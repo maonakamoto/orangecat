@@ -58,12 +58,5 @@ export {
   type GroupTemplate,
 } from './template-factory';
 
-// Export custom template components
-export {
-  default as OrganizationTemplates,
-  ORGANIZATION_TEMPLATES,
-  type OrganizationTemplate,
-} from './OrganizationTemplates';
-
 // Export wizard-specific template picker
 export { WizardTemplatePicker } from './WizardTemplatePicker';
