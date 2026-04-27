@@ -2,103 +2,6 @@ import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
-export const userCircleSchema = z.object({
-  name: z
-    .string()
-    .min(3, 'Name must be at least 3 characters')
-    .max(50, 'Name must be under 50 characters'),
-  description: z
-    .string()
-    .max(500, 'Description must be under 500 characters')
-    .optional()
-    .nullable(),
-  category: z.string().min(1, 'Please select a category'),
-
-  // Enhanced visibility and membership
-  visibility: z.enum(['public', 'private', 'hidden']).default('private'),
-  max_members: z.number().int().positive().optional().nullable(),
-  member_approval: z.enum(['auto', 'manual', 'invite']).default('manual'),
-
-  // Geographic features
-  location_restricted: z.boolean().default(false),
-  location_radius_km: z.number().int().positive().optional().nullable(),
-
-  // Economic features
-  bitcoin_address: z.string().optional().nullable(),
-  wallet_purpose: z.string().max(200).optional().nullable(),
-  contribution_required: z.boolean().default(false),
-  contribution_amount: z.number().positive().optional().nullable(),
-
-  // Activity settings
-  activity_level: z.enum(['casual', 'regular', 'intensive']).default('regular'),
-  meeting_frequency: z.enum(['none', 'weekly', 'monthly', 'quarterly']).default('none'),
-
-  // Advanced features
-  enable_projects: z.boolean().default(false),
-  enable_events: z.boolean().default(true),
-  enable_discussions: z.boolean().default(true),
-  require_member_intro: z.boolean().default(false),
-});
-
-// Organization validation
-export const organizationSchema = z.object({
-  name: z
-    .string()
-    .min(1, 'Organization name is required')
-    .max(255, 'Name must be at most 255 characters'),
-  slug: z
-    .string()
-    .min(1, 'Slug is required')
-    .max(100, 'Slug must be at most 100 characters')
-    .regex(
-      /^[a-z0-9][a-z0-9\-]*[a-z0-9]$/,
-      'Slug must start and end with alphanumeric characters and can contain hyphens'
-    ),
-  type: z.enum([
-    'dao',
-    'company',
-    'nonprofit',
-    'community',
-    'cooperative',
-    'foundation',
-    'collective',
-    'guild',
-    'syndicate',
-    'circle',
-  ]),
-  description: optionalText(5000),
-  category: optionalText(100),
-  tags: z.array(z.string()).default([]).optional(),
-  website_url: z
-    .string()
-    .url()
-    .optional()
-    .nullable()
-    .or(z.literal(''))
-    .refine(
-      val => !val || val.trim() === '' || /^https?:\/\/.+/i.test(val),
-      'Please enter a valid URL (e.g., https://example.com)'
-    ),
-  governance_model: z
-    .enum([
-      'hierarchical',
-      'flat',
-      'democratic',
-      'consensus',
-      'liquid_democracy',
-      'quadratic_voting',
-      'stake_weighted',
-      'reputation_based',
-    ])
-    .default('hierarchical'),
-  treasury_address: optionalText(255),
-  lightning_address: lightningAddressSchema,
-  avatar_url: optionalUrl(),
-  banner_url: optionalUrl(),
-  is_public: z.boolean().default(true),
-  requires_approval: z.boolean().default(true),
-});
-
 /**
  * Recurrence pattern for events.
  * Standard iCalendar-style recurrence rule stored as JSONB in the database.
@@ -243,7 +146,4 @@ export const eventSchema = z
   );
 
 // Types
-export type UserCircleFormData = z.infer<typeof userCircleSchema>;
-export type OrganizationFormData = z.infer<typeof organizationSchema>;
 export type EventFormData = z.infer<typeof eventSchema>;
-export type RecurrencePatternData = z.infer<typeof recurrencePatternSchema>;
