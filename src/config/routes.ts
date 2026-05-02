@@ -271,6 +271,9 @@ export const ROUTES = {
   AI_ASSISTANTS: {
     VIEW: (id: string) => `/ai-assistants/${id}`,
   },
+  ASSETS: {
+    VIEW: (id: string) => `/assets/${id}`,
+  },
   GROUPS: {
     VIEW: (slug: string) => `/groups/${slug}`,
   },
