@@ -1,41 +1,27 @@
 'use client';
 
-/**
- * UNIFIED ENTITY FORM COMPONENT (REFACTORED)
- *
- * Modular, reusable form component for creating/editing any entity type.
- * Split into smaller subcomponents for maintainability.
- */
-
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ZodError } from 'zod';
-import { toast } from 'sonner';
-import { API_ROUTES } from '@/config/api-routes';
-
+import { useCallback, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
 import Loading from '@/components/Loading';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 
-import { FormField } from '../FormField';
 import { GuidancePanel } from '../GuidancePanel';
 import { TemplatePicker } from '../templates/TemplatePicker';
 import { AIPrefillBar } from '../AIPrefillBar';
 import type { EntityConfig, EntityTemplate } from '../types';
-import { logger } from '@/utils/logger';
-import { entityEvents } from '@/lib/analytics';
+import { FORM_THEME } from '@/config/theme-colors';
 
 import { EntityCreationSuccess } from '../EntityCreationSuccess';
 import { useEntityFormState } from './hooks/useEntityFormState';
 import { useFieldVisibility } from './hooks/useFieldVisibility';
+import { useEntityFormSubmit } from './hooks/useEntityFormSubmit';
 import { FormHeader } from './components/FormHeader';
 import { FormInfoBanner } from './components/FormInfoBanner';
 import { FormActions } from './components/FormActions';
-import { AIGeneratedIndicator } from './components/AIGeneratedIndicator';
-import { FORM_THEME } from '@/config/theme-colors';
+import { FormFieldGroups } from './components/FormFieldGroups';
 
-interface WizardMode {
+export interface WizardMode {
   currentStep: number;
   totalSteps: number;
   visibleFields: string[];
@@ -68,7 +54,6 @@ export function EntityForm<T extends Record<string, unknown>>({
   embedded,
 }: EntityFormProps<T>) {
   const { user, isLoading: authLoading, hydrated } = useAuth();
-  const router = useRouter();
   const userCurrency = useUserCurrency();
 
   const {
@@ -84,21 +69,12 @@ export function EntityForm<T extends Record<string, unknown>>({
     setErrors,
     validateField,
     formatRelativeTime,
-  } = useEntityFormState({
-    config,
-    initialValues,
-    userCurrency,
-    userId: user?.id,
-    mode,
-  });
+  } = useEntityFormState({ config, initialValues, userCurrency, userId: user?.id, mode });
 
-  // Track newly created entity for post-creation publish flow
   const [createdEntity, setCreatedEntity] = useState<{ id: string; title: string } | null>(null);
 
   const handleFieldBlur = useCallback(
-    (fieldName: string) => {
-      validateField(fieldName);
-    },
+    (fieldName: string) => validateField(fieldName),
     [validateField]
   );
 
@@ -108,35 +84,21 @@ export function EntityForm<T extends Record<string, unknown>>({
     wizardMode,
   });
 
-  // Track existing entity_wallets link ID so edit mode can replace it
-  const existingWalletLinkIdRef = useRef<string | undefined>(undefined);
+  const { handleSubmit } = useEntityFormSubmit({
+    config,
+    formState,
+    mode,
+    entityId,
+    user,
+    onSuccess,
+    onError,
+    clearDraft,
+    setSubmitting,
+    setErrors,
+    onEntityCreated: setCreatedEntity,
+    handleFieldChange,
+  });
 
-  // Pre-populate wallet selector when editing an entity that has a wallet linked
-  useEffect(() => {
-    const hasWalletGroup = config.fieldGroups.some(g => g.customComponent);
-    if (mode !== 'edit' || !entityId || !hasWalletGroup) {
-      return;
-    }
-
-    fetch(`${API_ROUTES.ENTITY_WALLETS}?entity_type=${config.type}&entity_id=${entityId}`, {
-      credentials: 'include',
-    })
-      .then(r => r.json())
-      .then(data => {
-        const link = data.data?.[0];
-        if (link?.wallet_id) {
-          handleFieldChange('_wallet_id' as keyof T, link.wallet_id);
-          existingWalletLinkIdRef.current = link.id;
-        }
-      })
-      .catch((err: unknown) => {
-        logger.warn('Wallet link failed (non-blocking)', { err }, 'EntityForm');
-      }); // Non-blocking; missing wallet isn't a blocker
-  }, [mode, entityId, config.type, config.fieldGroups, handleFieldChange]);
-
-  const theme = FORM_THEME[config.colorTheme];
-
-  // Template selection handler
   const handleTemplateSelect = useCallback(
     (template: EntityTemplate<T>) => {
       handleFieldChange('__template__' as keyof T, { ...initialFormData, ...template.defaults });
@@ -145,169 +107,13 @@ export function EntityForm<T extends Record<string, unknown>>({
     [initialFormData, handleFieldChange]
   );
 
-  // Submit handler
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-
-      try {
-        setSubmitting(true);
-
-        const dataToValidate = { ...config.defaultValues, ...formState.data };
-        const validatedData = config.validationSchema.parse(dataToValidate);
-
-        const url =
-          mode === 'edit' && entityId ? `${config.apiEndpoint}/${entityId}` : config.apiEndpoint;
-
-        const response = await fetch(url, {
-          method: mode === 'edit' ? 'PUT' : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(validatedData),
-        });
-
-        if (!response.ok) {
-          let errorMessage = `Failed to ${mode} ${config.name.toLowerCase()}`;
-          try {
-            const errorData = await response.clone().json();
-            logger.error('EntityForm: API error response', { errorData }, 'EntityForm');
-            errorMessage =
-              errorData.error?.message || errorData.message || errorData.error || errorMessage;
-          } catch {
-            try {
-              const text = await response.clone().text();
-              logger.error('EntityForm: API error (non-JSON)', { text }, 'EntityForm');
-              errorMessage = text || errorMessage;
-            } catch (textError) {
-              logger.error(
-                'EntityForm: Could not read error response',
-                { textError },
-                'EntityForm'
-              );
-            }
-          }
-          throw new Error(errorMessage);
-        }
-
-        const result = await response.json();
-
-        if (mode === 'create') {
-          clearDraft();
-          if (result.data?.id) {
-            entityEvents.created(config.type, result.data.id, user?.id);
-          }
-        }
-
-        // Link wallet to entity (non-blocking fire-and-forget)
-        const walletId = (formState.data as Record<string, unknown>)._wallet_id as
-          | string
-          | undefined;
-        if (walletId && result.data?.id) {
-          (async () => {
-            try {
-              if (mode === 'edit' && existingWalletLinkIdRef.current) {
-                // Replace existing link: delete old, insert new
-                await fetch(`${API_ROUTES.ENTITY_WALLETS}/${existingWalletLinkIdRef.current}`, {
-                  method: 'DELETE',
-                  credentials: 'include',
-                });
-              }
-              await fetch(API_ROUTES.ENTITY_WALLETS, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({
-                  entity_type: config.type,
-                  entity_id: result.data.id,
-                  wallet_id: walletId,
-                }),
-              });
-            } catch (err) {
-              logger.warn('Failed to link wallet to entity', { err }, 'EntityForm');
-            }
-          })();
-        }
-
-        const showSuccessToast = () =>
-          toast.success(
-            `${config.name} ${mode === 'create' ? 'created' : 'updated'} successfully!`,
-            {
-              description:
-                mode === 'create'
-                  ? `Your ${config.name.toLowerCase()} "${result.data?.title || result.data?.name || ''}" has been created.`
-                  : 'Your changes have been saved.',
-              duration: 4000,
-            }
-          );
-
-        if (onSuccess) {
-          showSuccessToast();
-          onSuccess(result.data);
-        } else if (mode === 'create' && result.data?.id) {
-          // Show post-creation success state with publish option
-          setCreatedEntity({
-            id: result.data.id,
-            title: result.data.title || result.data.name || config.name,
-          });
-        } else {
-          showSuccessToast();
-          let redirectUrl = config.successUrl;
-          if (result.data) {
-            redirectUrl = redirectUrl.replace(/:(\w+)/g, (_, field) => result.data[field] || '');
-            redirectUrl = redirectUrl.replace(/\[(\w+)\]/g, (_, field) => result.data[field] || '');
-          }
-          router.push(redirectUrl);
-        }
-      } catch (error) {
-        if (error instanceof ZodError) {
-          const fieldErrors: Record<string, string> = {};
-          error.errors.forEach(err => {
-            const path = err.path[0] as string;
-            fieldErrors[path] = err.message;
-          });
-          setErrors(fieldErrors);
-        } else {
-          const errorMsg =
-            error instanceof Error
-              ? error.message
-              : `Failed to ${mode} ${config.name.toLowerCase()}`;
-          setErrors({ general: errorMsg });
-
-          toast.error(`Failed to ${mode} ${config.name.toLowerCase()}`, {
-            description: errorMsg,
-            duration: 5000,
-          });
-
-          if (onError) {
-            onError(errorMsg);
-          }
-        }
-      }
-    },
-    [
-      config,
-      formState.data,
-      mode,
-      entityId,
-      onSuccess,
-      onError,
-      router,
-      clearDraft,
-      setSubmitting,
-      setErrors,
-      user,
-    ]
-  );
-
   if (!hydrated || authLoading) {
     return <Loading fullScreen message="Loading..." />;
   }
-
   if (!user) {
     return null;
   }
 
-  // Show post-creation success state with publish option
   if (createdEntity) {
     return (
       <EntityCreationSuccess
@@ -324,6 +130,7 @@ export function EntityForm<T extends Record<string, unknown>>({
   }
 
   const Icon = config.icon;
+  const theme = FORM_THEME[config.colorTheme];
 
   return (
     <div
@@ -367,87 +174,16 @@ export function EntityForm<T extends Record<string, unknown>>({
                   />
                 )}
 
-                {visibleFieldGroups.map(group => {
-                  if (!isGroupVisible(group)) {
-                    return null;
-                  }
-
-                  if (group.customComponent) {
-                    const CustomComponent = group.customComponent;
-                    return (
-                      <div key={group.id} className="space-y-4">
-                        <CustomComponent
-                          formData={formState.data}
-                          onFieldChange={handleFieldChange}
-                          disabled={formState.isSubmitting}
-                        />
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <div key={group.id} className="space-y-4">
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900">{group.title}</h3>
-                        {group.description && (
-                          <p className="text-base text-gray-600 mt-1">{group.description}</p>
-                        )}
-                      </div>
-
-                      {group.fields && group.fields.length > 0 && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {group.fields.map(field => {
-                            if (!isFieldVisible(field)) {
-                              return null;
-                            }
-
-                            const isAIGenerated = aiGeneratedFields.fields.has(field.name);
-                            const aiConfidence = aiGeneratedFields.confidence[field.name] || 0.7;
-
-                            return (
-                              <div
-                                key={field.name}
-                                className={`${field.colSpan === 2 ? 'md:col-span-2' : ''} ${isAIGenerated ? 'relative' : ''}`}
-                              >
-                                {isAIGenerated && (
-                                  <AIGeneratedIndicator confidence={aiConfidence} />
-                                )}
-                                <div
-                                  className={
-                                    isAIGenerated ? 'ring-1 ring-purple-200 rounded-md p-0.5' : ''
-                                  }
-                                >
-                                  <FormField
-                                    config={field}
-                                    value={formState.data[field.name as keyof T]}
-                                    error={formState.errors[field.name]}
-                                    onChange={value =>
-                                      handleFieldChange(field.name as keyof T, value)
-                                    }
-                                    onFocus={() => handleFieldFocus(field.name)}
-                                    onBlur={() => handleFieldBlur(field.name)}
-                                    disabled={formState.isSubmitting}
-                                    currency={
-                                      'currency' in formState.data
-                                        ? (formState.data.currency as string)
-                                        : undefined
-                                    }
-                                    onCurrencyChange={
-                                      field.type === 'currency' && 'currency' in formState.data
-                                        ? currency =>
-                                            handleFieldChange('currency' as keyof T, currency)
-                                        : undefined
-                                    }
-                                  />
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                <FormFieldGroups
+                  visibleFieldGroups={visibleFieldGroups}
+                  isGroupVisible={isGroupVisible}
+                  isFieldVisible={isFieldVisible}
+                  formState={formState}
+                  handleFieldChange={handleFieldChange}
+                  handleFieldFocus={handleFieldFocus}
+                  handleFieldBlur={handleFieldBlur}
+                  aiGeneratedFields={aiGeneratedFields}
+                />
 
                 {config.infoBanner && <FormInfoBanner banner={config.infoBanner} />}
 
