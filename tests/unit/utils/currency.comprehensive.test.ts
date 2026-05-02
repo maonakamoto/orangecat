@@ -331,7 +331,7 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
     test('formats large numbers of amounts quickly', () => {
       const startTime = performance.now();
 
-      for (let i = 0; i < 10000; i++) {
+      for (let i = 0; i < 1000; i++) {
         formatBTC(Math.random() * 21000000);
         formatSats(Math.random() * 2100000000000000);
         formatUSD(Math.random() * 1000000);
@@ -340,8 +340,8 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
       const endTime = performance.now();
       const totalTime = endTime - startTime;
 
-      // Should format 30,000 amounts in under 60000ms (generous for slow CI + parallel test environments)
-      expect(totalTime).toBeLessThan(60000);
+      // Should format 3,000 amounts in under 6000ms
+      expect(totalTime).toBeLessThan(6000);
     });
 
     test('converts large numbers of amounts quickly', () => {

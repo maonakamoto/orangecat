@@ -1,6 +1,6 @@
 /**
  * Input Component Tests
- * 
+ *
  * Testing critical form input component used throughout the Bitcoin platform
  * Essential for user authentication, donations, and campaign creation
  */
@@ -141,65 +141,65 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
 
   describe('🎮 User Interactions', () => {
     test('should handle typing in input field', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       render(<Input placeholder="Type here" />);
       const input = screen.getByPlaceholderText('Type here');
-      
+
       await user.type(input, 'Hello Bitcoin!');
       expect(input).toHaveValue('Hello Bitcoin!');
     });
 
     test('should handle focus and blur events', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       const onFocus = jest.fn();
       const onBlur = jest.fn();
-      
+
       render(<Input onFocus={onFocus} onBlur={onBlur} placeholder="Focus test" />);
       const input = screen.getByPlaceholderText('Focus test');
-      
+
       await user.click(input);
       expect(onFocus).toHaveBeenCalledTimes(1);
-      
+
       await user.tab(); // Move focus away
       expect(onBlur).toHaveBeenCalledTimes(1);
     });
 
     test('should handle onChange events', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       const onChange = jest.fn();
-      
+
       render(<Input onChange={onChange} placeholder="Change test" />);
       const input = screen.getByPlaceholderText('Change test');
-      
+
       await user.type(input, 'test');
       expect(onChange).toHaveBeenCalledTimes(4); // One call per character
     });
 
     test('should handle controlled input', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       const TestComponent = () => {
         const [value, setValue] = React.useState('');
         return (
-          <Input 
-            value={value} 
-            onChange={(e) => setValue(e.target.value)} 
-            placeholder="Controlled input" 
+          <Input
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            placeholder="Controlled input"
           />
         );
       };
-      
+
       render(<TestComponent />);
       const input = screen.getByPlaceholderText('Controlled input');
-      
+
       await user.type(input, 'controlled');
       expect(input).toHaveValue('controlled');
     });
 
     test('should handle clear input', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       render(<Input defaultValue="Initial value" placeholder="Clear test" />);
       const input = screen.getByPlaceholderText('Clear test');
-      
+
       expect(input).toHaveValue('Initial value');
       await user.clear(input);
       expect(input).toHaveValue('');
@@ -208,27 +208,27 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
 
   describe('💰 Bitcoin Platform Specific Tests', () => {
     test('should handle Bitcoin address input', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       render(
-        <Input 
-          icon={Bitcoin} 
-          placeholder="Enter Bitcoin address" 
+        <Input
+          icon={Bitcoin}
+          placeholder="Enter Bitcoin address"
           pattern="^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,87}$"
           label="Bitcoin Address"
         />
       );
-      
+
       const input = screen.getByLabelText('Bitcoin Address');
       const validAddress = 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4';
-      
+
       await user.type(input, validAddress);
       expect(input).toHaveValue(validAddress);
     });
 
     test('should handle satoshi amount input', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       render(
-        <Input 
+        <Input
           type="number"
           min="1"
           max="2100000000000000"
@@ -237,23 +237,18 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
           label="Donation Amount (sats)"
         />
       );
-      
+
       const input = screen.getByLabelText('Donation Amount (sats)');
       await user.type(input, '100000');
       expect(input).toHaveValue(100000);
     });
 
     test('should handle campaign title input', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       render(
-        <Input 
-          maxLength={100}
-          placeholder="Enter campaign title"
-          label="Campaign Title"
-          required
-        />
+        <Input maxLength={100} placeholder="Enter campaign title" label="Campaign Title" required />
       );
-      
+
       const input = screen.getByPlaceholderText('Enter campaign title');
       await user.type(input, 'Bitcoin Education Initiative');
       expect(input).toHaveValue('Bitcoin Education Initiative');
@@ -262,9 +257,9 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
     });
 
     test('should handle email registration input', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       render(
-        <Input 
+        <Input
           type="email"
           icon={Mail}
           placeholder="Enter your email"
@@ -272,7 +267,7 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
           required
         />
       );
-      
+
       const input = screen.getByPlaceholderText('Enter your email');
       await user.type(input, 'bitcoiner@example.com');
       expect(input).toHaveValue('bitcoiner@example.com');
@@ -281,7 +276,7 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
     });
 
     test('should handle password input with visibility toggle simulation', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       const TestComponent = () => {
         const [showPassword, setShowPassword] = React.useState(false);
         return (
@@ -298,14 +293,14 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
           </div>
         ) as React.ReactElement;
       };
-      
+
       render(<TestComponent />);
       const input = screen.getByLabelText('Password');
       const toggleButton = screen.getByText('Show');
-      
+
       await user.type(input, 'mySecurePassword123!');
       expect(input).toHaveAttribute('type', 'password');
-      
+
       await user.click(toggleButton);
       expect(input).toHaveAttribute('type', 'text');
     });
@@ -331,13 +326,7 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
     });
 
     test('should support aria attributes', () => {
-      render(
-        <Input 
-          placeholder="ARIA test"
-          aria-describedby="help-text"
-          aria-invalid="true"
-        />
-      );
+      render(<Input placeholder="ARIA test" aria-describedby="help-text" aria-invalid="true" />);
       const input = screen.getByPlaceholderText('ARIA test');
       expect(input).toHaveAttribute('aria-describedby', 'help-text');
       expect(input).toHaveAttribute('aria-invalid', 'true');
@@ -372,31 +361,31 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
     });
 
     test('should handle special characters in input', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       render(<Input placeholder="Special chars test" />);
       const input = screen.getByPlaceholderText('Special chars test');
-      
+
       const specialText = '₿ 💰 🚀 !@#$%^&*()';
       await user.type(input, specialText);
       expect(input).toHaveValue(specialText);
     });
 
     test('should handle long input values', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       render(<Input placeholder="Long input test" />);
       const input = screen.getByPlaceholderText('Long input test');
-      
+
       const longText = 'a'.repeat(100); // Reduced size for performance
       await user.type(input, longText);
       expect(input).toHaveValue(longText);
     });
 
     test('should handle rapid typing', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       const onChange = jest.fn();
       render(<Input onChange={onChange} placeholder="Rapid typing test" />);
       const input = screen.getByPlaceholderText('Rapid typing test');
-      
+
       // Simulate typing without delay option
       await user.type(input, 'rapid');
       expect(input).toHaveValue('rapid');
@@ -421,14 +410,14 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
     });
 
     test('should handle paste events with large content', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       render(<Input placeholder="Paste test" />);
       const input = screen.getByPlaceholderText('Paste test');
-      
+
       const largeContent = 'x'.repeat(100); // Reduced size for performance
       await user.click(input);
       await user.paste(largeContent);
       expect(input).toHaveValue(largeContent);
     });
   });
-}); 
+});
