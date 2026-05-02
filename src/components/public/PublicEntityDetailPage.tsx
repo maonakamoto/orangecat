@@ -66,22 +66,35 @@ export interface EntityDetailConfig {
   renderHeaderExtra?: (entity: EntityData) => ReactNode;
   /** Entity-specific detail cards below description */
   renderDetails?: (entity: EntityData) => ReactNode;
+  /** Extra sidebar cards rendered after EntityShare (e.g., Quick Stats, CTAs) */
+  renderSidebarExtra?: (entity: EntityData) => ReactNode;
   /** Select columns for metadata query (defaults to 'title, description, price_btc') */
   metadataSelect?: string;
   /** View route for sign-in redirect */
   getViewRoute?: (id: string) => string;
+  /** Override default visibility filter. Defaults to `status = active`. */
+  visibilityFilter?: { column: string; value: string | boolean };
+  /** Whether to show the payment section in the sidebar (default: true) */
+  showPaymentSection?: boolean;
 }
 
 /**
  * Fetch entity data for metadata generation
  */
-export async function fetchEntityForMetadata(entityType: EntityType, id: string, select?: string) {
+export async function fetchEntityForMetadata(
+  entityType: EntityType,
+  id: string,
+  select?: string,
+  visibilityFilter?: { column: string; value: string | boolean }
+) {
   const supabase = await createServerClient();
+  const filterCol = visibilityFilter?.column ?? 'status';
+  const filterVal = visibilityFilter?.value ?? STATUS.PRODUCTS.ACTIVE;
   const { data } = await supabase
     .from(getTableName(entityType))
     .select(select || 'title, description, price_btc')
     .eq('id', id)
-    .eq('status', STATUS.PRODUCTS.ACTIVE)
+    .eq(filterCol, filterVal)
     .single();
   return data as EntityData | null;
 }
@@ -106,7 +119,10 @@ export default async function PublicEntityDetailPage({
     .from(getTableName(config.entityType))
     .select('*')
     .eq('id', id)
-    .eq('status', STATUS.PRODUCTS.ACTIVE)
+    .eq(
+      config.visibilityFilter?.column ?? 'status',
+      config.visibilityFilter?.value ?? STATUS.PRODUCTS.ACTIVE
+    )
     .single();
 
   const entity = data as EntityData | null;
@@ -197,15 +213,19 @@ export default async function PublicEntityDetailPage({
                 description={entity.description}
               />
 
-              <PublicEntityPaymentSection
-                entityType={config.entityType}
-                entityId={id}
-                entityTitle={entity.title}
-                priceBtc={entity.price_btc ? Number(entity.price_btc) : undefined}
-                sellerProfileId={owner?.id ?? null}
-                sellerUserId={owner?.user_id ?? null}
-                signInRedirect={viewRoute}
-              />
+              {config.renderSidebarExtra?.(entity)}
+
+              {config.showPaymentSection !== false && (
+                <PublicEntityPaymentSection
+                  entityType={config.entityType}
+                  entityId={id}
+                  entityTitle={entity.title}
+                  priceBtc={entity.price_btc ? Number(entity.price_btc) : undefined}
+                  sellerProfileId={owner?.id ?? null}
+                  sellerUserId={owner?.user_id ?? null}
+                  signInRedirect={viewRoute}
+                />
+              )}
 
               <PublicEntityTimestamps
                 createdAt={entity.created_at}

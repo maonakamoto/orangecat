@@ -1,76 +1,21 @@
-/**
- * Public Loan Detail Page
- *
- * Displays loan details for public loans.
- * Allows anyone to view public loans listed on the platform.
- *
- * Created: 2025-12-31
- */
-
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { DollarSign, ArrowLeft, Percent, TrendingUp, User, MessageSquare } from 'lucide-react';
-import { createServerClient } from '@/lib/supabase/server';
-import { getTableName } from '@/config/entity-registry';
-import type { Database } from '@/types/database';
+import { Percent, TrendingUp, User, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { STATUS } from '@/config/database-constants';
 import { formatDistanceToNow } from 'date-fns';
 import { formatCurrency } from '@/services/currency';
 import { generateEntityMetadata } from '@/lib/seo/metadata';
-import { generateEntityJsonLd, JsonLdScript } from '@/lib/seo/structured-data';
-import EntityShare from '@/components/sharing/EntityShare';
-import PublicEntityOwnerCard from '@/components/public/PublicEntityOwnerCard';
-import PublicEntityTimestamps from '@/components/public/PublicEntityTimestamps';
 import PublicEntityCTA from '@/components/public/PublicEntityCTA';
 import { ROUTES } from '@/config/routes';
+import PublicEntityDetailPage, {
+  fetchEntityForMetadata,
+  type EntityDetailConfig,
+  type EntityData,
+} from '@/components/public/PublicEntityDetailPage';
 
 interface PageProps {
   params: Promise<{ id: string }>;
-}
-
-type LoanRow = Database['public']['Tables']['loans']['Row'];
-type LoanWithProfile = LoanRow & {
-  profiles: {
-    id: string;
-    username: string | null;
-    name: string | null;
-    avatar_url: string | null;
-  } | null;
-};
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = await params;
-  const supabase = await createServerClient();
-
-  const { data: loanData } = await supabase
-    .from(getTableName('loan'))
-    .select('title, description, original_amount, currency')
-    .eq('id', id)
-    .eq('is_public', true)
-    .single();
-
-  const loan = loanData as Pick<
-    LoanRow,
-    'title' | 'description' | 'original_amount' | 'currency'
-  > | null;
-  if (!loan) {
-    return {
-      title: 'Loan Not Found | OrangeCat',
-      description: 'The loan you are looking for does not exist.',
-    };
-  }
-
-  const description = loan.description || `${loan.title} - Peer-to-peer Bitcoin loan on OrangeCat.`;
-  return generateEntityMetadata({
-    type: 'loan',
-    id,
-    title: loan.title,
-    description,
-  });
 }
 
 function calculateProgress(original: number, remaining: number) {
@@ -80,239 +25,160 @@ function calculateProgress(original: number, remaining: number) {
   return ((original - remaining) / original) * 100;
 }
 
-export default async function PublicLoanDetailPage({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const supabase = await createServerClient();
+  const loan = await fetchEntityForMetadata(
+    'loan',
+    id,
+    'title, description, original_amount, currency',
+    { column: 'is_public', value: true }
+  );
 
-  // Fetch public loan with owner profile
-  const { data: loanData, error } = await supabase
-    .from(getTableName('loan'))
-    .select(
-      `
-      *,
-      profiles:user_id (
-        id,
-        username,
-        name,
-        avatar_url
-      )
-    `
-    )
-    .eq('id', id)
-    .eq('is_public', true)
-    .single();
-
-  const loan = loanData as unknown as LoanWithProfile;
-  if (error || !loan) {
-    notFound();
+  if (!loan) {
+    return {
+      title: 'Loan Not Found | OrangeCat',
+      description: 'The loan you are looking for does not exist.',
+    };
   }
 
-  const progress = calculateProgress(loan.original_amount, loan.remaining_balance);
-  const rawProfile = loan.profiles as {
-    id: string;
-    username: string | null;
-    name: string | null;
-    avatar_url: string | null;
-  } | null;
-  const ownerProfile = rawProfile ? { ...rawProfile, user_id: rawProfile.id } : null;
+  const description = loan.description || `${loan.title} - Peer-to-peer Bitcoin loan on OrangeCat.`;
+  return generateEntityMetadata({ type: 'loan', id, title: loan.title, description });
+}
 
-  const jsonLd = generateEntityJsonLd({
-    type: 'loan',
-    id,
-    title: loan.title,
-    description: loan.description,
-    extra: {
-      amount: {
-        '@type': 'MonetaryAmount',
-        value: loan.original_amount,
-        currency: loan.currency || 'BTC',
-      },
-      ...(loan.interest_rate !== null &&
-        loan.interest_rate !== undefined && { annualPercentageRate: loan.interest_rate }),
+const loanConfig: EntityDetailConfig = {
+  entityType: 'loan',
+  ownerLabel: 'Listed By',
+  descriptionTitle: 'About this Loan',
+  visibilityFilter: { column: 'is_public', value: true },
+  getViewRoute: id => ROUTES.LOANS.VIEW(id),
+  showPaymentSection: false,
+  getJsonLdExtra: (entity: EntityData) => ({
+    amount: {
+      '@type': 'MonetaryAmount',
+      value: entity.original_amount,
+      currency: entity.currency || 'BTC',
     },
-  });
-
-  return (
-    <>
-      <JsonLdScript data={jsonLd} />
-      <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-tiffany-50/30">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <Link
-              href={`${ROUTES.DISCOVER}?type=loans`}
-              className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Loans
-            </Link>
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <DollarSign className="w-8 h-8 text-blue-600" />
-                </div>
-                <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{loan.title}</h1>
-                  <div className="flex items-center gap-3 mt-2">
-                    <Badge
-                      variant={loan.status === STATUS.LOANS.ACTIVE ? 'default' : 'secondary'}
-                      className="capitalize"
-                    >
-                      {loan.status}
-                    </Badge>
-                    <span className="text-gray-500 text-sm">
-                      Listed {formatDistanceToNow(new Date(loan.created_at), { addSuffix: true })}
-                    </span>
-                  </div>
-                </div>
+    ...(entity.interest_rate !== null &&
+      entity.interest_rate !== undefined && { annualPercentageRate: entity.interest_rate }),
+  }),
+  renderHeaderExtra: (entity: EntityData) => (
+    <span className="text-gray-500 text-sm">
+      Listed {formatDistanceToNow(new Date(entity.created_at), { addSuffix: true })}
+    </span>
+  ),
+  renderDetails: (entity: EntityData) => {
+    const progress = calculateProgress(entity.original_amount, entity.remaining_balance);
+    return (
+      <>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Financial Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">Remaining Balance</span>
+                <span className="font-bold text-xl text-blue-600">
+                  {formatCurrency(entity.remaining_balance, entity.currency ?? 'USD')}
+                </span>
+              </div>
+              <Progress value={progress} className="h-2" />
+              <div className="flex justify-between text-xs text-gray-500">
+                <span>{progress.toFixed(1)}% funded</span>
+                <span>
+                  Original: {formatCurrency(entity.original_amount, entity.currency ?? 'USD')}
+                </span>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Main Content */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Main Column */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Description */}
-              {loan.description && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">About this Loan</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 whitespace-pre-wrap">{loan.description}</p>
-                  </CardContent>
-                </Card>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {entity.interest_rate !== null && entity.interest_rate !== undefined && (
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
+                    <Percent className="w-4 h-4" />
+                    Interest Rate
+                  </div>
+                  <div className="font-semibold text-lg">{entity.interest_rate}% APR</div>
+                </div>
               )}
-
-              {/* Financial Details */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Financial Details</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Progress */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-500">Remaining Balance</span>
-                      <span className="font-bold text-xl text-blue-600">
-                        {formatCurrency(loan.remaining_balance, loan.currency ?? 'USD')}
-                      </span>
-                    </div>
-                    <Progress value={progress} className="h-2" />
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>{progress.toFixed(1)}% funded</span>
-                      <span>
-                        Original: {formatCurrency(loan.original_amount, loan.currency ?? 'USD')}
-                      </span>
-                    </div>
+              {entity.monthly_payment && (
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
+                    <TrendingUp className="w-4 h-4" />
+                    Monthly Payment
                   </div>
-
-                  {/* Details Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {loan.interest_rate !== null && loan.interest_rate !== undefined && (
-                      <div className="p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
-                          <Percent className="w-4 h-4" />
-                          Interest Rate
-                        </div>
-                        <div className="font-semibold text-lg">{loan.interest_rate}% APR</div>
-                      </div>
-                    )}
-                    {loan.monthly_payment && (
-                      <div className="p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
-                          <TrendingUp className="w-4 h-4" />
-                          Monthly Payment
-                        </div>
-                        <div className="font-semibold text-lg">
-                          {formatCurrency(loan.monthly_payment, loan.currency ?? 'USD')}
-                        </div>
-                      </div>
-                    )}
+                  <div className="font-semibold text-lg">
+                    {formatCurrency(entity.monthly_payment, entity.currency ?? 'USD')}
                   </div>
-
-                  {/* Current Lender */}
-                  {loan.lender_name && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 border-t pt-4">
-                      <User className="w-4 h-4" />
-                      <span>Current Lender: {loan.lender_name}</span>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Terms & Conditions */}
-              {loan.preferred_terms && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Preferred Terms</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 whitespace-pre-wrap">{loan.preferred_terms}</p>
-                  </CardContent>
-                </Card>
+                </div>
               )}
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {ownerProfile && <PublicEntityOwnerCard owner={ownerProfile} label="Listed By" />}
+            {entity.lender_name && (
+              <div className="flex items-center gap-2 text-sm text-gray-600 border-t pt-4">
+                <User className="w-4 h-4" />
+                <span>Current Lender: {entity.lender_name}</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
-              {/* Quick Stats */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Quick Stats</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Loan Type</span>
-                    <Badge variant="secondary" className="capitalize">
-                      {loan.loan_category_id || 'General'}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Negotiable</span>
-                    <span className="font-medium">{loan.is_negotiable ? 'Yes' : 'No'}</span>
-                  </div>
-                  {loan.minimum_offer_amount && (
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">Min Offer</span>
-                      <span className="font-medium">
-                        {formatCurrency(loan.minimum_offer_amount, loan.currency ?? 'USD')}
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Contact Method</span>
-                    <span className="font-medium capitalize">
-                      {loan.contact_method || 'Platform'}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <EntityShare
-                entityType="loan"
-                entityId={id}
-                title={loan.title}
-                description={loan.description ?? undefined}
-              />
-
-              <PublicEntityCTA
-                href={`${ROUTES.AUTH}?mode=login&from=${ROUTES.LOANS.VIEW(id)}`}
-                icon={MessageSquare}
-                label="Contact Lister"
-                description="Sign in to contact the loan lister or make an offer"
-              />
-
-              <PublicEntityTimestamps createdAt={loan.created_at} updatedAt={loan.updated_at} />
-            </div>
+        {entity.preferred_terms && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Preferred Terms</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-700 whitespace-pre-wrap">{entity.preferred_terms}</p>
+            </CardContent>
+          </Card>
+        )}
+      </>
+    );
+  },
+  renderSidebarExtra: (entity: EntityData) => (
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Quick Stats</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-500">Loan Type</span>
+            <Badge variant="secondary" className="capitalize">
+              {entity.loan_category_id || 'General'}
+            </Badge>
           </div>
-        </div>
-      </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-500">Negotiable</span>
+            <span className="font-medium">{entity.is_negotiable ? 'Yes' : 'No'}</span>
+          </div>
+          {entity.minimum_offer_amount && (
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-500">Min Offer</span>
+              <span className="font-medium">
+                {formatCurrency(entity.minimum_offer_amount, entity.currency ?? 'USD')}
+              </span>
+            </div>
+          )}
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-500">Contact Method</span>
+            <span className="font-medium capitalize">{entity.contact_method || 'Platform'}</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      <PublicEntityCTA
+        href={`${ROUTES.AUTH}?mode=login&from=${ROUTES.LOANS.VIEW(entity.id)}`}
+        icon={MessageSquare}
+        label="Contact Lister"
+        description="Sign in to contact the loan lister or make an offer"
+      />
     </>
-  );
+  ),
+};
+
+export default async function PublicLoanDetailPage({ params }: PageProps) {
+  const { id } = await params;
+  return <PublicEntityDetailPage id={id} config={loanConfig} />;
 }
