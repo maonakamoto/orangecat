@@ -129,7 +129,9 @@ export function EntityForm<T extends Record<string, unknown>>({
           existingWalletLinkIdRef.current = link.id;
         }
       })
-      .catch((err: unknown) => { logger.warn('Wallet link failed (non-blocking)', { err }, 'EntityForm'); }); // Non-blocking; missing wallet isn't a blocker
+      .catch((err: unknown) => {
+        logger.warn('Wallet link failed (non-blocking)', { err }, 'EntityForm');
+      }); // Non-blocking; missing wallet isn't a blocker
   }, [mode, entityId, config.type, config.fieldGroups, handleFieldChange]);
 
   const theme = FORM_THEME[config.colorTheme];
@@ -226,7 +228,7 @@ export function EntityForm<T extends Record<string, unknown>>({
           })();
         }
 
-        if (onSuccess) {
+        const showSuccessToast = () =>
           toast.success(
             `${config.name} ${mode === 'create' ? 'created' : 'updated'} successfully!`,
             {
@@ -237,6 +239,9 @@ export function EntityForm<T extends Record<string, unknown>>({
               duration: 4000,
             }
           );
+
+        if (onSuccess) {
+          showSuccessToast();
           onSuccess(result.data);
         } else if (mode === 'create' && result.data?.id) {
           // Show post-creation success state with publish option
@@ -245,16 +250,7 @@ export function EntityForm<T extends Record<string, unknown>>({
             title: result.data.title || result.data.name || config.name,
           });
         } else {
-          toast.success(
-            `${config.name} ${mode === 'create' ? 'created' : 'updated'} successfully!`,
-            {
-              description:
-                mode === 'create'
-                  ? `Your ${config.name.toLowerCase()} "${result.data?.title || result.data?.name || ''}" has been created.`
-                  : 'Your changes have been saved.',
-              duration: 4000,
-            }
-          );
+          showSuccessToast();
           let redirectUrl = config.successUrl;
           if (result.data) {
             redirectUrl = redirectUrl.replace(/:(\w+)/g, (_, field) => result.data[field] || '');

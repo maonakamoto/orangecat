@@ -111,6 +111,29 @@ export interface EntityRouteParams {
   params: { id: string };
 }
 
+// ==================== HELPERS ====================
+
+async function defaultOwnershipCheck(
+  existing: Record<string, unknown>,
+  userId: string,
+  ownershipField: string,
+  useActorOwnership: boolean | undefined,
+  action: 'update' | 'delete',
+  entityNamePlural: string
+): Promise<NextResponse | null> {
+  if (useActorOwnership && existing.actor_id) {
+    const hasAccess = await checkOwnership(existing as { actor_id: string }, userId);
+    if (!hasAccess) {
+      return apiForbidden(`You can only ${action} your own ${entityNamePlural}`);
+    }
+  } else {
+    if (existing[ownershipField] !== userId) {
+      return apiForbidden(`You can only ${action} your own ${entityNamePlural}`);
+    }
+  }
+  return null;
+}
+
 // ==================== GET HANDLER ====================
 
 /**
@@ -137,7 +160,9 @@ export function createGetHandler(config: EntityHandlerConfig) {
 
   return async function GET(request: NextRequest, { params }: EntityRouteParams) {
     const uuidCheck = validateUUID(params.id, `${meta.name} ID`);
-    if (!uuidCheck.valid) { return uuidCheck.error!; }
+    if (!uuidCheck.valid) {
+      return uuidCheck.error!;
+    }
 
     try {
       // Rate limiting check
@@ -251,7 +276,9 @@ export function createPutHandler(config: EntityHandlerConfig) {
 
   return async function PUT(request: NextRequest, { params }: EntityRouteParams) {
     const uuidCheck = validateUUID(params.id, `${meta.name} ID`);
-    if (!uuidCheck.valid) { return uuidCheck.error!; }
+    if (!uuidCheck.valid) {
+      return uuidCheck.error!;
+    }
 
     try {
       const supabase = await createServerClient();
@@ -284,19 +311,16 @@ export function createPutHandler(config: EntityHandlerConfig) {
           return authError;
         }
       } else {
-        // Default ownership check
-        if (config.useActorOwnership && existing.actor_id) {
-          // Use actor-based ownership check
-          const hasAccess = await checkOwnership(existing as { actor_id: string }, user.id);
-          if (!hasAccess) {
-            return apiForbidden(`You can only update your own ${meta.namePlural.toLowerCase()}`);
-          }
-        } else {
-          // Use field-based ownership check
-          const ownerId = (existing as Record<string, unknown>)[ownershipField];
-          if (ownerId !== user.id) {
-            return apiForbidden(`You can only update your own ${meta.namePlural.toLowerCase()}`);
-          }
+        const ownershipError = await defaultOwnershipCheck(
+          existing,
+          user.id,
+          ownershipField,
+          config.useActorOwnership,
+          'update',
+          meta.namePlural.toLowerCase()
+        );
+        if (ownershipError) {
+          return ownershipError;
         }
       }
 
@@ -372,7 +396,9 @@ export function createDeleteHandler(config: EntityHandlerConfig) {
 
   return async function DELETE(_request: NextRequest, { params }: EntityRouteParams) {
     const uuidCheck = validateUUID(params.id, `${meta.name} ID`);
-    if (!uuidCheck.valid) { return uuidCheck.error!; }
+    if (!uuidCheck.valid) {
+      return uuidCheck.error!;
+    }
 
     try {
       const supabase = await createServerClient();
@@ -388,11 +414,11 @@ export function createDeleteHandler(config: EntityHandlerConfig) {
       const entityId = params.id;
 
       // Check if entity exists
-      const { data: existingData2, error: fetchError } = await (supabase.from(table) as any)
+      const { data: existingData, error: fetchError } = await (supabase.from(table) as any)
         .select('*')
         .eq('id', entityId)
         .single();
-      const existing = existingData2 as any;
+      const existing = existingData as any;
 
       if (fetchError || !existing) {
         return apiNotFound(`${meta.name} not found`);
@@ -405,19 +431,16 @@ export function createDeleteHandler(config: EntityHandlerConfig) {
           return authError;
         }
       } else {
-        // Default ownership check
-        if (config.useActorOwnership && existing.actor_id) {
-          // Use actor-based ownership check
-          const hasAccess = await checkOwnership(existing as { actor_id: string }, user.id);
-          if (!hasAccess) {
-            return apiForbidden(`You can only delete your own ${meta.namePlural.toLowerCase()}`);
-          }
-        } else {
-          // Use field-based ownership check
-          const ownerId = (existing as Record<string, unknown>)[ownershipField];
-          if (ownerId !== user.id) {
-            return apiForbidden(`You can only delete your own ${meta.namePlural.toLowerCase()}`);
-          }
+        const ownershipError = await defaultOwnershipCheck(
+          existing,
+          user.id,
+          ownershipField,
+          config.useActorOwnership,
+          'delete',
+          meta.namePlural.toLowerCase()
+        );
+        if (ownershipError) {
+          return ownershipError;
         }
       }
 
