@@ -5,6 +5,7 @@ import ProfilePageClient from '@/components/profile/ProfilePageClient';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getTableName } from '@/config/entity-registry';
 import { safeJsonLdString } from '@/lib/seo/structured-data';
+import type { ScalableProfile } from '@/types/database';
 
 interface PageProps {
   params: Promise<{ username: string }>;
@@ -34,15 +35,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         .select('username')
         .eq('id', user.id)
         .single();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const userProfile = userProfileData as any;
+      const userProfile = userProfileData as { username: string | null } | null;
 
       targetUsername = userProfile?.username || user.id;
     } else {
       // Not authenticated - return generic metadata
       return {
         title: 'My Profile | OrangeCat',
-        description: 'View your profile on OrangeCat. Exchange, fund, lend, invest, and connect with others.',
+        description:
+          'View your profile on OrangeCat. Exchange, fund, lend, invest, and connect with others.',
       };
     }
   }
@@ -53,8 +54,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .eq('username', targetUsername)
     .single();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const profile = profileData as any;
+  const profile = profileData as {
+    name: string | null;
+    bio: string | null;
+    avatar_url: string | null;
+    username: string | null;
+  } | null;
   if (!profile) {
     return {
       title: 'Profile Not Found | OrangeCat',
@@ -123,8 +128,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
       .select('username')
       .eq('id', user.id)
       .single();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const userProfile = userProfileData as any;
+    const userProfile = userProfileData as { username: string | null } | null;
 
     targetUsername = userProfile?.username || user.id;
   }
@@ -135,8 +139,9 @@ export default async function PublicProfilePage({ params }: PageProps) {
     .select('*')
     .eq('username', targetUsername)
     .single();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const profile = profileData as any;
+  // Supabase Row type and ScalableProfile diverge on narrow union fields (e.g. status);
+  // both derive from the same table so the shape is compatible at runtime.
+  const profile = profileData as unknown as ScalableProfile;
 
   if (profileError || !profile) {
     notFound();
