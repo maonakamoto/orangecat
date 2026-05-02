@@ -11,10 +11,9 @@ import BulkActionsBar from '@/components/entity/BulkActionsBar';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useEntityList } from '@/hooks/useEntityList';
 import { useBulkSelection } from '@/hooks/useBulkSelection';
+import { useBulkDelete } from '@/hooks/useBulkDelete';
 import { investmentEntityConfig } from '@/config/entities/investments';
 import { Investment } from '@/types/investments';
-import { toast } from 'sonner';
-import { logger } from '@/utils/logger';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrendingUp, Search } from 'lucide-react';
 
@@ -24,9 +23,7 @@ import { TrendingUp, Search } from 'lucide-react';
 export default function InvestmentsPage() {
   const { user, isLoading, hydrated } = useRequireAuth();
   const { selectedIds, toggleSelect, toggleSelectAll, clearSelection } = useBulkSelection();
-  const [isDeleting, setIsDeleting] = useState(false);
   const [showSelection, setShowSelection] = useState(false);
-  const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false);
   const [activeTab, setActiveTab] = useState<'my-investments' | 'open'>('my-investments');
 
   const {
@@ -56,37 +53,20 @@ export default function InvestmentsPage() {
     enabled: hydrated && !isLoading && activeTab === 'open',
   });
 
-  const handleBulkDelete = () => {
-    if (selectedIds.size === 0) {return;}
-    setBulkDeleteConfirm(true);
-  };
-
-  const executeBulkDelete = async () => {
-    setBulkDeleteConfirm(false);
-    setIsDeleting(true);
-    try {
-      const deletePromises = Array.from(selectedIds).map(async id => {
-        const response = await fetch(`/api/investments/${id}`, { method: 'DELETE' });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || `Failed to delete investment ${id}`);
-        }
-        return response.json().catch(() => ({}));
-      });
-
-      await Promise.all(deletePromises);
-      toast.success(
-        `Successfully deleted ${selectedIds.size} investment${selectedIds.size > 1 ? 's' : ''}`
-      );
-      clearSelection();
-      await refresh();
-    } catch (error) {
-      logger.error('Failed to delete investments', { error }, 'InvestmentsPage');
-      toast.error('Failed to delete some investments. Please try again.');
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+  const {
+    isDeleting,
+    bulkDeleteConfirm,
+    setBulkDeleteConfirm,
+    handleBulkDelete,
+    executeBulkDelete,
+  } = useBulkDelete({
+    selectedIds,
+    apiEndpoint: investmentEntityConfig.apiEndpoint,
+    entityName: 'Investment',
+    entityNamePlural: 'Investments',
+    clearSelection,
+    refresh,
+  });
 
   if (!hydrated || isLoading) {
     return <Loading fullScreen message="Loading your investments..." />;

@@ -2,10 +2,9 @@ import { useState, useMemo } from 'react';
 import { useRequireAuth } from '@/hooks/useAuth';
 import { useEntityList } from '@/hooks/useEntityList';
 import { useBulkSelection } from '@/hooks/useBulkSelection';
+import { useBulkDelete } from '@/hooks/useBulkDelete';
 import { projectEntityConfig, type ProjectListItem } from '@/config/entities/projects';
 import { PROJECT_STATUS } from '@/config/project-statuses';
-import { toast } from 'sonner';
-import { logger } from '@/utils/logger';
 
 type ActiveTab = 'my-projects' | 'favorites';
 
@@ -13,9 +12,7 @@ export function useProjectList() {
   const { user, isLoading, hydrated, session } = useRequireAuth();
   const { selectedIds, toggleSelect, toggleSelectAll, clearSelection } = useBulkSelection();
 
-  const [isDeleting, setIsDeleting] = useState(false);
   const [showSelection, setShowSelection] = useState(false);
-  const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>('my-projects');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -94,44 +91,21 @@ export function useProjectList() {
     return items;
   }, [activeTab, myProjects, favorites, searchQuery, statusFilter]);
 
-  const handleBulkDelete = () => {
-    if (selectedIds.size === 0) {
-      return;
-    }
-    setBulkDeleteConfirm(true);
-  };
-
-  const executeBulkDelete = async () => {
-    setBulkDeleteConfirm(false);
-    setIsDeleting(true);
-    try {
-      await Promise.all(
-        Array.from(selectedIds).map(async id => {
-          const response = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `Failed to delete project ${id}`);
-          }
-          const result = await response.json().catch(() => ({}));
-          if (result.error) {
-            throw new Error(result.error);
-          }
-          return result;
-        })
-      );
-      toast.success(
-        `Successfully deleted ${selectedIds.size} project${selectedIds.size > 1 ? 's' : ''}`
-      );
-      clearSelection();
-      setShowSelection(false);
-      await refresh();
-    } catch (error) {
-      logger.error('Failed to delete projects', { error }, 'ProjectsDashboardPage');
-      toast.error('Failed to delete some projects. Please try again.');
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+  const {
+    isDeleting,
+    bulkDeleteConfirm,
+    setBulkDeleteConfirm,
+    handleBulkDelete,
+    executeBulkDelete,
+  } = useBulkDelete({
+    selectedIds,
+    apiEndpoint: projectEntityConfig.apiEndpoint,
+    entityName: 'Project',
+    entityNamePlural: 'Projects',
+    clearSelection,
+    refresh,
+    onSuccess: () => setShowSelection(false),
+  });
 
   const switchTab = (tab: ActiveTab) => {
     setActiveTab(tab);

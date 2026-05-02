@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useRequireAuth } from '@/hooks/useAuth';
 import { useEntityList } from '@/hooks/useEntityList';
 import { useBulkSelection } from '@/hooks/useBulkSelection';
+import { useBulkDelete } from '@/hooks/useBulkDelete';
 import { loanEntityConfig } from '@/config/entities/loans';
 import { Loan, LoanOffer } from '@/types/loans';
 import { toast } from 'sonner';
@@ -16,9 +17,7 @@ export function useLoanList() {
   const { user, isLoading, hydrated } = useRequireAuth();
   const { selectedIds, toggleSelect, toggleSelectAll, clearSelection } = useBulkSelection();
 
-  const [isDeleting, setIsDeleting] = useState(false);
   const [showSelection, setShowSelection] = useState(false);
-  const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>('my-loans');
   const [myOffers, setMyOffers] = useState<LoanOffer[]>([]);
   const [availableLoans, setAvailableLoans] = useState<Loan[]>([]);
@@ -89,43 +88,20 @@ export function useLoanList() {
     }
   };
 
-  const handleBulkDelete = () => {
-    if (selectedIds.size === 0) {
-      return;
-    }
-    setBulkDeleteConfirm(true);
-  };
-
-  const executeBulkDelete = async () => {
-    setBulkDeleteConfirm(false);
-    setIsDeleting(true);
-    try {
-      await Promise.all(
-        Array.from(selectedIds).map(async id => {
-          const response = await fetch(`/api/loans/${id}`, { method: 'DELETE' });
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `Failed to delete loan ${id}`);
-          }
-          const result = await response.json().catch(() => ({}));
-          if (result.error) {
-            throw new Error(result.error);
-          }
-          return result;
-        })
-      );
-      toast.success(
-        `Successfully deleted ${selectedIds.size} loan${selectedIds.size > 1 ? 's' : ''}`
-      );
-      clearSelection();
-      await refresh();
-    } catch (err) {
-      logger.error('Failed to delete loans', { error: err }, 'LoansPage');
-      toast.error('Failed to delete some loans. Please try again.');
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+  const {
+    isDeleting,
+    bulkDeleteConfirm,
+    setBulkDeleteConfirm,
+    handleBulkDelete,
+    executeBulkDelete,
+  } = useBulkDelete({
+    selectedIds,
+    apiEndpoint: loanEntityConfig.apiEndpoint,
+    entityName: 'Loan',
+    entityNamePlural: 'Loans',
+    clearSelection,
+    refresh,
+  });
 
   const handleLoanCreated = () => {
     setCreateDialogOpen(false);

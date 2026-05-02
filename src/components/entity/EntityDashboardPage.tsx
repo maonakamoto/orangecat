@@ -13,6 +13,7 @@ import BulkActionsBar from '@/components/entity/BulkActionsBar';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useEntityList } from '@/hooks/useEntityList';
 import { useBulkSelection } from '@/hooks/useBulkSelection';
+import { useBulkDelete } from '@/hooks/useBulkDelete';
 import { EntityConfig, BaseEntity } from '@/types/entity';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
@@ -60,16 +61,29 @@ export default function EntityDashboardPage<T extends BaseEntity>({
   const { user, isLoading: authLoading, hydrated } = useRequireAuth();
   const userCurrency = useUserCurrency();
   const { selectedIds, toggleSelect, toggleSelectAll, clearSelection } = useBulkSelection();
-  const [isDeleting, setIsDeleting] = useState(false);
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [showSelection, setShowSelection] = useState(false);
-  const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false);
 
   const { items, loading, error, page, total, setPage, refresh } = useEntityList<T>({
     apiEndpoint: config.apiEndpoint,
     userId: user?.id,
     limit,
     enabled: !!user?.id && hydrated && !authLoading,
+  });
+
+  const {
+    isDeleting,
+    bulkDeleteConfirm,
+    setBulkDeleteConfirm,
+    handleBulkDelete,
+    executeBulkDelete,
+  } = useBulkDelete({
+    selectedIds,
+    apiEndpoint: config.apiEndpoint,
+    entityName: config.name,
+    entityNamePlural: config.namePlural,
+    clearSelection,
+    refresh,
   });
 
   // Memoize items to prevent unnecessary re-renders
@@ -102,42 +116,6 @@ export default function EntityDashboardPage<T extends BaseEntity>({
     },
     [config.apiEndpoint, config.name, refresh]
   );
-
-  // Bulk delete selected items
-  const handleBulkDelete = useCallback(() => {
-    if (selectedIds.size === 0) {return;}
-    setBulkDeleteConfirm(true);
-  }, [selectedIds.size]);
-
-  const executeBulkDelete = useCallback(async () => {
-    setBulkDeleteConfirm(false);
-    setIsDeleting(true);
-    try {
-      const deletePromises = Array.from(selectedIds).map(async id => {
-        const response = await fetch(`${config.apiEndpoint}/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || `Failed to delete ${config.name} ${id}`);
-        }
-        return response.json().catch(() => ({}));
-      });
-
-      await Promise.all(deletePromises);
-      toast.success(
-        `Successfully deleted ${selectedIds.size} ${selectedIds.size > 1 ? config.namePlural.toLowerCase() : config.name.toLowerCase()}`
-      );
-      clearSelection();
-      await refresh();
-    } catch (error) {
-      logger.error(`Failed to delete ${config.namePlural}`, { error }, 'EntityDashboardPage');
-      toast.error(`Failed to delete some ${config.namePlural.toLowerCase()}. Please try again.`);
-    } finally {
-      setIsDeleting(false);
-    }
-  }, [selectedIds, config.apiEndpoint, config.name, config.namePlural, clearSelection, refresh]);
-
 
   // Loading state
   if (!hydrated || authLoading) {
