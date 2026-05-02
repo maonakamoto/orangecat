@@ -48,30 +48,20 @@ import { cn } from '@/lib/utils';
  */
 
 // Entity types displayed as generic ProfileEntityTab tabs, in order.
-// Icon and label come from ENTITY_REGISTRY; statsKey maps to the stats prop field.
-const PROFILE_ENTITY_TABS: Array<{
-  entityType: EntityType;
-  statsKey:
-    | 'productCount'
-    | 'serviceCount'
-    | 'causeCount'
-    | 'eventCount'
-    | 'loanCount'
-    | 'assetCount'
-    | 'aiAssistantCount';
-}> = [
-  { entityType: 'product', statsKey: 'productCount' },
-  { entityType: 'service', statsKey: 'serviceCount' },
-  { entityType: 'cause', statsKey: 'causeCount' },
-  { entityType: 'event', statsKey: 'eventCount' },
-  { entityType: 'loan', statsKey: 'loanCount' },
-  { entityType: 'asset', statsKey: 'assetCount' },
-  { entityType: 'ai_assistant', statsKey: 'aiAssistantCount' },
+// Icon and label come from ENTITY_REGISTRY; counts come from stats.entityCounts[entityType].
+const PROFILE_ENTITY_TABS: EntityType[] = [
+  'product',
+  'service',
+  'cause',
+  'event',
+  'loan',
+  'asset',
+  'ai_assistant',
 ];
 
 // Tab IDs for registry-driven entity tabs (used in visibility filter)
 const ENTITY_TAB_IDS = new Set(
-  PROFILE_ENTITY_TABS.map(({ entityType }) =>
+  PROFILE_ENTITY_TABS.map(entityType =>
     ENTITY_REGISTRY[entityType].namePlural.toLowerCase().replace(/\s+/g, '-')
   )
 );
@@ -85,14 +75,7 @@ interface ProfileLayoutProps {
     followerCount?: number;
     followingCount?: number;
     walletCount?: number;
-    // Entity counts for profile tabs
-    productCount?: number;
-    serviceCount?: number;
-    causeCount?: number;
-    eventCount?: number;
-    loanCount?: number;
-    assetCount?: number;
-    aiAssistantCount?: number;
+    entityCounts?: Partial<Record<EntityType, number>>;
   };
   mode?: 'view' | 'edit';
   onSave?: (data: ProfileFormData) => Promise<void>;
@@ -264,14 +247,14 @@ export default function ProfileLayout({
       badge: stats?.projectCount,
       content: <ProfileProjectsTab profile={profile} isOwnProfile={isOwnProfile} />,
     },
-    ...PROFILE_ENTITY_TABS.map(({ entityType, statsKey }) => {
+    ...PROFILE_ENTITY_TABS.map(entityType => {
       const meta = ENTITY_REGISTRY[entityType];
       const Icon = meta.icon;
       return {
         id: meta.namePlural.toLowerCase().replace(/\s+/g, '-'),
         label: meta.namePlural,
         icon: <Icon className="w-4 h-4" />,
-        badge: stats?.[statsKey],
+        badge: stats?.entityCounts?.[entityType],
         content: (
           <ProfileEntityTab profile={profile} entityType={entityType} isOwnProfile={isOwnProfile} />
         ),
@@ -295,10 +278,16 @@ export default function ProfileLayout({
 
   // For public profiles, hide tabs with no content
   const filteredTabs = tabs.filter(tab => {
-    if (isOwnProfile) { return true; }
+    if (isOwnProfile) {
+      return true;
+    }
     // Entity tabs: show only when there's content
-    if (ENTITY_TAB_IDS.has(tab.id)) { return (tab.badge || 0) > 0; }
-    if (tab.id === 'projects') { return (stats?.projectCount || 0) > 0; }
+    if (ENTITY_TAB_IDS.has(tab.id)) {
+      return (tab.badge || 0) > 0;
+    }
+    if (tab.id === 'projects') {
+      return (stats?.projectCount || 0) > 0;
+    }
     if (tab.id === 'people') {
       return (stats?.followerCount || 0) + (stats?.followingCount || 0) > 0;
     }

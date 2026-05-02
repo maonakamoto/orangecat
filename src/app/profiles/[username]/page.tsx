@@ -317,14 +317,15 @@ export default async function PublicProfilePage({ params }: PageProps) {
           followerCount: followerCount || 0,
           followingCount: followingCount || 0,
           walletCount,
-          // Entity counts for profile tabs
-          productCount: productCount || 0,
-          serviceCount: serviceCount || 0,
-          causeCount: causeCount || 0,
-          eventCount: eventCount || 0,
-          loanCount: loanCount || 0,
-          assetCount: assetCount || 0,
-          aiAssistantCount: aiAssistantCount || 0,
+          entityCounts: {
+            product: productCount || 0,
+            service: serviceCount || 0,
+            cause: causeCount || 0,
+            event: eventCount || 0,
+            loan: loanCount || 0,
+            asset: assetCount || 0,
+            ai_assistant: aiAssistantCount || 0,
+          },
         }}
       />
     </>

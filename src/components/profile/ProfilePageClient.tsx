@@ -2,6 +2,7 @@
 
 import { ScalableProfile, Project } from '@/types/database';
 import ProfileLayout from '@/components/profile/ProfileLayout';
+import type { EntityType } from '@/config/entity-registry';
 
 interface ProfilePageClientProps {
   profile: ScalableProfile;
@@ -13,13 +14,7 @@ interface ProfilePageClientProps {
     followerCount: number;
     followingCount: number;
     walletCount: number;
-    productCount?: number;
-    serviceCount?: number;
-    causeCount?: number;
-    eventCount?: number;
-    loanCount?: number;
-    assetCount?: number;
-    aiAssistantCount?: number;
+    entityCounts?: Partial<Record<EntityType, number>>;
   };
 }
 
