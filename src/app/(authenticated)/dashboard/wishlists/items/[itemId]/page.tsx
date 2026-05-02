@@ -8,8 +8,6 @@
  * Last Modified Summary: Created wishlist item detail page with proof section
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { notFound, redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import { WishlistItemProofSection } from '@/components/wishlist/WishlistItemProofSection';
@@ -20,6 +18,21 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb';
 interface PageProps {
   params: Promise<{ itemId: string }>;
 }
+
+// Actual queried shape — generated DB types are stale (missing is_fully_funded/is_fulfilled,
+// and wishlists join uses actor_id not user_id in the live schema)
+type WishlistItemRow = {
+  id: string;
+  wishlist_id: string;
+  title: string;
+  description: string | null;
+  image_url: string | null;
+  target_amount_btc: number;
+  funded_amount_btc: number;
+  is_fully_funded: boolean;
+  is_fulfilled: boolean;
+  wishlists: { id: string; title: string; actor_id: string } | null;
+};
 
 export default async function WishlistItemDetailPage({ params }: PageProps) {
   const { itemId } = await params;
@@ -34,10 +47,10 @@ export default async function WishlistItemDetailPage({ params }: PageProps) {
     redirect('/auth?mode=login&from=/dashboard/wishlists');
   }
 
-  // Fetch wishlist item
-  const { data: item, error: itemError } = await (
-    supabase.from(DATABASE_TABLES.WISHLIST_ITEMS) as any
-  )
+  // Fetch wishlist item — cast result because DATABASE_TABLES.WISHLIST_ITEMS loses Supabase
+  // type inference (same root cause as other DATABASE_TABLES.X usages in this codebase)
+  const { data: itemData, error: itemError } = await supabase
+    .from(DATABASE_TABLES.WISHLIST_ITEMS)
     .select(
       `
       id,
@@ -58,6 +71,8 @@ export default async function WishlistItemDetailPage({ params }: PageProps) {
     )
     .eq('id', itemId)
     .single();
+
+  const item = itemData as unknown as WishlistItemRow;
 
   if (itemError || !item) {
     notFound();

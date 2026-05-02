@@ -23,6 +23,48 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+// Narrow types matching the actual DB schema (generated types in database.ts are stale for projects)
+type ProjectMeta = {
+  title: string;
+  description: string | null;
+  goal_amount: number | null;
+  raised_amount: number | null;
+  currency: string | null;
+  category: string | null;
+  status: string;
+  user_id: string;
+};
+
+// Mirrors ProjectPageClient's Project interface — all required fields plus known optionals
+type ProjectFull = {
+  id: string;
+  user_id: string;
+  title: string;
+  description: string | null;
+  goal_amount: number | null;
+  raised_amount: number | null;
+  currency: string | null;
+  category: string | null;
+  status: string;
+  bitcoin_address: string | null;
+  lightning_address: string | null;
+  funding_purpose: string | null;
+  website_url: string | null;
+  tags: string[] | null;
+  created_at: string;
+  updated_at: string;
+  bitcoin_balance_btc?: number | null;
+  bitcoin_balance_updated_at?: string | null;
+  supporters_count?: number | null;
+  last_support_at?: string | null;
+};
+
+type ProfileSnippet = {
+  username: string | null;
+  name: string | null;
+  avatar_url: string | null;
+} | null;
+
 /**
  * Generate metadata for project pages
  * This enables SEO and social media preview cards (Twitter, Facebook, LinkedIn, etc.)
@@ -37,8 +79,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .eq('id', id)
     .single();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const project = projectData as any;
+  const project = projectData as ProjectMeta | null;
   if (!project) {
     return {
       title: 'Project Not Found | OrangeCat',
@@ -47,8 +88,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   // Fetch creator profile separately for metadata
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let creatorProfile: any = null;
+  let creatorProfile: ProfileSnippet = null;
   if (project.user_id) {
     const { data: profileData } = await supabase
       .from(DATABASE_TABLES.PROFILES)
@@ -57,8 +97,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       .maybeSingle();
 
     if (profileData) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      creatorProfile = profileData as any;
+      creatorProfile = profileData as ProfileSnippet;
     }
   }
 
@@ -118,15 +157,13 @@ export default async function PublicProjectPage({ params }: PageProps) {
     .eq('id', id)
     .single();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const project = projectData as any;
+  const project = projectData as unknown as ProjectFull;
   if (projectError || !project) {
     notFound();
   }
 
   // Fetch profile separately (more reliable than JOIN)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let profile: any = null;
+  let profile: (ProfileSnippet & { id: string }) | null = null;
   if (project.user_id) {
     const { data: profileData } = await supabase
       .from(DATABASE_TABLES.PROFILES)
@@ -135,16 +172,17 @@ export default async function PublicProjectPage({ params }: PageProps) {
       .maybeSingle();
 
     if (profileData) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      profile = profileData as any;
+      profile = profileData as ProfileSnippet & { id: string };
     }
   }
 
-  // Ensure raised_amount exists
+  // Ensure non-nullable fields match ProjectPageClient's Project interface
   const projectWithProfile = {
     ...project,
+    description: project.description ?? '',
+    currency: project.currency ?? 'BTC',
     raised_amount: project.raised_amount ?? 0,
-    profiles: profile,
+    profiles: profile ?? undefined,
   };
 
   // Generate JSON-LD structured data for SEO
