@@ -258,34 +258,26 @@ export function useDiscoverState() {
     [counts]
   );
 
+  const tabItems: Partial<Record<DiscoverTabType, unknown[]>> = {
+    projects,
+    profiles,
+    loans: financial.loans,
+    investments: financial.investments,
+    assets: financial.assets,
+    causes: generic.causes,
+    events: generic.events,
+    products: generic.products,
+    services: generic.services,
+    groups: generic.groups,
+    wishlists: generic.wishlists,
+    research: generic.research,
+    ai_assistants: generic.aiAssistants,
+  };
+
   const isEmpty =
-    (activeTab === 'projects' && projects.length === 0) ||
-    (activeTab === 'profiles' && profiles.length === 0) ||
-    (activeTab === 'loans' && financial.loans.length === 0) ||
-    (activeTab === 'investments' && financial.investments.length === 0) ||
-    (activeTab === 'assets' && financial.assets.length === 0) ||
-    (activeTab === 'causes' && generic.causes.length === 0) ||
-    (activeTab === 'events' && generic.events.length === 0) ||
-    (activeTab === 'products' && generic.products.length === 0) ||
-    (activeTab === 'services' && generic.services.length === 0) ||
-    (activeTab === 'groups' && generic.groups.length === 0) ||
-    (activeTab === 'wishlists' && generic.wishlists.length === 0) ||
-    (activeTab === 'research' && generic.research.length === 0) ||
-    (activeTab === 'ai_assistants' && generic.aiAssistants.length === 0) ||
-    (activeTab === 'all' &&
-      projects.length === 0 &&
-      profiles.length === 0 &&
-      financial.loans.length === 0 &&
-      financial.investments.length === 0 &&
-      financial.assets.length === 0 &&
-      generic.causes.length === 0 &&
-      generic.events.length === 0 &&
-      generic.products.length === 0 &&
-      generic.services.length === 0 &&
-      generic.groups.length === 0 &&
-      generic.wishlists.length === 0 &&
-      generic.research.length === 0 &&
-      generic.aiAssistants.length === 0);
+    activeTab === 'all'
+      ? Object.values(tabItems).every(items => items.length === 0)
+      : (tabItems[activeTab]?.length ?? 0) === 0;
 
   const hasFilters = !!(searchTerm || selectedCategories.length > 0);
 
