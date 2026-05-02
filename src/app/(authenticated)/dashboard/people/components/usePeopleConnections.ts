@@ -38,8 +38,7 @@ function transformConnectionItem(
     profile: {
       id: (profileData as Profile).id || item[idField] || '',
       username: (profileData as Profile).username,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      name: (profileData as Profile).name || (profileData as any).display_name || null,
+      name: (profileData as Profile).name || null,
       avatar_url: (profileData as Profile).avatar_url,
       bio: (profileData as Profile).bio,
       bitcoin_address: (profileData as Profile).bitcoin_address,
@@ -52,12 +51,18 @@ function transformConnectionItem(
 }
 
 function parseResponseArray(data: { success?: boolean; data?: unknown }): ConnectionResponseItem[] {
-  if (!data.success) {return [];}
+  if (!data.success) {
+    return [];
+  }
   const raw = data.data;
-  if (Array.isArray(raw)) {return raw as ConnectionResponseItem[];}
+  if (Array.isArray(raw)) {
+    return raw as ConnectionResponseItem[];
+  }
   if (raw && typeof raw === 'object' && 'data' in raw) {
     const nested = (raw as { data?: unknown }).data;
-    if (Array.isArray(nested)) {return nested as ConnectionResponseItem[];}
+    if (Array.isArray(nested)) {
+      return nested as ConnectionResponseItem[];
+    }
   }
   return [];
 }
@@ -70,7 +75,9 @@ export function usePeopleConnections(userId: string | undefined, hydrated: boole
   const [followingLoading, setFollowingLoading] = useState<string | null>(null);
 
   const loadConnections = useCallback(async () => {
-    if (!userId) {return;}
+    if (!userId) {
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -137,7 +144,9 @@ export function usePeopleConnections(userId: string | undefined, hydrated: boole
   }, [userId, hydrated, loadConnections]);
 
   const handleFollow = async (profileId: string) => {
-    if (!userId) {return;}
+    if (!userId) {
+      return;
+    }
     setFollowingLoading(profileId);
     try {
       const response = await fetch(API_ROUTES.SOCIAL.FOLLOW, {
@@ -161,7 +170,9 @@ export function usePeopleConnections(userId: string | undefined, hydrated: boole
   };
 
   const handleUnfollow = async (profileId: string) => {
-    if (!userId) {return;}
+    if (!userId) {
+      return;
+    }
     setFollowingLoading(profileId);
     try {
       const response = await fetch(API_ROUTES.SOCIAL.UNFOLLOW, {

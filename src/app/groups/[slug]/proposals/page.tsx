@@ -27,12 +27,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .eq('slug', slug)
     .single();
 
-  if (!group) {
+  const g = group as { name: string } | null;
+  if (!g) {
     return { title: 'Proposals | OrangeCat' };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const g = group as any;
   return {
     title: `Proposals - ${g.name} | OrangeCat`,
     description: `View and vote on proposals for ${g.name}`,

@@ -34,15 +34,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .eq('slug', slug)
     .single();
 
-  if (!group) {
+  const g = group as {
+    name: string;
+    description: string | null;
+    visibility: string;
+    member_count: number | null;
+  } | null;
+  if (!g) {
     return {
       title: 'Group Not Found | OrangeCat',
       description: 'The group you are looking for does not exist.',
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const g = group as any;
   const title = `${g.name} | OrangeCat`;
   const description =
     g.description ||
@@ -79,12 +83,10 @@ export default async function GroupDetailPage({ params }: PageProps) {
     .eq('slug', slug)
     .single();
 
-  if (!group) {
+  const g = group as { id: string; name: string; description: string | null } | null;
+  if (!g) {
     notFound();
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const g = group as any;
 
   const structuredData = {
     '@context': 'https://schema.org',
