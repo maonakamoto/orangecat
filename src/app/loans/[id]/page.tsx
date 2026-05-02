@@ -31,7 +31,7 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-type LoanRow = Database['public']['Tables']['user_loans']['Row'];
+type LoanRow = Database['public']['Tables']['loans']['Row'];
 type LoanWithProfile = LoanRow & {
   profiles: {
     id: string;
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-function formatCurrency(amount: number, currency: string = 'USD') {
+function formatCurrency(amount: number, currency: string | null | undefined = 'USD') {
   if (currency === 'BTC') {
     return `${amount.toFixed(8)} BTC`;
   }
