@@ -17,11 +17,12 @@ export default async function MyProfilePage() {
     redirect('/auth?mode=login');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+  const { data: profileData } = await supabase
+    .from(DATABASE_TABLES.PROFILES)
     .select('username')
     .eq('id', user.id)
     .maybeSingle();
+  const profile = profileData as { username: string | null } | null;
 
   const username = profile?.username || user.id;
   redirect(`/profiles/${username}`);

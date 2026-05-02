@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { DollarSign, ArrowLeft, Percent, TrendingUp, User, MessageSquare } from 'lucide-react';
 import { createServerClient } from '@/lib/supabase/server';
 import { getTableName } from '@/config/entity-registry';
+import type { Database } from '@/types/database';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -30,6 +31,16 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+type LoanRow = Database['public']['Tables']['user_loans']['Row'];
+type LoanWithProfile = LoanRow & {
+  profiles: {
+    id: string;
+    username: string | null;
+    name: string | null;
+    avatar_url: string | null;
+  } | null;
+};
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const supabase = await createServerClient();
@@ -41,8 +52,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .eq('is_public', true)
     .single();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const loan = loanData as any;
+  const loan = loanData as Pick<
+    LoanRow,
+    'title' | 'description' | 'original_amount' | 'currency'
+  > | null;
   if (!loan) {
     return {
       title: 'Loan Not Found | OrangeCat',
@@ -101,8 +114,7 @@ export default async function PublicLoanDetailPage({ params }: PageProps) {
     .eq('is_public', true)
     .single();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const loan = loanData as any;
+  const loan = loanData as unknown as LoanWithProfile;
   if (error || !loan) {
     notFound();
   }
@@ -296,7 +308,7 @@ export default async function PublicLoanDetailPage({ params }: PageProps) {
                 entityType="loan"
                 entityId={id}
                 title={loan.title}
-                description={loan.description}
+                description={loan.description ?? undefined}
               />
 
               <PublicEntityCTA
