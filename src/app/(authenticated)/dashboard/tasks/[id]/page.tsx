@@ -45,10 +45,7 @@ export default function TaskDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Modal states
-  const [showCompleteModal, setShowCompleteModal] = useState(false);
-  const [showRequestModal, setShowRequestModal] = useState(false);
-  const [showAttentionModal, setShowAttentionModal] = useState(false);
+  const [activeModal, setActiveModal] = useState<'complete' | 'request' | 'attention' | null>(null);
 
   // Load task
   const loadTask = useCallback(async () => {
@@ -85,16 +82,22 @@ export default function TaskDetailPage() {
   }, [hydrated, authLoading, user, loadTask]);
 
   // Action handlers
-  const { actionLoading, handleComplete, handleFlagAttention, handleRequest, archiveConfirmOpen, requestArchiveConfirm, executeArchive, closeArchiveConfirm } =
-    useTaskActions({
-      taskId,
-      onSuccess: () => {
-        setShowCompleteModal(false);
-        setShowAttentionModal(false);
-        setShowRequestModal(false);
-        loadTask();
-      },
-    });
+  const {
+    actionLoading,
+    handleComplete,
+    handleFlagAttention,
+    handleRequest,
+    archiveConfirmOpen,
+    requestArchiveConfirm,
+    executeArchive,
+    closeArchiveConfirm,
+  } = useTaskActions({
+    taskId,
+    onSuccess: () => {
+      setActiveModal(null);
+      loadTask();
+    },
+  });
 
   if (authLoading || loading) {
     return <Loading fullScreen message="Loading task..." />;
@@ -123,7 +126,9 @@ export default function TaskDetailPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20 p-4 sm:p-6 lg:p-8 pb-20 md:pb-8">
       <div className="max-w-3xl mx-auto space-y-6">
-        <Breadcrumb items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: task.title }]} />
+        <Breadcrumb
+          items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: task.title }]}
+        />
         {/* Header */}
         <div className="flex items-center justify-end">
           <div className="flex items-center gap-2">
@@ -238,12 +243,12 @@ export default function TaskDetailPage() {
 
           {/* Actions */}
           <div className="border-t border-gray-200 p-4 bg-gray-50 flex flex-wrap gap-2">
-            <Button onClick={() => setShowCompleteModal(true)} className="flex items-center gap-2">
+            <Button onClick={() => setActiveModal('complete')} className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4" />
               Done
             </Button>
             <Button
-              onClick={() => setShowRequestModal(true)}
+              onClick={() => setActiveModal('request')}
               variant="outline"
               className="flex items-center gap-2"
             >
@@ -251,7 +256,7 @@ export default function TaskDetailPage() {
               Request
             </Button>
             <Button
-              onClick={() => setShowAttentionModal(true)}
+              onClick={() => setActiveModal('attention')}
               variant="outline"
               className="flex items-center gap-2 text-amber-600 border-amber-300 hover:bg-amber-50"
             >
@@ -266,27 +271,27 @@ export default function TaskDetailPage() {
       </div>
 
       {/* Action Modals */}
-      {showCompleteModal && (
+      {activeModal === 'complete' && (
         <CompleteModal
           estimatedMinutes={task.estimated_minutes}
           actionLoading={actionLoading}
-          onClose={() => setShowCompleteModal(false)}
+          onClose={() => setActiveModal(null)}
           onComplete={handleComplete}
         />
       )}
 
-      {showAttentionModal && (
+      {activeModal === 'attention' && (
         <AttentionModal
           actionLoading={actionLoading}
-          onClose={() => setShowAttentionModal(false)}
+          onClose={() => setActiveModal(null)}
           onFlag={handleFlagAttention}
         />
       )}
 
-      {showRequestModal && (
+      {activeModal === 'request' && (
         <RequestModal
           actionLoading={actionLoading}
-          onClose={() => setShowRequestModal(false)}
+          onClose={() => setActiveModal(null)}
           onRequest={handleRequest}
         />
       )}
