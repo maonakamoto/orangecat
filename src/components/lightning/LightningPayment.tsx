@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { Zap, Wifi, WifiOff, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
@@ -266,9 +267,9 @@ export default function LightningPayment({
             <AlertTriangle className="h-4 w-4 text-yellow-600" />
             <AlertDescription className="text-yellow-800 text-sm">
               <strong>Demo Mode</strong> — Invoices are simulated.{' '}
-              <a href="/settings" className="text-yellow-900 underline font-medium">
+              <Link href="/settings" className="text-yellow-900 underline font-medium">
                 Connect your wallet
-              </a>{' '}
+              </Link>{' '}
               via NWC to make real Lightning payments.
             </AlertDescription>
           </Alert>

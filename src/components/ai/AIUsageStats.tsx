@@ -41,7 +41,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
     return num.toLocaleString();
   };
 
-  const formatDate = (dateString?: string) => {
+  const formatRelativeCompact = (dateString?: string) => {
     if (!dateString) {
       return 'Never';
     }
@@ -84,7 +84,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
     },
     {
       label: 'Last Used',
-      value: formatDate(usage.lastUsedAt),
+      value: formatRelativeCompact(usage.lastUsedAt),
       icon: Clock,
       color: 'text-gray-600',
       bgColor: 'bg-gray-100',
