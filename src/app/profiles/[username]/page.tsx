@@ -4,6 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import ProfilePageClient from '@/components/profile/ProfilePageClient';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getTableName } from '@/config/entity-registry';
+import type { EntityType } from '@/config/entity-registry';
 import { safeJsonLdString } from '@/lib/seo/structured-data';
 import type { ScalableProfile } from '@/types/database';
 import { mapProjectRow } from '@/types/project';
@@ -216,60 +217,32 @@ export default async function PublicProfilePage({ params }: PageProps) {
     }
   }
 
-  // Fetch entity counts for all entity types (for tab badges)
-  // Run these in parallel for efficiency
-  const [
-    { count: productCount },
-    { count: serviceCount },
-    { count: causeCount },
-    { count: eventCount },
-    { count: loanCount },
-    { count: assetCount },
-    { count: aiAssistantCount },
-  ] = await Promise.all([
-    supabase
-      .from(getTableName('product'))
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', profile.id)
-      .neq('status', 'draft')
-      .neq('show_on_profile', false),
-    supabase
-      .from(getTableName('service'))
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', profile.id)
-      .neq('status', 'draft')
-      .neq('show_on_profile', false),
-    supabase
-      .from(getTableName('cause'))
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', profile.id)
-      .neq('status', 'draft')
-      .neq('show_on_profile', false),
-    supabase
-      .from(getTableName('event'))
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', profile.id)
-      .neq('status', 'draft')
-      .neq('show_on_profile', false),
-    supabase
-      .from(getTableName('loan'))
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', profile.id)
-      .neq('status', 'draft')
-      .neq('show_on_profile', false),
-    supabase
-      .from(getTableName('asset'))
-      .select('*', { count: 'exact', head: true })
-      .eq('owner_id', profile.id)
-      .neq('status', 'draft')
-      .neq('show_on_profile', false),
-    supabase
-      .from(getTableName('ai_assistant'))
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', profile.id)
-      .neq('status', 'draft')
-      .neq('show_on_profile', false),
-  ]);
+  // Fetch entity counts for profile tab badges in parallel.
+  // userField differs for asset (owner_id) vs. all others (user_id) — legacy schema.
+  const ENTITY_COUNT_CONFIG: Array<{ type: EntityType; userField: string }> = [
+    { type: 'product', userField: 'user_id' },
+    { type: 'service', userField: 'user_id' },
+    { type: 'cause', userField: 'user_id' },
+    { type: 'event', userField: 'user_id' },
+    { type: 'loan', userField: 'user_id' },
+    { type: 'asset', userField: 'owner_id' },
+    { type: 'ai_assistant', userField: 'user_id' },
+  ];
+
+  const entityCountResults = await Promise.all(
+    ENTITY_COUNT_CONFIG.map(({ type, userField }) =>
+      supabase
+        .from(getTableName(type))
+        .select('*', { count: 'exact', head: true })
+        .eq(userField, profile.id)
+        .neq('status', 'draft')
+        .neq('show_on_profile', false)
+    )
+  );
+
+  const entityCounts = Object.fromEntries(
+    ENTITY_COUNT_CONFIG.map(({ type }, i) => [type, entityCountResults[i].count || 0])
+  ) as Partial<Record<EntityType, number>>;
 
   // Calculate statistics
   const projectCount = projects?.length || 0;
@@ -317,15 +290,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
           followerCount: followerCount || 0,
           followingCount: followingCount || 0,
           walletCount,
-          entityCounts: {
-            product: productCount || 0,
-            service: serviceCount || 0,
-            cause: causeCount || 0,
-            event: eventCount || 0,
-            loan: loanCount || 0,
-            asset: assetCount || 0,
-            ai_assistant: aiAssistantCount || 0,
-          },
+          entityCounts,
         }}
       />
     </>
