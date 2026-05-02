@@ -293,291 +293,121 @@ export default function DiscoverResults({
     </div>
   );
 
-  // All Tab
+  // All Tab — build a unified section list and render in one pass
   if (activeTab === 'all') {
-    const sectionCounts = [
-      projects.length,
-      profiles.length,
-      loans.length,
-      investments.length,
-      ...genericTabs.map(t => t.items.length),
+    type AllSection = {
+      id: string;
+      title: string;
+      icon: ReactNode;
+      count: number;
+      tabType: DiscoverTabType;
+      renderContent: () => ReactNode;
+    };
+
+    // 9 generic entity types derived from the same config that drives individual tabs
+    const genericSections: AllSection[] = genericTabs.map(t => ({
+      id: t.id,
+      title: t.title,
+      icon: t.icon,
+      count: t.items.length,
+      tabType: t.id,
+      renderContent: () => (
+        <AnimatedGrid
+          items={t.items.slice(0, 6)}
+          viewMode={viewMode}
+          renderItem={item => (
+            <GenericPublicCard
+              entity={item}
+              entityType={t.entityType}
+              href={t.makeHref(item)}
+              viewMode={viewMode}
+            />
+          )}
+        />
+      ),
+    }));
+
+    // 4 special entity types that use their own card components
+    const allSections: AllSection[] = [
+      {
+        id: 'projects',
+        title: 'Projects',
+        tabType: 'projects',
+        icon: <Target className="w-5 h-5" />,
+        count: projects.length,
+        renderContent: () => (
+          <AnimatedGrid
+            items={projects.slice(0, 6)}
+            viewMode={viewMode}
+            renderItem={item => <ProjectCard project={item} />}
+          />
+        ),
+      },
+      ...genericSections,
+      {
+        id: 'investments',
+        title: 'Investments',
+        tabType: 'investments',
+        icon: <TrendingUp className="w-5 h-5" />,
+        count: investments.length,
+        renderContent: () => (
+          <AnimatedGrid
+            items={investments.slice(0, 6)}
+            viewMode={viewMode}
+            renderItem={item => <InvestmentCard investment={item} viewMode={viewMode} />}
+          />
+        ),
+      },
+      {
+        id: 'loans',
+        title: 'Loans',
+        tabType: 'loans',
+        icon: <DollarSign className="w-5 h-5" />,
+        count: loans.length,
+        renderContent: () => (
+          <AnimatedGrid
+            items={loans.slice(0, 6)}
+            viewMode={viewMode}
+            renderItem={item => <LoanCard loan={item} viewMode={viewMode} />}
+          />
+        ),
+      },
+      {
+        id: 'profiles',
+        title: 'People',
+        tabType: 'profiles',
+        icon: <Users className="w-5 h-5" />,
+        count: profiles.length,
+        renderContent: () => (
+          <AnimatedGrid
+            items={profiles.slice(0, 6)}
+            viewMode={viewMode}
+            renderItem={item => <ProfileCard profile={item} viewMode={viewMode} />}
+          />
+        ),
+      },
     ];
-    const hasMultipleSections = sectionCounts.filter(n => n > 0).length > 1;
+
+    const hasMultipleSections = allSections.filter(s => s.count > 0).length > 1;
 
     return (
       <div className="space-y-8">
         {resultsHeader}
-        {projects.length > 0 && (
-          <ResultsSection
-            title="Projects"
-            count={projects.length}
-            icon={<Target className="w-5 h-5" />}
-            onViewAll={() => onTabChange('projects')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Projects"
-          >
-            <AnimatedGrid
-              items={projects.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => <ProjectCard project={item} />}
-            />
-          </ResultsSection>
-        )}
-        {causes.length > 0 && (
-          <ResultsSection
-            title="Causes"
-            count={causes.length}
-            icon={<Heart className="w-5 h-5" />}
-            onViewAll={() => onTabChange('causes')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Causes"
-          >
-            <AnimatedGrid
-              items={causes.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => (
-                <GenericPublicCard
-                  entity={item}
-                  entityType="cause"
-                  href={ROUTES.CAUSES.VIEW(item.id)}
-                  viewMode={viewMode}
-                />
-              )}
-            />
-          </ResultsSection>
-        )}
-        {investments.length > 0 && (
-          <ResultsSection
-            title="Investments"
-            count={investments.length}
-            icon={<TrendingUp className="w-5 h-5" />}
-            onViewAll={() => onTabChange('investments')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Investments"
-          >
-            <AnimatedGrid
-              items={investments.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => <InvestmentCard investment={item} viewMode={viewMode} />}
-            />
-          </ResultsSection>
-        )}
-        {assets.length > 0 && (
-          <ResultsSection
-            title="Assets"
-            count={assets.length}
-            icon={<Building className="w-5 h-5" />}
-            onViewAll={() => onTabChange('assets')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Assets"
-          >
-            <AnimatedGrid
-              items={assets.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => (
-                <GenericPublicCard
-                  entity={item}
-                  entityType="asset"
-                  href={ROUTES.ASSETS.VIEW(item.id)}
-                  viewMode={viewMode}
-                />
-              )}
-            />
-          </ResultsSection>
-        )}
-        {loans.length > 0 && (
-          <ResultsSection
-            title="Loans"
-            count={loans.length}
-            icon={<DollarSign className="w-5 h-5" />}
-            onViewAll={() => onTabChange('loans')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Loans"
-          >
-            <AnimatedGrid
-              items={loans.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => <LoanCard loan={item} viewMode={viewMode} />}
-            />
-          </ResultsSection>
-        )}
-        {products.length > 0 && (
-          <ResultsSection
-            title="Products"
-            count={products.length}
-            icon={<Package className="w-5 h-5" />}
-            onViewAll={() => onTabChange('products')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Products"
-          >
-            <AnimatedGrid
-              items={products.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => (
-                <GenericPublicCard
-                  entity={item}
-                  entityType="product"
-                  href={ROUTES.PRODUCTS.VIEW(item.id)}
-                  viewMode={viewMode}
-                />
-              )}
-            />
-          </ResultsSection>
-        )}
-        {services.length > 0 && (
-          <ResultsSection
-            title="Services"
-            count={services.length}
-            icon={<Briefcase className="w-5 h-5" />}
-            onViewAll={() => onTabChange('services')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Services"
-          >
-            <AnimatedGrid
-              items={services.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => (
-                <GenericPublicCard
-                  entity={item}
-                  entityType="service"
-                  href={ROUTES.SERVICES.VIEW(item.id)}
-                  viewMode={viewMode}
-                />
-              )}
-            />
-          </ResultsSection>
-        )}
-        {events.length > 0 && (
-          <ResultsSection
-            title="Events"
-            count={events.length}
-            icon={<Calendar className="w-5 h-5" />}
-            onViewAll={() => onTabChange('events')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Events"
-          >
-            <AnimatedGrid
-              items={events.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => (
-                <GenericPublicCard
-                  entity={item}
-                  entityType="event"
-                  href={ROUTES.EVENTS.VIEW(item.id)}
-                  viewMode={viewMode}
-                />
-              )}
-            />
-          </ResultsSection>
-        )}
-        {groups.length > 0 && (
-          <ResultsSection
-            title="Groups"
-            count={groups.length}
-            icon={<Building2 className="w-5 h-5" />}
-            onViewAll={() => onTabChange('groups')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Groups"
-          >
-            <AnimatedGrid
-              items={groups.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => (
-                <GenericPublicCard
-                  entity={item}
-                  entityType="group"
-                  href={ROUTES.GROUPS.VIEW(item.slug ?? item.id)}
-                  viewMode={viewMode}
-                />
-              )}
-            />
-          </ResultsSection>
-        )}
-        {wishlists.length > 0 && (
-          <ResultsSection
-            title="Wishlists"
-            count={wishlists.length}
-            icon={<Gift className="w-5 h-5" />}
-            onViewAll={() => onTabChange('wishlists')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Wishlists"
-          >
-            <AnimatedGrid
-              items={wishlists.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => (
-                <GenericPublicCard
-                  entity={item}
-                  entityType="wishlist"
-                  href={ROUTES.WISHLISTS.VIEW(item.id)}
-                  viewMode={viewMode}
-                />
-              )}
-            />
-          </ResultsSection>
-        )}
-        {research.length > 0 && (
-          <ResultsSection
-            title="Research"
-            count={research.length}
-            icon={<FlaskConical className="w-5 h-5" />}
-            onViewAll={() => onTabChange('research')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All Research"
-          >
-            <AnimatedGrid
-              items={research.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => (
-                <GenericPublicCard
-                  entity={item}
-                  entityType="research"
-                  href={ROUTES.RESEARCH.VIEW(item.id)}
-                  viewMode={viewMode}
-                />
-              )}
-            />
-          </ResultsSection>
-        )}
-        {aiAssistants.length > 0 && (
-          <ResultsSection
-            title="AI Assistants"
-            count={aiAssistants.length}
-            icon={<Bot className="w-5 h-5" />}
-            onViewAll={() => onTabChange('ai_assistants')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All AI Assistants"
-          >
-            <AnimatedGrid
-              items={aiAssistants.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => (
-                <GenericPublicCard
-                  entity={item}
-                  entityType="ai_assistant"
-                  href={ROUTES.AI_ASSISTANTS.VIEW(item.id)}
-                  viewMode={viewMode}
-                />
-              )}
-            />
-          </ResultsSection>
-        )}
-        {profiles.length > 0 && (
-          <ResultsSection
-            title="People"
-            count={profiles.length}
-            icon={<Users className="w-5 h-5" />}
-            onViewAll={() => onTabChange('profiles')}
-            showViewAll={hasMultipleSections}
-            viewAllLabel="View All People"
-          >
-            <AnimatedGrid
-              items={profiles.slice(0, 6)}
-              viewMode={viewMode}
-              renderItem={item => <ProfileCard profile={item} viewMode={viewMode} />}
-            />
-          </ResultsSection>
-        )}
+        {allSections
+          .filter(s => s.count > 0)
+          .map(section => (
+            <ResultsSection
+              key={section.id}
+              title={section.title}
+              count={section.count}
+              icon={section.icon}
+              onViewAll={() => onTabChange(section.tabType)}
+              showViewAll={hasMultipleSections}
+              viewAllLabel={`View All ${section.title}`}
+            >
+              {section.renderContent()}
+            </ResultsSection>
+          ))}
       </div>
     );
   }
