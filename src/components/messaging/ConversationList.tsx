@@ -1,16 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
-import { Users, MessageSquare, RefreshCw, Trash2 } from 'lucide-react';
-import AvatarLink from '@/components/ui/AvatarLink';
-import { cn } from '@/lib/utils';
+import { MessageSquare, RefreshCw } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useConversations } from '@/features/messaging/hooks';
-import type { Conversation } from '@/features/messaging/types';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { API_ROUTES } from '@/config/api-routes';
+import { ConversationListItem } from './ConversationListItem';
 
 interface ConversationListProps {
   searchQuery: string;
@@ -65,7 +61,6 @@ export default function ConversationList({
     }
   };
 
-  // External refresh signal from parent
   React.useEffect(() => {
     if (typeof refreshSignal !== 'number') {
       return;
@@ -98,7 +93,6 @@ export default function ConversationList({
     conversationId: string,
     isSelected: boolean
   ) => {
-    // Long-press (touch) to enter selection mode and start selecting
     if (e.pointerType === 'touch') {
       clearPressTimer();
       pressTimerRef.current = window.setTimeout(() => {
@@ -108,8 +102,6 @@ export default function ConversationList({
         setDragAction(isSelected ? 'deselect' : 'select');
       }, 350);
     }
-
-    // Mouse/touch drag selection when selection mode is active
     if (selectionMode) {
       e.preventDefault();
       setIsPointerSelecting(true);
@@ -141,136 +133,14 @@ export default function ConversationList({
     if (!searchQuery) {
       return true;
     }
-
-    const searchLower = searchQuery.toLowerCase();
-
-    // Search in conversation title
-    if (conversation.title?.toLowerCase().includes(searchLower)) {
+    const q = searchQuery.toLowerCase();
+    if (conversation.title?.toLowerCase().includes(q)) {
       return true;
     }
-
-    // Search in participant names/usernames
     return conversation.participants.some(
-      participant =>
-        participant.name?.toLowerCase().includes(searchLower) ||
-        participant.username?.toLowerCase().includes(searchLower)
+      p => p.name?.toLowerCase().includes(q) || p.username?.toLowerCase().includes(q)
     );
   });
-
-  const buildProfileHref = (participant?: Conversation['participants'][number]) => {
-    if (!participant) {
-      return null;
-    }
-    if (
-      participant.username &&
-      typeof participant.username === 'string' &&
-      participant.username.trim()
-    ) {
-      return `/profiles/${encodeURIComponent(participant.username.trim())}`;
-    }
-    if (
-      participant.user_id &&
-      typeof participant.user_id === 'string' &&
-      participant.user_id.trim()
-    ) {
-      return `/profiles/${encodeURIComponent(participant.user_id.trim())}`;
-    }
-    return null;
-  };
-
-  const getPrimaryParticipant = (conversation: Conversation) => {
-    return (conversation.participants || []).find(
-      p => p && p.is_active && p.user_id !== currentUserId
-    );
-  };
-
-  const getConversationDisplayName = (conversation: Conversation) => {
-    if (conversation.title) {
-      return conversation.title;
-    }
-
-    // For direct messages, show the other participant's name (exclude current user)
-    // Filter out invalid participants (null/undefined)
-    const otherParticipants = (conversation.participants || []).filter(
-      p => p && p.is_active && p.user_id !== currentUserId
-    );
-
-    if (otherParticipants.length === 1) {
-      return otherParticipants[0].name || otherParticipants[0].username || 'Unknown User';
-    }
-
-    if (otherParticipants.length === 0) {
-      return 'Notes to Self';
-    }
-
-    // For groups without title, show participant names
-    return (
-      otherParticipants
-        .slice(0, 3)
-        .map(p => p.name || p.username || 'Unknown')
-        .filter(Boolean)
-        .join(', ') + (otherParticipants.length > 3 ? ` +${otherParticipants.length - 3}` : '')
-    );
-  };
-
-  const getConversationProfileHref = (conversation: Conversation) => {
-    if (conversation.is_group) {
-      return null;
-    }
-    const primary = getPrimaryParticipant(conversation);
-    return buildProfileHref(primary);
-  };
-
-  const getConversationAvatar = (conversation: Conversation) => {
-    // Get other participants (exclude current user for DMs)
-    // Filter out invalid participants (null/undefined)
-    const otherParticipants = (conversation.participants || []).filter(
-      p => p && p.is_active && p.user_id !== currentUserId
-    );
-
-    if (conversation.is_group) {
-      return (
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-tiffany-400 to-tiffany-600 flex items-center justify-center text-white">
-          <Users className="w-5 h-5" />
-        </div>
-      );
-    }
-
-    // For DMs, show the other person's avatar
-    if (otherParticipants.length >= 1) {
-      const participant = otherParticipants[0];
-      // Ensure all values are valid strings or null
-      return (
-        <AvatarLink
-          username={
-            participant?.username && typeof participant.username === 'string'
-              ? participant.username
-              : null
-          }
-          userId={
-            participant?.user_id && typeof participant.user_id === 'string'
-              ? participant.user_id
-              : null
-          }
-          avatarUrl={
-            participant?.avatar_url && typeof participant.avatar_url === 'string'
-              ? participant.avatar_url
-              : null
-          }
-          name={participant?.name && typeof participant.name === 'string' ? participant.name : null}
-          size={40}
-          className="flex-shrink-0"
-        />
-      );
-    }
-
-    // Fallback for self-conversations or edge cases
-    return (
-      <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-        <MessageSquare className="w-5 h-5 text-gray-600" />
-      </div>
-    );
-  };
 
   if (loading) {
     return (
@@ -311,133 +181,58 @@ export default function ConversationList({
 
   return (
     <>
-    <div className="divide-y divide-gray-100">
-      {filteredConversations.length === 0 ? (
-        <div className="p-10 text-center text-gray-500">
-          <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-60" />
-          <p className="text-sm font-medium">
-            {searchQuery ? 'No conversations match your search' : 'No conversations yet'}
-          </p>
-          {!searchQuery && (
-            <p className="text-xs mt-1 text-gray-400">Start a new conversation to get started.</p>
-          )}
-        </div>
-      ) : (
-        filteredConversations.map(conversation => (
-          <div
-            key={conversation.id}
-            onPointerDown={e =>
-              handlePointerDown(e, conversation.id, selectedIds?.has(conversation.id) || false)
-            }
-            onPointerEnter={() => handlePointerEnter(conversation.id)}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-            onPointerLeave={() => {
-              if (isPointerSelecting && dragAction === 'select') {
-                // allow continued drag without deselecting on leave
-                return;
-              }
-            }}
-            onClick={e => {
-              // If we were dragging or in selection mode, don't navigate
-              if (isPointerSelecting || selectionMode) {
-                e.preventDefault();
-                return;
-              }
-              onSelectConversation(conversation.id);
-            }}
-            className={cn(
-              'p-3 sm:p-4 hover:bg-gray-50 cursor-pointer transition-all duration-150 flex items-start gap-3 group',
-              selectedConversationId === conversation.id &&
-                'bg-white shadow-sm border-l-4 border-orange-500',
-              selectionMode && 'pr-3'
+      <div className="divide-y divide-gray-100">
+        {filteredConversations.length === 0 ? (
+          <div className="p-10 text-center text-gray-500">
+            <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-60" />
+            <p className="text-sm font-medium">
+              {searchQuery ? 'No conversations match your search' : 'No conversations yet'}
+            </p>
+            {!searchQuery && (
+              <p className="text-xs mt-1 text-gray-400">Start a new conversation to get started.</p>
             )}
-          >
-            {selectionMode && (
-              <input
-                type="checkbox"
-                checked={selectedIds?.has(conversation.id) || false}
-                onChange={e => {
-                  e.stopPropagation();
-                  onToggleSelect?.(conversation.id);
-                }}
-                className="mt-2"
-              />
-            )}
-            {getConversationAvatar(conversation)}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start gap-2">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-medium text-gray-900 truncate">
-                      {(() => {
-                        const href = getConversationProfileHref(conversation);
-                        const name = getConversationDisplayName(conversation);
-                        return href ? (
-                          <Link href={href} className="hover:underline">
-                            {name}
-                          </Link>
-                        ) : (
-                          name
-                        );
-                      })()}
-                    </h3>
-                    {conversation.unread_count > 0 && (
-                      <span className="bg-orange-500 text-white text-[11px] leading-4 rounded-full px-2 py-0.5">
-                        {conversation.unread_count > 99 ? '99+' : conversation.unread_count}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-600 truncate">
-                    {conversation.last_message_preview || 'No messages yet'}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
-                    <span>
-                      {conversation.last_message_at
-                        ? formatDistanceToNow(new Date(conversation.last_message_at), {
-                            addSuffix: true,
-                          })
-                        : 'No messages'}
-                    </span>
-                    <span className="w-1 h-1 rounded-full bg-gray-300" />
-                    <span>
-                      {conversation.is_group
-                        ? `${conversation.participants.length} members`
-                        : 'Direct message'}
-                    </span>
-                  </div>
-                </div>
-                {!selectionMode && (
-                  <button
-                    type="button"
-                    aria-label="Delete conversation"
-                    className="p-1 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 self-start"
-                    onClick={e => {
-                      e.stopPropagation();
-                      setConfirmDeleteId(conversation.id);
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            </div>
           </div>
-        ))
-      )}
-    </div>
+        ) : (
+          filteredConversations.map(conversation => {
+            const isSelected = selectedIds?.has(conversation.id) || false;
+            return (
+              <ConversationListItem
+                key={conversation.id}
+                conversation={conversation}
+                isSelected={isSelected}
+                isActiveConversation={selectedConversationId === conversation.id}
+                selectionMode={selectionMode}
+                currentUserId={currentUserId}
+                onPointerDown={e => handlePointerDown(e, conversation.id, isSelected)}
+                onPointerEnter={() => handlePointerEnter(conversation.id)}
+                onPointerUp={handlePointerUp}
+                onClick={() => {
+                  if (isPointerSelecting || selectionMode) {
+                    return;
+                  }
+                  onSelectConversation(conversation.id);
+                }}
+                onToggleSelect={() => onToggleSelect?.(conversation.id)}
+                onDeleteRequest={() => setConfirmDeleteId(conversation.id)}
+              />
+            );
+          })
+        )}
+      </div>
 
-    <ConfirmDialog
-      isOpen={!!confirmDeleteId}
-      onClose={() => setConfirmDeleteId(null)}
-      onConfirm={() => {
-        if (confirmDeleteId) {handleDeleteOne(confirmDeleteId);}
-        setConfirmDeleteId(null);
-      }}
-      title="Delete conversation?"
-      description="This removes it for you. Other participants won't be affected."
-      confirmLabel="Delete"
-    />
+      <ConfirmDialog
+        isOpen={!!confirmDeleteId}
+        onClose={() => setConfirmDeleteId(null)}
+        onConfirm={() => {
+          if (confirmDeleteId) {
+            handleDeleteOne(confirmDeleteId);
+          }
+          setConfirmDeleteId(null);
+        }}
+        title="Delete conversation?"
+        description="This removes it for you. Other participants won't be affected."
+        confirmLabel="Delete"
+      />
     </>
   );
 }
