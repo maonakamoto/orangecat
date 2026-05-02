@@ -1,13 +1,4 @@
-/**
- * Discover Results Component
- *
- * Handles rendering of search results, loading states, and pagination.
- * Extracted from discover/page.tsx for better modularity.
- *
- * Created: 2025-01-30
- * Last Modified: 2025-01-30
- * Last Modified Summary: Extracted from discover/page.tsx
- */
+'use client';
 
 import { motion } from 'framer-motion';
 import {
@@ -21,7 +12,13 @@ import {
   FlaskConical,
   Bot,
   Building,
+  Heart,
+  Package,
+  Briefcase,
+  Calendar,
+  Building2,
 } from 'lucide-react';
+import type { ReactNode } from 'react';
 import Button from '@/components/ui/Button';
 import { ProjectCard } from '@/components/entity/variants/ProjectCard';
 import ProfileCard from '@/components/ui/ProfileCard';
@@ -70,6 +67,36 @@ interface DiscoverResultsProps {
   onTabChange: (tab: DiscoverTabType) => void;
 }
 
+// Single generic grid with animation — replaces 4 near-identical grid components.
+function AnimatedGrid<T extends { id: string }>({
+  items,
+  viewMode,
+  renderItem,
+}: {
+  items: T[];
+  viewMode: ViewMode;
+  renderItem: (item: T) => ReactNode;
+}) {
+  return (
+    <div
+      className={`grid gap-6 ${
+        viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
+      }`}
+    >
+      {items.map((item, index) => (
+        <motion.div
+          key={item.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: index * 0.05 }}
+        >
+          {renderItem(item)}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 export default function DiscoverResults({
   activeTab,
   viewMode,
@@ -93,41 +120,121 @@ export default function DiscoverResults({
   onLoadMore,
   onTabChange,
 }: DiscoverResultsProps) {
-  // Loading State - Skeleton Grid
+  // Config for the 9 generic entity tab types — drives both 'all' sections and individual tabs.
+  const genericTabs: Array<{
+    id: DiscoverTabType;
+    title: string;
+    icon: ReactNode;
+    items: GenericPublicEntity[];
+    entityType: EntityType;
+    makeHref: (e: GenericPublicEntity) => string;
+  }> = [
+    {
+      id: 'causes',
+      title: 'Causes',
+      icon: <Heart className="w-5 h-5" />,
+      items: causes,
+      entityType: 'cause',
+      makeHref: e => ROUTES.CAUSES.VIEW(e.id),
+    },
+    {
+      id: 'assets',
+      title: 'Assets',
+      icon: <Building className="w-5 h-5" />,
+      items: assets,
+      entityType: 'asset',
+      makeHref: e => ROUTES.ASSETS.VIEW(e.id),
+    },
+    {
+      id: 'products',
+      title: 'Products',
+      icon: <Package className="w-5 h-5" />,
+      items: products,
+      entityType: 'product',
+      makeHref: e => ROUTES.PRODUCTS.VIEW(e.id),
+    },
+    {
+      id: 'services',
+      title: 'Services',
+      icon: <Briefcase className="w-5 h-5" />,
+      items: services,
+      entityType: 'service',
+      makeHref: e => ROUTES.SERVICES.VIEW(e.id),
+    },
+    {
+      id: 'events',
+      title: 'Events',
+      icon: <Calendar className="w-5 h-5" />,
+      items: events,
+      entityType: 'event',
+      makeHref: e => ROUTES.EVENTS.VIEW(e.id),
+    },
+    {
+      id: 'groups',
+      title: 'Groups',
+      icon: <Building2 className="w-5 h-5" />,
+      items: groups,
+      entityType: 'group',
+      makeHref: e => ROUTES.GROUPS.VIEW(e.slug ?? e.id),
+    },
+    {
+      id: 'wishlists',
+      title: 'Wishlists',
+      icon: <Gift className="w-5 h-5" />,
+      items: wishlists,
+      entityType: 'wishlist',
+      makeHref: e => ROUTES.WISHLISTS.VIEW(e.id),
+    },
+    {
+      id: 'research',
+      title: 'Research',
+      icon: <FlaskConical className="w-5 h-5" />,
+      items: research,
+      entityType: 'research',
+      makeHref: e => ROUTES.RESEARCH.VIEW(e.id),
+    },
+    {
+      id: 'ai_assistants',
+      title: 'AI Assistants',
+      icon: <Bot className="w-5 h-5" />,
+      items: aiAssistants,
+      entityType: 'ai_assistant',
+      makeHref: e => ROUTES.AI_ASSISTANTS.VIEW(e.id),
+    },
+  ];
+
+  // Loading State
   if (loading) {
     return (
       <div className="space-y-8">
-        {/* Loading Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse" />
         </div>
-
-        {/* Skeleton Grid */}
         <div
           className={`grid gap-6 ${
             viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
           }`}
         >
           {activeTab === 'profiles' ? (
-            Array.from({ length: 6 }).map((_, index) => (
-              <ProfileCardSkeleton key={index} viewMode={viewMode} />
+            Array.from({ length: 6 }).map((_, i) => (
+              <ProfileCardSkeleton key={i} viewMode={viewMode} />
             ))
           ) : activeTab === 'projects' ? (
-            Array.from({ length: 6 }).map((_, index) => <ProjectCardSkeleton key={index} />)
+            Array.from({ length: 6 }).map((_, i) => <ProjectCardSkeleton key={i} />)
           ) : activeTab === 'loans' || activeTab === 'investments' ? (
-            Array.from({ length: 6 }).map((_, index) => (
-              <LoanCardSkeleton key={index} viewMode={viewMode} />
+            Array.from({ length: 6 }).map((_, i) => (
+              <LoanCardSkeleton key={i} viewMode={viewMode} />
             ))
           ) : (
             <>
-              {Array.from({ length: 2 }).map((_, index) => (
-                <ProjectCardSkeleton key={`project-${index}`} />
+              {Array.from({ length: 2 }).map((_, i) => (
+                <ProjectCardSkeleton key={`project-${i}`} />
               ))}
-              {Array.from({ length: 2 }).map((_, index) => (
-                <ProfileCardSkeleton key={`profile-${index}`} viewMode={viewMode} />
+              {Array.from({ length: 2 }).map((_, i) => (
+                <ProfileCardSkeleton key={`profile-${i}`} viewMode={viewMode} />
               ))}
-              {Array.from({ length: 2 }).map((_, index) => (
-                <LoanCardSkeleton key={`loan-${index}`} viewMode={viewMode} />
+              {Array.from({ length: 2 }).map((_, i) => (
+                <LoanCardSkeleton key={`loan-${i}`} viewMode={viewMode} />
               ))}
             </>
           )}
@@ -136,23 +243,13 @@ export default function DiscoverResults({
     );
   }
 
-  // Calculate displayed count including all entity types
   const displayedCount =
     projects.length +
     profiles.length +
     loans.length +
     investments.length +
-    assets.length +
-    causes.length +
-    events.length +
-    products.length +
-    services.length +
-    groups.length +
-    wishlists.length +
-    research.length +
-    aiAssistants.length;
+    genericTabs.reduce((sum, t) => sum + t.items.length, 0);
 
-  // Results Header
   const resultsHeader = (
     <div className="flex items-center justify-between mb-6">
       <h2 className="text-2xl font-semibold text-gray-900">
@@ -172,110 +269,6 @@ export default function DiscoverResults({
     </div>
   );
 
-  // Results Grid Component for Projects and Profiles
-  const ResultsGrid = ({
-    items,
-    type,
-  }: {
-    items: (SearchFundingPage | SearchProfile)[];
-    type: 'project' | 'profile';
-  }) => (
-    <div
-      className={`grid gap-6 ${
-        viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
-      }`}
-    >
-      {items.map((item, index) => (
-        <motion.div
-          key={item.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: index * 0.05 }}
-        >
-          {type === 'project' ? (
-            <ProjectCard project={item as SearchFundingPage} />
-          ) : (
-            <ProfileCard profile={item as SearchProfile} viewMode={viewMode} />
-          )}
-        </motion.div>
-      ))}
-    </div>
-  );
-
-  // Loans Grid Component
-  const LoansGrid = ({ items }: { items: Loan[] }) => (
-    <div
-      className={`grid gap-6 ${
-        viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
-      }`}
-    >
-      {items.map((loan, index) => (
-        <motion.div
-          key={loan.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: index * 0.05 }}
-        >
-          <LoanCard loan={loan} viewMode={viewMode} />
-        </motion.div>
-      ))}
-    </div>
-  );
-
-  // Generic Entity Grid Component (causes, events, products, services, groups)
-  const GenericGrid = ({
-    items,
-    entityType,
-    makeHref,
-  }: {
-    items: GenericPublicEntity[];
-    entityType: EntityType;
-    makeHref: (entity: GenericPublicEntity) => string;
-  }) => (
-    <div
-      className={`grid gap-6 ${
-        viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
-      }`}
-    >
-      {items.map((entity, index) => (
-        <motion.div
-          key={entity.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: index * 0.05 }}
-        >
-          <GenericPublicCard
-            entity={entity}
-            entityType={entityType}
-            href={makeHref(entity)}
-            viewMode={viewMode}
-          />
-        </motion.div>
-      ))}
-    </div>
-  );
-
-  // Investments Grid Component
-  const InvestmentsGrid = ({ items }: { items: Investment[] }) => (
-    <div
-      className={`grid gap-6 ${
-        viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
-      }`}
-    >
-      {items.map((investment, index) => (
-        <motion.div
-          key={investment.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: index * 0.05 }}
-        >
-          <InvestmentCard investment={investment} viewMode={viewMode} />
-        </motion.div>
-      ))}
-    </div>
-  );
-
-  // Load More Button
   const LoadMoreButton = ({ label }: { label: string }) => (
     <div className="mt-8 flex justify-center">
       <Button
@@ -300,24 +293,17 @@ export default function DiscoverResults({
     </div>
   );
 
-  // Tab-Specific Content
+  // All Tab
   if (activeTab === 'all') {
-    const sectionLengths = [
+    const sectionCounts = [
       projects.length,
       profiles.length,
       loans.length,
       investments.length,
-      assets.length,
-      causes.length,
-      events.length,
-      products.length,
-      services.length,
-      groups.length,
-      wishlists.length,
-      research.length,
-      aiAssistants.length,
+      ...genericTabs.map(t => t.items.length),
     ];
-    const hasMultipleSections = sectionLengths.filter(n => n > 0).length > 1;
+    const hasMultipleSections = sectionCounts.filter(n => n > 0).length > 1;
+
     return (
       <div className="space-y-8">
         {resultsHeader}
@@ -330,22 +316,33 @@ export default function DiscoverResults({
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Projects"
           >
-            <ResultsGrid items={projects.slice(0, 6)} type="project" />
+            <AnimatedGrid
+              items={projects.slice(0, 6)}
+              viewMode={viewMode}
+              renderItem={item => <ProjectCard project={item} />}
+            />
           </ResultsSection>
         )}
         {causes.length > 0 && (
           <ResultsSection
             title="Causes"
             count={causes.length}
-            icon={<Users className="w-5 h-5" />}
+            icon={<Heart className="w-5 h-5" />}
             onViewAll={() => onTabChange('causes')}
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Causes"
           >
-            <GenericGrid
+            <AnimatedGrid
               items={causes.slice(0, 6)}
-              entityType="cause"
-              makeHref={e => ROUTES.CAUSES.VIEW(e.id)}
+              viewMode={viewMode}
+              renderItem={item => (
+                <GenericPublicCard
+                  entity={item}
+                  entityType="cause"
+                  href={ROUTES.CAUSES.VIEW(item.id)}
+                  viewMode={viewMode}
+                />
+              )}
             />
           </ResultsSection>
         )}
@@ -358,7 +355,11 @@ export default function DiscoverResults({
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Investments"
           >
-            <InvestmentsGrid items={investments.slice(0, 6)} />
+            <AnimatedGrid
+              items={investments.slice(0, 6)}
+              viewMode={viewMode}
+              renderItem={item => <InvestmentCard investment={item} viewMode={viewMode} />}
+            />
           </ResultsSection>
         )}
         {assets.length > 0 && (
@@ -370,10 +371,17 @@ export default function DiscoverResults({
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Assets"
           >
-            <GenericGrid
+            <AnimatedGrid
               items={assets.slice(0, 6)}
-              entityType="asset"
-              makeHref={e => ROUTES.ASSETS.VIEW(e.id)}
+              viewMode={viewMode}
+              renderItem={item => (
+                <GenericPublicCard
+                  entity={item}
+                  entityType="asset"
+                  href={ROUTES.ASSETS.VIEW(item.id)}
+                  viewMode={viewMode}
+                />
+              )}
             />
           </ResultsSection>
         )}
@@ -386,22 +394,33 @@ export default function DiscoverResults({
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Loans"
           >
-            <LoansGrid items={loans.slice(0, 6)} />
+            <AnimatedGrid
+              items={loans.slice(0, 6)}
+              viewMode={viewMode}
+              renderItem={item => <LoanCard loan={item} viewMode={viewMode} />}
+            />
           </ResultsSection>
         )}
         {products.length > 0 && (
           <ResultsSection
             title="Products"
             count={products.length}
-            icon={<Users className="w-5 h-5" />}
+            icon={<Package className="w-5 h-5" />}
             onViewAll={() => onTabChange('products')}
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Products"
           >
-            <GenericGrid
+            <AnimatedGrid
               items={products.slice(0, 6)}
-              entityType="product"
-              makeHref={e => ROUTES.PRODUCTS.VIEW(e.id)}
+              viewMode={viewMode}
+              renderItem={item => (
+                <GenericPublicCard
+                  entity={item}
+                  entityType="product"
+                  href={ROUTES.PRODUCTS.VIEW(item.id)}
+                  viewMode={viewMode}
+                />
+              )}
             />
           </ResultsSection>
         )}
@@ -409,15 +428,22 @@ export default function DiscoverResults({
           <ResultsSection
             title="Services"
             count={services.length}
-            icon={<Users className="w-5 h-5" />}
+            icon={<Briefcase className="w-5 h-5" />}
             onViewAll={() => onTabChange('services')}
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Services"
           >
-            <GenericGrid
+            <AnimatedGrid
               items={services.slice(0, 6)}
-              entityType="service"
-              makeHref={e => ROUTES.SERVICES.VIEW(e.id)}
+              viewMode={viewMode}
+              renderItem={item => (
+                <GenericPublicCard
+                  entity={item}
+                  entityType="service"
+                  href={ROUTES.SERVICES.VIEW(item.id)}
+                  viewMode={viewMode}
+                />
+              )}
             />
           </ResultsSection>
         )}
@@ -425,15 +451,22 @@ export default function DiscoverResults({
           <ResultsSection
             title="Events"
             count={events.length}
-            icon={<Users className="w-5 h-5" />}
+            icon={<Calendar className="w-5 h-5" />}
             onViewAll={() => onTabChange('events')}
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Events"
           >
-            <GenericGrid
+            <AnimatedGrid
               items={events.slice(0, 6)}
-              entityType="event"
-              makeHref={e => ROUTES.EVENTS.VIEW(e.id)}
+              viewMode={viewMode}
+              renderItem={item => (
+                <GenericPublicCard
+                  entity={item}
+                  entityType="event"
+                  href={ROUTES.EVENTS.VIEW(item.id)}
+                  viewMode={viewMode}
+                />
+              )}
             />
           </ResultsSection>
         )}
@@ -441,15 +474,22 @@ export default function DiscoverResults({
           <ResultsSection
             title="Groups"
             count={groups.length}
-            icon={<Users className="w-5 h-5" />}
+            icon={<Building2 className="w-5 h-5" />}
             onViewAll={() => onTabChange('groups')}
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Groups"
           >
-            <GenericGrid
+            <AnimatedGrid
               items={groups.slice(0, 6)}
-              entityType="group"
-              makeHref={e => ROUTES.GROUPS.VIEW(e.slug ?? e.id)}
+              viewMode={viewMode}
+              renderItem={item => (
+                <GenericPublicCard
+                  entity={item}
+                  entityType="group"
+                  href={ROUTES.GROUPS.VIEW(item.slug ?? item.id)}
+                  viewMode={viewMode}
+                />
+              )}
             />
           </ResultsSection>
         )}
@@ -462,10 +502,17 @@ export default function DiscoverResults({
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Wishlists"
           >
-            <GenericGrid
+            <AnimatedGrid
               items={wishlists.slice(0, 6)}
-              entityType="wishlist"
-              makeHref={e => ROUTES.WISHLISTS.VIEW(e.id)}
+              viewMode={viewMode}
+              renderItem={item => (
+                <GenericPublicCard
+                  entity={item}
+                  entityType="wishlist"
+                  href={ROUTES.WISHLISTS.VIEW(item.id)}
+                  viewMode={viewMode}
+                />
+              )}
             />
           </ResultsSection>
         )}
@@ -478,10 +525,17 @@ export default function DiscoverResults({
             showViewAll={hasMultipleSections}
             viewAllLabel="View All Research"
           >
-            <GenericGrid
+            <AnimatedGrid
               items={research.slice(0, 6)}
-              entityType="research"
-              makeHref={e => ROUTES.RESEARCH.VIEW(e.id)}
+              viewMode={viewMode}
+              renderItem={item => (
+                <GenericPublicCard
+                  entity={item}
+                  entityType="research"
+                  href={ROUTES.RESEARCH.VIEW(item.id)}
+                  viewMode={viewMode}
+                />
+              )}
             />
           </ResultsSection>
         )}
@@ -494,10 +548,17 @@ export default function DiscoverResults({
             showViewAll={hasMultipleSections}
             viewAllLabel="View All AI Assistants"
           >
-            <GenericGrid
+            <AnimatedGrid
               items={aiAssistants.slice(0, 6)}
-              entityType="ai_assistant"
-              makeHref={e => ROUTES.AI_ASSISTANTS.VIEW(e.id)}
+              viewMode={viewMode}
+              renderItem={item => (
+                <GenericPublicCard
+                  entity={item}
+                  entityType="ai_assistant"
+                  href={ROUTES.AI_ASSISTANTS.VIEW(item.id)}
+                  viewMode={viewMode}
+                />
+              )}
             />
           </ResultsSection>
         )}
@@ -510,152 +571,99 @@ export default function DiscoverResults({
             showViewAll={hasMultipleSections}
             viewAllLabel="View All People"
           >
-            <ResultsGrid items={profiles.slice(0, 6)} type="profile" />
+            <AnimatedGrid
+              items={profiles.slice(0, 6)}
+              viewMode={viewMode}
+              renderItem={item => <ProfileCard profile={item} viewMode={viewMode} />}
+            />
           </ResultsSection>
         )}
       </div>
     );
   }
 
+  // Individual tab — investments
   if (activeTab === 'investments') {
     return (
       <>
         {resultsHeader}
-        <InvestmentsGrid items={investments} />
+        <AnimatedGrid
+          items={investments}
+          viewMode={viewMode}
+          renderItem={item => <InvestmentCard investment={item} viewMode={viewMode} />}
+        />
         {hasMore && <LoadMoreButton label="Load More Investments" />}
       </>
     );
   }
-  if (activeTab === 'assets') {
+
+  // Individual tab — loans
+  if (activeTab === 'loans') {
     return (
       <>
         {resultsHeader}
-        <GenericGrid items={assets} entityType="asset" makeHref={e => ROUTES.ASSETS.VIEW(e.id)} />
-        {hasMore && <LoadMoreButton label="Load More Assets" />}
-      </>
-    );
-  }
-  if (activeTab === 'causes') {
-    return (
-      <>
-        {resultsHeader}
-        <GenericGrid items={causes} entityType="cause" makeHref={e => ROUTES.CAUSES.VIEW(e.id)} />
-        {hasMore && <LoadMoreButton label="Load More Causes" />}
-      </>
-    );
-  }
-  if (activeTab === 'events') {
-    return (
-      <>
-        {resultsHeader}
-        <GenericGrid items={events} entityType="event" makeHref={e => ROUTES.EVENTS.VIEW(e.id)} />
-        {hasMore && <LoadMoreButton label="Load More Events" />}
-      </>
-    );
-  }
-  if (activeTab === 'products') {
-    return (
-      <>
-        {resultsHeader}
-        <GenericGrid
-          items={products}
-          entityType="product"
-          makeHref={e => ROUTES.PRODUCTS.VIEW(e.id)}
+        <AnimatedGrid
+          items={loans}
+          viewMode={viewMode}
+          renderItem={item => <LoanCard loan={item} viewMode={viewMode} />}
         />
-        {hasMore && <LoadMoreButton label="Load More Products" />}
+        {hasMore && <LoadMoreButton label="Load More Loans" />}
       </>
     );
   }
-  if (activeTab === 'services') {
-    return (
-      <>
-        {resultsHeader}
-        <GenericGrid
-          items={services}
-          entityType="service"
-          makeHref={e => ROUTES.SERVICES.VIEW(e.id)}
-        />
-        {hasMore && <LoadMoreButton label="Load More Services" />}
-      </>
-    );
-  }
-  if (activeTab === 'groups') {
-    return (
-      <>
-        {resultsHeader}
-        <GenericGrid
-          items={groups}
-          entityType="group"
-          makeHref={e => ROUTES.GROUPS.VIEW(e.slug ?? e.id)}
-        />
-        {hasMore && <LoadMoreButton label="Load More Groups" />}
-      </>
-    );
-  }
-  if (activeTab === 'wishlists') {
-    return (
-      <>
-        {resultsHeader}
-        <GenericGrid
-          items={wishlists}
-          entityType="wishlist"
-          makeHref={e => ROUTES.WISHLISTS.VIEW(e.id)}
-        />
-        {hasMore && <LoadMoreButton label="Load More Wishlists" />}
-      </>
-    );
-  }
-  if (activeTab === 'research') {
-    return (
-      <>
-        {resultsHeader}
-        <GenericGrid
-          items={research}
-          entityType="research"
-          makeHref={e => ROUTES.RESEARCH.VIEW(e.id)}
-        />
-        {hasMore && <LoadMoreButton label="Load More Research" />}
-      </>
-    );
-  }
-  if (activeTab === 'ai_assistants') {
-    return (
-      <>
-        {resultsHeader}
-        <GenericGrid
-          items={aiAssistants}
-          entityType="ai_assistant"
-          makeHref={e => ROUTES.AI_ASSISTANTS.VIEW(e.id)}
-        />
-        {hasMore && <LoadMoreButton label="Load More AI Assistants" />}
-      </>
-    );
-  }
+
+  // Individual tab — projects
   if (activeTab === 'projects') {
     return (
       <>
         {resultsHeader}
-        <ResultsGrid items={projects} type="project" />
+        <AnimatedGrid
+          items={projects}
+          viewMode={viewMode}
+          renderItem={item => <ProjectCard project={item} />}
+        />
         {hasMore && <LoadMoreButton label="Load More Projects" />}
       </>
     );
   }
+
+  // Individual tab — profiles
   if (activeTab === 'profiles') {
     return (
       <>
         {resultsHeader}
-        <ResultsGrid items={profiles} type="profile" />
+        <AnimatedGrid
+          items={profiles}
+          viewMode={viewMode}
+          renderItem={item => <ProfileCard profile={item} viewMode={viewMode} />}
+        />
         {hasMore && <LoadMoreButton label="Load More People" />}
       </>
     );
   }
 
-  // LOANS TAB
-  return (
-    <>
-      {resultsHeader}
-      <LoansGrid items={loans} />
-      {hasMore && <LoadMoreButton label="Load More" />}
-    </>
-  );
+  // Individual tab — all 9 generic entity types via config lookup
+  const genericTab = genericTabs.find(t => t.id === activeTab);
+  if (genericTab) {
+    return (
+      <>
+        {resultsHeader}
+        <AnimatedGrid
+          items={genericTab.items}
+          viewMode={viewMode}
+          renderItem={item => (
+            <GenericPublicCard
+              entity={item}
+              entityType={genericTab.entityType}
+              href={genericTab.makeHref(item)}
+              viewMode={viewMode}
+            />
+          )}
+        />
+        {hasMore && <LoadMoreButton label={`Load More ${genericTab.title}`} />}
+      </>
+    );
+  }
+
+  return null;
 }
