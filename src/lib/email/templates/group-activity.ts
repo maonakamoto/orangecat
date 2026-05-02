@@ -5,7 +5,7 @@
  * Pure functions — no imports from outside templates.
  */
 
-import { emailLayout, emailPlainText } from './layout';
+import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
 export type GroupActivityType = 'invite' | 'proposal' | 'vote_reminder' | 'proposal_resolved';
 
@@ -97,7 +97,7 @@ function getGroupActivityConfig(data: GroupActivityEmailData): GroupActivityConf
           <p style="margin:0 0 16px;">
             A new proposal was created in <strong>${escapeHtml(groupName)}</strong>:
           </p>
-          <div style="padding:16px;background:#f9fafb;border-radius:8px;border-left:4px solid #0ABAB5;margin:0 0 16px;">
+          <div style="padding:16px;background:#f9fafb;border-radius:8px;border-left:4px solid ${EMAIL_COLORS.TIFFANY};margin:0 0 16px;">
             <p style="margin:0;font-size:16px;font-weight:600;">${escapeHtml(proposalTitle || 'Untitled proposal')}</p>
           </div>
           <p style="margin:0;">Your vote matters. Take a look when you can.</p>`,
@@ -163,7 +163,7 @@ function getGroupActivityConfig(data: GroupActivityEmailData): GroupActivityConf
             <p style="margin:0 0 4px;font-size:16px;font-weight:600;">
               ${escapeHtml(proposalTitle || 'Untitled proposal')}
             </p>
-            <p style="margin:0;font-size:14px;color:#4a4a4a;">
+            <p style="margin:0;font-size:14px;color:${EMAIL_COLORS.TEXT_SECONDARY};">
               ${passed ? 'Passed' : 'Did not pass'}${voteInfo}
             </p>
           </div>

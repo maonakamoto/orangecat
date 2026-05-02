@@ -5,7 +5,7 @@
  * Pure functions — no imports from outside templates.
  */
 
-import { emailLayout, emailPlainText } from './layout';
+import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
 export interface WeeklyDigestStats {
   views?: number;
@@ -81,7 +81,7 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
 
     htmlSections.push(`
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
-        style="border:1px solid #e5e5e5;border-radius:8px;margin:0 0 24px;">
+        style="border:1px solid ${EMAIL_COLORS.BORDER};border-radius:8px;margin:0 0 24px;">
         <tr>${statItems.join('')}</tr>
       </table>`);
 
@@ -97,7 +97,7 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
           <td style="padding:8px 12px;font-size:14px;border-bottom:1px solid #f0f0f0;">
             <strong>${escapeHtml(e.title)}</strong>
           </td>
-          <td style="padding:8px 12px;font-size:14px;color:#8a8a8a;text-align:right;border-bottom:1px solid #f0f0f0;">
+          <td style="padding:8px 12px;font-size:14px;color:${EMAIL_COLORS.TEXT_MUTED};text-align:right;border-bottom:1px solid #f0f0f0;">
             ${e.views} views &middot; ${e.payments} payments
           </td>
         </tr>`
@@ -105,9 +105,9 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
       .join('');
 
     htmlSections.push(`
-      <p style="font-size:14px;font-weight:600;color:#1a1a1a;margin:0 0 8px;">Top performers</p>
+      <p style="font-size:14px;font-weight:600;color:${EMAIL_COLORS.TEXT_PRIMARY};margin:0 0 8px;">Top performers</p>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
-        style="border:1px solid #e5e5e5;border-radius:8px;overflow:hidden;margin:0 0 24px;">
+        style="border:1px solid ${EMAIL_COLORS.BORDER};border-radius:8px;overflow:hidden;margin:0 0 24px;">
         ${entityRows}
       </table>`);
 
@@ -121,11 +121,14 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
   // Suggestions section
   if (suggestions && suggestions.length > 0) {
     const suggestionItems = suggestions
-      .map(s => `<li style="padding:4px 0;font-size:14px;color:#4a4a4a;">${escapeHtml(s)}</li>`)
+      .map(
+        s =>
+          `<li style="padding:4px 0;font-size:14px;color:${EMAIL_COLORS.TEXT_SECONDARY};">${escapeHtml(s)}</li>`
+      )
       .join('');
 
     htmlSections.push(`
-      <p style="font-size:14px;font-weight:600;color:#1a1a1a;margin:0 0 8px;">From your Cat</p>
+      <p style="font-size:14px;font-weight:600;color:${EMAIL_COLORS.TEXT_PRIMARY};margin:0 0 8px;">From your Cat</p>
       <ul style="margin:0 0 24px;padding-left:20px;">
         ${suggestionItems}
       </ul>`);
@@ -136,7 +139,7 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
   // Quiet week fallback
   if (!hasStats && !topEntities?.length) {
     htmlSections.push(`
-      <p style="margin:0 0 16px;color:#4a4a4a;">
+      <p style="margin:0 0 16px;color:${EMAIL_COLORS.TEXT_SECONDARY};">
         It was a quiet week — no views or payments to report. That's okay.
         If you want, I can help you get more visibility.
       </p>`);
@@ -151,7 +154,7 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
     body: htmlSections.join('\n'),
     ctaText: 'Chat with Cat',
     ctaUrl: chatUrl,
-    footer: `<a href="${escapeHtml(dashboardUrl)}" style="color:#0ABAB5;text-decoration:none;">View full dashboard</a>`,
+    footer: `<a href="${escapeHtml(dashboardUrl)}" style="color:${EMAIL_COLORS.TIFFANY};text-decoration:none;">View full dashboard</a>`,
     unsubscribeUrl,
   });
 
@@ -172,8 +175,8 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
 function statCell(label: string, value: string): string {
   return `
     <td style="padding:16px;text-align:center;width:25%;">
-      <div style="font-size:20px;font-weight:700;color:#1a1a1a;">${escapeHtml(value)}</div>
-      <div style="font-size:12px;color:#8a8a8a;margin-top:4px;">${escapeHtml(label)}</div>
+      <div style="font-size:20px;font-weight:700;color:${EMAIL_COLORS.TEXT_PRIMARY};">${escapeHtml(value)}</div>
+      <div style="font-size:12px;color:${EMAIL_COLORS.TEXT_MUTED};margin-top:4px;">${escapeHtml(label)}</div>
     </td>`;
 }
 

@@ -6,7 +6,7 @@
  * Pure functions — no imports from outside templates.
  */
 
-import { emailLayout, emailPlainText } from './layout';
+import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
 export type ReengagementStage = '14d' | '30d' | '60d' | '90d';
 
@@ -147,7 +147,7 @@ function getReengagementConfig(data: ReengagementEmailData): ReengagementConfig 
             If you ever want to pick things up again, just sign in.
             I'll be here.
           </p>
-          <p style="margin:0;color:#8a8a8a;font-size:14px;">
+          <p style="margin:0;color:${EMAIL_COLORS.TEXT_MUTED};font-size:14px;">
             If you're done with OrangeCat, you can unsubscribe below
             and I won't email you again.
           </p>`,

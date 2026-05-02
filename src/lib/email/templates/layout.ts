@@ -24,13 +24,19 @@ export interface EmailLayoutProps {
   unsubscribeUrl: string;
 }
 
-const TIFFANY = '#0ABAB5';
-const _TIFFANY_LIGHT = '#E6F7F7';
-const TEXT_PRIMARY = '#1a1a1a';
-const TEXT_SECONDARY = '#4a4a4a';
-const TEXT_MUTED = '#8a8a8a';
-const BORDER = '#e5e5e5';
-const BG = '#f5f5f5';
+// Exported so all email templates can share a single source of truth for
+// inline styles (email clients require inline CSS — Tailwind tokens don't apply).
+export const EMAIL_COLORS = {
+  TIFFANY: '#0ABAB5',
+  TIFFANY_LIGHT: '#E6F7F7',
+  TEXT_PRIMARY: '#1a1a1a',
+  TEXT_SECONDARY: '#4a4a4a',
+  TEXT_MUTED: '#8a8a8a',
+  BORDER: '#e5e5e5',
+  BG: '#f5f5f5',
+} as const;
+
+const { TIFFANY, TEXT_PRIMARY, TEXT_SECONDARY, TEXT_MUTED, BORDER, BG } = EMAIL_COLORS;
 
 /**
  * Wraps email content in the OrangeCat branded layout.

@@ -12,6 +12,21 @@
  * Created: 2026-02-05
  */
 
+import { colors } from '@/lib/theme';
+
+// Raw hex values for status/priority indicators — needed for inline style opacity
+// tricks (e.g. `${color}20`). Brand-shared tokens come from theme.ts; the rest
+// are task-specific Tailwind palette values consolidated here.
+const TASK_COLORS = {
+  gray: colors.neutral.gray500, // idle, unknown, normal-priority
+  slate: '#64748b', // slate-500 — low priority
+  amber: '#d97706', // amber-600 — needs attention
+  blue: '#2563eb', // blue-600  — requested
+  violet: '#7c3aed', // violet-600 — in progress
+  orange: '#ea580c', // orange-600 — high priority
+  red: colors.status.error, // red-600   — urgent
+} as const;
+
 // ==================== TASK TYPES ====================
 
 /**
@@ -80,25 +95,25 @@ export const TASK_STATUS_CONFIG: Record<TaskStatus, TaskStatusInfo> = {
   idle: {
     label: 'Ready',
     className: 'bg-gray-100 text-gray-700',
-    color: '#6b7280',
+    color: TASK_COLORS.gray,
     description: 'Task is ready and waiting',
   },
   needs_attention: {
     label: 'Needs Attention',
     className: 'bg-amber-100 text-amber-700',
-    color: '#d97706',
+    color: TASK_COLORS.amber,
     description: 'Someone flagged this task as urgent',
   },
   requested: {
     label: 'Requested',
     className: 'bg-blue-100 text-blue-700',
-    color: '#2563eb',
+    color: TASK_COLORS.blue,
     description: 'Someone has been asked to complete this task',
   },
   in_progress: {
     label: 'In Progress',
     className: 'bg-purple-100 text-purple-700',
-    color: '#7c3aed',
+    color: TASK_COLORS.violet,
     description: 'Someone is currently working on this',
   },
 };
@@ -182,25 +197,25 @@ export const PRIORITY_CONFIG: Record<Priority, PriorityInfo> = {
   low: {
     label: 'Low',
     className: 'bg-slate-100 text-slate-600',
-    color: '#64748b',
+    color: TASK_COLORS.slate,
     order: 1,
   },
   normal: {
     label: 'Normal',
     className: 'bg-gray-100 text-gray-700',
-    color: '#6b7280',
+    color: TASK_COLORS.gray,
     order: 2,
   },
   high: {
     label: 'High',
     className: 'bg-orange-100 text-orange-700',
-    color: '#ea580c',
+    color: TASK_COLORS.orange,
     order: 3,
   },
   urgent: {
     label: 'Urgent',
     className: 'bg-red-100 text-red-700',
-    color: '#dc2626',
+    color: TASK_COLORS.red,
     order: 4,
   },
 };
@@ -327,7 +342,7 @@ export function getTaskStatusInfo(status: string | null | undefined): TaskStatus
     return {
       label: 'Unknown',
       className: 'bg-gray-100 text-gray-700',
-      color: '#6b7280',
+      color: TASK_COLORS.gray,
     };
   }
 
@@ -336,7 +351,7 @@ export function getTaskStatusInfo(status: string | null | undefined): TaskStatus
     TASK_STATUS_CONFIG[normalized] || {
       label: status.charAt(0).toUpperCase() + status.slice(1),
       className: 'bg-gray-100 text-gray-700',
-      color: '#6b7280',
+      color: TASK_COLORS.gray,
     }
   );
 }

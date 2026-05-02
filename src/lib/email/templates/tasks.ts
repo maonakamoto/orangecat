@@ -12,6 +12,8 @@
  * Created: 2026-02-05
  */
 
+import { EMAIL_COLORS } from './layout';
+
 export interface EmailContent {
   subject: string;
   html: string;
@@ -42,7 +44,7 @@ export function taskAttentionNotification(
     .content { background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px; }
     .task-title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 16px; }
     .message-box { background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #f59e0b; margin: 16px 0; }
-    .button { display: inline-block; background: #0ABAB5; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .button { display: inline-block; background: ${EMAIL_COLORS.TIFFANY}; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
     .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
   </style>
 </head>
@@ -105,7 +107,7 @@ export function taskRequestNotification(
     .content { background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px; }
     .task-title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 16px; }
     .message-box { background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6; margin: 16px 0; }
-    .button { display: inline-block; background: #0ABAB5; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .button { display: inline-block; background: ${EMAIL_COLORS.TIFFANY}; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
     .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
   </style>
 </head>
@@ -169,7 +171,7 @@ export function taskBroadcastRequestNotification(
     .task-title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 16px; }
     .message-box { background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #8b5cf6; margin: 16px 0; }
     .broadcast-badge { display: inline-block; background: #f3e8ff; color: #7c3aed; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; margin-bottom: 12px; }
-    .button { display: inline-block; background: #0ABAB5; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .button { display: inline-block; background: ${EMAIL_COLORS.TIFFANY}; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
     .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
   </style>
 </head>
@@ -235,7 +237,7 @@ export function newTaskNotification(
     .content { background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px; }
     .task-title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 16px; }
     .category-badge { display: inline-block; background: #d1fae5; color: #065f46; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; }
-    .button { display: inline-block; background: #0ABAB5; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .button { display: inline-block; background: ${EMAIL_COLORS.TIFFANY}; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
     .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
   </style>
 </head>
@@ -299,7 +301,7 @@ export function taskCompletedNotification(
     .content { background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px; }
     .task-title { font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 16px; }
     .message-box { background: white; padding: 16px; border-radius: 8px; border-left: 4px solid #22c55e; margin: 16px 0; }
-    .button { display: inline-block; background: #0ABAB5; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .button { display: inline-block; background: ${EMAIL_COLORS.TIFFANY}; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
     .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
   </style>
 </head>

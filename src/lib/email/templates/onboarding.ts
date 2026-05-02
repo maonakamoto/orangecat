@@ -5,7 +5,7 @@
  * Pure functions — no imports from outside templates.
  */
 
-import { emailLayout, emailPlainText } from './layout';
+import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
 export type OnboardingDay = 1 | 2 | 3 | 5 | 7;
 
@@ -62,7 +62,7 @@ function getOnboardingConfig(data: OnboardingEmailData): OnboardingConfig {
             It takes about 2 minutes.
           </p>
           <p style="margin:0 0 16px;">Here's what helps most:</p>
-          <ul style="margin:0 0 16px;padding-left:20px;color:#4a4a4a;">
+          <ul style="margin:0 0 16px;padding-left:20px;color:${EMAIL_COLORS.TEXT_SECONDARY};">
             <li style="padding:4px 0;">A display name (real or pseudonymous — your choice)</li>
             <li style="padding:4px 0;">A short bio</li>
             <li style="padding:4px 0;">An avatar</li>
@@ -129,25 +129,25 @@ function getOnboardingConfig(data: OnboardingEmailData): OnboardingConfig {
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
             <tr>
               <td style="padding:10px 16px;background:#f9fafb;border-radius:6px;">
-                <strong>Product</strong><span style="color:#8a8a8a;"> — sell something physical or digital</span>
+                <strong>Product</strong><span style="color:${EMAIL_COLORS.TEXT_MUTED};"> — sell something physical or digital</span>
               </td>
             </tr>
             <tr><td style="height:6px;"></td></tr>
             <tr>
               <td style="padding:10px 16px;background:#f9fafb;border-radius:6px;">
-                <strong>Service</strong><span style="color:#8a8a8a;"> — offer your skills or time</span>
+                <strong>Service</strong><span style="color:${EMAIL_COLORS.TEXT_MUTED};"> — offer your skills or time</span>
               </td>
             </tr>
             <tr><td style="height:6px;"></td></tr>
             <tr>
               <td style="padding:10px 16px;background:#f9fafb;border-radius:6px;">
-                <strong>Project</strong><span style="color:#8a8a8a;"> — fund something with milestones</span>
+                <strong>Project</strong><span style="color:${EMAIL_COLORS.TEXT_MUTED};"> — fund something with milestones</span>
               </td>
             </tr>
             <tr><td style="height:6px;"></td></tr>
             <tr>
               <td style="padding:10px 16px;background:#f9fafb;border-radius:6px;">
-                <strong>Cause</strong><span style="color:#8a8a8a;"> — raise funds for something you care about</span>
+                <strong>Cause</strong><span style="color:${EMAIL_COLORS.TEXT_MUTED};"> — raise funds for something you care about</span>
               </td>
             </tr>
           </table>
@@ -183,7 +183,7 @@ function getOnboardingConfig(data: OnboardingEmailData): OnboardingConfig {
             Browsing what others have created is one of the best ways to figure out
             what you want to offer. Take a look.
           </p>
-          <p style="margin:0;color:#8a8a8a;font-size:14px;">
+          <p style="margin:0;color:${EMAIL_COLORS.TEXT_MUTED};font-size:14px;">
             And if you see something you like, supporting it is a good way to connect.
           </p>`,
         bodyText: [
@@ -209,14 +209,14 @@ function getOnboardingConfig(data: OnboardingEmailData): OnboardingConfig {
         completed.push('Profile set up');
       } else {
         remaining.push(
-          `<a href="${profileUrl}" style="color:#0ABAB5;text-decoration:none;">Complete your profile</a>`
+          `<a href="${profileUrl}" style="color:${EMAIL_COLORS.TIFFANY};text-decoration:none;">Complete your profile</a>`
         );
       }
       if (weekStats?.walletAdded) {
         completed.push('Wallet connected');
       } else {
         remaining.push(
-          `<a href="${walletUrl}" style="color:#0ABAB5;text-decoration:none;">Add a wallet</a>`
+          `<a href="${walletUrl}" style="color:${EMAIL_COLORS.TIFFANY};text-decoration:none;">Add a wallet</a>`
         );
       }
       if (weekStats && weekStats.entitiesCreated > 0) {
@@ -225,7 +225,7 @@ function getOnboardingConfig(data: OnboardingEmailData): OnboardingConfig {
         );
       } else {
         remaining.push(
-          `<a href="${createUrl}" style="color:#0ABAB5;text-decoration:none;">Create your first listing</a>`
+          `<a href="${createUrl}" style="color:${EMAIL_COLORS.TIFFANY};text-decoration:none;">Create your first listing</a>`
         );
       }
 

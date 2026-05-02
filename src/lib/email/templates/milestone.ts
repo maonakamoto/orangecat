@@ -5,7 +5,7 @@
  * Pure functions — no imports from outside templates.
  */
 
-import { emailLayout, emailPlainText } from './layout';
+import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
 export type MilestoneType =
   | 'first_entity'
@@ -97,7 +97,7 @@ export function milestoneTemplate(data: MilestoneEmailData): {
   const body = `
     <p style="margin:0 0 16px;">Hi ${greeting},</p>
     <p style="margin:0 0 16px;">${config.message}</p>
-    <p style="margin:0;color:#8a8a8a;font-size:14px;">${config.nextStep}</p>`;
+    <p style="margin:0;color:${EMAIL_COLORS.TEXT_MUTED};font-size:14px;">${config.nextStep}</p>`;
 
   const html = emailLayout({
     preheader: config.message.replace(/<[^>]*>/g, ''),

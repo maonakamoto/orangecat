@@ -5,6 +5,8 @@
  * Returns subject + html + text for the seller notification email.
  */
 
+import { EMAIL_COLORS } from './layout';
+
 export interface PaymentReceivedData {
   sellerName: string;
   entityTitle: string;
@@ -48,49 +50,49 @@ export function paymentReceivedTemplate(data: PaymentReceivedData): {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${subject}</title>
 </head>
-<body style="margin:0;padding:0;background:#ffffff;font-family:Inter,system-ui,sans-serif;color:#1a1a1a;">
+<body style="margin:0;padding:0;background:#ffffff;font-family:Inter,system-ui,sans-serif;color:${EMAIL_COLORS.TEXT_PRIMARY};">
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:40px auto;padding:0 16px;">
     <tr>
       <td>
-        <p style="font-size:13px;color:#8a8a8a;margin:0 0 24px;">OrangeCat</p>
+        <p style="font-size:13px;color:${EMAIL_COLORS.TEXT_MUTED};margin:0 0 24px;">OrangeCat</p>
         <h1 style="font-size:22px;font-weight:600;margin:0 0 8px;">You received a payment</h1>
-        <p style="font-size:15px;color:#4a4a4a;margin:0 0 32px;">for <strong>${entityTitle}</strong></p>
+        <p style="font-size:15px;color:${EMAIL_COLORS.TEXT_SECONDARY};margin:0 0 32px;">for <strong>${entityTitle}</strong></p>
 
         <table width="100%" cellpadding="0" cellspacing="0"
-          style="border:1px solid #e5e5e5;border-radius:8px;padding:24px;margin-bottom:32px;">
+          style="border:1px solid ${EMAIL_COLORS.BORDER};border-radius:8px;padding:24px;margin-bottom:32px;">
           <tr>
             <td style="padding:6px 0;">
-              <span style="font-size:13px;color:#8a8a8a;display:inline-block;width:80px;">Item</span>
+              <span style="font-size:13px;color:${EMAIL_COLORS.TEXT_MUTED};display:inline-block;width:80px;">Item</span>
               <span style="font-size:14px;">${entityTitle}</span>
             </td>
           </tr>
           <tr>
             <td style="padding:6px 0;">
-              <span style="font-size:13px;color:#8a8a8a;display:inline-block;width:80px;">Amount</span>
+              <span style="font-size:13px;color:${EMAIL_COLORS.TEXT_MUTED};display:inline-block;width:80px;">Amount</span>
               <span style="font-size:18px;font-weight:700;font-family:monospace;">${amountBtc} BTC</span>
             </td>
           </tr>
           <tr>
             <td style="padding:6px 0;">
-              <span style="font-size:13px;color:#8a8a8a;display:inline-block;width:80px;">From</span>
+              <span style="font-size:13px;color:${EMAIL_COLORS.TEXT_MUTED};display:inline-block;width:80px;">From</span>
               <span style="font-size:14px;">@${buyerName}</span>
             </td>
           </tr>
           <tr>
             <td style="padding:6px 0;">
-              <span style="font-size:13px;color:#8a8a8a;display:inline-block;width:80px;">Via</span>
+              <span style="font-size:13px;color:${EMAIL_COLORS.TEXT_MUTED};display:inline-block;width:80px;">Via</span>
               <span style="font-size:14px;">${paymentMethod}</span>
             </td>
           </tr>
         </table>
 
         <a href="${dashboardUrl}"
-          style="display:inline-block;background:#0ABAB5;color:#ffffff;text-decoration:none;
+          style="display:inline-block;background:${EMAIL_COLORS.TIFFANY};color:#ffffff;text-decoration:none;
                  padding:12px 24px;border-radius:6px;font-size:14px;font-weight:500;">
           View Dashboard
         </a>
 
-        <p style="font-size:12px;color:#8a8a8a;margin-top:40px;">
+        <p style="font-size:12px;color:${EMAIL_COLORS.TEXT_MUTED};margin-top:40px;">
           You're receiving this because you have a seller account on OrangeCat.
         </p>
       </td>

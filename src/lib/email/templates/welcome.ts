@@ -5,7 +5,7 @@
  * Pure functions — no imports from outside templates.
  */
 
-import { emailLayout, emailPlainText } from './layout';
+import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
 export interface WelcomeEmailData {
   displayName: string;
@@ -38,22 +38,22 @@ export function welcomeTemplate(data: WelcomeEmailData): {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
       <tr>
         <td style="padding:12px 16px;background:#f9fafb;border-radius:6px;margin-bottom:8px;">
-          <a href="${profileUrl}" style="color:#0ABAB5;text-decoration:none;font-weight:600;">Set up your profile</a>
-          <span style="color:#8a8a8a;"> — tell the world (or just me) who you are</span>
+          <a href="${profileUrl}" style="color:${EMAIL_COLORS.TIFFANY};text-decoration:none;font-weight:600;">Set up your profile</a>
+          <span style="color:${EMAIL_COLORS.TEXT_MUTED};"> — tell the world (or just me) who you are</span>
         </td>
       </tr>
       <tr><td style="height:8px;"></td></tr>
       <tr>
         <td style="padding:12px 16px;background:#f9fafb;border-radius:6px;">
-          <a href="${walletUrl}" style="color:#0ABAB5;text-decoration:none;font-weight:600;">Add a wallet</a>
-          <span style="color:#8a8a8a;"> — so you can receive Bitcoin payments</span>
+          <a href="${walletUrl}" style="color:${EMAIL_COLORS.TIFFANY};text-decoration:none;font-weight:600;">Add a wallet</a>
+          <span style="color:${EMAIL_COLORS.TEXT_MUTED};"> — so you can receive Bitcoin payments</span>
         </td>
       </tr>
       <tr><td style="height:8px;"></td></tr>
       <tr>
         <td style="padding:12px 16px;background:#f9fafb;border-radius:6px;">
-          <a href="${createUrl}" style="color:#0ABAB5;text-decoration:none;font-weight:600;">Create something</a>
-          <span style="color:#8a8a8a;"> — a product, service, project, or anything you like</span>
+          <a href="${createUrl}" style="color:${EMAIL_COLORS.TIFFANY};text-decoration:none;font-weight:600;">Create something</a>
+          <span style="color:${EMAIL_COLORS.TEXT_MUTED};"> — a product, service, project, or anything you like</span>
         </td>
       </tr>
     </table>
