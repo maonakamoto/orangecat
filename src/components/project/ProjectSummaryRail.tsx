@@ -11,7 +11,7 @@ import { logger } from '@/utils/logger';
 import { Bitcoin } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { formatCurrency as formatCurrencyFromService } from '@/services/currency';
+import { formatCurrency } from '@/services/currency';
 
 interface Props {
   project: {
@@ -156,8 +156,4 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
       )}
     </aside>
   );
-}
-
-function formatCurrency(amount: number, currency: string) {
-  return formatCurrencyFromService(amount, currency);
 }

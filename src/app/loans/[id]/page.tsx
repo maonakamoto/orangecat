@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { STATUS } from '@/config/database-constants';
 import { formatDistanceToNow } from 'date-fns';
+import { formatCurrency } from '@/services/currency';
 import { generateEntityMetadata } from '@/lib/seo/metadata';
 import { generateEntityJsonLd, JsonLdScript } from '@/lib/seo/structured-data';
 import EntityShare from '@/components/sharing/EntityShare';
@@ -70,16 +71,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: loan.title,
     description,
   });
-}
-
-function formatCurrency(amount: number, currency: string | null | undefined = 'USD') {
-  if (currency === 'BTC') {
-    return `${amount.toFixed(8)} BTC`;
-  }
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currency === 'EUR' ? 'EUR' : currency === 'CHF' ? 'CHF' : 'USD',
-  }).format(amount);
 }
 
 function calculateProgress(original: number, remaining: number) {
@@ -207,13 +198,15 @@ export default async function PublicLoanDetailPage({ params }: PageProps) {
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-gray-500">Remaining Balance</span>
                       <span className="font-bold text-xl text-blue-600">
-                        {formatCurrency(loan.remaining_balance, loan.currency)}
+                        {formatCurrency(loan.remaining_balance, loan.currency ?? 'USD')}
                       </span>
                     </div>
                     <Progress value={progress} className="h-2" />
                     <div className="flex justify-between text-xs text-gray-500">
                       <span>{progress.toFixed(1)}% funded</span>
-                      <span>Original: {formatCurrency(loan.original_amount, loan.currency)}</span>
+                      <span>
+                        Original: {formatCurrency(loan.original_amount, loan.currency ?? 'USD')}
+                      </span>
                     </div>
                   </div>
 
@@ -235,7 +228,7 @@ export default async function PublicLoanDetailPage({ params }: PageProps) {
                           Monthly Payment
                         </div>
                         <div className="font-semibold text-lg">
-                          {formatCurrency(loan.monthly_payment, loan.currency)}
+                          {formatCurrency(loan.monthly_payment, loan.currency ?? 'USD')}
                         </div>
                       </div>
                     )}
@@ -288,7 +281,7 @@ export default async function PublicLoanDetailPage({ params }: PageProps) {
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">Min Offer</span>
                       <span className="font-medium">
-                        {formatCurrency(loan.minimum_offer_amount, loan.currency)}
+                        {formatCurrency(loan.minimum_offer_amount, loan.currency ?? 'USD')}
                       </span>
                     </div>
                   )}

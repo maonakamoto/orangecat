@@ -1,5 +1,6 @@
 import EntityDetailPage from '@/components/entity/EntityDetailPage';
 import { loanEntityConfig } from '@/config/entities/loans';
+import { formatCurrency } from '@/services/currency';
 import { Badge } from '@/components/ui/badge';
 import type { Loan } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
@@ -20,16 +21,6 @@ interface PageProps {
  */
 export default async function LoanDetailPage({ params }: PageProps) {
   const { id } = await params;
-
-  function formatCurrency(amount: number, currency: string = 'USD') {
-    if (currency === 'BTC') {
-      return `${amount.toFixed(8)} BTC`;
-    }
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency === 'EUR' ? 'EUR' : currency === 'CHF' ? 'CHF' : 'USD',
-    }).format(amount);
-  }
 
   function calculateProgress(original: number, remaining: number) {
     if (original === 0) {

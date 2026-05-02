@@ -7,7 +7,7 @@ import { ArrowLeft, Bitcoin } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { ROUTES } from '@/config/routes';
 import { useState, useEffect } from 'react';
-import { formatCurrency as formatCurrencyFromService } from '@/services/currency';
+import { formatCurrency } from '@/services/currency';
 import { getStatusInfo } from '@/config/status-config';
 import { PublicEntityPaymentSection } from '@/components/payment';
 
@@ -211,10 +211,10 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
             <div className="flex items-center justify-between gap-3">
               <div className="flex-1 min-w-0">
                 <div className="text-xs text-gray-500">
-                  Goal: {formatCurrency(project.goal_amount, project.currency)}
+                  Goal: {formatCurrency(project.goal_amount ?? 0, project.currency)}
                 </div>
                 <div className="text-lg font-bold text-gray-900 truncate">
-                  {formatCurrency(project.raised_amount || 0, project.currency)}
+                  {formatCurrency(project.raised_amount ?? 0, project.currency)}
                 </div>
                 <div className="h-1.5 bg-gray-200 rounded-full mt-1">
                   <div
@@ -236,11 +236,4 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
       )}
     </div>
   );
-}
-
-function formatCurrency(amount: number | null, currency: string): string {
-  if (!amount) {
-    return `0 ${currency}`;
-  }
-  return formatCurrencyFromService(amount, currency);
 }
