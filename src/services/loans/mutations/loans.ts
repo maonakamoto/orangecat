@@ -15,6 +15,7 @@ import { STATUS } from '@/config/database-constants';
 import { getCurrentUserId } from '../utils/auth';
 import { validateCreateLoanRequest } from '../utils/validation';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import type { ServiceResult } from '@/types/common';
 
 /**
  * Resolve a user_id to an actor_id via the browser Supabase client.
@@ -125,7 +126,7 @@ export async function updateLoan(
 /**
  * Delete a loan
  */
-export async function deleteLoan(loanId: string): Promise<{ success: boolean; error?: string }> {
+export async function deleteLoan(loanId: string): Promise<ServiceResult> {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {

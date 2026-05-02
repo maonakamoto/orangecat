@@ -13,6 +13,7 @@ import { logger } from '@/utils/logger';
 import { TABLES } from '../constants';
 import supabase from '@/lib/supabase/browser';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import type { ServiceResult } from '@/types/common';
 
 /**
  * Fetch Bitcoin balance from mempool.space API
@@ -63,7 +64,7 @@ export async function updateWalletBalance(
   walletId: string,
   balanceBtc: number,
   client?: AnySupabaseClient
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const sb = client || supabase;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

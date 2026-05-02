@@ -39,6 +39,15 @@ export interface SupabaseResponse<T = unknown> {
   status?: number;
 }
 
+/**
+ * Standard service-layer result for operations that return success/failure.
+ * Use this instead of inline `{ success: boolean; error?: string }` in service files.
+ *
+ * For operations that also return data, extend inline:
+ *   Promise<ServiceResult & { data: MyType }>
+ */
+export type ServiceResult = { success: boolean; error?: string };
+
 // ==================== FORM DATA ====================
 
 /**

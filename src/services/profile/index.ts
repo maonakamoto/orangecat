@@ -29,6 +29,7 @@ import supabase from '@/lib/supabase/browser';
 import { ProfileReader } from './reader';
 import { ProfileWriter } from './writer';
 import type { ScalableProfile, ScalableProfileFormData, ProfileServiceResponse } from './types';
+import type { ServiceResult } from '@/types/common';
 
 export class ProfileService {
   // =====================================================================
@@ -99,7 +100,7 @@ export class ProfileService {
   // 🔐 LEGACY COMPATIBILITY METHODS
   // =====================================================================
 
-  static async updatePassword(newPassword: string): Promise<{ success: boolean; error?: string }> {
+  static async updatePassword(newPassword: string): Promise<ServiceResult> {
     try {
       const result = await supabase.auth.updateUser({ password: newPassword });
 

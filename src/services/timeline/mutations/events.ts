@@ -22,6 +22,7 @@ import type {
   TimelineDisplayEvent,
 } from '@/types/timeline';
 import { validateEventRequest } from '../processors/validation';
+import type { ServiceResult } from '@/types/common';
 import { mapDbEventToTimelineEvent } from '../formatters';
 import {
   generateProjectEventTitle,
@@ -505,7 +506,7 @@ export async function updateEvent(
     visibility?: TimelineVisibility;
     metadata?: Record<string, unknown>;
   }
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const updateData: Record<string, unknown> = {};
 
@@ -552,7 +553,7 @@ export async function updateEvent(
 export async function updateEventVisibility(
   eventId: string,
   visibility: TimelineVisibility
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   return updateEvent(eventId, { visibility });
 }
 

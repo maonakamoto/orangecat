@@ -56,6 +56,7 @@ import { getLoanOffers, getUserOffers } from './queries/offers';
 import { createLoan, updateLoan, deleteLoan, createObligationLoan } from './mutations/loans';
 import { createLoanOffer, updateLoanOffer, respondToOffer } from './mutations/offers';
 import { createPayment, completePayment } from './mutations/payments';
+import type { ServiceResult } from '@/types/common';
 
 /**
  * LoansService Class
@@ -82,21 +83,15 @@ class LoansService {
     return getLoan(loanId);
   }
 
-  async getUserLoans(
-    query?: LoansQuery,
-    pagination?: Pagination
-  ): Promise<LoansListResponse> {
+  async getUserLoans(query?: LoansQuery, pagination?: Pagination): Promise<LoansListResponse> {
     return getUserLoans(query, pagination);
   }
 
-  async getAvailableLoans(
-    query?: LoansQuery,
-    pagination?: Pagination
-  ): Promise<LoansListResponse> {
+  async getAvailableLoans(query?: LoansQuery, pagination?: Pagination): Promise<LoansListResponse> {
     return getAvailableLoans(query, pagination);
   }
 
-  async deleteLoan(loanId: string): Promise<{ success: boolean; error?: string }> {
+  async deleteLoan(loanId: string): Promise<ServiceResult> {
     return deleteLoan(loanId);
   }
 

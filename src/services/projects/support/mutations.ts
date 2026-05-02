@@ -13,6 +13,7 @@ import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { ProjectSupport, SupportProjectRequest, SupportProjectResponse } from './types';
 import { supportProjectSchema } from './validation';
+import type { ServiceResult } from '@/types/common';
 import { getCurrentUserId } from './helpers';
 
 /**
@@ -95,9 +96,7 @@ export async function createProjectSupport(
 /**
  * Delete project support (user can delete their own support)
  */
-export async function deleteProjectSupport(
-  supportId: string
-): Promise<{ success: boolean; error?: string }> {
+export async function deleteProjectSupport(supportId: string): Promise<ServiceResult> {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {

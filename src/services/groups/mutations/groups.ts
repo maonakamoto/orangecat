@@ -17,6 +17,7 @@ import { TABLES, getDefaultsForLabel } from '../constants';
 import { getCurrentUserId, generateSlug, ensureUniqueSlug } from '../utils/helpers';
 import { logGroupActivity } from '../utils/activity';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import type { ServiceResult } from '@/types/common';
 
 /**
  * Create a new group
@@ -208,7 +209,7 @@ export async function updateGroup(
 export async function deleteGroup(
   groupId: string,
   client?: AnySupabaseClient
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const supabaseClient = client || supabase;
     const userId = await getCurrentUserId(supabaseClient);

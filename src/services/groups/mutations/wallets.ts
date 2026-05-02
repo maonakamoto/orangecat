@@ -21,6 +21,7 @@ import { logGroupActivity } from '../utils/activity';
 import { checkGroupPermission } from '../permissions';
 import { TABLES } from '../constants';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import type { ServiceResult } from '@/types/common';
 
 /**
  * Create a group wallet
@@ -108,7 +109,7 @@ export async function updateGroupWallet(
   walletId: string,
   request: UpdateGroupWalletRequest,
   client?: AnySupabaseClient
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const sb = client || supabase;
     const userId = await getCurrentUserId(sb);

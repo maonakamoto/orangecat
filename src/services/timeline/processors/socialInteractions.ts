@@ -12,6 +12,7 @@ import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { withApiRetry } from '@/utils/retry';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import type { ServiceResult } from '@/types/common';
 
 // TIMELINE_LIKES, TIMELINE_DISLIKES, TIMELINE_COMMENTS are not in the generated DB schema,
 // and custom RPCs (like/unlike/comment) are also absent — cast required.
@@ -256,7 +257,7 @@ export async function addComment(
   content: string,
   parentCommentId?: string,
   userId?: string,
-  _createEventFn?: (request: Record<string, unknown>) => Promise<{ success: boolean; error?: string }>
+  _createEventFn?: (request: Record<string, unknown>) => Promise<ServiceResult>
 ): Promise<{ success: boolean; commentId?: string; commentCount: number; error?: string }> {
   try {
     // Get user ID if not provided
@@ -312,7 +313,11 @@ export async function addComment(
         .from(DATABASE_TABLES.TIMELINE_COMMENTS)
         .select('*', { count: 'exact', head: true })
         .eq('event_id', eventId);
-      return { success: true, commentId: (inserted as { id: string }).id, commentCount: count || 0 };
+      return {
+        success: true,
+        commentId: (inserted as { id: string }).id,
+        commentCount: count || 0,
+      };
     }
   } catch (error) {
     logger.error('Error adding timeline comment', error, 'Timeline');
@@ -327,7 +332,7 @@ export async function updateComment(
   commentId: string,
   content: string,
   userId?: string
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const targetUserId = userId || (await getCurrentUserId());
     if (!targetUserId) {
@@ -376,10 +381,7 @@ export async function updateComment(
 /**
  * Delete a comment (soft delete)
  */
-export async function deleteComment(
-  commentId: string,
-  userId?: string
-): Promise<{ success: boolean; error?: string }> {
+export async function deleteComment(commentId: string, userId?: string): Promise<ServiceResult> {
   try {
     const targetUserId = userId || (await getCurrentUserId());
     if (!targetUserId) {
@@ -552,7 +554,10 @@ export async function getEventComments(
 /**
  * Get replies to a comment
  */
-export async function getCommentReplies(commentId: string, limit: number = 20): Promise<Record<string, unknown>[]> {
+export async function getCommentReplies(
+  commentId: string,
+  limit: number = 20
+): Promise<Record<string, unknown>[]> {
   try {
     try {
       const { data, error } = await db.rpc('get_comment_replies', {

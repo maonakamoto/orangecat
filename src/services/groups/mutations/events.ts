@@ -15,6 +15,7 @@ import { logGroupActivity } from '../utils/activity';
 import { STATUS } from '@/config/database-constants';
 import { TABLES } from '../constants';
 import { fromTable, type AnySupabaseClient } from '../db-helpers';
+import type { ServiceResult } from '@/types/common';
 import type {
   CreateEventInput,
   UpdateEventInput,
@@ -170,7 +171,7 @@ export async function updateEvent(
 export async function deleteEvent(
   eventId: string,
   client?: AnySupabaseClient
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const sb = client || supabase;
     const userId = await getCurrentUserId(sb);

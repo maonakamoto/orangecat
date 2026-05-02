@@ -10,6 +10,7 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import type { FileUploadResult, FileUploadProgress } from '@/types/storage';
+import type { ServiceResult } from '@/types/common';
 
 export type { FileUploadResult, FileUploadProgress };
 
@@ -163,7 +164,7 @@ export class ProofStorageService {
   /**
    * Delete a proof file from storage
    */
-  static async deleteFile(filePath: string): Promise<{ success: boolean; error?: string }> {
+  static async deleteFile(filePath: string): Promise<ServiceResult> {
     try {
       const { error } = await supabase.storage.from(this.BUCKET_NAME).remove([filePath]);
 

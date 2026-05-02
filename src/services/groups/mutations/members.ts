@@ -19,6 +19,7 @@ import { getCurrentUserId, isGroupMember, getUserRole } from '../utils/helpers';
 import { logGroupActivity } from '../utils/activity';
 import { canPerformAction } from '../permissions/resolver';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import type { ServiceResult } from '@/types/common';
 
 /**
  * Join a group
@@ -26,7 +27,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 export async function joinGroup(
   groupId: string,
   client?: AnySupabaseClient
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const sb = client || supabase;
     const userId = await getCurrentUserId(sb);
@@ -88,7 +89,7 @@ export async function joinGroup(
 export async function leaveGroup(
   groupId: string,
   client?: AnySupabaseClient
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const sb = client || supabase;
     const userId = await getCurrentUserId(sb);
@@ -245,7 +246,7 @@ export async function removeMember(
   groupId: string,
   memberId: string,
   client?: AnySupabaseClient
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const sb = client || supabase;
     const userId = await getCurrentUserId(sb);

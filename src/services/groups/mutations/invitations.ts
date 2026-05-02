@@ -16,6 +16,7 @@ import { getCurrentUserId, isGroupMember } from '../utils/helpers';
 import { logGroupActivity } from '../utils/activity';
 import { canPerformAction } from '../permissions/resolver';
 import { fromTable, callRpc, type AnySupabaseClient } from '../db-helpers';
+import type { ServiceResult } from '@/types/common';
 
 // ==================== TYPES ====================
 
@@ -241,7 +242,7 @@ export async function acceptInvitation(
 export async function declineInvitation(
   invitationId: string,
   client?: AnySupabaseClient
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const sb = client || supabase;
     const userId = await getCurrentUserId(sb);
@@ -339,7 +340,7 @@ export async function acceptInvitationByToken(
 export async function revokeInvitation(
   invitationId: string,
   client?: AnySupabaseClient
-): Promise<{ success: boolean; error?: string }> {
+): Promise<ServiceResult> {
   try {
     const sb = client || supabase;
     const userId = await getCurrentUserId(sb);

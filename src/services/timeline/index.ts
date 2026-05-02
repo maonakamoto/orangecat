@@ -65,6 +65,7 @@ import {
 
 // Import utilities
 import { getDemoTimelineEvents } from './utils/demo';
+import type { ServiceResult } from '@/types/common';
 
 class TimelineService {
   private readonly _DEFAULT_PAGE_SIZE = 20;
@@ -324,21 +325,14 @@ class TimelineService {
   /**
    * Update a comment's content
    */
-  async updateComment(
-    commentId: string,
-    content: string,
-    userId?: string
-  ): Promise<{ success: boolean; error?: string }> {
+  async updateComment(commentId: string, content: string, userId?: string): Promise<ServiceResult> {
     return updateEventComment(commentId, content, userId);
   }
 
   /**
    * Delete a comment (soft delete)
    */
-  async deleteComment(
-    commentId: string,
-    userId?: string
-  ): Promise<{ success: boolean; error?: string }> {
+  async deleteComment(commentId: string, userId?: string): Promise<ServiceResult> {
     return deleteEventComment(commentId, userId);
   }
 
@@ -370,7 +364,7 @@ class TimelineService {
       visibility?: TimelineVisibility;
       metadata?: Record<string, unknown>;
     }
-  ): Promise<{ success: boolean; error?: string }> {
+  ): Promise<ServiceResult> {
     return updateEvent(eventId, updates);
   }
 
@@ -380,7 +374,7 @@ class TimelineService {
   async updateEventVisibility(
     eventId: string,
     visibility: TimelineVisibility
-  ): Promise<{ success: boolean; error?: string }> {
+  ): Promise<ServiceResult> {
     return updateEventVisibility(eventId, visibility);
   }
 }
