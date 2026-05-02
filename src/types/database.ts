@@ -3050,6 +3050,527 @@ export interface Database {
           created_at?: string;
         };
       };
+
+      // ── Tables added from live schema 2026-05-02 ──────────────────────────
+
+      tasks: {
+        Row: {
+          category: string;
+          completed_at: string | null;
+          completed_by: string | null;
+          created_at: string | null;
+          created_by: string;
+          current_status: string;
+          description: string | null;
+          due_date: string | null;
+          estimated_minutes: number | null;
+          id: string;
+          instructions: string | null;
+          is_archived: boolean | null;
+          is_completed: boolean | null;
+          is_reminder: boolean;
+          priority: string;
+          project_id: string | null;
+          schedule_cron: string | null;
+          schedule_human: string | null;
+          tags: string[] | null;
+          task_type: string;
+          title: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          category: string;
+          completed_at?: string | null;
+          completed_by?: string | null;
+          created_at?: string | null;
+          created_by: string;
+          current_status?: string;
+          description?: string | null;
+          due_date?: string | null;
+          estimated_minutes?: number | null;
+          id?: string;
+          instructions?: string | null;
+          is_archived?: boolean | null;
+          is_completed?: boolean | null;
+          is_reminder?: boolean;
+          priority?: string;
+          project_id?: string | null;
+          schedule_cron?: string | null;
+          schedule_human?: string | null;
+          tags?: string[] | null;
+          task_type: string;
+          title: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          category?: string;
+          completed_at?: string | null;
+          completed_by?: string | null;
+          created_at?: string | null;
+          created_by?: string;
+          current_status?: string;
+          description?: string | null;
+          due_date?: string | null;
+          estimated_minutes?: number | null;
+          id?: string;
+          instructions?: string | null;
+          is_archived?: boolean | null;
+          is_completed?: boolean | null;
+          is_reminder?: boolean;
+          priority?: string;
+          project_id?: string | null;
+          schedule_cron?: string | null;
+          schedule_human?: string | null;
+          tags?: string[] | null;
+          task_type?: string;
+          title?: string;
+          updated_at?: string | null;
+        };
+      };
+
+      task_completions: {
+        Row: {
+          completed_at: string | null;
+          completed_by: string;
+          created_at: string | null;
+          duration_minutes: number | null;
+          id: string;
+          notes: string | null;
+          task_id: string;
+        };
+        Insert: {
+          completed_at?: string | null;
+          completed_by: string;
+          created_at?: string | null;
+          duration_minutes?: number | null;
+          id?: string;
+          notes?: string | null;
+          task_id: string;
+        };
+        Update: {
+          completed_at?: string | null;
+          completed_by?: string;
+          created_at?: string | null;
+          duration_minutes?: number | null;
+          id?: string;
+          notes?: string | null;
+          task_id?: string;
+        };
+      };
+
+      task_requests: {
+        Row: {
+          completion_id: string | null;
+          created_at: string | null;
+          id: string;
+          is_broadcast: boolean | null;
+          message: string | null;
+          requested_by: string;
+          requested_user_id: string | null;
+          responded_by: string | null;
+          response_message: string | null;
+          status: string;
+          task_id: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          completion_id?: string | null;
+          created_at?: string | null;
+          id?: string;
+          is_broadcast?: boolean | null;
+          message?: string | null;
+          requested_by: string;
+          requested_user_id?: string | null;
+          responded_by?: string | null;
+          response_message?: string | null;
+          status?: string;
+          task_id: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          completion_id?: string | null;
+          created_at?: string | null;
+          id?: string;
+          is_broadcast?: boolean | null;
+          message?: string | null;
+          requested_by?: string;
+          requested_user_id?: string | null;
+          responded_by?: string | null;
+          response_message?: string | null;
+          status?: string;
+          task_id?: string;
+          updated_at?: string | null;
+        };
+      };
+
+      task_projects: {
+        Row: {
+          created_at: string | null;
+          created_by: string;
+          description: string | null;
+          id: string;
+          status: string;
+          target_date: string | null;
+          title: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          created_by: string;
+          description?: string | null;
+          id?: string;
+          status?: string;
+          target_date?: string | null;
+          title: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          created_by?: string;
+          description?: string | null;
+          id?: string;
+          status?: string;
+          target_date?: string | null;
+          title?: string;
+          updated_at?: string | null;
+        };
+      };
+
+      task_attention_flags: {
+        Row: {
+          created_at: string | null;
+          flagged_by: string;
+          id: string;
+          is_resolved: boolean | null;
+          message: string | null;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          resolved_by_completion_id: string | null;
+          task_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          flagged_by: string;
+          id?: string;
+          is_resolved?: boolean | null;
+          message?: string | null;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          resolved_by_completion_id?: string | null;
+          task_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          flagged_by?: string;
+          id?: string;
+          is_resolved?: boolean | null;
+          message?: string | null;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          resolved_by_completion_id?: string | null;
+          task_id?: string;
+        };
+      };
+
+      cat_conversations: {
+        Row: {
+          created_at: string;
+          id: string;
+          is_default: boolean;
+          title: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          is_default?: boolean;
+          title?: string | null;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          is_default?: boolean;
+          title?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+      };
+
+      cat_messages: {
+        Row: {
+          content: string;
+          conversation_id: string;
+          created_at: string;
+          id: string;
+          model_used: string | null;
+          provider: string | null;
+          role: string;
+          token_count: number | null;
+          user_id: string;
+        };
+        Insert: {
+          content: string;
+          conversation_id: string;
+          created_at?: string;
+          id?: string;
+          model_used?: string | null;
+          provider?: string | null;
+          role: string;
+          token_count?: number | null;
+          user_id: string;
+        };
+        Update: {
+          content?: string;
+          conversation_id?: string;
+          created_at?: string;
+          id?: string;
+          model_used?: string | null;
+          provider?: string | null;
+          role?: string;
+          token_count?: number | null;
+          user_id?: string;
+        };
+      };
+
+      entity_wallets: {
+        Row: {
+          created_at: string | null;
+          created_by: string | null;
+          entity_id: string;
+          entity_type: string;
+          id: string;
+          is_primary: boolean | null;
+          wallet_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          created_by?: string | null;
+          entity_id: string;
+          entity_type: string;
+          id?: string;
+          is_primary?: boolean | null;
+          wallet_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          created_by?: string | null;
+          entity_id?: string;
+          entity_type?: string;
+          id?: string;
+          is_primary?: boolean | null;
+          wallet_id?: string;
+        };
+      };
+
+      investments: {
+        Row: {
+          actor_id: string;
+          bitcoin_address: string | null;
+          created_at: string;
+          currency: string;
+          description: string | null;
+          end_date: string | null;
+          expected_return_rate: number | null;
+          id: string;
+          investment_type: string;
+          is_public: boolean;
+          lightning_address: string | null;
+          maximum_investment: number | null;
+          minimum_investment: number;
+          return_frequency: string | null;
+          risk_level: string | null;
+          show_on_profile: boolean | null;
+          start_date: string | null;
+          status: string;
+          target_amount: number;
+          term_months: number | null;
+          terms: string | null;
+          thumbnail_url: string | null;
+          title: string;
+          total_raised: number;
+          updated_at: string;
+          wallet_id: string | null;
+        };
+        Insert: {
+          actor_id: string;
+          bitcoin_address?: string | null;
+          created_at?: string;
+          currency?: string;
+          description?: string | null;
+          end_date?: string | null;
+          expected_return_rate?: number | null;
+          id?: string;
+          investment_type?: string;
+          is_public?: boolean;
+          lightning_address?: string | null;
+          maximum_investment?: number | null;
+          minimum_investment?: number;
+          return_frequency?: string | null;
+          risk_level?: string | null;
+          show_on_profile?: boolean | null;
+          start_date?: string | null;
+          status?: string;
+          target_amount: number;
+          term_months?: number | null;
+          terms?: string | null;
+          thumbnail_url?: string | null;
+          title: string;
+          total_raised?: number;
+          updated_at?: string;
+          wallet_id?: string | null;
+        };
+        Update: {
+          actor_id?: string;
+          bitcoin_address?: string | null;
+          created_at?: string;
+          currency?: string;
+          description?: string | null;
+          end_date?: string | null;
+          expected_return_rate?: number | null;
+          id?: string;
+          investment_type?: string;
+          is_public?: boolean;
+          lightning_address?: string | null;
+          maximum_investment?: number | null;
+          minimum_investment?: number;
+          return_frequency?: string | null;
+          risk_level?: string | null;
+          show_on_profile?: boolean | null;
+          start_date?: string | null;
+          status?: string;
+          target_amount?: number;
+          term_months?: number | null;
+          terms?: string | null;
+          thumbnail_url?: string | null;
+          title?: string;
+          total_raised?: number;
+          updated_at?: string;
+          wallet_id?: string | null;
+        };
+      };
+
+      assets: {
+        Row: {
+          actor_id: string | null;
+          created_at: string;
+          currency: string;
+          deposit_amount_btc: number | null;
+          description: string | null;
+          documents: Json | null;
+          estimated_value: number | null;
+          id: string;
+          is_for_rent: boolean;
+          is_for_sale: boolean;
+          location: string | null;
+          max_rental_period: number | null;
+          min_rental_period: number;
+          owner_id: string;
+          public_visibility: boolean;
+          rental_period_type: string;
+          rental_price_btc: number | null;
+          requires_deposit: boolean;
+          sale_price_btc: number | null;
+          show_on_profile: boolean;
+          status: string;
+          title: string;
+          type: string;
+          updated_at: string;
+          verification_status: string;
+        };
+        Insert: {
+          actor_id?: string | null;
+          created_at?: string;
+          currency?: string;
+          deposit_amount_btc?: number | null;
+          description?: string | null;
+          documents?: Json | null;
+          estimated_value?: number | null;
+          id?: string;
+          is_for_rent?: boolean;
+          is_for_sale?: boolean;
+          location?: string | null;
+          max_rental_period?: number | null;
+          min_rental_period?: number;
+          owner_id: string;
+          public_visibility?: boolean;
+          rental_period_type?: string;
+          rental_price_btc?: number | null;
+          requires_deposit?: boolean;
+          sale_price_btc?: number | null;
+          show_on_profile?: boolean;
+          status?: string;
+          title: string;
+          type: string;
+          updated_at?: string;
+          verification_status?: string;
+        };
+        Update: {
+          actor_id?: string | null;
+          created_at?: string;
+          currency?: string;
+          deposit_amount_btc?: number | null;
+          description?: string | null;
+          documents?: Json | null;
+          estimated_value?: number | null;
+          id?: string;
+          is_for_rent?: boolean;
+          is_for_sale?: boolean;
+          location?: string | null;
+          max_rental_period?: number | null;
+          min_rental_period?: number;
+          owner_id?: string;
+          public_visibility?: boolean;
+          rental_period_type?: string;
+          rental_price_btc?: number | null;
+          requires_deposit?: boolean;
+          sale_price_btc?: number | null;
+          show_on_profile?: boolean;
+          status?: string;
+          title?: string;
+          type?: string;
+          updated_at?: string;
+          verification_status?: string;
+        };
+      };
+
+      contributions: {
+        Row: {
+          amount_btc: number;
+          contributor_id: string;
+          created_at: string | null;
+          entity_id: string;
+          entity_type: string;
+          id: string;
+          is_anonymous: boolean | null;
+          message: string | null;
+          payment_intent_id: string;
+        };
+        Insert: {
+          amount_btc: number;
+          contributor_id: string;
+          created_at?: string | null;
+          entity_id: string;
+          entity_type: string;
+          id?: string;
+          is_anonymous?: boolean | null;
+          message?: string | null;
+          payment_intent_id: string;
+        };
+        Update: {
+          amount_btc?: number;
+          contributor_id?: string;
+          created_at?: string | null;
+          entity_id?: string;
+          entity_type?: string;
+          id?: string;
+          is_anonymous?: boolean | null;
+          message?: string | null;
+          payment_intent_id?: string;
+        };
+      };
     };
     Views: {
       message_details: {
