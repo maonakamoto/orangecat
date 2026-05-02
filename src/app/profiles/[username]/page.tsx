@@ -6,6 +6,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { getTableName } from '@/config/entity-registry';
 import { safeJsonLdString } from '@/lib/seo/structured-data';
 import type { ScalableProfile } from '@/types/database';
+import { mapProjectRow } from '@/types/project';
 
 interface PageProps {
   params: Promise<{ username: string }>;
@@ -171,8 +172,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
     .neq('status', 'draft') // Exclude drafts from public profile
     .neq('show_on_profile', false) // Respect user's visibility preference (null = true by default)
     .order('created_at', { ascending: false });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const projects = projectsData as any[] | null;
+  const projects = (projectsData || []).map(mapProjectRow);
 
   // Fetch follower count
   const { count: followerCount } = await supabase
@@ -190,15 +190,13 @@ export default async function PublicProfilePage({ params }: PageProps) {
   let walletCount = 0;
   try {
     // Use the get_entity_wallets function to get active wallets for this profile
+    // get_entity_wallets is not in generated DB types — cast the rpc reference to call it
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: walletData } = await (supabase.rpc as any)('get_entity_wallets', {
+    const { data: walletData } = (await (supabase.rpc as any)('get_entity_wallets', {
       p_entity_type: 'profile',
       p_entity_id: profile.id,
-    });
-    walletCount = walletData
-      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (walletData as any[]).filter((w: { is_active: boolean }) => w.is_active).length
-      : 0;
+    })) as { data: Array<{ is_active: boolean }> | null };
+    walletCount = walletData ? walletData.filter(w => w.is_active).length : 0;
   } catch {
     // Fallback: try querying wallet_ownerships table directly
     try {
