@@ -54,7 +54,8 @@ export default function DiscoverHero({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
           >
-            Projects, causes, products, services, loans, investments, events, and more — from creators and communities around the world.
+            Projects, causes, products, services, loans, investments, events, and more — from
+            creators and communities around the world.
           </motion.p>
 
           {/* Stats - Compact */}
@@ -73,10 +74,8 @@ export default function DiscoverHero({
               <div className="text-sm text-gray-600 mt-1">People</div>
             </div>
             <div className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card">
-              <div className="text-fluid-xl font-bold text-bitcoinOrange">
-                {totalFinancial}
-              </div>
-              <div className="text-sm text-gray-600 mt-1">Loans & Investments</div>
+              <div className="text-fluid-xl font-bold text-bitcoinOrange">{totalFinancial}</div>
+              <div className="text-sm text-gray-600 mt-1">Finance</div>
             </div>
           </motion.div>
         </motion.div>
@@ -84,5 +83,3 @@ export default function DiscoverHero({
     </motion.div>
   );
 }
-
-
