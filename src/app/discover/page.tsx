@@ -136,19 +136,21 @@ export default function DiscoverPage() {
             <DiscoverTabs
               activeTab={activeTab}
               onTabChange={handleTabChange}
-              projectCount={projects.length}
-              profileCount={profiles.length}
-              loanCount={loans.length}
-              investmentCount={investments.length || totalInvestmentsCount}
-              assetCount={assets.length}
-              causeCount={causes.length}
-              eventCount={events.length}
-              productCount={products.length}
-              serviceCount={services.length}
-              groupCount={groups.length}
-              wishlistCount={wishlists.length}
-              researchCount={research.length}
-              aiAssistantCount={aiAssistants.length}
+              counts={{
+                projects: projects.length,
+                profiles: profiles.length,
+                loans: loans.length,
+                investments: investments.length || totalInvestmentsCount,
+                assets: assets.length,
+                causes: causes.length,
+                events: events.length,
+                products: products.length,
+                services: services.length,
+                groups: groups.length,
+                wishlists: wishlists.length,
+                research: research.length,
+                ai_assistants: aiAssistants.length,
+              }}
               loading={
                 loading || loansLoading || investmentsLoading || assetsLoading || genericLoading
               }

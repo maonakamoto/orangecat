@@ -34,38 +34,10 @@ export type DiscoverTabType =
   | 'research'
   | 'ai_assistants';
 
-interface TabCounts {
-  projects: number;
-  profiles: number;
-  loans: number;
-  investments: number;
-  assets: number;
-  causes: number;
-  events: number;
-  products: number;
-  services: number;
-  groups: number;
-  wishlists: number;
-  research: number;
-  ai_assistants: number;
-}
-
 interface DiscoverTabsProps {
   activeTab: DiscoverTabType;
   onTabChange: (tab: DiscoverTabType) => void;
-  projectCount: number;
-  profileCount: number;
-  loanCount?: number;
-  investmentCount?: number;
-  assetCount?: number;
-  causeCount?: number;
-  eventCount?: number;
-  productCount?: number;
-  serviceCount?: number;
-  groupCount?: number;
-  wishlistCount?: number;
-  researchCount?: number;
-  aiAssistantCount?: number;
+  counts: Partial<Record<DiscoverTabType, number>>;
   loading?: boolean;
 }
 
@@ -73,149 +45,39 @@ interface TabConfig {
   id: DiscoverTabType;
   label: string;
   icon: React.ReactNode;
-  getCount: (counts: TabCounts) => number;
 }
 
 const tabs: TabConfig[] = [
-  {
-    id: 'all',
-    label: 'All',
-    icon: <Grid3X3 className="w-4 h-4" />,
-    getCount: c =>
-      c.projects +
-      c.profiles +
-      c.loans +
-      c.investments +
-      c.assets +
-      c.causes +
-      c.events +
-      c.products +
-      c.services +
-      c.groups +
-      c.wishlists +
-      c.research +
-      c.ai_assistants,
-  },
-  {
-    id: 'projects',
-    label: 'Projects',
-    icon: <Target className="w-4 h-4" />,
-    getCount: c => c.projects,
-  },
-  {
-    id: 'causes',
-    label: 'Causes',
-    icon: <Heart className="w-4 h-4" />,
-    getCount: c => c.causes,
-  },
-  {
-    id: 'investments',
-    label: 'Investments',
-    icon: <TrendingUp className="w-4 h-4" />,
-    getCount: c => c.investments,
-  },
-  {
-    id: 'loans',
-    label: 'Loans',
-    icon: <DollarSign className="w-4 h-4" />,
-    getCount: c => c.loans,
-  },
-  {
-    id: 'assets',
-    label: 'Assets',
-    icon: <Building className="w-4 h-4" />,
-    getCount: c => c.assets,
-  },
-  {
-    id: 'products',
-    label: 'Products',
-    icon: <Package className="w-4 h-4" />,
-    getCount: c => c.products,
-  },
-  {
-    id: 'services',
-    label: 'Services',
-    icon: <Briefcase className="w-4 h-4" />,
-    getCount: c => c.services,
-  },
-  {
-    id: 'events',
-    label: 'Events',
-    icon: <Calendar className="w-4 h-4" />,
-    getCount: c => c.events,
-  },
-  {
-    id: 'groups',
-    label: 'Groups',
-    icon: <Building2 className="w-4 h-4" />,
-    getCount: c => c.groups,
-  },
-  {
-    id: 'wishlists',
-    label: 'Wishlists',
-    icon: <Gift className="w-4 h-4" />,
-    getCount: c => c.wishlists,
-  },
-  {
-    id: 'research',
-    label: 'Research',
-    icon: <FlaskConical className="w-4 h-4" />,
-    getCount: c => c.research,
-  },
-  {
-    id: 'ai_assistants',
-    label: 'AI Assistants',
-    icon: <Bot className="w-4 h-4" />,
-    getCount: c => c.ai_assistants,
-  },
-  {
-    id: 'profiles',
-    label: 'People',
-    icon: <Users className="w-4 h-4" />,
-    getCount: c => c.profiles,
-  },
+  { id: 'all', label: 'All', icon: <Grid3X3 className="w-4 h-4" /> },
+  { id: 'projects', label: 'Projects', icon: <Target className="w-4 h-4" /> },
+  { id: 'causes', label: 'Causes', icon: <Heart className="w-4 h-4" /> },
+  { id: 'investments', label: 'Investments', icon: <TrendingUp className="w-4 h-4" /> },
+  { id: 'loans', label: 'Loans', icon: <DollarSign className="w-4 h-4" /> },
+  { id: 'assets', label: 'Assets', icon: <Building className="w-4 h-4" /> },
+  { id: 'products', label: 'Products', icon: <Package className="w-4 h-4" /> },
+  { id: 'services', label: 'Services', icon: <Briefcase className="w-4 h-4" /> },
+  { id: 'events', label: 'Events', icon: <Calendar className="w-4 h-4" /> },
+  { id: 'groups', label: 'Groups', icon: <Building2 className="w-4 h-4" /> },
+  { id: 'wishlists', label: 'Wishlists', icon: <Gift className="w-4 h-4" /> },
+  { id: 'research', label: 'Research', icon: <FlaskConical className="w-4 h-4" /> },
+  { id: 'ai_assistants', label: 'AI Assistants', icon: <Bot className="w-4 h-4" /> },
+  { id: 'profiles', label: 'People', icon: <Users className="w-4 h-4" /> },
 ];
 
 export default function DiscoverTabs({
   activeTab,
   onTabChange,
-  projectCount,
-  profileCount,
-  loanCount = 0,
-  investmentCount = 0,
-  assetCount = 0,
-  causeCount = 0,
-  eventCount = 0,
-  productCount = 0,
-  serviceCount = 0,
-  groupCount = 0,
-  wishlistCount = 0,
-  researchCount = 0,
-  aiAssistantCount = 0,
+  counts,
   loading = false,
 }: DiscoverTabsProps) {
-  const counts: TabCounts = {
-    projects: projectCount,
-    profiles: profileCount,
-    loans: loanCount,
-    investments: investmentCount,
-    assets: assetCount,
-    causes: causeCount,
-    events: eventCount,
-    products: productCount,
-    services: serviceCount,
-    groups: groupCount,
-    wishlists: wishlistCount,
-    research: researchCount,
-    ai_assistants: aiAssistantCount,
-  };
+  const allCount = Object.values(counts).reduce((sum, n) => sum + (n || 0), 0);
 
   return (
     <div className="border-b border-gray-200 bg-white/80 backdrop-blur-sm rounded-t-2xl sticky top-0 z-10 overflow-x-auto">
       <nav className="-mb-px flex space-x-6 px-6 pt-4 min-w-max" aria-label="Tabs">
         {tabs.map(tab => {
           const isActive = activeTab === tab.id;
-          const count = tab.getCount(counts);
+          const count = tab.id === 'all' ? allCount : counts[tab.id] || 0;
 
           return (
             <button
