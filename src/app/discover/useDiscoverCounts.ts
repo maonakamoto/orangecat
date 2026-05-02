@@ -15,6 +15,7 @@ interface DiscoverCounts {
   totalProfilesCount: number;
   totalLoansCount: number;
   totalInvestmentsCount: number;
+  totalAssetsCount: number;
 }
 
 export function useDiscoverCounts(): DiscoverCounts {
@@ -23,6 +24,7 @@ export function useDiscoverCounts(): DiscoverCounts {
     totalProfilesCount: 0,
     totalLoansCount: 0,
     totalInvestmentsCount: 0,
+    totalAssetsCount: 0,
   });
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export function useDiscoverCounts(): DiscoverCounts {
             profiles: number;
             loans: number;
             investments: number;
+            assets: number;
             timestamp: number;
           };
           if (Date.now() - parsed.timestamp < CACHE_DURATION) {
@@ -43,12 +46,13 @@ export function useDiscoverCounts(): DiscoverCounts {
               totalProfilesCount: parsed.profiles,
               totalLoansCount: parsed.loans ?? 0,
               totalInvestmentsCount: parsed.investments ?? 0,
+              totalAssetsCount: parsed.assets ?? 0,
             });
             return;
           }
         }
 
-        const [projectsRes, profilesRes, loansRes, investmentsRes] = await Promise.all([
+        const [projectsRes, profilesRes, loansRes, investmentsRes, assetsRes] = await Promise.all([
           supabase
             .from(getTableName('project'))
             .select('*', { count: 'exact', head: true })
@@ -63,6 +67,11 @@ export function useDiscoverCounts(): DiscoverCounts {
             .from(getTableName('investment'))
             .select('*', { count: 'exact', head: true })
             .eq('is_public', true),
+          supabase
+            .from(getTableName('asset'))
+            .select('*', { count: 'exact', head: true })
+            .eq('public_visibility', true)
+            .eq('status', ENTITY_STATUS.ACTIVE),
         ]);
 
         const next: DiscoverCounts = {
@@ -70,6 +79,7 @@ export function useDiscoverCounts(): DiscoverCounts {
           totalProfilesCount: profilesRes.count ?? 0,
           totalLoansCount: loansRes.count ?? 0,
           totalInvestmentsCount: investmentsRes.count ?? 0,
+          totalAssetsCount: assetsRes.count ?? 0,
         };
 
         setCounts(next);
@@ -80,6 +90,7 @@ export function useDiscoverCounts(): DiscoverCounts {
             profiles: next.totalProfilesCount,
             loans: next.totalLoansCount,
             investments: next.totalInvestmentsCount,
+            assets: next.totalAssetsCount,
             timestamp: Date.now(),
           })
         );

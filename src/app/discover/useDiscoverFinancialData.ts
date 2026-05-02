@@ -8,12 +8,15 @@ import { ENTITY_STATUS } from '@/config/database-constants';
 import type { DiscoverTabType } from '@/components/discover/DiscoverTabs';
 import type { Loan } from '@/types/loans';
 import type { Investment } from '@/types/investments';
+import type { GenericPublicEntity } from '@/components/entity/variants/GenericPublicCard';
 
 interface DiscoverFinancialData {
   loans: Loan[];
   loansLoading: boolean;
   investments: Investment[];
   investmentsLoading: boolean;
+  assets: GenericPublicEntity[];
+  assetsLoading: boolean;
 }
 
 export function useDiscoverFinancialData(
@@ -24,6 +27,8 @@ export function useDiscoverFinancialData(
   const [loansLoading, setLoansLoading] = useState(false);
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [investmentsLoading, setInvestmentsLoading] = useState(false);
+  const [assets, setAssets] = useState<GenericPublicEntity[]>([]);
+  const [assetsLoading, setAssetsLoading] = useState(false);
 
   useEffect(() => {
     if (activeTab !== 'all' && activeTab !== 'loans') {
@@ -104,5 +109,45 @@ export function useDiscoverFinancialData(
     fetchInvestments();
   }, [activeTab, searchTerm]);
 
-  return { loans, loansLoading, investments, investmentsLoading };
+  useEffect(() => {
+    if (activeTab !== 'all' && activeTab !== 'assets') {
+      setAssets([]);
+      return;
+    }
+
+    const fetchAssets = async () => {
+      setAssetsLoading(true);
+      try {
+        let query = supabase
+          .from(getTableName('asset'))
+          .select('id, title, description, status, type, created_at')
+          .eq('public_visibility', true)
+          .eq('status', ENTITY_STATUS.ACTIVE)
+          .order('created_at', { ascending: false })
+          .limit(activeTab === 'assets' ? 50 : 12);
+
+        if (searchTerm) {
+          const escaped = searchTerm.replace(/[%_]/g, '\\$&');
+          query = query.or(`title.ilike.%${escaped}%,description.ilike.%${escaped}%`);
+        }
+
+        const { data, error } = await query;
+        if (error) {
+          logger.error('Error fetching assets', error, 'Discover');
+          setAssets([]);
+        } else {
+          setAssets((data || []) as GenericPublicEntity[]);
+        }
+      } catch (error) {
+        logger.error('Error fetching assets', error, 'Discover');
+        setAssets([]);
+      } finally {
+        setAssetsLoading(false);
+      }
+    };
+
+    fetchAssets();
+  }, [activeTab, searchTerm]);
+
+  return { loans, loansLoading, investments, investmentsLoading, assets, assetsLoading };
 }

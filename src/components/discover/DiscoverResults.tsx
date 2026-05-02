@@ -10,7 +10,18 @@
  */
 
 import { motion } from 'framer-motion';
-import { ArrowUpDown, Loader2, Target, Users, DollarSign, TrendingUp, Gift, FlaskConical, Bot } from 'lucide-react';
+import {
+  ArrowUpDown,
+  Loader2,
+  Target,
+  Users,
+  DollarSign,
+  TrendingUp,
+  Gift,
+  FlaskConical,
+  Bot,
+  Building,
+} from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { ProjectCard } from '@/components/entity/variants/ProjectCard';
 import ProfileCard from '@/components/ui/ProfileCard';
@@ -22,7 +33,10 @@ import {
 import ResultsSection from '@/components/discover/ResultsSection';
 import { LoanCard } from '@/components/entity/variants/LoanCard';
 import { InvestmentCard } from '@/components/entity/variants/InvestmentCard';
-import { GenericPublicCard, type GenericPublicEntity } from '@/components/entity/variants/GenericPublicCard';
+import {
+  GenericPublicCard,
+  type GenericPublicEntity,
+} from '@/components/entity/variants/GenericPublicCard';
 import type { SearchFundingPage, SearchProfile } from '@/services/search';
 import type { DiscoverTabType } from '@/components/discover/DiscoverTabs';
 import type { Loan } from '@/types/loans';
@@ -39,6 +53,7 @@ interface DiscoverResultsProps {
   profiles: SearchProfile[];
   loans?: Loan[];
   investments?: Investment[];
+  assets?: GenericPublicEntity[];
   causes?: GenericPublicEntity[];
   events?: GenericPublicEntity[];
   products?: GenericPublicEntity[];
@@ -62,6 +77,7 @@ export default function DiscoverResults({
   profiles,
   loans = [],
   investments = [],
+  assets = [],
   causes = [],
   events = [],
   products = [],
@@ -126,6 +142,7 @@ export default function DiscoverResults({
     profiles.length +
     loans.length +
     investments.length +
+    assets.length +
     causes.length +
     events.length +
     products.length +
@@ -286,70 +303,213 @@ export default function DiscoverResults({
   // Tab-Specific Content
   if (activeTab === 'all') {
     const sectionLengths = [
-      projects.length, profiles.length, loans.length, investments.length,
-      causes.length, events.length, products.length, services.length, groups.length, wishlists.length, research.length, aiAssistants.length,
+      projects.length,
+      profiles.length,
+      loans.length,
+      investments.length,
+      assets.length,
+      causes.length,
+      events.length,
+      products.length,
+      services.length,
+      groups.length,
+      wishlists.length,
+      research.length,
+      aiAssistants.length,
     ];
     const hasMultipleSections = sectionLengths.filter(n => n > 0).length > 1;
     return (
       <div className="space-y-8">
         {resultsHeader}
         {projects.length > 0 && (
-          <ResultsSection title="Projects" count={projects.length} icon={<Target className="w-5 h-5" />} onViewAll={() => onTabChange('projects')} showViewAll={hasMultipleSections} viewAllLabel="View All Projects">
+          <ResultsSection
+            title="Projects"
+            count={projects.length}
+            icon={<Target className="w-5 h-5" />}
+            onViewAll={() => onTabChange('projects')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Projects"
+          >
             <ResultsGrid items={projects.slice(0, 6)} type="project" />
           </ResultsSection>
         )}
         {causes.length > 0 && (
-          <ResultsSection title="Causes" count={causes.length} icon={<Users className="w-5 h-5" />} onViewAll={() => onTabChange('causes')} showViewAll={hasMultipleSections} viewAllLabel="View All Causes">
-            <GenericGrid items={causes.slice(0, 6)} entityType="cause" makeHref={e => ROUTES.CAUSES.VIEW(e.id)} />
+          <ResultsSection
+            title="Causes"
+            count={causes.length}
+            icon={<Users className="w-5 h-5" />}
+            onViewAll={() => onTabChange('causes')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Causes"
+          >
+            <GenericGrid
+              items={causes.slice(0, 6)}
+              entityType="cause"
+              makeHref={e => ROUTES.CAUSES.VIEW(e.id)}
+            />
           </ResultsSection>
         )}
         {investments.length > 0 && (
-          <ResultsSection title="Investments" count={investments.length} icon={<TrendingUp className="w-5 h-5" />} onViewAll={() => onTabChange('investments')} showViewAll={hasMultipleSections} viewAllLabel="View All Investments">
+          <ResultsSection
+            title="Investments"
+            count={investments.length}
+            icon={<TrendingUp className="w-5 h-5" />}
+            onViewAll={() => onTabChange('investments')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Investments"
+          >
             <InvestmentsGrid items={investments.slice(0, 6)} />
           </ResultsSection>
         )}
+        {assets.length > 0 && (
+          <ResultsSection
+            title="Assets"
+            count={assets.length}
+            icon={<Building className="w-5 h-5" />}
+            onViewAll={() => onTabChange('assets')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Assets"
+          >
+            <GenericGrid
+              items={assets.slice(0, 6)}
+              entityType="asset"
+              makeHref={e => ROUTES.ASSETS.VIEW(e.id)}
+            />
+          </ResultsSection>
+        )}
         {loans.length > 0 && (
-          <ResultsSection title="Loans" count={loans.length} icon={<DollarSign className="w-5 h-5" />} onViewAll={() => onTabChange('loans')} showViewAll={hasMultipleSections} viewAllLabel="View All Loans">
+          <ResultsSection
+            title="Loans"
+            count={loans.length}
+            icon={<DollarSign className="w-5 h-5" />}
+            onViewAll={() => onTabChange('loans')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Loans"
+          >
             <LoansGrid items={loans.slice(0, 6)} />
           </ResultsSection>
         )}
         {products.length > 0 && (
-          <ResultsSection title="Products" count={products.length} icon={<Users className="w-5 h-5" />} onViewAll={() => onTabChange('products')} showViewAll={hasMultipleSections} viewAllLabel="View All Products">
-            <GenericGrid items={products.slice(0, 6)} entityType="product" makeHref={e => ROUTES.PRODUCTS.VIEW(e.id)} />
+          <ResultsSection
+            title="Products"
+            count={products.length}
+            icon={<Users className="w-5 h-5" />}
+            onViewAll={() => onTabChange('products')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Products"
+          >
+            <GenericGrid
+              items={products.slice(0, 6)}
+              entityType="product"
+              makeHref={e => ROUTES.PRODUCTS.VIEW(e.id)}
+            />
           </ResultsSection>
         )}
         {services.length > 0 && (
-          <ResultsSection title="Services" count={services.length} icon={<Users className="w-5 h-5" />} onViewAll={() => onTabChange('services')} showViewAll={hasMultipleSections} viewAllLabel="View All Services">
-            <GenericGrid items={services.slice(0, 6)} entityType="service" makeHref={e => ROUTES.SERVICES.VIEW(e.id)} />
+          <ResultsSection
+            title="Services"
+            count={services.length}
+            icon={<Users className="w-5 h-5" />}
+            onViewAll={() => onTabChange('services')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Services"
+          >
+            <GenericGrid
+              items={services.slice(0, 6)}
+              entityType="service"
+              makeHref={e => ROUTES.SERVICES.VIEW(e.id)}
+            />
           </ResultsSection>
         )}
         {events.length > 0 && (
-          <ResultsSection title="Events" count={events.length} icon={<Users className="w-5 h-5" />} onViewAll={() => onTabChange('events')} showViewAll={hasMultipleSections} viewAllLabel="View All Events">
-            <GenericGrid items={events.slice(0, 6)} entityType="event" makeHref={e => ROUTES.EVENTS.VIEW(e.id)} />
+          <ResultsSection
+            title="Events"
+            count={events.length}
+            icon={<Users className="w-5 h-5" />}
+            onViewAll={() => onTabChange('events')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Events"
+          >
+            <GenericGrid
+              items={events.slice(0, 6)}
+              entityType="event"
+              makeHref={e => ROUTES.EVENTS.VIEW(e.id)}
+            />
           </ResultsSection>
         )}
         {groups.length > 0 && (
-          <ResultsSection title="Groups" count={groups.length} icon={<Users className="w-5 h-5" />} onViewAll={() => onTabChange('groups')} showViewAll={hasMultipleSections} viewAllLabel="View All Groups">
-            <GenericGrid items={groups.slice(0, 6)} entityType="group" makeHref={e => ROUTES.GROUPS.VIEW(e.slug ?? e.id)} />
+          <ResultsSection
+            title="Groups"
+            count={groups.length}
+            icon={<Users className="w-5 h-5" />}
+            onViewAll={() => onTabChange('groups')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Groups"
+          >
+            <GenericGrid
+              items={groups.slice(0, 6)}
+              entityType="group"
+              makeHref={e => ROUTES.GROUPS.VIEW(e.slug ?? e.id)}
+            />
           </ResultsSection>
         )}
         {wishlists.length > 0 && (
-          <ResultsSection title="Wishlists" count={wishlists.length} icon={<Gift className="w-5 h-5" />} onViewAll={() => onTabChange('wishlists')} showViewAll={hasMultipleSections} viewAllLabel="View All Wishlists">
-            <GenericGrid items={wishlists.slice(0, 6)} entityType="wishlist" makeHref={e => ROUTES.WISHLISTS.VIEW(e.id)} />
+          <ResultsSection
+            title="Wishlists"
+            count={wishlists.length}
+            icon={<Gift className="w-5 h-5" />}
+            onViewAll={() => onTabChange('wishlists')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Wishlists"
+          >
+            <GenericGrid
+              items={wishlists.slice(0, 6)}
+              entityType="wishlist"
+              makeHref={e => ROUTES.WISHLISTS.VIEW(e.id)}
+            />
           </ResultsSection>
         )}
         {research.length > 0 && (
-          <ResultsSection title="Research" count={research.length} icon={<FlaskConical className="w-5 h-5" />} onViewAll={() => onTabChange('research')} showViewAll={hasMultipleSections} viewAllLabel="View All Research">
-            <GenericGrid items={research.slice(0, 6)} entityType="research" makeHref={e => ROUTES.RESEARCH.VIEW(e.id)} />
+          <ResultsSection
+            title="Research"
+            count={research.length}
+            icon={<FlaskConical className="w-5 h-5" />}
+            onViewAll={() => onTabChange('research')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All Research"
+          >
+            <GenericGrid
+              items={research.slice(0, 6)}
+              entityType="research"
+              makeHref={e => ROUTES.RESEARCH.VIEW(e.id)}
+            />
           </ResultsSection>
         )}
         {aiAssistants.length > 0 && (
-          <ResultsSection title="AI Assistants" count={aiAssistants.length} icon={<Bot className="w-5 h-5" />} onViewAll={() => onTabChange('ai_assistants')} showViewAll={hasMultipleSections} viewAllLabel="View All AI Assistants">
-            <GenericGrid items={aiAssistants.slice(0, 6)} entityType="ai_assistant" makeHref={e => ROUTES.AI_ASSISTANTS.VIEW(e.id)} />
+          <ResultsSection
+            title="AI Assistants"
+            count={aiAssistants.length}
+            icon={<Bot className="w-5 h-5" />}
+            onViewAll={() => onTabChange('ai_assistants')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All AI Assistants"
+          >
+            <GenericGrid
+              items={aiAssistants.slice(0, 6)}
+              entityType="ai_assistant"
+              makeHref={e => ROUTES.AI_ASSISTANTS.VIEW(e.id)}
+            />
           </ResultsSection>
         )}
         {profiles.length > 0 && (
-          <ResultsSection title="People" count={profiles.length} icon={<Users className="w-5 h-5" />} onViewAll={() => onTabChange('profiles')} showViewAll={hasMultipleSections} viewAllLabel="View All People">
+          <ResultsSection
+            title="People"
+            count={profiles.length}
+            icon={<Users className="w-5 h-5" />}
+            onViewAll={() => onTabChange('profiles')}
+            showViewAll={hasMultipleSections}
+            viewAllLabel="View All People"
+          >
             <ResultsGrid items={profiles.slice(0, 6)} type="profile" />
           </ResultsSection>
         )}
@@ -358,39 +518,144 @@ export default function DiscoverResults({
   }
 
   if (activeTab === 'investments') {
-    return (<>{resultsHeader}<InvestmentsGrid items={investments} />{hasMore && <LoadMoreButton label="Load More Investments" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <InvestmentsGrid items={investments} />
+        {hasMore && <LoadMoreButton label="Load More Investments" />}
+      </>
+    );
+  }
+  if (activeTab === 'assets') {
+    return (
+      <>
+        {resultsHeader}
+        <GenericGrid items={assets} entityType="asset" makeHref={e => ROUTES.ASSETS.VIEW(e.id)} />
+        {hasMore && <LoadMoreButton label="Load More Assets" />}
+      </>
+    );
   }
   if (activeTab === 'causes') {
-    return (<>{resultsHeader}<GenericGrid items={causes} entityType="cause" makeHref={e => ROUTES.CAUSES.VIEW(e.id)} />{hasMore && <LoadMoreButton label="Load More Causes" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <GenericGrid items={causes} entityType="cause" makeHref={e => ROUTES.CAUSES.VIEW(e.id)} />
+        {hasMore && <LoadMoreButton label="Load More Causes" />}
+      </>
+    );
   }
   if (activeTab === 'events') {
-    return (<>{resultsHeader}<GenericGrid items={events} entityType="event" makeHref={e => ROUTES.EVENTS.VIEW(e.id)} />{hasMore && <LoadMoreButton label="Load More Events" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <GenericGrid items={events} entityType="event" makeHref={e => ROUTES.EVENTS.VIEW(e.id)} />
+        {hasMore && <LoadMoreButton label="Load More Events" />}
+      </>
+    );
   }
   if (activeTab === 'products') {
-    return (<>{resultsHeader}<GenericGrid items={products} entityType="product" makeHref={e => ROUTES.PRODUCTS.VIEW(e.id)} />{hasMore && <LoadMoreButton label="Load More Products" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <GenericGrid
+          items={products}
+          entityType="product"
+          makeHref={e => ROUTES.PRODUCTS.VIEW(e.id)}
+        />
+        {hasMore && <LoadMoreButton label="Load More Products" />}
+      </>
+    );
   }
   if (activeTab === 'services') {
-    return (<>{resultsHeader}<GenericGrid items={services} entityType="service" makeHref={e => ROUTES.SERVICES.VIEW(e.id)} />{hasMore && <LoadMoreButton label="Load More Services" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <GenericGrid
+          items={services}
+          entityType="service"
+          makeHref={e => ROUTES.SERVICES.VIEW(e.id)}
+        />
+        {hasMore && <LoadMoreButton label="Load More Services" />}
+      </>
+    );
   }
   if (activeTab === 'groups') {
-    return (<>{resultsHeader}<GenericGrid items={groups} entityType="group" makeHref={e => ROUTES.GROUPS.VIEW(e.slug ?? e.id)} />{hasMore && <LoadMoreButton label="Load More Groups" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <GenericGrid
+          items={groups}
+          entityType="group"
+          makeHref={e => ROUTES.GROUPS.VIEW(e.slug ?? e.id)}
+        />
+        {hasMore && <LoadMoreButton label="Load More Groups" />}
+      </>
+    );
   }
   if (activeTab === 'wishlists') {
-    return (<>{resultsHeader}<GenericGrid items={wishlists} entityType="wishlist" makeHref={e => ROUTES.WISHLISTS.VIEW(e.id)} />{hasMore && <LoadMoreButton label="Load More Wishlists" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <GenericGrid
+          items={wishlists}
+          entityType="wishlist"
+          makeHref={e => ROUTES.WISHLISTS.VIEW(e.id)}
+        />
+        {hasMore && <LoadMoreButton label="Load More Wishlists" />}
+      </>
+    );
   }
   if (activeTab === 'research') {
-    return (<>{resultsHeader}<GenericGrid items={research} entityType="research" makeHref={e => ROUTES.RESEARCH.VIEW(e.id)} />{hasMore && <LoadMoreButton label="Load More Research" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <GenericGrid
+          items={research}
+          entityType="research"
+          makeHref={e => ROUTES.RESEARCH.VIEW(e.id)}
+        />
+        {hasMore && <LoadMoreButton label="Load More Research" />}
+      </>
+    );
   }
   if (activeTab === 'ai_assistants') {
-    return (<>{resultsHeader}<GenericGrid items={aiAssistants} entityType="ai_assistant" makeHref={e => ROUTES.AI_ASSISTANTS.VIEW(e.id)} />{hasMore && <LoadMoreButton label="Load More AI Assistants" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <GenericGrid
+          items={aiAssistants}
+          entityType="ai_assistant"
+          makeHref={e => ROUTES.AI_ASSISTANTS.VIEW(e.id)}
+        />
+        {hasMore && <LoadMoreButton label="Load More AI Assistants" />}
+      </>
+    );
   }
   if (activeTab === 'projects') {
-    return (<>{resultsHeader}<ResultsGrid items={projects} type="project" />{hasMore && <LoadMoreButton label="Load More Projects" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <ResultsGrid items={projects} type="project" />
+        {hasMore && <LoadMoreButton label="Load More Projects" />}
+      </>
+    );
   }
   if (activeTab === 'profiles') {
-    return (<>{resultsHeader}<ResultsGrid items={profiles} type="profile" />{hasMore && <LoadMoreButton label="Load More People" />}</>);
+    return (
+      <>
+        {resultsHeader}
+        <ResultsGrid items={profiles} type="profile" />
+        {hasMore && <LoadMoreButton label="Load More People" />}
+      </>
+    );
   }
 
   // LOANS TAB
-  return (<>{resultsHeader}<LoansGrid items={loans} />{hasMore && <LoadMoreButton label="Load More" />}</>);
+  return (
+    <>
+      {resultsHeader}
+      <LoansGrid items={loans} />
+      {hasMore && <LoadMoreButton label="Load More" />}
+    </>
+  );
 }

@@ -19,6 +19,7 @@ const VALID_TAB_TYPES: DiscoverTabType[] = [
   'profiles',
   'loans',
   'investments',
+  'assets',
   'causes',
   'events',
   'products',
@@ -251,7 +252,8 @@ export function useDiscoverState() {
     () => ({
       totalProjects: counts.totalProjectsCount,
       totalProfiles: counts.totalProfilesCount,
-      totalFinancial: counts.totalLoansCount + counts.totalInvestmentsCount,
+      totalFinancial:
+        counts.totalLoansCount + counts.totalInvestmentsCount + counts.totalAssetsCount,
     }),
     [counts]
   );
@@ -261,6 +263,7 @@ export function useDiscoverState() {
     (activeTab === 'profiles' && profiles.length === 0) ||
     (activeTab === 'loans' && financial.loans.length === 0) ||
     (activeTab === 'investments' && financial.investments.length === 0) ||
+    (activeTab === 'assets' && financial.assets.length === 0) ||
     (activeTab === 'causes' && generic.causes.length === 0) ||
     (activeTab === 'events' && generic.events.length === 0) ||
     (activeTab === 'products' && generic.products.length === 0) ||
@@ -274,6 +277,7 @@ export function useDiscoverState() {
       profiles.length === 0 &&
       financial.loans.length === 0 &&
       financial.investments.length === 0 &&
+      financial.assets.length === 0 &&
       generic.causes.length === 0 &&
       generic.events.length === 0 &&
       generic.products.length === 0 &&
@@ -292,6 +296,7 @@ export function useDiscoverState() {
     loading,
     loansLoading: financial.loansLoading,
     investmentsLoading: financial.investmentsLoading,
+    assetsLoading: financial.assetsLoading,
     genericLoading: generic.genericLoading,
     totalResults,
     hasMore,
@@ -302,6 +307,7 @@ export function useDiscoverState() {
     profiles,
     loans: financial.loans,
     investments: financial.investments,
+    assets: financial.assets,
     causes: generic.causes,
     events: generic.events,
     products: generic.products,

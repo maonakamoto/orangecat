@@ -1,15 +1,45 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Target, Users, Grid3X3, DollarSign, TrendingUp, Heart, Package, Briefcase, Calendar, Building2, Gift, FlaskConical, Bot } from 'lucide-react';
+import {
+  Target,
+  Users,
+  Grid3X3,
+  DollarSign,
+  TrendingUp,
+  Heart,
+  Package,
+  Briefcase,
+  Calendar,
+  Building2,
+  Gift,
+  FlaskConical,
+  Bot,
+  Building,
+} from 'lucide-react';
 
-export type DiscoverTabType = 'all' | 'projects' | 'profiles' | 'loans' | 'investments' | 'causes' | 'events' | 'products' | 'services' | 'groups' | 'wishlists' | 'research' | 'ai_assistants';
+export type DiscoverTabType =
+  | 'all'
+  | 'projects'
+  | 'profiles'
+  | 'loans'
+  | 'investments'
+  | 'assets'
+  | 'causes'
+  | 'events'
+  | 'products'
+  | 'services'
+  | 'groups'
+  | 'wishlists'
+  | 'research'
+  | 'ai_assistants';
 
 interface TabCounts {
   projects: number;
   profiles: number;
   loans: number;
   investments: number;
+  assets: number;
   causes: number;
   events: number;
   products: number;
@@ -27,6 +57,7 @@ interface DiscoverTabsProps {
   profileCount: number;
   loanCount?: number;
   investmentCount?: number;
+  assetCount?: number;
   causeCount?: number;
   eventCount?: number;
   productCount?: number;
@@ -50,79 +81,98 @@ const tabs: TabConfig[] = [
     id: 'all',
     label: 'All',
     icon: <Grid3X3 className="w-4 h-4" />,
-    getCount: (c) => c.projects + c.profiles + c.loans + c.investments + c.causes + c.events + c.products + c.services + c.groups + c.wishlists + c.research + c.ai_assistants,
+    getCount: c =>
+      c.projects +
+      c.profiles +
+      c.loans +
+      c.investments +
+      c.assets +
+      c.causes +
+      c.events +
+      c.products +
+      c.services +
+      c.groups +
+      c.wishlists +
+      c.research +
+      c.ai_assistants,
   },
   {
     id: 'projects',
     label: 'Projects',
     icon: <Target className="w-4 h-4" />,
-    getCount: (c) => c.projects,
+    getCount: c => c.projects,
   },
   {
     id: 'causes',
     label: 'Causes',
     icon: <Heart className="w-4 h-4" />,
-    getCount: (c) => c.causes,
+    getCount: c => c.causes,
   },
   {
     id: 'investments',
     label: 'Investments',
     icon: <TrendingUp className="w-4 h-4" />,
-    getCount: (c) => c.investments,
+    getCount: c => c.investments,
   },
   {
     id: 'loans',
     label: 'Loans',
     icon: <DollarSign className="w-4 h-4" />,
-    getCount: (c) => c.loans,
+    getCount: c => c.loans,
+  },
+  {
+    id: 'assets',
+    label: 'Assets',
+    icon: <Building className="w-4 h-4" />,
+    getCount: c => c.assets,
   },
   {
     id: 'products',
     label: 'Products',
     icon: <Package className="w-4 h-4" />,
-    getCount: (c) => c.products,
+    getCount: c => c.products,
   },
   {
     id: 'services',
     label: 'Services',
     icon: <Briefcase className="w-4 h-4" />,
-    getCount: (c) => c.services,
+    getCount: c => c.services,
   },
   {
     id: 'events',
     label: 'Events',
     icon: <Calendar className="w-4 h-4" />,
-    getCount: (c) => c.events,
+    getCount: c => c.events,
   },
   {
     id: 'groups',
     label: 'Groups',
     icon: <Building2 className="w-4 h-4" />,
-    getCount: (c) => c.groups,
+    getCount: c => c.groups,
   },
   {
     id: 'wishlists',
     label: 'Wishlists',
     icon: <Gift className="w-4 h-4" />,
-    getCount: (c) => c.wishlists,
+    getCount: c => c.wishlists,
   },
   {
     id: 'research',
     label: 'Research',
     icon: <FlaskConical className="w-4 h-4" />,
-    getCount: (c) => c.research,
+    getCount: c => c.research,
   },
   {
     id: 'ai_assistants',
     label: 'AI Assistants',
     icon: <Bot className="w-4 h-4" />,
-    getCount: (c) => c.ai_assistants,
+    getCount: c => c.ai_assistants,
   },
   {
     id: 'profiles',
     label: 'People',
     icon: <Users className="w-4 h-4" />,
-    getCount: (c) => c.profiles,
+    getCount: c => c.profiles,
   },
 ];
 
@@ -133,6 +183,7 @@ export default function DiscoverTabs({
   profileCount,
   loanCount = 0,
   investmentCount = 0,
+  assetCount = 0,
   causeCount = 0,
   eventCount = 0,
   productCount = 0,
@@ -148,6 +199,7 @@ export default function DiscoverTabs({
     profiles: profileCount,
     loans: loanCount,
     investments: investmentCount,
+    assets: assetCount,
     causes: causeCount,
     events: eventCount,
     products: productCount,
@@ -161,7 +213,7 @@ export default function DiscoverTabs({
   return (
     <div className="border-b border-gray-200 bg-white/80 backdrop-blur-sm rounded-t-2xl sticky top-0 z-10 overflow-x-auto">
       <nav className="-mb-px flex space-x-6 px-6 pt-4 min-w-max" aria-label="Tabs">
-        {tabs.map((tab) => {
+        {tabs.map(tab => {
           const isActive = activeTab === tab.id;
           const count = tab.getCount(counts);
 

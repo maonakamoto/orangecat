@@ -20,6 +20,7 @@ export default function DiscoverPage() {
     searchError,
     loading,
     loansLoading,
+    assetsLoading,
     totalResults,
     hasMore,
     isLoadingMore,
@@ -29,6 +30,7 @@ export default function DiscoverPage() {
     profiles,
     loans,
     investments,
+    assets,
     causes,
     events,
     products,
@@ -138,6 +140,7 @@ export default function DiscoverPage() {
               profileCount={profiles.length}
               loanCount={loans.length}
               investmentCount={investments.length || totalInvestmentsCount}
+              assetCount={assets.length}
               causeCount={causes.length}
               eventCount={events.length}
               productCount={products.length}
@@ -146,7 +149,9 @@ export default function DiscoverPage() {
               wishlistCount={wishlists.length}
               researchCount={research.length}
               aiAssistantCount={aiAssistants.length}
-              loading={loading || loansLoading || investmentsLoading || genericLoading}
+              loading={
+                loading || loansLoading || investmentsLoading || assetsLoading || genericLoading
+              }
             />
 
             <div className="bg-white/70 backdrop-blur-sm rounded-b-2xl border border-gray-200/60 border-t-0 p-6">
@@ -190,39 +195,71 @@ export default function DiscoverPage() {
               )}
 
               {/* Empty State */}
-              {!loading && !loansLoading && !investmentsLoading && !genericLoading && !searchError && isEmpty && (
-                <DiscoverEmptyState
-                  activeTab={activeTab}
-                  hasFilters={hasFilters}
-                  onClearFilters={clearFilters}
-                />
-              )}
+              {!loading &&
+                !loansLoading &&
+                !investmentsLoading &&
+                !assetsLoading &&
+                !genericLoading &&
+                !searchError &&
+                isEmpty && (
+                  <DiscoverEmptyState
+                    activeTab={activeTab}
+                    hasFilters={hasFilters}
+                    onClearFilters={clearFilters}
+                  />
+                )}
 
               {/* Results */}
-              {!loading && !loansLoading && !investmentsLoading && !genericLoading && !searchError && !isEmpty && (
-                <DiscoverResults
-                  activeTab={activeTab}
-                  viewMode={viewMode}
-                  projects={projects}
-                  profiles={profiles}
-                  loans={loans}
-                  investments={investments}
-                  causes={causes}
-                  events={events}
-                  products={products}
-                  services={services}
-                  groups={groups}
-                  wishlists={wishlists}
-                  research={research}
-                  aiAssistants={aiAssistants}
-                  totalResults={totalResults + loans.length + investments.length + causes.length + events.length + products.length + services.length + groups.length + wishlists.length + research.length + aiAssistants.length}
-                  loading={loading || loansLoading || investmentsLoading || genericLoading}
-                  hasMore={hasMore}
-                  isLoadingMore={isLoadingMore}
-                  onLoadMore={handleLoadMore}
-                  onTabChange={handleTabChange}
-                />
-              )}
+              {!loading &&
+                !loansLoading &&
+                !investmentsLoading &&
+                !assetsLoading &&
+                !genericLoading &&
+                !searchError &&
+                !isEmpty && (
+                  <DiscoverResults
+                    activeTab={activeTab}
+                    viewMode={viewMode}
+                    projects={projects}
+                    profiles={profiles}
+                    loans={loans}
+                    investments={investments}
+                    assets={assets}
+                    causes={causes}
+                    events={events}
+                    products={products}
+                    services={services}
+                    groups={groups}
+                    wishlists={wishlists}
+                    research={research}
+                    aiAssistants={aiAssistants}
+                    totalResults={
+                      totalResults +
+                      loans.length +
+                      investments.length +
+                      assets.length +
+                      causes.length +
+                      events.length +
+                      products.length +
+                      services.length +
+                      groups.length +
+                      wishlists.length +
+                      research.length +
+                      aiAssistants.length
+                    }
+                    loading={
+                      loading ||
+                      loansLoading ||
+                      investmentsLoading ||
+                      assetsLoading ||
+                      genericLoading
+                    }
+                    hasMore={hasMore}
+                    isLoadingMore={isLoadingMore}
+                    onLoadMore={handleLoadMore}
+                    onTabChange={handleTabChange}
+                  />
+                )}
             </div>
           </div>
         </motion.div>
