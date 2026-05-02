@@ -1,33 +1,22 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import {
   ArrowUpDown,
   Loader2,
-  Target,
-  Users,
-  DollarSign,
-  TrendingUp,
-  Gift,
-  FlaskConical,
-  Bot,
-  Building,
   Heart,
   Package,
   Briefcase,
   Calendar,
   Building2,
+  Gift,
+  FlaskConical,
+  Bot,
+  Building,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import Button from '@/components/ui/Button';
 import { ProjectCard } from '@/components/entity/variants/ProjectCard';
 import ProfileCard from '@/components/ui/ProfileCard';
-import {
-  ProjectCardSkeleton,
-  ProfileCardSkeleton,
-  LoanCardSkeleton,
-} from '@/components/ui/Skeleton';
-import ResultsSection from '@/components/discover/ResultsSection';
 import { LoanCard } from '@/components/entity/variants/LoanCard';
 import { InvestmentCard } from '@/components/entity/variants/InvestmentCard';
 import {
@@ -40,8 +29,9 @@ import type { Loan } from '@/types/loans';
 import type { Investment } from '@/types/investments';
 import type { EntityType } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
-
-type ViewMode = 'grid' | 'list';
+import { AnimatedGrid, type ViewMode } from './AnimatedGrid';
+import { DiscoverLoadingState } from './DiscoverLoadingState';
+import { DiscoverAllTab } from './DiscoverAllTab';
 
 interface DiscoverResultsProps {
   activeTab: DiscoverTabType;
@@ -67,36 +57,6 @@ interface DiscoverResultsProps {
   onTabChange: (tab: DiscoverTabType) => void;
 }
 
-// Single generic grid with animation — replaces 4 near-identical grid components.
-function AnimatedGrid<T extends { id: string }>({
-  items,
-  viewMode,
-  renderItem,
-}: {
-  items: T[];
-  viewMode: ViewMode;
-  renderItem: (item: T) => ReactNode;
-}) {
-  return (
-    <div
-      className={`grid gap-6 ${
-        viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
-      }`}
-    >
-      {items.map((item, index) => (
-        <motion.div
-          key={item.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: index * 0.05 }}
-        >
-          {renderItem(item)}
-        </motion.div>
-      ))}
-    </div>
-  );
-}
-
 export default function DiscoverResults({
   activeTab,
   viewMode,
@@ -120,7 +80,6 @@ export default function DiscoverResults({
   onLoadMore,
   onTabChange,
 }: DiscoverResultsProps) {
-  // Config for the 9 generic entity tab types — drives both 'all' sections and individual tabs.
   const genericTabs: Array<{
     id: DiscoverTabType;
     title: string;
@@ -203,44 +162,8 @@ export default function DiscoverResults({
     },
   ];
 
-  // Loading State
   if (loading) {
-    return (
-      <div className="space-y-8">
-        <div className="flex items-center justify-between mb-6">
-          <div className="h-8 w-48 bg-gray-200 rounded animate-pulse" />
-        </div>
-        <div
-          className={`grid gap-6 ${
-            viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
-          }`}
-        >
-          {activeTab === 'profiles' ? (
-            Array.from({ length: 6 }).map((_, i) => (
-              <ProfileCardSkeleton key={i} viewMode={viewMode} />
-            ))
-          ) : activeTab === 'projects' ? (
-            Array.from({ length: 6 }).map((_, i) => <ProjectCardSkeleton key={i} />)
-          ) : activeTab === 'loans' || activeTab === 'investments' ? (
-            Array.from({ length: 6 }).map((_, i) => (
-              <LoanCardSkeleton key={i} viewMode={viewMode} />
-            ))
-          ) : (
-            <>
-              {Array.from({ length: 2 }).map((_, i) => (
-                <ProjectCardSkeleton key={`project-${i}`} />
-              ))}
-              {Array.from({ length: 2 }).map((_, i) => (
-                <ProfileCardSkeleton key={`profile-${i}`} viewMode={viewMode} />
-              ))}
-              {Array.from({ length: 2 }).map((_, i) => (
-                <LoanCardSkeleton key={`loan-${i}`} viewMode={viewMode} />
-              ))}
-            </>
-          )}
-        </div>
-      </div>
-    );
+    return <DiscoverLoadingState activeTab={activeTab} viewMode={viewMode} />;
   }
 
   const displayedCount =
@@ -293,186 +216,60 @@ export default function DiscoverResults({
     </div>
   );
 
-  // All Tab — build a unified section list and render in one pass
   if (activeTab === 'all') {
-    type AllSection = {
-      id: string;
-      title: string;
-      icon: ReactNode;
-      count: number;
-      tabType: DiscoverTabType;
-      renderContent: () => ReactNode;
-    };
-
-    // 9 generic entity types derived from the same config that drives individual tabs
-    const genericSections: AllSection[] = genericTabs.map(t => ({
-      id: t.id,
-      title: t.title,
-      icon: t.icon,
-      count: t.items.length,
-      tabType: t.id,
-      renderContent: () => (
-        <AnimatedGrid
-          items={t.items.slice(0, 6)}
-          viewMode={viewMode}
-          renderItem={item => (
-            <GenericPublicCard
-              entity={item}
-              entityType={t.entityType}
-              href={t.makeHref(item)}
-              viewMode={viewMode}
-            />
-          )}
-        />
-      ),
-    }));
-
-    // 4 special entity types that use their own card components
-    const allSections: AllSection[] = [
-      {
-        id: 'projects',
-        title: 'Projects',
-        tabType: 'projects',
-        icon: <Target className="w-5 h-5" />,
-        count: projects.length,
-        renderContent: () => (
-          <AnimatedGrid
-            items={projects.slice(0, 6)}
-            viewMode={viewMode}
-            renderItem={item => <ProjectCard project={item} />}
-          />
-        ),
-      },
-      ...genericSections,
-      {
-        id: 'investments',
-        title: 'Investments',
-        tabType: 'investments',
-        icon: <TrendingUp className="w-5 h-5" />,
-        count: investments.length,
-        renderContent: () => (
-          <AnimatedGrid
-            items={investments.slice(0, 6)}
-            viewMode={viewMode}
-            renderItem={item => <InvestmentCard investment={item} viewMode={viewMode} />}
-          />
-        ),
-      },
-      {
-        id: 'loans',
-        title: 'Loans',
-        tabType: 'loans',
-        icon: <DollarSign className="w-5 h-5" />,
-        count: loans.length,
-        renderContent: () => (
-          <AnimatedGrid
-            items={loans.slice(0, 6)}
-            viewMode={viewMode}
-            renderItem={item => <LoanCard loan={item} viewMode={viewMode} />}
-          />
-        ),
-      },
-      {
-        id: 'profiles',
-        title: 'People',
-        tabType: 'profiles',
-        icon: <Users className="w-5 h-5" />,
-        count: profiles.length,
-        renderContent: () => (
-          <AnimatedGrid
-            items={profiles.slice(0, 6)}
-            viewMode={viewMode}
-            renderItem={item => <ProfileCard profile={item} viewMode={viewMode} />}
-          />
-        ),
-      },
-    ];
-
-    const hasMultipleSections = allSections.filter(s => s.count > 0).length > 1;
-
     return (
-      <div className="space-y-8">
-        {resultsHeader}
-        {allSections
-          .filter(s => s.count > 0)
-          .map(section => (
-            <ResultsSection
-              key={section.id}
-              title={section.title}
-              count={section.count}
-              icon={section.icon}
-              onViewAll={() => onTabChange(section.tabType)}
-              showViewAll={hasMultipleSections}
-              viewAllLabel={`View All ${section.title}`}
-            >
-              {section.renderContent()}
-            </ResultsSection>
-          ))}
-      </div>
+      <DiscoverAllTab
+        genericTabs={genericTabs}
+        projects={projects}
+        investments={investments}
+        loans={loans}
+        profiles={profiles}
+        viewMode={viewMode}
+        resultsHeader={resultsHeader}
+        onTabChange={onTabChange}
+      />
     );
   }
 
-  // Individual tab — investments
+  // Shared renderer for the 4 typed individual tab types
+  const renderTabContent = <T extends { id: string }>(
+    items: T[],
+    renderItem: (item: T) => ReactNode,
+    loadMoreLabel: string
+  ) => (
+    <>
+      {resultsHeader}
+      <AnimatedGrid items={items} viewMode={viewMode} renderItem={renderItem} />
+      {hasMore && <LoadMoreButton label={loadMoreLabel} />}
+    </>
+  );
+
   if (activeTab === 'investments') {
-    return (
-      <>
-        {resultsHeader}
-        <AnimatedGrid
-          items={investments}
-          viewMode={viewMode}
-          renderItem={item => <InvestmentCard investment={item} viewMode={viewMode} />}
-        />
-        {hasMore && <LoadMoreButton label="Load More Investments" />}
-      </>
+    return renderTabContent(
+      investments,
+      i => <InvestmentCard investment={i} viewMode={viewMode} />,
+      'Load More Investments'
     );
   }
-
-  // Individual tab — loans
   if (activeTab === 'loans') {
-    return (
-      <>
-        {resultsHeader}
-        <AnimatedGrid
-          items={loans}
-          viewMode={viewMode}
-          renderItem={item => <LoanCard loan={item} viewMode={viewMode} />}
-        />
-        {hasMore && <LoadMoreButton label="Load More Loans" />}
-      </>
+    return renderTabContent(
+      loans,
+      i => <LoanCard loan={i} viewMode={viewMode} />,
+      'Load More Loans'
     );
   }
-
-  // Individual tab — projects
   if (activeTab === 'projects') {
-    return (
-      <>
-        {resultsHeader}
-        <AnimatedGrid
-          items={projects}
-          viewMode={viewMode}
-          renderItem={item => <ProjectCard project={item} />}
-        />
-        {hasMore && <LoadMoreButton label="Load More Projects" />}
-      </>
-    );
+    return renderTabContent(projects, i => <ProjectCard project={i} />, 'Load More Projects');
   }
-
-  // Individual tab — profiles
   if (activeTab === 'profiles') {
-    return (
-      <>
-        {resultsHeader}
-        <AnimatedGrid
-          items={profiles}
-          viewMode={viewMode}
-          renderItem={item => <ProfileCard profile={item} viewMode={viewMode} />}
-        />
-        {hasMore && <LoadMoreButton label="Load More People" />}
-      </>
+    return renderTabContent(
+      profiles,
+      i => <ProfileCard profile={i} viewMode={viewMode} />,
+      'Load More People'
     );
   }
 
-  // Individual tab — all 9 generic entity types via config lookup
+  // Generic entity type tab (causes, assets, products, services, events, groups, wishlists, research, ai_assistants)
   const genericTab = genericTabs.find(t => t.id === activeTab);
   if (genericTab) {
     return (
