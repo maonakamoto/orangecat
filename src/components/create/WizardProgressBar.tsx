@@ -1,0 +1,82 @@
+'use client';
+
+import { Check } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import type { WizardStep } from './types';
+
+interface WizardProgressBarProps {
+  wizardSteps: WizardStep[];
+  currentStep: number;
+  completedSteps: Set<number>;
+  progress: number;
+  theme: { bg: string; ring: string };
+  onStepClick: (index: number) => void;
+}
+
+export function WizardProgressBar({
+  wizardSteps,
+  currentStep,
+  completedSteps,
+  progress,
+  theme,
+  onStepClick,
+}: WizardProgressBarProps) {
+  const currentStepConfig = wizardSteps[currentStep];
+
+  return (
+    <div className="max-w-4xl mx-auto mb-8">
+      <div className="flex justify-between items-center mb-4">
+        <span className="text-sm font-medium text-gray-700">
+          Step {currentStep + 1} of {wizardSteps.length}
+        </span>
+        <div className="flex items-center gap-2">
+          {currentStepConfig?.optional && (
+            <Badge variant="secondary" className="text-xs">
+              Optional
+            </Badge>
+          )}
+        </div>
+      </div>
+      <Progress value={progress} className="h-2 bg-gray-200" />
+
+      <div className="flex justify-between mt-6">
+        {wizardSteps.map((step, index) => {
+          const isCompleted = completedSteps.has(index);
+          const isCurrent = index === currentStep;
+          const isAccessible = index <= currentStep || completedSteps.has(index);
+
+          return (
+            <button
+              key={step.id}
+              onClick={() => onStepClick(index)}
+              disabled={!isAccessible}
+              className={`flex flex-col items-center gap-2 transition-all ${
+                isAccessible ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
+              }`}
+            >
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all ${
+                  isCompleted
+                    ? 'bg-green-500 text-white'
+                    : isCurrent
+                      ? `${theme.bg} text-white ring-4 ${theme.ring}`
+                      : 'bg-gray-200 text-gray-600'
+                }`}
+              >
+                {isCompleted ? <Check className="w-5 h-5" /> : index + 1}
+              </div>
+              <span
+                className={`text-xs font-medium max-w-[100px] text-center ${
+                  isCurrent ? 'text-gray-900' : 'text-gray-600'
+                }`}
+              >
+                {step.title.split(' (')[0]}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
