@@ -1,14 +1,4 @@
-/**
- * Discover Hero Section
- *
- * Displays the hero section with title, description, and stats.
- * Extracted from discover/page.tsx for better modularity.
- *
- * Created: 2025-01-30
- * Last Modified: 2025-01-30
- * Last Modified Summary: Extracted from discover/page.tsx
- */
-
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 interface DiscoverHeroProps {
@@ -65,14 +55,20 @@ export default function DiscoverHero({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
           >
-            <div className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card">
+            <Link
+              href="/discover?type=projects"
+              className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card hover:shadow-md hover:border-orange-200 transition-all duration-200 block"
+            >
               <div className="text-fluid-xl font-bold text-gray-900">{totalProjects}</div>
               <div className="text-sm text-gray-600 mt-1">Active Projects</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card">
+            </Link>
+            <Link
+              href="/discover?type=profiles"
+              className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card hover:shadow-md hover:border-tiffany-200 transition-all duration-200 block"
+            >
               <div className="text-fluid-xl font-bold text-tiffany-600">{totalProfiles}</div>
               <div className="text-sm text-gray-600 mt-1">People</div>
-            </div>
+            </Link>
             <div className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card">
               <div className="text-fluid-xl font-bold text-bitcoinOrange">{totalFinancial}</div>
               <div className="text-sm text-gray-600 mt-1">Finance</div>

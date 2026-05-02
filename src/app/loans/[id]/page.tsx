@@ -76,9 +76,6 @@ function formatCurrency(amount: number, currency: string | null | undefined = 'U
   if (currency === 'BTC') {
     return `${amount.toFixed(8)} BTC`;
   }
-  if (currency === 'BTC') {
-    return `${amount.toLocaleString()} BTC`;
-  }
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currency === 'EUR' ? 'EUR' : currency === 'CHF' ? 'CHF' : 'USD',
