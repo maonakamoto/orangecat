@@ -477,20 +477,6 @@ export function createOpenRouterServiceWithByok(
 }
 
 /**
- * Create service with platform key but restrict to free models only
- * Used for free tier users without BYOK
- */
-export function createOpenRouterServiceFreeOnly(options?: {
-  btcPriceUsd?: number;
-}): OpenRouterService {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey) {
-    throw new Error('OPENROUTER_API_KEY environment variable not set');
-  }
-  return new OpenRouterService(apiKey, { ...options, isByok: false });
-}
-
-/**
  * Determine the best model to use based on user's key status
  * - BYOK users: Can use any model
  * - Free users: Limited to free models with daily quota

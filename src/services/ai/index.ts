@@ -13,7 +13,6 @@ export {
   OpenRouterAPIError,
   createOpenRouterService,
   createOpenRouterServiceWithByok,
-  createOpenRouterServiceFreeOnly,
   getModelForUser,
   type OpenRouterMessage,
   type ChatCompletionResult,
