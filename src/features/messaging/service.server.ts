@@ -30,6 +30,37 @@ export async function getServerUser() {
   return { supabase, user };
 }
 
+type AdminClient = ReturnType<typeof createAdminClient>;
+
+async function assertMember(
+  admin: AdminClient,
+  conversationId: string,
+  userId: string
+): Promise<void> {
+  const { data } = await admin
+    .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
+    .select('user_id')
+    .eq('conversation_id', conversationId)
+    .eq('user_id', userId)
+    .eq('is_active', true)
+    .maybeSingle();
+  if (!data) {
+    throw Object.assign(new Error('Access denied'), { status: 403 });
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
+async function createConvRecord(admin: AdminClient, data: ConversationsInsert): Promise<string> {
+  const { data: conv, error } = await (admin.from(DATABASE_TABLES.CONVERSATIONS) as any)
+    .insert(data)
+    .select('id')
+    .single();
+  if (error || !conv?.id) {
+    throw Object.assign(new Error('Failed to create conversation'), { status: 500 });
+  }
+  return conv.id as string;
+}
+
 export async function ensureMessagingFunctions() {
   const admin = createAdminClient();
 
@@ -221,20 +252,8 @@ export async function fetchConversationSummary(conversationId: string): Promise<
     throw Object.assign(new Error('Unauthorized'), { status: 401 });
   }
 
-  // Use admin client to bypass RLS issues
   const admin = createAdminClient();
-
-  // Membership check
-  const { data: participant } = await admin
-    .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
-    .select('user_id')
-    .eq('conversation_id', conversationId)
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .maybeSingle();
-  if (!participant) {
-    throw Object.assign(new Error('Access denied'), { status: 403 });
-  }
+  await assertMember(admin, conversationId, user.id);
 
   const { data: conv } = await admin
     .from(DATABASE_TABLES.CONVERSATIONS)
@@ -306,20 +325,8 @@ export async function fetchMessages(
     throw Object.assign(new Error('Unauthorized'), { status: 401 });
   }
 
-  // Use admin client to bypass RLS issues
   const admin = createAdminClient();
-
-  // Verify membership
-  const { data: participant } = await admin
-    .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
-    .select('user_id')
-    .eq('conversation_id', conversationId)
-    .eq('user_id', user.id)
-    .eq('is_active', true)
-    .maybeSingle();
-  if (!participant) {
-    throw Object.assign(new Error('Access denied'), { status: 403 });
-  }
+  await assertMember(admin, conversationId, user.id);
 
   // Fetch messages with sender info using admin client
   let query = admin
@@ -663,21 +670,7 @@ export async function openConversation(
   // Self conversation (Notes to Self)
   if (!participantIds || participantIds.length === 0) {
     await ensureProfile(user.id);
-    const convData: ConversationsInsert = {
-      created_by: user.id,
-      is_group: false,
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-    const { data: convIns, error: convErr } = await (
-      admin.from(DATABASE_TABLES.CONVERSATIONS) as any
-    )
-      .insert(convData)
-      .select('id')
-      .single();
-    if (convErr || !convIns || !convIns.id) {
-      throw Object.assign(new Error('Failed to create conversation'), { status: 500 });
-    }
-    const convId = convIns.id as string;
+    const convId = await createConvRecord(admin, { created_by: user.id, is_group: false });
     const participantData: ConversationParticipantsInsert = {
       conversation_id: convId,
       user_id: user.id,
@@ -702,30 +695,15 @@ export async function openConversation(
     await ensureProfile(user.id);
     await ensureProfile(otherId);
 
-    // Create conversation using admin client
-    const convData: ConversationsInsert = {
-      created_by: user.id,
-      is_group: false,
-    };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-    const insertQuery = (admin.from(DATABASE_TABLES.CONVERSATIONS) as any)
-      .insert(convData)
-      .select('id')
-      .single();
-    const { data: convIns, error: convErr } = await insertQuery;
-    if (convErr || !convIns || !convIns.id) {
-      throw Object.assign(new Error('Failed to create conversation'), { status: 500 });
-    }
-    const newId = convIns.id as string;
+    const newId = await createConvRecord(admin, { created_by: user.id, is_group: false });
     const participantsData: ConversationParticipantsInsert[] = [
       { conversation_id: newId, user_id: user.id, role: 'member', is_active: true },
       { conversation_id: newId, user_id: otherId, role: 'member', is_active: true },
     ];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-    const insertParticipantsQuery = (
+    const { error: pErr } = await (
       admin.from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS) as any
     ).insert(participantsData);
-    const { error: pErr } = await insertParticipantsQuery;
     if (pErr) {
       throw Object.assign(new Error('Failed to add participants'), { status: 500 });
     }
@@ -751,20 +729,11 @@ export async function openConversation(
   for (const id of participantIds) {
     await ensureProfile(id);
   }
-  const groupConvData: ConversationsInsert = {
+  const gid = await createConvRecord(admin, {
     created_by: user.id,
     is_group: true,
     title: title || null,
-  };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-  const { data: convIns, error: cErr } = await (admin.from(DATABASE_TABLES.CONVERSATIONS) as any)
-    .insert(groupConvData)
-    .select('id')
-    .single();
-  if (cErr || !convIns || !convIns.id) {
-    throw Object.assign(new Error('Failed to create conversation'), { status: 500 });
-  }
-  const gid = convIns.id as string;
+  });
   const rows: ConversationParticipantsInsert[] = [user.id, ...participantIds].map(pid => ({
     conversation_id: gid,
     user_id: pid,
