@@ -1,42 +1,21 @@
 import { BaseEntity } from './entity';
+import type {
+  ResearchField,
+  Methodology as ResearchMethodology,
+  FundingModel,
+  TransparencyLevel,
+  ProgressFrequency,
+  ResearchTimeline as TimelineType,
+} from '@/config/research';
 
-export type ResearchField =
-  | 'fundamental_physics'
-  | 'mathematics'
-  | 'computer_science'
-  | 'biology'
-  | 'chemistry'
-  | 'neuroscience'
-  | 'psychology'
-  | 'economics'
-  | 'philosophy'
-  | 'engineering'
-  | 'medicine'
-  | 'environmental_science'
-  | 'social_science'
-  | 'artificial_intelligence'
-  | 'blockchain_cryptography'
-  | 'other';
-
-export type ResearchMethodology =
-  | 'theoretical'
-  | 'experimental'
-  | 'computational'
-  | 'empirical'
-  | 'qualitative'
-  | 'mixed_methods'
-  | 'meta_analysis'
-  | 'survey'
-  | 'case_study'
-  | 'action_research';
-
-export type FundingModel = 'donation' | 'subscription' | 'milestone' | 'royalty' | 'hybrid';
-
-export type TransparencyLevel = 'full' | 'progress' | 'milestone' | 'minimal';
-
-export type ProgressFrequency = 'weekly' | 'biweekly' | 'monthly' | 'milestone' | 'as_needed';
-
-export type TimelineType = 'short_term' | 'medium_term' | 'long_term' | 'ongoing' | 'indefinite';
+export type {
+  ResearchField,
+  ResearchMethodology,
+  FundingModel,
+  TransparencyLevel,
+  ProgressFrequency,
+  TimelineType,
+};
 
 export interface TeamMember {
   id?: string;
