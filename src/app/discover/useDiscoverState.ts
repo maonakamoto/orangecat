@@ -1,14 +1,16 @@
 'use client';
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { logger } from '@/utils/logger';
 import { useSearch } from '@/hooks/useSearch';
-import { SearchFundingPage, SearchProfile, SearchType, SortOption } from '@/services/search';
+import { SearchFundingPage, SearchProfile } from '@/services/search';
 import { PUBLIC_SEARCH_STATUSES } from '@/config/project-statuses';
 import { useDiscoverCounts } from './useDiscoverCounts';
 import { useDiscoverFinancialData } from './useDiscoverFinancialData';
 import { useDiscoverGenericData } from './useDiscoverGenericData';
+import { useDiscoverFilters } from './useDiscoverFilters';
+import { useDiscoverUrlSync } from './useDiscoverUrlSync';
+import { useDiscoverHandlers } from './useDiscoverHandlers';
 import type { DiscoverTabType } from '@/components/discover/DiscoverTabs';
 
 export type ViewMode = 'grid' | 'list';
@@ -34,7 +36,6 @@ export function useDiscoverState() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Read initial state from URL params
   const initialSearchTerm = searchParams?.get('search') || '';
   const initialCategories = (searchParams?.get('category') || '')
     .split(',')
@@ -84,15 +85,41 @@ export function useDiscoverState() {
   const [activeTab, setActiveTab] = useState<DiscoverTabType>(initialType);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(initialCategories);
-  const [selectedStatuses, setSelectedStatuses] = useState<
-    ('active' | 'paused' | 'completed' | 'cancelled')[]
-  >(PUBLIC_SEARCH_STATUSES as ('active' | 'paused' | 'completed' | 'cancelled')[]);
-  const [country, setCountry] = useState(initialCountry);
-  const [city, setCity] = useState(initialCity);
-  const [postal, setPostal] = useState(initialPostal);
-  const [radiusKm, setRadiusKm] = useState<number>(initialRadiusKm);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  const filters = useDiscoverFilters({
+    setFilters,
+    setSearchTerm,
+    setSortBy,
+    router,
+    initialCategories,
+    initialCountry,
+    initialCity,
+    initialPostal,
+    initialRadiusKm,
+  });
+
+  useDiscoverUrlSync({
+    activeTab,
+    searchTerm,
+    selectedCategories: filters.selectedCategories,
+    sortBy,
+    country: filters.country,
+    city: filters.city,
+    postal: filters.postal,
+    radiusKm: filters.radiusKm,
+    router,
+    searchParams,
+  });
+
+  const { isLoadingMore, handleLoadMore, handleSearch, handleSortChange, handleTabChange } =
+    useDiscoverHandlers({
+      hasMore,
+      loadMore,
+      setSearchTerm,
+      setSortBy,
+      setSearchType,
+      setActiveTab,
+    });
 
   const counts = useDiscoverCounts();
   const financial = useDiscoverFinancialData(activeTab, searchTerm);
@@ -105,151 +132,6 @@ export function useDiscoverState() {
   const profiles = useMemo(
     () => searchResults.filter(r => r.type === 'profile').map(r => r.data as SearchProfile),
     [searchResults]
-  );
-
-  useEffect(() => {
-    setFilters({
-      categories: selectedCategories.length > 0 ? selectedCategories : undefined,
-      statuses: selectedStatuses.length > 0 ? selectedStatuses : undefined,
-      country: country || undefined,
-      city: city || undefined,
-      postal_code: postal || undefined,
-      radius_km: radiusKm || undefined,
-    });
-  }, [selectedCategories, selectedStatuses, country, city, postal, radiusKm, setFilters]);
-
-  useEffect(() => {
-    const p = new URLSearchParams(searchParams?.toString() || '');
-    if (activeTab !== 'all') {
-      p.set('type', activeTab);
-    } else {
-      p.delete('type');
-    }
-    if (searchTerm) {
-      p.set('search', searchTerm);
-    } else {
-      p.delete('search');
-    }
-    if (selectedCategories.length > 0) {
-      p.set('category', selectedCategories.join(','));
-    } else {
-      p.delete('category');
-    }
-    if (sortBy !== 'recent') {
-      p.set('sort', sortBy);
-    } else {
-      p.delete('sort');
-    }
-    if (country) {
-      p.set('country', country);
-    } else {
-      p.delete('country');
-    }
-    if (city) {
-      p.set('city', city);
-    } else {
-      p.delete('city');
-    }
-    if (postal) {
-      p.set('postal', postal);
-    } else {
-      p.delete('postal');
-    }
-    if (radiusKm) {
-      p.set('radius_km', String(radiusKm));
-    } else {
-      p.delete('radius_km');
-    }
-
-    const newUrl = `/discover?${p.toString()}`;
-    const currentUrl = searchParams ? `/discover?${searchParams.toString()}` : '/discover';
-    if (newUrl !== currentUrl) {
-      router.replace(newUrl, { scroll: false });
-    }
-  }, [
-    activeTab,
-    searchTerm,
-    selectedCategories,
-    sortBy,
-    country,
-    city,
-    postal,
-    radiusKm,
-    router,
-    searchParams,
-  ]);
-
-  const handleLoadMore = useCallback(async () => {
-    if (!hasMore || isLoadingMore) {
-      return;
-    }
-    setIsLoadingMore(true);
-    try {
-      await loadMore();
-    } catch (error) {
-      logger.error('Error loading more results', error, 'Discover');
-    } finally {
-      setIsLoadingMore(false);
-    }
-  }, [hasMore, isLoadingMore, loadMore]);
-
-  const handleSearch = (value: string) => setSearchTerm(value);
-
-  const handleToggleCategory = useCallback((category: string) => {
-    setSelectedCategories(prev =>
-      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
-    );
-  }, []);
-
-  const handleSortChange = (sort: string) => {
-    const validSorts: SortOption[] = ['relevance', 'recent'];
-    if (validSorts.includes(sort as SortOption)) {
-      setSortBy(sort as SortOption);
-    }
-  };
-
-  const handleToggleStatus = useCallback(
-    (status: 'active' | 'paused' | 'completed' | 'cancelled') => {
-      setSelectedStatuses(prev => {
-        const next = prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status];
-        return next.length > 0 ? next : ['active', 'paused'];
-      });
-    },
-    []
-  );
-
-  const handleTabChange = useCallback(
-    (tab: DiscoverTabType) => {
-      setActiveTab(tab);
-      const newType: SearchType =
-        tab === 'all' ? 'all' : tab === 'profiles' ? 'profiles' : 'projects';
-      setSearchType(newType);
-    },
-    [setSearchType]
-  );
-
-  const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedCategories([]);
-    setSelectedStatuses(
-      PUBLIC_SEARCH_STATUSES as ('active' | 'paused' | 'completed' | 'cancelled')[]
-    );
-    setSortBy('recent');
-    setCountry('');
-    setCity('');
-    setPostal('');
-    setRadiusKm(0);
-    router.push('/discover');
-  };
-
-  const stats = useMemo(
-    () => ({
-      totalProjects: counts.totalProjectsCount,
-      totalProfiles: counts.totalProfilesCount,
-      totalFinancial:
-        counts.totalLoansCount + counts.totalInvestmentsCount + counts.totalAssetsCount,
-    }),
-    [counts]
   );
 
   const tabItems: Partial<Record<DiscoverTabType, unknown[]>> = {
@@ -272,8 +154,6 @@ export function useDiscoverState() {
     activeTab === 'all'
       ? Object.values(tabItems).every(items => items.length === 0)
       : (tabItems[activeTab]?.length ?? 0) === 0;
-
-  const hasFilters = !!(searchTerm || selectedCategories.length > 0);
 
   return {
     searchTerm,
@@ -300,31 +180,24 @@ export function useDiscoverState() {
     research: generic.research,
     aiAssistants: generic.aiAssistants,
     totalInvestmentsCount: counts.totalInvestmentsCount,
-    stats,
+    stats: {
+      totalProjects: counts.totalProjectsCount,
+      totalProfiles: counts.totalProfilesCount,
+      totalFinancial:
+        counts.totalLoansCount + counts.totalInvestmentsCount + counts.totalAssetsCount,
+    },
     activeTab,
     viewMode,
     setViewMode,
     showFilters,
     setShowFilters,
-    selectedCategories,
-    selectedStatuses,
     sortBy,
-    country,
-    setCountry,
-    city,
-    setCity,
-    postal,
-    setPostal,
-    radiusKm,
-    setRadiusKm,
+    ...filters,
     isEmpty,
-    hasFilters,
+    hasFilters: !!(searchTerm || filters.selectedCategories.length > 0),
     handleSearch,
     handleSortChange,
-    handleToggleCategory,
-    handleToggleStatus,
     handleTabChange,
     handleLoadMore,
-    clearFilters,
   };
 }
