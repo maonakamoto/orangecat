@@ -1,10 +1,3 @@
-/**
- * Timeline Events Hook - Automatically create timeline events for user actions
- *
- * This hook listens for various user actions and automatically creates timeline events
- * to populate the activity feed with real data.
- */
-
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { timelineService } from '@/services/timeline';
@@ -13,16 +6,13 @@ import { logger } from '@/utils/logger';
 export const useTimelineEvents = () => {
   const { user, profile } = useAuth();
 
-  // Listen for project creation events
   useEffect(() => {
     if (!user?.id) {
       return;
     }
 
-    // Listen for custom events dispatched when projects are created
     const handleProjectCreated = async (event: CustomEvent) => {
       const { projectId, projectData } = event.detail;
-
       try {
         await timelineService.createProjectEvent(projectId, 'project_created', user.id, {
           metadata: {
@@ -33,17 +23,14 @@ export const useTimelineEvents = () => {
             project_currency: projectData.currency,
           },
         });
-
         logger.info('Created timeline event for project creation', { projectId }, 'TimelineHook');
       } catch (error) {
         logger.error('Failed to create project creation timeline event', error, 'TimelineHook');
       }
     };
 
-    // Listen for support/funding events
     const handleSupportReceived = async (event: CustomEvent) => {
       const { transactionId, projectId, amountBtc, supporterId } = event.detail;
-
       try {
         await timelineService.createTransactionEvent(
           transactionId,
@@ -51,7 +38,6 @@ export const useTimelineEvents = () => {
           supporterId || user.id,
           amountBtc
         );
-
         logger.info(
           'Created timeline event for support',
           { transactionId, projectId },
@@ -62,12 +48,9 @@ export const useTimelineEvents = () => {
       }
     };
 
-    // Listen for profile updates
     const handleProfileUpdated = async (event: CustomEvent) => {
       const { changes } = event.detail;
-
       try {
-        // Only create events for significant profile changes
         const significantFields = [
           'display_name',
           'username',
@@ -76,11 +59,9 @@ export const useTimelineEvents = () => {
           'lightning_address',
           'avatar_url',
         ];
-
         const hasSignificantChange = significantFields.some(
           field => changes && changes[field] !== undefined
         );
-
         if (hasSignificantChange) {
           await timelineService.createEvent({
             eventType: 'profile_updated',
@@ -92,7 +73,6 @@ export const useTimelineEvents = () => {
             visibility: 'followers',
             metadata: { changes },
           });
-
           logger.info(
             'Created timeline event for profile update',
             { userId: user.id },
@@ -104,10 +84,8 @@ export const useTimelineEvents = () => {
       }
     };
 
-    // Listen for follows
     const handleUserFollowed = async (event: CustomEvent) => {
       const { followedUserId, followedUserData } = event.detail;
-
       try {
         await timelineService.createEvent({
           eventType: 'user_followed',
@@ -120,54 +98,39 @@ export const useTimelineEvents = () => {
           description: `${profile?.name || profile?.username || 'User'} started following ${followedUserData?.display_name || followedUserData?.username || 'someone'}`,
           visibility: 'followers',
         });
-
         logger.info('Created timeline event for user follow', { followedUserId }, 'TimelineHook');
       } catch (error) {
         logger.error('Failed to create follow timeline event', error, 'TimelineHook');
       }
     };
 
-    // Custom event types for timeline events
-    // TypeScript doesn't know about custom events, so we cast to EventListener
-    const projectCreatedEvent = 'project-created';
-    const supportReceivedEvent = 'support-received';
-    const profileUpdatedEvent = 'profile-updated';
-    const userFollowedEvent = 'user-followed';
+    window.addEventListener('project-created', handleProjectCreated as unknown as EventListener);
+    window.addEventListener('support-received', handleSupportReceived as unknown as EventListener);
+    window.addEventListener('profile-updated', handleProfileUpdated as unknown as EventListener);
+    window.addEventListener('user-followed', handleUserFollowed as unknown as EventListener);
 
-    window.addEventListener(projectCreatedEvent, handleProjectCreated as unknown as EventListener);
-    window.addEventListener(
-      supportReceivedEvent,
-      handleSupportReceived as unknown as EventListener
-    );
-    window.addEventListener(profileUpdatedEvent, handleProfileUpdated as unknown as EventListener);
-    window.addEventListener(userFollowedEvent, handleUserFollowed as unknown as EventListener);
-
-    // Cleanup
     return () => {
       window.removeEventListener(
-        projectCreatedEvent,
+        'project-created',
         handleProjectCreated as unknown as EventListener
       );
       window.removeEventListener(
-        supportReceivedEvent,
+        'support-received',
         handleSupportReceived as unknown as EventListener
       );
       window.removeEventListener(
-        profileUpdatedEvent,
+        'profile-updated',
         handleProfileUpdated as unknown as EventListener
       );
-      window.removeEventListener(userFollowedEvent, handleUserFollowed as unknown as EventListener);
+      window.removeEventListener('user-followed', handleUserFollowed as unknown as EventListener);
     };
   }, [user?.id, profile]);
 
-  // Helper functions to dispatch events from other parts of the app
   return {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dispatchProjectCreated: (projectId: string, projectData: any) => {
       window.dispatchEvent(
-        new CustomEvent('project-created', {
-          detail: { projectId, projectData },
-        })
+        new CustomEvent('project-created', { detail: { projectId, projectData } })
       );
     },
 
@@ -186,19 +149,13 @@ export const useTimelineEvents = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dispatchProfileUpdated: (changes: Record<string, any>) => {
-      window.dispatchEvent(
-        new CustomEvent('profile-updated', {
-          detail: { changes },
-        })
-      );
+      window.dispatchEvent(new CustomEvent('profile-updated', { detail: { changes } }));
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dispatchUserFollowed: (followedUserId: string, followedUserData?: any) => {
       window.dispatchEvent(
-        new CustomEvent('user-followed', {
-          detail: { followedUserId, followedUserData },
-        })
+        new CustomEvent('user-followed', { detail: { followedUserId, followedUserData } })
       );
     },
   };

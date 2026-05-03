@@ -56,12 +56,8 @@ export function usePostSubmission({
 
   useEffect(() => {
     return () => {
-      if (successTimer.current) {
-        clearTimeout(successTimer.current);
-      }
-      if (retryTimer.current) {
-        clearTimeout(retryTimer.current);
-      }
+      clearTimeout(successTimer.current);
+      clearTimeout(retryTimer.current);
     };
   }, []);
 
@@ -87,9 +83,7 @@ export function usePostSubmission({
       clearDraft();
       setPostSuccess(true);
       onSuccess?.(result.event);
-      if (successTimer.current) {
-        clearTimeout(successTimer.current);
-      }
+      clearTimeout(successTimer.current);
       successTimer.current = setTimeout(() => setPostSuccess(false), 3000);
       return true;
     } catch (err) {
@@ -150,9 +144,7 @@ export function usePostSubmission({
         return;
       }
       setRetryCount(prev => prev + 1);
-      if (retryTimer.current) {
-        clearTimeout(retryTimer.current);
-      }
+      clearTimeout(retryTimer.current);
       retryTimer.current = setTimeout(
         () => {
           handlePost();
