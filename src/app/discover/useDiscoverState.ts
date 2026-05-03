@@ -11,26 +11,10 @@ import { useDiscoverGenericData } from './useDiscoverGenericData';
 import { useDiscoverFilters } from './useDiscoverFilters';
 import { useDiscoverUrlSync } from './useDiscoverUrlSync';
 import { useDiscoverHandlers } from './useDiscoverHandlers';
+import { VALID_TAB_TYPES } from './discoverConstants';
 import type { DiscoverTabType } from '@/components/discover/DiscoverTabs';
 
 export type ViewMode = 'grid' | 'list';
-
-const VALID_TAB_TYPES: DiscoverTabType[] = [
-  'all',
-  'projects',
-  'profiles',
-  'loans',
-  'investments',
-  'assets',
-  'causes',
-  'events',
-  'products',
-  'services',
-  'groups',
-  'wishlists',
-  'research',
-  'ai_assistants',
-];
 
 export function useDiscoverState() {
   const router = useRouter();
