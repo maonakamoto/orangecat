@@ -135,35 +135,11 @@ export function useNavigation(sections: NavSection[]): UseNavigationReturn {
     if (!hydrated) {
       return [];
     }
-
+    const canShow = (item: NavItem) =>
+      !(item.requiresAuth && !user) && !(item.requiresProfile && !profile);
     return sections
-      .filter(section => {
-        if (section.requiresAuth && !user) {
-          return false;
-        }
-        const filteredItems = section.items.filter(item => {
-          if (item.requiresAuth && !user) {
-            return false;
-          }
-          if (item.requiresProfile && !profile) {
-            return false;
-          }
-          return true;
-        });
-        return filteredItems.length > 0;
-      })
-      .map(section => ({
-        ...section,
-        items: section.items.filter(item => {
-          if (item.requiresAuth && !user) {
-            return false;
-          }
-          if (item.requiresProfile && !profile) {
-            return false;
-          }
-          return true;
-        }),
-      }))
+      .filter(s => !(s.requiresAuth && !user) && s.items.some(canShow))
+      .map(s => ({ ...s, items: s.items.filter(canShow) }))
       .sort((a, b) => a.priority - b.priority);
   }, [sections, user, profile, hydrated]);
 

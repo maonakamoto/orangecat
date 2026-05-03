@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import supabase from '@/lib/supabase/browser';
-import { debugLog } from '@/features/messaging/lib/constants';
 import { useConnectionHeartbeat } from './useConnectionHeartbeat';
 import { makeSubscribeHandler } from './connectionSubscribeHandler';
 import { useBrowserConnectionEvents } from './useBrowserConnectionEvents';
@@ -17,16 +16,7 @@ interface UseRealtimeConnectionOptions {
   maxReconnectDelay?: number;
 }
 
-interface UseRealtimeConnectionReturn {
-  status: ConnectionStatus;
-  isConnected: boolean;
-  reconnect: () => void;
-  error: Error | null;
-}
-
-export function useRealtimeConnection(
-  options: UseRealtimeConnectionOptions = {}
-): UseRealtimeConnectionReturn {
+export function useRealtimeConnection(options: UseRealtimeConnectionOptions = {}) {
   const {
     enabled = true,
     onStatusChange,
@@ -55,7 +45,6 @@ export function useRealtimeConnection(
       if (onStatusChange) {
         onStatusChange(newStatus);
       }
-      debugLog('[useRealtimeConnection] Status changed:', newStatus, err?.message);
     },
     [onStatusChange]
   );
@@ -78,11 +67,9 @@ export function useRealtimeConnection(
     }
 
     if (setupInProgressRef.current) {
-      debugLog('[useRealtimeConnection] Setup already in progress, skipping');
       return;
     }
     if (channelRef.current?.state === 'joined') {
-      debugLog('[useRealtimeConnection] Channel already joined, skipping setup');
       return;
     }
 
@@ -100,9 +87,7 @@ export function useRealtimeConnection(
         return;
       }
       const channelState = channelRef.current?.state;
-      debugLog('[useRealtimeConnection] Subscription timeout check - channel state:', channelState);
       if (channelState !== 'joined') {
-        debugLog('[useRealtimeConnection] Subscription timeout - channel state:', channelState);
         setupInProgressRef.current = false;
         updateStatus('error', new Error(`Subscription timeout - channel state: ${channelState}`));
         stopHeartbeat();
@@ -142,7 +127,6 @@ export function useRealtimeConnection(
     }
 
     if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
-      debugLog('[useRealtimeConnection] Max reconnection attempts reached');
       updateStatus('error', new Error('Max reconnection attempts reached'));
       return;
     }
@@ -151,10 +135,6 @@ export function useRealtimeConnection(
     const delay = Math.min(
       initialReconnectDelay * Math.pow(2, reconnectAttemptsRef.current),
       maxReconnectDelay
-    );
-
-    debugLog(
-      `[useRealtimeConnection] Reconnecting (attempt ${reconnectAttemptsRef.current}/${maxReconnectAttempts}) in ${delay}ms`
     );
 
     reconnectTimeoutRef.current = setTimeout(() => {
@@ -175,7 +155,6 @@ export function useRealtimeConnection(
   attemptReconnectRef.current = attemptReconnect;
 
   const reconnect = useCallback(() => {
-    debugLog('[useRealtimeConnection] Manual reconnect triggered');
     reconnectAttemptsRef.current = 0;
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);

@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   search,
   getTrending,
-  getSearchSuggestions,
   SearchResult,
   SearchType,
   SortOption,
   SearchFilters,
   SearchResponse,
 } from '@/services/search';
+import { fetchSuggestions } from './searchUtils';
 
 export interface UseSearchOptions {
   initialQuery?: string;
@@ -20,7 +20,6 @@ export interface UseSearchOptions {
 }
 
 export interface UseSearchReturn {
-  // State
   query: string;
   searchType: SearchType;
   sortBy: SortOption;
@@ -31,8 +30,6 @@ export interface UseSearchReturn {
   totalResults: number;
   hasMore: boolean;
   suggestions: string[];
-
-  // Actions
   setQuery: (query: string) => void;
   setSearchType: (type: SearchType) => void;
   setSortBy: (sort: SortOption) => void;
@@ -41,8 +38,6 @@ export interface UseSearchReturn {
   loadMore: () => Promise<void>;
   clearSearch: () => void;
   clearError: () => void;
-
-  // Computed
   isEmpty: boolean;
   isSearching: boolean;
   hasResults: boolean;
@@ -119,9 +114,8 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
         setTotalResults(response.totalCount);
         setHasMore(response.hasMore);
         setCurrentOffset(offset + response.results.length);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        setError(err.message || 'Failed to perform search');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to perform search');
       } finally {
         setLoading(false);
       }
@@ -136,18 +130,10 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     await executeSearch(currentOffset, true);
   }, [hasMore, loading, currentOffset, executeSearch]);
 
-  const loadSuggestions = useCallback(async (searchQuery: string) => {
-    if (!searchQuery || searchQuery.length < 2) {
-      setSuggestions([]);
-      return;
-    }
-    try {
-      const newSuggestions = await getSearchSuggestions(searchQuery, 5);
-      setSuggestions(newSuggestions);
-    } catch {
-      setSuggestions([]);
-    }
-  }, []);
+  const loadSuggestions = useCallback(
+    (searchQuery: string) => fetchSuggestions(searchQuery, setSuggestions),
+    []
+  );
 
   useEffect(() => {
     if (autoSearch) {
@@ -176,9 +162,9 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     setError(null);
   }, []);
 
-  const isEmpty = useMemo(() => results.length === 0, [results]);
-  const isSearching = useMemo(() => loading, [loading]);
-  const hasResults = useMemo(() => results.length > 0, [results]);
+  const isEmpty = results.length === 0;
+  const isSearching = loading;
+  const hasResults = results.length > 0;
 
   return {
     query,

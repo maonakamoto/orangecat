@@ -46,20 +46,7 @@ interface UseNotificationsOptions {
   realtime?: boolean;
 }
 
-interface UseNotificationsReturn {
-  notifications: Notification[];
-  unreadCount: number;
-  isLoading: boolean;
-  error: Error | null;
-  hasMore: boolean;
-  loadMore: () => Promise<void>;
-  markAsRead: (id: string | string[] | 'all') => Promise<void>;
-  deleteNotification: (id: string) => Promise<void>;
-  clearRead: () => Promise<void>;
-  refresh: () => Promise<void>;
-}
-
-export function useNotifications(options: UseNotificationsOptions = {}): UseNotificationsReturn {
+export function useNotifications(options: UseNotificationsOptions = {}) {
   const { filter = 'all', limit = 20, realtime = true } = options;
   const { user } = useAuth();
 
