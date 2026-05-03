@@ -1,22 +1,3 @@
-/**
- * UNIFIED ENTITY DETAIL PAGE COMPONENT
- *
- * Modular, reusable server component for displaying entity detail pages.
- * Replaces duplicate detail page implementations with a single, DRY component.
- *
- * Features:
- * - Type-safe entity rendering
- * - Automatic field formatting
- * - Currency formatting with user preferences
- * - Consistent layout using EntityDetailLayout
- * - Edit/Delete actions
- * - Permission checking
- *
- * Created: 2026-01-03
- * Last Modified: 2026-01-03
- * Last Modified Summary: Initial unified entity detail page implementation
- */
-
 import { notFound, redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
@@ -50,15 +31,11 @@ interface EntityDetailPageProps<T extends BaseEntity> {
   };
 }
 
-/**
- * Format a field value based on its type
- */
 function formatFieldValue(value: unknown, fieldName: string): string {
   if (value === null || value === undefined || value === '') {
     return '—';
   }
 
-  // Handle arrays
   if (Array.isArray(value)) {
     if (value.length === 0) {
       return '—';
@@ -66,7 +43,6 @@ function formatFieldValue(value: unknown, fieldName: string): string {
     return value.join(', ');
   }
 
-  // Handle dates
   if (fieldName.includes('_at') || fieldName.includes('date') || fieldName.includes('Date')) {
     try {
       const date = new Date(value as string | number | Date);
@@ -78,7 +54,6 @@ function formatFieldValue(value: unknown, fieldName: string): string {
     }
   }
 
-  // Handle currency fields - format numbers with locale
   if (
     fieldName.includes('price') ||
     fieldName.includes('amount') ||
@@ -90,18 +65,13 @@ function formatFieldValue(value: unknown, fieldName: string): string {
     }
   }
 
-  // Handle booleans
   if (typeof value === 'boolean') {
     return value ? 'Yes' : 'No';
   }
 
-  // Default: string representation
   return String(value);
 }
 
-/**
- * Default detail fields generator - creates fields from entity data
- */
 function makeDefaultDetailFields<T extends BaseEntity>(
   entity: T
 ): {
@@ -111,7 +81,6 @@ function makeDefaultDetailFields<T extends BaseEntity>(
   const left: DetailField[] = [];
   const right: DetailField[] = [];
 
-  // Common fields to show on left
   const leftFields = [
     'status',
     'category',
@@ -126,7 +95,6 @@ function makeDefaultDetailFields<T extends BaseEntity>(
   ];
   const rightFields = ['created_at', 'updated_at', 'published_at'];
 
-  // Add status
   if (entity.status) {
     left.push({
       label: 'Status',
@@ -134,9 +102,7 @@ function makeDefaultDetailFields<T extends BaseEntity>(
     });
   }
 
-  // Add other common fields
   Object.entries(entity).forEach(([key, value]) => {
-    // Skip base fields and internal fields
     if (
       [
         'id',
@@ -152,7 +118,6 @@ function makeDefaultDetailFields<T extends BaseEntity>(
       return;
     }
 
-    // Skip null/undefined values
     if (value === null || value === undefined) {
       return;
     }
@@ -173,7 +138,6 @@ function makeDefaultDetailFields<T extends BaseEntity>(
     }
   });
 
-  // Always add timestamps to right
   if (entity.created_at) {
     right.push({
       label: 'Created',
@@ -206,7 +170,6 @@ export default async function EntityDetailPage<T extends BaseEntity>({
     redirect(redirectPath || '/auth?mode=login');
   }
 
-  // Get user's currency preference from profile
   let userCurrency: Currency = PLATFORM_DEFAULT_CURRENCY;
   if (user) {
     const { data: profile } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
@@ -219,7 +182,6 @@ export default async function EntityDetailPage<T extends BaseEntity>({
     }
   }
 
-  // Map entity config name to EntityType for getTableName
   const entityTypeMap: Record<string, string> = {
     product: 'product',
     service: 'service',
@@ -235,22 +197,18 @@ export default async function EntityDetailPage<T extends BaseEntity>({
   const entityType = entityTypeMap[config.name.toLowerCase()] || config.name.toLowerCase();
   const tableName = getTableName(entityType as Parameters<typeof getTableName>[0]);
 
-  // Look up current user's actor_id for ownership filtering
   let actorId: string | null = null;
   if (user) {
     const actor = await getOrCreateUserActor(user.id);
     actorId = actor.id;
   }
 
-  // Build query
   let query = (supabase.from(tableName) as any).select('*').eq('id', entityId);
 
   // Filter by actor_id to enforce ownership (actor_id is NOT NULL on all entity tables)
   if (userId || (actorId && requireAuth)) {
     // userId prop is a legacy auth.users UUID; resolve it to actor_id if provided
-    const filterActorId = userId
-      ? (await getOrCreateUserActor(userId)).id
-      : actorId!;
+    const filterActorId = userId ? (await getOrCreateUserActor(userId)).id : actorId!;
     query = query.eq('actor_id', filterActorId);
   }
 
@@ -260,17 +218,14 @@ export default async function EntityDetailPage<T extends BaseEntity>({
     notFound();
   }
 
-  // Check permissions (if entity has is_public field)
   if ('is_public' in entity && !entity.is_public && actorId && entity.actor_id !== actorId) {
     notFound();
   }
 
-  // Generate detail fields
   const fields = makeDetailFields
     ? makeDetailFields(entity as T, userCurrency)
     : makeDefaultDetailFields(entity as T);
 
-  // Header actions
   const headerActions = (
     <Link href={config.editPath(entityId)}>
       <Button>Edit</Button>
