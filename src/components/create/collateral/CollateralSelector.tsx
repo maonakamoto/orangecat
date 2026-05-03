@@ -1,31 +1,15 @@
-/**
- * Collateral Selector Component
- *
- * Unified collateral selection supporting both assets and wallets.
- * Calculates total collateral value and displays it prominently.
- *
- * Created: 2025-01-31
- * Last Modified: 2025-01-31
- * Last Modified Summary: Initial creation of unified collateral selector
- */
-
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
 import { Shield, Wallet, Package, CheckCircle2, AlertCircle } from 'lucide-react';
-import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
-
-const SATS_PER_BTC = 100_000_000;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { DEFAULT_CURRENCY } from '@/config/currencies';
-import { convertBtcTo } from '@/services/currency';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/config/routes';
-import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { useCollateralSelector } from './useCollateralSelector';
 
 export interface CollateralItem {
   id: string;
@@ -40,15 +24,10 @@ export interface CollateralItem {
 }
 
 interface CollateralSelectorProps {
-  /** Selected collateral items */
   selectedCollateral: CollateralItem[];
-  /** Callback when collateral changes */
   onCollateralChange: (items: CollateralItem[]) => void;
-  /** Loan amount for comparison */
   loanAmount?: number;
-  /** Loan currency */
   loanCurrency?: string;
-  /** Whether component is disabled */
   disabled?: boolean;
 }
 
@@ -61,99 +40,27 @@ export function CollateralSelector({
 }: CollateralSelectorProps) {
   const { profile } = useAuth();
   const { formatAmount } = useDisplayCurrency();
-  const [assets, setAssets] = useState<any[]>([]);
-  const [wallets, setWallets] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showAssetSelector, setShowAssetSelector] = useState(false);
-  const [showWalletSelector, setShowWalletSelector] = useState(false);
 
-  // Fetch assets and wallets
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!profile?.id) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const [assetsRes, walletsRes] = await Promise.all([
-          fetch(ENTITY_REGISTRY.asset.apiEndpoint, { credentials: 'include' }),
-          fetch(`/api/wallets?profile_id=${profile.id}`, { credentials: 'include' }),
-        ]);
-
-        if (assetsRes.ok) {
-          const assetsData = await assetsRes.json();
-          setAssets(assetsData.data || []);
-        }
-
-        if (walletsRes.ok) {
-          const walletsData = await walletsRes.json();
-          setWallets(walletsData.data || []);
-        }
-      } catch (error) {
-        logger.error('Failed to fetch collateral options', error, 'Collateral');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [profile?.id]);
-
-  // Calculate total collateral value
-  const totalCollateral = useMemo(() => {
-    return selectedCollateral.reduce((sum, item) => {
-      // Convert to loan currency (simplified - would need real conversion)
-      return sum + item.value;
-    }, 0);
-  }, [selectedCollateral]);
-
-  // Calculate coverage percentage
-  const coveragePercentage = useMemo(() => {
-    if (!loanAmount || loanAmount === 0) {
-      return null;
-    }
-    return Math.min(100, (totalCollateral / loanAmount) * 100);
-  }, [totalCollateral, loanAmount]);
-
-  const handleAddAsset = (asset: any) => {
-    const newItem: CollateralItem = {
-      id: asset.id,
-      type: 'asset',
-      name: asset.title,
-      value: asset.estimated_value || 0,
-      currency: asset.currency || DEFAULT_CURRENCY,
-      metadata: {
-        verification_status: asset.verification_status,
-      },
-    };
-    onCollateralChange([...selectedCollateral, newItem]);
-    setShowAssetSelector(false);
-  };
-
-  const handleAddWallet = (wallet: any) => {
-    // Convert BTC balance to fiat using currency service
-    const btcValue = wallet.balance_btc || 0;
-    const estimatedValue = convertBtcTo(btcValue, DEFAULT_CURRENCY);
-
-    const newItem: CollateralItem = {
-      id: wallet.id,
-      type: 'wallet',
-      name: wallet.label,
-      value: estimatedValue,
-      currency: DEFAULT_CURRENCY,
-      metadata: {
-        balance_btc: btcValue,
-      },
-    };
-    onCollateralChange([...selectedCollateral, newItem]);
-    setShowWalletSelector(false);
-  };
-
-  const handleRemoveCollateral = (id: string) => {
-    onCollateralChange(selectedCollateral.filter(item => item.id !== id));
-  };
+  const {
+    assets,
+    wallets,
+    loading,
+    showAssetSelector,
+    showWalletSelector,
+    totalCollateral,
+    coveragePercentage,
+    SATS_PER_BTC,
+    handleAddAsset,
+    handleAddWallet,
+    handleRemoveCollateral,
+    toggleAssetSelector,
+    toggleWalletSelector,
+  } = useCollateralSelector({
+    profileId: profile?.id,
+    selectedCollateral,
+    onCollateralChange,
+    loanAmount,
+  });
 
   return (
     <Card>
@@ -168,7 +75,6 @@ export function CollateralSelector({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Total Collateral Summary */}
         {selectedCollateral.length > 0 && (
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
@@ -181,54 +87,49 @@ export function CollateralSelector({
                 {loanCurrency}
               </span>
             </div>
-            {loanAmount && (
-              <div className="flex items-center gap-2 mt-2">
-                {coveragePercentage !== null && (
-                  <>
-                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div
-                        className={cn(
-                          'h-2 rounded-full transition-all',
-                          coveragePercentage >= 100
-                            ? 'bg-green-500'
-                            : coveragePercentage >= 50
-                              ? 'bg-yellow-500'
-                              : 'bg-orange-500'
-                        )}
-                        style={{ width: `${Math.min(100, coveragePercentage)}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-600 font-medium">
-                      {coveragePercentage.toFixed(0)}% coverage
-                    </span>
-                  </>
-                )}
-              </div>
-            )}
             {loanAmount && coveragePercentage !== null && (
-              <div className="mt-2 flex items-center gap-1 text-xs">
-                {coveragePercentage >= 100 ? (
-                  <>
-                    <CheckCircle2 className="w-3 h-3 text-green-600" />
-                    <span className="text-green-700">Collateral fully covers loan amount</span>
-                  </>
-                ) : coveragePercentage >= 50 ? (
-                  <>
-                    <AlertCircle className="w-3 h-3 text-yellow-600" />
-                    <span className="text-yellow-700">Partial collateral coverage</span>
-                  </>
-                ) : (
-                  <>
-                    <AlertCircle className="w-3 h-3 text-orange-600" />
-                    <span className="text-orange-700">Low collateral coverage</span>
-                  </>
-                )}
-              </div>
+              <>
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <div
+                      className={cn(
+                        'h-2 rounded-full transition-all',
+                        coveragePercentage >= 100
+                          ? 'bg-green-500'
+                          : coveragePercentage >= 50
+                            ? 'bg-yellow-500'
+                            : 'bg-orange-500'
+                      )}
+                      style={{ width: `${Math.min(100, coveragePercentage)}%` }}
+                    />
+                  </div>
+                  <span className="text-xs text-gray-600 font-medium">
+                    {coveragePercentage.toFixed(0)}% coverage
+                  </span>
+                </div>
+                <div className="mt-2 flex items-center gap-1 text-xs">
+                  {coveragePercentage >= 100 ? (
+                    <>
+                      <CheckCircle2 className="w-3 h-3 text-green-600" />
+                      <span className="text-green-700">Collateral fully covers loan amount</span>
+                    </>
+                  ) : coveragePercentage >= 50 ? (
+                    <>
+                      <AlertCircle className="w-3 h-3 text-yellow-600" />
+                      <span className="text-yellow-700">Partial collateral coverage</span>
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle className="w-3 h-3 text-orange-600" />
+                      <span className="text-orange-700">Low collateral coverage</span>
+                    </>
+                  )}
+                </div>
+              </>
             )}
           </div>
         )}
 
-        {/* Selected Collateral Items */}
         {selectedCollateral.length > 0 && (
           <div className="space-y-2">
             {selectedCollateral.map(item => (
@@ -281,15 +182,11 @@ export function CollateralSelector({
           </div>
         )}
 
-        {/* Add Collateral Buttons */}
         <div className="flex gap-3">
           <Button
             type="button"
             variant="outline"
-            onClick={() => {
-              setShowAssetSelector(!showAssetSelector);
-              setShowWalletSelector(false);
-            }}
+            onClick={toggleAssetSelector}
             disabled={disabled || loading}
             className="flex-1"
           >
@@ -299,10 +196,7 @@ export function CollateralSelector({
           <Button
             type="button"
             variant="outline"
-            onClick={() => {
-              setShowWalletSelector(!showWalletSelector);
-              setShowAssetSelector(false);
-            }}
+            onClick={toggleWalletSelector}
             disabled={disabled || loading}
             className="flex-1"
           >
@@ -311,7 +205,6 @@ export function CollateralSelector({
           </Button>
         </div>
 
-        {/* Asset Selector */}
         {showAssetSelector && (
           <div className="border border-gray-200 rounded-lg p-4 bg-white">
             <h4 className="text-sm font-semibold text-gray-900 mb-3">Select Asset</h4>
@@ -356,7 +249,6 @@ export function CollateralSelector({
           </div>
         )}
 
-        {/* Wallet Selector */}
         {showWalletSelector && (
           <div className="border border-gray-200 rounded-lg p-4 bg-white">
             <h4 className="text-sm font-semibold text-gray-900 mb-3">Select Wallet</h4>
