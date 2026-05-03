@@ -19,9 +19,6 @@ import type { ServiceResult } from '@/types/common';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = supabase as any;
 
-/**
- * Get current user ID helper
- */
 async function getCurrentUserId(): Promise<string | null> {
   try {
     const {
@@ -33,6 +30,147 @@ async function getCurrentUserId(): Promise<string | null> {
     return null;
   }
 }
+
+// ─── Shared helpers ───────────────────────────────────────────────────────────
+
+interface ReactionConfig {
+  table: string;
+  addRpc: string;
+  removeRpc: string;
+  /** Key in the RPC response containing the updated count, e.g. 'like_count' */
+  countKey: string;
+}
+
+async function toggleReaction(
+  eventId: string,
+  targetUserId: string,
+  cfg: ReactionConfig
+): Promise<{ success: boolean; active: boolean; count: number; error?: string }> {
+  const { table, addRpc, removeRpc, countKey } = cfg;
+
+  const { data: existing } = await db
+    .from(table)
+    .select('id')
+    .eq('event_id', eventId)
+    .eq('user_id', targetUserId)
+    .single();
+
+  if (existing) {
+    // Remove reaction
+    try {
+      const { data, error } = await db.rpc(removeRpc, {
+        p_event_id: eventId,
+        p_user_id: targetUserId,
+      });
+      if (error) {
+        logger.error(`Failed to call ${removeRpc}`, error, 'Timeline');
+        return { success: false, active: false, count: 0, error: error.message };
+      }
+      return {
+        success: true,
+        active: false,
+        count: (data as Record<string, number>)?.[countKey] || 0,
+      };
+    } catch (dbError) {
+      logger.warn(`RPC ${removeRpc} not available, using fallback`, dbError, 'Timeline');
+      const { error: delErr } = await db
+        .from(table)
+        .delete()
+        .eq('event_id', eventId)
+        .eq('user_id', targetUserId);
+      if (delErr) {
+        logger.error(`Fallback ${removeRpc} failed`, delErr, 'Timeline');
+        return { success: false, active: false, count: 0, error: delErr.message };
+      }
+      const { count } = await db
+        .from(table)
+        .select('*', { count: 'exact', head: true })
+        .eq('event_id', eventId);
+      return { success: true, active: false, count: count || 0 };
+    }
+  } else {
+    // Add reaction
+    try {
+      const { data, error } = await db.rpc(addRpc, {
+        p_event_id: eventId,
+        p_user_id: targetUserId,
+      });
+      if (error) {
+        logger.error(`Failed to call ${addRpc}`, error, 'Timeline');
+        return { success: false, active: false, count: 0, error: error.message };
+      }
+      return {
+        success: true,
+        active: true,
+        count: (data as Record<string, number>)?.[countKey] || 0,
+      };
+    } catch (dbError) {
+      logger.warn(`RPC ${addRpc} not available, using fallback`, dbError, 'Timeline');
+      const { error: insertErr } = await db
+        .from(table)
+        .insert({ event_id: eventId, user_id: targetUserId });
+      if (insertErr) {
+        logger.error(`Fallback ${addRpc} failed`, insertErr, 'Timeline');
+        return { success: false, active: false, count: 0, error: insertErr.message };
+      }
+      const { count } = await db
+        .from(table)
+        .select('*', { count: 'exact', head: true })
+        .eq('event_id', eventId);
+      return { success: true, active: true, count: count || 0 };
+    }
+  }
+}
+
+type CommentRow = {
+  id: string;
+  event_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+  parent_comment_id: string | null;
+};
+
+type ProfileRow = {
+  id: string;
+  display_name: string;
+  username: string | null;
+  avatar_url: string | null;
+};
+
+async function enrichWithProfiles(rows: CommentRow[]): Promise<Record<string, unknown>[]> {
+  const userIds = Array.from(new Set(rows.map(c => c.user_id).filter(Boolean)));
+  let profilesMap: Record<
+    string,
+    { display_name: string; username: string | null; avatar_url: string | null }
+  > = {};
+  if (userIds.length > 0) {
+    const { data: profiles, error: pErr } = await db
+      .from(DATABASE_TABLES.PROFILES)
+      .select('id, display_name, username, avatar_url')
+      .in('id', userIds as string[]);
+    if (!pErr && profiles) {
+      profilesMap = Object.fromEntries(
+        (profiles as ProfileRow[]).map(p => [
+          p.id,
+          { display_name: p.display_name, username: p.username, avatar_url: p.avatar_url },
+        ])
+      );
+    }
+  }
+  return rows.map(c => ({
+    id: c.id,
+    content: c.content,
+    created_at: c.created_at,
+    user_id: c.user_id,
+    user_name: profilesMap[c.user_id]?.display_name || 'User',
+    user_username: profilesMap[c.user_id]?.username || null,
+    user_avatar: profilesMap[c.user_id]?.avatar_url || null,
+    reply_count: 0,
+  }));
+}
+
+// ─── Public API ───────────────────────────────────────────────────────────────
 
 /**
  * Like or unlike an event
@@ -48,96 +186,16 @@ export async function toggleLike(
         if (!targetUserId) {
           return { success: false, liked: false, likeCount: 0, error: 'Authentication required' };
         }
-
-        // Check if user already liked this event
-        const { data: existingLike } = await db
-          .from(DATABASE_TABLES.TIMELINE_LIKES)
-          .select('id')
-          .eq('event_id', eventId)
-          .eq('user_id', targetUserId)
-          .single();
-
-        if (existingLike) {
-          // Unlike the event
-          try {
-            const { data, error } = await db.rpc('unlike_timeline_event', {
-              p_event_id: eventId,
-              p_user_id: targetUserId,
-            });
-
-            if (error) {
-              logger.error('Failed to unlike timeline event', error, 'Timeline');
-              return { success: false, liked: false, likeCount: 0, error: error.message };
-            }
-
-            return {
-              success: true,
-              liked: false,
-              likeCount: (data as { like_count?: number })?.like_count || 0,
-            };
-          } catch (dbError) {
-            logger.warn(
-              'Database function not available for unlike, using fallback',
-              dbError,
-              'Timeline'
-            );
-            const { error: delErr } = await db
-              .from(DATABASE_TABLES.TIMELINE_LIKES)
-              .delete()
-              .eq('event_id', eventId)
-              .eq('user_id', targetUserId);
-            if (delErr) {
-              logger.error('Fallback unlike failed', delErr, 'Timeline');
-              return { success: false, liked: false, likeCount: 0, error: delErr.message };
-            }
-            const { count } = await db
-              .from(DATABASE_TABLES.TIMELINE_LIKES)
-              .select('*', { count: 'exact', head: true })
-              .eq('event_id', eventId);
-            return { success: true, liked: false, likeCount: count || 0 };
-          }
-        } else {
-          // Like the event
-          try {
-            const { data, error } = await db.rpc('like_timeline_event', {
-              p_event_id: eventId,
-              p_user_id: targetUserId,
-            });
-
-            if (error) {
-              logger.error('Failed to like timeline event', error, 'Timeline');
-              return { success: false, liked: false, likeCount: 0, error: error.message };
-            }
-
-            return {
-              success: true,
-              liked: true,
-              likeCount: (data as { like_count?: number })?.like_count || 0,
-            };
-          } catch (dbError) {
-            logger.warn(
-              'Database function not available for like, using fallback',
-              dbError,
-              'Timeline'
-            );
-            // Fallback: insert into timeline_likes and return new count
-            const { error: insertErr } = await db
-              .from(DATABASE_TABLES.TIMELINE_LIKES)
-              .insert({ event_id: eventId, user_id: targetUserId });
-            if (insertErr) {
-              logger.error('Fallback like failed', insertErr, 'Timeline');
-              return { success: false, liked: false, likeCount: 0, error: insertErr.message };
-            }
-            const { count } = await db
-              .from(DATABASE_TABLES.TIMELINE_LIKES)
-              .select('*', { count: 'exact', head: true })
-              .eq('event_id', eventId);
-            return { success: true, liked: true, likeCount: count || 0 };
-          }
-        }
+        const r = await toggleReaction(eventId, targetUserId, {
+          table: DATABASE_TABLES.TIMELINE_LIKES,
+          addRpc: 'like_timeline_event',
+          removeRpc: 'unlike_timeline_event',
+          countKey: 'like_count',
+        });
+        return { success: r.success, liked: r.active, likeCount: r.count, error: r.error };
       },
-      { maxAttempts: 2 }
-    ); // Only retry once for likes to avoid spam
+      { maxAttempts: 2 } // Only retry once for likes to avoid spam
+    );
   } catch (error) {
     logger.error('Error toggling like on timeline event', error, 'Timeline');
     return { success: false, liked: false, likeCount: 0, error: 'Internal server error' };
@@ -156,93 +214,13 @@ export async function toggleDislike(
     if (!targetUserId) {
       return { success: false, disliked: false, dislikeCount: 0, error: 'Authentication required' };
     }
-
-    // Check if user already disliked this event
-    const { data: existingDislike } = await db
-      .from(DATABASE_TABLES.TIMELINE_DISLIKES)
-      .select('id')
-      .eq('event_id', eventId)
-      .eq('user_id', targetUserId)
-      .single();
-
-    if (existingDislike) {
-      // Undislike the event
-      try {
-        const { data, error } = await db.rpc('undislike_timeline_event', {
-          p_event_id: eventId,
-          p_user_id: targetUserId,
-        });
-
-        if (error) {
-          logger.error('Failed to undislike timeline event', error, 'Timeline');
-          return { success: false, disliked: false, dislikeCount: 0, error: error.message };
-        }
-
-        return {
-          success: true,
-          disliked: false,
-          dislikeCount: (data as { dislike_count?: number })?.dislike_count || 0,
-        };
-      } catch (dbError) {
-        logger.warn(
-          'Database function not available for undislike, using fallback',
-          dbError,
-          'Timeline'
-        );
-        const { error: delErr } = await db
-          .from(DATABASE_TABLES.TIMELINE_DISLIKES)
-          .delete()
-          .eq('event_id', eventId)
-          .eq('user_id', targetUserId);
-        if (delErr) {
-          logger.error('Fallback undislike failed', delErr, 'Timeline');
-          return { success: false, disliked: false, dislikeCount: 0, error: delErr.message };
-        }
-        const { count } = await db
-          .from(DATABASE_TABLES.TIMELINE_DISLIKES)
-          .select('*', { count: 'exact', head: true })
-          .eq('event_id', eventId);
-        return { success: true, disliked: false, dislikeCount: count || 0 };
-      }
-    } else {
-      // Dislike the event
-      try {
-        const { data, error } = await db.rpc('dislike_timeline_event', {
-          p_event_id: eventId,
-          p_user_id: targetUserId,
-        });
-
-        if (error) {
-          logger.error('Failed to dislike timeline event', error, 'Timeline');
-          return { success: false, disliked: false, dislikeCount: 0, error: error.message };
-        }
-
-        return {
-          success: true,
-          disliked: true,
-          dislikeCount: (data as { dislike_count?: number })?.dislike_count || 0,
-        };
-      } catch (dbError) {
-        logger.warn(
-          'Database function not available for dislike, using fallback',
-          dbError,
-          'Timeline'
-        );
-        // Fallback: insert into timeline_dislikes and return new count
-        const { error: insertErr } = await db
-          .from(DATABASE_TABLES.TIMELINE_DISLIKES)
-          .insert({ event_id: eventId, user_id: targetUserId });
-        if (insertErr) {
-          logger.error('Fallback dislike failed', insertErr, 'Timeline');
-          return { success: false, disliked: false, dislikeCount: 0, error: insertErr.message };
-        }
-        const { count } = await db
-          .from(DATABASE_TABLES.TIMELINE_DISLIKES)
-          .select('*', { count: 'exact', head: true })
-          .eq('event_id', eventId);
-        return { success: true, disliked: true, dislikeCount: count || 0 };
-      }
-    }
+    const r = await toggleReaction(eventId, targetUserId, {
+      table: DATABASE_TABLES.TIMELINE_DISLIKES,
+      addRpc: 'dislike_timeline_event',
+      removeRpc: 'undislike_timeline_event',
+      countKey: 'dislike_count',
+    });
+    return { success: r.success, disliked: r.active, dislikeCount: r.count, error: r.error };
   } catch (error) {
     logger.error('Error toggling dislike on timeline event', error, 'Timeline');
     return { success: false, disliked: false, dislikeCount: 0, error: 'Internal server error' };
@@ -260,7 +238,6 @@ export async function addComment(
   _createEventFn?: (request: Record<string, unknown>) => Promise<ServiceResult>
 ): Promise<{ success: boolean; commentId?: string; commentCount: number; error?: string }> {
   try {
-    // Get user ID if not provided
     let actorUserId = userId;
     if (!actorUserId) {
       const fetchedUserId = await getCurrentUserId();
@@ -294,7 +271,6 @@ export async function addComment(
         dbError,
         'Timeline'
       );
-      // Fallback: insert directly into timeline_comments
       const { data: inserted, error: iErr } = await db
         .from(DATABASE_TABLES.TIMELINE_COMMENTS)
         .insert({
@@ -358,7 +334,6 @@ export async function updateComment(
         dbError,
         'Timeline'
       );
-      // Fallback: update directly in timeline_comments table
       const { error: updateErr } = await db
         .from(DATABASE_TABLES.TIMELINE_COMMENTS)
         .update({ content, updated_at: new Date().toISOString() })
@@ -412,7 +387,6 @@ export async function deleteComment(commentId: string, userId?: string): Promise
       );
     }
 
-    // Fallback: soft delete by updating deleted_at timestamp
     const { error: deleteErr } = await db
       .from(DATABASE_TABLES.TIMELINE_COMMENTS)
       .update({
@@ -459,22 +433,6 @@ export async function getEventCounts(
   }
 }
 
-type CommentRow = {
-  id: string;
-  event_id: string;
-  user_id: string;
-  content: string;
-  created_at: string;
-  parent_comment_id: string | null;
-};
-
-type ProfileRow = {
-  id: string;
-  display_name: string;
-  username: string | null;
-  avatar_url: string | null;
-};
-
 /**
  * Get comments for an event
  */
@@ -503,7 +461,6 @@ export async function getEventComments(
         dbError,
         'Timeline'
       );
-      // Fallback: query comments table directly and enrich with profile info
       const { data: comments, error: cErr } = await db
         .from(DATABASE_TABLES.TIMELINE_COMMENTS)
         .select('id, event_id, user_id, content, created_at, parent_comment_id')
@@ -514,36 +471,7 @@ export async function getEventComments(
         logger.error('Fallback comments query failed', cErr, 'Timeline');
         return [];
       }
-      const commentsData = comments as CommentRow[];
-      const userIds = Array.from(new Set(commentsData.map(c => c.user_id).filter(Boolean)));
-      let profilesMap: Record<
-        string,
-        { display_name: string; username: string | null; avatar_url: string | null }
-      > = {};
-      if (userIds.length > 0) {
-        const { data: profiles, error: pErr } = await db
-          .from(DATABASE_TABLES.PROFILES)
-          .select('id, display_name, username, avatar_url')
-          .in('id', userIds as string[]);
-        if (!pErr && profiles) {
-          profilesMap = Object.fromEntries(
-            (profiles as ProfileRow[]).map(p => [
-              p.id,
-              { display_name: p.display_name, username: p.username, avatar_url: p.avatar_url },
-            ])
-          );
-        }
-      }
-      return commentsData.map(c => ({
-        id: c.id,
-        content: c.content,
-        created_at: c.created_at,
-        user_id: c.user_id,
-        user_name: profilesMap[c.user_id]?.display_name || 'User',
-        user_username: profilesMap[c.user_id]?.username || null,
-        user_avatar: profilesMap[c.user_id]?.avatar_url || null,
-        reply_count: 0,
-      }));
+      return enrichWithProfiles(comments as CommentRow[]);
     }
   } catch (error) {
     logger.error('Error getting event comments', error, 'Timeline');
@@ -587,36 +515,7 @@ export async function getCommentReplies(
         logger.error('Fallback replies query failed', rErr, 'Timeline');
         return [];
       }
-      const repliesData = replies as CommentRow[];
-      const userIds = Array.from(new Set(repliesData.map(c => c.user_id).filter(Boolean)));
-      let profilesMap: Record<
-        string,
-        { display_name: string; username: string | null; avatar_url: string | null }
-      > = {};
-      if (userIds.length > 0) {
-        const { data: profiles, error: pErr } = await db
-          .from(DATABASE_TABLES.PROFILES)
-          .select('id, display_name, username, avatar_url')
-          .in('id', userIds as string[]);
-        if (!pErr && profiles) {
-          profilesMap = Object.fromEntries(
-            (profiles as ProfileRow[]).map(p => [
-              p.id,
-              { display_name: p.display_name, username: p.username, avatar_url: p.avatar_url },
-            ])
-          );
-        }
-      }
-      return repliesData.map(c => ({
-        id: c.id,
-        content: c.content,
-        created_at: c.created_at,
-        user_id: c.user_id,
-        user_name: profilesMap[c.user_id]?.display_name || 'User',
-        user_username: profilesMap[c.user_id]?.username || null,
-        user_avatar: profilesMap[c.user_id]?.avatar_url || null,
-        reply_count: 0,
-      }));
+      return enrichWithProfiles(replies as CommentRow[]);
     }
   } catch (error) {
     logger.error('Error getting comment replies', error, 'Timeline');
