@@ -96,6 +96,29 @@ export interface BookingResult {
 export class BookingService {
   constructor(private supabase: AnySupabaseClient) {}
 
+  private async updateBookingStatus(opts: {
+    bookingId: string;
+    updateData: Record<string, unknown>;
+    actorField: string;
+    actorId: string;
+    allowedStatuses: string[];
+    errorMessage: string;
+  }): Promise<BookingResult> {
+    let q = this.supabase
+      .from(DATABASE_TABLES.BOOKINGS)
+      .update(opts.updateData)
+      .eq('id', opts.bookingId)
+      .eq(opts.actorField, opts.actorId);
+    q =
+      opts.allowedStatuses.length === 1
+        ? q.eq('status', opts.allowedStatuses[0])
+        : q.in('status', opts.allowedStatuses);
+    const { data: booking, error } = await q.select().single();
+    return error || !booking
+      ? { success: false, error: opts.errorMessage }
+      : { success: true, booking };
+  }
+
   /**
    * Get available time slots for a service on a given date
    */
@@ -307,130 +330,64 @@ export class BookingService {
     };
   }
 
-  /**
-   * Confirm a pending booking (provider action)
-   */
   async confirmBooking(bookingId: string, providerActorId: string): Promise<BookingResult> {
-    const { data: booking, error } = await this.supabase
-      .from(DATABASE_TABLES.BOOKINGS)
-      .update({
-        status: STATUS.BOOKINGS.CONFIRMED,
-        confirmed_at: new Date().toISOString(),
-      })
-      .eq('id', bookingId)
-      .eq('provider_actor_id', providerActorId)
-      .eq('status', STATUS.BOOKINGS.PENDING)
-      .select()
-      .single();
-
-    if (error || !booking) {
-      return {
-        success: false,
-        error: 'Failed to confirm booking',
-      };
-    }
-
-    return {
-      success: true,
-      booking,
-    };
+    return this.updateBookingStatus({
+      bookingId,
+      updateData: { status: STATUS.BOOKINGS.CONFIRMED, confirmed_at: new Date().toISOString() },
+      actorField: 'provider_actor_id',
+      actorId: providerActorId,
+      allowedStatuses: [STATUS.BOOKINGS.PENDING],
+      errorMessage: 'Failed to confirm booking',
+    });
   }
 
-  /**
-   * Reject a pending booking (provider action)
-   */
   async rejectBooking(
     bookingId: string,
     providerActorId: string,
     reason?: string
   ): Promise<BookingResult> {
-    const { data: booking, error } = await this.supabase
-      .from(DATABASE_TABLES.BOOKINGS)
-      .update({
+    return this.updateBookingStatus({
+      bookingId,
+      updateData: {
         status: STATUS.BOOKINGS.REJECTED,
         cancellation_reason: reason,
         cancelled_at: new Date().toISOString(),
-      })
-      .eq('id', bookingId)
-      .eq('provider_actor_id', providerActorId)
-      .eq('status', STATUS.BOOKINGS.PENDING)
-      .select()
-      .single();
-
-    if (error || !booking) {
-      return {
-        success: false,
-        error: 'Failed to reject booking',
-      };
-    }
-
-    return {
-      success: true,
-      booking,
-    };
+      },
+      actorField: 'provider_actor_id',
+      actorId: providerActorId,
+      allowedStatuses: [STATUS.BOOKINGS.PENDING],
+      errorMessage: 'Failed to reject booking',
+    });
   }
 
-  /**
-   * Cancel a booking (customer action)
-   */
   async cancelBooking(
     bookingId: string,
     customerUserId: string,
     reason?: string
   ): Promise<BookingResult> {
-    const { data: booking, error } = await this.supabase
-      .from(DATABASE_TABLES.BOOKINGS)
-      .update({
+    return this.updateBookingStatus({
+      bookingId,
+      updateData: {
         status: STATUS.BOOKINGS.CANCELLED,
         cancellation_reason: reason,
         cancelled_at: new Date().toISOString(),
-      })
-      .eq('id', bookingId)
-      .eq('customer_user_id', customerUserId)
-      .in('status', [STATUS.BOOKINGS.PENDING, STATUS.BOOKINGS.CONFIRMED])
-      .select()
-      .single();
-
-    if (error || !booking) {
-      return {
-        success: false,
-        error: 'Failed to cancel booking',
-      };
-    }
-
-    return {
-      success: true,
-      booking,
-    };
+      },
+      actorField: 'customer_user_id',
+      actorId: customerUserId,
+      allowedStatuses: [STATUS.BOOKINGS.PENDING, STATUS.BOOKINGS.CONFIRMED],
+      errorMessage: 'Failed to cancel booking',
+    });
   }
 
-  /**
-   * Mark booking as completed (provider action)
-   */
   async completeBooking(bookingId: string, providerActorId: string): Promise<BookingResult> {
-    const { data: booking, error } = await this.supabase
-      .from(DATABASE_TABLES.BOOKINGS)
-      .update({
-        status: STATUS.BOOKINGS.COMPLETED,
-        completed_at: new Date().toISOString(),
-      })
-      .eq('id', bookingId)
-      .eq('provider_actor_id', providerActorId)
-      .in('status', [STATUS.BOOKINGS.CONFIRMED, STATUS.BOOKINGS.IN_PROGRESS])
-      .select()
-      .single();
-
-    if (error || !booking) {
-      return {
-        success: false,
-        error: 'Failed to complete booking',
-      };
-    }
-
-    return {
-      success: true,
-      booking,
-    };
+    return this.updateBookingStatus({
+      bookingId,
+      updateData: { status: STATUS.BOOKINGS.COMPLETED, completed_at: new Date().toISOString() },
+      actorField: 'provider_actor_id',
+      actorId: providerActorId,
+      allowedStatuses: [STATUS.BOOKINGS.CONFIRMED, STATUS.BOOKINGS.IN_PROGRESS],
+      errorMessage: 'Failed to complete booking',
+    });
   }
 
   /**
