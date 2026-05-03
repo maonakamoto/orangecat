@@ -81,7 +81,6 @@ export function useDiscoverState() {
     debounceMs: 300,
   });
 
-  // UI state
   const [activeTab, setActiveTab] = useState<DiscoverTabType>(initialType);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [showFilters, setShowFilters] = useState(false);
@@ -95,12 +94,10 @@ export function useDiscoverState() {
   const [radiusKm, setRadiusKm] = useState<number>(initialRadiusKm);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  // Sub-hook data
   const counts = useDiscoverCounts();
   const financial = useDiscoverFinancialData(activeTab, searchTerm);
   const generic = useDiscoverGenericData(activeTab, searchTerm);
 
-  // Extract projects and profiles from search results
   const projects = useMemo(
     () => searchResults.filter(r => r.type === 'project').map(r => r.data as SearchFundingPage),
     [searchResults]
@@ -110,7 +107,6 @@ export function useDiscoverState() {
     [searchResults]
   );
 
-  // Sync filter state into search hook
   useEffect(() => {
     setFilters({
       categories: selectedCategories.length > 0 ? selectedCategories : undefined,
@@ -122,7 +118,6 @@ export function useDiscoverState() {
     });
   }, [selectedCategories, selectedStatuses, country, city, postal, radiusKm, setFilters]);
 
-  // Sync state back to URL
   useEffect(() => {
     const p = new URLSearchParams(searchParams?.toString() || '');
     if (activeTab !== 'all') {
@@ -184,7 +179,6 @@ export function useDiscoverState() {
     searchParams,
   ]);
 
-  // Handlers
   const handleLoadMore = useCallback(async () => {
     if (!hasMore || isLoadingMore) {
       return;
@@ -282,7 +276,6 @@ export function useDiscoverState() {
   const hasFilters = !!(searchTerm || selectedCategories.length > 0);
 
   return {
-    // Search state
     searchTerm,
     searchError,
     loading,
@@ -293,8 +286,6 @@ export function useDiscoverState() {
     totalResults,
     hasMore,
     isLoadingMore,
-
-    // Data
     projects,
     profiles,
     loans: financial.loans,
@@ -310,8 +301,6 @@ export function useDiscoverState() {
     aiAssistants: generic.aiAssistants,
     totalInvestmentsCount: counts.totalInvestmentsCount,
     stats,
-
-    // UI state
     activeTab,
     viewMode,
     setViewMode,
@@ -328,12 +317,8 @@ export function useDiscoverState() {
     setPostal,
     radiusKm,
     setRadiusKm,
-
-    // Derived state
     isEmpty,
     hasFilters,
-
-    // Handlers
     handleSearch,
     handleSortChange,
     handleToggleCategory,
