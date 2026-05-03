@@ -14,6 +14,7 @@ import { FORM_THEME } from '@/config/theme-colors';
 
 import { EntityCreationSuccess } from '../EntityCreationSuccess';
 import { useEntityFormState } from './hooks/useEntityFormState';
+import { formatRelativeTime } from './hooks/useEntityFormDraft';
 import { useFieldVisibility } from './hooks/useFieldVisibility';
 import { useEntityFormSubmit } from './hooks/useEntityFormSubmit';
 import { FormHeader } from './components/FormHeader';
@@ -68,7 +69,6 @@ export function EntityForm<T extends Record<string, unknown>>({
     setSubmitting,
     setErrors,
     validateField,
-    formatRelativeTime,
   } = useEntityFormState({ config, initialValues, userCurrency, userId: user?.id, mode });
 
   const [createdEntity, setCreatedEntity] = useState<{ id: string; title: string } | null>(null);
