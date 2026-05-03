@@ -1,46 +1,15 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { AIChatMessage, type AIMessage } from './AIChatMessage';
+import { AIChatMessage } from './AIChatMessage';
 import { AIChatInput } from './AIChatInput';
 import { ModelSelector, ModelBadge } from './ModelSelector';
 import { Loader2, Bot, ArrowLeft, Key, Gift, AlertCircle } from 'lucide-react';
-import { logger } from '@/utils/logger';
 import { ROUTES } from '@/config/routes';
 import Button from '@/components/ui/Button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
 import Link from 'next/link';
-import { API_ROUTES } from '@/config/api-routes';
-
-interface AIAssistant {
-  id: string;
-  title: string;
-  avatar_url?: string | null;
-  pricing_model?: string;
-  price_per_message?: number;
-  price_per_1k_tokens?: number;
-  welcome_message?: string | null;
-  free_messages_per_day?: number | null;
-  model_preference?: string | null;
-}
-
-interface UserStatus {
-  hasByok: boolean;
-  usedFreeMessage?: boolean;
-  freeMessagesRemaining: number;
-  freeMessagesPerDay: number;
-}
-
-interface Conversation {
-  id: string;
-  title?: string | null;
-  total_messages: number;
-  total_cost_btc: number;
-  messages: AIMessage[];
-  assistant?: AIAssistant;
-}
+import { useAIChatPanel } from './useAIChatPanel';
 
 interface AIChatPanelProps {
   assistantId: string;
@@ -55,146 +24,18 @@ export function AIChatPanel({
   userAvatar,
   userName = 'You',
 }: AIChatPanelProps) {
-  const [conversation, setConversation] = useState<Conversation | null>(null);
-  const [messages, setMessages] = useState<AIMessage[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] = useState<string>('auto');
-  const [userStatus, setUserStatus] = useState<UserStatus | null>(null);
-  const [lastModelUsed, setLastModelUsed] = useState<string | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
-
-  // Load conversation, messages, and user status
-  useEffect(() => {
-    const loadConversation = async () => {
-      try {
-        setIsLoading(true);
-
-        // Fetch conversation and user API key status in parallel
-        const [convResponse, keysResponse] = await Promise.all([
-          fetch(`/api/ai-assistants/${assistantId}/conversations/${conversationId}`),
-          fetch(API_ROUTES.USER.API_KEYS),
-        ]);
-
-        if (!convResponse.ok) {
-          throw new Error('Failed to load conversation');
-        }
-
-        const convData = await convResponse.json();
-        if (convData.success) {
-          setConversation(convData.data);
-          // Filter out system messages for display
-          setMessages(convData.data.messages.filter((m: AIMessage) => m.role !== 'system'));
-
-          // Set initial model from assistant preference
-          const assistant = convData.data.assistant;
-          if (assistant?.model_preference && assistant.model_preference !== 'any') {
-            setSelectedModel(assistant.model_preference);
-          }
-        } else {
-          throw new Error(convData.error || 'Failed to load conversation');
-        }
-
-        // Get user API key status
-        if (keysResponse.ok) {
-          const keysData = await keysResponse.json();
-          if (keysData.success) {
-            setUserStatus({
-              hasByok: keysData.data.hasByok,
-              freeMessagesRemaining: keysData.data.platformUsage?.requests_remaining || 0,
-              freeMessagesPerDay: keysData.data.platformUsage?.daily_limit || 10,
-            });
-          }
-        }
-      } catch (err) {
-        logger.error('Error loading conversation', err, 'AI');
-        setError(err instanceof Error ? err.message : 'Failed to load');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadConversation();
-  }, [assistantId, conversationId]);
-
-  // Scroll to bottom when messages change
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, scrollToBottom]);
-
-  const handleSendMessage = useCallback(
-    async (content: string) => {
-      try {
-        // Optimistically add user message
-        const tempUserMessage: AIMessage = {
-          id: `temp-${Date.now()}`,
-          role: 'user',
-          content,
-          created_at: new Date().toISOString(),
-        };
-        setMessages(prev => [...prev, tempUserMessage]);
-        scrollToBottom();
-
-        const response = await fetch(
-          `/api/ai-assistants/${assistantId}/conversations/${conversationId}/messages`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              content,
-              model: selectedModel !== 'auto' ? selectedModel : undefined,
-            }),
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          if (response.status === 429) {
-            toast.error(
-              errorData.details?.message ||
-                'Daily limit reached. Add an API key for unlimited usage.'
-            );
-          }
-          throw new Error(errorData.error || 'Failed to send message');
-        }
-
-        const data = await response.json();
-        if (data.success) {
-          // Replace temp message with real one and add assistant response
-          setMessages(prev => [
-            ...prev.filter(m => m.id !== tempUserMessage.id),
-            data.data.userMessage,
-            data.data.assistantMessage,
-          ]);
-
-          // Update last model used for display
-          if (data.data.assistantMessage?.model_used) {
-            setLastModelUsed(data.data.assistantMessage.model_used);
-          }
-
-          // Update user status from response
-          if (data.data.userStatus) {
-            setUserStatus(data.data.userStatus);
-          }
-        } else {
-          throw new Error(data.error || 'Failed to send');
-        }
-      } catch (err) {
-        logger.error('Error sending message', err, 'AI');
-        if (!(err instanceof Error && err.message.includes('limit'))) {
-          toast.error('Failed to send message. Please try again.');
-        }
-        // Remove optimistic message on error
-        setMessages(prev => prev.filter(m => !m.id.startsWith('temp-')));
-        throw err; // Re-throw so input can restore content
-      }
-    },
-    [assistantId, conversationId, scrollToBottom, selectedModel]
-  );
+  const {
+    conversation,
+    messages,
+    isLoading,
+    error,
+    selectedModel,
+    setSelectedModel,
+    userStatus,
+    lastModelUsed,
+    messagesEndRef,
+    handleSendMessage,
+  } = useAIChatPanel(assistantId, conversationId);
 
   if (isLoading) {
     return (
@@ -219,7 +60,6 @@ export function AIChatPanel({
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      {/* Header */}
       <div className="flex items-center gap-3 p-4 bg-white border-b border-gray-200">
         <Link
           href={`/dashboard/ai-assistants`}
@@ -247,7 +87,6 @@ export function AIChatPanel({
           </div>
         </div>
 
-        {/* Status badges */}
         <div className="flex items-center gap-2">
           {userStatus?.hasByok ? (
             <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200">
@@ -264,7 +103,6 @@ export function AIChatPanel({
           )}
         </div>
 
-        {/* Model selector - only for BYOK users */}
         {userStatus?.hasByok && (
           <ModelSelector
             selectedModel={selectedModel}
@@ -275,7 +113,6 @@ export function AIChatPanel({
         )}
       </div>
 
-      {/* Low messages warning */}
       {userStatus &&
         !userStatus.hasByok &&
         userStatus.freeMessagesRemaining <= 2 &&
@@ -295,7 +132,6 @@ export function AIChatPanel({
           </div>
         )}
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full p-8 text-center">
@@ -336,7 +172,6 @@ export function AIChatPanel({
         )}
       </div>
 
-      {/* Input */}
       <AIChatInput
         onSend={handleSendMessage}
         placeholder={`Message ${assistant?.title || 'assistant'}...`}
