@@ -1,10 +1,3 @@
-/**
- * SocialTimeline Component
- *
- * Displays personal or community timeline with posts, search, and sorting.
- * Logic extracted to useSocialTimeline hook, controls to separate components.
- */
-
 'use client';
 
 import React, { useRef } from 'react';
@@ -97,7 +90,6 @@ export default function SocialTimeline({
     invalidateTimelineCache,
   } = useSocialTimeline({ mode, defaultSort, onOptimisticUpdate });
 
-  // Early return for unauthenticated users
   if (hydrated && authCheckComplete && !isLoading && !user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-purple-50/20 flex items-center justify-center">
@@ -110,7 +102,6 @@ export default function SocialTimeline({
     );
   }
 
-  // Show loading skeleton while auth check is in progress
   if (!authCheckComplete) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-purple-50/20 p-4">
@@ -121,7 +112,6 @@ export default function SocialTimeline({
 
   const isInitialLoad = !hydrated || isLoading;
 
-  // Search controls component
   const searchControls = (
     <TimelineSearchControls
       searchQuery={searchQuery}
@@ -136,7 +126,6 @@ export default function SocialTimeline({
     />
   );
 
-  // Inline composer
   const inlineComposer =
     showInlineComposer && user ? (
       <div ref={composerRef}>
@@ -162,7 +151,6 @@ export default function SocialTimeline({
 
   const postComposer = inlineComposer === undefined ? searchControls : undefined;
 
-  // Calculate stats
   const timelineStats =
     customStats ||
     (timelineFeed
@@ -175,7 +163,6 @@ export default function SocialTimeline({
         }
       : undefined);
 
-  // Build timeline feed content
   const timelineFeedContent = mergedFeed || {
     events: [],
     pagination: { page: 1, limit: 20, total: 0, hasNext: false, hasPrev: false },
@@ -191,7 +178,6 @@ export default function SocialTimeline({
     metadata: { totalEvents: 0, featuredEvents: 0, lastUpdated: new Date().toISOString() },
   };
 
-  // Override feed when search is active
   const activeFeed: TimelineFeedResponse = isSearchActive
     ? {
         events: searchResults || [],
@@ -211,7 +197,6 @@ export default function SocialTimeline({
       }
     : timelineFeedContent;
 
-  // Empty state rendering
   const emptyState = isSearchActive ? (
     searching ? (
       <TimelineSkeleton count={3} />
@@ -257,7 +242,6 @@ export default function SocialTimeline({
     </div>
   ) : null;
 
-  // Header content with sorting and share button
   const headerContent =
     showSortingControls || (showShareButton && user) ? (
       <>
