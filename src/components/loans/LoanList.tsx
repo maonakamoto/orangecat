@@ -18,15 +18,10 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { formatCurrency } from '@/services/currency';
-import { PLATFORM_DEFAULT_CURRENCY, CURRENCY_CODES } from '@/config/currencies';
-import type { CurrencyCode } from '@/config/currencies';
-import { useState } from 'react';
 import { LoanOffersDialog } from './LoanOffersDialog';
-import { toast } from 'sonner';
-import loansService from '@/services/loans';
 import { CreateLoanDialog } from './CreateLoanDialog';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { useLoanList, getStatusColor, formatLoanAmount, calculateProgress } from './useLoanList';
 
 interface LoanListProps {
   loans: Loan[];
@@ -34,79 +29,21 @@ interface LoanListProps {
 }
 
 export function LoanList({ loans, onLoanUpdated }: LoanListProps) {
-  const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null);
-  const [offersDialogOpen, setOffersDialogOpen] = useState(false);
-  const [editLoan, setEditLoan] = useState<Loan | null>(null);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [confirmDeleteLoan, setConfirmDeleteLoan] = useState<Loan | null>(null);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800';
-      case 'paid_off':
-        return 'bg-blue-100 text-blue-800';
-      case 'refinanced':
-        return 'bg-purple-100 text-purple-800';
-      case 'defaulted':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const formatLoanAmount = (amount: number, currency: string = PLATFORM_DEFAULT_CURRENCY) => {
-    // Validate currency and fallback to platform default
-    const validCurrency = (
-      CURRENCY_CODES.includes(currency as CurrencyCode) ? currency : PLATFORM_DEFAULT_CURRENCY
-    ) as CurrencyCode;
-    return formatCurrency(amount, validCurrency);
-  };
-
-  const calculateProgress = (original: number, remaining: number) => {
-    if (original === 0) {
-      return 0;
-    }
-    return ((original - remaining) / original) * 100;
-  };
-
-  const handleToggleVisibility = async (loan: Loan) => {
-    try {
-      const result = await loansService.updateLoan(loan.id, { is_public: !loan.is_public });
-      if (result.success) {
-        toast.success(loan.is_public ? 'Loan hidden' : 'Loan made public');
-        onLoanUpdated?.();
-      } else {
-        toast.error(result.error || 'Failed to update visibility');
-      }
-    } catch {
-      toast.error('Failed to update visibility');
-    }
-  };
-
-  const handleViewOffers = (loan: Loan) => {
-    setSelectedLoan(loan);
-    setOffersDialogOpen(true);
-  };
-
-  const executeDelete = async (loan: Loan) => {
-    try {
-      const result = await loansService.deleteLoan(loan.id);
-      if (result.success) {
-        toast.success('Loan deleted');
-        onLoanUpdated?.();
-      } else {
-        toast.error(result.error || 'Failed to delete loan');
-      }
-    } catch {
-      toast.error('Failed to delete loan');
-    }
-  };
-
-  const handleEdit = (loan: Loan) => {
-    setEditLoan(loan);
-    setEditDialogOpen(true);
-  };
+  const {
+    selectedLoan,
+    offersDialogOpen,
+    setOffersDialogOpen,
+    editLoan,
+    setEditLoan,
+    editDialogOpen,
+    setEditDialogOpen,
+    confirmDeleteLoan,
+    setConfirmDeleteLoan,
+    handleToggleVisibility,
+    handleViewOffers,
+    executeDelete,
+    handleEdit,
+  } = useLoanList(onLoanUpdated);
 
   if (loans.length === 0) {
     return (
@@ -147,7 +84,12 @@ export function LoanList({ loans, onLoanUpdated }: LoanListProps) {
                   <Button variant="ghost" size="sm" onClick={() => handleEdit(loan)}>
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700" onClick={() => setConfirmDeleteLoan(loan)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700"
+                    onClick={() => setConfirmDeleteLoan(loan)}
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -155,7 +97,6 @@ export function LoanList({ loans, onLoanUpdated }: LoanListProps) {
             </CardHeader>
 
             <CardContent className="space-y-4">
-              {/* Financial Summary */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Remaining Balance</p>
@@ -192,7 +133,6 @@ export function LoanList({ loans, onLoanUpdated }: LoanListProps) {
                 </div>
               </div>
 
-              {/* Progress Bar */}
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Payoff Progress</span>
@@ -201,7 +141,6 @@ export function LoanList({ loans, onLoanUpdated }: LoanListProps) {
                 <Progress value={progress} className="h-2" />
               </div>
 
-              {/* Loan Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t">
                 <div className="space-y-2">
                   {loan.lender_name && (
@@ -241,12 +180,13 @@ export function LoanList({ loans, onLoanUpdated }: LoanListProps) {
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <span className="text-muted-foreground">Offers:</span>
-                    <span className="font-medium">{(loan.offers as LoanOffer[] | undefined)?.length ?? 0}</span>
+                    <span className="font-medium">
+                      {(loan.offers as LoanOffer[] | undefined)?.length ?? 0}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex gap-2 pt-2 border-t">
                 <Button
                   variant="outline"
@@ -313,7 +253,9 @@ export function LoanList({ loans, onLoanUpdated }: LoanListProps) {
         isOpen={!!confirmDeleteLoan}
         onClose={() => setConfirmDeleteLoan(null)}
         onConfirm={async () => {
-          if (confirmDeleteLoan) {await executeDelete(confirmDeleteLoan);}
+          if (confirmDeleteLoan) {
+            await executeDelete(confirmDeleteLoan);
+          }
           setConfirmDeleteLoan(null);
         }}
         title="Delete this loan?"
