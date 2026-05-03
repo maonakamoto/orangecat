@@ -1,13 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { Cpu, Zap, Eye, Settings2, DollarSign, Info, ChevronDown } from 'lucide-react';
+import { LucideIcon, Zap, Eye, Settings2, DollarSign, Info } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import {
-  AI_MODEL_REGISTRY,
   MODEL_TIERS,
   TIER_CONFIG,
   getModelsByTier,
@@ -15,6 +13,7 @@ import {
   type AIModelMetadata,
 } from '@/config/ai-models';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { AIModelSelector } from './AIModelSelector';
 
 export interface AIPreferences {
   defaultModelId: string | null;
@@ -32,16 +31,63 @@ interface AIModelPreferencesProps {
   disabled?: boolean;
 }
 
-/**
- * AIModelPreferences - Model settings component
- *
- * Allows users to configure:
- * - Default model
- * - Default tier
- * - Auto-router toggle
- * - Cost limits
- * - Capability requirements
- */
+interface CapabilityToggleCardProps {
+  icon: LucideIcon;
+  label: string;
+  description: string;
+  checked: boolean;
+  onToggle: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  disabled?: boolean;
+}
+
+function CapabilityToggleCard({
+  icon: Icon,
+  label,
+  description,
+  checked,
+  onToggle,
+  onFocus,
+  onBlur,
+  disabled,
+}: CapabilityToggleCardProps) {
+  return (
+    <Card variant="minimal" className="p-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Icon className="w-5 h-5 text-gray-500" />
+          <div>
+            <span className="font-medium text-sm">{label}</span>
+            <p className="text-xs text-gray-500">{description}</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          onClick={onToggle}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          disabled={disabled}
+          className={cn(
+            'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
+            checked ? 'bg-tiffany-600' : 'bg-gray-200',
+            disabled && 'opacity-50 cursor-not-allowed'
+          )}
+        >
+          <span
+            className={cn(
+              'inline-block h-3 w-3 transform rounded-full bg-white transition-transform',
+              checked ? 'translate-x-5' : 'translate-x-1'
+            )}
+          />
+        </button>
+      </div>
+    </Card>
+  );
+}
+
 export function AIModelPreferences({
   preferences,
   onChange,
@@ -49,31 +95,17 @@ export function AIModelPreferences({
   disabled = false,
 }: AIModelPreferencesProps) {
   const { displayCurrency } = useDisplayCurrency();
-  const [isModelSelectorOpen, setIsModelSelectorOpen] = useState(false);
-
-  const selectedModel = preferences.defaultModelId
-    ? AI_MODEL_REGISTRY[preferences.defaultModelId]
-    : null;
 
   const handleTierChange = (tier: ModelTier) => {
-    onChange({
-      defaultTier: tier,
-      // Clear specific model when changing tier
-      defaultModelId: null,
-    });
+    onChange({ defaultTier: tier, defaultModelId: null });
   };
 
   const handleModelSelect = (model: AIModelMetadata) => {
-    onChange({
-      defaultModelId: model.id,
-      defaultTier: model.tier,
-    });
-    setIsModelSelectorOpen(false);
+    onChange({ defaultModelId: model.id, defaultTier: model.tier });
   };
 
   return (
     <div className="space-y-6">
-      {/* Auto Router Toggle */}
       <Card variant="minimal" className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
@@ -122,7 +154,6 @@ export function AIModelPreferences({
         )}
       </Card>
 
-      {/* Default Tier */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Default Tier
@@ -171,83 +202,21 @@ export function AIModelPreferences({
         </div>
       </div>
 
-      {/* Default Model Selector */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Default Model
           <span className="text-gray-500 font-normal ml-2">(optional)</span>
         </label>
-        <div onFocus={() => onFieldFocus?.('defaultModel')} onBlur={() => onFieldFocus?.(null)}>
-          <button
-            type="button"
-            onClick={() => setIsModelSelectorOpen(!isModelSelectorOpen)}
-            disabled={disabled}
-            className={cn(
-              'w-full p-3 rounded-lg border-2 text-left transition-all flex items-center justify-between',
-              isModelSelectorOpen
-                ? 'border-tiffany-500 bg-tiffany-50'
-                : 'border-gray-200 hover:border-gray-300',
-              disabled && 'opacity-50 cursor-not-allowed'
-            )}
-          >
-            <div className="flex items-center gap-3">
-              <Cpu className="w-5 h-5 text-gray-400" />
-              {selectedModel ? (
-                <div>
-                  <span className="font-medium">{selectedModel.name}</span>
-                  <span className="text-sm text-gray-500 ml-2">{selectedModel.provider}</span>
-                </div>
-              ) : (
-                <span className="text-gray-500">
-                  {preferences.autoRouterEnabled
-                    ? 'Auto-selected based on tier'
-                    : 'Select a model...'}
-                </span>
-              )}
-            </div>
-            <ChevronDown
-              className={cn(
-                'w-5 h-5 text-gray-400 transition-transform',
-                isModelSelectorOpen && 'rotate-180'
-              )}
-            />
-          </button>
-
-          {/* Model Dropdown */}
-          {isModelSelectorOpen && (
-            <div className="mt-2 p-2 border border-gray-200 rounded-lg bg-white shadow-lg max-h-64 overflow-y-auto">
-              {getModelsByTier(preferences.defaultTier).map(model => (
-                <button
-                  key={model.id}
-                  type="button"
-                  onClick={() => handleModelSelect(model)}
-                  className={cn(
-                    'w-full p-2 rounded-lg text-left hover:bg-gray-50 flex items-center justify-between',
-                    selectedModel?.id === model.id && 'bg-tiffany-50'
-                  )}
-                >
-                  <div>
-                    <div className="font-medium text-sm">{model.name}</div>
-                    <div className="text-xs text-gray-500">{model.provider}</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {model.isFree && (
-                      <Badge className="bg-emerald-100 text-emerald-700 text-xs">FREE</Badge>
-                    )}
-                    {model.capabilities.includes('vision') && (
-                      <span title="Vision capable">
-                        <Eye className="w-3 h-3 text-gray-400" />
-                      </span>
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <AIModelSelector
+          defaultModelId={preferences.defaultModelId}
+          defaultTier={preferences.defaultTier}
+          autoRouterEnabled={preferences.autoRouterEnabled}
+          disabled={disabled}
+          onFieldFocus={onFieldFocus}
+          onModelSelect={handleModelSelect}
+        />
       </div>
 
-      {/* Cost Limit */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Maximum Cost per Request ({displayCurrency})
@@ -274,79 +243,28 @@ export function AIModelPreferences({
         </p>
       </div>
 
-      {/* Capability Requirements */}
       <div className="space-y-3">
         <label className="block text-sm font-medium text-gray-700">Required Capabilities</label>
-
-        {/* Vision */}
-        <Card variant="minimal" className="p-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Eye className="w-5 h-5 text-gray-500" />
-              <div>
-                <span className="font-medium text-sm">Vision</span>
-                <p className="text-xs text-gray-500">Image understanding capability</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={preferences.requireVision}
-              onClick={() => onChange({ requireVision: !preferences.requireVision })}
-              onFocus={() => onFieldFocus?.('requireVision')}
-              onBlur={() => onFieldFocus?.(null)}
-              disabled={disabled}
-              className={cn(
-                'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
-                preferences.requireVision ? 'bg-tiffany-600' : 'bg-gray-200',
-                disabled && 'opacity-50 cursor-not-allowed'
-              )}
-            >
-              <span
-                className={cn(
-                  'inline-block h-3 w-3 transform rounded-full bg-white transition-transform',
-                  preferences.requireVision ? 'translate-x-5' : 'translate-x-1'
-                )}
-              />
-            </button>
-          </div>
-        </Card>
-
-        {/* Function Calling */}
-        <Card variant="minimal" className="p-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Settings2 className="w-5 h-5 text-gray-500" />
-              <div>
-                <span className="font-medium text-sm">Function Calling</span>
-                <p className="text-xs text-gray-500">Tool use and structured output</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={preferences.requireFunctionCalling}
-              onClick={() =>
-                onChange({ requireFunctionCalling: !preferences.requireFunctionCalling })
-              }
-              onFocus={() => onFieldFocus?.('requireFunctionCalling')}
-              onBlur={() => onFieldFocus?.(null)}
-              disabled={disabled}
-              className={cn(
-                'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
-                preferences.requireFunctionCalling ? 'bg-tiffany-600' : 'bg-gray-200',
-                disabled && 'opacity-50 cursor-not-allowed'
-              )}
-            >
-              <span
-                className={cn(
-                  'inline-block h-3 w-3 transform rounded-full bg-white transition-transform',
-                  preferences.requireFunctionCalling ? 'translate-x-5' : 'translate-x-1'
-                )}
-              />
-            </button>
-          </div>
-        </Card>
+        <CapabilityToggleCard
+          icon={Eye}
+          label="Vision"
+          description="Image understanding capability"
+          checked={preferences.requireVision}
+          onToggle={() => onChange({ requireVision: !preferences.requireVision })}
+          onFocus={() => onFieldFocus?.('requireVision')}
+          onBlur={() => onFieldFocus?.(null)}
+          disabled={disabled}
+        />
+        <CapabilityToggleCard
+          icon={Settings2}
+          label="Function Calling"
+          description="Tool use and structured output"
+          checked={preferences.requireFunctionCalling}
+          onToggle={() => onChange({ requireFunctionCalling: !preferences.requireFunctionCalling })}
+          onFocus={() => onFieldFocus?.('requireFunctionCalling')}
+          onBlur={() => onFieldFocus?.(null)}
+          disabled={disabled}
+        />
       </div>
     </div>
   );
