@@ -1,14 +1,5 @@
 'use client';
 
-/**
- * Recovery Codes Component
- *
- * Generates and displays backup recovery codes for users with MFA enabled.
- * Recovery codes can be used when the authenticator app is unavailable.
- *
- * @module auth/RecoveryCodes
- */
-
 import React, { useState, useCallback, useMemo } from 'react';
 import {
   Key,
@@ -32,32 +23,17 @@ import {
 } from '@/components/ui/Card';
 
 interface RecoveryCodesProps {
-  /**
-   * Callback when codes are generated successfully
-   */
   onCodesGenerated?: (codes: string[]) => void;
-  /**
-   * Callback to close/dismiss the component
-   */
   onClose?: () => void;
-  /**
-   * Whether to show the generate button or just display codes
-   * If codes are provided, they will be displayed directly
-   */
   initialCodes?: string[];
 }
 
-/**
- * Generate recovery codes
- * In production, this should be done server-side with proper entropy
- */
 function generateRecoveryCodes(count: number = 10): string[] {
   const codes: string[] = [];
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Avoiding similar chars (0/O, 1/I)
 
   for (let i = 0; i < count; i++) {
     let code = '';
-    // Generate 8 character codes in format XXXX-XXXX
     const randomBytes = new Uint32Array(8);
     crypto.getRandomValues(randomBytes);
     for (let j = 0; j < 8; j++) {
@@ -79,11 +55,9 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
   const [acknowledged, setAcknowledged] = useState(false);
   const [regenerateConfirm, setRegenerateConfirm] = useState(false);
 
-  // Generate recovery codes
   const handleGenerateCodes = useCallback(async () => {
     setGenerating(true);
 
-    // Simulate async generation (in production, this would be an API call)
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const newCodes = generateRecoveryCodes(10);
@@ -93,7 +67,6 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
     setGenerating(false);
   }, [onCodesGenerated]);
 
-  // Copy all codes to clipboard
   const handleCopy = useCallback(() => {
     const codesText = codes.join('\n');
     navigator.clipboard.writeText(codesText);
@@ -101,7 +74,6 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
     setTimeout(() => setCopied(false), 2000);
   }, [codes]);
 
-  // Download codes as text file
   const handleDownload = useCallback(() => {
     const codesText = [
       'OrangeCat Recovery Codes',
@@ -128,12 +100,10 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
     URL.revokeObjectURL(url);
   }, [codes]);
 
-  // Regenerate codes (requires confirmation)
   const handleRegenerate = useCallback(() => {
     setRegenerateConfirm(true);
   }, []);
 
-  // Format codes for display
   const formattedCodes = useMemo(() => {
     return codes.map((code, index) => ({
       number: index + 1,
@@ -141,7 +111,6 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
     }));
   }, [codes]);
 
-  // No codes yet - show generate button
   if (codes.length === 0) {
     return (
       <Card className="w-full max-w-md mx-auto">
@@ -195,7 +164,6 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
     );
   }
 
-  // Display generated codes
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
@@ -208,7 +176,6 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
         <CardDescription>Save these codes in a secure location</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Warning banner */}
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
           <div className="flex items-start gap-3">
             <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
@@ -221,7 +188,6 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           </div>
         </div>
 
-        {/* Recovery codes grid */}
         <div className="grid grid-cols-2 gap-2 p-4 bg-gray-50 border border-gray-200 rounded-lg">
           {formattedCodes.map(({ number, code }) => (
             <div
@@ -234,7 +200,6 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           ))}
         </div>
 
-        {/* Action buttons */}
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleCopy} className="flex-1">
             {copied ? (
@@ -255,7 +220,6 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           </Button>
         </div>
 
-        {/* Regenerate option */}
         <div className="pt-4 border-t border-gray-200">
           <button
             onClick={handleRegenerate}
@@ -272,7 +236,6 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           <p className="text-xs text-gray-400 mt-1">This will invalidate your current codes</p>
         </div>
 
-        {/* Acknowledgment checkbox */}
         <label className="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
