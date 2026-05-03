@@ -1,7 +1,5 @@
 'use client';
 
-/** Task Detail Page - view details, completion history, and take actions */
-
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
@@ -39,7 +37,6 @@ export default function TaskDetailPage() {
   const params = useParams();
   const taskId = params?.id as string;
 
-  // State
   const [task, setTask] = useState<TaskWithRelations | null>(null);
   const [completions, setCompletions] = useState<CompletionWithUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +44,6 @@ export default function TaskDetailPage() {
 
   const [activeModal, setActiveModal] = useState<'complete' | 'request' | 'attention' | null>(null);
 
-  // Load task
   const loadTask = useCallback(async () => {
     if (!taskId) {
       return;
@@ -81,7 +77,6 @@ export default function TaskDetailPage() {
     }
   }, [hydrated, authLoading, user, loadTask]);
 
-  // Action handlers
   const {
     actionLoading,
     handleComplete,
@@ -129,7 +124,6 @@ export default function TaskDetailPage() {
         <Breadcrumb
           items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: task.title }]}
         />
-        {/* Header */}
         <div className="flex items-center justify-end">
           <div className="flex items-center gap-2">
             <Button href={`/dashboard/tasks/${taskId}/edit`} variant="outline" size="sm">
@@ -147,10 +141,8 @@ export default function TaskDetailPage() {
           </div>
         </div>
 
-        {/* Task Card */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="p-6">
-            {/* Title and status */}
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">{task.title}</h1>
@@ -177,7 +169,6 @@ export default function TaskDetailPage() {
               </div>
             </div>
 
-            {/* Description */}
             {task.description && (
               <div className="mb-6">
                 <h2 className="text-sm font-medium text-gray-500 mb-2 flex items-center gap-2">
@@ -188,7 +179,6 @@ export default function TaskDetailPage() {
               </div>
             )}
 
-            {/* Instructions */}
             {task.instructions && (
               <div className="mb-6 bg-blue-50 rounded-lg p-4">
                 <h2 className="text-sm font-medium text-blue-800 mb-2">Instructions</h2>
@@ -196,7 +186,6 @@ export default function TaskDetailPage() {
               </div>
             )}
 
-            {/* Meta info */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
               <div>
                 <span className="text-gray-500 flex items-center gap-1">
@@ -241,7 +230,6 @@ export default function TaskDetailPage() {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="border-t border-gray-200 p-4 bg-gray-50 flex flex-wrap gap-2">
             <Button onClick={() => setActiveModal('complete')} className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4" />
@@ -266,11 +254,9 @@ export default function TaskDetailPage() {
           </div>
         </div>
 
-        {/* Completion History */}
         <CompletionHistory completions={completions} />
       </div>
 
-      {/* Action Modals */}
       {activeModal === 'complete' && (
         <CompleteModal
           estimatedMinutes={task.estimated_minutes}

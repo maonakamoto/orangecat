@@ -98,10 +98,11 @@ export default async function PublicWishlistPage({ params }: PageProps) {
 
   const wishlist = wishlistData as Wishlist;
 
-  // Fetch items (RLS allows public read for public/unlisted active wishlists)
   const { data: itemsData } = await supabase
     .from(DATABASE_TABLES.WISHLIST_ITEMS)
-    .select('id, title, description, image_url, target_amount_btc, funded_amount_btc, is_fully_funded, external_url, priority')
+    .select(
+      'id, title, description, image_url, target_amount_btc, funded_amount_btc, is_fully_funded, external_url, priority'
+    )
     .eq('wishlist_id', id)
     .order('priority', { ascending: false })
     .order('created_at', { ascending: true });
@@ -128,14 +129,10 @@ export default async function PublicWishlistPage({ params }: PageProps) {
     <>
       <JsonLdScript data={jsonLd} />
       <div className="min-h-screen bg-gradient-to-br from-rose-50/50 via-white to-orange-50/30">
-        {/* Header */}
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
-              items={[
-                { label: 'Wishlists', href: '/wishlists' },
-                { label: wishlist.title },
-              ]}
+              items={[{ label: 'Wishlists', href: '/wishlists' }, { label: wishlist.title }]}
               className="mb-4"
             />
             <div className="flex items-start gap-4">
@@ -174,7 +171,6 @@ export default async function PublicWishlistPage({ params }: PageProps) {
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left: Description + Items */}
             <div className="lg:col-span-2 space-y-6">
               {wishlist.description && (
                 <Card>
@@ -187,7 +183,6 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                 </Card>
               )}
 
-              {/* Overall progress */}
               {items.length > 0 && totalTarget > 0 && (
                 <Card>
                   <CardHeader>
@@ -204,12 +199,9 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                 </Card>
               )}
 
-              {/* Wishlist Items */}
               {items.length > 0 ? (
                 <div className="space-y-4">
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    Items ({items.length})
-                  </h2>
+                  <h2 className="text-xl font-semibold text-gray-900">Items ({items.length})</h2>
                   {items.map(item => {
                     const itemProgress =
                       item.target_amount_btc > 0
@@ -277,7 +269,6 @@ export default async function PublicWishlistPage({ params }: PageProps) {
               )}
             </div>
 
-            {/* Right: Owner, Share, Contribute */}
             <div className="space-y-6">
               {owner && <PublicEntityOwnerCard owner={owner} label="Created by" />}
 
