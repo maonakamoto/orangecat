@@ -1,12 +1,13 @@
 'use client';
 
-import { Search, Grid3X3, List, Loader2 } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { simpleCategories } from '@/config/categories';
 import { SortOption } from '@/services/search';
+import { SortViewControl, type ViewMode } from './SortViewControl';
 
-// Status styles mapping for Tailwind (dynamic classes don't work)
+// Status styles mapping for Tailwind (dynamic classes don't work with string interpolation)
 const STATUS_STYLES = {
   active: {
     selected: 'bg-green-100 border-green-300 text-green-700',
@@ -27,29 +28,22 @@ const STATUS_STYLES = {
 } as const;
 
 type StatusKey = keyof typeof STATUS_STYLES;
-type ViewMode = 'grid' | 'list';
 
 interface DiscoverFiltersProps {
   variant: 'desktop' | 'mobile';
-  // Search
   searchTerm: string;
   onSearchChange: (value: string) => void;
   loading?: boolean;
-  // Sort
   sortBy: SortOption;
   onSortChange: (value: string) => void;
-  // View mode
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
-  // Statuses
   selectedStatuses: StatusKey[];
   onToggleStatus: (status: StatusKey) => void;
   showStatusFilter?: boolean;
-  // Categories
   selectedCategories: string[];
   onToggleCategory: (category: string) => void;
   showCategoryFilter?: boolean;
-  // Geography
   country: string;
   onCountryChange: (value: string) => void;
   city: string;
@@ -58,7 +52,6 @@ interface DiscoverFiltersProps {
   onPostalChange: (value: string) => void;
   radiusKm: number;
   onRadiusChange: (value: number) => void;
-  // Actions
   onClearFilters: () => void;
 }
 
@@ -91,7 +84,6 @@ export default function DiscoverFilters({
 
   return (
     <>
-      {/* Search */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
         <div className="relative">
@@ -113,85 +105,14 @@ export default function DiscoverFilters({
         </div>
       </div>
 
-      {/* Sort & View - layout differs between mobile and desktop */}
-      {isMobile ? (
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Sort</label>
-            <select
-              value={sortBy}
-              onChange={e => onSortChange(e.target.value)}
-              className="w-full px-3 py-2 bg-white/80 border border-gray-200/80 rounded-xl text-sm"
-            >
-              <option value="recent">Newest</option>
-              <option value="relevance">Relevance</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">View</label>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200/80 p-1 flex gap-1">
-              <Button
-                variant={viewMode === 'grid' ? 'primary' : 'ghost'}
-                size="sm"
-                onClick={() => onViewModeChange('grid')}
-                className="flex-1 h-8"
-              >
-                <Grid3X3 className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'primary' : 'ghost'}
-                size="sm"
-                onClick={() => onViewModeChange('list')}
-                className="flex-1 h-8"
-              >
-                <List className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          {/* Sort */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Sort by</label>
-            <select
-              value={sortBy}
-              onChange={e => onSortChange(e.target.value)}
-              className="w-full px-3 py-2 bg-white/80 border border-gray-200/80 rounded-xl text-sm"
-            >
-              <option value="recent">Newest</option>
-              <option value="relevance">Relevance</option>
-            </select>
-          </div>
+      <SortViewControl
+        isMobile={isMobile}
+        sortBy={sortBy}
+        onSortChange={onSortChange}
+        viewMode={viewMode}
+        onViewModeChange={onViewModeChange}
+      />
 
-          {/* View Mode */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">View</label>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200/80 p-1 flex gap-1">
-              <Button
-                variant={viewMode === 'grid' ? 'primary' : 'ghost'}
-                size="sm"
-                onClick={() => onViewModeChange('grid')}
-                className="flex-1 h-8"
-              >
-                <Grid3X3 className="w-4 h-4 mr-1" />
-                Grid
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'primary' : 'ghost'}
-                size="sm"
-                onClick={() => onViewModeChange('list')}
-                className="flex-1 h-8"
-              >
-                <List className="w-4 h-4 mr-1" />
-                List
-              </Button>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Project Status */}
       {showStatusFilter && (
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">Project Status</label>
@@ -216,7 +137,6 @@ export default function DiscoverFilters({
         </div>
       )}
 
-      {/* Categories */}
       {showCategoryFilter && (
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">Categories</label>
@@ -238,7 +158,6 @@ export default function DiscoverFilters({
         </div>
       )}
 
-      {/* Geography */}
       <div className="space-y-3 mb-6">
         <label className="block text-sm font-medium text-gray-700">Location</label>
         <input
@@ -272,7 +191,6 @@ export default function DiscoverFilters({
         </select>
       </div>
 
-      {/* Active filters summary - desktop only */}
       {!isMobile &&
         (searchTerm ||
           selectedCategories.length > 0 ||
@@ -320,6 +238,5 @@ export default function DiscoverFilters({
   );
 }
 
-// Export status types for use in parent components
 export type { StatusKey };
 export { STATUS_STYLES };
