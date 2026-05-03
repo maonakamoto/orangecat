@@ -12,7 +12,7 @@ import { getHeaderClasses } from '@/lib/ui/header-utils';
 import { HEADER_DIMENSIONS, HEADER_SPACING } from '@/constants/header';
 import Logo from './Logo';
 import AuthButtons from './AuthButtons';
-import { HeaderCreateButton } from '@/components/dashboard/SmartCreateButton';
+import { HeaderCreateButton } from '@/components/dashboard/HeaderCreateButton';
 import EnhancedSearchBar from '@/components/search/EnhancedSearchBar';
 import MobileSearchModal from '@/components/search/MobileSearchModal';
 import NotificationCenter from '@/components/notifications/NotificationCenter';
