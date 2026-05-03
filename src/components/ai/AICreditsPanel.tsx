@@ -1,12 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { Coins, Plus, ArrowUpRight, ArrowDownLeft, RefreshCw, Zap } from 'lucide-react';
-import { logger } from '@/utils/logger';
+import { Plus, RefreshCw, Zap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -14,137 +11,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
-import { API_ROUTES } from '@/config/api-routes';
 import { QUICK_AMOUNT_PRESETS_SATS } from '@/config/ai-credits';
-
-interface CreditBalance {
-  balance_btc: number;
-  total_deposited_btc: number;
-  total_spent_btc: number;
-}
-
-interface Transaction {
-  id: string;
-  transaction_type: 'deposit' | 'charge' | 'refund' | 'bonus';
-  amount_btc: number;
-  balance_before: number;
-  balance_after: number;
-  description: string;
-  created_at: string;
-  assistant?: {
-    id: string;
-    name: string;
-    avatar_url: string | null;
-  } | null;
-}
-
-interface AICreditsData {
-  balance: CreditBalance;
-  transactions: Transaction[];
-  pagination: {
-    total: number;
-    limit: number;
-    offset: number;
-    hasMore: boolean;
-  };
-}
+import { useAICreditsPanel, getTransactionIcon, getTransactionColor } from './useAICreditsPanel';
 
 export function AICreditsPanel() {
-  const { formatAmount } = useDisplayCurrency();
-  const [data, setData] = useState<AICreditsData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [depositing, setDepositing] = useState(false);
-  const [showDepositDialog, setShowDepositDialog] = useState(false);
-  const [depositAmount, setDepositAmount] = useState('1000');
-
-  const fetchCredits = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(API_ROUTES.AI_CREDITS.BASE);
-      if (!response.ok) {
-        throw new Error('Failed to fetch credits');
-      }
-      const result = await response.json();
-      if (result.success && result.data) {
-        setData(result.data);
-      }
-    } catch (error) {
-      logger.error('Failed to fetch AI credits', error, 'AI');
-      toast.error('Failed to load credits');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchCredits();
-  }, [fetchCredits]);
-
-  const handleDeposit = async () => {
-    const amount = parseInt(depositAmount, 10);
-    if (isNaN(amount) || amount < 100) {
-      toast.error(`Minimum deposit is ${formatAmount(100)}`);
-      return;
-    }
-
-    setDepositing(true);
-    try {
-      // For MVP, use the manual add endpoint
-      const response = await fetch(API_ROUTES.AI_CREDITS.ADD, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount_btc: amount,
-          description: 'Manual deposit',
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to add credits');
-      }
-
-      await response.json();
-      toast.success(`Added ${formatAmount(amount)} to your balance`);
-      setShowDepositDialog(false);
-      setDepositAmount('1000');
-
-      // Refresh balance
-      fetchCredits();
-    } catch (error) {
-      logger.error('Deposit failed', error, 'AI');
-      toast.error(error instanceof Error ? error.message : 'Deposit failed');
-    } finally {
-      setDepositing(false);
-    }
-  };
-
-  const getTransactionIcon = (type: string) => {
-    switch (type) {
-      case 'deposit':
-      case 'bonus':
-      case 'refund':
-        return <ArrowDownLeft className="h-4 w-4 text-green-500" />;
-      case 'charge':
-        return <ArrowUpRight className="h-4 w-4 text-orange-500" />;
-      default:
-        return <Coins className="h-4 w-4 text-gray-500" />;
-    }
-  };
-
-  const getTransactionColor = (type: string) => {
-    switch (type) {
-      case 'deposit':
-      case 'bonus':
-      case 'refund':
-        return 'text-green-600';
-      case 'charge':
-        return 'text-orange-600';
-      default:
-        return 'text-gray-600';
-    }
-  };
+  const {
+    formatAmount,
+    data,
+    loading,
+    depositing,
+    showDepositDialog,
+    setShowDepositDialog,
+    depositAmount,
+    setDepositAmount,
+    fetchCredits,
+    handleDeposit,
+  } = useAICreditsPanel();
 
   if (loading && !data) {
     return (
@@ -180,7 +62,6 @@ export function AICreditsPanel() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Balance Display */}
           <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg p-4 border border-yellow-200">
             <div className="text-sm text-yellow-800 mb-1">Available Balance</div>
             <div className="text-3xl font-bold text-yellow-900">
@@ -192,13 +73,11 @@ export function AICreditsPanel() {
             </div>
           </div>
 
-          {/* Add Credits Button */}
           <Button className="w-full" onClick={() => setShowDepositDialog(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Add Credits
           </Button>
 
-          {/* Recent Transactions */}
           {data?.transactions && data.transactions.length > 0 && (
             <div className="space-y-2">
               <h4 className="text-sm font-medium text-gray-700">Recent Activity</h4>
@@ -229,7 +108,6 @@ export function AICreditsPanel() {
             </div>
           )}
 
-          {/* Empty state */}
           {(!data?.transactions || data.transactions.length === 0) && (
             <div className="text-center py-4 text-gray-500 text-base">
               No transactions yet. Add credits to start chatting with AI assistants.
@@ -238,7 +116,6 @@ export function AICreditsPanel() {
         </CardContent>
       </Card>
 
-      {/* Deposit Dialog */}
       <Dialog open={showDepositDialog} onOpenChange={setShowDepositDialog}>
         <DialogContent>
           <DialogHeader>
@@ -252,7 +129,6 @@ export function AICreditsPanel() {
           </DialogHeader>
 
           <div className="space-y-4 py-4">
-            {/* Quick amounts */}
             <div className="grid grid-cols-4 gap-2">
               {QUICK_AMOUNT_PRESETS_SATS.map(amount => (
                 <Button
@@ -266,7 +142,6 @@ export function AICreditsPanel() {
               ))}
             </div>
 
-            {/* Custom amount */}
             <div>
               <label className="text-sm font-medium text-gray-700">Custom Amount</label>
               <Input
@@ -282,7 +157,6 @@ export function AICreditsPanel() {
               </p>
             </div>
 
-            {/* Info box */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <p className="text-base text-blue-800">
                 <strong>Development Mode:</strong> Credits are added instantly for testing. In
@@ -290,7 +164,6 @@ export function AICreditsPanel() {
               </p>
             </div>
 
-            {/* Action buttons */}
             <div className="flex gap-2">
               <Button
                 variant="outline"
