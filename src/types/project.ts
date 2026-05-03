@@ -36,20 +36,3 @@ export function mapProjectRow(row: any): Project {
     goal_currency: row.currency,
   };
 }
-
-export interface ProjectMedia {
-  id: string;
-  project_id: string;
-  storage_path: string;
-  position: number;
-  alt_text?: string | null;
-  created_at: string;
-}
-
-import { STORAGE_BUCKETS } from '@/config/database-tables';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getMediaUrl(supabase: any, storagePath: string): string {
-  const { data } = supabase.storage.from(STORAGE_BUCKETS.PROJECT_MEDIA).getPublicUrl(storagePath);
-  return data.publicUrl;
-}
