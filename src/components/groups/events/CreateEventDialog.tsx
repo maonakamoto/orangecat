@@ -1,19 +1,5 @@
-/**
- * Create Event Dialog Component
- *
- * Dialog for creating new events in a group.
- *
- * Created: 2025-12-31
- * Last Modified: 2025-12-31
- * Last Modified Summary: Initial implementation
- */
-
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { groupEventSchema, type GroupEventFormData } from '@/lib/validation/groups';
 import {
   Dialog,
   DialogContent,
@@ -42,9 +28,7 @@ import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
 import { Switch } from '@/components/ui/switch';
 import { Loader2, Calendar } from 'lucide-react';
-import { toast } from 'sonner';
-import { logger } from '@/utils/logger';
-
+import { useCreateEventForm } from './useCreateEventForm';
 
 interface CreateEventDialogProps {
   open: boolean;
@@ -61,72 +45,11 @@ export function CreateEventDialog({
   groupSlug,
   onSuccess,
 }: CreateEventDialogProps) {
-  const [submitting, setSubmitting] = useState(false);
-
-  const form = useForm<GroupEventFormData>({
-    resolver: zodResolver(groupEventSchema),
-    defaultValues: {
-      title: '',
-      description: '',
-      event_type: 'general',
-      location_type: 'online',
-      location_details: '',
-      starts_at: '',
-      ends_at: '',
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-      max_attendees: undefined,
-      is_public: true,
-      requires_rsvp: false,
-    },
-  });
-
-  const onSubmit = async (data: GroupEventFormData) => {
-    try {
-      setSubmitting(true);
-
-      // Format datetime for API
-      const startsAt = new Date(data.starts_at).toISOString();
-      const endsAt = data.ends_at ? new Date(data.ends_at).toISOString() : undefined;
-
-      const response = await fetch(`/api/groups/${groupSlug}/events`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...data,
-          starts_at: startsAt,
-          ends_at: endsAt,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Failed to create event');
-      }
-
-      toast.success('Event created successfully');
-      form.reset();
-      onSuccess?.();
-      onClose();
-    } catch (error) {
-      logger.error('Failed to create event:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to create event');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  // Get current datetime in local timezone for input
-  const getLocalDateTime = (minutesFromNow = 0) => {
-    const date = new Date();
-    date.setMinutes(date.getMinutes() + minutesFromNow);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const mins = String(date.getMinutes()).padStart(2, '0');
-    return `${year}-${month}-${day}T${hours}:${mins}`;
-  };
+  const { form, submitting, onSubmit, getLocalDateTime } = useCreateEventForm(
+    groupSlug,
+    onSuccess,
+    onClose
+  );
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -234,10 +157,7 @@ export function CreateEventDialog({
                   <FormItem>
                     <FormLabel>Location Details</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="e.g., 123 Main St, City, State"
-                        {...field}
-                      />
+                      <Input placeholder="e.g., 123 Main St, City, State" {...field} />
                     </FormControl>
                     <FormDescription>Physical location or meeting link</FormDescription>
                     <FormMessage />
@@ -254,11 +174,7 @@ export function CreateEventDialog({
                   <FormItem>
                     <FormLabel>Start Date & Time *</FormLabel>
                     <FormControl>
-                      <Input
-                        type="datetime-local"
-                        {...field}
-                        defaultValue={getLocalDateTime(60)}
-                      />
+                      <Input type="datetime-local" {...field} defaultValue={getLocalDateTime(60)} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -292,7 +208,7 @@ export function CreateEventDialog({
                       type="number"
                       placeholder="Leave empty for unlimited"
                       {...field}
-                      onChange={(e) => {
+                      onChange={e => {
                         const value = e.target.value;
                         field.onChange(value === '' ? undefined : parseInt(value, 10));
                       }}
@@ -313,9 +229,7 @@ export function CreateEventDialog({
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">Require RSVP</FormLabel>
-                      <FormDescription>
-                        Members must RSVP to attend this event
-                      </FormDescription>
+                      <FormDescription>Members must RSVP to attend this event</FormDescription>
                     </div>
                     <FormControl>
                       <Switch checked={field.value} onCheckedChange={field.onChange} />
@@ -331,9 +245,7 @@ export function CreateEventDialog({
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">Public Event</FormLabel>
-                      <FormDescription>
-                        Event is visible to non-members
-                      </FormDescription>
+                      <FormDescription>Event is visible to non-members</FormDescription>
                     </div>
                     <FormControl>
                       <Switch checked={field.value} onCheckedChange={field.onChange} />
