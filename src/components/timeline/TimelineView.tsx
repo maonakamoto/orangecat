@@ -1,62 +1,25 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { timelineService } from '@/services/timeline';
-import { TimelineFeedResponse, TimelineDisplayEvent } from '@/types/timeline';
+import React, { useEffect } from 'react';
 import TimelineComponent from './TimelineComponent';
 import TimelineComposer from './TimelineComposer';
 import Button from '@/components/ui/Button';
-import { logger } from '@/utils/logger';
-import { filterOptimisticEvents } from '@/utils/timeline';
-
-/**
- * TimelineView Component - Reusable Timeline Display
- *
- * DRY, modular component that fetches and displays timelines.
- * Used across all timeline contexts: journey, community, profiles, projects.
- *
- * Data Fetching Strategy:
- * - 'journey': Shows user's own posts (actor_id = userId) - posts the user created
- * - 'community': Shows all public posts
- * - 'profile': Shows posts on a specific profile (subject_id = profileId) - posts on that profile's timeline
- * - 'project': Shows posts on a specific project (subject_id = projectId) - posts on that project's timeline
- *
- * IMPORTANT: 'journey' and 'profile' show DIFFERENT data:
- * - Journey (My Timeline): Shows posts WHERE user is the actor (posts user created)
- * - Profile Timeline: Shows posts WHERE profile is the subject (posts on that profile's timeline)
- *
- * This means a post can appear on a profile timeline but not in "My Timeline" if:
- * - Someone else posted on that profile's timeline, OR
- * - The user posted on someone else's profile timeline
- */
+import { useTimelineView } from './useTimelineView';
 
 export interface TimelineViewProps {
-  // Feed configuration
   feedType: 'journey' | 'community' | 'profile' | 'project';
-  ownerId?: string; // Profile ID or Project ID (required for profile/project feeds)
-  ownerType?: 'profile' | 'project'; // Type of owner
-
-  // Display options
+  ownerId?: string;
+  ownerType?: 'profile' | 'project';
   showComposer?: boolean;
   compact?: boolean;
   showFilters?: boolean;
-
-  // Empty state customization
   emptyStateTitle?: string;
   emptyStateDescription?: string;
-
-  // Callbacks
   onPostCreated?: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onOptimisticEvent?: (event: any) => void; // Add optimistic event to UI immediately
+  onOptimisticEvent?: (event: any) => void;
 }
 
-/**
- * TimelineView - Universal Timeline Component
- *
- * Handles data fetching, loading states, and rendering for all timeline types.
- */
 export default function TimelineView({
   feedType,
   ownerId,
@@ -69,161 +32,20 @@ export default function TimelineView({
   onPostCreated,
   onOptimisticEvent,
 }: TimelineViewProps) {
-  const { user, isLoading: authLoading, hydrated } = useAuth();
-  const [feed, setFeed] = useState<TimelineFeedResponse | null>(null);
-  const [optimisticEvents, setOptimisticEvents] = useState<TimelineDisplayEvent[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    user,
+    authLoading,
+    hydrated,
+    feed,
+    loading,
+    error,
+    mergedFeed,
+    loadFeed,
+    handleEventUpdate,
+    handleLoadMore,
+    handlePostCreated,
+  } = useTimelineView({ feedType, ownerId, onPostCreated, onOptimisticEvent });
 
-  // Handle optimistic event updates
-  const _handleOptimisticEvent = useCallback(
-    (event: TimelineDisplayEvent) => {
-      // Add optimistic event to the beginning of the list
-      setOptimisticEvents(prev => [event, ...prev]);
-      onOptimisticEvent?.(event);
-    },
-    [onOptimisticEvent]
-  );
-
-  // Remove optimistic event when real event arrives
-  const _removeOptimisticEvent = useCallback((optimisticId: string) => {
-    setOptimisticEvents(prev => prev.filter(event => event.id !== optimisticId));
-  }, []);
-
-  // Merge optimistic events with real feed using shared utility (DRY)
-  const mergedEvents = React.useMemo(() => {
-    if (!feed?.events) {
-      return optimisticEvents;
-    }
-
-    // Use centralized utility to filter optimistic events
-    const filteredOptimistic = filterOptimisticEvents(optimisticEvents, feed.events);
-
-    return [...filteredOptimistic, ...feed.events];
-  }, [feed?.events, optimisticEvents]);
-
-  // Create merged feed for rendering (must be declared before any early returns)
-  const mergedFeed = React.useMemo(() => {
-    if (!feed) {
-      return null;
-    }
-    return {
-      ...feed,
-      events: mergedEvents,
-      metadata: {
-        ...feed.metadata,
-        totalEvents: mergedEvents.length,
-      },
-    } as TimelineFeedResponse;
-  }, [feed, mergedEvents]);
-
-  // Validate required props
-  useEffect(() => {
-    if ((feedType === 'profile' || feedType === 'project') && !ownerId) {
-      logger.error(
-        `TimelineView: ownerId is required for ${feedType} feed type`,
-        null,
-        'TimelineView'
-      );
-      setError(`Invalid configuration: missing ${feedType} ID`);
-    }
-  }, [feedType, ownerId]);
-
-  // Load timeline feed
-  const loadFeed = useCallback(
-    async (page: number = 1) => {
-      // Don't load if we don't have required data yet
-      if (!hydrated) {
-        return;
-      }
-      if ((feedType === 'profile' || feedType === 'project') && !ownerId) {
-        return;
-      }
-      if ((feedType === 'journey' || feedType === 'community') && !user?.id) {
-        return;
-      }
-
-      try {
-        setLoading(true);
-        setError(null);
-
-        let feedData: TimelineFeedResponse;
-
-        switch (feedType) {
-          case 'journey':
-            // User's own posts (actor_id = userId)
-            feedData = await timelineService.getEnrichedUserFeed(user!.id, {}, { page, limit: 20 });
-            break;
-
-          case 'community':
-            // All public posts
-            feedData = await timelineService.getCommunityFeed({}, { page, limit: 20 });
-            break;
-
-          case 'profile':
-            // Posts on a specific profile's timeline (subject_id = profileId)
-            feedData = await timelineService.getProfileFeed(ownerId!, {}, { page, limit: 20 });
-            break;
-
-          case 'project':
-            // Posts on a specific project's timeline (subject_id = projectId)
-            feedData = await timelineService.getProjectFeed(ownerId!, {}, { page, limit: 20 });
-            break;
-
-          default:
-            throw new Error(`Unknown feed type: ${feedType}`);
-        }
-
-        setFeed(feedData);
-      } catch (err) {
-        logger.error(`Failed to load ${feedType} timeline`, err, 'TimelineView');
-        setError(`Failed to load timeline`);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [feedType, ownerId, user, hydrated]
-  );
-
-  // Load feed on mount and when dependencies change
-  useEffect(() => {
-    loadFeed();
-  }, [loadFeed]);
-
-  // Handle event updates (likes, comments, etc.)
-  const handleEventUpdate = useCallback(
-    (eventId: string, updates: Partial<TimelineDisplayEvent>) => {
-      setFeed(prev => {
-        if (!prev) {
-          return prev;
-        }
-
-        return {
-          ...prev,
-          events: prev.events
-            .map(event => (event.id === eventId ? { ...event, ...updates } : event))
-            .filter(event => !event.isDeleted), // Remove deleted events
-        };
-      });
-    },
-    []
-  );
-
-  // Handle load more
-  const handleLoadMore = useCallback(() => {
-    if (!feed?.pagination.hasNext) {
-      return;
-    }
-    loadFeed(feed.pagination.page + 1);
-  }, [feed, loadFeed]);
-
-  // Handle post creation refresh
-  const handlePostCreated = useCallback(() => {
-    loadFeed(1); // Reload first page
-    onPostCreated?.();
-  }, [loadFeed, onPostCreated]);
-
-  // Auth check for journey/community
   if (hydrated && !authLoading && !user && (feedType === 'journey' || feedType === 'community')) {
     return (
       <div className="text-center py-16">
@@ -234,11 +56,9 @@ export default function TimelineView({
     );
   }
 
-  // Loading state
   if (!hydrated || authLoading || loading) {
     return (
       <div className="space-y-4">
-        {/* Loading skeleton */}
         {[...Array(3)].map((_, i) => (
           <div key={i} className="bg-white border border-gray-200 rounded-lg p-4 animate-pulse">
             <div className="flex items-start space-x-3">
@@ -255,7 +75,6 @@ export default function TimelineView({
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="text-center py-16">
@@ -267,7 +86,6 @@ export default function TimelineView({
     );
   }
 
-  // Empty state
   if (feed && feed.events.length === 0) {
     const defaultTitle =
       feedType === 'journey'
@@ -295,12 +113,9 @@ export default function TimelineView({
     );
   }
 
-  // Render timeline
   return (
     <div className="space-y-4">
-      {/* Focus handling: if ?focus=<eventId> present, scroll that post into view */}
       {mergedFeed && <FocusScroller />}
-      {/* Timeline Composer - Show at top if enabled */}
       {showComposer &&
         (user ? (
           <TimelineComposer
@@ -343,7 +158,6 @@ export default function TimelineView({
           </div>
         ))}
 
-      {/* Timeline Feed */}
       {mergedFeed && (
         <TimelineComponent
           feed={mergedFeed}
@@ -357,7 +171,6 @@ export default function TimelineView({
   );
 }
 
-// Helper component to handle focus scrolling post-render
 function FocusScroller() {
   useEffect(() => {
     try {
