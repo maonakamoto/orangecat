@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { logger } from '@/utils/logger';
-import { API_ROUTES } from '@/config/api-routes';
 import { toast } from 'sonner';
 import { useMessages } from '@/features/messaging/hooks/useMessages';
 import { useMessageSubscription } from '@/hooks/useMessageSubscription';
@@ -10,6 +9,7 @@ import { TIMING } from '@/features/messaging/lib/constants';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import supabase from '@/lib/supabase/browser';
 import type { Message } from '@/features/messaging/types';
+import { editMessageAction, deleteMessageAction } from './messageViewActions';
 
 export function useMessageView(conversationId: string, currentUserId: string | undefined) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -144,29 +144,7 @@ export function useMessageView(conversationId: string, currentUserId: string | u
   const handleEditSave = useCallback(
     async (messageId: string, newContent: string) => {
       setEditingMessageId(null);
-      try {
-        const res = await fetch(`/api/messages/edit/${encodeURIComponent(messageId)}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'same-origin',
-          body: JSON.stringify({ content: newContent }),
-        });
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}) as Record<string, unknown>);
-          toast.error(data.error || 'Failed to edit message');
-        } else {
-          const { data: full } = await supabase
-            .from(DATABASE_TABLES.MESSAGE_DETAILS)
-            .select('*')
-            .eq('id', messageId)
-            .single();
-          if (full) {
-            handleNewMessage(full as Message);
-          }
-        }
-      } catch {
-        toast.error('Network error while editing');
-      }
+      await editMessageAction(messageId, newContent, handleNewMessage);
     },
     [handleNewMessage]
   );
@@ -174,28 +152,7 @@ export function useMessageView(conversationId: string, currentUserId: string | u
   const handleEditCancel = useCallback(() => setEditingMessageId(null), []);
 
   const handleDelete = useCallback(async () => {
-    const msg = menuState.message;
-    if (!msg) {
-      return;
-    }
-    try {
-      const res = await fetch(API_ROUTES.MESSAGES.BULK_DELETE, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
-        body: JSON.stringify({ conversationId, ids: [msg.id] }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}) as Record<string, unknown>);
-        toast.error(data.error || 'Failed to delete message');
-      } else {
-        removeMessage(msg.id);
-      }
-    } catch {
-      toast.error('Network error while deleting');
-    } finally {
-      closeMenu();
-    }
+    await deleteMessageAction(menuState.message, conversationId, removeMessage, closeMenu);
   }, [menuState.message, conversationId, removeMessage, closeMenu]);
 
   return {
