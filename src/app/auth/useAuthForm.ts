@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth, useRedirectIfAuthenticated } from '@/hooks/useAuth';
-import { resetPassword, getMFAAssuranceLevel, signInAnonymously } from '@/services/supabase/auth';
-import { registrationEvents, trackEvent } from '@/lib/analytics';
+import { signInAnonymously } from '@/services/supabase/auth';
 import { getReadableError } from '@/utils/getReadableError';
 import supabase from '@/lib/supabase/browser';
-import { API_ROUTES } from '@/config/api-routes';
+import { useAuthSubmission } from './useAuthSubmission';
 
 export type OAuthProvider = 'google' | 'github' | 'apple' | 'x' | 'facebook';
 
@@ -45,10 +44,6 @@ export function useAuthForm() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [localLoading, setLocalLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
   const [rememberMe, setRememberMe] = useState(true);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [showMFAVerify, setShowMFAVerify] = useState(false);
@@ -59,203 +54,49 @@ export function useAuthForm() {
 
   const handleCaptchaSuccess = useCallback((token: string) => {
     setCaptchaToken(token);
-    setError(null);
   }, []);
 
   const handleCaptchaError = useCallback((err: string) => {
     setCaptchaToken(null);
-    setError(err);
   }, []);
 
   const handleCaptchaExpire = useCallback(() => {
     setCaptchaToken(null);
   }, []);
 
+  const {
+    localLoading,
+    error,
+    success,
+    retryCount,
+    handleSubmit,
+    handleForgotPassword,
+    handleRetry,
+    handleClearError,
+  } = useAuthSubmission({
+    formData,
+    mode,
+    captchaEnabled,
+    captchaToken,
+    setCaptchaToken,
+    setMode,
+    setShowMFAVerify,
+    rememberMe,
+    signIn,
+    signUp,
+  });
+
   const loading = localLoading || authLoading;
   const _isCurrentlyLoading = loading || redirectLoading;
 
   useEffect(() => {
-    if (localLoading) {
-      const timeout = Math.min(15000 + retryCount * 5000, 45000); // 15s, 20s, 25s, max 45s
-      const timer = setTimeout(() => {
-        setLocalLoading(false);
-        setError(
-          'Authentication request timed out. This usually means environment variables are not configured properly.'
-        );
-      }, timeout);
-
-      return () => clearTimeout(timer);
-    }
-    return () => {}; // Return empty cleanup function when not loading
-  }, [localLoading, retryCount]);
-
-  useEffect(() => {
     if (session?.user && hydrated) {
       const redirectUrl = searchParams?.get('from') || '/dashboard';
-      router.replace(redirectUrl); // Use replace to avoid back button issues
+      router.replace(redirectUrl);
     }
   }, [session, hydrated, router, searchParams]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLocalLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    try {
-      if (!formData.email || !formData.password) {
-        throw new Error('Please fill in all required fields');
-      }
-
-      if (mode === 'register' && formData.password !== formData.confirmPassword) {
-        throw new Error('Passwords do not match');
-      }
-
-      if (mode === 'register') {
-        const { validatePasswordStrength } = await import('@/lib/validation/password');
-        const passwordValidation = validatePasswordStrength(formData.password);
-        if (!passwordValidation.valid) {
-          throw new Error(passwordValidation.errors[0] || 'Password does not meet requirements');
-        }
-
-        if (captchaEnabled && !captchaToken) {
-          throw new Error('Please complete the CAPTCHA verification');
-        }
-
-        if (captchaEnabled && captchaToken) {
-          const captchaResponse = await fetch(API_ROUTES.AUTH.VERIFY_CAPTCHA, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: captchaToken }),
-          });
-          const captchaResult = await captchaResponse.json();
-          if (!captchaResult.success) {
-            setCaptchaToken(null); // Reset CAPTCHA on failure
-            throw new Error(captchaResult.error || 'CAPTCHA verification failed');
-          }
-        }
-      }
-
-      const result =
-        mode === 'login'
-          ? await signIn(formData.email, formData.password, rememberMe)
-          : await signUp(formData.email, formData.password);
-
-      if (result.error) {
-        let errorMessage = getReadableError(result.error);
-        if (errorMessage.includes('Invalid login credentials')) {
-          errorMessage = 'Invalid email or password. Please check your credentials and try again.';
-        } else if (errorMessage.includes('Email not confirmed')) {
-          errorMessage =
-            'Please check your email and click the confirmation link before signing in.';
-        } else if (errorMessage.includes('Too many requests')) {
-          errorMessage = 'Too many login attempts. Please wait a few minutes before trying again.';
-        } else if (errorMessage.includes('timeout') || errorMessage.includes('network')) {
-          errorMessage = 'Connection timeout. Please check your internet connection and try again.';
-        }
-
-        throw new Error(errorMessage);
-      }
-
-      if (mode === 'register' && result.data && !result.data.session) {
-        registrationEvents.success({ email: formData.email });
-        registrationEvents.emailSent({ email: formData.email });
-        setSuccess(
-          'Registration successful! Please check your email to verify your account before signing in.'
-        );
-        setFormData({ email: '', password: '', confirmPassword: '' });
-        setCaptchaToken(null); // Reset CAPTCHA on successful registration
-        setMode('login');
-      } else if (result.data && result.data.user) {
-        // Check if MFA is required
-        if (mode === 'login') {
-          const mfaResult = await getMFAAssuranceLevel();
-          if (
-            mfaResult.data &&
-            mfaResult.data.currentLevel === 'aal1' &&
-            mfaResult.data.nextLevel === 'aal2'
-          ) {
-            setShowMFAVerify(true);
-            setLocalLoading(false);
-            return; // Don't redirect yet, show MFA verification
-          }
-        }
-
-        trackEvent('login_success', { userId: result.data.user.id });
-        setSuccess('Login successful! Redirecting...');
-      }
-    } catch (error) {
-      const errorMessage = getReadableError(error, 'An unexpected error occurred');
-      setError(errorMessage);
-      setRetryCount(prev => prev + 1);
-    } finally {
-      setLocalLoading(false);
-    }
-  };
-
-  const handleForgotPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLocalLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    try {
-      if (!formData.email) {
-        throw new Error('Please enter your email address');
-      }
-
-      const result = await resetPassword({ email: formData.email });
-
-      if (result.error) {
-        throw new Error(getReadableError(result.error, 'Failed to send reset email'));
-      }
-
-      setSuccess('Password reset email sent! Check your inbox and follow the instructions.');
-    } catch (error) {
-      const errorMessage = getReadableError(error, 'Failed to send password reset email');
-      setError(errorMessage);
-    } finally {
-      setLocalLoading(false);
-    }
-  };
-
-  const handleRetry = () => {
-    setRetryCount(prev => prev + 1);
-    setError(null);
-    setSuccess(null);
-    const syntheticEvent = {
-      preventDefault: () => {},
-      stopPropagation: () => {},
-      currentTarget: document.createElement('form'),
-      target: document.createElement('form'),
-      nativeEvent: new Event('submit'),
-      bubbles: true,
-      cancelable: true,
-      defaultPrevented: false,
-      eventPhase: 0,
-      isTrusted: false,
-      timeStamp: Date.now(),
-      type: 'submit',
-      isDefaultPrevented: () => false,
-      isPropagationStopped: () => false,
-      persist: () => {},
-    } as unknown as React.FormEvent<HTMLFormElement>;
-
-    if (mode === 'forgot') {
-      handleForgotPassword(syntheticEvent);
-    } else {
-      handleSubmit(syntheticEvent);
-    }
-  };
-
-  const handleClearError = () => {
-    setError(null);
-    setSuccess(null);
-    setRetryCount(0);
-  };
-
   const handleMFAVerificationComplete = () => {
-    setSuccess('Login successful! Redirecting...');
     setShowMFAVerify(false);
   };
 
@@ -265,8 +106,6 @@ export function useAuthForm() {
   };
 
   const handleOAuthSignIn = async (provider: OAuthProvider) => {
-    setLocalLoading(true);
-    setError(null);
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
@@ -276,14 +115,11 @@ export function useAuthForm() {
         throw error;
       }
     } catch (err) {
-      setError(getReadableError(err, `Failed to sign in with ${provider}`));
-      setLocalLoading(false);
+      getReadableError(err, `Failed to sign in with ${provider}`);
     }
   };
 
   const handleAnonymousSignIn = async () => {
-    setLocalLoading(true);
-    setError(null);
     try {
       const result = await signInAnonymously();
       if (result.error) {
@@ -292,8 +128,7 @@ export function useAuthForm() {
       const redirectUrl = searchParams?.get('from') || '/dashboard';
       router.replace(redirectUrl);
     } catch (err) {
-      setError(getReadableError(err, 'Anonymous sign-in failed'));
-      setLocalLoading(false);
+      getReadableError(err, 'Anonymous sign-in failed');
     }
   };
 
@@ -331,5 +166,6 @@ export function useAuthForm() {
     handleOAuthSignIn,
     handleAnonymousSignIn,
     _isCurrentlyLoading,
+    retryCount,
   };
 }
