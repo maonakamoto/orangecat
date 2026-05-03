@@ -1,10 +1,5 @@
 'use client';
-import { logger } from '@/utils/logger';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -33,37 +28,8 @@ import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Loader2, Target, DollarSign, Percent, Calendar } from 'lucide-react';
-import { formatCurrency } from '@/services/currency';
-import { PLATFORM_DEFAULT_CURRENCY, CURRENCY_CODES } from '@/config/currencies';
-import type { CurrencyCode } from '@/config/currencies';
-import loansService from '@/services/loans';
-import { Loan, CreateLoanOfferRequest } from '@/types/loans';
-import { toast } from 'sonner';
-
-const offerSchema = z
-  .object({
-    offer_type: z.enum(['refinance', 'payoff']),
-    offer_amount: z.number().min(0.01, 'Offer amount must be greater than 0'),
-    interest_rate: z.number().min(0).max(100).optional(),
-    term_months: z.number().min(1).max(360).optional(),
-    terms: z.string().optional(),
-    conditions: z.string().optional(),
-  })
-  .refine(
-    data => {
-      // If refinance offer, require interest rate and term
-      if (data.offer_type === 'refinance') {
-        return data.interest_rate !== undefined && data.term_months !== undefined;
-      }
-      return true;
-    },
-    {
-      message: 'Refinance offers require interest rate and term',
-      path: ['interest_rate'],
-    }
-  );
-
-type OfferFormData = z.infer<typeof offerSchema>;
+import { Loan } from '@/types/loans';
+import { useMakeOfferForm } from './useMakeOfferForm';
 
 interface MakeOfferDialogProps {
   loan: Loan;
@@ -78,65 +44,8 @@ export function MakeOfferDialog({
   onOpenChange,
   onOfferSubmitted,
 }: MakeOfferDialogProps) {
-  const [loading, setLoading] = useState(false);
-
-  const form = useForm<OfferFormData>({
-    resolver: zodResolver(offerSchema),
-    defaultValues: {
-      offer_type: 'refinance',
-      offer_amount: Math.min(loan.remaining_balance * 0.9, loan.remaining_balance), // Suggest 10% below remaining
-      interest_rate: loan.interest_rate ? Math.max(0, loan.interest_rate - 2) : 15, // Suggest 2% lower
-      term_months: 36, // Default 3 years
-    },
-  });
-
-  const watchOfferType = form.watch('offer_type');
-
-  const formatLoanCurrency = (amount: number, currency: string = PLATFORM_DEFAULT_CURRENCY) => {
-    // Validate currency and fallback to platform default
-    const validCurrency = (
-      CURRENCY_CODES.includes(currency as CurrencyCode) ? currency : PLATFORM_DEFAULT_CURRENCY
-    ) as CurrencyCode;
-    return formatCurrency(amount, validCurrency);
-  };
-
-  const onSubmit = async (data: OfferFormData) => {
-    try {
-      setLoading(true);
-
-      const offerData: CreateLoanOfferRequest = {
-        loan_id: loan.id,
-        offer_type: data.offer_type,
-        offer_amount: data.offer_amount,
-        interest_rate: data.interest_rate,
-        term_months: data.term_months,
-        terms: data.terms,
-        conditions: data.conditions,
-      };
-
-      const result = await loansService.createLoanOffer(offerData);
-
-      if (result.success) {
-        toast.success('Offer submitted successfully!');
-        onOfferSubmitted();
-        form.reset();
-      } else {
-        toast.error(result.error || 'Failed to submit offer');
-      }
-    } catch (error) {
-      logger.error('Failed to submit offer:', error);
-      toast.error('Failed to submit offer');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleOpenChange = (newOpen: boolean) => {
-    if (!newOpen) {
-      form.reset();
-    }
-    onOpenChange(newOpen);
-  };
+  const { form, loading, watchOfferType, formatLoanCurrency, onSubmit, handleOpenChange } =
+    useMakeOfferForm(loan, onOpenChange, onOfferSubmitted);
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -152,7 +61,6 @@ export function MakeOfferDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Loan Summary */}
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-base">{loan.title}</CardTitle>
@@ -178,7 +86,6 @@ export function MakeOfferDialog({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Offer Type */}
             <FormField
               control={form.control}
               name="offer_type"
@@ -207,7 +114,6 @@ export function MakeOfferDialog({
               )}
             />
 
-            {/* Offer Amount */}
             <FormField
               control={form.control}
               name="offer_amount"
@@ -236,61 +142,57 @@ export function MakeOfferDialog({
               )}
             />
 
-            {/* Refinance-specific fields */}
             {watchOfferType === 'refinance' && (
-              <>
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="interest_rate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center gap-1">
-                          <Percent className="h-4 w-4" />
-                          Interest Rate *
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            step="0.01"
-                            placeholder="12.50"
-                            {...field}
-                            onChange={e => field.onChange(parseFloat(e.target.value) || undefined)}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="interest_rate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        <Percent className="h-4 w-4" />
+                        Interest Rate *
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          placeholder="12.50"
+                          {...field}
+                          onChange={e => field.onChange(parseFloat(e.target.value) || undefined)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                  <FormField
-                    control={form.control}
-                    name="term_months"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          Term (Months) *
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min="1"
-                            max="360"
-                            placeholder="36"
-                            {...field}
-                            onChange={e => field.onChange(parseInt(e.target.value) || undefined)}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </>
+                <FormField
+                  control={form.control}
+                  name="term_months"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        Term (Months) *
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min="1"
+                          max="360"
+                          placeholder="36"
+                          {...field}
+                          onChange={e => field.onChange(parseInt(e.target.value) || undefined)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             )}
 
-            {/* Terms and Conditions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -331,7 +233,6 @@ export function MakeOfferDialog({
               />
             </div>
 
-            {/* Submit */}
             <div className="flex justify-end gap-3 pt-6 border-t">
               <Button
                 type="button"
