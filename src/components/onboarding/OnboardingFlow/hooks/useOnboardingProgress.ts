@@ -1,8 +1,3 @@
-/**
- * ONBOARDING PROGRESS HOOK
- * Manages localStorage persistence and state for onboarding flow
- */
-
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -18,9 +13,6 @@ import type {
   OnboardingActions,
 } from '../types';
 
-/**
- * Load onboarding progress from localStorage
- */
 function loadProgress(): OnboardingProgress | null {
   if (typeof window === 'undefined') {
     return null;
@@ -29,7 +21,6 @@ function loadProgress(): OnboardingProgress | null {
     const saved = localStorage.getItem(ONBOARDING_STORAGE_KEY);
     if (saved) {
       const progress = JSON.parse(saved) as OnboardingProgress;
-      // Check if progress is less than expiration time
       const lastUpdated = new Date(progress.lastUpdated);
       const hoursSinceUpdate = (Date.now() - lastUpdated.getTime()) / (1000 * 60 * 60);
       if (hoursSinceUpdate < PROGRESS_EXPIRATION_HOURS) {
@@ -42,9 +33,6 @@ function loadProgress(): OnboardingProgress | null {
   return null;
 }
 
-/**
- * Save onboarding progress to localStorage
- */
 function saveProgress(currentStep: number, completedSteps: Set<number>): void {
   if (typeof window === 'undefined') {
     return;
@@ -61,9 +49,6 @@ function saveProgress(currentStep: number, completedSteps: Set<number>): void {
   }
 }
 
-/**
- * Clear onboarding progress from localStorage
- */
 function clearProgress(): void {
   if (typeof window === 'undefined') {
     return;
@@ -85,7 +70,6 @@ export function useOnboardingProgress(
   const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
 
-  // Load saved progress on mount
   useEffect(() => {
     const savedProgress = loadProgress();
     if (savedProgress) {
@@ -93,11 +77,9 @@ export function useOnboardingProgress(
       setCompletedSteps(new Set(savedProgress.completedSteps));
     }
     setIsInitialized(true);
-    // Track onboarding start when component mounts
     onboardingEvents.started(userId);
   }, [userId]);
 
-  // Save progress whenever it changes
   useEffect(() => {
     if (isInitialized) {
       saveProgress(currentStep, completedSteps);
@@ -106,11 +88,9 @@ export function useOnboardingProgress(
 
   const handleNext = useCallback(() => {
     if (currentStep < steps.length - 1) {
-      // Track step completion
       onboardingEvents.stepCompleted(currentStep, steps[currentStep].id, userId);
       setCompletedSteps(prev => new Set([...prev, currentStep]));
       setCurrentStep(currentStep + 1);
-      // Track viewing next step
       onboardingEvents.stepViewed(currentStep + 1, steps[currentStep + 1].id, userId);
     }
   }, [currentStep, steps, userId]);
@@ -123,11 +103,7 @@ export function useOnboardingProgress(
 
   const handleSkip = useCallback(async () => {
     onboardingEvents.skipped(currentStep, userId);
-
-    // Clear saved progress since user is skipping
     clearProgress();
-
-    // Mark onboarding as completed (skipped) so user doesn't see it again
     if (userId) {
       try {
         await ProfileService.fallbackProfileUpdate(userId, {
@@ -136,10 +112,8 @@ export function useOnboardingProgress(
         });
       } catch (error) {
         logger.error('Failed to mark onboarding as skipped', error, 'Onboarding');
-        // Continue anyway - analytics event was sent
       }
     }
-
     router.push(`${ROUTES.DASHBOARD.HOME}?welcome=true`);
   }, [currentStep, userId, router]);
 
@@ -147,8 +121,6 @@ export function useOnboardingProgress(
     async (href: string) => {
       onboardingEvents.stepCompleted(currentStep, steps[currentStep].id, userId);
       setCompletedSteps(prev => new Set([...prev, currentStep]));
-
-      // Mark onboarding complete before navigating away
       clearProgress();
       if (userId) {
         try {
@@ -161,21 +133,17 @@ export function useOnboardingProgress(
           logger.error('Failed to mark onboarding complete on navigate-away', error, 'Onboarding');
         }
       }
-
       router.push(href);
     },
     [currentStep, steps, userId, router]
   );
 
   const handleCompleteOnboarding = useCallback(async () => {
-    // Clear saved progress since onboarding is complete
     clearProgress();
-
     if (!userId) {
       router.push(`${ROUTES.DASHBOARD.HOME}?welcome=true`);
       return;
     }
-
     setCompletingOnboarding(true);
     try {
       await ProfileService.fallbackProfileUpdate(userId, {
@@ -187,7 +155,6 @@ export function useOnboardingProgress(
       router.push(`${ROUTES.DASHBOARD.HOME}?welcome=true`);
     } catch (error) {
       logger.error('Failed to complete onboarding', error, 'Onboarding');
-      // Still mark as completed in analytics - the user tried
       onboardingEvents.completed(userId);
       toast.error('Something went wrong, but you can continue to your dashboard.');
       router.push(`${ROUTES.DASHBOARD.HOME}?welcome=true`);

@@ -1,20 +1,9 @@
 'use client';
 
-/**
- * Timeline Query Hook
- *
- * Custom React Query hook for fetching and caching timeline data.
- * Provides stale-while-revalidate behavior for instant page loads
- * when navigating back to timeline pages.
- *
- * @module hooks/useTimelineQuery
- */
-
 import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { timelineService } from '@/services/timeline';
 import { TimelineFeedResponse, TimelineDisplayEvent } from '@/types/timeline';
 
-// Query key factory for consistent cache keys
 export const timelineKeys = {
   all: ['timeline'] as const,
   userFeed: (userId: string) => [...timelineKeys.all, 'user', userId] as const,
@@ -30,9 +19,6 @@ interface UseTimelineFeedOptions {
   limit?: number;
 }
 
-/**
- * Hook for fetching user's personal timeline with caching
- */
 export function useUserTimelineFeed({
   userId,
   enabled = true,
@@ -45,8 +31,8 @@ export function useUserTimelineFeed({
       return timelineService.getEnrichedUserFeed(userId, {}, { page, limit });
     },
     enabled: enabled && !!userId,
-    staleTime: 30 * 1000, // Data fresh for 30 seconds
-    gcTime: 5 * 60 * 1000, // Keep in cache for 5 minutes
+    staleTime: 30 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 }
 
@@ -55,9 +41,6 @@ interface UseCommunityFeedOptions {
   enabled?: boolean;
 }
 
-/**
- * Hook for fetching community timeline with infinite scrolling
- */
 export function useCommunityTimelineFeed({ sortBy, enabled = true }: UseCommunityFeedOptions) {
   return useInfiniteQuery({
     queryKey: timelineKeys.communityFeed(sortBy),
@@ -77,9 +60,6 @@ export function useCommunityTimelineFeed({ sortBy, enabled = true }: UseCommunit
   });
 }
 
-/**
- * Hook for searching timeline posts with caching
- */
 export function useTimelineSearch(query: string, enabled = true) {
   return useQuery({
     queryKey: timelineKeys.search(query),
@@ -90,15 +70,11 @@ export function useTimelineSearch(query: string, enabled = true) {
       return timelineService.searchPosts(query, { limit: 30, offset: 0 });
     },
     enabled: enabled && query.length >= 2,
-    staleTime: 60 * 1000, // Search results fresh for 1 minute
-    gcTime: 2 * 60 * 1000, // Keep in cache for 2 minutes
+    staleTime: 60 * 1000,
+    gcTime: 2 * 60 * 1000,
   });
 }
 
-/**
- * Hook for invalidating timeline cache
- * Used after creating, updating, or deleting posts
- */
 export function useInvalidateTimeline() {
   const queryClient = useQueryClient();
 
@@ -118,15 +94,10 @@ export function useInvalidateTimeline() {
   };
 }
 
-/**
- * Hook for optimistically updating timeline cache
- * Used for instant UI updates when liking, commenting, etc.
- */
 export function useOptimisticTimelineUpdate() {
   const queryClient = useQueryClient();
 
   return {
-    // Optimistically add a new post to the feed
     addPost: (userId: string, newPost: TimelineDisplayEvent) => {
       queryClient.setQueryData(
         timelineKeys.userFeed(userId),
@@ -146,9 +117,7 @@ export function useOptimisticTimelineUpdate() {
       );
     },
 
-    // Optimistically update a post's likes count
     updateLikes: (postId: string, increment: number) => {
-      // Update in all timeline caches that might contain this post
       queryClient.setQueriesData(
         { queryKey: timelineKeys.all },
         (oldData: TimelineFeedResponse | undefined) => {
@@ -167,7 +136,6 @@ export function useOptimisticTimelineUpdate() {
       );
     },
 
-    // Optimistically remove a post from the feed
     removePost: (postId: string) => {
       queryClient.setQueriesData(
         { queryKey: timelineKeys.all },
@@ -189,10 +157,6 @@ export function useOptimisticTimelineUpdate() {
   };
 }
 
-/**
- * Hook for prefetching timeline data
- * Used for instant navigation when hovering over links
- */
 export function usePrefetchTimeline() {
   const queryClient = useQueryClient();
 

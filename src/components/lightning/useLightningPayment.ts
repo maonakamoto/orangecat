@@ -5,14 +5,8 @@ import { toast } from 'sonner';
 import { useNostr } from '@/hooks/useNostr';
 import { NWCClient } from '@/lib/nostr/nwc';
 import type { PaymentStatus } from '@/services/bitcoin/types';
-
-export interface Invoice {
-  bolt11: string;
-  paymentHash: string;
-  expiresAt: Date;
-  amount: number; // satoshis
-  description: string;
-}
+import { generateNWCInvoice, generateDemoInvoice, type Invoice } from './lightningInvoiceUtils';
+export type { Invoice } from './lightningInvoiceUtils';
 
 interface UseLightningPaymentOptions {
   projectTitle: string;
@@ -42,7 +36,6 @@ export function useLightningPayment({
     if (!invoice) {
       return;
     }
-
     const updateTimer = () => {
       const timeRemaining = invoice.expiresAt.getTime() - Date.now();
       if (timeRemaining <= 0) {
@@ -52,7 +45,6 @@ export function useLightningPayment({
       }
       setTimeLeft(Math.floor(timeRemaining / 1000));
     };
-
     updateTimer();
     const timer = setInterval(updateTimer, 1000);
     return () => clearInterval(timer);
@@ -72,9 +64,7 @@ export function useLightningPayment({
       if (!nwcUri) {
         return;
       }
-
       const client = new NWCClient(nwcUri);
-
       const interval = setInterval(async () => {
         try {
           const result = await client.lookupInvoice(paymentHash);
@@ -89,7 +79,6 @@ export function useLightningPayment({
           /* best-effort poll */
         }
       }, 3000);
-
       setPollInterval(interval);
       setTimeout(
         () => {
@@ -102,72 +91,30 @@ export function useLightningPayment({
     [getNWCUri, onPaymentComplete]
   );
 
-  const generateNWCInvoice = async () => {
-    const nwcUri = getNWCUri();
-    if (!nwcUri) {
-      return;
-    }
-
-    const amountSats = parseInt(amount);
-    const description = `${projectTitle} - ${message || 'Lightning payment'}`;
-    const client = new NWCClient(nwcUri);
-
-    try {
-      await client.connect();
-      const nwcInvoice = await client.makeInvoice(amountSats, description, 3600);
-
-      const inv: Invoice = {
-        bolt11: nwcInvoice.invoice,
-        paymentHash: nwcInvoice.payment_hash,
-        expiresAt: new Date(Date.now() + 3600 * 1000),
-        amount: amountSats,
-        description,
-      };
-
-      setInvoice(inv);
-      setPaymentStatus('pending');
-      toast.success('Lightning invoice created!');
-      startPaymentPolling(nwcInvoice.payment_hash);
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Failed to create invoice';
-      toast.error(msg);
-      onPaymentFailed?.(msg);
-    } finally {
-      client.disconnect();
-    }
-  };
-
-  const generateDemoInvoice = async () => {
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    const amountSats = parseInt(amount);
-    const description = `${projectTitle} - ${message || 'Lightning payment'}`;
-
-    const demoInvoice: Invoice = {
-      bolt11: `lnbc${amountSats}u1p${Math.random().toString(36).substring(2, 60)}`,
-      paymentHash: `demo_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
-      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
-      amount: amountSats,
-      description,
-    };
-
-    setInvoice(demoInvoice);
-    setPaymentStatus('pending');
-    toast.info('Demo invoice generated (connect NWC for real payments)');
-  };
-
   const generateInvoice = async () => {
     if (!amount || parseInt(amount) <= 0) {
       toast.error('Please enter a valid amount');
       return;
     }
-
     setIsGenerating(true);
+    const amountSats = parseInt(amount);
+    const description = `${projectTitle} - ${message || 'Lightning payment'}`;
     try {
       if (nwcConnected) {
-        await generateNWCInvoice();
+        const nwcUri = getNWCUri();
+        if (nwcUri) {
+          await generateNWCInvoice({
+            amountSats,
+            description,
+            nwcUri,
+            setInvoice,
+            setPaymentStatus,
+            onPaymentFailed,
+            startPaymentPolling,
+          });
+        }
       } else {
-        await generateDemoInvoice();
+        await generateDemoInvoice({ amountSats, description, setInvoice, setPaymentStatus });
       }
     } catch {
       toast.error('Failed to generate invoice');
