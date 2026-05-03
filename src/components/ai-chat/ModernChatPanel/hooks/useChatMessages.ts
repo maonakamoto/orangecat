@@ -1,78 +1,28 @@
-/**
- * USE CHAT MESSAGES HOOK
- * Manages chat messages, sending, and streaming.
- * Loads persistent history from the server on mount.
- */
-
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { readEventStream } from '@/lib/sse';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
 import type { Message, CatAction, ExecActionResult } from '../types';
+import { useChatHistory } from './useChatHistory';
 
 const STREAM_TIMEOUT_MS = 60_000;
 
 interface UseChatMessagesOptions {
   selectedModel: string;
-  /** Called when an exec_action result has status=pending_confirmation (new item for user to approve) */
   onPendingResult?: () => void;
 }
 
 export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessagesOptions) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
-  // Use a ref so the sendMessage callback always sees the latest value without needing it in deps
   const onPendingResultRef = useRef(onPendingResult);
   onPendingResultRef.current = onPendingResult;
 
-  // Load persistent history on mount
-  useEffect(() => {
-    let cancelled = false;
-    setIsLoadingHistory(true);
+  const { isLoadingHistory } = useChatHistory(setMessages);
 
-    fetch(API_ROUTES.CAT.HISTORY)
-      .then(r => (r.ok ? r.json() : null))
-      .then(data => {
-        if (cancelled || !data?.data?.length) {
-          return;
-        }
-        const historicMessages: Message[] = data.data.map(
-          (m: {
-            id: string;
-            role: 'user' | 'assistant';
-            content: string;
-            created_at: string;
-            model_used?: string;
-          }) => ({
-            id: m.id,
-            role: m.role,
-            content: m.content,
-            timestamp: new Date(m.created_at),
-            modelUsed: m.model_used ?? undefined,
-          })
-        );
-        setMessages(historicMessages);
-      })
-      .catch((err: unknown) => {
-        // Non-fatal — start fresh if history load fails
-        logger.warn('Chat history load failed', { err }, 'useChatMessages');
-      })
-      .finally(() => {
-        if (!cancelled) {
-          setIsLoadingHistory(false);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -89,7 +39,6 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
 
       setError(null);
 
-      // Add user message (optimistic — server will persist it)
       const userMessage: Message = {
         id: `user-${Date.now()}`,
         role: 'user',
@@ -99,16 +48,10 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
       setMessages(prev => [...prev, userMessage]);
       setIsLoading(true);
 
-      // Add placeholder assistant message
       const assistantId = `assistant-${Date.now()}`;
       setMessages(prev => [
         ...prev,
-        {
-          id: assistantId,
-          role: 'assistant',
-          content: '',
-          timestamp: new Date(),
-        },
+        { id: assistantId, role: 'assistant', content: '', timestamp: new Date() },
       ]);
 
       const abortController = new AbortController();
@@ -171,19 +114,15 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
           }
         });
 
-        // Trigger immediate pending actions refresh if any exec results need confirmation
         if (execResults?.some(r => r.status === 'pending_confirmation')) {
           onPendingResultRef.current?.();
         }
 
-        // Update with final model used, actions, and exec results
         setMessages(prev =>
           prev.map(m => (m.id === assistantId ? { ...m, modelUsed, actions, execResults } : m))
         );
       } catch (e) {
         const isAbort = e instanceof DOMException && e.name === 'AbortError';
-
-        // Check if partial content was streamed
         let hasPartialContent = false;
         setMessages(prev => {
           const assistant = prev.find(m => m.id === assistantId);
@@ -192,7 +131,7 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
         });
 
         if (isAbort && hasPartialContent) {
-          // Keep partial content, no error shown
+          // intentional no-op: keep partial streamed content
         } else if (isAbort) {
           setError('Response timed out. Try again or rephrase your question.');
           setMessages(prev => prev.filter(m => m.id !== assistantId));
@@ -212,8 +151,9 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
   const clearChat = useCallback(() => {
     setMessages([]);
     setError(null);
-    // Delete server-side history (best-effort)
-    fetch(API_ROUTES.CAT.HISTORY, { method: 'DELETE' }).catch((err: unknown) => { logger.warn('Failed to clear server history', { err }, 'useChatMessages'); });
+    fetch(API_ROUTES.CAT.HISTORY, { method: 'DELETE' }).catch((err: unknown) => {
+      logger.warn('Failed to clear server history', { err }, 'useChatMessages');
+    });
   }, []);
 
   const setErrorState = useCallback((err: string | null) => {
@@ -223,12 +163,7 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
   const addSystemMessage = useCallback((content: string) => {
     setMessages(prev => [
       ...prev,
-      {
-        id: `system-${Date.now()}`,
-        role: 'assistant',
-        content,
-        timestamp: new Date(),
-      },
+      { id: `system-${Date.now()}`, role: 'assistant', content, timestamp: new Date() },
     ]);
   }, []);
 
