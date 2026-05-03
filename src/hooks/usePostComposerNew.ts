@@ -1,14 +1,10 @@
-import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { logger } from '@/utils/logger';
 import { useAuth } from '@/hooks/useAuth';
 import { TimelineVisibility } from '@/types/timeline';
 import { usePostDraft } from '@/hooks/usePostDraft';
-import {
-  formatPostError,
-  fetchUserProjects,
-  submitPost,
-  queueOfflinePost,
-} from '@/services/timeline/utils/post-composer';
+import { fetchUserProjects } from '@/services/timeline/utils/post-composer';
+import { usePostSubmission } from './usePostSubmission';
 
 export interface PostComposerOptions {
   subjectType?: 'profile' | 'project';
@@ -28,15 +24,12 @@ export interface PostComposerOptions {
 }
 
 export interface PostComposerState {
-  // Form state
   content: string;
   setContent: (content: string) => void;
   visibility: TimelineVisibility;
   setVisibility: (visibility: TimelineVisibility) => void;
   selectedProjects: string[];
   setSelectedProjects: (projects: string[]) => void;
-
-  // UI state
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   userProjects: any[];
   loadingProjects: boolean;
@@ -44,13 +37,9 @@ export interface PostComposerState {
   error: string | null;
   postSuccess: boolean;
   retryCount: number;
-
-  // Computed values
   characterCount: number;
   isValid: boolean;
   canPost: boolean;
-
-  // Actions
   handlePost: () => Promise<void>;
   toggleProjectSelection: (projectId: string) => void;
   reset: () => void;
@@ -58,14 +47,6 @@ export interface PostComposerState {
   retry: () => Promise<void>;
 }
 
-// Constants
-const MAX_RETRY_ATTEMPTS = 3;
-const RETRY_DELAY = 2000; // 2 seconds
-
-/**
- * Mobile-first, robust posting hook
- * Features: Drafts, retry logic, optimistic updates, offline support
- */
 export function usePostComposer(options: PostComposerOptions = {}): PostComposerState {
   const { user } = useAuth();
   const {
@@ -82,23 +63,13 @@ export function usePostComposer(options: PostComposerOptions = {}): PostComposer
     parentEventId,
   } = options;
 
-  // Core state
   const [content, setContent] = useState('');
   const [visibility, setVisibility] = useState<TimelineVisibility>(defaultVisibility || 'public');
   const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [userProjects, setUserProjects] = useState<any[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
-  const [isPosting, setIsPosting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [postSuccess, setPostSuccess] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
 
-  // Refs for timers
-  const successTimer = useRef<NodeJS.Timeout>();
-  const retryTimer = useRef<NodeJS.Timeout>();
-
-  // Draft management (extracted hook)
   const draftSetters = useMemo(() => ({ setContent, setVisibility, setSelectedProjects }), []);
   const { clearDraft } = usePostDraft(
     { subjectType, subjectId, enableDrafts, debounceMs, defaultVisibility },
@@ -106,34 +77,6 @@ export function usePostComposer(options: PostComposerOptions = {}): PostComposer
     draftSetters
   );
 
-  // Cleanup timers on unmount
-  useEffect(() => {
-    return () => {
-      [successTimer, retryTimer].forEach(timer => {
-        if (timer.current) {
-          clearTimeout(timer.current);
-        }
-      });
-    };
-  }, []);
-
-  // Computed values
-  const characterCount = content.length;
-  const isValid = content.trim().length > 0 && characterCount <= maxLength;
-  const canPost = isValid && !isPosting && !loadingProjects;
-
-  // Content setter (clears errors)
-  const handleSetContent = useCallback(
-    (newContent: string) => {
-      setContent(newContent);
-      if (error) {
-        setError(null);
-      }
-    },
-    [error]
-  );
-
-  // Load user projects on mount
   useEffect(() => {
     if (!allowProjectSelection || !user?.id) {
       return;
@@ -150,40 +93,26 @@ export function usePostComposer(options: PostComposerOptions = {}): PostComposer
       });
   }, [allowProjectSelection, user?.id]);
 
-  const performPost = useCallback(async (): Promise<boolean> => {
-    if (!canPost || !user) {
-      return false;
-    }
-    try {
-      const result = await submitPost({
-        user,
-        content,
-        subjectType,
-        subjectId,
-        visibility,
-        selectedProjects,
-        parentEventId,
-        onOptimisticUpdate,
-      });
-      if (!result.success) {
-        setError(result.error);
-        return false;
-      }
-      clearDraft();
-      setPostSuccess(true);
-      onSuccess?.(result.event);
-      if (successTimer.current) {
-        clearTimeout(successTimer.current);
-      }
-      successTimer.current = setTimeout(() => setPostSuccess(false), 3000);
-      return true;
-    } catch (err) {
-      setError(formatPostError(err));
-      logger.error('Failed to create post', err, 'usePostComposer');
-      return false;
-    }
-  }, [
+  const characterCount = content.length;
+  const isValid = content.trim().length > 0 && characterCount <= maxLength;
+  const contentValid = isValid && !loadingProjects;
+
+  const clearFormState = useCallback(() => {
+    setContent('');
+    setSelectedProjects([]);
+  }, []);
+
+  const {
+    isPosting,
+    error,
+    postSuccess,
+    retryCount,
     canPost,
+    handlePost,
+    retry,
+    clearError,
+    resetSubmission,
+  } = usePostSubmission({
     user,
     content,
     subjectType,
@@ -193,93 +122,27 @@ export function usePostComposer(options: PostComposerOptions = {}): PostComposer
     parentEventId,
     onOptimisticUpdate,
     onSuccess,
-    clearDraft,
-  ]);
-
-  // Reset function
-  const reset = useCallback(() => {
-    setContent('');
-    setSelectedProjects([]);
-    setError(null);
-    setPostSuccess(false);
-    setRetryCount(0);
-    clearDraft();
-  }, [clearDraft]);
-
-  // Public API: handlePost with offline + retry support
-  const handlePost = useCallback(async () => {
-    if (!canPost || !user?.id) {
-      return;
-    }
-
-    if (!navigator.onLine) {
-      try {
-        await queueOfflinePost({
-          user,
-          content,
-          subjectType,
-          subjectId,
-          visibility,
-          selectedProjects,
-          parentEventId,
-          onOptimisticUpdate,
-        });
-        setError(null);
-        setPostSuccess(true);
-        reset();
-      } catch (err) {
-        setError('Failed to save post for offline sending.');
-        logger.error('Failed to add to offline queue', err, 'usePostComposer');
-      }
-      return;
-    }
-
-    // Online posting logic
-    setIsPosting(true);
-    setError(null);
-
-    const success = await performPost();
-    setIsPosting(false);
-
-    // Auto-retry logic
-    if (!success && enableRetry && retryCount < MAX_RETRY_ATTEMPTS && navigator.onLine) {
-      if (error && error.includes('profile')) {
-        logger.warn('Profile verification failed, skipping retry', { error }, 'usePostComposer');
-        return;
-      }
-
-      setRetryCount(prev => prev + 1);
-      if (retryTimer.current) {
-        clearTimeout(retryTimer.current);
-      }
-      retryTimer.current = setTimeout(
-        () => {
-          handlePost();
-        },
-        RETRY_DELAY * (retryCount + 1)
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    canPost,
-    performPost,
+    contentValid,
     enableRetry,
-    retryCount,
-    user,
-    content,
-    visibility,
-    selectedProjects,
-    subjectType,
-    subjectId,
-    reset,
-  ]);
+    clearDraft,
+    onOfflineQueued: clearFormState,
+  });
 
-  const retry = useCallback(async () => {
-    if (isPosting) {
-      return;
-    }
-    await handlePost();
-  }, [handlePost, isPosting]);
+  const handleSetContent = useCallback(
+    (newContent: string) => {
+      setContent(newContent);
+      if (error) {
+        clearError();
+      }
+    },
+    [error, clearError]
+  );
+
+  const reset = useCallback(() => {
+    clearFormState();
+    resetSubmission();
+    clearDraft();
+  }, [clearFormState, resetSubmission, clearDraft]);
 
   const toggleProjectSelection = useCallback((projectId: string) => {
     setSelectedProjects(prev =>
@@ -287,33 +150,22 @@ export function usePostComposer(options: PostComposerOptions = {}): PostComposer
     );
   }, []);
 
-  const clearError = useCallback(() => {
-    setError(null);
-  }, []);
-
   return {
-    // Form state
     content,
     setContent: handleSetContent,
     visibility,
     setVisibility,
     selectedProjects,
     setSelectedProjects,
-
-    // UI state
     userProjects,
     loadingProjects,
     isPosting,
     error,
     postSuccess,
     retryCount,
-
-    // Computed values
     characterCount,
     isValid,
     canPost,
-
-    // Actions
     handlePost,
     toggleProjectSelection,
     reset,
