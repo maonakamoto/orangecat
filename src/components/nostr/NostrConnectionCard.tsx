@@ -1,28 +1,13 @@
 'use client';
 
-/**
- * Nostr Connection Card
- *
- * Allows users to connect their Nostr identity and NWC wallet.
- * This is separate from social links - it enables:
- * - NIP-07 browser extension signing
- * - NWC wallet connection for Lightning payments
- * - Profile npub display
- *
- * Created: 2026-02-25
- */
-
-import { useState, useEffect, useCallback } from 'react';
 import { Zap, Key, Unplug, ExternalLink, Copy, Check, AlertCircle, Wallet } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
-import { useNostr } from '@/hooks/useNostr';
-import { NWCClient } from '@/lib/nostr/nwc';
-import { shortenNpub, isValidNWCUri } from '@/lib/nostr';
-import { logger } from '@/utils/logger';
+import { shortenNpub } from '@/lib/nostr';
+import { useNostrConnectionCard } from './useNostrConnectionCard';
 
 export function NostrConnectionCard() {
   const {
@@ -34,77 +19,26 @@ export function NostrConnectionCard() {
     error,
     hasExtension,
     connectWithExtension,
-    connectWithNpub,
     disconnect,
-    saveNWCUri,
-    getNWCUri,
     removeNWC,
-  } = useNostr();
-
-  const [showNpubInput, setShowNpubInput] = useState(false);
-  const [npubInput, setNpubInput] = useState('');
-  const [showNwcInput, setShowNwcInput] = useState(false);
-  const [nwcInput, setNwcInput] = useState('');
-  const [nwcError, setNwcError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-  const [balanceSats, setBalanceSats] = useState<number | null>(null);
-  const [balanceLoading, setBalanceLoading] = useState(false);
-
-  // Fetch wallet balance when NWC is connected
-  const fetchBalance = useCallback(async () => {
-    const nwcUri = getNWCUri();
-    if (!nwcUri || !nwcConnected) {
-      return;
-    }
-
-    setBalanceLoading(true);
-    const client = new NWCClient(nwcUri);
-    try {
-      await client.connect();
-      const sats = await client.getBalance();
-      setBalanceSats(sats);
-    } catch (err) {
-      logger.warn('Failed to fetch NWC balance', { error: err });
-    } finally {
-      client.disconnect();
-      setBalanceLoading(false);
-    }
-  }, [getNWCUri, nwcConnected]);
-
-  useEffect(() => {
-    if (nwcConnected) {
-      fetchBalance();
-    } else {
-      setBalanceSats(null);
-    }
-  }, [nwcConnected, fetchBalance]);
-
-  const handleNpubConnect = () => {
-    if (npubInput.trim()) {
-      connectWithNpub(npubInput.trim());
-      setShowNpubInput(false);
-      setNpubInput('');
-    }
-  };
-
-  const handleNwcConnect = () => {
-    setNwcError(null);
-    if (!isValidNWCUri(nwcInput.trim())) {
-      setNwcError('Invalid NWC URI. It should start with nostr+walletconnect://');
-      return;
-    }
-    saveNWCUri(nwcInput.trim());
-    setShowNwcInput(false);
-    setNwcInput('');
-  };
-
-  const handleCopyNpub = async () => {
-    if (npub) {
-      await navigator.clipboard.writeText(npub);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+    showNpubInput,
+    setShowNpubInput,
+    npubInput,
+    setNpubInput,
+    showNwcInput,
+    setShowNwcInput,
+    nwcInput,
+    setNwcInput,
+    nwcError,
+    copied,
+    balanceSats,
+    balanceLoading,
+    handleNpubConnect,
+    handleNwcConnect,
+    handleCancelNwc,
+    handleCancelNpub,
+    handleCopyNpub,
+  } = useNostrConnectionCard();
 
   return (
     <Card>
@@ -125,15 +59,17 @@ export function NostrConnectionCard() {
           </Alert>
         )}
 
-        {/* Connection Status */}
         {connected && npub ? (
           <div className="space-y-3">
-            {/* Connected identity */}
             <div className="flex items-center justify-between p-3 rounded-lg bg-purple-50 border border-purple-200">
               <div className="flex items-center gap-3 min-w-0">
                 {profile?.picture ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={profile.picture} alt={profile.display_name || profile.name || 'Nostr profile picture'} className="h-8 w-8 rounded-full" />
+                  <img
+                    src={profile.picture}
+                    alt={profile.display_name || profile.name || 'Nostr profile picture'}
+                    className="h-8 w-8 rounded-full"
+                  />
                 ) : (
                   <div className="h-8 w-8 rounded-full bg-purple-200 flex items-center justify-center">
                     <Key className="h-4 w-4 text-purple-600" />
@@ -171,7 +107,6 @@ export function NostrConnectionCard() {
               </Button>
             </div>
 
-            {/* NWC Wallet Connection */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium flex items-center gap-1.5">
@@ -227,15 +162,7 @@ export function NostrConnectionCard() {
                     <Button size="sm" onClick={handleNwcConnect}>
                       Connect Wallet
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        setShowNwcInput(false);
-                        setNwcInput('');
-                        setNwcError(null);
-                      }}
-                    >
+                    <Button size="sm" variant="ghost" onClick={handleCancelNwc}>
                       Cancel
                     </Button>
                   </div>
@@ -253,15 +180,12 @@ export function NostrConnectionCard() {
               )}
             </div>
 
-            {/* Nostr profile link */}
             {profile?.nip05 && (
               <div className="text-xs text-muted-foreground">NIP-05: {profile.nip05}</div>
             )}
           </div>
         ) : (
-          /* Not connected - show connection options */
           <div className="space-y-3">
-            {/* NIP-07 Extension */}
             {hasExtension ? (
               <Button
                 onClick={connectWithExtension}
@@ -301,7 +225,6 @@ export function NostrConnectionCard() {
               </div>
             )}
 
-            {/* Manual npub entry */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
@@ -329,14 +252,7 @@ export function NostrConnectionCard() {
                   >
                     {loading ? 'Connecting...' : 'Link npub'}
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => {
-                      setShowNpubInput(false);
-                      setNpubInput('');
-                    }}
-                  >
+                  <Button size="sm" variant="ghost" onClick={handleCancelNpub}>
                     Cancel
                   </Button>
                 </div>
