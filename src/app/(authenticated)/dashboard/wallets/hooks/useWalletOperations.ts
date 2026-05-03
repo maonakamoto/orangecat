@@ -1,11 +1,4 @@
-/**
- * useWalletOperations Hook
- *
- * Custom hook for wallet CRUD operations (create, update, delete, refresh).
- *
- * Created: 2025-01-30
- * Last Modified: 2025-01-30
- */
+'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -27,11 +20,43 @@ interface DuplicateDialogState {
   existingWallets: Array<{ id: string; label: string; category: string }> | null;
 }
 
-export function useWalletOperations({
-  userId,
-  profileId,
-  setWallets,
-}: UseWalletOperationsOptions) {
+const WALLET_AUTH_REDIRECT = '/auth?mode=login&from=/dashboard/wallets';
+
+async function callWalletApi(
+  url: string,
+  options: RequestInit,
+  router: ReturnType<typeof useRouter>,
+  context: string
+): Promise<unknown | null> {
+  let response: Response;
+  try {
+    response = await fetch(url, options);
+  } catch (err) {
+    logger.error(
+      `Network error during ${context}`,
+      { error: err instanceof Error ? err.message : String(err) },
+      'WalletManagement'
+    );
+    toast.error('Network error. Please check your connection and try again.');
+    return null;
+  }
+
+  if (!response.ok) {
+    if (response.status === 401 || response.status === 403) {
+      logger.warn(`Auth required for ${context}`, { status: response.status }, 'WalletManagement');
+      toast.error('Please log in to manage wallets');
+      router.push(WALLET_AUTH_REDIRECT);
+      return null;
+    }
+    const errorMessage = await parseErrorResponse(response);
+    logger.error(`Failed: ${context}`, { status: response.status }, 'WalletManagement');
+    throw new Error(errorMessage);
+  }
+
+  return response.json();
+}
+
+export function useWalletOperations({ userId, profileId, setWallets }: UseWalletOperationsOptions) {
   const router = useRouter();
   const [duplicateDialog, setDuplicateDialog] = useState<DuplicateDialogState>({
     isOpen: false,
@@ -50,131 +75,36 @@ export function useWalletOperations({
       toast.error('Wallet name is required');
       return;
     }
-
     if (!data.address_or_xpub?.trim()) {
       toast.error('Wallet address is required');
       return;
     }
-
     if (!data.category) {
       toast.error('Wallet category is required');
       return;
     }
 
-    logger.info(
-      'Starting wallet creation',
-      {
-        userId,
-        profileId,
-        label: data.label,
-        category: data.category,
-      },
-      'WalletManagement'
-    );
-
     try {
-      const requestBody = {
-        ...data,
-        profile_id: profileId,
-      };
-
-      logger.debug('Sending wallet creation request', { requestBody }, 'WalletManagement');
-
-      let response;
-      try {
-        response = await fetch(API_ROUTES.WALLETS.BASE, {
+      const responseData = (await callWalletApi(
+        API_ROUTES.WALLETS.BASE,
+        {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache',
-          },
-          body: JSON.stringify(requestBody),
-        });
-      } catch (fetchError) {
-        logger.error(
-          'Network error during wallet creation',
-          {
-            error: fetchError instanceof Error ? fetchError.message : String(fetchError),
-            profileId,
-            userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
-          },
-          'WalletManagement'
-        );
-        toast.error('Network error. Please check your connection and try again.');
+          headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+          body: JSON.stringify({ ...data, profile_id: profileId }),
+        },
+        router,
+        'wallet creation'
+      )) as Record<string, unknown> | null;
+
+      if (responseData === null) {
         return;
       }
 
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          logger.warn(
-            'Authentication required for wallet operation',
-            { status: response.status, profileId },
-            'WalletManagement'
-          );
-          toast.error('Please log in to add wallets');
-          router.push('/auth?mode=login&from=/dashboard/wallets');
-          return;
-        }
-
-        let errorMessage;
-        try {
-          errorMessage = await parseErrorResponse(response);
-        } catch (parseError) {
-          logger.error(
-            'Failed to parse error response',
-            {
-              status: response.status,
-              parseError: parseError instanceof Error ? parseError.message : String(parseError),
-              profileId,
-            },
-            'WalletManagement'
-          );
-          errorMessage = `Server error (${response.status})`;
-        }
-
-        logger.error(
-          'Failed to add wallet',
-          {
-            status: response.status,
-            errorMessage,
-            profileId,
-            responseType: response.type,
-            responseUrl: response.url,
-          },
-          'WalletManagement'
-        );
-        toast.error(errorMessage || 'Failed to add wallet');
-        return;
-      }
-
-      let responseData;
-      try {
-        responseData = await response.json();
-        logger.debug('Wallet creation response received', { responseData }, 'WalletManagement');
-      } catch (jsonError) {
-        logger.error(
-          'Failed to parse wallet creation response',
-          {
-            error: jsonError instanceof Error ? jsonError.message : String(jsonError),
-            profileId,
-          },
-          'WalletManagement'
-        );
-        toast.error('Invalid response from server');
-        return;
-      }
-
-      const duplicateWarning = responseData?.data?.duplicateWarning;
+      const inner = responseData?.data as Record<string, unknown> | undefined;
+      const duplicateWarning = inner?.duplicateWarning as
+        | { existingWallets: Array<{ id: string; label: string; category: string }> }
+        | undefined;
       if (duplicateWarning) {
-        logger.info(
-          'Duplicate wallet warning triggered',
-          {
-            existingCount: duplicateWarning.existingWallets?.length,
-            profileId,
-          },
-          'WalletManagement'
-        );
-
         setDuplicateDialog({
           isOpen: true,
           walletData: data,
@@ -183,14 +113,9 @@ export function useWalletOperations({
         return;
       }
 
-      const newWallet = responseData?.data?.wallet || responseData?.data;
-
-      if (!newWallet || !newWallet.id) {
-        logger.error(
-          'Invalid wallet data returned',
-          { newWallet, profileId },
-          'WalletManagement'
-        );
+      const newWallet = (inner?.wallet ?? inner) as Wallet | undefined;
+      if (!newWallet?.id) {
+        logger.error('Invalid wallet data returned', { newWallet, profileId }, 'WalletManagement');
         toast.error('Wallet creation failed: invalid data returned');
         return;
       }
@@ -199,12 +124,7 @@ export function useWalletOperations({
       toast.success('Wallet added successfully');
       logger.info(
         'Wallet added successfully',
-        {
-          walletId: newWallet.id,
-          profileId,
-          label: newWallet.label,
-          category: newWallet.category,
-        },
+        { walletId: newWallet.id, profileId },
         'WalletManagement'
       );
     } catch (error) {
@@ -220,9 +140,9 @@ export function useWalletOperations({
     }
 
     try {
-      let response;
-      try {
-        response = await fetch(API_ROUTES.WALLETS.BASE, {
+      const responseData = (await callWalletApi(
+        API_ROUTES.WALLETS.BASE,
+        {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -230,58 +150,25 @@ export function useWalletOperations({
             profile_id: profileId,
             force_duplicate: true,
           }),
-        });
-      } catch (fetchError) {
-        logger.error(
-          'Network error during duplicate wallet creation',
-          {
-            error: fetchError instanceof Error ? fetchError.message : String(fetchError),
-            profileId,
-          },
-          'WalletManagement'
-        );
-        toast.error('Network error. Please check your connection and try again.');
+        },
+        router,
+        'duplicate wallet creation'
+      )) as Record<string, unknown> | null;
+
+      if (responseData === null) {
         return;
       }
 
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          logger.warn(
-            'Authentication required for duplicate wallet operation',
-            { status: response.status, profileId },
-            'WalletManagement'
-          );
-          toast.error('Please log in to add wallets');
-          router.push('/auth?mode=login&from=/dashboard/wallets');
-          return;
-        }
-
-        const errorMessage = await parseErrorResponse(response);
-        logger.error(
-          'Failed to force add duplicate wallet',
-          { status: response.status, profileId },
-          'WalletManagement'
-        );
-        throw new Error(errorMessage);
-      }
-
-      const responseData = await response.json();
-      const newWallet = responseData?.data?.wallet || responseData?.data;
-
+      const inner = responseData?.data as Record<string, unknown> | undefined;
+      const newWallet = (inner?.wallet ?? inner) as Wallet;
       setWallets(prev => [newWallet, ...prev]);
-
       toast.success('Wallet added successfully');
       logger.info(
         'Wallet added with duplicate confirmation',
         { walletId: newWallet.id, profileId },
         'WalletManagement'
       );
-
-      setDuplicateDialog({
-        isOpen: false,
-        walletData: null,
-        existingWallets: null,
-      });
+      setDuplicateDialog({ isOpen: false, walletData: null, existingWallets: null });
     } catch (error) {
       toast.error(
         `Failed to add wallet: ${error instanceof Error ? error.message : 'Unknown error'}`
@@ -290,63 +177,29 @@ export function useWalletOperations({
   };
 
   const handleCancelDuplicateWallet = () => {
-    setDuplicateDialog({
-      isOpen: false,
-      walletData: null,
-      existingWallets: null,
-    });
+    setDuplicateDialog({ isOpen: false, walletData: null, existingWallets: null });
   };
 
   const handleUpdateWallet = async (walletId: string, data: Partial<WalletFormData>) => {
     try {
-      let response;
-      try {
-        response = await fetch(`${API_ROUTES.WALLETS.BASE}/${walletId}`, {
+      const responseData = (await callWalletApi(
+        `${API_ROUTES.WALLETS.BASE}/${walletId}`,
+        {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...data,
-            profile_id: profileId,
-          }),
-        });
-      } catch (fetchError) {
-        logger.error(
-          'Network error during wallet update',
-          {
-            error: fetchError instanceof Error ? fetchError.message : String(fetchError),
-            walletId,
-          },
-          'WalletManagement'
-        );
-        toast.error('Network error. Please check your connection and try again.');
+          body: JSON.stringify({ ...data, profile_id: profileId }),
+        },
+        router,
+        'wallet update'
+      )) as Record<string, unknown> | null;
+
+      if (responseData === null) {
         return;
       }
 
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          logger.warn(
-            'Authentication required for wallet update',
-            { status: response.status, walletId },
-            'WalletManagement'
-          );
-          toast.error('Please log in to update wallets');
-          router.push('/auth?mode=login&from=/dashboard/wallets');
-          return;
-        }
-
-        const errorMessage = await parseErrorResponse(response);
-        logger.error('Failed to update wallet', { status: response.status, walletId }, 'WalletManagement');
-        throw new Error(errorMessage);
-      }
-
-      let updatedWallet;
-      try {
-        const responseData = await response.json();
-        updatedWallet = responseData.data || responseData.wallet || responseData;
-      } catch {
-        throw new Error('Invalid response from server');
-      }
-
+      const updatedWallet = (responseData?.data ??
+        (responseData as Record<string, unknown>)?.wallet ??
+        responseData) as Wallet;
       if (!updatedWallet) {
         throw new Error('Wallet update failed: no wallet data returned');
       }
@@ -354,93 +207,44 @@ export function useWalletOperations({
       setWallets(prev => prev.map(w => (w.id === walletId ? updatedWallet : w)));
       toast.success('Wallet updated successfully');
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update wallet';
-      toast.error(errorMessage);
+      toast.error(error instanceof Error ? error.message : 'Failed to update wallet');
     }
   };
 
   const handleDeleteWallet = async (walletId: string) => {
     try {
-      let response;
-      try {
-        response = await fetch(`${API_ROUTES.WALLETS.BASE}/${walletId}`, {
-          method: 'DELETE',
-        });
-      } catch (fetchError) {
-        logger.error(
-          'Network error during wallet deletion',
-          {
-            error: fetchError instanceof Error ? fetchError.message : String(fetchError),
-            walletId,
-          },
-          'WalletManagement'
-        );
-        toast.error('Network error. Please check your connection and try again.');
+      const result = await callWalletApi(
+        `${API_ROUTES.WALLETS.BASE}/${walletId}`,
+        { method: 'DELETE' },
+        router,
+        'wallet deletion'
+      );
+
+      if (result === null) {
         return;
       }
-
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          logger.warn(
-            'Authentication required for wallet deletion',
-            { status: response.status, walletId },
-            'WalletManagement'
-          );
-          toast.error('Please log in to delete wallets');
-          router.push('/auth?mode=login&from=/dashboard/wallets');
-          return;
-        }
-
-        const errorMessage = await parseErrorResponse(response);
-        logger.error('Failed to delete wallet', { status: response.status, walletId }, 'WalletManagement');
-        throw new Error(errorMessage);
-      }
-
       setWallets(prev => prev.filter(w => w.id !== walletId));
       toast.success('Wallet deleted successfully');
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete wallet';
-      toast.error(errorMessage);
+      toast.error(error instanceof Error ? error.message : 'Failed to delete wallet');
     }
   };
 
   const handleRefreshWallet = async (walletId: string) => {
     try {
-      let response;
-      try {
-        response = await fetch(`${API_ROUTES.WALLETS.BASE}/${walletId}/refresh`, {
-          method: 'POST',
-        });
-      } catch (fetchError) {
-        logger.error(
-          'Network error during wallet refresh',
-          {
-            error: fetchError instanceof Error ? fetchError.message : String(fetchError),
-            walletId,
-          },
-          'WalletManagement'
-        );
-        toast.error('Network error. Please check your connection and try again.');
+      const responseData = (await callWalletApi(
+        `${API_ROUTES.WALLETS.BASE}/${walletId}/refresh`,
+        { method: 'POST' },
+        router,
+        'wallet refresh'
+      )) as Record<string, unknown> | null;
+
+      if (responseData === null) {
         return;
       }
 
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          logger.warn(
-            'Authentication required for wallet refresh',
-            { status: response.status, walletId },
-            'WalletManagement'
-          );
-          toast.error('Please log in to refresh wallet data');
-          router.push('/auth?mode=login&from=/dashboard/wallets');
-          return;
-        }
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to refresh wallet');
-      }
-
-      const refreshedData = await response.json();
-      const refreshedWallet = refreshedData.data?.wallet ?? refreshedData.data;
+      const inner = responseData?.data as Record<string, unknown> | undefined;
+      const refreshedWallet = (inner?.wallet ?? inner) as Wallet;
       setWallets(prev => prev.map(w => (w.id === walletId ? refreshedWallet : w)));
       toast.success('Wallet refreshed successfully');
     } catch (error) {
@@ -459,4 +263,3 @@ export function useWalletOperations({
     duplicateDialog,
   };
 }
-
