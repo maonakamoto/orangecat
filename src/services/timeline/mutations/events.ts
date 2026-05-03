@@ -30,10 +30,10 @@ import {
   shouldFeatureProjectEvent,
 } from '../formatters/eventTitles';
 
-/**
- * Get current user ID helper
- */
-async function getCurrentUserId(): Promise<string | null> {
+async function resolveActorId(actorId?: string): Promise<string | null> {
+  if (actorId) {
+    return actorId;
+  }
   try {
     const {
       data: { user },
@@ -43,6 +43,26 @@ async function getCurrentUserId(): Promise<string | null> {
     logger.error('Error getting current user ID', error, 'Timeline');
     return null;
   }
+}
+
+function buildSafeTitle(title?: string, description?: string): string {
+  return title?.trim() || description?.trim()?.slice(0, 140) || 'Update';
+}
+
+async function fetchCreatedEvent(
+  eventId: string,
+  logMessage: string
+): Promise<{ event: TimelineEvent | null }> {
+  const { data, error } = await supabase
+    .from(TIMELINE_TABLES.EVENTS)
+    .select('*')
+    .eq('id', eventId)
+    .single();
+  if (error || !data) {
+    logger.error(logMessage, error, 'Timeline');
+    return { event: null };
+  }
+  return { event: mapDbEventToTimelineEvent(data) };
 }
 
 /**
@@ -68,33 +88,22 @@ export async function createEventWithVisibility(
   }
 ): Promise<TimelineEventResponse> {
   try {
-    // Get current user if actorId not provided
-    let actorId = request.actorId;
+    const actorId = await resolveActorId(request.actorId);
     if (!actorId) {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        return { success: false, error: 'Authentication required' };
-      }
-      actorId = user.id;
+      return { success: false, error: 'Authentication required' };
     }
 
-    // Validate required fields
     const validation = validateEventRequest(request);
     if (!validation.valid) {
       return { success: false, error: validation.error };
     }
 
-    // Prepare timeline contexts as JSONB array
     const timelineContextsJson = (request.timelineContexts || []).map(ctx => ({
       timeline_type: ctx.timeline_type,
       timeline_owner_id: ctx.timeline_owner_id,
     }));
 
-    // Ensure title is never null (DB constraint)
-    const safeTitle =
-      request.title?.trim() || request.description?.trim()?.slice(0, 140) || 'Update';
+    const safeTitle = buildSafeTitle(request.title, request.description);
 
     // Use database function to create post with visibility contexts
     // The function returns JSONB, so we need to parse it
@@ -181,27 +190,11 @@ export async function createEventWithVisibility(
       return { success: false, error: 'Post created but could not retrieve ID. Please refresh.' };
     }
 
-    // Fetch the created event
-    const { data: eventData, error: fetchError } = await supabase
-      .from(TIMELINE_TABLES.EVENTS)
-      .select('*')
-      .eq('id', postId)
-      .single();
-
-    if (fetchError) {
-      logger.error('Failed to fetch created post', fetchError, 'Timeline');
+    const { event } = await fetchCreatedEvent(postId, 'Failed to fetch created post');
+    if (!event) {
       return { success: false, error: 'Post created but could not retrieve details' };
     }
-
-    const timelineEvent = mapDbEventToTimelineEvent(eventData);
-
-    return {
-      success: true,
-      event: timelineEvent,
-      metadata: {
-        visibility_count: result.visibility_count || 0,
-      },
-    };
+    return { success: true, event, metadata: { visibility_count: result.visibility_count || 0 } };
   } catch (error) {
     logger.error('Error creating post with visibility', { error, request }, 'Timeline');
 
@@ -239,27 +232,17 @@ export async function createEvent(
   request: CreateTimelineEventRequest
 ): Promise<TimelineEventResponse> {
   try {
-    // Get current user if actorId not provided
-    let actorId = request.actorId;
+    const actorId = await resolveActorId(request.actorId);
     if (!actorId) {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        return { success: false, error: 'Authentication required' };
-      }
-      actorId = user.id;
+      return { success: false, error: 'Authentication required' };
     }
 
-    // Validate required fields based on event type
     const validation = validateEventRequest(request);
     if (!validation.valid) {
       return { success: false, error: validation.error };
     }
 
-    // Prepare event data - match database function parameter names exactly
-    const safeTitle =
-      request.title?.trim() || request.description?.trim()?.slice(0, 140) || 'Update';
+    const safeTitle = buildSafeTitle(request.title, request.description);
 
     const eventData = {
       p_event_type: request.eventType || 'post_created',
@@ -301,24 +284,12 @@ export async function createEvent(
       return { success: false, error: 'Timeline service unavailable' };
     }
 
-    // Fetch the created event (only if database function succeeded)
-    const { data: eventData2, error: fetchError } = await supabase
-      .from(TIMELINE_TABLES.EVENTS)
-      .select('*')
-      .eq('id', eventId)
-      .single();
-
-    if (fetchError) {
-      logger.error('Failed to fetch created timeline event', fetchError, 'Timeline');
+    const { event } = await fetchCreatedEvent(eventId, 'Failed to fetch created timeline event');
+    if (!event) {
       return { success: false, error: 'Event created but could not retrieve details' };
     }
-
-    const timelineEvent = mapDbEventToTimelineEvent(eventData2);
-
-    // Trigger any post-creation hooks
-    await handlePostCreationHooks(timelineEvent);
-
-    return { success: true, event: timelineEvent };
+    await handlePostCreationHooks(event);
+    return { success: true, event };
   } catch (error) {
     logger.error('Error creating timeline event', error, 'Timeline');
     return { success: false, error: 'Internal server error' };
@@ -476,19 +447,11 @@ export async function createQuoteReply(
       return { success: true, event: eventResult.event };
     }
 
-    // Fallback: fetch directly
-    const { data: eventData, error: fetchError } = await supabase
-      .from(TIMELINE_TABLES.EVENTS)
-      .select('*')
-      .eq('id', result.data)
-      .single();
-
-    if (fetchError || !eventData) {
+    const { event } = await fetchCreatedEvent(result.data, 'Failed to fetch quote reply');
+    if (!event) {
       return { success: false, error: 'Quote reply created but failed to fetch' };
     }
-
-    const timelineEvent = mapDbEventToTimelineEvent(eventData);
-    return { success: true, event: timelineEvent };
+    return { success: true, event };
   } catch (error) {
     logger.error('Error creating quote reply', error, 'Timeline');
     return { success: false, error: 'Failed to create quote reply. Please try again.' };
@@ -591,14 +554,9 @@ export async function shareEvent(
   visibility: TimelineVisibility = 'public'
 ): Promise<{ success: boolean; shareCount: number; error?: string }> {
   try {
-    // Get user ID if not provided
-    let actorId = userId;
+    const actorId = await resolveActorId(userId);
     if (!actorId) {
-      const fetchedUserId = await getCurrentUserId();
-      if (!fetchedUserId) {
-        return { success: false, shareCount: 0, error: 'Authentication required' };
-      }
-      actorId = fetchedUserId;
+      return { success: false, shareCount: 0, error: 'Authentication required' };
     }
 
     // Create a share event referencing the original
