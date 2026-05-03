@@ -1,20 +1,3 @@
-/**
- * TASKS SECTION
- *
- * Dynamic recommendations based on user state.
- * All task logic comes from the SSOT recommendations service.
- *
- * KEY PRINCIPLES:
- * - No hardcoded tasks - all from SSOT
- * - Context-aware - shows only relevant tasks
- * - Progressive - harder tasks after basics complete
- * - Low friction - minimal clicks, immediate feedback
- *
- * Created: 2025-01-XX (original)
- * Last Modified: 2026-01-07
- * Last Modified Summary: Refactored to use recommendations service SSOT
- */
-
 'use client';
 
 import { useState } from 'react';
@@ -38,22 +21,16 @@ import { TASK_DEFINITIONS } from '@/services/recommendations/tasks';
 import type { RecommendedTask, TaskPriority } from '@/services/recommendations/types';
 import type { LucideIcon } from 'lucide-react';
 
-// Build a lookup map from task ID to icon (since icons can't be serialized via API)
 const TASK_ICON_MAP: Record<string, LucideIcon> = Object.fromEntries(
   TASK_DEFINITIONS.map(task => [task.id, task.icon])
 );
 
 interface TasksSectionProps {
   className?: string;
-  /** Maximum tasks to display */
   maxTasks?: number;
-  /** Show smart questions when profile complete */
   showQuestions?: boolean;
 }
 
-/**
- * Get priority styling
- */
 function getPriorityColor(priority: TaskPriority): string {
   switch (priority) {
     case 'critical':
@@ -67,9 +44,6 @@ function getPriorityColor(priority: TaskPriority): string {
   }
 }
 
-/**
- * Get priority label
- */
 function getPriorityLabel(priority: TaskPriority): string {
   switch (priority) {
     case 'critical':
@@ -101,14 +75,12 @@ export default function TasksSection({
     celebration,
     markTaskCompleted,
     completedTaskIds,
-  } = useRecommendations({ limit: maxTasks + 2 }); // Fetch extra for "show more"
+  } = useRecommendations({ limit: maxTasks + 2 });
 
-  // Not authenticated
   if (!user || !profile) {
     return null;
   }
 
-  // Loading state
   if (isLoading) {
     return (
       <Card className={className}>
@@ -120,12 +92,10 @@ export default function TasksSection({
     );
   }
 
-  // Error state
   if (error) {
-    return null; // Silent fail - don't block dashboard
+    return null;
   }
 
-  // Celebration state - all setup tasks done
   if (celebration) {
     return (
       <div className={className}>
@@ -134,17 +104,10 @@ export default function TasksSection({
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Sparkles className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {celebration.title}
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">{celebration.title}</h3>
             <p className="text-gray-600 mb-4">{celebration.description}</p>
-
-            {/* Show smart questions for engaged users */}
             {showQuestions && questions.length > 0 && (
-              <SmartQuestionsPanel
-                questions={questions}
-                className="mt-6 text-left"
-              />
+              <SmartQuestionsPanel questions={questions} className="mt-6 text-left" />
             )}
           </CardContent>
         </Card>
@@ -152,7 +115,6 @@ export default function TasksSection({
     );
   }
 
-  // No tasks - shouldn't happen but handle gracefully
   if (tasks.length === 0) {
     return null;
   }
@@ -176,9 +138,7 @@ export default function TasksSection({
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <div className="text-sm font-medium text-gray-900">
-                  {taskCompletion}% Setup
-                </div>
+                <div className="text-sm font-medium text-gray-900">{taskCompletion}% Setup</div>
                 <div className="text-xs text-gray-500">
                   {tasks.length} task{tasks.length !== 1 ? 's' : ''} remaining
                 </div>
@@ -197,7 +157,6 @@ export default function TasksSection({
             </div>
           </div>
 
-          {/* Progress bar */}
           <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
             <div
               className="bg-tiffany-600 h-2 rounded-full transition-all duration-500"
@@ -209,7 +168,7 @@ export default function TasksSection({
         {isExpanded && (
           <CardContent className="pt-0">
             <div className="space-y-3">
-              {visibleTasks.map((task) => (
+              {visibleTasks.map(task => (
                 <TaskCard
                   key={task.id}
                   task={task}
@@ -220,23 +179,15 @@ export default function TasksSection({
 
               {hiddenCount > 0 && (
                 <div className="text-center pt-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsExpanded(true)}
-                  >
+                  <Button variant="ghost" size="sm" onClick={() => setIsExpanded(true)}>
                     Show {hiddenCount} more task{hiddenCount !== 1 ? 's' : ''}
                   </Button>
                 </div>
               )}
             </div>
 
-            {/* Show smart questions if profile is mostly complete */}
             {showQuestions && questions.length > 0 && profileCompletion >= 75 && (
-              <SmartQuestionsPanel
-                questions={questions}
-                className="mt-6 pt-4 border-t"
-              />
+              <SmartQuestionsPanel questions={questions} className="mt-6 pt-4 border-t" />
             )}
           </CardContent>
         )}
@@ -245,9 +196,6 @@ export default function TasksSection({
   );
 }
 
-/**
- * Individual task card
- */
 function TaskCard({
   task,
   onComplete,
@@ -257,20 +205,15 @@ function TaskCard({
   onComplete: () => void;
   isCompleted: boolean;
 }) {
-  // Look up icon from the map since icons can't be serialized via API
   const IconComponent = TASK_ICON_MAP[task.id] || Target;
 
   return (
     <div
       className={`
         flex items-start gap-4 p-4 border rounded-lg transition-all
-        ${isCompleted
-          ? 'border-green-200 bg-green-50 opacity-60'
-          : 'border-gray-200 hover:border-tiffany-300 hover:shadow-sm'
-        }
+        ${isCompleted ? 'border-green-200 bg-green-50 opacity-60' : 'border-gray-200 hover:border-tiffany-300 hover:shadow-sm'}
       `}
     >
-      {/* Checkbox */}
       <button
         onClick={onComplete}
         className="mt-0.5 text-gray-400 hover:text-tiffany-600 transition-colors flex-shrink-0"
@@ -283,14 +226,14 @@ function TaskCard({
         )}
       </button>
 
-      {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            {/* Title row */}
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <IconComponent className="w-4 h-4 text-gray-600 flex-shrink-0" />
-              <h4 className={`font-medium ${isCompleted ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+              <h4
+                className={`font-medium ${isCompleted ? 'line-through text-gray-500' : 'text-gray-900'}`}
+              >
                 {task.title}
               </h4>
               <span
@@ -300,10 +243,8 @@ function TaskCard({
               </span>
             </div>
 
-            {/* Description */}
             <p className="text-sm text-gray-600 mb-3">{task.description}</p>
 
-            {/* Action button */}
             {!isCompleted && (
               <Link href={task.action.href}>
                 <Button
@@ -323,5 +264,4 @@ function TaskCard({
   );
 }
 
-// Export for testing
 export { TaskCard };
