@@ -18,23 +18,16 @@ import {
   ContextIndicator,
 } from './ComposerShared';
 
-/**
- * TimelineComposer Component - X-Inspired Minimal Design
- *
- * PRIMARY COMPOSER for inline timeline posting.
- * Clean, minimal composer inspired by X (Twitter) design principles.
- *
- * Features:
- * - Minimal visual weight (no heavy cards/gradients)
- * - Progressive disclosure (collapsible project selection)
- * - Basic text formatting (bold/italic via markdown)
- * - Modular, maintainable, DRY code
- *
- * Uses shared components from ComposerShared.tsx for DRY compliance.
- *
- * @see PostComposerMobile for full-screen mobile modal variant
- * @see ComposerShared for reusable UI components
- */
+const VISIBILITY_PRESETS = [
+  { key: 'public' as const, label: 'Public', icon: Globe, description: 'Visible to everyone' },
+  {
+    key: 'followers' as const,
+    label: 'Followers',
+    icon: Users,
+    description: 'People who follow you',
+  },
+  { key: 'private' as const, label: 'Only me', icon: Lock, description: 'Just you' },
+];
 
 export interface TimelineComposerProps {
   targetOwnerId?: string;
@@ -49,9 +42,7 @@ export interface TimelineComposerProps {
   placeholder?: string;
   buttonText?: string;
   showBanner?: boolean;
-  /** Parent event ID for replies */
   parentEventId?: string;
-  /** Simplified UI that hides advanced controls */
   simpleMode?: boolean;
 }
 
@@ -73,21 +64,6 @@ const TimelineComposer = React.memo(function TimelineComposer({
   const [showProjects, setShowProjects] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
 
-  const VISIBILITY_PRESETS = useMemo(
-    () => [
-      { key: 'public' as const, label: 'Public', icon: Globe, description: 'Visible to everyone' },
-      {
-        key: 'followers' as const,
-        label: 'Followers',
-        icon: Users,
-        description: 'People who follow you',
-      },
-      { key: 'private' as const, label: 'Only me', icon: Lock, description: 'Just you' },
-    ],
-    []
-  );
-
-  // Track online/offline status
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -102,7 +78,6 @@ const TimelineComposer = React.memo(function TimelineComposer({
     };
   }, []);
 
-  // Use the post composer hook
   const postComposer = usePostComposer({
     subjectType: targetOwnerType,
     subjectId: targetOwnerId,
@@ -115,7 +90,6 @@ const TimelineComposer = React.memo(function TimelineComposer({
     parentEventId,
   });
 
-  // Determine if posting to own timeline
   const postingToOwnTimeline = useMemo(
     () => !targetOwnerId || targetOwnerId === user?.id,
     [targetOwnerId, user?.id]
@@ -126,12 +100,10 @@ const TimelineComposer = React.memo(function TimelineComposer({
     [targetOwnerName, postingToOwnTimeline]
   );
 
-  // Default placeholder
   const defaultPlaceholder = postingToOwnTimeline
     ? "What's happening?"
     : `Write on ${targetName}...`;
 
-  // Use the shared contentEditable editor hook
   const { editorRef, handleInput, handlePaste, handleKeyDown, handleFormat } =
     useContentEditableEditor({
       content: postComposer.content,
@@ -146,7 +118,6 @@ const TimelineComposer = React.memo(function TimelineComposer({
       disabled: postComposer.isPosting,
     });
 
-  // Project selection handlers
   const handleToggleProject = useCallback(
     (id: string) => {
       postComposer.toggleProjectSelection(id);
@@ -162,7 +133,6 @@ const TimelineComposer = React.memo(function TimelineComposer({
     setShowProjects(true);
   }, []);
 
-  // Button disabled state
   const isButtonDisabled = useMemo(
     () =>
       !postComposer.content.trim() || postComposer.isPosting || postComposer.content.length > 500,
@@ -172,7 +142,6 @@ const TimelineComposer = React.memo(function TimelineComposer({
   return (
     <div className="max-w-2xl mx-auto border-b border-gray-200 bg-white px-4 sm:px-5 py-4 transition-all">
       <div className="flex gap-3">
-        {/* User Avatar - Using AvatarLink component */}
         <div className="pt-0.5 sm:pt-1 flex-shrink-0">
           <AvatarLink
             username={profile?.username || null}
@@ -185,12 +154,9 @@ const TimelineComposer = React.memo(function TimelineComposer({
           />
         </div>
 
-        {/* Content Area */}
         <div className="flex-1 min-w-0">
-          {/* Subtle Context Indicator (Replacement for Banner) */}
           {!postingToOwnTimeline && showBanner && <ContextIndicator targetName={targetName} />}
 
-          {/* ContentEditable Input - Shows formatted text inline (like X) */}
           <div
             ref={editorRef}
             contentEditable
@@ -216,7 +182,6 @@ const TimelineComposer = React.memo(function TimelineComposer({
             suppressContentEditableWarning
           />
 
-          {/* Project Selection Panel (Collapsible) */}
           {showProjects && allowProjectSelection && (
             <ProjectSelectionPanel
               projects={postComposer.userProjects}
@@ -227,10 +192,8 @@ const TimelineComposer = React.memo(function TimelineComposer({
             />
           )}
 
-          {/* Error/Success Messages */}
           <ComposerMessages error={postComposer.error} success={postComposer.postSuccess} />
 
-          {/* Bottom Toolbar - simplified by default */}
           <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
             <div className="flex items-center gap-2 text-tiffany-500 flex-wrap">
               {!simpleMode && <TextFormatToolbar onFormat={handleFormat} />}
