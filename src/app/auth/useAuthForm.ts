@@ -23,7 +23,6 @@ export function useAuthForm() {
   const { signIn, signUp, isLoading: authLoading, hydrated, session, profile, clear } = useAuth();
   const { isLoading: redirectLoading } = useRedirectIfAuthenticated();
 
-  // Determine initial mode based on URL parameter
   const [mode, setMode] = useState<AuthMode>('login');
 
   useEffect(() => {
@@ -33,7 +32,6 @@ export function useAuthForm() {
     }
   }, [searchParams]);
 
-  // Clear any stale auth state when visiting auth page
   useEffect(() => {
     if (hydrated && !session && !profile) {
       clear();
@@ -55,12 +53,10 @@ export function useAuthForm() {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [showMFAVerify, setShowMFAVerify] = useState(false);
 
-  // CAPTCHA state
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const captchaEnabled = !!turnstileSiteKey;
 
-  // CAPTCHA handlers
   const handleCaptchaSuccess = useCallback((token: string) => {
     setCaptchaToken(token);
     setError(null);
@@ -75,13 +71,9 @@ export function useAuthForm() {
     setCaptchaToken(null);
   }, []);
 
-  // Combined loading state
   const loading = localLoading || authLoading;
-
-  // Combined loading state for better UX
   const _isCurrentlyLoading = loading || redirectLoading;
 
-  // Enhanced timeout handling with exponential backoff
   useEffect(() => {
     if (localLoading) {
       const timeout = Math.min(15000 + retryCount * 5000, 45000); // 15s, 20s, 25s, max 45s
@@ -97,9 +89,7 @@ export function useAuthForm() {
     return () => {}; // Return empty cleanup function when not loading
   }, [localLoading, retryCount]);
 
-  // Check if we already have a valid session and redirect
   useEffect(() => {
-    // If we have a session after hydration, redirect immediately
     if (session?.user && hydrated) {
       const redirectUrl = searchParams?.get('from') || '/dashboard';
       router.replace(redirectUrl); // Use replace to avoid back button issues
@@ -113,7 +103,6 @@ export function useAuthForm() {
     setSuccess(null);
 
     try {
-      // Basic client-side validation
       if (!formData.email || !formData.password) {
         throw new Error('Please fill in all required fields');
       }
@@ -122,7 +111,6 @@ export function useAuthForm() {
         throw new Error('Passwords do not match');
       }
 
-      // Use centralized password validation instead of hardcoded check
       if (mode === 'register') {
         const { validatePasswordStrength } = await import('@/lib/validation/password');
         const passwordValidation = validatePasswordStrength(formData.password);
@@ -130,12 +118,10 @@ export function useAuthForm() {
           throw new Error(passwordValidation.errors[0] || 'Password does not meet requirements');
         }
 
-        // Verify CAPTCHA for registration
         if (captchaEnabled && !captchaToken) {
           throw new Error('Please complete the CAPTCHA verification');
         }
 
-        // Verify CAPTCHA token server-side
         if (captchaEnabled && captchaToken) {
           const captchaResponse = await fetch(API_ROUTES.AUTH.VERIFY_CAPTCHA, {
             method: 'POST',
@@ -156,10 +142,7 @@ export function useAuthForm() {
           : await signUp(formData.email, formData.password);
 
       if (result.error) {
-        // Enhanced error handling
         let errorMessage = getReadableError(result.error);
-
-        // Provide more user-friendly error messages
         if (errorMessage.includes('Invalid login credentials')) {
           errorMessage = 'Invalid email or password. Please check your credentials and try again.';
         } else if (errorMessage.includes('Email not confirmed')) {
@@ -187,8 +170,6 @@ export function useAuthForm() {
         // Check if MFA is required
         if (mode === 'login') {
           const mfaResult = await getMFAAssuranceLevel();
-
-          // If user needs to complete MFA (has aal2 factors but only aal1 authenticated)
           if (
             mfaResult.data &&
             mfaResult.data.currentLevel === 'aal1' &&
@@ -200,7 +181,6 @@ export function useAuthForm() {
           }
         }
 
-        // Successful login - redirect will happen automatically via useRedirectIfAuthenticated
         trackEvent('login_success', { userId: result.data.user.id });
         setSuccess('Login successful! Redirecting...');
       }
@@ -243,7 +223,6 @@ export function useAuthForm() {
     setRetryCount(prev => prev + 1);
     setError(null);
     setSuccess(null);
-    // Create a synthetic form event for retry
     const syntheticEvent = {
       preventDefault: () => {},
       stopPropagation: () => {},
@@ -276,15 +255,12 @@ export function useAuthForm() {
   };
 
   const handleMFAVerificationComplete = () => {
-    // MFA verification completed successfully
     setSuccess('Login successful! Redirecting...');
     setShowMFAVerify(false);
-    // Redirect will happen automatically via useRedirectIfAuthenticated
   };
 
   const handleMFACancelled = () => {
     setShowMFAVerify(false);
-    // Sign out to clear partial authentication
     clear();
   };
 
@@ -294,14 +270,11 @@ export function useAuthForm() {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
       });
       if (error) {
         throw error;
       }
-      // Browser will redirect to provider's OAuth page
     } catch (err) {
       setError(getReadableError(err, `Failed to sign in with ${provider}`));
       setLocalLoading(false);
@@ -316,7 +289,6 @@ export function useAuthForm() {
       if (result.error) {
         throw new Error(getReadableError(result.error, 'Anonymous sign-in failed'));
       }
-      // Redirect will happen automatically via useRedirectIfAuthenticated
       const redirectUrl = searchParams?.get('from') || '/dashboard';
       router.replace(redirectUrl);
     } catch (err) {
@@ -326,7 +298,6 @@ export function useAuthForm() {
   };
 
   return {
-    // State
     mode,
     setMode,
     formData,
@@ -345,16 +316,12 @@ export function useAuthForm() {
     showMFAVerify,
     session,
     hydrated,
-
-    // CAPTCHA
     captchaToken,
     captchaEnabled,
     turnstileSiteKey,
     handleCaptchaSuccess,
     handleCaptchaError,
     handleCaptchaExpire,
-
-    // Handlers
     handleSubmit,
     handleForgotPassword,
     handleRetry,
@@ -363,8 +330,6 @@ export function useAuthForm() {
     handleMFACancelled,
     handleOAuthSignIn,
     handleAnonymousSignIn,
-
-    // Unused but preserved to avoid breaking references
     _isCurrentlyLoading,
   };
 }
