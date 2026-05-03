@@ -1,29 +1,8 @@
-/**
- * ComposerShared - Shared Components for Post Composers
- *
- * SSOT for reusable UI pieces used by both TimelineComposer and PostComposerMobile.
- * Follows DRY principle by extracting duplicated rendering logic.
- *
- * Used by:
- * - TimelineComposer (inline posting)
- * - PostComposerMobile (fullscreen/modal posting)
- */
-
 'use client';
 
 import React from 'react';
 import { Bold, Italic, X, FolderPlus, WifiOff } from 'lucide-react';
-import Button from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
-
-// ==================== TYPES ====================
-
-export interface Project {
-  id: string;
-  title: string;
-}
-
-// ==================== TEXT FORMAT TOOLBAR ====================
 
 export interface TextFormatToolbarProps {
   onFormat: (format: 'bold' | 'italic') => void;
@@ -31,9 +10,6 @@ export interface TextFormatToolbarProps {
   size?: 'sm' | 'md';
 }
 
-/**
- * Toolbar for applying text formatting (bold/italic)
- */
 export function TextFormatToolbar({
   onFormat,
   variant = 'sky',
@@ -73,7 +49,10 @@ export function TextFormatToolbar({
   );
 }
 
-// ==================== PROJECT SELECTION PANEL ====================
+export interface Project {
+  id: string;
+  title: string;
+}
 
 export interface ProjectSelectionPanelProps {
   projects: Project[];
@@ -84,9 +63,6 @@ export interface ProjectSelectionPanelProps {
   variant?: 'orange' | 'default';
 }
 
-/**
- * Collapsible panel for selecting projects to cross-post
- */
 export function ProjectSelectionPanel({
   projects,
   selectedProjects,
@@ -143,8 +119,6 @@ export function ProjectSelectionPanel({
   );
 }
 
-// ==================== PROJECT TOGGLE BUTTON ====================
-
 export interface ProjectToggleButtonProps {
   showProjects: boolean;
   selectedCount: number;
@@ -152,9 +126,6 @@ export interface ProjectToggleButtonProps {
   variant?: 'sky' | 'orange';
 }
 
-/**
- * Button to toggle project selection panel
- */
 export function ProjectToggleButton({
   showProjects,
   selectedCount,
@@ -185,8 +156,6 @@ export function ProjectToggleButton({
   );
 }
 
-// ==================== COMPOSER MESSAGES ====================
-
 export interface ComposerMessagesProps {
   error?: string | null;
   success?: boolean;
@@ -196,9 +165,6 @@ export interface ComposerMessagesProps {
   maxRetries?: number;
 }
 
-/**
- * Error and success message display for composers
- */
 export function ComposerMessages({
   error,
   success,
@@ -247,8 +213,6 @@ export function ComposerMessages({
   return null;
 }
 
-// ==================== CHARACTER COUNTER ====================
-
 export interface CharacterCounterProps {
   count: number;
   max?: number;
@@ -257,9 +221,6 @@ export interface CharacterCounterProps {
   className?: string;
 }
 
-/**
- * Character count display with color warnings
- */
 export function CharacterCounter({
   count,
   max = 500,
@@ -285,15 +246,10 @@ export function CharacterCounter({
   );
 }
 
-// ==================== OFFLINE INDICATOR ====================
-
 export interface OfflineIndicatorProps {
   isOnline: boolean;
 }
 
-/**
- * Shows offline status indicator
- */
 export function OfflineIndicator({ isOnline }: OfflineIndicatorProps) {
   if (isOnline) {
     return null;
@@ -307,68 +263,10 @@ export function OfflineIndicator({ isOnline }: OfflineIndicatorProps) {
   );
 }
 
-// ==================== POST BUTTON ====================
-
-export interface PostButtonProps {
-  onClick: () => void;
-  disabled: boolean;
-  isPosting: boolean;
-  text?: string;
-  variant?: 'sky' | 'orange' | 'gradient';
-  size?: 'sm' | 'md';
-}
-
-/**
- * Primary post/submit button
- */
-export function PostButton({
-  onClick,
-  disabled,
-  isPosting,
-  text = 'Post',
-  variant = 'sky',
-  size = 'sm',
-}: PostButtonProps) {
-  const baseClasses = cn(
-    'rounded-full font-bold transition-all disabled:opacity-50 disabled:shadow-none',
-    size === 'sm' ? 'px-5 py-2 text-sm shadow-sm' : 'px-6 py-2 shadow-sm min-h-[44px] min-w-[80px]'
-  );
-
-  const variantClasses = {
-    sky: 'bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white',
-    orange: 'bg-orange-500 hover:bg-orange-600 text-white',
-    gradient:
-      'bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 disabled:from-gray-300 disabled:to-gray-300 text-white hover:shadow-md',
-  };
-
-  return (
-    <Button
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(baseClasses, variantClasses[variant])}
-      size="sm"
-    >
-      {isPosting ? (
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          <span>Posting...</span>
-        </div>
-      ) : (
-        text
-      )}
-    </Button>
-  );
-}
-
-// ==================== CONTEXT INDICATOR ====================
-
 export interface ContextIndicatorProps {
   targetName: string;
 }
 
-/**
- * Shows where the post will appear
- */
 export function ContextIndicator({ targetName }: ContextIndicatorProps) {
   return (
     <div className="mb-1.5 flex items-center">
