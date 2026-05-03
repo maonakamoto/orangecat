@@ -22,23 +22,33 @@ import { ResearchEntity } from '@/types/research';
 import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { ROUTES } from '@/config/routes';
-import { PROJECT_STATUS } from '@/config/project-statuses';
+import { PROJECT_STATUS, VALID_PROJECT_STATUSES } from '@/config/project-statuses';
+import { RESEARCH_FIELDS, type ResearchField } from '@/config/research';
 
-const FIELD_COLORS: Record<string, string> = {
+const FIELD_COLORS: Record<ResearchField, string> = {
+  fundamental_physics: 'bg-purple-100 text-purple-800',
+  mathematics: 'bg-orange-100 text-orange-800',
   computer_science: 'bg-blue-100 text-blue-800',
   biology: 'bg-green-100 text-green-800',
-  physics: 'bg-purple-100 text-purple-800',
-  mathematics: 'bg-orange-100 text-orange-800',
-  medicine: 'bg-red-100 text-red-800',
+  chemistry: 'bg-teal-100 text-teal-800',
+  neuroscience: 'bg-violet-100 text-violet-800',
+  psychology: 'bg-rose-100 text-rose-800',
+  economics: 'bg-amber-100 text-amber-800',
+  philosophy: 'bg-slate-100 text-slate-800',
   engineering: 'bg-indigo-100 text-indigo-800',
-  ai: 'bg-pink-100 text-pink-800',
+  medicine: 'bg-red-100 text-red-800',
+  environmental_science: 'bg-emerald-100 text-emerald-800',
+  social_science: 'bg-sky-100 text-sky-800',
+  artificial_intelligence: 'bg-pink-100 text-pink-800',
+  blockchain_cryptography: 'bg-yellow-100 text-yellow-800',
+  other: 'bg-gray-100 text-gray-800',
 };
 
 const STATUS_COLORS: Record<string, string> = {
   [PROJECT_STATUS.ACTIVE]: 'bg-green-500',
   [PROJECT_STATUS.DRAFT]: 'bg-yellow-500',
   [PROJECT_STATUS.COMPLETED]: 'bg-blue-500',
-  paused: 'bg-orange-500',
+  [PROJECT_STATUS.PAUSED]: 'bg-orange-500',
   [PROJECT_STATUS.CANCELLED]: 'bg-red-500',
 };
 
@@ -53,7 +63,9 @@ export default function ResearchDashboard() {
   const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
-    if (!authLoading && hydrated) { fetchResearchEntities(); }
+    if (!authLoading && hydrated) {
+      fetchResearchEntities();
+    }
   }, [authLoading, hydrated]);
 
   const fetchResearchEntities = async () => {
@@ -79,7 +91,9 @@ export default function ResearchDashboard() {
     return matchesSearch && matchesField && matchesStatus;
   });
 
-  if (authLoading || !hydrated) { return <Loading message="Loading research..." />; }
+  if (authLoading || !hydrated) {
+    return <Loading message="Loading research..." />;
+  }
 
   return (
     <EntityListShell
@@ -152,18 +166,16 @@ export default function ResearchDashboard() {
           />
         </div>
         <Select value={fieldFilter} onValueChange={setFieldFilter}>
-          <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue placeholder="All Fields" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Fields</SelectItem>
-            <SelectItem value="computer_science">Computer Science</SelectItem>
-            <SelectItem value="biology">Biology</SelectItem>
-            <SelectItem value="physics">Physics</SelectItem>
-            <SelectItem value="medicine">Medicine</SelectItem>
-            <SelectItem value="engineering">Engineering</SelectItem>
-            <SelectItem value="artificial_intelligence">AI</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
+            {RESEARCH_FIELDS.map(f => (
+              <SelectItem key={f.value} value={f.value}>
+                {f.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -172,10 +184,11 @@ export default function ResearchDashboard() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="draft">Draft</SelectItem>
-            <SelectItem value="completed">Completed</SelectItem>
-            <SelectItem value="paused">Paused</SelectItem>
+            {VALID_PROJECT_STATUSES.map(s => (
+              <SelectItem key={s} value={s}>
+                {s.charAt(0).toUpperCase() + s.slice(1)}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -231,8 +244,13 @@ export default function ResearchDashboard() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Badge className={FIELD_COLORS[entity.field] ?? 'bg-gray-100 text-gray-800'}>
-                  {entity.field.replace('_', ' ')}
+                <Badge
+                  className={
+                    FIELD_COLORS[entity.field as ResearchField] ?? 'bg-gray-100 text-gray-800'
+                  }
+                >
+                  {RESEARCH_FIELDS.find(f => f.value === entity.field)?.label ??
+                    entity.field.replace(/_/g, ' ')}
                 </Badge>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
