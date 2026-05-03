@@ -1,0 +1,122 @@
+'use client';
+
+import { Calendar, Tag, Filter } from 'lucide-react';
+import { BlogPost } from '@/lib/blog';
+
+interface TimeFilterOption {
+  key: string;
+  label: string;
+  count: number;
+}
+
+interface BlogFiltersProps {
+  tags: string[];
+  selectedTag: string | null;
+  setSelectedTag: (tag: string | null) => void;
+  selectedTimeFilter: string;
+  setSelectedTimeFilter: (filter: string) => void;
+  timeFilterOptions: TimeFilterOption[];
+  filteredPosts: BlogPost[];
+  clearFilters: () => void;
+}
+
+export function BlogFilters({
+  tags,
+  selectedTag,
+  setSelectedTag,
+  selectedTimeFilter,
+  setSelectedTimeFilter,
+  timeFilterOptions,
+  filteredPosts,
+  clearFilters,
+}: BlogFiltersProps) {
+  return (
+    <div className="mb-8 space-y-6">
+      {tags.length > 0 && (
+        <div>
+          <div className="flex items-center mb-4">
+            <Tag className="w-4 h-4 mr-2 text-gray-600" />
+            <h3 className="text-lg font-semibold">Filter by Topic</h3>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedTag(null)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                !selectedTag
+                  ? 'bg-tiffany-500 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              All Topics
+            </button>
+            {tags.map(tag => (
+              <button
+                key={tag}
+                onClick={() => setSelectedTag(tag)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  selectedTag === tag
+                    ? 'bg-tiffany-500 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div>
+        <div className="flex items-center mb-4">
+          <Calendar className="w-4 h-4 mr-2 text-gray-600" />
+          <h3 className="text-lg font-semibold">Filter by Time</h3>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {timeFilterOptions.map(option => (
+            <button
+              key={option.key}
+              onClick={() => setSelectedTimeFilter(option.key)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedTimeFilter === option.key
+                  ? 'bg-orange-500 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {option.label}
+              <span className="ml-1.5 text-xs opacity-75">({option.count})</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {(selectedTag || selectedTimeFilter !== 'all') && (
+        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+          <Filter className="w-4 h-4 text-gray-500" />
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-gray-600">Showing:</span>
+            {selectedTag && (
+              <span className="px-2 py-1 bg-tiffany-100 text-tiffany-700 rounded text-xs font-medium">
+                {selectedTag}
+              </span>
+            )}
+            {selectedTimeFilter !== 'all' && (
+              <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-medium">
+                {timeFilterOptions.find(opt => opt.key === selectedTimeFilter)?.label}
+              </span>
+            )}
+            <span className="text-gray-500">•</span>
+            <span className="text-gray-600 font-medium">
+              {filteredPosts.length} post{filteredPosts.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+          <button
+            onClick={clearFilters}
+            className="ml-auto text-xs text-gray-500 hover:text-gray-700 underline"
+          >
+            Clear all filters
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
