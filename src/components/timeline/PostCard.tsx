@@ -1,14 +1,11 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { TimelineDisplayEvent, TimelineVisibility } from '@/types/timeline';
+import React from 'react';
+import { TimelineDisplayEvent } from '@/types/timeline';
 import { useAuth } from '@/hooks/useAuth';
-import { logger } from '@/utils/logger';
 import { PostHeader } from './PostHeader';
 import { PostContent } from './PostContent';
 import { PostActions } from './PostActions';
-import { usePostInteractions } from '@/hooks/usePostInteractions';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
 import { RepostModal } from './RepostModal';
@@ -17,8 +14,8 @@ import { EditPostModal } from './EditPostModal';
 import { DeletePostDialog } from './DeletePostDialog';
 import AvatarLink from '@/components/ui/AvatarLink';
 import { cn } from '@/lib/utils';
-import { timelineService } from '@/services/timeline';
 import { Check } from 'lucide-react';
+import { usePostCardActions } from './usePostCardActions';
 
 interface PostCardProps {
   event: TimelineDisplayEvent;
@@ -29,7 +26,6 @@ interface PostCardProps {
   onReplyCreated?: (reply: TimelineDisplayEvent) => void;
   showThreading?: boolean;
   onShowThread?: () => void;
-  // Multi-select support
   isSelectionMode?: boolean;
   isSelected?: boolean;
   onToggleSelect?: (eventId: string) => void;
@@ -48,190 +44,50 @@ export function PostCard({
   isSelected = false,
   onToggleSelect,
 }: PostCardProps) {
-  const router = useRouter();
   const { user, profile } = useAuth();
 
-  // Reply state
-  const [showReplyInput, setShowReplyInput] = useState(false);
-  const [replyText, setReplyText] = useState('');
-  const [isReplying, setIsReplying] = useState(false);
-
-  // Edit/Delete state
-  const [showMenu, setShowMenu] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  // Delegate repost logic to the hook (DRY compliance)
   const {
+    canEdit,
+    showReplyInput,
+    replyText,
+    setReplyText,
+    isReplying,
+    showMenu,
+    showEditModal,
+    setShowEditModal,
+    showDeleteDialog,
+    setShowDeleteDialog,
+    isEditing,
+    isDeleting,
     isReposting,
     repostModalOpen,
+    handleMenuToggle,
+    handleEditClick,
+    handleEditSave,
+    handleDeleteClick,
+    handleDeleteConfirm,
+    handleToggleReply,
+    handleReplySubmit,
+    handleSelectionClick,
+    handlePostClick,
     handleRepostClick,
     handleRepostClose,
     handleSimpleRepost,
     handleQuoteRepost,
-  } = usePostInteractions({ event, onUpdate });
+  } = usePostCardActions({
+    event,
+    user,
+    profile,
+    onUpdate,
+    onDelete,
+    onReplyCreated,
+    isSelectionMode,
+    onToggleSelect,
+  });
 
-  // Check permissions
-  const canEdit = user?.id === event.actor.id;
-
-  // Check if this is a repost (simple or quote)
   const isRepost = event.metadata?.is_repost;
   const isQuoteRepost = event.metadata?.is_quote_repost;
   const isSimpleRepost = isRepost && !isQuoteRepost;
-
-  // Handle menu toggle
-  const handleMenuToggle = useCallback(() => {
-    setShowMenu(prev => !prev);
-  }, []);
-
-  // Handle edit
-  const handleEditClick = useCallback(() => {
-    setShowMenu(false);
-    setShowEditModal(true);
-  }, []);
-
-  // Handle edit save
-  const handleEditSave = useCallback(
-    async (updates: { title: string; description: string; visibility: TimelineVisibility }) => {
-      setIsEditing(true);
-      try {
-        const result = await timelineService.updateEvent(event.id, {
-          title: updates.title,
-          description: updates.description,
-          visibility: updates.visibility,
-        });
-
-        if (result.success) {
-          onUpdate({
-            title: updates.title,
-            description: updates.description,
-            visibility: updates.visibility,
-            updatedAt: new Date().toISOString(),
-          });
-          logger.info('Post updated successfully', { eventId: event.id }, 'PostCard');
-        } else {
-          throw new Error(result.error || 'Failed to update post');
-        }
-      } catch (error) {
-        logger.error('Failed to update post', error, 'PostCard');
-        throw error;
-      } finally {
-        setIsEditing(false);
-      }
-    },
-    [event.id, onUpdate]
-  );
-
-  // Handle delete click
-  const handleDeleteClick = useCallback(() => {
-    setShowMenu(false);
-    setShowDeleteDialog(true);
-  }, []);
-
-  // Handle delete confirm
-  const handleDeleteConfirm = useCallback(async () => {
-    setIsDeleting(true);
-    try {
-      const success = await timelineService.deleteEvent(event.id);
-
-      if (success) {
-        logger.info('Post deleted successfully', { eventId: event.id }, 'PostCard');
-        setShowDeleteDialog(false);
-        onDelete?.();
-      } else {
-        throw new Error('Failed to delete post');
-      }
-    } catch (error) {
-      logger.error('Failed to delete post', error, 'PostCard');
-      throw error;
-    } finally {
-      setIsDeleting(false);
-    }
-  }, [event.id, onDelete]);
-
-  // Handle toggling reply input (X-style inline reply)
-  const handleToggleReply = useCallback(() => {
-    setShowReplyInput(prev => !prev);
-  }, []);
-
-  // Handle reply submission (creates a new timeline event with parent_event_id)
-  const handleReplySubmit = useCallback(async () => {
-    const text = replyText.trim();
-    if (!text || isReplying || !user) {
-      return;
-    }
-
-    setIsReplying(true);
-    try {
-      const title = text.length <= 120 ? text : `${text.slice(0, 117).trimEnd()}...`;
-      const result = await timelineService.createEvent({
-        eventType: 'status_update',
-        actorId: user.id,
-        subjectType: event.subject?.type || 'profile',
-        subjectId: event.subject?.id || event.actor.id,
-        title,
-        description: text,
-        visibility: event.visibility,
-        metadata: { is_user_post: true, is_reply: true },
-        parentEventId: event.id,
-      });
-
-      if (!result.success || !result.event) {
-        throw new Error(result.error || 'Failed to reply');
-      }
-
-      // Fetch enriched event for display (ensures avatar/name are present)
-      const hydrated = await timelineService.getEventById(result.event.id);
-
-      setReplyText('');
-      setShowReplyInput(false);
-      if (hydrated.success && hydrated.event) {
-        onReplyCreated?.(hydrated.event);
-      }
-
-      // Best-effort local count bump
-      onUpdate({
-        commentsCount: (event.commentsCount || event.replyCount || 0) + 1,
-        replyCount: (event.replyCount || 0) + 1,
-      });
-    } catch (error) {
-      logger.error('Failed to post reply', error, 'PostCard');
-    } finally {
-      setIsReplying(false);
-    }
-  }, [replyText, isReplying, user, event, onReplyCreated, onUpdate]);
-
-  // Handle selection checkbox click
-  const handleSelectionClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      onToggleSelect?.(event.id);
-    },
-    [event.id, onToggleSelect]
-  );
-
-  // Navigate to thread view when clicking the post (X-style)
-  const handlePostClick = useCallback(
-    (e: React.MouseEvent) => {
-      // In selection mode, toggle selection instead of navigating
-      if (isSelectionMode) {
-        onToggleSelect?.(event.id);
-        return;
-      }
-
-      // Don't navigate if clicking on interactive elements
-      const target = e.target as HTMLElement;
-      const isInteractive = target.closest('a, button, textarea, input, [role="button"]');
-      if (isInteractive) {
-        return;
-      }
-
-      router.push(`/post/${event.id}`);
-    },
-    [router, event.id, isSelectionMode, onToggleSelect]
-  );
 
   return (
     <>
@@ -245,7 +101,6 @@ export function PostCard({
         )}
         data-event-id={event.id}
       >
-        {/* X-style repost indicator at top */}
         {isSimpleRepost && (
           <div
             className={cn(
@@ -261,7 +116,6 @@ export function PostCard({
         )}
 
         <div className="flex gap-3">
-          {/* Selection checkbox - shown in selection mode */}
           {isSelectionMode && (
             <div className="flex-shrink-0 flex items-start pt-2">
               <button
@@ -281,7 +135,6 @@ export function PostCard({
             </div>
           )}
 
-          {/* Avatar column - continuous thread line could go here */}
           <div className="flex-shrink-0">
             <AvatarLink
               username={
@@ -296,9 +149,7 @@ export function PostCard({
             />
           </div>
 
-          {/* Content column */}
           <div className="flex-1 min-w-0">
-            {/* Post Header with edit/delete menu */}
             <PostHeader
               event={event}
               canEdit={canEdit}
@@ -309,12 +160,10 @@ export function PostCard({
               onDelete={handleDeleteClick}
             />
 
-            {/* Post Content */}
             <div className="mt-1">
               <PostContent event={event} />
             </div>
 
-            {/* Post Actions */}
             <PostActions
               event={event}
               onUpdate={onUpdate}
@@ -323,19 +172,18 @@ export function PostCard({
               isReposting={isReposting}
             />
 
-            {/* Thread Indicator - only visible when there's a real thread */}
-            {showThreading && event.threadId && (event.threadRepliesCount || event.replyCount || 0) > 0 && (
-              <div className="mt-2">
-                <ThreadIndicator
-                  threadId={event.threadId}
-                  replyCount={event.threadRepliesCount || event.replyCount || 0}
-                  onShowThread={onShowThread}
-                />
-              </div>
-            )}
+            {showThreading &&
+              event.threadId &&
+              (event.threadRepliesCount || event.replyCount || 0) > 0 && (
+                <div className="mt-2">
+                  <ThreadIndicator
+                    threadId={event.threadId}
+                    replyCount={event.threadRepliesCount || event.replyCount || 0}
+                    onShowThread={onShowThread}
+                  />
+                </div>
+              )}
 
-
-            {/* Inline Reply Input (X-style) */}
             {showReplyInput && user && (
               <div className="mt-3 flex gap-3 pt-3 border-t border-gray-100">
                 <AvatarLink
@@ -371,7 +219,6 @@ export function PostCard({
           </div>
         </div>
 
-        {/* Repost Modal */}
         <RepostModal
           isOpen={repostModalOpen}
           onClose={handleRepostClose}
@@ -393,7 +240,6 @@ export function PostCard({
         />
       </article>
 
-      {/* Edit Post Modal */}
       <EditPostModal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
@@ -402,7 +248,6 @@ export function PostCard({
         isSaving={isEditing}
       />
 
-      {/* Delete Post Dialog */}
       <DeletePostDialog
         isOpen={showDeleteDialog}
         onClose={() => setShowDeleteDialog(false)}
