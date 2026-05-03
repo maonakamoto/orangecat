@@ -4,33 +4,21 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
 import BottomSheet from '@/components/ui/BottomSheet';
 import AvatarLink from '@/components/ui/AvatarLink';
-import { Globe, ChevronDown, ArrowLeft, ImageIcon } from 'lucide-react';
+import { Globe, ChevronDown, ImageIcon } from 'lucide-react';
 import { usePostComposer, type PostComposerOptions } from '@/hooks/usePostComposerNew';
 import { useContentEditableEditor } from '@/hooks/useContentEditableEditor';
 import { cn } from '@/lib/utils';
 import { sanitizeHtml } from '@/lib/validation';
 import { TextFormatToolbar, ComposerMessages, CharacterCounter } from './ComposerShared';
+import { PostComposerFullScreenHeader } from './PostComposerFullScreenHeader';
+import { PostComposerInlineControls } from './PostComposerInlineControls';
 
-/**
- * MOBILE-FIRST Post Composer Component
- *
- * SECONDARY COMPOSER for full-screen mobile modal posting.
- * Designed for touch-first interaction with progressive enhancement for larger screens.
- *
- * Features:
- * - Bottom sheet UI for full-screen modal
- * - Touch-optimized controls (min 44px targets)
- * - Offline support, auto-save drafts
- * - X-style full-screen mode via fullScreen prop
- *
- * Uses shared components from ComposerShared.tsx for DRY compliance.
- *
- * @see TimelineComposer for inline posting variant
- * @see ComposerShared for reusable UI components
- */
+const LazyProjectSelectionModal = dynamic(() => import('./ProjectSelectionModal'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export interface PostComposerMobileProps extends PostComposerOptions {
   placeholder?: string;
@@ -39,10 +27,10 @@ export interface PostComposerMobileProps extends PostComposerOptions {
   showProjectSelection?: boolean;
   autoFocus?: boolean;
   onCancel?: () => void;
-  compact?: boolean; // Compact mode for timeline integration
-  fullScreen?: boolean; // X-style full-screen mode using BottomSheet
-  isOpen?: boolean; // For full-screen modal behavior
-  onClose?: () => void; // For full-screen modal close
+  compact?: boolean;
+  fullScreen?: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
@@ -72,13 +60,6 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
 
   const [isOptionsSheetOpen, setIsOptionsSheetOpen] = useState(false);
 
-  // Lazy load project selection modal (always available, only rendered when needed)
-  const LazyProjectSelectionModal = dynamic(() => import('./ProjectSelectionModal'), {
-    ssr: false,
-    loading: () => null,
-  });
-
-  // Use the shared contentEditable editor hook
   const { editorRef, handleInput, handlePaste, handleKeyDown, handleFormat } =
     useContentEditableEditor({
       content: composer.content,
@@ -90,40 +71,26 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
       sanitizer: sanitizeHtml,
     });
 
-  // Auto-focus on mount (mobile-friendly)
   useEffect(() => {
     if ((autoFocus || fullScreen || isOpen) && editorRef.current && !compact) {
-      // Delay focus for mobile keyboards
       setTimeout(() => editorRef.current?.focus(), 100);
     }
   }, [autoFocus, compact, fullScreen, isOpen, editorRef]);
 
-  // Render composer content (reusable for both Card and BottomSheet)
   const renderComposerContent = () => (
     <>
-      {/* X-style full-screen header */}
       {fullScreen && (
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-          <button
-            onClick={onClose || onCancel}
-            className="p-2 -ml-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
-            aria-label="Close composer"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
-          </button>
-          <Button
-            onClick={composer.handlePost}
-            disabled={!composer.canPost}
-            className="bg-orange-500 hover:bg-orange-600 text-white rounded-full px-5 min-h-[36px] disabled:opacity-50"
-          >
-            {composer.isPosting ? 'Posting...' : buttonText}
-          </Button>
-        </div>
+        <PostComposerFullScreenHeader
+          buttonText={buttonText}
+          isPosting={composer.isPosting}
+          canPost={composer.canPost}
+          onClose={onClose}
+          onCancel={onCancel}
+          onPost={composer.handlePost}
+        />
       )}
 
-      {/* Main content area */}
       <div className={cn('flex gap-3', fullScreen ? 'px-4 pt-4' : '')}>
-        {/* Avatar */}
         <div className={cn('flex-shrink-0', fullScreen ? 'pt-1' : '')}>
           {fullScreen ? (
             <AvatarLink
@@ -158,9 +125,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
           )}
         </div>
 
-        {/* Content area */}
         <div className="flex-1 min-w-0">
-          {/* Crosspost selector (X-style) */}
           {fullScreen && showProjectSelection && (
             <button
               onClick={() => setIsOptionsSheetOpen(true)}
@@ -173,7 +138,6 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
             </button>
           )}
 
-          {/* Header with user info (only in non-compact, non-fullscreen mode) */}
           {!compact && !fullScreen && (
             <div className="flex items-center gap-3 mb-4">
               <div className="flex-1 min-w-0">
@@ -192,14 +156,13 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                   >
                     <Globe className="w-3 h-3" />
                     {composer.visibility === 'public' ? 'Public' : 'Private'}
-                    <ChevronDown className={`w-3 h-3 transition-transform`} />
+                    <ChevronDown className="w-3 h-3 transition-transform" />
                   </button>
                 )}
               </div>
             </div>
           )}
 
-          {/* Main input area - contentEditable for visual formatting */}
           <div className="relative">
             <div
               ref={editorRef}
@@ -223,13 +186,11 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                     : 'text-base min-h-[60px]',
                 composer.isPosting && 'opacity-50 cursor-not-allowed'
               )}
-              style={{ fontSize: fullScreen ? '20px' : '16px' }} // Prevent iOS zoom on focus
+              style={{ fontSize: fullScreen ? '20px' : '16px' }}
               suppressContentEditableWarning
               aria-label="Write your post"
               aria-describedby="character-count"
             />
-
-            {/* Character counter */}
             <CharacterCounter
               count={composer.characterCount}
               max={composerOptions.maxLength || 500}
@@ -239,7 +200,6 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
         </div>
       </div>
 
-      {/* Project Selection Modal (X-style) */}
       {isOptionsSheetOpen && showProjectSelection && (
         <LazyProjectSelectionModal
           isOpen={isOptionsSheetOpen}
@@ -251,7 +211,6 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
         />
       )}
 
-      {/* Error/Success Messages */}
       <ComposerMessages
         error={composer.error}
         success={composer.postSuccess}
@@ -260,10 +219,8 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
         retryCount={composer.retryCount}
       />
 
-      {/* Toolbar (X-style) - Only features that exist/are needed */}
       {fullScreen && (
         <div className="flex items-center gap-4 px-4 pt-4 border-t border-gray-200 mt-4">
-          {/* Image upload (grayed out - coming soon) */}
           <button
             className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 cursor-not-allowed rounded-full transition-colors"
             aria-label="Add image (coming soon)"
@@ -272,93 +229,27 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
           >
             <ImageIcon className="w-5 h-5" />
           </button>
-
-          {/* Text formatting toolbar */}
           <TextFormatToolbar onFormat={handleFormat} variant="orange" size="md" />
         </div>
       )}
 
-      {/* Action Bar (non-fullscreen) */}
       {!fullScreen && (
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
-          <div className="flex items-center gap-2">
-            {/* Options toggle (mobile) */}
-            {!compact && (
-              <button
-                onClick={() => setIsOptionsSheetOpen(true)}
-                className="text-gray-700 hover:text-gray-700 p-3 min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label="Show post options"
-              >
-                <ChevronDown className="w-5 h-5" />
-              </button>
-            )}
-
-            {/* Project indicator */}
-            {composer.selectedProjects.length > 0 && (
-              <div className="text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
-                {composer.selectedProjects.length} project
-                {composer.selectedProjects.length > 1 ? 's' : ''}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            {/* Cancel button */}
-            {onCancel && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onCancel}
-                disabled={composer.isPosting}
-                className="text-gray-600"
-              >
-                Cancel
-              </Button>
-            )}
-
-            {/* Post button */}
-            <Button
-              onClick={composer.handlePost}
-              disabled={!composer.canPost}
-              className={cn(
-                'bg-gradient-to-r from-orange-500 to-yellow-500',
-                'hover:from-orange-600 hover:to-yellow-600',
-                'disabled:from-gray-300 disabled:to-gray-300',
-                'text-white px-6 py-2 rounded-full font-semibold',
-                'transition-all shadow-sm hover:shadow-md',
-                'disabled:shadow-none min-h-[44px] min-w-[80px]',
-                compact && 'px-4 py-2 text-sm'
-              )}
-              aria-label={composer.isPosting ? 'Posting...' : `Post ${buttonText}`}
-            >
-              {composer.isPosting ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Posting...</span>
-                </div>
-              ) : (
-                buttonText
-              )}
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {/* Loading state for projects */}
-      {composer.loadingProjects && (
-        <div className="mt-2 text-xs text-gray-700">Loading your projects...</div>
-      )}
-
-      {/* Keyboard hint (desktop only, non-fullscreen) */}
-      {!fullScreen && (
-        <div className="hidden sm:block mt-2 text-xs text-gray-400 text-center">
-          Press Ctrl+Enter to post
-        </div>
+        <PostComposerInlineControls
+          buttonText={buttonText}
+          isPosting={composer.isPosting}
+          canPost={composer.canPost}
+          compact={compact}
+          loadingProjects={composer.loadingProjects}
+          selectedProjectCount={composer.selectedProjects.length}
+          showOptionsButton={showProjectSelection || showVisibilityToggle}
+          onPost={composer.handlePost}
+          onCancel={onCancel}
+          onShowOptions={() => setIsOptionsSheetOpen(true)}
+        />
       )}
     </>
   );
 
-  // Full-screen mode: render in BottomSheet
   if (fullScreen) {
     return (
       <BottomSheet
@@ -373,7 +264,6 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
     );
   }
 
-  // Inline mode: render in Card (existing behavior)
   return (
     <Card
       className={cn(
