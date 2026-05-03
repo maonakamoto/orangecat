@@ -302,6 +302,50 @@ export async function fetchProfileForCat(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyQuery = any;
+
+/**
+ * Shared helper: fetch up to 20 rows from an entity table, log on error, map to EntitySummary[].
+ */
+async function fetchEntityBatch(
+  supabase: AnySupabaseClient,
+  opts: {
+    entityType: string;
+    tableName: string;
+    select: string;
+    filterField: string;
+    filterValue: string;
+    statuses?: string[];
+    extraWhere?: (q: AnyQuery) => AnyQuery;
+  },
+  map: (row: Record<string, unknown>) => EntitySummary
+): Promise<EntitySummary[]> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let q = (supabase as any)
+    .from(opts.tableName)
+    .select(opts.select)
+    .eq(opts.filterField, opts.filterValue);
+  if (opts.statuses) {
+    q = q.in('status', opts.statuses);
+  }
+  if (opts.extraWhere) {
+    q = opts.extraWhere(q);
+  }
+  const { data, error } = await q.limit(20);
+  if (error) {
+    logger.warn(
+      `Failed to fetch ${opts.entityType} for cat`,
+      { error: error.message },
+      'DocumentContext'
+    );
+    return [];
+  }
+  return ((data as Record<string, unknown>[]) || []).map(map);
+}
+
+const DEFAULT_STATUSES = ['active', 'draft', 'paused'] as const;
+
 /**
  * Fetch user's entities (products, services, projects, causes, events)
  */
@@ -346,281 +390,244 @@ export async function fetchEntitiesForCat(
 
     const actorId = actor.id;
 
-    // Fetch products (include draft so user can ask about their drafts)
-    const { data: products, error: productsError } = await supabase
-      .from(ENTITY_REGISTRY.product.tableName)
-      .select('id, title, description, status, price, currency, category')
-      .eq('actor_id', actorId)
-      .in('status', ['active', 'draft', 'paused'])
-      .limit(20);
+    // Fetch all entity types via shared helper (each call: select → error log → map)
+    const d = (r: Record<string, unknown>) =>
+      (r.description as string | undefined)?.substring(0, 300);
 
-    if (productsError) {
-      logger.warn(
-        'Failed to fetch products for cat',
-        { error: productsError.message },
-        'DocumentContext'
-      );
-    } else if (products) {
-      stats.totalProducts = products.length;
-      products.forEach(p => {
-        entities.push({
-          id: p.id,
-          type: 'product',
-          title: p.title,
-          description: p.description?.substring(0, 300),
-          status: p.status,
-          price_btc: p.price,
-        });
-      });
-    }
+    const products = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'product',
+        tableName: ENTITY_REGISTRY.product.tableName,
+        select: 'id, title, description, status, price',
+        filterField: 'actor_id',
+        filterValue: actorId,
+        statuses: [...DEFAULT_STATUSES],
+      },
+      r => ({
+        id: r.id as string,
+        type: 'product',
+        title: r.title as string,
+        description: d(r),
+        status: r.status as string,
+        price_btc: r.price as number | undefined,
+      })
+    );
+    stats.totalProducts = products.length;
+    entities.push(...products);
 
-    // Fetch services (include draft)
-    const { data: services, error: servicesError } = await supabase
-      .from(ENTITY_REGISTRY.service.tableName)
-      .select('id, title, description, status, hourly_rate, fixed_price, currency, category')
-      .eq('actor_id', actorId)
-      .in('status', ['active', 'draft', 'paused'])
-      .limit(20);
+    const services = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'service',
+        tableName: ENTITY_REGISTRY.service.tableName,
+        select: 'id, title, description, status, hourly_rate, fixed_price',
+        filterField: 'actor_id',
+        filterValue: actorId,
+        statuses: [...DEFAULT_STATUSES],
+      },
+      r => ({
+        id: r.id as string,
+        type: 'service',
+        title: r.title as string,
+        description: d(r),
+        status: r.status as string,
+        price_btc: (r.fixed_price as number) || (r.hourly_rate as number) || undefined,
+      })
+    );
+    stats.totalServices = services.length;
+    entities.push(...services);
 
-    if (servicesError) {
-      logger.warn(
-        'Failed to fetch services for cat',
-        { error: servicesError.message },
-        'DocumentContext'
-      );
-    } else if (services) {
-      stats.totalServices = services.length;
-      services.forEach(s => {
-        entities.push({
-          id: s.id,
-          type: 'service',
-          title: s.title,
-          description: s.description?.substring(0, 300),
-          status: s.status,
-          price_btc: s.fixed_price || s.hourly_rate,
-        });
-      });
-    }
+    const projects = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'project',
+        tableName: ENTITY_REGISTRY.project.tableName,
+        select: 'id, title, description, status, goal_amount',
+        filterField: 'actor_id',
+        filterValue: actorId,
+        statuses: [...DEFAULT_STATUSES],
+      },
+      r => ({
+        id: r.id as string,
+        type: 'project',
+        title: r.title as string,
+        description: d(r),
+        status: r.status as string,
+        price_btc: r.goal_amount as number | undefined,
+      })
+    );
+    stats.totalProjects = projects.length;
+    entities.push(...projects);
 
-    // Fetch projects
-    const { data: projects, error: projectsError } = await supabase
-      .from(ENTITY_REGISTRY.project.tableName)
-      .select('id, title, description, status, goal_amount, currency, category')
-      .eq('actor_id', actorId)
-      .in('status', ['active', 'draft', 'paused'])
-      .limit(20);
+    const causes = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'cause',
+        tableName: ENTITY_REGISTRY.cause.tableName,
+        select: 'id, title, description, status, cause_category, goal_amount',
+        filterField: 'actor_id',
+        filterValue: actorId,
+        statuses: [...DEFAULT_STATUSES],
+      },
+      r => ({
+        id: r.id as string,
+        type: 'cause',
+        title: r.title as string,
+        description: d(r),
+        status: r.status as string,
+        category: r.cause_category as string | undefined,
+        price_btc: r.goal_amount as number | undefined,
+      })
+    );
+    stats.totalCauses = causes.length;
+    entities.push(...causes);
 
-    if (projectsError) {
-      logger.warn(
-        'Failed to fetch projects for cat',
-        { error: projectsError.message },
-        'DocumentContext'
-      );
-    } else if (projects) {
-      stats.totalProjects = projects.length;
-      projects.forEach(p => {
-        entities.push({
-          id: p.id,
-          type: 'project',
-          title: p.title,
-          description: p.description?.substring(0, 300),
-          status: p.status,
-          price_btc: p.goal_amount,
-        });
-      });
-    }
+    const events = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'event',
+        tableName: ENTITY_REGISTRY.event.tableName,
+        select: 'id, title, description, status, venue_name, venue_city, venue_country',
+        filterField: 'actor_id',
+        filterValue: actorId,
+        statuses: [...DEFAULT_STATUSES],
+      },
+      r => ({
+        id: r.id as string,
+        type: 'event',
+        title: r.title as string,
+        description: d(r),
+        status: r.status as string,
+        location:
+          [r.venue_name, r.venue_city, r.venue_country].filter(Boolean).join(', ') || undefined,
+      })
+    );
+    stats.totalEvents = events.length;
+    entities.push(...events);
 
-    // Fetch causes
-    const { data: causes, error: causesError } = await supabase
-      .from(ENTITY_REGISTRY.cause.tableName)
-      .select('id, title, description, status, cause_category, goal_amount')
-      .eq('actor_id', actorId)
-      .in('status', ['active', 'draft', 'paused'])
-      .limit(20);
+    const assets = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'asset',
+        tableName: ENTITY_REGISTRY.asset.tableName,
+        select: 'id, title, description, status, location, estimated_value',
+        filterField: 'actor_id',
+        filterValue: actorId,
+        statuses: [...DEFAULT_STATUSES],
+      },
+      r => ({
+        id: r.id as string,
+        type: 'asset',
+        title: r.title as string,
+        description: d(r),
+        status: r.status as string,
+        price_btc: r.estimated_value as number | undefined,
+        location: r.location as string | undefined,
+      })
+    );
+    stats.totalAssets = assets.length;
+    entities.push(...assets);
 
-    if (causesError) {
-      logger.warn(
-        'Failed to fetch causes for cat',
-        { error: causesError.message },
-        'DocumentContext'
-      );
-    } else if (causes) {
-      stats.totalCauses = causes.length;
-      causes.forEach(c => {
-        entities.push({
-          id: c.id,
-          type: 'cause',
-          title: c.title,
-          description: c.description?.substring(0, 300),
-          status: c.status,
-          category: c.cause_category,
-          price_btc: c.goal_amount,
-        });
-      });
-    }
+    // loans: extra status 'pending'; column is original_amount
+    const loans = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'loan',
+        tableName: ENTITY_REGISTRY.loan.tableName,
+        select: 'id, title, description, status, original_amount, interest_rate',
+        filterField: 'actor_id',
+        filterValue: actorId,
+        statuses: ['active', 'draft', 'paused', 'pending'],
+      },
+      r => ({
+        id: r.id as string,
+        type: 'loan',
+        title: r.title as string,
+        description: d(r),
+        status: r.status as string,
+        price_btc: r.original_amount as number | undefined,
+        category:
+          r.interest_rate !== null && r.interest_rate !== undefined
+            ? `${r.interest_rate}% interest`
+            : undefined,
+      })
+    );
+    stats.totalLoans = loans.length;
+    entities.push(...loans);
 
-    // Fetch events
-    const { data: events, error: eventsError } = await supabase
-      .from(ENTITY_REGISTRY.event.tableName)
-      .select(
-        'id, title, description, status, start_date, end_date, venue_name, venue_city, venue_country'
-      )
-      .eq('actor_id', actorId)
-      .in('status', ['active', 'draft', 'paused'])
-      .limit(20);
+    // investments: different status set
+    const investments = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'investment',
+        tableName: ENTITY_REGISTRY.investment.tableName,
+        select: 'id, title, description, status, investment_type, target_amount',
+        filterField: 'actor_id',
+        filterValue: actorId,
+        statuses: ['draft', 'open', 'active', 'funded'],
+      },
+      r => ({
+        id: r.id as string,
+        type: 'investment',
+        title: r.title as string,
+        description: d(r),
+        status: r.status as string,
+        price_btc: r.target_amount as number | undefined,
+        category: r.investment_type as string | undefined,
+      })
+    );
+    stats.totalInvestments = investments.length;
+    entities.push(...investments);
 
-    if (eventsError) {
-      logger.warn(
-        'Failed to fetch events for cat',
-        { error: eventsError.message },
-        'DocumentContext'
-      );
-    } else if (events) {
-      stats.totalEvents = events.length;
-      events.forEach(e => {
-        entities.push({
-          id: e.id,
-          type: 'event',
-          title: e.title,
-          description: e.description?.substring(0, 300),
-          status: e.status,
-          location: [e.venue_name, e.venue_city, e.venue_country].filter(Boolean).join(', '),
-        });
-      });
-    }
+    // research: uses user_id (references profiles), NOT actor_id
+    const research = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'research',
+        tableName: ENTITY_REGISTRY.research.tableName,
+        select: 'id, title, description, status, field, funding_goal_btc, funding_raised_btc',
+        filterField: 'user_id',
+        filterValue: userId,
+        statuses: [...DEFAULT_STATUSES],
+      },
+      r => ({
+        id: r.id as string,
+        type: 'research',
+        title: r.title as string,
+        description: d(r),
+        status: r.status as string,
+        price_btc: r.funding_goal_btc as number | undefined,
+        category: r.field as string | undefined,
+        raised_btc:
+          (r.funding_raised_btc as number) > 0 ? (r.funding_raised_btc as number) : undefined,
+      })
+    );
+    stats.totalResearch = research.length;
+    entities.push(...research);
 
-    // Fetch assets
-    const { data: assets, error: assetsError } = await supabase
-      .from(ENTITY_REGISTRY.asset.tableName)
-      .select('id, title, description, status, type, location, estimated_value')
-      .eq('actor_id', actorId)
-      .in('status', ['active', 'draft', 'paused'])
-      .limit(20);
-
-    if (assetsError) {
-      logger.warn(
-        'Failed to fetch assets for cat',
-        { error: assetsError.message },
-        'DocumentContext'
-      );
-    } else if (assets) {
-      stats.totalAssets = assets.length;
-      assets.forEach(a => {
-        entities.push({
-          id: a.id,
-          type: 'asset',
-          title: a.title,
-          description: a.description?.substring(0, 300),
-          status: a.status,
-          price_btc: a.estimated_value,
-          location: a.location,
-        });
-      });
-    }
-
-    // Fetch loans (peer-to-peer lending)
-    // Column is original_amount (not amount); loans also have actor_id via migration
-    const { data: loans, error: loansError } = await supabase
-      .from(ENTITY_REGISTRY.loan.tableName)
-      .select('id, title, description, status, original_amount, currency, interest_rate')
-      .eq('actor_id', actorId)
-      .in('status', ['active', 'draft', 'paused', 'pending'])
-      .limit(20);
-
-    if (loansError) {
-      logger.warn('Failed to fetch loans for cat', { error: loansError.message }, 'DocumentContext');
-    } else if (loans) {
-      stats.totalLoans = loans.length;
-      loans.forEach(l => {
-        entities.push({
-          id: l.id,
-          type: 'loan',
-          title: l.title,
-          description: l.description?.substring(0, 300),
-          status: l.status,
-          price_btc: l.original_amount,
-          category: l.interest_rate !== null ? `${l.interest_rate}% interest` : undefined,
-        });
-      });
-    }
-
-    // Fetch investments (equity/revenue-share opportunities)
-    const { data: investments, error: investmentsError } = await supabase
-      .from(ENTITY_REGISTRY.investment.tableName)
-      .select('id, title, description, status, investment_type, target_amount, currency')
-      .eq('actor_id', actorId)
-      .in('status', ['draft', 'open', 'active', 'funded'])
-      .limit(20);
-
-    if (investmentsError) {
-      logger.warn('Failed to fetch investments for cat', { error: investmentsError.message }, 'DocumentContext');
-    } else if (investments) {
-      stats.totalInvestments = investments.length;
-      investments.forEach(i => {
-        entities.push({
-          id: i.id,
-          type: 'investment',
-          title: i.title,
-          description: i.description?.substring(0, 300),
-          status: i.status,
-          price_btc: i.target_amount,
-          category: i.investment_type,
-        });
-      });
-    }
-
-    // Fetch research entities (DeSci funding)
-    // research_entities uses user_id (references profiles), NOT actor_id
-    const { data: research, error: researchError } = await supabase
-      .from(ENTITY_REGISTRY.research.tableName)
-      .select('id, title, description, status, field, funding_goal_btc, funding_raised_btc')
-      .eq('user_id', userId)
-      .in('status', ['active', 'draft', 'paused'])
-      .limit(20);
-
-    if (researchError) {
-      logger.warn('Failed to fetch research for cat', { error: researchError.message }, 'DocumentContext');
-    } else if (research) {
-      stats.totalResearch = research.length;
-      research.forEach(r => {
-        entities.push({
-          id: r.id,
-          type: 'research',
-          title: r.title,
-          description: r.description?.substring(0, 300),
-          status: r.status,
-          price_btc: r.funding_goal_btc,
-          category: r.field,
-          // funding_raised_btc is maintained as a running total on the research entity itself
-          raised_btc: r.funding_raised_btc > 0 ? r.funding_raised_btc : undefined,
-        });
-      });
-    }
-
-    // Fetch wishlists
-    // wishlists have no status column — they use is_active (boolean) + visibility
-    const { data: wishlists, error: wishlistsError } = await supabase
-      .from(ENTITY_REGISTRY.wishlist.tableName)
-      .select('id, title, description, type, visibility, is_active')
-      .eq('actor_id', actorId)
-      .eq('is_active', true)
-      .limit(20);
-
-    if (wishlistsError) {
-      logger.warn('Failed to fetch wishlists for cat', { error: wishlistsError.message }, 'DocumentContext');
-    } else if (wishlists) {
-      stats.totalWishlists = wishlists.length;
-      wishlists.forEach(w => {
-        entities.push({
-          id: w.id,
-          type: 'wishlist',
-          title: w.title,
-          description: w.description?.substring(0, 300),
-          status: w.visibility, // wishlists surface visibility (public/unlisted/private) as their "status"
-          category: w.type,    // wishlist type (birthday, wedding, general, etc.)
-        });
-      });
-    }
+    // wishlists: no status column — filter by is_active instead
+    const wishlists = await fetchEntityBatch(
+      supabase,
+      {
+        entityType: 'wishlist',
+        tableName: ENTITY_REGISTRY.wishlist.tableName,
+        select: 'id, title, description, type, visibility',
+        filterField: 'actor_id',
+        filterValue: actorId,
+        extraWhere: q => q.eq('is_active', true),
+      },
+      r => ({
+        id: r.id as string,
+        type: 'wishlist',
+        title: r.title as string,
+        description: d(r),
+        status: r.visibility as string,
+        category: r.type as string | undefined,
+      })
+    );
+    stats.totalWishlists = wishlists.length;
+    entities.push(...wishlists);
 
     // Enrich projects with funding stats from project_support_stats view.
     // Done after all entity fetches so we have the project IDs.
@@ -633,10 +640,12 @@ export async function fetchEntitiesForCat(
 
       if (supportStats && supportStats.length > 0) {
         const statsMap = new Map(
-          supportStats.map((s: { project_id: string; total_bitcoin_btc: number; total_supporters: number }) => [
-            s.project_id,
-            { raised: s.total_bitcoin_btc, supporters: s.total_supporters },
-          ])
+          supportStats.map(
+            (s: { project_id: string; total_bitcoin_btc: number; total_supporters: number }) => [
+              s.project_id,
+              { raised: s.total_bitcoin_btc, supporters: s.total_supporters },
+            ]
+          )
         );
         entities.forEach(e => {
           if (e.type === 'project') {
@@ -733,7 +742,9 @@ export async function fetchTasksForCat(
   try {
     const { data: tasks, error } = await supabase
       .from(DATABASE_TABLES.TASKS)
-      .select('id, title, category, priority, current_status, task_type, schedule_human, due_date, is_reminder')
+      .select(
+        'id, title, category, priority, current_status, task_type, schedule_human, due_date, is_reminder'
+      )
       .eq('created_by', userId)
       .eq('is_archived', false)
       .eq('is_completed', false)
@@ -807,11 +818,17 @@ export async function fetchConversationsForCat(
       .eq('is_active', true);
 
     if (otherError) {
-      logger.warn('Failed to fetch conversation participants for cat', { error: otherError.message }, 'DocumentContext');
+      logger.warn(
+        'Failed to fetch conversation participants for cat',
+        { error: otherError.message },
+        'DocumentContext'
+      );
     }
 
     // 4. Fetch profiles for the other participants
-    const otherUserIds = [...new Set((otherParts || []).map((p: { user_id: string }) => p.user_id))];
+    const otherUserIds = [
+      ...new Set((otherParts || []).map((p: { user_id: string }) => p.user_id)),
+    ];
     const profileMap: Record<string, { username: string | null; name: string | null }> = {};
 
     if (otherUserIds.length > 0) {
@@ -820,9 +837,11 @@ export async function fetchConversationsForCat(
         .select('id, username, name')
         .in('id', otherUserIds);
 
-      (profiles || []).forEach((p: { id: string; username: string | null; name: string | null }) => {
-        profileMap[p.id] = { username: p.username, name: p.name };
-      });
+      (profiles || []).forEach(
+        (p: { id: string; username: string | null; name: string | null }) => {
+          profileMap[p.id] = { username: p.username, name: p.name };
+        }
+      );
     }
 
     // 5. Build a map: conversation_id → other user_id
@@ -834,32 +853,35 @@ export async function fetchConversationsForCat(
     });
 
     // 6. Assemble summaries
-    return conversations.map((c: {
-      id: string;
-      last_message_preview: string | null;
-      last_message_sender_id: string | null;
-      last_message_at: string | null;
-      is_group: boolean;
-    }) => {
-      const otherUserId = otherUserByConv[c.id] ?? null;
-      const profile = otherUserId ? profileMap[otherUserId] : null;
-      const isMine = c.last_message_sender_id === userId;
-      // Unread: last message was NOT sent by me, and either I've never read this
-      // conversation or the last message arrived after my last_read_at timestamp.
-      const lastReadAt = myLastReadByConv[c.id] ?? null;
-      const hasUnread = !isMine && c.last_message_at !== null && (
-        lastReadAt === null || new Date(c.last_message_at) > new Date(lastReadAt)
-      );
-      return {
-        id: c.id,
-        other_username: profile?.username ?? null,
-        other_name: profile?.name ?? null,
-        last_message_preview: c.last_message_preview,
-        last_message_is_mine: isMine,
-        last_message_at: c.last_message_at,
-        has_unread: hasUnread,
-      };
-    });
+    return conversations.map(
+      (c: {
+        id: string;
+        last_message_preview: string | null;
+        last_message_sender_id: string | null;
+        last_message_at: string | null;
+        is_group: boolean;
+      }) => {
+        const otherUserId = otherUserByConv[c.id] ?? null;
+        const profile = otherUserId ? profileMap[otherUserId] : null;
+        const isMine = c.last_message_sender_id === userId;
+        // Unread: last message was NOT sent by me, and either I've never read this
+        // conversation or the last message arrived after my last_read_at timestamp.
+        const lastReadAt = myLastReadByConv[c.id] ?? null;
+        const hasUnread =
+          !isMine &&
+          c.last_message_at !== null &&
+          (lastReadAt === null || new Date(c.last_message_at) > new Date(lastReadAt));
+        return {
+          id: c.id,
+          other_username: profile?.username ?? null,
+          other_name: profile?.name ?? null,
+          last_message_preview: c.last_message_preview,
+          last_message_is_mine: isMine,
+          last_message_at: c.last_message_at,
+          has_unread: hasUnread,
+        };
+      }
+    );
   } catch (error) {
     logger.error('Exception fetching conversations for cat', error, 'DocumentContext');
     return [];
@@ -900,7 +922,8 @@ export async function fetchInboundActivityForCat(
       actorIds.length > 0
         ? supabase
             .from(DATABASE_TABLES.BOOKINGS)
-            .select(`
+            .select(
+              `
               starts_at,
               ends_at,
               status,
@@ -908,7 +931,8 @@ export async function fetchInboundActivityForCat(
                 display_name,
                 username
               )
-            `)
+            `
+            )
             .in('provider_actor_id', actorIds)
             .in('status', ['confirmed', 'pending'])
             .gte('starts_at', now)
@@ -917,42 +941,54 @@ export async function fetchInboundActivityForCat(
         : Promise.resolve({ data: [], error: null }),
     ]);
 
-    const recentSales: SaleRecord[] = (salesResult.data ?? []).map((o: {
-      entity_title: string;
-      entity_type: string;
-      amount_btc: number;
-      status: string;
-      created_at: string;
-    }) => ({
-      entity_title: o.entity_title,
-      entity_type: o.entity_type,
-      amount_btc: o.amount_btc,
-      status: o.status,
-      created_at: o.created_at,
-    }));
+    const recentSales: SaleRecord[] = (salesResult.data ?? []).map(
+      (o: {
+        entity_title: string;
+        entity_type: string;
+        amount_btc: number;
+        status: string;
+        created_at: string;
+      }) => ({
+        entity_title: o.entity_title,
+        entity_type: o.entity_type,
+        amount_btc: o.amount_btc,
+        status: o.status,
+        created_at: o.created_at,
+      })
+    );
 
-    const upcomingBookings: BookingRecord[] = (bookingsResult.data ?? []).map((b: {
-      starts_at: string;
-      ends_at: string | null;
-      status: string;
-      // Supabase returns one-to-one FK joins as arrays; take first element
-      customer: { display_name: string | null; username: string | null }[] | null;
-    }) => {
-      const customer = Array.isArray(b.customer) ? b.customer[0] : b.customer;
-      return {
-        starts_at: b.starts_at,
-        ends_at: b.ends_at,
-        status: b.status,
-        customer_display_name: customer?.display_name ?? null,
-        customer_username: customer?.username ?? null,
-      };
-    });
+    const upcomingBookings: BookingRecord[] = (bookingsResult.data ?? []).map(
+      (b: {
+        starts_at: string;
+        ends_at: string | null;
+        status: string;
+        // Supabase returns one-to-one FK joins as arrays; take first element
+        customer: { display_name: string | null; username: string | null }[] | null;
+      }) => {
+        const customer = Array.isArray(b.customer) ? b.customer[0] : b.customer;
+        return {
+          starts_at: b.starts_at,
+          ends_at: b.ends_at,
+          status: b.status,
+          customer_display_name: customer?.display_name ?? null,
+          customer_username: customer?.username ?? null,
+        };
+      }
+    );
 
     if (salesResult.error) {
-      logger.warn('Failed to fetch sales for cat', { error: salesResult.error.message }, 'DocumentContext');
+      logger.warn(
+        'Failed to fetch sales for cat',
+        { error: salesResult.error.message },
+        'DocumentContext'
+      );
     }
     if (bookingsResult.error) {
-      logger.warn('Failed to fetch bookings for cat', { error: bookingsResult.error.message }, 'DocumentContext');
+      logger.warn(
+        'Failed to fetch bookings for cat',
+        { error: bookingsResult.error.message },
+        'DocumentContext'
+      );
     }
 
     return { recentSales, upcomingBookings };
@@ -980,7 +1016,11 @@ export async function fetchGroupMembershipsForCat(
 
     if (memberError || !memberships || memberships.length === 0) {
       if (memberError) {
-        logger.warn('Failed to fetch group memberships for cat', { error: memberError.message }, 'DocumentContext');
+        logger.warn(
+          'Failed to fetch group memberships for cat',
+          { error: memberError.message },
+          'DocumentContext'
+        );
       }
       return [];
     }
@@ -994,16 +1034,31 @@ export async function fetchGroupMembershipsForCat(
       .in('id', groupIds);
 
     if (groupsError || !groups) {
-      logger.warn('Failed to fetch groups for cat membership', { error: groupsError?.message }, 'DocumentContext');
+      logger.warn(
+        'Failed to fetch groups for cat membership',
+        { error: groupsError?.message },
+        'DocumentContext'
+      );
       return [];
     }
 
     // Build role map: group_id → role
     const roleMap = new Map(
-      (memberships as { group_id: string; role: 'founder' | 'admin' | 'member' }[]).map(m => [m.group_id, m.role])
+      (memberships as { group_id: string; role: 'founder' | 'admin' | 'member' }[]).map(m => [
+        m.group_id,
+        m.role,
+      ])
     );
 
-    return (groups as { id: string; name: string; description: string | null; label: string; visibility: 'public' | 'members_only' | 'private' }[]).map(g => ({
+    return (
+      groups as {
+        id: string;
+        name: string;
+        description: string | null;
+        label: string;
+        visibility: 'public' | 'members_only' | 'private';
+      }[]
+    ).map(g => ({
       id: g.id,
       name: g.name,
       description: g.description,
@@ -1024,7 +1079,16 @@ export async function fetchFullContextForCat(
   supabase: AnySupabaseClient,
   userId: string
 ): Promise<FullUserContext> {
-  const [profile, documents, { entities, stats }, tasks, wallets, conversations, inboundActivity, memberGroups] = await Promise.all([
+  const [
+    profile,
+    documents,
+    { entities, stats },
+    tasks,
+    wallets,
+    conversations,
+    inboundActivity,
+    memberGroups,
+  ] = await Promise.all([
     fetchProfileForCat(supabase, userId),
     fetchDocumentsForCat(supabase, userId),
     fetchEntitiesForCat(supabase, userId),
@@ -1208,7 +1272,9 @@ export function buildFullContextString(context: FullUserContext): string {
       parts.push(` (id: ${g.id})`);
       return parts.join('');
     });
-    sections.push(`## Group Memberships\nThe user is a member of the following groups:\n${groupLines.join('\n')}`);
+    sections.push(
+      `## Group Memberships\nThe user is a member of the following groups:\n${groupLines.join('\n')}`
+    );
   }
 
   // Tasks section
@@ -1228,16 +1294,26 @@ export function buildFullContextString(context: FullUserContext): string {
       } else {
         parts.push(` [${t.category}]`);
       }
-      if (t.priority !== 'normal') { parts.push(` priority:${t.priority}`); }
-      if (t.current_status !== 'idle') { parts.push(` status:${t.current_status}`); }
+      if (t.priority !== 'normal') {
+        parts.push(` priority:${t.priority}`);
+      }
+      if (t.current_status !== 'idle') {
+        parts.push(` status:${t.current_status}`);
+      }
       // Due date / schedule
       if (t.due_date) {
         const due = new Date(t.due_date);
         const isOverdue = due < now;
-        const dueStr = due.toLocaleString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric',
-          hour: '2-digit', minute: '2-digit', timeZone: 'UTC', hour12: false,
-        }) + ' UTC';
+        const dueStr =
+          due.toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'UTC',
+            hour12: false,
+          }) + ' UTC';
         parts.push(isOverdue ? ` ⚠️ OVERDUE (was due ${dueStr})` : ` — due ${dueStr}`);
       } else if (t.task_type !== 'one_time' && t.schedule_human) {
         parts.push(` — ${t.schedule_human}`);
@@ -1248,10 +1324,14 @@ export function buildFullContextString(context: FullUserContext): string {
     });
     const alerts: string[] = [];
     if (urgent.length > 0) {
-      alerts.push(`⚠️ ${urgent.length} task${urgent.length > 1 ? 's' : ''} need${urgent.length === 1 ? 's' : ''} attention.`);
+      alerts.push(
+        `⚠️ ${urgent.length} task${urgent.length > 1 ? 's' : ''} need${urgent.length === 1 ? 's' : ''} attention.`
+      );
     }
     if (overdueReminders.length > 0) {
-      alerts.push(`🔔 ${overdueReminders.length} reminder${overdueReminders.length > 1 ? 's are' : ' is'} overdue.`);
+      alerts.push(
+        `🔔 ${overdueReminders.length} reminder${overdueReminders.length > 1 ? 's are' : ' is'} overdue.`
+      );
     }
     const alertNote = alerts.length > 0 ? `\n${alerts.join(' ')}` : '';
     sections.push(`## Active Tasks & Reminders${alertNote}\n${taskLines.join('\n')}`);
@@ -1296,9 +1376,10 @@ export function buildFullContextString(context: FullUserContext): string {
       const unreadBadge = c.has_unread ? ' 🔴 UNREAD' : '';
       return `- ${who}${unreadBadge}${preview} (${direction}) [conv id: ${c.id}]`;
     });
-    const unreadNote = unreadCount > 0
-      ? `\n📬 ${unreadCount} unread conversation${unreadCount > 1 ? 's' : ''} — proactively mention this to the user.`
-      : '';
+    const unreadNote =
+      unreadCount > 0
+        ? `\n📬 ${unreadCount} unread conversation${unreadCount > 1 ? 's' : ''} — proactively mention this to the user.`
+        : '';
     sections.push(
       `## Recent Conversations${unreadNote}\nUse the conversation id with reply_to_message to reply on the user's behalf.\n${convLines.join('\n')}`
     );
@@ -1312,7 +1393,10 @@ export function buildFullContextString(context: FullUserContext): string {
     if (recentSales.length > 0) {
       const saleLines = recentSales.map(s => {
         const date = new Date(s.created_at).toLocaleDateString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          timeZone: 'UTC',
         });
         return `- **${s.entity_title}** (${s.entity_type}) — ${s.amount_btc} BTC — ${date}`;
       });
@@ -1322,10 +1406,17 @@ export function buildFullContextString(context: FullUserContext): string {
     if (upcomingBookings.length > 0) {
       const bookingLines = upcomingBookings.map(b => {
         const start = new Date(b.starts_at).toLocaleString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric',
-          hour: '2-digit', minute: '2-digit', timeZone: 'UTC', hour12: false,
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'UTC',
+          hour12: false,
         });
-        const who = b.customer_display_name ?? (b.customer_username ? `@${b.customer_username}` : 'unknown customer');
+        const who =
+          b.customer_display_name ??
+          (b.customer_username ? `@${b.customer_username}` : 'unknown customer');
         return `- ${start} UTC with ${who} [${b.status}]`;
       });
       parts.push(`### Upcoming Bookings (as provider)\n${bookingLines.join('\n')}`);
@@ -1341,14 +1432,20 @@ export function buildFullContextString(context: FullUserContext): string {
     const { hasNwcWallet, lightningAddress } = context.paymentCapabilities;
     const capLines: string[] = [];
     if (hasNwcWallet) {
-      capLines.push('⚡ **NWC wallet connected** — can use send_payment and fund_project exec_action blocks to send Bitcoin automatically');
+      capLines.push(
+        '⚡ **NWC wallet connected** — can use send_payment and fund_project exec_action blocks to send Bitcoin automatically'
+      );
     } else {
-      capLines.push('❌ **No NWC wallet** — cannot auto-send payments; if user asks to send Bitcoin, tell them to connect a Nostr Wallet Connect wallet first (Settings → Wallets)');
+      capLines.push(
+        '❌ **No NWC wallet** — cannot auto-send payments; if user asks to send Bitcoin, tell them to connect a Nostr Wallet Connect wallet first (Settings → Wallets)'
+      );
     }
     if (lightningAddress) {
       capLines.push(`📬 **Lightning address**: ${lightningAddress} (others can pay the user here)`);
     } else {
-      capLines.push('📬 **No lightning address configured** — user cannot receive lightning payments without one');
+      capLines.push(
+        '📬 **No lightning address configured** — user cannot receive lightning payments without one'
+      );
     }
     sections.push(`## Payment Capabilities\n${capLines.join('\n')}`);
   }
@@ -1391,14 +1488,18 @@ export function buildFullContextString(context: FullUserContext): string {
       statParts.push(`${stats.totalLoans} loan${stats.totalLoans > 1 ? 's' : ''}`);
     }
     if (stats.totalResearch > 0) {
-      statParts.push(`${stats.totalResearch} research ${stats.totalResearch > 1 ? 'entities' : 'entity'}`);
+      statParts.push(
+        `${stats.totalResearch} research ${stats.totalResearch > 1 ? 'entities' : 'entity'}`
+      );
     }
     if (stats.totalWishlists > 0) {
       statParts.push(`${stats.totalWishlists} wishlist${stats.totalWishlists > 1 ? 's' : ''}`);
     }
     if (stats.totalTasks > 0) {
       const taskStat = `${stats.totalTasks} active task${stats.totalTasks > 1 ? 's' : ''}`;
-      statParts.push(stats.urgentTasks > 0 ? `${taskStat} (${stats.urgentTasks} urgent)` : taskStat);
+      statParts.push(
+        stats.urgentTasks > 0 ? `${taskStat} (${stats.urgentTasks} urgent)` : taskStat
+      );
     }
     if (stats.totalWallets > 0) {
       statParts.push(`${stats.totalWallets} wallet${stats.totalWallets > 1 ? 's' : ''}`);
