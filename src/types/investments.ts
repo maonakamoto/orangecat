@@ -8,11 +8,8 @@
 import { type CurrencyCode } from '@/config/currencies';
 import { type InvestmentStatus } from '@/config/database-constants';
 
-export type { InvestmentStatus };
-export type InvestmentType = 'equity' | 'revenue_share' | 'profit_share' | 'token' | 'other';
-export type ReturnFrequency = 'monthly' | 'quarterly' | 'annually' | 'at_exit' | 'custom';
-
-// ==================== DATABASE TYPES ====================
+type InvestmentType = 'equity' | 'revenue_share' | 'profit_share' | 'token' | 'other';
+type ReturnFrequency = 'monthly' | 'quarterly' | 'annually' | 'at_exit' | 'custom';
 
 export interface Investment {
   id: string;
@@ -45,8 +42,6 @@ export interface Investment {
   [key: string]: unknown;
 }
 
-// ==================== FORM TYPES ====================
-
 export interface CreateInvestmentRequest {
   title: string;
   description: string;
@@ -64,34 +59,4 @@ export interface CreateInvestmentRequest {
   is_public?: boolean;
   bitcoin_address?: string;
   lightning_address?: string;
-}
-
-export interface UpdateInvestmentRequest extends Partial<CreateInvestmentRequest> {
-  status?: InvestmentStatus;
-  is_public?: boolean;
-}
-
-// ==================== API RESPONSE TYPES ====================
-
-export interface InvestmentResponse {
-  success: boolean;
-  investment?: Investment;
-  error?: string;
-}
-
-export interface InvestmentsListResponse {
-  success: boolean;
-  investments?: Investment[];
-  total?: number;
-  error?: string;
-}
-
-// ==================== DISPLAY TYPES ====================
-
-export interface InvestmentCardData extends Investment {
-  owner_profile?: {
-    username?: string;
-    display_name?: string;
-    avatar_url?: string;
-  };
 }

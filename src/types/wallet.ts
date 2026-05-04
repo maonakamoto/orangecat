@@ -3,7 +3,7 @@
 import { validate as validateBitcoinAddress } from 'bitcoin-address-validation';
 import bs58check from 'bs58check';
 
-export type WalletType = 'address' | 'xpub';
+type WalletType = 'address' | 'xpub';
 
 export type WalletBehaviorType = 'general' | 'recurring_budget' | 'one_time_goal';
 
@@ -16,7 +16,7 @@ export type BudgetPeriod =
   | 'yearly'
   | 'custom';
 
-export type GoalStatus = 'active' | 'paused' | 'reached' | 'purchased' | 'cancelled' | 'archived';
+type GoalStatus = 'active' | 'paused' | 'reached' | 'purchased' | 'cancelled' | 'archived';
 
 export type WalletCategory =
   | 'general'
@@ -102,7 +102,7 @@ export const WALLET_CATEGORIES: Record<
 };
 
 // Allowed emojis for icons (whitelist for security)
-export const ALLOWED_CATEGORY_ICONS = [
+const ALLOWED_CATEGORY_ICONS = [
   '💰',
   '🏠',
   '🍔',
@@ -185,20 +185,6 @@ export interface Wallet {
   updated_at: string;
 }
 
-export interface WalletAddress {
-  id: string;
-  wallet_id: string;
-  address: string;
-  derivation_index: number;
-  balance_btc: number;
-  tx_count: number;
-  last_tx_at: string | null;
-  discovered_at: string;
-  is_used: boolean;
-  first_tx_at: string | null;
-  watch_status: 'active' | 'paused' | 'archived';
-}
-
 export interface WalletFormData {
   label: string;
   description?: string | null;
@@ -224,7 +210,7 @@ export interface WalletFormData {
   is_primary?: boolean;
 }
 
-export interface ValidationResult {
+interface ValidationResult {
   valid: boolean;
   error: string | null;
   type?: WalletType;
@@ -249,7 +235,7 @@ export function detectWalletType(addressOrXpub: string): WalletType {
  * Validate Bitcoin address using proper checksum validation
  * Supports: P2PKH, P2SH, P2WPKH (bech32), P2TR (taproot)
  */
-export function isValidBitcoinAddress(
+function isValidBitcoinAddress(
   address: string,
   network: 'mainnet' | 'testnet' = 'mainnet'
 ): boolean {
@@ -264,7 +250,7 @@ export function isValidBitcoinAddress(
 /**
  * Validate xpub/ypub/zpub with proper base58check verification
  */
-export function isValidXpub(xpub: string): boolean {
+function isValidXpub(xpub: string): boolean {
   try {
     const validPrefixes = ['xpub', 'ypub', 'zpub', 'tpub', 'upub', 'vpub'];
 
@@ -322,77 +308,6 @@ export function validateAddressOrXpub(
   }
 
   return { valid: true, type: 'address', error: null };
-}
-
-/**
- * Validate wallet form data
- */
-export function validateWalletFormData(data: WalletFormData): ValidationResult {
-  // Validate label
-  if (!data.label || !data.label.trim()) {
-    return { valid: false, error: 'Wallet name is required' };
-  }
-
-  if (data.label.length > MAX_LABEL_LENGTH) {
-    return { valid: false, error: `Wallet name must be ${MAX_LABEL_LENGTH} characters or less` };
-  }
-
-  // Validate description
-  if (data.description && data.description.length > MAX_DESCRIPTION_LENGTH) {
-    return {
-      valid: false,
-      error: `Description must be ${MAX_DESCRIPTION_LENGTH} characters or less`,
-    };
-  }
-
-  // Validate address/xpub (optional now — skip if not provided)
-  if (!data.address_or_xpub) {
-    if (!data.lightning_address) {
-      return {
-        valid: false,
-        error: 'Either a Bitcoin address/xpub or a Lightning address is required',
-      };
-    }
-    // Lightning-only wallet — skip address validation
-  } else {
-    const addressValidation = validateAddressOrXpub(data.address_or_xpub);
-    if (!addressValidation.valid) {
-      return addressValidation;
-    }
-  }
-
-  // Validate category
-  if (!Object.keys(WALLET_CATEGORIES).includes(data.category)) {
-    return { valid: false, error: 'Invalid category' };
-  }
-
-  // Validate category icon (whitelist for security)
-  // Type guard to check if string is in the allowed icons array
-  if (
-    data.category_icon &&
-    !(ALLOWED_CATEGORY_ICONS as readonly string[]).includes(data.category_icon)
-  ) {
-    return { valid: false, error: 'Invalid category icon' };
-  }
-
-  // Validate goal amount
-  if (data.goal_amount !== undefined && data.goal_amount !== null) {
-    if (data.goal_amount <= 0) {
-      return { valid: false, error: 'Goal amount must be greater than 0' };
-    }
-    if (data.goal_amount > 1_000_000_000) {
-      // 1 billion max
-      return { valid: false, error: 'Goal amount too large' };
-    }
-  }
-
-  // Validate goal currency
-  const validCurrencies = ['USD', 'EUR', 'BTC', 'SATS', 'CHF'];
-  if (data.goal_currency && !validCurrencies.includes(data.goal_currency)) {
-    return { valid: false, error: 'Invalid goal currency' };
-  }
-
-  return { valid: true, error: null };
 }
 
 /**
