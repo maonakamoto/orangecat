@@ -115,51 +115,6 @@ export interface LoanPayment {
   created_at: string;
 }
 
-// ==================== AGGREGATED TYPES ====================
-
-export interface LoanStats {
-  loan_id: string;
-  loan_owner_id: string;
-  remaining_balance: number;
-  interest_rate?: number;
-  status: LoanStatus;
-  total_offers: number;
-  pending_offers: number;
-  accepted_offers: number;
-  best_offer_amount?: number;
-  best_interest_rate?: number;
-  best_term_months?: number;
-  total_paid: number;
-  last_payment_date?: string;
-}
-
-export interface UserLoanSummary {
-  id: string;
-  title: string;
-  remaining_balance: number;
-  interest_rate?: number;
-  status: LoanStatus;
-  total_offers: number;
-  pending_offers: number;
-  last_payment_date?: string;
-}
-
-export interface AvailableLoan {
-  id: string;
-  title: string;
-  description?: string;
-  remaining_balance: number;
-  interest_rate?: number;
-  monthly_payment?: number;
-  lender_name?: string;
-  total_offers: number;
-  best_offer_amount?: number;
-  best_interest_rate?: number;
-  owner_username?: string;
-  owner_display_name?: string;
-  created_at: string;
-}
-
 // ==================== FORM TYPES ====================
 
 export interface CreateLoanRequest {
@@ -248,12 +203,6 @@ export interface LoanPaymentResponse {
   error?: string;
 }
 
-export interface LoanStatsResponse {
-  success: boolean;
-  stats?: LoanStats;
-  error?: string;
-}
-
 // ==================== PAGINATION & FILTERING ====================
 
 export type Pagination = OffsetPagination;
@@ -276,120 +225,4 @@ export interface LoanOffersQuery {
   offer_type?: LoanOfferType;
   sort_by?: 'created_at' | 'offer_amount' | 'interest_rate';
   sort_order?: 'asc' | 'desc';
-}
-
-export interface LoansPagination extends Pagination {
-  query?: LoansQuery;
-}
-
-export interface LoanOffersPagination extends Pagination {
-  query?: LoanOffersQuery;
-}
-
-// ==================== DISPLAY TYPES ====================
-
-export interface LoanCardData extends Loan {
-  category?: LoanCategory;
-  stats?: LoanStats;
-  owner_profile?: {
-    username?: string;
-    display_name?: string;
-    avatar_url?: string;
-  };
-}
-
-export interface LoanOfferCardData extends LoanOffer {
-  loan?: LoanCardData;
-  offerer_profile?: {
-    username?: string;
-    display_name?: string;
-    avatar_url?: string;
-  };
-}
-
-export interface LoanDashboardData {
-  myLoans: LoanCardData[];
-  myOffers: LoanOfferCardData[];
-  availableLoans: LoanCardData[];
-  recentPayments: LoanPayment[];
-  stats: {
-    totalLoans: number;
-    activeLoans: number;
-    totalOffers: number;
-    pendingOffers: number;
-    totalPaid: number;
-    totalSaved: number; // Estimated savings from refinancing
-  };
-}
-
-// ==================== VALIDATION TYPES ====================
-
-export interface LoanValidationError {
-  field: keyof CreateLoanRequest;
-  message: string;
-}
-
-export interface LoanValidationResult {
-  valid: boolean;
-  errors: LoanValidationError[];
-}
-
-// ==================== UTILITY TYPES ====================
-
-export type LoanFormMode = 'create' | 'edit' | 'view';
-
-export type LoanOfferFormMode = 'create' | 'view';
-
-export interface LoanFilters {
-  status?: LoanStatus[];
-  categories?: string[];
-  amountRange?: [number, number];
-  interestRange?: [number, number];
-  negotiable?: boolean;
-}
-
-export interface LoanSortOption {
-  label: string;
-  value: string;
-  field: string;
-  direction: 'asc' | 'desc';
-}
-
-// ==================== HOOK TYPES ====================
-
-export interface UseLoansOptions {
-  query?: LoansQuery;
-  pagination?: Pagination;
-  enabled?: boolean;
-}
-
-export interface UseLoanOptions {
-  loanId: string;
-  enabled?: boolean;
-}
-
-export interface UseLoanOffersOptions {
-  loanId?: string;
-  offererId?: string;
-  query?: LoanOffersQuery;
-  pagination?: Pagination;
-  enabled?: boolean;
-}
-
-export interface UseCreateLoanOptions {
-  onSuccess?: (loan: Loan) => void;
-  onError?: (error: string) => void;
-}
-
-export interface UseUpdateLoanOptions extends UseCreateLoanOptions {
-  loanId: string;
-}
-
-export interface UseCreateOfferOptions {
-  onSuccess?: (offer: LoanOffer) => void;
-  onError?: (error: string) => void;
-}
-
-export interface UseUpdateOfferOptions extends UseCreateOfferOptions {
-  offerId: string;
 }
