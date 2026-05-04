@@ -18,7 +18,7 @@
  * Last Modified Summary: Established as SSOT with clear documentation about BTC-only transactions
  */
 
-export const CURRENCY_CODES = ['USD', 'EUR', 'CHF', 'BTC', 'SATS'] as const;
+export const CURRENCY_CODES = ['USD', 'EUR', 'CHF', 'GBP', 'BTC', 'SATS'] as const;
 export type CurrencyCode = (typeof CURRENCY_CODES)[number];
 
 /**
@@ -38,6 +38,7 @@ export const CURRENCY_METADATA: Record<
   USD: { label: 'USD (US Dollar)', symbol: '$', precision: 2 },
   EUR: { label: 'EUR (Euro)', symbol: '€', precision: 2 },
   CHF: { label: 'CHF (Swiss Franc)', symbol: 'CHF', precision: 2 },
+  GBP: { label: 'GBP (British Pound)', symbol: '£', precision: 2 },
   BTC: { label: 'BTC (Bitcoin)', symbol: '₿', precision: 8 },
   SATS: { label: 'Satoshis', symbol: 'sat', precision: 0 },
 };

@@ -1,13 +1,14 @@
 /**
  * Currency types used throughout the UI.
- *
- * Note: @/config/currencies exports CurrencyCode which covers the same domain.
- * These types remain here because 14+ UI files import Currency from this path.
+ * Currency derives from the SSOT in @/config/currencies.
+ * These exports remain here because 14+ UI files import from this path.
  */
 
-export type FiatCurrency = 'CHF' | 'EUR' | 'USD' | 'GBP';
-export type CryptoCurrency = 'BTC' | 'SATS';
-export type Currency = FiatCurrency | CryptoCurrency;
+import type { CurrencyCode } from '@/config/currencies';
+
+export type Currency = CurrencyCode;
+export type FiatCurrency = Exclude<Currency, 'BTC' | 'SATS'>;
+export type CryptoCurrency = Extract<Currency, 'BTC' | 'SATS'>;
 
 export const FIAT_CURRENCIES: FiatCurrency[] = ['CHF', 'EUR', 'USD', 'GBP'];
 export const CRYPTO_CURRENCIES: CryptoCurrency[] = ['BTC', 'SATS'];

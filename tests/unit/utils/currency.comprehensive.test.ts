@@ -172,8 +172,7 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
 
       test('handles known currencies with proper symbols', () => {
         expect(formatCurrency(100, 'EUR')).toBe('€100.00');
-        // GBP is not in CURRENCY_METADATA, falls back to plain number
-        expect(formatCurrency(50, 'GBP')).toBe('50');
+        expect(formatCurrency(50, 'GBP')).toBe('£50.00');
       });
 
       test('handles edge cases', () => {

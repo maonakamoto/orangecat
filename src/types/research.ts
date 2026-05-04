@@ -8,15 +8,6 @@ import type {
   ResearchTimeline as TimelineType,
 } from '@/config/research';
 
-export type {
-  ResearchField,
-  ResearchMethodology,
-  FundingModel,
-  TransparencyLevel,
-  ProgressFrequency,
-  TimelineType,
-};
-
 export interface TeamMember {
   id?: string;
   name: string;
