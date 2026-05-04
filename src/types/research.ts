@@ -188,26 +188,3 @@ export interface ResearchEntityCreate extends Omit<
   // Optional overrides for creation
   is_public?: boolean;
 }
-
-export type ResearchEntityUpdate = Partial<ResearchEntityCreate>;
-
-export interface ResearchEntityStats {
-  total_entities: number;
-  total_funding_raised: number;
-  total_researchers: number;
-  active_projects: number;
-  completed_projects: number;
-  average_completion_rate: number;
-  top_research_fields: Array<{
-    field: ResearchField;
-    count: number;
-    total_funding: number;
-  }>;
-  funding_distribution: {
-    donation: number;
-    subscription: number;
-    milestone: number;
-    royalty: number;
-    hybrid: number;
-  };
-}

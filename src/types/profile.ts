@@ -115,32 +115,3 @@ export const PROFILE_CATEGORIES = {
     ],
   },
 } as const;
-
-// Category tags for better discovery and association
-export const CATEGORY_TAGS = {
-  // Purpose-based tags
-  education: { label: 'Education', icon: '📚', color: 'blue' },
-  technology: { label: 'Technology', icon: '💻', color: 'indigo' },
-  art: { label: 'Art & Creativity', icon: '🎨', color: 'pink' },
-  environment: { label: 'Environment', icon: '🌱', color: 'green' },
-  social: { label: 'Social Impact', icon: '🤝', color: 'purple' },
-  health: { label: 'Health & Wellness', icon: '❤️', color: 'red' },
-  business: { label: 'Business & Entrepreneurship', icon: '💼', color: 'orange' },
-  research: { label: 'Research & Development', icon: '🔬', color: 'cyan' },
-  community: { label: 'Community Building', icon: '🏘️', color: 'yellow' },
-  journalism: { label: 'Journalism & Media', icon: '📰', color: 'gray' },
-
-  // Bitcoin-specific tags
-  bitcoin_education: { label: 'Bitcoin Education', icon: '₿', color: 'orange' },
-  lightning: { label: 'Lightning Network', icon: '⚡', color: 'yellow' },
-  mining: { label: 'Bitcoin Mining', icon: '⛏️', color: 'orange' },
-  development: { label: 'Bitcoin Development', icon: '🔧', color: 'blue' },
-  adoption: { label: 'Bitcoin Adoption', icon: '🌍', color: 'green' },
-
-  // Stage/Status tags
-  startup: { label: 'Startup', icon: '🌟', color: 'purple' },
-  established: { label: 'Established', icon: '🏆', color: 'gold' },
-  experimental: { label: 'Experimental', icon: '🧪', color: 'teal' },
-  collaborative: { label: 'Open to Collaboration', icon: '🤝', color: 'blue' },
-  urgent: { label: 'Urgent Need', icon: '🚨', color: 'red' },
-} as const;

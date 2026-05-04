@@ -11,7 +11,8 @@ import type { Profile as AppProfile } from './profile';
 import type { Project as AppProject } from './project';
 import type { ProfileData } from '../lib/validation';
 import type { EntityStatus } from '@/config/status-config';
-import type { VisibilityLevel } from './common';
+
+type VisibilityLevel = 'public' | 'private' | 'unlisted' | 'hidden';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
