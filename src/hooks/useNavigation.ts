@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 import { useAuth } from './useAuth';
 import { useActiveNavItem } from './useActiveNavItem';
 import {
@@ -59,17 +59,26 @@ export function useNavigation(sections: NavSection[]): UseNavigationReturn {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
+  // Stable refs to break the inline-function dep cycle in useNavigationStorage
+  type LoadedState = {
+    isSidebarOpen: boolean;
+    isSidebarCollapsed: boolean;
+    collapsedSections: Set<string>;
+  };
+  const onStateLoadedRef = useRef<(s: LoadedState) => void>();
+  onStateLoadedRef.current = ({ isSidebarOpen, isSidebarCollapsed, collapsedSections: cs }) => {
+    setIsSidebarOpen(isSidebarOpen);
+    setIsSidebarCollapsed(isSidebarCollapsed);
+    setCollapsedSections(cs);
+  };
+  const onLoadFailedRef = useRef<(d: Set<string>) => void>();
+  onLoadFailedRef.current = defaultCollapsed => setCollapsedSections(defaultCollapsed);
+
+  const onStateLoaded = useCallback((s: LoadedState) => onStateLoadedRef.current?.(s), []);
+  const onLoadFailed = useCallback((d: Set<string>) => onLoadFailedRef.current?.(d), []);
+
   const { persistSidebarState, persistSidebarCollapsedState, persistCollapsedSections } =
-    useNavigationStorage(hydrated, sections, {
-      onStateLoaded: ({ isSidebarOpen, isSidebarCollapsed, collapsedSections }) => {
-        setIsSidebarOpen(isSidebarOpen);
-        setIsSidebarCollapsed(isSidebarCollapsed);
-        setCollapsedSections(collapsedSections);
-      },
-      onLoadFailed: defaultCollapsed => {
-        setCollapsedSections(defaultCollapsed);
-      },
-    });
+    useNavigationStorage(hydrated, sections, { onStateLoaded, onLoadFailed });
 
   const { activeSection, activeItem, isItemActive } = useActiveNavItem(sections);
 

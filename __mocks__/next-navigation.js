@@ -9,4 +9,5 @@ module.exports = {
   useSearchParams: () => ({
     get: jest.fn(),
   }),
+  usePathname: jest.fn(() => '/'),
 };

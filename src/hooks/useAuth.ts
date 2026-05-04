@@ -2,21 +2,23 @@
 
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { logger } from '@/utils/logger';
 
 export { useRequireAuth, useRedirectIfAuthenticated } from './useAuthRedirects';
 
 function useThrottledLog(logFn: () => void, delay: number = 10000) {
   const lastLogTime = useRef(0);
+  const logFnRef = useRef(logFn);
+  logFnRef.current = logFn;
 
-  return () => {
+  return useCallback(() => {
     const now = Date.now();
     if (now - lastLogTime.current >= delay) {
-      logFn();
+      logFnRef.current();
       lastLogTime.current = now;
     }
-  };
+  }, [delay]);
 }
 
 export function useAuth() {
