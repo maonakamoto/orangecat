@@ -9,10 +9,10 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useEntityList } from '@/hooks/useEntityList';
+import { useCatContext } from '@/hooks/useCatContext';
 import { documentEntityConfig, type DocumentListItem } from '@/config/entities/documents';
 import {
   Plus,
@@ -27,7 +27,6 @@ import {
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { ROUTES } from '@/config/routes';
-import { API_ROUTES } from '@/config/api-routes';
 
 const TYPE_ICONS: Record<string, React.ElementType> = {
   goals: Target,
@@ -47,21 +46,9 @@ const TYPE_LABELS: Record<string, string> = {
   other: 'Other',
 };
 
-interface ContextSummary {
-  completeness: number;
-  knowledgeItems: {
-    category: string;
-    icon: string;
-    items: string[];
-    count: number;
-  }[];
-  tips: string[];
-}
-
 export function CatContextTab() {
   const { user } = useAuth();
-  const [summary, setSummary] = useState<ContextSummary | null>(null);
-  const [summaryLoading, setSummaryLoading] = useState(true);
+  const { summary, isLoading: summaryLoading } = useCatContext();
 
   const { items: documents, loading: documentsLoading } = useEntityList<DocumentListItem>({
     apiEndpoint: documentEntityConfig.apiEndpoint,
@@ -69,26 +56,6 @@ export function CatContextTab() {
     limit: 50,
     enabled: !!user?.id,
   });
-
-  // Fetch context summary
-  useEffect(() => {
-    async function fetchSummary() {
-      try {
-        const res = await fetch(API_ROUTES.CAT.CONTEXT);
-        const data = await res.json();
-        if (data.success) {
-          setSummary(data.data);
-        }
-      } catch {
-        // Ignore errors
-      } finally {
-        setSummaryLoading(false);
-      }
-    }
-    if (user) {
-      fetchSummary();
-    }
-  }, [user]);
 
   const getCompletenessLabel = (score: number) => {
     if (score >= 70) {

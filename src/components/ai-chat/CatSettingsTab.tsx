@@ -8,10 +8,9 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/hooks/useAuth';
 import { useAISettings } from '@/hooks/useAISettings';
+import { useCatPermissions } from '@/hooks/useCatPermissions';
 import {
   Bot,
   Key,
@@ -26,25 +25,6 @@ import {
   Gift,
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import { API_ROUTES } from '@/config/api-routes';
-
-interface CategorySummary {
-  category: string;
-  name: string;
-  description: string;
-  enabled: boolean;
-  actionCount: number;
-  enabledActionCount: number;
-}
-
-interface PermissionData {
-  summary: {
-    categories: CategorySummary[];
-    totalActions: number;
-    enabledActions: number;
-    highRiskEnabled: boolean;
-  };
-}
 
 const MODEL_TIERS = [
   { id: 'free', name: 'Free', description: 'No API cost, rate limited', icon: Gift },
@@ -54,61 +34,18 @@ const MODEL_TIERS = [
 ];
 
 export function CatSettingsTab() {
-  const { user } = useAuth();
   const { preferences, hasByok, updatePreferences, isLoading: aiLoading } = useAISettings();
-  const [permissions, setPermissions] = useState<PermissionData | null>(null);
-  const [permLoading, setPermLoading] = useState(true);
-  const [saving, setSaving] = useState<string | null>(null);
-
-  // Fetch permissions
-  useEffect(() => {
-    async function fetchPermissions() {
-      try {
-        const res = await fetch(API_ROUTES.CAT.PERMISSIONS);
-        const data = await res.json();
-        if (data.success) {
-          setPermissions(data.data);
-        }
-      } catch {
-        // Ignore errors
-      } finally {
-        setPermLoading(false);
-      }
-    }
-    if (user) {
-      fetchPermissions();
-    }
-  }, [user]);
-
-  const toggleCategory = async (categoryId: string, enabled: boolean) => {
-    setSaving(categoryId);
-    try {
-      const res = await fetch(API_ROUTES.CAT.PERMISSIONS, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category: categoryId, enabled }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        // Refetch permissions
-        const res2 = await fetch(API_ROUTES.CAT.PERMISSIONS);
-        const data2 = await res2.json();
-        if (data2.success) {
-          setPermissions(data2.data);
-        }
-      }
-    } catch {
-      // Ignore errors
-    } finally {
-      setSaving(null);
-    }
-  };
-
+  const {
+    permissions,
+    isLoading: permLoading,
+    isSaving: saving,
+    toggleCategory,
+  } = useCatPermissions();
   const handleTierChange = async (tier: 'free' | 'economy' | 'standard' | 'premium') => {
     try {
       await updatePreferences({ default_tier: tier });
     } catch {
-      // Ignore errors
+      // ignore
     }
   };
 
