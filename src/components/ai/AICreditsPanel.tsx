@@ -17,6 +17,7 @@ import { useAICreditsPanel, getTransactionIcon, getTransactionColor } from './us
 export function AICreditsPanel() {
   const {
     formatAmount,
+    formatAmountBtc,
     data,
     loading,
     depositing,
@@ -65,11 +66,11 @@ export function AICreditsPanel() {
           <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg p-4 border border-yellow-200">
             <div className="text-sm text-yellow-800 mb-1">Available Balance</div>
             <div className="text-3xl font-bold text-yellow-900">
-              {formatAmount(balance.balance_btc)}
+              {formatAmountBtc(balance.balance_btc)}
             </div>
             <div className="text-xs text-yellow-700 mt-2 flex gap-4">
-              <span>Deposited: {formatAmount(balance.total_deposited_btc)}</span>
-              <span>Spent: {formatAmount(balance.total_spent_btc)}</span>
+              <span>Deposited: {formatAmountBtc(balance.total_deposited_btc)}</span>
+              <span>Spent: {formatAmountBtc(balance.total_spent_btc)}</span>
             </div>
           </div>
 
@@ -100,7 +101,7 @@ export function AICreditsPanel() {
                     </div>
                     <div className={`font-medium ${getTransactionColor(tx.transaction_type)}`}>
                       {tx.transaction_type === 'charge' ? '-' : '+'}
-                      {formatAmount(tx.amount_btc)}
+                      {formatAmountBtc(tx.amount_btc)}
                     </div>
                   </div>
                 ))}

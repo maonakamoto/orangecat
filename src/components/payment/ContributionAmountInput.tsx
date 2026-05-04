@@ -29,7 +29,7 @@ export function ContributionAmountInput({
 }: ContributionAmountInputProps) {
   const [customMode, setCustomMode] = useState(false);
   const [customInput, setCustomInput] = useState('');
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
   const handleCustomBlur = () => {
     const val = parseFloat(customInput);

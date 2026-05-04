@@ -18,7 +18,7 @@ import { useCallback } from 'react';
 import { useUserCurrency } from './useUserCurrency';
 import { isFiatCurrency } from '@/utils/currency-helpers';
 import { useCurrencyConversion } from './useCurrencyConversion';
-import { formatCurrency, formatSats, satsToBitcoin } from '@/services/currency';
+import { formatCurrency, formatSats, satsToBitcoin, bitcoinToSats } from '@/services/currency';
 import type { CurrencyCode } from '@/config/currencies';
 
 export interface DisplayCurrencyOptions {
@@ -35,6 +35,8 @@ export interface DisplayCurrencyOptions {
 export interface UseDisplayCurrencyReturn {
   /** Format sats amount in user's preferred display currency */
   formatAmount: (sats: number, options?: DisplayCurrencyOptions) => string;
+  /** Format BTC amount (database canonical unit) in user's preferred display currency */
+  formatAmountBtc: (btc: number, options?: DisplayCurrencyOptions) => string;
   /** User's preferred display currency code */
   displayCurrency: CurrencyCode;
   /** Whether user prefers fiat (CHF/EUR/USD) vs crypto (BTC/SATS) */
@@ -111,8 +113,15 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
     [displayCurrency, convertFromBTC, isLoading]
   );
 
+  const formatAmountBtc = useCallback(
+    (btc: number, options?: DisplayCurrencyOptions): string =>
+      formatAmount(Math.round(bitcoinToSats(btc)), options),
+    [formatAmount]
+  );
+
   return {
     formatAmount,
+    formatAmountBtc,
     displayCurrency,
     prefersFiat,
     isLoading,

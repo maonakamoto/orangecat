@@ -59,7 +59,7 @@ export const getTransactionIcon = (type: string): React.ReactNode => {
 };
 
 export function useAICreditsPanel() {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmount, formatAmountBtc } = useDisplayCurrency();
   const [data, setData] = useState<AICreditsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [depositing, setDepositing] = useState(false);
@@ -124,6 +124,7 @@ export function useAICreditsPanel() {
 
   return {
     formatAmount,
+    formatAmountBtc,
     data,
     loading,
     depositing,

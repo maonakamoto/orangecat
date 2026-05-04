@@ -39,7 +39,7 @@ export function PaymentButton({
 }: PaymentButtonProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const meta = getEntityMetadata(entityType);
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
   // Don't render for entities that aren't purchasable
   if (meta.paymentPattern === 'none') {

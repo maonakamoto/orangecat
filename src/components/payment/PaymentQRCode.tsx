@@ -36,7 +36,7 @@ export function PaymentQRCode({
 }: PaymentQRCodeProps) {
   const [copied, setCopied] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(expiresInSeconds ?? 0);
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
   // Live countdown timer
   useEffect(() => {

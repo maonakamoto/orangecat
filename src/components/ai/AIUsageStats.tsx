@@ -29,7 +29,7 @@ interface AIUsageStatsProps {
  * - Last used timestamp
  */
 export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsProps) {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
   const formatNumber = (num: number) => {
     if (num >= 1_000_000) {
@@ -145,7 +145,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
  * AIUsageStatsCompact - Compact inline version
  */
 export function AIUsageStatsCompact({ usage }: { usage: UsageData }) {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
   return (
     <div className="flex items-center gap-4 text-sm text-gray-600">

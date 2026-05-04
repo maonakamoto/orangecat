@@ -12,7 +12,7 @@ import { WithdrawDialog } from './WithdrawDialog';
 import { RecentWithdrawals } from './RecentWithdrawals';
 
 export function AIRevenuePanel() {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmount, formatAmountBtc } = useDisplayCurrency();
   const { data, earnings, recentWithdrawals, loading, refresh, fetchRevenue } = useAIRevenue();
   const [showWithdrawDialog, setShowWithdrawDialog] = useState(false);
 
@@ -103,8 +103,10 @@ export function AIRevenuePanel() {
           </div>
         </div>
 
-        {(earnings?.available_balance_btc || 0) - (earnings?.pending_withdrawal_btc || 0) >=
-          MIN_WITHDRAWAL_SATS && (
+        {Math.round(
+          ((earnings?.available_balance_btc || 0) - (earnings?.pending_withdrawal_btc || 0)) *
+            100_000_000
+        ) >= MIN_WITHDRAWAL_SATS && (
           <Button className="w-full" variant="outline" onClick={() => setShowWithdrawDialog(true)}>
             <Wallet className="h-4 w-4 mr-2" />
             Withdraw Earnings
@@ -168,6 +170,7 @@ export function AIRevenuePanel() {
         onClose={() => setShowWithdrawDialog(false)}
         earnings={earnings}
         formatAmount={formatAmount}
+        formatAmountBtc={formatAmountBtc}
         onWithdrawSuccess={() => {
           setShowWithdrawDialog(false);
           refresh();

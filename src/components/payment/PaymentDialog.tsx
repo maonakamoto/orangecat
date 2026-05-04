@@ -48,7 +48,7 @@ export function PaymentDialog({
 }: PaymentDialogProps) {
   const meta = getEntityMetadata(entityType);
   const isContribution = meta.paymentPattern === 'contribution';
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
   const { state, initiate, confirmPaid, reset, isLoading } = usePaymentFlow();
 

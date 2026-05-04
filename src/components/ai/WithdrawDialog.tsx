@@ -22,7 +22,8 @@ interface WithdrawDialogProps {
   open: boolean;
   onClose: () => void;
   earnings: EarningsData | null;
-  formatAmount: (amount: number) => string;
+  formatAmount: (sats: number) => string;
+  formatAmountBtc: (btc: number) => string;
   onWithdrawSuccess: () => void;
 }
 
@@ -31,6 +32,7 @@ export function WithdrawDialog({
   onClose,
   earnings,
   formatAmount,
+  formatAmountBtc,
   onWithdrawSuccess,
 }: WithdrawDialogProps) {
   const [withdrawAmount, setWithdrawAmount] = useState('');
@@ -50,8 +52,9 @@ export function WithdrawDialog({
       toast.error('Please enter a valid Lightning address');
       return;
     }
-    if (amount > maxWithdrawable) {
-      toast.error(`Maximum available for withdrawal: ${formatAmount(maxWithdrawable)}`);
+    const maxWithdrawableSats = Math.round(maxWithdrawable * 100_000_000);
+    if (amount > maxWithdrawableSats) {
+      toast.error(`Maximum available for withdrawal: ${formatAmountBtc(maxWithdrawable)}`);
       return;
     }
 
@@ -94,7 +97,7 @@ export function WithdrawDialog({
           <div className="bg-green-50 border border-green-200 rounded-lg p-3">
             <div className="text-sm text-green-800">Available to withdraw</div>
             <div className="text-2xl font-bold text-green-900">
-              {formatAmount(Math.round(maxWithdrawable * 100_000_000))}
+              {formatAmountBtc(maxWithdrawable)}
             </div>
           </div>
 
@@ -105,7 +108,7 @@ export function WithdrawDialog({
                 variant={withdrawAmount === amount.toString() ? 'primary' : 'outline'}
                 size="sm"
                 onClick={() => setWithdrawAmount(amount.toString())}
-                disabled={amount > maxWithdrawable}
+                disabled={amount > Math.round(maxWithdrawable * 100_000_000)}
               >
                 {formatAmount(amount)}
               </Button>
