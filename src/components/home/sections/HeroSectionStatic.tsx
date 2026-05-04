@@ -53,21 +53,14 @@ export default function HeroSectionStatic() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
               <Link href="/discover" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 min-h-[48px] sm:min-h-[56px] bg-gradient-to-r from-tiffany-500 to-tiffany-600 hover:from-tiffany-600 hover:to-tiffany-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-                >
+                <Button variant="gradient" size="lg" className="w-full sm:w-auto">
                   <TrendingUp className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Discover
                   <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </Link>
               <Link href="/auth" className="w-full sm:w-auto">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 min-h-[48px] sm:min-h-[56px] border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
-                >
+                <Button variant="outline" size="lg" className="w-full sm:w-auto">
                   <Cat className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Meet Your Cat
                 </Button>
@@ -108,19 +101,18 @@ export default function HeroSectionStatic() {
 
               {/* Card Content */}
               <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
-                {/* Progress Bar */}
-                <div>
-                  <div className="flex justify-between text-xs sm:text-sm mb-2">
-                    <span className="font-semibold text-gray-900">24,297 CHF raised</span>
-                    <span className="text-gray-600">of 69,420 CHF</span>
-                  </div>
-                  <div className="w-full h-2 sm:h-3 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-tiffany-400 to-tiffany-600 rounded-full"
-                      style={{ width: '35%' }}
-                    />
-                  </div>
-                  <p className="text-xs text-gray-600 mt-1 sm:mt-2">Backed by 142 supporters</p>
+                {/* Platform capabilities */}
+                <div className="space-y-2">
+                  {['Buy, sell, fund, lend', 'Any currency accepted', 'AI-powered by your Cat'].map(
+                    feature => (
+                      <div key={feature} className="flex items-center gap-2 text-sm text-gray-600">
+                        <div className="w-4 h-4 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
+                          <div className="w-1.5 h-1.5 rounded-full bg-tiffany-500" />
+                        </div>
+                        {feature}
+                      </div>
+                    )
+                  )}
                 </div>
 
                 {/* Stats */}
@@ -136,13 +128,13 @@ export default function HeroSectionStatic() {
                 </div>
 
                 {/* CTA Button in Demo */}
-                <a
+                <Link
                   href="/discover"
                   className="block w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-tiffany-500 to-tiffany-600 text-white text-sm sm:text-base font-semibold rounded-lg hover:from-tiffany-600 hover:to-tiffany-700 transition-all duration-200 flex items-center justify-center gap-2"
                 >
                   <Cat className="w-4 h-4 sm:w-5 sm:h-5" />
-                  View Project
-                </a>
+                  Explore Platform
+                </Link>
               </div>
 
               {/* Floating badges */}
