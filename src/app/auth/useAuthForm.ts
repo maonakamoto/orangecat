@@ -56,7 +56,7 @@ export function useAuthForm() {
     setCaptchaToken(token);
   }, []);
 
-  const handleCaptchaError = useCallback((err: string) => {
+  const handleCaptchaError = useCallback((_err: string) => {
     setCaptchaToken(null);
   }, []);
 

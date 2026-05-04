@@ -37,6 +37,9 @@ export function useTypingSubscription({
       return;
     }
 
+    // Capture ref object (not .current) so cleanup reads the live value at teardown time
+    const typingRef = isTypingRef;
+
     const fetchTypingUsers = async () => {
       try {
         const { data } = await supabase
@@ -140,7 +143,7 @@ export function useTypingSubscription({
         clearInterval(refreshIntervalRef.current);
         refreshIntervalRef.current = null;
       }
-      if (isTypingRef.current) {
+      if (typingRef.current) {
         sendTypingStatus(false);
       }
     };

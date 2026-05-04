@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
@@ -31,7 +31,10 @@ export function useMessagePanelState({
   const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false);
   const [refreshSignal, setRefreshSignal] = useState(0);
 
-  const setSelectedConversationId = (id: string | null) => setCurrentConversation(id);
+  const setSelectedConversationId = useCallback(
+    (id: string | null) => setCurrentConversation(id),
+    [setCurrentConversation]
+  );
 
   const toggleConvSelect = (id: string) => {
     setSelectedConvIds(prev => {
@@ -83,7 +86,6 @@ export function useMessagePanelState({
   };
 
   // Wait until auth is fully ready before loading conversations from URL
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isAuthReady) {
       return;
@@ -98,7 +100,14 @@ export function useMessagePanelState({
       setSelectedConversationId(null);
       setHasInitializedFromUrl(false);
     }
-  }, [initialConversationId, user, isAuthReady, hasInitializedFromUrl, selectedConversationId]);
+  }, [
+    initialConversationId,
+    user,
+    isAuthReady,
+    hasInitializedFromUrl,
+    selectedConversationId,
+    setSelectedConversationId,
+  ]);
 
   useEffect(() => {
     if (initialConversationId !== selectedConversationId) {
