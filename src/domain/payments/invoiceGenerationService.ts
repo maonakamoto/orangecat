@@ -10,6 +10,7 @@
 import { NWCClient } from '@/lib/nostr/nwc';
 import type { ResolvedWallet } from './types';
 import { logger } from '@/utils/logger';
+import { bitcoinToSats } from '@/services/currency';
 
 export interface GeneratedInvoice {
   /** BOLT11 invoice string (Lightning) or null (on-chain) */
@@ -59,7 +60,7 @@ async function generateNWCInvoice(
 ): Promise<GeneratedInvoice> {
   const client = new NWCClient(nwcUri);
   // NWC protocol uses sats
-  const amountSats = Math.round(amountBtc * 100_000_000);
+  const amountSats = bitcoinToSats(amountBtc);
 
   try {
     await client.connect();
@@ -116,7 +117,7 @@ async function generateLightningAddressInvoice(
   }
 
   // LNURL-pay protocol uses millisatoshis
-  const amountSats = Math.round(amountBtc * 100_000_000);
+  const amountSats = bitcoinToSats(amountBtc);
   const amountMsats = amountSats * 1000;
 
   // Validate amount is within bounds

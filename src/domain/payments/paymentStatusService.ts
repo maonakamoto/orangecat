@@ -13,6 +13,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { checkAddressPayment, type OnchainPaymentCheck } from '@/lib/bitcoin/mempool';
 import { decrypt } from './encryptionService';
 import { logger } from '@/utils/logger';
+import { bitcoinToSats } from '@/services/currency';
 import type { PaymentIntent } from './types';
 
 /**
@@ -96,7 +97,7 @@ export async function checkOnchainPaymentStatus(
     : undefined;
 
   // Convert BTC to sats for mempool API (protocol level)
-  const expectedAmountSats = Math.round(paymentIntent.amount_btc * 100_000_000);
+  const expectedAmountSats = bitcoinToSats(paymentIntent.amount_btc);
   const result: OnchainPaymentCheck = await checkAddressPayment({
     address: paymentIntent.onchain_address,
     expectedAmountSats,

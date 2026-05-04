@@ -39,7 +39,7 @@ export function CollateralSelector({
   disabled = false,
 }: CollateralSelectorProps) {
   const { profile } = useAuth();
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
   const {
     assets,
@@ -49,7 +49,6 @@ export function CollateralSelector({
     showWalletSelector,
     totalCollateral,
     coveragePercentage,
-    SATS_PER_BTC,
     handleAddAsset,
     handleAddWallet,
     handleRemoveCollateral,
@@ -282,7 +281,7 @@ export function CollateralSelector({
                         <span className="text-sm font-medium text-gray-900">{wallet.label}</span>
                         {wallet.balance_btc && (
                           <span className="text-xs text-gray-500">
-                            {formatAmount(Math.round(wallet.balance_btc * SATS_PER_BTC))}
+                            {formatAmount(wallet.balance_btc)}
                           </span>
                         )}
                       </div>

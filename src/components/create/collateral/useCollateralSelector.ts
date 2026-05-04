@@ -7,8 +7,6 @@ import { convertBtcTo } from '@/services/currency';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { CollateralItem } from './CollateralSelector';
 
-const SATS_PER_BTC = 100_000_000;
-
 interface UseCollateralSelectorParams {
   profileId?: string;
   selectedCollateral: CollateralItem[];
@@ -120,7 +118,6 @@ export function useCollateralSelector({
     showWalletSelector,
     totalCollateral,
     coveragePercentage,
-    SATS_PER_BTC,
     handleAddAsset,
     handleAddWallet,
     handleRemoveCollateral,

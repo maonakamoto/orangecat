@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { bitcoinToSats } from '@/services/currency';
 import { MIN_WITHDRAWAL_SATS } from './types';
 import { useAIRevenue } from './useAIRevenue';
 import { WithdrawDialog } from './WithdrawDialog';
@@ -59,23 +60,16 @@ export function AIRevenuePanel() {
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
           <div className="text-sm text-green-800 mb-1">Total Earnings</div>
           <div className="text-3xl font-bold text-green-900">
-            {formatAmount(
-              Math.round((earnings?.total_earned_btc || summary.total_revenue_btc) * 100_000_000)
-            )}
+            {formatAmountBtc(earnings?.total_earned_btc || summary.total_revenue_btc)}
           </div>
           <div className="text-sm text-green-700 mt-1 space-y-0.5">
             <div>
               Available:{' '}
-              {formatAmount(
-                Math.round(
-                  (earnings?.available_balance_btc || summary.available_balance_btc) * 100_000_000
-                )
-              )}
+              {formatAmountBtc(earnings?.available_balance_btc || summary.available_balance_btc)}
             </div>
             {(earnings?.pending_withdrawal_btc || 0) > 0 && (
               <div className="text-yellow-700">
-                Pending:{' '}
-                {formatAmount(Math.round((earnings?.pending_withdrawal_btc || 0) * 100_000_000))}
+                Pending: {formatAmountBtc(earnings?.pending_withdrawal_btc || 0)}
               </div>
             )}
           </div>
@@ -103,9 +97,8 @@ export function AIRevenuePanel() {
           </div>
         </div>
 
-        {Math.round(
-          ((earnings?.available_balance_btc || 0) - (earnings?.pending_withdrawal_btc || 0)) *
-            100_000_000
+        {bitcoinToSats(
+          (earnings?.available_balance_btc || 0) - (earnings?.pending_withdrawal_btc || 0)
         ) >= MIN_WITHDRAWAL_SATS && (
           <Button className="w-full" variant="outline" onClick={() => setShowWithdrawDialog(true)}>
             <Wallet className="h-4 w-4 mr-2" />
@@ -113,7 +106,7 @@ export function AIRevenuePanel() {
           </Button>
         )}
 
-        <RecentWithdrawals withdrawals={recentWithdrawals} formatAmount={formatAmount} />
+        <RecentWithdrawals withdrawals={recentWithdrawals} formatAmountBtc={formatAmountBtc} />
 
         {/* Per-Assistant Breakdown */}
         {assistants.length > 0 && (
@@ -149,7 +142,7 @@ export function AIRevenuePanel() {
                   </div>
                   <div className="text-right flex-shrink-0 ml-2">
                     <div className="font-medium text-green-600">
-                      {formatAmount(Math.round(assistant.total_revenue_btc * 100_000_000))}
+                      {formatAmountBtc(assistant.total_revenue_btc)}
                     </div>
                   </div>
                 </div>

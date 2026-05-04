@@ -5,7 +5,6 @@ import { computeAmountRaised } from '@/lib/projectGoal';
 import Button from '@/components/ui/Button';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
-const SATS_PER_BTC = 100_000_000;
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { Bitcoin } from 'lucide-react';
@@ -30,7 +29,7 @@ interface Props {
 }
 
 export default function ProjectSummaryRail({ project, isOwner }: Props) {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
   const goalCurrency = project.goal_currency || project.currency || PLATFORM_DEFAULT_CURRENCY;
   const [amountRaised, setAmountRaised] = useState<number>(0);
   const [refreshing, setRefreshing] = useState(false);
@@ -110,7 +109,7 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
               </span>
             </div>
             <div className="text-base font-semibold text-gray-900">
-              {formatAmount(Math.round(bitcoinBalanceBtc * SATS_PER_BTC))}
+              {formatAmount(bitcoinBalanceBtc)}
             </div>
             {bitcoinBalanceUpdatedAt && (
               <div className="text-xs text-gray-500 mt-1">

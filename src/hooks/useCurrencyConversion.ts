@@ -10,7 +10,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { currencyConverter } from '@/services/currency';
+import { currencyConverter, satsToBitcoin, bitcoinToSats } from '@/services/currency';
 import { type CurrencyCode } from '@/config/currencies';
 
 export function useCurrencyConversion() {
@@ -43,7 +43,7 @@ export function useCurrencyConversion() {
       return amount;
     }
     if (currency === 'SATS') {
-      return amount / 100_000_000;
+      return satsToBitcoin(amount);
     }
 
     // Use last cached rates (synchronous)
@@ -85,7 +85,7 @@ export function useCurrencyConversion() {
       return amountBTC;
     }
     if (currency === 'SATS') {
-      return Math.round(amountBTC * 100_000_000);
+      return bitcoinToSats(amountBTC);
     }
 
     try {

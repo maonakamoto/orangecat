@@ -15,6 +15,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { API_ROUTES } from '@/config/api-routes';
 import { QUICK_AMOUNT_PRESETS_SATS } from '@/config/ai-credits';
+import { bitcoinToSats } from '@/services/currency';
 import type { EarningsData } from './types';
 import { MIN_WITHDRAWAL_SATS } from './types';
 
@@ -52,7 +53,7 @@ export function WithdrawDialog({
       toast.error('Please enter a valid Lightning address');
       return;
     }
-    const maxWithdrawableSats = Math.round(maxWithdrawable * 100_000_000);
+    const maxWithdrawableSats = bitcoinToSats(maxWithdrawable);
     if (amount > maxWithdrawableSats) {
       toast.error(`Maximum available for withdrawal: ${formatAmountBtc(maxWithdrawable)}`);
       return;
@@ -108,7 +109,7 @@ export function WithdrawDialog({
                 variant={withdrawAmount === amount.toString() ? 'primary' : 'outline'}
                 size="sm"
                 onClick={() => setWithdrawAmount(amount.toString())}
-                disabled={amount > Math.round(maxWithdrawable * 100_000_000)}
+                disabled={amount > bitcoinToSats(maxWithdrawable)}
               >
                 {formatAmount(amount)}
               </Button>

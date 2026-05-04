@@ -10,10 +10,10 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { auditSuccess, AUDIT_ACTIONS } from '@/lib/api/auditLog';
 import { logger } from '@/utils/logger';
 import { BITCOIN_FETCH_TIMEOUT_MS } from '@/lib/wallets/constants';
+import { satsToBitcoin } from '@/services/currency';
 
 const COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
 const API_TIMEOUT_MS = BITCOIN_FETCH_TIMEOUT_MS;
-const SATS_PER_BTC = 100_000_000;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyClient = any;
@@ -56,7 +56,7 @@ async function fetchXpubBalance(xpub: string): Promise<number> {
   const data = await res.json();
   const funded: number = data?.chain_stats?.funded_txo_sum ?? 0;
   const spent: number = data?.chain_stats?.spent_txo_sum ?? 0;
-  return (funded - spent) / SATS_PER_BTC;
+  return satsToBitcoin(funded - spent);
 }
 
 export type RefreshResult =

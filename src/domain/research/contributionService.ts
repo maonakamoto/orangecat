@@ -6,7 +6,7 @@
 
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { PROJECT_STATUS } from '@/config/project-statuses';
-import { convertToBtc } from '@/services/currency';
+import { convertToBtc, bitcoinToSats } from '@/services/currency';
 import { logger } from '@/utils/logger';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,13 +17,23 @@ const VALID_FUNDING_MODELS = ['donation', 'subscription', 'milestone', 'royalty'
 
 export type CreateContributionResult =
   | { ok: true; contribution: Record<string, unknown>; invoice: string }
-  | { ok: false; code: 'NOT_FOUND' | 'NOT_ACCEPTING' | 'INVALID_AMOUNT' | 'INVALID_MODEL' | 'DB_ERROR'; message: string };
+  | {
+      ok: false;
+      code: 'NOT_FOUND' | 'NOT_ACCEPTING' | 'INVALID_AMOUNT' | 'INVALID_MODEL' | 'DB_ERROR';
+      message: string;
+    };
 
 export async function createResearchContribution(
   supabase: AnyClient,
   researchEntityId: string,
   userId: string | null,
-  body: { amount: number; currency?: string; funding_model: string; message?: string; anonymous?: boolean }
+  body: {
+    amount: number;
+    currency?: string;
+    funding_model: string;
+    message?: string;
+    anonymous?: boolean;
+  }
 ): Promise<CreateContributionResult> {
   const { data: entity, error: entityError } = await supabase
     .from(DATABASE_TABLES.RESEARCH_ENTITIES)
@@ -32,24 +42,42 @@ export async function createResearchContribution(
     .single();
 
   if (entityError) {
-    if (entityError.code === 'PGRST116') {return { ok: false, code: 'NOT_FOUND', message: 'Research entity not found' };}
+    if (entityError.code === 'PGRST116') {
+      return { ok: false, code: 'NOT_FOUND', message: 'Research entity not found' };
+    }
     throw entityError;
   }
 
-  if (!entity.is_public) {return { ok: false, code: 'NOT_ACCEPTING', message: 'Cannot contribute to private research entities' };}
+  if (!entity.is_public) {
+    return {
+      ok: false,
+      code: 'NOT_ACCEPTING',
+      message: 'Cannot contribute to private research entities',
+    };
+  }
   if (entity.status === PROJECT_STATUS.COMPLETED || entity.status === PROJECT_STATUS.CANCELLED) {
-    return { ok: false, code: 'NOT_ACCEPTING', message: 'This research entity is no longer accepting contributions' };
+    return {
+      ok: false,
+      code: 'NOT_ACCEPTING',
+      message: 'This research entity is no longer accepting contributions',
+    };
   }
 
   const { amount, currency, funding_model, message, anonymous } = body;
 
-  if (!amount || amount <= 0) {return { ok: false, code: 'INVALID_AMOUNT', message: 'Valid contribution amount is required' };}
+  if (!amount || amount <= 0) {
+    return { ok: false, code: 'INVALID_AMOUNT', message: 'Valid contribution amount is required' };
+  }
 
   const amountBtc = convertToBtc(amount, currency || 'BTC');
-  if (amountBtc < MIN_AMOUNT_BTC) {return { ok: false, code: 'INVALID_AMOUNT', message: 'Minimum contribution is 0.00001 BTC' };}
-  if (!VALID_FUNDING_MODELS.includes(funding_model)) {return { ok: false, code: 'INVALID_MODEL', message: 'Invalid funding model' };}
+  if (amountBtc < MIN_AMOUNT_BTC) {
+    return { ok: false, code: 'INVALID_AMOUNT', message: 'Minimum contribution is 0.00001 BTC' };
+  }
+  if (!VALID_FUNDING_MODELS.includes(funding_model)) {
+    return { ok: false, code: 'INVALID_MODEL', message: 'Invalid funding model' };
+  }
 
-  const satsAmount = Math.round(amountBtc * 100_000_000);
+  const satsAmount = bitcoinToSats(amountBtc);
   const invoice = `lnbc${satsAmount}...`; // Placeholder
 
   const { data: contribution, error } = await supabase
@@ -68,15 +96,17 @@ export async function createResearchContribution(
     .single();
 
   if (error) {
-    logger.error('Failed to create research contribution', { researchEntityId, error: error.message });
+    logger.error('Failed to create research contribution', {
+      researchEntityId,
+      error: error.message,
+    });
     return { ok: false, code: 'DB_ERROR', message: 'Failed to create contribution' };
   }
 
   // Update funding total
-  await (supabase.rpc as unknown as (name: string, params: Record<string, unknown>) => Promise<unknown>)(
-    'update_research_funding',
-    { research_entity_id: researchEntityId, amount_btc: amountBtc }
-  );
+  await (
+    supabase.rpc as unknown as (name: string, params: Record<string, unknown>) => Promise<unknown>
+  )('update_research_funding', { research_entity_id: researchEntityId, amount_btc: amountBtc });
 
   logger.info('Research contribution created', {
     researchEntityId,
@@ -89,7 +119,9 @@ export async function createResearchContribution(
   return { ok: true, contribution: contribution as Record<string, unknown>, invoice };
 }
 
-export function computeContributionStats(contributions: Array<{ amount_btc: number; funding_model: string }>) {
+export function computeContributionStats(
+  contributions: Array<{ amount_btc: number; funding_model: string }>
+) {
   const totalAmountBtc = contributions.reduce((sum, c) => sum + c.amount_btc, 0);
   const fundingSources: Record<string, number> = {};
   for (const c of contributions) {

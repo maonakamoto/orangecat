@@ -21,10 +21,10 @@ function getStatusIcon(status: string) {
 
 interface RecentWithdrawalsProps {
   withdrawals: Withdrawal[];
-  formatAmount: (amount: number) => string;
+  formatAmountBtc: (btc: number) => string;
 }
 
-export function RecentWithdrawals({ withdrawals, formatAmount }: RecentWithdrawalsProps) {
+export function RecentWithdrawals({ withdrawals, formatAmountBtc }: RecentWithdrawalsProps) {
   if (withdrawals.length === 0) {
     return null;
   }
@@ -41,9 +41,7 @@ export function RecentWithdrawals({ withdrawals, formatAmount }: RecentWithdrawa
             <div className="flex items-center gap-2">
               {getStatusIcon(withdrawal.status)}
               <div>
-                <div className="font-medium">
-                  {formatAmount(Math.round(withdrawal.amount_btc * 100_000_000))}
-                </div>
+                <div className="font-medium">{formatAmountBtc(withdrawal.amount_btc)}</div>
                 <div className="text-xs text-gray-500">
                   {new Date(withdrawal.created_at).toLocaleDateString()}
                 </div>

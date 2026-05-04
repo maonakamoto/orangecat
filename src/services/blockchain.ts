@@ -1,5 +1,7 @@
 'use server';
 
+import { satsToBitcoin } from '@/services/currency';
+
 export interface BitcoinBalance {
   balance_btc: number;
   tx_count: number;
@@ -28,7 +30,7 @@ export async function fetchBitcoinBalance(address: string): Promise<BitcoinBalan
   const balanceSats = funded - spent;
 
   return {
-    balance_btc: balanceSats / 100_000_000,
+    balance_btc: satsToBitcoin(balanceSats),
     tx_count: txCount,
     updated_at: new Date().toISOString(),
   };

@@ -1,5 +1,6 @@
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { ActionHandler } from './types';
+import { bitcoinToSats } from '@/services/currency';
 
 export const entityHandlers: Record<string, ActionHandler> = {
   create_product: async (supabase, _userId, actorId, params) => {
@@ -28,7 +29,10 @@ export const entityHandlers: Record<string, ActionHandler> = {
     }
     const title = params.title as string;
     const statusLabel = params.publish ? 'live' : 'draft';
-    return { success: true, data: { ...data, displayMessage: `🛍️ Product "${title}" created (${statusLabel})` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `🛍️ Product "${title}" created (${statusLabel})` },
+    };
   },
 
   create_service: async (supabase, _userId, actorId, params) => {
@@ -63,12 +67,16 @@ export const entityHandlers: Record<string, ActionHandler> = {
     }
     const title = params.title as string;
     const statusLabel = params.publish ? 'live' : 'draft';
-    return { success: true, data: { ...data, displayMessage: `🔧 Service "${title}" created (${statusLabel})` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `🔧 Service "${title}" created (${statusLabel})` },
+    };
   },
 
   create_project: async (supabase, _userId, actorId, params) => {
     // DB columns are `goal_amount` + `currency`, not `goal_btc`
-    const goalAmount = (params.goal_btc as number | null) ?? (params.goal_amount as number | null) ?? null;
+    const goalAmount =
+      (params.goal_btc as number | null) ?? (params.goal_amount as number | null) ?? null;
 
     const { data, error } = await supabase
       .from(ENTITY_REGISTRY.project.tableName)
@@ -89,19 +97,27 @@ export const entityHandlers: Record<string, ActionHandler> = {
     }
     const title = params.title as string;
     const statusLabel = params.publish ? 'live' : 'draft';
-    return { success: true, data: { ...data, displayMessage: `🚀 Project "${title}" created (${statusLabel})` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `🚀 Project "${title}" created (${statusLabel})` },
+    };
   },
 
   create_cause: async (supabase, _userId, actorId, params) => {
     // DB column is `cause_category` (not `category`); target_amount is the funding goal
-    const targetAmount = (params.goal_btc as number | null) ?? (params.target_amount as number | null) ?? (params.goal_amount as number | null) ?? null;
+    const targetAmount =
+      (params.goal_btc as number | null) ??
+      (params.target_amount as number | null) ??
+      (params.goal_amount as number | null) ??
+      null;
     const { data, error } = await supabase
       .from(ENTITY_REGISTRY.cause.tableName)
       .insert({
         actor_id: actorId,
         title: params.title,
         description: params.description || null,
-        cause_category: (params.cause_category as string | null) ?? (params.category as string | null) ?? null,
+        cause_category:
+          (params.cause_category as string | null) ?? (params.category as string | null) ?? null,
         target_amount: targetAmount,
         currency: 'BTC',
         status: params.publish ? 'active' : 'draft',
@@ -114,7 +130,10 @@ export const entityHandlers: Record<string, ActionHandler> = {
     }
     const title = params.title as string;
     const statusLabel = params.publish ? 'live' : 'draft';
-    return { success: true, data: { ...data, displayMessage: `❤️ Cause "${title}" created (${statusLabel})` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `❤️ Cause "${title}" created (${statusLabel})` },
+    };
   },
 
   create_event: async (supabase, _userId, actorId, params) => {
@@ -136,7 +155,10 @@ export const entityHandlers: Record<string, ActionHandler> = {
     }
     const title = params.title as string;
     const statusLabel = params.publish ? 'live' : 'draft';
-    return { success: true, data: { ...data, displayMessage: `📅 Event "${title}" created (${statusLabel})` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `📅 Event "${title}" created (${statusLabel})` },
+    };
   },
 
   create_asset: async (supabase, _userId, actorId, params) => {
@@ -166,8 +188,14 @@ export const entityHandlers: Record<string, ActionHandler> = {
   create_investment: async (supabase, _userId, actorId, params) => {
     // DB columns: target_amount + currency (not target_amount_btc), minimum_investment.
     // Published investments use status='open' (not 'active') per investments status enum.
-    const targetAmount = (params.target_amount_btc as number | null) ?? (params.target_amount as number | null) ?? null;
-    const minimumInvestment = (params.minimum_investment_btc as number | null) ?? (params.minimum_investment as number | null) ?? 0.0001;
+    const targetAmount =
+      (params.target_amount_btc as number | null) ??
+      (params.target_amount as number | null) ??
+      null;
+    const minimumInvestment =
+      (params.minimum_investment_btc as number | null) ??
+      (params.minimum_investment as number | null) ??
+      0.0001;
 
     const { data, error } = await supabase
       .from(ENTITY_REGISTRY.investment.tableName)
@@ -192,7 +220,10 @@ export const entityHandlers: Record<string, ActionHandler> = {
     }
     const title = params.title as string;
     const statusLabel = params.publish ? 'open' : 'draft';
-    return { success: true, data: { ...data, displayMessage: `📈 Investment "${title}" created (${statusLabel})` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `📈 Investment "${title}" created (${statusLabel})` },
+    };
   },
 
   create_loan: async (supabase, userId, actorId, params) => {
@@ -200,7 +231,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
     // amount_btc → original_amount + remaining_balance (BTC decimal columns).
     // amount_sats is the legacy satoshi column; kept in sync via conversion.
     const amountBtc = (params.amount_btc as number) ?? 0;
-    const amountSats = Math.round(amountBtc * 100_000_000);
+    const amountSats = bitcoinToSats(amountBtc);
 
     const { data, error } = await supabase
       .from(ENTITY_REGISTRY.loan.tableName)
@@ -226,7 +257,10 @@ export const entityHandlers: Record<string, ActionHandler> = {
     }
     const title = params.title as string;
     const rateNote = params.interest_rate ? ` at ${params.interest_rate}% interest` : '';
-    return { success: true, data: { ...data, displayMessage: `💰 Loan request "${title}" created${rateNote}` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `💰 Loan request "${title}" created${rateNote}` },
+    };
   },
 
   create_wishlist: async (supabase, _userId, actorId, params) => {
@@ -265,7 +299,8 @@ export const entityHandlers: Record<string, ActionHandler> = {
         description: params.description || null,
         field: (params.field as string) || 'other',
         methodology: (params.methodology as string) || 'experimental',
-        expected_outcome: (params.expected_outcome as string) || (params.description as string) || '',
+        expected_outcome:
+          (params.expected_outcome as string) || (params.description as string) || '',
         timeline: (params.timeline as string) || 'medium_term',
         funding_goal_btc: fundingGoalBtc,
         funding_raised_btc: 0,
@@ -301,7 +336,10 @@ export const entityHandlers: Record<string, ActionHandler> = {
     }
     const resTitle = params.title as string;
     const field = params.field ? ` [${params.field}]` : '';
-    return { success: true, data: { ...data, displayMessage: `🔬 Research "${resTitle}"${field} created` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `🔬 Research "${resTitle}"${field} created` },
+    };
   },
 
   update_entity: async (supabase, _userId, actorId, params) => {

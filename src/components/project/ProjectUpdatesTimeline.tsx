@@ -16,8 +16,6 @@ import { formatDistanceToNow } from 'date-fns';
 import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
-const SATS_PER_BTC = 100_000_000;
-
 interface ProjectUpdate {
   id: string;
   project_id: string;
@@ -34,7 +32,7 @@ interface ProjectUpdatesTimelineProps {
 }
 
 export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpdatesTimelineProps) {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
   const [updates, setUpdates] = useState<ProjectUpdate[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -142,7 +140,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
                     <p className="font-medium text-gray-900">{update.title}</p>
                     {update.amount_btc && (
                       <span className="text-sm font-semibold text-orange-600 flex-shrink-0">
-                        {formatAmount(Math.round(update.amount_btc * SATS_PER_BTC))}
+                        {formatAmount(update.amount_btc)}
                       </span>
                     )}
                   </div>
