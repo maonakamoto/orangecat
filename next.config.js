@@ -211,11 +211,6 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
 
-  eslint: {
-    // Block production builds on lint errors
-    ignoreDuringBuilds: false,
-  },
-
   // Remove X-Powered-By header
   poweredByHeader: false,
 
