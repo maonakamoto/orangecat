@@ -20,6 +20,11 @@ try {
 }
 
 const nextConfig = {
+  // ESLint is a devDependency — lint in CI, skip in Vercel build
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
   // Fix workspace root detection to prevent watching entire home directory
   outputFileTracingRoot: __dirname,
 
