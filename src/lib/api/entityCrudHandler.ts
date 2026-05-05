@@ -44,7 +44,7 @@ import { validateUUID } from '@/lib/api/validation';
 
 // ==================== TYPES ====================
 
-export interface EntityHandlerConfig {
+interface EntityHandlerConfig {
   /** Entity type from registry */
   entityType: EntityType;
   /** Zod schema for validation (optional for GET/DELETE) */
@@ -107,7 +107,7 @@ export interface EntityHandlerConfig {
   getCacheControl?: (entity: Record<string, unknown>, userId: string | null) => string;
 }
 
-export interface EntityRouteParams {
+interface EntityRouteParams {
   params: { id: string };
 }
 
@@ -144,7 +144,7 @@ async function defaultOwnershipCheck(
  * - Optional status filtering
  * - Consistent error responses
  */
-export function createGetHandler(config: EntityHandlerConfig) {
+function createGetHandler(config: EntityHandlerConfig) {
   const {
     entityType,
     requireActiveStatus = true,
@@ -253,7 +253,7 @@ export function createGetHandler(config: EntityHandlerConfig) {
  * - Zod validation
  * - Consistent error responses
  */
-export function createPutHandler(config: EntityHandlerConfig) {
+function createPutHandler(config: EntityHandlerConfig) {
   const {
     entityType,
     schema,
@@ -382,7 +382,7 @@ export function createPutHandler(config: EntityHandlerConfig) {
  * - Ownership verification
  * - Consistent error responses
  */
-export function createDeleteHandler(config: EntityHandlerConfig) {
+function createDeleteHandler(config: EntityHandlerConfig) {
   const {
     entityType,
     ownershipField = 'user_id',

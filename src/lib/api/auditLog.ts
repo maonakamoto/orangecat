@@ -68,12 +68,12 @@ export const AUDIT_ACTIONS = {
   SUSPICIOUS_ACTIVITY: 'SUSPICIOUS_ACTIVITY',
 } as const;
 
-export type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];
+type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];
 
 /**
  * Audit log entry interface
  */
-export interface AuditLogEntry {
+interface AuditLogEntry {
   action: AuditAction;
   userId: string | null;
   entityType?: 'profile' | 'project' | 'wallet' | 'post' | 'donation' | 'other';
@@ -161,104 +161,4 @@ export async function auditSuccess(
     metadata,
     success: true,
   });
-}
-
-/**
- * Simplified audit log for failed operations
- */
-export async function auditFailure(
-  action: AuditAction,
-  userId: string | null,
-  errorMessage: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  metadata?: Record<string, any>
-): Promise<void> {
-  return auditLog({
-    action,
-    userId,
-    metadata,
-    success: false,
-    errorMessage,
-  });
-}
-
-/**
- * Audit log with request context (IP, user agent)
- */
-export async function auditWithContext(entry: AuditLogEntry, request: Request): Promise<void> {
-  const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip');
-  const userAgent = request.headers.get('user-agent');
-
-  return auditLog({
-    ...entry,
-    ipAddress: ipAddress || undefined,
-    userAgent: userAgent || undefined,
-  });
-}
-
-/**
- * Query audit logs (for admin dashboard)
- *
- * @param filters - Filter criteria
- * @returns Audit log entries matching filters
- */
-export async function queryAuditLogs(filters: {
-  userId?: string;
-  action?: AuditAction;
-  entityType?: string;
-  entityId?: string;
-  startDate?: Date;
-  endDate?: Date;
-  limit?: number;
-  offset?: number;
-}) {
-  try {
-    const supabase = await createServerClient();
-
-    let query = supabase
-      .from(DATABASE_TABLES.AUDIT_LOGS)
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (filters.userId) {
-      query = query.eq('user_id', filters.userId);
-    }
-
-    if (filters.action) {
-      query = query.eq('action', filters.action);
-    }
-
-    if (filters.entityType) {
-      query = query.eq('entity_type', filters.entityType);
-    }
-
-    if (filters.entityId) {
-      query = query.eq('entity_id', filters.entityId);
-    }
-
-    if (filters.startDate) {
-      query = query.gte('created_at', filters.startDate.toISOString());
-    }
-
-    if (filters.endDate) {
-      query = query.lte('created_at', filters.endDate.toISOString());
-    }
-
-    const limit = filters.limit || 100;
-    const offset = filters.offset || 0;
-
-    query = query.range(offset, offset + limit - 1);
-
-    const { data, error } = await query;
-
-    if (error) {
-      logger.error('Failed to query audit logs', { error: error.message, filters });
-      return [];
-    }
-
-    return data || [];
-  } catch (error) {
-    logger.error('Unexpected error querying audit logs', { error });
-    return [];
-  }
 }

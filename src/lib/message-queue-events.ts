@@ -2,7 +2,7 @@
 // Lightweight event helpers for the message queue lifecycle.
 // Keep this React-agnostic so libs and hooks can both use it.
 
-export type MessageSyncProgressDetail = { processed: number; total: number };
+type MessageSyncProgressDetail = { processed: number; total: number };
 
 const UPDATED = 'message-queue:updated';
 const SYNC_START = 'message-queue:sync-start';
@@ -38,12 +38,9 @@ export function messageSyncComplete(): void {
   window.dispatchEvent(new CustomEvent(SYNC_COMPLETE));
 }
 
-export const messageQueueEvents = {
+const messageQueueEvents = {
   UPDATED,
   SYNC_START,
   SYNC_PROGRESS,
   SYNC_COMPLETE,
 };
-
-
-

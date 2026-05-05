@@ -19,7 +19,7 @@ let scheduledRetry: ReturnType<typeof setTimeout> | null = null;
 /**
  * Sets the current user ID for filtering queued messages.
  */
-export function setMessageSyncUser(id: string | null): void {
+function setMessageSyncUser(id: string | null): void {
   currentUserId = id;
 }
 
@@ -213,6 +213,3 @@ export const messageSyncManager = {
   processQueue: processMessageQueue,
   setCurrentUser: setMessageSyncUser,
 };
-
-
-

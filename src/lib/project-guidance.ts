@@ -42,7 +42,7 @@ export interface DefaultContent {
 }
 
 // Legacy alias - use projectDefaultGuidance in new code
-export const projectDefaultContent: DefaultContent = {
+const projectDefaultContent: DefaultContent = {
   title: "What's a Project?",
   description:
     'A project is any initiative that needs funding — from personal goals to community causes. Accept Bitcoin funding directly to your wallet.',

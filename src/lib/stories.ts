@@ -1,62 +1,63 @@
-import fs from 'fs'
-import path from 'path'
-import matter from 'gray-matter'
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 
 export interface Story {
-  id: string
-  category: string
-  emoji: string
-  name: string
-  role: string
-  location: string
-  goal: string
-  raised: string
-  supporters: number
-  timeline: string
-  gradient: string
-  summary: string
-  published: boolean
-  featured: boolean
-  story: string
-  results?: string[]
-  testimonial?: string
+  id: string;
+  category: string;
+  emoji: string;
+  name: string;
+  role: string;
+  location: string;
+  goal: string;
+  raised: string;
+  supporters: number;
+  timeline: string;
+  gradient: string;
+  summary: string;
+  published: boolean;
+  featured: boolean;
+  story: string;
+  results?: string[];
+  testimonial?: string;
 }
 
-const STORIES_PATH = path.join(process.cwd(), 'content/stories')
+const STORIES_PATH = path.join(process.cwd(), 'content/stories');
 
 // Ensure stories directory exists
-export function ensureStoriesDirectory() {
+function ensureStoriesDirectory() {
   if (!fs.existsSync(STORIES_PATH)) {
-    fs.mkdirSync(STORIES_PATH, { recursive: true })
+    fs.mkdirSync(STORIES_PATH, { recursive: true });
   }
 }
 
 // Get all story slugs
-export function getStorySlugs(): string[] {
-  ensureStoriesDirectory()
+function getStorySlugs(): string[] {
+  ensureStoriesDirectory();
 
   if (!fs.existsSync(STORIES_PATH)) {
-    return []
+    return [];
   }
 
-  return fs.readdirSync(STORIES_PATH)
+  return fs
+    .readdirSync(STORIES_PATH)
     .filter(filename => filename.endsWith('.mdx'))
-    .map(filename => filename.replace(/\.mdx$/, ''))
+    .map(filename => filename.replace(/\.mdx$/, ''));
 }
 
 // Get a single story by ID
-export function getStory(id: string): Story | null {
+function getStory(id: string): Story | null {
   try {
-    ensureStoriesDirectory()
+    ensureStoriesDirectory();
 
-    const fullPath = path.join(STORIES_PATH, `${id}.mdx`)
+    const fullPath = path.join(STORIES_PATH, `${id}.mdx`);
 
     if (!fs.existsSync(fullPath)) {
-      return null
+      return null;
     }
 
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-    const { data, content } = matter(fileContents)
+    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const { data, content } = matter(fileContents);
 
     return {
       id: data.id || id,
@@ -75,46 +76,44 @@ export function getStory(id: string): Story | null {
       featured: data.featured || false,
       story: content,
       results: data.results || [],
-      testimonial: data.testimonial || ''
-    }
+      testimonial: data.testimonial || '',
+    };
   } catch {
-    return null
+    return null;
   }
 }
 
 // Get all stories
 export function getAllStories(): Story[] {
-  const slugs = getStorySlugs()
+  const slugs = getStorySlugs();
 
   return slugs
     .map(slug => getStory(slug))
     .filter((story): story is Story => story !== null)
-    .filter(story => story.published)
+    .filter(story => story.published);
 }
 
 // Get published stories only
-export function getPublishedStories(): Story[] {
-  return getAllStories().filter(story => story.published)
+function getPublishedStories(): Story[] {
+  return getAllStories().filter(story => story.published);
 }
 
 // Get featured stories
-export function getFeaturedStories(): Story[] {
-  return getAllStories().filter(story => story.featured)
+function getFeaturedStories(): Story[] {
+  return getAllStories().filter(story => story.featured);
 }
 
 // Get stories by category
-export function getStoriesByCategory(category: string): Story[] {
+function getStoriesByCategory(category: string): Story[] {
   if (category === 'All') {
-    return getAllStories()
+    return getAllStories();
   }
 
-  return getAllStories().filter(story =>
-    story.category === category
-  )
+  return getAllStories().filter(story => story.category === category);
 }
 
 // Get all unique categories
 export function getAllCategories(): string[] {
-  const allCategories = getAllStories().map(story => story.category)
-  return ['All', ...Array.from(new Set(allCategories)).sort()]
+  const allCategories = getAllStories().map(story => story.category);
+  return ['All', ...Array.from(new Set(allCategories)).sort()];
 }

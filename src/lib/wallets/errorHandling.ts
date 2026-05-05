@@ -34,7 +34,7 @@ export async function parseErrorResponse(response: Response): Promise<string> {
 /**
  * Create standardized error response
  */
-export function createWalletErrorResponse(
+function createWalletErrorResponse(
   error: string,
   code: string,
   status: number = 500,

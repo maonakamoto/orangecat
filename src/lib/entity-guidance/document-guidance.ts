@@ -25,13 +25,7 @@ import {
 } from 'lucide-react';
 import type { GuidanceContent, DefaultGuidance } from '@/components/create/types';
 
-export type DocumentFieldType =
-  | 'title'
-  | 'content'
-  | 'document_type'
-  | 'visibility'
-  | 'tags'
-  | null;
+type DocumentFieldType = 'title' | 'content' | 'document_type' | 'visibility' | 'tags' | null;
 
 export const documentGuidanceContent: Record<NonNullable<DocumentFieldType>, GuidanceContent> = {
   title: {
@@ -152,7 +146,7 @@ export const documentDefaultGuidance: DefaultGuidance = {
   hint: 'Documents marked "My Cat Only" or "Public" will be used by My Cat for personalized advice.',
 };
 
-export const documentTypeGuidance = {
+const documentTypeGuidance = {
   goals: {
     icon: React.createElement(Target, { className: 'w-5 h-5 text-indigo-600' }),
     title: 'Goals & Aspirations',
@@ -221,7 +215,7 @@ export const documentTypeGuidance = {
   },
 };
 
-export const visibilityGuidance = {
+const visibilityGuidance = {
   private: {
     icon: React.createElement(Lock, { className: 'w-5 h-5 text-gray-600' }),
     title: 'Private',

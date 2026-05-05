@@ -21,7 +21,7 @@ export interface EntityPerformance {
   payments: number;
 }
 
-export interface WeeklyDigestEmailData {
+interface WeeklyDigestEmailData {
   displayName: string;
   stats: WeeklyDigestStats;
   topEntities?: EntityPerformance[];

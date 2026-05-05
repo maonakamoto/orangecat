@@ -14,7 +14,7 @@ export type MilestoneType =
   | 'profile_complete'
   | 'entity_published';
 
-export interface MilestoneEmailData {
+interface MilestoneEmailData {
   displayName: string;
   milestoneType: MilestoneType;
   /** Context-specific detail, e.g. entity title or payment amount */

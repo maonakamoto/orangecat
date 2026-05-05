@@ -16,7 +16,7 @@ import {
 const STORE_NAME = 'offlinePostQueue';
 
 // QueuedPost is a type alias for backward compatibility
-export type QueuedPost = QueuedItem<unknown>;
+type QueuedPost = QueuedItem<unknown>;
 
 // Register the post queue store
 registerQueueStore(STORE_NAME, () => {

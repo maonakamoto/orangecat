@@ -9,7 +9,7 @@ import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
 export type GroupActivityType = 'invite' | 'proposal' | 'vote_reminder' | 'proposal_resolved';
 
-export interface GroupActivityEmailData {
+interface GroupActivityEmailData {
   displayName: string;
   activityType: GroupActivityType;
   groupName: string;

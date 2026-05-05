@@ -9,7 +9,7 @@
 
 import { logger } from '@/utils/logger';
 
-export interface Nip05Result {
+interface Nip05Result {
   valid: boolean;
   pubkey?: string;
   relays?: string[];

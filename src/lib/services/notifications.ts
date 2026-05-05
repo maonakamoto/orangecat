@@ -12,7 +12,7 @@ import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 
 // Notification types supported by the system
-export type NotificationType =
+type NotificationType =
   | 'follow'
   | 'payment'
   | 'project_funded'

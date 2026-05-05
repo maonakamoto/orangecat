@@ -7,7 +7,7 @@
 
 import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
-export interface WelcomeEmailData {
+interface WelcomeEmailData {
   displayName: string;
   dashboardUrl: string;
   profileUrl: string;

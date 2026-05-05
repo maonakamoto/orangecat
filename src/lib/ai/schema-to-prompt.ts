@@ -6,13 +6,12 @@
  */
 
 import type { EntityType } from '@/config/entity-registry';
-import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { FieldConfig, EntityConfig } from '@/components/create/types';
 
 /**
  * Field description for AI prompt
  */
-export interface FieldDescription {
+interface FieldDescription {
   name: string;
   type: string;
   description: string;
@@ -24,7 +23,7 @@ export interface FieldDescription {
 /**
  * Convert a field config to a description for the AI
  */
-export function fieldConfigToDescription(field: FieldConfig): FieldDescription {
+function fieldConfigToDescription(field: FieldConfig): FieldDescription {
   const constraints: string[] = [];
   const examples: string[] = [];
 
@@ -146,37 +145,6 @@ export function formatFieldsForPrompt(descriptions: FieldDescription[]): string 
 }
 
 /**
- * Get entity context for the AI prompt
- */
-export function getEntityContext(entityType: EntityType): string {
-  const meta = ENTITY_REGISTRY[entityType];
-
-  if (!meta) {
-    return `Creating a ${entityType}`;
-  }
-
-  return `Creating a ${meta.name} - ${meta.description}`;
-}
-
-/**
- * Get list of required fields from an entity config
- */
-export function getRequiredFields(config: EntityConfig): string[] {
-  const required: string[] = [];
-
-  for (const group of config.fieldGroups) {
-    if (group.fields) {
-      for (const field of group.fields) {
-        if (field.required) {
-          required.push(field.name);
-        }
-      }
-    }
-  }
-
-  return required;
-}
-
 /**
  * Get common field names that typically need special handling
  */

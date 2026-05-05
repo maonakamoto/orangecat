@@ -7,7 +7,7 @@
 
 import { logger } from '@/utils/logger';
 
-export interface NominatimResult {
+interface NominatimResult {
   place_id: number;
   display_name: string;
   lat: string;

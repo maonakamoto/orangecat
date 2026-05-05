@@ -9,7 +9,7 @@ import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
 export type OnboardingDay = 1 | 2 | 3 | 5 | 7;
 
-export interface OnboardingEmailData {
+interface OnboardingEmailData {
   displayName: string;
   day: OnboardingDay;
   /** Stats for day-7 summary */

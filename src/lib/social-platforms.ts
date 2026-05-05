@@ -51,7 +51,7 @@ export interface SocialPlatform {
  *
  * Platforms NOT in this list can still be added via "Custom" option.
  */
-export const SOCIAL_PLATFORMS: SocialPlatform[] = [
+const SOCIAL_PLATFORMS: SocialPlatform[] = [
   {
     id: 'x',
     label: 'X (Twitter)',
@@ -233,6 +233,6 @@ export function getPredefinedPlatforms(): SocialPlatform[] {
 /**
  * Check if platform is predefined
  */
-export function isPredefinedPlatform(id: SocialPlatformId): boolean {
+function isPredefinedPlatform(id: SocialPlatformId): boolean {
   return id !== 'custom';
 }

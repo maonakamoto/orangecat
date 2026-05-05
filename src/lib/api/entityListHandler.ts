@@ -32,7 +32,7 @@ import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 
 // ==================== TYPES ====================
 
-export interface EntityListHandlerConfig {
+interface EntityListHandlerConfig {
   /** Entity type from registry */
   entityType: EntityType;
   /** Override table name (uses registry tableName if not specified) */

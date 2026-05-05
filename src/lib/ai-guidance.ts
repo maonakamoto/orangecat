@@ -203,7 +203,7 @@ export const aiDefaultContent: DefaultContent = {
 
 // ==================== ONBOARDING CONTENT ====================
 
-export interface OnboardingStepContent {
+interface OnboardingStepContent {
   title: string;
   description: string;
   whyTitle?: string;

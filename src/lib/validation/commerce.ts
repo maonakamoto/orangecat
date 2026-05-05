@@ -13,7 +13,7 @@ import { lightningAddressSchema, optionalText, optionalUrl } from './base';
  *
  * Uses .passthrough() to allow additional fields without breaking existing data.
  */
-export const availabilityScheduleSchema = z
+const availabilityScheduleSchema = z
   .object({
     days: z
       .array(z.enum(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']))
@@ -37,7 +37,7 @@ export const availabilityScheduleSchema = z
  *
  * Uses .passthrough() to allow additional fields without breaking existing data.
  */
-export const distributionRulesSchema = z
+const distributionRulesSchema = z
   .object({
     type: z.enum(['equal', 'weighted', 'custom']).optional(),
     allocations: z.record(z.string(), z.number()).optional(),
@@ -51,7 +51,7 @@ export const distributionRulesSchema = z
  *
  * Uses .passthrough() to allow additional fields without breaking existing data.
  */
-export const beneficiarySchema = z
+const beneficiarySchema = z
   .object({
     id: z.string().optional(),
     name: z.string().max(200).optional(),
@@ -119,6 +119,6 @@ export const userCauseSchema = z.object({
 export type UserProductFormData = z.infer<typeof userProductSchema>;
 export type UserServiceFormData = z.infer<typeof userServiceSchema>;
 export type UserCauseFormData = z.infer<typeof userCauseSchema>;
-export type AvailabilityScheduleData = z.infer<typeof availabilityScheduleSchema>;
+type AvailabilityScheduleData = z.infer<typeof availabilityScheduleSchema>;
 export type DistributionRulesData = z.infer<typeof distributionRulesSchema>;
 export type BeneficiaryData = z.infer<typeof beneficiarySchema>;

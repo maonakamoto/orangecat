@@ -2,7 +2,7 @@
  * Simple SSE reader for fetch() response bodies.
  * Splits by blank lines and parses `data: ...` lines as JSON.
  */
-export async function readSSEStream(
+async function readSSEStream(
   body: ReadableStream<Uint8Array> | null,
   onData: (message: unknown) => void
 ): Promise<void> {

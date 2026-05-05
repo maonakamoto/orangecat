@@ -14,7 +14,7 @@ import { entityTransforms } from './normalizeEntityData';
 /**
  * Field mapping configuration for building update payloads
  */
-export interface FieldMapping {
+interface FieldMapping {
   /** Source field name (from validated data) */
   from: string;
   /** Target field name (in update payload) - defaults to same as source */
@@ -77,7 +77,8 @@ export function buildUpdatePayload(
     }
 
     // Use value, default, or undefined
-    let value = normalizedValue !== undefined && normalizedValue !== null ? normalizedValue : mapping.default;
+    let value =
+      normalizedValue !== undefined && normalizedValue !== null ? normalizedValue : mapping.default;
 
     // Apply transform if provided (transforms can override empty string handling)
     if (value !== undefined && mapping.transform) {
@@ -158,6 +159,3 @@ export const commonFieldMappings = {
 
 // Re-export transforms for convenience
 export { entityTransforms };
-
-
-

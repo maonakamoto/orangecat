@@ -10,7 +10,7 @@ import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 
 export type ReengagementStage = '14d' | '30d' | '60d' | '90d';
 
-export interface ReengagementEmailData {
+interface ReengagementEmailData {
   displayName: string;
   stage: ReengagementStage;
   /** Entity title for the 14d and 60d variants */

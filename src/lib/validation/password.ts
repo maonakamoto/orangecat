@@ -42,7 +42,7 @@ const COMMON_PASSWORDS = [
 /**
  * Password validation result
  */
-export interface PasswordValidationResult {
+interface PasswordValidationResult {
   valid: boolean;
   errors: string[];
 }
@@ -94,7 +94,7 @@ export function validatePasswordStrength(password: string): PasswordValidationRe
   }
 
   // Check for common weak passwords
-  if (COMMON_PASSWORDS.includes(password.toLowerCase() as typeof COMMON_PASSWORDS[number])) {
+  if (COMMON_PASSWORDS.includes(password.toLowerCase() as (typeof COMMON_PASSWORDS)[number])) {
     errors.push('Password is too common. Please choose a more unique password');
   }
 
@@ -123,27 +123,18 @@ export function validatePasswordStrength(password: string): PasswordValidationRe
 export const passwordSchema = z
   .string()
   .min(PASSWORD_RULES.minLength, `Password must be at least ${PASSWORD_RULES.minLength} characters`)
-  .max(PASSWORD_RULES.maxLength, `Password must be less than ${PASSWORD_RULES.maxLength} characters`)
+  .max(
+    PASSWORD_RULES.maxLength,
+    `Password must be less than ${PASSWORD_RULES.maxLength} characters`
+  )
   .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
   .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
   .regex(/[0-9]/, 'Password must contain at least one number')
   .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
   .refine(
-    password => !COMMON_PASSWORDS.includes(password.toLowerCase() as typeof COMMON_PASSWORDS[number]),
+    password =>
+      !COMMON_PASSWORDS.includes(password.toLowerCase() as (typeof COMMON_PASSWORDS)[number]),
     {
       message: 'Password is too common. Please choose a more unique password',
     }
   );
-
-/**
- * Simple boolean check for password validity
- *
- * Use this for quick validation checks without detailed error messages.
- *
- * @param password - Password to validate
- * @returns True if password meets all requirements
- */
-export function isValidPassword(password: string): boolean {
-  const result = validatePasswordStrength(password);
-  return result.valid;
-}

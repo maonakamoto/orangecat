@@ -15,7 +15,7 @@ import { messageQueueUpdated } from './message-queue-events';
 
 const STORE_NAME = 'offlineMessageQueue';
 
-export interface QueuedMessagePayload {
+interface QueuedMessagePayload {
   conversationId: string;
   content: string;
   messageType?: string;
@@ -64,7 +64,7 @@ export async function incrementMessageAttemptCount(id: string): Promise<void> {
 /**
  * Clears the entire message queue.
  */
-export async function clearMessageQueue(): Promise<void> {
+async function clearMessageQueue(): Promise<void> {
   return clearQueueStore(STORE_NAME);
 }
 
@@ -83,6 +83,3 @@ export const messageQueueService = {
   incrementMessageAttemptCount,
   clearMessageQueue,
 };
-
-
-

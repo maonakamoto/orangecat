@@ -10,13 +10,13 @@ import { z } from 'zod';
  * - cat_visible: My Cat can use as context for owner
  * - public: Anyone can see, My Cat can reference for any user
  */
-export const documentVisibilityEnum = z.enum(['private', 'cat_visible', 'public']);
+const documentVisibilityEnum = z.enum(['private', 'cat_visible', 'public']);
 export type DocumentVisibility = z.infer<typeof documentVisibilityEnum>;
 
 /**
  * Document types for categorization
  */
-export const documentTypeEnum = z.enum([
+const documentTypeEnum = z.enum([
   'goals', // Personal/professional goals
   'finances', // Financial information, budgets
   'skills', // Skills, expertise, experience

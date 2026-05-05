@@ -31,7 +31,7 @@ export const wishlistSchema = z.object({
   is_active: z.boolean().default(true),
 });
 
-export const wishlistItemSchema = z.object({
+const wishlistItemSchema = z.object({
   title: z
     .string()
     .min(3, 'Title must be at least 3 characters')
@@ -66,7 +66,7 @@ export const wishlistItemSchema = z.object({
   quantity_wanted: z.number().int().positive().default(1),
 });
 
-export const wishlistContributionSchema = z.object({
+const wishlistContributionSchema = z.object({
   wishlist_item_id: z.string().uuid(),
   amount_btc: z.number().int('Amount must be whole satoshis').positive('Amount must be positive'),
   message: z.string().max(500).optional().nullable(),
@@ -96,6 +96,6 @@ export const wishlistFeedbackSchema = z
 // Types
 export type WishlistFormData = z.infer<typeof wishlistSchema>;
 export type WishlistItemFormData = z.infer<typeof wishlistItemSchema>;
-export type WishlistContributionFormData = z.infer<typeof wishlistContributionSchema>;
+type WishlistContributionFormData = z.infer<typeof wishlistContributionSchema>;
 export type WishlistFulfillmentProofFormData = z.infer<typeof wishlistFulfillmentProofSchema>;
 export type WishlistFeedbackFormData = z.infer<typeof wishlistFeedbackSchema>;

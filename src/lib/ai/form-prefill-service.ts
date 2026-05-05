@@ -6,7 +6,7 @@
  */
 
 import type { EntityType } from '@/config/entity-registry';
-import { ENTITY_REGISTRY, isValidEntityType } from '@/config/entity-registry';
+import { isValidEntityType } from '@/config/entity-registry';
 import type { AIPrefillResponse } from '@/components/create/types';
 import { logger } from '@/utils/logger';
 import {
@@ -23,7 +23,7 @@ const DEFAULT_OPENROUTER_MODEL = 'meta-llama/llama-4-maverick:free';
 /**
  * Configuration for the form prefill service
  */
-export interface FormPrefillConfig {
+interface FormPrefillConfig {
   /** AI model to use */
   model?: string;
   /** API key for the provider (optional, uses env if not provided) */
@@ -204,117 +204,4 @@ export async function generateFormPrefill(
       error: error instanceof Error ? error.message : 'An unexpected error occurred',
     };
   }
-}
-
-/**
- * Validate and sanitize the generated data against the entity schema
- */
-export function sanitizeGeneratedData(
-  data: Record<string, unknown>,
-  entityType: EntityType,
-  fieldConfigs: Array<{ name: string; type: string; options?: Array<{ value: string }> }>
-): Record<string, unknown> {
-  const sanitized: Record<string, unknown> = {};
-
-  for (const field of fieldConfigs) {
-    const value = data[field.name];
-    if (value === undefined || value === null) {
-      continue;
-    }
-
-    // Type-specific sanitization
-    switch (field.type) {
-      case 'number':
-      case 'currency':
-        // Ensure numeric values
-        const num = typeof value === 'string' ? parseFloat(value) : value;
-        if (typeof num === 'number' && !isNaN(num)) {
-          sanitized[field.name] = num;
-        }
-        break;
-
-      case 'select':
-      case 'radio':
-        // Ensure value is one of the allowed options
-        if (field.options) {
-          const allowedValues = field.options.map(o => o.value);
-          if (typeof value === 'string' && allowedValues.includes(value)) {
-            sanitized[field.name] = value;
-          }
-        }
-        break;
-
-      case 'checkbox':
-      case 'boolean':
-        // Ensure boolean value
-        sanitized[field.name] = Boolean(value);
-        break;
-
-      case 'tags':
-        // Ensure array of strings
-        if (Array.isArray(value)) {
-          sanitized[field.name] = value.filter(v => typeof v === 'string');
-        } else if (typeof value === 'string') {
-          // Parse comma-separated string
-          sanitized[field.name] = value
-            .split(',')
-            .map(s => s.trim())
-            .filter(Boolean);
-        }
-        break;
-
-      case 'date':
-        // Ensure valid date string
-        if (typeof value === 'string') {
-          const date = new Date(value);
-          if (!isNaN(date.getTime())) {
-            sanitized[field.name] = value;
-          }
-        }
-        break;
-
-      default:
-        // String values - basic sanitization
-        if (typeof value === 'string') {
-          sanitized[field.name] = value.trim();
-        } else if (typeof value === 'number') {
-          sanitized[field.name] = String(value);
-        }
-    }
-  }
-
-  return sanitized;
-}
-
-/**
- * Get a list of all fields that can be AI-generated for an entity type
- */
-export function getGeneratableFields(entityType: EntityType): string[] {
-  const meta = ENTITY_REGISTRY[entityType];
-  if (!meta) {
-    return [];
-  }
-
-  // Most fields can be AI-generated except for sensitive ones
-  const _excludedFields = [
-    'bitcoin_address',
-    'lightning_address',
-    'api_key',
-    'secret',
-    'password',
-    'token',
-  ];
-
-  // This would ideally come from the entity config
-  // For now, return common fields
-  return [
-    'title',
-    'description',
-    'price',
-    'category',
-    'tags',
-    'product_type',
-    'event_type',
-    'service_location_type',
-  ];
 }

@@ -7,7 +7,7 @@
 
 import { EMAIL_COLORS } from './layout';
 
-export interface PaymentReceivedData {
+interface PaymentReceivedData {
   sellerName: string;
   entityTitle: string;
   /** Pre-formatted, e.g. "0.00100000" */

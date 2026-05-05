@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import type { GuidanceContent, DefaultGuidance } from '@/components/create/types';
 
-export type EventFieldType =
+type EventFieldType =
   | 'title'
   | 'description'
   | 'event_type'

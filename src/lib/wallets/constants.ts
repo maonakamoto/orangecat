@@ -16,9 +16,3 @@ export const AUTH_TIMEOUT_MS = 15000; // 15 seconds for auth loading
 export const MAX_WALLETS_PER_ENTITY = 10;
 export const MAX_LABEL_LENGTH = 100;
 export const MAX_DESCRIPTION_LENGTH = 500;
-
-// Database error codes
-export const POSTGRES_TABLE_NOT_FOUND = '42P01';
-
-// Fallback storage key for wallets in profile metadata
-export const FALLBACK_WALLETS_KEY = 'legacy_wallets';

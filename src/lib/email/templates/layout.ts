@@ -7,7 +7,7 @@
  * Pure functions — no imports, no side effects.
  */
 
-export interface EmailLayoutProps {
+interface EmailLayoutProps {
   /** Preview text shown in inbox (hidden in email body) */
   preheader: string;
   /** Main heading */

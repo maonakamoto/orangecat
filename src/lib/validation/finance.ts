@@ -11,7 +11,7 @@ import { lightningAddressSchema, optionalText } from './base';
  *
  * Uses .passthrough() to allow additional fields without breaking existing data.
  */
-export const collateralItemSchema = z
+const collateralItemSchema = z
   .object({
     id: z.string().optional(),
     type: z.string().max(50).optional(),
@@ -60,22 +60,14 @@ export const assetSchema = z.object({
 
   // Rental options
   is_for_rent: z.boolean().optional().default(false),
-  rental_price_btc: z
-    .number()
-    .positive()
-    .optional()
-    .nullable(),
+  rental_price_btc: z.number().positive().optional().nullable(),
   rental_period_type: z.enum(['hourly', 'daily', 'weekly', 'monthly']).optional().default('daily'),
   min_rental_period: z.number().int().positive().optional().default(1),
   max_rental_period: z.number().int().positive().optional().nullable(),
 
   // Deposit
   requires_deposit: z.boolean().optional().default(false),
-  deposit_amount_btc: z
-    .number()
-    .positive()
-    .optional()
-    .nullable(),
+  deposit_amount_btc: z.number().positive().optional().nullable(),
 
   // Visibility
   show_on_profile: z.boolean().optional().default(true),
@@ -303,10 +295,7 @@ export const paymentCreateSchema = z.object({
   }),
   entity_id: z.string().uuid('entity_id must be a valid UUID'),
   /** Required for contributions; ignored for fixed-price entities */
-  amount_btc: z
-    .number()
-    .positive('amount_btc must be positive')
-    .optional(),
+  amount_btc: z.number().positive('amount_btc must be positive').optional(),
   /** Optional message for contributions */
   message: z.string().max(500, 'Message must be at most 500 characters').optional(),
   /** Whether contribution is anonymous */

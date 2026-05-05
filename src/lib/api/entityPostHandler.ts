@@ -40,7 +40,7 @@ type SupabaseClient = Awaited<ReturnType<typeof createServerClient>>;
 
 // ==================== TYPES ====================
 
-export interface EntityPostHandlerConfig {
+interface EntityPostHandlerConfig {
   /** Entity type from registry */
   entityType: EntityType;
   /** Zod schema for validation */

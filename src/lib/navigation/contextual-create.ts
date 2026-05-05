@@ -10,7 +10,7 @@
 
 import { ENTITY_REGISTRY, EntityType } from '@/config/entity-registry';
 
-export type CreateActionType = 'post' | 'entity' | 'menu';
+type CreateActionType = 'post' | 'entity' | 'menu';
 
 export interface ContextualCreateAction {
   /** Type of create action */
@@ -117,45 +117,4 @@ export function getContextualCreateAction(pathname: string): ContextualCreateAct
     href: '/timeline?compose=true',
     label: 'Create',
   };
-}
-
-/**
- * Check if the + button should show a dropdown menu
- *
- * @param pathname - Current route pathname
- * @returns true if menu should be shown, false for direct action
- */
-export function shouldShowCreateMenu(pathname: string): boolean {
-  const action = getContextualCreateAction(pathname);
-  return action.type === 'menu';
-}
-
-/**
- * Get the entity type for the current route (if applicable)
- *
- * @param pathname - Current route pathname
- * @returns EntityType if on an entity page, undefined otherwise
- */
-export function getRouteEntityType(pathname: string): EntityType | undefined {
-  const action = getContextualCreateAction(pathname);
-  return action.entityType;
-}
-
-/**
- * Get tooltip text for the + button based on context
- *
- * @param pathname - Current route pathname
- * @returns Tooltip text describing what the + button will do
- */
-export function getCreateButtonTooltip(pathname: string): string {
-  const action = getContextualCreateAction(pathname);
-
-  switch (action.type) {
-    case 'post':
-      return 'Create a new post';
-    case 'entity':
-      return `Create a new ${action.label.toLowerCase()}`;
-    case 'menu':
-      return 'Create something new';
-  }
 }

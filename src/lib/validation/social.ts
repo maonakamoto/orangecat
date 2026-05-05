@@ -8,7 +8,7 @@ import { lightningAddressSchema, optionalText, optionalUrl } from './base';
  *
  * Uses .passthrough() to allow additional fields without breaking existing data.
  */
-export const recurrencePatternSchema = z
+const recurrencePatternSchema = z
   .object({
     frequency: z.enum(['daily', 'weekly', 'biweekly', 'monthly', 'yearly']).optional(),
     interval: z.number().int().positive().max(365).optional(),

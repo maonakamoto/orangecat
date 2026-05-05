@@ -5,7 +5,6 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { logger } from '@/utils/logger';
 import { apiUnauthorized, apiForbidden, apiInternalError } from './standardResponse';
 
-
 /**
  * Authentication Middleware for API Routes
  *
@@ -24,7 +23,7 @@ import { apiUnauthorized, apiForbidden, apiInternalError } from './standardRespo
 // TYPES
 // =====================================================================
 
-export interface AuthContext {
+interface AuthContext {
   user: User;
   supabase: AnySupabaseClient;
 }
@@ -34,12 +33,12 @@ export type AuthenticatedRequest = NextRequest & {
   supabase: AnySupabaseClient;
 };
 
-export type AuthenticatedHandler<TContext = Record<string, unknown>> = (
+type AuthenticatedHandler<TContext = Record<string, unknown>> = (
   req: AuthenticatedRequest,
   context: TContext & { params?: Record<string, string> }
 ) => Promise<NextResponse>;
 
-export type OptionalAuthHandler<TContext = Record<string, unknown>> = (
+type OptionalAuthHandler<TContext = Record<string, unknown>> = (
   req: NextRequest & { user: User | null; supabase: AnySupabaseClient },
   context: TContext & { params?: Record<string, string> }
 ) => Promise<NextResponse>;
@@ -168,7 +167,7 @@ export function withRole<TContext = Record<string, unknown>>(
  * Extract authenticated user from request (for use in compose middleware)
  * Returns null if not authenticated
  */
-export async function getAuthUser(_req: NextRequest): Promise<AuthContext | null> {
+async function getAuthUser(_req: NextRequest): Promise<AuthContext | null> {
   try {
     const supabase = await createServerClient();
     const {
