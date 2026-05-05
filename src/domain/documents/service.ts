@@ -9,10 +9,6 @@
  * Last Modified Summary: Refactored to use generic base entity service for CRUD
  */
 
-import { createServerClient } from '@/lib/supabase/server';
-import { logger } from '@/utils/logger';
-import { DATABASE_TABLES } from '@/config/database-tables';
-import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import {
   listEntityPage,
   getEntity as baseGetEntity,
@@ -120,53 +116,4 @@ export async function updateDocument(
  */
 export async function deleteDocument(id: string, userId: string): Promise<void> {
   return deleteEntity('document', id, userId);
-}
-
-/**
- * Get documents that My Cat can access for a user
- * Returns documents with visibility 'cat_visible' or 'public'
- */
-export async function getDocumentsForCat(userId: string): Promise<Document[]> {
-  const supabase = await createServerClient();
-
-  // Get actor for user
-  const actor = await getOrCreateUserActor(userId);
-
-  const { data, error } = await supabase
-    .from(DATABASE_TABLES.USER_DOCUMENTS)
-    .select('*')
-    .eq('actor_id', actor.id)
-    .in('visibility', ['cat_visible', 'public'])
-    .order('document_type', { ascending: true })
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    logger.error('Failed to get documents for cat', { error: error.message, userId });
-    throw error;
-  }
-
-  return (data || []) as Document[];
-}
-
-/**
- * Get public documents for any user (by their actor ID)
- * Used when My Cat needs to reference another user's public context
- */
-export async function getPublicDocumentsForActor(actorId: string): Promise<Document[]> {
-  const supabase = await createServerClient();
-
-  const { data, error } = await supabase
-    .from(DATABASE_TABLES.USER_DOCUMENTS)
-    .select('*')
-    .eq('actor_id', actorId)
-    .eq('visibility', 'public')
-    .order('document_type', { ascending: true })
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    logger.error('Failed to get public documents for actor', { error: error.message, actorId });
-    throw error;
-  }
-
-  return (data || []) as Document[];
 }

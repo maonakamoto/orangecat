@@ -59,7 +59,7 @@ async function fetchXpubBalance(xpub: string): Promise<number> {
   return satsToBitcoin(funded - spent);
 }
 
-export type RefreshResult =
+type RefreshResult =
   | { ok: true; wallet: Record<string, unknown> }
   | { ok: false; code: 'COOLDOWN'; remainingSeconds: number }
   | { ok: false; code: 'INVALID_TYPE' }

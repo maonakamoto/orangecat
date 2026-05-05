@@ -14,7 +14,7 @@ type AnyClient = any;
 
 const MAX_MEDIA_PER_PROJECT = 3;
 
-export type SaveMediaResult =
+type SaveMediaResult =
   | { ok: true; media: Record<string, unknown> }
   | { ok: false; code: 'NOT_FOUND' | 'FORBIDDEN' | 'COUNT_EXCEEDED' | 'DB_ERROR'; message: string };
 
@@ -31,8 +31,16 @@ export async function saveProjectMedia(
     .eq('id', projectId)
     .single();
 
-  if (!project) {return { ok: false, code: 'NOT_FOUND', message: 'Project not found' };}
-  if (project.user_id !== userId) {return { ok: false, code: 'FORBIDDEN', message: 'You can only upload media to your own projects' };}
+  if (!project) {
+    return { ok: false, code: 'NOT_FOUND', message: 'Project not found' };
+  }
+  if (project.user_id !== userId) {
+    return {
+      ok: false,
+      code: 'FORBIDDEN',
+      message: 'You can only upload media to your own projects',
+    };
+  }
 
   const { count, error: countError } = await supabase
     .from(DATABASE_TABLES.PROJECT_MEDIA)
@@ -45,7 +53,11 @@ export async function saveProjectMedia(
   }
 
   if (count !== null && count >= MAX_MEDIA_PER_PROJECT) {
-    return { ok: false, code: 'COUNT_EXCEEDED', message: `Maximum ${MAX_MEDIA_PER_PROJECT} images per project` };
+    return {
+      ok: false,
+      code: 'COUNT_EXCEEDED',
+      message: `Maximum ${MAX_MEDIA_PER_PROJECT} images per project`,
+    };
   }
 
   // Find the first available position (0, 1, or 2)
@@ -59,7 +71,12 @@ export async function saveProjectMedia(
 
   const { data: media, error } = await supabase
     .from(DATABASE_TABLES.PROJECT_MEDIA)
-    .insert({ project_id: projectId, storage_path: path, position: nextPosition, alt_text: altText })
+    .insert({
+      project_id: projectId,
+      storage_path: path,
+      position: nextPosition,
+      alt_text: altText,
+    })
     .select()
     .single();
 

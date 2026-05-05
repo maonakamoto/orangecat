@@ -12,7 +12,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyClient = any;
 
-export type TransferResult =
+type TransferResult =
   | { ok: true; transaction: Record<string, unknown>; wallets: Wallet[] | null; message: string }
   | {
       ok: false;
@@ -71,7 +71,11 @@ export async function executeWalletTransfer(
       fromWalletUserId: fromWallet.user_id,
       toWalletUserId: toWallet.user_id,
     });
-    return { ok: false, code: 'FORBIDDEN', message: 'You can only transfer between your own wallets' };
+    return {
+      ok: false,
+      code: 'FORBIDDEN',
+      message: 'You can only transfer between your own wallets',
+    };
   }
 
   // Check sufficient balance

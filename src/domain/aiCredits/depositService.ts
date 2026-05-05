@@ -11,7 +11,7 @@ import { getPaymentProvider } from '@/services/bitcoin/paymentService';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyClient = any;
 
-export interface DepositResult {
+interface DepositResult {
   deposit_id: string;
   amount_btc: number;
   payment_method: string;
@@ -34,7 +34,14 @@ export async function createCreditDeposit(
   const { data: deposit, error: depositError } = await (
     supabase.from(DATABASE_TABLES.AI_CREDIT_DEPOSITS) as AnyClient
   )
-    .insert({ id: depositId, user_id: userId, amount_btc: amountBtc, payment_method: paymentMethod, status: 'pending', expires_at: expiresAt })
+    .insert({
+      id: depositId,
+      user_id: userId,
+      amount_btc: amountBtc,
+      payment_method: paymentMethod,
+      status: 'pending',
+      expires_at: expiresAt,
+    })
     .select()
     .single();
 
@@ -53,7 +60,9 @@ export async function createCreditDeposit(
     };
   }
 
-  if (depositError) {throw depositError;}
+  if (depositError) {
+    throw depositError;
+  }
 
   let paymentDetails: { invoice: string | null; address?: string } = { invoice: null };
 
@@ -66,9 +75,15 @@ export async function createCreditDeposit(
     );
 
     if (paymentResult.success && paymentResult.invoice) {
-      paymentDetails = { invoice: paymentResult.invoice.invoice ?? null, address: paymentResult.invoice.address };
+      paymentDetails = {
+        invoice: paymentResult.invoice.invoice ?? null,
+        address: paymentResult.invoice.address,
+      };
       await (supabase.from(DATABASE_TABLES.AI_CREDIT_DEPOSITS) as AnyClient)
-        .update({ payment_details: paymentDetails, provider_invoice_id: paymentResult.transactionId })
+        .update({
+          payment_details: paymentDetails,
+          provider_invoice_id: paymentResult.transactionId,
+        })
         .eq('id', deposit?.id || depositId);
     }
   } catch (providerError) {

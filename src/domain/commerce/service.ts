@@ -1,8 +1,6 @@
 import { createServerClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { UserProduct, UserService, UserCause } from '@/types/database';
-import { logger } from '@/utils/logger';
-import { getTableName } from '@/config/entity-registry';
 import { STATUS } from '@/config/database-constants';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import { createEntity } from '@/domain/base/entityService';
@@ -247,86 +245,4 @@ export async function createCause(userId: string, input: CreateCauseInput): Prom
       client: createAdminClient(),
     }
   );
-}
-
-// createCircle function removed - use groups service instead
-// Circles are now unified as groups (type='circle') in the organizations table
-
-interface CreateOrganizationInput {
-  name: string;
-  slug: string;
-  description?: string | null;
-  type:
-    | 'dao'
-    | 'company'
-    | 'nonprofit'
-    | 'community'
-    | 'cooperative'
-    | 'foundation'
-    | 'collective'
-    | 'guild'
-    | 'syndicate'
-    | 'circle';
-  category?: string | null;
-  tags?: string[];
-  governance_model?:
-    | 'hierarchical'
-    | 'flat'
-    | 'democratic'
-    | 'consensus'
-    | 'liquid_democracy'
-    | 'quadratic_voting'
-    | 'stake_weighted'
-    | 'reputation_based';
-  treasury_address?: string | null;
-  website_url?: string | null;
-  avatar_url?: string | null;
-  banner_url?: string | null;
-  is_public?: boolean;
-  requires_approval?: boolean;
-  settings?: Record<string, unknown>;
-  contact_info?: Record<string, unknown>;
-}
-
-// Organization uses profile_id instead of actor_id, so it cannot use the generic createEntity.
-export async function createOrganization(userId: string, input: CreateOrganizationInput) {
-  const adminClient = createAdminClient();
-  const payload = {
-    profile_id: userId,
-    name: input.name,
-    slug: input.slug,
-    description: input.description ?? null,
-    type: input.type,
-    category: input.category ?? null,
-    tags: input.tags ?? [],
-    governance_model: input.governance_model ?? 'hierarchical',
-    treasury_address: input.treasury_address ?? null,
-    website_url: input.website_url ?? null,
-    avatar_url: input.avatar_url ?? null,
-    banner_url: input.banner_url ?? null,
-    is_public: input.is_public ?? true,
-    requires_approval: input.requires_approval ?? true,
-    verification_level: 0,
-    trust_score: 0.0,
-    settings: input.settings ?? {},
-    contact_info: input.contact_info ?? {},
-    application_process: { questions: [] },
-    founded_at: new Date().toISOString(),
-  };
-  interface OrganizationResult {
-    id: string;
-    [key: string]: unknown;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const result = await (adminClient.from(getTableName('group')) as any)
-    .insert(payload)
-    .select()
-    .single();
-  const { data, error } = result as { data: OrganizationResult | null; error: unknown };
-  if (error) {
-    logger.error('Organization creation failed', { error, userId });
-    throw error;
-  }
-  logger.info('Organization created successfully', { organizationId: data?.id, userId });
-  return data;
 }

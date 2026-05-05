@@ -9,10 +9,8 @@ export type {
   PaymentMethod,
   PaymentIntentStatus,
   PaymentIntent,
-  OrderStatus,
   Order,
   Contribution,
-  ShippingAddress,
   InitiatePaymentInput,
   InitiatePaymentResult,
   PaymentStatusResult,
@@ -23,5 +21,4 @@ export type {
 export { initiatePayment, checkPaymentStatus, buyerConfirmPayment } from './paymentFlowService';
 export { resolveSellerWallet, getSellerUserId } from './walletResolutionService';
 export { generateInvoice } from './invoiceGenerationService';
-export { checkNWCPaymentStatus, checkOnchainPaymentStatus } from './paymentStatusService';
 export { encrypt, decrypt } from './encryptionService';

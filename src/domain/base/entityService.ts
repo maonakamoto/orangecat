@@ -23,7 +23,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 // ==================== TYPES ====================
 
-export interface ListPageParams {
+interface ListPageParams {
   /** Max items to return */
   limit: number;
   /** Offset for pagination */
@@ -44,7 +44,7 @@ export interface ListPageParams {
   publicStatuses?: string[];
 }
 
-export interface ListPageResult<T = Record<string, unknown>> {
+interface ListPageResult<T = Record<string, unknown>> {
   items: T[];
   total: number;
 }
@@ -197,8 +197,7 @@ export async function createEntity<T = Record<string, unknown>>(
   }
 ): Promise<T> {
   const actor = await getOrCreateUserActor(userId);
-  const client =
-    options?.client ?? ((await createServerClient()) as unknown as AnySupabaseClient);
+  const client = options?.client ?? ((await createServerClient()) as unknown as AnySupabaseClient);
   const tableName = getTableName(entityType);
   const selectColumns = options?.select ?? '*';
 

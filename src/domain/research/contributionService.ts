@@ -15,7 +15,7 @@ type AnyClient = any;
 const MIN_AMOUNT_BTC = 0.00001;
 const VALID_FUNDING_MODELS = ['donation', 'subscription', 'milestone', 'royalty'];
 
-export type CreateContributionResult =
+type CreateContributionResult =
   | { ok: true; contribution: Record<string, unknown>; invoice: string }
   | {
       ok: false;

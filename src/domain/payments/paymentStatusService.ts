@@ -21,7 +21,7 @@ import type { PaymentIntent } from './types';
  *
  * Returns true if paid, false otherwise.
  */
-export async function checkNWCPaymentStatus(
+async function checkNWCPaymentStatus(
   supabase: SupabaseClient,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   paymentIntent: any
@@ -83,7 +83,7 @@ export async function checkNWCPaymentStatus(
  *
  * Never throws — Mempool API errors are caught and logged internally.
  */
-export async function checkOnchainPaymentStatus(
+async function checkOnchainPaymentStatus(
   paymentIntent: Pick<PaymentIntent, 'id' | 'onchain_address' | 'amount_btc' | 'created_at'>
 ): Promise<'confirmed' | 'in_mempool' | 'not_found'> {
   if (!paymentIntent.onchain_address || !paymentIntent.amount_btc) {

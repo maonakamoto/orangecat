@@ -1,12 +1,12 @@
 import { createEntity } from '@/domain/base/entityService';
-import type { AssetInput } from './schema';
+import type { AssetFormData } from './schema';
 import { DEFAULT_CURRENCY } from '@/config/currencies';
 import { STATUS } from '@/config/database-constants';
 
 const ASSET_SELECT =
   'id, title, type, status, estimated_value, currency, created_at, verification_status';
 
-export async function createAsset(userId: string, input: AssetInput) {
+export async function createAsset(userId: string, input: AssetFormData) {
   return createEntity(
     'asset',
     userId,

@@ -12,7 +12,7 @@ type AnyClient = any;
 
 const VALID_VOTE_TYPES = ['direction', 'priority', 'impact', 'continuation'] as const;
 
-export interface VoteSummary {
+interface VoteSummary {
   total_votes: number;
   by_type: Record<string, Record<string, number>>;
   user_vote: Record<string, string> | null;
@@ -32,12 +32,16 @@ export function aggregateVotes(votes: VoteRow[], userId: string | null): VoteSum
   const summary: VoteSummary = { total_votes: votes.length, by_type: {}, user_vote: null };
 
   for (const vote of votes) {
-    if (!summary.by_type[vote.vote_type]) {summary.by_type[vote.vote_type] = {};}
+    if (!summary.by_type[vote.vote_type]) {
+      summary.by_type[vote.vote_type] = {};
+    }
     summary.by_type[vote.vote_type][vote.choice] =
       (summary.by_type[vote.vote_type][vote.choice] || 0) + vote.weight;
 
     if (userId && vote.user_id === userId) {
-      if (!summary.user_vote) {summary.user_vote = {};}
+      if (!summary.user_vote) {
+        summary.user_vote = {};
+      }
       summary.user_vote[vote.vote_type] = vote.choice;
     }
   }
@@ -45,7 +49,7 @@ export function aggregateVotes(votes: VoteRow[], userId: string | null): VoteSum
   return summary;
 }
 
-export type CastVoteResult =
+type CastVoteResult =
   | { ok: true; vote: VoteRow }
   | { ok: false; code: 'INVALID_TYPE' | 'DB_ERROR'; message: string };
 
@@ -64,16 +68,29 @@ export async function castVote(
   // Contributors get double weight
   const weight = contributorUserIds.includes(userId) ? 2.0 : 1.0;
 
-  const { data: voteData, error } = await (supabase.from(DATABASE_TABLES.RESEARCH_VOTES) as AnyClient)
+  const { data: voteData, error } = await (
+    supabase.from(DATABASE_TABLES.RESEARCH_VOTES) as AnyClient
+  )
     .upsert(
-      { research_entity_id: researchEntityId, user_id: userId, vote_type: voteType, choice, weight },
+      {
+        research_entity_id: researchEntityId,
+        user_id: userId,
+        vote_type: voteType,
+        choice,
+        weight,
+      },
       { onConflict: 'research_entity_id,user_id,vote_type' }
     )
     .select()
     .single();
 
   if (error) {
-    logger.error('Failed to cast vote', { researchEntityId, userId, voteType, error: error.message });
+    logger.error('Failed to cast vote', {
+      researchEntityId,
+      userId,
+      voteType,
+      error: error.message,
+    });
     return { ok: false, code: 'DB_ERROR', message: 'Failed to cast vote' };
   }
 
