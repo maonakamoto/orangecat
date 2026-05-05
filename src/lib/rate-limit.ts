@@ -33,7 +33,7 @@ interface RequestLike {
   };
 }
 
-export interface RateLimitConfig {
+interface RateLimitConfig {
   windowMs?: number;
   maxRequests?: number;
 }
@@ -182,16 +182,6 @@ export async function rateLimit(request: RequestLike): Promise<RateLimitResult> 
 }
 
 /**
- * Synchronous version for backward compatibility
- * Uses in-memory fallback (not recommended for production)
- */
-export function rateLimitSync(request: RequestLike): RateLimitResult {
-  const ip =
-    request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'anonymous';
-  return fallbackGeneralLimiter.check(`api:${ip}`);
-}
-
-/**
  * Rate limit for social actions (follow, unfollow)
  * 10 actions per minute per user
  */
@@ -207,13 +197,6 @@ export async function rateLimitSocialAsync(userId: string): Promise<RateLimitRes
 }
 
 /**
- * Synchronous social rate limit (backward compatibility)
- */
-export function rateLimitSocial(userId: string): RateLimitResult {
-  return fallbackSocialLimiter.check(`social:${userId}`);
-}
-
-/**
  * Rate limit for write operations (create, update, delete)
  * 30 writes per minute per user
  */
@@ -226,13 +209,6 @@ export async function rateLimitWriteAsync(userId: string): Promise<RateLimitResu
   }
 
   return fallbackWriteLimiter.check(key);
-}
-
-/**
- * Synchronous write rate limit (backward compatibility)
- */
-export function rateLimitWrite(userId: string): RateLimitResult {
-  return fallbackWriteLimiter.check(`write:${userId}`);
 }
 
 // ==================== RESPONSE HELPER ====================
@@ -280,13 +256,4 @@ export function applyRateLimitHeaders<T extends Response>(response: T, result: R
   headers.set('X-RateLimit-Reset', result.resetTime.toString());
   headers.set('Retry-After', retryAfterSeconds(result).toString());
   return response;
-}
-
-// ==================== STATUS CHECK ====================
-
-/**
- * Check if production rate limiting is configured
- */
-export function isProductionRateLimitingEnabled(): boolean {
-  return redis !== null;
 }

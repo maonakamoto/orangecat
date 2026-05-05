@@ -99,7 +99,7 @@ export function validatePhoneNumber(phone: string): { valid: boolean; error?: st
 /**
  * Format phone number for display (Swiss format)
  */
-export function formatPhoneNumberForDisplay(phone: string): string {
+function formatPhoneNumberForDisplay(phone: string): string {
   const normalized = normalizePhoneNumber(phone);
 
   if (!normalized) {
@@ -115,6 +115,3 @@ export function formatPhoneNumberForDisplay(phone: string): string {
   // For other formats, return normalized
   return normalized;
 }
-
-
-

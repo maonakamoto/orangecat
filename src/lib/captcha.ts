@@ -8,7 +8,7 @@ import { logger } from '@/utils/logger';
 
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
-export interface TurnstileVerifyResponse {
+interface TurnstileVerifyResponse {
   success: boolean;
   challenge_ts?: string;
   hostname?: string;
@@ -17,7 +17,7 @@ export interface TurnstileVerifyResponse {
   cdata?: string;
 }
 
-export interface VerifyCaptchaResult {
+interface VerifyCaptchaResult {
   success: boolean;
   error?: string;
   timestamp?: string;
@@ -122,20 +122,4 @@ function mapTurnstileError(errorCode?: string): string {
   };
 
   return errorMap[errorCode || ''] || 'CAPTCHA verification failed. Please try again.';
-}
-
-/**
- * Check if CAPTCHA is enabled
- */
-export function isCaptchaEnabled(): boolean {
-  // CAPTCHA is enabled if we have a site key (client-side check)
-  // or secret key (server-side check)
-  return !!(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || process.env.TURNSTILE_SECRET_KEY);
-}
-
-/**
- * Get the site key for client-side usage
- */
-export function getCaptchaSiteKey(): string | undefined {
-  return process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 }

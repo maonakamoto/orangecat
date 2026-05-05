@@ -9,7 +9,7 @@
 import { logger } from '@/utils/logger';
 
 // Event types for type safety
-export type AnalyticsEvent =
+type AnalyticsEvent =
   // Registration funnel
   | 'page_view'
   | 'registration_started'
@@ -47,27 +47,7 @@ interface AnalyticsProperties {
   [key: string]: string | number | boolean | undefined | null;
 }
 
-interface UserProperties {
-  userId?: string;
-  email?: string;
-  username?: string;
-  hasBitcoinAddress?: boolean;
-  projectCount?: number;
-  onboardingCompleted?: boolean;
-  [key: string]: string | number | boolean | undefined | null;
-}
-
 const isDev = process.env.NODE_ENV === 'development';
-
-/** Initialize analytics — call once in your app layout */
-export function initAnalytics() {
-  if (typeof window === 'undefined') {
-    return;
-  }
-  if (isDev) {
-    logger.debug('Analytics initialized (console mode)', undefined, 'analytics');
-  }
-}
 
 /** Track an analytics event */
 export function trackEvent(event: AnalyticsEvent, properties?: AnalyticsProperties) {
@@ -95,16 +75,6 @@ export function trackEvent(event: AnalyticsEvent, properties?: AnalyticsProperti
     localStorage.setItem('orangecat_analytics', JSON.stringify(events));
   } catch {
     // ignore storage errors
-  }
-}
-
-/** Identify a user for analytics */
-export function identifyUser(properties: UserProperties) {
-  if (typeof window === 'undefined') {
-    return;
-  }
-  if (isDev) {
-    logger.debug('User identified', properties, 'analytics');
   }
 }
 
@@ -138,18 +108,6 @@ export const onboardingEvents = {
   completed: (userId?: string) => trackEvent('onboarding_completed', { userId }),
 };
 
-/** Track key user actions */
-export const userActions = {
-  walletAdded: (userId?: string) => trackEvent('wallet_address_added', { userId }),
-  projectCreated: (projectId: string, userId?: string) =>
-    trackEvent('project_created', { projectId, userId }),
-  projectPublished: (projectId: string, userId?: string) =>
-    trackEvent('project_published', { projectId, userId }),
-  profileUpdated: (fields: string[], userId?: string) =>
-    trackEvent('profile_updated', { fields: fields.join(','), userId }),
-  postCreated: (userId?: string) => trackEvent('timeline_post_created', { userId }),
-};
-
 /** Track entity lifecycle events (covers all entity types generically) */
 export const entityEvents = {
   created: (entityType: string, entityId: string, userId?: string) =>
@@ -157,23 +115,3 @@ export const entityEvents = {
   published: (entityType: string, entityId: string, userId?: string) =>
     trackEvent('entity_published', { entityType, entityId, userId }),
 };
-
-/** Debug: view stored analytics events */
-export function getStoredEvents(): Array<{ event: string; properties: AnalyticsProperties }> {
-  if (typeof window === 'undefined') {
-    return [];
-  }
-  try {
-    return JSON.parse(localStorage.getItem('orangecat_analytics') || '[]');
-  } catch {
-    return [];
-  }
-}
-
-/** Clear stored analytics events */
-export function clearStoredEvents() {
-  if (typeof window === 'undefined') {
-    return;
-  }
-  localStorage.removeItem('orangecat_analytics');
-}

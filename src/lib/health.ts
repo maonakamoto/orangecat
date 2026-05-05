@@ -3,12 +3,12 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 
 export type ServiceStatus = 'operational' | 'degraded' | 'outage';
 
-export interface ServiceHealth {
+interface ServiceHealth {
   name: string;
   status: ServiceStatus;
 }
 
-export interface HealthReport {
+interface HealthReport {
   overall: ServiceStatus;
   timestamp: string;
   services: ServiceHealth[];
