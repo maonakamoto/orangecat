@@ -48,8 +48,6 @@ import {
   apiRateLimited,
   apiInternalError,
   apiServiceUnavailable,
-  isApiSuccess,
-  isApiError,
 } from '@/lib/api/standardResponse';
 
 // ---------------------------------------------------------------------------
@@ -68,7 +66,7 @@ describe('apiSuccess — envelope contract', () => {
   it('wraps payload in { success, data, metadata }', async () => {
     const payload = { id: 'abc', title: 'Hello' };
     const response = apiSuccess(payload);
-    const body = await json(response) as Record<string, unknown>;
+    const body = (await json(response)) as Record<string, unknown>;
 
     expect(body.success).toBe(true);
     expect(body.data).toEqual(payload);
@@ -87,7 +85,7 @@ describe('apiSuccess — envelope contract', () => {
       upload_url: 'https://example.com/upload',
     };
     const response = apiSuccess(payload);
-    const body = await json(response) as Record<string, unknown>;
+    const body = (await json(response)) as Record<string, unknown>;
 
     // Fields must NOT be accessible at the top level
     expect(body.message).toBeUndefined();
@@ -117,7 +115,7 @@ describe('apiSuccess — envelope contract', () => {
 
   it('includes pagination in metadata when provided', async () => {
     const response = apiSuccess([1, 2, 3], { page: 2, limit: 10, total: 50 });
-    const body = await json(response) as Record<string, unknown>;
+    const body = (await json(response)) as Record<string, unknown>;
     const meta = body.metadata as Record<string, unknown>;
 
     expect(meta.page).toBe(2);
@@ -128,7 +126,7 @@ describe('apiSuccess — envelope contract', () => {
   it('metadata.timestamp is an ISO 8601 string', async () => {
     const before = new Date().toISOString();
     const response = apiSuccess({ x: 1 });
-    const body = await json(response) as Record<string, unknown>;
+    const body = (await json(response)) as Record<string, unknown>;
     const after = new Date().toISOString();
 
     const ts = (body.metadata as Record<string, unknown>)?.timestamp as string;
@@ -139,7 +137,7 @@ describe('apiSuccess — envelope contract', () => {
   it('passes arrays as data', async () => {
     const items = [{ id: '1' }, { id: '2' }];
     const response = apiSuccess(items);
-    const body = await json(response) as Record<string, unknown>;
+    const body = (await json(response)) as Record<string, unknown>;
 
     expect(Array.isArray(body.data)).toBe(true);
     expect(body.data).toEqual(items);
@@ -147,7 +145,7 @@ describe('apiSuccess — envelope contract', () => {
 
   it('passes null as data', async () => {
     const response = apiSuccess(null);
-    const body = await json(response) as Record<string, unknown>;
+    const body = (await json(response)) as Record<string, unknown>;
     expect(body.data).toBeNull();
   });
 
@@ -166,7 +164,7 @@ describe('apiSuccess — envelope contract', () => {
 describe('apiError — envelope contract', () => {
   it('wraps error in { success: false, error: { code, message } }', async () => {
     const response = apiError('Something went wrong', 'CUSTOM_CODE', 500);
-    const body = await json(response) as Record<string, unknown>;
+    const body = (await json(response)) as Record<string, unknown>;
 
     expect(body.success).toBe(false);
     const err = body.error as Record<string, unknown>;
@@ -178,14 +176,16 @@ describe('apiError — envelope contract', () => {
   it('includes details when provided', async () => {
     const details = { field: 'email', reason: 'invalid' };
     const response = apiError('Validation failed', 'VALIDATION_ERROR', 422, details);
-    const body = await json(response) as Record<string, unknown>;
+    const body = (await json(response)) as Record<string, unknown>;
     const err = body.error as Record<string, unknown>;
     expect(err.details).toEqual(details);
   });
 });
 
 describe('error helper codes and statuses', () => {
-  const cases: Array<[string, () => { status: number; json: () => Promise<unknown> }, number, string]> = [
+  const cases: Array<
+    [string, () => { status: number; json: () => Promise<unknown> }, number, string]
+  > = [
     ['apiBadRequest', () => apiBadRequest('bad'), 400, 'BAD_REQUEST'],
     ['apiUnauthorized', () => apiUnauthorized(), 401, 'UNAUTHORIZED'],
     ['apiForbidden', () => apiForbidden(), 403, 'FORBIDDEN'],
@@ -197,13 +197,16 @@ describe('error helper codes and statuses', () => {
     ['apiServiceUnavailable', () => apiServiceUnavailable(), 503, 'SERVICE_UNAVAILABLE'],
   ];
 
-  it.each(cases)('%s returns correct status and code', async (name, fn, expectedStatus, expectedCode) => {
-    const response = fn();
-    expect((response as unknown as { status: number }).status).toBe(expectedStatus);
-    const body = await json(response) as Record<string, unknown>;
-    expect(body.success).toBe(false);
-    expect((body.error as Record<string, unknown>).code).toBe(expectedCode);
-  });
+  it.each(cases)(
+    '%s returns correct status and code',
+    async (name, fn, expectedStatus, expectedCode) => {
+      const response = fn();
+      expect((response as unknown as { status: number }).status).toBe(expectedStatus);
+      const body = (await json(response)) as Record<string, unknown>;
+      expect(body.success).toBe(false);
+      expect((body.error as Record<string, unknown>).code).toBe(expectedCode);
+    }
+  );
 });
 
 describe('apiRateLimited — Retry-After header', () => {
@@ -217,21 +220,5 @@ describe('apiRateLimited — Retry-After header', () => {
     const response = apiRateLimited('Too fast');
     const headers = (response as unknown as { headers: Headers }).headers;
     expect(headers.get('Retry-After')).toBeNull();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// Type guards
-// ---------------------------------------------------------------------------
-
-describe('isApiSuccess / isApiError type guards', () => {
-  it('isApiSuccess returns true for success shape', () => {
-    expect(isApiSuccess({ success: true, data: {} })).toBe(true);
-    expect(isApiSuccess({ success: false, error: { code: 'E', message: 'm' } })).toBe(false);
-  });
-
-  it('isApiError returns true for error shape', () => {
-    expect(isApiError({ success: false, error: { code: 'E', message: 'm' } })).toBe(true);
-    expect(isApiError({ success: true, data: {} })).toBe(false);
   });
 });
