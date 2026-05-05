@@ -18,7 +18,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from './useAuth';
 import { logger } from '@/utils/logger';
 
-export type NavigationContextType = 'individual' | 'group';
+type NavigationContextType = 'individual' | 'group';
 
 export interface GroupContextInfo {
   id: string;
@@ -28,13 +28,13 @@ export interface GroupContextInfo {
   role?: string;
 }
 
-export interface NavigationContext {
+interface NavigationContext {
   type: NavigationContextType;
   /** Present when type === 'group' */
   group?: GroupContextInfo;
 }
 
-export interface UseNavigationContextReturn {
+interface UseNavigationContextReturn {
   context: NavigationContext;
   /** Groups the user belongs to (for the switcher) */
   userGroups: GroupContextInfo[];

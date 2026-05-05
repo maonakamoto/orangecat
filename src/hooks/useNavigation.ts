@@ -32,7 +32,7 @@ export interface NavSection {
   requiresAuth?: boolean;
 }
 
-export interface NavigationState {
+interface NavigationState {
   isSidebarOpen: boolean;
   isSidebarCollapsed: boolean;
   collapsedSections: Set<string>;
@@ -40,7 +40,7 @@ export interface NavigationState {
   activeItem: string | null;
 }
 
-export interface UseNavigationReturn {
+interface UseNavigationReturn {
   navigationState: NavigationState;
   toggleSidebar: () => void;
   toggleSidebarCollapse: () => void;

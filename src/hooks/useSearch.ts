@@ -10,7 +10,7 @@ import {
 } from '@/services/search';
 import { fetchSuggestions } from './searchUtils';
 
-export interface UseSearchOptions {
+interface UseSearchOptions {
   initialQuery?: string;
   initialType?: SearchType;
   initialSort?: SortOption;
@@ -19,7 +19,7 @@ export interface UseSearchOptions {
   debounceMs?: number;
 }
 
-export interface UseSearchReturn {
+interface UseSearchReturn {
   query: string;
   searchType: SearchType;
   sortBy: SortOption;

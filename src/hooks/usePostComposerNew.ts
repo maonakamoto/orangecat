@@ -23,7 +23,7 @@ export interface PostComposerOptions {
   parentEventId?: string;
 }
 
-export interface PostComposerState {
+interface PostComposerState {
   content: string;
   setContent: (content: string) => void;
   visibility: TimelineVisibility;

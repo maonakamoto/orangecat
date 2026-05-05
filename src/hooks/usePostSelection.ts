@@ -4,14 +4,12 @@ import { useState, useCallback, useMemo } from 'react';
 import { TimelineDisplayEvent, TimelineVisibility } from '@/types/timeline';
 import { usePostSelectionBulk, type BulkOperationResult } from './usePostSelectionBulk';
 
-export type { BulkOperationResult } from './usePostSelectionBulk';
-
-export interface UsePostSelectionOptions {
+interface UsePostSelectionOptions {
   onPostsDeleted?: (deletedIds: string[]) => void;
   onVisibilityChanged?: (eventIds: string[], newVisibility: TimelineVisibility) => void;
 }
 
-export interface UsePostSelectionReturn {
+interface UsePostSelectionReturn {
   selectedIds: Set<string>;
   isSelectionMode: boolean;
   isProcessing: boolean;

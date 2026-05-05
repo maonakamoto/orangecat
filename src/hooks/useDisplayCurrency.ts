@@ -21,7 +21,7 @@ import { useCurrencyConversion } from './useCurrencyConversion';
 import { formatCurrency, formatSats, satsToBitcoin, bitcoinToSats } from '@/services/currency';
 import type { CurrencyCode } from '@/config/currencies';
 
-export interface DisplayCurrencyOptions {
+interface DisplayCurrencyOptions {
   /** Show currency symbol (default: true) */
   showSymbol?: boolean;
   /** Compact format for large numbers (default: false) */
@@ -32,7 +32,7 @@ export interface DisplayCurrencyOptions {
   showBoth?: boolean;
 }
 
-export interface UseDisplayCurrencyReturn {
+interface UseDisplayCurrencyReturn {
   /** Format sats amount in user's preferred display currency */
   formatAmount: (sats: number, options?: DisplayCurrencyOptions) => string;
   /** Format BTC amount (database canonical unit) in user's preferred display currency */
@@ -132,6 +132,6 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
  * Non-hook version for server components or static rendering.
  * Always shows sats since we can't access user preferences or rates.
  */
-export function formatAmountStatic(sats: number): string {
+function formatAmountStatic(sats: number): string {
   return formatSats(sats);
 }

@@ -22,7 +22,7 @@ interface BulkProps {
   onVisibilityChanged?: (eventIds: string[], newVisibility: TimelineVisibility) => void;
 }
 
-export interface UsePostSelectionBulkReturn {
+interface UsePostSelectionBulkReturn {
   bulkDelete: (events: TimelineDisplayEvent[]) => Promise<BulkOperationResult>;
   bulkSetVisibility: (
     events: TimelineDisplayEvent[],

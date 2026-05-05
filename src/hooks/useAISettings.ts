@@ -39,7 +39,7 @@ export interface AISettingsState {
   primaryKey: UserApiKey | null;
 }
 
-export interface PlatformUsage {
+interface PlatformUsage {
   daily_requests: number;
   daily_limit: number;
   requests_remaining: number;

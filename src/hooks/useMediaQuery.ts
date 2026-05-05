@@ -71,43 +71,6 @@ export function useMediaQuery(query: string): boolean {
   return matches;
 }
 
-/**
- * Common breakpoint hooks for convenience
- * Based on Tailwind's default breakpoints
- */
-
-export function useIsMobile() {
-  return useMediaQuery('(max-width: 767px)');
-}
-
-export function useIsTablet() {
-  return useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
-}
-
 export function useIsDesktop() {
   return useMediaQuery('(min-width: 1024px)');
-}
-
-export function useIsLargeDesktop() {
-  return useMediaQuery('(min-width: 1280px)');
-}
-
-/**
- * Other useful media query hooks
- */
-
-export function usePrefersReducedMotion() {
-  return useMediaQuery('(prefers-reduced-motion: reduce)');
-}
-
-export function usePrefersDarkMode() {
-  return useMediaQuery('(prefers-color-scheme: dark)');
-}
-
-export function useIsPortrait() {
-  return useMediaQuery('(orientation: portrait)');
-}
-
-export function useIsLandscape() {
-  return useMediaQuery('(orientation: landscape)');
 }
