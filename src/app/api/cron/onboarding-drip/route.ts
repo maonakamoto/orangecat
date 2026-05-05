@@ -18,7 +18,7 @@ import { logger } from '@/utils/logger';
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/standardResponse';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 300; // 5 minutes
+export const maxDuration = 60;
 
 const LOG_SOURCE = 'CronOnboardingDrip';
 const BATCH_SIZE = 50;

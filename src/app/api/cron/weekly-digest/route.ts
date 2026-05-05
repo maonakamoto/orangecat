@@ -17,7 +17,7 @@ import { logger } from '@/utils/logger';
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/standardResponse';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 300; // 5 minutes
+export const maxDuration = 60;
 
 const LOG_SOURCE = 'CronWeeklyDigest';
 const BATCH_SIZE = 50;
@@ -29,7 +29,11 @@ function verifyCronSecret(request: Request): boolean {
 /** Returns IDs of users who should receive a weekly digest (explicit weekly pref, or no pref row = default weekly). */
 async function getUserIdsForDigest(admin: any): Promise<string[]> {
   const [{ data: explicitWeekly }, { data: allPrefs }, { data: allProfiles }] = await Promise.all([
-    admin.from(DATABASE_TABLES.NOTIFICATION_PREFERENCES).select('user_id').eq('digest_frequency', 'weekly').eq('progress_emails', true),
+    admin
+      .from(DATABASE_TABLES.NOTIFICATION_PREFERENCES)
+      .select('user_id')
+      .eq('digest_frequency', 'weekly')
+      .eq('progress_emails', true),
     admin.from(DATABASE_TABLES.NOTIFICATION_PREFERENCES).select('user_id'),
     admin.from(DATABASE_TABLES.PROFILES).select('id'),
   ]);
@@ -41,16 +45,25 @@ async function getUserIdsForDigest(admin: any): Promise<string[]> {
 }
 
 export async function GET(request: Request) {
-  if (!verifyCronSecret(request)) {return apiUnauthorized();}
+  if (!verifyCronSecret(request)) {
+    return apiUnauthorized();
+  }
 
   const startTime = Date.now();
   const admin = createAdminClient();
   const emailService = new NotificationEmailService();
-  let processed = 0, sent = 0, skipped = 0, failed = 0;
+  let processed = 0,
+    sent = 0,
+    skipped = 0,
+    failed = 0;
 
   try {
     const userIdsToProcess = await getUserIdsForDigest(admin);
-    logger.info(`Weekly digest: ${userIdsToProcess.length} users to process`, { total: userIdsToProcess.length }, LOG_SOURCE);
+    logger.info(
+      `Weekly digest: ${userIdsToProcess.length} users to process`,
+      { total: userIdsToProcess.length },
+      LOG_SOURCE
+    );
 
     for (let i = 0; i < userIdsToProcess.length; i += BATCH_SIZE) {
       const batch = userIdsToProcess.slice(i, i + BATCH_SIZE);
@@ -58,14 +71,24 @@ export async function GET(request: Request) {
         batch.map(async userId => {
           processed++;
           const digestData = await buildWeeklyDigest(userId);
-          if (!digestData.hasContent) { skipped++; return { userId, status: 'skipped' as const }; }
+          if (!digestData.hasContent) {
+            skipped++;
+            return { userId, status: 'skipped' as const };
+          }
 
           const result = await emailService.sendNotificationEmail({
             userId,
             type: 'weekly_digest',
-            data: { stats: digestData.stats, topEntities: digestData.topEntities, suggestions: digestData.suggestions },
+            data: {
+              stats: digestData.stats,
+              topEntities: digestData.topEntities,
+              suggestions: digestData.suggestions,
+            },
           });
-          if (result.sent) { sent++; return { userId, status: 'sent' as const }; }
+          if (result.sent) {
+            sent++;
+            return { userId, status: 'sent' as const };
+          }
           skipped++;
           return { userId, status: 'skipped' as const, reason: result.reason };
         })
@@ -74,16 +97,28 @@ export async function GET(request: Request) {
       for (const result of results) {
         if (result.status === 'rejected') {
           failed++;
-          logger.error('Weekly digest failed for user in batch', { error: result.reason?.message ?? result.reason }, LOG_SOURCE);
+          logger.error(
+            'Weekly digest failed for user in batch',
+            { error: result.reason?.message ?? result.reason },
+            LOG_SOURCE
+          );
         }
       }
     }
 
     const durationMs = Date.now() - startTime;
-    logger.info('Weekly digest cron completed', { processed, sent, skipped, failed, durationMs }, LOG_SOURCE);
+    logger.info(
+      'Weekly digest cron completed',
+      { processed, sent, skipped, failed, durationMs },
+      LOG_SOURCE
+    );
     return apiSuccess({ processed, sent, skipped, failed, durationMs });
   } catch (error) {
-    logger.error('Weekly digest cron failed', { error: error instanceof Error ? error.message : error }, LOG_SOURCE);
+    logger.error(
+      'Weekly digest cron failed',
+      { error: error instanceof Error ? error.message : error },
+      LOG_SOURCE
+    );
     return apiError('Internal error', 'INTERNAL_ERROR', 500);
   }
 }
