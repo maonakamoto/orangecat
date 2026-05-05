@@ -14,7 +14,7 @@ import { logger } from '@/utils/logger';
 // TYPES
 // =====================================================================
 
-export interface ApiSuccessResponse<T = unknown> {
+interface ApiSuccessResponse<T = unknown> {
   success: true;
   data: T;
   metadata?: {
@@ -37,7 +37,7 @@ export interface ApiErrorResponse {
   };
 }
 
-export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | ApiErrorResponse;
+type ApiResponse<T = unknown> = ApiSuccessResponse<T> | ApiErrorResponse;
 
 // =====================================================================
 // SUCCESS RESPONSES
@@ -46,7 +46,7 @@ export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | ApiErrorResponse;
 /**
  * Cache configuration presets
  */
-export const CACHE_PRESETS = {
+const CACHE_PRESETS = {
   // No caching - always fresh
   NONE: 'no-store, must-revalidate',
 
@@ -280,7 +280,13 @@ export function apiServiceUnavailable(
 
 type SupabaseError = { code?: string; message?: string; hint?: string };
 type ZodLikeError = { errors?: Array<{ path?: string[]; message?: string }> };
-type ApiLikeError = { name?: string; code?: string; hint?: string; status?: number; message?: string };
+type ApiLikeError = {
+  name?: string;
+  code?: string;
+  hint?: string;
+  status?: number;
+  message?: string;
+};
 
 /**
  * Handle standard Supabase errors and convert to API responses
@@ -360,22 +366,4 @@ export function handleApiError(error: unknown): NextResponse<ApiErrorResponse> {
   // Unknown error
   logger.error('Unhandled API error', error);
   return apiInternalError('An unexpected error occurred');
-}
-
-// =====================================================================
-// TYPE GUARDS
-// =====================================================================
-
-/**
- * Check if response is successful
- */
-export function isApiSuccess<T>(response: ApiResponse<T>): response is ApiSuccessResponse<T> {
-  return response.success === true;
-}
-
-/**
- * Check if response is an error
- */
-export function isApiError(response: ApiResponse): response is ApiErrorResponse {
-  return response.success === false;
 }

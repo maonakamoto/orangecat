@@ -160,7 +160,7 @@ export const taskProjectUpdateSchema = taskProjectSchema.partial();
 /**
  * Schema for task list filters
  */
-export const taskFilterSchema = z.object({
+const taskFilterSchema = z.object({
   category: z.enum(TASK_CATEGORY_OPTIONS as unknown as [string, ...string[]]).optional(),
   status: z.enum(TASK_STATUS_OPTIONS as unknown as [string, ...string[]]).optional(),
   task_type: z.enum(TASK_TYPE_OPTIONS as unknown as [string, ...string[]]).optional(),
@@ -173,28 +173,28 @@ export const taskFilterSchema = z.object({
 // ==================== DERIVED TYPES ====================
 
 /** Input type for creating a task */
-export type TaskInput = z.infer<typeof taskSchema>;
+type TaskInput = z.infer<typeof taskSchema>;
 
 /** Input type for updating a task */
 export type TaskUpdateInput = z.infer<typeof taskUpdateSchema>;
 
 /** Input type for recording a completion */
-export type TaskCompletionInput = z.infer<typeof taskCompletionSchema>;
+type TaskCompletionInput = z.infer<typeof taskCompletionSchema>;
 
 /** Input type for flagging attention */
-export type AttentionFlagInput = z.infer<typeof attentionFlagSchema>;
+type AttentionFlagInput = z.infer<typeof attentionFlagSchema>;
 
 /** Input type for creating a request */
-export type TaskRequestInput = z.infer<typeof taskRequestSchema>;
+type TaskRequestInput = z.infer<typeof taskRequestSchema>;
 
 /** Input type for responding to a request */
-export type RequestResponseInput = z.infer<typeof requestResponseSchema>;
+type RequestResponseInput = z.infer<typeof requestResponseSchema>;
 
 /** Input type for creating a project */
-export type TaskProjectInput = z.infer<typeof taskProjectSchema>;
+type TaskProjectInput = z.infer<typeof taskProjectSchema>;
 
 /** Input type for updating a project */
-export type TaskProjectUpdateInput = z.infer<typeof taskProjectUpdateSchema>;
+type TaskProjectUpdateInput = z.infer<typeof taskProjectUpdateSchema>;
 
 /** Filter type for task listing */
 export type TaskFilter = z.infer<typeof taskFilterSchema>;
@@ -247,7 +247,7 @@ export interface TaskCompletion {
 /**
  * Task attention flag
  */
-export interface TaskAttentionFlag {
+interface TaskAttentionFlag {
   id: string;
   task_id: string;
   flagged_by: string;
@@ -262,7 +262,7 @@ export interface TaskAttentionFlag {
 /**
  * Task request
  */
-export interface TaskRequest {
+interface TaskRequest {
   id: string;
   task_id: string;
   requested_by: string;
@@ -280,7 +280,7 @@ export interface TaskRequest {
 /**
  * Task project
  */
-export interface TaskProject {
+interface TaskProject {
   id: string;
   title: string;
   description: string | null;
@@ -318,7 +318,7 @@ export interface TaskWithRelations extends Task {
 /**
  * Task request with relations
  */
-export interface TaskRequestWithRelations extends TaskRequest {
+interface TaskRequestWithRelations extends TaskRequest {
   task?: Task;
   requester?: {
     id: string;
