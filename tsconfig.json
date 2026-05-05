@@ -48,6 +48,7 @@
     "playwright.config.ts",
     "jest.setup.ts",
     "jest.config.ts",
+    "scripts/**/*.ts",
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "**/*.test.ts",
