@@ -92,48 +92,15 @@ export function formatSats(amount: number): string {
   return `${value.toLocaleString('en-US')} sat`;
 }
 
-// ==================== FIAT DISPLAY ====================
-
-export function formatSwissFrancs(amount: number): string {
-  return new Intl.NumberFormat('de-CH', {
-    style: 'currency',
-    currency: 'CHF',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
-}
-
-export function formatUSD(amount: number): string {
-  const value = typeof amount === 'number' && isFinite(amount) ? amount : 0;
-  return value.toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
-
-// ==================== REGIONAL DISPLAY ====================
-
-export function getRegionName(): string {
-  return 'Switzerland';
-}
-
-export function getRegionEmoji(): string {
-  return '🇨🇭';
-}
-
-export function formatRegionalAlternatives(): string {
-  return 'alternatives popular in your region';
-}
-
 /**
  * Format BTC for clean display — strips unnecessary trailing zeros.
  * 0.001 → "0.001", 0.00500000 → "0.005", 1.0 → "1"
  */
 export function displayBTC(amount: number | string | null | undefined): string {
   const num = typeof amount === 'string' ? parseFloat(amount) : (amount ?? 0);
-  if (!isFinite(num) || num === 0) {return '0 BTC';}
+  if (!isFinite(num) || num === 0) {
+    return '0 BTC';
+  }
   // Show up to 8 decimals but strip trailing zeros
   return `${parseFloat(num.toFixed(8))} BTC`;
 }

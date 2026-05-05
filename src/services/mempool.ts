@@ -6,7 +6,7 @@ import { logger } from '@/utils/logger';
 
 const MEMPOOL_API = 'https://mempool.space/api';
 
-export interface MempoolTransaction {
+interface MempoolTransaction {
   txid: string;
   version: number;
   locktime: number;
@@ -43,7 +43,7 @@ export interface MempoolTransaction {
   };
 }
 
-export interface AddressStats {
+interface AddressStats {
   address: string;
   chain_stats: {
     funded_txo_count: number;
@@ -73,7 +73,7 @@ export interface TransactionSummary {
 /**
  * Get address statistics including balance
  */
-export async function getAddressStats(address: string): Promise<AddressStats | null> {
+async function getAddressStats(address: string): Promise<AddressStats | null> {
   try {
     const response = await fetch(`${MEMPOOL_API}/address/${address}`, {
       cache: 'no-store', // Always get fresh data
@@ -174,25 +174,4 @@ export function processTransactions(
       blockHeight: tx.status.block_height,
     };
   });
-}
-
-/**
- * Format satoshis to BTC
- */
-export function formatBTC(sats: number, decimals: number = 8): string {
-  return (sats / 100000000).toFixed(decimals);
-}
-
-/**
- * Get transaction explorer URL
- */
-export function getTxUrl(txid: string): string {
-  return `https://mempool.space/tx/${txid}`;
-}
-
-/**
- * Get address explorer URL
- */
-export function getAddressUrl(address: string): string {
-  return `https://mempool.space/address/${address}`;
 }

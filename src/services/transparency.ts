@@ -15,7 +15,7 @@ export interface TransparencyData {
   isResponsiveToFeedback: boolean;
 }
 
-export interface TransparencyScore {
+interface TransparencyScore {
   score: number;
 }
 
@@ -26,9 +26,7 @@ export interface TransparencyScore {
  * Each category has a weight, and each criterion within it has a weight.
  * The final score is the sum of (categoryWeight * criterionWeight * booleanValue).
  */
-export const calculateTransparencyScore = async (
-  data: TransparencyData
-): Promise<TransparencyScore> => {
+const calculateTransparencyScore = async (data: TransparencyData): Promise<TransparencyScore> => {
   const criteria = getTransparencyCriteria();
   const dataRecord = data as unknown as Record<string, boolean>;
 

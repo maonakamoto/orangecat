@@ -19,7 +19,7 @@ export interface ProfileRow {
   avatar_url: string | null;
 }
 
-export interface ContributorStats {
+interface ContributorStats {
   user: ProfileRow;
   totalCompletions: number;
   totalMinutes: number;

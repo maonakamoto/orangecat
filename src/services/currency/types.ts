@@ -14,16 +14,3 @@ export interface RateCache {
   lastUpdated: Date | null;
   expiresAt: Date | null;
 }
-
-export interface CurrencyBreakdown {
-  btc: number;
-  sats: number;
-  fiat: Record<string, number>;
-}
-
-export interface CurrencyConversion {
-  bitcoin: number;
-  sats: number;
-  chf: number;
-  usd: number;
-}

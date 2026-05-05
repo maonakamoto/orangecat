@@ -6,7 +6,6 @@
 
 import type { CurrencyCode } from '@/config/currencies';
 import { logger } from '@/utils/logger';
-import { API_ROUTES } from '@/config/api-routes';
 import type { ExchangeRates, RateCache } from './types';
 
 // ==================== RATE CACHE ====================
@@ -25,7 +24,7 @@ export const cache: RateCache = {
 
 // ==================== RATE MANAGEMENT ====================
 
-export function updateRates(rates: Record<string, number>): void {
+function updateRates(rates: Record<string, number>): void {
   Object.assign(cache.rates, rates);
   cache.lastUpdated = new Date();
   cache.expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
@@ -64,32 +63,6 @@ export function getRate(from: string, to: string): number {
   }
 
   return 0;
-}
-
-export async function fetchRates(): Promise<void> {
-  try {
-    const response = await fetch(API_ROUTES.CURRENCY.RATES);
-    if (response.ok) {
-      const json = await response.json();
-      const rates = json?.data?.rates ?? json?.rates;
-      if (rates) {
-        updateRates(rates);
-      }
-    }
-  } catch (error) {
-    logger.error(
-      'Failed to fetch currency rates',
-      { error: error instanceof Error ? error.message : error },
-      'currency'
-    );
-  }
-}
-
-export function ratesNeedRefresh(): boolean {
-  if (!cache.expiresAt) {
-    return true;
-  }
-  return new Date() > cache.expiresAt;
 }
 
 // ==================== COINGECKO CONVERTER SERVICE ====================
@@ -251,23 +224,4 @@ export async function convertToBTC(amount: number, fromCurrency: CurrencyCode): 
 
 export async function convertFromBTC(amountBTC: number, toCurrency: CurrencyCode): Promise<number> {
   return currencyConverter.fromBTC(amountBTC, toCurrency);
-}
-
-export async function convertCurrencyAsync(
-  amount: number,
-  fromCurrency: CurrencyCode,
-  toCurrency: CurrencyCode
-): Promise<number> {
-  return currencyConverter.convert(amount, fromCurrency, toCurrency);
-}
-
-// Placeholder hook for real-time price data
-export function useBitcoinPrice() {
-  return {
-    btcUsd: cache.rates['BTC_USD'] || 97000,
-    btcChf: cache.rates['BTC_CHF'] || 86000,
-    usdChf: 0.89,
-    isLoading: false,
-    error: null,
-  };
 }

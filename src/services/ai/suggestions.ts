@@ -14,8 +14,12 @@ const DOCUMENT_TYPE_SUGGESTIONS: Record<string, (doc: DocumentContext) => string
       `Help me make progress on my goal: "${truncate(doc.title, 40)}"`,
       `What's a good first step for achieving "${truncate(doc.title, 35)}"?`,
     ];
-    if (doc.content.toLowerCase().includes('bitcoin')) {s.push('How can I accelerate my Bitcoin journey?');}
-    if (doc.content.toLowerCase().includes('learn')) {s.push('Create a learning plan based on my goals');}
+    if (doc.content.toLowerCase().includes('bitcoin')) {
+      s.push('How can I accelerate my Bitcoin journey?');
+    }
+    if (doc.content.toLowerCase().includes('learn')) {
+      s.push('Create a learning plan based on my goals');
+    }
     return s;
   },
   skills: doc => {
@@ -24,8 +28,12 @@ const DOCUMENT_TYPE_SUGGESTIONS: Record<string, (doc: DocumentContext) => string
       `What products could I create with my skills?`,
     ];
     const lc = doc.content.toLowerCase();
-    if (lc.includes('development') || lc.includes('coding')) {s.push('What digital products should a developer sell?');}
-    if (lc.includes('design')) {s.push('How can I sell design services on OrangeCat?');}
+    if (lc.includes('development') || lc.includes('coding')) {
+      s.push('What digital products should a developer sell?');
+    }
+    if (lc.includes('design')) {
+      s.push('How can I sell design services on OrangeCat?');
+    }
     return s;
   },
   background: _doc => [
@@ -63,25 +71,6 @@ const CONTEXT_AWARE_GENERIC = [
   'What Bitcoin opportunities align with my skills?',
 ];
 
-/** Legacy: generate suggestions from documents only. */
-export function generateSuggestions(documents: DocumentContext[]): string[] {
-  if (documents.length === 0) {return DEFAULT_SUGGESTIONS;}
-
-  const suggestions: string[] = [];
-  const used = new Set<string>();
-
-  for (const doc of documents) {
-    const generator = DOCUMENT_TYPE_SUGGESTIONS[doc.document_type || 'other'] || DOCUMENT_TYPE_SUGGESTIONS.other;
-    for (const s of generator(doc)) {
-      if (!used.has(s) && suggestions.length < 6) { suggestions.push(s); used.add(s); }
-    }
-  }
-  for (const s of CONTEXT_AWARE_GENERIC) {
-    if (!used.has(s) && suggestions.length < 6) { suggestions.push(s); used.add(s); }
-  }
-  return suggestions.slice(0, 4);
-}
-
 /**
  * Returns true when the user has enough context for the Cat to give personalised advice.
  * Includes profile info, entities, documents, tasks, and wallets — not just documents.
@@ -101,20 +90,25 @@ export function hasRichContext(context: FullUserContext): boolean {
  * Prioritises entity-based gaps, then document-based suggestions, then generic.
  */
 export function generateSuggestionsFromContext(context: FullUserContext): string[] {
-  if (!hasRichContext(context)) {return DEFAULT_SUGGESTIONS;}
+  if (!hasRichContext(context)) {
+    return DEFAULT_SUGGESTIONS;
+  }
 
   const suggestions: string[] = [];
   const used = new Set<string>();
 
   function add(s: string) {
-    if (!used.has(s) && suggestions.length < 6) { suggestions.push(s); used.add(s); }
+    if (!used.has(s) && suggestions.length < 6) {
+      suggestions.push(s);
+      used.add(s);
+    }
   }
 
   // 1. Named-entity suggestions — most specific and valuable
   const firstProduct = context.entities.find(e => e.type === 'product');
   const firstService = context.entities.find(e => e.type === 'service');
   const firstProject = context.entities.find(e => e.type === 'project');
-  const firstCause   = context.entities.find(e => e.type === 'cause');
+  const firstCause = context.entities.find(e => e.type === 'cause');
 
   if (firstProduct) {
     add(`Help me write a better description for "${truncate(firstProduct.title, 35)}"`);
@@ -130,12 +124,12 @@ export function generateSuggestionsFromContext(context: FullUserContext): string
   }
 
   // 2. Gap suggestions — based on what the user has vs. what's missing
-  const hasProducts  = context.stats.totalProducts > 0;
-  const hasServices  = context.stats.totalServices > 0;
-  const hasProjects  = context.stats.totalProjects > 0;
-  const hasCauses    = context.stats.totalCauses > 0;
-  const hasWallets   = context.wallets.length > 0;
-  const hasTasks     = context.tasks.length > 0;
+  const hasProducts = context.stats.totalProducts > 0;
+  const hasServices = context.stats.totalServices > 0;
+  const hasProjects = context.stats.totalProjects > 0;
+  const hasCauses = context.stats.totalCauses > 0;
+  const hasWallets = context.wallets.length > 0;
+  const hasTasks = context.tasks.length > 0;
 
   if (hasProducts && !hasProjects && !hasCauses) {
     add('I have products — should I also create a project to fund a bigger vision?');
@@ -161,12 +155,17 @@ export function generateSuggestionsFromContext(context: FullUserContext): string
 
   // 3. Document-based suggestions
   for (const doc of context.documents) {
-    const generator = DOCUMENT_TYPE_SUGGESTIONS[doc.document_type || 'other'] || DOCUMENT_TYPE_SUGGESTIONS.other;
-    for (const s of generator(doc)) { add(s); }
+    const generator =
+      DOCUMENT_TYPE_SUGGESTIONS[doc.document_type || 'other'] || DOCUMENT_TYPE_SUGGESTIONS.other;
+    for (const s of generator(doc)) {
+      add(s);
+    }
   }
 
   // 4. Generic fallbacks
-  for (const s of CONTEXT_AWARE_GENERIC) { add(s); }
+  for (const s of CONTEXT_AWARE_GENERIC) {
+    add(s);
+  }
 
   return suggestions.slice(0, 4);
 }

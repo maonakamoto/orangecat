@@ -8,13 +8,11 @@
 import {
   formatBTC,
   formatSats,
-  formatUSD,
-  btcToSats,
-  satsToBTC,
   formatCurrency,
   parseBTCAmount,
   validateBTCAmount,
-  convertCurrency,
+  bitcoinToSats,
+  satsToBitcoin,
 } from '../../../src/services/currency';
 
 describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
@@ -77,87 +75,6 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
         expect(formatSats(NaN)).toBe('0 sat');
         expect(formatSats(Infinity)).toBe('0 sat');
         expect(formatSats(-Infinity)).toBe('0 sat');
-      });
-    });
-  });
-
-  describe('💵 USD Formatting', () => {
-    describe('formatUSD', () => {
-      test('formats USD amounts with cents', () => {
-        expect(formatUSD(100)).toBe('$100.00');
-        expect(formatUSD(1.5)).toBe('$1.50');
-        expect(formatUSD(0)).toBe('$0.00');
-      });
-
-      test('formats large USD amounts', () => {
-        expect(formatUSD(1000)).toBe('$1,000.00');
-        expect(formatUSD(1000000)).toBe('$1,000,000.00');
-        expect(formatUSD(50000.99)).toBe('$50,000.99');
-      });
-
-      test('handles negative USD amounts', () => {
-        expect(formatUSD(-100)).toBe('-$100.00');
-        expect(formatUSD(-1.5)).toBe('-$1.50');
-      });
-
-      test('handles edge cases', () => {
-        expect(formatUSD(NaN)).toBe('$0.00');
-        expect(formatUSD(Infinity)).toBe('$0.00');
-        expect(formatUSD(-Infinity)).toBe('$0.00');
-      });
-    });
-  });
-
-  describe('🔄 Unit Conversions', () => {
-    describe('btcToSats', () => {
-      test('converts BTC to satoshis correctly', () => {
-        expect(btcToSats(1)).toBe(100000000); // 1 BTC = 100M sats
-        expect(btcToSats(0.5)).toBe(50000000); // 0.5 BTC = 50M sats
-        expect(btcToSats(0.00000001)).toBe(1); // 1 sat
-        expect(btcToSats(0)).toBe(0);
-      });
-
-      test('handles decimal precision correctly', () => {
-        expect(btcToSats(0.12345678)).toBe(12345678);
-        expect(btcToSats(0.000001)).toBe(100);
-      });
-
-      test('handles negative amounts', () => {
-        expect(btcToSats(-1)).toBe(-100000000);
-        expect(btcToSats(-0.5)).toBe(-50000000);
-      });
-
-      test('handles edge cases', () => {
-        // btcToSats doesn't sanitize input - passes through NaN/Infinity
-        expect(btcToSats(NaN)).toBeNaN();
-        expect(btcToSats(Infinity)).toBe(Infinity);
-        expect(btcToSats(-Infinity)).toBe(-Infinity);
-      });
-    });
-
-    describe('satsToBTC', () => {
-      test('converts satoshis to BTC correctly', () => {
-        expect(satsToBTC(100000000)).toBe(1); // 100M sats = 1 BTC
-        expect(satsToBTC(50000000)).toBe(0.5); // 50M sats = 0.5 BTC
-        expect(satsToBTC(1)).toBe(0.00000001); // 1 sat
-        expect(satsToBTC(0)).toBe(0);
-      });
-
-      test('handles large satoshi amounts', () => {
-        expect(satsToBTC(2100000000000000)).toBe(21000000); // 21M BTC supply
-        expect(satsToBTC(12345678)).toBe(0.12345678);
-      });
-
-      test('handles negative amounts', () => {
-        expect(satsToBTC(-100000000)).toBe(-1);
-        expect(satsToBTC(-50000000)).toBe(-0.5);
-      });
-
-      test('handles edge cases', () => {
-        // satsToBTC doesn't sanitize input - passes through NaN/Infinity
-        expect(satsToBTC(NaN)).toBeNaN();
-        expect(satsToBTC(Infinity)).toBe(Infinity);
-        expect(satsToBTC(-Infinity)).toBe(-Infinity);
       });
     });
   });
@@ -260,38 +177,6 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
     });
   });
 
-  describe('💱 Currency Conversion', () => {
-    describe('convertCurrency', () => {
-      test('converts between BTC and SATS', () => {
-        expect(convertCurrency(1, 'BTC', 'SATS')).toBe(100000000);
-        expect(convertCurrency(100000000, 'SATS', 'BTC')).toBe(1);
-      });
-
-      test('converts with exchange rates', () => {
-        const exchangeRates = { 'BTC/USD': 50000, 'USD/BTC': 0.00002 };
-
-        expect(convertCurrency(1, 'BTC', 'USD', exchangeRates)).toBe(50000);
-        expect(convertCurrency(50000, 'USD', 'BTC', exchangeRates)).toBe(1);
-      });
-
-      test('handles same currency conversion', () => {
-        expect(convertCurrency(100, 'USD', 'USD')).toBe(100);
-        expect(convertCurrency(1, 'BTC', 'BTC')).toBe(1);
-      });
-
-      test('handles missing exchange rates', () => {
-        expect(convertCurrency(1, 'BTC', 'EUR')).toBe(0); // No rate available
-        expect(convertCurrency(100, 'USD', 'GBP')).toBe(0); // No rate available
-      });
-
-      test('handles edge cases', () => {
-        expect(convertCurrency(0, 'BTC', 'USD')).toBe(0);
-        expect(convertCurrency(NaN, 'BTC', 'USD')).toBe(0);
-        expect(convertCurrency(Infinity, 'BTC', 'USD')).toBe(0);
-      });
-    });
-  });
-
   describe('🔢 Precision and Rounding', () => {
     test('maintains Bitcoin precision (8 decimals)', () => {
       const amount = 1.123456789; // 9 decimals
@@ -307,7 +192,7 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
 
     test('handles floating point precision issues', () => {
       const amount = 0.1 + 0.2; // JavaScript floating point issue
-      const sats = btcToSats(amount);
+      const sats = bitcoinToSats(amount);
       expect(sats).toBe(30000000); // Should handle precision correctly
     });
   });
@@ -316,7 +201,6 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
     test('formats numbers with locale-specific separators', () => {
       // Test assumes US locale formatting
       expect(formatSats(1234567)).toBe('1,234,567 sat');
-      expect(formatUSD(1234.56)).toBe('$1,234.56');
     });
 
     test('handles different decimal separators', () => {
@@ -333,13 +217,12 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
       for (let i = 0; i < 1000; i++) {
         formatBTC(Math.random() * 21000000);
         formatSats(Math.random() * 2100000000000000);
-        formatUSD(Math.random() * 1000000);
       }
 
       const endTime = performance.now();
       const totalTime = endTime - startTime;
 
-      // Should format 3,000 amounts in under 6000ms
+      // Should format 2,000 amounts in under 6000ms
       expect(totalTime).toBeLessThan(6000);
     });
 
@@ -347,8 +230,8 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
       const startTime = performance.now();
 
       for (let i = 0; i < 10000; i++) {
-        btcToSats(Math.random() * 21);
-        satsToBTC(Math.random() * 2100000000);
+        bitcoinToSats(Math.random() * 21);
+        satsToBitcoin(Math.random() * 2100000000);
       }
 
       const endTime = performance.now();
@@ -374,7 +257,6 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
 
       expect(() => formatBTC(veryLarge)).not.toThrow();
       expect(() => formatSats(veryLarge)).not.toThrow();
-      expect(() => formatUSD(veryLarge)).not.toThrow();
     });
 
     test('handles extremely small numbers safely', () => {
@@ -382,7 +264,6 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
 
       expect(() => formatBTC(verySmall)).not.toThrow();
       expect(() => formatSats(verySmall)).not.toThrow();
-      expect(() => formatUSD(verySmall)).not.toThrow();
     });
   });
 
@@ -393,7 +274,7 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
       amounts.forEach(amount => {
         expect(formatBTC(amount)).toMatch(/^\d+\.\d{8} BTC$/);
         expect(validateBTCAmount(amount)).toBe(true);
-        expect(btcToSats(amount)).toBeGreaterThan(0);
+        expect(bitcoinToSats(amount)).toBeGreaterThan(0);
       });
     });
 
@@ -402,7 +283,7 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
 
       microAmounts.forEach(amount => {
         expect(validateBTCAmount(amount)).toBe(true);
-        expect(btcToSats(amount)).toBeGreaterThanOrEqual(1);
+        expect(bitcoinToSats(amount)).toBeGreaterThanOrEqual(1);
         expect(formatBTC(amount)).toContain('BTC');
       });
     });
@@ -414,7 +295,6 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
       dcaAmounts.forEach(usdAmount => {
         const btcAmount = usdAmount / btcPrice;
         expect(validateBTCAmount(btcAmount)).toBe(true);
-        expect(formatUSD(usdAmount)).toMatch(/^\$[\d,]+\.\d{2}$/);
       });
     });
   });

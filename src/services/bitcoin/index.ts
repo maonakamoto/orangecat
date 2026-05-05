@@ -63,7 +63,7 @@ interface FetchInterface {
   (url: string, options?: RequestInit): Promise<Response>;
 }
 
-export class BitcoinService {
+class BitcoinService {
   private static instance: BitcoinService;
   private fetchFn: FetchInterface;
   private providers: APIProvider[];
@@ -399,23 +399,7 @@ export class BitcoinService {
   }
 }
 
-// Export singleton instance and convenience functions for backward compatibility
-export const bitcoinService = BitcoinService.getInstance();
+const bitcoinService = BitcoinService.getInstance();
 
-// Legacy function exports for backward compatibility
-export const cleanBitcoinAddress = (address: string) => bitcoinService.cleanBitcoinAddress(address);
 export const fetchBitcoinWalletData = (address: string) =>
   bitcoinService.fetchBitcoinWalletData(address);
-export const getTransactionUrl = (txid: string) => bitcoinService.getTransactionUrl(txid);
-export const getAddressUrl = (address: string) => bitcoinService.getAddressUrl(address);
-
-// Add missing formatBtcValue function
-export const formatBtcValue = (value: number, decimals: number = 8): string => {
-  if (typeof value !== 'number' || !isFinite(value)) {
-    return '0.00000000';
-  }
-
-  // Ensure we don't show more than 8 decimal places for BTC
-  const clampedDecimals = Math.min(Math.max(0, decimals), 8);
-  return value.toFixed(clampedDecimals);
-};

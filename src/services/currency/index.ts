@@ -9,36 +9,9 @@
  *   validation.ts  — input parsing and amount validation
  */
 
-export type { ExchangeRates, RateCache, CurrencyBreakdown, CurrencyConversion } from './types';
+export { getRate, currencyConverter, convertToBTC, convertFromBTC } from './rates';
 
-export {
-  updateRates,
-  getRate,
-  fetchRates,
-  ratesNeedRefresh,
-  currencyConverter,
-  convertToBTC,
-  convertFromBTC,
-  convertCurrencyAsync,
-  useBitcoinPrice,
-} from './rates';
-
-export {
-  satsToBitcoin,
-  bitcoinToSats,
-  satsToBTC,
-  satsToBtc,
-  btcToSats,
-  satoshisToBitcoin,
-  bitcoinToSatoshis,
-  convertBtcTo,
-  convertToBtc,
-  convert,
-  convertCurrency,
-  getCurrencyBreakdown,
-  convertBitcoinToAll,
-  convertSatsToAll,
-} from './conversion';
+export { satsToBitcoin, bitcoinToSats, convertBtcTo, convertToBtc, convert } from './conversion';
 
 export {
   formatCurrency,
@@ -46,66 +19,6 @@ export {
   formatBTC,
   displayBTC,
   formatSats,
-  formatSwissFrancs,
-  formatUSD,
-  getRegionName,
-  getRegionEmoji,
-  formatRegionalAlternatives,
 } from './formatting';
 
 export { parseAmount, validateAmount, parseBTCAmount, validateBTCAmount } from './validation';
-
-// ==================== CONVENIENCE BUNDLE ====================
-
-import {
-  convertBtcTo,
-  convertToBtc,
-  convert,
-  getCurrencyBreakdown,
-  convertBitcoinToAll,
-  convertSatsToAll,
-  satsToBitcoin,
-  bitcoinToSats,
-} from './conversion';
-import {
-  formatCurrency,
-  formatBitcoinDisplay,
-  formatBTC,
-  formatSats,
-  formatSwissFrancs,
-  formatUSD,
-  getRegionName,
-  getRegionEmoji,
-  formatRegionalAlternatives,
-} from './formatting';
-import { getRate, updateRates, fetchRates, ratesNeedRefresh, useBitcoinPrice } from './rates';
-import { parseAmount, validateAmount } from './validation';
-
-export const currencyService = {
-  convertBtcTo,
-  convertToBtc,
-  convert,
-  formatCurrency,
-  getCurrencyBreakdown,
-  getRate,
-  updateRates,
-  fetchRates,
-  ratesNeedRefresh,
-  parseAmount,
-  validateAmount,
-  satsToBitcoin,
-  bitcoinToSats,
-  formatBitcoinDisplay,
-  formatSwissFrancs,
-  formatBTC,
-  formatSats,
-  formatUSD,
-  convertBitcoinToAll,
-  convertSatsToAll,
-  getRegionName,
-  getRegionEmoji,
-  formatRegionalAlternatives,
-  useBitcoinPrice,
-};
-
-export default currencyService;
