@@ -1,20 +1,20 @@
-export interface Category {
-  id: string
-  name: string
-  description: string
-  icon: string // Lucide icon name
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  icon: string; // Lucide icon name
   groups: {
-    id: string
-    name: string
-    description: string
-  }[]
+    id: string;
+    name: string;
+    description: string;
+  }[];
 }
 
-export interface SimpleCategory {
-  value: string
-  label: string
-  icon: string
-  description: string
+interface SimpleCategory {
+  value: string;
+  label: string;
+  icon: string;
+  description: string;
 }
 
 export const categories: Category[] = [
@@ -27,19 +27,19 @@ export const categories: Category[] = [
       {
         id: 'medical',
         name: 'Medical Expenses',
-        description: 'Medical treatments, procedures, and healthcare costs'
+        description: 'Medical treatments, procedures, and healthcare costs',
       },
       {
         id: 'life-events',
         name: 'Life Events',
-        description: 'Birth of a child, weddings, funerals, and other significant life moments'
+        description: 'Birth of a child, weddings, funerals, and other significant life moments',
       },
       {
         id: 'personal',
         name: 'Personal Needs',
-        description: 'Personal emergencies, family support, and individual assistance'
-      }
-    ]
+        description: 'Personal emergencies, family support, and individual assistance',
+      },
+    ],
   },
   {
     id: 'creators',
@@ -50,19 +50,19 @@ export const categories: Category[] = [
       {
         id: 'content-creators',
         name: 'Content Creators',
-        description: 'Bloggers, YouTubers, podcasters, and social media creators'
+        description: 'Bloggers, YouTubers, podcasters, and social media creators',
       },
       {
         id: 'artists',
         name: 'Artists',
-        description: 'Visual artists, musicians, DJs, and digital artists'
+        description: 'Visual artists, musicians, DJs, and digital artists',
       },
       {
         id: 'writers',
         name: 'Writers',
-        description: 'Authors, journalists, and independent writers'
-      }
-    ]
+        description: 'Authors, journalists, and independent writers',
+      },
+    ],
   },
   {
     id: 'builders',
@@ -73,19 +73,19 @@ export const categories: Category[] = [
       {
         id: 'open-source',
         name: 'Open Source Developers',
-        description: 'Maintainers and contributors to open source projects'
+        description: 'Maintainers and contributors to open source projects',
       },
       {
         id: 'founders',
         name: 'Solo Founders',
-        description: 'Independent entrepreneurs and startup founders'
+        description: 'Independent entrepreneurs and startup founders',
       },
       {
         id: 'vibe-coders',
         name: 'Vibe Coders',
-        description: 'Creative developers and experimental projects'
-      }
-    ]
+        description: 'Creative developers and experimental projects',
+      },
+    ],
   },
   {
     id: 'education',
@@ -96,19 +96,19 @@ export const categories: Category[] = [
       {
         id: 'students',
         name: 'Students',
-        description: 'Individual students and student projects'
+        description: 'Individual students and student projects',
       },
       {
         id: 'classes',
         name: 'Classes & Courses',
-        description: 'Educational programs and course creators'
+        description: 'Educational programs and course creators',
       },
       {
         id: 'educational-research',
         name: 'Educational Research',
-        description: 'Academic research and educational initiatives'
-      }
-    ]
+        description: 'Academic research and educational initiatives',
+      },
+    ],
   },
   {
     id: 'research',
@@ -119,19 +119,19 @@ export const categories: Category[] = [
       {
         id: 'desci',
         name: 'Decentralized Science',
-        description: 'DeSci projects and blockchain-based research initiatives'
+        description: 'DeSci projects and blockchain-based research initiatives',
       },
       {
         id: 'independent-research',
         name: 'Independent Researchers',
-        description: 'Individual researchers and scientific investigations'
+        description: 'Individual researchers and scientific investigations',
       },
       {
         id: 'scientific-studies',
         name: 'Scientific Studies',
-        description: 'Research projects, experiments, and academic studies'
-      }
-    ]
+        description: 'Research projects, experiments, and academic studies',
+      },
+    ],
   },
   {
     id: 'infrastructure',
@@ -142,19 +142,19 @@ export const categories: Category[] = [
       {
         id: 'public-works',
         name: 'Public Works',
-        description: 'Parks, bike lanes, roads, and public facilities'
+        description: 'Parks, bike lanes, roads, and public facilities',
       },
       {
         id: 'community-facilities',
         name: 'Community Facilities',
-        description: 'Playgrounds, community centers, and shared spaces'
+        description: 'Playgrounds, community centers, and shared spaces',
       },
       {
         id: 'urban-improvement',
         name: 'Urban Improvement',
-        description: 'Pothole repairs, lighting, and city infrastructure upgrades'
-      }
-    ]
+        description: 'Pothole repairs, lighting, and city infrastructure upgrades',
+      },
+    ],
   },
   {
     id: 'environment',
@@ -165,19 +165,19 @@ export const categories: Category[] = [
       {
         id: 'cleanup-efforts',
         name: 'Cleanup Efforts',
-        description: 'Beach cleanups, waste removal, and environmental restoration'
+        description: 'Beach cleanups, waste removal, and environmental restoration',
       },
       {
         id: 'conservation',
         name: 'Conservation',
-        description: 'Wildlife protection, habitat preservation, and biodiversity projects'
+        description: 'Wildlife protection, habitat preservation, and biodiversity projects',
       },
       {
         id: 'sustainability',
         name: 'Sustainability',
-        description: 'Renewable energy, green technologies, and sustainable practices'
-      }
-    ]
+        description: 'Renewable energy, green technologies, and sustainable practices',
+      },
+    ],
   },
   {
     id: 'organizations',
@@ -188,58 +188,54 @@ export const categories: Category[] = [
       {
         id: 'non-profits',
         name: 'Non-Profits',
-        description: 'Registered non-profit organizations'
+        description: 'Registered non-profit organizations',
       },
       {
         id: 'charities',
         name: 'Charities',
-        description: 'Charitable organizations and initiatives'
+        description: 'Charitable organizations and initiatives',
       },
       {
         id: 'communities',
         name: 'Communities',
-        description: 'Community projects and initiatives'
-      }
-    ]
-  }
-]
+        description: 'Community projects and initiatives',
+      },
+    ],
+  },
+];
 
 // Helper exports for different use cases - SINGLE SOURCE OF TRUTH
 
 // Simple categories for form dropdowns and UI components
 export const simpleCategories: SimpleCategory[] = [
-  { value: 'health', label: 'Health', icon: '🏥', description: 'Medical expenses, treatments, procedures' },
+  {
+    value: 'health',
+    label: 'Health',
+    icon: '🏥',
+    description: 'Medical expenses, treatments, procedures',
+  },
   { value: 'creative', label: 'Creative', icon: '🎨', description: 'Art, music, writing' },
   { value: 'technology', label: 'Technology', icon: '💻', description: 'Apps, websites, tech' },
   { value: 'community', label: 'Community', icon: '🏘️', description: 'Local initiatives' },
   { value: 'education', label: 'Education', icon: '📚', description: 'Learning, courses' },
   { value: 'research', label: 'Research', icon: '🔬', description: 'DeSci, independent research' },
-  { value: 'infrastructure', label: 'Infrastructure', icon: '🏗️', description: 'Parks, bike lanes, public works' },
-  { value: 'environment', label: 'Environment', icon: '🌱', description: 'Cleanup, conservation, sustainability' },
+  {
+    value: 'infrastructure',
+    label: 'Infrastructure',
+    icon: '🏗️',
+    description: 'Parks, bike lanes, public works',
+  },
+  {
+    value: 'environment',
+    label: 'Environment',
+    icon: '🌱',
+    description: 'Cleanup, conservation, sustainability',
+  },
   { value: 'charity', label: 'Charity', icon: '❤️', description: 'Helping others' },
   { value: 'business', label: 'Business', icon: '🚀', description: 'Startups, ventures' },
   { value: 'personal', label: 'Personal', icon: '🌟', description: 'Personal goals' },
-  { value: 'other', label: 'Other', icon: '✨', description: 'Everything else' }
-]
-
-// Category values only (for filters, validation, etc.)
-export const categoryValues = simpleCategories.map(cat => cat.value)
+  { value: 'other', label: 'Other', icon: '✨', description: 'Everything else' },
+];
 
 // TypeScript union type for categories
-export type CategoryValue = typeof categoryValues[number]
-
-// Legacy mapping for backwards compatibility
-export const CATEGORY_LABELS: Record<string, string> = {
-  health: 'Health',
-  creative: 'Creative',
-  technology: 'Technology',
-  community: 'Community',
-  education: 'Education',
-  research: 'Research',
-  infrastructure: 'Infrastructure',
-  environment: 'Environment',
-  charity: 'Charity',
-  business: 'Business',
-  personal: 'Personal',
-  other: 'Other'
-} 
+export type CategoryValue = (typeof simpleCategories)[number]['value'];

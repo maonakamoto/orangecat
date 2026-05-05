@@ -5,14 +5,14 @@
  * Used by src/services/transparency.ts for weighted scoring.
  */
 
-export interface TransparencyCriterion {
+interface TransparencyCriterion {
   key: string;
   label: string;
   description: string;
   weight: number;
 }
 
-export interface TransparencyCategory {
+interface TransparencyCategory {
   label: string;
   weight: number;
   criteria: TransparencyCriterion[];
@@ -112,10 +112,6 @@ export const TRANSPARENCY_CONFIG = {
     },
   },
 } as const satisfies Record<string, Record<string, TransparencyCategory>>;
-
-/** All criterion keys for type safety */
-export type TransparencyCriterionKey =
-  (typeof TRANSPARENCY_CONFIG.categories)[keyof typeof TRANSPARENCY_CONFIG.categories]['criteria'][number]['key'];
 
 /** Helper to get a flat list of all criteria with their effective weight */
 export function getTransparencyCriteria(): Array<

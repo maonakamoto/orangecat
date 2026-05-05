@@ -56,7 +56,7 @@ export interface NavSection {
   items: NavigationItem[];
 }
 
-export interface NavItem {
+interface NavItem {
   name: string;
   href: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;

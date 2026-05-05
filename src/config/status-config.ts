@@ -21,7 +21,7 @@ export type EntityStatus = 'draft' | 'active' | 'paused' | 'completed' | 'cancel
 
 // ==================== STATUS CONFIG ====================
 
-export interface StatusInfo {
+interface StatusInfo {
   label: string;
   className: string;
   description?: string;

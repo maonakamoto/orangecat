@@ -8,22 +8,14 @@
  * Adding a new label = adding an entry here. No code changes needed.
  */
 
-import {
-  Users,
-  Building2,
-  Heart,
-  Briefcase,
-  Globe,
-  Home,
-  Handshake,
-} from 'lucide-react';
+import { Users, Building2, Heart, Briefcase, Globe, Home, Handshake } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { GovernancePreset } from './governance-presets';
 import type { GroupFeature } from './group-features';
 
 export type GroupVisibility = 'public' | 'members_only' | 'private';
 
-export interface GroupLabelConfig {
+interface GroupLabelConfig {
   id: string;
   name: string;
   description: string;

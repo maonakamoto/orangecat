@@ -18,9 +18,9 @@ export const PROPOSAL_STATUSES = {
   CANCELLED: 'cancelled',
 } as const;
 
-export type ProposalStatus = typeof PROPOSAL_STATUSES[keyof typeof PROPOSAL_STATUSES];
+export type ProposalStatus = (typeof PROPOSAL_STATUSES)[keyof typeof PROPOSAL_STATUSES];
 
-export const PROPOSAL_TYPES = {
+const PROPOSAL_TYPES = {
   GENERAL: 'general',
   TREASURY: 'treasury',
   MEMBERSHIP: 'membership',
@@ -28,7 +28,7 @@ export const PROPOSAL_TYPES = {
   EMPLOYMENT: 'employment',
 } as const;
 
-export type ProposalType = typeof PROPOSAL_TYPES[keyof typeof PROPOSAL_TYPES];
+export type ProposalType = (typeof PROPOSAL_TYPES)[keyof typeof PROPOSAL_TYPES];
 
 export const PROPOSAL_TYPE_LABELS: Record<ProposalType, string> = {
   [PROPOSAL_TYPES.GENERAL]: 'General',
@@ -73,4 +73,3 @@ export const PROPOSAL_STATUS_CONFIG: Record<
     className: '',
   },
 };
-

@@ -5,7 +5,7 @@
  * It enables users to choose between free, paid, open source, and proprietary models.
  */
 
-export interface ModelMetadata {
+interface ModelMetadata {
   id: string;
   name: string;
   provider: string;
@@ -450,89 +450,3 @@ export const MODEL_REGISTRY: Record<string, ModelMetadata> = {
     description: 'Access 200+ models with one API key. Automatic fallbacks and best pricing.',
   },
 };
-
-/**
- * Get all models matching criteria
- */
-export function getModels(filters?: {
-  tier?: 'free' | 'freemium' | 'paid';
-  type?: 'open' | 'proprietary';
-  availability?: 'cloud' | 'local' | 'both';
-}): ModelMetadata[] {
-  const models = Object.values(MODEL_REGISTRY);
-
-  if (!filters) {
-    return models;
-  }
-
-  return models.filter(model => {
-    if (filters.tier && model.tier !== filters.tier) {
-      return false;
-    }
-    if (filters.type && model.type !== filters.type) {
-      return false;
-    }
-    if (filters.availability) {
-      if (
-        filters.availability !== 'both' &&
-        model.availability !== filters.availability &&
-        model.availability !== 'both'
-      ) {
-        return false;
-      }
-    }
-    return true;
-  });
-}
-
-/**
- * Get recommended models based on user context
- */
-export function getRecommendedModels(context?: {
-  budget?: 'free' | 'low' | 'medium' | 'high';
-  privacy?: 'public' | 'private' | 'paranoid';
-  hardware?: {
-    ram: number;
-    vram?: number;
-  };
-}): ModelMetadata[] {
-  const recommendations: ModelMetadata[] = [];
-
-  // Always recommend free tier first
-  recommendations.push(MODEL_REGISTRY['groq/mixtral-8x7b']);
-
-  // Privacy-conscious users
-  if (context?.privacy === 'paranoid') {
-    if (context?.hardware?.ram && context.hardware.ram >= 16) {
-      recommendations.push(MODEL_REGISTRY['local/llama-3.1-8b']);
-    }
-    if (context?.hardware?.ram && context.hardware.ram >= 64) {
-      recommendations.push(MODEL_REGISTRY['local/llama-3.1-70b']);
-    }
-    return recommendations;
-  }
-
-  // Budget users
-  if (!context?.budget || context.budget === 'free') {
-    recommendations.push(MODEL_REGISTRY['google/gemini-2.0-flash']);
-    if (context?.hardware?.ram && context.hardware.ram >= 16) {
-      recommendations.push(MODEL_REGISTRY['local/llama-3.1-8b']);
-    }
-  }
-
-  // Quality seekers
-  if (context?.budget === 'medium' || context?.budget === 'high') {
-    recommendations.push(MODEL_REGISTRY['anthropic/claude-3.5-sonnet']);
-    recommendations.push(MODEL_REGISTRY['openai/gpt-4o']);
-    recommendations.push(MODEL_REGISTRY['openrouter/auto']);
-  }
-
-  return recommendations;
-}
-
-/**
- * Get default model for free tier
- */
-export function getDefaultModel(): ModelMetadata {
-  return MODEL_REGISTRY['groq/mixtral-8x7b'];
-}

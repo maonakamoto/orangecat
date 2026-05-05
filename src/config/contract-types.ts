@@ -20,7 +20,11 @@ export const CONTRACT_TYPES = {
     },
     term_fields: [
       { name: 'job_title', type: 'text', required: true },
-      { name: 'employment_type', type: 'select', options: ['full_time', 'part_time', 'contractor', 'temporary'] },
+      {
+        name: 'employment_type',
+        type: 'select',
+        options: ['full_time', 'part_time', 'contractor', 'temporary'],
+      },
       { name: 'salary', type: 'number', required: true },
       { name: 'payment_frequency', type: 'select', options: ['monthly', 'weekly', 'one_time'] },
       { name: 'start_date', type: 'date' },
@@ -81,14 +85,3 @@ export const CONTRACT_TYPES = {
     ],
   },
 } as const;
-
-export type ContractType = keyof typeof CONTRACT_TYPES;
-
-export function getContractTypeConfig(type: ContractType) {
-  return CONTRACT_TYPES[type];
-}
-
-export function getAllContractTypes() {
-  return Object.values(CONTRACT_TYPES);
-}
-

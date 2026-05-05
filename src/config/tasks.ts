@@ -51,12 +51,6 @@ export const TASK_TYPE_LABELS: Record<TaskType, string> = {
   recurring_as_needed: 'Recurring (as needed)',
 };
 
-export const TASK_TYPE_DESCRIPTIONS: Record<TaskType, string> = {
-  one_time: 'A one-time task that is done once completed',
-  recurring_scheduled: 'Recurring task on a fixed schedule (e.g., weekly cleaning)',
-  recurring_as_needed: 'Recurring task without a fixed schedule (e.g., restocking)',
-};
-
 // ==================== TASK STATUSES ====================
 
 /**
@@ -220,15 +214,6 @@ export const PRIORITY_CONFIG: Record<Priority, PriorityInfo> = {
   },
 };
 
-// ==================== TASK PROJECT STATUSES ====================
-
-/**
- * Statuses for task-management project groupings.
- *
- * NOTE: These are NOT the same as the fundraising-project entity statuses
- * in `src/config/project-statuses.ts`. These describe how a workspace
- * project (used to group tasks in the tasks dashboard) is progressing.
- */
 export const TASK_PROJECT_STATUSES = {
   PLANNING: 'planning',
   ACTIVE: 'active',
@@ -237,100 +222,14 @@ export const TASK_PROJECT_STATUSES = {
   CANCELLED: 'cancelled',
 } as const;
 
-export type TaskProjectStatus = (typeof TASK_PROJECT_STATUSES)[keyof typeof TASK_PROJECT_STATUSES];
-
 export const TASK_PROJECT_STATUS_OPTIONS = Object.values(TASK_PROJECT_STATUSES);
 
-export const TASK_PROJECT_STATUS_LABELS: Record<TaskProjectStatus, string> = {
-  planning: 'Planning',
-  active: 'Active',
-  on_hold: 'On Hold',
-  completed: 'Completed',
-  cancelled: 'Cancelled',
-};
-
-export const TASK_PROJECT_STATUS_CONFIG: Record<
-  TaskProjectStatus,
-  { label: string; className: string }
-> = {
-  planning: {
-    label: 'Planning',
-    className: 'bg-gray-100 text-gray-700',
-  },
-  active: {
-    label: 'Active',
-    className: 'bg-green-100 text-green-700',
-  },
-  on_hold: {
-    label: 'On Hold',
-    className: 'bg-yellow-100 text-yellow-700',
-  },
-  completed: {
-    label: 'Completed',
-    className: 'bg-blue-100 text-blue-700',
-  },
-  cancelled: {
-    label: 'Cancelled',
-    className: 'bg-red-100 text-red-700',
-  },
-};
-
-// ==================== REQUEST STATUSES ====================
-
-/**
- * Request statuses for task requests
- */
 export const REQUEST_STATUSES = {
   PENDING: 'pending',
   ACCEPTED: 'accepted',
   DECLINED: 'declined',
   COMPLETED: 'completed',
 } as const;
-
-export type RequestStatus = (typeof REQUEST_STATUSES)[keyof typeof REQUEST_STATUSES];
-
-export const REQUEST_STATUS_OPTIONS = Object.values(REQUEST_STATUSES);
-
-export const REQUEST_STATUS_LABELS: Record<RequestStatus, string> = {
-  pending: 'Pending',
-  accepted: 'Accepted',
-  declined: 'Declined',
-  completed: 'Completed',
-};
-
-export const REQUEST_STATUS_CONFIG: Record<RequestStatus, { label: string; className: string }> = {
-  pending: {
-    label: 'Pending',
-    className: 'bg-yellow-100 text-yellow-700',
-  },
-  accepted: {
-    label: 'Accepted',
-    className: 'bg-blue-100 text-blue-700',
-  },
-  declined: {
-    label: 'Declined',
-    className: 'bg-red-100 text-red-700',
-  },
-  completed: {
-    label: 'Completed',
-    className: 'bg-green-100 text-green-700',
-  },
-};
-
-// ==================== NOTIFICATION TYPES ====================
-
-/**
- * Task-related notification types
- */
-export const TASK_NOTIFICATION_TYPES = {
-  ATTENTION: 'task_attention',
-  REQUEST: 'task_request',
-  COMPLETED: 'task_completed',
-  BROADCAST: 'task_broadcast',
-} as const;
-
-export type TaskNotificationType =
-  (typeof TASK_NOTIFICATION_TYPES)[keyof typeof TASK_NOTIFICATION_TYPES];
 
 // ==================== UTILITY FUNCTIONS ====================
 
@@ -369,16 +268,6 @@ export function getPriorityInfo(priority: string | null | undefined): PriorityIn
 }
 
 /**
- * Get category label
- */
-export function getCategoryLabel(category: string | null | undefined): string {
-  if (!category) {
-    return 'Unknown';
-  }
-  return TASK_CATEGORY_LABELS[category as TaskCategory] || category;
-}
-
-/**
  * Get category icon (emoji)
  */
 export function getCategoryIcon(category: string | null | undefined): string {
@@ -386,17 +275,6 @@ export function getCategoryIcon(category: string | null | undefined): string {
     return '📌';
   }
   return TASK_CATEGORY_ICONS[category as TaskCategory] || '📌';
-}
-
-/**
- * Check if a task requires immediate attention
- */
-export function requiresAttention(status: TaskStatus, priority: Priority): boolean {
-  return (
-    status === TASK_STATUSES.NEEDS_ATTENTION ||
-    priority === PRIORITIES.URGENT ||
-    (status === TASK_STATUSES.REQUESTED && priority === PRIORITIES.HIGH)
-  );
 }
 
 // ==================== DEFAULT VALUES ====================

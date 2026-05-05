@@ -21,7 +21,7 @@ export interface RolePermissions {
   delete_group: ActionPermission;
 }
 
-export interface GovernancePresetConfig {
+interface GovernancePresetConfig {
   id: string;
   name: string;
   description: string;
@@ -167,10 +167,7 @@ export type GroupRole = 'founder' | 'admin' | 'member';
 /**
  * Get role permissions from a governance preset
  */
-export function getRolePermissions(
-  preset: GovernancePreset,
-  role: GroupRole
-): RolePermissions {
+export function getRolePermissions(preset: GovernancePreset, role: GroupRole): RolePermissions {
   return GOVERNANCE_PRESETS[preset].roles[role];
 }
 

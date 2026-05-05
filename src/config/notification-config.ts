@@ -555,59 +555,8 @@ export const NOTIFICATION_CONFIG: Record<string, NotificationTypeConfig> = {
   },
 };
 
-// =====================================================================
-// HELPER FUNCTIONS
-// =====================================================================
-
-/** All notification types that can trigger an email */
-export function getEmailableTypes(): string[] {
-  return Object.values(NOTIFICATION_CONFIG)
-    .filter(config => config.emailEnabled)
-    .map(config => config.type);
-}
-
-/** Types that have email enabled by default for new users */
-export function getDefaultEnabledTypes(): string[] {
-  return Object.values(NOTIFICATION_CONFIG)
-    .filter(config => config.emailEnabled && config.emailDefaultOn)
-    .map(config => config.type);
-}
-
-/** Get all notification types in a given category */
-export function getCategoryTypes(category: NotificationCategory): NotificationTypeConfig[] {
-  return Object.values(NOTIFICATION_CONFIG).filter(config => config.category === category);
-}
-
 /** Check if a notification type is transactional (can't opt out) */
 export function isTransactional(type: string): boolean {
   const config = NOTIFICATION_CONFIG[type];
   return config?.category === 'transactional' || config?.canOptOut === false;
 }
-
-/** Get a notification config by type, or undefined if not found */
-export function getNotificationConfig(type: string): NotificationTypeConfig | undefined {
-  return NOTIFICATION_CONFIG[type];
-}
-
-/** All known notification type keys */
-export const NOTIFICATION_TYPES = Object.keys(NOTIFICATION_CONFIG) as string[];
-
-/** All notification categories in display order */
-export const NOTIFICATION_CATEGORIES: NotificationCategory[] = [
-  'transactional',
-  'economic',
-  'social',
-  'group',
-  'progress',
-  'reengagement',
-];
-
-/** Human-readable category labels for preferences UI */
-export const NOTIFICATION_CATEGORY_LABELS: Record<NotificationCategory, string> = {
-  transactional: 'Security & Account',
-  economic: 'Payments & Orders',
-  social: 'Social Activity',
-  group: 'Groups & Governance',
-  progress: 'Progress & Milestones',
-  reengagement: 'Check-ins',
-};

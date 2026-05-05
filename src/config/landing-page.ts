@@ -33,7 +33,7 @@ import {
  * Main categories shown on landing page
  * Reflects the full economic spectrum: exchange → funding → governance → AI agent
  */
-export interface SuperAppCategory {
+interface SuperAppCategory {
   id: string;
   title: string;
   description: string;
@@ -119,7 +119,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
 /**
  * Unified 4-step process — Cat-centric flow
  */
-export interface HowItWorksStep {
+interface HowItWorksStep {
   number: string;
   icon: LucideIcon;
   title: string;
@@ -172,7 +172,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
  * Comparison between traditional platforms and OrangeCat
  * Used in TrustSection
  */
-export interface ComparisonRow {
+interface ComparisonRow {
   feature: string;
   traditional: string;
   orangecat: string;
@@ -208,7 +208,7 @@ export const PLATFORM_COMPARISON: ComparisonRow[] = [
 /**
  * Key benefits of using OrangeCat
  */
-export interface PlatformBenefit {
+interface PlatformBenefit {
   icon: LucideIcon;
   title: string;
   description: string;
@@ -246,7 +246,7 @@ export const PLATFORM_BENEFITS: PlatformBenefit[] = [
 /**
  * Example use cases — clearly labeled as examples, not real testimonials
  */
-export interface ExampleUseCase {
+interface ExampleUseCase {
   emoji: string;
   category: string;
   title: string;
