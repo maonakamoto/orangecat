@@ -36,7 +36,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx", "jest.setup.ts"],
+  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
   "exclude": [
     "node_modules",
     ".next",
@@ -46,6 +46,8 @@
     "cypress",
     "cypress.config.ts",
     "playwright.config.ts",
+    "jest.setup.ts",
+    "jest.config.ts",
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "**/*.test.ts",
