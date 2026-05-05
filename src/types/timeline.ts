@@ -174,7 +174,7 @@ export interface TimelineEvent {
 /**
  * Rich content for timeline events
  */
-export interface TimelineEventContent {
+interface TimelineEventContent {
   text?: string;
   images?: string[];
   links?: TimelineLink[];
@@ -186,7 +186,7 @@ export interface TimelineEventContent {
 /**
  * Link within timeline event content
  */
-export interface TimelineLink {
+interface TimelineLink {
   url: string;
   title?: string;
   description?: string;
@@ -197,7 +197,7 @@ export interface TimelineLink {
 /**
  * Embedded content (videos, etc.)
  */
-export interface TimelineEmbed {
+interface TimelineEmbed {
   type: 'video' | 'image' | 'link' | 'project' | 'profile';
   url: string;
   title?: string;
@@ -209,7 +209,7 @@ export interface TimelineEmbed {
 /**
  * User mentions in content
  */
-export interface TimelineMention {
+interface TimelineMention {
   userId: string;
   username: string;
   displayName?: string;
@@ -221,7 +221,7 @@ export interface TimelineMention {
 /**
  * Geographic location data
  */
-export interface TimelineLocationData {
+interface TimelineLocationData {
   latitude?: number;
   longitude?: number;
   country?: string;
@@ -234,7 +234,7 @@ export interface TimelineLocationData {
 /**
  * Device and browser information
  */
-export interface TimelineDeviceInfo {
+interface TimelineDeviceInfo {
   userAgent?: string;
   platform?: string;
   browser?: string;
@@ -315,24 +315,6 @@ export interface TimelineDisplayEvent extends Omit<TimelineEvent, 'eventType' | 
 }
 
 /**
- * Timeline feed configuration
- */
-export interface TimelineFeedConfig {
-  userId: string;
-  includeOwnEvents: boolean;
-  includeFollowedEvents: boolean;
-  includeProjectEvents: boolean;
-  eventTypes?: TimelineEventType[];
-  visibility?: TimelineVisibility[];
-  dateRange?: {
-    start: string;
-    end: string;
-  };
-  limit: number;
-  offset: number;
-}
-
-/**
  * Timeline filtering options
  */
 export interface TimelineFilters {
@@ -363,16 +345,6 @@ export interface TimelinePagination {
 }
 
 // ==================== API TYPES ====================
-
-/**
- * API request for timeline feed
- */
-export interface TimelineFeedRequest {
-  userId: string;
-  filters?: Partial<TimelineFilters>;
-  pagination?: Partial<TimelinePagination>;
-  includeReplies?: boolean;
-}
 
 /**
  * API response for timeline feed
@@ -434,47 +406,6 @@ export interface TimelineEventResponse {
   metadata?: Record<string, any>;
 }
 
-// ==================== EVENT TYPE CONFIGURATIONS ====================
-
-/**
- * Configuration for each event type
- */
-export interface TimelineEventTypeConfig {
-  label: string;
-  description: string;
-  icon: LucideIcon;
-  color: string;
-  category: 'project' | 'social' | 'transaction' | 'community' | 'system';
-  requiresSubject: boolean;
-  requiresTarget: boolean;
-  supportsAmount: boolean;
-  supportsQuantity: boolean;
-  defaultVisibility: TimelineVisibility;
-  canBeFeatured: boolean;
-}
-
-/**
- * Registry of all event type configurations
- * Note: This is a partial implementation - full config should be in timeline service
- */
-export const TIMELINE_EVENT_CONFIGS: Partial<Record<TimelineEventType, TimelineEventTypeConfig>> = {
-  // Project events would be defined here
-  project_created: {
-    label: 'Project Created',
-    description: 'A new project was launched',
-    icon: {} as LucideIcon, // Placeholder - actual icon should be imported from lucide-react
-    color: 'blue',
-    category: 'project',
-    requiresSubject: true,
-    requiresTarget: false,
-    supportsAmount: false,
-    supportsQuantity: false,
-    defaultVisibility: 'public',
-    canBeFeatured: true,
-  },
-  // ... other event configurations would be added here
-};
-
 // ==================== UTILITY TYPES ====================
 
 /**
@@ -505,32 +436,4 @@ export interface TimelineEventDb extends Omit<
   is_deleted: boolean;
   deleted_at?: string;
   deletion_reason?: string;
-}
-
-/**
- * Helper type for event creation
- */
-export type TimelineEventInput = Omit<
-  TimelineEvent,
-  'id' | 'createdAt' | 'updatedAt' | 'isDeleted' | 'deletedAt' | 'deletionReason'
->;
-
-// ==================== LEGACY COMPATIBILITY ====================
-
-/**
- * Legacy Activity interface for backward compatibility
- */
-export interface Activity extends Omit<TimelineDisplayEvent, 'eventType' | 'eventSubtype'> {
-  type: string;
-  context: string;
-  time: string;
-}
-
-/**
- * Migration helper for legacy activity data
- */
-export interface ActivityMigration {
-  legacyActivity: Activity;
-  timelineEvent: TimelineEventInput;
-  migrationNotes?: string;
 }
