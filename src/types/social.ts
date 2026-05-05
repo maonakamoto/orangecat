@@ -5,7 +5,3 @@ export interface SocialLink {
   label?: string; // For custom platforms
   value: string; // URL or username
 }
-
-export interface SocialLinks {
-  links: SocialLink[];
-}
