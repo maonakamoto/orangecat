@@ -36,7 +36,7 @@ import type { TaskDefinition, SmartQuestion, UserContext } from './types';
  * PROFILE COMPLETION FIELDS
  * Used to calculate profile completion percentage
  */
-export const PROFILE_FIELDS = [
+const PROFILE_FIELDS = [
   'username',
   'display_name',
   'bio',
@@ -129,8 +129,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     action: { label: 'Open My Cat', href: '/dashboard/cat' },
     icon: MessageSquare,
     // Show when the user has no entities at all — Cat is the best guide here
-    condition: ctx =>
-      Object.values(ctx.entityCounts).reduce((sum, c) => sum + (c ?? 0), 0) === 0,
+    condition: ctx => Object.values(ctx.entityCounts).reduce((sum, c) => sum + (c ?? 0), 0) === 0,
   },
 
   // ==================== HIGH: First Entity Creation ====================

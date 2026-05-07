@@ -67,27 +67,6 @@ export interface SearchLoan {
   };
 }
 
-// Raw type from Supabase (before transformation)
-export interface RawSearchFundingPage {
-  id: string;
-  user_id: string;
-  title: string;
-  description: string;
-  bitcoin_address: string | null;
-  category: string | null;
-  status: string;
-  goal_amount: number | null;
-  raised_amount: number;
-  created_at: string;
-  updated_at: string;
-  profiles: Array<{
-    id: string;
-    username: string | null;
-    name: string | null;
-    avatar_url: string | null;
-  }>;
-}
-
 // Raw profile from database queries
 export interface RawSearchProfile {
   id: string;
@@ -199,5 +178,3 @@ export interface SearchResponse {
     totalLoans?: number;
   };
 }
-
-

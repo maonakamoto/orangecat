@@ -54,7 +54,7 @@ export const supabaseAdmin = createClient<Database>(
 );
 
 // Supabase configuration object for easy access
-export const supabaseConfig = {
+const supabaseConfig = {
   supabaseUrl,
   supabaseAnonKey,
   supabaseServiceRoleKey,

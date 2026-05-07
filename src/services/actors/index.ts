@@ -40,7 +40,7 @@ export async function getActor(actorId: string): Promise<Actor | null> {
 /**
  * Get actor by user ID
  */
-export async function getActorByUser(userId: string): Promise<Actor | null> {
+async function getActorByUser(userId: string): Promise<Actor | null> {
   try {
     const { data, error } = await supabase
       .from(DATABASE_TABLES.ACTORS)
@@ -133,11 +133,13 @@ export async function getActorDisplayName(actorId: string): Promise<string> {
   try {
     const { data, error } = await supabase
       .from(DATABASE_TABLES.ACTORS)
-      .select(`
+      .select(
+        `
         id, actor_type, user_id, group_id,
         profiles:user_id (name, username),
         groups:group_id (name)
-      `)
+      `
+      )
       .eq('id', actorId)
       .maybeSingle();
 

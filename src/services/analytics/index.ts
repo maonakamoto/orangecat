@@ -3,7 +3,7 @@ import { fetchBitcoinWalletData } from '@/services/bitcoin';
 import { logger } from '@/utils/logger';
 
 // Types for our analytics system
-export interface MetricValue {
+interface MetricValue {
   value: number | string;
   confidence: 'high' | 'medium' | 'low';
   lastUpdated: Date;
@@ -11,14 +11,14 @@ export interface MetricValue {
   isDemo: boolean;
 }
 
-export interface FeatureMetrics {
+interface FeatureMetrics {
   isEnabled: boolean;
   isDemo: boolean;
   timeline?: string;
   stats: Record<string, MetricValue>;
 }
 
-export interface DashboardMetrics {
+interface DashboardMetrics {
   fundraising: FeatureMetrics;
   organizations: FeatureMetrics;
   events: FeatureMetrics;
@@ -328,6 +328,5 @@ class AnalyticsService {
   }
 }
 
-// Export singleton instance
-export const analyticsService = new AnalyticsService();
+const analyticsService = new AnalyticsService();
 export default analyticsService;

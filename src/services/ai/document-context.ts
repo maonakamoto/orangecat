@@ -59,7 +59,7 @@ export {
   fetchGroupMembershipsForCat,
 } from './social-context-fetcher';
 
-export async function fetchDocumentsForCat(
+async function fetchDocumentsForCat(
   supabase: AnySupabaseClient,
   userId: string
 ): Promise<DocumentContext[]> {
@@ -95,7 +95,7 @@ export async function fetchDocumentsForCat(
   }
 }
 
-export async function fetchProfileForCat(
+async function fetchProfileForCat(
   supabase: AnySupabaseClient,
   userId: string
 ): Promise<ProfileContext | null> {
@@ -125,7 +125,7 @@ export async function fetchProfileForCat(
   }
 }
 
-export async function fetchWalletsForCat(
+async function fetchWalletsForCat(
   supabase: AnySupabaseClient,
   userId: string
 ): Promise<WalletSummary[]> {
@@ -174,7 +174,7 @@ export async function fetchWalletsForCat(
   }
 }
 
-export async function fetchTasksForCat(
+async function fetchTasksForCat(
   supabase: AnySupabaseClient,
   userId: string
 ): Promise<TaskSummary[]> {

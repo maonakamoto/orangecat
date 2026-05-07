@@ -50,7 +50,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://orangecat.ch';
 // TYPES
 // =====================================================================
 
-export interface SendNotificationEmailParams {
+interface SendNotificationEmailParams {
   /** Recipient user ID (auth.users.id) */
   userId: string;
   /** Notification type key from NOTIFICATION_CONFIG */
@@ -59,7 +59,7 @@ export interface SendNotificationEmailParams {
   data: Record<string, unknown>;
 }
 
-export interface SendResult {
+interface SendResult {
   sent: boolean;
   reason?: string;
 }

@@ -74,7 +74,7 @@ interface OpenRouterStreamChunk {
   };
 }
 
-export interface ChatCompletionResult {
+interface ChatCompletionResult {
   content: string;
   model: string;
   inputTokens: number;
@@ -433,7 +433,7 @@ export class OpenRouterService {
 
 // ==================== ERROR CLASS ====================
 
-export class OpenRouterAPIError extends Error {
+class OpenRouterAPIError extends Error {
   type: string;
   statusCode?: number;
 
@@ -481,7 +481,7 @@ export function createOpenRouterServiceWithByok(
  * - BYOK users: Can use any model
  * - Free users: Limited to free models with daily quota
  */
-export function getModelForUser(hasByok: boolean, requestedModel?: string): string {
+function getModelForUser(hasByok: boolean, requestedModel?: string): string {
   // If user has BYOK, they can use any model
   if (hasByok && requestedModel) {
     return requestedModel;

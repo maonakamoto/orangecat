@@ -16,13 +16,9 @@
 import type { GroupPermissions } from './index';
 import type { GroupRole } from '@/config/governance-presets';
 
-export type GroupRolePermissions = Record<GroupRole, GroupPermissions>;
+type GroupRolePermissions = Record<GroupRole, GroupPermissions>;
 
-/**
- * Default permissions by role
- * These are fallback defaults - actual permissions should come from governance presets
- */
-export const DEFAULT_GROUP_PERMISSIONS: GroupRolePermissions = {
+const DEFAULT_GROUP_PERMISSIONS: GroupRolePermissions = {
   // Founder (highest level)
   founder: {
     canView: true,
@@ -65,4 +61,3 @@ export const DEFAULT_GROUP_PERMISSIONS: GroupRolePermissions = {
     canVote: true,
   },
 };
-

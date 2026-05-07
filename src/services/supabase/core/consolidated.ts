@@ -242,7 +242,7 @@ export class ProfileService {
 // 🔧 DATABASE HEALTH CHECK
 // =====================================================================
 
-export class DatabaseService {
+class DatabaseService {
   /**
    * Test database connection
    */

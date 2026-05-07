@@ -15,7 +15,6 @@ export {
   canPerformActions,
   getMemberPermissions,
   resolvePermission,
-  type PermissionResult,
 } from './resolver';
 
 import supabase from '@/lib/supabase/browser';
@@ -25,7 +24,7 @@ import { GOVERNANCE_PRESETS } from '@/config/governance-presets';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 // Permission keys that map to governance preset actions
-export type GroupPermissionKey =
+type GroupPermissionKey =
   | 'canView'
   | 'canJoin'
   | 'canInvite'

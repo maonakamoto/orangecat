@@ -14,12 +14,7 @@ export {
 export { createAutoRouter } from './auto-router';
 
 // API Key Management (BYOK)
-export {
-  ApiKeyService,
-  createApiKeyService,
-  type UserApiKey,
-  type PlatformUsage,
-} from './api-key-service';
+export { ApiKeyService, createApiKeyService } from './api-key-service';
 
 // Groq Service (fast, free inference)
 export {

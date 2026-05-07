@@ -83,7 +83,7 @@ export async function createContract(input: CreateContractInput) {
   }
 }
 
-export async function activateContract(contractId: string) {
+async function activateContract(contractId: string) {
   try {
     const userId = await getCurrentUserId();
     if (!userId) {

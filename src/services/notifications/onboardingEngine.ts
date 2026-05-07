@@ -49,7 +49,7 @@ export interface OnboardingEmail {
 // STATE DETECTION
 // =====================================================================
 
-export async function getOnboardingState(userId: string): Promise<OnboardingState> {
+async function getOnboardingState(userId: string): Promise<OnboardingState> {
   const admin = createAdminClient();
 
   // Fetch user creation date from auth

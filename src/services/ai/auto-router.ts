@@ -23,7 +23,7 @@ import {
 
 // ==================== TYPES ====================
 
-export interface RoutingParams {
+interface RoutingParams {
   /** The user's message */
   message: string;
   /** Previous messages in the conversation */
@@ -40,7 +40,7 @@ export interface RoutingParams {
   requiresFunctionCalling?: boolean;
 }
 
-export interface RoutingResult {
+interface RoutingResult {
   /** Selected model ID */
   model: string;
   /** Human-readable reason for selection */

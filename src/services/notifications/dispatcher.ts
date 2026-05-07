@@ -38,7 +38,7 @@ const EMAIL_ENABLED_TYPES: Record<string, boolean> = {
 // TYPES
 // =====================================================================
 
-export interface DispatchParams {
+interface DispatchParams {
   /** Recipient user ID (auth.users.id) */
   userId: string;
   /** Notification type (e.g., 'payment', 'follow', 'system') */

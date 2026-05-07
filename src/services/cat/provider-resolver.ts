@@ -31,13 +31,13 @@ const GROQ_KEY_HEADER = 'x-groq-api-key';
 export type AIProvider = 'groq' | 'openrouter';
 
 /** Minimal interface both Groq and OpenRouter services satisfy */
-export interface AiService {
+interface AiService {
   streamChatCompletion(opts: {
     model: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     messages: any[];
     temperature: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }): AsyncIterable<{ content?: string; usage?: any; done?: boolean }>;
   chatCompletion(opts: {
     model: string;
@@ -56,7 +56,7 @@ export interface AiService {
   }>;
 }
 
-export interface ResolvedProvider {
+interface ResolvedProvider {
   provider: AIProvider;
   hasByok: boolean;
   modelToUse: string;
@@ -85,9 +85,7 @@ export async function resolveProvider(
   const storedOpenRouterKey = clientOpenRouterKey
     ? null
     : await keyService.getDecryptedKey(userId, 'openrouter');
-  const storedGroqKey = clientGroqKey
-    ? null
-    : await keyService.getDecryptedKey(userId, 'groq');
+  const storedGroqKey = clientGroqKey ? null : await keyService.getDecryptedKey(userId, 'groq');
 
   const userOpenRouterKey = clientOpenRouterKey || storedOpenRouterKey;
   const userGroqKey = clientGroqKey || storedGroqKey;
@@ -131,7 +129,10 @@ export async function resolveProvider(
         { status: 429 }
       );
     }
-    platformUsage = { daily_limit: usage.daily_limit, requests_remaining: usage.requests_remaining };
+    platformUsage = {
+      daily_limit: usage.daily_limit,
+      requests_remaining: usage.requests_remaining,
+    };
   }
 
   // Model selection
@@ -151,7 +152,11 @@ export async function resolveProvider(
     if (!hasByok) {
       if (modelToUse === 'auto' || modelToUse === 'any' || !isModelFree(modelToUse)) {
         const freeModelIds = getFreeModels().map(m => m.id);
-        modelToUse = auto.selectModel({ message, conversationHistory: [], allowedModels: freeModelIds }).model;
+        modelToUse = auto.selectModel({
+          message,
+          conversationHistory: [],
+          allowedModels: freeModelIds,
+        }).model;
       }
     } else if (modelToUse === 'auto' || modelToUse === 'any') {
       modelToUse = auto.selectModel({ message, conversationHistory: [] }).model;
@@ -164,8 +169,12 @@ export async function resolveProvider(
   // Instantiate the AI service
   const aiService: AiService =
     provider === 'groq'
-      ? (hasByok ? createGroqServiceWithByok(userGroqKey as string) : createGroqService())
-      : (hasByok ? createOpenRouterServiceWithByok(userOpenRouterKey as string) : createOpenRouterService());
+      ? hasByok
+        ? createGroqServiceWithByok(userGroqKey as string)
+        : createGroqService()
+      : hasByok
+        ? createOpenRouterServiceWithByok(userOpenRouterKey as string)
+        : createOpenRouterService();
 
   return { provider, hasByok, modelToUse, aiService, platformUsage, keyService, userGroqKey };
 }

@@ -20,14 +20,14 @@ export interface PaymentResult {
   transactionId?: string;
 }
 
-export interface BalanceCheckResult {
+interface BalanceCheckResult {
   hasBalance: boolean;
   currentBalance: number;
   requiredAmount: number;
   shortfall?: number;
 }
 
-export interface AssistantPricing {
+interface AssistantPricing {
   pricing_model: 'free' | 'per_message' | 'per_token' | 'subscription';
   price_per_message: number;
   price_per_1k_tokens: number;

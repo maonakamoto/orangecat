@@ -50,7 +50,7 @@ interface AssistantRecord {
   free_messages_per_day: number | null;
 }
 
-export interface SendMessageResult {
+interface SendMessageResult {
   userMessage: Record<string, unknown>;
   assistantMessage: Record<string, unknown>;
   payment: { charged: number; balanceRemaining: number } | null;
@@ -70,12 +70,17 @@ export interface SendMessageResult {
   };
 }
 
-export type SendMessageError =
+type SendMessageError =
   | { code: 'NOT_FOUND'; message: string }
   | { code: 'ARCHIVED' }
   | { code: 'RATE_LIMITED'; message: string }
   | { code: 'SERVICE_UNAVAILABLE' }
-  | { code: 'INSUFFICIENT_CREDITS'; currentBalance: number; requiredAmount: number; shortfall: number }
+  | {
+      code: 'INSUFFICIENT_CREDITS';
+      currentBalance: number;
+      requiredAmount: number;
+      shortfall: number;
+    }
   | { code: 'AI_ERROR'; message: string }
   | { code: 'DB_ERROR'; message: string };
 
@@ -91,11 +96,15 @@ export async function sendAiMessage(
 ): Promise<SendMessageResult | SendMessageError> {
   // 1. Verify conversation
   const convResult = await verifyConversation(supabase, convId, assistantId, userId);
-  if ('error' in convResult) {return convResult.error;}
+  if ('error' in convResult) {
+    return convResult.error;
+  }
 
   // 2. Fetch assistant
   const assistantResult = await fetchAssistant(supabase, assistantId);
-  if ('error' in assistantResult) {return assistantResult.error;}
+  if ('error' in assistantResult) {
+    return assistantResult.error;
+  }
   const assistant = assistantResult.assistant;
 
   // 3. Determine provider + BYOK
@@ -104,7 +113,9 @@ export async function sendAiMessage(
   const hasByok = !!userOpenRouterKey;
 
   const provider = resolveProvider(hasByok, userOpenRouterKey);
-  if (!provider) {return { code: 'SERVICE_UNAVAILABLE' };}
+  if (!provider) {
+    return { code: 'SERVICE_UNAVAILABLE' };
+  }
 
   // 4. Check platform usage limits (non-BYOK users)
   if (!hasByok) {
@@ -158,15 +169,27 @@ export async function sendAiMessage(
 
   // 9. Store user message
   const userMsgResult = await storeUserMessage(supabase, convId, content);
-  if ('error' in userMsgResult) {return userMsgResult.error;}
+  if ('error' in userMsgResult) {
+    return userMsgResult.error;
+  }
   const userMessage = userMsgResult.message;
 
   // 10. Generate AI response
   const messages = buildMessageHistory(history, content);
-  const aiResult = await callAi(provider, hasByok, userOpenRouterKey, modelToUse, messages, assistant);
+  const aiResult = await callAi(
+    provider,
+    hasByok,
+    userOpenRouterKey,
+    modelToUse,
+    messages,
+    assistant
+  );
   if ('error' in aiResult) {
     // Clean up user message on AI failure
-    await supabase.from(DATABASE_TABLES.AI_MESSAGES).delete().eq('id', (userMessage as { id: string }).id);
+    await supabase
+      .from(DATABASE_TABLES.AI_MESSAGES)
+      .delete()
+      .eq('id', (userMessage as { id: string }).id);
     return aiResult.error;
   }
   const aiResponse = aiResult.response;
@@ -174,8 +197,18 @@ export async function sendAiMessage(
   // 11. Store AI response
   const apiCostBtc = aiResponse.costBtc;
   const totalCostBtc = apiCostBtc + creatorCharge;
-  const aiMsgResult = await storeAssistantMessage(supabase, convId, aiResponse, assistant, creatorCharge, apiCostBtc, hasByok);
-  if ('error' in aiMsgResult) {return aiMsgResult.error;}
+  const aiMsgResult = await storeAssistantMessage(
+    supabase,
+    convId,
+    aiResponse,
+    assistant,
+    creatorCharge,
+    apiCostBtc,
+    hasByok
+  );
+  if ('error' in aiMsgResult) {
+    return aiMsgResult.error;
+  }
   const assistantMessage = aiMsgResult.message;
 
   // 12. Post-message side effects
@@ -208,12 +241,16 @@ export async function sendAiMessage(
     userMessage,
     assistantMessage: {
       ...assistantMessage,
-      model_name: (provider === 'openrouter' ? getModelMetadata(modelToUse)?.name : null) || modelToUse,
+      model_name:
+        (provider === 'openrouter' ? getModelMetadata(modelToUse)?.name : null) || modelToUse,
       is_free_model: aiResponse.isFreeModel,
       used_byok: hasByok,
     },
     payment: paymentResult
-      ? { charged: paymentResult.amountCharged ?? 0, balanceRemaining: paymentResult.balanceRemaining ?? 0 }
+      ? {
+          charged: paymentResult.amountCharged ?? 0,
+          balanceRemaining: paymentResult.balanceRemaining ?? 0,
+        }
       : null,
     usage: {
       inputTokens: aiResponse.inputTokens,
@@ -248,9 +285,13 @@ async function verifyConversation(
     .eq('user_id', userId)
     .single();
 
-  if (error || !data) {return { error: { code: 'NOT_FOUND', message: 'Conversation not found' } };}
+  if (error || !data) {
+    return { error: { code: 'NOT_FOUND', message: 'Conversation not found' } };
+  }
   const conv = data as { id: string; status: string };
-  if (conv.status !== STATUS.AI_ASSISTANTS.ACTIVE) {return { error: { code: 'ARCHIVED' } };}
+  if (conv.status !== STATUS.AI_ASSISTANTS.ACTIVE) {
+    return { error: { code: 'ARCHIVED' } };
+  }
   return { ok: true };
 }
 
@@ -260,18 +301,28 @@ async function fetchAssistant(
 ): Promise<{ assistant: AssistantRecord } | { error: SendMessageError }> {
   const { data, error } = await supabase
     .from(DATABASE_TABLES.AI_ASSISTANTS)
-    .select('id, title, system_prompt, welcome_message, pricing_model, price_per_message, price_per_1k_tokens, user_id, model_preference, allowed_models, min_model_tier, temperature, max_tokens_per_response, free_messages_per_day')
+    .select(
+      'id, title, system_prompt, welcome_message, pricing_model, price_per_message, price_per_1k_tokens, user_id, model_preference, allowed_models, min_model_tier, temperature, max_tokens_per_response, free_messages_per_day'
+    )
     .eq('id', assistantId)
     .single();
 
-  if (error || !data) {return { error: { code: 'NOT_FOUND', message: 'Assistant not found' } };}
+  if (error || !data) {
+    return { error: { code: 'NOT_FOUND', message: 'Assistant not found' } };
+  }
   return { assistant: data as AssistantRecord };
 }
 
 function resolveProvider(hasByok: boolean, userKey: string | null): AIProvider | null {
-  if (userKey) {return 'openrouter';}
-  if (process.env.OPENROUTER_API_KEY) {return 'openrouter';}
-  if (isGroqAvailable()) {return 'groq';}
+  if (userKey) {
+    return 'openrouter';
+  }
+  if (process.env.OPENROUTER_API_KEY) {
+    return 'openrouter';
+  }
+  if (isGroqAvailable()) {
+    return 'groq';
+  }
   return null;
 }
 
@@ -283,7 +334,9 @@ function selectModel(
   history: { role: string; content: string }[],
   content: string
 ): string {
-  if (provider === 'groq') {return DEFAULT_GROQ_MODEL;}
+  if (provider === 'groq') {
+    return DEFAULT_GROQ_MODEL;
+  }
 
   let modelToUse = requestedModel || assistant.model_preference || 'auto';
   const historyMapped = history.map(m => ({ role: m.role, content: m.content }));
@@ -291,11 +344,19 @@ function selectModel(
   if (!hasByok) {
     if (modelToUse === 'auto' || modelToUse === 'any' || !isModelFree(modelToUse)) {
       const freeModelIds = getFreeModels().map(m => m.id);
-      modelToUse = createAutoRouter().selectModel({ message: content, conversationHistory: historyMapped, allowedModels: freeModelIds }).model;
+      modelToUse = createAutoRouter().selectModel({
+        message: content,
+        conversationHistory: historyMapped,
+        allowedModels: freeModelIds,
+      }).model;
     }
   } else if (modelToUse === 'auto' || modelToUse === 'any') {
     const allowedModels = assistant.allowed_models?.length ? assistant.allowed_models : undefined;
-    modelToUse = createAutoRouter().selectModel({ message: content, conversationHistory: historyMapped, allowedModels }).model;
+    modelToUse = createAutoRouter().selectModel({
+      message: content,
+      conversationHistory: historyMapped,
+      allowedModels,
+    }).model;
   }
 
   return getModelMetadata(modelToUse) ? modelToUse : DEFAULT_FREE_MODEL_ID;
@@ -307,7 +368,9 @@ async function checkFreeMessageUsage(
   assistantId: string,
   freeMessagesPerDay: number
 ): Promise<{ usesFreeMessage: boolean; freeMessagesRemaining: number }> {
-  if (freeMessagesPerDay <= 0) {return { usesFreeMessage: false, freeMessagesRemaining: 0 };}
+  if (freeMessagesPerDay <= 0) {
+    return { usesFreeMessage: false, freeMessagesRemaining: 0 };
+  }
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -349,7 +412,17 @@ async function callAi(
   messages: (OpenRouterMessage | GroqMessage)[],
   assistant: AssistantRecord
 ): Promise<
-  | { response: { content: string; model: string; inputTokens: number; outputTokens: number; totalTokens: number; isFreeModel: boolean; costBtc: number } }
+  | {
+      response: {
+        content: string;
+        model: string;
+        inputTokens: number;
+        outputTokens: number;
+        totalTokens: number;
+        isFreeModel: boolean;
+        costBtc: number;
+      };
+    }
   | { error: SendMessageError }
 > {
   try {
@@ -389,7 +462,13 @@ async function storeUserMessage(
 ): Promise<{ message: Record<string, unknown> } | { error: SendMessageError }> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase.from(DATABASE_TABLES.AI_MESSAGES) as any)
-    .insert({ conversation_id: convId, role: 'user', content, tokens_used: Math.ceil(content.length / 4), cost_btc: 0 })
+    .insert({
+      conversation_id: convId,
+      role: 'user',
+      content,
+      tokens_used: Math.ceil(content.length / 4),
+      cost_btc: 0,
+    })
     .select()
     .single();
 
@@ -403,7 +482,15 @@ async function storeUserMessage(
 async function storeAssistantMessage(
   supabase: SupabaseClient,
   convId: string,
-  aiResponse: { content: string; model: string; inputTokens: number; outputTokens: number; totalTokens: number; isFreeModel: boolean; costBtc: number },
+  aiResponse: {
+    content: string;
+    model: string;
+    inputTokens: number;
+    outputTokens: number;
+    totalTokens: number;
+    isFreeModel: boolean;
+    costBtc: number;
+  },
   assistant: AssistantRecord,
   creatorMarkupBtc: number,
   apiCostBtc: number,

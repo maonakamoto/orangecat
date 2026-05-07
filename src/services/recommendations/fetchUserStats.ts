@@ -6,7 +6,12 @@
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { ENTITY_REGISTRY, ENTITY_TYPES, getTableName, type EntityType } from '@/config/entity-registry';
+import {
+  ENTITY_REGISTRY,
+  ENTITY_TYPES,
+  getTableName,
+  type EntityType,
+} from '@/config/entity-registry';
 import { STATUS } from '@/config/database-constants';
 import { DATABASE_TABLES } from '@/config/database-tables';
 
@@ -26,7 +31,7 @@ interface ProfileRecord {
   preferred_currency: string | null;
 }
 
-export interface UserStatsData {
+interface UserStatsData {
   profile: ProfileRecord;
   entityCounts: Partial<Record<EntityType, number>>;
   hasWallet: boolean;
@@ -50,7 +55,9 @@ export async function fetchUserStats(
   ]);
 
   const profile = profileResult.data as ProfileRecord | null;
-  if (profileResult.error || !profile) {return null;}
+  if (profileResult.error || !profile) {
+    return null;
+  }
 
   const actorId = (actorResult.data as { id: string } | null)?.id;
 
@@ -102,14 +109,19 @@ export async function fetchUserStats(
         .eq('status', STATUS.PROJECTS.ACTIVE)
     : Promise.resolve({ count: 0 });
 
-  const [entityCountResults, walletResult, wishlistItemsResult, recentProjectResult, publishedResult] =
-    await Promise.all([
-      Promise.all(entityCountPromises),
-      walletCountPromise,
-      wishlistItemsPromise,
-      recentProjectPromise,
-      publishedCountPromise,
-    ]);
+  const [
+    entityCountResults,
+    walletResult,
+    wishlistItemsResult,
+    recentProjectResult,
+    publishedResult,
+  ] = await Promise.all([
+    Promise.all(entityCountPromises),
+    walletCountPromise,
+    wishlistItemsPromise,
+    recentProjectPromise,
+    publishedCountPromise,
+  ]);
 
   // Aggregate entity counts
   const entityCounts: Partial<Record<EntityType, number>> = {};
@@ -129,5 +141,12 @@ export async function fetchUserStats(
     daysSinceLastActivity = Math.floor(ms / (1000 * 60 * 60 * 24));
   }
 
-  return { profile, entityCounts, hasWallet, daysSinceLastActivity, hasPublishedEntities, wishlistItemCount };
+  return {
+    profile,
+    entityCounts,
+    hasWallet,
+    daysSinceLastActivity,
+    hasPublishedEntities,
+    wishlistItemCount,
+  };
 }

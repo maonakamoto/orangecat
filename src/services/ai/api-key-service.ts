@@ -41,7 +41,7 @@ export interface PlatformUsage {
   can_use_platform: boolean;
 }
 
-export interface KeyValidationResult {
+interface KeyValidationResult {
   isValid: boolean;
   error?: string;
   rateLimits?: {
@@ -75,7 +75,7 @@ function getEncryptionKey(): Buffer {
 /**
  * Encrypt an API key
  */
-export function encryptApiKey(plainKey: string): string {
+function encryptApiKey(plainKey: string): string {
   const key = getEncryptionKey();
   const iv = randomBytes(IV_LENGTH);
   const cipher = createCipheriv(ALGORITHM, key, iv);
@@ -92,7 +92,7 @@ export function encryptApiKey(plainKey: string): string {
 /**
  * Decrypt an API key
  */
-export function decryptApiKey(encryptedKey: string): string {
+function decryptApiKey(encryptedKey: string): string {
   const key = getEncryptionKey();
   const [ivHex, authTagHex, encrypted] = encryptedKey.split(':');
 
@@ -115,7 +115,7 @@ export function decryptApiKey(encryptedKey: string): string {
 /**
  * Generate key hint (last 4 characters)
  */
-export function generateKeyHint(apiKey: string): string {
+function generateKeyHint(apiKey: string): string {
   if (apiKey.length < 8) {
     return '****';
   }

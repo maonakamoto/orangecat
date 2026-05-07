@@ -25,7 +25,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://orangecat.ch';
 // TYPES
 // =====================================================================
 
-export interface WeeklyDigestData {
+interface WeeklyDigestData {
   userName: string;
   period: { start: string; end: string };
 

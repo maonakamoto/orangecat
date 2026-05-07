@@ -207,7 +207,7 @@ export interface GroupActivitiesQuery {
 // ==================== EVENT TYPES ====================
 
 export type EventType = 'general' | 'meeting' | 'celebration' | 'assembly';
-export type LocationType = 'online' | 'in_person' | 'hybrid';
+type LocationType = 'online' | 'in_person' | 'hybrid';
 export type RsvpStatus = 'going' | 'maybe' | 'not_going';
 
 export interface GroupEvent {

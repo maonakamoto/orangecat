@@ -30,7 +30,7 @@ const validVisibilitiesArray: string[] = [...validVisibilities];
 /**
  * Validate create group request
  */
-export function validateCreateGroupRequest(request: CreateGroupInput): {
+function validateCreateGroupRequest(request: CreateGroupInput): {
   valid: boolean;
   errors: Array<{ field: string; message: string }>;
 } {
@@ -78,7 +78,7 @@ export function validateCreateGroupRequest(request: CreateGroupInput): {
 /**
  * Validate update group request
  */
-export function validateUpdateGroupRequest(request: UpdateGroupInput): {
+function validateUpdateGroupRequest(request: UpdateGroupInput): {
   valid: boolean;
   errors: Array<{ field: string; message: string }>;
 } {
@@ -167,6 +167,5 @@ export const updateGroupSchema = z.object({
   voting_threshold: z.number().int().min(1).max(100).optional().nullable(),
 });
 
-// Export inferred types
 export type CreateGroupSchemaType = z.infer<typeof createGroupSchema>;
-export type UpdateGroupSchemaType = z.infer<typeof updateGroupSchema>;
+type UpdateGroupSchemaType = z.infer<typeof updateGroupSchema>;

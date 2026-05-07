@@ -163,9 +163,5 @@ class LoansService {
   }
 }
 
-// Export singleton instance
 const loansService = new LoansService();
 export default loansService;
-
-// Export class for testing
-export { LoansService };

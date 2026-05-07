@@ -65,7 +65,12 @@ export function getRecommendedTasks(
     includeCompleted?: boolean;
   } = {}
 ): RecommendedTask[] {
-  const { limit = 10, categories, priorities, includeCompleted: _includeCompleted = false } = options;
+  const {
+    limit = 10,
+    categories,
+    priorities,
+    includeCompleted: _includeCompleted = false,
+  } = options;
 
   // Filter tasks by condition
   let eligibleTasks = TASK_DEFINITIONS.filter(task => {
@@ -190,7 +195,7 @@ export function getNextAction(context: UserContext): RecommendedTask | null {
  * @param context - User's current state
  * @returns Tasks grouped by category
  */
-export function getTasksByCategory(context: UserContext): Record<TaskCategory, RecommendedTask[]> {
+function getTasksByCategory(context: UserContext): Record<TaskCategory, RecommendedTask[]> {
   const allTasks = getRecommendedTasks(context, { limit: 50 });
 
   return {
@@ -207,7 +212,7 @@ export function getTasksByCategory(context: UserContext): Record<TaskCategory, R
  * @param context - User's current state
  * @returns Whether onboarding is complete
  */
-export function isOnboardingComplete(context: UserContext): boolean {
+function isOnboardingComplete(context: UserContext): boolean {
   const criticalTasks = getRecommendedTasks(context, {
     priorities: ['critical'],
   });

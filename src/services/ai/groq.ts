@@ -63,7 +63,7 @@ interface GroqStreamChunk {
   };
 }
 
-export interface GroqChatResult {
+interface GroqChatResult {
   content: string;
   model: string;
   inputTokens: number;
@@ -76,7 +76,7 @@ export interface GroqChatResult {
   usedByok: boolean;
 }
 
-export interface GroqStreamChunkResult {
+interface GroqStreamChunkResult {
   content: string;
   done: boolean;
   usage?: {
@@ -97,7 +97,7 @@ interface GroqError {
 // ==================== CONSTANTS ====================
 
 // Groq's best free models
-export const GROQ_MODELS = {
+const GROQ_MODELS = {
   // Fast, capable model - great for chat
   'llama-3.3-70b-versatile': {
     name: 'Llama 3.3 70B Versatile',

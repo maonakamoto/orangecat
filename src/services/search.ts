@@ -10,18 +10,8 @@
  */
 
 import { logger } from '@/utils/logger';
-import {
-  generateCacheKey,
-  getCachedResult,
-  setCachedResult,
-  clearSearchCache,
-} from './search/cache';
-import {
-  calculateRelevanceScore,
-  sortResults,
-  getSearchFacets,
-  clearFacetsCache,
-} from './search/processors';
+import { generateCacheKey, getCachedResult, setCachedResult } from './search/cache';
+import { calculateRelevanceScore, sortResults, getSearchFacets } from './search/processors';
 import {
   searchProfiles,
   searchFundingPages,
@@ -229,11 +219,3 @@ export async function getTrending(): Promise<SearchResponse> {
 
 // Re-export utility functions
 export { getSearchSuggestions };
-
-/**
- * Clear all search caches
- */
-export function clearAllSearchCaches(): void {
-  clearSearchCache();
-  clearFacetsCache();
-}

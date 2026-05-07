@@ -22,7 +22,7 @@ const HISTORY_INJECTION_LIMIT = 20;
 /** Max messages to return for UI history display */
 const HISTORY_DISPLAY_LIMIT = 50;
 
-export interface StoredMessage {
+interface StoredMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;

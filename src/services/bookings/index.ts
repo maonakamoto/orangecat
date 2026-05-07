@@ -12,7 +12,7 @@ import { STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 
 // Types
-export type BookableType = 'service' | 'asset';
+type BookableType = 'service' | 'asset';
 
 export type BookingStatus =
   | 'pending'
@@ -51,7 +51,7 @@ export interface Booking {
   updated_at: string;
 }
 
-export interface AvailabilitySlot {
+interface AvailabilitySlot {
   id: string;
   service_id: string;
   provider_actor_id: string;
@@ -64,13 +64,13 @@ export interface AvailabilitySlot {
   current_bookings: number;
 }
 
-export interface TimeSlot {
+interface TimeSlot {
   start: Date;
   end: Date;
   available: boolean;
 }
 
-export interface CreateBookingParams {
+interface CreateBookingParams {
   bookableType: BookableType;
   bookableId: string;
   providerActorId: string;
@@ -84,7 +84,7 @@ export interface CreateBookingParams {
   metadata?: Record<string, unknown>;
 }
 
-export interface BookingResult {
+interface BookingResult {
   success: boolean;
   booking?: Booking;
   error?: string;
