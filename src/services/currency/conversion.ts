@@ -6,14 +6,16 @@
 
 import { cache } from './rates';
 
+const SATS_PER_BTC = 100_000_000;
+
 // ==================== BTC <-> SATS ====================
 
 export function satsToBitcoin(sats: number): number {
-  return sats / 100_000_000;
+  return sats / SATS_PER_BTC;
 }
 
 export function bitcoinToSats(bitcoin: number): number {
-  return Math.round(bitcoin * 100_000_000);
+  return Math.round(bitcoin * SATS_PER_BTC);
 }
 
 // ==================== CORE CONVERSION ====================
@@ -23,7 +25,7 @@ export function convertBtcTo(amount: number, targetCurrency: string): number {
     return amount;
   }
   if (targetCurrency === 'SATS') {
-    return Math.round(amount * 100_000_000);
+    return Math.round(amount * SATS_PER_BTC);
   }
   const rate = cache.rates[`BTC_${targetCurrency}`] || 0;
   return amount * rate;
@@ -34,7 +36,7 @@ export function convertToBtc(amount: number, fromCurrency: string): number {
     return amount;
   }
   if (fromCurrency === 'SATS') {
-    return amount / 100_000_000;
+    return amount / SATS_PER_BTC;
   }
   const rate = cache.rates[`BTC_${fromCurrency}`] || 1;
   return amount / rate;
