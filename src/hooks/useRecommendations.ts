@@ -12,7 +12,12 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { EntityType } from '@/config/entity-registry';
-import type { RecommendedTask, SmartQuestion, TaskPriority, TaskCategory } from '@/services/recommendations/types';
+import type {
+  RecommendedTask,
+  SmartQuestion,
+  TaskPriority,
+  TaskCategory,
+} from '@/services/recommendations/types';
 
 /**
  * Response shape from the stats API
@@ -162,14 +167,6 @@ export function useRecommendations(
     markTaskCompleted,
     completedTaskIds,
   };
-}
-
-/**
- * Get count for a specific entity type
- */
-export function useEntityCount(entityType: EntityType): number {
-  const { entityCounts } = useRecommendations({ limit: 0 });
-  return entityCounts[entityType] ?? 0;
 }
 
 export default useRecommendations;

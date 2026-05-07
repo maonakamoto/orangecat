@@ -12,7 +12,7 @@ import type { ResolvedWallet } from './types';
 import { logger } from '@/utils/logger';
 import { bitcoinToSats } from '@/services/currency';
 
-export interface GeneratedInvoice {
+interface GeneratedInvoice {
   /** BOLT11 invoice string (Lightning) or null (on-chain) */
   bolt11: string | null;
   /** Payment hash for NWC lookups */

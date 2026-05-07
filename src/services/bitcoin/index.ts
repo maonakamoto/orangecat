@@ -8,6 +8,7 @@ import {
 } from '@/types/bitcoin';
 import { getErrorMessage } from '@/types/common';
 import { logger } from '@/utils/logger';
+import { satsToBitcoin } from '@/services/currency';
 import { BITCOIN_FETCH_TIMEOUT_MS } from '@/lib/wallets/constants';
 
 /**
@@ -159,7 +160,7 @@ class BitcoinService {
 
             return {
               txid: tx.txid || 'unknown',
-              value: valueInSatoshis / 100000000, // Convert satoshis to BTC
+              value: satsToBitcoin(valueInSatoshis),
               status: tx.status?.confirmed ? 'confirmed' : 'pending',
               timestamp: tx.status?.block_time ? tx.status.block_time * 1000 : Date.now(),
               type: txType,
@@ -237,7 +238,7 @@ class BitcoinService {
 
             return {
               txid: tx.txid || 'unknown',
-              value: valueInSatoshis / 100000000, // Convert satoshis to BTC
+              value: satsToBitcoin(valueInSatoshis),
               status: tx.status?.confirmed ? 'confirmed' : 'pending',
               timestamp: tx.status?.block_time ? tx.status.block_time * 1000 : Date.now(),
               type: txType,
@@ -363,7 +364,7 @@ class BitcoinService {
         const transactions = provider.processTransactions(txsData, cleanAddress);
 
         return {
-          balance: balanceInSatoshis / 100000000, // Convert balance to BTC here
+          balance: satsToBitcoin(balanceInSatoshis),
           address: cleanAddress,
           transactions,
           network: 'mainnet' as const,

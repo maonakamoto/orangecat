@@ -3,7 +3,7 @@
 import { ArrowLeftRight, Bitcoin, Info } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Currency, ALL_CURRENCIES } from '@/types/settings';
-import { formatCurrency } from '@/services/currency';
+import { formatCurrency, bitcoinToSats } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { getGoalExplanation, isBitcoinNativeCurrency } from '@/utils/currency-helpers';
 import { useCurrencyInput } from './useCurrencyInput';
@@ -150,7 +150,7 @@ export function CurrencyInput({
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">SATS</span>
                 <span className="font-mono font-medium text-gray-700">
-                  {Math.round(breakdown.btc * 100000000).toLocaleString('en-US')}
+                  {bitcoinToSats(breakdown.btc).toLocaleString('en-US')}
                 </span>
               </div>
             )}

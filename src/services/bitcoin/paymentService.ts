@@ -7,6 +7,7 @@
  */
 
 import type { PaymentProvider, PaymentType, PaymentStatus, Invoice, PaymentResult } from './types';
+import { satsToBitcoin, bitcoinToSats } from '@/services/currency';
 
 // Re-export shared types for backward compatibility
 export type { PaymentType, PaymentStatus, PaymentResult };
@@ -133,11 +134,11 @@ class MockPaymentProvider implements PaymentProvider {
   }
 
   satoshisToBTC(satoshis: number): number {
-    return satoshis / 100000000;
+    return satsToBitcoin(satoshis);
   }
 
   BTCToSatoshis(btc: number): number {
-    return Math.round(btc * 100000000);
+    return bitcoinToSats(btc);
   }
 
   isValidBitcoinAddress(address: string): boolean {
