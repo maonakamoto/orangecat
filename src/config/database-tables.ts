@@ -162,9 +162,6 @@ export const TIMELINE_TABLES = {
   COMMUNITY_VIEW: DATABASE_TABLES.COMMUNITY_TIMELINE,
 } as const;
 
-// Type for table names
-export type DatabaseTableName = (typeof DATABASE_TABLES)[keyof typeof DATABASE_TABLES];
-
 /**
  * Supabase Storage Bucket Names
  *

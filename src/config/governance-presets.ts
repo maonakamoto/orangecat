@@ -163,31 +163,3 @@ export const GOVERNANCE_PRESETS = {
 
 export type GovernancePreset = keyof typeof GOVERNANCE_PRESETS;
 export type GroupRole = 'founder' | 'admin' | 'member';
-
-/**
- * Get role permissions from a governance preset
- */
-export function getRolePermissions(preset: GovernancePreset, role: GroupRole): RolePermissions {
-  return GOVERNANCE_PRESETS[preset].roles[role];
-}
-
-/**
- * Get all governance presets as array for UI rendering
- */
-export function getGovernancePresetsArray() {
-  return Object.entries(GOVERNANCE_PRESETS).map(([key, config]) => ({
-    key: key as GovernancePreset,
-    ...config,
-  }));
-}
-
-/**
- * Check if an action requires a vote for a given preset and role
- */
-export function actionRequiresVote(
-  preset: GovernancePreset,
-  role: GroupRole,
-  action: keyof RolePermissions
-): boolean {
-  return GOVERNANCE_PRESETS[preset].roles[role][action] === 'vote_required';
-}

@@ -184,23 +184,9 @@ export type ProposalStatus = (typeof STATUS.PROPOSALS)[keyof typeof STATUS.PROPO
 export type LoanStatus = (typeof STATUS.LOANS)[keyof typeof STATUS.LOANS];
 export type BookingStatus = (typeof STATUS.BOOKINGS)[keyof typeof STATUS.BOOKINGS];
 export type LoanOfferStatus = (typeof STATUS.LOAN_OFFERS)[keyof typeof STATUS.LOAN_OFFERS];
-export type TransactionStatus = (typeof STATUS.TRANSACTIONS)[keyof typeof STATUS.TRANSACTIONS];
-export type ProductStatus = (typeof STATUS.PRODUCTS)[keyof typeof STATUS.PRODUCTS];
 export type ServiceStatus = (typeof STATUS.SERVICES)[keyof typeof STATUS.SERVICES];
-export type CauseStatus = (typeof STATUS.CAUSES)[keyof typeof STATUS.CAUSES];
 export type MessageStatus = (typeof STATUS.MESSAGES)[keyof typeof STATUS.MESSAGES];
-export type GroupMemberRole = (typeof STATUS.GROUP_MEMBERS)[keyof typeof STATUS.GROUP_MEMBERS];
-export type GroupMemberStatus =
-  (typeof STATUS.GROUP_MEMBER_STATUS)[keyof typeof STATUS.GROUP_MEMBER_STATUS];
-export type GroupEventType = (typeof STATUS.GROUP_EVENTS)[keyof typeof STATUS.GROUP_EVENTS];
-export type GroupEventRsvpStatus =
-  (typeof STATUS.GROUP_EVENT_RSVPS)[keyof typeof STATUS.GROUP_EVENT_RSVPS];
-export type GroupInvitationStatus =
-  (typeof STATUS.GROUP_INVITATIONS)[keyof typeof STATUS.GROUP_INVITATIONS];
-export type ContractStatus = (typeof STATUS.CONTRACTS)[keyof typeof STATUS.CONTRACTS];
-export type AiAssistantStatus = (typeof STATUS.AI_ASSISTANTS)[keyof typeof STATUS.AI_ASSISTANTS];
 export type InvestmentStatus = (typeof STATUS.INVESTMENTS)[keyof typeof STATUS.INVESTMENTS];
-export type EventStatus = (typeof STATUS.EVENTS)[keyof typeof STATUS.EVENTS];
 
 /**
  * Currency constants
@@ -212,16 +198,6 @@ export const CURRENCY = {
 } as const;
 
 export type Currency = (typeof CURRENCY)[keyof typeof CURRENCY];
-
-/**
- * Actor types
- */
-export const ACTOR_TYPES = {
-  USER: 'user',
-  GROUP: 'group',
-} as const;
-
-export type ActorType = (typeof ACTOR_TYPES)[keyof typeof ACTOR_TYPES];
 
 /**
  * Proposal types
@@ -237,19 +213,6 @@ export const PROPOSAL_TYPES = {
 export type ProposalType = (typeof PROPOSAL_TYPES)[keyof typeof PROPOSAL_TYPES];
 
 /**
- * Contract types
- */
-export const CONTRACT_TYPES = {
-  EMPLOYMENT: 'employment',
-  SERVICE: 'service',
-  RENTAL: 'rental',
-  PARTNERSHIP: 'partnership',
-  MEMBERSHIP: 'membership',
-} as const;
-
-export type ContractType = (typeof CONTRACT_TYPES)[keyof typeof CONTRACT_TYPES];
-
-/**
  * Message types
  */
 export const MESSAGE_TYPES = {
@@ -259,13 +222,3 @@ export const MESSAGE_TYPES = {
 } as const;
 
 export type MessageType = (typeof MESSAGE_TYPES)[keyof typeof MESSAGE_TYPES];
-
-/**
- * Conversation types
- */
-export const CONVERSATION_TYPES = {
-  DIRECT: 'direct',
-  GROUP: 'group',
-} as const;
-
-export type ConversationType = (typeof CONVERSATION_TYPES)[keyof typeof CONVERSATION_TYPES];

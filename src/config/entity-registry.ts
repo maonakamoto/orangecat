@@ -67,7 +67,7 @@ export type EntityType = (typeof ENTITY_TYPES)[number];
  */
 export type EntityCategory = 'gateway' | 'business' | 'community' | 'finance' | 'personal';
 
-export const ENTITY_CATEGORY_ORDER: EntityCategory[] = [
+const ENTITY_CATEGORY_ORDER: EntityCategory[] = [
   'gateway',
   'business',
   'community',
@@ -78,7 +78,7 @@ export const ENTITY_CATEGORY_ORDER: EntityCategory[] = [
 // ==================== ENTITY METADATA ====================
 
 /** Payment pattern for an entity type */
-export type PaymentPattern = 'fixed_price' | 'contribution' | 'none';
+type PaymentPattern = 'fixed_price' | 'contribution' | 'none';
 
 export interface EntityMetadata {
   /** Entity type identifier */
@@ -432,39 +432,10 @@ export function getEntityMetadata(type: EntityType): EntityMetadata {
 }
 
 /**
- * Get color classes for an entity type
- */
-export function getEntityColorClasses(type: EntityType): { text: string; bg: string } {
-  const entity = ENTITY_REGISTRY[type];
-  return COLOR_CLASSES[entity.colorTheme];
-}
-
-/**
- * Get all entity types that support templates
- */
-export function getEntitiesWithTemplates(): EntityType[] {
-  return ENTITY_TYPES.filter(type => ENTITY_REGISTRY[type].hasTemplates);
-}
-
-/**
  * Check if a string is a valid entity type
  */
 export function isValidEntityType(type: string): type is EntityType {
   return ENTITY_TYPES.includes(type as EntityType);
-}
-
-/**
- * Get create page URL for an entity type
- */
-export function getCreateUrl(type: EntityType): string {
-  return ENTITY_REGISTRY[type].createPath;
-}
-
-/**
- * Get entity list URL for an entity type
- */
-export function getListUrl(type: EntityType): string {
-  return ENTITY_REGISTRY[type].basePath;
 }
 
 /**

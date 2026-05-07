@@ -41,9 +41,9 @@ export type ActionCategory =
   | 'settings' // User settings
   | 'context'; // Managing My Cat's context
 
-export type ActionRiskLevel = 'low' | 'medium' | 'high';
+type ActionRiskLevel = 'low' | 'medium' | 'high';
 
-export interface ActionParameter {
+interface ActionParameter {
   name: string;
   type: 'string' | 'number' | 'boolean' | 'entity_id' | 'user_id' | 'btc';
   required: boolean;
@@ -284,8 +284,18 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
     riskLevel: 'high',
     requiresConfirmation: true,
     parameters: [
-      { name: 'title', type: 'string', required: true, description: 'Investment opportunity title' },
-      { name: 'description', type: 'string', required: false, description: 'Investment description' },
+      {
+        name: 'title',
+        type: 'string',
+        required: true,
+        description: 'Investment opportunity title',
+      },
+      {
+        name: 'description',
+        type: 'string',
+        required: false,
+        description: 'Investment description',
+      },
       {
         name: 'investment_type',
         type: 'string',
@@ -333,7 +343,12 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
     requiresConfirmation: true,
     parameters: [
       { name: 'title', type: 'string', required: true, description: 'Loan request title' },
-      { name: 'description', type: 'string', required: false, description: 'Loan purpose and details' },
+      {
+        name: 'description',
+        type: 'string',
+        required: false,
+        description: 'Loan purpose and details',
+      },
       {
         name: 'amount_btc',
         type: 'btc',
@@ -373,12 +388,18 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
     requiresConfirmation: true,
     parameters: [
       { name: 'title', type: 'string', required: true, description: 'Research title' },
-      { name: 'description', type: 'string', required: false, description: 'Research description and goals' },
+      {
+        name: 'description',
+        type: 'string',
+        required: false,
+        description: 'Research description and goals',
+      },
       {
         name: 'field',
         type: 'string',
         required: false,
-        description: 'Research field: biology, computer_science, mathematics, physics, economics, medicine, artificial_intelligence, blockchain_cryptography, other (default: other)',
+        description:
+          'Research field: biology, computer_science, mathematics, physics, economics, medicine, artificial_intelligence, blockchain_cryptography, other (default: other)',
         default: 'other',
       },
       {
@@ -392,7 +413,8 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
         name: 'methodology',
         type: 'string',
         required: false,
-        description: 'Research methodology: experimental, theoretical, computational, empirical, mixed_methods (default: experimental)',
+        description:
+          'Research methodology: experimental, theoretical, computational, empirical, mixed_methods (default: experimental)',
         default: 'experimental',
       },
       {
@@ -421,13 +443,19 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
     riskLevel: 'low',
     requiresConfirmation: false,
     parameters: [
-      { name: 'title', type: 'string', required: true, description: 'Wishlist title (e.g., "My Birthday List")' },
+      {
+        name: 'title',
+        type: 'string',
+        required: true,
+        description: 'Wishlist title (e.g., "My Birthday List")',
+      },
       { name: 'description', type: 'string', required: false, description: 'Wishlist description' },
       {
         name: 'type',
         type: 'string',
         required: false,
-        description: 'Wishlist type: general, birthday, wedding, baby_shower, graduation, personal (default: general)',
+        description:
+          'Wishlist type: general, birthday, wedding, baby_shower, graduation, personal (default: general)',
         default: 'general',
       },
       {
@@ -493,13 +521,19 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
   archive_entity: {
     id: 'archive_entity',
     name: 'Archive Entity',
-    description: 'Archive (soft-delete) a product, service, project, cause, or event — sets status to archived and removes it from public view',
+    description:
+      'Archive (soft-delete) a product, service, project, cause, or event — sets status to archived and removes it from public view',
     category: 'entities',
     icon: Settings,
     riskLevel: 'high',
     requiresConfirmation: true,
     parameters: [
-      { name: 'entity_type', type: 'string', required: true, description: 'Type of entity (product, service, project, cause, event, etc.)' },
+      {
+        name: 'entity_type',
+        type: 'string',
+        required: true,
+        description: 'Type of entity (product, service, project, cause, event, etc.)',
+      },
       { name: 'entity_id', type: 'entity_id', required: true, description: 'Entity ID to archive' },
     ],
     examples: [
@@ -612,27 +646,74 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
   add_wallet: {
     id: 'add_wallet',
     name: 'Add Wallet',
-    description: 'Create a savings goal wallet or budget wallet on the user\'s profile',
+    description: "Create a savings goal wallet or budget wallet on the user's profile",
     category: 'payments',
     icon: Wallet,
     riskLevel: 'medium',
     requiresConfirmation: false,
     parameters: [
-      { name: 'label', type: 'string', required: true, description: 'Wallet name (e.g. "Vacation Fund", "Food Budget")' },
+      {
+        name: 'label',
+        type: 'string',
+        required: true,
+        description: 'Wallet name (e.g. "Vacation Fund", "Food Budget")',
+      },
       {
         name: 'behavior_type',
         type: 'string',
         required: true,
-        description: '"one_time_goal" (save toward a target) | "recurring_budget" (periodic spending limit) | "general"',
+        description:
+          '"one_time_goal" (save toward a target) | "recurring_budget" (periodic spending limit) | "general"',
       },
-      { name: 'category', type: 'string', required: false, description: 'general | rent | food | medical | education | emergency | transportation | utilities | projects | legal | entertainment' },
-      { name: 'description', type: 'string', required: false, description: 'What this wallet is for' },
-      { name: 'goal_amount', type: 'number', required: false, description: 'Target amount in BTC (for one_time_goal)' },
-      { name: 'goal_currency', type: 'string', required: false, description: 'Currency for the goal (e.g. BTC, CHF, USD)' },
-      { name: 'goal_deadline', type: 'string', required: false, description: 'ISO date for the goal deadline (e.g. 2026-12-31)' },
-      { name: 'budget_amount', type: 'number', required: false, description: 'Budget amount in BTC per period (for recurring_budget)' },
-      { name: 'budget_period', type: 'string', required: false, description: 'daily | weekly | monthly | quarterly | yearly' },
-      { name: 'lightning_address', type: 'string', required: false, description: 'Lightning address to associate (uses primary wallet\'s address if omitted)' },
+      {
+        name: 'category',
+        type: 'string',
+        required: false,
+        description:
+          'general | rent | food | medical | education | emergency | transportation | utilities | projects | legal | entertainment',
+      },
+      {
+        name: 'description',
+        type: 'string',
+        required: false,
+        description: 'What this wallet is for',
+      },
+      {
+        name: 'goal_amount',
+        type: 'number',
+        required: false,
+        description: 'Target amount in BTC (for one_time_goal)',
+      },
+      {
+        name: 'goal_currency',
+        type: 'string',
+        required: false,
+        description: 'Currency for the goal (e.g. BTC, CHF, USD)',
+      },
+      {
+        name: 'goal_deadline',
+        type: 'string',
+        required: false,
+        description: 'ISO date for the goal deadline (e.g. 2026-12-31)',
+      },
+      {
+        name: 'budget_amount',
+        type: 'number',
+        required: false,
+        description: 'Budget amount in BTC per period (for recurring_budget)',
+      },
+      {
+        name: 'budget_period',
+        type: 'string',
+        required: false,
+        description: 'daily | weekly | monthly | quarterly | yearly',
+      },
+      {
+        name: 'lightning_address',
+        type: 'string',
+        required: false,
+        description: "Lightning address to associate (uses primary wallet's address if omitted)",
+      },
     ],
     examples: [
       'Set up a vacation savings goal for 0.05 BTC by December',
@@ -883,8 +964,18 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
     requiresConfirmation: false,
     parameters: [
       { name: 'title', type: 'string', required: true, description: 'What to be reminded about' },
-      { name: 'due_date', type: 'string', required: true, description: 'When — ISO 8601 or natural language ("tomorrow", "in 2 hours")' },
-      { name: 'notes', type: 'string', required: false, description: 'Optional additional context' },
+      {
+        name: 'due_date',
+        type: 'string',
+        required: true,
+        description: 'When — ISO 8601 or natural language ("tomorrow", "in 2 hours")',
+      },
+      {
+        name: 'notes',
+        type: 'string',
+        required: false,
+        description: 'Optional additional context',
+      },
     ],
     examples: [
       'Remind me to check on my project tomorrow',
@@ -899,24 +990,44 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
   update_profile: {
     id: 'update_profile',
     name: 'Update Profile',
-    description: 'Update the user\'s public profile — name, bio, background, location, or website',
+    description: "Update the user's public profile — name, bio, background, location, or website",
     category: 'context',
     icon: Settings,
     riskLevel: 'medium',
     requiresConfirmation: false,
     parameters: [
       { name: 'name', type: 'string', required: false, description: 'Display name' },
-      { name: 'bio', type: 'string', required: false, description: 'Short bio (appears on profile)' },
-      { name: 'background', type: 'string', required: false, description: 'Longer background / about section' },
-      { name: 'website', type: 'string', required: false, description: 'Personal or business website URL' },
+      {
+        name: 'bio',
+        type: 'string',
+        required: false,
+        description: 'Short bio (appears on profile)',
+      },
+      {
+        name: 'background',
+        type: 'string',
+        required: false,
+        description: 'Longer background / about section',
+      },
+      {
+        name: 'website',
+        type: 'string',
+        required: false,
+        description: 'Personal or business website URL',
+      },
       { name: 'location_city', type: 'string', required: false, description: 'City' },
-      { name: 'location_country', type: 'string', required: false, description: 'Country (ISO 2-letter code, e.g. CH, US, DE)' },
+      {
+        name: 'location_country',
+        type: 'string',
+        required: false,
+        description: 'Country (ISO 2-letter code, e.g. CH, US, DE)',
+      },
     ],
     examples: [
-      'Update my bio to say I\'m a freelance photographer',
+      "Update my bio to say I'm a freelance photographer",
       'Set my location to Zurich, Switzerland',
       'My website is example.com, add it to my profile',
-      'Write a background section based on what I\'ve told you',
+      "Write a background section based on what I've told you",
     ],
     enabled: true,
   },

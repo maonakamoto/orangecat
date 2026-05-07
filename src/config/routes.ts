@@ -91,26 +91,12 @@ export const ROUTE_CONTEXTS = {
 /**
  * Type definitions for route contexts
  */
-export type AuthenticatedRoute = (typeof ROUTE_CONTEXTS.authenticated)[number];
-export type PublicRoute = (typeof ROUTE_CONTEXTS.public)[number];
-export type UniversalRoute = (typeof ROUTE_CONTEXTS.universal)[number];
-export type AuthRoute = (typeof ROUTE_CONTEXTS.auth)[number];
-export type ContextualRoute = (typeof ROUTE_CONTEXTS.contextual)[number];
-
 export type RouteContext = 'authenticated' | 'public' | 'universal' | 'auth' | 'contextual';
-
-/**
- * All routes that require authentication to access
- */
-export const AUTHENTICATED_ROUTES = [
-  ...ROUTE_CONTEXTS.authenticated,
-  ...ROUTE_CONTEXTS.contextual,
-] as const;
 
 /**
  * All routes that should show navigation (headers, footers, etc.)
  */
-export const NAVIGATED_ROUTES = [
+const NAVIGATED_ROUTES = [
   ...ROUTE_CONTEXTS.public,
   ...ROUTE_CONTEXTS.authenticated,
   ...ROUTE_CONTEXTS.universal,
@@ -121,12 +107,12 @@ export const NAVIGATED_ROUTES = [
 /**
  * Routes that should hide the footer (typically authenticated routes)
  */
-export const FOOTER_HIDDEN_ROUTES = [...ROUTE_CONTEXTS.authenticated] as const;
+const FOOTER_HIDDEN_ROUTES = [...ROUTE_CONTEXTS.authenticated] as const;
 
 /**
  * Routes that should show the sidebar (authenticated routes)
  */
-export const SIDEBAR_VISIBLE_ROUTES = [...ROUTE_CONTEXTS.authenticated] as const;
+const SIDEBAR_VISIBLE_ROUTES = [...ROUTE_CONTEXTS.authenticated] as const;
 
 /**
  * Get the context of a route based on its pathname
@@ -343,11 +329,4 @@ export const ROUTES = {
 
   // Settings routes
   SETTINGS: '/settings',
-} as const;
-
-/**
- * Legacy routes that redirect to new routes
- */
-export const LEGACY_ROUTES = {
-  CREATE: '/create', // Redirects to /projects/create
 } as const;

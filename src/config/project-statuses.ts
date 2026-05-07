@@ -64,16 +64,3 @@ export const VALID_PROJECT_STATUSES: readonly ProjectStatus[] = [
 
 /** Statuses visible in public search/discover */
 export const PUBLIC_SEARCH_STATUSES: readonly ProjectStatus[] = ['active', 'paused'] as const;
-
-/** Get status display configuration (label, colors, badge variant) */
-export function getProjectStatus(
-  status: string
-): (typeof PROJECT_STATUSES)[keyof typeof PROJECT_STATUSES] {
-  const normalized = status?.toLowerCase() as ProjectStatus;
-  return PROJECT_STATUSES[normalized] || PROJECT_STATUSES.draft;
-}
-
-/** Type guard: check if a string is a valid ProjectStatus */
-export function isValidProjectStatus(status: string): status is ProjectStatus {
-  return VALID_PROJECT_STATUSES.includes(status as ProjectStatus);
-}

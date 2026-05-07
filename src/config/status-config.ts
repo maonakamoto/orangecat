@@ -91,20 +91,6 @@ export function getStatusInfo(status: string | null | undefined): StatusInfo {
 }
 
 /**
- * Get just the status label
- */
-export function getStatusLabel(status: string | null | undefined): string {
-  return getStatusInfo(status).label;
-}
-
-/**
- * Get just the status className
- */
-export function getStatusClassName(status: string | null | undefined): string {
-  return getStatusInfo(status).className;
-}
-
-/**
  * Check if a status is considered "public" (visible to others)
  */
 export function isPublicStatus(status: string | null | undefined): boolean {
@@ -112,37 +98,7 @@ export function isPublicStatus(status: string | null | undefined): boolean {
   return publicStatuses.includes((status?.toLowerCase() || '') as EntityStatus);
 }
 
-/**
- * Check if a status is considered "editable"
- */
-export function isEditableStatus(status: string | null | undefined): boolean {
-  const editableStatuses: EntityStatus[] = ['draft', 'active', 'paused'];
-  return editableStatuses.includes((status?.toLowerCase() || '') as EntityStatus);
-}
-
 // ==================== STATUS LISTS ====================
-
-/**
- * All possible statuses in display order
- */
-export const ALL_STATUSES: EntityStatus[] = [
-  'draft',
-  'active',
-  'paused',
-  'completed',
-  'cancelled',
-  'archived',
-];
-
-/**
- * Statuses that should be shown in public listings
- */
-export const PUBLIC_STATUSES: EntityStatus[] = ['active'];
-
-/**
- * Statuses that owners can see for their own entities
- */
-export const OWNER_VISIBLE_STATUSES: EntityStatus[] = ['draft', 'active', 'paused', 'completed'];
 
 /**
  * Statuses considered "normal" that don't need special visual emphasis

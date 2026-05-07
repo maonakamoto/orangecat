@@ -10,7 +10,12 @@
  */
 
 import { ComponentType, SVGProps } from 'react';
-import { ENTITY_REGISTRY, ENTITY_TYPES, type EntityType, type EntityCategory } from './entity-registry';
+import {
+  ENTITY_REGISTRY,
+  ENTITY_TYPES,
+  type EntityType,
+  type EntityCategory,
+} from './entity-registry';
 import type { NavSection, NavigationItem } from './navigation';
 
 /**
@@ -180,7 +185,8 @@ export function generateEntityNavigation(): NavSection[] {
 
   // Group 4: Manage (Wallets, Assets, Loans)
   const manageEntities = ENTITY_TYPES.filter(
-    type => ENTITY_REGISTRY[type].category === 'finance' || ENTITY_REGISTRY[type].category === 'gateway'
+    type =>
+      ENTITY_REGISTRY[type].category === 'finance' || ENTITY_REGISTRY[type].category === 'gateway'
   );
   if (manageEntities.length > 0) {
     sections.push({
@@ -212,22 +218,4 @@ export function generateEntityNavigation(): NavSection[] {
   }
 
   return sections.sort((a, b) => a.priority - b.priority);
-}
-
-/**
- * Get navigation item for a specific entity type
- */
-export function getEntityNavigationItem(type: EntityType): NavigationItem | null {
-  const entity = ENTITY_REGISTRY[type];
-  if (!entity) {
-    return null;
-  }
-
-  return {
-    name: entity.namePlural,
-    href: entity.basePath,
-    icon: entity.icon as ComponentType<SVGProps<SVGSVGElement>>,
-    description: entity.description,
-    requiresAuth: true,
-  };
 }
