@@ -15,7 +15,7 @@ const profileCheckCache = new Map<string, { exists: boolean; timestamp: number }
  * Checks whether the current user has a profile, with caching.
  * Returns true if profile exists, false otherwise.
  */
-export async function ensureProfileExists(userId: string): Promise<boolean> {
+async function ensureProfileExists(userId: string): Promise<boolean> {
   const cached = profileCheckCache.get(userId);
   if (cached && Date.now() - cached.timestamp < PROFILE_CACHE_DURATION) {
     return cached.exists;
@@ -65,7 +65,7 @@ interface CreateOptimisticEventParams {
  * before the server confirms the post creation.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createOptimisticEvent(params: CreateOptimisticEventParams): Record<string, any> {
+function createOptimisticEvent(params: CreateOptimisticEventParams): Record<string, any> {
   const { user, content, subjectType, subjectId, visibility, selectedProjects, parentEventId } =
     params;
 
@@ -176,14 +176,14 @@ export function formatPostError(err: any): string {
 /**
  * Truncates post content into a title that satisfies a DB NOT NULL constraint.
  */
-export function truncateToTitle(postContent: string): string {
+function truncateToTitle(postContent: string): string {
   return postContent.length <= 120 ? postContent : `${postContent.slice(0, 117).trimEnd()}...`;
 }
 
 /**
  * Builds timeline visibility context entries for a post.
  */
-export function buildTimelineContexts(
+function buildTimelineContexts(
   subjectType: string,
   subjectId: string | undefined,
   userId: string,
