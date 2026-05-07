@@ -6,7 +6,8 @@ import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { Message } from '@/features/messaging/types';
 import { queueIfOffline, handleNetworkError } from '@/features/messaging/lib/offline-queue';
-import { MESSAGE_TYPES, debugLog, API_ROUTES } from '@/features/messaging/lib/constants';
+import { MESSAGE_TYPES, debugLog } from '@/features/messaging/lib/constants';
+import { API_ROUTES } from '@/config/api-routes';
 import {
   createOptimisticMessage,
   validateMessageContent,
@@ -94,7 +95,7 @@ export async function sendMessage({
   debugLog('[MessageComposer] sending', { conversationId, tempId, userId: user.id });
 
   try {
-    const response = await fetch(API_ROUTES.CONVERSATION(conversationId), {
+    const response = await fetch(API_ROUTES.MESSAGES.CONVERSATION(conversationId), {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

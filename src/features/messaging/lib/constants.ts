@@ -119,22 +119,6 @@ export const ERROR_CODES = {
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
 
 // =============================================================================
-// API ROUTES
-// =============================================================================
-
-export const API_ROUTES = {
-  CONVERSATIONS: '/api/messages',
-  CONVERSATION: (id: string) => `/api/messages/${id}`,
-  CONVERSATION_READ: (id: string) => `/api/messages/${id}/read`,
-  CONVERSATION_SUMMARY: (id: string) => `/api/messages/${id}/summary`,
-  OPEN_CONVERSATION: '/api/messages/open',
-  SELF_CONVERSATION: '/api/messages/self',
-  BULK_CONVERSATIONS: '/api/messages/bulk-conversations',
-  BULK_DELETE: '/api/messages/bulk-delete',
-  UNREAD_COUNT: '/api/messages/unread-count',
-} as const;
-
-// =============================================================================
 // REALTIME CHANNELS
 // =============================================================================
 

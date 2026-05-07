@@ -4,7 +4,8 @@ import { useCallback, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import type { Conversation } from '../types';
-import { API_ROUTES, debugLog } from '../lib/constants';
+import { debugLog } from '../lib/constants';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface UseConversationsFetcherOptions {
   isAuthReady: boolean;
@@ -42,7 +43,7 @@ export function useConversationsFetcher({
       setError(null);
       setRefreshing(true);
       debugLog('[useConversations] fetching conversations');
-      let res = await fetch(`${API_ROUTES.CONVERSATIONS}?limit=30`, { credentials: 'same-origin' });
+      let res = await fetch(`${API_ROUTES.MESSAGES.BASE}?limit=30`, { credentials: 'same-origin' });
       debugLog('[useConversations] response status', { status: res.status, text: res.statusText });
 
       if (res.status === 401) {
@@ -67,7 +68,7 @@ export function useConversationsFetcher({
 
               if (syncRes.ok) {
                 debugLog('[useConversations] session synced; retrying');
-                res = await fetch(`${API_ROUTES.CONVERSATIONS}?limit=30`, {
+                res = await fetch(`${API_ROUTES.MESSAGES.BASE}?limit=30`, {
                   credentials: 'same-origin',
                 });
                 debugLog('[useConversations] retry status', {

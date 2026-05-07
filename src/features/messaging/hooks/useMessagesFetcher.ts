@@ -5,7 +5,8 @@ import { toast } from 'sonner';
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { Message, Conversation, Pagination } from '../types';
-import { API_ROUTES, TIMING, debugLog } from '../lib/constants';
+import { TIMING, debugLog } from '../lib/constants';
+import { API_ROUTES } from '@/config/api-routes';
 import { mergeMessages } from '../lib/message-utils';
 
 interface UseMessagesFetcherOptions {
@@ -102,8 +103,8 @@ export function useMessagesFetcher({
         }
 
         const url = cursor
-          ? `${API_ROUTES.CONVERSATION(conversationId)}?cursor=${cursor}`
-          : API_ROUTES.CONVERSATION(conversationId);
+          ? `${API_ROUTES.MESSAGES.CONVERSATION(conversationId)}?cursor=${cursor}`
+          : API_ROUTES.MESSAGES.CONVERSATION(conversationId);
 
         const response = await fetch(url, { credentials: 'same-origin' });
 

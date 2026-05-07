@@ -14,6 +14,11 @@ export const API_ROUTES = {
   },
   MESSAGES: {
     BASE: '/api/messages',
+    CONVERSATION: (id: string) => `/api/messages/${id}`,
+    CONVERSATION_READ: (id: string) => `/api/messages/${id}/read`,
+    CONVERSATION_SUMMARY: (id: string) => `/api/messages/${id}/summary`,
+    OPEN: '/api/messages/open',
+    SELF: '/api/messages/self',
     ACTORS: '/api/messages/actors',
     BULK_CONVERSATIONS: '/api/messages/bulk-conversations',
     BULK_DELETE: '/api/messages/bulk-delete',

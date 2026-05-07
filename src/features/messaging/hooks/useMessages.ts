@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 import type { Message, Conversation, Pagination } from '../types';
-import { API_ROUTES, TIMING, debugLog } from '../lib/constants';
+import { TIMING, debugLog } from '../lib/constants';
+import { API_ROUTES } from '@/config/api-routes';
 import { mergeMessages, confirmOptimisticMessage } from '../lib/message-utils';
 import { useReadReceipts } from './useReadReceipts';
 import { useMessagesFetcher } from './useMessagesFetcher';
@@ -45,7 +46,7 @@ export function useMessages(
       return;
     }
     try {
-      await fetch(API_ROUTES.CONVERSATION_READ(conversationId), {
+      await fetch(API_ROUTES.MESSAGES.CONVERSATION_READ(conversationId), {
         method: 'POST',
         credentials: 'same-origin',
       });
