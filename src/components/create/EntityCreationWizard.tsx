@@ -181,6 +181,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
                       onSelectTemplate={handleTemplateSelect}
                       selectedTemplateId={selectedTemplate?.id}
                       showStartFromScratch
+                      entityLabel={config.pageTitle?.replace(/^Create\s+/i, '')}
                     />
                   </div>
                 ) : (

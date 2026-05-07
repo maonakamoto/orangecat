@@ -95,6 +95,7 @@ export const userServiceSchema = z
     service_area: optionalText(200),
     images: z.array(z.string().url()).optional().default([]),
     portfolio_links: z.array(z.string().url()).optional().default([]),
+    show_on_profile: z.boolean().optional().default(true),
     status: z.enum(['draft', 'active', 'paused', 'unavailable']).default('draft'),
   })
   .refine(data => data.hourly_rate || data.fixed_price, {

@@ -158,7 +158,7 @@ export const productConfig = createEntityConfig<UserProductFormData>({
   name: 'Product',
   namePlural: 'Products',
   icon: Package,
-  colorTheme: 'orange',
+  colorTheme: 'tiffany',
   backUrl: ENTITY_REGISTRY['product'].basePath,
   successUrl: ENTITY_REGISTRY['product'].basePath,
   pageTitle: 'Create Product',

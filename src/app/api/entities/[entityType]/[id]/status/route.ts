@@ -19,12 +19,16 @@ import {
   handleSupabaseError,
 } from '@/lib/api/standardResponse';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import {  rateLimit, applyRateLimitHeaders , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimit, applyRateLimitHeaders, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
-import { isValidEntityType, getTableName, getUserIdField, type EntityType } from '@/config/entity-registry';
+import {
+  isValidEntityType,
+  getTableName,
+  getUserIdField,
+  type EntityType,
+} from '@/config/entity-registry';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { z } from 'zod';
-import { checkOwnership } from '@/services/actors';
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
   draft: ['active'],
@@ -46,20 +50,29 @@ interface RouteContext {
 export const PATCH = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   try {
     const { entityType, id } = await context.params;
-    if (!isValidEntityType(entityType)) {return apiBadRequest(`Invalid entity type: ${entityType}`);}
+    if (!isValidEntityType(entityType)) {
+      return apiBadRequest(`Invalid entity type: ${entityType}`);
+    }
     const idValidation = getValidationError(validateUUID(id, 'entity ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
 
     const rateLimitResult = await rateLimit(request);
     if (!rateLimitResult.success) {
-      return apiRateLimited('Too many requests', rateLimitResult.resetTime ? retryAfterSeconds(rateLimitResult) : undefined);
+      return apiRateLimited(
+        'Too many requests',
+        rateLimitResult.resetTime ? retryAfterSeconds(rateLimitResult) : undefined
+      );
     }
 
     const { user, supabase } = request;
     const body = await request.json();
     const parseResult = statusUpdateSchema.safeParse(body);
     if (!parseResult.success) {
-      return apiValidationError(`Invalid status. Must be one of: ${Object.keys(VALID_TRANSITIONS).join(', ')}`);
+      return apiValidationError(
+        `Invalid status. Must be one of: ${Object.keys(VALID_TRANSITIONS).join(', ')}`
+      );
     }
 
     const { status: newStatus } = parseResult.data;
@@ -72,12 +85,39 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
       .eq('id', id)
       .single();
 
-    if (fetchError || !existing) {return apiNotFound(`${entityType} not found`);}
+    if (fetchError || !existing) {
+      return apiNotFound(`${entityType} not found`);
+    }
 
-    const hasAccess = userIdField === 'actor_id'
-      ? await checkOwnership(existing as { actor_id: string }, user.id)
-      : existing[userIdField] === user.id;
-    if (!hasAccess) {return apiNotFound(`${entityType} not found`);}
+    let hasAccess: boolean;
+    if (userIdField === 'actor_id') {
+      const actorId = (existing as { actor_id: string }).actor_id;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: actor } = await (supabase.from('actors') as any)
+        .select('actor_type, user_id, group_id')
+        .eq('id', actorId)
+        .maybeSingle();
+      if (!actor) {
+        hasAccess = false;
+      } else if (actor.actor_type === 'user') {
+        hasAccess = actor.user_id === user.id;
+      } else if (actor.actor_type === 'group') {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: membership } = await (supabase.from('group_members') as any)
+          .select('role')
+          .eq('group_id', actor.group_id)
+          .eq('user_id', user.id)
+          .maybeSingle();
+        hasAccess = !!membership;
+      } else {
+        hasAccess = false;
+      }
+    } else {
+      hasAccess = existing[userIdField] === user.id;
+    }
+    if (!hasAccess) {
+      return apiNotFound(`${entityType} not found`);
+    }
 
     const currentStatus = (existing.status || 'draft').toLowerCase();
     const allowedTransitions = VALID_TRANSITIONS[currentStatus] || [];
@@ -90,11 +130,19 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: updated, error: updateError } = await (supabase.from(tableName) as any)
       .update({ status: newStatus, updated_at: new Date().toISOString() })
-      .eq('id', id).select().single();
+      .eq('id', id)
+      .select()
+      .single();
 
-    if (updateError) {return handleSupabaseError(updateError);}
+    if (updateError) {
+      return handleSupabaseError(updateError);
+    }
 
-    logger.info(`Entity status changed: ${entityType} ${id}`, { userId: user.id, oldStatus: currentStatus, newStatus });
+    logger.info(`Entity status changed: ${entityType} ${id}`, {
+      userId: user.id,
+      oldStatus: currentStatus,
+      newStatus,
+    });
     return applyRateLimitHeaders(apiSuccess(updated), rateLimitResult);
   } catch (error) {
     return handleApiError(error);

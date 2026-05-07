@@ -4,11 +4,11 @@
  * Template definitions for service creation.
  *
  * Created: 2025-01-30
- * Last Modified: 2025-01-30
+ * Last Modified: 2026-05-07
  */
 
 import React from 'react';
-import { Briefcase, Palette, Wrench, Type, Globe2 } from 'lucide-react';
+import { Briefcase, Palette, Camera, Sparkles, Globe2 } from 'lucide-react';
 import type { EntityTemplate } from '../types';
 import type { UserServiceFormData } from '@/lib/validation';
 
@@ -22,9 +22,9 @@ export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
       title: '1-hour Consultation',
       description: 'Video call to review your needs, answer questions, and propose next steps.',
       category: 'Consulting',
-      hourly_rate: 50000,
-      fixed_price: null,
-      currency: 'SATS',
+      hourly_rate: null,
+      fixed_price: 150,
+      currency: 'CHF',
       duration_minutes: 60,
       service_location_type: 'remote',
       service_area: '',
@@ -32,17 +32,18 @@ export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
     },
   },
   {
-    id: 'design-sprint',
+    id: 'custom-creation',
     icon: React.createElement(Palette, { className: 'w-4 h-4' }),
-    name: 'Design Sprint (1 week)',
-    tagline: 'Rapid prototypes and user feedback in 5 days.',
+    name: 'Custom Creation',
+    tagline: 'Bespoke artwork, design, or illustration made to order.',
     defaults: {
-      title: '1-week Design Sprint',
-      description: 'Define, prototype, and validate a key flow in 5 days with stakeholder syncs.',
-      category: 'Design',
+      title: 'Custom Creation',
+      description:
+        'A fully custom piece made to your brief — share references, discuss concept, receive the final work.',
+      category: 'Art & Illustration',
       hourly_rate: null,
-      fixed_price: 800000,
-      currency: 'SATS',
+      fixed_price: 500,
+      currency: 'CHF',
       duration_minutes: null,
       service_location_type: 'remote',
       service_area: '',
@@ -50,36 +51,38 @@ export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
     },
   },
   {
-    id: 'bug-fix-bundle',
-    icon: React.createElement(Wrench, { className: 'w-4 h-4' }),
-    name: 'Bug Fix Bundle',
-    tagline: 'Up to 3 bugs fixed with a quick turnaround.',
+    id: 'photo-session',
+    icon: React.createElement(Camera, { className: 'w-4 h-4' }),
+    name: 'Photography Session',
+    tagline: 'Portrait, product, or event shoot with edited deliverables.',
     defaults: {
-      title: 'Bug Fix Bundle (up to 3 issues)',
-      description: 'Triage, patch, and verify up to 3 bugs. Includes test coverage where feasible.',
-      category: 'Development',
+      title: 'Photography Session (1 hour)',
+      description:
+        '1-hour shoot at an agreed location. Includes 20 edited high-resolution images delivered within 5 days.',
+      category: 'Photography',
       hourly_rate: null,
-      fixed_price: 150000,
-      currency: 'SATS',
-      duration_minutes: null,
-      service_location_type: 'remote',
+      fixed_price: 300,
+      currency: 'CHF',
+      duration_minutes: 60,
+      service_location_type: 'both',
       service_area: '',
       status: 'draft',
     },
   },
   {
-    id: 'copy-edit',
-    icon: React.createElement(Type, { className: 'w-4 h-4' }),
-    name: 'Copy Edit (short form)',
-    tagline: 'Tighten a landing page or email in one pass.',
+    id: 'coaching-session',
+    icon: React.createElement(Sparkles, { className: 'w-4 h-4' }),
+    name: 'Coaching / Mentoring',
+    tagline: 'Structured session to unlock progress on a goal.',
     defaults: {
-      title: 'Copy Edit (one pass)',
-      description: 'Tone, clarity, grammar, and light structure for one page/email. Two revisions included.',
-      category: 'Writing',
-      hourly_rate: null,
-      fixed_price: 60000,
-      currency: 'SATS',
-      duration_minutes: null,
+      title: 'Coaching Session (1 hour)',
+      description:
+        'One-on-one session focused on a specific challenge. We set goals, work through blocks, and leave with a clear action plan.',
+      category: 'Coaching & Mentoring',
+      hourly_rate: 120,
+      fixed_price: null,
+      currency: 'CHF',
+      duration_minutes: 60,
       service_location_type: 'remote',
       service_area: '',
       status: 'draft',
@@ -89,20 +92,19 @@ export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
     id: 'local-visit',
     icon: React.createElement(Globe2, { className: 'w-4 h-4' }),
     name: 'On-site Session',
-    tagline: 'Local visit for setup, training, or audits.',
+    tagline: 'Local visit for hands-on help, training, or audits.',
     defaults: {
       title: 'On-site Session (2 hours)',
-      description: 'Hands-on help at your location: setup, audits, or training. Travel not included.',
-      category: 'Coaching',
-      hourly_rate: 70000,
+      description:
+        'Hands-on help at your location: setup, training, or consultation. Travel within service area included.',
+      category: 'Consulting',
+      hourly_rate: 100,
       fixed_price: null,
-      currency: 'SATS',
+      currency: 'CHF',
       duration_minutes: 120,
       service_location_type: 'onsite',
-      service_area: 'Zurich, Switzerland',
+      service_area: '',
       status: 'draft',
     },
   },
 ];
-
-

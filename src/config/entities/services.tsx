@@ -20,7 +20,7 @@ import type { Currency } from '@/types/settings';
 export const serviceEntityConfig: EntityConfig<UserService> = {
   name: 'Service',
   namePlural: 'Services',
-  colorTheme: 'orange',
+  colorTheme: 'tiffany',
 
   listPath: ENTITY_REGISTRY['service'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['service'].basePath}/${id}`,

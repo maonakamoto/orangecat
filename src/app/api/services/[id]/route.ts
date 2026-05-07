@@ -32,6 +32,7 @@ const buildServiceUpdatePayload = createUpdatePayloadBuilder([
   { from: 'service_area', transform: entityTransforms.emptyStringToNull },
   commonFieldMappings.arrayField('images', []),
   commonFieldMappings.arrayField('portfolio_links', []),
+  { from: 'show_on_profile', default: true },
   { from: 'status', default: 'draft' }, // Ensure status is preserved
 ]);
 

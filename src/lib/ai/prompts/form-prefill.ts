@@ -70,9 +70,11 @@ ${fieldsDescription}
 ${specialInstructions ? `Special instructions:\n${specialInstructions}\n` : ''}`;
 
   if (existingData && Object.keys(existingData).length > 0) {
-    // Filter out empty/default values
+    // Price and currency are always overridable — if the user mentions them in their description,
+    // the AI should pick them up rather than keeping template defaults.
+    const userOverridableFields = new Set(['price', 'currency', 'hourly_rate', 'fixed_price']);
     const nonEmptyData = Object.entries(existingData).filter(
-      ([_, v]) => v !== '' && v !== null && v !== undefined
+      ([k, v]) => v !== '' && v !== null && v !== undefined && !userOverridableFields.has(k)
     );
     if (nonEmptyData.length > 0) {
       prompt += `\nPreserve these existing values (do not overwrite):
@@ -126,8 +128,36 @@ export function parseAIResponse(
       }
     }
 
+    // Coerce numeric fields — LLMs sometimes return numbers as strings
+    const numericFieldPatterns = [
+      /_btc$/,
+      /_sats$/,
+      /_usd$/,
+      /^price/,
+      /^amount/,
+      /^rate/,
+      /^hourly_rate$/,
+      /^fixed_price$/,
+      /^duration/,
+      /^inventory/,
+      /^count/,
+      /^quantity/,
+      /^target_amount/,
+      /^minimum_investment/,
+      /^funding_goal/,
+    ];
+    const coercedData: Record<string, unknown> = {};
+    for (const [key, val] of Object.entries(parsed.data)) {
+      if (typeof val === 'string' && numericFieldPatterns.some(p => p.test(key))) {
+        const num = Number(val);
+        coercedData[key] = isNaN(num) ? val : num;
+      } else {
+        coercedData[key] = val;
+      }
+    }
+
     return {
-      data: parsed.data,
+      data: coercedData,
       confidence,
     };
   } catch (error) {

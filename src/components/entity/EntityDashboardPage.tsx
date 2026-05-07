@@ -133,13 +133,18 @@ export default function EntityDashboardPage<T extends BaseEntity>({
   }
 
   // Determine color class based on theme
-  const colorClass = {
-    orange: 'bg-gradient-to-r from-orange-600 to-orange-700',
-    blue: 'bg-gradient-to-r from-blue-600 to-blue-700',
-    green: 'bg-gradient-to-r from-green-600 to-green-700',
-    purple: 'bg-gradient-to-r from-purple-600 to-purple-700',
-    tiffany: 'bg-gradient-to-r from-teal-500 to-teal-600',
-  }[config.colorTheme || 'orange'];
+  const colorClass =
+    (
+      {
+        orange: 'bg-gradient-to-r from-orange-600 to-orange-700',
+        blue: 'bg-gradient-to-r from-blue-600 to-blue-700',
+        green: 'bg-gradient-to-r from-green-600 to-green-700',
+        purple: 'bg-gradient-to-r from-purple-600 to-purple-700',
+        rose: 'bg-gradient-to-r from-rose-500 to-rose-600',
+        indigo: 'bg-gradient-to-r from-indigo-600 to-indigo-700',
+        tiffany: 'bg-gradient-to-r from-teal-500 to-teal-600',
+      } as Record<string, string>
+    )[config.colorTheme || 'tiffany'] ?? 'bg-gradient-to-r from-teal-500 to-teal-600';
 
   const headerActions = (
     <div className="flex items-center gap-2">

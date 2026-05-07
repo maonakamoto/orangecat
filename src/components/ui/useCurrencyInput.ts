@@ -35,14 +35,22 @@ export function useCurrencyInput(
       return;
     }
 
+    // Coerce to number — AI prefill may pass strings even though type says number
+    const numValue = Number(value);
+    if (isNaN(numValue)) {
+      setLocalValue('');
+      setIsUserEditing(false);
+      return;
+    }
+
     if (!isUserEditing) {
       let formatted: string;
       if (inputCurrency === 'BTC') {
-        formatted = value.toFixed(8).replace(/\.?0+$/, '');
+        formatted = numValue.toFixed(8).replace(/\.?0+$/, '');
       } else if (inputCurrency === 'SATS') {
-        formatted = Math.round(value).toLocaleString('en-US', { maximumFractionDigits: 0 });
+        formatted = Math.round(numValue).toLocaleString('en-US', { maximumFractionDigits: 0 });
       } else {
-        formatted = value.toFixed(2);
+        formatted = numValue.toFixed(2);
       }
       setLocalValue(formatted);
     }

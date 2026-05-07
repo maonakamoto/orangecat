@@ -26,6 +26,7 @@ interface WizardTemplatePickerProps<T extends EntityTemplate> {
   onSelectTemplate: (template: T | null) => void;
   selectedTemplateId?: string | null;
   showStartFromScratch?: boolean;
+  entityLabel?: string;
   className?: string;
 }
 
@@ -34,6 +35,7 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
   onSelectTemplate,
   selectedTemplateId,
   showStartFromScratch = true,
+  entityLabel,
   className,
 }: WizardTemplatePickerProps<T>) {
   const [selected, setSelected] = useState<string | null>(selectedTemplateId ?? null);
@@ -87,7 +89,9 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
               Start from scratch
             </h3>
             <p className="text-xs sm:text-sm text-gray-500">
-              Create your project with a blank canvas
+              {entityLabel
+                ? `Create a blank ${entityLabel.toLowerCase()}`
+                : 'Start with a blank form'}
             </p>
           </button>
         )}

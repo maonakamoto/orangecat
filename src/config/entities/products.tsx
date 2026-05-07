@@ -20,7 +20,7 @@ import type { Currency } from '@/types/settings';
 export const productEntityConfig: EntityConfig<UserProduct> = {
   name: 'Product',
   namePlural: 'Products',
-  colorTheme: 'orange',
+  colorTheme: 'tiffany',
 
   listPath: ENTITY_REGISTRY['product'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['product'].basePath}/${id}`,
@@ -82,7 +82,7 @@ export const productEntityConfig: EntityConfig<UserProduct> = {
     description: 'Start building your marketplace by creating your first product.',
     action: (
       <Link href={ROUTES.DASHBOARD.STORE_CREATE}>
-        <Button className="bg-gradient-to-r from-orange-600 to-orange-700">Create Product</Button>
+        <Button>Create Product</Button>
       </Link>
     ),
   },

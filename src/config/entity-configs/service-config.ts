@@ -22,16 +22,19 @@ import { WALLET_FIELD_GROUP } from './wallet-field-group';
 // ==================== CONSTANTS ====================
 
 const SERVICE_CATEGORIES = [
-  'Consulting',
+  'Art & Illustration',
+  'Tattoo & Body Art',
+  'Beauty & Wellness',
+  'Photography',
+  'Video & Film',
+  'Music & Audio',
   'Design',
+  'Writing & Editing',
+  'Consulting',
+  'Coaching & Mentoring',
+  'Teaching & Tutoring',
   'Development',
   'Marketing',
-  'Writing',
-  'Teaching',
-  'Coaching',
-  'Photography',
-  'Video',
-  'Music',
   'Translation',
   'Legal',
   'Accounting',
@@ -166,6 +169,7 @@ const defaultValues: UserServiceFormData = {
   service_area: '',
   images: [],
   portfolio_links: [],
+  show_on_profile: true,
   status: 'draft',
 };
 
