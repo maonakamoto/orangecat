@@ -14,7 +14,7 @@ import { logger } from '@/utils/logger';
 import type { GroupMember, AddMemberInput, UpdateMemberInput } from '@/types/group';
 import type { GroupMemberResponse } from '../types';
 import { STATUS } from '@/config/database-constants';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { getCurrentUserId, isGroupMember, getUserRole } from '../utils/helpers';
 import { logGroupActivity } from '../utils/activity';
 import { canPerformAction } from '../permissions/resolver';
@@ -38,7 +38,7 @@ export async function joinGroup(
     // Get group to check join policy
     // Cast to any to bypass Supabase type generation for tables not in generated types
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: group, error: groupError } = (await (sb.from(TABLES.groups) as any)
+    const { data: group, error: groupError } = (await (sb.from(DATABASE_TABLES.GROUPS) as any)
       .select('is_public, visibility')
       .eq('id', groupId)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,7 +61,7 @@ export async function joinGroup(
 
     // Create membership
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: insertError } = await (sb.from(TABLES.group_members) as any).insert({
+    const { error: insertError } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any).insert({
       group_id: groupId,
       user_id: userId,
       role: 'member',
@@ -113,7 +113,7 @@ export async function leaveGroup(
 
     // Remove membership
     const { error } = await sb
-      .from(TABLES.group_members)
+      .from(DATABASE_TABLES.GROUP_MEMBERS)
       .delete()
       .eq('group_id', groupId)
       .eq('user_id', userId);
@@ -162,7 +162,7 @@ export async function addMember(
 
     // Add member
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(TABLES.group_members) as any)
+    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
       .insert({
         group_id: groupId,
         user_id: input.user_id,
@@ -220,7 +220,7 @@ export async function updateMember(
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(TABLES.group_members) as any)
+    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
       .update(payload)
       .eq('group_id', groupId)
       .eq('user_id', memberId)
@@ -267,7 +267,7 @@ export async function removeMember(
     }
 
     const { error } = await sb
-      .from(TABLES.group_members)
+      .from(DATABASE_TABLES.GROUP_MEMBERS)
       .delete()
       .eq('group_id', groupId)
       .eq('user_id', memberId);

@@ -1,7 +1,7 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { STATUS } from '@/config/database-constants';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { getCurrentUserId, isGroupMember } from '../utils/helpers';
 import { getProposal, getProposalVotes } from '../queries/proposals';
 import type { ProposalVote } from '../queries/proposals';
@@ -48,7 +48,7 @@ export async function castVote(input: CastVoteInput, client?: AnySupabaseClient)
     const { data, error } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.group_votes) as any
+        .from(DATABASE_TABLES.GROUP_VOTES) as any
     )
       .upsert(
         {
@@ -121,7 +121,7 @@ export async function checkAndResolveProposal(
       await (
         sb
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .from(TABLES.group_proposals) as any
+          .from(DATABASE_TABLES.GROUP_PROPOSALS) as any
       )
         .update({ status: newStatus, updated_at: new Date().toISOString() })
         .eq('id', proposalId);

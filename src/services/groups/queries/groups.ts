@@ -13,7 +13,7 @@ import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import type { Group, GroupsQuery, GroupsListResponse, GroupResponse } from '../types';
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, TABLES } from '../constants';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
 import { getCurrentUserId, getUserGroupIds } from '../utils/helpers';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
@@ -41,7 +41,7 @@ export async function getGroup(
     const userId = await getCurrentUserId(sb);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let query = (sb.from(TABLES.groups) as any).select('*');
+    let query = (sb.from(DATABASE_TABLES.GROUPS) as any).select('*');
 
     if (bySlug) {
       query = query.eq('slug', identifier);
@@ -108,7 +108,7 @@ export async function getUserGroups(
     const groupIds = memberships.map((m: { group_id: string }) => m.group_id);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let dbQuery = (sb.from(TABLES.groups) as any)
+    let dbQuery = (sb.from(DATABASE_TABLES.GROUPS) as any)
       .select('*', { count: 'exact' })
       .in('id', groupIds);
 
@@ -162,7 +162,7 @@ export async function getAvailableGroups(
     const _userId = await getCurrentUserId(sb);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let dbQuery = (sb.from(TABLES.groups) as any)
+    let dbQuery = (sb.from(DATABASE_TABLES.GROUPS) as any)
       .select('*', { count: 'exact' })
       .eq('is_public', true);
 
@@ -259,7 +259,7 @@ export async function searchGroups(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const escapedSearchQuery = searchQuery.replace(/[%_]/g, '\\$&');
-    let dbQuery = (sb.from(TABLES.groups) as any)
+    let dbQuery = (sb.from(DATABASE_TABLES.GROUPS) as any)
       .select('*', { count: 'exact' })
       .or(`name.ilike.%${escapedSearchQuery}%,description.ilike.%${escapedSearchQuery}%`);
 

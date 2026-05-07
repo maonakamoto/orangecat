@@ -12,7 +12,8 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import type { GroupMembersResponse, GroupMemberDetail } from '../types';
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, TABLES } from '../constants';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { checkGroupPermission } from '../permissions';
 import { getCurrentUserId } from '../utils/helpers';
 import { fromTable, type AnySupabaseClient } from '../db-helpers';
@@ -53,7 +54,7 @@ export async function getGroupMembers(
       }
     } else {
       // Check if group is public
-      const { data: groupData } = await fromTable(sb, TABLES.groups)
+      const { data: groupData } = await fromTable(sb, DATABASE_TABLES.GROUPS)
         .select('is_public')
         .eq('id', groupId)
         .single();
@@ -66,7 +67,7 @@ export async function getGroupMembers(
     }
 
     // Build query
-    let query = fromTable(sb, TABLES.group_members)
+    let query = fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .select(
         `
         *,
@@ -141,7 +142,7 @@ export async function getGroupMember(
       }
     }
 
-    const { data, error } = await fromTable(sb, TABLES.group_members)
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .select(
         `
         *,

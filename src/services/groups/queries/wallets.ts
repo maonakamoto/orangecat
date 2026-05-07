@@ -14,7 +14,7 @@ import { logger } from '@/utils/logger';
 import type { GroupWalletsResponse, GroupWalletSummary } from '../types';
 import { checkGroupPermission } from '../permissions';
 import { getCurrentUserId } from '../utils/helpers';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 /**
@@ -38,7 +38,7 @@ export async function getGroupWallets(
 
     // Query group_wallets table
     const { data, error } = await sb
-      .from(TABLES.group_wallets)
+      .from(DATABASE_TABLES.GROUP_WALLETS)
       .select('*')
       .eq('group_id', groupId)
       .eq('is_active', true)

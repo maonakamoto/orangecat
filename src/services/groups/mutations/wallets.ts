@@ -19,7 +19,7 @@ import type {
 import { getCurrentUserId } from '../utils/helpers';
 import { logGroupActivity } from '../utils/activity';
 import { checkGroupPermission } from '../permissions';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import type { ServiceResult } from '@/types/common';
 
@@ -47,7 +47,7 @@ export async function createGroupWallet(
     const { data, error } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.group_wallets) as any
+        .from(DATABASE_TABLES.GROUP_WALLETS) as any
     )
       .insert({
         group_id: request.group_id,
@@ -122,7 +122,7 @@ export async function updateGroupWallet(
     const { data: walletData } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.group_wallets) as any
+        .from(DATABASE_TABLES.GROUP_WALLETS) as any
     )
       .select('group_id')
       .eq('id', walletId)
@@ -165,7 +165,7 @@ export async function updateGroupWallet(
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (sb.from(TABLES.group_wallets) as any)
+    const { error } = await (sb.from(DATABASE_TABLES.GROUP_WALLETS) as any)
       .update(payload)
       .eq('id', walletId);
 

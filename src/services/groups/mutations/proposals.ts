@@ -1,7 +1,7 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { STATUS } from '@/config/database-constants';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { canPerformAction } from '../permissions/resolver';
 import { getCurrentUserId, isGroupMember } from '../utils/helpers';
 import { getProposal } from '../queries/proposals';
@@ -43,7 +43,7 @@ export async function createProposal(input: CreateProposalInput, client?: AnySup
       return { success: false, error: 'Description must be 5000 characters or less' };
     }
 
-    const { data, error } = await fromTable(sb, TABLES.group_proposals)
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .insert({
         group_id: input.group_id,
         proposer_id: userId,
@@ -106,7 +106,7 @@ export async function activateProposal(proposalId: string, client?: AnySupabaseC
 
     const threshold = proposal.voting_threshold || 50;
 
-    const { data, error } = await fromTable(sb, TABLES.group_proposals)
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .update({
         status: 'active',
         voting_starts_at: votingStartsAt.toISOString(),
@@ -189,7 +189,7 @@ export async function updateProposal(
       return { success: false, error: 'Title is required' };
     }
 
-    const { data, error } = await fromTable(sb, TABLES.group_proposals)
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .update({ ...payload, updated_at: new Date().toISOString() })
       .eq('id', proposalId)
       .select()
@@ -231,7 +231,7 @@ export async function cancelProposal(proposalId: string, client?: AnySupabaseCli
       return { success: false, error: 'Only the proposer can cancel the proposal' };
     }
 
-    const { data, error } = await fromTable(sb, TABLES.group_proposals)
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .update({ status: 'cancelled', updated_at: new Date().toISOString() })
       .eq('id', proposalId)
       .select()
@@ -271,7 +271,9 @@ export async function deleteProposal(proposalId: string, client?: AnySupabaseCli
       return { success: false, error: 'Only the proposer can delete the proposal' };
     }
 
-    const { error } = await fromTable(sb, TABLES.group_proposals).delete().eq('id', proposalId);
+    const { error } = await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
+      .delete()
+      .eq('id', proposalId);
     if (error) {
       logger.error('Failed to delete proposal', error, 'Groups');
       return { success: false, error: error.message };

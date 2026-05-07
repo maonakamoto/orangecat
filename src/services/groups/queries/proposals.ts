@@ -1,6 +1,7 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
-import { TABLES, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 export type ProposalStatus = 'draft' | 'active' | 'passed' | 'failed' | 'executed' | 'cancelled';
@@ -61,7 +62,7 @@ export async function getProposal(
   try {
     const sb = client || supabase;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(TABLES.group_proposals) as any)
+    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_PROPOSALS) as any)
       .select(
         `
         *,
@@ -132,7 +133,7 @@ export async function getProposalVotes(
   try {
     const sb = client || supabase;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(TABLES.group_votes) as any)
+    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_VOTES) as any)
       .select('*')
       .eq('proposal_id', proposalId);
 
@@ -165,7 +166,7 @@ export async function getGroupProposals(
     const status = options?.status || 'all';
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let query = (sb.from(TABLES.group_proposals) as any)
+    let query = (sb.from(DATABASE_TABLES.GROUP_PROPOSALS) as any)
       .select(
         `
         *,
@@ -256,7 +257,7 @@ export async function getPublicJobPostings(
     const offset = options?.offset || 0;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query = (sb.from(TABLES.group_proposals) as any)
+    const query = (sb.from(DATABASE_TABLES.GROUP_PROPOSALS) as any)
       .select(
         `
         *,

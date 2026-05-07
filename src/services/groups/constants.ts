@@ -20,20 +20,6 @@ export type { GroupLabel, GovernancePreset, GroupFeature };
 // Pagination defaults
 export { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
-// Table names
-export const TABLES = {
-  groups: 'groups',
-  group_members: 'group_members',
-  group_features: 'group_features',
-  group_proposals: 'group_proposals',
-  group_votes: 'group_votes',
-  group_wallets: 'group_wallets',
-  group_events: 'group_events',
-  group_event_rsvps: 'group_event_rsvps',
-  group_invitations: 'group_invitations',
-  group_activities: 'group_activities', // Activity logging table
-} as const;
-
 /**
  * Get defaults for a group label
  * Delegates to the SSOT config

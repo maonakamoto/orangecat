@@ -13,7 +13,8 @@ import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import type { Group, CreateGroupInput, UpdateGroupInput } from '@/types/group';
 import type { GroupResponse } from '../types';
-import { TABLES, getDefaultsForLabel } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
+import { getDefaultsForLabel } from '../constants';
 import { getCurrentUserId, generateSlug, ensureUniqueSlug } from '../utils/helpers';
 import { logGroupActivity } from '../utils/activity';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
@@ -65,7 +66,7 @@ export async function createGroup(
 
     // Insert into groups table
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabaseClient.from(TABLES.groups) as any)
+    const { data, error } = await (supabaseClient.from(DATABASE_TABLES.GROUPS) as any)
       .insert(payload)
       .select()
       .single();
@@ -77,7 +78,9 @@ export async function createGroup(
 
     // Add creator as founder in group_members
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: memberError } = await (supabaseClient.from(TABLES.group_members) as any).insert({
+    const { error: memberError } = await (
+      supabaseClient.from(DATABASE_TABLES.GROUP_MEMBERS) as any
+    ).insert({
       group_id: data.id,
       user_id: currentUserId,
       role: 'founder',
@@ -97,7 +100,7 @@ export async function createGroup(
       }));
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseClient.from(TABLES.group_features) as any).insert(featureInserts);
+      await (supabaseClient.from(DATABASE_TABLES.GROUP_FEATURES) as any).insert(featureInserts);
     }
 
     // Log activity
@@ -185,7 +188,7 @@ export async function updateGroup(
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabaseClient.from(TABLES.groups) as any)
+    const { data, error } = await (supabaseClient.from(DATABASE_TABLES.GROUPS) as any)
       .update(payload)
       .eq('id', groupId)
       .select()
@@ -228,7 +231,9 @@ export async function deleteGroup(
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabaseClient.from(TABLES.groups) as any).delete().eq('id', groupId);
+    const { error } = await (supabaseClient.from(DATABASE_TABLES.GROUPS) as any)
+      .delete()
+      .eq('id', groupId);
 
     if (error) {
       logger.error('Failed to delete group', error, 'Groups');

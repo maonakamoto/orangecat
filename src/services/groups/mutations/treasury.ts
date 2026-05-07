@@ -10,7 +10,7 @@
  */
 
 import { logger } from '@/utils/logger';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import supabase from '@/lib/supabase/browser';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import type { ServiceResult } from '@/types/common';
@@ -71,7 +71,7 @@ export async function updateWalletBalance(
     const { error } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.group_wallets) as any
+        .from(DATABASE_TABLES.GROUP_WALLETS) as any
     )
       .update({
         current_balance_btc: balanceBtc,
@@ -108,7 +108,7 @@ export async function refreshWalletBalance(
     const { data: wallet, error: fetchError } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.group_wallets) as any
+        .from(DATABASE_TABLES.GROUP_WALLETS) as any
     )
       .select('bitcoin_address')
       .eq('id', walletId)
@@ -160,7 +160,7 @@ export async function refreshGroupTreasuryBalances(
     const { data: wallets, error: fetchError } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.group_wallets) as any
+        .from(DATABASE_TABLES.GROUP_WALLETS) as any
     )
       .select('id, bitcoin_address')
       .eq('group_id', groupId)

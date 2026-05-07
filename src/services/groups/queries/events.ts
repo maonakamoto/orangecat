@@ -11,7 +11,7 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { getCurrentUserId } from '../utils/helpers';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import type { EventsQuery, EventsListResponse, EventResponse, RsvpsListResponse } from '../types';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
@@ -28,7 +28,7 @@ export async function getGroupEvents(
     const _userId = await getCurrentUserId(sb);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let query = (sb.from(TABLES.group_events) as any)
+    let query = (sb.from(DATABASE_TABLES.GROUP_EVENTS) as any)
       .select(
         `
         *,
@@ -98,7 +98,7 @@ export async function getEvent(
     const _userId = await getCurrentUserId(sb);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(TABLES.group_events) as any)
+    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_EVENTS) as any)
       .select(
         `
         *,
@@ -161,7 +161,7 @@ export async function getEventRsvps(
 
     // First check if user can access the event
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: event } = await (sb.from(TABLES.group_events) as any)
+    const { data: event } = await (sb.from(DATABASE_TABLES.GROUP_EVENTS) as any)
       .select('id, is_public, group_id')
       .eq('id', eventId)
       .single();
@@ -172,7 +172,7 @@ export async function getEventRsvps(
 
     // Get RSVPs
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error, count } = await (sb.from(TABLES.group_event_rsvps) as any)
+    const { data, error, count } = await (sb.from(DATABASE_TABLES.GROUP_EVENT_RSVPS) as any)
       .select(
         `
         *,
@@ -238,7 +238,7 @@ export async function getUserRsvpStatus(
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(TABLES.group_event_rsvps) as any)
+    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_EVENT_RSVPS) as any)
       .select('status')
       .eq('event_id', eventId)
       .eq('user_id', userId)

@@ -20,7 +20,7 @@ export {
 
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { GOVERNANCE_PRESETS } from '@/config/governance-presets';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
@@ -84,7 +84,7 @@ export async function checkGroupPermission(
     const { data: group } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.groups) as any
+        .from(DATABASE_TABLES.GROUPS) as any
     )
       .select('is_public, governance_preset')
       .eq('id', groupId)
@@ -99,7 +99,7 @@ export async function checkGroupPermission(
     const { data: membership } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.group_members) as any
+        .from(DATABASE_TABLES.GROUP_MEMBERS) as any
     )
       .select('role, permission_overrides')
       .eq('group_id', groupId)
@@ -176,7 +176,7 @@ export async function getGroupPermissions(
     const { data: group2 } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.groups) as any
+        .from(DATABASE_TABLES.GROUPS) as any
     )
       .select('is_public, governance_preset')
       .eq('id', groupId)
@@ -191,7 +191,7 @@ export async function getGroupPermissions(
     const { data: membership2 } = await (
       sb
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(TABLES.group_members) as any
+        .from(DATABASE_TABLES.GROUP_MEMBERS) as any
     )
       .select('role, permission_overrides')
       .eq('group_id', groupId)

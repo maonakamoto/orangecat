@@ -13,7 +13,7 @@ import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { GroupActivitiesResponse, GroupActivitiesQuery } from '../types';
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, TABLES } from '../constants';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
 import { checkGroupPermission } from '../permissions';
 import { getCurrentUserId } from '../utils/helpers';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
@@ -40,7 +40,7 @@ export async function getGroupActivities(
     } else {
       // Check if group is public
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: group } = await (sb.from(TABLES.groups) as any)
+      const { data: group } = await (sb.from(DATABASE_TABLES.GROUPS) as any)
         .select('is_public')
         .eq('id', groupId)
         .single();

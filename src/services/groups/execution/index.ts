@@ -1,6 +1,6 @@
 import { logger } from '@/utils/logger';
 import supabase from '@/lib/supabase/browser';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { fromTable, type AnySupabaseClient } from '../db-helpers';
 
 interface ProposalRecord {
@@ -115,13 +115,14 @@ const handlers: Record<string, ActionHandler> = {
 
       // Create project owned by group
       // group_id and actor_id are passed as context; createProject reads only ProjectData fields
-      const project = await createProject(
-        proposal.proposer_id,
-        { ...projectData, group_id: proposal.group_id, actor_id: groupActor.id } as unknown as import('@/lib/validation').ProjectData
-      );
+      const project = await createProject(proposal.proposer_id, {
+        ...projectData,
+        group_id: proposal.group_id,
+        actor_id: groupActor.id,
+      } as unknown as import('@/lib/validation').ProjectData);
 
       // Update proposal with created project ID
-      await fromTable(sb, TABLES.group_proposals)
+      await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
         .update({
           action_data: {
             ...proposal.action_data,
@@ -165,7 +166,7 @@ const handlers: Record<string, ActionHandler> = {
       // 3. Notify authorized signers
       // 4. Wait for multisig execution
 
-      await fromTable(sb, TABLES.group_proposals)
+      await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
         .update({
           action_data: {
             ...proposal.action_data,
@@ -210,7 +211,7 @@ export async function executeProposalAction(
     }
 
     // Mark as executed before/after to avoid duplicate runs
-    const { data: reloaded } = await fromTable(sb, TABLES.group_proposals)
+    const { data: reloaded } = await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .select('executed_at, execution_result')
       .eq('id', proposalId)
       .single();
@@ -221,7 +222,7 @@ export async function executeProposalAction(
 
     await handler(proposalId, proposal, sb);
 
-    await fromTable(sb, TABLES.group_proposals)
+    await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .update({
         executed_at: new Date().toISOString(),
         execution_result: { ok: true, action: proposal.action_type },
@@ -229,7 +230,7 @@ export async function executeProposalAction(
       .eq('id', proposalId);
   } catch (error) {
     logger.error('Exception executing proposal action', error, 'Groups');
-    await fromTable(sb, TABLES.group_proposals)
+    await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .update({
         executed_at: new Date().toISOString(),
         execution_result: { ok: false, error: String(error) },

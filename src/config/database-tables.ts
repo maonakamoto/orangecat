@@ -41,6 +41,8 @@ export const DATABASE_TABLES = {
   GROUP_EVENTS: 'group_events',
   GROUP_EVENT_RSVPS: 'group_event_rsvps',
   GROUP_PROPOSALS: 'group_proposals',
+  GROUP_VOTES: 'group_votes',
+  GROUP_FEATURES: 'group_features',
   GROUP_ACTIVITIES: 'group_activities',
 
   // Contracts

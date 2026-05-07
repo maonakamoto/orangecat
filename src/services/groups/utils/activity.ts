@@ -11,7 +11,7 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import type { ActivityType } from '../types';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 /**
@@ -37,7 +37,7 @@ export async function logGroupActivity(
   try {
     const supabaseClient = client || supabase;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabaseClient.from(TABLES.group_activities) as any).insert({
+    await (supabaseClient.from(DATABASE_TABLES.GROUP_ACTIVITIES) as any).insert({
       group_id: groupId,
       user_id: userId,
       activity_type: activityType,

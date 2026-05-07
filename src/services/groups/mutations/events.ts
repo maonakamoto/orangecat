@@ -13,7 +13,7 @@ import { logger } from '@/utils/logger';
 import { getCurrentUserId, isGroupMember, getUserRole } from '../utils/helpers';
 import { logGroupActivity } from '../utils/activity';
 import { STATUS } from '@/config/database-constants';
-import { TABLES } from '../constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { fromTable, type AnySupabaseClient } from '../db-helpers';
 import type { ServiceResult } from '@/types/common';
 import type {
@@ -52,7 +52,7 @@ export async function createEvent(
     }
 
     // Create event
-    const { data, error } = await fromTable(sb, TABLES.group_events)
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENTS)
       .insert({
         ...input,
         creator_id: userId,
@@ -108,7 +108,7 @@ export async function updateEvent(
     }
 
     // Get event to check permissions
-    const { data: existing, error: fetchError } = await fromTable(sb, TABLES.group_events)
+    const { data: existing, error: fetchError } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENTS)
       .select('id, group_id, creator_id')
       .eq('id', eventId)
       .single();
@@ -132,7 +132,7 @@ export async function updateEvent(
     }
 
     // Update event
-    const { data: updated, error } = await fromTable(sb, TABLES.group_events)
+    const { data: updated, error } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENTS)
       .update(input)
       .eq('id', eventId)
       .select()
@@ -180,7 +180,7 @@ export async function deleteEvent(
     }
 
     // Get event to check permissions
-    const { data: existing, error: fetchError } = await fromTable(sb, TABLES.group_events)
+    const { data: existing, error: fetchError } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENTS)
       .select('id, group_id, creator_id, title')
       .eq('id', eventId)
       .single();
@@ -204,7 +204,7 @@ export async function deleteEvent(
     }
 
     // Delete event (RSVPs will be cascade deleted)
-    const { error } = await fromTable(sb, TABLES.group_events).delete().eq('id', eventId);
+    const { error } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENTS).delete().eq('id', eventId);
 
     if (error) {
       logger.error('Failed to delete event', error, 'Groups');
@@ -247,7 +247,7 @@ export async function rsvpToEvent(
     }
 
     // Get event to verify it exists and is accessible
-    const { data: existing, error: fetchError } = await fromTable(sb, TABLES.group_events)
+    const { data: existing, error: fetchError } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENTS)
       .select('id, group_id, is_public, requires_rsvp')
       .eq('id', eventId)
       .single();
@@ -270,7 +270,7 @@ export async function rsvpToEvent(
     }
 
     // Upsert RSVP
-    const { data: rsvpData, error } = await fromTable(sb, TABLES.group_event_rsvps)
+    const { data: rsvpData, error } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENT_RSVPS)
       .upsert(
         {
           event_id: eventId,
