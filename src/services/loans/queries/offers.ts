@@ -11,9 +11,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import type { LoanOffersListResponse, LoanOffersQuery, Pagination } from '@/types/loans';
 import { getCurrentUserId } from '../utils/auth';
-
-const DEFAULT_PAGE_SIZE = 20;
-const MAX_PAGE_SIZE = 100;
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 /**
  * Get offers for a loan

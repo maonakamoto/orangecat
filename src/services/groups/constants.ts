@@ -18,8 +18,7 @@ export { GROUP_LABELS, GOVERNANCE_PRESETS, GROUP_FEATURES };
 export type { GroupLabel, GovernancePreset, GroupFeature };
 
 // Pagination defaults
-export const DEFAULT_PAGE_SIZE = 20;
-export const MAX_PAGE_SIZE = 100;
+export { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 // Table names
 export const TABLES = {

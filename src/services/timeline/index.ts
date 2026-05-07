@@ -68,9 +68,6 @@ import { getDemoTimelineEvents } from './utils/demo';
 import type { ServiceResult } from '@/types/common';
 
 class TimelineService {
-  private readonly _DEFAULT_PAGE_SIZE = 20;
-  private readonly _MAX_PAGE_SIZE = 100;
-
   // ==================== EVENT CREATION ====================
 
   /**

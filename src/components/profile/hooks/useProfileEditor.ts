@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 import { toast } from 'sonner';
 import { Profile } from '@/types/profile';
 import { ProfileFormData } from '@/types/database';
@@ -12,9 +11,9 @@ import { profileSchema as serverProfileSchema } from '@/lib/validation';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { ProfileFieldType } from '@/lib/profile-guidance';
 import { submitProfileForm } from './profileSubmitHandler';
+import type { ProfileFormValues } from '../types';
 
 const profileSchema = serverProfileSchema;
-type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export interface UseProfileEditorOptions {
   profile: Profile;

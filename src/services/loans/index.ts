@@ -66,9 +66,6 @@ import type { ServiceResult } from '@/types/common';
  * Maintains backward compatibility with existing code.
  */
 class LoansService {
-  private readonly DEFAULT_PAGE_SIZE = 20;
-  private readonly MAX_PAGE_SIZE = 100;
-
   // ==================== LOAN MANAGEMENT ====================
 
   async createLoan(request: CreateLoanRequest): Promise<LoanResponse> {

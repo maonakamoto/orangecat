@@ -19,9 +19,7 @@ import type {
 } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
 import { getCurrentUserId } from '../utils/auth';
-
-const DEFAULT_PAGE_SIZE = 20;
-const MAX_PAGE_SIZE = 100;
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 /**
  * Get a specific loan by ID

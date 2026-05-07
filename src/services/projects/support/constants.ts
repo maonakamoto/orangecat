@@ -9,8 +9,7 @@
  */
 
 // Default pagination
-export const DEFAULT_PAGE_SIZE = 20;
-export const MAX_PAGE_SIZE = 100;
+export { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 // Support type labels (user-facing)
 // Note: The key 'bitcoin_funding' matches the database enum value (database/API).
