@@ -186,7 +186,6 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                     : 'text-base min-h-[60px]',
                 composer.isPosting && 'opacity-50 cursor-not-allowed'
               )}
-              style={{ fontSize: fullScreen ? '20px' : '16px' }}
               suppressContentEditableWarning
               aria-label="Write your post"
               aria-describedby="character-count"

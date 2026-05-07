@@ -5,6 +5,17 @@ export const alt = 'OrangeCat - Your AI Economic Agent';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
+// satori (next/og) does not support Tailwind — inline styles are required here.
+// Color values are sourced from the design system defined in tailwind.config.ts and CLAUDE.md.
+const BRAND = {
+  tiffanyGradient: 'linear-gradient(135deg, #0ABAB5 0%, #089B96 50%, #067A76 100%)',
+  accentGradient: 'linear-gradient(135deg, #F97316, #EA580C)',
+  white: 'white',
+  whiteSubtle: 'rgba(255,255,255,0.9)',
+  whiteGlass: 'rgba(255,255,255,0.15)',
+  shadow: '0 8px 32px rgba(0,0,0,0.2)',
+} as const;
+
 export default function Image() {
   return new ImageResponse(
     <div
@@ -15,7 +26,7 @@ export default function Image() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0ABAB5 0%, #089B96 50%, #067A76 100%)',
+        background: BRAND.tiffanyGradient,
         fontFamily: 'system-ui, sans-serif',
       }}
     >
@@ -28,10 +39,10 @@ export default function Image() {
           width: 120,
           height: 120,
           borderRadius: 28,
-          background: 'linear-gradient(135deg, #F97316, #EA580C)',
+          background: BRAND.accentGradient,
           marginBottom: 32,
           fontSize: 64,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+          boxShadow: BRAND.shadow,
         }}
       >
         🐾
@@ -42,7 +53,7 @@ export default function Image() {
           display: 'flex',
           fontSize: 64,
           fontWeight: 800,
-          color: 'white',
+          color: BRAND.white,
           marginBottom: 16,
           letterSpacing: '-0.02em',
         }}
@@ -54,7 +65,7 @@ export default function Image() {
         style={{
           display: 'flex',
           fontSize: 28,
-          color: 'rgba(255,255,255,0.9)',
+          color: BRAND.whiteSubtle,
           marginBottom: 48,
         }}
       >
@@ -74,8 +85,8 @@ export default function Image() {
               display: 'flex',
               padding: '10px 24px',
               borderRadius: 100,
-              background: 'rgba(255,255,255,0.15)',
-              color: 'white',
+              background: BRAND.whiteGlass,
+              color: BRAND.white,
               fontSize: 20,
               fontWeight: 600,
             }}

@@ -27,10 +27,8 @@ export function ThreadLine({ depth = 1, isLast: _isLast = false, className }: Th
         <div
           className={cn(
             'w-0.5 bg-gray-300 flex-shrink-0',
-            depth > 1 && '-mt-2 mb-2',
-            depth === 1 && 'mb-2'
+            depth > 1 ? 'h-4 -mt-2 mb-2' : 'h-2 mb-2'
           )}
-          style={{ height: depth > 1 ? '1rem' : '0.5rem' }}
         />
 
         {/* Horizontal connector (only for nested replies) */}
@@ -82,6 +80,3 @@ export function ThreadConnector({
     </div>
   );
 }
-
-
-

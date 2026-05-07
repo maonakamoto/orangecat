@@ -178,7 +178,6 @@ const TimelineComposer = React.memo(function TimelineComposer({
               'empty:before:pointer-events-none',
               postComposer.isPosting && 'opacity-50 cursor-not-allowed'
             )}
-            style={{ fontSize: simpleMode ? '16px' : '17px' }} // Prevent iOS zoom on focus
             suppressContentEditableWarning
           />
 
