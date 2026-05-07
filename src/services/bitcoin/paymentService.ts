@@ -190,7 +190,7 @@ export function getPaymentProvider(): PaymentProvider {
  * NWC is per-user (each user connects their own wallet), so this requires
  * the user's NWC connection URI.
  */
-export async function getNWCPaymentProvider(connectionUri: string): Promise<PaymentProvider> {
+async function getNWCPaymentProvider(connectionUri: string): Promise<PaymentProvider> {
   const { NWCPaymentProvider } = await import('./nwcProvider');
   return new NWCPaymentProvider(connectionUri);
 }

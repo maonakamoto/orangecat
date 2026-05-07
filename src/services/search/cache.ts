@@ -99,9 +99,6 @@ export function setCachedResult(key: string, data: SearchResponse): void {
 /**
  * Clear all cached search results
  */
-export function clearSearchCache(): void {
+function clearSearchCache(): void {
   searchCache.clear();
 }
-
-
-

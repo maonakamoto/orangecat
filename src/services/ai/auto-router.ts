@@ -136,7 +136,7 @@ const COMPLEXITY_KEYWORDS: Record<string, { weight: number; taskType: TaskType }
 
 // ==================== AUTO ROUTER CLASS ====================
 
-export class AIAutoRouter {
+class AIAutoRouter {
   private btcPriceUsd: number;
 
   constructor(btcPriceUsd: number = DEFAULT_BTC_PRICE_USD) {

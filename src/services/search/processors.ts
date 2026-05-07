@@ -219,6 +219,6 @@ export async function getSearchFacets(): Promise<SearchResponse['facets']> {
 /**
  * Clear facets cache
  */
-export function clearFacetsCache(): void {
+function clearFacetsCache(): void {
   facetsCache = null;
 }

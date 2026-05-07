@@ -22,7 +22,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 /**
  * Result of a permission check
  */
-export interface PermissionResult {
+interface PermissionResult {
   allowed: boolean;
   requiresVote: boolean;
   reason?: string;
