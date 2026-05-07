@@ -36,8 +36,8 @@ export function DesktopNavigation({ items }: DesktopNavigationProps) {
           className={cn(
             'px-3 py-2 text-sm font-medium rounded-xl transition-colors whitespace-nowrap',
             isActive(item.href!)
-              ? 'text-orange-600 bg-orange-50'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              ? 'text-tiffany-600 bg-tiffany-50'
+              : 'text-gray-600 hover:text-tiffany-600 hover:bg-tiffany-50'
           )}
         >
           {item.name}

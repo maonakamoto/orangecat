@@ -141,9 +141,7 @@ export function RepostModal({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="max-w-xl p-0">
         <DialogTitle className="sr-only">Repost</DialogTitle>
-        <Card
-          className="w-full bg-white rounded-2xl shadow-2xl"
-        >
+        <Card className="w-full bg-white rounded-2xl shadow-2xl">
           <CardContent className="p-0">
             {/* Header */}
             <div className="flex items-center px-4 py-3 border-b border-gray-200">
@@ -206,7 +204,7 @@ export function RepostModal({
                     onClick={handleQuoteRepost}
                     disabled={!canQuote}
                     isLoading={isReposting}
-                    className="h-9 px-4 text-sm bg-orange-600 hover:bg-orange-700 text-white rounded-full"
+                    className="h-9 px-4 text-sm bg-tiffany-500 hover:bg-tiffany-600 text-white rounded-full"
                   >
                     Quote post
                   </Button>

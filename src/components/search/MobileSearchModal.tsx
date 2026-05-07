@@ -138,7 +138,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
             value={query}
             onChange={e => setQuery(e.target.value)}
             autoFocus
-            className="w-full pl-10 pr-4 py-3 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-gray-50"
+            className="w-full pl-10 pr-4 py-3 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent bg-gray-50"
           />
         </form>
       </div>
@@ -224,7 +224,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                 Suggestions
               </h4>
               {loading && (
-                <div className="w-4 h-4 border border-orange-200 border-t-orange-500 rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border border-tiffany-200 border-t-tiffany-500 rounded-full animate-spin"></div>
               )}
             </div>
 
@@ -249,7 +249,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
             <div className="mt-4 pt-4 border-t border-gray-100">
               <button
                 onClick={() => handleSearch(query)}
-                className="w-full flex items-center gap-4 px-4 py-3 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors font-medium"
+                className="w-full flex items-center gap-4 px-4 py-3 text-tiffany-600 hover:bg-tiffany-50 rounded-lg transition-colors font-medium"
               >
                 <Search className="w-4 h-4" />
                 <span className="text-base">Search for "{query}"</span>

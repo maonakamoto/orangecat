@@ -52,7 +52,7 @@ export function DashboardInviteCTA({ profile, userId }: DashboardInviteCTAProps)
           <Button
             onClick={() => setShowShare(!showShare)}
             size="sm"
-            className="bg-orange-600 hover:bg-orange-700 text-white min-h-[44px]"
+            className="bg-tiffany-500 hover:bg-tiffany-600 text-white min-h-[44px]"
           >
             <Share2 className="w-4 h-4 mr-2" />
             Share

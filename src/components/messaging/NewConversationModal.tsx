@@ -220,7 +220,7 @@ export default function NewConversationModal({
                   tabIndex={0}
                   aria-disabled={!!creatingId}
                   className={cn(
-                    'w-full flex items-center gap-3 px-4 py-3 hover:bg-orange-25 text-left transition-all duration-200 rounded-lg',
+                    'w-full flex items-center gap-3 px-4 py-3 hover:bg-tiffany-50 text-left transition-all duration-200 rounded-lg',
                     creatingId === p.id && 'opacity-60'
                   )}
                   onClick={() => {
@@ -255,7 +255,7 @@ export default function NewConversationModal({
                   <Button
                     size="sm"
                     disabled={!!creatingId && creatingId !== p.id}
-                    className="bg-orange-500 hover:bg-orange-600 text-white flex-shrink-0"
+                    className="bg-tiffany-500 hover:bg-tiffany-600 text-white flex-shrink-0"
                     onClick={e => {
                       e.stopPropagation();
                       if (!creatingId) {

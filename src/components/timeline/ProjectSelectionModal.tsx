@@ -138,7 +138,7 @@ export default function ProjectSelectionModal({
                     <div
                       className={cn(
                         'w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ml-3',
-                        isSelected ? 'bg-orange-500 border-orange-500' : 'border-gray-300'
+                        isSelected ? 'bg-tiffany-500 border-tiffany-500' : 'border-gray-300'
                       )}
                     >
                       {isSelected && <Check className="w-4 h-4 text-white" />}
@@ -170,6 +170,3 @@ export default function ProjectSelectionModal({
     </BottomSheet>
   );
 }
-
-
-

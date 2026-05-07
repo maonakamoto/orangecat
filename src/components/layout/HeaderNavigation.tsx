@@ -63,7 +63,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-3 py-2 min-h-[44px] rounded-lg text-base text-gray-700 hover:text-orange-600 hover:bg-gray-50"
+                className="block px-3 py-2 min-h-[44px] rounded-lg text-base text-gray-700 hover:text-tiffany-600 hover:bg-tiffany-50"
                 onClick={onClose}
               >
                 {item.name}
@@ -89,7 +89,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
                     <Link
                       key={`${sectionKey}-${link.href}`}
                       href={link.href}
-                      className="px-3 py-2 min-h-[44px] rounded-lg text-sm text-gray-600 hover:text-orange-600 hover:bg-gray-50"
+                      className="px-3 py-2 min-h-[44px] rounded-lg text-sm text-gray-600 hover:text-tiffany-600 hover:bg-tiffany-50"
                       onClick={onClose}
                     >
                       {link.name}
@@ -146,14 +146,16 @@ function HeaderNavLink({ href, label, isActive }: HeaderNavLinkProps) {
   const linkClasses = cn(
     'px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 relative',
     isActive
-      ? 'text-orange-600 bg-orange-50 shadow-sm'
-      : 'text-gray-700 hover:text-orange-600 hover:bg-gray-50'
+      ? 'text-tiffany-600 bg-tiffany-50 shadow-sm'
+      : 'text-gray-700 hover:text-tiffany-600 hover:bg-tiffany-50'
   );
 
   return (
     <Link href={href} className={linkClasses}>
       {label}
-      {isActive && <div className="absolute inset-x-0 bottom-0 h-0.5 bg-orange-500 rounded-full" />}
+      {isActive && (
+        <div className="absolute inset-x-0 bottom-0 h-0.5 bg-tiffany-500 rounded-full" />
+      )}
     </Link>
   );
 }
@@ -199,14 +201,14 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
         className={cn(
           'px-4 py-2.5 min-h-[44px] text-sm font-medium rounded-xl transition-all duration-150 relative flex items-center gap-1',
           hasActiveChild
-            ? 'text-orange-600 bg-orange-50 shadow-sm'
-            : 'text-gray-700 hover:text-orange-600 hover:bg-gray-50'
+            ? 'text-tiffany-600 bg-tiffany-50 shadow-sm'
+            : 'text-gray-700 hover:text-tiffany-600 hover:bg-tiffany-50'
         )}
       >
         {item.name}
         <ChevronDown className={cn('w-4 h-4 transition-transform', isOpen && 'rotate-180')} />
         {hasActiveChild && (
-          <div className="absolute inset-x-0 bottom-0 h-0.5 bg-orange-500 rounded-full" />
+          <div className="absolute inset-x-0 bottom-0 h-0.5 bg-tiffany-500 rounded-full" />
         )}
       </button>
 
@@ -225,8 +227,8 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
                 className={cn(
                   'block px-4 py-2.5 min-h-[44px] text-sm transition-colors',
                   isActive(child.href)
-                    ? 'text-orange-600 bg-orange-50 font-medium'
-                    : 'text-gray-700 hover:text-orange-600 hover:bg-gray-50'
+                    ? 'text-tiffany-600 bg-tiffany-50 font-medium'
+                    : 'text-gray-700 hover:text-tiffany-600 hover:bg-tiffany-50'
                 )}
                 onClick={() => setIsOpen(false)}
               >

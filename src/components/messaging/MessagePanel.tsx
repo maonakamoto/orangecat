@@ -136,7 +136,7 @@ export default function MessagePanel({
             <Button
               size="sm"
               onClick={() => setShowNewModal(true)}
-              className="bg-orange-500 hover:bg-orange-600 text-white shadow-sm"
+              className="bg-tiffany-500 hover:bg-tiffany-600 text-white shadow-sm"
             >
               <Plus className="w-4 h-4 mr-1" />
               New
@@ -153,7 +153,7 @@ export default function MessagePanel({
                 className={cn(
                   'px-3 py-1.5 rounded-full text-sm font-medium transition-all border',
                   activeTab === tab
-                    ? 'bg-orange-100 text-orange-700 border-orange-200 shadow-sm'
+                    ? 'bg-tiffany-50 text-tiffany-700 border-tiffany-200 shadow-sm'
                     : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
                 )}
               >
@@ -229,7 +229,7 @@ export default function MessagePanel({
                 </p>
                 <Button
                   onClick={() => setShowNewModal(true)}
-                  className="bg-orange-500 hover:bg-orange-600 text-white shadow"
+                  className="bg-tiffany-500 hover:bg-tiffany-600 text-white shadow"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   New chat

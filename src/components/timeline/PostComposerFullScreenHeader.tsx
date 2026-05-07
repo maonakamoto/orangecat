@@ -33,7 +33,7 @@ export function PostComposerFullScreenHeader({
       <Button
         onClick={onPost}
         disabled={!canPost}
-        className="bg-orange-500 hover:bg-orange-600 text-white rounded-full px-5 min-h-[36px] disabled:opacity-50"
+        className="bg-tiffany-500 hover:bg-tiffany-600 text-white rounded-full px-5 min-h-[36px] disabled:opacity-50"
       >
         {isPosting ? 'Posting...' : buttonText}
       </Button>

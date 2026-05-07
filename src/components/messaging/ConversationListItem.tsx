@@ -145,7 +145,7 @@ export function ConversationListItem({
       onClick={onClick}
       className={cn(
         'p-3 sm:p-4 hover:bg-gray-50 cursor-pointer transition-all duration-150 flex items-start gap-3 group',
-        isActiveConversation && 'bg-white shadow-sm border-l-4 border-orange-500',
+        isActiveConversation && 'bg-white shadow-sm border-l-4 border-tiffany-500',
         selectionMode && 'pr-3'
       )}
     >
@@ -175,7 +175,7 @@ export function ConversationListItem({
                 )}
               </h3>
               {conversation.unread_count > 0 && (
-                <span className="bg-orange-500 text-white text-[11px] leading-4 rounded-full px-2 py-0.5">
+                <span className="bg-tiffany-500 text-white text-[11px] leading-4 rounded-full px-2 py-0.5">
                   {conversation.unread_count > 99 ? '99+' : conversation.unread_count}
                 </span>
               )}

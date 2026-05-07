@@ -31,7 +31,7 @@ function DropdownItem({ onClick, isFocused, children, itemRef }: DropdownItemPro
       ref={itemRef}
       onClick={onClick}
       className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-left ${
-        isFocused ? 'bg-orange-50 border border-orange-200 text-orange-900' : ''
+        isFocused ? 'bg-tiffany-50 border border-tiffany-200 text-tiffany-900' : ''
       }`}
       role="option"
       aria-selected={isFocused}
@@ -247,9 +247,9 @@ export function SuggestionsSection({
             itemRefs.current[searchQueryIndex] = el;
           }}
           onClick={() => onSearch(query)}
-          className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-orange-600 hover:bg-orange-50 rounded-lg transition-colors font-medium ${
+          className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-tiffany-600 hover:bg-tiffany-50 rounded-lg transition-colors font-medium ${
             focusedIndex === searchQueryIndex
-              ? 'bg-orange-100 border border-orange-300 text-orange-800'
+              ? 'bg-tiffany-100 border border-tiffany-300 text-tiffany-800'
               : ''
           }`}
           role="option"

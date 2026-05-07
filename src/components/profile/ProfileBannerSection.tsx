@@ -121,7 +121,7 @@ export function ProfileBannerSection({
               'shadow-lg text-xs sm:text-sm',
               isFollowing
                 ? 'bg-gray-600 hover:bg-gray-700 text-white'
-                : 'bg-orange-600 hover:bg-orange-700 text-white'
+                : 'bg-tiffany-500 hover:bg-tiffany-600 text-white'
             )}
           >
             <Users className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />

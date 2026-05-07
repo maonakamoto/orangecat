@@ -100,7 +100,7 @@ export function ProjectSelectionPanel({
               'px-3 py-1 text-xs font-medium rounded-full border transition-all',
               selectedProjects.includes(project.id)
                 ? variant === 'orange'
-                  ? 'bg-orange-500 text-white border-orange-500 shadow-sm'
+                  ? 'bg-tiffany-500 text-white border-tiffany-500 shadow-sm'
                   : 'bg-sky-500 text-white border-sky-500 shadow-sm'
                 : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:bg-orange-50'
             )}

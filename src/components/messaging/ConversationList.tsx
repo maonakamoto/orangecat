@@ -170,7 +170,7 @@ export default function ConversationList({
             setError(null);
             refresh();
           }}
-          className="inline-flex items-center gap-2 text-sm text-orange-600 hover:text-orange-700"
+          className="inline-flex items-center gap-2 text-sm text-tiffany-600 hover:text-tiffany-700"
         >
           <RefreshCw className="w-4 h-4" />
           Try again

@@ -92,7 +92,9 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
   const [copied, setCopied] = useState(false);
 
   // Clean the message content by removing action and exec_action blocks for display
-  const displayContent = message.content.replace(/```(?:action|exec_action)[\s\S]*?```/g, '').trim();
+  const displayContent = message.content
+    .replace(/```(?:action|exec_action)[\s\S]*?```/g, '')
+    .trim();
 
   const handleCopy = () => {
     void navigator.clipboard.writeText(displayContent);
@@ -124,7 +126,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
           className={cn(
             'inline-block rounded-2xl px-4 py-2.5 max-w-full',
             isUser
-              ? 'bg-orange-500 text-white rounded-tr-sm'
+              ? 'bg-tiffany-500 text-white rounded-tr-sm'
               : 'bg-gray-100 text-gray-900 rounded-tl-sm'
           )}
         >

@@ -64,13 +64,13 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
             }}
             className={cn(
               'w-full px-4 py-2.5 text-left hover:bg-gray-50 flex items-center gap-3',
-              selectedModel === 'auto' && 'bg-orange-50'
+              selectedModel === 'auto' && 'bg-tiffany-50'
             )}
           >
             <div className="flex-1">
               <div className="font-medium text-gray-900 flex items-center gap-2">
                 Auto (Best Free)
-                {selectedModel === 'auto' && <Check className="h-4 w-4 text-orange-500" />}
+                {selectedModel === 'auto' && <Check className="h-4 w-4 text-tiffany-500" />}
               </div>
               <div className="text-xs text-gray-500">Automatically selects the best model</div>
             </div>
@@ -89,14 +89,14 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
               }}
               className={cn(
                 'w-full px-4 py-2.5 text-left hover:bg-gray-50 flex items-center gap-3',
-                selectedModel === model.id && 'bg-orange-50'
+                selectedModel === model.id && 'bg-tiffany-50'
               )}
             >
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-gray-900 flex items-center gap-2 truncate">
                   {model.name}
                   {selectedModel === model.id && (
-                    <Check className="h-4 w-4 text-orange-500 flex-shrink-0" />
+                    <Check className="h-4 w-4 text-tiffany-500 flex-shrink-0" />
                   )}
                 </div>
                 <div className="text-xs text-gray-500 truncate">

@@ -75,7 +75,7 @@ export function GetStartedStep({ hasWallet = false, hasProjects = false }: GetSt
             <ArrowRight className="h-6 w-6 text-orange-600 flex-shrink-0 hidden sm:block" />
           </div>
           <Button
-            className="w-full mt-4 bg-orange-600 hover:bg-orange-700"
+            className="w-full mt-4 bg-tiffany-500 hover:bg-tiffany-600"
             onClick={e => {
               e.stopPropagation();
               router.push(ROUTES.PROJECTS.CREATE);
@@ -95,14 +95,14 @@ export function GetStartedStep({ hasWallet = false, hasProjects = false }: GetSt
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <button
             onClick={() => router.push(ROUTES.DISCOVER)}
-            className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-orange-600 transition-colors min-h-[44px]"
+            className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-tiffany-600 transition-colors min-h-[44px]"
           >
             <Users className="h-4 w-4" />
             Explore Projects
           </button>
           <button
             onClick={() => router.push(ROUTES.STUDY_BITCOIN)}
-            className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-orange-600 transition-colors min-h-[44px]"
+            className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-tiffany-600 transition-colors min-h-[44px]"
           >
             <BookOpen className="h-4 w-4" />
             Learn About Bitcoin

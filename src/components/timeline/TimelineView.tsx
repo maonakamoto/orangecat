@@ -150,7 +150,7 @@ export default function TimelineView({
                       : '/profiles/me';
                   window.location.href = `/auth?redirect=${encodeURIComponent(redirect)}`;
                 }}
-                className="bg-orange-500 hover:bg-orange-600 text-white"
+                className="bg-tiffany-500 hover:bg-tiffany-600 text-white"
               >
                 Sign in
               </Button>

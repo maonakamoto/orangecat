@@ -46,7 +46,7 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
             rows={1}
             className={cn(
               'w-full resize-none rounded-2xl border border-gray-200 px-4 py-3 pr-12',
-              'focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-300',
+              'focus:outline-none focus:ring-2 focus:ring-tiffany-500/20 focus:border-tiffany-300',
               'text-sm leading-relaxed placeholder:text-gray-400',
               'max-h-[200px]'
             )}
@@ -66,7 +66,7 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
             className={cn(
               'flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all',
               value.trim() && !isLoading
-                ? 'bg-orange-500 hover:bg-orange-600 text-white shadow-md'
+                ? 'bg-tiffany-500 hover:bg-tiffany-600 text-white shadow-md'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             )}
           >

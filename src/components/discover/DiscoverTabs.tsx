@@ -128,7 +128,7 @@ export default function DiscoverTabs({
               {isActive && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-orange-600"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-tiffany-500"
                   initial={false}
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
