@@ -15,11 +15,12 @@ import {
   apiRateLimited,
   handleApiError,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { z } from 'zod';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { resolveGroupBySlug, checkGroupMember } from '@/domain/groups/helpers.server';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 type UntypedTable = any;
 
@@ -45,11 +46,16 @@ export const GET = withAuth(
       const { searchParams } = new URL(req.url);
 
       const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {return apiNotFound('Group not found');}
+      if (!group) {
+        return apiNotFound('Group not found');
+      }
 
       const status = searchParams.get('status') || 'upcoming';
       const event_type = searchParams.get('event_type');
-      const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10) || 20, 100);
+      const limit = Math.min(
+        parseInt(searchParams.get('limit') || String(DEFAULT_PAGE_SIZE), 10) || DEFAULT_PAGE_SIZE,
+        MAX_PAGE_SIZE
+      );
       const offset = Math.max(parseInt(searchParams.get('offset') || '0', 10) || 0, 0);
 
       let query = (supabase.from(DATABASE_TABLES.GROUP_EVENTS) as UntypedTable)
@@ -65,9 +71,14 @@ export const GET = withAuth(
         .order('starts_at', { ascending: true })
         .range(offset, offset + limit - 1);
 
-      if (status === 'upcoming') {query = query.gte('starts_at', new Date().toISOString());}
-      else if (status === 'past') {query = query.lt('starts_at', new Date().toISOString());}
-      if (event_type) {query = query.eq('event_type', event_type);}
+      if (status === 'upcoming') {
+        query = query.gte('starts_at', new Date().toISOString());
+      } else if (status === 'past') {
+        query = query.lt('starts_at', new Date().toISOString());
+      }
+      if (event_type) {
+        query = query.eq('event_type', event_type);
+      }
 
       const { data: events, count, error } = await query;
 
@@ -76,7 +87,11 @@ export const GET = withAuth(
         return handleApiError(error);
       }
 
-      return apiSuccess({ events: events || [], total: count || 0, hasMore: (events?.length || 0) === limit });
+      return apiSuccess({
+        events: events || [],
+        total: count || 0,
+        hasMore: (events?.length || 0) === limit,
+      });
     } catch (error) {
       logger.error('Events GET error', { error }, 'Groups');
       return handleApiError(error);
@@ -96,16 +111,23 @@ export const POST = withAuth(
       }
 
       const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {return apiNotFound('Group not found');}
+      if (!group) {
+        return apiNotFound('Group not found');
+      }
 
       const isMember = await checkGroupMember(supabase, group.id, user.id);
-      if (!isMember) {return apiForbidden('Only group members can create events');}
+      if (!isMember) {
+        return apiForbidden('Only group members can create events');
+      }
 
       const body = await req.json();
       const validation = createEventSchema.safeParse(body);
       if (!validation.success) {
         return apiValidationError('Invalid request data', {
-          fields: validation.error.issues.map(i => ({ field: i.path.join('.'), message: i.message })),
+          fields: validation.error.issues.map(i => ({
+            field: i.path.join('.'),
+            message: i.message,
+          })),
         });
       }
 
@@ -122,7 +144,10 @@ export const POST = withAuth(
 
       const { data: event, error: insertError } = await (
         supabase.from(DATABASE_TABLES.GROUP_EVENTS) as UntypedTable
-      ).insert(eventData).select().single();
+      )
+        .insert(eventData)
+        .select()
+        .single();
 
       if (insertError) {
         logger.error('Failed to create event', { error: insertError, groupId: group.id }, 'Groups');
@@ -131,10 +156,16 @@ export const POST = withAuth(
 
       const { data: creatorProfile } = await (
         supabase.from(DATABASE_TABLES.PROFILES) as UntypedTable
-      ).select('id, name, avatar_url').eq('id', user.id).single();
+      )
+        .select('id, name, avatar_url')
+        .eq('id', user.id)
+        .single();
 
       return apiCreated({
-        event: { ...event, creator: creatorProfile || { id: user.id, name: null, avatar_url: null } },
+        event: {
+          ...event,
+          creator: creatorProfile || { id: user.id, name: null, avatar_url: null },
+        },
       });
     } catch (error) {
       logger.error('Events POST error', { error }, 'Groups');

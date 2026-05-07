@@ -8,13 +8,14 @@ import {
   apiRateLimited,
   handleApiError,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { withAuth, withOptionalAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { getGroup } from '@/services/groups/queries/groups';
 import { getGroupProposals, type ProposalStatus } from '@/services/groups/queries/proposals';
 import { createProposal } from '@/services/groups/mutations/proposals';
 import { logger } from '@/utils/logger';
 import { z } from 'zod';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 const createProposalSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200),
@@ -39,7 +40,10 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
     const { searchParams } = request.nextUrl;
     const status = (searchParams.get('status') || 'all') as ProposalStatus | 'all';
     const proposalType = searchParams.get('proposal_type') || undefined;
-    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20', 10)));
+    const limit = Math.min(
+      MAX_PAGE_SIZE,
+      Math.max(1, parseInt(searchParams.get('limit') || String(DEFAULT_PAGE_SIZE), 10))
+    );
     const offset = Math.max(0, parseInt(searchParams.get('offset') || '0', 10));
 
     const groupResult = await getGroup(slug, true);

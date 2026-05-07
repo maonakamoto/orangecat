@@ -4,6 +4,7 @@ import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { withOptionalAuth } from '@/lib/api/withAuth';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -14,14 +15,20 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
     const { id } = await context.params;
 
     const idValidation = getValidationError(validateUUID(id, 'user ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
 
     const { supabase } = request;
     const { searchParams } = new URL((request as NextRequest).url);
-    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100);
+    const limit = Math.min(
+      parseInt(searchParams.get('limit') || String(DEFAULT_PAGE_SIZE)),
+      MAX_PAGE_SIZE
+    );
     const offset = parseInt(searchParams.get('offset') || '0');
 
-    const { data, error, count } = await supabase.from(DATABASE_TABLES.FOLLOWS)
+    const { data, error, count } = await supabase
+      .from(DATABASE_TABLES.FOLLOWS)
       .select(
         'following_id, created_at, profile:profiles!follows_following_id_fkey(id, username, name, avatar_url, bio, bitcoin_address, lightning_address)',
         { count: 'exact' }

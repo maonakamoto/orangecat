@@ -18,6 +18,7 @@ import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { MIN_WITHDRAWAL_SATS } from '@/components/ai/types';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 const withdrawalRequestSchema = z.object({
   amount_btc: z
@@ -35,7 +36,10 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
   const { user, supabase } = request;
   try {
     const { searchParams } = new URL(request.url);
-    const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10), 100);
+    const limit = Math.min(
+      parseInt(searchParams.get('limit') || String(DEFAULT_PAGE_SIZE), 10),
+      MAX_PAGE_SIZE
+    );
     const offset = parseInt(searchParams.get('offset') || '0', 10);
 
     const [{ data: earnings }, { data: withdrawals, error: withdrawalsError, count }] =

@@ -23,9 +23,10 @@ import {
   apiInternalError,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { getUserActorId } from '@/domain/actors';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 // Validation schema
 const executeActionSchema = z.object({
@@ -43,7 +44,10 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
   const { user, supabase } = request;
   try {
     const { searchParams } = new URL(request.url);
-    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20', 10)));
+    const limit = Math.min(
+      MAX_PAGE_SIZE,
+      Math.max(1, parseInt(searchParams.get('limit') || String(DEFAULT_PAGE_SIZE), 10))
+    );
     const actionId = searchParams.get('actionId') || undefined;
     const status = searchParams.get('status') || undefined;
 
@@ -94,7 +98,8 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     if (result.success) {
       return apiSuccess(result);
     } else {
-      const safeError = result.status === 'denied' ? 'Action not permitted' : 'Action could not be executed';
+      const safeError =
+        result.status === 'denied' ? 'Action not permitted' : 'Action could not be executed';
       return result.status === 'denied' ? apiForbidden(safeError) : apiBadRequest(safeError);
     }
   } catch (error) {

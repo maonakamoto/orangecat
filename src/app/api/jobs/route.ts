@@ -10,11 +10,15 @@ import { NextRequest } from 'next/server';
 import { apiSuccess, apiInternalError, handleApiError } from '@/lib/api/standardResponse';
 import { getPublicJobPostings } from '@/services/groups/queries/proposals';
 import { logger } from '@/utils/logger';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20', 10)));
+    const limit = Math.min(
+      MAX_PAGE_SIZE,
+      Math.max(1, parseInt(searchParams.get('limit') || String(DEFAULT_PAGE_SIZE), 10))
+    );
     const offset = Math.max(0, parseInt(searchParams.get('offset') || '0', 10));
     const location = searchParams.get('location') || undefined;
     const job_type = searchParams.get('job_type') || undefined;

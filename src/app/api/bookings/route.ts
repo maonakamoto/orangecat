@@ -12,6 +12,7 @@ import { BookingStatus } from '@/services/bookings';
 import { logger } from '@/utils/logger';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { apiSuccess, apiInternalError } from '@/lib/api/standardResponse';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 export const GET = withAuth(async (request: AuthenticatedRequest) => {
   try {
@@ -20,7 +21,10 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     const url = new URL(request.url);
     const role = url.searchParams.get('role') as 'customer' | 'provider' | 'both' | null;
     const statusParam = url.searchParams.get('status');
-    const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get('limit') || '20')));
+    const limit = Math.min(
+      MAX_PAGE_SIZE,
+      Math.max(1, parseInt(url.searchParams.get('limit') || String(DEFAULT_PAGE_SIZE)))
+    );
     const offset = Math.max(0, parseInt(url.searchParams.get('offset') || '0'));
 
     const status = statusParam ? (statusParam.split(',') as BookingStatus[]) : undefined;

@@ -17,6 +17,7 @@ import { NotificationEmailService } from '@/services/notifications/emailService'
 import { logger } from '@/utils/logger';
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/standardResponse';
 import { CRON } from '@/constants/cron';
+import { DATABASE_TABLES } from '@/config/database-tables';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -51,7 +52,7 @@ export async function GET(request: Request) {
     // Supabase admin.auth.admin.listUsers supports pagination but not date filtering,
     // so we query profiles table (created_at mirrors auth user creation)
     const { data: recentUsers, error: fetchError } = await admin
-      .from('profiles')
+      .from(DATABASE_TABLES.PROFILES)
       .select('id')
       .gte('created_at', eightDaysAgo.toISOString());
 
