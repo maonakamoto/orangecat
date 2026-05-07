@@ -104,6 +104,22 @@ export function createOptimisticEvent(params: CreateOptimisticEventParams): Reco
           : null) || user.id,
       avatar_url: user.user_metadata?.avatar_url,
     },
+    // PostCard expects event.actor (the enriched shape), not actor_data
+    actor: {
+      id: user.id,
+      name:
+        user.user_metadata?.name ||
+        (typeof user.email === 'string' && user.email.includes('@')
+          ? user.email.split('@')[0]
+          : null) ||
+        'You',
+      username:
+        (typeof user.email === 'string' && user.email.includes('@')
+          ? user.email.split('@')[0]
+          : null) || user.id,
+      avatar: user.user_metadata?.avatar_url,
+      type: 'user',
+    },
     like_count: 0,
     share_count: 0,
     comment_count: 0,

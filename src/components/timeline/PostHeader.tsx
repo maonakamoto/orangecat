@@ -51,14 +51,20 @@ export function PostHeader({
   }, [showMenu, onMenuToggle]);
 
   // For simple reposts, show the original author instead of the reposter
-  const displayAuthor = isSimpleRepost
+  const rawAuthor = isSimpleRepost
     ? {
-        id: event.metadata?.original_actor_id || event.actor.id,
-        name: event.metadata?.original_actor_name || event.actor.name,
-        username: event.metadata?.original_actor_username || event.actor.username,
-        avatar: event.metadata?.original_actor_avatar || event.actor.avatar,
+        id: event.metadata?.original_actor_id || event.actor?.id,
+        name: event.metadata?.original_actor_name || event.actor?.name,
+        username: event.metadata?.original_actor_username || event.actor?.username,
+        avatar: event.metadata?.original_actor_avatar || event.actor?.avatar,
       }
     : event.actor;
+  const displayAuthor = {
+    id: rawAuthor?.id ?? '',
+    name: rawAuthor?.name ?? 'Unknown',
+    username: rawAuthor?.username ?? rawAuthor?.id ?? '',
+    avatar: rawAuthor?.avatar,
+  };
 
   // TimelineDisplayEvent extends TimelineEvent which has eventTimestamp, createdAt, updatedAt
   // Use eventTimestamp as primary, fallback to createdAt for backward compatibility

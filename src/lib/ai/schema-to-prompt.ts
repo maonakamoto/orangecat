@@ -145,7 +145,6 @@ export function formatFieldsForPrompt(descriptions: FieldDescription[]): string 
 }
 
 /**
-/**
  * Get common field names that typically need special handling
  */
 export function getSpecialFieldInstructions(entityType: EntityType): string {

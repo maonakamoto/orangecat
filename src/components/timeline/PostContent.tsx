@@ -177,41 +177,6 @@ export function PostContent({ event }: PostContentProps) {
         </div>
       )}
 
-      {/* Event Metadata (filtered) - only show relevant, non-internal metadata */}
-      {event.metadata &&
-        (() => {
-          const internalKeys = [
-            'is_repost',
-            'is_quote_repost',
-            'is_reply',
-            'is_user_post',
-            'original_event_id',
-            'original_actor_id',
-            'original_actor_name',
-            'original_actor_username',
-            'original_actor_avatar',
-            'original_description',
-            'quote_text',
-            'attachments',
-          ];
-          const visibleEntries = Object.entries(event.metadata)
-            .filter(
-              ([key, value]) =>
-                !internalKeys.includes(key) && value !== null && value !== undefined && value !== ''
-            )
-            .slice(0, 5);
-
-          return visibleEntries.length > 0 ? (
-            <div className="flex flex-wrap gap-2 text-xs text-gray-500">
-              {visibleEntries.map(([label, value]) => (
-                <span key={label} className="capitalize bg-gray-100 px-2 py-0.5 rounded-full">
-                  {label.replace(/_/g, ' ')}: {String(value)}
-                </span>
-              ))}
-            </div>
-          ) : null;
-        })()}
-
       {/* FUTURE: Add media rendering (images, videos, embeds) — requires media upload pipeline and storage bucket setup before attachments can be displayed */}
       {(() => {
         const attachments =

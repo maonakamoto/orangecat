@@ -10,8 +10,10 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import supabase from '@/lib/supabase/browser';
 import type { Message } from '@/features/messaging/types';
 import { editMessageAction, deleteMessageAction } from './messageViewActions';
+import { useMessagingStore } from '@/stores/messaging';
 
 export function useMessageView(conversationId: string, currentUserId: string | undefined) {
+  const { updateConversation } = useMessagingStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
   const [menuState, setMenuState] = useState<{
@@ -96,8 +98,12 @@ export function useMessageView(conversationId: string, currentUserId: string | u
     (message: Message) => {
       addOptimisticMessage(message);
       setShouldAutoScroll(true);
+      updateConversation(conversationId, {
+        last_message_preview: message.content,
+        last_message_at: message.created_at || new Date().toISOString(),
+      });
     },
-    [addOptimisticMessage]
+    [addOptimisticMessage, updateConversation, conversationId]
   );
 
   const handleMessageConfirmed = useCallback(
