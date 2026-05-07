@@ -15,12 +15,13 @@ import { buildWeeklyDigest } from '@/services/notifications/digestBuilder';
 import { NotificationEmailService } from '@/services/notifications/emailService';
 import { logger } from '@/utils/logger';
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/standardResponse';
+import { CRON } from '@/constants/cron';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 const LOG_SOURCE = 'CronWeeklyDigest';
-const BATCH_SIZE = 50;
+const BATCH_SIZE = CRON.BATCH_SIZE;
 
 function verifyCronSecret(request: Request): boolean {
   return request.headers.get('authorization') === `Bearer ${process.env.CRON_SECRET}`;

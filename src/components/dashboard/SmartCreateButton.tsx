@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button';
 import { useProjectStore } from '@/stores/projectStore';
 import DraftContinueDialog from './DraftContinueDialog';
 import { cn } from '@/lib/utils';
+import { ROUTES } from '@/config/routes';
 import {
   getEntitiesForCreateMenu,
   COLOR_CLASSES,
@@ -92,18 +93,18 @@ export default function SmartCreateButton({
     if (shouldShowDraftPrompt) {
       setShowDraftDialog(true);
     } else {
-      router.push('/projects/create');
+      router.push(ROUTES.PROJECTS.CREATE);
     }
   };
 
   const handleContinueDraft = () => {
     setShowDraftDialog(false);
-    router.push('/projects/create');
+    router.push(ROUTES.PROJECTS.CREATE);
   };
 
   const handleStartFresh = () => {
     setShowDraftDialog(false);
-    router.push('/projects/create?new=true');
+    router.push(`${ROUTES.PROJECTS.CREATE}?new=true`);
   };
 
   const getButtonContent = () => {

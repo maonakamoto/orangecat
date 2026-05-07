@@ -15,6 +15,7 @@ import { useUnreadCount } from '@/stores/messaging';
 import { useUnreadNotifications } from '@/hooks/useUnreadNotifications';
 import { NotificationBadge } from '@/components/ui/NotificationBadge';
 import { TOUCH_TARGETS, HEADER_BUTTON_BASE } from '@/constants/header';
+import { ROUTES } from '@/config/routes';
 import { cn } from '@/lib/utils';
 
 interface HeaderActionButtonProps {
@@ -83,7 +84,7 @@ export function MessagesButton() {
 
   return (
     <HeaderActionButton
-      onClick={() => router.push('/messages')}
+      onClick={() => router.push(ROUTES.MESSAGES)}
       ariaLabel={`Messages ${unreadCount > 0 ? `(${unreadCount} unread)` : ''}`}
       icon={<MessageSquare className="w-6 h-6 sm:w-5 sm:h-5" />}
       badgeCount={unreadCount}

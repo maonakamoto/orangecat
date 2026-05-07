@@ -10,6 +10,7 @@ import MessageView from './MessageView';
 import { cn } from '@/lib/utils';
 import NewConversationModal from './NewConversationModal';
 import { useAuth } from '@/hooks/useAuth';
+import { ROUTES } from '@/config/routes';
 import { useRealtimeManager } from '@/hooks/useRealtimeManager';
 import { ConnectionStatusIndicator } from './ConnectionStatusIndicator';
 import { useMessagePanelState } from './useMessagePanelState';
@@ -207,7 +208,7 @@ export default function MessagePanel({
             conversationId={selectedConversationId}
             onBack={(reason?: 'forbidden' | 'not_found' | 'unknown' | 'network') => {
               setSelectedConversationId(null);
-              router.push('/messages');
+              router.push(ROUTES.MESSAGES);
               if (reason === 'forbidden' || reason === 'not_found') {
                 setShowNewModal(true);
               }
