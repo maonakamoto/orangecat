@@ -38,6 +38,7 @@ import {
 import { logger } from '@/utils/logger';
 import { type EntityType, getEntityMetadata } from '@/config/entity-registry';
 import { ENTITY_STATUS } from '@/config/database-constants';
+import { checkOwnership } from '@/services/actors';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import { validateUUID } from '@/lib/api/validation';
 
@@ -118,30 +119,10 @@ async function defaultOwnershipCheck(
   ownershipField: string,
   useActorOwnership: boolean | undefined,
   action: 'update' | 'delete',
-  entityNamePlural: string,
-  supabase: AnySupabaseClient
+  entityNamePlural: string
 ): Promise<NextResponse | null> {
   if (useActorOwnership && existing.actor_id) {
-    const actorId = existing.actor_id as string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: actor } = await (supabase.from('actors') as any)
-      .select('actor_type, user_id, group_id')
-      .eq('id', actorId)
-      .maybeSingle();
-
-    let hasAccess = false;
-    if (actor?.actor_type === 'user') {
-      hasAccess = actor.user_id === userId;
-    } else if (actor?.actor_type === 'group') {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: membership } = await (supabase.from('group_members') as any)
-        .select('role')
-        .eq('group_id', actor.group_id)
-        .eq('user_id', userId)
-        .maybeSingle();
-      hasAccess = !!membership;
-    }
-
+    const hasAccess = await checkOwnership(existing as { actor_id: string }, userId);
     if (!hasAccess) {
       return apiForbidden(`You can only ${action} your own ${entityNamePlural}`);
     }
@@ -336,8 +317,7 @@ function createPutHandler(config: EntityHandlerConfig) {
           ownershipField,
           config.useActorOwnership,
           'update',
-          meta.namePlural.toLowerCase(),
-          supabase as AnySupabaseClient
+          meta.namePlural.toLowerCase()
         );
         if (ownershipError) {
           return ownershipError;
@@ -457,8 +437,7 @@ function createDeleteHandler(config: EntityHandlerConfig) {
           ownershipField,
           config.useActorOwnership,
           'delete',
-          meta.namePlural.toLowerCase(),
-          supabase as AnySupabaseClient
+          meta.namePlural.toLowerCase()
         );
         if (ownershipError) {
           return ownershipError;

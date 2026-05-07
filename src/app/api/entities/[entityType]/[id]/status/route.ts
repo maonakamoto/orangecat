@@ -28,6 +28,7 @@ import {
   type EntityType,
 } from '@/config/entity-registry';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
+import { checkOwnership } from '@/services/actors';
 import { z } from 'zod';
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
@@ -89,32 +90,10 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
       return apiNotFound(`${entityType} not found`);
     }
 
-    let hasAccess: boolean;
-    if (userIdField === 'actor_id') {
-      const actorId = (existing as { actor_id: string }).actor_id;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: actor } = await (supabase.from('actors') as any)
-        .select('actor_type, user_id, group_id')
-        .eq('id', actorId)
-        .maybeSingle();
-      if (!actor) {
-        hasAccess = false;
-      } else if (actor.actor_type === 'user') {
-        hasAccess = actor.user_id === user.id;
-      } else if (actor.actor_type === 'group') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: membership } = await (supabase.from('group_members') as any)
-          .select('role')
-          .eq('group_id', actor.group_id)
-          .eq('user_id', user.id)
-          .maybeSingle();
-        hasAccess = !!membership;
-      } else {
-        hasAccess = false;
-      }
-    } else {
-      hasAccess = existing[userIdField] === user.id;
-    }
+    const hasAccess =
+      userIdField === 'actor_id'
+        ? await checkOwnership(existing as { actor_id: string }, user.id)
+        : existing[userIdField] === user.id;
     if (!hasAccess) {
       return apiNotFound(`${entityType} not found`);
     }
