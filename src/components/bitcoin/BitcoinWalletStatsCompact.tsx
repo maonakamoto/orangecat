@@ -11,6 +11,7 @@ import {
 } from '@/services/mempool';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import Button from '@/components/ui/Button';
+import { formatDate } from '@/utils/dates';
 
 interface BitcoinWalletStatsCompactProps {
   address: string;
@@ -148,9 +149,7 @@ export default function BitcoinWalletStatsCompact({
                   )}
                 </div>
                 <div className="text-xs text-gray-500">
-                  {tx.timestamp
-                    ? new Date(tx.timestamp * 1000).toLocaleDateString()
-                    : 'Unconfirmed'}
+                  {tx.timestamp ? formatDate(new Date(tx.timestamp * 1000)) : 'Unconfirmed'}
                 </div>
               </div>
             ))}

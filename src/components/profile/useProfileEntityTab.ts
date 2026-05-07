@@ -8,6 +8,7 @@ import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { logger } from '@/utils/logger';
 import { EntityType, ENTITY_REGISTRY } from '@/config/entity-registry';
 import React from 'react';
+import { formatDate } from '@/utils/dates';
 
 export interface EntityData {
   id: string;
@@ -64,7 +65,7 @@ export const getRelativeTime = (date: string) => {
   if (days < 30) {
     return `${Math.floor(days / 7)}w ago`;
   }
-  return created.toLocaleDateString();
+  return formatDate(created);
 };
 
 export function useProfileEntityTab(profile: ScalableProfile, entityType: EntityType) {

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Plus, Gift } from 'lucide-react';
+import { formatDate } from '@/utils/dates';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -195,7 +196,7 @@ export function WishlistDetailsSidebar({ wishlist }: { wishlist: WishlistWithSta
           )}
           <div>
             <div className="text-gray-500">Created</div>
-            <div className="font-medium">{new Date(wishlist.created_at).toLocaleDateString()}</div>
+            <div className="font-medium">{formatDate(wishlist.created_at)}</div>
           </div>
           {wishlist.fulfilled_item_count > 0 && (
             <div>

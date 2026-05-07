@@ -12,6 +12,7 @@ import {
   getCategoryColor,
   formatAddress,
 } from './walletVaultUtils';
+import { formatDate } from '@/utils/dates';
 
 function TypeIconDisplay({ type }: { type: WalletAddress['type'] }) {
   const LucideIcon = getLucideTypeIcon(type);
@@ -119,9 +120,7 @@ export function WalletAddressCard({
                 <Clock className="w-3 h-3" />
                 Used {address.usageCount}x
               </span>
-              {address.lastUsed && (
-                <span>Last: {new Date(address.lastUsed).toLocaleDateString()}</span>
-              )}
+              {address.lastUsed && <span>Last: {formatDate(address.lastUsed)}</span>}
             </div>
             <div className="flex gap-1">
               <Button

@@ -1,6 +1,7 @@
 import EntityDetailPage from '@/components/entity/EntityDetailPage';
 import { assetEntityConfig } from '@/config/entities/assets';
 import type { Asset } from '@/types/asset';
+import { formatDate } from '@/utils/dates';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -24,7 +25,7 @@ export default async function AssetDetailPage({ params }: PageProps) {
       entityId={id}
       requireAuth={true}
       redirectPath="/auth?mode=login&from=/dashboard/assets"
-      makeDetailFields={(asset) => {
+      makeDetailFields={asset => {
         const left = [
           {
             label: 'Status',
@@ -70,7 +71,7 @@ export default async function AssetDetailPage({ params }: PageProps) {
         if (asset.purchase_date) {
           left.push({
             label: 'Purchase Date',
-            value: new Date(asset.purchase_date).toLocaleDateString(),
+            value: formatDate(asset.purchase_date),
           });
         }
 

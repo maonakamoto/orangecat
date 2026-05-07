@@ -9,6 +9,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { STATUS } from '@/config/database-constants';
+import { formatDate } from '@/utils/dates';
 
 interface Conversation {
   id: string;
@@ -168,9 +169,7 @@ export default function AIAssistantChatPage() {
                   </p>
                   <p className="text-sm text-gray-500">
                     {conv.total_messages} messages
-                    {conv.last_message_at && (
-                      <> &middot; {new Date(conv.last_message_at).toLocaleDateString()}</>
-                    )}
+                    {conv.last_message_at && <> &middot; {formatDate(conv.last_message_at)}</>}
                   </p>
                 </div>
                 <MessageSquare className="h-5 w-5 text-gray-400 flex-shrink-0" />

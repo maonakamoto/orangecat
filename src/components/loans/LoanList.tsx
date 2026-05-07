@@ -18,6 +18,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { formatDate } from '@/utils/dates';
 import { LoanOffersDialog } from './LoanOffersDialog';
 import { CreateLoanDialog } from './CreateLoanDialog';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -153,7 +154,7 @@ export function LoanList({ loans, onLoanUpdated }: LoanListProps) {
                     <div className="flex items-center gap-2 text-sm">
                       <Calendar className="h-3 w-3 text-muted-foreground" />
                       <span className="text-muted-foreground">Originated:</span>
-                      <span>{new Date(loan.origination_date).toLocaleDateString()}</span>
+                      <span>{formatDate(loan.origination_date)}</span>
                     </div>
                   )}
                   <div className="flex items-center gap-2 text-sm">

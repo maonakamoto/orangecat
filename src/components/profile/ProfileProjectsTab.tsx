@@ -10,6 +10,7 @@ import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
+import { formatDate } from '@/utils/dates';
 import { getStatusInfo } from '@/config/status-config';
 import { PROJECT_STATUS } from '@/config/project-statuses';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
@@ -118,7 +119,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
     if (days < 30) {
       return `${Math.floor(days / 7)}w ago`;
     }
-    return created.toLocaleDateString();
+    return formatDate(created);
   };
 
   return (
@@ -127,7 +128,10 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
           <Target className="w-5 h-5 text-orange-500" />
-          {publicProjects.length} {publicProjects.length === 1 ? ENTITY_REGISTRY.project.name : ENTITY_REGISTRY.project.namePlural}
+          {publicProjects.length}{' '}
+          {publicProjects.length === 1
+            ? ENTITY_REGISTRY.project.name
+            : ENTITY_REGISTRY.project.namePlural}
         </h3>
         {isOwnProfile && (
           <Link href={ROUTES.DASHBOARD.PROJECTS}>

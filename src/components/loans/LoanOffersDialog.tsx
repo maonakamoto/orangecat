@@ -23,6 +23,7 @@ import { PayoffDialog } from './PayoffDialog';
 import { formatCurrency } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY, CURRENCY_CODES, type CurrencyCode } from '@/config/currencies';
 import { STATUS } from '@/config/database-constants';
+import { formatDate } from '@/utils/dates';
 
 interface LoanOffersDialogProps {
   loan: Loan;
@@ -194,7 +195,7 @@ export function LoanOffersDialog({
                     {offer.status !== STATUS.LOAN_OFFERS.PENDING && (
                       <div className="text-sm text-muted-foreground flex items-center gap-1">
                         <Clock className="h-4 w-4" />
-                        Updated {new Date(offer.updated_at).toLocaleDateString()}
+                        Updated {formatDate(offer.updated_at)}
                       </div>
                     )}
                   </div>

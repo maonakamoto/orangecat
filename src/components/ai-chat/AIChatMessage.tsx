@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Bot, User } from 'lucide-react';
+import { formatShortTime } from '@/utils/dates';
 
 interface AIMessage {
   id: string;
@@ -61,12 +62,7 @@ export function AIChatMessage({
           <span className="font-medium text-sm text-gray-900">
             {isUser ? userName : assistantName}
           </span>
-          <span className="text-xs text-gray-400">
-            {new Date(message.created_at).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </span>
+          <span className="text-xs text-gray-400">{formatShortTime(message.created_at)}</span>
           {!isUser && message.tokens_used && message.tokens_used > 0 && (
             <span className="text-xs text-gray-400">({message.tokens_used} tokens)</span>
           )}

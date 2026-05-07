@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { QUICK_AMOUNT_PRESETS_SATS } from '@/config/ai-credits';
+import { formatDate } from '@/utils/dates';
 import { useAICreditsPanel, getTransactionIcon, getTransactionColor } from './useAICreditsPanel';
 
 export function AICreditsPanel() {
@@ -94,9 +95,7 @@ export function AICreditsPanel() {
                         <div className="font-medium">
                           {tx.assistant?.name || tx.description || tx.transaction_type}
                         </div>
-                        <div className="text-xs text-gray-500">
-                          {new Date(tx.created_at).toLocaleDateString()}
-                        </div>
+                        <div className="text-xs text-gray-500">{formatDate(tx.created_at)}</div>
                       </div>
                     </div>
                     <div className={`font-medium ${getTransactionColor(tx.transaction_type)}`}>

@@ -17,6 +17,7 @@ import { Calendar, MapPin, Users, Clock } from 'lucide-react';
 import Link from 'next/link';
 import type { GroupEvent } from '@/services/groups/types';
 import { STATUS } from '@/config/database-constants';
+import { formatDate, formatShortTime } from '@/utils/dates';
 
 interface EventCardProps {
   event: GroupEvent & {
@@ -54,8 +55,7 @@ export function EventCard({ event, groupSlug, onUpdate: _onUpdate }: EventCardPr
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Calendar className="h-4 w-4" />
           <span>
-            {startDate.toLocaleDateString()}{' '}
-            {startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {formatDate(startDate)} {formatShortTime(startDate)}
           </span>
         </div>
 
@@ -63,8 +63,7 @@ export function EventCard({ event, groupSlug, onUpdate: _onUpdate }: EventCardPr
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Clock className="h-4 w-4" />
             <span>
-              Ends: {endDate.toLocaleDateString()}{' '}
-              {endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              Ends: {formatDate(endDate)} {formatShortTime(endDate)}
             </span>
           </div>
         )}

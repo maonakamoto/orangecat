@@ -2,6 +2,7 @@
 
 import { CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
 import type { Withdrawal } from './types';
+import { formatDate } from '@/utils/dates';
 
 function getStatusIcon(status: string) {
   switch (status) {
@@ -42,9 +43,7 @@ export function RecentWithdrawals({ withdrawals, formatAmountBtc }: RecentWithdr
               {getStatusIcon(withdrawal.status)}
               <div>
                 <div className="font-medium">{formatAmountBtc(withdrawal.amount_btc)}</div>
-                <div className="text-xs text-gray-500">
-                  {new Date(withdrawal.created_at).toLocaleDateString()}
-                </div>
+                <div className="text-xs text-gray-500">{formatDate(withdrawal.created_at)}</div>
               </div>
             </div>
             <div className="text-xs text-gray-500 capitalize">{withdrawal.status}</div>

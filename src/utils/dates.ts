@@ -22,3 +22,7 @@ export function formatRelativeTime(date: string | Date): string {
     addSuffix: true,
   });
 }
+
+export function formatShortTime(date: string | Date): string {
+  return format(typeof date === 'string' ? new Date(date) : date, 'HH:mm');
+}
