@@ -11,10 +11,10 @@
 import { z } from 'zod';
 
 // Support type enum
-export const supportTypeSchema = z.enum(['bitcoin_funding', 'signature', 'message', 'reaction']);
+const supportTypeSchema = z.enum(['bitcoin_funding', 'signature', 'message', 'reaction']);
 
 // Reaction emoji schema
-export const reactionEmojiSchema = z.enum(['❤️', '👍', '🔥', '🚀', '💪', '🎉', '⭐', '🙌']);
+const reactionEmojiSchema = z.enum(['❤️', '👍', '🔥', '🚀', '💪', '🎉', '⭐', '🙌']);
 
 // Base support project schema
 export const supportProjectSchema = z
@@ -100,8 +100,3 @@ export const supportPaginationSchema = z.object({
   limit: z.number().int().positive().max(100).optional(),
   offset: z.number().int().nonnegative().optional(),
 });
-
-// Export types
-export type SupportProjectInput = z.infer<typeof supportProjectSchema>;
-export type SupportFiltersInput = z.infer<typeof supportFiltersSchema>;
-export type SupportPaginationInput = z.infer<typeof supportPaginationSchema>;

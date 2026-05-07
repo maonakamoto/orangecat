@@ -20,7 +20,7 @@ import type { ServiceResult } from '@/types/common';
 
 // ==================== TYPES ====================
 
-export interface CreateInvitationInput {
+interface CreateInvitationInput {
   group_id: string;
   user_id?: string;
   email?: string;
@@ -30,7 +30,7 @@ export interface CreateInvitationInput {
   expires_in_days?: number;
 }
 
-export interface InvitationResponse {
+interface InvitationResponse {
   success: boolean;
   invitation?: {
     id: string;
@@ -42,26 +42,6 @@ export interface InvitationResponse {
     status: string;
     expires_at: string;
   };
-  error?: string;
-}
-
-export interface InvitationsListResponse {
-  success: boolean;
-  invitations?: Array<{
-    id: string;
-    group_id: string;
-    user_id?: string;
-    email?: string;
-    token?: string;
-    role: string;
-    message?: string;
-    status: string;
-    invited_by: string;
-    inviter_name?: string;
-    inviter_avatar_url?: string;
-    expires_at: string;
-    created_at: string;
-  }>;
   error?: string;
 }
 

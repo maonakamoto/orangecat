@@ -60,7 +60,7 @@ export async function fetchBitcoinBalance(bitcoinAddress: string): Promise<numbe
  * @param balanceBtc - New balance in BTC
  * @param client - Optional Supabase client override
  */
-export async function updateWalletBalance(
+async function updateWalletBalance(
   walletId: string,
   balanceBtc: number,
   client?: AnySupabaseClient
@@ -140,56 +140,5 @@ export async function refreshWalletBalance(
   } catch (error) {
     logger.error('Exception refreshing wallet balance', error, 'Groups');
     return { success: false, error: 'Failed to refresh balance' };
-  }
-}
-
-/**
- * Update all wallet balances for a group
- *
- * @param groupId - Group ID
- * @param client - Optional Supabase client override
- */
-export async function refreshGroupTreasuryBalances(
-  groupId: string,
-  client?: AnySupabaseClient
-): Promise<{ success: boolean; updated: number; error?: string }> {
-  try {
-    const sb = client || supabase;
-    // Get all wallets for the group
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: wallets, error: fetchError } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUP_WALLETS) as any
-    )
-      .select('id, bitcoin_address')
-      .eq('group_id', groupId)
-      .eq('is_active', true)
-      .not('bitcoin_address', 'is', null);
-
-    if (fetchError) {
-      logger.error('Failed to fetch group wallets', fetchError, 'Groups');
-      return { success: false, updated: 0, error: fetchError.message };
-    }
-
-    if (!wallets || wallets.length === 0) {
-      return { success: true, updated: 0 };
-    }
-
-    // Update each wallet balance
-    let updated = 0;
-    for (const wallet of wallets) {
-      if (wallet.bitcoin_address) {
-        const result = await refreshWalletBalance(wallet.id, sb);
-        if (result.success) {
-          updated++;
-        }
-      }
-    }
-
-    return { success: true, updated };
-  } catch (error) {
-    logger.error('Exception refreshing group treasury balances', error, 'Groups');
-    return { success: false, updated: 0, error: 'Failed to refresh balances' };
   }
 }

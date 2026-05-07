@@ -51,13 +51,13 @@ export interface GroupInvitation {
   responded_at?: string;
 }
 
-export interface UserInvitationsResponse {
+interface UserInvitationsResponse {
   success: boolean;
   invitations?: PendingInvitation[];
   error?: string;
 }
 
-export interface GroupInvitationsResponse {
+interface GroupInvitationsResponse {
   success: boolean;
   invitations?: GroupInvitation[];
   total?: number;

@@ -7,7 +7,7 @@ import { getCurrentUserId, isGroupMember } from '../utils/helpers';
 import { getProposal } from '../queries/proposals';
 import { fromTable, type AnySupabaseClient } from '../db-helpers';
 
-export interface CreateProposalInput {
+interface CreateProposalInput {
   group_id: string;
   title: string;
   description?: string;

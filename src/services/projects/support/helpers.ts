@@ -35,33 +35,3 @@ export async function getCurrentUserId(): Promise<string | null> {
 // Re-export formatSats from SSOT to avoid duplication
 // Use useDisplayCurrency hook in components for user-preferred currency
 export { formatSats } from '@/services/currency';
-
-/**
- * Get support type display label
- */
-export function getSupportTypeLabel(supportType: string): string {
-  const labels: Record<string, string> = {
-    bitcoin_funding: 'Bitcoin Funding',
-    signature: 'Signature',
-    message: 'Message',
-    reaction: 'Reaction',
-  };
-  return labels[supportType] || supportType;
-}
-
-/**
- * Get reaction emoji label
- */
-export function getReactionLabel(emoji: string): string {
-  const labels: Record<string, string> = {
-    '❤️': 'Love',
-    '👍': 'Thumbs Up',
-    '🔥': 'Fire',
-    '🚀': 'Rocket',
-    '💪': 'Strong',
-    '🎉': 'Celebrate',
-    '⭐': 'Star',
-    '🙌': 'Praise',
-  };
-  return labels[emoji] || emoji;
-}

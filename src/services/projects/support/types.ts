@@ -9,11 +9,11 @@
  * Last Modified Summary: Created project support type definitions
  */
 
-// Support type enum
-export type SupportType = 'bitcoin_funding' | 'signature' | 'message' | 'reaction';
+// Support type enum (internal to support package)
+type SupportType = 'bitcoin_funding' | 'signature' | 'message' | 'reaction';
 
-// Reaction emoji types
-export type ReactionEmoji = '❤️' | '👍' | '🔥' | '🚀' | '💪' | '🎉' | '⭐' | '🙌';
+// Reaction emoji types (internal to support package)
+type ReactionEmoji = '❤️' | '👍' | '🔥' | '🚀' | '💪' | '🎉' | '⭐' | '🙌';
 
 // Base project support interface
 export interface ProjectSupport {
@@ -21,28 +21,22 @@ export interface ProjectSupport {
   project_id: string;
   user_id: string | null;
 
-  // Support type
   support_type: SupportType;
 
-  // Bitcoin funding fields (if type = 'bitcoin_funding')
   amount_btc?: number | null;
   transaction_hash?: string | null;
   lightning_invoice?: string | null;
 
-  // Signature/Message fields (if type = 'signature' or 'message')
   display_name?: string | null;
   message?: string | null;
   is_anonymous?: boolean;
 
-  // Reaction field (if type = 'reaction')
   reaction_emoji?: ReactionEmoji | null;
 
-  // Metadata
   created_at: string;
   updated_at: string;
 }
 
-// Project support with user profile (for display)
 export interface ProjectSupportWithUser extends ProjectSupport {
   user?: {
     id: string;
@@ -52,38 +46,29 @@ export interface ProjectSupportWithUser extends ProjectSupport {
   } | null;
 }
 
-// Project support stats
 export interface ProjectSupportStats {
   project_id: string;
   total_bitcoin_btc: number;
   total_signatures: number;
   total_messages: number;
   total_reactions: number;
-  total_supporters: number; // Unique users who supported
+  total_supporters: number;
   last_support_at: string | null;
   updated_at: string;
 }
 
-// Request interfaces
 export interface SupportProjectRequest {
   support_type: SupportType;
-
-  // Bitcoin funding
   amount?: number;
   currency?: string;
   lightning_invoice?: string;
   transaction_hash?: string;
-
-  // Signature/Message
   display_name?: string;
   message?: string;
   is_anonymous?: boolean;
-
-  // Reaction
   reaction_emoji?: ReactionEmoji;
 }
 
-// Response interfaces
 export interface ProjectSupportResponse {
   supports: ProjectSupportWithUser[];
   stats: ProjectSupportStats;
@@ -101,14 +86,12 @@ export interface SupportProjectResponse {
   error?: string;
 }
 
-// Support filters
 export interface SupportFilters {
   support_type?: SupportType;
   is_anonymous?: boolean;
   user_id?: string;
 }
 
-// Support pagination
 export interface SupportPagination {
   page?: number;
   limit?: number;

@@ -37,20 +37,20 @@ export interface Proposal {
   groupSlug?: string; // Added by components
 }
 
-export interface ProposalsListResponse {
+interface ProposalsListResponse {
   success: boolean;
   proposals?: Proposal[];
   total?: number;
   error?: string;
 }
 
-export interface ProposalResponse {
+interface ProposalResponse {
   success: boolean;
   proposal?: Proposal;
   error?: string;
 }
 
-export interface VoteData {
+interface VoteData {
   vote: string;
   voting_power: number | string;
 }

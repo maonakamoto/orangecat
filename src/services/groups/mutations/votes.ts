@@ -8,7 +8,7 @@ import type { ProposalVote } from '../queries/proposals';
 import { executeProposalAction } from '../execution';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
-export interface CastVoteInput {
+interface CastVoteInput {
   proposal_id: string;
   vote: 'yes' | 'no' | 'abstain';
 }
@@ -77,7 +77,7 @@ export async function castVote(input: CastVoteInput, client?: AnySupabaseClient)
   }
 }
 
-export async function checkAndResolveProposal(
+async function checkAndResolveProposal(
   proposalId: string,
   client?: AnySupabaseClient
 ): Promise<void> {
