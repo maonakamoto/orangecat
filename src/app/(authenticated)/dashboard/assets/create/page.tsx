@@ -1,93 +1,48 @@
 'use client';
 
-/**
- * CREATE/EDIT ASSET PAGE
- *
- * Uses the generic EntityCreationWizard for consistent entity creation UX.
- * Supports both create and edit modes via query parameter.
- *
- * Created: 2025-12-03
- * Last Modified: 2026-02-24
- * Last Modified Summary: Added edit mode support (?edit=id)
- */
-
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { EntityCreationWizard } from '@/components/create';
 import { EntityForm } from '@/components/create/EntityForm';
 import { assetConfig } from '@/config/entity-configs';
-import { useCreatePrefill } from '@/hooks/useCreatePrefill';
+import { useEntityCreateEdit } from '@/hooks/useEntityCreateEdit';
+import { getEntityMetadata } from '@/config/entity-registry';
 import Loading from '@/components/Loading';
-import { useAuth } from '@/hooks/useAuth';
-import { logger } from '@/utils/logger';
-import { ROUTES } from '@/config/routes';
 import type { AssetFormData } from '@/lib/validation';
+
+const meta = getEntityMetadata('asset');
 
 export default function CreateAssetPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const editId = searchParams?.get('edit');
-  const { user, hydrated } = useAuth();
-  const [assetData, setAssetData] = useState<Partial<AssetFormData> | null>(null);
-  const [loading, setLoading] = useState(!!editId);
-  const [editError, setEditError] = useState<string | null>(null);
-
-  const { initialData } = useCreatePrefill<AssetFormData>({
-    entityType: 'asset',
-    enabled: !editId,
-  });
-
-  // Fetch asset data if in edit mode
-  useEffect(() => {
-    if (editId && user?.id && hydrated) {
-      const fetchAsset = async () => {
-        try {
-          const response = await fetch(`/api/assets/${editId}`);
-          if (response.ok) {
-            const result = await response.json();
-            if (result.success && result.data) {
-              setAssetData(result.data);
-            } else {
-              setEditError('Failed to load asset data');
-            }
-          } else {
-            setEditError(response.status === 404 ? 'Asset not found' : 'Failed to load asset data');
-          }
-        } catch (error) {
-          logger.error('Failed to fetch asset:', error);
-          setEditError('Failed to load asset data');
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchAsset();
-    } else if (!editId) {
-      setLoading(false);
-    }
-  }, [editId, user?.id, hydrated]);
+  const { editId, entityData, loading, editError, initialData } =
+    useEntityCreateEdit<AssetFormData>('asset');
 
   if (loading) {
-    return <Loading fullScreen message="Loading asset..." />;
+    return (
+      <Loading
+        fullScreen
+        message={editId ? `Loading ${meta.name.toLowerCase()}...` : 'Loading...'}
+      />
+    );
   }
 
   if (editId && editError) {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center">
         <h3 className="text-lg font-semibold mb-2">{editError}</h3>
-        <p className="text-gray-500 mb-4">Unable to load asset for editing.</p>
+        <p className="text-gray-500 mb-4">Unable to load {meta.name.toLowerCase()} for editing.</p>
         <button
-          onClick={() => router.push(ROUTES.DASHBOARD.ASSETS)}
-          className="text-sm text-green-600 hover:text-green-700 font-medium"
+          onClick={() => router.push(meta.basePath)}
+          className="text-sm font-medium text-gray-600 hover:text-gray-900 underline"
         >
-          Back to assets
+          Back to {meta.namePlural.toLowerCase()}
         </button>
       </div>
     );
   }
 
-  if (editId && assetData) {
+  if (editId && entityData) {
     return (
-      <EntityForm config={assetConfig} initialValues={assetData} mode="edit" entityId={editId} />
+      <EntityForm config={assetConfig} initialValues={entityData} mode="edit" entityId={editId} />
     );
   }
 
@@ -95,7 +50,7 @@ export default function CreateAssetPage() {
     <EntityCreationWizard<AssetFormData>
       config={assetConfig}
       initialData={initialData}
-      onCancel={() => router.push(ROUTES.DASHBOARD.ASSETS)}
+      onCancel={() => router.push(meta.basePath)}
     />
   );
 }

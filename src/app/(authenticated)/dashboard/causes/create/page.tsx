@@ -1,109 +1,56 @@
 'use client';
 
-/**
- * CREATE/EDIT CAUSE PAGE
- *
- * Uses the generic EntityCreationWizard for consistent entity creation UX.
- * Supports both create and edit modes via query parameter.
- *
- * Supports:
- * - Create mode: /dashboard/causes/create (shows template selection then form)
- * - Edit mode: /dashboard/causes/create?edit=<id> (shows form directly with existing data)
- * - Prefill from URL params: /dashboard/causes/create?title=...&description=...
- *
- * Created: 2025-12-03
- * Last Modified: 2026-02-09
- * Last Modified Summary: Added edit mode support (mirrors loans/create pattern)
- */
-
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { EntityCreationWizard } from '@/components/create';
 import { EntityForm } from '@/components/create/EntityForm';
 import { causeConfig } from '@/config/entity-configs';
-import { useCreatePrefill } from '@/hooks/useCreatePrefill';
+import { useEntityCreateEdit } from '@/hooks/useEntityCreateEdit';
+import { getEntityMetadata } from '@/config/entity-registry';
 import Loading from '@/components/Loading';
-import { useAuth } from '@/hooks/useAuth';
-import { logger } from '@/utils/logger';
-import { ROUTES } from '@/config/routes';
 import type { UserCauseFormData } from '@/lib/validation';
+
+const meta = getEntityMetadata('cause');
 
 export default function CreateCausePage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const editId = searchParams?.get('edit');
-  const { user, hydrated } = useAuth();
-  const [causeData, setCauseData] = useState<Partial<UserCauseFormData> | null>(null);
-  const [loading, setLoading] = useState(!!editId);
-  const [editError, setEditError] = useState<string | null>(null);
-
-  const { initialData } = useCreatePrefill<UserCauseFormData>({
-    entityType: 'cause',
-    enabled: !editId,
-  });
-
-  // Fetch cause data if in edit mode
-  useEffect(() => {
-    if (editId && user?.id && hydrated) {
-      const fetchCause = async () => {
-        try {
-          const response = await fetch(`/api/causes/${editId}`);
-          if (response.ok) {
-            const result = await response.json();
-            if (result.success && result.data) {
-              setCauseData(result.data);
-            } else {
-              setEditError('Failed to load cause data');
-            }
-          } else {
-            setEditError(response.status === 404 ? 'Cause not found' : 'Failed to load cause data');
-          }
-        } catch (error) {
-          logger.error('Failed to fetch cause:', error);
-          setEditError('Failed to load cause data');
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchCause();
-    } else if (!editId) {
-      setLoading(false);
-    }
-  }, [editId, user?.id, hydrated]);
+  const { editId, entityData, loading, editError, initialData } =
+    useEntityCreateEdit<UserCauseFormData>('cause');
 
   if (loading) {
-    return <Loading fullScreen message="Loading cause..." />;
+    return (
+      <Loading
+        fullScreen
+        message={editId ? `Loading ${meta.name.toLowerCase()}...` : 'Loading...'}
+      />
+    );
   }
 
-  // Edit mode: show error if fetch failed
   if (editId && editError) {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center">
         <h3 className="text-lg font-semibold mb-2">{editError}</h3>
-        <p className="text-gray-500 mb-4">Unable to load cause for editing.</p>
+        <p className="text-gray-500 mb-4">Unable to load {meta.name.toLowerCase()} for editing.</p>
         <button
-          onClick={() => router.push(ROUTES.DASHBOARD.CAUSES)}
-          className="text-sm text-orange-600 hover:text-orange-700 font-medium"
+          onClick={() => router.push(meta.basePath)}
+          className="text-sm font-medium text-gray-600 hover:text-gray-900 underline"
         >
-          Back to causes
+          Back to {meta.namePlural.toLowerCase()}
         </button>
       </div>
     );
   }
 
-  // Edit mode: use EntityForm directly (skip template selection)
-  if (editId && causeData) {
+  if (editId && entityData) {
     return (
-      <EntityForm config={causeConfig} initialValues={causeData} mode="edit" entityId={editId} />
+      <EntityForm config={causeConfig} initialValues={entityData} mode="edit" entityId={editId} />
     );
   }
 
-  // Create mode: use EntityCreationWizard
   return (
     <EntityCreationWizard<UserCauseFormData>
       config={causeConfig}
       initialData={initialData}
-      onCancel={() => router.push(ROUTES.DASHBOARD.CAUSES)}
+      onCancel={() => router.push(meta.basePath)}
     />
   );
 }

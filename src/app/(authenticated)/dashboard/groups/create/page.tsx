@@ -1,93 +1,48 @@
 'use client';
 
-/**
- * CREATE/EDIT GROUP PAGE
- *
- * Uses the generic EntityCreationWizard for consistent entity creation UX.
- * Supports both create and edit modes via query parameter.
- *
- * Created: 2025-12-30
- * Last Modified: 2026-02-24
- * Last Modified Summary: Added edit mode support (?edit=id)
- */
-
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { EntityCreationWizard } from '@/components/create';
 import { EntityForm } from '@/components/create/EntityForm';
 import { groupConfig } from '@/config/entity-configs';
-import { useCreatePrefill } from '@/hooks/useCreatePrefill';
+import { useEntityCreateEdit } from '@/hooks/useEntityCreateEdit';
+import { getEntityMetadata } from '@/config/entity-registry';
 import Loading from '@/components/Loading';
-import { useAuth } from '@/hooks/useAuth';
-import { logger } from '@/utils/logger';
-import { ROUTES } from '@/config/routes';
 import type { CreateGroupSchemaType } from '@/services/groups/validation';
+
+const meta = getEntityMetadata('group');
 
 export default function CreateGroupPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const editId = searchParams?.get('edit');
-  const { user, hydrated } = useAuth();
-  const [groupData, setGroupData] = useState<Partial<CreateGroupSchemaType> | null>(null);
-  const [loading, setLoading] = useState(!!editId);
-  const [editError, setEditError] = useState<string | null>(null);
-
-  const { initialData } = useCreatePrefill<CreateGroupSchemaType>({
-    entityType: 'group',
-    enabled: !editId,
-  });
-
-  // Fetch group data if in edit mode
-  useEffect(() => {
-    if (editId && user?.id && hydrated) {
-      const fetchGroup = async () => {
-        try {
-          const response = await fetch(`/api/groups/${editId}`);
-          if (response.ok) {
-            const result = await response.json();
-            if (result.success && result.data) {
-              setGroupData(result.data);
-            } else {
-              setEditError('Failed to load group data');
-            }
-          } else {
-            setEditError(response.status === 404 ? 'Group not found' : 'Failed to load group data');
-          }
-        } catch (error) {
-          logger.error('Failed to fetch group:', error);
-          setEditError('Failed to load group data');
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchGroup();
-    } else if (!editId) {
-      setLoading(false);
-    }
-  }, [editId, user?.id, hydrated]);
+  const { editId, entityData, loading, editError, initialData } =
+    useEntityCreateEdit<CreateGroupSchemaType>('group');
 
   if (loading) {
-    return <Loading fullScreen message="Loading group..." />;
+    return (
+      <Loading
+        fullScreen
+        message={editId ? `Loading ${meta.name.toLowerCase()}...` : 'Loading...'}
+      />
+    );
   }
 
   if (editId && editError) {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center">
         <h3 className="text-lg font-semibold mb-2">{editError}</h3>
-        <p className="text-gray-500 mb-4">Unable to load group for editing.</p>
+        <p className="text-gray-500 mb-4">Unable to load {meta.name.toLowerCase()} for editing.</p>
         <button
-          onClick={() => router.push(ROUTES.DASHBOARD.GROUPS)}
-          className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+          onClick={() => router.push(meta.basePath)}
+          className="text-sm font-medium text-gray-600 hover:text-gray-900 underline"
         >
-          Back to groups
+          Back to {meta.namePlural.toLowerCase()}
         </button>
       </div>
     );
   }
 
-  if (editId && groupData) {
+  if (editId && entityData) {
     return (
-      <EntityForm config={groupConfig} initialValues={groupData} mode="edit" entityId={editId} />
+      <EntityForm config={groupConfig} initialValues={entityData} mode="edit" entityId={editId} />
     );
   }
 
@@ -95,7 +50,7 @@ export default function CreateGroupPage() {
     <EntityCreationWizard<CreateGroupSchemaType>
       config={groupConfig}
       initialData={initialData}
-      onCancel={() => router.push(ROUTES.DASHBOARD.GROUPS)}
+      onCancel={() => router.push(meta.basePath)}
     />
   );
 }
