@@ -58,7 +58,6 @@ export const DATABASE_TABLES = {
   PAYMENT_INTENTS: 'payment_intents',
   ORDERS: 'orders',
   CONTRIBUTIONS: 'contributions',
-  SHIPPING_ADDRESSES: 'shipping_addresses',
 
   // Timeline
   TIMELINE_EVENTS: 'timeline_events',
@@ -82,14 +81,11 @@ export const DATABASE_TABLES = {
   // System
   AUDIT_LOGS: 'audit_logs',
   CHANNEL_WAITLIST: 'channel_waitlist',
-  DRAFT_EVENTS: 'draft_events',
   TYPING_INDICATORS: 'typing_indicators',
-  TRANSPARENCY_SCORES: 'transparency_scores',
 
   // AI Assistants
   AI_CONVERSATIONS: 'ai_conversations',
   AI_MESSAGES: 'ai_messages',
-  AI_ASSISTANT_RATINGS: 'ai_assistant_ratings',
   AI_USER_CREDITS: 'ai_user_credits',
   AI_CREDIT_TRANSACTIONS: 'ai_credit_transactions',
   AI_CREATOR_EARNINGS: 'ai_creator_earnings',
