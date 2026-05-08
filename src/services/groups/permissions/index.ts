@@ -36,7 +36,7 @@ type GroupPermissionKey =
   | 'canCreateProposals'
   | 'canVote';
 
-export interface GroupPermissions {
+interface GroupPermissions {
   canView: boolean;
   canJoin: boolean;
   canInvite: boolean;

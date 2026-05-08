@@ -47,7 +47,7 @@ export type {
 } from './document-context-types';
 
 // Re-export string builders so existing callers stay unchanged
-export { buildDocumentContextString, buildFullContextString } from './context-string-builder';
+export { buildFullContextString } from './context-string-builder';
 
 // Re-export entity fetcher so callers can import directly if needed
 export { fetchEntitiesForCat } from './entity-context-fetcher';

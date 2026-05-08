@@ -178,7 +178,7 @@ export type ActivityType =
   | 'deleted_event'
   | 'rsvp_to_event';
 
-export interface GroupActivity {
+interface GroupActivity {
   id: string;
   group_id: string;
   user_id: string;
@@ -206,7 +206,7 @@ export interface GroupActivitiesQuery {
 
 // ==================== EVENT TYPES ====================
 
-export type EventType = 'general' | 'meeting' | 'celebration' | 'assembly';
+type EventType = 'general' | 'meeting' | 'celebration' | 'assembly';
 type LocationType = 'online' | 'in_person' | 'hybrid';
 export type RsvpStatus = 'going' | 'maybe' | 'not_going';
 

@@ -9,7 +9,7 @@
 import { isSupportedCurrency } from '@/config/currencies';
 import type { CreateLoanRequest } from '@/types/loans';
 
-export interface ValidationError {
+interface ValidationError {
   field: string;
   message: string;
 }
@@ -34,11 +34,17 @@ export function validateCreateLoanRequest(request: CreateLoanRequest): Validatio
   }
 
   if (!request.remaining_balance || request.remaining_balance <= 0) {
-    errors.push({ field: 'remaining_balance', message: 'Remaining balance must be greater than 0' });
+    errors.push({
+      field: 'remaining_balance',
+      message: 'Remaining balance must be greater than 0',
+    });
   }
 
   if (request.remaining_balance > request.original_amount) {
-    errors.push({ field: 'remaining_balance', message: 'Remaining balance cannot exceed original amount' });
+    errors.push({
+      field: 'remaining_balance',
+      message: 'Remaining balance cannot exceed original amount',
+    });
   }
 
   if (request.currency && !isSupportedCurrency(request.currency)) {

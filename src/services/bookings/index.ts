@@ -80,7 +80,7 @@ interface BookingResult {
 /**
  * Booking Service Class
  */
-export class BookingService {
+class BookingService {
   constructor(private supabase: AnySupabaseClient) {}
 
   private async updateBookingStatus(opts: {

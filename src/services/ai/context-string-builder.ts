@@ -12,7 +12,7 @@ const DOCUMENT_TYPE_LABELS: Record<string, string> = {
   other: 'Other Context',
 };
 
-export function buildDocumentContextString(documents: DocumentContext[]): string {
+function buildDocumentContextString(documents: DocumentContext[]): string {
   if (documents.length === 0) {
     return '';
   }
