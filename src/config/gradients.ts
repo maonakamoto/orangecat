@@ -38,6 +38,11 @@ export const GRADIENTS = {
   pageBgOrange: 'bg-gradient-to-br from-orange-50 via-white to-orange-50',
   pageBgBlue: 'bg-gradient-to-br from-orange-50 via-white to-blue-50',
 
+  // ── Bitcoin gradients (only for Bitcoin-related UI) ──────────────────────
+  brandBitcoin: 'bg-gradient-to-r from-bitcoinOrange to-orange-500',
+  btnBitcoin:
+    'bg-gradient-to-r from-bitcoinOrange to-orange-500 hover:from-orange-600 hover:to-orange-600',
+
   // ── Button combos (base + hover, always used together) ───────────────────
   btnOrange:
     'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700',

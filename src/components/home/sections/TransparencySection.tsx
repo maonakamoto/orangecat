@@ -2,7 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { Shield, Eye, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { SECTION_HEADERS } from '@/config/landing-page';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function TransparencySection() {
   const { transparency } = SECTION_HEADERS;
@@ -198,7 +200,10 @@ export default function TransparencySection() {
           </p>
           <a
             href="/auth"
-            className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white bg-gradient-to-r from-bitcoinOrange to-orange-500 hover:from-orange-600 hover:to-orange-600 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+            className={cn(
+              GRADIENTS.btnBitcoin,
+              'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
+            )}
           >
             Create Your Profile
           </a>

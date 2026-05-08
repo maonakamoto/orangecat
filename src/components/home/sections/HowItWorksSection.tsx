@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import { HOW_IT_WORKS_STEPS, SECTION_HEADERS, CTA_LABELS } from '@/config/landing-page';
 import { GRADIENTS } from '@/config/gradients';
 
@@ -97,7 +98,10 @@ export default function HowItWorksSection() {
           <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Ready to get started?</p>
           <a
             href="/auth"
-            className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white bg-gradient-to-r from-bitcoinOrange to-orange-500 hover:from-orange-600 hover:to-orange-600 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+            className={cn(
+              GRADIENTS.btnBitcoin,
+              'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
+            )}
           >
             {CTA_LABELS.createAccount}
           </a>

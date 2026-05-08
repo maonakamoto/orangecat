@@ -10,6 +10,8 @@
 'use client';
 
 import { HelpCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { DynamicSidebar } from '@/components/create/DynamicSidebar';
 import {
   walletGuidanceContent,
@@ -37,7 +39,10 @@ export function WalletsMobileGuidance({
       {/* Floating Help Button */}
       <button
         onClick={() => onShowMobileGuidance(true)}
-        className="lg:hidden fixed bottom-6 right-6 z-50 p-4 bg-gradient-to-r from-bitcoinOrange to-orange-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
+        className={cn(
+          GRADIENTS.brandBitcoin,
+          'lg:hidden fixed bottom-6 right-6 z-50 p-4 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200'
+        )}
         aria-label="Get help with this field"
       >
         <HelpCircle className="w-6 h-6" />
@@ -87,5 +92,3 @@ export function WalletsMobileGuidance({
     </>
   );
 }
-
-

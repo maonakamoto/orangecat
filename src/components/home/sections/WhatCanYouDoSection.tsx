@@ -3,7 +3,9 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { SUPER_APP_CATEGORIES, SECTION_HEADERS, CTA_LABELS } from '@/config/landing-page';
+import { GRADIENTS } from '@/config/gradients';
 
 /**
  * WhatCanYouDoSection - Simplified Feature Overview
@@ -130,7 +132,10 @@ export default function WhatCanYouDoSection() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
               href="/discover"
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white bg-gradient-to-r from-bitcoinOrange to-orange-500 hover:from-orange-600 hover:to-orange-600 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+              className={cn(
+                GRADIENTS.btnBitcoin,
+                'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
+              )}
             >
               {CTA_LABELS.secondaryAction}
               <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />

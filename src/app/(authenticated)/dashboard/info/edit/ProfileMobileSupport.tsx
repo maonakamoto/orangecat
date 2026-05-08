@@ -1,6 +1,8 @@
 'use client';
 
 import { CheckCircle2, HelpCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { DynamicSidebar } from '@/components/create/DynamicSidebar';
 import {
   profileGuidanceContent,
@@ -60,7 +62,10 @@ export function ProfileMobileSupport({
       {focusedField && (
         <button
           onClick={() => setShowMobileGuidance(true)}
-          className="lg:hidden fixed bottom-6 right-6 z-50 p-4 bg-gradient-to-r from-bitcoinOrange to-orange-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
+          className={cn(
+            GRADIENTS.brandBitcoin,
+            'lg:hidden fixed bottom-6 right-6 z-50 p-4 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200'
+          )}
           aria-label="Get help"
         >
           <HelpCircle className="w-6 h-6" />

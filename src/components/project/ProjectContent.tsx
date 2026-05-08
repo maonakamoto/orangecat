@@ -11,7 +11,9 @@
 import { Card, CardContent } from '@/components/ui/Card';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { ExternalLink } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { getUniqueCategories } from '@/utils/project';
+import { GRADIENTS } from '@/config/gradients';
 import { ProjectDonationSection } from './ProjectDonationSection';
 import { ProjectUpdatesTimeline } from './ProjectUpdatesTimeline';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
@@ -147,7 +149,10 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 aria-label={`Funding progress: ${progressPercentage.toFixed(1)}%`}
               >
                 <div
-                  className="bg-gradient-to-r from-bitcoinOrange to-orange-500 h-4 rounded-full transition-all duration-500"
+                  className={cn(
+                    GRADIENTS.brandBitcoin,
+                    'h-4 rounded-full transition-all duration-500'
+                  )}
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>
