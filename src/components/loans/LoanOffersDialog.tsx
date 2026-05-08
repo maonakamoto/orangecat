@@ -20,11 +20,10 @@ import loansService from '@/services/loans';
 import { Loan, LoanOffer } from '@/types/loans';
 import { toast } from 'sonner';
 import { PayoffDialog } from './PayoffDialog';
-import { formatCurrency } from '@/services/currency';
-import { PLATFORM_DEFAULT_CURRENCY, CURRENCY_CODES, type CurrencyCode } from '@/config/currencies';
 import { STATUS } from '@/config/database-constants';
 import { formatDate } from '@/utils/dates';
 import { getLoanOfferStatusColor } from './constants';
+import { formatLoanAmount } from './useLoanList';
 
 interface LoanOffersDialogProps {
   loan: Loan;
@@ -93,14 +92,6 @@ export function LoanOffersDialog({
     } finally {
       setActioningId(null);
     }
-  };
-
-  const formatLoanAmount = (amount: number, currency: string = PLATFORM_DEFAULT_CURRENCY) => {
-    // Validate currency and fallback to platform default
-    const validCurrency = (
-      CURRENCY_CODES.includes(currency as CurrencyCode) ? currency : PLATFORM_DEFAULT_CURRENCY
-    ) as CurrencyCode;
-    return formatCurrency(amount, validCurrency);
   };
 
   return (

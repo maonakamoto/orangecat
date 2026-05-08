@@ -9,9 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Percent, Target, User, MessageSquare } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { MakeOfferDialog } from './MakeOfferDialog';
-import { formatCurrency } from '@/services/currency';
-import { PLATFORM_DEFAULT_CURRENCY, CURRENCY_CODES } from '@/config/currencies';
-import type { CurrencyCode } from '@/config/currencies';
+import { formatLoanAmount, calculateProgress } from './useLoanList';
 
 interface AvailableLoansProps {
   loans: Loan[];
@@ -21,21 +19,6 @@ interface AvailableLoansProps {
 export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
   const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null);
   const [offerDialogOpen, setOfferDialogOpen] = useState(false);
-
-  const formatLoanAmount = (amount: number, currency: string = PLATFORM_DEFAULT_CURRENCY) => {
-    // Validate currency and fallback to platform default
-    const validCurrency = (
-      CURRENCY_CODES.includes(currency as CurrencyCode) ? currency : PLATFORM_DEFAULT_CURRENCY
-    ) as CurrencyCode;
-    return formatCurrency(amount, validCurrency);
-  };
-
-  const calculateProgress = (original: number, remaining: number) => {
-    if (original === 0) {
-      return 0;
-    }
-    return ((original - remaining) / original) * 100;
-  };
 
   const handleMakeOffer = (loan: Loan) => {
     setSelectedLoan(loan);

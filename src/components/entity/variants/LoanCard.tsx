@@ -18,6 +18,7 @@ import { formatDistanceToNow } from 'date-fns';
 import type { Loan } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
 import { formatCurrency as formatCurrencyFn } from '@/services/currency';
+import { calculateProgress } from '@/components/loans/useLoanList';
 
 interface LoanCardProps {
   loan: Loan;
@@ -27,13 +28,6 @@ interface LoanCardProps {
 export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
   const formatAmount = (amount: number, currency: string = 'USD') =>
     formatCurrencyFn(amount, currency);
-
-  const calculateProgress = (original: number, remaining: number) => {
-    if (original === 0) {
-      return 0;
-    }
-    return ((original - remaining) / original) * 100;
-  };
 
   const progress = calculateProgress(loan.original_amount, loan.remaining_balance);
 
