@@ -11,7 +11,7 @@ import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { STATUS } from '@/config/database-constants';
 import BookingTabs from './components/BookingTabs';
 import BookingCard from './components/BookingCard';
-import type { Booking } from './components/BookingCard';
+import type { Booking } from '@/services/bookings';
 import type { TabType, FilterStatus, TabConfig } from './components/BookingTabs';
 
 export default function BookingsDashboardPage() {
@@ -92,7 +92,9 @@ export default function BookingsDashboardPage() {
   };
 
   const filteredBookings = bookings.filter(booking => {
-    if (filterStatus === 'all') {return true;}
+    if (filterStatus === 'all') {
+      return true;
+    }
     return booking.status === filterStatus;
   });
 
@@ -154,7 +156,7 @@ export default function BookingsDashboardPage() {
               processingId={processingId}
               formatAmount={formatAmount}
               onAction={handleAction}
-              onViewDetails={(id) => router.push(`/dashboard/bookings/${id}`)}
+              onViewDetails={id => router.push(`/dashboard/bookings/${id}`)}
             />
           ))}
         </div>

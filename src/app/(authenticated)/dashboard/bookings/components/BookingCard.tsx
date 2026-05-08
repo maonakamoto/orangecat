@@ -13,39 +13,26 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
+import type { Booking as BookingBase } from '@/services/bookings';
 
-interface Booking {
-  id: string;
-  bookable_type: string;
-  bookable_id: string;
-  provider_actor_id: string;
-  customer_actor_id: string;
-  customer_user_id: string;
-  starts_at: string;
-  ends_at: string;
-  price_btc: number;
-  currency: string;
-  status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'rejected';
-  customer_notes?: string;
-  provider_notes?: string;
-  rejection_reason?: string;
-  cancellation_reason?: string;
-  metadata?: Record<string, unknown>;
-  created_at: string;
-  updated_at: string;
+type Booking = BookingBase & {
   customer?: {
     id: string;
     username: string;
     display_name?: string;
     avatar_url?: string;
   };
-}
+};
 
 interface BookingCardProps {
   booking: Booking;
   processingId: string | null;
   formatAmount: (amount: number) => string;
-  onAction: (bookingId: string, action: 'confirm' | 'reject' | 'complete' | 'cancel', reason?: string) => void;
+  onAction: (
+    bookingId: string,
+    action: 'confirm' | 'reject' | 'complete' | 'cancel',
+    reason?: string
+  ) => void;
   onViewDetails: (bookingId: string) => void;
 }
 
@@ -79,7 +66,10 @@ export default function BookingCard({
   onViewDetails,
 }: BookingCardProps) {
   const isProcessing = processingId === booking.id;
-  const [reasonDialog, setReasonDialog] = useState<{ action: 'reject' | 'cancel'; reason: string } | null>(null);
+  const [reasonDialog, setReasonDialog] = useState<{
+    action: 'reject' | 'cancel';
+    reason: string;
+  } | null>(null);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -127,14 +117,12 @@ export default function BookingCard({
           )}
 
           {/* Rejection/Cancellation Reason */}
-          {(booking.rejection_reason || booking.cancellation_reason) && (
+          {booking.cancellation_reason && (
             <div className="bg-red-50 rounded-md p-3 mb-4">
               <p className="text-xs font-medium text-red-500 mb-1">
-                {booking.rejection_reason ? 'Rejection' : 'Cancellation'} reason:
+                {booking.status === 'rejected' ? 'Rejection' : 'Cancellation'} reason:
               </p>
-              <p className="text-base text-red-700">
-                {booking.rejection_reason || booking.cancellation_reason}
-              </p>
+              <p className="text-base text-red-700">{booking.cancellation_reason}</p>
             </div>
           )}
         </div>
@@ -256,7 +244,7 @@ export default function BookingCard({
             placeholder="Reason (optional)"
             value={reasonDialog?.reason ?? ''}
             onChange={e =>
-              setReasonDialog(prev => prev ? { ...prev, reason: e.target.value } : null)
+              setReasonDialog(prev => (prev ? { ...prev, reason: e.target.value } : null))
             }
           />
           <DialogFooter className="gap-2 sm:gap-0">
