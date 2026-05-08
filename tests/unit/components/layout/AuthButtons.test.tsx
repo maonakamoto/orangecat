@@ -11,35 +11,65 @@ import { useAuth } from '@/hooks/useAuth';
 
 // Mock useAuth hook
 jest.mock('@/hooks/useAuth', () => ({
-  useAuth: jest.fn()
+  useAuth: jest.fn(),
 }));
 
 // Mock next/link
 jest.mock('next/link', () => {
-  return function MockLink({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) {
-    return <a href={href} className={className}>{children}</a>;
+  return function MockLink({
+    children,
+    href,
+    className,
+  }: {
+    children: React.ReactNode;
+    href: string;
+    className?: string;
+  }) {
+    return (
+      <a href={href} className={className}>
+        {children}
+      </a>
+    );
   };
 });
 
 // Mock Button component
 jest.mock('@/components/ui/Button', () => {
-  return function MockButton({ children, variant, className }: { children: React.ReactNode; variant?: string; className?: string }) {
-    return <button data-variant={variant} className={className}>{children}</button>;
+  return function MockButton({
+    children,
+    variant,
+    className,
+  }: {
+    children: React.ReactNode;
+    variant?: string;
+    className?: string;
+  }) {
+    return (
+      <button data-variant={variant} className={className}>
+        {children}
+      </button>
+    );
   };
 });
 
 // Mock UserProfileDropdown component
 jest.mock('@/components/ui/UserProfileDropdown', () => {
   return function MockUserProfileDropdown({ variant }: { variant?: string }) {
-    return <div data-testid="user-profile-dropdown" data-variant={variant}>User Profile Dropdown</div>;
+    return (
+      <div data-testid="user-profile-dropdown" data-variant={variant}>
+        User Profile Dropdown
+      </div>
+    );
   };
 });
 
 // Mock Lucide React icons
 jest.mock('lucide-react', () => ({
   Loader2: ({ className }: { className?: string }) => (
-    <div data-testid="loader2-icon" className={className}>Loading</div>
-  )
+    <div data-testid="loader2-icon" className={className}>
+      Loading
+    </div>
+  ),
 }));
 
 const mockUseAuth = useAuth as jest.Mock;
@@ -55,11 +85,11 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: null,
         session: null,
         isLoading: false,
-        hydrated: false
+        hydrated: false,
       });
 
       render(<AuthButtons />);
-      
+
       const pulseDiv = document.querySelector('.animate-pulse');
       expect(pulseDiv).toBeInTheDocument();
       // Component uses smaller indicator (w-3 h-3) for compact loading
@@ -71,14 +101,19 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: null,
         session: null,
         isLoading: true,
-        hydrated: true
+        hydrated: true,
       });
 
       render(<AuthButtons />);
-      
+
       expect(screen.getByTestId('loader2-icon')).toBeInTheDocument();
       // Component uses h-4 w-4 for compact spinner size
-      expect(screen.getByTestId('loader2-icon')).toHaveClass('h-4', 'w-4', 'animate-spin', 'text-tiffany-500');
+      expect(screen.getByTestId('loader2-icon')).toHaveClass(
+        'h-4',
+        'w-4',
+        'animate-spin',
+        'text-tiffany-500'
+      );
     });
 
     test('should apply custom className to hydration indicator', () => {
@@ -86,11 +121,11 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: null,
         session: null,
         isLoading: false,
-        hydrated: false
+        hydrated: false,
       });
 
       render(<AuthButtons className="custom-class" />);
-      
+
       const container = document.querySelector('.custom-class');
       expect(container).toBeInTheDocument();
       expect(container).toHaveClass('flex', 'items-center', 'justify-center', 'custom-class');
@@ -103,11 +138,11 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: { id: '123', email: 'user@example.com' },
         session: { access_token: 'token' },
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
 
       render(<AuthButtons />);
-      
+
       const dropdown = screen.getByTestId('user-profile-dropdown');
       expect(dropdown).toBeInTheDocument();
       expect(dropdown).toHaveAttribute('data-variant', 'advanced');
@@ -120,7 +155,7 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: { id: '123', email: 'user@example.com' },
         session: null,
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
 
       render(<AuthButtons />);
@@ -136,7 +171,7 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: null,
         session: { access_token: 'token', user: { id: '123' } },
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
 
       render(<AuthButtons />);
@@ -153,30 +188,30 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: null,
         session: null,
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
     });
 
     test('should render login and register buttons when not authenticated', () => {
       render(<AuthButtons />);
-      
+
       expect(screen.getByText('Sign In')).toBeInTheDocument();
       expect(screen.getByText('Get Started')).toBeInTheDocument();
     });
 
     test('should have correct href attributes for auth buttons', () => {
       render(<AuthButtons />);
-      
+
       const loginLink = screen.getByText('Sign In').closest('a');
       const registerLink = screen.getByText('Get Started').closest('a');
-      
+
       expect(loginLink).toHaveAttribute('href', '/auth?mode=login');
       expect(registerLink).toHaveAttribute('href', '/auth?mode=register');
     });
 
     test('should use ghost variant for login button', () => {
       render(<AuthButtons />);
-      
+
       const loginButton = screen.getByText('Sign In');
       expect(loginButton).toHaveAttribute('data-variant', 'ghost');
     });
@@ -188,8 +223,8 @@ describe('🔐 AuthButtons Component Tests', () => {
       const registerButton = screen.getByText('Get Started');
 
       // Component uses 36px minimum height for compact buttons
-      expect(loginButton).toHaveClass('min-h-[36px]');
-      expect(registerButton).toHaveClass('min-h-[36px]');
+      expect(loginButton).toHaveClass('min-h-9');
+      expect(registerButton).toHaveClass('min-h-9');
     });
   });
 
@@ -199,7 +234,7 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: null,
         session: null,
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
     });
 
@@ -215,20 +250,20 @@ describe('🔐 AuthButtons Component Tests', () => {
 
     test('should apply full width styling to links in mobile layout', () => {
       render(<AuthButtons className="flex-col" />);
-      
+
       const loginLink = screen.getByText('Sign In').closest('a');
       const registerLink = screen.getByText('Get Started').closest('a');
-      
+
       expect(loginLink).toHaveClass('w-full');
       expect(registerLink).toHaveClass('w-full');
     });
 
     test('should apply full width and center styling to buttons in mobile layout', () => {
       render(<AuthButtons className="flex-col" />);
-      
+
       const loginButton = screen.getByText('Sign In');
       const registerButton = screen.getByText('Get Started');
-      
+
       expect(loginButton).toHaveClass('w-full', 'justify-center');
       expect(registerButton).toHaveClass('w-full', 'justify-center');
     });
@@ -237,76 +272,76 @@ describe('🔐 AuthButtons Component Tests', () => {
   describe('🔄 State Transitions', () => {
     test('should transition from hydration to loading state', () => {
       const { rerender } = render(<AuthButtons />);
-      
+
       mockUseAuth.mockReturnValue({
         user: null,
         session: null,
         isLoading: false,
-        hydrated: false
+        hydrated: false,
       });
       rerender(<AuthButtons />);
-      
+
       const pulseDiv = document.querySelector('.animate-pulse');
       expect(pulseDiv).toBeInTheDocument();
       expect(pulseDiv).toHaveClass('animate-pulse');
-      
+
       mockUseAuth.mockReturnValue({
         user: null,
         session: null,
         isLoading: true,
-        hydrated: true
+        hydrated: true,
       });
       rerender(<AuthButtons />);
-      
+
       expect(screen.getByTestId('loader2-icon')).toHaveClass('animate-spin');
     });
 
     test('should transition from loading to unauthenticated state', () => {
       const { rerender } = render(<AuthButtons />);
-      
+
       mockUseAuth.mockReturnValue({
         user: null,
         session: null,
         isLoading: true,
-        hydrated: true
+        hydrated: true,
       });
       rerender(<AuthButtons />);
-      
+
       expect(screen.getByTestId('loader2-icon')).toBeInTheDocument();
-      
+
       mockUseAuth.mockReturnValue({
         user: null,
         session: null,
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
       rerender(<AuthButtons />);
-      
+
       expect(screen.getByText('Sign In')).toBeInTheDocument();
       expect(screen.getByText('Get Started')).toBeInTheDocument();
     });
 
     test('should transition from unauthenticated to authenticated state', () => {
       const { rerender } = render(<AuthButtons />);
-      
+
       mockUseAuth.mockReturnValue({
         user: null,
         session: null,
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
       rerender(<AuthButtons />);
-      
+
       expect(screen.getByText('Sign In')).toBeInTheDocument();
-      
+
       mockUseAuth.mockReturnValue({
         user: { id: '123', email: 'user@example.com' },
         session: { access_token: 'token' },
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
       rerender(<AuthButtons />);
-      
+
       expect(screen.getByTestId('user-profile-dropdown')).toBeInTheDocument();
       expect(screen.queryByText('Sign In')).not.toBeInTheDocument();
     });
@@ -318,23 +353,23 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: null,
         session: null,
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
     });
 
     test('should have accessible button text', () => {
       render(<AuthButtons />);
-      
+
       expect(screen.getByRole('button', { name: 'Sign In' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Get Started' })).toBeInTheDocument();
     });
 
     test('should have proper link semantics', () => {
       render(<AuthButtons />);
-      
+
       const loginLink = screen.getByRole('link', { name: 'Sign In' });
       const registerLink = screen.getByRole('link', { name: 'Get Started' });
-      
+
       expect(loginLink).toHaveAttribute('href', '/auth?mode=login');
       expect(registerLink).toHaveAttribute('href', '/auth?mode=register');
     });
@@ -346,8 +381,8 @@ describe('🔐 AuthButtons Component Tests', () => {
       const registerButton = screen.getByText('Get Started');
 
       // Component uses 36px minimum height for compact buttons
-      expect(loginButton).toHaveClass('min-h-[36px]');
-      expect(registerButton).toHaveClass('min-h-[36px]');
+      expect(loginButton).toHaveClass('min-h-9');
+      expect(registerButton).toHaveClass('min-h-9');
     });
   });
 
@@ -357,15 +392,15 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: null,
         session: null,
         isLoading: false,
-        hydrated: true
+        hydrated: true,
       });
-      
+
       expect(() => render(<AuthButtons />)).not.toThrow();
     });
 
     test('should handle empty auth hook return', () => {
       mockUseAuth.mockReturnValue({});
-      
+
       expect(() => render(<AuthButtons />)).not.toThrow();
     });
 
@@ -374,21 +409,21 @@ describe('🔐 AuthButtons Component Tests', () => {
         user: null,
         session: null,
       });
-      
+
       expect(() => render(<AuthButtons />)).not.toThrow();
     });
 
     test('should handle className edge cases', () => {
       const edgeCases = ['', '   ', 'flex-col-something', 'not-flex-col'];
-      
+
       edgeCases.forEach(className => {
         mockUseAuth.mockReturnValue({
           user: null,
           session: null,
           isLoading: false,
-          hydrated: true
+          hydrated: true,
         });
-        
+
         const { unmount } = render(<AuthButtons className={className} />);
         expect(screen.getByText('Sign In')).toBeInTheDocument();
         unmount();

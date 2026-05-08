@@ -1,6 +1,6 @@
 /**
  * Button Component Tests
- * 
+ *
  * Testing core UI component used throughout the Bitcoin funding platform
  * Critical for user interaction, accessibility, and platform branding
  */
@@ -13,7 +13,11 @@ import Button from '@/components/ui/Button';
 // Mock Next.js Link component
 jest.mock('next/link', () => {
   return function MockLink({ children, href, ...props }: any) {
-    return <a href={href} {...props}>{children}</a>;
+    return (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    );
   };
 });
 
@@ -91,25 +95,25 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
       render(<Button size="sm">Small</Button>);
       const button = screen.getByRole('button');
       // Small size uses 44px min-height for mobile touch targets
-      expect(button).toHaveClass('h-11', 'min-h-[44px]', 'px-4', 'text-sm', 'min-w-[80px]');
+      expect(button).toHaveClass('h-11', 'min-h-11', 'px-4', 'text-sm', 'min-w-20');
     });
 
     test('should apply medium size (default)', () => {
       render(<Button>Medium</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-11', 'min-h-[44px]', 'px-6', 'text-base', 'min-w-[100px]');
+      expect(button).toHaveClass('h-11', 'min-h-11', 'px-6', 'text-base', 'min-w-[100px]');
     });
 
     test('should apply large size styling', () => {
       render(<Button size="lg">Large</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-12', 'min-h-[48px]', 'px-8', 'text-lg', 'min-w-[120px]');
+      expect(button).toHaveClass('h-12', 'min-h-12', 'px-8', 'text-lg', 'min-w-[120px]');
     });
 
     test('should apply extra large size styling', () => {
       render(<Button size="xl">Extra Large</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-14', 'min-h-[56px]', 'px-10', 'text-xl', 'min-w-[140px]');
+      expect(button).toHaveClass('h-14', 'min-h-14', 'px-10', 'text-xl', 'min-w-[140px]');
     });
   });
 
@@ -143,7 +147,7 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     test('should handle click events', () => {
       const handleClick = jest.fn();
       render(<Button onClick={handleClick}>Click me</Button>);
-      
+
       fireEvent.click(screen.getByRole('button'));
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
@@ -157,8 +161,12 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
 
     test('should not call onClick when disabled', () => {
       const handleClick = jest.fn();
-      render(<Button disabled onClick={handleClick}>Disabled</Button>);
-      
+      render(
+        <Button disabled onClick={handleClick}>
+          Disabled
+        </Button>
+      );
+
       fireEvent.click(screen.getByRole('button'));
       expect(handleClick).not.toHaveBeenCalled();
     });
@@ -187,14 +195,18 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     test('should support focus management', () => {
       render(<Button>Focusable</Button>);
       const button = screen.getByRole('button');
-      
+
       button.focus();
       expect(button).toHaveFocus();
       expect(button).toHaveClass('focus-visible:outline-none', 'focus-visible:ring-2');
     });
 
     test('should support aria attributes', () => {
-      render(<Button aria-label="Custom label" aria-describedby="desc">Icon</Button>);
+      render(
+        <Button aria-label="Custom label" aria-describedby="desc">
+          Icon
+        </Button>
+      );
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-label', 'Custom label');
       expect(button).toHaveAttribute('aria-describedby', 'desc');
@@ -210,7 +222,7 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
       render(<Button size="sm">Small Touch</Button>);
       const button = screen.getByRole('button');
       // All sizes use 44px minimum for mobile touch targets
-      expect(button).toHaveClass('min-h-[44px]', 'min-w-[80px]');
+      expect(button).toHaveClass('min-h-11', 'min-w-20');
     });
   });
 
@@ -223,13 +235,21 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     });
 
     test('should apply styles to link variant', () => {
-      render(<Button href="/test" variant="primary">Link</Button>);
+      render(
+        <Button href="/test" variant="primary">
+          Link
+        </Button>
+      );
       const link = screen.getByRole('link');
       expect(link).toHaveClass('bg-tiffany-600', 'text-white');
     });
 
     test('should support loading state in link mode', () => {
-      render(<Button href="/test" isLoading>Loading Link</Button>);
+      render(
+        <Button href="/test" isLoading>
+          Loading Link
+        </Button>
+      );
       expect(screen.getByText('Loading...')).toBeInTheDocument();
     });
   });
@@ -238,19 +258,15 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     test('should work as Bitcoin donation button', () => {
       const handleDonate = jest.fn();
       render(
-        <Button 
-          onClick={handleDonate}
-          variant="gradient"
-          size="lg"
-        >
+        <Button onClick={handleDonate} variant="gradient" size="lg">
           ₿ Donate Bitcoin
         </Button>
       );
-      
+
       const button = screen.getByRole('button', { name: '₿ Donate Bitcoin' });
       expect(button).toBeInTheDocument();
       expect(button).toHaveClass('bg-gradient-to-r', 'from-tiffany-600', 'to-orange-600');
-      
+
       fireEvent.click(button);
       expect(handleDonate).toHaveBeenCalled();
     });
@@ -258,18 +274,14 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     test('should work as campaign creation button', () => {
       const handleCreate = jest.fn();
       render(
-        <Button 
-          onClick={handleCreate}
-          variant="primary"
-          size="xl"
-        >
+        <Button onClick={handleCreate} variant="primary" size="xl">
           Create Campaign
         </Button>
       );
-      
+
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-14', 'min-h-[56px]', 'bg-tiffany-600');
-      
+      expect(button).toHaveClass('h-14', 'min-h-14', 'bg-tiffany-600');
+
       fireEvent.click(button);
       expect(handleCreate).toHaveBeenCalled();
     });
@@ -280,15 +292,15 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
           Submit Campaign
         </Button>
       );
-      
+
       expect(screen.getByText('Submit Campaign')).toBeInTheDocument();
-      
+
       rerender(
         <Button type="submit" variant="primary" isLoading>
           Submit Campaign
         </Button>
       );
-      
+
       expect(screen.getByText('Loading...')).toBeInTheDocument();
       expect(screen.getByRole('button')).toBeDisabled();
     });
@@ -296,32 +308,25 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     test('should work as danger action (delete campaign)', () => {
       const handleDelete = jest.fn();
       render(
-        <Button 
-          onClick={handleDelete}
-          variant="danger"
-          size="sm"
-        >
+        <Button onClick={handleDelete} variant="danger" size="sm">
           Delete Campaign
         </Button>
       );
-      
+
       const button = screen.getByRole('button');
       expect(button).toHaveClass('bg-red-600', 'text-white');
-      
+
       fireEvent.click(button);
       expect(handleDelete).toHaveBeenCalled();
     });
 
     test('should work as navigation link to campaign page', () => {
       render(
-        <Button 
-          href="/campaign/123"
-          variant="outline"
-        >
+        <Button href="/campaign/123" variant="outline">
           View Campaign
         </Button>
       );
-      
+
       const link = screen.getByRole('link');
       expect(link).toHaveAttribute('href', '/campaign/123');
       expect(link).toHaveClass('border-2', 'border-gray-300');
@@ -331,10 +336,7 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
   describe('🎨 Custom Styling & Integration', () => {
     test('should merge custom classes properly', () => {
       render(
-        <Button 
-          className="custom-margin bg-purple-500" 
-          variant="primary"
-        >
+        <Button className="custom-margin bg-purple-500" variant="primary">
           Custom
         </Button>
       );
@@ -343,11 +345,7 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     });
 
     test('should support style prop', () => {
-      render(
-        <Button style={{ backgroundColor: 'red', fontSize: '20px' }}>
-          Styled
-        </Button>
-      );
+      render(<Button style={{ backgroundColor: 'red', fontSize: '20px' }}>Styled</Button>);
       const button = screen.getByRole('button');
       expect(button.style.backgroundColor).toBe('red');
       expect(button.style.fontSize).toBe('20px');
@@ -355,12 +353,7 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
 
     test('should support all standard button attributes', () => {
       render(
-        <Button 
-          type="submit"
-          name="submitBtn"
-          value="submit"
-          data-testid="submit-button"
-        >
+        <Button type="submit" name="submitBtn" value="submit" data-testid="submit-button">
           Submit
         </Button>
       );
@@ -371,4 +364,4 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
       expect(button).toHaveAttribute('data-testid', 'submit-button');
     });
   });
-}); 
+});

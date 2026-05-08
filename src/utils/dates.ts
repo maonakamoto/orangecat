@@ -13,7 +13,7 @@ export function formatTime(date: string | Date): string {
   return format(typeof date === 'string' ? new Date(date) : date, 'h:mm a');
 }
 
-function formatDateTime(date: string | Date): string {
+export function formatDateTime(date: string | Date): string {
   return format(typeof date === 'string' ? new Date(date) : date, 'MMM d, yyyy h:mm a');
 }
 

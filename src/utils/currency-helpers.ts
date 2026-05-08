@@ -53,7 +53,7 @@ export function getGoalExplanation(currency: Currency, isGoal: boolean = true): 
 /**
  * Get a short hint for currency selection
  */
-function getCurrencyHint(currency: Currency): string {
+export function getCurrencyHint(currency: Currency): string {
   if (currency === 'BTC') {
     return 'Bitcoin-native: No fractions, direct BTC amounts';
   } else if (currency === 'SATS') {
