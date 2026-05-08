@@ -8,7 +8,7 @@
  * Refactored: 2026-01-04 to use generic list handler (further reduction)
  */
 
-import { userCauseSchema } from '@/domain/causes/schema';
+import { userCauseSchema } from '@/lib/validation';
 import { createCause } from '@/domain/commerce/service';
 import { createEntityListHandler } from '@/lib/api/entityListHandler';
 import { createEntityPostHandler } from '@/lib/api/entityPostHandler';

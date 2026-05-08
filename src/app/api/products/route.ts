@@ -1,4 +1,4 @@
-import { userProductSchema } from '@/domain/products/schema';
+import { userProductSchema } from '@/lib/validation';
 import { createProduct } from '@/domain/commerce/service';
 import { createEntityListHandler } from '@/lib/api/entityListHandler';
 import { createEntityPostHandler } from '@/lib/api/entityPostHandler';
