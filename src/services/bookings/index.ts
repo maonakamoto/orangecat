@@ -23,7 +23,7 @@ export type BookingStatus =
   | 'rejected'
   | 'no_show';
 
-export interface Booking {
+interface Booking {
   id: string;
   bookable_type: BookableType;
   bookable_id: string;
