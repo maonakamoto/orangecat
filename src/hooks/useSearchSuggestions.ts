@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { getSearchSuggestions } from '@/services/search';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function debounce<T extends (...args: any[]) => any>(
+function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
   func: T,
   delay: number
 ): ((...args: Parameters<T>) => void) & { cancel: () => void } {

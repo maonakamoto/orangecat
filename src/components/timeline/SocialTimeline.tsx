@@ -35,8 +35,7 @@ export interface SocialTimelineProps {
   };
   showInlineComposer?: boolean;
   allowProjectSelection?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onOptimisticUpdate?: (event: any) => void;
+  onOptimisticUpdate?: (event: import('@/types/timeline').TimelineDisplayEvent) => void;
 }
 
 export default function SocialTimeline({

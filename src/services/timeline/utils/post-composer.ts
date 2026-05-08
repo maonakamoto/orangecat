@@ -6,7 +6,14 @@ import { DATABASE_TABLES, STORAGE_BUCKETS } from '@/config/database-tables';
 import { API_ROUTES } from '@/config/api-routes';
 import { timelineService } from '@/services/timeline';
 import { offlineQueueService } from '@/lib/offline-queue';
-import type { TimelineSubjectType } from '@/types/timeline';
+import type { TimelineSubjectType, TimelineDisplayEvent } from '@/types/timeline';
+import {
+  getEventIcon,
+  getEventColor,
+  getEventDisplayType,
+  getTimeAgo,
+  isEventRecent,
+} from '@/services/timeline/formatters';
 
 const PROFILE_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 const profileCheckCache = new Map<string, { exists: boolean; timestamp: number }>();
@@ -64,23 +71,35 @@ interface CreateOptimisticEventParams {
  * Creates an optimistic event object for immediate UI display
  * before the server confirms the post creation.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function createOptimisticEvent(params: CreateOptimisticEventParams): Record<string, any> {
+function createOptimisticEvent(params: CreateOptimisticEventParams): TimelineDisplayEvent {
   const { user, content, subjectType, subjectId, visibility, selectedProjects, parentEventId } =
     params;
 
   const optimisticId = `optimistic-${Date.now()}-${Math.random()}`;
   const now = new Date().toISOString();
 
+  const displayName =
+    user.user_metadata?.name ||
+    (typeof user.email === 'string' && user.email.includes('@')
+      ? user.email.split('@')[0]
+      : null) ||
+    'You';
+  const username =
+    (typeof user.email === 'string' && user.email.includes('@')
+      ? user.email.split('@')[0]
+      : null) || user.id;
+
   return {
     id: optimisticId,
-    eventType: 'status_update',
     actorId: user.id,
-    subjectType,
+    actorType: 'user',
+    subjectType: subjectType as TimelineSubjectType,
     subjectId: subjectId || user.id,
     title: '',
     description: content,
     visibility,
+    isFeatured: false,
+    isDeleted: false,
     metadata: {
       is_user_post: true,
       cross_posted: subjectId && subjectId !== user.id,
@@ -90,39 +109,23 @@ function createOptimisticEvent(params: CreateOptimisticEventParams): Record<stri
     },
     parentEventId,
     eventTimestamp: now,
-    actor_data: {
-      id: user.id,
-      display_name:
-        user.user_metadata?.name ||
-        (typeof user.email === 'string' && user.email.includes('@')
-          ? user.email.split('@')[0]
-          : null) ||
-        'You',
-      username:
-        (typeof user.email === 'string' && user.email.includes('@')
-          ? user.email.split('@')[0]
-          : null) || user.id,
-      avatar_url: user.user_metadata?.avatar_url,
-    },
-    // PostCard expects event.actor (the enriched shape), not actor_data
+    createdAt: now,
+    updatedAt: now,
     actor: {
       id: user.id,
-      name:
-        user.user_metadata?.name ||
-        (typeof user.email === 'string' && user.email.includes('@')
-          ? user.email.split('@')[0]
-          : null) ||
-        'You',
-      username:
-        (typeof user.email === 'string' && user.email.includes('@')
-          ? user.email.split('@')[0]
-          : null) || user.id,
+      name: displayName,
+      username,
       avatar: user.user_metadata?.avatar_url,
       type: 'user',
     },
-    like_count: 0,
-    share_count: 0,
-    comment_count: 0,
+    icon: getEventIcon('status_update'),
+    iconColor: getEventColor('status_update'),
+    displayType: getEventDisplayType('status_update'),
+    timeAgo: getTimeAgo(now),
+    isRecent: isEventRecent(now),
+    likesCount: 0,
+    sharesCount: 0,
+    commentsCount: 0,
   };
 }
 
@@ -224,6 +227,15 @@ function buildTimelineContexts(
 // POST SUBMISSION
 // =============================================================================
 
+export interface UserProject {
+  id: string;
+  title: string;
+  description?: string;
+  status: string;
+  contributor_count?: number;
+  thumbnail_url: string | null;
+}
+
 interface PostSubmitOptions {
   user: OptimisticEventUser;
   content: string;
@@ -232,12 +244,12 @@ interface PostSubmitOptions {
   visibility: TimelineVisibility;
   selectedProjects: string[];
   parentEventId?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onOptimisticUpdate?: (event: any) => void;
+  onOptimisticUpdate?: (event: TimelineDisplayEvent) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type PostSubmitResult = { success: true; event: any } | { success: false; error: string };
+type PostSubmitResult =
+  | { success: true; event: TimelineDisplayEvent | undefined }
+  | { success: false; error: string };
 
 /**
  * Submits a post to the timeline service.
@@ -316,7 +328,7 @@ export async function submitPost(options: PostSubmitOptions): Promise<PostSubmit
     return { success: false, error: errorMsg };
   }
 
-  return { success: true, event: result.event };
+  return { success: true, event: result.event as TimelineDisplayEvent | undefined };
 }
 
 /**
@@ -379,8 +391,7 @@ export async function queueOfflinePost(options: PostSubmitOptions): Promise<void
  * Fetches user projects with thumbnails for the project selector.
  * Returns processed project list or empty array on failure.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchUserProjects(userId: string): Promise<any[]> {
+export async function fetchUserProjects(userId: string): Promise<UserProject[]> {
   try {
     // Resolve user to actor for ownership filtering
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -415,14 +426,18 @@ export async function fetchUserProjects(userId: string): Promise<any[]> {
       throw error;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (data || []).map((project: any) => {
-      let thumbnail_url = null;
+    type ProjectRow = {
+      id: string;
+      title: string;
+      description?: string | null;
+      status: string;
+      contributor_count?: number | null;
+      project_media: { id: string; storage_path: string; position: number }[] | null;
+    };
+    return (data || []).map((project: ProjectRow): UserProject => {
+      let thumbnail_url: string | null = null;
       if (project.project_media && project.project_media.length > 0) {
-        const firstMedia = project.project_media.sort(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (a: any, b: any) => a.position - b.position
-        )[0];
+        const firstMedia = project.project_media.sort((a, b) => a.position - b.position)[0];
         if (firstMedia?.storage_path) {
           const { data: urlData } = supabase.storage
             .from(STORAGE_BUCKETS.PROJECT_MEDIA)
@@ -430,10 +445,12 @@ export async function fetchUserProjects(userId: string): Promise<any[]> {
           thumbnail_url = urlData.publicUrl;
         }
       }
+      const { project_media: _pm, description, contributor_count, ...rest } = project;
       return {
-        ...project,
+        ...rest,
+        description: description ?? undefined,
+        contributor_count: contributor_count ?? undefined,
         thumbnail_url,
-        project_media: undefined,
       };
     });
   } catch (err) {

@@ -59,8 +59,26 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
       return apiInternalError('Failed to fetch projects');
     }
 
+    type ProjectWithMedia = {
+      id: string;
+      title: string;
+      description?: string | null;
+      category?: string | null;
+      tags?: string[] | null;
+      status: string;
+      bitcoin_address?: string | null;
+      lightning_address?: string | null;
+      goal_amount?: number | null;
+      currency?: string | null;
+      raised_amount?: number | null;
+      bitcoin_balance_btc?: number | null;
+      bitcoin_balance_updated_at?: string | null;
+      created_at: string;
+      updated_at: string;
+      project_media: { id: string; storage_path: string; position: number }[] | null;
+    };
     // Process projects to get first media URL
-    const projectsWithMedia = (projects || []).map((project: any) => {
+    const projectsWithMedia = (projects || []).map((project: ProjectWithMedia) => {
       if (project.project_media && project.project_media.length > 0) {
         // Get first media item (sorted by position)
         const firstMedia = project.project_media.sort(

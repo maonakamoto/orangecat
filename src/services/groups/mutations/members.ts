@@ -42,7 +42,10 @@ export async function joinGroup(
       .select('is_public, visibility')
       .eq('id', groupId)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .single()) as { data: { is_public: boolean; visibility: string } | null; error: any };
+      .single()) as {
+      data: { is_public: boolean; visibility: string } | null;
+      error: Error | null;
+    };
 
     if (groupError || !group) {
       return { success: false, error: 'Group not found' };

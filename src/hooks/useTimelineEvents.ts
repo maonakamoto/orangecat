@@ -127,8 +127,7 @@ export const useTimelineEvents = () => {
   }, [user?.id, profile]);
 
   return {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dispatchProjectCreated: (projectId: string, projectData: any) => {
+    dispatchProjectCreated: (projectId: string, projectData: Record<string, unknown>) => {
       window.dispatchEvent(
         new CustomEvent('project-created', { detail: { projectId, projectData } })
       );
@@ -147,13 +146,14 @@ export const useTimelineEvents = () => {
       );
     },
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dispatchProfileUpdated: (changes: Record<string, any>) => {
+    dispatchProfileUpdated: (changes: Record<string, unknown>) => {
       window.dispatchEvent(new CustomEvent('profile-updated', { detail: { changes } }));
     },
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dispatchUserFollowed: (followedUserId: string, followedUserData?: any) => {
+    dispatchUserFollowed: (
+      followedUserId: string,
+      followedUserData?: { display_name?: string; username?: string }
+    ) => {
       window.dispatchEvent(
         new CustomEvent('user-followed', { detail: { followedUserId, followedUserData } })
       );

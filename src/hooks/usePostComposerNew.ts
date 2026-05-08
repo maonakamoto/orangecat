@@ -1,9 +1,9 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { logger } from '@/utils/logger';
 import { useAuth } from '@/hooks/useAuth';
-import { TimelineVisibility } from '@/types/timeline';
+import type { TimelineVisibility, TimelineDisplayEvent } from '@/types/timeline';
 import { usePostDraft } from '@/hooks/usePostDraft';
-import { fetchUserProjects } from '@/services/timeline/utils/post-composer';
+import { fetchUserProjects, type UserProject } from '@/services/timeline/utils/post-composer';
 import { usePostSubmission } from './usePostSubmission';
 
 export interface PostComposerOptions {
@@ -11,10 +11,8 @@ export interface PostComposerOptions {
   subjectId?: string;
   allowProjectSelection?: boolean;
   defaultVisibility?: TimelineVisibility;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSuccess?: (event?: any) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onOptimisticUpdate?: (event: any) => void;
+  onSuccess?: (event?: TimelineDisplayEvent) => void;
+  onOptimisticUpdate?: (event: TimelineDisplayEvent) => void;
   debounceMs?: number;
   enableDrafts?: boolean;
   enableRetry?: boolean;
@@ -30,8 +28,7 @@ interface PostComposerState {
   setVisibility: (visibility: TimelineVisibility) => void;
   selectedProjects: string[];
   setSelectedProjects: (projects: string[]) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  userProjects: any[];
+  userProjects: UserProject[];
   loadingProjects: boolean;
   isPosting: boolean;
   error: string | null;
@@ -66,8 +63,7 @@ export function usePostComposer(options: PostComposerOptions = {}): PostComposer
   const [content, setContent] = useState('');
   const [visibility, setVisibility] = useState<TimelineVisibility>(defaultVisibility || 'public');
   const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [userProjects, setUserProjects] = useState<any[]>([]);
+  const [userProjects, setUserProjects] = useState<UserProject[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
 
   const draftSetters = useMemo(() => ({ setContent, setVisibility, setSelectedProjects }), []);

@@ -35,8 +35,21 @@ export async function createProjectSupport(
 
     const userId = await getCurrentUserId();
 
+    type SupportInsertData = {
+      project_id: string;
+      user_id: string | null;
+      support_type: string;
+      is_anonymous: boolean;
+      amount_btc?: number;
+      transaction_hash?: string | null;
+      lightning_invoice?: string | null;
+      display_name?: string | null;
+      message?: string | null;
+      reaction_emoji?: string;
+    };
+
     // Build support data
-    const supportData: any = {
+    const supportData: SupportInsertData = {
       project_id: projectId,
       user_id: userId,
       support_type: request.support_type,
@@ -63,9 +76,9 @@ export async function createProjectSupport(
       supportData.user_id = null;
     }
 
-    // Insert support
-    const { data, error } = await supabase
-      .from(DATABASE_TABLES.PROJECT_SUPPORT)
+    // Insert support — project_support resolves to never in generated types; cast from() to bypass
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase.from(DATABASE_TABLES.PROJECT_SUPPORT) as any)
       .insert(supportData)
       .select()
       .single();

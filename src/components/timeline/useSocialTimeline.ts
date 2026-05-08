@@ -12,8 +12,7 @@ import { useSocialTimelineSearch } from './useSocialTimelineSearch';
 export interface UseSocialTimelineProps {
   mode: 'timeline' | 'community';
   defaultSort?: 'recent' | 'trending' | 'popular';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onOptimisticUpdate?: (event: any) => void;
+  onOptimisticUpdate?: (event: TimelineDisplayEvent) => void;
 }
 
 export function useSocialTimeline({
@@ -26,8 +25,7 @@ export function useSocialTimeline({
 
   const { invalidateAll: invalidateTimelineCache } = useInvalidateTimeline();
   const [timelineFeed, setTimelineFeed] = useState<TimelineFeedResponse | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [optimisticEvents, setOptimisticEvents] = useState<any[]>([]);
+  const [optimisticEvents, setOptimisticEvents] = useState<TimelineDisplayEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,8 +34,7 @@ export function useSocialTimeline({
   const search = useSocialTimelineSearch();
 
   const handleOptimisticUpdate = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (event: any) => {
+    (event: TimelineDisplayEvent) => {
       setOptimisticEvents(prev => [event, ...prev]);
       onOptimisticUpdate?.(event);
     },

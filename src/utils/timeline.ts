@@ -7,6 +7,8 @@
  * Created: 2025-01-22
  */
 
+import type { TimelineDisplayEvent } from '@/types/timeline';
+
 /**
  * Merge optimistic events with real events, removing duplicates
  * Matches events by content and timestamp within a 5-second window
@@ -16,16 +18,12 @@
  * @returns Filtered optimistic events that haven't been replaced
  */
 export function filterOptimisticEvents(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  optimisticEvents: any[],
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  realEvents: any[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): any[] {
+  optimisticEvents: TimelineDisplayEvent[],
+  realEvents: TimelineDisplayEvent[]
+): TimelineDisplayEvent[] {
   return optimisticEvents.filter(
     optEvent =>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      !realEvents.some((realEvent: any) => {
+      !realEvents.some(realEvent => {
         // Match by content and timestamp (simple heuristic)
         return (
           realEvent.description === optEvent.description &&
