@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Users } from 'lucide-react';
-import { ScalableProfile } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
 import DefaultAvatar from '@/components/ui/DefaultAvatar';
 import supabase from '@/lib/supabase/browser';
 import { useAuth } from '@/hooks/useAuth';

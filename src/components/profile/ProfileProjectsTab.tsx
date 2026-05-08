@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Target, Bitcoin, ArrowRight } from 'lucide-react';
-import { ScalableProfile } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
 import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';

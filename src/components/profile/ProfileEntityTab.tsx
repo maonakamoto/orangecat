@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Calendar, MapPin, Globe, Tag } from 'lucide-react';
-import { ScalableProfile } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
 import Button from '@/components/ui/Button';
 import { EntityType } from '@/config/entity-registry';
 import { getStatusInfo, NORMAL_VISIBLE_STATUSES } from '@/config/status-config';

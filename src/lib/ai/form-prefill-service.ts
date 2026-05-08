@@ -7,7 +7,7 @@
 
 import type { EntityType } from '@/config/entity-registry';
 import { isValidEntityType } from '@/config/entity-registry';
-import type { AIPrefillResponse } from '@/components/create/types';
+import type { AIPrefillResponse, EntityConfig } from '@/components/create/types';
 import { logger } from '@/utils/logger';
 import {
   extractFieldDescriptions,
@@ -42,21 +42,7 @@ interface FormPrefillConfig {
 export async function generateFormPrefill(
   entityType: string,
   description: string,
-  entityConfig: {
-    fieldGroups: Array<{
-      fields?: Array<{
-        name: string;
-        label: string;
-        type: string;
-        required?: boolean;
-        hint?: string;
-        placeholder?: string;
-        options?: Array<{ value: string; label: string }>;
-        min?: number;
-        max?: number;
-      }>;
-    }>;
-  },
+  entityConfig: EntityConfig,
   existingData?: Record<string, unknown>,
   config?: FormPrefillConfig
 ): Promise<AIPrefillResponse> {
@@ -82,7 +68,7 @@ export async function generateFormPrefill(
 
   try {
     // Extract field descriptions from the entity config
-    const fieldDescriptions = extractFieldDescriptions(entityConfig as any);
+    const fieldDescriptions = extractFieldDescriptions(entityConfig);
     const fieldsPrompt = formatFieldsForPrompt(fieldDescriptions);
     const specialInstructions = getSpecialFieldInstructions(entityType as EntityType);
 

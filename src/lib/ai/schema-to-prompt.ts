@@ -6,7 +6,7 @@
  */
 
 import type { EntityType } from '@/config/entity-registry';
-import type { FieldConfig, EntityConfig } from '@/components/create/types';
+import type { FieldConfig, FieldGroup } from '@/components/create/types';
 
 /**
  * Field description for AI prompt
@@ -103,7 +103,9 @@ function fieldConfigToDescription(field: FieldConfig): FieldDescription {
 /**
  * Extract field descriptions from an entity config
  */
-export function extractFieldDescriptions(config: EntityConfig): FieldDescription[] {
+export function extractFieldDescriptions(config: {
+  fieldGroups: FieldGroup[];
+}): FieldDescription[] {
   const descriptions: FieldDescription[] = [];
 
   for (const group of config.fieldGroups) {

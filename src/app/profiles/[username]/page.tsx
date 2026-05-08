@@ -6,7 +6,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { getTableName } from '@/config/entity-registry';
 import type { EntityType } from '@/config/entity-registry';
 import { safeJsonLdString } from '@/lib/seo/structured-data';
-import type { ScalableProfile } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
 import { mapProjectRow } from '@/types/project';
 
 interface PageProps {

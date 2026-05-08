@@ -1,6 +1,7 @@
 'use client';
 
-import { ScalableProfile, Project } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
+import { Project } from '@/types/database';
 import ProfileLayout from '@/components/profile/ProfileLayout';
 import type { EntityType } from '@/config/entity-registry';
 

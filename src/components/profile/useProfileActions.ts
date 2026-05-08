@@ -6,7 +6,8 @@ import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
 import { useAuth } from '@/hooks/useAuth';
-import type { ScalableProfile, ProfileFormData } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
+import type { ProfileFormData } from '@/types/database';
 
 interface UseProfileActionsParams {
   profile: ScalableProfile;

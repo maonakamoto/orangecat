@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Package } from 'lucide-react';
-import { ScalableProfile } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { logger } from '@/utils/logger';

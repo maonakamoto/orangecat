@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useCallback, useState } from 'react';
-import { ScalableProfile } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
 import TimelineView from '@/components/timeline/TimelineView';
 
 interface ProfileTimelineTabProps {
@@ -39,9 +39,7 @@ export default function ProfileTimelineTab({ profile, isOwnProfile }: ProfileTim
           showFilters={false}
           emptyStateTitle="No posts yet"
           emptyStateDescription={
-            isOwnProfile
-              ? 'Share your first update!'
-              : 'No posts on this timeline yet.'
+            isOwnProfile ? 'Share your first update!' : 'No posts on this timeline yet.'
           }
           onPostCreated={handlePostCreated}
         />

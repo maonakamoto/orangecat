@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ScalableProfile } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
 import { Wallet } from '@/types/wallet';
 import { logger } from '@/utils/logger';
 import ProfileWalletSection from '@/components/profile/ProfileWalletSection';

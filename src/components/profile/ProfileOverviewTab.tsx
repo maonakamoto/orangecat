@@ -1,6 +1,6 @@
 'use client';
 
-import { ScalableProfile } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { User, Globe, Calendar, Mail, Phone } from 'lucide-react';
 import { SocialLinksDisplay } from './SocialLinksDisplay';
@@ -83,7 +83,9 @@ export default function ProfileOverviewTab({
                   {stats.projectCount}
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 mt-1">
-                  {stats.projectCount === 1 ? ENTITY_REGISTRY.project.name : ENTITY_REGISTRY.project.namePlural}
+                  {stats.projectCount === 1
+                    ? ENTITY_REGISTRY.project.name
+                    : ENTITY_REGISTRY.project.namePlural}
                 </div>
               </div>
             </CardContent>

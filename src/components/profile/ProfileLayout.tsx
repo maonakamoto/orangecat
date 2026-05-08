@@ -1,7 +1,8 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
-import { ScalableProfile, ProfileFormData, Project } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
+import { ProfileFormData, Project } from '@/types/database';
 import ProfileViewTabs from '@/components/profile/ProfileViewTabs';
 import ProfileOverviewTab from '@/components/profile/ProfileOverviewTab';
 import ProfileTimelineTab from '@/components/profile/ProfileTimelineTab';

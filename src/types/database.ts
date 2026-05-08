@@ -3690,8 +3690,5 @@ export type Profile = AppProfile & {
   email?: string | null;
 };
 
-// Re-export ScalableProfile from services for backwards compatibility
-export type { ScalableProfile, ScalableProfileFormData } from '@/services/profile/types';
-
 // AI Assistant type for dashboard and entity components
 export type AIAssistant = Database['public']['Tables']['ai_assistants']['Row'];

@@ -7,7 +7,7 @@ import Button from '@/components/ui/Button';
 import DefaultAvatar from '@/components/ui/DefaultAvatar';
 import ProfileShare from '@/components/sharing/ProfileShare';
 import { cn } from '@/lib/utils';
-import type { ScalableProfile } from '@/types/database';
+import type { ScalableProfile } from '@/services/profile/types';
 
 interface ProfileBannerSectionProps {
   profile: ScalableProfile;
