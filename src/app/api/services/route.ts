@@ -1,4 +1,4 @@
-import { userServiceSchema } from '@/domain/services/schema';
+import { userServiceSchema } from '@/lib/validation';
 import { createService } from '@/domain/commerce/service';
 import { createEntityListHandler } from '@/lib/api/entityListHandler';
 import { createEntityPostHandler } from '@/lib/api/entityPostHandler';
