@@ -14,6 +14,7 @@ interface ConnectionResponseItem {
   following_id?: string;
   follower_id?: string;
   created_at: string;
+  updated_at?: string;
   profiles?: Profile;
   id?: string;
   username?: string;
@@ -112,8 +113,7 @@ export function usePeopleConnections(userId: string | undefined, hydrated: boole
         const allData = await allRes.json();
         if (allData.success) {
           const arr = Array.isArray(allData.data?.data) ? allData.data.data : [];
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const transformed: Connection[] = arr.map((p: any) => ({
+          const transformed: Connection[] = arr.map((p: ConnectionResponseItem) => ({
             profile: {
               id: p.id,
               username: p.username,

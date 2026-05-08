@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth';
 import { createBrowserClient } from '@supabase/ssr';
 import { toast } from 'sonner';
 import { API_ROUTES } from '@/config/api-routes';
+import { getErrorMessage } from '@/types/common';
 import type { User } from '@supabase/supabase-js';
 
 export interface SettingsFormData {
@@ -61,9 +62,8 @@ export function useSettingsForm(user: User | null) {
         throw error;
       }
       toast.success('Confirmation email sent! Please check your inbox.');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to update email.');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error) || 'Failed to update email.');
     } finally {
       setIsSubmittingEmail(false);
     }
@@ -88,9 +88,8 @@ export function useSettingsForm(user: User | null) {
         toast.success('Password updated successfully!');
         setFormData(prev => ({ ...prev, newPassword: '', confirmPassword: '' }));
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toast.error(error.message || 'An unexpected error occurred.');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error) || 'An unexpected error occurred.');
     } finally {
       setIsSubmittingPassword(false);
     }
@@ -112,9 +111,8 @@ export function useSettingsForm(user: User | null) {
       toast.success('Account deleted. You will be signed out.');
       await signOut();
       router.push('/');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to delete account.');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error) || 'Failed to delete account.');
     } finally {
       setIsDeleting(false);
     }

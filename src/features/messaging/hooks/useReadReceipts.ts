@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
-import type { Message } from '../types';
+import type { Message, Participant } from '../types';
 import { TIMING, debugLog } from '../lib/constants';
 import { applyStatusToMessages } from '../lib/message-utils';
 import { useRealtimeSubscription } from './useRealtimeSubscription';
@@ -60,7 +60,7 @@ export function useReadReceipts(
       }
 
       const newMap = new Map<string, Date | null>();
-      (participants || []).forEach((p: any) => {
+      (participants || []).forEach((p: Participant) => {
         newMap.set(p.user_id, p.last_read_at ? new Date(p.last_read_at) : null);
       });
       setParticipantReadTimes(newMap);
