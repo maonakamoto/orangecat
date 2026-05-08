@@ -1,6 +1,7 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'gradient';
@@ -25,8 +26,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500 shadow-button hover:shadow-button-hover active:shadow-sm border-0',
       outline:
         'border-2 border-gray-300 bg-transparent hover:bg-gray-50 hover:border-gray-400 focus-visible:ring-gray-500 shadow-sm hover:shadow-button active:shadow-sm text-gray-700',
-      gradient:
-        'bg-gradient-to-r from-tiffany-600 to-orange-600 hover:from-tiffany-700 hover:to-orange-700 text-white shadow-button hover:shadow-button-hover active:shadow-sm border-0 focus-visible:ring-tiffany-500',
+      gradient: `${GRADIENTS.btnPrimary} text-white shadow-button hover:shadow-button-hover active:shadow-sm border-0 focus-visible:ring-tiffany-500`,
     };
 
     const sizes = {

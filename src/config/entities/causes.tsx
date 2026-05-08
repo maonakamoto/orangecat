@@ -16,6 +16,7 @@ import { STATUS } from '@/config/database-constants';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { Currency } from '@/types/settings';
+import { GRADIENTS } from '@/config/gradients';
 
 export const causeEntityConfig: EntityConfig<UserCause> = {
   name: 'Cause',
@@ -105,7 +106,7 @@ export const causeEntityConfig: EntityConfig<UserCause> = {
     description: 'Start making a difference by creating your first cause or fundraiser.',
     action: (
       <Link href={ROUTES.DASHBOARD.CAUSES_CREATE}>
-        <Button className="bg-gradient-to-r from-orange-600 to-orange-700">Create Cause</Button>
+        <Button className={GRADIENTS.brandOrangeDark}>Create Cause</Button>
       </Link>
     ),
   },

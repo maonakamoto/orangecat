@@ -15,6 +15,7 @@ import { AvailableLoans } from '@/components/loans/AvailableLoans';
 import { LoanOffersList } from '@/components/loans/LoanOffersList';
 import { CreateLoanDialog } from '@/components/loans/CreateLoanDialog';
 import { useLoanList } from './useLoanList';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function LoansPage() {
   const {
@@ -70,7 +71,7 @@ export default function LoansPage() {
       )}
       <Button
         href={loanEntityConfig.createPath}
-        className="bg-gradient-to-r from-tiffany-600 to-tiffany-700 w-full sm:w-auto"
+        className={`${GRADIENTS.brandTiffanyDark} w-full sm:w-auto`}
       >
         Create Loan
       </Button>

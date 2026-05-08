@@ -9,6 +9,7 @@ import Button from '@/components/ui/Button';
 import { ComponentProps } from 'react';
 import { JsonLdScript } from '@/lib/seo/structured-data';
 import BlogShareButton from './BlogShareButton';
+import { GRADIENTS } from '@/config/gradients';
 
 // MDX Components
 const mdxComponents = {
@@ -278,10 +279,7 @@ export default async function BlogPost({ params }: PageProps) {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/blog">
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
-                  >
+                  <Button size="lg" className={GRADIENTS.btnOrange}>
                     Read More Articles
                   </Button>
                 </Link>

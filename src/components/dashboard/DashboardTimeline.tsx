@@ -9,6 +9,7 @@ import TimelineComposer from '@/components/timeline/TimelineComposer';
 import { TimelineFeedResponse } from '@/types/timeline';
 import { BookOpen, MessageSquare, Compass, RefreshCw, AlertCircle } from 'lucide-react';
 import { TimelinePostSkeleton } from '@/components/ui/Skeleton';
+import { GRADIENTS } from '@/config/gradients';
 
 interface DashboardTimelineProps {
   timelineFeed: TimelineFeedResponse | null;
@@ -53,7 +54,9 @@ export function DashboardTimeline({
       <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl shadow-sm overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-100">
           <div>
-            <CardTitle className="text-base sm:text-lg font-semibold text-gray-900">My Timeline</CardTitle>
+            <CardTitle className="text-base sm:text-lg font-semibold text-gray-900">
+              My Timeline
+            </CardTitle>
             <CardDescription className="text-xs sm:text-sm text-gray-500">
               Recent activities, posts, and updates
             </CardDescription>
@@ -95,7 +98,9 @@ export function DashboardTimeline({
           ) : (
             <div className="text-center py-8 sm:py-12 px-4 text-gray-500">
               <MessageSquare className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-300" />
-              <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-2">Start My Timeline</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-2">
+                Start My Timeline
+              </h3>
               <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 max-w-md mx-auto">
                 Share your first update! My timeline will show your posts, project updates, and
                 interactions with the community.
@@ -103,7 +108,7 @@ export function DashboardTimeline({
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
                 <Button
                   onClick={() => router.push('/timeline?compose=true')}
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                  className={GRADIENTS.btnOrange}
                   size="sm"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />

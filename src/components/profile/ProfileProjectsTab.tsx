@@ -14,6 +14,7 @@ import { formatRelativeTimeCompact } from '@/utils/dates';
 import { getStatusInfo } from '@/config/status-config';
 import { PROJECT_STATUS } from '@/config/project-statuses';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { GRADIENTS } from '@/config/gradients';
 
 // Extended project list item for profile display
 interface ProfileProjectItem {
@@ -199,7 +200,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                         <div
-                          className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full transition-all duration-300"
+                          className={`${GRADIENTS.brandOrangeAmber} h-2 rounded-full transition-all duration-300`}
                           style={{ width: `${progress}%` }}
                         />
                       </div>

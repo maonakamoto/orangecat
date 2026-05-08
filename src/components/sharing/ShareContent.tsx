@@ -8,6 +8,7 @@ const Facebook = Globe;
 const Linkedin = Globe;
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { GRADIENTS } from '@/config/gradients';
 
 export interface SharePlatform {
   name: string;
@@ -166,7 +167,9 @@ export default function ShareContent({
       {showTitle && (
         <div className="flex items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-900 flex items-center gap-2 text-lg">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center">
+            <div
+              className={`w-8 h-8 rounded-full ${GRADIENTS.brandOrange} flex items-center justify-center`}
+            >
               <Share2 className="w-4 h-4 text-white" />
             </div>
             {titleText}
@@ -187,7 +190,7 @@ export default function ShareContent({
       {hasNativeShare && (
         <button
           onClick={handleNativeShare}
-          className="w-full mb-5 flex items-center justify-center gap-3 p-4 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold transition-all touch-manipulation active:scale-95 shadow-lg shadow-orange-500/30"
+          className={`w-full mb-5 flex items-center justify-center gap-3 p-4 rounded-xl ${GRADIENTS.btnOrange} text-white font-semibold transition-all touch-manipulation active:scale-95 shadow-lg shadow-orange-500/30`}
         >
           <Share2 className="w-5 h-5" />
           <span>Share via...</span>

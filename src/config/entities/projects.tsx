@@ -20,6 +20,7 @@ import { PROJECT_STATUS } from '@/config/project-statuses';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { Currency } from '@/types/settings';
+import { GRADIENTS } from '@/config/gradients';
 
 // Project type for EntityList usage
 export interface ProjectListItem {
@@ -153,7 +154,7 @@ export const projectEntityConfig: EntityConfig<ProjectListItem> = {
       'Create your first project to start accepting Bitcoin funding and building support for your cause.',
     action: (
       <Link href={ROUTES.DASHBOARD.PROJECTS_CREATE}>
-        <Button className="bg-gradient-to-r from-orange-600 to-orange-700">Create Project</Button>
+        <Button className={GRADIENTS.brandOrangeDark}>Create Project</Button>
       </Link>
     ),
   },

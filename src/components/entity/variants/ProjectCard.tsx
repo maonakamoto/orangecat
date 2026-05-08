@@ -17,6 +17,7 @@ import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import BTCAmountDisplay from '@/components/ui/BTCAmountDisplay';
 import type { SearchFundingPage } from '@/services/search';
 import type { CurrencyCode } from '@/config/currencies';
+import { GRADIENTS } from '@/config/gradients';
 
 interface ProjectCardProps extends Omit<
   EntityCardProps,
@@ -62,7 +63,7 @@ export function ProjectCard({
       <div className="w-full space-y-1">
         <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
           <div
-            className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all duration-500"
+            className={`h-full ${GRADIENTS.brandOrangeAmber} transition-all duration-500`}
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
@@ -82,7 +83,7 @@ export function ProjectCard({
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
           <div
-            className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all duration-500"
+            className={`h-full ${GRADIENTS.brandOrangeAmber} transition-all duration-500`}
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
@@ -99,35 +100,36 @@ export function ProjectCard({
   ) : null;
 
   // Metrics slot - hide in compact mode (shown in progress slot)
-  const metricsSlot = showMetrics && !compact ? (
-    <div className="flex items-center gap-4 text-sm text-gray-600">
-      {currentAmount > 0 && (
-        <div className="flex items-center gap-1">
-          <span className="font-medium">
-            <CurrencyDisplay amount={currentAmount} currency={projectCurrency} />
-          </span>
-          {projectCurrency !== 'BTC' && (
-            <span className="text-xs text-gray-500">
-              (<BTCAmountDisplay amount={currentAmount} currency={projectCurrency} />)
+  const metricsSlot =
+    showMetrics && !compact ? (
+      <div className="flex items-center gap-4 text-sm text-gray-600">
+        {currentAmount > 0 && (
+          <div className="flex items-center gap-1">
+            <span className="font-medium">
+              <CurrencyDisplay amount={currentAmount} currency={projectCurrency} />
             </span>
-          )}
-        </div>
-      )}
-      {project.supporters_count !== undefined && project.supporters_count > 0 && (
-        <div>
-          <span className="font-medium">{project.supporters_count}</span>{' '}
-          <span className="text-xs">supporters</span>
-        </div>
-      )}
-    </div>
-  ) : null;
+            {projectCurrency !== 'BTC' && (
+              <span className="text-xs text-gray-500">
+                (<BTCAmountDisplay amount={currentAmount} currency={projectCurrency} />)
+              </span>
+            )}
+          </div>
+        )}
+        {project.supporters_count !== undefined && project.supporters_count > 0 && (
+          <div>
+            <span className="font-medium">{project.supporters_count}</span>{' '}
+            <span className="text-xs">supporters</span>
+          </div>
+        )}
+      </div>
+    ) : null;
 
   return (
     <EntityCard
       {...props}
       id={project.id}
       title={project.title || 'Untitled Project'}
-      description={compact ? null : (project.description || null)}
+      description={compact ? null : project.description || null}
       thumbnailUrl={project.cover_image_url || project.banner_url || undefined}
       href={props.href || `/projects/${project.id}`}
       badge={statusConfig.label}

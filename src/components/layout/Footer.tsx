@@ -7,6 +7,7 @@ import { shouldShowFooter } from '@/config/routes';
 import Logo from './Logo';
 import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 const Footer = React.memo(function Footer() {
   const pathname = usePathname();
@@ -28,7 +29,7 @@ const Footer = React.memo(function Footer() {
       {/* Back to top button */}
       <button
         onClick={scrollToTop}
-        className="absolute -top-6 right-4 sm:right-8 w-12 h-12 bg-gradient-to-r from-orange-500 to-tiffany-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 flex items-center justify-center group z-10"
+        className={`absolute -top-6 right-4 sm:right-8 w-12 h-12 ${GRADIENTS.brandMixed} text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 flex items-center justify-center group z-10`}
         aria-label="Back to top"
         type="button"
       >
@@ -71,10 +72,12 @@ const Footer = React.memo(function Footer() {
           {/* Navigation Links */}
           <div className="space-y-6">
             <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase relative">
-              <span className="bg-gradient-to-r from-orange-500 to-tiffany-500 bg-clip-text text-transparent">
+              <span className={`${GRADIENTS.brandMixed} bg-clip-text text-transparent`}>
                 Navigation
               </span>
-              <div className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-orange-500 to-tiffany-500 rounded-full"></div>
+              <div
+                className={`absolute bottom-0 left-0 w-8 h-0.5 ${GRADIENTS.brandMixed} rounded-full`}
+              ></div>
             </h3>
             <ul className="space-y-3">
               {footerNavigation.product.map(item => (
@@ -95,10 +98,12 @@ const Footer = React.memo(function Footer() {
           {/* Company Links */}
           <div className="space-y-6">
             <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase relative">
-              <span className="bg-gradient-to-r from-orange-500 to-tiffany-500 bg-clip-text text-transparent">
+              <span className={`${GRADIENTS.brandMixed} bg-clip-text text-transparent`}>
                 Company
               </span>
-              <div className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-orange-500 to-tiffany-500 rounded-full"></div>
+              <div
+                className={`absolute bottom-0 left-0 w-8 h-0.5 ${GRADIENTS.brandMixed} rounded-full`}
+              ></div>
             </h3>
             <ul className="space-y-3">
               {footerNavigation.company.map(item => (
@@ -132,10 +137,10 @@ const Footer = React.memo(function Footer() {
           {/* Legal Links */}
           <div className="space-y-6">
             <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase relative">
-              <span className="bg-gradient-to-r from-orange-500 to-tiffany-500 bg-clip-text text-transparent">
-                Legal
-              </span>
-              <div className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-orange-500 to-tiffany-500 rounded-full"></div>
+              <span className={`${GRADIENTS.brandMixed} bg-clip-text text-transparent`}>Legal</span>
+              <div
+                className={`absolute bottom-0 left-0 w-8 h-0.5 ${GRADIENTS.brandMixed} rounded-full`}
+              ></div>
             </h3>
             <ul className="space-y-3">
               {footerNavigation.legal.map(item => (
@@ -156,10 +161,12 @@ const Footer = React.memo(function Footer() {
           {/* Newsletter/CTA Section */}
           <div className="space-y-6 sm:col-span-2 lg:col-span-1">
             <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase relative">
-              <span className="bg-gradient-to-r from-orange-500 to-tiffany-500 bg-clip-text text-transparent">
+              <span className={`${GRADIENTS.brandMixed} bg-clip-text text-transparent`}>
                 Stay Updated
               </span>
-              <div className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-orange-500 to-tiffany-500 rounded-full"></div>
+              <div
+                className={`absolute bottom-0 left-0 w-8 h-0.5 ${GRADIENTS.brandMixed} rounded-full`}
+              ></div>
             </h3>
             <div className="space-y-4">
               <p className="text-sm text-gray-600 leading-relaxed">
@@ -167,7 +174,7 @@ const Footer = React.memo(function Footer() {
               </p>
               <Link
                 href="/auth?mode=register"
-                className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-tiffany-500 rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 min-h-[44px]"
+                className={`inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 text-sm font-medium text-white ${GRADIENTS.brandMixed} rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 min-h-[44px]`}
               >
                 Get Started Today
               </Link>

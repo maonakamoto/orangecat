@@ -17,6 +17,7 @@ import { useBulkDelete } from '@/hooks/useBulkDelete';
 import { EntityConfig, BaseEntity } from '@/types/entity';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
+import { GRADIENTS } from '@/config/gradients';
 
 /**
  * EntityDashboardPage - Reusable dashboard page component for all entity types
@@ -136,7 +137,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
   const colorClass =
     (
       {
-        orange: 'bg-gradient-to-r from-orange-600 to-orange-700',
+        orange: GRADIENTS.brandOrangeDark,
         blue: 'bg-gradient-to-r from-blue-600 to-blue-700',
         green: 'bg-gradient-to-r from-green-600 to-green-700',
         purple: 'bg-gradient-to-r from-purple-600 to-purple-700',

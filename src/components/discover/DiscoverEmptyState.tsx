@@ -4,6 +4,7 @@ import Button from '@/components/ui/Button';
 import type { DiscoverTabType } from '@/components/discover/DiscoverTabs';
 import { ENTITY_REGISTRY, type EntityType } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
+import { GRADIENTS } from '@/config/gradients';
 
 interface DiscoverEmptyStateProps {
   activeTab: DiscoverTabType;
@@ -67,7 +68,7 @@ export default function DiscoverEmptyState({
               <Button
                 href={meta.createPath}
                 size="lg"
-                className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 mb-4"
+                className={`${GRADIENTS.btnOrangeDark} text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 mb-4`}
               >
                 {meta.createActionLabel}
               </Button>
@@ -109,7 +110,7 @@ export default function DiscoverEmptyState({
           {meta && (
             <Button
               href={meta.createPath}
-              className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              className={`${GRADIENTS.btnOrangeDark} text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300`}
             >
               Or {meta.createActionLabel.toLowerCase()} →
             </Button>

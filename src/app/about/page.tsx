@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { Heart, Zap, TreePine, Cat } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 export const metadata: Metadata = {
   title: 'About OrangeCat',
@@ -30,7 +31,9 @@ export default function AboutPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 text-center max-w-3xl mx-auto">
           <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-tiffany-400 to-tiffany-600 rounded-2xl flex items-center justify-center">
+            <div
+              className={`w-20 h-20 ${GRADIENTS.brandTiffanyBr} rounded-2xl flex items-center justify-center`}
+            >
               <Cat className="w-10 h-10 text-white" />
             </div>
           </div>
@@ -106,7 +109,7 @@ export default function AboutPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-orange-500 to-tiffany-500">
+      <div className={GRADIENTS.brandMixed}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h2 className="text-2xl font-semibold text-white mb-4">Join the Open Economy</h2>

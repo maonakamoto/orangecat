@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ArrowRight, Globe, Zap, TrendingUp, Cat } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { GRADIENTS } from '@/config/gradients';
 
 /**
  * Static Hero Section - Renders immediately without animations
@@ -89,7 +90,9 @@ export default function HeroSectionStatic() {
               {/* Card Header */}
               <div className="p-4 sm:p-6 border-b border-gray-100">
                 <div className="flex items-start gap-3 sm:gap-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-tiffany-400 to-tiffany-600 flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
+                  <div
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${GRADIENTS.brandTiffanyBr} flex items-center justify-center text-xl sm:text-2xl flex-shrink-0`}
+                  >
                     🐱
                   </div>
                   <div className="flex-1 min-w-0">
@@ -130,7 +133,7 @@ export default function HeroSectionStatic() {
                 {/* CTA Button in Demo */}
                 <Link
                   href="/discover"
-                  className="block w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-tiffany-500 to-tiffany-600 text-white text-sm sm:text-base font-semibold rounded-lg hover:from-tiffany-600 hover:to-tiffany-700 transition-all duration-200 flex items-center justify-center gap-2"
+                  className={`block w-full px-3 sm:px-4 py-2.5 sm:py-3 ${GRADIENTS.brandTiffany} text-white text-sm sm:text-base font-semibold rounded-lg hover:from-tiffany-600 hover:to-tiffany-700 transition-all duration-200 flex items-center justify-center gap-2`}
                 >
                   <Cat className="w-4 h-4 sm:w-5 sm:h-5" />
                   Explore Platform

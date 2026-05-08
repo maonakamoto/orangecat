@@ -16,6 +16,7 @@ import { STATUS } from '@/config/database-constants';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { Currency } from '@/types/settings';
+import { GRADIENTS } from '@/config/gradients';
 
 export const serviceEntityConfig: EntityConfig<UserService> = {
   name: 'Service',
@@ -109,7 +110,7 @@ export const serviceEntityConfig: EntityConfig<UserService> = {
     description: 'Start offering your expertise to the community by creating your first service.',
     action: (
       <Link href={ROUTES.DASHBOARD.SERVICES_CREATE}>
-        <Button className="bg-gradient-to-r from-orange-600 to-orange-700">Create Service</Button>
+        <Button className={GRADIENTS.brandOrangeDark}>Create Service</Button>
       </Link>
     ),
   },

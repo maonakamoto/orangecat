@@ -23,6 +23,7 @@ import { ProfileService } from '@/services/profile';
 import { logger } from '@/utils/logger';
 import { ROUTES } from '@/config/routes';
 import { ONBOARDING_METHOD } from './OnboardingFlow/constants';
+import { GRADIENTS } from '@/config/gradients';
 
 const EXAMPLE_PROMPTS = [
   "I'm a freelance graphic designer looking to find clients and sell design templates",
@@ -78,7 +79,9 @@ export default function IntelligentOnboarding() {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
+          <div
+            className={`w-16 h-16 ${GRADIENTS.brandOrangeBr} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}
+          >
             <Cat className="w-9 h-9 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Meet My Cat</h1>
@@ -137,7 +140,7 @@ export default function IntelligentOnboarding() {
             data-testid="onboarding-start-chat"
             onClick={handleStartChat}
             disabled={!description.trim() || isRedirecting}
-            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+            className={`w-full ${GRADIENTS.btnOrange}`}
           >
             {isRedirecting ? (
               <>

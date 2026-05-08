@@ -12,6 +12,7 @@ import {
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import Button from '@/components/ui/Button';
 import { formatDate } from '@/utils/dates';
+import { GRADIENTS } from '@/config/gradients';
 
 interface BitcoinWalletStatsCompactProps {
   address: string;
@@ -92,7 +93,7 @@ export default function BitcoinWalletStatsCompact({
   return (
     <div className={`bg-white rounded-lg border border-gray-200 overflow-hidden ${className}`}>
       {/* Balance Display */}
-      <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-4 text-white">
+      <div className={`${GRADIENTS.brandOrangeAmber} p-4 text-white`}>
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2">
             <Bitcoin className="w-4 h-4" />

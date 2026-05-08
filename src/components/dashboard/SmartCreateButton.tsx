@@ -15,6 +15,7 @@ import {
   type EntityMetadata,
   type EntityCategory,
 } from '@/config/entity-registry';
+import { GRADIENTS } from '@/config/gradients';
 
 interface SmartCreateButtonProps {
   children?: React.ReactNode;
@@ -165,7 +166,7 @@ export function MobileCreateButton() {
         onClick={() => setIsOpen(true)}
         className={cn(
           'flex items-center justify-center w-12 h-12 rounded-full',
-          'bg-gradient-to-r from-orange-500 to-tiffany-500 text-white shadow-lg',
+          `${GRADIENTS.brandMixed} text-white shadow-lg`,
           'hover:from-orange-600 hover:to-tiffany-600',
           'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2'
         )}
@@ -215,7 +216,7 @@ export function DashboardCreateButton({ className = '' }: { className?: string }
 
   return (
     <SmartCreateButton
-      className={`${hasAnyDraft ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700' : 'bg-gradient-to-r from-tiffany-600 to-orange-600 hover:from-tiffany-700 hover:to-orange-700'} min-h-[44px] ${className}`}
+      className={`${hasAnyDraft ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700' : GRADIENTS.btnPrimary} min-h-[44px] ${className}`}
       size="lg"
       fullWidth={true}
     />

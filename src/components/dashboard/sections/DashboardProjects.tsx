@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button';
 import { BarChart3 } from 'lucide-react';
 import { ProjectCard } from '@/components/entity/variants/ProjectCard';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { GRADIENTS } from '@/config/gradients';
 
 // Use a generic interface compatible with the project store
 interface DashboardProjectsProps {
@@ -40,7 +41,7 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
               <CardDescription>Your projects</CardDescription>
             </div>
             <Link href={ENTITY_REGISTRY.project.createPath}>
-              <Button size="sm" className="bg-gradient-to-r from-orange-500 to-orange-600">
+              <Button size="sm" className={GRADIENTS.brandOrange}>
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Create Project
               </Button>
@@ -72,8 +73,7 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
           <div>
             <CardTitle>My Projects</CardTitle>
             <CardDescription>
-              Your projects ({projects.length}{' '}
-              {projects.length === 1 ? 'project' : 'projects'})
+              Your projects ({projects.length} {projects.length === 1 ? 'project' : 'projects'})
             </CardDescription>
           </div>
           <Link href={ENTITY_REGISTRY.project.basePath}>

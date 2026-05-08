@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { Plus } from 'lucide-react';
 import type { CatAction } from '../types';
+import { GRADIENTS } from '@/config/gradients';
 
 interface ActionButtonProps {
   action: CatAction;
@@ -23,7 +24,7 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
         onClick={onClick}
         className={cn(
           'flex items-center gap-2 px-4 py-2.5 rounded-xl',
-          'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700',
+          GRADIENTS.btnOrange,
           'text-white font-medium text-sm shadow-md hover:shadow-lg',
           'transition-all transform hover:scale-[1.02]'
         )}
@@ -36,7 +37,9 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
   }
 
   // exec_action blocks run server-side; they don't render a button here
-  if (action.type === 'exec_action') { return null; }
+  if (action.type === 'exec_action') {
+    return null;
+  }
 
   // Entity actions (create, update, publish)
   const entityMeta = ENTITY_REGISTRY[action.entityType];
@@ -61,7 +64,7 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
           ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
           : action.type === 'update_entity'
             ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
-            : 'bg-gradient-to-r from-tiffany-500 to-tiffany-600 hover:from-tiffany-600 hover:to-tiffany-700',
+            : `${GRADIENTS.brandTiffany} hover:from-tiffany-600 hover:to-tiffany-700`,
         'text-white font-medium text-sm shadow-md hover:shadow-lg',
         'transition-all transform hover:scale-[1.02]'
       )}

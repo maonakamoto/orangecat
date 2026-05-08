@@ -11,6 +11,7 @@ import { getRouteContext, ROUTE_CONTEXTS, ROUTES } from '@/config/routes';
 import { getContextualCreateAction } from '@/lib/navigation/contextual-create';
 import { MobileCreateSheet } from '@/components/create/MobileCreateSheet';
 import { Z_INDEX } from '@/constants/z-index';
+import { GRADIENTS } from '@/config/gradients';
 
 const MobileBottomNav = React.memo(function MobileBottomNav() {
   const pathname = usePathname();
@@ -210,9 +211,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                     className={cn(
                       'absolute flex items-center justify-center rounded-full shadow-lg',
                       'transition-all duration-300 hover:scale-105 active:scale-95',
-                      isAuthenticated
-                        ? 'bg-gradient-to-r from-orange-500 to-orange-600'
-                        : 'bg-gradient-to-r from-tiffany-500 to-tiffany-600'
+                      isAuthenticated ? GRADIENTS.brandOrange : GRADIENTS.brandTiffany
                     )}
                     style={{
                       width: shouldBeSmall ? '48px' : '56px',

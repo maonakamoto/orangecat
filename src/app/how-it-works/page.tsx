@@ -10,6 +10,7 @@ import {
   CTA_LABELS,
   SUPER_APP_CATEGORIES,
 } from '@/config/landing-page';
+import { GRADIENTS } from '@/config/gradients';
 
 /**
  * How It Works Page - Detailed walkthrough
@@ -224,7 +225,7 @@ export default function HowItWorksPage() {
               <Button
                 href="/auth?mode=register"
                 size="lg"
-                className="bg-gradient-to-r from-tiffany-500 to-tiffany-600 hover:from-tiffany-600 hover:to-tiffany-700 text-white group"
+                className={`${GRADIENTS.brandTiffany} hover:from-tiffany-600 hover:to-tiffany-700 text-white group`}
               >
                 {CTA_LABELS.createAccount}
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />

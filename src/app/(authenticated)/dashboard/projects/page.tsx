@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Target, Heart } from 'lucide-react';
 import { useProjectList } from './useProjectList';
 import { ProjectsSearchFilter } from './ProjectsSearchFilter';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function ProjectsDashboardPage() {
   const {
@@ -66,7 +67,7 @@ export default function ProjectsDashboardPage() {
       )}
       <Button
         href={projectEntityConfig.createPath}
-        className="bg-gradient-to-r from-orange-600 to-orange-700 w-full sm:w-auto"
+        className={`${GRADIENTS.brandOrangeDark} w-full sm:w-auto`}
       >
         Create Project
       </Button>

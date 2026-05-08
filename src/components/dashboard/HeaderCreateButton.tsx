@@ -5,6 +5,7 @@ import { Plus } from 'lucide-react';
 import { useDropdown } from '@/hooks/useDropdown';
 import { cn } from '@/lib/utils';
 import { CREATE_OPTIONS, shouldShowDivider } from './SmartCreateButton';
+import { GRADIENTS } from '@/config/gradients';
 
 export function HeaderCreateButton() {
   const { isOpen, dropdownRef, buttonRef, toggle, close } = useDropdown({
@@ -20,7 +21,7 @@ export function HeaderCreateButton() {
         onClick={toggle}
         className={cn(
           'flex items-center justify-center w-10 h-10 sm:w-9 sm:h-9 rounded-xl transition-all duration-200',
-          'bg-gradient-to-r from-orange-500 to-tiffany-500 text-white',
+          `${GRADIENTS.brandMixed} text-white`,
           'hover:from-orange-600 hover:to-tiffany-600 hover:shadow-md',
           'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2',
           'touch-manipulation',

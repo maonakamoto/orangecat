@@ -20,10 +20,21 @@ import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { TASK_CATEGORIES, TASK_STATUSES, TASK_TYPES } from '@/config/tasks';
 import type { Task } from '@/lib/schemas/tasks';
-import { ClipboardList, AlertTriangle, Play, Clock, Filter, Plus, ChevronDown, ChevronUp, BarChart3 } from 'lucide-react';
+import {
+  ClipboardList,
+  AlertTriangle,
+  Play,
+  Clock,
+  Filter,
+  Plus,
+  ChevronDown,
+  ChevronUp,
+  BarChart3,
+} from 'lucide-react';
 import QuickStatCard from './components/QuickStatCard';
 import TaskCard from './components/TaskCard';
 import TaskFilters from './components/TaskFilters';
+import { GRADIENTS } from '@/config/gradients';
 
 type TaskCategory = (typeof TASK_CATEGORIES)[keyof typeof TASK_CATEGORIES];
 type TaskStatus = (typeof TASK_STATUSES)[keyof typeof TASK_STATUSES];
@@ -57,19 +68,31 @@ export default function TasksPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   const loadTasks = useCallback(async () => {
-    if (!user?.id) {return;}
+    if (!user?.id) {
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
       const params = new URLSearchParams();
-      if (categoryFilter) {params.set('category', categoryFilter);}
-      if (statusFilter) {params.set('status', statusFilter);}
-      if (typeFilter) {params.set('type', typeFilter);}
-      if (showArchived) {params.set('archived', 'true');}
+      if (categoryFilter) {
+        params.set('category', categoryFilter);
+      }
+      if (statusFilter) {
+        params.set('status', statusFilter);
+      }
+      if (typeFilter) {
+        params.set('type', typeFilter);
+      }
+      if (showArchived) {
+        params.set('archived', 'true');
+      }
 
       const response = await fetch(`/api/tasks?${params.toString()}`);
       const data = await response.json();
-      if (!response.ok) {throw new Error(data.error || 'Failed to load tasks');}
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to load tasks');
+      }
       setTasks(data.data?.tasks || []);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load tasks';
@@ -87,13 +110,16 @@ export default function TasksPage() {
     }
   }, [hydrated, authLoading, user, loadTasks]);
 
-  const taskCounts = useMemo(() => ({
-    total: tasks.length,
-    idle: tasks.filter(t => t.current_status === TASK_STATUSES.IDLE).length,
-    needsAttention: tasks.filter(t => t.current_status === TASK_STATUSES.NEEDS_ATTENTION).length,
-    requested: tasks.filter(t => t.current_status === TASK_STATUSES.REQUESTED).length,
-    inProgress: tasks.filter(t => t.current_status === TASK_STATUSES.IN_PROGRESS).length,
-  }), [tasks]);
+  const taskCounts = useMemo(
+    () => ({
+      total: tasks.length,
+      idle: tasks.filter(t => t.current_status === TASK_STATUSES.IDLE).length,
+      needsAttention: tasks.filter(t => t.current_status === TASK_STATUSES.NEEDS_ATTENTION).length,
+      requested: tasks.filter(t => t.current_status === TASK_STATUSES.REQUESTED).length,
+      inProgress: tasks.filter(t => t.current_status === TASK_STATUSES.IN_PROGRESS).length,
+    }),
+    [tasks]
+  );
 
   const handleComplete = async (taskId: string) => {
     try {
@@ -140,16 +166,29 @@ export default function TasksPage() {
 
   const headerActions = (
     <div className="flex items-center gap-2">
-      <Button href={ROUTES.DASHBOARD.TASKS_ANALYTICS} variant="outline" size="sm" className="flex items-center gap-2">
+      <Button
+        href={ROUTES.DASHBOARD.TASKS_ANALYTICS}
+        variant="outline"
+        size="sm"
+        className="flex items-center gap-2"
+      >
         <BarChart3 className="h-4 w-4" />
         <span className="hidden sm:inline">Analytics</span>
       </Button>
-      <Button onClick={() => setShowFilters(!showFilters)} variant="outline" size="sm" className="flex items-center gap-2">
+      <Button
+        onClick={() => setShowFilters(!showFilters)}
+        variant="outline"
+        size="sm"
+        className="flex items-center gap-2"
+      >
         <Filter className="h-4 w-4" />
         <span className="hidden sm:inline">Filter</span>
         {showFilters ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
       </Button>
-      <Button href={ROUTES.DASHBOARD.TASKS_NEW} className="flex items-center gap-2 bg-gradient-to-r from-tiffany-600 to-tiffany-700">
+      <Button
+        href={ROUTES.DASHBOARD.TASKS_NEW}
+        className={`flex items-center gap-2 ${GRADIENTS.brandTiffanyDark}`}
+      >
         <Plus className="h-4 w-4" />
         <span>Create Task</span>
       </Button>
@@ -157,13 +196,27 @@ export default function TasksPage() {
   );
 
   return (
-    <EntityListShell title="Tasks" description="Manage and complete team tasks" headerActions={headerActions}>
+    <EntityListShell
+      title="Tasks"
+      description="Manage and complete team tasks"
+      headerActions={headerActions}
+    >
       {/* Quick Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <QuickStatCard icon={ClipboardList} label="Total" value={taskCounts.total} color="gray" />
         <QuickStatCard icon={Clock} label="Ready" value={taskCounts.idle} color="blue" />
-        <QuickStatCard icon={AlertTriangle} label="Needs attention" value={taskCounts.needsAttention} color="amber" />
-        <QuickStatCard icon={Play} label="In progress" value={taskCounts.inProgress} color="green" />
+        <QuickStatCard
+          icon={AlertTriangle}
+          label="Needs attention"
+          value={taskCounts.needsAttention}
+          color="amber"
+        />
+        <QuickStatCard
+          icon={Play}
+          label="In progress"
+          value={taskCounts.inProgress}
+          color="green"
+        />
       </div>
 
       {showFilters && (
@@ -196,7 +249,9 @@ export default function TasksPage() {
           <ClipboardList className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">No tasks found</h3>
           <p className="text-gray-600 mb-6">
-            {categoryFilter || statusFilter || typeFilter ? 'Try different filter settings' : 'Create your first task'}
+            {categoryFilter || statusFilter || typeFilter
+              ? 'Try different filter settings'
+              : 'Create your first task'}
           </p>
           <Button href={ROUTES.DASHBOARD.TASKS_NEW} className="inline-flex">
             <Plus className="h-4 w-4 mr-2" />
