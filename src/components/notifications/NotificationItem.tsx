@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { formatRelativeTime } from '@/utils/dates';
 import { type Notification } from '@/hooks/useNotifications';
+import { getInitial } from '@/utils/string';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 function getNotificationIcon(notification: Notification) {
@@ -21,7 +22,7 @@ function getNotificationIcon(notification: Notification) {
     return (
       <Avatar className="h-8 w-8">
         <AvatarImage src={sourceProfile.avatar_url} />
-        <AvatarFallback>{sourceProfile.name?.charAt(0) || '?'}</AvatarFallback>
+        <AvatarFallback>{getInitial(sourceProfile.name, '?')}</AvatarFallback>
       </Avatar>
     );
   }

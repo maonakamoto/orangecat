@@ -14,6 +14,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { getInitial } from '@/utils/string';
 
 interface AvatarLinkProps {
   /**
@@ -23,32 +24,32 @@ interface AvatarLinkProps {
    */
   username?: string | null;
   userId?: string | null;
-  
+
   /**
    * Avatar image URL
    */
   avatarUrl?: string | null;
-  
+
   /**
    * Display name for alt text and fallback initial
    */
   name?: string | null;
-  
+
   /**
    * Size of the avatar (default: 48)
    */
   size?: number;
-  
+
   /**
    * Additional CSS classes
    */
   className?: string;
-  
+
   /**
    * Show online status indicator (green dot)
    */
   showOnlineStatus?: boolean;
-  
+
   /**
    * Whether this is the current user's avatar
    */
@@ -75,7 +76,7 @@ export default function AvatarLink({
   // Ensure username is a valid non-empty string before using it in URL
   const validUsername = username && typeof username === 'string' && username.trim().length > 0;
   const validUserId = userId && typeof userId === 'string' && userId.trim().length > 0;
-  
+
   const profileUrl = validUsername
     ? `/profiles/${encodeURIComponent(username.trim())}`
     : validUserId
@@ -85,7 +86,7 @@ export default function AvatarLink({
         : '#';
 
   const displayName = name || username || 'User';
-  const initial = displayName.charAt(0).toUpperCase();
+  const initial = getInitial(displayName);
 
   // Ensure href is always a valid string
   const safeHref = typeof profileUrl === 'string' ? profileUrl : '#';
@@ -129,4 +130,3 @@ export default function AvatarLink({
     </Link>
   );
 }
-

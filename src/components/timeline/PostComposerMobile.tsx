@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import BottomSheet from '@/components/ui/BottomSheet';
 import AvatarLink from '@/components/ui/AvatarLink';
 import { Globe, ChevronDown, ImageIcon } from 'lucide-react';
+import { getInitial } from '@/utils/string';
 import { usePostComposer, type PostComposerOptions } from '@/hooks/usePostComposerNew';
 import { useContentEditableEditor } from '@/hooks/useContentEditableEditor';
 import { cn } from '@/lib/utils';
@@ -116,7 +117,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                 ) : (
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-600 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
                     <span className="text-white font-semibold text-sm">
-                      {(user?.user_metadata?.name || user?.email || 'U')[0].toUpperCase()}
+                      {getInitial(user?.user_metadata?.name || user?.email)}
                     </span>
                   </div>
                 )}

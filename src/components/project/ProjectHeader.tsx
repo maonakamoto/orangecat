@@ -16,6 +16,7 @@ import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';
 import { getUniqueCategories } from '@/utils/project';
+import { getInitial } from '@/utils/string';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -127,14 +128,7 @@ export default function ProjectHeader({
                     />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center text-orange-600 font-semibold text-sm cursor-pointer hover:opacity-80 transition-opacity">
-                      {(
-                        project.profiles.name ||
-                        project.profiles.username ||
-                        project.profiles.id?.substring(0, 1) ||
-                        'A'
-                      )
-                        .charAt(0)
-                        .toUpperCase()}
+                      {getInitial(project.profiles.name || project.profiles.username, 'A')}
                     </div>
                   )}
                 </Link>

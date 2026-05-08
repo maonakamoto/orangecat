@@ -13,6 +13,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { formatRelativeTime } from '@/utils/dates';
+import { getInitial } from '@/utils/string';
 import {
   Receipt,
   Camera,
@@ -62,7 +63,7 @@ export function ProofOfPurchaseCard({
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src={proof.user?.avatar_url} />
-            <AvatarFallback>{proof.user?.username?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+            <AvatarFallback>{getInitial(proof.user?.username)}</AvatarFallback>
           </Avatar>
           <div>
             <p className="text-sm font-medium">{proof.user?.username || 'Anonymous'}</p>

@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Users } from 'lucide-react';
+import { getInitial } from '@/utils/string';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import DefaultAvatar from '@/components/ui/DefaultAvatar';
@@ -35,7 +36,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
                 <Image src={profile.avatar_url} alt={displayName} fill className="object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-tiffany-600 font-semibold">
-                  {displayName.charAt(0).toUpperCase()}
+                  {getInitial(displayName)}
                 </div>
               )}
             </div>

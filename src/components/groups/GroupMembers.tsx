@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import { Users, UserPlus, Crown, Shield, User } from 'lucide-react';
 import { STATUS } from '@/config/database-constants';
 import type { GroupMember, GroupRole } from '@/types/group';
+import { getInitial } from '@/utils/string';
 import groupsService from '@/services/groups';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
@@ -116,7 +117,7 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div className="h-10 w-10 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center border-2 border-orange-300">
-                      {(member.display_name || member.username || 'U').charAt(0).toUpperCase()}
+                      {getInitial(member.display_name || member.username)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
