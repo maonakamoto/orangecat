@@ -90,7 +90,6 @@ export const API_ROUTES = {
     COLLATERAL: '/api/loan-collateral',
   },
   PROFILE: '/api/profile',
-  CHAT: '/api/chat',
   GROUPS: '/api/groups',
   JOBS: '/api/jobs',
   DELETE_USER: '/api/delete-user',
