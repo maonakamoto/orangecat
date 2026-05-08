@@ -46,6 +46,7 @@ const config: EntityDetailConfig = {
   ownerLabel: 'Listed By',
   descriptionTitle: 'About this Asset',
   metadataSelect: 'title, description',
+  showPaymentSection: false,
   getViewRoute: id => ROUTES.ASSETS.VIEW(id),
   renderHeaderExtra: entity => {
     const verificationStatus = entity.verification_status as string | undefined;
