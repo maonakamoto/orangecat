@@ -84,7 +84,7 @@ const Footer = React.memo(function Footer() {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="group flex items-center text-base text-gray-600 hover:text-orange-600 transition-all duration-300 py-2 px-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-tiffany-50 hover:shadow-sm min-h-[44px]"
+                    className="group flex items-center text-base text-gray-600 hover:text-orange-600 transition-all duration-300 py-2 px-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-tiffany-50 hover:shadow-sm min-h-11"
                   >
                     <span className="group-hover:translate-x-1 transition-transform duration-300">
                       {item.name}
@@ -113,7 +113,7 @@ const Footer = React.memo(function Footer() {
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center text-base text-gray-600 hover:text-orange-600 transition-all duration-300 py-2 px-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-tiffany-50 hover:shadow-sm min-h-[44px]"
+                      className="group flex items-center text-base text-gray-600 hover:text-orange-600 transition-all duration-300 py-2 px-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-tiffany-50 hover:shadow-sm min-h-11"
                     >
                       <span className="group-hover:translate-x-1 transition-transform duration-300">
                         {item.name}
@@ -122,7 +122,7 @@ const Footer = React.memo(function Footer() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="group flex items-center text-base text-gray-600 hover:text-orange-600 transition-all duration-300 py-2 px-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-tiffany-50 hover:shadow-sm min-h-[44px]"
+                      className="group flex items-center text-base text-gray-600 hover:text-orange-600 transition-all duration-300 py-2 px-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-tiffany-50 hover:shadow-sm min-h-11"
                     >
                       <span className="group-hover:translate-x-1 transition-transform duration-300">
                         {item.name}
@@ -147,7 +147,7 @@ const Footer = React.memo(function Footer() {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="group flex items-center text-base text-gray-600 hover:text-orange-600 transition-all duration-300 py-2 px-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-tiffany-50 hover:shadow-sm min-h-[44px]"
+                    className="group flex items-center text-base text-gray-600 hover:text-orange-600 transition-all duration-300 py-2 px-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-tiffany-50 hover:shadow-sm min-h-11"
                   >
                     <span className="group-hover:translate-x-1 transition-transform duration-300">
                       {item.name}
@@ -174,7 +174,7 @@ const Footer = React.memo(function Footer() {
               </p>
               <Link
                 href="/auth?mode=register"
-                className={`inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 text-sm font-medium text-white ${GRADIENTS.brandMixed} rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 min-h-[44px]`}
+                className={`inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 text-sm font-medium text-white ${GRADIENTS.brandMixed} rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 min-h-11`}
               >
                 Get Started Today
               </Link>

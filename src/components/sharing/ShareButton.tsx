@@ -73,7 +73,7 @@ export default function ShareButton({
         <button
           ref={buttonRef}
           onClick={toggleShare}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+          className="p-2 rounded-lg hover:bg-gray-100 transition-colors min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Share project"
         >
           <Share2

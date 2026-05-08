@@ -82,7 +82,7 @@ export default function MessageHeader({ conversation, currentUserId, onBack }: M
           variant="ghost"
           size="sm"
           onClick={onBack}
-          className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+          className="p-2 min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Go back"
         >
           <ArrowLeft className="h-4 w-4" />

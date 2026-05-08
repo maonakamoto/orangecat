@@ -129,7 +129,7 @@ export function WalletAddressCard({
                 size="sm"
                 onClick={() => onToggleFavorite(address.id)}
                 aria-label={address.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-1 min-h-11 min-w-11 flex items-center justify-center"
               >
                 <Heart
                   className={`w-3 h-3 ${address.isFavorite ? 'fill-red-500 text-red-500' : ''}`}
@@ -140,7 +140,7 @@ export function WalletAddressCard({
                 variant="outline"
                 size="sm"
                 aria-label="Edit address"
-                className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-1 min-h-11 min-w-11 flex items-center justify-center"
               >
                 <Edit className="w-3 h-3" />
               </Button>
@@ -149,7 +149,7 @@ export function WalletAddressCard({
                 variant="outline"
                 size="sm"
                 aria-label="Delete address"
-                className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-red-600"
+                className="p-1 min-h-11 min-w-11 flex items-center justify-center text-red-600"
               >
                 <Trash2 className="w-3 h-3" />
               </Button>

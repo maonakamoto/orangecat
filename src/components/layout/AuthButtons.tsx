@@ -50,7 +50,7 @@ export default function AuthButtons({ className = '' }: AuthButtonsProps) {
     >
       {/* Mobile: Single prominent login button */}
       <Link href={getStarted.href} className="sm:hidden">
-        <Button size="sm" className="min-h-[36px] min-w-[72px] text-sm font-medium">
+        <Button size="sm" className="min-h-9 min-w-18 text-sm font-medium">
           Login
         </Button>
       </Link>
@@ -59,7 +59,7 @@ export default function AuthButtons({ className = '' }: AuthButtonsProps) {
         <Button
           variant="ghost"
           size="sm"
-          className={`${isMobileNav ? 'w-full justify-center' : ''} min-h-[36px] text-sm`}
+          className={`${isMobileNav ? 'w-full justify-center' : ''} min-h-9 text-sm`}
         >
           {signIn.name}
         </Button>
@@ -67,7 +67,7 @@ export default function AuthButtons({ className = '' }: AuthButtonsProps) {
       <Link href={getStarted.href} className={`hidden sm:block ${isMobileNav ? 'w-full' : ''}`}>
         <Button
           size="sm"
-          className={`${isMobileNav ? 'w-full justify-center' : ''} min-h-[36px] text-sm`}
+          className={`${isMobileNav ? 'w-full justify-center' : ''} min-h-9 text-sm`}
         >
           {getStarted.name}
         </Button>

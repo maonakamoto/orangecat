@@ -37,7 +37,7 @@ export function PostComposerInlineControls({
           {!compact && showOptionsButton && (
             <button
               onClick={onShowOptions}
-              className="text-gray-700 hover:text-gray-700 p-3 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="text-gray-700 hover:text-gray-700 p-3 min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Show post options"
             >
               <ChevronDown className="w-5 h-5" />
@@ -71,7 +71,7 @@ export function PostComposerInlineControls({
               'disabled:from-gray-300 disabled:to-gray-300',
               'text-white px-6 py-2 rounded-full font-semibold',
               'transition-all shadow-sm hover:shadow-md',
-              'disabled:shadow-none min-h-[44px] min-w-[80px]',
+              'disabled:shadow-none min-h-11 min-w-20',
               compact && 'px-4 py-2 text-sm'
             )}
             aria-label={isPosting ? 'Posting...' : `Post ${buttonText}`}

@@ -153,7 +153,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                 ref={isActive ? activeTabRef : null}
                 onClick={() => handleTabClick(tab.id)}
                 className={cn(
-                  'group inline-flex items-center justify-center sm:justify-start py-2.5 sm:py-3 lg:py-4 px-3 sm:px-1 md:px-2 border-b-2 font-medium text-sm sm:text-sm transition-colors whitespace-nowrap touch-manipulation min-h-[44px] flex-shrink-0',
+                  'group inline-flex items-center justify-center sm:justify-start py-2.5 sm:py-3 lg:py-4 px-3 sm:px-1 md:px-2 border-b-2 font-medium text-sm sm:text-sm transition-colors whitespace-nowrap touch-manipulation min-h-11 flex-shrink-0',
                   isActive
                     ? 'border-orange-500 text-orange-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'

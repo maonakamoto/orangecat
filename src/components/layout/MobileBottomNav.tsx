@@ -200,7 +200,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                   isActive && (isAuthenticated ? 'text-orange-600' : 'text-tiffany-600'),
                   !isActive && 'text-gray-500',
                   item.primary && 'relative',
-                  shouldBeSmall ? 'min-h-[48px] gap-0.5' : 'min-h-[56px] gap-1'
+                  shouldBeSmall ? 'min-h-12 gap-0.5' : 'min-h-14 gap-1'
                 )}
                 aria-label={item.label}
                 aria-current={isActive ? 'page' : undefined}

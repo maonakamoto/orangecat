@@ -117,7 +117,7 @@ export function WalletSection({ walletAddress, lightningAddress }: WalletSection
               />
               <button
                 onClick={() => navigator.clipboard.writeText(lightningAddress)}
-                className="p-2 text-gray-600 hover:text-gray-900 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 text-gray-600 hover:text-gray-900 transition-colors min-h-11 min-w-11 flex items-center justify-center"
                 aria-label="Copy address"
               >
                 <Copy className="h-5 w-5" />

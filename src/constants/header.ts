@@ -44,11 +44,11 @@ export const HEADER_SPACING = {
  */
 export const TOUCH_TARGETS = {
   /** Mobile touch target (11 * 4px = 44px) */
-  MOBILE: 'w-11 h-11 min-w-[44px] min-h-[44px]',
+  MOBILE: 'w-11 h-11 min-w-11 min-h-11',
   /** Desktop touch target */
   DESKTOP: 'sm:w-10 sm:h-10 sm:min-w-0 sm:min-h-0',
   /** Combined mobile and desktop */
-  RESPONSIVE: 'w-11 h-11 sm:w-10 sm:h-10 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0',
+  RESPONSIVE: 'w-11 h-11 sm:w-10 sm:h-10 min-w-11 min-h-11 sm:min-w-0 sm:min-h-0',
 } as const;
 
 /**

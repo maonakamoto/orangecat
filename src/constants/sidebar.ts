@@ -57,7 +57,7 @@ export const SIDEBAR_BREAKPOINTS = {
 export const SIDEBAR_SPACING = {
   PADDING_X: 'px-3 sm:px-4',
   PADDING_Y: 'py-3 sm:py-4',
-  ITEM_HEIGHT: 'min-h-[44px]', // Touch-friendly minimum height
+  ITEM_HEIGHT: 'min-h-11', // Touch-friendly minimum height
   SECTION_SPACING: 'space-y-4 sm:space-y-6',
 } as const;
 

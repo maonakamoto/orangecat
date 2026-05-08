@@ -114,7 +114,7 @@ export function BasicInfoSection({
               <FormControl>
                 <Textarea
                   placeholder="Additional details about your loan..."
-                  className="min-h-[80px]"
+                  className="min-h-20"
                   {...field}
                 />
               </FormControl>
@@ -129,5 +129,3 @@ export function BasicInfoSection({
     </Card>
   );
 }
-
-

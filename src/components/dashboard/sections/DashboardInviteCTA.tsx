@@ -44,7 +44,7 @@ export function DashboardInviteCTA({ profile, userId }: DashboardInviteCTAProps)
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Link href={ROUTES.DASHBOARD.PEOPLE}>
-            <Button variant="outline" size="sm" className="min-h-[44px]">
+            <Button variant="outline" size="sm" className="min-h-11">
               <Users className="w-4 h-4 mr-2" />
               Discover
             </Button>
@@ -52,12 +52,12 @@ export function DashboardInviteCTA({ profile, userId }: DashboardInviteCTAProps)
           <Button
             onClick={() => setShowShare(!showShare)}
             size="sm"
-            className="bg-tiffany-500 hover:bg-tiffany-600 text-white min-h-[44px]"
+            className="bg-tiffany-500 hover:bg-tiffany-600 text-white min-h-11"
           >
             <Share2 className="w-4 h-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline" size="sm" onClick={handleCopyLink} className="min-h-[44px]">
+          <Button variant="outline" size="sm" onClick={handleCopyLink} className="min-h-11">
             <Copy className="w-4 h-4 mr-2" />
             Copy
           </Button>

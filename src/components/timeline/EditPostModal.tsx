@@ -121,7 +121,7 @@ export function EditPostModal({
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full p-2 -ml-2 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full p-2 -ml-2 transition-colors min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Close"
           >
             <X className="w-5 h-5" />

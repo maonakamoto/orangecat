@@ -25,7 +25,7 @@ export function PostComposerFullScreenHeader({
     <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
       <button
         onClick={onClose || onCancel}
-        className="p-2 -ml-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+        className="p-2 -ml-2 min-h-11 min-w-11 flex items-center justify-center"
         aria-label="Close composer"
       >
         <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -33,7 +33,7 @@ export function PostComposerFullScreenHeader({
       <Button
         onClick={onPost}
         disabled={!canPost}
-        className="bg-tiffany-500 hover:bg-tiffany-600 text-white rounded-full px-5 min-h-[36px] disabled:opacity-50"
+        className="bg-tiffany-500 hover:bg-tiffany-600 text-white rounded-full px-5 min-h-9 disabled:opacity-50"
       >
         {isPosting ? 'Posting...' : buttonText}
       </Button>

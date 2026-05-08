@@ -129,7 +129,7 @@ export default function Hero() {
               <Link href="/auth" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto text-lg px-8 py-4 min-h-[56px] bg-gradient-to-r from-bitcoinOrange to-orange-500 hover:from-orange-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+                  className="w-full sm:w-auto text-lg px-8 py-4 min-h-14 bg-gradient-to-r from-bitcoinOrange to-orange-500 hover:from-orange-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                   <Bitcoin className="mr-2 h-5 w-5" />
                   Start Your Project
@@ -140,7 +140,7 @@ export default function Hero() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="w-full sm:w-auto text-lg px-8 py-4 min-h-[56px] border-2 border-tiffany-300 text-tiffany-700 hover:bg-tiffany-50 hover:border-tiffany-400 transform hover:scale-105 transition-all duration-200"
+                  className="w-full sm:w-auto text-lg px-8 py-4 min-h-14 border-2 border-tiffany-300 text-tiffany-700 hover:bg-tiffany-50 hover:border-tiffany-400 transform hover:scale-105 transition-all duration-200"
                 >
                   <TrendingUp className="mr-2 h-5 w-5" />
                   Explore Projects

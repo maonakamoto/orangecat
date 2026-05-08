@@ -83,7 +83,9 @@ export default function ProjectMediaGallery({
 
   const publicUrls = useMemo(() => {
     return media.map(m => {
-      const { data } = supabaseBrowser.storage.from(STORAGE_BUCKETS.PROJECT_MEDIA).getPublicUrl(m.storage_path);
+      const { data } = supabaseBrowser.storage
+        .from(STORAGE_BUCKETS.PROJECT_MEDIA)
+        .getPublicUrl(m.storage_path);
       return { ...m, url: data.publicUrl as string };
     });
   }, [media]);
@@ -232,7 +234,7 @@ export default function ProjectMediaGallery({
           {/* Close Button */}
           <button
             onClick={e => closeLightbox(e)}
-            className="absolute top-4 right-4 z-[60] text-white/90 hover:text-white transition-colors p-2 rounded-full hover:bg-white/20 bg-black/40 backdrop-blur-sm min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="absolute top-4 right-4 z-[60] text-white/90 hover:text-white transition-colors p-2 rounded-full hover:bg-white/20 bg-black/40 backdrop-blur-sm min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Close gallery"
           >
             <X className="w-6 h-6" />
@@ -261,14 +263,14 @@ export default function ProjectMediaGallery({
               <>
                 <button
                   onClick={goToPrevious}
-                  className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white hover:text-white transition-all p-2 md:p-3 rounded-full hover:bg-white/20 bg-black/50 backdrop-blur-sm z-10 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white hover:text-white transition-all p-2 md:p-3 rounded-full hover:bg-white/20 bg-black/50 backdrop-blur-sm z-10 min-h-11 min-w-11 flex items-center justify-center"
                   aria-label="Previous image"
                 >
                   <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
                 <button
                   onClick={goToNext}
-                  className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white hover:text-white transition-all p-2 md:p-3 rounded-full hover:bg-white/20 bg-black/50 backdrop-blur-sm z-10 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white hover:text-white transition-all p-2 md:p-3 rounded-full hover:bg-white/20 bg-black/50 backdrop-blur-sm z-10 min-h-11 min-w-11 flex items-center justify-center"
                   aria-label="Next image"
                 >
                   <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />

@@ -168,7 +168,7 @@ export default function NewConversationModal({
           <button
             onClick={onClose}
             aria-label="Close"
-            className="p-2 hover:bg-gray-100 hover:text-gray-700 rounded-full transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 hover:bg-gray-100 hover:text-gray-700 rounded-full transition-all duration-200 min-h-11 min-w-11 flex items-center justify-center"
           >
             <X className="w-5 h-5 text-gray-500" />
           </button>

@@ -203,7 +203,7 @@ export function MakeOfferDialog({
                     <FormControl>
                       <Textarea
                         placeholder="Describe your terms..."
-                        className="min-h-[80px]"
+                        className="min-h-20"
                         {...field}
                       />
                     </FormControl>
@@ -220,11 +220,7 @@ export function MakeOfferDialog({
                   <FormItem>
                     <FormLabel>Conditions</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Any conditions..."
-                        className="min-h-[80px]"
-                        {...field}
-                      />
+                      <Textarea placeholder="Any conditions..." className="min-h-20" {...field} />
                     </FormControl>
                     <FormDescription>Optional: Special conditions or requirements</FormDescription>
                     <FormMessage />

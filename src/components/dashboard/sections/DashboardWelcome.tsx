@@ -70,7 +70,7 @@ export function DashboardWelcome({
       >
         <button
           onClick={onDismiss}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 text-green-600 hover:text-green-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 text-green-600 hover:text-green-800 transition-colors min-h-11 min-w-11 flex items-center justify-center"
         >
           <X className="h-5 w-5" />
         </button>
@@ -97,7 +97,7 @@ export function DashboardWelcome({
       <button
         onClick={onDismiss}
         aria-label="Dismiss"
-        className="absolute top-3 right-3 sm:top-4 sm:right-4 text-green-600 hover:text-green-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+        className="absolute top-3 right-3 sm:top-4 sm:right-4 text-green-600 hover:text-green-800 transition-colors min-h-11 min-w-11 flex items-center justify-center"
       >
         <X className="h-5 w-5" />
       </button>
@@ -127,7 +127,7 @@ export function DashboardWelcome({
 
           {/* Next action card */}
           <Link href={nextAction.href}>
-            <div className="p-4 bg-white rounded-lg border border-green-200 hover:border-green-300 hover:shadow-md transition-all cursor-pointer min-h-[44px]">
+            <div className="p-4 bg-white rounded-lg border border-green-200 hover:border-green-300 hover:shadow-md transition-all cursor-pointer min-h-11">
               <div className="flex items-center justify-between">
                 <div className="flex items-start gap-3">
                   <div className={`p-2 ${nextAction.bgColor} rounded-lg flex-shrink-0`}>

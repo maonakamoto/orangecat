@@ -49,7 +49,7 @@ export default function ProjectSelectionModal({
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
         <button
           onClick={onClose}
-          className="p-2 -ml-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+          className="p-2 -ml-2 min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Close"
         >
           <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -63,7 +63,7 @@ export default function ProjectSelectionModal({
         {/* Everyone option (default - always selected) */}
         <div className="px-4 py-4 border-b border-gray-200">
           <button
-            className="flex items-center justify-between w-full min-h-[44px]"
+            className="flex items-center justify-between w-full min-h-11"
             disabled
             aria-label="Everyone (default)"
           >

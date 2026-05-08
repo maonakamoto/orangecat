@@ -130,7 +130,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
           {fullScreen && showProjectSelection && (
             <button
               onClick={() => setIsOptionsSheetOpen(true)}
-              className="mb-3 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 flex items-center gap-1 transition-colors min-h-[32px]"
+              className="mb-3 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 flex items-center gap-1 transition-colors min-h-8"
             >
               {composer.selectedProjects.length > 0
                 ? `${composer.selectedProjects.length} project${composer.selectedProjects.length > 1 ? 's' : ''}`
@@ -151,7 +151,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                 {showVisibilityToggle && (
                   <button
                     onClick={() => setIsOptionsSheetOpen(true)}
-                    className="flex items-center gap-1 text-xs text-gray-700 hover:text-gray-700 mt-1 min-h-[44px] px-2"
+                    className="flex items-center gap-1 text-xs text-gray-700 hover:text-gray-700 mt-1 min-h-11 px-2"
                     aria-expanded={isOptionsSheetOpen}
                     aria-controls="post-options-sheet"
                   >
@@ -183,7 +183,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                 fullScreen
                   ? 'text-xl min-h-[120px]'
                   : compact
-                    ? 'text-sm min-h-[40px]'
+                    ? 'text-sm min-h-10'
                     : 'text-base min-h-[60px]',
                 composer.isPosting && 'opacity-50 cursor-not-allowed'
               )}
@@ -222,7 +222,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
       {fullScreen && (
         <div className="flex items-center gap-4 px-4 pt-4 border-t border-gray-200 mt-4">
           <button
-            className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 cursor-not-allowed rounded-full transition-colors"
+            className="p-2 min-h-11 min-w-11 flex items-center justify-center text-gray-400 cursor-not-allowed rounded-full transition-colors"
             aria-label="Add image (coming soon)"
             title="Image upload (coming soon)"
             disabled

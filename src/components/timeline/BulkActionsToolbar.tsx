@@ -149,7 +149,7 @@ export function BulkActionsToolbar({
             size="sm"
             onClick={onExitSelectionMode}
             disabled={isProcessing}
-            className="text-gray-500 hover:text-gray-700 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="text-gray-500 hover:text-gray-700 p-2 min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Exit selection mode"
           >
             <X className="w-4 h-4" />

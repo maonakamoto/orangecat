@@ -158,7 +158,7 @@ export function Sidebar({
               <div className={`border-t border-gray-100 ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}>
                 <button
                   onClick={toggleSidebar}
-                  className="w-full flex items-center gap-3 p-2 text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-xl transition-colors duration-200 min-h-[44px]"
+                  className="w-full flex items-center gap-3 p-2 text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-xl transition-colors duration-200 min-h-11"
                   aria-label={navigationLabels.SIDEBAR_COLLAPSE}
                 >
                   <X className="h-5 w-5" />

@@ -98,14 +98,14 @@ export function GetStartedStep({ hasWallet = false, hasProjects = false }: GetSt
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <button
             onClick={() => router.push(ROUTES.DISCOVER)}
-            className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-tiffany-600 transition-colors min-h-[44px]"
+            className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-tiffany-600 transition-colors min-h-11"
           >
             <Users className="h-4 w-4" />
             Explore Projects
           </button>
           <button
             onClick={() => router.push(ROUTES.STUDY_BITCOIN)}
-            className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-tiffany-600 transition-colors min-h-[44px]"
+            className="flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-tiffany-600 transition-colors min-h-11"
           >
             <BookOpen className="h-4 w-4" />
             Learn About Bitcoin

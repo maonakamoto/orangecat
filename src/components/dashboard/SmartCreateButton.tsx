@@ -216,7 +216,7 @@ export function DashboardCreateButton({ className = '' }: { className?: string }
 
   return (
     <SmartCreateButton
-      className={`${hasAnyDraft ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700' : GRADIENTS.btnPrimary} min-h-[44px] ${className}`}
+      className={`${hasAnyDraft ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700' : GRADIENTS.btnPrimary} min-h-11 ${className}`}
       size="lg"
       fullWidth={true}
     />

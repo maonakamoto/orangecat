@@ -74,7 +74,7 @@ export function LocationInput({
               key={suggestion.id}
               type="button"
               onClick={() => handleSuggestionSelect(suggestion)}
-              className="w-full px-4 py-3 min-h-[44px] text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 focus:outline-none focus:bg-gray-50"
+              className="w-full px-4 py-3 min-h-11 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 focus:outline-none focus:bg-gray-50"
             >
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />

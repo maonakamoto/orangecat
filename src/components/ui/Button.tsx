@@ -30,10 +30,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const sizes = {
-      sm: 'h-11 min-h-[44px] px-4 text-sm min-w-[80px] font-medium', // Mobile touch target: 44px minimum
-      md: 'h-11 min-h-[44px] px-6 text-base min-w-[100px] font-semibold',
-      lg: 'h-12 min-h-[48px] px-8 text-lg min-w-[120px] font-semibold',
-      xl: 'h-14 min-h-[56px] px-10 text-xl min-w-[140px] font-bold',
+      sm: 'h-11 min-h-11 px-4 text-sm min-w-20 font-medium', // Mobile touch target: 44px minimum
+      md: 'h-11 min-h-11 px-6 text-base min-w-[100px] font-semibold',
+      lg: 'h-12 min-h-12 px-8 text-lg min-w-[120px] font-semibold',
+      xl: 'h-14 min-h-14 px-10 text-xl min-w-[140px] font-bold',
     };
 
     const buttonContent = isLoading ? (

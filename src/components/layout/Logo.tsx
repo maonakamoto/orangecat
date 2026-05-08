@@ -34,7 +34,7 @@ export default function Logo({ className = '', showText = true, size = 'md' }: L
   return (
     <Link
       href="/"
-      className={`flex items-center space-x-1.5 sm:space-x-2 group min-h-[44px] py-2 ${className}`.trim()}
+      className={`flex items-center space-x-1.5 sm:space-x-2 group min-h-11 py-2 ${className}`.trim()}
       aria-label="OrangeCat - Your AI Economic Agent"
     >
       <span className={`inline-block align-middle flex-shrink-0 ${iconSizeClasses[size]}`}>

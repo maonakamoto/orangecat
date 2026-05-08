@@ -69,7 +69,8 @@ export function CreateAssetDialog({
       type: (template.type as QuickAssetFormData['type']) || 'other',
       description: (template.description as string) || '',
       estimated_value: (template.estimated_value as number) || undefined,
-      currency: ((template.currency as string) || DEFAULT_CURRENCY) as QuickAssetFormData['currency'],
+      currency: ((template.currency as string) ||
+        DEFAULT_CURRENCY) as QuickAssetFormData['currency'],
     });
   };
 
@@ -160,7 +161,7 @@ export function CreateAssetDialog({
                 <FormControl>
                   <Textarea
                     placeholder="Brief description of the asset..."
-                    className="min-h-[80px]"
+                    className="min-h-20"
                     {...field}
                     value={field.value ?? ''}
                   />

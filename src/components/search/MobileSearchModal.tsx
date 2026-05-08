@@ -125,7 +125,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
         <button
           onClick={onClose}
           aria-label="Close search"
-          className="p-2 -ml-2 text-gray-500 hover:text-gray-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+          className="p-2 -ml-2 text-gray-500 hover:text-gray-700 min-h-11 min-w-11 flex items-center justify-center"
         >
           <X className="w-5 h-5" />
         </button>

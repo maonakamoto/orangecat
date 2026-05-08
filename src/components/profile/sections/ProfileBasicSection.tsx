@@ -9,7 +9,14 @@
 
 'use client';
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { ProfileFieldType } from '@/lib/profile-guidance';
@@ -117,7 +124,7 @@ export function ProfileBasicSection({
             <FormControl>
               <Textarea
                 placeholder="Tell your story..."
-                className="min-h-[80px] resize-none"
+                className="min-h-20 resize-none"
                 {...field}
                 value={field.value || ''}
                 onFocus={() => onFieldFocus?.('bio')}
@@ -143,4 +150,3 @@ export function ProfileBasicSection({
     </div>
   );
 }
-

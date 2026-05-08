@@ -96,7 +96,7 @@ function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDism
 
         <button
           onClick={onDismiss}
-          className="p-1 text-gray-400 hover:text-gray-600 rounded opacity-0 group-hover:opacity-100 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center"
+          className="p-1 text-gray-400 hover:text-gray-600 rounded opacity-0 group-hover:opacity-100 transition-opacity min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Dismiss question"
         >
           <X className="w-4 h-4" />
@@ -133,7 +133,7 @@ export function SmartQuestionInline({
       {onDismiss && (
         <button
           onClick={onDismiss}
-          className="p-1 text-gray-400 hover:text-gray-600 rounded min-h-[44px] min-w-[44px] flex items-center justify-center"
+          className="p-1 text-gray-400 hover:text-gray-600 rounded min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Dismiss"
         >
           <X className="w-3 h-3" />

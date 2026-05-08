@@ -121,7 +121,7 @@ export function MessageContextMenu({
         ref={menuRef}
         className={cn(
           'fixed z-50 bg-white rounded-lg shadow-xl border border-gray-200',
-          'min-w-[160px] py-1',
+          'min-w-40 py-1',
           'animate-in fade-in-0 zoom-in-95 duration-150'
         )}
         style={{
@@ -191,6 +191,3 @@ export function MessageContextMenu({
     </>
   );
 }
-
-
-

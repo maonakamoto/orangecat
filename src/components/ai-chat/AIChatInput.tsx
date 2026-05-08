@@ -80,7 +80,7 @@ export function AIChatInput({
             className={cn(
               'w-full px-4 py-3 pr-12 border border-gray-200 rounded-lg resize-none',
               'focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent',
-              'max-h-48 min-h-[48px] text-sm',
+              'max-h-48 min-h-12 text-sm',
               'placeholder:text-gray-400',
               (disabled || isSending) && 'opacity-50 cursor-not-allowed'
             )}
@@ -96,7 +96,7 @@ export function AIChatInput({
             'px-4 py-3 bg-tiffany-500 hover:bg-tiffany-600 text-white rounded-lg',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             'transition-colors duration-200 flex-shrink-0',
-            'min-w-[48px] min-h-[48px]'
+            'min-w-12 min-h-12'
           )}
           aria-label="Send message"
         >

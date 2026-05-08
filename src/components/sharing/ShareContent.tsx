@@ -177,7 +177,7 @@ export default function ShareContent({
           {onClose && (
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Close share menu"
             >
               <X className="w-5 h-5" />

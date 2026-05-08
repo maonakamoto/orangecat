@@ -65,7 +65,7 @@ export default function MessageComposer({
             className={cn(
               'w-full py-2.5 sm:py-3 pl-3 sm:pl-4 pr-3 sm:pr-4 border border-gray-200 rounded-lg resize-none',
               'focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent',
-              'max-h-32 min-h-[44px] text-sm sm:text-base',
+              'max-h-32 min-h-11 text-sm sm:text-base',
               'placeholder:text-gray-400',
               isSending && 'opacity-50 cursor-not-allowed'
             )}
@@ -81,7 +81,7 @@ export default function MessageComposer({
             'px-3 sm:px-4 py-2.5 sm:py-3 bg-tiffany-500 hover:bg-tiffany-600 text-white rounded-lg',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             'transition-colors duration-200 flex-shrink-0',
-            'min-w-[44px] sm:min-w-[auto]'
+            'min-w-11 sm:min-w-[auto]'
           )}
           disabled={!content.trim() || isSending}
           aria-label="Send message"

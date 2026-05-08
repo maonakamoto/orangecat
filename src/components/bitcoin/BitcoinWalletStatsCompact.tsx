@@ -101,7 +101,7 @@ export default function BitcoinWalletStatsCompact({
           </div>
           <button
             onClick={fetchData}
-            className="text-white/80 hover:text-white transition-colors p-1 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="text-white/80 hover:text-white transition-colors p-1 min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Refresh balance"
           >
             <RefreshCw className="w-3 h-3" />

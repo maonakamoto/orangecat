@@ -17,7 +17,7 @@ export function TextFormatToolbar({
 }: TextFormatToolbarProps) {
   const baseClasses = cn(
     'flex items-center justify-center rounded-full transition-colors',
-    size === 'sm' ? 'h-9 w-9' : 'p-2 min-h-[44px] min-w-[44px]'
+    size === 'sm' ? 'h-9 w-9' : 'p-2 min-h-11 min-w-11'
   );
 
   const colorClasses =
@@ -83,7 +83,7 @@ export function ProjectSelectionPanel({
         </span>
         <button
           onClick={onClose}
-          className="text-orange-400 hover:text-orange-600 active:text-orange-700 transition-colors p-2 sm:p-1 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 rounded-full touch-manipulation"
+          className="text-orange-400 hover:text-orange-600 active:text-orange-700 transition-colors p-2 sm:p-1 min-h-11 min-w-11 sm:min-h-0 sm:min-w-0 rounded-full touch-manipulation"
           aria-label="Close project selection"
         >
           <X className="w-4 h-4 sm:w-3 sm:h-3" />
@@ -181,7 +181,7 @@ export function ComposerMessages({
           {onClearError && (
             <button
               onClick={onClearError}
-              className="text-red-400 hover:text-red-600 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="text-red-400 hover:text-red-600 min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Dismiss error"
             >
               <X className="w-4 h-4" />
@@ -192,7 +192,7 @@ export function ComposerMessages({
           <div className="mt-2">
             <button
               onClick={onRetry}
-              className="text-sm text-red-600 hover:text-red-800 underline rounded-md min-h-[44px] px-2 flex items-center"
+              className="text-sm text-red-600 hover:text-red-800 underline rounded-md min-h-11 px-2 flex items-center"
             >
               Try again
             </button>
