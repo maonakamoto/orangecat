@@ -29,9 +29,6 @@ export const API_ROUTES = {
     TRANSFER: '/api/wallets/transfer',
   },
   ENTITY_WALLETS: '/api/entity-wallets',
-  CURRENCY: {
-    RATES: '/api/currency/rates',
-  },
   NOTIFICATIONS: {
     UNREAD: '/api/notifications/unread',
     READ: '/api/notifications/read',
