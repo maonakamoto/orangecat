@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/Button';
 import { CheckCircle2, XCircle, Minus, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface VoteButtonsProps {
   proposalId: string;
@@ -32,16 +33,20 @@ export function VoteButtons({
   disabled = false,
 }: VoteButtonsProps) {
   const [voting, setVoting] = useState(false);
-  const [selectedVote, setSelectedVote] = useState<'yes' | 'no' | 'abstain' | null>(currentVote || null);
+  const [selectedVote, setSelectedVote] = useState<'yes' | 'no' | 'abstain' | null>(
+    currentVote || null
+  );
 
   const handleVote = async (vote: 'yes' | 'no' | 'abstain') => {
-    if (voting || disabled) {return;}
+    if (voting || disabled) {
+      return;
+    }
 
     try {
       setVoting(true);
       setSelectedVote(vote);
 
-      const response = await fetch(`/api/groups/${groupSlug}/proposals/${proposalId}/vote`, {
+      const response = await fetch(API_ROUTES.GROUPS.PROPOSAL_VOTE(groupSlug, proposalId), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ vote }),
@@ -63,7 +68,9 @@ export function VoteButtons({
     }
   };
 
-  const getButtonVariant = (vote: 'yes' | 'no' | 'abstain'): 'primary' | 'secondary' | 'danger' | 'outline' => {
+  const getButtonVariant = (
+    vote: 'yes' | 'no' | 'abstain'
+  ): 'primary' | 'secondary' | 'danger' | 'outline' => {
     if (selectedVote === vote) {
       return vote === 'yes' ? 'primary' : vote === 'no' ? 'danger' : 'secondary';
     }
@@ -76,9 +83,7 @@ export function VoteButtons({
         onClick={() => handleVote('yes')}
         disabled={voting || disabled}
         variant={getButtonVariant('yes')}
-        className={`flex-1 ${
-          selectedVote === 'yes' ? 'bg-green-500 hover:bg-green-600' : ''
-        }`}
+        className={`flex-1 ${selectedVote === 'yes' ? 'bg-green-500 hover:bg-green-600' : ''}`}
       >
         {voting && selectedVote === 'yes' ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -93,9 +98,7 @@ export function VoteButtons({
         onClick={() => handleVote('no')}
         disabled={voting || disabled}
         variant={getButtonVariant('no')}
-        className={`flex-1 ${
-          selectedVote === 'no' ? 'bg-red-500 hover:bg-red-600' : ''
-        }`}
+        className={`flex-1 ${selectedVote === 'no' ? 'bg-red-500 hover:bg-red-600' : ''}`}
       >
         {voting && selectedVote === 'no' ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -110,9 +113,7 @@ export function VoteButtons({
         onClick={() => handleVote('abstain')}
         disabled={voting || disabled}
         variant={getButtonVariant('abstain')}
-        className={`flex-1 ${
-          selectedVote === 'abstain' ? 'bg-gray-500 hover:bg-gray-600' : ''
-        }`}
+        className={`flex-1 ${selectedVote === 'abstain' ? 'bg-gray-500 hover:bg-gray-600' : ''}`}
       >
         {voting && selectedVote === 'abstain' ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -125,4 +126,3 @@ export function VoteButtons({
     </div>
   );
 }
-

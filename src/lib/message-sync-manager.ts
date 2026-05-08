@@ -3,6 +3,7 @@
 
 import { logger } from '@/utils/logger';
 import { messageQueueService, type QueuedMessage } from './message-queue';
+import { API_ROUTES } from '@/config/api-routes';
 import {
   messageQueueUpdated,
   messageSyncStart,
@@ -49,7 +50,7 @@ async function sendQueuedMessage(message: QueuedMessage): Promise<boolean> {
   const { conversationId, content, messageType = 'text', metadata } = message.payload;
 
   try {
-    const response = await fetch(`/api/messages/${conversationId}`, {
+    const response = await fetch(API_ROUTES.MESSAGES.CONVERSATION(conversationId), {
       method: 'POST',
       credentials: 'include',
       headers: {

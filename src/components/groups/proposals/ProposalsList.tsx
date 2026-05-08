@@ -28,6 +28,7 @@ import { logger } from '@/utils/logger';
 import { useAuth } from '@/hooks/useAuth';
 import { PROPOSAL_STATUSES, type ProposalStatus } from '@/config/proposal-constants';
 import type { Proposal } from '@/services/groups/queries/proposals';
+import { API_ROUTES } from '@/config/api-routes';
 
 type ProposalWithSlug = Proposal & { groupSlug: string };
 
@@ -59,7 +60,9 @@ export function ProposalsList({
       }
       params.append('limit', '50');
 
-      const response = await fetch(`/api/groups/${groupSlug}/proposals?${params.toString()}`);
+      const response = await fetch(
+        `${API_ROUTES.GROUPS.PROPOSALS(groupSlug)}?${params.toString()}`
+      );
       if (!response.ok) {
         throw new Error('Failed to load proposals');
       }

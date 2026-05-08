@@ -19,6 +19,7 @@ import { VotingProgress } from './VotingProgress';
 import { VoteButtons } from './VoteButtons';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 import { formatRelativeTime } from '@/utils/dates';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
@@ -52,7 +53,7 @@ export function ProposalDetail({
       return;
     }
     try {
-      const response = await fetch(`/api/groups/${groupSlug}/proposals/${proposalId}/votes`);
+      const response = await fetch(API_ROUTES.GROUPS.PROPOSAL_VOTES(groupSlug, proposalId));
       if (response.ok) {
         const data = await response.json();
         const votes = data.data?.votes || data.votes || [];
@@ -72,7 +73,7 @@ export function ProposalDetail({
   const loadProposal = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/groups/${groupSlug}/proposals/${proposalId}`);
+      const response = await fetch(API_ROUTES.GROUPS.PROPOSAL(groupSlug, proposalId));
       if (!response.ok) {
         throw new Error('Failed to load proposal');
       }
@@ -102,7 +103,7 @@ export function ProposalDetail({
   const handleActivate = async () => {
     try {
       setActivating(true);
-      const response = await fetch(`/api/groups/${groupSlug}/proposals/${proposalId}/activate`, {
+      const response = await fetch(API_ROUTES.GROUPS.PROPOSAL_ACTIVATE(groupSlug, proposalId), {
         method: 'POST',
       });
 

@@ -7,6 +7,7 @@ import { useMessagingStore } from '@/stores/messaging';
 import { CHANNELS, TIMING, debugLog } from '../lib/constants';
 import { useRealtimeSubscription } from './useRealtimeSubscription';
 import { useConversationsFetcher } from './useConversationsFetcher';
+import { API_ROUTES } from '@/config/api-routes';
 
 export function useConversations(searchQuery: string, selectedConversationId?: string | null) {
   const { user, hydrated, isLoading: authLoading, isAuthenticated } = useAuth();
@@ -56,7 +57,7 @@ export function useConversations(searchQuery: string, selectedConversationId?: s
         return;
       }
       try {
-        const res = await fetch(`/api/messages/${selectedConversationId}/summary`, {
+        const res = await fetch(API_ROUTES.MESSAGES.CONVERSATION_SUMMARY(selectedConversationId), {
           credentials: 'same-origin',
         });
         if (!res.ok) {

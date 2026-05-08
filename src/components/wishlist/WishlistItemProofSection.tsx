@@ -14,6 +14,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { WishlistProofSection } from './WishlistProofSection';
 import { logger } from '@/utils/logger';
 import type { FulfillmentProof } from './types';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface WishlistItemProofSectionProps {
   itemId: string;
@@ -28,7 +29,7 @@ export function WishlistItemProofSection({ itemId, canAddProof }: WishlistItemPr
   const fetchProofs = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/wishlists/items/${itemId}/proofs`);
+      const response = await fetch(API_ROUTES.WISHLISTS.ITEM_PROOFS(itemId));
 
       if (!response.ok) {
         throw new Error('Failed to fetch proofs');

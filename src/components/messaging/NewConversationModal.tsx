@@ -84,7 +84,7 @@ export default function NewConversationModal({
         setError(null);
 
         // Use /api/messages/open which handles self / direct / group cases
-        const res = await fetch('/api/messages/open', {
+        const res = await fetch(API_ROUTES.MESSAGES.OPEN, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',

@@ -19,6 +19,7 @@ import type { GroupWalletSummary } from '@/services/groups/types';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import { API_ROUTES } from '@/config/api-routes';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { BADGE_COLORS } from '@/config/badge-colors';
 
@@ -44,7 +45,7 @@ export function GroupWallets({
   const handleRefreshBalance = async (walletId: string) => {
     try {
       setRefreshing(walletId);
-      const response = await fetch(`/api/groups/${groupSlug}/wallets/${walletId}/refresh`, {
+      const response = await fetch(API_ROUTES.GROUPS.WALLET_REFRESH(groupSlug, walletId), {
         method: 'POST',
       });
 

@@ -18,6 +18,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { logger } from '@/utils/logger';
 import { entityEvents } from '@/lib/analytics';
 import { GRADIENTS } from '@/config/gradients';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface EntityCreationSuccessProps {
   /** Entity type identifier (e.g. 'product', 'service') */
@@ -48,7 +49,7 @@ export function EntityCreationSuccess({
   const handlePublish = async () => {
     setIsPublishing(true);
     try {
-      const response = await fetch(`/api/entities/${entityType}/${entityId}/status`, {
+      const response = await fetch(API_ROUTES.ENTITIES.STATUS(entityType, entityId), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

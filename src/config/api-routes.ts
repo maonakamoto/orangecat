@@ -83,6 +83,10 @@ export const API_ROUTES = {
     BASE: '/api/wishlists',
     PROOFS: '/api/wishlists/proofs',
     FEEDBACK: '/api/wishlists/feedback',
+    ITEM_PROOFS: (itemId: string) => `/api/wishlists/items/${itemId}/proofs`,
+  },
+  ENTITIES: {
+    STATUS: (entityType: string, id: string) => `/api/entities/${entityType}/${id}/status`,
   },
   USER: {
     API_KEYS: '/api/user/api-keys',
@@ -107,7 +111,17 @@ export const API_ROUTES = {
     COLLATERAL: '/api/loan-collateral',
   },
   PROFILE: '/api/profile',
-  GROUPS: '/api/groups',
+  GROUPS: {
+    BASE: '/api/groups',
+    EVENTS: (slug: string) => `/api/groups/${slug}/events`,
+    PROPOSALS: (slug: string) => `/api/groups/${slug}/proposals`,
+    PROPOSAL: (slug: string, id: string) => `/api/groups/${slug}/proposals/${id}`,
+    PROPOSAL_VOTES: (slug: string, id: string) => `/api/groups/${slug}/proposals/${id}/votes`,
+    PROPOSAL_VOTE: (slug: string, id: string) => `/api/groups/${slug}/proposals/${id}/vote`,
+    PROPOSAL_ACTIVATE: (slug: string, id: string) => `/api/groups/${slug}/proposals/${id}/activate`,
+    WALLET_REFRESH: (slug: string, walletId: string) =>
+      `/api/groups/${slug}/wallets/${walletId}/refresh`,
+  },
   JOBS: '/api/jobs',
   DELETE_USER: '/api/delete-user',
   WAITLIST: '/api/waitlist',

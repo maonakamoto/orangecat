@@ -109,7 +109,7 @@ export function useNavigationContext(): UseNavigationContextReturn {
     async function loadGroups() {
       setLoadingGroups(true);
       try {
-        const response = await fetch(`${API_ROUTES.GROUPS}?membership=mine&pageSize=50`);
+        const response = await fetch(`${API_ROUTES.GROUPS.BASE}?membership=mine&pageSize=50`);
         if (!response.ok) {
           setUserGroups([]);
           return;

@@ -27,6 +27,7 @@ import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { useAuth } from '@/hooks/useAuth';
 import type { GroupEvent } from '@/services/groups/types';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface EventsListProps {
   groupId: string;
@@ -52,7 +53,7 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
       }
       params.append('limit', '50');
 
-      const response = await fetch(`/api/groups/${groupSlug}/events?${params.toString()}`);
+      const response = await fetch(`${API_ROUTES.GROUPS.EVENTS(groupSlug)}?${params.toString()}`);
       if (!response.ok) {
         throw new Error('Failed to load events');
       }

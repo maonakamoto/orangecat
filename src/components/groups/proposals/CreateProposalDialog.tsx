@@ -14,6 +14,7 @@ import {
 import { FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 import { GuidancePanel } from '@/components/create/GuidancePanel';
 import {
   proposalGuidanceContent,
@@ -73,7 +74,7 @@ export function CreateProposalDialog({
           note: data.description,
         };
       }
-      const response = await fetch(`/api/groups/${groupSlug}/proposals`, {
+      const response = await fetch(API_ROUTES.GROUPS.PROPOSALS(groupSlug), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { groupEventSchema, type GroupEventFormData } from '@/lib/validation/groups';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 
 export function useCreateEventForm(
   groupSlug: string,
@@ -38,7 +39,7 @@ export function useCreateEventForm(
       const startsAt = new Date(data.starts_at).toISOString();
       const endsAt = data.ends_at ? new Date(data.ends_at).toISOString() : undefined;
 
-      const response = await fetch(`/api/groups/${groupSlug}/events`, {
+      const response = await fetch(API_ROUTES.GROUPS.EVENTS(groupSlug), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, starts_at: startsAt, ends_at: endsAt }),

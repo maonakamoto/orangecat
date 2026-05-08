@@ -74,7 +74,7 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
           filter,
         });
 
-        const response = await fetch(`/api/notifications?${params}`);
+        const response = await fetch(`${API_ROUTES.NOTIFICATIONS.BASE}?${params}`);
         const data = await response.json();
 
         if (!data.success) {

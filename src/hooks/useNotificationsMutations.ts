@@ -63,7 +63,7 @@ export function useNotificationsMutations({
   const deleteNotification = useCallback(
     async (id: string) => {
       try {
-        const response = await fetch(`/api/notifications?id=${id}`, {
+        const response = await fetch(`${API_ROUTES.NOTIFICATIONS.BASE}?id=${id}`, {
           method: 'DELETE',
         });
 
