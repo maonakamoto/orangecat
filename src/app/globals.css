@@ -127,6 +127,28 @@
   :root {
     --bitcoin-orange: #f7931a;
     --bitcoin-orange-dark: #e8830f;
+    /* RGB channels for Tailwind opacity-modifier support (bg-tiffany-500/50 etc.) */
+    --bitcoin-orange-channels: 247 147 26;
+    --tiffany-50: 230 247 247;
+    --tiffany-100: 186 235 234;
+    --tiffany-200: 142 222 221;
+    --tiffany-300: 98 210 208;
+    --tiffany-400: 54 198 195;
+    --tiffany-500: 10 186 181;
+    --tiffany-600: 8 155 150;
+    --tiffany-700: 6 124 119;
+    --tiffany-800: 4 93 88;
+    --tiffany-900: 2 62 57;
+    --orange-50: 255 245 240;
+    --orange-100: 255 230 217;
+    --orange-200: 255 212 194;
+    --orange-300: 255 191 166;
+    --orange-400: 255 160 122;
+    --orange-500: 255 140 105;
+    --orange-600: 255 107 0;
+    --orange-700: 230 92 0;
+    --orange-800: 204 82 0;
+    --orange-900: 179 71 0;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
