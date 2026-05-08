@@ -37,8 +37,6 @@ export interface ApiErrorResponse {
   };
 }
 
-type ApiResponse<T = unknown> = ApiSuccessResponse<T> | ApiErrorResponse;
-
 // =====================================================================
 // SUCCESS RESPONSES
 // =====================================================================

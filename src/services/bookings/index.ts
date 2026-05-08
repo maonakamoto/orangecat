@@ -51,19 +51,6 @@ export interface Booking {
   updated_at: string;
 }
 
-interface AvailabilitySlot {
-  id: string;
-  service_id: string;
-  provider_actor_id: string;
-  day_of_week?: number;
-  specific_date?: string;
-  start_time: string;
-  end_time: string;
-  is_available: boolean;
-  max_bookings: number;
-  current_bookings: number;
-}
-
 interface TimeSlot {
   start: Date;
   end: Date;

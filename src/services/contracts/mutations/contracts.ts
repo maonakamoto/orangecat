@@ -1,11 +1,9 @@
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
-import { STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 import { CONTRACT_TYPES } from '@/config/contract-types';
 import { getCurrentUserId } from '@/services/groups/utils/helpers';
 import { getActor, getActorDisplayName } from '@/services/actors';
-import { getContract } from '../queries/contracts';
 
 export interface CreateContractInput {
   party_a_actor_id: string;
@@ -80,46 +78,5 @@ export async function createContract(input: CreateContractInput) {
   } catch (error) {
     logger.error('Exception creating contract', error, 'Contracts');
     return { success: false, error: 'Failed to create contract' };
-  }
-}
-
-async function activateContract(contractId: string) {
-  try {
-    const userId = await getCurrentUserId();
-    if (!userId) {
-      return { success: false, error: 'Authentication required' };
-    }
-
-    const contract = await getContract(contractId);
-    if (!contract.success || !contract.contract) {
-      return { success: false, error: 'Contract not found' };
-    }
-
-    if (contract.contract.status !== STATUS.CONTRACTS.PROPOSED) {
-      return {
-        success: false,
-        error: `Cannot activate contract with status: ${contract.contract.status}`,
-      };
-    }
-
-    const { data, error } = await (supabase.from(DATABASE_TABLES.CONTRACTS) as any)
-      .update({
-        status: 'active',
-        activated_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', contractId)
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Failed to activate contract', error, 'Contracts');
-      return { success: false, error: error.message };
-    }
-
-    return { success: true, contract: data };
-  } catch (error) {
-    logger.error('Exception activating contract', error, 'Contracts');
-    return { success: false, error: 'Failed to activate contract' };
   }
 }

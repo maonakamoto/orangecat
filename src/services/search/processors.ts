@@ -215,10 +215,3 @@ export async function getSearchFacets(): Promise<SearchResponse['facets']> {
     };
   }
 }
-
-/**
- * Clear facets cache
- */
-function clearFacetsCache(): void {
-  facetsCache = null;
-}

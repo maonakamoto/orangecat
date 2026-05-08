@@ -10,125 +10,18 @@
  */
 
 import { z } from 'zod';
-import type { CreateGroupInput, UpdateGroupInput } from '@/types/group';
 import { GROUP_LABELS } from '@/config/group-labels';
 import { GOVERNANCE_PRESETS } from '@/config/governance-presets';
 
 // Valid label values - auto-derived from config (SSOT)
 // Adding a new label to GROUP_LABELS automatically includes it here
-const validLabels = Object.keys(GROUP_LABELS);
 const validLabelsTuple = Object.keys(GROUP_LABELS) as [string, ...string[]]; // For zod.enum
 
 // Valid governance presets - auto-derived from config (SSOT)
-const validGovernancePresets = Object.keys(GOVERNANCE_PRESETS);
 const validGovernancePresetsTuple = Object.keys(GOVERNANCE_PRESETS) as [string, ...string[]]; // For zod.enum
 
 // Valid visibility values from config
 const validVisibilities = ['public', 'members_only', 'private'] as const;
-const validVisibilitiesArray: string[] = [...validVisibilities];
-
-/**
- * Validate create group request
- */
-function validateCreateGroupRequest(request: CreateGroupInput): {
-  valid: boolean;
-  errors: Array<{ field: string; message: string }>;
-} {
-  const errors: Array<{ field: string; message: string }> = [];
-
-  // Name validation
-  if (!request.name || request.name.trim().length < 3) {
-    errors.push({ field: 'name', message: 'Group name must be at least 3 characters' });
-  }
-  if (request.name && request.name.length > 100) {
-    errors.push({ field: 'name', message: 'Group name cannot exceed 100 characters' });
-  }
-
-  // Description validation
-  if (request.description && request.description.length > 2000) {
-    errors.push({ field: 'description', message: 'Description cannot exceed 2000 characters' });
-  }
-
-  // Label validation
-  if (!request.label) {
-    errors.push({ field: 'label', message: 'Group label is required' });
-  } else if (!validLabels.includes(request.label)) {
-    errors.push({ field: 'label', message: `Label must be one of: ${validLabels.join(', ')}` });
-  }
-
-  // Governance preset validation
-  if (request.governance_preset && !validGovernancePresets.includes(request.governance_preset)) {
-    errors.push({
-      field: 'governance_preset',
-      message: `Governance preset must be one of: ${validGovernancePresets.join(', ')}`,
-    });
-  }
-
-  // Visibility validation
-  if (request.visibility && !validVisibilitiesArray.includes(request.visibility)) {
-    errors.push({
-      field: 'visibility',
-      message: `Visibility must be one of: ${validVisibilities.join(', ')}`,
-    });
-  }
-
-  return { valid: errors.length === 0, errors };
-}
-
-/**
- * Validate update group request
- */
-function validateUpdateGroupRequest(request: UpdateGroupInput): {
-  valid: boolean;
-  errors: Array<{ field: string; message: string }>;
-} {
-  const errors: Array<{ field: string; message: string }> = [];
-
-  // Name validation (if provided)
-  if (request.name !== undefined) {
-    if (request.name.trim().length < 3) {
-      errors.push({ field: 'name', message: 'Group name must be at least 3 characters' });
-    }
-    if (request.name.length > 100) {
-      errors.push({ field: 'name', message: 'Group name cannot exceed 100 characters' });
-    }
-  }
-
-  // Description validation (if provided)
-  if (
-    request.description !== undefined &&
-    request.description !== null &&
-    request.description.length > 2000
-  ) {
-    errors.push({ field: 'description', message: 'Description cannot exceed 2000 characters' });
-  }
-
-  // Label validation (if provided)
-  if (request.label !== undefined && !validLabels.includes(request.label)) {
-    errors.push({ field: 'label', message: `Label must be one of: ${validLabels.join(', ')}` });
-  }
-
-  // Governance preset validation (if provided)
-  if (
-    request.governance_preset !== undefined &&
-    !validGovernancePresets.includes(request.governance_preset)
-  ) {
-    errors.push({
-      field: 'governance_preset',
-      message: `Governance preset must be one of: ${validGovernancePresets.join(', ')}`,
-    });
-  }
-
-  // Visibility validation (if provided)
-  if (request.visibility !== undefined && !validVisibilitiesArray.includes(request.visibility)) {
-    errors.push({
-      field: 'visibility',
-      message: `Visibility must be one of: ${validVisibilities.join(', ')}`,
-    });
-  }
-
-  return { valid: errors.length === 0, errors };
-}
 
 /**
  * Zod schema for create group request (for runtime validation)
@@ -168,4 +61,3 @@ export const updateGroupSchema = z.object({
 });
 
 export type CreateGroupSchemaType = z.infer<typeof createGroupSchema>;
-type UpdateGroupSchemaType = z.infer<typeof updateGroupSchema>;

@@ -127,11 +127,3 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
     isLoading,
   };
 }
-
-/**
- * Non-hook version for server components or static rendering.
- * Always shows sats since we can't access user preferences or rates.
- */
-function formatAmountStatic(sats: number): string {
-  return formatSats(sats);
-}

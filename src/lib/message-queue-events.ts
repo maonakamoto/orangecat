@@ -37,10 +37,3 @@ export function messageSyncComplete(): void {
   }
   window.dispatchEvent(new CustomEvent(SYNC_COMPLETE));
 }
-
-const messageQueueEvents = {
-  UPDATED,
-  SYNC_START,
-  SYNC_PROGRESS,
-  SYNC_COMPLETE,
-};

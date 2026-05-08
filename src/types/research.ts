@@ -68,16 +68,6 @@ interface ResearchProgress {
   };
 }
 
-interface ResearchVote {
-  id: string;
-  user_id: string;
-  research_entity_id: string;
-  vote_type: 'direction' | 'priority' | 'impact' | 'continuation';
-  choice: string | number; // For multiple choice or rating
-  weight?: number; // Voting power based on contribution
-  created_at: string;
-}
-
 interface FundingContribution {
   id: string;
   user_id: string;

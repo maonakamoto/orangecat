@@ -11,24 +11,6 @@ interface Token {
   linkText?: string;
 }
 
-// Escapes HTML to prevent XSS before applying bold/italic transforms
-function renderMarkdown(text: string): string {
-  if (!text) {
-    return '';
-  }
-
-  const escaped = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-
-  let result = escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  result = result.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-  return result;
-}
-
 function tokenize(text: string): Token[] {
   if (!text) {
     return [];

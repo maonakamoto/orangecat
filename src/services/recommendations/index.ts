@@ -190,37 +190,6 @@ export function getNextAction(context: UserContext): RecommendedTask | null {
 }
 
 /**
- * Get tasks grouped by category
- *
- * @param context - User's current state
- * @returns Tasks grouped by category
- */
-function getTasksByCategory(context: UserContext): Record<TaskCategory, RecommendedTask[]> {
-  const allTasks = getRecommendedTasks(context, { limit: 50 });
-
-  return {
-    setup: allTasks.filter(t => t.category === 'setup'),
-    create: allTasks.filter(t => t.category === 'create'),
-    engage: allTasks.filter(t => t.category === 'engage'),
-    grow: allTasks.filter(t => t.category === 'grow'),
-  };
-}
-
-/**
- * Check if user has completed onboarding (critical tasks)
- *
- * @param context - User's current state
- * @returns Whether onboarding is complete
- */
-function isOnboardingComplete(context: UserContext): boolean {
-  const criticalTasks = getRecommendedTasks(context, {
-    priorities: ['critical'],
-  });
-
-  return criticalTasks.length === 0;
-}
-
-/**
  * Build user context from profile and stats
  * Helper for API route
  */

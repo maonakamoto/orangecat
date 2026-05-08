@@ -24,6 +24,3 @@ export const registerSchema = z
     message: "Passwords don't match",
     path: ['confirmPassword'],
   });
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-type RegisterFormValues = z.infer<typeof registerSchema>;

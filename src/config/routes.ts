@@ -94,17 +94,6 @@ export const ROUTE_CONTEXTS = {
 export type RouteContext = 'authenticated' | 'public' | 'universal' | 'auth' | 'contextual';
 
 /**
- * All routes that should show navigation (headers, footers, etc.)
- */
-const NAVIGATED_ROUTES = [
-  ...ROUTE_CONTEXTS.public,
-  ...ROUTE_CONTEXTS.authenticated,
-  ...ROUTE_CONTEXTS.universal,
-  ...ROUTE_CONTEXTS.auth,
-  ...ROUTE_CONTEXTS.contextual,
-] as const;
-
-/**
  * Routes that should hide the footer (typically authenticated routes)
  */
 const FOOTER_HIDDEN_ROUTES = [...ROUTE_CONTEXTS.authenticated] as const;

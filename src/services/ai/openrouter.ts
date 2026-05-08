@@ -16,7 +16,6 @@ import {
   calculateCostBtc,
   isModelFree,
   DEFAULT_BTC_PRICE_USD,
-  DEFAULT_FREE_MODEL_ID,
 } from '@/config/ai-models';
 
 // ==================== TYPES ====================
@@ -474,24 +473,4 @@ export function createOpenRouterServiceWithByok(
   options?: { btcPriceUsd?: number }
 ): OpenRouterService {
   return new OpenRouterService(userApiKey, { ...options, isByok: true });
-}
-
-/**
- * Determine the best model to use based on user's key status
- * - BYOK users: Can use any model
- * - Free users: Limited to free models with daily quota
- */
-function getModelForUser(hasByok: boolean, requestedModel?: string): string {
-  // If user has BYOK, they can use any model
-  if (hasByok && requestedModel) {
-    return requestedModel;
-  }
-
-  // For free users, only allow free models
-  if (requestedModel && isModelFree(requestedModel)) {
-    return requestedModel;
-  }
-
-  // Default to free model
-  return DEFAULT_FREE_MODEL_ID;
 }

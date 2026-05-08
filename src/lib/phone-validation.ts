@@ -95,23 +95,3 @@ export function validatePhoneNumber(phone: string): { valid: boolean; error?: st
     error: 'Please enter a valid phone number (e.g., 0783226939 or +41 78 322 69 39)',
   };
 }
-
-/**
- * Format phone number for display (Swiss format)
- */
-function formatPhoneNumberForDisplay(phone: string): string {
-  const normalized = normalizePhoneNumber(phone);
-
-  if (!normalized) {
-    return phone;
-  }
-
-  // Format Swiss numbers: +41783226939 -> +41 78 322 69 39
-  if (normalized.startsWith('+41') && normalized.length === 12) {
-    const number = normalized.substring(3);
-    return `+41 ${number.substring(0, 2)} ${number.substring(2, 5)} ${number.substring(5, 7)} ${number.substring(7)}`;
-  }
-
-  // For other formats, return normalized
-  return normalized;
-}

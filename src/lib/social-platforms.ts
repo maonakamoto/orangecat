@@ -229,10 +229,3 @@ export function getPlatformById(id: SocialPlatformId): SocialPlatform | undefine
 export function getPredefinedPlatforms(): SocialPlatform[] {
   return SOCIAL_PLATFORMS.filter(p => p.id !== 'custom');
 }
-
-/**
- * Check if platform is predefined
- */
-function isPredefinedPlatform(id: SocialPlatformId): boolean {
-  return id !== 'custom';
-}

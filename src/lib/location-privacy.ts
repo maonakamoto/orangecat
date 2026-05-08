@@ -61,8 +61,3 @@ export function buildLocationContext(
 export function isLocationHidden(locationContext?: string | null): boolean {
   return parseLocationContext(locationContext).mode === 'hidden';
 }
-
-function getLocationGroupLabel(locationContext?: string | null): string | undefined {
-  const parsed = parseLocationContext(locationContext);
-  return parsed.mode === 'group' ? parsed.groupLabel : undefined;
-}

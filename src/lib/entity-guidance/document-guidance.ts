@@ -20,8 +20,6 @@ import {
   Wrench,
   StickyNote,
   Cat,
-  Lock,
-  Globe,
 } from 'lucide-react';
 import type { GuidanceContent, DefaultGuidance } from '@/components/create/types';
 
@@ -144,94 +142,4 @@ export const documentDefaultGuidance: DefaultGuidance = {
     },
   ],
   hint: 'Documents marked "My Cat Only" or "Public" will be used by My Cat for personalized advice.',
-};
-
-const documentTypeGuidance = {
-  goals: {
-    icon: React.createElement(Target, { className: 'w-5 h-5 text-indigo-600' }),
-    title: 'Goals & Aspirations',
-    description: 'Your personal or professional goals that My Cat can help you achieve.',
-    examples: [
-      'Short-term and long-term objectives',
-      'Career goals and milestones',
-      'Personal development targets',
-      'Financial targets and savings goals',
-    ],
-  },
-  finances: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-indigo-600' }),
-    title: 'Financial Information',
-    description: 'Context about your financial situation for better advice.',
-    examples: [
-      'Monthly budget breakdown',
-      'Income sources and amounts',
-      'Debt and savings status',
-      'Investment allocations',
-    ],
-  },
-  skills: {
-    icon: React.createElement(Wrench, { className: 'w-5 h-5 text-indigo-600' }),
-    title: 'Skills & Expertise',
-    description: 'Your professional abilities and experience.',
-    examples: [
-      'Technical skills and proficiency levels',
-      'Years of experience in different areas',
-      'Certifications and education',
-      'Soft skills and strengths',
-    ],
-  },
-  business_plan: {
-    icon: React.createElement(Briefcase, { className: 'w-5 h-5 text-indigo-600' }),
-    title: 'Business Plan',
-    description: 'Startup ideas, strategies, and business context.',
-    examples: [
-      'Business idea and value proposition',
-      'Market analysis and target audience',
-      'Revenue model and projections',
-      'Milestones and timeline',
-    ],
-  },
-  notes: {
-    icon: React.createElement(StickyNote, { className: 'w-5 h-5 text-indigo-600' }),
-    title: 'Notes',
-    description: 'General notes and information.',
-    examples: [
-      'Meeting notes and decisions',
-      'Ideas and brainstorms',
-      'Research and findings',
-      'Personal reflections',
-    ],
-  },
-  other: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-indigo-600' }),
-    title: 'Other',
-    description: 'Any other context that does not fit other categories.',
-    examples: [
-      'Travel plans',
-      'Health and wellness goals',
-      'Hobbies and interests',
-      'Family context',
-    ],
-  },
-};
-
-const visibilityGuidance = {
-  private: {
-    icon: React.createElement(Lock, { className: 'w-5 h-5 text-gray-600' }),
-    title: 'Private',
-    description: 'Only you can see this document. My Cat cannot access it.',
-    useCase: 'Use for drafts or sensitive information you do not want My Cat to use.',
-  },
-  cat_visible: {
-    icon: React.createElement(Cat, { className: 'w-5 h-5 text-indigo-600' }),
-    title: 'My Cat Only',
-    description: 'My Cat can use this to give you personalized advice.',
-    useCase: 'Best for most personal context - goals, skills, finances.',
-  },
-  public: {
-    icon: React.createElement(Globe, { className: 'w-5 h-5 text-green-600' }),
-    title: 'Public',
-    description: 'Anyone can see this on your profile.',
-    useCase: 'Use for information you want to share publicly.',
-  },
 };

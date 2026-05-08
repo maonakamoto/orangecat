@@ -155,49 +155,21 @@ export const taskProjectSchema = z.object({
  */
 export const taskProjectUpdateSchema = taskProjectSchema.partial();
 
-// ==================== FILTER SCHEMAS ====================
-
-/**
- * Schema for task list filters
- */
-const taskFilterSchema = z.object({
-  category: z.enum(TASK_CATEGORY_OPTIONS as unknown as [string, ...string[]]).optional(),
-  status: z.enum(TASK_STATUS_OPTIONS as unknown as [string, ...string[]]).optional(),
-  task_type: z.enum(TASK_TYPE_OPTIONS as unknown as [string, ...string[]]).optional(),
-  priority: z.enum(PRIORITY_OPTIONS as unknown as [string, ...string[]]).optional(),
-  project_id: z.string().uuid().optional(),
-  is_archived: z.boolean().optional(),
-  search: z.string().max(100).optional(),
-});
-
 // ==================== DERIVED TYPES ====================
-
-/** Input type for creating a task */
-type TaskInput = z.infer<typeof taskSchema>;
 
 /** Input type for updating a task */
 export type TaskUpdateInput = z.infer<typeof taskUpdateSchema>;
 
-/** Input type for recording a completion */
-type TaskCompletionInput = z.infer<typeof taskCompletionSchema>;
-
-/** Input type for flagging attention */
-type AttentionFlagInput = z.infer<typeof attentionFlagSchema>;
-
-/** Input type for creating a request */
-type TaskRequestInput = z.infer<typeof taskRequestSchema>;
-
-/** Input type for responding to a request */
-type RequestResponseInput = z.infer<typeof requestResponseSchema>;
-
-/** Input type for creating a project */
-type TaskProjectInput = z.infer<typeof taskProjectSchema>;
-
-/** Input type for updating a project */
-type TaskProjectUpdateInput = z.infer<typeof taskProjectUpdateSchema>;
-
 /** Filter type for task listing */
-export type TaskFilter = z.infer<typeof taskFilterSchema>;
+export type TaskFilter = {
+  category?: string;
+  status?: string;
+  task_type?: string;
+  priority?: string;
+  project_id?: string;
+  is_archived?: boolean;
+  search?: string;
+};
 
 // ==================== DATABASE TYPES ====================
 
@@ -308,25 +280,6 @@ export interface TaskWithRelations extends Task {
     avatar_url?: string;
   } | null;
   completed_by_user?: {
-    id: string;
-    username: string;
-    display_name?: string;
-    avatar_url?: string;
-  } | null;
-}
-
-/**
- * Task request with relations
- */
-interface TaskRequestWithRelations extends TaskRequest {
-  task?: Task;
-  requester?: {
-    id: string;
-    username: string;
-    display_name?: string;
-    avatar_url?: string;
-  } | null;
-  requested_user?: {
     id: string;
     username: string;
     display_name?: string;

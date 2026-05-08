@@ -11,9 +11,6 @@
  * Last Modified Summary: Converted to re-export layer for backward compatibility
  */
 
-import React from 'react';
-import { Heart, Users, Shield } from 'lucide-react';
-
 // Re-export the canonical guidance content
 export {
   projectGuidanceContent,
@@ -40,25 +37,3 @@ export interface DefaultContent {
   }>;
   hint?: string;
 }
-
-// Legacy alias - use projectDefaultGuidance in new code
-const projectDefaultContent: DefaultContent = {
-  title: "What's a Project?",
-  description:
-    'A project is any initiative that needs funding — from personal goals to community causes. Accept Bitcoin funding directly to your wallet.',
-  features: [
-    {
-      icon: React.createElement(Heart, { className: 'w-4 h-4 text-orange-600' }),
-      text: 'Accept Bitcoin funding instantly',
-    },
-    {
-      icon: React.createElement(Users, { className: 'w-4 h-4 text-orange-600' }),
-      text: 'Rally supporters and share updates',
-    },
-    {
-      icon: React.createElement(Shield, { className: 'w-4 h-4 text-orange-600' }),
-      text: 'Transparent and self-custodial by design',
-    },
-  ],
-  hint: '💡 Click on any field to get specific guidance',
-};

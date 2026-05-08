@@ -179,36 +179,3 @@ export const logger = new Logger();
 // =====================================================================
 // 🔧 HELPER FUNCTIONS
 // =====================================================================
-
-/**
- * Migration helper to replace console.log calls
- * Use this to gradually replace console.log throughout the codebase
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function safeLog(message: string, data?: any, level: LogLevel = 'debug'): void {
-  logger[level](message, data);
-}
-
-/**
- * Error boundary logger
- */
-function logError(error: Error, context?: string): void {
-  logger.error(
-    `Error in ${context || 'application'}`,
-    {
-      message: error.message,
-      stack: error.stack,
-      name: error.name,
-    },
-    context
-  );
-}
-
-/**
- * Performance timing logger
- */
-function logTiming(operation: string, startTime: number): void {
-  const endTime = Date.now();
-  const duration = endTime - startTime;
-  logger.performance(`${operation} completed in ${duration}ms`);
-}

@@ -185,15 +185,5 @@ export function getPaymentProvider(): PaymentProvider {
   }
 }
 
-/**
- * Get an NWC-backed payment provider for a specific user's wallet connection.
- * NWC is per-user (each user connects their own wallet), so this requires
- * the user's NWC connection URI.
- */
-async function getNWCPaymentProvider(connectionUri: string): Promise<PaymentProvider> {
-  const { NWCPaymentProvider } = await import('./nwcProvider');
-  return new NWCPaymentProvider(connectionUri);
-}
-
 // Export singleton instance (backward compatible)
 export const bitcoinPaymentService = new MockPaymentProvider();

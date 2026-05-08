@@ -57,40 +57,6 @@ export const colors = {
   },
 } as const;
 
-// Semantic color mappings for specific use cases
-const semanticColors = {
-  // Bitcoin-related elements
-  bitcoin: {
-    background: colors.bitcoin.light,
-    text: colors.bitcoin.main,
-    border: colors.bitcoin.main,
-    hover: colors.bitcoin.dark,
-    icon: colors.bitcoin.main,
-  },
-
-  // Currency displays
-  currency: {
-    btc: colors.bitcoin.main,
-    usd: colors.neutral.gray600,
-    default: colors.neutral.gray600,
-  },
-
-  // Status indicators
-  status: {
-    active: colors.status.success,
-    inactive: colors.neutral.gray400,
-    pending: colors.status.warning,
-    error: colors.status.error,
-  },
-
-  // Interactive elements
-  interactive: {
-    primary: colors.primary.main,
-    secondary: colors.secondary.main,
-    bitcoin: colors.bitcoin.main,
-  },
-} as const;
-
 // Tailwind class generators for consistent usage
 const getColorClasses = {
   bitcoin: {

@@ -93,25 +93,6 @@ export function getAllStories(): Story[] {
     .filter(story => story.published);
 }
 
-// Get published stories only
-function getPublishedStories(): Story[] {
-  return getAllStories().filter(story => story.published);
-}
-
-// Get featured stories
-function getFeaturedStories(): Story[] {
-  return getAllStories().filter(story => story.featured);
-}
-
-// Get stories by category
-function getStoriesByCategory(category: string): Story[] {
-  if (category === 'All') {
-    return getAllStories();
-  }
-
-  return getAllStories().filter(story => story.category === category);
-}
-
 // Get all unique categories
 export function getAllCategories(): string[] {
   const allCategories = getAllStories().map(story => story.category);

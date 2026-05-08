@@ -38,30 +38,6 @@ export async function getActor(actorId: string): Promise<Actor | null> {
 }
 
 /**
- * Get actor by user ID
- */
-async function getActorByUser(userId: string): Promise<Actor | null> {
-  try {
-    const { data, error } = await supabase
-      .from(DATABASE_TABLES.ACTORS)
-      .select('*')
-      .eq('actor_type', 'user')
-      .eq('user_id', userId)
-      .maybeSingle();
-
-    if (error) {
-      logger.error('Failed to get actor by user', error, 'Actors');
-      return null;
-    }
-
-    return data as Actor | null;
-  } catch (error) {
-    logger.error('Exception getting actor by user', error, 'Actors');
-    return null;
-  }
-}
-
-/**
  * Get actor by group ID
  */
 export async function getActorByGroup(groupId: string): Promise<Actor | null> {

@@ -95,10 +95,3 @@ export function setCachedResult(key: string, data: SearchResponse): void {
 
   cleanupCache();
 }
-
-/**
- * Clear all cached search results
- */
-function clearSearchCache(): void {
-  searchCache.clear();
-}

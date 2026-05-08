@@ -120,6 +120,5 @@ export const userCauseSchema = z.object({
 export type UserProductFormData = z.infer<typeof userProductSchema>;
 export type UserServiceFormData = z.infer<typeof userServiceSchema>;
 export type UserCauseFormData = z.infer<typeof userCauseSchema>;
-type AvailabilityScheduleData = z.infer<typeof availabilityScheduleSchema>;
 export type DistributionRulesData = z.infer<typeof distributionRulesSchema>;
 export type BeneficiaryData = z.infer<typeof beneficiarySchema>;
