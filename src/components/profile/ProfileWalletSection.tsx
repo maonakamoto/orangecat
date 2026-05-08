@@ -2,6 +2,7 @@
 
 import { Bitcoin, Copy, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
+import { truncateAddress } from '@/utils/string';
 import Button from '@/components/ui/Button';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
@@ -152,8 +153,7 @@ export default function ProfileWalletSection({
                       }}
                       title="Click to copy address"
                     >
-                      {wallet.address_or_xpub.slice(0, 20)}...
-                      {wallet.address_or_xpub.slice(-10)}
+                      {truncateAddress(wallet.address_or_xpub, 20, 10)}
                     </code>
                   </div>
 
