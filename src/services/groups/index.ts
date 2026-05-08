@@ -1,52 +1,4 @@
 /**
- * Groups Service - Main Orchestrator
- *
- * Unified service for groups.
- * Re-exports all functionality from modular sub-modules.
- *
- * Created: 2025-01-30
- * Last Modified: 2025-12-29
- * Last Modified Summary: Simplified to use only new groups system
- */
-
-// Re-export types
-export * from './types';
-
-// Re-export constants
-export * from './constants';
-
-// Re-export queries
-export * from './queries/groups';
-export * from './queries/members';
-export * from './queries/wallets';
-export * from './queries/activities';
-export * from './queries/invitations';
-export * from './queries/events';
-export * from './queries/proposals';
-
-// Re-export mutations
-export * from './mutations/groups';
-export * from './mutations/members';
-export * from './mutations/wallets';
-export * from './mutations/invitations';
-export * from './mutations/events';
-export * from './mutations/proposals';
-// NOTE: mutations/votes is intentionally NOT re-exported here.
-// It imports execution/ which pulls in domain/projects/service (server-only, uses next/headers).
-// Re-exporting it would break client components that import from this barrel.
-// Import directly from '@/services/groups/mutations/votes' where needed (server-side only).
-
-// Re-export permissions
-export * from './permissions';
-
-// Re-export validation
-export * from './validation';
-
-// Re-export utils
-export * from './utils/helpers';
-export * from './utils/activity';
-
-/**
  * GroupsService Class
  *
  * Provides a class-based interface for groups operations.
@@ -310,6 +262,3 @@ class GroupsService {
 // Export singleton instance
 const groupsService = new GroupsService();
 export default groupsService;
-
-// Export class for testing
-export { GroupsService };

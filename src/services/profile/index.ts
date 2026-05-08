@@ -16,14 +16,6 @@
  * - Clear separation of concerns
  */
 
-// Export all types
-export type { ScalableProfile, ScalableProfileFormData, ProfileServiceResponse } from './types';
-
-// Export all modules
-export { ProfileMapper } from './mapper';
-export { ProfileReader } from './reader';
-export { ProfileWriter } from './writer';
-
 // Main service class that combines all operations
 import supabase from '@/lib/supabase/browser';
 import { ProfileReader } from './reader';

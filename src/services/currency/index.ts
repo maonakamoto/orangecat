@@ -9,16 +9,10 @@
  *   validation.ts  — input parsing and amount validation
  */
 
-export { getRate, currencyConverter, convertToBTC, convertFromBTC } from './rates';
+export { currencyConverter } from './rates';
 
 export { satsToBitcoin, bitcoinToSats, convertBtcTo, convertToBtc, convert } from './conversion';
 
-export {
-  formatCurrency,
-  formatBitcoinDisplay,
-  formatBTC,
-  displayBTC,
-  formatSats,
-} from './formatting';
+export { formatCurrency, displayBTC, formatSats } from './formatting';
 
-export { parseAmount, validateAmount, parseBTCAmount, validateBTCAmount } from './validation';
+export { parseAmount } from './validation';

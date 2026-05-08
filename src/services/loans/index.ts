@@ -1,37 +1,3 @@
-/**
- * LOANS SERVICE - Main Orchestrator
- *
- * Unified service for loans operations.
- * Re-exports all functionality from modular sub-modules.
- *
- * Created: 2025-01-30
- * Last Modified: 2025-01-30
- * Last Modified Summary: Refactored from 807-line monolith to modular architecture
- *
- * BEFORE: 807 lines in single file (102% over 400-line limit)
- * AFTER: Modular architecture with single responsibilities
- *
- * Architecture Benefits:
- * - Single Responsibility Principle
- * - Better testability
- * - Easier maintenance
- * - Improved code reuse
- * - Clear separation of concerns
- */
-
-// Re-export queries
-export * from './queries/loans';
-export * from './queries/offers';
-
-// Re-export mutations
-export * from './mutations/loans';
-export * from './mutations/offers';
-export * from './mutations/payments';
-
-// Re-export utils
-export * from './utils/auth';
-export * from './utils/validation';
-
 // Import types
 import type {
   CreateLoanRequest,
