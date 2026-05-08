@@ -30,41 +30,6 @@ function updateRates(rates: Record<string, number>): void {
   cache.expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 }
 
-export function getRate(from: string, to: string): number {
-  if (from === to) {
-    return 1;
-  }
-
-  const key = `${from}_${to}`;
-  if (cache.rates[key]) {
-    return cache.rates[key];
-  }
-
-  // Try reverse rate
-  const reverseKey = `${to}_${from}`;
-  if (cache.rates[reverseKey]) {
-    return 1 / cache.rates[reverseKey];
-  }
-
-  // Go through BTC
-  const toBtcKey = `BTC_${from}`;
-  const fromBtcKey = `BTC_${to}`;
-
-  if (from === 'BTC' && cache.rates[fromBtcKey]) {
-    return cache.rates[fromBtcKey];
-  }
-  if (to === 'BTC' && cache.rates[toBtcKey]) {
-    return 1 / cache.rates[toBtcKey];
-  }
-
-  // Convert via BTC
-  if (cache.rates[toBtcKey] && cache.rates[fromBtcKey]) {
-    return cache.rates[fromBtcKey] / cache.rates[toBtcKey];
-  }
-
-  return 0;
-}
-
 // ==================== COINGECKO CONVERTER SERVICE ====================
 
 class CurrencyConverterService {

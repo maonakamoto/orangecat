@@ -131,7 +131,7 @@ function renderInlineTokens(text: string): React.ReactNode[] {
   return tokens.length === 0 ? [text] : tokens.map(tokenToReact);
 }
 
-function renderMarkdownToReact(text: string): React.ReactNode[] {
+export function renderMarkdownToReact(text: string): React.ReactNode[] {
   if (!text) {
     return [];
   }
