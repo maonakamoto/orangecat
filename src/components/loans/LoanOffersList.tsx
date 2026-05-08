@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Target, TrendingUp, Clock, CheckCircle, XCircle, Edit, MessageSquare } from 'lucide-react';
 import { STATUS } from '@/config/database-constants';
 import { formatDistanceToNow } from 'date-fns';
+import { getLoanOfferStatusColor } from './constants';
 
 interface LoanOffersListProps {
   offers: LoanOffer[];
@@ -14,21 +15,6 @@ interface LoanOffersListProps {
 }
 
 export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: LoanOffersListProps) {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case STATUS.LOAN_OFFERS.PENDING:
-        return 'bg-yellow-100 text-yellow-800';
-      case STATUS.LOAN_OFFERS.ACCEPTED:
-        return 'bg-green-100 text-green-800';
-      case STATUS.LOAN_OFFERS.REJECTED:
-        return 'bg-red-100 text-red-800';
-      case STATUS.LOAN_OFFERS.EXPIRED:
-        return 'bg-gray-100 text-gray-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   const getStatusIcon = (status: string) => {
     switch (status) {
       case STATUS.LOAN_OFFERS.PENDING:
@@ -70,7 +56,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
                   <CardTitle className="text-lg">
                     {offer.offer_type === 'refinance' ? 'Refinance Offer' : 'Payoff Offer'}
                   </CardTitle>
-                  <Badge className={`${getStatusColor(offer.status)} gap-1`}>
+                  <Badge className={`${getLoanOfferStatusColor(offer.status)} gap-1`}>
                     {getStatusIcon(offer.status)}
                     {offer.status}
                   </Badge>

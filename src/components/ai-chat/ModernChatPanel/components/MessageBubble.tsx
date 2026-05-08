@@ -3,8 +3,8 @@
  * Displays a single chat message with avatar and actions
  */
 
-import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { Cat, User, Copy, Check, Clock, X } from 'lucide-react';
 import { AI_MODEL_REGISTRY } from '@/config/ai-models';
 import { renderChatMarkdown } from '@/utils/markdown';
@@ -89,18 +89,14 @@ interface MessageBubbleProps {
 
 export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleProps) {
   const isUser = message.role === 'user';
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
 
   // Clean the message content by removing action and exec_action blocks for display
   const displayContent = message.content
     .replace(/```(?:action|exec_action)[\s\S]*?```/g, '')
     .trim();
 
-  const handleCopy = () => {
-    void navigator.clipboard.writeText(displayContent);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  const handleCopy = () => void copy(displayContent);
 
   return (
     <div

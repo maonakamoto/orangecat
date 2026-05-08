@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import {
   Key,
   Copy,
@@ -51,7 +52,7 @@ function generateRecoveryCodes(count: number = 10): string[] {
 export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: RecoveryCodesProps) {
   const [codes, setCodes] = useState<string[]>(initialCodes || []);
   const [generating, setGenerating] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
   const [acknowledged, setAcknowledged] = useState(false);
   const [regenerateConfirm, setRegenerateConfirm] = useState(false);
 
@@ -68,11 +69,8 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
   }, [onCodesGenerated]);
 
   const handleCopy = useCallback(() => {
-    const codesText = codes.join('\n');
-    navigator.clipboard.writeText(codesText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [codes]);
+    void copy(codes.join('\n'));
+  }, [codes, copy]);
 
   const handleDownload = useCallback(() => {
     const codesText = [

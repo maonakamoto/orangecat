@@ -26,3 +26,21 @@ export function formatRelativeTime(date: string | Date): string {
 export function formatShortTime(date: string | Date): string {
   return format(typeof date === 'string' ? new Date(date) : date, 'HH:mm');
 }
+
+export function formatRelativeTimeCompact(date: string | Date): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  const days = Math.floor((Date.now() - d.getTime()) / (1000 * 60 * 60 * 24));
+  if (days === 0) {
+    return 'Today';
+  }
+  if (days === 1) {
+    return 'Yesterday';
+  }
+  if (days < 7) {
+    return `${days}d ago`;
+  }
+  if (days < 30) {
+    return `${Math.floor(days / 7)}w ago`;
+  }
+  return formatDate(d);
+}

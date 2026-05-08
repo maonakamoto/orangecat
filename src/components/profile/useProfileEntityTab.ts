@@ -8,7 +8,6 @@ import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { logger } from '@/utils/logger';
 import { EntityType, ENTITY_REGISTRY } from '@/config/entity-registry';
 import React from 'react';
-import { formatDate } from '@/utils/dates';
 
 export interface EntityData {
   id: string;
@@ -49,24 +48,7 @@ export interface EntityMetadata {
   colorTheme: string;
 }
 
-export const getRelativeTime = (date: string) => {
-  const created = new Date(date);
-  const now = new Date();
-  const days = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
-  if (days === 0) {
-    return 'Today';
-  }
-  if (days === 1) {
-    return 'Yesterday';
-  }
-  if (days < 7) {
-    return `${days}d ago`;
-  }
-  if (days < 30) {
-    return `${Math.floor(days / 7)}w ago`;
-  }
-  return formatDate(created);
-};
+export { formatRelativeTimeCompact as getRelativeTime } from '@/utils/dates';
 
 export function useProfileEntityTab(profile: ScalableProfile, entityType: EntityType) {
   const [entities, setEntities] = useState<EntityData[]>([]);

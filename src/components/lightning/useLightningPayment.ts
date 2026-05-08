@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { useNostr } from '@/hooks/useNostr';
 import { NWCClient } from '@/lib/nostr/nwc';
 import type { PaymentStatus } from '@/services/bitcoin/types';
@@ -28,7 +29,7 @@ export function useLightningPayment({
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus | 'checking'>('pending');
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [pollInterval, setPollInterval] = useState<ReturnType<typeof setInterval> | null>(null);
 
@@ -127,12 +128,10 @@ export function useLightningPayment({
     if (!invoice) {
       return;
     }
-    try {
-      await navigator.clipboard.writeText(invoice.bolt11);
-      setCopied(true);
+    const ok = await copy(invoice.bolt11);
+    if (ok) {
       toast.success('Invoice copied!');
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
+    } else {
       toast.error('Failed to copy');
     }
   };

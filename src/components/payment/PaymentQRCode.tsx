@@ -13,6 +13,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Copy, Check, ExternalLink, Timer } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 
 interface PaymentQRCodeProps {
   /** QR data string (bolt11 uppercased or bitcoin: URI) */
@@ -34,7 +35,7 @@ export function PaymentQRCode({
   size = 256,
   expiresInSeconds,
 }: PaymentQRCodeProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
   const [secondsLeft, setSecondsLeft] = useState(expiresInSeconds ?? 0);
   const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
@@ -61,11 +62,7 @@ export function PaymentQRCode({
   const isLightning = qrData.startsWith('LN') || qrData.startsWith('ln');
   const copyText = isLightning ? qrData.toLowerCase() : qrData;
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(copyText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  const handleCopy = () => void copy(copyText);
 
   // Deep link to open in a Lightning wallet
   const walletLink = isLightning ? `lightning:${qrData.toLowerCase()}` : qrData;

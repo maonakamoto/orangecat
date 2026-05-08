@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { motion } from 'framer-motion';
 import { Copy, Check, Bitcoin, Zap } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
@@ -11,14 +12,10 @@ interface WalletSectionProps {
 }
 
 export function WalletSection({ walletAddress, lightningAddress }: WalletSectionProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
   const [activeTab, setActiveTab] = useState<'bitcoin' | 'lightning'>('bitcoin');
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(walletAddress);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  const handleCopy = () => void copy(walletAddress);
 
   return (
     <motion.div

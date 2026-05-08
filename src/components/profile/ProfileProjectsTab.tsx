@@ -10,7 +10,7 @@ import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { formatDate } from '@/utils/dates';
+import { formatRelativeTimeCompact } from '@/utils/dates';
 import { getStatusInfo } from '@/config/status-config';
 import { PROJECT_STATUS } from '@/config/project-statuses';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
@@ -101,26 +101,6 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
       </div>
     );
   }
-
-  // Format relative time
-  const getRelativeTime = (date: string) => {
-    const created = new Date(date);
-    const now = new Date();
-    const days = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
-    if (days === 0) {
-      return 'Today';
-    }
-    if (days === 1) {
-      return 'Yesterday';
-    }
-    if (days < 7) {
-      return `${days}d ago`;
-    }
-    if (days < 30) {
-      return `${Math.floor(days / 7)}w ago`;
-    }
-    return formatDate(created);
-  };
 
   return (
     <div className="space-y-4">
@@ -264,7 +244,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
 
                   {/* Footer */}
                   <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100">
-                    <span>{getRelativeTime(project.created_at)}</span>
+                    <span>{formatRelativeTimeCompact(project.created_at)}</span>
                     {project.bitcoin_address && (
                       <span className="flex items-center gap-1 text-orange-600">
                         <Bitcoin className="w-3 h-3" />

@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
 import { useMessagingStore } from '@/stores/messaging';
+import { useBulkSelection } from '@/hooks/useBulkSelection';
 
 interface UseMessagePanelStateParams {
   isAuthReady: boolean;
@@ -27,7 +28,11 @@ export function useMessagePanelState({
   const [showNewModal, setShowNewModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'all' | 'requests'>('all');
   const [convSelectionMode, setConvSelectionMode] = useState(false);
-  const [selectedConvIds, setSelectedConvIds] = useState<Set<string>>(new Set());
+  const {
+    selectedIds: selectedConvIds,
+    toggleSelect: toggleConvSelect,
+    clearSelection: clearConvSelection,
+  } = useBulkSelection();
   const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false);
   const [refreshSignal, setRefreshSignal] = useState(0);
 
@@ -35,20 +40,6 @@ export function useMessagePanelState({
     (id: string | null) => setCurrentConversation(id),
     [setCurrentConversation]
   );
-
-  const toggleConvSelect = (id: string) => {
-    setSelectedConvIds(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
-
-  const clearConvSelection = () => setSelectedConvIds(new Set());
 
   const bulkDeleteSelected = () => {
     if (selectedConvIds.size === 0) {

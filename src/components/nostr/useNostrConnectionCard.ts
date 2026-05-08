@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { useNostr } from '@/hooks/useNostr';
 import { NWCClient } from '@/lib/nostr/nwc';
 import { isValidNWCUri } from '@/lib/nostr';
@@ -28,7 +29,7 @@ export function useNostrConnectionCard() {
   const [showNwcInput, setShowNwcInput] = useState(false);
   const [nwcInput, setNwcInput] = useState('');
   const [nwcError, setNwcError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: copyToClipboard } = useCopyToClipboard();
   const [balanceSats, setBalanceSats] = useState<number | null>(null);
   const [balanceLoading, setBalanceLoading] = useState(false);
 
@@ -92,9 +93,7 @@ export function useNostrConnectionCard() {
 
   const handleCopyNpub = async () => {
     if (npub) {
-      await navigator.clipboard.writeText(npub);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await copyToClipboard(npub);
     }
   };
 

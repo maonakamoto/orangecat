@@ -10,6 +10,7 @@
 
 import { DEFAULT_CURRENCY } from '@/config/currencies';
 import type { LoanDialogFormData } from './validation';
+import { STATUS } from '@/config/database-constants';
 
 export const DEFAULT_LOAN_FORM_VALUES: LoanDialogFormData = {
   title: '',
@@ -37,4 +38,12 @@ export const CONTACT_METHODS = [
   { value: 'phone', label: 'Phone' },
 ] as const;
 
+const LOAN_OFFER_STATUS_COLORS: Record<string, string> = {
+  [STATUS.LOAN_OFFERS.PENDING]: 'bg-yellow-100 text-yellow-800',
+  [STATUS.LOAN_OFFERS.ACCEPTED]: 'bg-green-100 text-green-800',
+  [STATUS.LOAN_OFFERS.REJECTED]: 'bg-red-100 text-red-800',
+  [STATUS.LOAN_OFFERS.EXPIRED]: 'bg-gray-100 text-gray-800',
+};
 
+export const getLoanOfferStatusColor = (status: string): string =>
+  LOAN_OFFER_STATUS_COLORS[status] ?? 'bg-gray-100 text-gray-800';

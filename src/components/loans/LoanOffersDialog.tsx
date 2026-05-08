@@ -24,6 +24,7 @@ import { formatCurrency } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY, CURRENCY_CODES, type CurrencyCode } from '@/config/currencies';
 import { STATUS } from '@/config/database-constants';
 import { formatDate } from '@/utils/dates';
+import { getLoanOfferStatusColor } from './constants';
 
 interface LoanOffersDialogProps {
   loan: Loan;
@@ -102,21 +103,6 @@ export function LoanOffersDialog({
     return formatCurrency(amount, validCurrency);
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case STATUS.LOAN_OFFERS.PENDING:
-        return 'bg-yellow-100 text-yellow-800';
-      case STATUS.LOAN_OFFERS.ACCEPTED:
-        return 'bg-green-100 text-green-800';
-      case STATUS.LOAN_OFFERS.REJECTED:
-        return 'bg-red-100 text-red-800';
-      case STATUS.LOAN_OFFERS.EXPIRED:
-        return 'bg-gray-100 text-gray-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
@@ -144,7 +130,9 @@ export function LoanOffersDialog({
                   <div className="flex items-start justify-between">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <Badge className={getStatusColor(offer.status)}>{offer.status}</Badge>
+                        <Badge className={getLoanOfferStatusColor(offer.status)}>
+                          {offer.status}
+                        </Badge>
                         {offer.offer_type === 'refinance' ? (
                           <Badge variant="secondary">Refinance</Badge>
                         ) : (
