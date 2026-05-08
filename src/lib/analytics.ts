@@ -78,11 +78,6 @@ export function trackEvent(event: AnalyticsEvent, properties?: AnalyticsProperti
   }
 }
 
-/** Track page view */
-export function trackPageView(pageName: string, properties?: AnalyticsProperties) {
-  trackEvent('page_view', { page: pageName, ...properties });
-}
-
 /** Track registration funnel events */
 export const registrationEvents = {
   started: (properties?: AnalyticsProperties) => trackEvent('registration_started', properties),

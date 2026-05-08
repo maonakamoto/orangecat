@@ -12,7 +12,7 @@ import { ENTITY_REGISTRY, EntityType } from '@/config/entity-registry';
 
 type CreateActionType = 'post' | 'entity' | 'menu';
 
-export interface ContextualCreateAction {
+interface ContextualCreateAction {
   /** Type of create action */
   type: CreateActionType;
   /** Entity type if type is 'entity' */

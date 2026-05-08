@@ -11,7 +11,7 @@ interface MutationSetters {
   setTotal: Dispatch<SetStateAction<number>>;
 }
 
-export interface UseNotificationsMutationsReturn {
+interface UseNotificationsMutationsReturn {
   markAsRead: (id: string | string[] | 'all') => Promise<void>;
   deleteNotification: (id: string) => Promise<void>;
   clearRead: () => Promise<void>;

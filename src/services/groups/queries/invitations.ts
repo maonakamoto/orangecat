@@ -17,7 +17,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 // ==================== TYPES ====================
 
-export interface PendingInvitation {
+interface PendingInvitation {
   id: string;
   group_id: string;
   group_name: string;
@@ -32,7 +32,7 @@ export interface PendingInvitation {
   created_at: string;
 }
 
-export interface GroupInvitation {
+interface GroupInvitation {
   id: string;
   group_id: string;
   user_id?: string;

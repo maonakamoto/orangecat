@@ -10,7 +10,7 @@ interface Props {
   onUpdate: (updates: Partial<TimelineDisplayEvent>) => void;
 }
 
-export interface UsePostShareReturn {
+interface UsePostShareReturn {
   isSharing: boolean;
   shareOpen: boolean;
   handleShareOpen: () => void;

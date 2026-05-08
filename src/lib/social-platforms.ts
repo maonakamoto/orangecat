@@ -32,7 +32,7 @@ export type SocialPlatformId =
   | 'patreon'
   | 'custom';
 
-export interface SocialPlatform {
+interface SocialPlatform {
   id: SocialPlatformId;
   label: string;
   icon: React.ComponentType<{ className?: string }>;

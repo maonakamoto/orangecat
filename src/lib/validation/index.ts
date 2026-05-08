@@ -5,8 +5,8 @@
  * like `import { productSchema } from '@/lib/validation'` continue to work.
  */
 
-export * from './base';
 export * from './auth';
+export * from './base';
 export * from './commerce';
 export * from './projects';
 export * from './finance';

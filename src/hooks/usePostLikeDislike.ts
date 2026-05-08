@@ -10,7 +10,7 @@ interface Props {
   onUpdate: (updates: Partial<TimelineDisplayEvent>) => void;
 }
 
-export interface UsePostLikeDislikeReturn {
+interface UsePostLikeDislikeReturn {
   isLiking: boolean;
   handleLike: () => Promise<void>;
   isDisliking: boolean;

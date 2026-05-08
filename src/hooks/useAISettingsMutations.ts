@@ -14,7 +14,7 @@ interface MutationsProps {
   fetchData: () => Promise<void>;
 }
 
-export interface UseAISettingsMutationsReturn {
+interface UseAISettingsMutationsReturn {
   updatePreferences: (updates: Partial<UserAIPreferences>) => Promise<UserAIPreferences>;
   addKey: (params: { provider: string; apiKey: string; keyName: string }) => Promise<void>;
   deleteKey: (keyId: string) => Promise<void>;

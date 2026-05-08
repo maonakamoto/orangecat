@@ -327,13 +327,6 @@ export const entityWalletLinkSchema = z.object({
 });
 
 // Types
-export type PaymentCreateData = z.infer<typeof paymentCreateSchema>;
-export type PaymentActionData = z.infer<typeof paymentActionSchema>;
-export type EntityWalletLinkData = z.infer<typeof entityWalletLinkSchema>;
 export type AssetFormData = z.infer<typeof assetSchema>;
 export type LoanFormData = z.infer<typeof loanSchema>;
 export type InvestmentFormData = z.infer<typeof investmentSchema>;
-export type CollateralItemData = z.infer<typeof collateralItemSchema>;
-export type WalletCreateData = z.infer<typeof walletCreateSchema>;
-export type WalletUpdateData = z.infer<typeof walletUpdateSchema>;
-export type WalletTransferData = z.infer<typeof walletTransferSchema>;

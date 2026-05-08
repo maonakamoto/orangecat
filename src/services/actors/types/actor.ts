@@ -8,7 +8,7 @@
  * Last Modified Summary: Created actor types
  */
 
-export type ActorType = 'user' | 'group';
+type ActorType = 'user' | 'group';
 
 export interface Actor {
   id: string;
@@ -18,5 +18,3 @@ export interface Actor {
   created_at: string;
   updated_at: string;
 }
-
-

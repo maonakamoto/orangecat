@@ -11,7 +11,7 @@ interface Props {
   userId: string | undefined;
 }
 
-export interface UsePostRepostReturn {
+interface UsePostRepostReturn {
   isReposting: boolean;
   repostModalOpen: boolean;
   handleRepostClick: () => void;

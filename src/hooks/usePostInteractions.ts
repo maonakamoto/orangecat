@@ -12,7 +12,7 @@ interface UsePostInteractionsProps {
   onAddEvent?: (event: TimelineDisplayEvent) => void;
 }
 
-export interface UsePostInteractionsReturn {
+interface UsePostInteractionsReturn {
   isLiking: boolean;
   handleLike: () => Promise<void>;
   isDisliking: boolean;

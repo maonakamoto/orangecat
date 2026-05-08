@@ -87,7 +87,7 @@ interface ChatCompletionResult {
   usedByok: boolean;
 }
 
-export interface StreamChunk {
+interface StreamChunk {
   content: string;
   done: boolean;
   usage?: {

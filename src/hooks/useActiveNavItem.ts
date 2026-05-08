@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import type { NavSection } from './useNavigation';
 import { ROUTES } from '@/config/routes';
 
-export interface UseActiveNavItemReturn {
+interface UseActiveNavItemReturn {
   activeSection: string | null;
   activeItem: string | null;
   isItemActive: (href: string) => boolean;
