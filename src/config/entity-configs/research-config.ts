@@ -4,7 +4,7 @@ import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { z } from 'zod';
 
 // Research entity validation schema
-export const researchEntitySchema = z.object({
+const researchEntitySchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().min(1).max(2000),
   field: z.enum([

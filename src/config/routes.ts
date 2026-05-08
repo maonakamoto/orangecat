@@ -183,13 +183,6 @@ export function shouldShowSidebar(pathname: string): boolean {
 }
 
 /**
- * Check if a route should show navigation (header/footer)
- */
-export function shouldShowNavigation(pathname: string): boolean {
-  return NAVIGATED_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));
-}
-
-/**
  * Check if a route is considered "public" (accessible without auth)
  */
 export function isPublicRoute(pathname: string): boolean {

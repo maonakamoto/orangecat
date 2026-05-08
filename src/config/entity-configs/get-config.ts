@@ -56,10 +56,3 @@ const ENTITY_CONFIGS: Partial<Record<EntityType, EntityConfig<any>>> = {
 export function getEntityConfig(entityType: EntityType): EntityConfig<any> | null {
   return ENTITY_CONFIGS[entityType] || null;
 }
-
-/**
- * Get all available entity types that have configurations
- */
-export function getConfiguredEntityTypes(): EntityType[] {
-  return Object.keys(ENTITY_CONFIGS) as EntityType[];
-}

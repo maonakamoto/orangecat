@@ -40,7 +40,6 @@ export const ENTITY_STATUS = {
   PAUSED: 'paused',
   ARCHIVED: 'archived',
 } as const;
-export type EntityStatus = (typeof ENTITY_STATUS)[keyof typeof ENTITY_STATUS];
 
 export const STATUS = {
   // ProjectStatus lives in config/project-statuses.ts (SSOT)
@@ -177,48 +176,6 @@ export const STATUS = {
 } as const;
 
 /**
- * Type helpers for status values
+ * Type helpers for status values (only export types that callers import from this file)
  */
-// ProjectStatus is defined in config/project-statuses.ts (SSOT)
-export type ProposalStatus = (typeof STATUS.PROPOSALS)[keyof typeof STATUS.PROPOSALS];
-export type LoanStatus = (typeof STATUS.LOANS)[keyof typeof STATUS.LOANS];
-export type BookingStatus = (typeof STATUS.BOOKINGS)[keyof typeof STATUS.BOOKINGS];
-export type LoanOfferStatus = (typeof STATUS.LOAN_OFFERS)[keyof typeof STATUS.LOAN_OFFERS];
-export type ServiceStatus = (typeof STATUS.SERVICES)[keyof typeof STATUS.SERVICES];
-export type MessageStatus = (typeof STATUS.MESSAGES)[keyof typeof STATUS.MESSAGES];
 export type InvestmentStatus = (typeof STATUS.INVESTMENTS)[keyof typeof STATUS.INVESTMENTS];
-
-/**
- * Currency constants
- */
-export const CURRENCY = {
-  SATS: 'SATS',
-  BTC: 'BTC',
-  USD: 'USD',
-} as const;
-
-export type Currency = (typeof CURRENCY)[keyof typeof CURRENCY];
-
-/**
- * Proposal types
- */
-export const PROPOSAL_TYPES = {
-  GENERAL: 'general',
-  TREASURY: 'treasury',
-  MEMBERSHIP: 'membership',
-  GOVERNANCE: 'governance',
-  EMPLOYMENT: 'employment',
-} as const;
-
-export type ProposalType = (typeof PROPOSAL_TYPES)[keyof typeof PROPOSAL_TYPES];
-
-/**
- * Message types
- */
-export const MESSAGE_TYPES = {
-  TEXT: 'text',
-  IMAGE: 'image',
-  FILE: 'file',
-} as const;
-
-export type MessageType = (typeof MESSAGE_TYPES)[keyof typeof MESSAGE_TYPES];

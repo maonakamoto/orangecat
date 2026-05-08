@@ -86,7 +86,7 @@ export interface TaskStatusInfo {
   description?: string;
 }
 
-export const TASK_STATUS_CONFIG: Record<TaskStatus, TaskStatusInfo> = {
+const TASK_STATUS_CONFIG: Record<TaskStatus, TaskStatusInfo> = {
   idle: {
     label: 'Ready',
     className: BADGE_COLORS.neutral,
@@ -146,7 +146,7 @@ export const TASK_CATEGORY_LABELS: Record<TaskCategory, string> = {
   other: 'Other',
 };
 
-export const TASK_CATEGORY_ICONS: Record<TaskCategory, string> = {
+const TASK_CATEGORY_ICONS: Record<TaskCategory, string> = {
   cleaning: '🧹',
   maintenance: '🔧',
   admin: '📋',
@@ -188,7 +188,7 @@ export interface PriorityInfo {
   order: number;
 }
 
-export const PRIORITY_CONFIG: Record<Priority, PriorityInfo> = {
+const PRIORITY_CONFIG: Record<Priority, PriorityInfo> = {
   low: {
     label: 'Low',
     className: BADGE_COLORS.muted,
@@ -215,7 +215,7 @@ export const PRIORITY_CONFIG: Record<Priority, PriorityInfo> = {
   },
 };
 
-export const TASK_PROJECT_STATUSES = {
+const TASK_PROJECT_STATUSES = {
   PLANNING: 'planning',
   ACTIVE: 'active',
   ON_HOLD: 'on_hold',
