@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { isProfileIncomplete } from '@/components/onboarding/ProfileCompletionModal';
+import type { Profile } from '@/types/database';
 
 interface UseDashboardModalsOptions {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  profile: any;
+  profile: Profile | null;
   hydrated: boolean;
   localLoading: boolean;
   userId: string | undefined;
@@ -33,7 +33,7 @@ export function useDashboardModals({
     const isEmailConfirmed = searchParams?.get('confirmed') === 'true';
     const welcomeKey = `orangecat-welcome-shown-${userId}`;
     const hasSeenWelcome = localStorage.getItem(welcomeKey) === 'true';
-    const onboardingComplete = (profile as { onboarding_completed?: boolean }).onboarding_completed;
+    const onboardingComplete = profile.onboarding_completed;
     if (
       !hasSeenWelcome &&
       (isWelcome || isEmailConfirmed || (onboardingComplete && !hasSeenWelcome))

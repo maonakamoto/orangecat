@@ -117,8 +117,7 @@ export function useSocialTimeline({
   );
 
   const handleEventUpdate = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (eventId: string, updates: any) => {
+    (eventId: string, updates: Partial<TimelineDisplayEvent>) => {
       if (!timelineFeed) {
         return;
       }

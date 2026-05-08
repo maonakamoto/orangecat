@@ -1,6 +1,6 @@
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
-import { TimelineFeedResponse } from '@/types/timeline';
+import { TimelineFeedResponse, TimelineDisplayEvent } from '@/types/timeline';
 import TimelineComponent from './TimelineComponent';
 import { cn } from '@/lib/utils';
 
@@ -12,8 +12,7 @@ export interface TimelineLayoutProps {
   gradientVia: string;
   gradientTo: string;
   feed: TimelineFeedResponse;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onEventUpdate: (eventId: string, updates: any) => void;
+  onEventUpdate: (eventId: string, updates: Partial<TimelineDisplayEvent>) => void;
   onLoadMore: () => void;
   isLoadingMore?: boolean;
   stats?: {

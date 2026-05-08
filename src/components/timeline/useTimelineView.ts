@@ -12,8 +12,7 @@ interface UseTimelineViewParams {
   feedType: 'journey' | 'community' | 'profile' | 'project';
   ownerId?: string;
   onPostCreated?: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onOptimisticEvent?: (event: any) => void;
+  onOptimisticEvent?: (event: TimelineDisplayEvent) => void;
 }
 
 export function useTimelineView({

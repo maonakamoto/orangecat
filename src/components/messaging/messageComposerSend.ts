@@ -5,6 +5,7 @@ import { logger } from '@/utils/logger';
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { Message } from '@/features/messaging/types';
+import type { MessagingActor } from '@/features/messaging/hooks/useMessagingActors';
 import { queueIfOffline, handleNetworkError } from '@/features/messaging/lib/offline-queue';
 import { MESSAGE_TYPES, debugLog } from '@/features/messaging/lib/constants';
 import { API_ROUTES } from '@/config/api-routes';
@@ -12,21 +13,20 @@ import {
   createOptimisticMessage,
   validateMessageContent,
 } from '@/features/messaging/lib/message-utils';
+import type { User } from '@supabase/supabase-js';
+import type { Profile } from '@/types/database';
 
 interface SendMessageParams {
   content: string;
   isSending: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  profile: any;
+  user: User | null;
+  profile: Profile | null;
   conversationId: string;
   stopTyping: () => void;
   onMessageSent: (message: Message) => void;
   onMessageFailed?: (tempId: string, errorMessage?: string) => void;
   onMessageConfirmed?: (tempId: string, realMessage: Message) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selectedActor: any;
+  selectedActor: MessagingActor | null | undefined;
   setIsSending: (v: boolean) => void;
   setContent: (v: string) => void;
   textareaRef: React.RefObject<HTMLTextAreaElement>;

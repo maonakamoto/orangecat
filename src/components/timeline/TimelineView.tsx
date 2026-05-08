@@ -5,6 +5,7 @@ import TimelineComponent from './TimelineComponent';
 import TimelineComposer from './TimelineComposer';
 import Button from '@/components/ui/Button';
 import { useTimelineView } from './useTimelineView';
+import type { TimelineDisplayEvent } from '@/types/timeline';
 
 export interface TimelineViewProps {
   feedType: 'journey' | 'community' | 'profile' | 'project';
@@ -16,8 +17,7 @@ export interface TimelineViewProps {
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   onPostCreated?: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onOptimisticEvent?: (event: any) => void;
+  onOptimisticEvent?: (event: TimelineDisplayEvent) => void;
 }
 
 export default function TimelineView({
