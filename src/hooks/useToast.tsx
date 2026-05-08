@@ -15,7 +15,7 @@ interface ToastStore {
   removeToast: (id: string) => void;
 }
 
-export const useToastStore = create<ToastStore>(set => ({
+const useToastStore = create<ToastStore>(set => ({
   toasts: [],
   addToast: (message, type, duration = 5000) => {
     const id = Math.random().toString(36).substr(2, 9);

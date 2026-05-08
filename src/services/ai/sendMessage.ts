@@ -14,13 +14,10 @@ import { logger } from '@/utils/logger';
 import {
   createOpenRouterService,
   createOpenRouterServiceWithByok,
-  createGroqService,
-  isGroqAvailable,
-  DEFAULT_GROQ_MODEL,
-  createApiKeyService,
   type OpenRouterMessage,
-  type GroqMessage,
-} from '@/services/ai';
+} from './openrouter';
+import { createGroqService, isGroqAvailable, DEFAULT_GROQ_MODEL, type GroqMessage } from './groq';
+import { createApiKeyService } from './api-key-service';
 import {
   DEFAULT_FREE_MODEL_ID,
   isModelFree,
