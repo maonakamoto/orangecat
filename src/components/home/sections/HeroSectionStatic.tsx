@@ -141,11 +141,11 @@ export default function HeroSectionStatic() {
               </div>
 
               {/* Floating badges */}
-              <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 px-2 py-1 sm:px-3 sm:py-1.5 bg-green-500 text-white text-[10px] sm:text-xs font-semibold rounded-full shadow-lg">
+              <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 px-2 py-1 sm:px-3 sm:py-1.5 bg-green-500 text-white text-2xs sm:text-xs font-semibold rounded-full shadow-lg">
                 ✓ 0% Fees
               </div>
 
-              <div className="absolute -bottom-2 -left-2 sm:-bottom-3 sm:-left-3 px-2 py-1 sm:px-3 sm:py-1.5 bg-tiffany-500 text-white text-[10px] sm:text-xs font-semibold rounded-full shadow-lg">
+              <div className="absolute -bottom-2 -left-2 sm:-bottom-3 sm:-left-3 px-2 py-1 sm:px-3 sm:py-1.5 bg-tiffany-500 text-white text-2xs sm:text-xs font-semibold rounded-full shadow-lg">
                 🐱 AI-powered
               </div>
             </div>

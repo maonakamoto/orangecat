@@ -240,7 +240,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                     <span
                       className={cn(
                         'font-medium transition-all duration-300 leading-tight',
-                        shouldBeSmall ? 'text-[10px]' : 'text-xs',
+                        shouldBeSmall ? 'text-2xs' : 'text-xs',
                         isActive && 'font-semibold'
                       )}
                     >

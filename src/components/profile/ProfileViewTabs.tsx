@@ -174,7 +174,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                 {tab.badge !== undefined && (
                   <span
                     className={cn(
-                      'ml-1.5 sm:ml-2 py-0.5 px-1.5 sm:px-2 rounded-full text-[10px] sm:text-xs font-medium flex-shrink-0',
+                      'ml-1.5 sm:ml-2 py-0.5 px-1.5 sm:px-2 rounded-full text-2xs sm:text-xs font-medium flex-shrink-0',
                       isActive ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-600'
                     )}
                   >

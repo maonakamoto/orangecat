@@ -24,6 +24,7 @@ const config: Config = {
     extend: {
       fontSize: {
         // Native mobile app typography scale
+        '2xs': ['0.625rem', { lineHeight: '1rem' }], // 10px - Badges, micro labels
         xs: ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.01em' }], // 12px - Labels, captions
         sm: ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.01em' }], // 14px - Secondary text
         base: ['1rem', { lineHeight: '1.5rem', letterSpacing: '0' }], // 16px - Body text (iOS standard)
