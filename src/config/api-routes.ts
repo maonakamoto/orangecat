@@ -93,7 +93,6 @@ export const API_ROUTES = {
   CHAT: '/api/chat',
   GROUPS: '/api/groups',
   JOBS: '/api/jobs',
-  SHIPPING_ADDRESSES: '/api/shipping-addresses',
   DELETE_USER: '/api/delete-user',
   WAITLIST: '/api/waitlist',
   AI_ASSISTANTS: '/api/ai-assistants',
