@@ -100,8 +100,6 @@ export const DATABASE_TABLES = {
 
   // Bookings
   BOOKINGS: 'bookings',
-  AVAILABILITY_SLOTS: 'availability_slots',
-  ASSET_AVAILABILITY: 'asset_availability',
 
   // Task Management
   TASKS: 'tasks',
