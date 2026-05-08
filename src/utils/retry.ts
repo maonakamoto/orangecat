@@ -8,46 +8,43 @@ interface RetryOptions {
   maxDelay?: number;
   backoffFactor?: number;
   jitter?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  retryCondition?: (error: any) => boolean;
+  retryCondition?: (error: unknown) => boolean;
 }
 
 /**
  * Default retry condition - retries on network errors and 5xx status codes
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isRetryableError(error: any): boolean {
-  // Network errors
+type ErrorLike = {
+  name?: string;
+  message?: string;
+  response?: { status?: number };
+  status?: number;
+  code?: string;
+};
+
+function isRetryableError(error: unknown): boolean {
   if (!error) {
     return false;
   }
-  if (
-    error.name === 'NetworkError' ||
-    error.message?.includes('network') ||
-    error.message?.includes('fetch')
-  ) {
+  const e = error as ErrorLike;
+  if (e.name === 'NetworkError' || e.message?.includes('network') || e.message?.includes('fetch')) {
     return true;
   }
 
-  // HTTP status codes
-  const status = error?.response?.status || error?.status;
+  const status = e.response?.status ?? e.status;
   if (typeof status === 'number') {
-    // Retry on server errors (5xx) and rate limiting (429)
     if (status >= 500 || status === 429) {
       return true;
     }
-    // Don't retry on client errors (4xx) except rate limiting
     if (status >= 400 && status < 500 && status !== 429) {
       return false;
     }
   }
 
-  // Timeout errors
-  if (error.name === 'TimeoutError' || error.code === 'ETIMEDOUT') {
+  if (e.name === 'TimeoutError' || e.code === 'ETIMEDOUT') {
     return true;
   }
 
-  // Default to retry for unknown errors
   return true;
 }
 
@@ -81,8 +78,7 @@ function calculateDelay(attempt: number, options: RetryOptions): number {
 async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> {
   const { maxAttempts = 3, retryCondition = isRetryableError } = options;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let lastError: any;
+  let lastError: unknown;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {

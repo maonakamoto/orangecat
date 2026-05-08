@@ -37,13 +37,20 @@ export function useSellerPaymentMethods(sellerProfileId: string | null): SellerP
     const supabase = createBrowserClient();
 
     async function check() {
-      const { data: wallets } = await supabase
+      type WalletRow = {
+        id: string;
+        wallet_type: string | null;
+        lightning_address: string | null;
+        address_or_xpub: string | null;
+      };
+      const { data: rawWallets } = await supabase
         .from(DATABASE_TABLES.WALLETS)
         .select('id, wallet_type, lightning_address, address_or_xpub')
         .eq('profile_id', sellerProfileId)
         .eq('is_active', true);
+      const wallets = (rawWallets || []) as WalletRow[];
 
-      if (!wallets || wallets.length === 0) {
+      if (wallets.length === 0) {
         setInfo({
           hasWallet: false,
           hasNWC: false,
@@ -56,12 +63,9 @@ export function useSellerPaymentMethods(sellerProfileId: string | null): SellerP
 
       setInfo({
         hasWallet: true,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table query
-        hasNWC: wallets.some((w: any) => w.wallet_type === 'nwc'),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        hasLightningAddress: wallets.some((w: any) => !!w.lightning_address),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        hasOnchain: wallets.some((w: any) => !!w.address_or_xpub),
+        hasNWC: wallets.some(w => w.wallet_type === 'nwc'),
+        hasLightningAddress: wallets.some(w => !!w.lightning_address),
+        hasOnchain: wallets.some(w => !!w.address_or_xpub),
         loading: false,
       });
     }

@@ -129,11 +129,10 @@ function createOptimisticEvent(params: CreateOptimisticEventParams): Record<stri
 /**
  * Formats a caught error from post creation into a user-friendly message.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function formatPostError(err: any): string {
-  // Check for a response object, common in HTTP client errors
-  if (err.response && err.response.status) {
-    switch (err.response.status) {
+export function formatPostError(err: unknown): string {
+  const e = err as { response?: { status?: number } };
+  if (e.response && e.response.status) {
+    switch (e.response.status) {
       case 400:
         return 'Invalid post content. Please review your post.';
       case 401:
@@ -146,7 +145,7 @@ export function formatPostError(err: any): string {
       case 504:
         return 'A server error occurred. Our team has been notified. Please try again later.';
       default:
-        return `An error occurred (code: ${err.response.status}). Please try again.`;
+        return `An error occurred (code: ${e.response.status}). Please try again.`;
     }
   }
 

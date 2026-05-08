@@ -29,7 +29,7 @@ export interface Message {
   sender_id: string;
   content: string;
   message_type: string;
-  metadata: any;
+  metadata: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
   is_deleted: boolean;

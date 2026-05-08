@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { ProfileFieldType } from '@/lib/profile-guidance';
 import { LocationMode } from '@/lib/location-privacy';
-import { Control } from 'react-hook-form';
+import { Control, UseFormSetValue, UseFormRegister } from 'react-hook-form';
 import type { ProfileFormValues } from '../types';
 import { ProfileLocationSection } from './ProfileLocationSection';
 import { PROFILE_SECTIONS, PROFILE_SECTION_DESCRIPTIONS } from '../constants';
@@ -35,10 +35,8 @@ interface ProfileBasicSectionProps {
   setLocationGroupLabel: (value: string) => void;
   form: {
     control: Control<ProfileFormValues>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setValue: (name: keyof ProfileFormValues, value: any) => void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    register: (name: keyof ProfileFormValues) => any;
+    setValue: UseFormSetValue<ProfileFormValues>;
+    register: UseFormRegister<ProfileFormValues>;
   };
 }
 

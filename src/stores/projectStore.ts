@@ -98,8 +98,12 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
         throw error;
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const projects: Project[] = (data || []).map((project: any) => ({
+      type RawProjectRow = Project & {
+        currency?: string;
+        raised_amount?: number;
+        contributor_count?: number;
+      };
+      const projects: Project[] = ((data || []) as RawProjectRow[]).map(project => ({
         ...project,
         // Map database fields to FundingPage interface
         total_funding: project.raised_amount ?? project.total_funding ?? 0,

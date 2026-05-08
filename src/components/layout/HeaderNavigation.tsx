@@ -13,7 +13,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface NavigationItem {
@@ -37,7 +37,7 @@ interface MobileDrawerProps {
     product?: Array<{ name: string; href: string }>;
     company?: Array<{ name: string; href: string }>;
     legal?: Array<{ name: string; href: string }>;
-    social?: Array<{ name: string; href: string; icon?: any }>;
+    social?: Array<{ name: string; href: string; icon?: LucideIcon }>;
   };
   onClose: () => void;
 }

@@ -11,7 +11,7 @@ import { Profile } from '@/types/profile';
 import { ProfileFormData } from '@/types/database';
 import { ProfileFieldType } from '@/lib/profile-guidance';
 import { LocationMode } from '@/lib/location-privacy';
-import { Control } from 'react-hook-form';
+import { Control, UseFormSetValue, UseFormRegister } from 'react-hook-form';
 import { z } from 'zod';
 import { profileSchema } from '@/lib/validation';
 import { SocialLink } from '@/types/social';
@@ -32,31 +32,14 @@ export interface ModernProfileEditorProps {
 export interface ProfileLocationSectionProps {
   form: {
     control: Control<ProfileFormValues>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setValue: (name: keyof ProfileFormValues, value: any) => void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    register: (name: keyof ProfileFormValues) => any;
+    setValue: UseFormSetValue<ProfileFormValues>;
+    register: UseFormRegister<ProfileFormValues>;
   };
   onFieldFocus?: (field: ProfileFieldType) => void;
   locationMode: LocationMode;
   setLocationMode: (mode: LocationMode) => void;
   locationGroupLabel: string;
   setLocationGroupLabel: (value: string) => void;
-}
-
-export interface ProfileBasicSectionProps {
-  control: Control<ProfileFormValues>;
-  onFieldFocus?: (field: ProfileFieldType) => void;
-  locationMode: LocationMode;
-  setLocationMode: (mode: LocationMode) => void;
-  locationGroupLabel: string;
-  setLocationGroupLabel: (value: string) => void;
-  form: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setValue: (name: keyof ProfileFormValues, value: any) => void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    register: (name: keyof ProfileFormValues) => any;
-  };
 }
 
 export interface OnlinePresenceSectionProps {
@@ -71,5 +54,3 @@ export interface ContactSectionProps {
   onFieldFocus?: (field: ProfileFieldType) => void;
   userEmail?: string;
 }
-
-

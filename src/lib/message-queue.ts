@@ -19,7 +19,7 @@ interface QueuedMessagePayload {
   conversationId: string;
   content: string;
   messageType?: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   tempId?: string; // Track optimistic message ID
 }
 

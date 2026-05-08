@@ -50,13 +50,16 @@ export function useTypingSubscription({
           .gt('expires_at', new Date().toISOString());
 
         if (data) {
+          type TypingRow = {
+            user_id: string;
+            started_at: string;
+            expires_at: string;
+            profiles: { username: string; name: string } | null;
+          };
           setTypingUsers(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            data
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              .filter((t: any) => t.profiles)
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              .map((t: any) => ({
+            (data as TypingRow[])
+              .filter(t => t.profiles)
+              .map(t => ({
                 userId: t.user_id,
                 username: t.profiles?.username || '',
                 name: t.profiles?.name || '',

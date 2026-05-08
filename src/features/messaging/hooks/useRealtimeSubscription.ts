@@ -27,7 +27,11 @@ export interface RealtimeSubscriptionConfig {
   /** Optional filter (e.g., 'conversation_id=eq.123') */
   filter?: string;
   /** Callback when change detected */
-  onEvent: (payload: { eventType: string; new?: any; old?: any }) => void;
+  onEvent: (payload: {
+    eventType: string;
+    new?: Record<string, unknown>;
+    old?: Record<string, unknown>;
+  }) => void;
   /** Whether subscription is enabled */
   enabled?: boolean;
   /** Debounce delay in ms (default: TIMING.REFRESH_DEBOUNCE_MS) */
@@ -74,7 +78,10 @@ export function useRealtimeSubscription(config: RealtimeSubscriptionConfig) {
 
   // Debounced event handler
   const handleEvent = useCallback(
-    (eventType: string, payload: { new?: any; old?: any }) => {
+    (
+      eventType: string,
+      payload: { new?: Record<string, unknown>; old?: Record<string, unknown> }
+    ) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -120,22 +127,21 @@ export function useRealtimeSubscription(config: RealtimeSubscriptionConfig) {
 
     // Subscribe to each event type
     events.forEach(event => {
-      const config: any = {
-        event: event === '*' ? '*' : event,
-        schema,
-        table,
-      };
-
-      if (filter) {
-        config.filter = filter;
-      }
-
-      channel.on('postgres_changes', config, payload => {
-        handleEvent(event === '*' ? payload.eventType : event, {
-          new: payload.new,
-          old: payload.old,
-        });
-      });
+      channel.on(
+        'postgres_changes',
+        {
+          event: event === '*' ? '*' : event,
+          schema,
+          table,
+          ...(filter ? { filter } : {}),
+        },
+        payload => {
+          handleEvent(event === '*' ? payload.eventType : event, {
+            new: payload.new,
+            old: payload.old,
+          });
+        }
+      );
     });
 
     channel.subscribe();

@@ -38,7 +38,7 @@ function createWalletErrorResponse(
   error: string,
   code: string,
   status: number = 500,
-  details?: any
+  details?: unknown
 ): NextResponse<ApiErrorResponse> {
   // Use standardized API error shape
   return apiError(error, code, status, details);

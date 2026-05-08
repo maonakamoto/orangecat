@@ -27,8 +27,9 @@ function setMessageSyncUser(id: string | null): void {
 /**
  * Classifies errors as permanent (should be removed) or transient (should retry).
  */
-function classifyError(err: any): 'permanent' | 'transient' {
-  const status = err?.response?.status ?? err?.status;
+function classifyError(err: unknown): 'permanent' | 'transient' {
+  const e = err as { response?: { status?: number }; status?: number };
+  const status = e?.response?.status ?? e?.status;
   if (typeof status === 'number') {
     // 4xx errors (except 429) are permanent - don't retry
     if ([400, 401, 403, 404].includes(status)) {

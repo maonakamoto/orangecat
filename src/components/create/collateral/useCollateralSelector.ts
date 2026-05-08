@@ -8,6 +8,20 @@ import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { API_ROUTES } from '@/config/api-routes';
 import type { CollateralItem } from './CollateralSelector';
 
+interface AssetRow {
+  id: string;
+  title: string;
+  estimated_value?: number;
+  currency?: string;
+  verification_status?: string;
+}
+
+interface WalletRow {
+  id: string;
+  label: string;
+  balance_btc?: number;
+}
+
 interface UseCollateralSelectorParams {
   profileId?: string;
   selectedCollateral: CollateralItem[];
@@ -21,8 +35,8 @@ export function useCollateralSelector({
   onCollateralChange,
   loanAmount,
 }: UseCollateralSelectorParams) {
-  const [assets, setAssets] = useState<any[]>([]);
-  const [wallets, setWallets] = useState<any[]>([]);
+  const [assets, setAssets] = useState<AssetRow[]>([]);
+  const [wallets, setWallets] = useState<WalletRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAssetSelector, setShowAssetSelector] = useState(false);
   const [showWalletSelector, setShowWalletSelector] = useState(false);
@@ -66,7 +80,7 @@ export function useCollateralSelector({
     return Math.min(100, (totalCollateral / loanAmount) * 100);
   }, [totalCollateral, loanAmount]);
 
-  const handleAddAsset = (asset: any) => {
+  const handleAddAsset = (asset: AssetRow) => {
     onCollateralChange([
       ...selectedCollateral,
       {
@@ -81,7 +95,7 @@ export function useCollateralSelector({
     setShowAssetSelector(false);
   };
 
-  const handleAddWallet = (wallet: any) => {
+  const handleAddWallet = (wallet: WalletRow) => {
     const btcValue = wallet.balance_btc || 0;
     onCollateralChange([
       ...selectedCollateral,

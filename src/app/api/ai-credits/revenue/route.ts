@@ -30,7 +30,8 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     // Get all assistants owned by this user with revenue stats
     const { data: assistants, error: assistantsError } = await supabase
       .from(DATABASE_TABLES.AI_ASSISTANTS)
-      .select(`
+      .select(
+        `
         id,
         name,
         avatar_url,
@@ -39,17 +40,23 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
         total_messages,
         pricing_model,
         price_per_message
-      `)
+      `
+      )
       .eq('user_id', user.id)
       .order('total_revenue_btc', { ascending: false });
 
-    if (assistantsError) {throw assistantsError;}
+    if (assistantsError) {
+      throw assistantsError;
+    }
 
-    const assistantRows = assistants || [];
+    const assistantRows = (assistants || []) as AssistantRevenue[];
 
-    const totalRevenueBtc = assistantRows.reduce((sum: number, a: any) => sum + (a.total_revenue_btc || 0), 0);
-    const totalConversations = assistantRows.reduce((sum: number, a: any) => sum + (a.total_conversations || 0), 0);
-    const totalMessages = assistantRows.reduce((sum: number, a: any) => sum + (a.total_messages || 0), 0);
+    const totalRevenueBtc = assistantRows.reduce((sum, a) => sum + (a.total_revenue_btc || 0), 0);
+    const totalConversations = assistantRows.reduce(
+      (sum, a) => sum + (a.total_conversations || 0),
+      0
+    );
+    const totalMessages = assistantRows.reduce((sum, a) => sum + (a.total_messages || 0), 0);
 
     const { data: earnings } = await supabase
       .from(DATABASE_TABLES.AI_CREATOR_EARNINGS)
@@ -67,16 +74,18 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
         total_messages: totalMessages,
         total_assistants: assistants?.length || 0,
       },
-      assistants: assistantRows.map((a: any): AssistantRevenue => ({
-        id: a.id,
-        name: a.name,
-        avatar_url: a.avatar_url,
-        total_revenue_btc: a.total_revenue_btc || 0,
-        total_conversations: a.total_conversations || 0,
-        total_messages: a.total_messages || 0,
-        pricing_model: a.pricing_model || 'free',
-        price_per_message: a.price_per_message || 0,
-      })),
+      assistants: assistantRows.map(
+        (a): AssistantRevenue => ({
+          id: a.id,
+          name: a.name,
+          avatar_url: a.avatar_url,
+          total_revenue_btc: a.total_revenue_btc || 0,
+          total_conversations: a.total_conversations || 0,
+          total_messages: a.total_messages || 0,
+          pricing_model: a.pricing_model || 'free',
+          price_per_message: a.price_per_message || 0,
+        })
+      ),
     });
   } catch (error) {
     logger.error('Failed to get revenue', { error });

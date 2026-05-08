@@ -10,9 +10,16 @@
 
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
-import type { TimelineDisplayEvent } from '@/types/timeline';
-import type { TimelineActorType } from '@/types/timeline';
-import { mapDbEventToTimelineEvent, getEventIcon, getEventColor, getEventDisplayType, formatAmount, getTimeAgo, isEventRecent } from '@/services/timeline/formatters';
+import type { TimelineDisplayEvent, TimelineEventDb, TimelineActorType } from '@/types/timeline';
+import {
+  mapDbEventToTimelineEvent,
+  getEventIcon,
+  getEventColor,
+  getEventDisplayType,
+  formatAmount,
+  getTimeAgo,
+  isEventRecent,
+} from '@/services/timeline/formatters';
 
 /**
  * Get current user ID helper
@@ -32,12 +39,29 @@ export async function getCurrentUserId(): Promise<string | null> {
 /**
  * Helper to transform enriched view events to display events
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function transformEnrichedEventToDisplay(event: any): TimelineDisplayEvent {
+type ActorData = { id: string; username?: string; display_name?: string; avatar_url?: string };
+type SubjectData = {
+  id: string;
+  type: string;
+  username?: string;
+  display_name?: string;
+  title?: string;
+};
+type EnrichedEventRow = TimelineEventDb & {
+  actor_data?: ActorData | null;
+  subject_data?: SubjectData | null;
+  target_data?: SubjectData | null;
+};
+
+export function transformEnrichedEventToDisplay(event: EnrichedEventRow): TimelineDisplayEvent {
   const timelineEvent = mapDbEventToTimelineEvent(event);
 
   // Omit eventType and eventSubtype as TimelineDisplayEvent extends Omit<TimelineEvent, 'eventType' | 'eventSubtype'>
-  const { eventType: _eventType, eventSubtype: _eventSubtype, ...eventWithoutTypes } = timelineEvent;
+  const {
+    eventType: _eventType,
+    eventSubtype: _eventSubtype,
+    ...eventWithoutTypes
+  } = timelineEvent;
 
   return {
     ...eventWithoutTypes,
@@ -92,4 +116,3 @@ export function transformEnrichedEventToDisplay(event: any): TimelineDisplayEven
     isRecent: isEventRecent(timelineEvent.eventTimestamp),
   };
 }
-

@@ -18,8 +18,7 @@ interface LogEntry {
   timestamp: string;
   level: LogLevel;
   message: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any;
+  data?: unknown;
   source?: string;
 }
 
@@ -61,8 +60,12 @@ class Logger {
     return LOG_LEVELS[level] >= LOG_LEVELS[LOGGER_CONFIG.activeLevel as LogLevel];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private formatLogEntry(level: LogLevel, message: string, data?: any, source?: string): LogEntry {
+  private formatLogEntry(
+    level: LogLevel,
+    message: string,
+    data?: unknown,
+    source?: string
+  ): LogEntry {
     return {
       timestamp: new Date().toISOString(),
       level,
@@ -111,32 +114,28 @@ class Logger {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  debug(message: string, data?: any, source?: string): void {
+  debug(message: string, data?: unknown, source?: string): void {
     if (!this.shouldLog('debug')) {
       return;
     }
     this.output(this.formatLogEntry('debug', message, data, source));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  info(message: string, data?: any, source?: string): void {
+  info(message: string, data?: unknown, source?: string): void {
     if (!this.shouldLog('info')) {
       return;
     }
     this.output(this.formatLogEntry('info', message, data, source));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  warn(message: string, data?: any, source?: string): void {
+  warn(message: string, data?: unknown, source?: string): void {
     if (!this.shouldLog('warn')) {
       return;
     }
     this.output(this.formatLogEntry('warn', message, data, source));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error(message: string, data?: any, source?: string): void {
+  error(message: string, data?: unknown, source?: string): void {
     if (!this.shouldLog('error')) {
       return;
     }
@@ -144,28 +143,23 @@ class Logger {
   }
 
   // Specialized logging methods
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  supabase(message: string, data?: any): void {
+  supabase(message: string, data?: unknown): void {
     this.info(`[Supabase] ${message}`, data, 'supabase');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  auth(message: string, data?: any): void {
+  auth(message: string, data?: unknown): void {
     this.info(`[Auth] ${message}`, data, 'auth');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  api(message: string, data?: any): void {
+  api(message: string, data?: unknown): void {
     this.info(`[API] ${message}`, data, 'api');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  database(message: string, data?: any): void {
+  database(message: string, data?: unknown): void {
     this.info(`[Database] ${message}`, data, 'database');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  performance(message: string, data?: any): void {
+  performance(message: string, data?: unknown): void {
     this.debug(`[Performance] ${message}`, data, 'performance');
   }
 }

@@ -27,7 +27,7 @@ registerQueueStore(STORE_NAME, () => {
  * Adds a post to the offline queue.
  * @param payload - The data required to make the post API call.
  */
-export async function addToQueue(payload: any, userId: string): Promise<void> {
+export async function addToQueue(payload: unknown, userId: string): Promise<void> {
   await addToQueueStore(STORE_NAME, payload, userId);
 }
 
@@ -35,7 +35,7 @@ export async function addToQueue(payload: any, userId: string): Promise<void> {
  * Retrieves all posts from the offline queue, sorted by creation time.
  */
 export async function getQueue(): Promise<QueuedPost[]> {
-  return getQueueStore<any>(STORE_NAME);
+  return getQueueStore<unknown>(STORE_NAME);
 }
 
 /**

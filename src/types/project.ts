@@ -29,8 +29,9 @@ export interface Project {
   updated_at: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function mapProjectRow(row: any): Project {
+type ProjectRow = Omit<Project, 'goal_currency'> & { currency: string };
+
+export function mapProjectRow(row: ProjectRow): Project {
   return {
     ...row,
     goal_currency: row.currency,

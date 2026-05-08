@@ -15,8 +15,8 @@ import { useState, useEffect } from 'react';
 import { CollateralSelector, type CollateralItem } from './CollateralSelector';
 
 interface LoanCollateralFieldProps {
-  formData: Record<string, any>;
-  onFieldChange: (field: string, value: any) => void;
+  formData: Record<string, unknown>;
+  onFieldChange: (field: string, value: unknown) => void;
   disabled?: boolean;
 }
 
