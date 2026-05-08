@@ -32,7 +32,7 @@ export interface Event {
   timezone?: string | null;
   is_all_day?: boolean | null;
   is_recurring?: boolean | null;
-  recurrence_pattern?: any | null;
+  recurrence_pattern?: Record<string, unknown> | null;
   venue_name?: string | null;
   venue_address?: string | null;
   venue_city?: string | null;

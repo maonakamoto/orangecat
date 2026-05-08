@@ -79,7 +79,7 @@ export function transformEnrichedEventToDisplay(event: EnrichedEventRow): Timeli
           type: 'user' as TimelineActorType,
         }
       : {
-          id: event.actor_id || 'unknown',
+          id: event.actorId || 'unknown',
           name: 'Unknown',
           type: 'user' as TimelineActorType,
         },
@@ -88,9 +88,9 @@ export function transformEnrichedEventToDisplay(event: EnrichedEventRow): Timeli
           id: event.subject_data.id,
           name:
             event.subject_data.type === 'profile'
-              ? event.subject_data.display_name || event.subject_data.username
-              : event.subject_data.title,
-          type: event.subject_data.type,
+              ? event.subject_data.display_name || event.subject_data.username || ''
+              : event.subject_data.title || '',
+          type: event.subject_data.type as import('@/types/timeline').TimelineSubjectType,
           url:
             event.subject_data.type === 'profile'
               ? `/profiles/${event.subject_data.username || event.subject_data.id}`
@@ -102,9 +102,9 @@ export function transformEnrichedEventToDisplay(event: EnrichedEventRow): Timeli
           id: event.target_data.id,
           name:
             event.target_data.type === 'profile'
-              ? event.target_data.display_name || event.target_data.username
-              : event.target_data.title,
-          type: event.target_data.type,
+              ? event.target_data.display_name || event.target_data.username || ''
+              : event.target_data.title || '',
+          type: event.target_data.type as import('@/types/timeline').TimelineSubjectType,
           url:
             event.target_data.type === 'profile'
               ? `/profiles/${event.target_data.username || event.target_data.id}`

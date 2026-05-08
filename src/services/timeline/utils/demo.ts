@@ -1,8 +1,8 @@
 /**
  * Timeline Demo Data Utilities
- * 
+ *
  * Generates demo timeline events for testing UI when database is not available.
- * 
+ *
  * Created: 2025-01-28
  * Last Modified: 2025-01-28
  * Last Modified Summary: Extracted demo data generation from monolithic timeline service
@@ -11,21 +11,18 @@
 /**
  * Generate demo timeline events for testing UI when database is not available
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getDemoTimelineEvents(userId: string): any[] {
+export function getDemoTimelineEvents(userId: string): Record<string, unknown>[] {
   const now = new Date();
 
   // Get user-created posts from localStorage
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const storedPosts = JSON.parse(localStorage.getItem('mock_timeline_posts') || '[]').filter(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (post: any) => post.actor_id === userId
-  ); // Only show user's own posts
+  const storedPosts = (
+    JSON.parse(localStorage.getItem('mock_timeline_posts') || '[]') as Record<string, unknown>[]
+  ).filter(post => (post as { actor_id?: string }).actor_id === userId); // Only show user's own posts
 
   // Demo posts (only show if no user posts exist)
-  const demoPosts =
+  const demoPosts: Record<string, unknown>[] =
     storedPosts.length === 0
-      ? [
+      ? ([
           {
             id: 'demo-1',
             event_type: 'status_update',
@@ -107,12 +104,9 @@ export function getDemoTimelineEvents(userId: string): any[] {
             user_shared: false,
             user_commented: false,
           },
-        ]
+        ] as Record<string, unknown>[])
       : [];
 
   // Combine user posts with demo posts
   return [...storedPosts, ...demoPosts];
 }
-
-
-

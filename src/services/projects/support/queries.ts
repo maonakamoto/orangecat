@@ -123,8 +123,16 @@ export async function getProjectSupport(
       };
     }
 
+    type SupportRow = Omit<ProjectSupportWithUser, 'user'> & {
+      profiles?: {
+        id: string;
+        username: string | null;
+        name: string | null;
+        avatar_url: string | null;
+      } | null;
+    };
     // Transform data to include user profile
-    const supports: ProjectSupportWithUser[] = (data || []).map((item: any) => ({
+    const supports: ProjectSupportWithUser[] = ((data || []) as SupportRow[]).map(item => ({
       ...item,
       user: item.profiles
         ? {

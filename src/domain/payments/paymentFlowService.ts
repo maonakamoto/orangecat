@@ -22,6 +22,7 @@ import type {
   InitiatePaymentResult,
   PaymentStatusResult,
   PaymentIntentStatus,
+  PaymentIntent,
 } from './types';
 import { logger } from '@/utils/logger';
 import { sendSellerPaymentNotification } from '@/lib/email/send-seller-notification';
@@ -334,8 +335,7 @@ async function updatePaymentStatus(
  */
 async function handlePaymentConfirmed(
   supabase: SupabaseClient,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  paymentIntent: any
+  paymentIntent: PaymentIntent
 ): Promise<void> {
   const piId = paymentIntent.id;
   const entityType = paymentIntent.entity_type as EntityType;

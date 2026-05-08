@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { logger } from '@/utils/logger';
 import { TimelineVisibility } from '@/types/timeline';
+import type { TimelineDisplayEvent } from '@/types/timeline';
 import {
   formatPostError,
   submitPost,
@@ -10,19 +11,22 @@ import {
 const MAX_RETRY_ATTEMPTS = 3;
 const RETRY_DELAY = 2000;
 
+type PostUser = {
+  id: string;
+  email?: string;
+  user_metadata?: { name?: string; avatar_url?: string };
+};
+
 interface UsePostSubmissionOptions {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user: any;
+  user: PostUser | null;
   content: string;
   subjectType: 'profile' | 'project';
   subjectId: string | undefined;
   visibility: TimelineVisibility;
   selectedProjects: string[];
   parentEventId: string | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onOptimisticUpdate: ((event: any) => void) | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSuccess: ((event?: any) => void) | undefined;
+  onOptimisticUpdate: ((event: TimelineDisplayEvent) => void) | undefined;
+  onSuccess: ((event?: TimelineDisplayEvent) => void) | undefined;
   contentValid: boolean;
   enableRetry: boolean;
   clearDraft: () => void;

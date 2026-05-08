@@ -14,17 +14,12 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
  * Last Modified Summary: Initial creation of reusable entity list hook
  */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface UseEntityListOptions<T = any> {
+interface UseEntityListOptions<T = Record<string, unknown>> {
   apiEndpoint: string;
   userId?: string;
   limit?: number;
   enabled?: boolean;
   queryParams?: Record<string, string | number>;
-  /**
-   * Optional transform function to convert API response to expected format.
-   * Useful when API returns data in a different structure.
-   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transformResponse?: (data: any) => { items: T[]; total: number };
 }

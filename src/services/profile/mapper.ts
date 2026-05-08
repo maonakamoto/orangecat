@@ -8,6 +8,20 @@
 
 import type { ScalableProfile } from './types';
 
+type DbProfileRow = {
+  id: string;
+  username: string | null;
+  name: string | null;
+  avatar_url: string | null;
+  banner_url: string | null;
+  bio: string | null;
+  website: string | null;
+  bitcoin_address: string | null;
+  lightning_address: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 // =====================================================================
 // 🔄 SCHEMA MAPPING UTILITIES
 // =====================================================================
@@ -16,7 +30,7 @@ export class ProfileMapper {
   /**
    * Map database row to scalable profile interface
    */
-  static mapDatabaseToProfile(dbRow: any): ScalableProfile | null {
+  static mapDatabaseToProfile(dbRow: DbProfileRow | null): ScalableProfile | null {
     if (!dbRow) {
       return null;
     }
@@ -76,9 +90,9 @@ export class ProfileMapper {
   /**
    * Map profile object to database format
    */
-  static mapProfileToDatabase(profile: Partial<ScalableProfile>): any {
+  static mapProfileToDatabase(profile: Partial<ScalableProfile>): Record<string, string> {
     // Core fields that go directly to database columns
-    const coreFields: any = {
+    const coreFields: Record<string, string | null> = {
       username: profile.username || null,
       name: profile.name || null,
       avatar_url: profile.avatar_url || null,
@@ -91,10 +105,10 @@ export class ProfileMapper {
     };
 
     // Only include fields that are not null/undefined
-    const cleanFields: any = {};
+    const cleanFields: Record<string, string> = {};
     Object.keys(coreFields).forEach(key => {
       if (coreFields[key] !== null && coreFields[key] !== undefined) {
-        cleanFields[key] = coreFields[key];
+        cleanFields[key] = coreFields[key] as string;
       }
     });
 

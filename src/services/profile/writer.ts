@@ -140,7 +140,8 @@ export class ProfileWriter {
 
       const { data, error } = await supabase
         .from(DATABASE_TABLES.PROFILES)
-        .insert(insertData)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .insert(insertData as any)
         .select('*')
         .single();
 

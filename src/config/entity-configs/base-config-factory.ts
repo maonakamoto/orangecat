@@ -16,6 +16,7 @@ import type {
   FieldConfig,
   GuidanceContent,
   WizardConfig,
+  EntityTemplate,
 } from '@/components/create/types';
 import type { ZodType } from 'zod';
 import { getEntityMetadata, type EntityType } from '@/config/entity-registry';
@@ -132,7 +133,7 @@ export interface BaseConfigOptions<T extends Record<string, any>> {
     hint?: string;
   };
   /** Optional templates */
-  templates?: any[];
+  templates?: EntityTemplate[];
   /** Optional info banner */
   infoBanner?: {
     title: string;

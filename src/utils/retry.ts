@@ -119,9 +119,10 @@ export async function withApiRetry<T>(
       if (!error) {
         return false;
       }
+      const e = error as ErrorLike;
 
       // HTTP status codes
-      const status = error?.response?.status || error?.status;
+      const status = e.response?.status || e.status;
       if (typeof status === 'number') {
         // Retry on server errors, rate limiting, and network issues
         if (status >= 500 || status === 429 || status === 0) {
@@ -138,17 +139,17 @@ export async function withApiRetry<T>(
       }
 
       // Network errors
-      if (error.name === 'NetworkError' || error.code === 'NETWORK_ERROR') {
+      if (e.name === 'NetworkError' || e.code === 'NETWORK_ERROR') {
         return true;
       }
 
       // Timeout errors
-      if (error.name === 'TimeoutError' || error.code === 'ETIMEDOUT') {
+      if (e.name === 'TimeoutError' || e.code === 'ETIMEDOUT') {
         return true;
       }
 
       // Fetch errors
-      if (error.message?.includes('fetch')) {
+      if (e.message?.includes('fetch')) {
         return true;
       }
 

@@ -23,8 +23,7 @@ import type { PaymentIntent } from './types';
  */
 export async function checkNWCPaymentStatus(
   supabase: SupabaseClient,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  paymentIntent: any
+  paymentIntent: PaymentIntent
 ): Promise<boolean> {
   if (!paymentIntent.payment_hash) {
     return false;

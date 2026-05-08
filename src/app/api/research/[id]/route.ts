@@ -26,15 +26,19 @@ async function verifyResearchOwner(
   userId: string,
   extraFields = ''
 ) {
-  const { data, error } = await supabase
+  const result = (await supabase
     .from(getTableName('research'))
     .select(`user_id${extraFields ? ', ' + extraFields : ''}`)
     .eq('id', id)
-    .single();
+    .single()) as {
+    data: { user_id: string; funding_raised_btc?: number } | null;
+    error: { code?: string } | null;
+  };
+  const { data, error } = result;
   if (error) {
     return error.code === 'PGRST116' ? 'not_found' : ('error' as const);
   }
-  if (data.user_id !== userId) {
+  if (!data || data.user_id !== userId) {
     return 'forbidden' as const;
   }
   return data;
@@ -159,7 +163,7 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest, context: Ro
     if (ownership === 'error') {
       return handleApiError(new Error('DB error'));
     }
-    if (ownership.funding_raised_btc > 0) {
+    if ((ownership.funding_raised_btc ?? 0) > 0) {
       return apiForbidden('Cannot delete research entity with funding. Archive instead.');
     }
 

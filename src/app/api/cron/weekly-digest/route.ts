@@ -11,7 +11,6 @@
 
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/types/supabase';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { buildWeeklyDigest } from '@/services/notifications/digestBuilder';
 import { NotificationEmailService } from '@/services/notifications/emailService';
@@ -30,7 +29,7 @@ function verifyCronSecret(request: Request): boolean {
 }
 
 /** Returns IDs of users who should receive a weekly digest (explicit weekly pref, or no pref row = default weekly). */
-async function getUserIdsForDigest(admin: SupabaseClient<Database>): Promise<string[]> {
+async function getUserIdsForDigest(admin: SupabaseClient): Promise<string[]> {
   const [{ data: explicitWeekly }, { data: allPrefs }, { data: allProfiles }] = await Promise.all([
     admin
       .from(DATABASE_TABLES.NOTIFICATION_PREFERENCES)

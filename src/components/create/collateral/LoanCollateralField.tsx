@@ -45,8 +45,8 @@ export function LoanCollateralField({
     <CollateralSelector
       selectedCollateral={collateral}
       onCollateralChange={handleCollateralChange}
-      loanAmount={formData.original_amount}
-      loanCurrency={formData.currency || 'CHF'}
+      loanAmount={formData.original_amount as number | undefined}
+      loanCurrency={(formData.currency as string) || 'CHF'}
       disabled={disabled}
     />
   );

@@ -32,19 +32,14 @@ export type AIProvider = 'groq' | 'openrouter';
 
 /** Minimal interface both Groq and OpenRouter services satisfy */
 interface AiService {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   streamChatCompletion(opts: {
     model: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     messages: any[];
     temperature: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  }): AsyncIterable<{ content?: string; usage?: any; done?: boolean }>;
-  chatCompletion(opts: {
-    model: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    messages: any[];
-    temperature: number;
-  }): Promise<{
+  }): AsyncIterable<{ content?: string; usage?: unknown; done?: boolean }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  chatCompletion(opts: { model: string; messages: any[]; temperature: number }): Promise<{
     content: string;
     model: string;
     inputTokens: number;
