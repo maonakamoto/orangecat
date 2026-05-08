@@ -17,7 +17,7 @@ import type { WalletBehaviorType, WalletCategory, BudgetPeriod } from '@/types/w
  * Entity types that Cat can suggest creating.
  * Subset of the full EntityType from the entity registry.
  */
-export type CatCreatableEntityType = Extract<
+type CatCreatableEntityType = Extract<
   EntityType,
   | 'product'
   | 'service'

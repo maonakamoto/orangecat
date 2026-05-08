@@ -8,11 +8,11 @@
 import { type CurrencyCode } from '@/config/currencies';
 import type { OffsetPagination } from '@/types/pagination';
 
-export type LoanStatus = 'active' | 'paid_off' | 'refinanced' | 'defaulted' | 'cancelled';
+type LoanStatus = 'active' | 'paid_off' | 'refinanced' | 'defaulted' | 'cancelled';
 
-export type LoanOfferStatus = 'pending' | 'accepted' | 'rejected' | 'expired' | 'cancelled';
+type LoanOfferStatus = 'pending' | 'accepted' | 'rejected' | 'expired' | 'cancelled';
 
-export type LoanOfferType = 'refinance' | 'payoff';
+type LoanOfferType = 'refinance' | 'payoff';
 
 export type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
 
@@ -20,7 +20,7 @@ export type PaymentType = 'monthly' | 'lump_sum' | 'refinance' | 'payoff';
 
 // Use CurrencyCode directly from @/config/currencies instead of creating an alias
 
-export type ContactMethod = 'platform' | 'email' | 'phone';
+type ContactMethod = 'platform' | 'email' | 'phone';
 
 export type PaymentMethod = 'bitcoin' | 'lightning' | 'bank_transfer' | 'card' | 'other';
 
@@ -36,9 +36,9 @@ export interface LoanCategory {
   updated_at: string;
 }
 
-export type LoanType = 'new_request' | 'existing_loan';
+type LoanType = 'new_request' | 'existing_loan';
 
-export type FulfillmentType = 'lightning' | 'onchain' | 'bank_transfer' | 'other';
+type FulfillmentType = 'lightning' | 'onchain' | 'bank_transfer' | 'other';
 
 export interface Loan {
   id: string;
@@ -98,7 +98,7 @@ export interface LoanOffer {
   rejected_at?: string;
 }
 
-export interface LoanPayment {
+interface LoanPayment {
   id: string;
   loan_id: string;
   offer_id?: string;

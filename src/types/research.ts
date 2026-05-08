@@ -8,7 +8,7 @@ import type {
   ResearchTimeline as TimelineType,
 } from '@/config/research';
 
-export interface TeamMember {
+interface TeamMember {
   id?: string;
   name: string;
   role: string;
@@ -18,7 +18,7 @@ export interface TeamMember {
   wallet_address?: string;
 }
 
-export interface ResourceNeed {
+interface ResourceNeed {
   type:
     | 'compute'
     | 'data'
@@ -33,7 +33,7 @@ export interface ResourceNeed {
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
 
-export interface ImpactArea {
+interface ImpactArea {
   area:
     | 'scientific_understanding'
     | 'technological_innovation'
@@ -48,12 +48,12 @@ export interface ImpactArea {
   description?: string;
 }
 
-export interface SDGAlignment {
+interface SDGAlignment {
   goal: string; // UN SDG identifier
   description?: string;
 }
 
-export interface ResearchProgress {
+interface ResearchProgress {
   id: string;
   title: string;
   description: string;
@@ -68,7 +68,7 @@ export interface ResearchProgress {
   };
 }
 
-export interface ResearchVote {
+interface ResearchVote {
   id: string;
   user_id: string;
   research_entity_id: string;
@@ -78,7 +78,7 @@ export interface ResearchVote {
   created_at: string;
 }
 
-export interface FundingContribution {
+interface FundingContribution {
   id: string;
   user_id: string;
   amount_btc: number;

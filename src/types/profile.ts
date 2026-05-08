@@ -40,9 +40,9 @@ export interface Profile {
   verification_status?: VerificationStatus;
 }
 
-export type ProfileType = 'individual' | 'project' | 'organization' | 'collective';
+type ProfileType = 'individual' | 'project' | 'organization' | 'collective';
 
-export interface AssociatedEntity {
+interface AssociatedEntity {
   id: string;
   type: ProfileType;
   name: string;
@@ -50,7 +50,7 @@ export interface AssociatedEntity {
   verified: boolean;
 }
 
-export type RelationshipType =
+type RelationshipType =
   | 'creator'
   | 'collaborator'
   | 'supporter'
@@ -59,7 +59,7 @@ export type RelationshipType =
   | 'founder'
   | 'participant';
 
-export interface ImpactMetric {
+interface ImpactMetric {
   label: string;
   value: string | number;
   description?: string;
