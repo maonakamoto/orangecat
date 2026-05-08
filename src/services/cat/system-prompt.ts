@@ -9,7 +9,7 @@
  * Last Modified Summary: Expanded for diverse use cases, added wallet awareness
  */
 
-export interface CatSystemPromptContext {
+interface CatSystemPromptContext {
   /** Optional user-specific context string (entities, profile, wallets, etc.) */
   userContext?: string;
 }

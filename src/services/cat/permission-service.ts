@@ -15,7 +15,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 
 // ==================== TYPES ====================
 
-export interface CatPermission {
+interface CatPermission {
   id: string;
   user_id: string;
   action_id: string; // Specific action ID or '*' for category-wide
@@ -28,7 +28,7 @@ export interface CatPermission {
   updated_at: string;
 }
 
-export interface PermissionCheck {
+interface PermissionCheck {
   allowed: boolean;
   reason?: string;
   requiresConfirmation: boolean;
@@ -36,7 +36,7 @@ export interface PermissionCheck {
   dailyLimit?: number;
 }
 
-export interface UserPermissionSummary {
+interface UserPermissionSummary {
   categories: {
     category: ActionCategory;
     name: string;

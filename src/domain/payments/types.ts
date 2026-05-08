@@ -48,13 +48,7 @@ export interface PaymentIntent {
 // ORDER
 // =====================================================================
 
-export type OrderStatus =
-  | 'pending_payment'
-  | 'paid'
-  | 'shipped'
-  | 'completed'
-  | 'cancelled'
-  | 'refunded';
+type OrderStatus = 'pending_payment' | 'paid' | 'shipped' | 'completed' | 'cancelled' | 'refunded';
 
 export interface Order {
   id: string;
@@ -89,26 +83,6 @@ export interface Contribution {
   message: string | null;
   is_anonymous: boolean;
   created_at: string;
-}
-
-// =====================================================================
-// SHIPPING ADDRESS
-// =====================================================================
-
-export interface ShippingAddress {
-  id: string;
-  user_id: string;
-  label: string | null;
-  full_name: string;
-  street: string;
-  street2: string | null;
-  city: string;
-  state: string | null;
-  postal_code: string;
-  country_code: string;
-  is_default: boolean;
-  created_at: string;
-  updated_at: string;
 }
 
 // =====================================================================

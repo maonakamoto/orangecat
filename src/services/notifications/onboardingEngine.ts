@@ -40,7 +40,7 @@ export interface OnboardingState {
   onboardingComplete: boolean;
 }
 
-export interface OnboardingEmail {
+interface OnboardingEmail {
   type: string;
   data: Record<string, unknown>;
 }

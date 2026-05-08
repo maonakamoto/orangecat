@@ -23,7 +23,7 @@ import { WALLET_CATEGORIES } from '@/types/wallet';
 const VALID_WALLET_CATEGORIES = Object.keys(WALLET_CATEGORIES);
 const VALID_BEHAVIOR_TYPES = ['general', 'recurring_budget', 'one_time_goal'];
 
-export interface ParsedResponse {
+interface ParsedResponse {
   /** The response text with action blocks removed */
   message: string;
   /** Any valid action blocks found in the response */

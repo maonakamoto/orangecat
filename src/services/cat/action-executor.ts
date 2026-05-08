@@ -21,14 +21,14 @@ export { parseReminderDate } from './handlers/date-utils';
 
 // ==================== TYPES ====================
 
-export interface ActionRequest {
+interface ActionRequest {
   actionId: string;
   parameters: Record<string, unknown>;
   conversationId?: string;
   messageId?: string;
 }
 
-export interface ActionResult {
+interface ActionResult {
   success: boolean;
   actionId: string;
   status: 'completed' | 'failed' | 'pending_confirmation' | 'denied';

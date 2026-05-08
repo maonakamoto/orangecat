@@ -54,7 +54,7 @@ export interface UserContext {
 /**
  * Action associated with a task
  */
-export interface TaskAction {
+interface TaskAction {
   /** Button label */
   label: string;
   /** Navigation URL */
@@ -109,16 +109,4 @@ export interface SmartQuestion {
   action: TaskAction;
   /** Condition function */
   condition: (context: UserContext) => boolean;
-}
-
-/**
- * Aggregated user stats from API
- */
-export interface UserStats {
-  profileCompletion: number;
-  hasWallet: boolean;
-  entityCounts: Partial<Record<EntityType, number>>;
-  daysSinceLastActivity: number | null;
-  hasPublishedEntities: boolean;
-  wishlistItemCount: number;
 }
