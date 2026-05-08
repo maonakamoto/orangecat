@@ -17,7 +17,7 @@ import {
   TrendingUp,
   MessageSquare,
 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { formatDate } from '@/utils/dates';
 import { LoanOffersDialog } from './LoanOffersDialog';
 import { CreateLoanDialog } from './CreateLoanDialog';
@@ -159,9 +159,7 @@ export function LoanList({ loans, onLoanUpdated }: LoanListProps) {
                   )}
                   <div className="flex items-center gap-2 text-sm">
                     <span className="text-muted-foreground">Listed:</span>
-                    <span>
-                      {formatDistanceToNow(new Date(loan.created_at), { addSuffix: true })}
-                    </span>
+                    <span>{formatRelativeTime(loan.created_at)}</span>
                   </div>
                 </div>
 

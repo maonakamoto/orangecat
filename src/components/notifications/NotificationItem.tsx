@@ -11,7 +11,7 @@ import {
   Settings,
   Trash2,
 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { type Notification } from '@/hooks/useNotifications';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -84,7 +84,7 @@ export function NotificationItem({
                 </p>
               )}
               <p className="text-xs text-gray-500 mt-2">
-                {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
+                {formatRelativeTime(notification.created_at)}
               </p>
             </div>
 

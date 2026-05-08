@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { Users, MessageSquare, Trash2 } from 'lucide-react';
 import AvatarLink from '@/components/ui/AvatarLink';
 import { cn } from '@/lib/utils';
@@ -186,9 +186,7 @@ export function ConversationListItem({
             <div className="flex items-center gap-2 text-xs text-gray-500">
               <span>
                 {conversation.last_message_at
-                  ? formatDistanceToNow(new Date(conversation.last_message_at), {
-                      addSuffix: true,
-                    })
+                  ? formatRelativeTime(conversation.last_message_at)
                   : 'No messages'}
               </span>
               <span className="w-1 h-1 rounded-full bg-gray-300" />

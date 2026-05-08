@@ -14,7 +14,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { Clock, CheckCircle2, XCircle } from 'lucide-react';
 import { getStatusBadge, getStatusIcon, getTypeLabel } from './utils';
 import { PROPOSAL_STATUSES, type ProposalStatus } from '@/config/proposal-constants';
@@ -47,7 +47,9 @@ interface ProposalCardProps {
 export function ProposalCard({ proposal }: ProposalCardProps) {
   // Calculate yes_percentage if not provided
   const getYesPercentage = () => {
-    if (!proposal.voting_results) {return 0;}
+    if (!proposal.voting_results) {
+      return 0;
+    }
     if (proposal.voting_results.yes_percentage !== undefined) {
       return proposal.voting_results.yes_percentage;
     }
@@ -89,23 +91,17 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
                 </Badge>
               </span>
               {proposal.proposer && (
-                <span className="text-gray-500">
-                  by {proposal.proposer.name || 'Unknown'}
-                </span>
+                <span className="text-gray-500">by {proposal.proposer.name || 'Unknown'}</span>
               )}
             </div>
-            <span className="text-gray-400">
-              {formatDistanceToNow(new Date(proposal.created_at), { addSuffix: true })}
-            </span>
+            <span className="text-gray-400">{formatRelativeTime(proposal.created_at)}</span>
           </div>
 
           {proposal.status === PROPOSAL_STATUSES.ACTIVE && proposal.voting_results && (
             <div className="pt-2 border-t">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">Voting Progress</span>
-                <span className="font-medium">
-                  {yesPercentage.toFixed(1)}% Yes
-                </span>
+                <span className="font-medium">{yesPercentage.toFixed(1)}% Yes</span>
               </div>
               <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div
@@ -120,14 +116,15 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
                 {proposal.voting_ends_at && (
                   <span className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {formatDistanceToNow(new Date(proposal.voting_ends_at), { addSuffix: true })}
+                    {formatRelativeTime(proposal.voting_ends_at)}
                   </span>
                 )}
               </div>
             </div>
           )}
 
-          {(proposal.status === PROPOSAL_STATUSES.PASSED || proposal.status === PROPOSAL_STATUSES.FAILED) &&
+          {(proposal.status === PROPOSAL_STATUSES.PASSED ||
+            proposal.status === PROPOSAL_STATUSES.FAILED) &&
             proposal.voting_results && (
               <div className="pt-2 border-t">
                 <div className="flex items-center gap-2 text-sm">
@@ -162,4 +159,3 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
     </Card>
   );
 }
-

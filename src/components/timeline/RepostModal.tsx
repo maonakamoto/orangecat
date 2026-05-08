@@ -6,7 +6,7 @@ import Button from '@/components/ui/Button';
 import { TimelineDisplayEvent } from '@/types/timeline';
 import AvatarLink from '@/components/ui/AvatarLink';
 import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 
 const QUOTE_MAX_LENGTH = 280;
@@ -127,7 +127,7 @@ export function RepostModal({
   }, [isOpen, quoteText]);
 
   // Compute these unconditionally (hooks-safe: values are derived from props/state, not hooks)
-  const timeAgo = formatDistanceToNow(new Date(event.eventTimestamp), { addSuffix: true });
+  const timeAgo = formatRelativeTime(event.eventTimestamp);
   const remainingCharacters = QUOTE_MAX_LENGTH - quoteText.length;
   const currentActor = {
     id: currentUser?.id || 'me',

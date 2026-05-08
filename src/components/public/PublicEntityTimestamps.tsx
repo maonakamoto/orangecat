@@ -1,6 +1,6 @@
 import { Calendar, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
-import { formatDistanceToNow, format } from 'date-fns';
+import { formatRelativeTime, formatDate } from '@/utils/dates';
 
 interface PublicEntityTimestampsProps {
   createdAt: string;
@@ -19,13 +19,13 @@ export default function PublicEntityTimestamps({
         <div className="flex items-center gap-2 text-gray-600">
           <Calendar className="w-4 h-4" />
           <span>
-            {createdLabel} {format(new Date(createdAt), 'MMM d, yyyy')}
+            {createdLabel} {formatDate(createdAt)}
           </span>
         </div>
         {updatedAt && updatedAt !== createdAt && (
           <div className="flex items-center gap-2 text-gray-600">
             <Clock className="w-4 h-4" />
-            <span>Updated {formatDistanceToNow(new Date(updatedAt), { addSuffix: true })}</span>
+            <span>Updated {formatRelativeTime(updatedAt)}</span>
           </div>
         )}
       </CardContent>

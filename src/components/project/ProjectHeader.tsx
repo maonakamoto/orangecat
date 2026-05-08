@@ -8,7 +8,7 @@
 
 'use client';
 
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Edit, Share2, MessageCircle } from 'lucide-react';
@@ -189,7 +189,7 @@ export default function ProjectHeader({
               {statusInfo.label}
             </span>
             <time dateTime={project.created_at} className="text-sm text-gray-500">
-              Created {formatDistanceToNow(new Date(project.created_at), { addSuffix: true })}
+              Created {formatRelativeTime(project.created_at)}
             </time>
           </div>
         </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { ENTITY_REGISTRY, type EntityType } from '@/config/entity-registry';
@@ -25,7 +25,12 @@ interface GenericPublicCardProps {
   viewMode?: 'grid' | 'list';
 }
 
-export function GenericPublicCard({ entity, entityType, href, viewMode = 'grid' }: GenericPublicCardProps) {
+export function GenericPublicCard({
+  entity,
+  entityType,
+  href,
+  viewMode = 'grid',
+}: GenericPublicCardProps) {
   const meta = ENTITY_REGISTRY[entityType];
   const Icon = meta?.icon;
   const category = entity.category ?? entity.cause_category;
@@ -51,7 +56,7 @@ export function GenericPublicCard({ entity, entityType, href, viewMode = 'grid' 
                 </Badge>
               )}
               <span className="text-gray-400 whitespace-nowrap">
-                {formatDistanceToNow(new Date(entity.created_at), { addSuffix: true })}
+                {formatRelativeTime(entity.created_at)}
               </span>
             </div>
           </div>
@@ -72,7 +77,7 @@ export function GenericPublicCard({ entity, entityType, href, viewMode = 'grid' 
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-base truncate">{entity.title}</CardTitle>
                 <CardDescription className="text-xs">
-                  {formatDistanceToNow(new Date(entity.created_at), { addSuffix: true })}
+                  {formatRelativeTime(entity.created_at)}
                 </CardDescription>
               </div>
             </div>

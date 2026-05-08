@@ -14,7 +14,7 @@ import { DollarSign, Percent, TrendingUp, User } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import type { Loan } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
 import { formatCurrency as formatCurrencyFn } from '@/services/currency';
@@ -57,9 +57,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
                   {loan.interest_rate}%
                 </Badge>
               )}
-              <span className="text-gray-500">
-                {formatDistanceToNow(new Date(loan.created_at), { addSuffix: true })}
-              </span>
+              <span className="text-gray-500">{formatRelativeTime(loan.created_at)}</span>
             </div>
           </div>
         </Card>
@@ -79,7 +77,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-base truncate">{loan.title}</CardTitle>
                 <CardDescription className="text-xs">
-                  Listed {formatDistanceToNow(new Date(loan.created_at), { addSuffix: true })}
+                  Listed {formatRelativeTime(loan.created_at)}
                 </CardDescription>
               </div>
             </div>

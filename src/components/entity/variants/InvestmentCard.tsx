@@ -5,7 +5,7 @@ import { TrendingUp, Percent, Shield } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import type { Investment } from '@/types/investments';
 import { formatCurrency as formatCurrencyFn } from '@/services/currency';
 
@@ -29,8 +29,7 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCardProps) {
-  const formatAmount = (amount: number) =>
-    formatCurrencyFn(amount, investment.currency || 'USD');
+  const formatAmount = (amount: number) => formatCurrencyFn(amount, investment.currency || 'USD');
 
   const progress =
     investment.target_amount > 0
@@ -48,19 +47,19 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-gray-900 truncate">{investment.title}</h3>
               <p className="text-sm text-gray-500 truncate">
-                {formatAmount(investment.total_raised)} raised of {formatAmount(investment.target_amount)}
+                {formatAmount(investment.total_raised)} raised of{' '}
+                {formatAmount(investment.target_amount)}
               </p>
             </div>
             <div className="flex items-center gap-4 text-sm">
-              {investment.expected_return_rate !== null && investment.expected_return_rate !== undefined && (
-                <Badge variant="secondary" className="gap-1">
-                  <Percent className="h-3 w-3" />
-                  {investment.expected_return_rate}% return
-                </Badge>
-              )}
-              <span className="text-gray-500">
-                {formatDistanceToNow(new Date(investment.created_at), { addSuffix: true })}
-              </span>
+              {investment.expected_return_rate !== null &&
+                investment.expected_return_rate !== undefined && (
+                  <Badge variant="secondary" className="gap-1">
+                    <Percent className="h-3 w-3" />
+                    {investment.expected_return_rate}% return
+                  </Badge>
+                )}
+              <span className="text-gray-500">{formatRelativeTime(investment.created_at)}</span>
             </div>
           </div>
         </Card>
@@ -80,7 +79,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-base truncate">{investment.title}</CardTitle>
                 <CardDescription className="text-xs">
-                  Listed {formatDistanceToNow(new Date(investment.created_at), { addSuffix: true })}
+                  Listed {formatRelativeTime(investment.created_at)}
                 </CardDescription>
               </div>
             </div>
@@ -110,12 +109,13 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
           </div>
 
           <div className="flex items-center justify-between text-sm">
-            {investment.expected_return_rate !== null && investment.expected_return_rate !== undefined && (
-              <div className="flex items-center gap-1">
-                <Percent className="h-3 w-3 text-gray-400" />
-                <span>{investment.expected_return_rate}% expected return</span>
-              </div>
-            )}
+            {investment.expected_return_rate !== null &&
+              investment.expected_return_rate !== undefined && (
+                <div className="flex items-center gap-1">
+                  <Percent className="h-3 w-3 text-gray-400" />
+                  <span>{investment.expected_return_rate}% expected return</span>
+                </div>
+              )}
             {investment.risk_level && (
               <span
                 className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 ${
@@ -130,7 +130,8 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
 
           {investment.term_months !== null && investment.term_months !== undefined && (
             <p className="text-xs text-muted-foreground">
-              {investment.term_months}-month term · min {formatAmount(investment.minimum_investment)}
+              {investment.term_months}-month term · min{' '}
+              {formatAmount(investment.minimum_investment)}
             </p>
           )}
         </CardContent>

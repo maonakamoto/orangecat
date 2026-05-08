@@ -19,7 +19,7 @@ import { VotingProgress } from './VotingProgress';
 import { VoteButtons } from './VoteButtons';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { getStatusBadge, getTypeLabel } from './utils';
@@ -196,17 +196,12 @@ export function ProposalDetail({
             )}
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4" />
-              <span>
-                Created {formatDistanceToNow(new Date(proposal.created_at), { addSuffix: true })}
-              </span>
+              <span>Created {formatRelativeTime(proposal.created_at)}</span>
             </div>
             {proposal.voting_ends_at && proposal.status === PROPOSAL_STATUSES.ACTIVE && (
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-blue-500" />
-                <span>
-                  Voting ends{' '}
-                  {formatDistanceToNow(new Date(proposal.voting_ends_at), { addSuffix: true })}
-                </span>
+                <span>Voting ends {formatRelativeTime(proposal.voting_ends_at)}</span>
               </div>
             )}
           </div>

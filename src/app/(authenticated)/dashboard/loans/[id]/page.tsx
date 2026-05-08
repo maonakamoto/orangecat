@@ -4,7 +4,8 @@ import { formatCurrency } from '@/services/currency';
 import { Badge } from '@/components/ui/badge';
 import type { Loan } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
+import { calculateProgress } from '@/components/loans/useLoanList';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -21,13 +22,6 @@ interface PageProps {
  */
 export default async function LoanDetailPage({ params }: PageProps) {
   const { id } = await params;
-
-  function calculateProgress(original: number, remaining: number) {
-    if (original === 0) {
-      return 0;
-    }
-    return ((original - remaining) / original) * 100;
-  }
 
   return (
     <EntityDetailPage<Loan>
@@ -141,7 +135,7 @@ export default async function LoanDetailPage({ params }: PageProps) {
         if (loan.created_at) {
           right.push({
             label: 'Created',
-            value: `${formatDistanceToNow(new Date(loan.created_at), { addSuffix: true })} (${new Date(loan.created_at).toLocaleString()})`,
+            value: `${formatRelativeTime(loan.created_at)} (${new Date(loan.created_at).toLocaleString()})`,
           });
         }
 

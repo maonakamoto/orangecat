@@ -6,8 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/Button';
 import { Target, TrendingUp, Clock, CheckCircle, XCircle, Edit, MessageSquare } from 'lucide-react';
 import { STATUS } from '@/config/database-constants';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { getLoanOfferStatusColor } from './constants';
+import { formatLoanAmount } from './useLoanList';
 
 interface LoanOffersListProps {
   offers: LoanOffer[];
@@ -26,13 +27,6 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
       default:
         return <Clock className="h-4 w-4" />;
     }
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
   };
 
   if (offers.length === 0) {
@@ -61,9 +55,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
                     {offer.status}
                   </Badge>
                 </div>
-                <CardDescription>
-                  Made {formatDistanceToNow(new Date(offer.created_at), { addSuffix: true })}
-                </CardDescription>
+                <CardDescription>Made {formatRelativeTime(offer.created_at)}</CardDescription>
               </div>
               <div className="flex gap-1">
                 {offer.status === STATUS.LOAN_OFFERS.PENDING && (
@@ -81,7 +73,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Offer Amount</p>
                 <p className="text-lg font-semibold text-green-600">
-                  {formatCurrency(offer.offer_amount)}
+                  {formatLoanAmount(offer.offer_amount)}
                 </p>
               </div>
 
@@ -102,7 +94,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
               {offer.monthly_payment && (
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Monthly Payment</p>
-                  <p className="text-lg font-semibold">{formatCurrency(offer.monthly_payment)}</p>
+                  <p className="text-lg font-semibold">{formatLoanAmount(offer.monthly_payment)}</p>
                 </div>
               )}
             </div>
@@ -121,19 +113,13 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
             <div className="flex items-center justify-between pt-2 border-t">
               <div className="text-sm text-muted-foreground">
                 {offer.status === STATUS.LOAN_OFFERS.PENDING && offer.expires_at && (
-                  <span>
-                    Expires {formatDistanceToNow(new Date(offer.expires_at), { addSuffix: true })}
-                  </span>
+                  <span>Expires {formatRelativeTime(offer.expires_at)}</span>
                 )}
                 {offer.status === STATUS.LOAN_OFFERS.ACCEPTED && offer.accepted_at && (
-                  <span>
-                    Accepted {formatDistanceToNow(new Date(offer.accepted_at), { addSuffix: true })}
-                  </span>
+                  <span>Accepted {formatRelativeTime(offer.accepted_at)}</span>
                 )}
                 {offer.status === STATUS.LOAN_OFFERS.REJECTED && offer.rejected_at && (
-                  <span>
-                    Rejected {formatDistanceToNow(new Date(offer.rejected_at), { addSuffix: true })}
-                  </span>
+                  <span>Rejected {formatRelativeTime(offer.rejected_at)}</span>
                 )}
               </div>
 

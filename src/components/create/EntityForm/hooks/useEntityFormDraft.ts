@@ -1,23 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
+import { formatRelativeTime } from '@/utils/dates';
 import type { FormState, EntityConfig } from '../../types';
 
-export function formatRelativeTime(timestamp: string): string {
-  const now = Date.now();
-  const then = new Date(timestamp).getTime();
-  const seconds = Math.floor((now - then) / 1000);
-  if (seconds < 60) {
-    return 'just now';
-  }
-  if (seconds < 3600) {
-    return `${Math.floor(seconds / 60)} minute${Math.floor(seconds / 60) > 1 ? 's' : ''} ago`;
-  }
-  if (seconds < 86400) {
-    return `${Math.floor(seconds / 3600)} hour${Math.floor(seconds / 3600) > 1 ? 's' : ''} ago`;
-  }
-  return `${Math.floor(seconds / 86400)} day${Math.floor(seconds / 86400) > 1 ? 's' : ''} ago`;
-}
+export { formatRelativeTime };
 
 interface UseEntityFormDraftOptions<T extends Record<string, unknown>> {
   mode: 'create' | 'edit';

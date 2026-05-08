@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/badge';
 import { Briefcase, MapPin, Clock, Building2, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { API_ROUTES } from '@/config/api-routes';
 
 export default function JobsPage() {
@@ -93,7 +93,9 @@ export default function JobsPage() {
           <CardContent className="py-12 text-center">
             <Briefcase className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-500 mb-2">No job postings available</p>
-            <p className="text-base text-gray-400">Check back later or create a group to post jobs</p>
+            <p className="text-base text-gray-400">
+              Check back later or create a group to post jobs
+            </p>
           </CardContent>
         </Card>
       ) : (
@@ -134,7 +136,7 @@ export default function JobsPage() {
                     )}
                     <div className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
-                      {formatDistanceToNow(new Date(job.created_at), { addSuffix: true })}
+                      {formatRelativeTime(job.created_at)}
                     </div>
                   </div>
                   <Link href={`/groups/${job.groups?.slug}/proposals/${job.id}`}>

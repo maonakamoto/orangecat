@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
 import { Percent, Target, User, MessageSquare } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { MakeOfferDialog } from './MakeOfferDialog';
 import { formatLoanAmount, calculateProgress } from './useLoanList';
 
@@ -54,7 +54,7 @@ export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
                   <div className="flex-1 min-w-0">
                     <CardTitle className="text-base truncate">{loan.title}</CardTitle>
                     <CardDescription className="text-xs">
-                      Listed {formatDistanceToNow(new Date(loan.created_at), { addSuffix: true })}
+                      Listed {formatRelativeTime(loan.created_at)}
                     </CardDescription>
                   </div>
                 </div>

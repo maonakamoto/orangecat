@@ -3,7 +3,7 @@ import { Percent, TrendingUp, User, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { formatCurrency } from '@/services/currency';
 import { generateEntityMetadata } from '@/lib/seo/metadata';
 import PublicEntityCTA from '@/components/public/PublicEntityCTA';
@@ -13,16 +13,10 @@ import PublicEntityDetailPage, {
   type EntityDetailConfig,
   type EntityData,
 } from '@/components/public/PublicEntityDetailPage';
+import { calculateProgress } from '@/components/loans/useLoanList';
 
 interface PageProps {
   params: Promise<{ id: string }>;
-}
-
-function calculateProgress(original: number, remaining: number) {
-  if (original === 0) {
-    return 0;
-  }
-  return ((original - remaining) / original) * 100;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -62,9 +56,7 @@ const loanConfig: EntityDetailConfig = {
       entity.interest_rate !== undefined && { annualPercentageRate: entity.interest_rate }),
   }),
   renderHeaderExtra: (entity: EntityData) => (
-    <span className="text-gray-500 text-sm">
-      Listed {formatDistanceToNow(new Date(entity.created_at), { addSuffix: true })}
-    </span>
+    <span className="text-gray-500 text-sm">Listed {formatRelativeTime(entity.created_at)}</span>
   ),
   renderDetails: (entity: EntityData) => {
     const progress = calculateProgress(entity.original_amount, entity.remaining_balance);

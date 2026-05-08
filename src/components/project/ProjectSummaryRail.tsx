@@ -8,7 +8,7 @@ import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { Bitcoin } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { formatCurrency } from '@/services/currency';
 
@@ -113,10 +113,7 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
             </div>
             {bitcoinBalanceUpdatedAt && (
               <div className="text-xs text-gray-500 mt-1">
-                Updated{' '}
-                {formatDistanceToNow(new Date(bitcoinBalanceUpdatedAt), {
-                  addSuffix: true,
-                })}
+                Updated {formatRelativeTime(bitcoinBalanceUpdatedAt)}
               </div>
             )}
           </div>
@@ -140,8 +137,7 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
           {project.last_support_at && (
             <div className="text-xs text-green-600 flex items-center gap-1">
               <span className="w-2 h-2 bg-green-600 rounded-full animate-pulse" />
-              Last contribution{' '}
-              {formatDistanceToNow(new Date(project.last_support_at), { addSuffix: true })}
+              Last contribution {formatRelativeTime(project.last_support_at)}
             </div>
           )}
         </div>

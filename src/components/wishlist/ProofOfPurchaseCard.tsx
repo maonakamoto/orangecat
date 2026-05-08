@@ -12,7 +12,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import {
   Receipt,
   Camera,
@@ -53,7 +53,7 @@ export function ProofOfPurchaseCard({
 }: ProofOfPurchaseCardProps) {
   const ProofIcon = PROOF_TYPE_ICONS[proof.proof_type];
   const proofMeta = PROOF_TYPE_META[proof.proof_type];
-  const timeAgo = formatDistanceToNow(new Date(proof.created_at), { addSuffix: true });
+  const timeAgo = formatRelativeTime(proof.created_at);
 
   return (
     <Card className={cn('p-4', isLoading && 'opacity-50 pointer-events-none')}>
@@ -62,14 +62,10 @@ export function ProofOfPurchaseCard({
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src={proof.user?.avatar_url} />
-            <AvatarFallback>
-              {proof.user?.username?.charAt(0).toUpperCase() || 'U'}
-            </AvatarFallback>
+            <AvatarFallback>{proof.user?.username?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
           </Avatar>
           <div>
-            <p className="text-sm font-medium">
-              {proof.user?.username || 'Anonymous'}
-            </p>
+            <p className="text-sm font-medium">{proof.user?.username || 'Anonymous'}</p>
             <p className="text-xs text-muted-foreground">{timeAgo}</p>
           </div>
         </div>
@@ -121,18 +117,13 @@ export function ProofOfPurchaseCard({
       {proof.transaction_id && (
         <div className="flex items-center gap-2 p-2 bg-muted rounded-md mb-3">
           <Bitcoin className="h-4 w-4 text-bitcoin-orange" />
-          <code className="text-xs font-mono flex-1 truncate">
-            {proof.transaction_id}
-          </code>
+          <code className="text-xs font-mono flex-1 truncate">{proof.transaction_id}</code>
           <Button
             variant="ghost"
             size="sm"
             className="h-6 w-6 p-0"
             onClick={() => {
-              window.open(
-                `https://mempool.space/tx/${proof.transaction_id}`,
-                '_blank'
-              );
+              window.open(`https://mempool.space/tx/${proof.transaction_id}`, '_blank');
             }}
           >
             <ExternalLink className="h-3 w-3" />

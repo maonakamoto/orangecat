@@ -12,7 +12,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Activity, Bitcoin, MessageSquare, Trophy, TrendingUp } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatRelativeTime } from '@/utils/dates';
 import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
@@ -149,7 +149,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
                   )}
                   <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
                     <TrendingUp className="w-3 h-3" />
-                    {formatDistanceToNow(new Date(update.created_at), { addSuffix: true })}
+                    {formatRelativeTime(update.created_at)}
                   </p>
                 </div>
               </div>
