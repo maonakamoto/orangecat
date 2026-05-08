@@ -326,24 +326,7 @@ export const entityWalletLinkSchema = z.object({
   entity_id: z.string().uuid('entity_id must be a valid UUID'),
 });
 
-// ==================== TRANSACTION SCHEMA ====================
-
-/** Transaction validation (peer-to-peer value transfer) */
-export const transactionSchema = z.object({
-  amount_btc: z.number().positive().max(21_000_000),
-  from_entity_type: z.enum(['profile', 'project']),
-  from_entity_id: z.string().uuid(),
-  to_entity_type: z.enum(['profile', 'project']),
-  to_entity_id: z.string().uuid(),
-  payment_method: z.enum(['bitcoin', 'lightning', 'on-chain', 'off-chain']),
-  message: z.string().max(500).optional().nullable(),
-  purpose: z.string().optional().nullable(),
-  anonymous: z.boolean().default(false),
-  public_visibility: z.boolean().default(true),
-});
-
 // Types
-export type TransactionData = z.infer<typeof transactionSchema>;
 export type PaymentCreateData = z.infer<typeof paymentCreateSchema>;
 export type PaymentActionData = z.infer<typeof paymentActionSchema>;
 export type EntityWalletLinkData = z.infer<typeof entityWalletLinkSchema>;
