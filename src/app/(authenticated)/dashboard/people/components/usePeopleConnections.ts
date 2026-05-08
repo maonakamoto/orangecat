@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 import type { Profile } from '@/types/profile';
 import { followUser, unfollowUser } from './peopleConnectionActions';
 
@@ -82,9 +83,9 @@ export function usePeopleConnections(userId: string | undefined, hydrated: boole
     setIsLoading(true);
     try {
       const [followingRes, followersRes, allRes] = await Promise.all([
-        fetch(`/api/social/following/${userId}`, { credentials: 'same-origin' }),
-        fetch(`/api/social/followers/${userId}`, { credentials: 'same-origin' }),
-        fetch(`/api/profiles?limit=100`, { credentials: 'same-origin' }),
+        fetch(API_ROUTES.SOCIAL.FOLLOWING(userId), { credentials: 'same-origin' }),
+        fetch(API_ROUTES.SOCIAL.FOLLOWERS(userId), { credentials: 'same-origin' }),
+        fetch(`${API_ROUTES.PROFILES.BASE}?limit=100`, { credentials: 'same-origin' }),
       ]);
 
       if (followingRes.ok) {

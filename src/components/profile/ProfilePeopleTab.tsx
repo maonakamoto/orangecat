@@ -1,5 +1,6 @@
 'use client';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -77,7 +78,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
 
           if (!followingError && followingData) {
             const followingProfiles = (followingData as FollowWithProfile[])
-              .map((item) => item.profiles)
+              .map(item => item.profiles)
               .filter((p): p is NonNullable<typeof p> => p !== null);
             setFollowing(followingProfiles as Connection[]);
           }
@@ -101,33 +102,33 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
 
           if (!followersError && followersData) {
             const followerProfiles = (followersData as FollowWithProfile[])
-              .map((item) => item.profiles)
+              .map(item => item.profiles)
               .filter((p): p is NonNullable<typeof p> => p !== null);
             setFollowers(followerProfiles as Connection[]);
           }
         } else {
           // For other profiles, use API (will work if public data)
           // Fetch following
-          const followingResponse = await fetch(`/api/social/following/${profile.id}`);
+          const followingResponse = await fetch(API_ROUTES.SOCIAL.FOLLOWING(profile.id));
           if (followingResponse.ok) {
             const followingData = await followingResponse.json();
             if (followingData.success && followingData.data && followingData.data.data) {
               // Extract profiles from nested structure
               const followingProfiles = (followingData.data.data as FollowWithProfile[])
-                .map((item) => item.profiles)
+                .map(item => item.profiles)
                 .filter((p): p is NonNullable<typeof p> => p !== null);
               setFollowing(followingProfiles as Connection[]);
             }
           }
 
           // Fetch followers
-          const followersResponse = await fetch(`/api/social/followers/${profile.id}`);
+          const followersResponse = await fetch(API_ROUTES.SOCIAL.FOLLOWERS(profile.id));
           if (followersResponse.ok) {
             const followersData = await followersResponse.json();
             if (followersData.success && followersData.data && followersData.data.data) {
               // Extract profiles from nested structure
               const followerProfiles = (followersData.data.data as FollowWithProfile[])
-                .map((item) => item.profiles)
+                .map(item => item.profiles)
                 .filter((p): p is NonNullable<typeof p> => p !== null);
               setFollowers(followerProfiles as Connection[]);
             }
@@ -229,7 +230,11 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
                     {person.name || person.username}
                   </h4>
                   <p className="text-xs sm:text-sm text-gray-600 mb-1">@{person.username}</p>
-                  {person.bio && <p className="text-xs sm:text-sm text-gray-600 line-clamp-1 sm:line-clamp-2">{person.bio}</p>}
+                  {person.bio && (
+                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-1 sm:line-clamp-2">
+                      {person.bio}
+                    </p>
+                  )}
                 </div>
               </Link>
             );

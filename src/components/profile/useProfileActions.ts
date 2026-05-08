@@ -29,7 +29,7 @@ export function useProfileActions({ profile, isOwnProfile, onSave }: UseProfileA
     }
     const checkFollowStatus = async () => {
       try {
-        const response = await fetch(`/api/social/following/${user.id}`);
+        const response = await fetch(API_ROUTES.SOCIAL.FOLLOWING(user.id));
         const data = await response.json();
         if (data.success && Array.isArray(data.data)) {
           setIsFollowing(

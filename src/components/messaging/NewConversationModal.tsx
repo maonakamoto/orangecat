@@ -1,6 +1,7 @@
 'use client';
 
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { X, Search, MessageSquare, Loader2 } from 'lucide-react';
@@ -48,8 +49,8 @@ export default function NewConversationModal({
       const controller = new AbortController();
       abortRef.current = controller;
       const url = q
-        ? `/api/profiles?limit=20&search=${encodeURIComponent(q)}`
-        : '/api/profiles?limit=20';
+        ? `${API_ROUTES.PROFILES.BASE}?limit=20&search=${encodeURIComponent(q)}`
+        : `${API_ROUTES.PROFILES.BASE}?limit=20`;
       const res = await fetch(url, { credentials: 'same-origin', signal: controller.signal });
       if (!res.ok) {
         throw new Error('Failed to load people');

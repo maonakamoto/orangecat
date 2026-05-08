@@ -90,7 +90,7 @@ export function useNotificationsMutations({
 
   const clearRead = useCallback(async () => {
     try {
-      const response = await fetch('/api/notifications?clear=read', {
+      const response = await fetch(API_ROUTES.NOTIFICATIONS.CLEAR_READ, {
         method: 'DELETE',
       });
 

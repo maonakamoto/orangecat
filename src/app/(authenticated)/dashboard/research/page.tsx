@@ -22,6 +22,7 @@ import { ResearchEntity } from '@/types/research';
 import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { ROUTES } from '@/config/routes';
+import { API_ROUTES } from '@/config/api-routes';
 import { PROJECT_STATUS, VALID_PROJECT_STATUSES } from '@/config/project-statuses';
 import { RESEARCH_FIELDS, type ResearchField } from '@/config/research';
 
@@ -70,7 +71,7 @@ export default function ResearchDashboard() {
 
   const fetchResearchEntities = async () => {
     try {
-      const response = await fetch('/api/research');
+      const response = await fetch(API_ROUTES.RESEARCH);
       if (response.ok) {
         const data = await response.json();
         setEntities(data.data || []);

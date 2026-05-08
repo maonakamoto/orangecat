@@ -9,6 +9,7 @@ import { logger } from '@/utils/logger';
 import { EntityType, ENTITY_REGISTRY } from '@/config/entity-registry';
 import React from 'react';
 import { ROUTES } from '@/config/routes';
+import { API_ROUTES } from '@/config/api-routes';
 
 export interface EntityData {
   id: string;
@@ -68,7 +69,7 @@ export function useProfileEntityTab(profile: ScalableProfile, entityType: Entity
     const fetchEntities = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/profiles/${profile.id}/entities/${entityType}`);
+        const response = await fetch(API_ROUTES.PROFILES.ENTITIES(profile.id, entityType));
         const result = await response.json();
 
         if (result.success && result.data) {

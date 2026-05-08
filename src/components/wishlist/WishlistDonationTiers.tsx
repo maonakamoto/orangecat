@@ -20,6 +20,7 @@ import BitcoinPaymentModal from '@/components/bitcoin/BitcoinPaymentModal';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
 import { convert, formatCurrency } from '@/services/currency';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface WishlistItem {
   id: string;
@@ -52,7 +53,7 @@ export function WishlistDonationTiers({
     const fetchTiers = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`/api/profiles/${userId}/wishlist-tiers`);
+        const response = await fetch(API_ROUTES.PROFILES.WISHLIST_TIERS(userId));
         if (response.ok) {
           const data = await response.json();
           setItems(data.data?.items || []);

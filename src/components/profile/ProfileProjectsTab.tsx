@@ -8,6 +8,7 @@ import { Target, Bitcoin, ArrowRight } from 'lucide-react';
 import { ScalableProfile } from '@/types/database';
 import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
+import { API_ROUTES } from '@/config/api-routes';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { formatRelativeTimeCompact } from '@/utils/dates';
@@ -51,7 +52,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
     const fetchProjects = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/profiles/${profile.id}/projects`);
+        const response = await fetch(API_ROUTES.PROFILES.PROJECTS(profile.id));
         const result = await response.json();
 
         if (result.success && result.data && Array.isArray(result.data.data)) {

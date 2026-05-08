@@ -9,6 +9,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { STATUS } from '@/config/database-constants';
+import { API_ROUTES } from '@/config/api-routes';
 import BookingTabs from './components/BookingTabs';
 import BookingCard from './components/BookingCard';
 import type { Booking } from '@/services/bookings';
@@ -39,7 +40,7 @@ export default function BookingsDashboardPage() {
           break;
       }
 
-      const response = await fetch(`/api/bookings?role=provider&status=${status}`);
+      const response = await fetch(`${API_ROUTES.BOOKINGS.BASE}?role=provider&status=${status}`);
       const data = await response.json();
       if (data.success) {
         setBookings(data.data || []);
@@ -63,7 +64,7 @@ export default function BookingsDashboardPage() {
   ) => {
     setProcessingId(bookingId);
     try {
-      const response = await fetch(`/api/bookings/${bookingId}`, {
+      const response = await fetch(API_ROUTES.BOOKINGS.BY_ID(bookingId), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, reason }),

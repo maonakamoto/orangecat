@@ -30,13 +30,25 @@ export const API_ROUTES = {
   },
   ENTITY_WALLETS: '/api/entity-wallets',
   NOTIFICATIONS: {
+    BASE: '/api/notifications',
     UNREAD: '/api/notifications/unread',
     READ: '/api/notifications/read',
+    CLEAR_READ: '/api/notifications?clear=read',
     PREFERENCES: '/api/notifications/preferences',
   },
+  PROFILES: {
+    BASE: '/api/profiles',
+    BY_ID: (id: string) => `/api/profiles/${id}`,
+    PROJECTS: (id: string) => `/api/profiles/${id}/projects`,
+    ENTITIES: (id: string, entityType: string) => `/api/profiles/${id}/entities/${entityType}`,
+    WISHLIST_TIERS: (id: string) => `/api/profiles/${id}/wishlist-tiers`,
+  },
+  RESEARCH: '/api/research',
   SOCIAL: {
     FOLLOW: '/api/social/follow',
     UNFOLLOW: '/api/social/unfollow',
+    FOLLOWING: (id: string) => `/api/social/following/${id}`,
+    FOLLOWERS: (id: string) => `/api/social/followers/${id}`,
   },
   TASKS: {
     BASE: '/api/tasks',
@@ -90,6 +102,10 @@ export const API_ROUTES = {
   WAITLIST: '/api/waitlist',
   AI_ASSISTANTS: '/api/ai-assistants',
   TRANSACTIONS: '/api/transactions',
+  BOOKINGS: {
+    BASE: '/api/bookings',
+    BY_ID: (id: string) => `/api/bookings/${id}`,
+  },
   PRESENCE: {
     OFFLINE: '/api/presence/offline',
   },
