@@ -2,7 +2,7 @@
 
 import { satsToBitcoin } from '@/services/currency';
 
-export interface BitcoinBalance {
+interface BitcoinBalance {
   balance_btc: number;
   tx_count: number;
   updated_at: string;
