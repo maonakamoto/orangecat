@@ -8,6 +8,8 @@ import Input from '@/components/ui/Input';
 import Card from '@/components/ui/Card';
 import supabase from '@/lib/supabase/browser';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -108,7 +110,9 @@ export default function ResetPasswordPage() {
 
   if (step === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-tiffany-50 px-4">
+      <div
+        className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
+      >
         <Card className="max-w-md w-full p-8 shadow-xl">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin mx-auto text-orange-600 mb-6" />
@@ -122,7 +126,9 @@ export default function ResetPasswordPage() {
 
   if (step === 'error') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-tiffany-50 px-4">
+      <div
+        className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
+      >
         <Card className="max-w-md w-full p-8 shadow-xl">
           <div className="text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 mb-6">
@@ -146,7 +152,9 @@ export default function ResetPasswordPage() {
 
   if (step === 'success') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-tiffany-50 px-4">
+      <div
+        className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
+      >
         <Card className="max-w-md w-full p-8 shadow-xl">
           <div className="text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-6">
@@ -166,11 +174,18 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-tiffany-50 px-4">
+    <div
+      className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
+    >
       <Card className="max-w-md w-full p-8 shadow-xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-orange-100 to-tiffany-100 mb-6">
+          <div
+            className={cn(
+              GRADIENTS.iconOrangeTiffany,
+              'mx-auto flex h-16 w-16 items-center justify-center rounded-full mb-6'
+            )}
+          >
             <Key className="h-8 w-8 text-orange-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Create New Password</h1>

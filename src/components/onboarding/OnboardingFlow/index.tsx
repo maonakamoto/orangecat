@@ -14,6 +14,8 @@
 import { useMemo } from 'react';
 import { Sparkles, Layers, Compass } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { useOnboardingProgress } from './hooks';
 import { OnboardingContext } from './context';
 import {
@@ -76,7 +78,7 @@ export function OnboardingFlow() {
   // Avoid flash — wait for localStorage progress to load
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50">
+      <div className={cn(GRADIENTS.pageBgBlue, 'min-h-screen')}>
         <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
           <div className="animate-pulse space-y-6">
             <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto" />
@@ -89,7 +91,7 @@ export function OnboardingFlow() {
 
   return (
     <OnboardingContext.Provider value={{ onNavigateAway: handleAction }}>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50">
+      <div className={cn(GRADIENTS.pageBgBlue, 'min-h-screen')}>
         <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
           <OnboardingHeader
             currentStep={currentStep}

@@ -5,6 +5,7 @@
 
 import { useRouter } from 'next/navigation';
 import { Cat, Trash2, Settings2 } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 import { ModelSelector } from './ModelSelector';
 
 interface ChatHeaderProps {
@@ -27,7 +28,9 @@ export function ChatHeader({
   return (
     <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center">
+        <div
+          className={`w-10 h-10 rounded-full ${GRADIENTS.brandOrangeBr} flex items-center justify-center`}
+        >
           <Cat className="h-5 w-5 text-white" />
         </div>
         <div>

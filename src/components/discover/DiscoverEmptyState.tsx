@@ -5,6 +5,7 @@ import type { DiscoverTabType } from '@/components/discover/DiscoverTabs';
 import { ENTITY_REGISTRY, type EntityType } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
 import { GRADIENTS } from '@/config/gradients';
+import { cn } from '@/lib/utils';
 
 interface DiscoverEmptyStateProps {
   activeTab: DiscoverTabType;
@@ -45,7 +46,12 @@ export default function DiscoverEmptyState({
         className="text-center py-16"
       >
         <div className="bg-gradient-to-r from-orange-50 via-tiffany-50 to-orange-50 rounded-2xl border border-orange-200 p-8 text-center max-w-2xl mx-auto">
-          <div className="w-16 h-16 bg-gradient-to-r from-orange-100 to-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div
+            className={cn(
+              GRADIENTS.iconOrangeTiffany,
+              'w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4'
+            )}
+          >
             <EntityIcon className="w-8 h-8 text-orange-600" />
           </div>
           <h3 className="text-2xl font-semibold text-gray-900 mb-3">

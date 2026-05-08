@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import Button from '@/components/ui/Button';
 import { logger } from '@/utils/logger';
 import {
@@ -104,7 +106,7 @@ export default function TaskDetailPage() {
 
   if (error || !task) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20 p-4 sm:p-6 lg:p-8">
+      <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
         <div className="max-w-3xl mx-auto">
           <Breadcrumb items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }]} className="mb-4" />
           <div className="bg-white rounded-xl border border-red-200 p-6 text-red-600">
@@ -119,7 +121,7 @@ export default function TaskDetailPage() {
   const priorityInfo = getPriorityInfo(task.priority);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20 p-4 sm:p-6 lg:p-8 pb-20 md:pb-8">
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8 pb-20 md:pb-8')}>
       <div className="max-w-3xl mx-auto space-y-6">
         <Breadcrumb
           items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: task.title }]}

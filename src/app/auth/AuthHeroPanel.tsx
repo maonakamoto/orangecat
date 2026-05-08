@@ -1,4 +1,6 @@
 import { TrendingUp, Shield, Globe } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 
 export function AuthHeroPanel() {
   return (
@@ -6,7 +8,12 @@ export function AuthHeroPanel() {
       <div className="max-w-lg text-center lg:text-left">
         {/* Logo */}
         <div className="mb-8 flex justify-center lg:justify-start">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-tiffany-400 to-tiffany-600 flex items-center justify-center text-4xl shadow-lg">
+          <div
+            className={cn(
+              GRADIENTS.brandTiffanyBr,
+              'w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-lg'
+            )}
+          >
             🐾
           </div>
         </div>

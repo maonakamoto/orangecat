@@ -27,6 +27,7 @@ import Link from 'next/link';
 import EntityListShell from '@/components/entity/EntityListShell';
 import Loading from '@/components/Loading';
 import { ROUTES } from '@/config/routes';
+import { GRADIENTS } from '@/config/gradients';
 
 export function GroupsDashboard() {
   const router = useRouter();
@@ -86,7 +87,7 @@ export function GroupsDashboard() {
 
   const headerActions = (
     <Link href={ROUTES.DASHBOARD.GROUPS_CREATE}>
-      <Button className="gap-2 bg-gradient-to-r from-purple-600 to-purple-700">
+      <Button className={`gap-2 ${GRADIENTS.brandPurple}`}>
         <Plus className="h-4 w-4" />
         Create Group
       </Button>

@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { PlayCircle, Radio, Video, Mic2, Share2, Users, Clock } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 import ProfileShare from '@/components/sharing/ProfileShare';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,7 +25,12 @@ export default function ChannelComingSoonPage() {
   const { user, profile } = useAuth();
   const [showShare, setShowShare] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, reset, formState: { errors: formErrors } } = useForm<WaitlistFormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors: formErrors },
+  } = useForm<WaitlistFormData>({
     resolver: zodResolver(waitlistSchema),
     defaultValues: { email: profile?.email || '' },
   });
@@ -34,7 +40,9 @@ export default function ChannelComingSoonPage() {
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
+          <div
+            className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${GRADIENTS.brandOrangeCircle} text-white shadow-lg`}
+          >
             <PlayCircle className="w-8 h-8" />
           </div>
           <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">

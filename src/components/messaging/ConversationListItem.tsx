@@ -5,6 +5,7 @@ import { formatRelativeTime } from '@/utils/dates';
 import { Users, MessageSquare, Trash2 } from 'lucide-react';
 import AvatarLink from '@/components/ui/AvatarLink';
 import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import type { Conversation } from '@/features/messaging/types';
 
 function buildProfileHref(participant?: Conversation['participants'][number]): string | null {
@@ -79,7 +80,12 @@ function getConversationAvatar(
 
   if (conversation.is_group) {
     return (
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-tiffany-400 to-tiffany-600 flex items-center justify-center text-white">
+      <div
+        className={cn(
+          GRADIENTS.brandTiffanyBr,
+          'w-10 h-10 rounded-full flex items-center justify-center text-white'
+        )}
+      >
         <Users className="w-5 h-5" />
       </div>
     );

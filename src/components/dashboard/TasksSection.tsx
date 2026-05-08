@@ -20,6 +20,7 @@ import { SmartQuestionsPanel } from './SmartQuestionsPanel';
 import { TASK_DEFINITIONS } from '@/services/recommendations/tasks';
 import type { RecommendedTask, TaskPriority } from '@/services/recommendations/types';
 import type { LucideIcon } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 const TASK_ICON_MAP: Record<string, LucideIcon> = Object.fromEntries(
   TASK_DEFINITIONS.map(task => [task.id, task.icon])
@@ -99,7 +100,7 @@ export default function TasksSection({
   if (celebration) {
     return (
       <div className={className}>
-        <Card className="border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
+        <Card className={`border-green-200 ${GRADIENTS.sectionGreen}`}>
           <CardContent className="p-6 text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Sparkles className="w-8 h-8 text-green-600" />

@@ -2,12 +2,13 @@
 
 import { motion } from 'framer-motion';
 import { HOW_IT_WORKS_STEPS, SECTION_HEADERS, CTA_LABELS } from '@/config/landing-page';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function HowItWorksSection() {
   const { howItWorks } = SECTION_HEADERS;
 
   return (
-    <section className="py-12 sm:py-16 lg:py-24 bg-gradient-to-br from-gray-50 to-gray-100">
+    <section className={`py-12 sm:py-16 lg:py-24 ${GRADIENTS.grayLight}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">

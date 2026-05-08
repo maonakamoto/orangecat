@@ -2,30 +2,40 @@
 
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
+import { GRADIENTS } from '@/config/gradients';
 import HeroSectionStatic from '@/components/home/sections/HeroSectionStatic';
 
 // Lazy load non-critical sections
 // Hero loads immediately for good FCP, rest loads as user scrolls
-const WhatCanYouDoSection = dynamic(() => import('@/components/home/sections/WhatCanYouDoSection'), {
-  loading: () => <div className="h-96 bg-gradient-to-br from-gray-50 via-white to-gray-50 animate-pulse" />,
-});
+const WhatCanYouDoSection = dynamic(
+  () => import('@/components/home/sections/WhatCanYouDoSection'),
+  {
+    loading: () => (
+      <div className="h-96 bg-gradient-to-br from-gray-50 via-white to-gray-50 animate-pulse" />
+    ),
+  }
+);
 
 const ProofSection = dynamic(() => import('@/components/home/sections/ProofSection'), {
   loading: () => <div className="h-96 bg-gray-50 animate-pulse" />,
 });
 
 const HowItWorksSection = dynamic(() => import('@/components/home/sections/HowItWorksSection'), {
-  loading: () => <div className="h-96 bg-gradient-to-br from-gray-50 to-gray-100 animate-pulse" />,
+  loading: () => <div className={`h-96 ${GRADIENTS.grayLight} animate-pulse`} />,
 });
 
-const TransparencySection = dynamic(() => import('@/components/home/sections/TransparencySection'), {
-  loading: () => <div className="h-96 bg-gradient-to-br from-tiffany-50 to-orange-50 animate-pulse" />,
-});
+const TransparencySection = dynamic(
+  () => import('@/components/home/sections/TransparencySection'),
+  {
+    loading: () => (
+      <div className="h-96 bg-gradient-to-br from-tiffany-50 to-orange-50 animate-pulse" />
+    ),
+  }
+);
 
 const TrustSection = dynamic(() => import('@/components/home/sections/TrustSection'), {
   loading: () => <div className="h-96 bg-white animate-pulse" />,
 });
-
 
 /**
  * Home Public Client - Progressive Loading Strategy
@@ -45,7 +55,11 @@ export default function HomePublicClient() {
       <HeroSectionStatic />
 
       {/* Below-fold sections - lazy loaded */}
-      <Suspense fallback={<div className="h-96 bg-gradient-to-br from-gray-50 via-white to-gray-50 animate-pulse" />}>
+      <Suspense
+        fallback={
+          <div className="h-96 bg-gradient-to-br from-gray-50 via-white to-gray-50 animate-pulse" />
+        }
+      >
         <WhatCanYouDoSection />
       </Suspense>
 
@@ -53,12 +67,15 @@ export default function HomePublicClient() {
         <ProofSection />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-gradient-to-br from-gray-50 to-gray-100 animate-pulse" />}>
+      <Suspense fallback={<div className={`h-96 ${GRADIENTS.grayLight} animate-pulse`} />}>
         <HowItWorksSection />
       </Suspense>
 
-
-      <Suspense fallback={<div className="h-96 bg-gradient-to-br from-tiffany-50 to-orange-50 animate-pulse" />}>
+      <Suspense
+        fallback={
+          <div className="h-96 bg-gradient-to-br from-tiffany-50 to-orange-50 animate-pulse" />
+        }
+      >
         <TransparencySection />
       </Suspense>
 

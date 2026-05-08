@@ -1,17 +1,18 @@
 'use client';
 
-import { ReactNode } from 'react'
-import { cn } from '@/lib/utils'
-import { Breadcrumb, BreadcrumbItem } from '@/components/ui/Breadcrumb'
+import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+import { Breadcrumb, BreadcrumbItem } from '@/components/ui/Breadcrumb';
+import { GRADIENTS } from '@/config/gradients';
 
 interface EntityDetailLayoutProps {
-  title: string
-  subtitle?: string
-  headerActions?: ReactNode
-  left: ReactNode
-  right?: ReactNode
-  className?: string
-  breadcrumbItems?: BreadcrumbItem[]
+  title: string;
+  subtitle?: string;
+  headerActions?: ReactNode;
+  left: ReactNode;
+  right?: ReactNode;
+  className?: string;
+  breadcrumbItems?: BreadcrumbItem[];
 }
 
 export default function EntityDetailLayout({
@@ -24,7 +25,7 @@ export default function EntityDetailLayout({
   breadcrumbItems,
 }: EntityDetailLayoutProps) {
   return (
-    <div className={cn('min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20 p-4 sm:p-6 lg:p-8', className)}>
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8', className)}>
       {breadcrumbItems && <Breadcrumb items={breadcrumbItems} className="mb-4" />}
       <div className="mb-6 flex items-center justify-between">
         <div>
@@ -38,6 +39,5 @@ export default function EntityDetailLayout({
         <div>{right}</div>
       </div>
     </div>
-  )
+  );
 }
-

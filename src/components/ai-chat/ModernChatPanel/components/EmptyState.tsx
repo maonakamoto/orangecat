@@ -4,6 +4,7 @@
  */
 
 import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { Cat, Sparkles } from 'lucide-react';
 
 interface EmptyStateProps {
@@ -21,7 +22,12 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-4 py-12">
-      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mb-6 shadow-lg">
+      <div
+        className={cn(
+          GRADIENTS.brandOrangeBr,
+          'w-16 h-16 rounded-full flex items-center justify-center mb-6 shadow-lg'
+        )}
+      >
         <Cat className="h-8 w-8 text-white" />
       </div>
       <h2 className="text-2xl font-semibold text-gray-900 mb-2">Hi, I'm your Cat</h2>
@@ -33,8 +39,8 @@ export function EmptyState({
           </>
         ) : (
           <>
-            I'm here to help with your projects, products, and ideas. Ask me anything —
-            only you can see our conversations.
+            I'm here to help with your projects, products, and ideas. Ask me anything — only you can
+            see our conversations.
           </>
         )}
       </p>

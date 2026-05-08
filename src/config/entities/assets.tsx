@@ -18,6 +18,7 @@ import Button from '@/components/ui/Button';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { GRADIENTS } from '@/config/gradients';
 
 export const assetEntityConfig: EntityConfig<Asset> = {
   name: 'Asset',
@@ -85,10 +86,11 @@ export const assetEntityConfig: EntityConfig<Asset> = {
 
   emptyState: {
     title: 'No assets yet',
-    description: 'Create your first asset to use as collateral for loans or to track your portfolio.',
+    description:
+      'Create your first asset to use as collateral for loans or to track your portfolio.',
     action: (
       <Link href={ROUTES.DASHBOARD.ASSETS_CREATE}>
-        <Button className="bg-gradient-to-r from-green-600 to-green-700">Create Asset</Button>
+        <Button className={GRADIENTS.brandGreen}>Create Asset</Button>
       </Link>
     ),
   },

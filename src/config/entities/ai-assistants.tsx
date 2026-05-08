@@ -15,6 +15,7 @@ import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { STATUS } from '@/config/database-constants';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { GRADIENTS } from '@/config/gradients';
 import type { Currency } from '@/types/settings';
 
 export const aiAssistantEntityConfig: EntityConfig<AIAssistant> = {
@@ -111,9 +112,7 @@ export const aiAssistantEntityConfig: EntityConfig<AIAssistant> = {
     description: 'Create your first AI assistant to start earning from your expertise.',
     action: (
       <Link href={ROUTES.DASHBOARD.AI_ASSISTANTS_CREATE}>
-        <Button className="bg-gradient-to-r from-purple-600 to-purple-700">
-          Create AI Assistant
-        </Button>
+        <Button className={GRADIENTS.brandPurple}>Create AI Assistant</Button>
       </Link>
     ),
   },

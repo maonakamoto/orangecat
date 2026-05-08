@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { TASK_CATEGORY_LABELS } from '@/config/tasks';
 import { Users, Clock, TrendingUp, AlertTriangle, CheckCircle, Award } from 'lucide-react';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
@@ -25,7 +27,7 @@ export default function TaskAnalyticsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20 p-4 sm:p-6 lg:p-8">
+      <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
         <div className="max-w-4xl mx-auto">
           <Breadcrumb
             items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: 'Analytics' }]}
@@ -40,7 +42,7 @@ export default function TaskAnalyticsPage() {
   const maxCompletions = Math.max(...contributions.map(c => c.totalCompletions), 1);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20 p-4 sm:p-6 lg:p-8 pb-20 md:pb-8">
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8 pb-20 md:pb-8')}>
       <div className="max-w-4xl mx-auto space-y-6">
         <Breadcrumb
           items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: 'Analytics' }]}

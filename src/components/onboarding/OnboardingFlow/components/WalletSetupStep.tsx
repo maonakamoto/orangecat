@@ -5,12 +5,15 @@
 
 import { Card, CardContent } from '@/components/ui/Card';
 import { Bitcoin, Sparkles, CheckCircle, AlertTriangle, ExternalLink } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 export function WalletSetupStep() {
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div
+          className={`w-16 h-16 ${GRADIENTS.brandOrangeCircle} rounded-full flex items-center justify-center mx-auto mb-4`}
+        >
           <Bitcoin className="h-8 w-8 text-white" />
         </div>
         <h3 className="text-2xl font-semibold mb-2">Add Your Bitcoin Address</h3>

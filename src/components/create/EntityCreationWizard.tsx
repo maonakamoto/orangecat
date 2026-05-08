@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { EntityForm } from './EntityForm';
 import { WizardTemplatePicker } from './templates/WizardTemplatePicker';
 import { WizardProgressBar } from './WizardProgressBar';
@@ -121,7 +123,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20 p-4 sm:p-6 lg:p-8">
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
       <div className="max-w-4xl mx-auto mb-6">
         <button
           onClick={handleCancel}

@@ -7,6 +7,7 @@ import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { Star, BarChart3, Zap, ArrowRight, TrendingUp, Clock, Plus } from 'lucide-react';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
+import { GRADIENTS } from '@/config/gradients';
 
 interface DashboardSidebarProps {
   stats: {
@@ -166,10 +167,7 @@ export function DashboardSidebar({ stats, profileCompletion }: DashboardSidebarP
               <p className="text-sm text-gray-600 mb-4">
                 Launch your first project in minutes. It's free and takes less than 5 minutes.
               </p>
-              <Button
-                className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
-                size="sm"
-              >
+              <Button className={GRADIENTS.btnEmeraldTeal} size="sm">
                 <Plus className="w-4 h-4 mr-2" />
                 Start Fundraising
               </Button>

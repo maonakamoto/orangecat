@@ -23,6 +23,7 @@ import {
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { EntityType } from '@/config/entity-registry';
 import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { useProfileActions } from './useProfileActions';
 import { ProfileBannerSection } from './ProfileBannerSection';
 
@@ -178,9 +179,7 @@ export default function ProfileLayout({
   });
 
   return (
-    <div
-      className={cn('min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100', className)}
-    >
+    <div className={cn('min-h-screen', GRADIENTS.graySubtle, className)}>
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8">
         <ProfileBannerSection
           profile={profile}

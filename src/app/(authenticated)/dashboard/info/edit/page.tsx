@@ -2,6 +2,8 @@
 
 import { Edit, ArrowLeft } from 'lucide-react';
 import Loading from '@/components/Loading';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import ModernProfileEditor from '@/components/profile/ModernProfileEditor';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
@@ -38,7 +40,7 @@ export default function DashboardInfoEditPage() {
   const missingFields = getProfileMissingFields(profile);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20">
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <ProfileMobileSupport
           completionPercentage={completionPercentage}

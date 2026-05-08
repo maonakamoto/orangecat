@@ -13,6 +13,7 @@ import InviteBanner from './components/InviteBanner';
 import PeopleTabBar from './components/PeopleTabBar';
 import PersonCard from './components/PersonCard';
 import { usePeopleConnections } from './components/usePeopleConnections';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function PeoplePage() {
   const { user, profile: currentProfile, isLoading: authLoading, hydrated, session } = useAuth();
@@ -52,7 +53,9 @@ export default function PeoplePage() {
   )
     .filter(conn => (activeTab === 'all' ? conn.profile.id !== user.id : true))
     .filter(conn => {
-      if (!searchTerm.trim()) {return true;}
+      if (!searchTerm.trim()) {
+        return true;
+      }
       const q = searchTerm.trim().toLowerCase();
       const p = conn.profile;
       return (
@@ -70,7 +73,7 @@ export default function PeoplePage() {
         : 'No users found yet.';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className={`min-h-screen ${GRADIENTS.grayLight}`}>
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Breadcrumb items={[{ label: 'People' }]} className="mb-4" />
         {/* Header */}

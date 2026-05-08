@@ -10,6 +10,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Bitcoin, Eye, Users, Cat, ArrowRight, Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 export function WelcomeStep() {
@@ -28,7 +30,12 @@ export function WelcomeStep() {
     <div className="space-y-6">
       {/* Hero */}
       <div className="text-center">
-        <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
+        <div
+          className={cn(
+            GRADIENTS.brandOrangeBr,
+            'w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md'
+          )}
+        >
           <span className="text-4xl">🐾</span>
         </div>
         <p className="text-muted-foreground max-w-sm mx-auto">

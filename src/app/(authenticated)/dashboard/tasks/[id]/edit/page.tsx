@@ -3,6 +3,8 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { ROUTES } from '@/config/routes';
 import { useEditTaskForm } from './useEditTaskForm';
@@ -37,7 +39,7 @@ export default function EditTaskPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20 p-4 sm:p-6 lg:p-8 pb-20 md:pb-8">
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8 pb-20 md:pb-8')}>
       <div className="max-w-2xl mx-auto">
         <Breadcrumb
           items={[

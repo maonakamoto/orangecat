@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import Button from '@/components/ui/Button';
 import { ArrowLeft, Bitcoin } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import dynamic from 'next/dynamic';
 import { ROUTES } from '@/config/routes';
 import { useState, useEffect } from 'react';
@@ -91,7 +93,7 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20">
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header with Back Button */}
         <div className="mb-6">

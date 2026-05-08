@@ -12,6 +12,8 @@ import { formatRelativeTime } from '@/utils/dates';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Edit, Share2, MessageCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';
@@ -127,7 +129,12 @@ export default function ProjectHeader({
                       className="rounded-full cursor-pointer"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center text-orange-600 font-semibold text-sm cursor-pointer hover:opacity-80 transition-opacity">
+                    <div
+                      className={cn(
+                        GRADIENTS.brandOrangeLightBr,
+                        'w-8 h-8 rounded-full flex items-center justify-center text-orange-600 font-semibold text-sm cursor-pointer hover:opacity-80 transition-opacity'
+                      )}
+                    >
                       {getInitial(project.profiles.name || project.profiles.username, 'A')}
                     </div>
                   )}
@@ -148,7 +155,12 @@ export default function ProjectHeader({
           ) : project.user_id ? (
             // Profile exists but wasn't loaded - show user ID as fallback
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center text-orange-600 font-semibold text-sm">
+              <div
+                className={cn(
+                  GRADIENTS.brandOrangeLightBr,
+                  'w-8 h-8 rounded-full flex items-center justify-center text-orange-600 font-semibold text-sm'
+                )}
+              >
                 ?
               </div>
               <div>
@@ -163,7 +175,12 @@ export default function ProjectHeader({
             </div>
           ) : (
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center text-orange-600 font-semibold text-sm">
+              <div
+                className={cn(
+                  GRADIENTS.brandOrangeLightBr,
+                  'w-8 h-8 rounded-full flex items-center justify-center text-orange-600 font-semibold text-sm'
+                )}
+              >
                 ?
               </div>
               <div>

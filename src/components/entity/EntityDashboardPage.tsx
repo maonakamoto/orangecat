@@ -138,9 +138,9 @@ export default function EntityDashboardPage<T extends BaseEntity>({
     (
       {
         orange: GRADIENTS.brandOrangeDark,
-        blue: 'bg-gradient-to-r from-blue-600 to-blue-700',
-        green: 'bg-gradient-to-r from-green-600 to-green-700',
-        purple: 'bg-gradient-to-r from-purple-600 to-purple-700',
+        blue: GRADIENTS.brandBlue,
+        green: GRADIENTS.brandGreen,
+        purple: GRADIENTS.brandPurple,
         rose: 'bg-gradient-to-r from-rose-500 to-rose-600',
         indigo: 'bg-gradient-to-r from-indigo-600 to-indigo-700',
         tiffany: 'bg-gradient-to-r from-teal-500 to-teal-600',

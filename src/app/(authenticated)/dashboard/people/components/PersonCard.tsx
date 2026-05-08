@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { UserPlus, UserMinus, ExternalLink } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import type { Profile } from '@/types/profile';
 
 interface PersonCardProps {
@@ -30,14 +32,14 @@ export default function PersonCard({
         <div className="flex items-start gap-4">
           {/* Avatar */}
           <Link href={`/profiles/${profile.username || profile.id}`}>
-            <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-orange-100 to-orange-200 flex-shrink-0">
+            <div
+              className={cn(
+                GRADIENTS.brandOrangeLightBr,
+                'relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0'
+              )}
+            >
               {profile.avatar_url ? (
-                <Image
-                  src={profile.avatar_url}
-                  alt={displayName}
-                  fill
-                  className="object-cover"
-                />
+                <Image src={profile.avatar_url} alt={displayName} fill className="object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-orange-600 font-semibold text-xl">
                   {displayName.charAt(0).toUpperCase()}

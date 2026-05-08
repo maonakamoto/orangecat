@@ -17,6 +17,7 @@ import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { logger } from '@/utils/logger';
 import { entityEvents } from '@/lib/analytics';
+import { GRADIENTS } from '@/config/gradients';
 
 interface EntityCreationSuccessProps {
   /** Entity type identifier (e.g. 'product', 'service') */
@@ -107,7 +108,7 @@ export function EntityCreationSuccess({
             <Button
               onClick={handlePublish}
               disabled={isPublishing}
-              className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
+              className={`w-full ${GRADIENTS.btnGreen}`}
             >
               <Rocket className="mr-2 h-4 w-4" />
               {isPublishing ? 'Publishing...' : 'Publish Now'}

@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { ModernChatPanel } from '@/components/ai-chat/ModernChatPanel';
 import { CatContextTab } from '@/components/ai-chat/CatContextTab';
 import { CatSettingsTab } from '@/components/ai-chat/CatSettingsTab';
@@ -62,13 +64,13 @@ export default function CatHubPage() {
   const initialMessage = searchParams?.get('q') || undefined;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20">
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-30">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl shadow-sm">
+              <div className={cn(GRADIENTS.brandOrangeBr, 'p-2 rounded-xl shadow-sm')}>
                 <Cat className="h-6 w-6 text-white" />
               </div>
               <div>

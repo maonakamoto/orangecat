@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Cat, AlertTriangle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';
 import { useRequireAuth } from '@/hooks/useAuth';
@@ -147,7 +149,7 @@ export default function CatPermissionsPage() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20 p-4 sm:p-6 pb-20 sm:pb-6">
+      <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 pb-20 sm:pb-6')}>
         <div className="max-w-3xl mx-auto">
           <div className="mb-6">
             <Link

@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { Target, BarChart3, TrendingUp, Plus } from 'lucide-react';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { GRADIENTS } from '@/config/gradients';
 
 interface MobileDashboardSidebarProps {
   stats: {
@@ -70,7 +71,7 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
               Create your first project and start receiving support in minutes.
             </p>
             <Button
-              className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+              className={GRADIENTS.btnEmeraldTeal}
               onClick={() => router.push(ENTITY_REGISTRY.project.createPath)}
             >
               <Plus className="w-4 h-4 mr-2" />

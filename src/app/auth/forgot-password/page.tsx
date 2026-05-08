@@ -8,6 +8,8 @@ import Input from '@/components/ui/Input';
 import Card from '@/components/ui/Card';
 import { resetPassword } from '@/services/supabase/auth';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -59,7 +61,9 @@ export default function ForgotPasswordPage() {
 
   if (step === 'success') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-tiffany-50 px-4">
+      <div
+        className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
+      >
         <Card className="max-w-md w-full p-8 shadow-xl">
           <div className="text-center">
             {/* Success Icon */}
@@ -108,7 +112,9 @@ export default function ForgotPasswordPage() {
 
   if (step === 'error') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-tiffany-50 px-4">
+      <div
+        className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
+      >
         <Card className="max-w-md w-full p-8 shadow-xl">
           <div className="text-center">
             {/* Error Icon */}
@@ -137,12 +143,19 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-tiffany-50 px-4">
+    <div
+      className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
+    >
       <Card className="max-w-md w-full p-8 shadow-xl">
         {/* Header */}
         <div className="text-center mb-8">
           {/* Icon */}
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-orange-100 to-tiffany-100 mb-6">
+          <div
+            className={cn(
+              GRADIENTS.iconOrangeTiffany,
+              'mx-auto flex h-16 w-16 items-center justify-center rounded-full mb-6'
+            )}
+          >
             <Mail className="h-8 w-8 text-orange-600" />
           </div>
 

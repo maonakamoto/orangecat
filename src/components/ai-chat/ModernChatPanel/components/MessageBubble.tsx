@@ -4,6 +4,7 @@
  */
 
 import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { Cat, User, Copy, Check, Clock, X } from 'lucide-react';
 import { AI_MODEL_REGISTRY } from '@/config/ai-models';
@@ -106,7 +107,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
       <div
         className={cn(
           'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center',
-          isUser ? 'bg-gray-200' : 'bg-gradient-to-br from-orange-400 to-orange-500'
+          isUser ? 'bg-gray-200' : GRADIENTS.brandOrangeBr
         )}
       >
         {isUser ? (

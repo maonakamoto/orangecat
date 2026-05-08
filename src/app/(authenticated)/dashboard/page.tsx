@@ -2,6 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import Loading from '@/components/Loading';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { ProfileCompletionModal } from '@/components/onboarding/ProfileCompletionModal';
 import {
   DashboardHeader,
@@ -69,7 +71,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20">
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
       <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 pb-20 sm:pb-8">
         <DashboardHeader
           profile={profile}

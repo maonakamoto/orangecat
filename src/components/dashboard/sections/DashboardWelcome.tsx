@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { X, Sparkles, Target, Wallet, CheckCircle, ArrowRight } from 'lucide-react';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { GRADIENTS } from '@/config/gradients';
 
 interface DashboardWelcomeProps {
   profile: {
@@ -64,7 +65,9 @@ export function DashboardWelcome({
   // If everything is set up, show a celebratory message
   if (!nextAction) {
     return (
-      <div className="relative rounded-xl border border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 p-4 sm:p-6 shadow-sm">
+      <div
+        className={`relative rounded-xl border border-green-200 ${GRADIENTS.sectionGreen} p-4 sm:p-6 shadow-sm`}
+      >
         <button
           onClick={onDismiss}
           className="absolute top-3 right-3 sm:top-4 sm:right-4 text-green-600 hover:text-green-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"

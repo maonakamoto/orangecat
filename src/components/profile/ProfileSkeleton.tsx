@@ -1,5 +1,7 @@
 'use client';
 
+import { GRADIENTS } from '@/config/gradients';
+
 /**
  * Skeleton loader for profile wallets section
  */
@@ -85,7 +87,7 @@ export function ProjectsSkeleton() {
  */
 export function ProfilePageSkeleton() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <div className={`min-h-screen ${GRADIENTS.graySubtle}`}>
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header Banner Skeleton */}
         <div className="relative mb-8">

@@ -3,10 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { ArrowLeft, FileQuestion } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function InvestmentNotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+    <div className={`min-h-screen ${GRADIENTS.grayLight} flex items-center justify-center p-4`}>
       <Card className="max-w-lg mx-auto shadow-xl">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">

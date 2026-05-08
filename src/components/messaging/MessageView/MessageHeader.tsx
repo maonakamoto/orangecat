@@ -11,6 +11,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Users } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import Button from '@/components/ui/Button';
 import AvatarLink from '@/components/ui/AvatarLink';
 import type { Conversation, Participant } from '@/features/messaging/types';
@@ -65,11 +67,7 @@ function getPrimaryParticipant(
   return participants.find(p => p && p.is_active && p.user_id !== currentUserId) || null;
 }
 
-export default function MessageHeader({
-  conversation,
-  currentUserId,
-  onBack,
-}: MessageHeaderProps) {
+export default function MessageHeader({ conversation, currentUserId, onBack }: MessageHeaderProps) {
   const displayName = getDisplayName(conversation, currentUserId);
   const primaryParticipant = getPrimaryParticipant(conversation, currentUserId);
 
@@ -100,7 +98,12 @@ export default function MessageHeader({
             className="flex-shrink-0"
           />
         ) : conversation.is_group ? (
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-tiffany-400 to-tiffany-600 flex items-center justify-center text-white">
+          <div
+            className={cn(
+              GRADIENTS.brandTiffanyBr,
+              'w-10 h-10 rounded-full flex items-center justify-center text-white'
+            )}
+          >
             <Users className="w-5 h-5" />
           </div>
         ) : null}
@@ -125,7 +128,6 @@ export default function MessageHeader({
           <p className="text-sm text-gray-500">{subtitle}</p>
         </div>
       </div>
-
     </div>
   );
 }

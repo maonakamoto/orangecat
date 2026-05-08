@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { Target, Sparkles, ArrowRight, Users, BookOpen } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
+import { GRADIENTS } from '@/config/gradients';
 
 /** Benefits shown on the CTA card - centralized for easy updates */
 const PROJECT_BENEFITS = ['No platform fees', 'Direct to your wallet', 'Full control'] as const;
@@ -39,7 +40,9 @@ export function GetStartedStep({ hasWallet = false, hasProjects = false }: GetSt
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div
+          className={`w-16 h-16 ${GRADIENTS.brandOrangeCircle} rounded-full flex items-center justify-center mx-auto mb-4`}
+        >
           <Target className="h-8 w-8 text-white" />
         </div>
         <h3 className="text-2xl font-semibold mb-2">You're Ready to Launch!</h3>
@@ -111,7 +114,7 @@ export function GetStartedStep({ hasWallet = false, hasProjects = false }: GetSt
       </div>
 
       {/* Encouragement Card */}
-      <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+      <Card className={`${GRADIENTS.sectionGreen} border-green-200`}>
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             <Sparkles className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />

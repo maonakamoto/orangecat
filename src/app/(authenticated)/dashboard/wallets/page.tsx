@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { WalletManager } from '@/components/wallets/WalletManager';
 import { DuplicateWalletDialog } from '@/components/wallets/DuplicateWalletDialog';
 import type { WalletFieldType } from '@/lib/wallet-guidance';
@@ -87,7 +89,7 @@ export default function DashboardWalletsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20">
+    <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
         {/* Page Header */}
         <WalletsPageHeader isDesktop={isDesktop} />

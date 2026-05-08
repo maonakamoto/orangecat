@@ -15,6 +15,7 @@ import { STATUS } from '@/config/database-constants';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { Currency } from '@/types/settings';
+import { GRADIENTS } from '@/config/gradients';
 
 // Event type from database - matches events table schema
 export interface Event {
@@ -168,7 +169,7 @@ export const eventEntityConfig: EntityConfig<Event> = {
       'Organize your first in-person gathering or meetup with Bitcoin-powered ticketing.',
     action: (
       <Link href={ROUTES.DASHBOARD.EVENTS_CREATE}>
-        <Button className="bg-gradient-to-r from-blue-600 to-blue-700">Create Event</Button>
+        <Button className={GRADIENTS.brandBlue}>Create Event</Button>
       </Link>
     ),
   },

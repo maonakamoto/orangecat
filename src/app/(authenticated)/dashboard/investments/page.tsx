@@ -16,6 +16,7 @@ import { investmentEntityConfig } from '@/config/entities/investments';
 import { Investment } from '@/types/investments';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrendingUp, Search } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 /**
  * Investments Dashboard Page
@@ -85,7 +86,7 @@ export default function InvestmentsPage() {
       )}
       <Button
         href={investmentEntityConfig.createPath}
-        className="bg-gradient-to-r from-green-600 to-green-700 w-full sm:w-auto"
+        className={`${GRADIENTS.brandGreen} w-full sm:w-auto`}
       >
         Create Investment
       </Button>

@@ -15,6 +15,7 @@
 import { useState } from 'react';
 import { Cat, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/Textarea';
 import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
 import { useRouter } from 'next/navigation';
@@ -66,7 +67,7 @@ export default function IntelligentOnboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-tiffany-50 flex items-center justify-center p-4">
+    <div className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center p-4')}>
       <div className="w-full max-w-lg">
         {/* Back navigation */}
         <button
