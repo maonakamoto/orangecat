@@ -17,7 +17,7 @@ import { TimelineDisplayEvent } from '@/types/timeline';
  * @param events - Array of timeline events
  * @returns Deduplicated array of events
  */
-export function deduplicateCrossPosts(events: TimelineDisplayEvent[]): TimelineDisplayEvent[] {
+function deduplicateCrossPosts(events: TimelineDisplayEvent[]): TimelineDisplayEvent[] {
   // Group events by original_post_id
   const eventGroups = new Map<string, TimelineDisplayEvent[]>();
   const standaloneEvents: TimelineDisplayEvent[] = [];
@@ -93,15 +93,18 @@ export function filterOptimisticEvents(
   realEvents: any[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any[] {
-  return optimisticEvents.filter(optEvent =>
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    !realEvents.some((realEvent: any) => {
-      // Match by content and timestamp (simple heuristic)
-      return realEvent.description === optEvent.description &&
-             Math.abs(
-               new Date(realEvent.eventTimestamp).getTime() -
-               new Date(optEvent.eventTimestamp).getTime()
-             ) < 5000; // 5 second window
-    })
+  return optimisticEvents.filter(
+    optEvent =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      !realEvents.some((realEvent: any) => {
+        // Match by content and timestamp (simple heuristic)
+        return (
+          realEvent.description === optEvent.description &&
+          Math.abs(
+            new Date(realEvent.eventTimestamp).getTime() -
+              new Date(optEvent.eventTimestamp).getTime()
+          ) < 5000
+        ); // 5 second window
+      })
   );
 }

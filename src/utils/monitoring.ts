@@ -1,7 +1,7 @@
 import { logger } from './logger';
 
 // Performance monitoring
-export const trackPerformance = (metricName: string, value: number) => {
+const trackPerformance = (metricName: string, value: number) => {
   if (process.env.NODE_ENV === 'production') {
     logger.performance(metricName, value);
   }
@@ -9,7 +9,7 @@ export const trackPerformance = (metricName: string, value: number) => {
 
 // Error tracking
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const trackError = (error: Error, context?: Record<string, any>) => {
+const trackError = (error: Error, context?: Record<string, any>) => {
   if (process.env.NODE_ENV === 'production') {
     // Log to Vercel Error Tracking
     logger.error('Application error', {
@@ -21,7 +21,7 @@ export const trackError = (error: Error, context?: Record<string, any>) => {
 };
 
 // Page view tracking
-export const trackPageView = (path: string) => {
+const trackPageView = (path: string) => {
   if (process.env.NODE_ENV === 'production') {
     logger.info(`Page View: ${path}`, undefined, 'Analytics');
   }

@@ -12,7 +12,7 @@ interface Token {
 }
 
 // Escapes HTML to prevent XSS before applying bold/italic transforms
-export function renderMarkdown(text: string): string {
+function renderMarkdown(text: string): string {
   if (!text) {
     return '';
   }
@@ -131,7 +131,7 @@ function renderInlineTokens(text: string): React.ReactNode[] {
   return tokens.length === 0 ? [text] : tokens.map(tokenToReact);
 }
 
-export function renderMarkdownToReact(text: string): React.ReactNode[] {
+function renderMarkdownToReact(text: string): React.ReactNode[] {
   if (!text) {
     return [];
   }

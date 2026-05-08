@@ -2,7 +2,7 @@
  * Utility functions for implementing retry logic with exponential backoff
  */
 
-export interface RetryOptions {
+interface RetryOptions {
   maxAttempts?: number;
   baseDelay?: number;
   maxDelay?: number;
@@ -16,7 +16,7 @@ export interface RetryOptions {
  * Default retry condition - retries on network errors and 5xx status codes
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function isRetryableError(error: any): boolean {
+function isRetryableError(error: any): boolean {
   // Network errors
   if (!error) {
     return false;
@@ -78,7 +78,7 @@ function calculateDelay(attempt: number, options: RetryOptions): number {
 /**
  * Retry a function with exponential backoff
  */
-export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> {
+async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> {
   const { maxAttempts = 3, retryCondition = isRetryableError } = options;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -160,6 +160,3 @@ export async function withApiRetry<T>(
     },
   });
 }
-
-
-
