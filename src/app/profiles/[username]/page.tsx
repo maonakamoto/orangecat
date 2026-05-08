@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     } else {
       // Not authenticated - return generic metadata
       return {
-        title: 'My Profile | OrangeCat',
+        title: 'My Profile',
         description:
           'View your profile on OrangeCat. Exchange, fund, lend, invest, and connect with others.',
       };
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   } | null;
   if (!profile) {
     return {
-      title: 'Profile Not Found | OrangeCat',
+      title: 'Profile Not Found',
       description: 'The profile you are looking for does not exist.',
     };
   }
@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const url = `https://orangecat.ch/profiles/${profile.username || targetUsername}`;
 
   return {
-    title: `${displayName} | OrangeCat`,
+    title: displayName,
     description,
     alternates: {
       canonical: url,

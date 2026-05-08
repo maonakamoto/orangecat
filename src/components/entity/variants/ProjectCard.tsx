@@ -132,8 +132,6 @@ export function ProjectCard({
       description={compact ? null : project.description || null}
       thumbnailUrl={project.cover_image_url || project.banner_url || undefined}
       href={props.href || `/projects/${project.id}`}
-      badge={statusConfig.label}
-      badgeVariant={statusConfig.badgeVariant}
       headerSlot={statusBadge}
       progressSlot={progressSlot}
       metricsSlot={metricsSlot}
