@@ -78,9 +78,6 @@ export const API_ROUTES = {
     BASE: '/api/payments',
     SEND: '/api/payments/send',
   },
-  ONBOARDING: {
-    ANALYZE: '/api/onboarding/analyze',
-  },
   PROJECTS: {
     BASE: '/api/projects',
     FAVORITES: '/api/projects/favorites',
