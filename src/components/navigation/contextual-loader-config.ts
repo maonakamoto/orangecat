@@ -59,7 +59,7 @@ interface RouteConfig extends ContextContent {
 
 const ROUTE_CONFIGS: RouteConfig[] = [
   {
-    matches: p => p === '/' || p.startsWith('/dashboard'),
+    matches: p => p === '/' || p.startsWith(ROUTES.DASHBOARD.HOME),
     icon: Home,
     title: 'Your Dashboard',
     subtitle: 'Your personal command center',

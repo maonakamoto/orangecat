@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { WALLET_CATEGORIES } from '@/types/wallet';
 import { WalletForm } from './WalletForm';
 import type { WalletCardProps } from '../types';
+import { truncateAddress } from '@/utils/string';
 
 export function WalletCard({
   wallet,
@@ -182,7 +183,7 @@ export function WalletCard({
           </button>
         </div>
         <code className="text-xs text-gray-700 block font-mono break-all bg-gray-50 p-2 rounded border">
-          {wallet.address_or_xpub.slice(0, 20)}...{wallet.address_or_xpub.slice(-10)}
+          {truncateAddress(wallet.address_or_xpub, 20, 10)}
         </code>
       </div>
     </div>

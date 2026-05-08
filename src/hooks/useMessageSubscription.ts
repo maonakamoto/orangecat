@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import supabase from '@/lib/supabase/browser';
 import { CHANNELS, debugLog, TIMING } from '@/features/messaging/lib/constants';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import {
   handleMessageInsert,
   handleMessageUpdate,
@@ -108,7 +109,7 @@ export function useMessageSubscription(
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'messages',
+          table: DATABASE_TABLES.MESSAGES,
           filter: `conversation_id=eq.${conversationId}`,
         },
         async payload =>
@@ -119,7 +120,7 @@ export function useMessageSubscription(
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'messages',
+          table: DATABASE_TABLES.MESSAGES,
           filter: `conversation_id=eq.${conversationId}`,
         },
         async payload =>
@@ -130,7 +131,7 @@ export function useMessageSubscription(
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'conversation_participants',
+          table: DATABASE_TABLES.CONVERSATION_PARTICIPANTS,
           filter: `conversation_id=eq.${conversationId}`,
         },
         async payload =>

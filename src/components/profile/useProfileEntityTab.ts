@@ -8,6 +8,7 @@ import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { logger } from '@/utils/logger';
 import { EntityType, ENTITY_REGISTRY } from '@/config/entity-registry';
 import React from 'react';
+import { ROUTES } from '@/config/routes';
 
 export interface EntityData {
   id: string;
@@ -56,7 +57,7 @@ export function useProfileEntityTab(profile: ScalableProfile, entityType: Entity
   const [loading, setLoading] = useState(true);
 
   const entityMeta = ENTITY_REGISTRY[entityType];
-  const getDashboardPath = () => entityMeta?.basePath || '/dashboard';
+  const getDashboardPath = () => entityMeta?.basePath || ROUTES.DASHBOARD.HOME;
   const getCreatePath = () => entityMeta?.createPath || `${getDashboardPath()}/create`;
   const getViewPath = (id: string) => `${entityMeta?.publicBasePath || `/${entityType}s`}/${id}`;
 

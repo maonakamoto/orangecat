@@ -5,6 +5,7 @@ import { createBrowserClient } from '@/lib/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
+import { DATABASE_TABLES } from '@/config/database-tables';
 
 export function useUnreadNotifications() {
   const { user } = useAuth();
@@ -38,7 +39,7 @@ export function useUnreadNotifications() {
         {
           event: '*',
           schema: 'public',
-          table: 'notifications',
+          table: DATABASE_TABLES.NOTIFICATIONS,
           filter: `recipient_user_id=eq.${user.id}`,
         },
         () => fetchCount()

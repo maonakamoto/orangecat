@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/Input';
 import { cn } from '@/lib/utils';
 import { PROVIDER_TYPE_LABELS, PROVIDER_DIFFICULTY_LABELS } from '@/data/aiProviders';
 import type { FilterType, DifficultyFilter, BillingFilter } from './useAIProviderDiscovery';
+import { capitalize } from '@/utils/string';
 
 interface AIProviderFiltersProps {
   searchQuery: string;
@@ -74,7 +75,7 @@ export function AIProviderFilters({
     difficulty === 'all' ? 'All Levels' : PROVIDER_DIFFICULTY_LABELS[difficulty];
 
   const getBillingLabel = (billing: BillingFilter) =>
-    billing === 'all' ? 'All Billing' : billing.charAt(0).toUpperCase() + billing.slice(1);
+    billing === 'all' ? 'All Billing' : capitalize(billing);
 
   return (
     <div className="space-y-4">

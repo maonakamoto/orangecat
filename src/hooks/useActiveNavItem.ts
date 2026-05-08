@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import type { NavSection } from './useNavigation';
+import { ROUTES } from '@/config/routes';
 
 export interface UseActiveNavItemReturn {
   activeSection: string | null;
@@ -31,15 +32,15 @@ export function useActiveNavItem(sections: NavSection[]): UseActiveNavItemReturn
           break outer;
         }
         if (
-          item.href === '/dashboard' &&
-          (pathname === '/dashboard' || pathname.startsWith('/dashboard/'))
+          item.href === ROUTES.DASHBOARD.HOME &&
+          (pathname === ROUTES.DASHBOARD.HOME || pathname.startsWith(ROUTES.DASHBOARD.HOME + '/'))
         ) {
           foundSection = section.id;
           foundItem = item.href ?? null;
           break outer;
         }
         if (
-          item.href !== '/dashboard' &&
+          item.href !== ROUTES.DASHBOARD.HOME &&
           (pathname.startsWith(`${item.href}/`) || pathname === item.href)
         ) {
           foundSection = section.id;
@@ -61,8 +62,8 @@ export function useActiveNavItem(sections: NavSection[]): UseActiveNavItemReturn
       if (pathname === href) {
         return true;
       }
-      if (href === '/dashboard') {
-        return pathname === '/dashboard';
+      if (href === ROUTES.DASHBOARD.HOME) {
+        return pathname === ROUTES.DASHBOARD.HOME;
       }
       return pathname.startsWith(`${href}/`) || pathname === href;
     },

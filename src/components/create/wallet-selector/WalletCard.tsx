@@ -2,19 +2,13 @@
 
 import { Check } from 'lucide-react';
 import { WALLET_CATEGORIES, type Wallet } from '@/types/wallet';
+import { truncateAddress } from '@/utils/string';
 
 interface WalletCardProps {
   wallet: Wallet;
   selected: boolean;
   onSelect: () => void;
   disabled?: boolean;
-}
-
-function truncateAddress(address: string, chars = 8): string {
-  if (address.length <= chars * 2 + 3) {
-    return address;
-  }
-  return `${address.slice(0, chars)}...${address.slice(-chars)}`;
 }
 
 export function WalletCard({ wallet, selected, onSelect, disabled }: WalletCardProps) {

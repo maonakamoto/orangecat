@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { logger } from '@/utils/logger';
+import { ROUTES } from '@/config/routes';
 
 export { useRequireAuth, useRedirectIfAuthenticated } from './useAuthRedirects';
 
@@ -115,7 +116,7 @@ export function useAuth() {
 
       const currentPath = window.location.pathname;
       if (
-        currentPath.startsWith('/dashboard') ||
+        currentPath.startsWith(ROUTES.DASHBOARD.HOME) ||
         currentPath.startsWith('/profile') ||
         currentPath.startsWith('/settings')
       ) {

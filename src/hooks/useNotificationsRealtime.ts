@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import type { Notification } from './useNotifications';
+import { DATABASE_TABLES } from '@/config/database-tables';
 
 interface Props {
   user: User | null;
@@ -28,7 +29,7 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'notifications',
+          table: DATABASE_TABLES.NOTIFICATIONS,
           filter: `recipient_user_id=eq.${user.id}`,
         },
         (payload: { new: Record<string, unknown> }) => {
@@ -40,7 +41,7 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'notifications',
+          table: DATABASE_TABLES.NOTIFICATIONS,
           filter: `recipient_user_id=eq.${user.id}`,
         },
         (payload: { new: Record<string, unknown> }) => {
@@ -52,7 +53,7 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
         {
           event: 'DELETE',
           schema: 'public',
-          table: 'notifications',
+          table: DATABASE_TABLES.NOTIFICATIONS,
           filter: `recipient_user_id=eq.${user.id}`,
         },
         (payload: { old: { id: string } }) => {

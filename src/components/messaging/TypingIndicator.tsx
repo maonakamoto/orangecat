@@ -10,6 +10,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import type { TypingUser } from '@/features/messaging/hooks/useTypingIndicator';
+import { capitalize } from '@/utils/string';
 
 interface TypingIndicatorProps {
   /** List of users currently typing */
@@ -200,7 +201,7 @@ export function OnlineStatusBadge({
   return (
     <span
       className={`${sizeClasses[size]} ${statusColors[status]} rounded-full inline-block ring-2 ring-white`}
-      title={status.charAt(0).toUpperCase() + status.slice(1)}
+      title={capitalize(status)}
     />
   );
 }

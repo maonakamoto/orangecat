@@ -1,6 +1,7 @@
 import EntityDetailPage from '@/components/entity/EntityDetailPage';
 import { causeEntityConfig } from '@/config/entities/causes';
 import type { UserCause } from '@/types/database';
+import { capitalize } from '@/utils/string';
 
 interface CauseDetailPageProps {
   params: Promise<{ id: string }>;
@@ -23,12 +24,23 @@ export default async function CauseDetailPage({ params }: CauseDetailPageProps) 
       config={causeEntityConfig}
       entityId={id}
       requireAuth={false}
-      makeDetailFields={(cause) => {
+      makeDetailFields={cause => {
         const left = [
           { label: 'Category', value: cause.cause_category || '—' },
-          { label: 'Status', value: cause.status ? cause.status.charAt(0).toUpperCase() + cause.status.slice(1) : 'Draft' },
-          { label: 'Goal Amount', value: cause.target_amount ? `${cause.target_amount.toLocaleString()} ${cause.currency || 'CHF'}` : 'Open-ended' },
-          { label: 'Current Amount', value: `${(cause.current_amount || 0).toLocaleString()} ${cause.currency || 'CHF'}` },
+          {
+            label: 'Status',
+            value: capitalize(cause.status || 'draft'),
+          },
+          {
+            label: 'Goal Amount',
+            value: cause.target_amount
+              ? `${cause.target_amount.toLocaleString()} ${cause.currency || 'CHF'}`
+              : 'Open-ended',
+          },
+          {
+            label: 'Current Amount',
+            value: `${(cause.current_amount || 0).toLocaleString()} ${cause.currency || 'CHF'}`,
+          },
         ];
 
         const right: Array<{ label: string; value: string }> = [];

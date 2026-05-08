@@ -29,18 +29,22 @@ export default async function ServiceDetailPage({ params }: PageProps) {
       redirectPath="/auth?mode=login&from=/dashboard/services"
       makeDetailFields={(service, userCurrency) => {
         // Display prices in user's preferred currency (or service's currency)
-        const displayCurrency = (userCurrency || service.currency || PLATFORM_DEFAULT_CURRENCY) as Currency;
+        const displayCurrency = (userCurrency ||
+          service.currency ||
+          PLATFORM_DEFAULT_CURRENCY) as Currency;
         const priceParts: string[] = [];
         if (service.hourly_rate && service.currency) {
-          const hourlyRate = service.currency === displayCurrency
-            ? service.hourly_rate
-            : convert(service.hourly_rate, service.currency as Currency, displayCurrency);
+          const hourlyRate =
+            service.currency === displayCurrency
+              ? service.hourly_rate
+              : convert(service.hourly_rate, service.currency as Currency, displayCurrency);
           priceParts.push(`${formatCurrency(hourlyRate, displayCurrency)}/hour`);
         }
         if (service.fixed_price && service.currency) {
-          const fixedPrice = service.currency === displayCurrency
-            ? service.fixed_price
-            : convert(service.fixed_price, service.currency as Currency, displayCurrency);
+          const fixedPrice =
+            service.currency === displayCurrency
+              ? service.fixed_price
+              : convert(service.fixed_price, service.currency as Currency, displayCurrency);
           priceParts.push(formatCurrency(fixedPrice, displayCurrency));
         }
         const priceLabel = priceParts.length > 0 ? priceParts.join(' or ') : 'Contact for pricing';
@@ -49,7 +53,15 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           { label: 'Status', value: service.status || 'draft' },
           { label: 'Category', value: service.category || '—' },
           { label: 'Pricing', value: priceLabel },
-          { label: 'Location', value: service.service_location_type === 'remote' ? 'Remote' : service.service_location_type === 'onsite' ? 'On-site' : service.service_location_type || '—' },
+          {
+            label: 'Location',
+            value:
+              service.service_location_type === 'remote'
+                ? 'Remote'
+                : service.service_location_type === 'onsite'
+                  ? 'On-site'
+                  : service.service_location_type || '—',
+          },
         ];
 
         if (service.duration_minutes) {

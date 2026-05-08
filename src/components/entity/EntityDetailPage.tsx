@@ -10,6 +10,7 @@ import { PLATFORM_DEFAULT_CURRENCY, isSupportedCurrency } from '@/config/currenc
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { Currency } from '@/types/settings';
 import type { ReactNode } from 'react';
+import { capitalize, capitalizeWords } from '@/utils/string';
 
 export interface DetailField {
   label: string;
@@ -98,7 +99,7 @@ function makeDefaultDetailFields<T extends BaseEntity>(
   if (entity.status) {
     left.push({
       label: 'Status',
-      value: String(entity.status).charAt(0).toUpperCase() + String(entity.status).slice(1),
+      value: capitalize(String(entity.status)),
     });
   }
 
@@ -122,12 +123,7 @@ function makeDefaultDetailFields<T extends BaseEntity>(
       return;
     }
 
-    const label = key
-      .replace(/_/g, ' ')
-      .replace(/([A-Z])/g, ' $1')
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    const label = capitalizeWords(key.replace(/([A-Z])/g, ' $1'));
 
     const formattedValue = formatFieldValue(value, key);
 
@@ -222,9 +218,13 @@ export default async function EntityDetailPage<T extends BaseEntity>({
     notFound();
   }
 
-  const fields = makeDetailFields
+  const rawFields = makeDetailFields
     ? makeDetailFields(entity as T, userCurrency)
     : makeDefaultDetailFields(entity as T);
+  const fields = {
+    left: rawFields.left ?? [],
+    right: rawFields.right ?? [],
+  };
 
   // Auto-append timestamps when makeDetailFields didn't already include them
   if (makeDetailFields) {

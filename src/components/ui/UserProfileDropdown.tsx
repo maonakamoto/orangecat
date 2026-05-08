@@ -40,7 +40,7 @@ export default function UserProfileDropdown({
     {
       label: 'Dashboard',
       icon: BarChart3,
-      href: '/dashboard',
+      href: ROUTES.DASHBOARD.HOME,
       description: 'Overview and analytics',
     },
     {

@@ -2,6 +2,7 @@ import EntityDetailPage from '@/components/entity/EntityDetailPage';
 import { assetEntityConfig } from '@/config/entities/assets';
 import type { Asset } from '@/types/asset';
 import { formatDate } from '@/utils/dates';
+import { capitalize, capitalizeWords } from '@/utils/string';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -29,13 +30,11 @@ export default async function AssetDetailPage({ params }: PageProps) {
         const left = [
           {
             label: 'Status',
-            value: asset.status
-              ? asset.status.charAt(0).toUpperCase() + asset.status.slice(1)
-              : 'Draft',
+            value: capitalize(asset.status || 'draft'),
           },
           {
             label: 'Type',
-            value: asset.type ? asset.type.replace(/_/g, ' ') : '—',
+            value: asset.type ? capitalizeWords(asset.type) : '—',
           },
           {
             label: 'Estimated Value',

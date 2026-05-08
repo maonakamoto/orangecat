@@ -1,6 +1,7 @@
 import EntityDetailPage from '@/components/entity/EntityDetailPage';
 import { aiAssistantEntityConfig } from '@/config/entities/ai-assistants';
 import type { AIAssistant } from '@/types/database';
+import { capitalize, capitalizeWords } from '@/utils/string';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -28,17 +29,13 @@ export default async function AIAssistantDetailPage({ params }: PageProps) {
         const left = [
           {
             label: 'Status',
-            value: assistant.status
-              ? assistant.status.charAt(0).toUpperCase() + assistant.status.slice(1)
-              : 'Draft',
+            value: capitalize(assistant.status || 'draft'),
           },
           { label: 'Category', value: assistant.category || '—' },
           { label: 'Model Preference', value: assistant.model_preference || 'Any' },
           {
             label: 'Pricing Model',
-            value: assistant.pricing_model
-              ? assistant.pricing_model.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
-              : '—',
+            value: assistant.pricing_model ? capitalizeWords(assistant.pricing_model) : '—',
           },
         ];
 

@@ -29,21 +29,29 @@ export default async function ProductDetailPage({ params }: PageProps) {
       redirectPath="/auth?mode=login&from=/dashboard/store"
       makeDetailFields={(product, userCurrency) => {
         // Display price in user's preferred currency (or product's currency)
-        const displayCurrency = (userCurrency || product.currency || PLATFORM_DEFAULT_CURRENCY) as Currency;
-        const priceValue = product.price && product.currency
-          ? (() => {
-              const price = product.currency === displayCurrency
-                ? product.price
-                : convert(product.price, product.currency as Currency, displayCurrency);
-              return formatCurrency(price, displayCurrency);
-            })()
-          : 'Not set';
-        
+        const displayCurrency = (userCurrency ||
+          product.currency ||
+          PLATFORM_DEFAULT_CURRENCY) as Currency;
+        const priceValue =
+          product.price && product.currency
+            ? (() => {
+                const price =
+                  product.currency === displayCurrency
+                    ? product.price
+                    : convert(product.price, product.currency as Currency, displayCurrency);
+                return formatCurrency(price, displayCurrency);
+              })()
+            : 'Not set';
+
         const left = [
           { label: 'Status', value: product.status || 'draft' },
           { label: 'Price', value: priceValue },
           { label: 'Type', value: product.product_type || '—' },
-          { label: 'Inventory', value: product.inventory_count === -1 ? 'Unlimited' : String(product.inventory_count || 0) },
+          {
+            label: 'Inventory',
+            value:
+              product.inventory_count === -1 ? 'Unlimited' : String(product.inventory_count || 0),
+          },
           { label: 'Fulfillment', value: product.fulfillment_type || '—' },
         ];
 

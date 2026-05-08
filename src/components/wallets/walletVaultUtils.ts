@@ -1,4 +1,5 @@
 import { Bitcoin, Zap, Users, Building, Heart } from 'lucide-react';
+import { truncateAddress as truncateAddressUtil } from '@/utils/string';
 import type { WalletAddress } from './WalletVault';
 
 export function getTypeIconName(
@@ -64,8 +65,5 @@ export function getCategoryColor(category: WalletAddress['category']): string {
 }
 
 export function formatAddress(address: string): string {
-  if (address.length <= 20) {
-    return address;
-  }
-  return `${address.slice(0, 10)}...${address.slice(-8)}`;
+  return truncateAddressUtil(address, 10, 8);
 }
