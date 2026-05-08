@@ -65,12 +65,6 @@ export default async function AIAssistantDetailPage({ params }: PageProps) {
           right.push({ label: 'Bitcoin Address', value: assistant.bitcoin_address });
         }
 
-        if (assistant.created_at) {
-          right.push({ label: 'Created', value: new Date(assistant.created_at).toLocaleString() });
-        }
-        if (assistant.updated_at) {
-          right.push({ label: 'Updated', value: new Date(assistant.updated_at).toLocaleString() });
-        }
         if (assistant.published_at) {
           right.push({
             label: 'Published',

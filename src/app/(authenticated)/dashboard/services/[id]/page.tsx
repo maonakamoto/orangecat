@@ -56,13 +56,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           left.push({ label: 'Duration', value: `${service.duration_minutes} minutes` });
         }
 
-        return {
-          left,
-          right: [
-            { label: 'Created', value: new Date(service.created_at || '').toLocaleString() },
-            { label: 'Updated', value: new Date(service.updated_at || '').toLocaleString() },
-          ],
-        };
+        return { left, right: [] };
       }}
     />
   );

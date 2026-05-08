@@ -98,20 +98,6 @@ export default async function AssetDetailPage({ params }: PageProps) {
           });
         }
 
-        if (asset.created_at) {
-          right.push({
-            label: 'Created',
-            value: new Date(asset.created_at).toLocaleString(),
-          });
-        }
-
-        if (asset.updated_at) {
-          right.push({
-            label: 'Updated',
-            value: new Date(asset.updated_at).toLocaleString(),
-          });
-        }
-
         return { left, right };
       }}
     />

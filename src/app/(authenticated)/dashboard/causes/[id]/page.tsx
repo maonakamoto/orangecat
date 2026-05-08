@@ -40,13 +40,6 @@ export default async function CauseDetailPage({ params }: CauseDetailPageProps) 
           right.push({ label: 'Lightning Address', value: cause.lightning_address });
         }
 
-        if (cause.created_at) {
-          right.push({ label: 'Created', value: new Date(cause.created_at).toLocaleString() });
-        }
-        if (cause.updated_at) {
-          right.push({ label: 'Updated', value: new Date(cause.updated_at).toLocaleString() });
-        }
-
         return { left, right };
       }}
     />

@@ -226,6 +226,18 @@ export default async function EntityDetailPage<T extends BaseEntity>({
     ? makeDetailFields(entity as T, userCurrency)
     : makeDefaultDetailFields(entity as T);
 
+  // Auto-append timestamps when makeDetailFields didn't already include them
+  if (makeDetailFields) {
+    const hasCreated = fields.right.some(f => f.label === 'Created');
+    const hasUpdated = fields.right.some(f => f.label === 'Updated');
+    if (!hasCreated && entity.created_at) {
+      fields.right.push({ label: 'Created', value: new Date(entity.created_at).toLocaleString() });
+    }
+    if (!hasUpdated && entity.updated_at) {
+      fields.right.push({ label: 'Updated', value: new Date(entity.updated_at).toLocaleString() });
+    }
+  }
+
   const headerActions = (
     <Link href={config.editPath(entityId)}>
       <Button>Edit</Button>

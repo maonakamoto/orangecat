@@ -51,13 +51,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           left.push({ label: 'Tags', value: product.tags.join(', ') });
         }
 
-        return {
-          left,
-          right: [
-            { label: 'Created', value: new Date(product.created_at || '').toLocaleString() },
-            { label: 'Updated', value: new Date(product.updated_at || '').toLocaleString() },
-          ],
-        };
+        return { left, right: [] };
       }}
     />
   );
