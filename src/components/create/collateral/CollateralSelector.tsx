@@ -10,6 +10,7 @@ import { DEFAULT_CURRENCY } from '@/config/currencies';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/config/routes';
 import { useCollateralSelector } from './useCollateralSelector';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 export interface CollateralItem {
   id: string;
@@ -140,9 +141,7 @@ export function CollateralSelector({
                   <div
                     className={cn(
                       'h-8 w-8 rounded-full flex items-center justify-center',
-                      item.type === 'asset'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-purple-100 text-purple-700'
+                      item.type === 'asset' ? BADGE_COLORS.info : BADGE_COLORS.purple
                     )}
                   >
                     {item.type === 'asset' ? (

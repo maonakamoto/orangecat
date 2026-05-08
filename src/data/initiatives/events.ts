@@ -7,6 +7,7 @@
  */
 
 import type { Initiative } from '@/types/initiative';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 export const events: Initiative = {
   id: 'events',
@@ -77,42 +78,42 @@ export const events: Initiative = {
       icon: 'PartyPopper',
       description: 'Birthday parties, anniversaries, and social gatherings',
       example: 'Surprise birthday party for 50 people',
-      color: 'bg-pink-100 text-pink-700 border-pink-200',
+      color: BADGE_COLORS.pink,
     },
     {
       name: 'Art Exhibits',
       icon: 'Palette',
       description: 'Gallery openings, art shows, and creative displays',
       example: 'Contemporary art exhibition',
-      color: 'bg-purple-100 text-purple-700 border-purple-200',
+      color: BADGE_COLORS.purple,
     },
     {
       name: 'Weekend Getaways',
       icon: 'Tent',
       description: 'Group trips, retreats, and adventure experiences',
       example: 'Mountain hiking weekend for 20 friends',
-      color: 'bg-green-100 text-green-700 border-green-200',
+      color: BADGE_COLORS.success,
     },
     {
       name: 'Conferences & Meetups',
       icon: 'Users',
       description: 'Professional conferences, networking events, and community meetups',
       example: 'Bitcoin developer conference',
-      color: 'bg-blue-100 text-blue-700 border-blue-200',
+      color: BADGE_COLORS.info,
     },
     {
       name: 'Workshops & Classes',
       icon: 'GraduationCap',
       description: 'Educational workshops, skill-building sessions, and training events',
       example: 'Photography workshop series',
-      color: 'bg-orange-100 text-orange-700 border-orange-200',
+      color: BADGE_COLORS.orange,
     },
     {
       name: 'Festivals & Fairs',
       icon: 'Music',
       description: 'Music festivals, cultural fairs, and community celebrations',
       example: 'Local food and music festival',
-      color: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+      color: BADGE_COLORS.warning,
     },
   ],
   capabilities: [
@@ -159,6 +160,3 @@ export const events: Initiative = {
     },
   ],
 };
-
-
-

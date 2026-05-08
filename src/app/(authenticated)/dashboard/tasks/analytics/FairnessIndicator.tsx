@@ -1,9 +1,10 @@
 import { CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 const config = {
-  good: { color: 'bg-green-100 text-green-700', icon: CheckCircle },
-  moderate: { color: 'bg-amber-100 text-amber-700', icon: Clock },
-  needs_attention: { color: 'bg-red-100 text-red-700', icon: AlertTriangle },
+  good: { color: BADGE_COLORS.success, icon: CheckCircle },
+  moderate: { color: BADGE_COLORS.amber, icon: Clock },
+  needs_attention: { color: BADGE_COLORS.error, icon: AlertTriangle },
 } as const;
 
 interface FairnessIndicatorProps {

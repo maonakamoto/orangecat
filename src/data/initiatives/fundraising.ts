@@ -7,6 +7,7 @@
  */
 
 import type { Initiative } from '@/types/initiative';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 export const fundraising: Initiative = {
   id: 'fundraising',
@@ -76,42 +77,42 @@ export const fundraising: Initiative = {
       icon: 'Heart',
       description: 'Non-profit and charitable causes',
       example: 'Disaster relief fund',
-      color: 'bg-red-100 text-red-700 border-red-200',
+      color: BADGE_COLORS.error,
     },
     {
       name: 'Startup Fundraising',
       icon: 'Rocket',
       description: 'Business and startup capital',
       example: 'Bitcoin startup seed round',
-      color: 'bg-blue-100 text-blue-700 border-blue-200',
+      color: BADGE_COLORS.info,
     },
     {
       name: 'Creative Projects',
       icon: 'Palette',
       description: 'Art, music, and creative endeavors',
       example: 'Independent film project',
-      color: 'bg-purple-100 text-purple-700 border-purple-200',
+      color: BADGE_COLORS.purple,
     },
     {
       name: 'Community Initiatives',
       icon: 'Users',
       description: 'Local community projects',
       example: 'Bitcoin meetup funding',
-      color: 'bg-green-100 text-green-700 border-green-200',
+      color: BADGE_COLORS.success,
     },
     {
       name: 'Educational Projects',
       icon: 'GraduationCap',
       description: 'Education and awareness projects',
       example: 'Bitcoin education program',
-      color: 'bg-orange-100 text-orange-700 border-orange-200',
+      color: BADGE_COLORS.orange,
     },
     {
       name: 'Emergency Relief',
       icon: 'AlertTriangle',
       description: 'Crisis response and emergency aid',
       example: 'Natural disaster relief',
-      color: 'bg-pink-100 text-pink-700 border-pink-200',
+      color: BADGE_COLORS.pink,
     },
   ],
   capabilities: [

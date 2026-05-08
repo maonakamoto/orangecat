@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { getAIProvider } from '@/data/aiProviders';
+import { BADGE_COLORS } from '@/config/badge-colors';
 import { UserApiKey } from './AIKeyManager';
 
 interface AIKeyCardProps {
@@ -40,12 +41,12 @@ export function AIKeyCard({ apiKey: key, isLoading, onSetPrimary, onDelete }: AI
                 </Badge>
               )}
               {key.is_valid ? (
-                <Badge className="bg-green-100 text-green-800 border-green-200">
+                <Badge className={BADGE_COLORS.success}>
                   <CheckCircle className="w-3 h-3 mr-1" />
                   Valid
                 </Badge>
               ) : (
-                <Badge className="bg-red-100 text-red-800 border-red-200">
+                <Badge className={BADGE_COLORS.error}>
                   <AlertCircle className="w-3 h-3 mr-1" />
                   Invalid
                 </Badge>

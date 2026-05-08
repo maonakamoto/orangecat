@@ -30,35 +30,21 @@ interface StatusInfo {
 /**
  * Status configuration - SSOT for all status labels and styles
  */
+import { BADGE_COLORS } from '@/config/badge-colors';
+
 export const STATUS_CONFIG: Record<EntityStatus, StatusInfo> = {
-  draft: {
-    label: 'Draft',
-    className: 'bg-gray-100 text-gray-700',
-    description: 'Not yet published',
-  },
-  active: {
-    label: 'Active',
-    className: 'bg-green-100 text-green-700',
-    description: 'Live and visible',
-  },
-  paused: {
-    label: 'Paused',
-    className: 'bg-yellow-100 text-yellow-700',
-    description: 'Temporarily inactive',
-  },
+  draft: { label: 'Draft', className: BADGE_COLORS.neutral, description: 'Not yet published' },
+  active: { label: 'Active', className: BADGE_COLORS.success, description: 'Live and visible' },
+  paused: { label: 'Paused', className: BADGE_COLORS.warning, description: 'Temporarily inactive' },
   completed: {
     label: 'Completed',
-    className: 'bg-blue-100 text-blue-700',
+    className: BADGE_COLORS.info,
     description: 'Successfully finished',
   },
-  cancelled: {
-    label: 'Cancelled',
-    className: 'bg-red-100 text-red-700',
-    description: 'No longer active',
-  },
+  cancelled: { label: 'Cancelled', className: BADGE_COLORS.error, description: 'No longer active' },
   archived: {
     label: 'Archived',
-    className: 'bg-slate-100 text-slate-700',
+    className: BADGE_COLORS.muted,
     description: 'Stored for reference',
   },
 };
@@ -75,17 +61,14 @@ export const STATUS_CONFIG: Record<EntityStatus, StatusInfo> = {
  */
 export function getStatusInfo(status: string | null | undefined): StatusInfo {
   if (!status) {
-    return {
-      label: 'Unknown',
-      className: 'bg-gray-100 text-gray-700',
-    };
+    return { label: 'Unknown', className: BADGE_COLORS.neutral };
   }
 
   const normalized = status.toLowerCase() as EntityStatus;
   return (
     STATUS_CONFIG[normalized] || {
       label: status.charAt(0).toUpperCase() + status.slice(1),
-      className: 'bg-gray-100 text-gray-700',
+      className: BADGE_COLORS.neutral,
     }
   );
 }

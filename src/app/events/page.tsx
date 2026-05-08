@@ -21,6 +21,7 @@ import {
   Tent,
   Music,
 } from 'lucide-react';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 export default function EventsPage() {
   const _router = useRouter();
@@ -73,13 +74,13 @@ export default function EventsPage() {
         'Graduation Parties',
         'Holiday Gatherings',
       ],
-      color: 'bg-pink-100 text-pink-700',
+      color: BADGE_COLORS.pink,
     },
     {
       category: 'Art & Culture',
       icon: Palette,
       examples: ['Art Exhibits', 'Gallery Openings', 'Photography Shows', 'Cultural Festivals'],
-      color: 'bg-purple-100 text-purple-700',
+      color: BADGE_COLORS.purple,
     },
     {
       category: 'Adventure & Travel',
@@ -90,13 +91,13 @@ export default function EventsPage() {
         'Camping Adventures',
         'City Explorations',
       ],
-      color: 'bg-green-100 text-green-700',
+      color: BADGE_COLORS.success,
     },
     {
       category: 'Community & Business',
       icon: Music,
       examples: ['Local Festivals', 'Professional Meetups', 'Workshops', 'Networking Events'],
-      color: 'bg-blue-100 text-blue-700',
+      color: BADGE_COLORS.info,
     },
   ];
 

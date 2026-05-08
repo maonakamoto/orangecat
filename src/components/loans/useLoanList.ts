@@ -7,16 +7,16 @@ import { formatCurrency } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY, CURRENCY_CODES } from '@/config/currencies';
 import type { CurrencyCode } from '@/config/currencies';
 import loansService from '@/services/loans';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 const STATUS_COLOR: Record<string, string> = {
-  active: 'bg-green-100 text-green-800',
-  paid_off: 'bg-blue-100 text-blue-800',
-  refinanced: 'bg-purple-100 text-purple-800',
-  defaulted: 'bg-red-100 text-red-800',
+  active: BADGE_COLORS.success,
+  paid_off: BADGE_COLORS.info,
+  refinanced: BADGE_COLORS.purple,
+  defaulted: BADGE_COLORS.error,
 };
 
-export const getStatusColor = (status: string) =>
-  STATUS_COLOR[status] ?? 'bg-gray-100 text-gray-800';
+export const getStatusColor = (status: string) => STATUS_COLOR[status] ?? BADGE_COLORS.neutral;
 
 export const formatLoanAmount = (amount: number, currency: string = PLATFORM_DEFAULT_CURRENCY) => {
   const validCurrency = (

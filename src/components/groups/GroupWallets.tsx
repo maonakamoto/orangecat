@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 interface GroupWalletsProps {
   groupId: string;
@@ -106,10 +107,7 @@ export function GroupWallets({
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg">{wallet.name}</CardTitle>
                       {wallet.is_active ? (
-                        <Badge
-                          variant="default"
-                          className="bg-green-100 text-green-700 border-green-200"
-                        >
+                        <Badge variant="default" className={BADGE_COLORS.success}>
                           Active
                         </Badge>
                       ) : (

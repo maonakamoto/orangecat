@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { useLightningPayment } from './useLightningPayment';
+import { BADGE_COLORS } from '@/config/badge-colors';
 import { LightningInvoiceForm } from './LightningInvoiceForm';
 import { LightningInvoiceDisplay } from './LightningInvoiceDisplay';
 import { LightningPaymentSuccess } from './LightningPaymentSuccess';
@@ -65,12 +66,16 @@ export default function LightningPayment({
           <Zap className="w-5 h-5 text-bitcoin-orange" />
           Lightning Payment
           {nwcConnected ? (
-            <span className="ml-auto flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+            <span
+              className={`ml-auto flex items-center gap-1 px-2 py-1 ${BADGE_COLORS.success} text-xs font-medium rounded-full`}
+            >
               <Wifi className="w-3 h-3" />
               NWC
             </span>
           ) : (
-            <span className="ml-auto flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+            <span
+              className={`ml-auto flex items-center gap-1 px-2 py-1 ${BADGE_COLORS.warning} text-xs font-medium rounded-full`}
+            >
               <WifiOff className="w-3 h-3" />
               Demo
             </span>

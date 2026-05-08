@@ -4,16 +4,17 @@ import Link from 'next/link';
 import { BookOpen, ChevronRight, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import type { LearningPath } from './config';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 interface LearningPathCardProps {
   path: LearningPath;
 }
 
-const levelColors = {
-  Beginner: 'bg-green-100 text-green-700',
-  Intermediate: 'bg-yellow-100 text-yellow-700',
-  Advanced: 'bg-red-100 text-red-700',
-} as const;
+const levelColors: Record<string, string> = {
+  Beginner: BADGE_COLORS.success,
+  Intermediate: BADGE_COLORS.warning,
+  Advanced: BADGE_COLORS.error,
+};
 
 export function LearningPathCard({ path }: LearningPathCardProps) {
   const Icon = path.icon;

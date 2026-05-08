@@ -13,6 +13,7 @@ import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { WalletRecommendation } from './useWalletRecommendation';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 interface WalletResultsViewProps {
   recommendations: WalletRecommendation[];
@@ -52,10 +53,10 @@ function WalletCard({ rec, index }: { rec: WalletRecommendation; index: number }
                 <Badge
                   className={
                     rec.wallet.difficulty === 'beginner'
-                      ? 'bg-green-100 text-green-700'
+                      ? BADGE_COLORS.success
                       : rec.wallet.difficulty === 'intermediate'
-                        ? 'bg-yellow-100 text-yellow-700'
-                        : 'bg-red-100 text-red-700'
+                        ? BADGE_COLORS.warning
+                        : BADGE_COLORS.error
                   }
                 >
                   {rec.wallet.difficulty}
@@ -77,10 +78,7 @@ function WalletCard({ rec, index }: { rec: WalletRecommendation; index: number }
           </h4>
           <div className="flex flex-wrap gap-2">
             {rec.reasons.map((reason, idx) => (
-              <span
-                key={idx}
-                className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm"
-              >
+              <span key={idx} className={`px-2 py-1 ${BADGE_COLORS.success} rounded-full text-sm`}>
                 {reason}
               </span>
             ))}

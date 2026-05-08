@@ -1,5 +1,6 @@
 import { Bitcoin, Zap, Users, Building, Heart } from 'lucide-react';
 import { truncateAddress as truncateAddressUtil } from '@/utils/string';
+import { BADGE_COLORS } from '@/config/badge-colors';
 import type { WalletAddress } from './WalletVault';
 
 export function getTypeIconName(
@@ -48,19 +49,19 @@ export function getCategoryIcon(category: WalletAddress['category']) {
 export function getCategoryColor(category: WalletAddress['category']): string {
   switch (category) {
     case 'personal':
-      return 'bg-blue-100 text-blue-700';
+      return BADGE_COLORS.info;
     case 'organization':
-      return 'bg-purple-100 text-purple-700';
+      return BADGE_COLORS.purple;
     case 'project':
-      return 'bg-pink-100 text-pink-700';
+      return BADGE_COLORS.pink;
     case 'friend':
-      return 'bg-green-100 text-green-700';
+      return BADGE_COLORS.success;
     case 'business':
-      return 'bg-orange-100 text-orange-700';
+      return BADGE_COLORS.orange;
     case 'donation':
-      return 'bg-red-100 text-red-700';
+      return BADGE_COLORS.error;
     default:
-      return 'bg-gray-100 text-gray-700';
+      return BADGE_COLORS.neutral;
   }
 }
 

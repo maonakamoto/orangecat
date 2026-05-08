@@ -7,6 +7,7 @@
  */
 
 import type { Initiative } from '@/types/initiative';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 export const organizations: Initiative = {
   id: 'organizations',
@@ -74,42 +75,42 @@ export const organizations: Initiative = {
       icon: 'Network',
       description: 'Fully decentralized organizations with on-chain governance',
       example: 'Bitcoin Development DAO',
-      color: 'bg-purple-100 text-purple-700 border-purple-200',
+      color: BADGE_COLORS.purple,
     },
     {
       name: 'Community Cooperatives',
       icon: 'Users',
       description: 'Member-owned cooperatives for community projects',
       example: 'Local Bitcoin Meetup Cooperative',
-      color: 'bg-blue-100 text-blue-700 border-blue-200',
+      color: BADGE_COLORS.info,
     },
     {
       name: 'Business Collectives',
       icon: 'Briefcase',
       description: 'Collaborative business entities and worker-owned companies',
       example: 'Open Source Software Collective',
-      color: 'bg-green-100 text-green-700 border-green-200',
+      color: BADGE_COLORS.success,
     },
     {
       name: 'Investment Clubs',
       icon: 'TrendingUp',
       description: 'Collective investment and asset management groups',
       example: 'Bitcoin Investment Syndicate',
-      color: 'bg-orange-100 text-orange-700 border-orange-200',
+      color: BADGE_COLORS.orange,
     },
     {
       name: 'Non-Profit Organizations',
       icon: 'Heart',
       description: 'Charitable and non-profit entities with transparent governance',
       example: 'Bitcoin Education Foundation',
-      color: 'bg-red-100 text-red-700 border-red-200',
+      color: BADGE_COLORS.error,
     },
     {
       name: 'Research Consortia',
       icon: 'Search',
       description: 'Collaborative research and development organizations',
       example: 'Lightning Network Research Group',
-      color: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+      color: BADGE_COLORS.indigo,
     },
   ],
   capabilities: [
@@ -156,6 +157,3 @@ export const organizations: Initiative = {
     },
   ],
 };
-
-
-

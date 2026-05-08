@@ -17,6 +17,7 @@ import {
   Bot,
   Building,
 } from 'lucide-react';
+import { BADGE_COLORS } from '@/config/badge-colors';
 
 export type DiscoverTabType =
   | 'all'
@@ -115,7 +116,7 @@ export default function DiscoverTabs({
                     transition-colors duration-200
                     ${
                       isActive
-                        ? 'bg-orange-100 text-orange-700 border border-orange-200'
+                        ? `border ${BADGE_COLORS.orange}`
                         : 'bg-gray-100 text-gray-600 border border-gray-200 group-hover:bg-gray-200'
                     }
                   `}
