@@ -13,6 +13,7 @@ import supabase from '@/lib/supabase/browser';
 import { getTableName } from '@/config/entity-registry';
 import { PROJECT_STATUS } from '@/config/project-statuses';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { API_ROUTES } from '@/config/api-routes';
 
 // Use existing FundingPage type from funding.ts
 import type { FundingPage } from '@/types/funding';
@@ -126,7 +127,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await fetch(`/api/projects/${id}`, {
+      const response = await fetch(API_ROUTES.PROJECTS.BY_ID(id), {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -160,7 +161,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await fetch(`/api/projects/${id}/status`, {
+      const response = await fetch(API_ROUTES.PROJECTS.STATUS(id), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -223,4 +224,3 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     });
   },
 }));
-

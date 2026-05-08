@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { ROUTES } from '@/config/routes';
+import { API_ROUTES } from '@/config/api-routes';
 import type { Task } from '@/lib/schemas/tasks';
 import type { TaskFormData } from '../../task-form-types';
 
@@ -22,7 +23,7 @@ export function useEditTaskForm(taskId: string, enabled: boolean) {
     }
     setLoading(true);
     try {
-      const response = await fetch(`/api/tasks/${taskId}`);
+      const response = await fetch(API_ROUTES.TASKS.BY_ID(taskId));
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || 'Failed to load task');
@@ -126,7 +127,7 @@ export function useEditTaskForm(taskId: string, enabled: boolean) {
     }
     setSubmitting(true);
     try {
-      const response = await fetch(`/api/tasks/${taskId}`, {
+      const response = await fetch(API_ROUTES.TASKS.BY_ID(taskId), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

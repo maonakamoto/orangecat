@@ -11,6 +11,7 @@ import { Bitcoin } from 'lucide-react';
 import { formatRelativeTime } from '@/utils/dates';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { formatCurrency } from '@/services/currency';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface Props {
   project: {
@@ -63,7 +64,7 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
     }
     setRefreshing(true);
     try {
-      const res = await fetch(`/api/projects/${project.id}/refresh-balance`, { method: 'POST' });
+      const res = await fetch(API_ROUTES.PROJECTS.REFRESH_BALANCE(project.id), { method: 'POST' });
       const data = await res.json();
       if (res.ok) {
         if (data.balance_btc !== undefined) {

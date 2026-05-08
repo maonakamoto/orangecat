@@ -54,7 +54,7 @@ export function useAIChatPanel(assistantId: string, conversationId: string) {
         setIsLoading(true);
 
         const [convResponse, keysResponse] = await Promise.all([
-          fetch(`/api/ai-assistants/${assistantId}/conversations/${conversationId}`),
+          fetch(API_ROUTES.AI_ASSISTANTS.CONVERSATION(assistantId, conversationId)),
           fetch(API_ROUTES.USER.API_KEYS),
         ]);
 

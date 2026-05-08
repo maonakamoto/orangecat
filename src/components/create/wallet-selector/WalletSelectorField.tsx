@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Input } from '@/components/ui/Input';
 import type { Wallet } from '@/types/wallet';
 import { WalletCard } from './WalletCard';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface WalletSelectorFieldProps {
   formData: Record<string, unknown>;
@@ -41,7 +42,7 @@ export function WalletSelectorField({
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const response = await fetch(`/api/wallets?profile_id=${profile.id}`, {
+      const response = await fetch(`${API_ROUTES.WALLETS.BASE}?profile_id=${profile.id}`, {
         signal: controller.signal,
       });
       clearTimeout(timeoutId);

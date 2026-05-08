@@ -12,6 +12,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { EntityType } from '@/config/entity-registry';
+import { API_ROUTES } from '@/config/api-routes';
 import type {
   RecommendedTask,
   SmartQuestion,
@@ -101,7 +102,7 @@ export function useRecommendations(
     setError(null);
 
     try {
-      const response = await fetch('/api/users/me/stats');
+      const response = await fetch(API_ROUTES.USER.STATS);
 
       if (!response.ok) {
         throw new Error('Failed to fetch user stats');

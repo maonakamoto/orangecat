@@ -13,6 +13,7 @@ import { logger } from '@/utils/logger';
 import { API_TIMEOUT_MS, AUTH_TIMEOUT_MS } from '@/lib/wallets/constants';
 import { parseErrorResponse } from '@/lib/wallets/errorHandling';
 import { toast } from 'sonner';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface UseWalletsOptions {
   profileId: string | undefined;
@@ -47,7 +48,7 @@ export function useWallets({ profileId, authLoading }: UseWalletsOptions): UseWa
       fetchController = new AbortController();
       const timeoutId = setTimeout(() => fetchController!.abort(), API_TIMEOUT_MS);
 
-      const walletsResponse = await fetch(`/api/wallets?profile_id=${profileId}`, {
+      const walletsResponse = await fetch(`${API_ROUTES.WALLETS.BASE}?profile_id=${profileId}`, {
         signal: fetchController.signal,
       });
 

@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 
 export function useProjectDonation(projectId: string) {
   const { user } = useAuth();
@@ -20,7 +21,7 @@ export function useProjectDonation(projectId: string) {
 
     const checkFavoriteStatus = async () => {
       try {
-        const response = await fetch(`/api/projects/${projectId}/favorite`);
+        const response = await fetch(API_ROUTES.PROJECTS.FAVORITE(projectId));
         if (response.ok) {
           const result = await response.json();
           setIsFavorited(result.data?.isFavorited || false);
@@ -49,7 +50,7 @@ export function useProjectDonation(projectId: string) {
 
     try {
       const method = previousState ? 'DELETE' : 'POST';
-      const response = await fetch(`/api/projects/${projectId}/favorite`, { method });
+      const response = await fetch(API_ROUTES.PROJECTS.FAVORITE(projectId), { method });
 
       if (!response.ok) {
         throw new Error('Failed to toggle favorite');

@@ -15,6 +15,7 @@ import { Activity, Bitcoin, MessageSquare, Trophy, TrendingUp } from 'lucide-rea
 import { formatRelativeTime } from '@/utils/dates';
 import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface ProjectUpdate {
   id: string;
@@ -40,7 +41,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
     const fetchUpdates = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/projects/${projectId}/updates`);
+        const response = await fetch(API_ROUTES.PROJECTS.UPDATES(projectId));
 
         if (response.ok) {
           const data = await response.json();

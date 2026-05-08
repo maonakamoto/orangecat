@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import Link from 'next/link';
 import { STATUS } from '@/config/database-constants';
 import { formatDate } from '@/utils/dates';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface Conversation {
   id: string;
@@ -46,14 +47,14 @@ export default function AIAssistantChatPage() {
     const loadData = async () => {
       try {
         // Load assistant details
-        const assistantRes = await fetch(`/api/ai-assistants/${assistantId}`);
+        const assistantRes = await fetch(API_ROUTES.AI_ASSISTANTS.BY_ID(assistantId));
         if (assistantRes.ok) {
           const data = await assistantRes.json();
           setAssistant(data.data || data);
         }
 
         // Load existing conversations
-        const convsRes = await fetch(`/api/ai-assistants/${assistantId}/conversations`);
+        const convsRes = await fetch(API_ROUTES.AI_ASSISTANTS.CONVERSATIONS(assistantId));
         if (convsRes.ok) {
           const data = await convsRes.json();
           setConversations(data.data || []);
@@ -69,9 +70,12 @@ export default function AIAssistantChatPage() {
   }, [assistantId]);
 
   const handleNewConversation = async () => {
+    if (!assistantId) {
+      return;
+    }
     setIsCreating(true);
     try {
-      const response = await fetch(`/api/ai-assistants/${assistantId}/conversations`, {
+      const response = await fetch(API_ROUTES.AI_ASSISTANTS.CONVERSATIONS(assistantId), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });

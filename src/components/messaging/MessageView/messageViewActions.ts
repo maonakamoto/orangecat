@@ -10,7 +10,7 @@ export async function editMessageAction(
   handleNewMessage: (msg: Message) => void
 ): Promise<void> {
   try {
-    const res = await fetch(`/api/messages/edit/${encodeURIComponent(messageId)}`, {
+    const res = await fetch(API_ROUTES.MESSAGES.EDIT(messageId), {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin',

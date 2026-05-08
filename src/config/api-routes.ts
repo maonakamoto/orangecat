@@ -17,6 +17,7 @@ export const API_ROUTES = {
     CONVERSATION: (id: string) => `/api/messages/${id}`,
     CONVERSATION_READ: (id: string) => `/api/messages/${id}/read`,
     CONVERSATION_SUMMARY: (id: string) => `/api/messages/${id}/summary`,
+    EDIT: (id: string) => `/api/messages/edit/${encodeURIComponent(id)}`,
     OPEN: '/api/messages/open',
     SELF: '/api/messages/self',
     ACTORS: '/api/messages/actors',
@@ -52,6 +53,10 @@ export const API_ROUTES = {
   },
   TASKS: {
     BASE: '/api/tasks',
+    BY_ID: (id: string) => `/api/tasks/${id}`,
+    COMPLETE: (id: string) => `/api/tasks/${id}/complete`,
+    ATTENTION: (id: string) => `/api/tasks/${id}/attention`,
+    REQUEST: (id: string) => `/api/tasks/${id}/request`,
     ANALYTICS: '/api/task-analytics',
   },
   AI_CREDITS: {
@@ -71,6 +76,7 @@ export const API_ROUTES = {
   },
   DOCUMENTS: {
     BASE: '/api/documents',
+    BY_ID: (id: string) => `/api/documents/${id}`,
     EXTRACT: '/api/documents/extract',
   },
   WISHLISTS: {
@@ -89,6 +95,11 @@ export const API_ROUTES = {
   },
   PROJECTS: {
     BASE: '/api/projects',
+    BY_ID: (id: string) => `/api/projects/${id}`,
+    STATUS: (id: string) => `/api/projects/${id}/status`,
+    REFRESH_BALANCE: (id: string) => `/api/projects/${id}/refresh-balance`,
+    UPDATES: (id: string) => `/api/projects/${id}/updates`,
+    FAVORITE: (id: string) => `/api/projects/${id}/favorite`,
     FAVORITES: '/api/projects/favorites',
   },
   LOANS: {
@@ -100,7 +111,13 @@ export const API_ROUTES = {
   JOBS: '/api/jobs',
   DELETE_USER: '/api/delete-user',
   WAITLIST: '/api/waitlist',
-  AI_ASSISTANTS: '/api/ai-assistants',
+  AI_ASSISTANTS: {
+    BASE: '/api/ai-assistants',
+    BY_ID: (id: string) => `/api/ai-assistants/${id}`,
+    CONVERSATIONS: (id: string) => `/api/ai-assistants/${id}/conversations`,
+    CONVERSATION: (assistantId: string, conversationId: string) =>
+      `/api/ai-assistants/${assistantId}/conversations/${conversationId}`,
+  },
   TRANSACTIONS: '/api/transactions',
   BOOKINGS: {
     BASE: '/api/bookings',

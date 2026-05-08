@@ -33,6 +33,7 @@ import CompletionHistory, { type CompletionWithUser } from './CompletionHistory'
 import type { TaskWithRelations } from './types';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { ROUTES } from '@/config/routes';
+import { API_ROUTES } from '@/config/api-routes';
 
 export default function TaskDetailPage() {
   const { user, isLoading: authLoading, hydrated } = useRequireAuth();
@@ -54,7 +55,7 @@ export default function TaskDetailPage() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/tasks/${taskId}`);
+      const response = await fetch(API_ROUTES.TASKS.BY_ID(taskId));
       const data = await response.json();
 
       if (!response.ok) {

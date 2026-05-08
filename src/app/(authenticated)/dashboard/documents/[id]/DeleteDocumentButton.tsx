@@ -27,6 +27,7 @@ import { Trash2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ROUTES } from '@/config/routes';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface DeleteDocumentButtonProps {
   documentId: string;
@@ -42,7 +43,7 @@ export function DeleteDocumentButton({ documentId, documentTitle }: DeleteDocume
     setIsDeleting(true);
 
     try {
-      const response = await fetch(`/api/documents/${documentId}`, {
+      const response = await fetch(API_ROUTES.DOCUMENTS.BY_ID(documentId), {
         method: 'DELETE',
       });
 

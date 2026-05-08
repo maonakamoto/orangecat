@@ -12,6 +12,7 @@ import {
 } from '@/services/bitcoin/paymentService';
 import QRCodeGenerator from './QRCodeGenerator';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface BitcoinPaymentModalProps {
   isOpen: boolean;
@@ -44,7 +45,7 @@ export default function BitcoinPaymentModal({
 
     // Record pending transaction for transparency
     try {
-      const res = await fetch('/api/transactions', {
+      const res = await fetch(API_ROUTES.TRANSACTIONS, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

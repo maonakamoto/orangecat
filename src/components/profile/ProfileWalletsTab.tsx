@@ -6,6 +6,7 @@ import { Wallet } from '@/types/wallet';
 import { logger } from '@/utils/logger';
 import ProfileWalletSection from '@/components/profile/ProfileWalletSection';
 import { toast } from 'sonner';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface ProfileWalletsTabProps {
   profile: ScalableProfile;
@@ -33,7 +34,7 @@ export default function ProfileWalletsTab({ profile, isOwnProfile }: ProfileWall
     const loadWallets = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/wallets?profile_id=${profile.id}`);
+        const response = await fetch(`${API_ROUTES.WALLETS.BASE}?profile_id=${profile.id}`);
 
         if (response.ok) {
           const data = await response.json();

@@ -4,6 +4,7 @@ import { useRequireAuth } from '@/hooks/useAuth';
 import { logger } from '@/utils/logger';
 import type { DocumentFormData } from '@/lib/validation';
 import { useCreatePrefill } from '@/hooks/useCreatePrefill';
+import { API_ROUTES } from '@/config/api-routes';
 
 type CreateMode = 'choose' | 'upload' | 'form';
 
@@ -62,7 +63,7 @@ export function useDocumentCreate() {
       try {
         setIsLoadingDocument(true);
         setLoadError(null);
-        const response = await fetch(`/api/documents/${editId}`);
+        const response = await fetch(API_ROUTES.DOCUMENTS.BY_ID(editId));
         if (!response.ok) {
           setLoadError(response.status === 404 ? 'Document not found' : 'Failed to load document');
           return;

@@ -57,7 +57,7 @@ export function useConversationsFetcher({
               data: { session },
             } = await supabase.auth.getSession();
             if (session?.access_token) {
-              const syncRes = await fetch('/api/auth/sync', {
+              const syncRes = await fetch(API_ROUTES.AUTH.SYNC, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -17,6 +17,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from './useAuth';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 
 type NavigationContextType = 'individual' | 'group';
 
@@ -108,7 +109,7 @@ export function useNavigationContext(): UseNavigationContextReturn {
     async function loadGroups() {
       setLoadingGroups(true);
       try {
-        const response = await fetch('/api/groups?membership=mine&pageSize=50');
+        const response = await fetch(`${API_ROUTES.GROUPS}?membership=mine&pageSize=50`);
         if (!response.ok) {
           setUserGroups([]);
           return;

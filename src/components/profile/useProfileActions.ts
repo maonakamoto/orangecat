@@ -89,7 +89,7 @@ export function useProfileActions({ profile, isOwnProfile, onSave }: UseProfileA
 
   const handleProfileSave = async (data: ProfileFormData) => {
     try {
-      const response = await fetch('/api/profile', {
+      const response = await fetch(API_ROUTES.PROFILE, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

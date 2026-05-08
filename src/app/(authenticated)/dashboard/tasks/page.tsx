@@ -35,6 +35,7 @@ import QuickStatCard from './components/QuickStatCard';
 import TaskCard from './components/TaskCard';
 import TaskFilters from './components/TaskFilters';
 import { GRADIENTS } from '@/config/gradients';
+import { API_ROUTES } from '@/config/api-routes';
 
 type TaskCategory = (typeof TASK_CATEGORIES)[keyof typeof TASK_CATEGORIES];
 type TaskStatus = (typeof TASK_STATUSES)[keyof typeof TASK_STATUSES];
@@ -88,7 +89,7 @@ export default function TasksPage() {
         params.set('archived', 'true');
       }
 
-      const response = await fetch(`/api/tasks?${params.toString()}`);
+      const response = await fetch(`${API_ROUTES.TASKS.BASE}?${params.toString()}`);
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || 'Failed to load tasks');
@@ -123,7 +124,7 @@ export default function TasksPage() {
 
   const handleComplete = async (taskId: string) => {
     try {
-      const response = await fetch(`/api/tasks/${taskId}/complete`, {
+      const response = await fetch(API_ROUTES.TASKS.COMPLETE(taskId), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({}),
@@ -141,7 +142,7 @@ export default function TasksPage() {
 
   const handleFlagAttention = async (taskId: string) => {
     try {
-      const response = await fetch(`/api/tasks/${taskId}/attention`, {
+      const response = await fetch(API_ROUTES.TASKS.ATTENTION(taskId), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: 'Needs attention' }),
