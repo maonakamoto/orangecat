@@ -1,10 +1,13 @@
 import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 import { Home, Search, ArrowLeft } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-50 to-white px-4">
+    <div
+      className={`min-h-screen flex items-center justify-center ${GRADIENTS.pageBgOrangeDown} px-4`}
+    >
       <div className="max-w-lg w-full space-y-8 p-6 bg-white rounded-xl shadow-xl border border-orange-100">
         {/* Icon */}
         <div className="text-center">

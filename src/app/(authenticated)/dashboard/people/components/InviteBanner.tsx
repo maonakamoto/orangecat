@@ -3,6 +3,7 @@ import Button from '@/components/ui/Button';
 import ProfileShare from '@/components/sharing/ProfileShare';
 import { Search, Share2, Copy } from 'lucide-react';
 import { toast } from 'sonner';
+import { GRADIENTS } from '@/config/gradients';
 
 interface InviteBannerProps {
   showShare: boolean;
@@ -25,7 +26,9 @@ export default function InviteBanner({
 }: InviteBannerProps) {
   return (
     <div className="mb-6">
-      <div className="rounded-xl border border-orange-200 bg-gradient-to-r from-orange-50 to-teal-50 p-4 sm:p-5 shadow-sm">
+      <div
+        className={`rounded-xl border border-orange-200 ${GRADIENTS.sectionOrangeTiffany} p-4 sm:p-5 shadow-sm`}
+      >
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div>
             <h3 className="font-semibold text-gray-900">Invite friends to OrangeCat</h3>

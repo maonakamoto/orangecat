@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Bitcoin, Shield, Zap, Lock, Globe, Code, Server, CheckCircle } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 export const metadata: Metadata = {
   title: 'Technology | OrangeCat',
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function TechnologyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
+    <div className={`min-h-screen ${GRADIENTS.pageBgOrangeDown}`}>
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-orange-600 text-white">
         <div className="absolute inset-0 bg-gradient-to-br from-orange-600 to-orange-800 opacity-90"></div>
@@ -25,8 +26,8 @@ export default function TechnologyPage() {
               Built on Bitcoin
             </h1>
             <p className="mt-6 max-w-3xl mx-auto text-xl text-orange-100">
-              Direct, transparent, and unstoppable economic participation powered by the world's most secure
-              network
+              Direct, transparent, and unstoppable economic participation powered by the world's
+              most secure network
             </p>
           </div>
         </div>
@@ -58,7 +59,8 @@ export default function TechnologyPage() {
               <Zap className="h-12 w-12 text-orange-600 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Zero Platform Fees</h3>
               <p className="text-gray-600">
-                We don't take a cut. Payments go directly between parties — 100% reaches the recipient.
+                We don't take a cut. Payments go directly between parties — 100% reaches the
+                recipient.
               </p>
             </div>
           </div>

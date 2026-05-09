@@ -22,6 +22,7 @@ export const GRADIENTS = {
 
   // ── Section / card background tints ───────────────────────────────────────
   sectionGreen: 'bg-gradient-to-r from-green-50 to-emerald-50',
+  sectionOrangeTiffany: 'bg-gradient-to-r from-orange-50 to-tiffany-50',
   iconOrangeTiffany: 'bg-gradient-to-r from-orange-100 to-tiffany-100',
 
   // ── Diagonal (br) gradients ───────────────────────────────────────────────
@@ -41,6 +42,7 @@ export const GRADIENTS = {
   sectionGrayWhite: 'bg-gradient-to-br from-gray-50 via-white to-gray-50',
 
   // ── Page background gradients (full-bleed wrappers) ───────────────────────
+  pageBgOrangeDown: 'bg-gradient-to-b from-orange-50 to-white',
   pageBg: 'bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20',
   pageBgSolid: 'bg-gradient-to-br from-orange-50 via-white to-tiffany-50',
   pageBgFrost: 'bg-gradient-to-br from-orange-50/80 via-white/80 to-tiffany-50/80',

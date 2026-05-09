@@ -272,7 +272,7 @@ export default async function BlogPost({ params }: PageProps) {
             </div>
 
             {/* Related Posts CTA */}
-            <div className="mt-12 bg-gradient-to-r from-orange-50 to-tiffany-50 rounded-2xl p-8 text-center">
+            <div className={`mt-12 ${GRADIENTS.sectionOrangeTiffany} rounded-2xl p-8 text-center`}>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">More from OrangeCat</h3>
               <p className="text-lg text-gray-700 mb-6">
                 Discover more insights about Bitcoin, security, and building in public.

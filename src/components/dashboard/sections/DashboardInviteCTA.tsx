@@ -7,6 +7,7 @@ import ProfileShare from '@/components/sharing/ProfileShare';
 import { Users, Share2, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { ROUTES } from '@/config/routes';
+import { GRADIENTS } from '@/config/gradients';
 
 interface DashboardInviteCTAProps {
   profile: {
@@ -32,7 +33,9 @@ export function DashboardInviteCTA({ profile, userId }: DashboardInviteCTAProps)
   };
 
   return (
-    <div className="relative rounded-xl border border-orange-200 bg-gradient-to-r from-orange-50 to-teal-50 p-4 sm:p-5 shadow-sm">
+    <div
+      className={`relative rounded-xl border border-orange-200 ${GRADIENTS.sectionOrangeTiffany} p-4 sm:p-5 shadow-sm`}
+    >
       <div className="space-y-3">
         <div>
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">

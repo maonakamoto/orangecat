@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Home, RefreshCw, ArrowLeft } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function Error({
   error,
@@ -28,7 +29,9 @@ export default function Error({
     error.message?.toLowerCase().includes('unauthorized');
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-50 to-white px-4">
+    <div
+      className={`min-h-screen flex items-center justify-center ${GRADIENTS.pageBgOrangeDown} px-4`}
+    >
       <div className="max-w-lg w-full space-y-8 p-6 bg-white rounded-xl shadow-xl border border-orange-100">
         {/* Icon */}
         <div className="text-center">

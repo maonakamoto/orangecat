@@ -143,9 +143,9 @@ export default function EntityDashboardPage<T extends BaseEntity>({
         purple: GRADIENTS.brandPurple,
         rose: 'bg-gradient-to-r from-rose-500 to-rose-600',
         indigo: 'bg-gradient-to-r from-indigo-600 to-indigo-700',
-        tiffany: 'bg-gradient-to-r from-teal-500 to-teal-600',
+        tiffany: GRADIENTS.brandTiffany,
       } as Record<string, string>
-    )[config.colorTheme || 'tiffany'] ?? 'bg-gradient-to-r from-teal-500 to-teal-600';
+    )[config.colorTheme || 'tiffany'] ?? GRADIENTS.brandTiffany;
 
   const headerActions = (
     <div className="flex items-center gap-2">
