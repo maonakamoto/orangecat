@@ -17,6 +17,7 @@ import { Investment } from '@/types/investments';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrendingUp, Search } from 'lucide-react';
 import { GRADIENTS } from '@/config/gradients';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 /**
  * Investments Dashboard Page
@@ -36,7 +37,7 @@ export default function InvestmentsPage() {
     setPage,
     refresh,
   } = useEntityList<Investment>({
-    apiEndpoint: '/api/investments',
+    apiEndpoint: ENTITY_REGISTRY['investment'].apiEndpoint,
     userId: user?.id,
     limit: 12,
     enabled: !!user?.id && hydrated && !isLoading && activeTab === 'my-investments',
@@ -49,7 +50,7 @@ export default function InvestmentsPage() {
     total: openTotal,
     setPage: setOpenPage,
   } = useEntityList<Investment>({
-    apiEndpoint: '/api/investments?public=true',
+    apiEndpoint: `${ENTITY_REGISTRY['investment'].apiEndpoint}?public=true`,
     limit: 12,
     enabled: hydrated && !isLoading && activeTab === 'open',
   });
