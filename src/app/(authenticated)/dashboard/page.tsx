@@ -7,7 +7,6 @@ import { GRADIENTS } from '@/config/gradients';
 import { ProfileCompletionModal } from '@/components/onboarding/ProfileCompletionModal';
 import {
   DashboardHeader,
-  DashboardWelcome,
   DashboardInviteCTA,
   DashboardJourney,
   DashboardQuickActions,
@@ -43,7 +42,6 @@ export default function DashboardPage() {
     timelineFeed,
     timelineLoading,
     timelineError,
-    showWelcome,
     showProfileCompletion,
     pendingActions,
     safeProjects,
@@ -53,7 +51,6 @@ export default function DashboardPage() {
     sidebarStats,
     reloadTimeline,
     handleProfileCompletionDone,
-    dismissWelcome,
     handleConfirmAction,
     handleRejectAction,
   } = useDashboard();
@@ -78,14 +75,6 @@ export default function DashboardPage() {
           totalProjects={totalProjects}
           totalDrafts={totalDrafts}
         />
-
-        {showWelcome && (
-          <DashboardWelcome
-            profile={profile}
-            hasProjects={hasProjects}
-            onDismiss={dismissWelcome}
-          />
-        )}
 
         {pendingActions.length > 0 && (
           <div className="space-y-3">
