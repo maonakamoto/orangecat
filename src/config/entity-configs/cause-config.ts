@@ -15,26 +15,7 @@ import { CAUSE_TEMPLATES, type CauseTemplate } from '@/components/create/templat
 import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { WalletSelectorField } from '@/components/create/wallet-selector';
-
-// ==================== CONSTANTS ====================
-
-const CAUSE_CATEGORIES = [
-  'Education',
-  'Healthcare',
-  'Environment',
-  'Poverty Relief',
-  'Animal Welfare',
-  'Disaster Relief',
-  'Human Rights',
-  'Arts & Culture',
-  'Community Development',
-  'Technology Access',
-  'Mental Health',
-  'Veterans Support',
-  'Children & Youth',
-  'Elderly Care',
-  'Other',
-];
+import { CAUSE_CATEGORY_OPTIONS } from '@/config/causes';
 
 // ==================== FIELD GROUPS ====================
 
@@ -66,7 +47,7 @@ const fieldGroups: FieldGroup[] = [
         label: 'Category',
         type: 'select',
         required: true,
-        options: CAUSE_CATEGORIES.map(cat => ({ value: cat, label: cat })),
+        options: CAUSE_CATEGORY_OPTIONS,
         colSpan: 2,
       },
     ],
