@@ -6,7 +6,7 @@ import { Globe, Lock, Eye, Bitcoin, Zap } from 'lucide-react';
 import type { Group, GroupMember } from '@/types/group';
 import type { GroupLabel } from '@/config/group-labels';
 import type { GovernancePreset } from '@/config/governance-presets';
-import { GROUP_LABELS } from '@/config/group-labels';
+import { GROUP_LABELS, GROUP_LABEL_ICON_CLASSES } from '@/config/group-labels';
 import { GOVERNANCE_PRESETS } from '@/config/governance-presets';
 import type { ElementType } from 'react';
 
@@ -32,7 +32,9 @@ export function GroupDetailSidebar({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <LabelIcon className={`h-5 w-5 text-${labelConfig?.color || 'gray'}-500`} />
+            <LabelIcon
+              className={`h-5 w-5 ${GROUP_LABEL_ICON_CLASSES[labelConfig?.color ?? 'gray'] ?? 'text-gray-500'}`}
+            />
             Group Information
           </CardTitle>
         </CardHeader>

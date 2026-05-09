@@ -146,6 +146,21 @@ export const GROUP_LABELS = {
 export type GroupLabel = keyof typeof GROUP_LABELS;
 
 /**
+ * Static icon color classes for each group label color.
+ * Avoids dynamic Tailwind class construction which breaks CSS purging.
+ */
+export const GROUP_LABEL_ICON_CLASSES: Record<string, string> = {
+  tiffany: 'text-tiffany-500',
+  amber: 'text-amber-500',
+  blue: 'text-blue-500',
+  slate: 'text-gray-500',
+  rose: 'text-rose-500',
+  green: 'text-green-500',
+  cyan: 'text-tiffany-500',
+  gray: 'text-gray-500',
+};
+
+/**
  * Get defaults for a group label
  */
 export function getGroupLabelDefaults(label: GroupLabel) {
