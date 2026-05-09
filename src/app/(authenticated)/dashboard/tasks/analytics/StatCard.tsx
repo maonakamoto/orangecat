@@ -4,7 +4,7 @@ const colorClasses = {
   green: 'bg-green-50 text-green-600 border-green-200',
   blue: 'bg-blue-50 text-blue-600 border-blue-200',
   amber: 'bg-amber-50 text-amber-600 border-amber-200',
-  purple: 'bg-tiffany-50 text-tiffany-600 border-tiffany-200',
+  tiffany: 'bg-tiffany-50 text-tiffany-600 border-tiffany-200',
 } as const;
 
 interface StatCardProps {

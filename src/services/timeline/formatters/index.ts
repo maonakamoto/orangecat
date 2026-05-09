@@ -156,7 +156,7 @@ export function getEventColor(eventType: TimelineEventType): string {
   const colorMap: Record<string, string> = {
     project_created: 'blue',
     support_received: 'green',
-    user_followed: 'purple',
+    user_followed: 'tiffany',
     project_completed: 'orange',
   };
   return colorMap[eventType] || 'gray';

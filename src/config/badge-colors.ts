@@ -17,12 +17,10 @@ export const BADGE_COLORS = {
   info: 'bg-blue-100 text-blue-700 border-blue-200',
   neutral: 'bg-gray-100 text-gray-700 border-gray-200',
   muted: 'bg-slate-100 text-slate-600 border-slate-200',
-  purple: 'bg-purple-100 text-purple-700 border-purple-200',
   amber: 'bg-amber-100 text-amber-700 border-amber-200',
   orange: 'bg-orange-100 text-orange-700 border-orange-200',
   tiffany: 'bg-tiffany-100 text-tiffany-700 border-tiffany-200',
   pink: 'bg-pink-100 text-pink-700 border-pink-200',
-  indigo: 'bg-indigo-100 text-indigo-700 border-indigo-200',
 } as const;
 
 export type BadgeColorKey = keyof typeof BADGE_COLORS;

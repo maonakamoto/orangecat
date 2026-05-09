@@ -85,7 +85,7 @@ export default function TaskAnalyticsPage() {
               icon={Clock}
               label="Open requests"
               value={stats.openRequests}
-              color="purple"
+              color="tiffany"
             />
           </div>
         )}
