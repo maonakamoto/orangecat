@@ -114,7 +114,7 @@ export function useOnboardingProgress(
         logger.error('Failed to mark onboarding as skipped', error, 'Onboarding');
       }
     }
-    router.push(`${ROUTES.DASHBOARD.HOME}?welcome=true`);
+    router.push(`${ROUTES.DASHBOARD.CAT}?welcome=true`);
   }, [currentStep, userId, router]);
 
   const handleAction = useCallback(
@@ -141,7 +141,7 @@ export function useOnboardingProgress(
   const handleCompleteOnboarding = useCallback(async () => {
     clearProgress();
     if (!userId) {
-      router.push(`${ROUTES.DASHBOARD.HOME}?welcome=true`);
+      router.push(`${ROUTES.DASHBOARD.CAT}?welcome=true`);
       return;
     }
     setCompletingOnboarding(true);
@@ -152,12 +152,12 @@ export function useOnboardingProgress(
       });
       onboardingEvents.completed(userId);
       toast.success('Welcome to OrangeCat! Your journey begins now.');
-      router.push(`${ROUTES.DASHBOARD.HOME}?welcome=true`);
+      router.push(`${ROUTES.DASHBOARD.CAT}?welcome=true`);
     } catch (error) {
       logger.error('Failed to complete onboarding', error, 'Onboarding');
       onboardingEvents.completed(userId);
       toast.error('Something went wrong, but you can continue to your dashboard.');
-      router.push(`${ROUTES.DASHBOARD.HOME}?welcome=true`);
+      router.push(`${ROUTES.DASHBOARD.CAT}?welcome=true`);
     } finally {
       setCompletingOnboarding(false);
     }

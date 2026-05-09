@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   CheckCircle2,
   Circle,
@@ -10,6 +10,7 @@ import {
   ChevronUp,
   Sparkles,
   Loader2,
+  X,
 } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
@@ -65,6 +66,22 @@ export default function TasksSection({
 }: TasksSectionProps) {
   const { user, profile } = useAuth();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [celebrationDismissed, setCelebrationDismissed] = useState(false);
+
+  useEffect(() => {
+    if (user?.id) {
+      setCelebrationDismissed(
+        localStorage.getItem(`oc_celebration_dismissed_${user.id}`) === 'true'
+      );
+    }
+  }, [user?.id]);
+
+  const dismissCelebration = () => {
+    if (user?.id) {
+      localStorage.setItem(`oc_celebration_dismissed_${user.id}`, 'true');
+    }
+    setCelebrationDismissed(true);
+  };
 
   const {
     isLoading,
@@ -97,11 +114,18 @@ export default function TasksSection({
     return null;
   }
 
-  if (celebration) {
+  if (celebration && !celebrationDismissed) {
     return (
       <div className={className}>
         <Card className={`border-green-200 ${GRADIENTS.sectionGreen}`}>
-          <CardContent className="p-6 text-center">
+          <CardContent className="p-6 text-center relative">
+            <button
+              onClick={dismissCelebration}
+              className="absolute top-3 right-3 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-white/60 rounded-lg transition-colors"
+              aria-label="Dismiss"
+            >
+              <X className="w-4 h-4" />
+            </button>
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Sparkles className="w-8 h-8 text-green-600" />
             </div>

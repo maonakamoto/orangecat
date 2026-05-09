@@ -27,14 +27,13 @@ export function useDashboard() {
     hydrated,
   });
 
-  const { showWelcome, showProfileCompletion, handleProfileCompletionDone, dismissWelcome } =
-    useDashboardModals({
-      profile,
-      hydrated,
-      localLoading,
-      userId: user?.id,
-      userEmail: user?.email,
-    });
+  const { showProfileCompletion, handleProfileCompletionDone } = useDashboardModals({
+    profile,
+    hydrated,
+    localLoading,
+    userId: user?.id,
+    userEmail: user?.email,
+  });
 
   useEffect(() => {
     if (hydrated) {
@@ -144,7 +143,6 @@ export function useDashboard() {
     timelineFeed,
     timelineLoading,
     timelineError,
-    showWelcome,
     showProfileCompletion,
     pendingActions,
     safeProjects,
@@ -159,7 +157,6 @@ export function useDashboard() {
     },
     reloadTimeline,
     handleProfileCompletionDone,
-    dismissWelcome,
     handleConfirmAction,
     handleRejectAction,
   };

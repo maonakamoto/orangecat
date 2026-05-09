@@ -8,7 +8,6 @@
  */
 
 export { DashboardHeader } from './DashboardHeader';
-export { DashboardWelcome } from './DashboardWelcome';
 export { DashboardInviteCTA } from './DashboardInviteCTA';
 export { DashboardJourney } from './DashboardJourney';
 export { DashboardQuickActions } from './DashboardQuickActions';
