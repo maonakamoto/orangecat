@@ -19,9 +19,9 @@ import type { Currency } from '@/types/settings';
 import { GRADIENTS } from '@/config/gradients';
 
 export const serviceEntityConfig: EntityConfig<UserService> = {
-  name: 'Service',
-  namePlural: 'Services',
-  colorTheme: 'tiffany',
+  name: ENTITY_REGISTRY['service'].name,
+  namePlural: ENTITY_REGISTRY['service'].namePlural,
+  colorTheme: ENTITY_REGISTRY['service'].colorTheme,
 
   listPath: ENTITY_REGISTRY['service'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['service'].basePath}/${id}`,

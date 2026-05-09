@@ -19,9 +19,9 @@ import type { Currency } from '@/types/settings';
 import { GRADIENTS } from '@/config/gradients';
 
 export const causeEntityConfig: EntityConfig<UserCause> = {
-  name: 'Cause',
-  namePlural: 'Causes',
-  colorTheme: 'orange',
+  name: ENTITY_REGISTRY['cause'].name,
+  namePlural: ENTITY_REGISTRY['cause'].namePlural,
+  colorTheme: ENTITY_REGISTRY['cause'].colorTheme,
 
   listPath: ENTITY_REGISTRY['cause'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['cause'].basePath}/${id}`,

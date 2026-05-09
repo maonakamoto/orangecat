@@ -18,9 +18,9 @@ import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { Currency } from '@/types/settings';
 
 export const productEntityConfig: EntityConfig<UserProduct> = {
-  name: 'Product',
-  namePlural: 'Products',
-  colorTheme: 'tiffany',
+  name: ENTITY_REGISTRY['product'].name,
+  namePlural: ENTITY_REGISTRY['product'].namePlural,
+  colorTheme: ENTITY_REGISTRY['product'].colorTheme,
 
   listPath: ENTITY_REGISTRY['product'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['product'].basePath}/${id}`,

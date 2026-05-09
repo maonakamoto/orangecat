@@ -42,9 +42,9 @@ export interface ProjectListItem {
 }
 
 export const projectEntityConfig: EntityConfig<ProjectListItem> = {
-  name: 'Project',
-  namePlural: 'Projects',
-  colorTheme: 'orange',
+  name: ENTITY_REGISTRY['project'].name,
+  namePlural: ENTITY_REGISTRY['project'].namePlural,
+  colorTheme: ENTITY_REGISTRY['project'].colorTheme,
 
   listPath: ENTITY_REGISTRY['project'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['project'].publicBasePath}/${id}`,

@@ -15,9 +15,9 @@ import { ROUTES } from '@/config/routes';
 import { GRADIENTS } from '@/config/gradients';
 
 export const investmentEntityConfig: EntityConfig<Investment> = {
-  name: 'Investment',
-  namePlural: 'Investments',
-  colorTheme: 'green',
+  name: ENTITY_REGISTRY['investment'].name,
+  namePlural: ENTITY_REGISTRY['investment'].namePlural,
+  colorTheme: ENTITY_REGISTRY['investment'].colorTheme,
 
   listPath: ENTITY_REGISTRY['investment'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['investment'].basePath}/${id}`,

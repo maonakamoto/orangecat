@@ -64,9 +64,9 @@ export interface Event {
 }
 
 export const eventEntityConfig: EntityConfig<Event> = {
-  name: 'Event',
-  namePlural: 'Events',
-  colorTheme: 'blue',
+  name: ENTITY_REGISTRY['event'].name,
+  namePlural: ENTITY_REGISTRY['event'].namePlural,
+  colorTheme: ENTITY_REGISTRY['event'].colorTheme,
 
   listPath: ENTITY_REGISTRY['event'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['event'].basePath}/${id}`,

@@ -21,9 +21,9 @@ import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { GRADIENTS } from '@/config/gradients';
 
 export const assetEntityConfig: EntityConfig<Asset> = {
-  name: 'Asset',
-  namePlural: 'Assets',
-  colorTheme: 'green',
+  name: ENTITY_REGISTRY['asset'].name,
+  namePlural: ENTITY_REGISTRY['asset'].namePlural,
+  colorTheme: ENTITY_REGISTRY['asset'].colorTheme,
 
   listPath: ENTITY_REGISTRY['asset'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['asset'].basePath}/${id}`,

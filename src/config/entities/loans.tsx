@@ -17,9 +17,9 @@ import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { GRADIENTS } from '@/config/gradients';
 
 export const loanEntityConfig: EntityConfig<Loan> = {
-  name: 'Loan',
-  namePlural: 'Loans',
-  colorTheme: 'tiffany',
+  name: ENTITY_REGISTRY['loan'].name,
+  namePlural: ENTITY_REGISTRY['loan'].namePlural,
+  colorTheme: ENTITY_REGISTRY['loan'].colorTheme,
 
   listPath: ENTITY_REGISTRY['loan'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['loan'].basePath}/${id}`,

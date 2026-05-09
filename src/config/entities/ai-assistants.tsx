@@ -19,9 +19,9 @@ import { GRADIENTS } from '@/config/gradients';
 import type { Currency } from '@/types/settings';
 
 export const aiAssistantEntityConfig: EntityConfig<AIAssistant> = {
-  name: 'AI Assistant',
-  namePlural: 'AI Assistants',
-  colorTheme: 'tiffany',
+  name: ENTITY_REGISTRY['ai_assistant'].name,
+  namePlural: ENTITY_REGISTRY['ai_assistant'].namePlural,
+  colorTheme: ENTITY_REGISTRY['ai_assistant'].colorTheme,
 
   listPath: ENTITY_REGISTRY['ai_assistant'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['ai_assistant'].basePath}/${id}`,

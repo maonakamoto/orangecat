@@ -25,9 +25,9 @@ export interface WishlistListItem {
 }
 
 export const wishlistEntityConfig: EntityConfig<WishlistListItem> = {
-  name: 'Wishlist',
-  namePlural: 'Wishlists',
-  colorTheme: 'orange',
+  name: ENTITY_REGISTRY['wishlist'].name,
+  namePlural: ENTITY_REGISTRY['wishlist'].namePlural,
+  colorTheme: ENTITY_REGISTRY['wishlist'].colorTheme,
 
   listPath: ENTITY_REGISTRY['wishlist'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['wishlist'].basePath}/${id}`,
