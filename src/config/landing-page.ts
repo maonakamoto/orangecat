@@ -69,7 +69,8 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     features: [
       {
         title: 'Fund Projects & Causes',
-        description: 'No-strings donations to milestone-based funding — all forms supported',
+        description:
+          'From no-strings gifts to milestone-based backing — all funding forms supported',
       },
       {
         title: 'Loans & Investments',

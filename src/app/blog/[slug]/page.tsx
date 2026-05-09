@@ -51,13 +51,13 @@ const mdxComponents = {
   ),
   li: ({ children, ...props }: ComponentProps<'li'>) => (
     <li className="flex items-start" {...props}>
-      <span className="w-2 h-2 bg-teal-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+      <span className="w-2 h-2 bg-tiffany-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
       <span>{children}</span>
     </li>
   ),
   blockquote: ({ children, ...props }: ComponentProps<'blockquote'>) => (
     <blockquote
-      className="border-l-4 border-teal-500 pl-6 my-8 bg-teal-50 py-4 rounded-r-lg"
+      className="border-l-4 border-tiffany-500 pl-6 my-8 bg-tiffany-50 py-4 rounded-r-lg"
       {...props}
     >
       <div className="text-lg text-gray-700 italic">{children}</div>
@@ -76,7 +76,7 @@ const mdxComponents = {
   a: ({ href, children, ...props }: ComponentProps<'a'>) => (
     <Link
       href={href || '#'}
-      className="text-teal-600 hover:text-teal-700 font-medium underline"
+      className="text-tiffany-600 hover:text-tiffany-700 font-medium underline"
       {...props}
     >
       {children}
