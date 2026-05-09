@@ -1,6 +1,13 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import { getPublishedPosts, getFeaturedPost, getAllTags } from '@/lib/blog';
 import BlogClientWrapper from '@/components/blog/BlogClientWrapper';
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description:
+    'Insights, guides, and stories about economic freedom, Bitcoin, and building on OrangeCat.',
+};
 
 export default function BlogPage() {
   const allPosts = getPublishedPosts();
