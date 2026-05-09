@@ -23,9 +23,11 @@ interface ModernChatPanelProps {
    * Used by onboarding to pre-seed the Cat with the user's description.
    */
   initialMessage?: string;
+  /** When true, shows an onboarding welcome in the empty state for first-time users. */
+  isNewUser?: boolean;
 }
 
-export function ModernChatPanel({ initialMessage }: ModernChatPanelProps = {}) {
+export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelProps = {}) {
   const router = useRouter();
   const [input, setInput] = useState('');
   const [selectedModel, setSelectedModel] = useState('auto');
@@ -57,11 +59,12 @@ export function ModernChatPanel({ initialMessage }: ModernChatPanelProps = {}) {
   const { suggestions, hasContext, isLoadingSuggestions } = useSuggestions();
 
   // Pending actions hook
-  const { pendingActions, handleConfirmAction, handleRejectAction, refreshPendingActions } = usePendingActionsManager({
-    onActionConfirmed: action => {
-      addSystemMessage(`✅ Action completed: ${action.description}`);
-    },
-  });
+  const { pendingActions, handleConfirmAction, handleRejectAction, refreshPendingActions } =
+    usePendingActionsManager({
+      onActionConfirmed: action => {
+        addSystemMessage(`✅ Action completed: ${action.description}`);
+      },
+    });
 
   // Keep ref in sync so sendMessage always calls the latest refresh function
   refreshPendingActionsRef.current = refreshPendingActions;

@@ -133,7 +133,7 @@ export const documentFormConfig = createEntityConfig<DocumentFormData>({
   name: 'Document',
   namePlural: 'Documents',
   icon: FileText,
-  colorTheme: 'indigo',
+  colorTheme: 'tiffany',
   backUrl: `${ROUTES.DASHBOARD.CAT}?tab=context`,
   successUrl: `${ROUTES.DASHBOARD.CAT}?tab=context`,
   pageTitle: 'Add Context',

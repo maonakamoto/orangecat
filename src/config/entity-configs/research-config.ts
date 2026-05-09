@@ -118,7 +118,7 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
   description:
     'Independent research topics with decentralized funding (e.g., Dark Matter, Climate Science)',
   icon: '🔬',
-  colorTheme: 'purple',
+  colorTheme: 'tiffany',
   schema: researchEntitySchema,
 
   // Routing

@@ -264,7 +264,7 @@ export const aiAssistantConfig = createEntityConfig<AIAssistantFormData>({
   name: 'AI Assistant',
   namePlural: 'AI Assistants',
   icon: Bot,
-  colorTheme: 'purple',
+  colorTheme: 'tiffany',
   backUrl: ENTITY_REGISTRY['ai_assistant'].basePath,
   successUrl: `${ENTITY_REGISTRY['ai_assistant'].basePath}/[id]`,
   pageTitle: 'Create AI Assistant',

@@ -198,7 +198,7 @@ export interface EntityConfig<T extends Record<string, any> = Record<string, any
   /** Entity icon */
   icon: LucideIcon;
   /** Primary color theme */
-  colorTheme: 'orange' | 'tiffany' | 'rose' | 'blue' | 'green' | 'purple' | 'indigo';
+  colorTheme: 'orange' | 'tiffany' | 'rose' | 'blue' | 'green';
   /** Back link URL */
   backUrl: string;
   /** API endpoint for CRUD */

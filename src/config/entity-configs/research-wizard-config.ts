@@ -286,7 +286,7 @@ export const researchWizardConfig = createEntityConfig<ResearchWizardFormData>({
   name: 'Research',
   namePlural: 'Research',
   icon: Microscope,
-  colorTheme: 'purple',
+  colorTheme: 'tiffany',
   backUrl: ENTITY_REGISTRY['research'].basePath,
   successUrl: `${ENTITY_REGISTRY['research'].basePath}/[id]`,
   pageTitle: 'Create Research',

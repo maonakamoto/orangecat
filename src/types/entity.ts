@@ -35,7 +35,7 @@ export interface EntityConfig<T extends BaseEntity = BaseEntity> {
   name: string;
   namePlural: string;
   icon?: React.ComponentType<{ className?: string }> | string;
-  colorTheme?: 'orange' | 'blue' | 'green' | 'purple' | 'tiffany';
+  colorTheme?: 'orange' | 'blue' | 'green' | 'rose' | 'tiffany';
   color?: string;
   description?: string;
 
