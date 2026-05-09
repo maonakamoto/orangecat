@@ -108,7 +108,7 @@ export const PROFILE_CATEGORIES = {
     label: 'Collective',
     description: 'A group of individuals working together on shared goals',
     icon: '👥',
-    color: 'purple',
+    color: 'tiffany',
     inspirationPrompts: [
       'What brings this collective together?',
       'How does the group amplify individual efforts?',

@@ -107,7 +107,7 @@ const TASK_STATUS_CONFIG: Record<TaskStatus, TaskStatusInfo> = {
   },
   in_progress: {
     label: 'In Progress',
-    className: BADGE_COLORS.purple,
+    className: BADGE_COLORS.tiffany,
     color: TASK_COLORS.violet,
     description: 'Someone is currently working on this',
   },

@@ -34,7 +34,7 @@ export function DocumentUploadMode({ onBack, onWrite, onContentExtracted, onErro
         <span className="text-gray-400 text-sm">or</span>
         <button
           onClick={onWrite}
-          className="block mx-auto mt-2 text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+          className="block mx-auto mt-2 text-sm text-tiffany-600 hover:text-tiffany-800 font-medium"
         >
           Write from scratch instead →
         </button>

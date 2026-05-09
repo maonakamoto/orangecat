@@ -95,7 +95,7 @@ export type TransparencyLevel = (typeof TRANSPARENCY_LEVELS)[number]['value'];
 // ==================== DISPLAY COLORS ====================
 
 export const RESEARCH_FIELD_COLORS: Record<ResearchField, string> = {
-  fundamental_physics: 'bg-purple-100 text-purple-800',
+  fundamental_physics: 'bg-tiffany-100 text-tiffany-800',
   mathematics: 'bg-orange-100 text-orange-800',
   computer_science: 'bg-blue-100 text-blue-800',
   biology: 'bg-green-100 text-green-800',
@@ -104,7 +104,7 @@ export const RESEARCH_FIELD_COLORS: Record<ResearchField, string> = {
   psychology: 'bg-rose-100 text-rose-800',
   economics: 'bg-amber-100 text-amber-800',
   philosophy: 'bg-slate-100 text-slate-800',
-  engineering: 'bg-indigo-100 text-indigo-800',
+  engineering: 'bg-blue-100 text-blue-800',
   medicine: 'bg-red-100 text-red-800',
   environmental_science: 'bg-emerald-100 text-emerald-800',
   social_science: 'bg-sky-100 text-sky-800',

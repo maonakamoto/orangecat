@@ -54,7 +54,7 @@ export default function AnalyticsPage() {
         icon: Target,
         color: 'text-blue-600',
       },
-      { label: 'Total Supporters', value: totalSupporters, icon: Users, color: 'text-purple-600' },
+      { label: 'Total Supporters', value: totalSupporters, icon: Users, color: 'text-tiffany-600' },
       {
         label: 'Avg Contribution',
         value: avgContribution,

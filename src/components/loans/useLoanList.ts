@@ -12,7 +12,7 @@ import { BADGE_COLORS } from '@/config/badge-colors';
 const STATUS_COLOR: Record<string, string> = {
   active: BADGE_COLORS.success,
   paid_off: BADGE_COLORS.info,
-  refinanced: BADGE_COLORS.purple,
+  refinanced: BADGE_COLORS.tiffany,
   defaulted: BADGE_COLORS.error,
 };
 

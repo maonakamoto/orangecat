@@ -35,7 +35,7 @@ export const GROUP_LABELS = {
     name: 'Circle',
     description: 'Informal group of trusted people',
     icon: Users,
-    color: 'purple',
+    color: 'tiffany',
     defaults: {
       is_public: false,
       visibility: 'members_only',
@@ -119,7 +119,7 @@ export const GROUP_LABELS = {
     name: 'Guild',
     description: 'Professional association',
     icon: Briefcase,
-    color: 'indigo',
+    color: 'blue',
     defaults: {
       is_public: true,
       visibility: 'public',

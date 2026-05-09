@@ -38,7 +38,7 @@ export const EXPLORE_OPTIONS = [
     title: 'My Cat',
     description: 'Your AI economic agent — ask it anything about OrangeCat',
     href: ROUTES.DASHBOARD.CAT,
-    color: 'purple',
+    color: 'tiffany',
   },
   {
     icon: Users,
@@ -51,6 +51,6 @@ export const EXPLORE_OPTIONS = [
 
 export const EXPLORE_COLOR_CLASSES: Record<string, { bg: string; text: string; border: string }> = {
   orange: { bg: 'bg-orange-50', text: 'text-orange-600', border: 'hover:border-orange-300' },
-  purple: { bg: 'bg-purple-50', text: 'text-purple-600', border: 'hover:border-purple-300' },
+  tiffany: { bg: 'bg-tiffany-50', text: 'text-tiffany-600', border: 'hover:border-tiffany-300' },
   blue: { bg: 'bg-blue-50', text: 'text-blue-600', border: 'hover:border-blue-300' },
 };

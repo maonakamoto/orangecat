@@ -79,7 +79,9 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
   }, [description, callAI]);
 
   const handleRefine = useCallback(() => {
-    if (!refineInput.trim()) {return;}
+    if (!refineInput.trim()) {
+      return;
+    }
     callAI(refineInput, true);
   }, [refineInput, callAI]);
 
@@ -91,12 +93,12 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
   };
 
   return (
-    <div className="rounded-xl border border-purple-200 bg-purple-50/40 p-4 mb-6 space-y-3">
+    <div className="rounded-xl border border-tiffany-200 bg-tiffany-50/40 p-4 mb-6 space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-purple-500" />
-          <span className="text-sm font-semibold text-purple-800">
+          <Sparkles className="h-4 w-4 text-tiffany-500" />
+          <span className="text-sm font-semibold text-tiffany-800">
             {hasFilled ? 'AI filled the form' : 'Fill with AI'}
           </span>
           {hasFilled && <CheckCircle2 className="h-4 w-4 text-green-500" />}
@@ -105,7 +107,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
           <button
             type="button"
             onClick={handleReset}
-            className="text-xs text-purple-500 hover:text-purple-700 flex items-center gap-1"
+            className="text-xs text-tiffany-500 hover:text-tiffany-700 flex items-center gap-1"
           >
             <RefreshCw className="h-3 w-3" />
             Start over
@@ -131,7 +133,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
             placeholder={`Describe what you want to create — AI will fill the form for you.\n\nExample: "I'm an artist selling original watercolour prints of Swiss landscapes, priced around 80 CHF each, shipping worldwide."`}
             disabled={isGenerating || disabled}
             rows={3}
-            className="block w-full rounded-lg px-3 py-2 text-sm border border-purple-200 bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-300 disabled:opacity-50 resize-none"
+            className="block w-full rounded-lg px-3 py-2 text-sm border border-tiffany-200 bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tiffany-300 focus:border-tiffany-300 disabled:opacity-50 resize-none"
           />
 
           <div className="flex items-center justify-between gap-2">
@@ -146,9 +148,12 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
                   <button
                     key={i}
                     type="button"
-                    onClick={() => { setDescription(example); setError(null); }}
+                    onClick={() => {
+                      setDescription(example);
+                      setError(null);
+                    }}
                     disabled={isGenerating || disabled}
-                    className="text-xs px-2.5 py-1 bg-purple-100 hover:bg-purple-200 text-purple-600 rounded-full transition-colors"
+                    className="text-xs px-2.5 py-1 bg-tiffany-100 hover:bg-tiffany-200 text-tiffany-600 rounded-full transition-colors"
                   >
                     {example.length > 45 ? `${example.slice(0, 45)}…` : example}
                   </button>
@@ -159,7 +164,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
               type="button"
               onClick={handleGenerate}
               disabled={isGenerating || disabled || !description.trim()}
-              className="gap-2 bg-purple-600 hover:bg-purple-700 text-white shrink-0 ml-auto"
+              className="gap-2 bg-tiffany-600 hover:bg-tiffany-700 text-white shrink-0 ml-auto"
             >
               {isGenerating ? (
                 <>
@@ -183,7 +188,10 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
           <input
             type="text"
             value={refineInput}
-            onChange={e => { setRefineInput(e.target.value); setError(null); }}
+            onChange={e => {
+              setRefineInput(e.target.value);
+              setError(null);
+            }}
             onKeyDown={e => {
               if (e.key === 'Enter') {
                 e.preventDefault();
@@ -192,13 +200,13 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
             }}
             placeholder='Tell AI what to change — e.g. "make the title shorter" or "increase the price"'
             disabled={isRefining || disabled}
-            className="flex-1 rounded-lg px-3 py-2 text-sm border border-purple-200 bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 disabled:opacity-50"
+            className="flex-1 rounded-lg px-3 py-2 text-sm border border-tiffany-200 bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tiffany-300 disabled:opacity-50"
           />
           <Button
             type="button"
             onClick={handleRefine}
             disabled={isRefining || disabled || !refineInput.trim()}
-            className="gap-2 bg-purple-600 hover:bg-purple-700 text-white shrink-0"
+            className="gap-2 bg-tiffany-600 hover:bg-tiffany-700 text-white shrink-0"
           >
             {isRefining ? (
               <Loader2 className="h-4 w-4 animate-spin" />

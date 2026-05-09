@@ -25,7 +25,7 @@ export function BioStep({ form }: BioStepProps) {
       <div className="text-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-900 mb-2">Share Your Story</h2>
         <p className="text-gray-600 mb-3">Help supporters understand what drives you.</p>
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 text-purple-700 text-xs rounded-full">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-tiffany-50 text-tiffany-700 text-xs rounded-full">
           <span>💭</span>
           <span>All story fields are optional</span>
         </div>

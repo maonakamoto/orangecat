@@ -11,7 +11,7 @@ export function AIGeneratedIndicator({ confidence }: AIGeneratedIndicatorProps) 
   return (
     <div className="absolute -top-1 -right-1 z-10">
       <span
-        className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-purple-100 text-purple-700 text-xs rounded-full border border-purple-200"
+        className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-tiffany-100 text-tiffany-700 text-xs rounded-full border border-tiffany-200"
         title={`AI generated (${Math.round(confidence * 100)}% confidence)`}
       >
         <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">

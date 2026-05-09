@@ -96,7 +96,7 @@ export default function BitBaumAboutPage() {
                 invest, lend, and transact with any identity, any currency.
               </p>
               <div className="flex flex-wrap justify-center gap-2">
-                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                <span className="px-3 py-1 bg-tiffany-100 text-tiffany-700 rounded-full text-sm">
                   Consumer Product
                 </span>
                 <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">
@@ -146,8 +146,8 @@ export default function BitBaumAboutPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-purple-600" />
+              <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="w-8 h-8 text-tiffany-600" />
               </div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">Always Day 1</h4>
               <p className="text-gray-600 text-sm">

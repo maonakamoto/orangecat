@@ -450,7 +450,7 @@ export const TIER_CONFIG: Record<
   premium: {
     label: 'Premium',
     description: 'Maximum capability for complex tasks',
-    color: 'purple',
+    color: 'orange',
   },
 };
 

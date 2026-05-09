@@ -20,8 +20,7 @@ export const metadata: Metadata = {
     'Platform documentation for OrangeCat — how the AI economic agent works, entity types, payments, and security.',
 };
 
-const ENTITY_TYPES = ENTITY_TYPE_KEYS
-  .filter(t => t !== 'wallet') // wallet is infrastructure, not a user-listable entity type
+const ENTITY_TYPES = ENTITY_TYPE_KEYS.filter(t => t !== 'wallet') // wallet is infrastructure, not a user-listable entity type
   .map(t => ({ name: ENTITY_REGISTRY[t].name, description: ENTITY_REGISTRY[t].description }));
 
 export default function DocsPage() {
@@ -39,26 +38,29 @@ export default function DocsPage() {
         {/* The Cat */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-purple-100">
-              <Bot className="h-5 w-5 text-purple-600" />
+            <div className="p-2 rounded-lg bg-tiffany-100">
+              <Bot className="h-5 w-5 text-tiffany-600" />
             </div>
             <h2 className="text-2xl font-semibold text-gray-900">Your Cat — AI Economic Agent</h2>
           </div>
           <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
             <p className="text-gray-600 leading-relaxed">
               Every user and group has a <strong>Cat</strong> — a personal AI agent that understands
-              your context and acts on your behalf. The Cat can create entities, draft content, search
-              for opportunities, send messages, and coordinate economic activity in plain language.
+              your context and acts on your behalf. The Cat can create entities, draft content,
+              search for opportunities, send messages, and coordinate economic activity in plain
+              language.
             </p>
             <p className="text-gray-600 leading-relaxed">
               The Cat reads your authorized data — your own entities, public profiles you interact
               with, and conversations you start. It proposes actions and waits for your confirmation
               before executing them. You stay in control; the Cat handles complexity.
             </p>
-            <div className="bg-purple-50 rounded-lg p-4">
-              <p className="text-sm text-purple-800 font-medium mb-2">Example Cat commands:</p>
-              <ul className="text-sm text-purple-700 space-y-1">
-                <li>&ldquo;Create a project for my open-source library with a 0.1 BTC goal&rdquo;</li>
+            <div className="bg-tiffany-50 rounded-lg p-4">
+              <p className="text-sm text-tiffany-800 font-medium mb-2">Example Cat commands:</p>
+              <ul className="text-sm text-tiffany-700 space-y-1">
+                <li>
+                  &ldquo;Create a project for my open-source library with a 0.1 BTC goal&rdquo;
+                </li>
                 <li>&ldquo;Find investors interested in renewable energy&rdquo;</li>
                 <li>&ldquo;Draft a consulting service listing at my usual rate&rdquo;</li>
                 <li>&ldquo;Send a message to the group about this week&apos;s proposal&rdquo;</li>
@@ -78,8 +80,8 @@ export default function DocsPage() {
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <p className="text-gray-600 leading-relaxed mb-5">
               Everything on OrangeCat is an <strong>entity</strong> — a structured unit of economic
-              or governance activity. Entities give the Cat a rich world model to read and operate on.
-              There are 14 entity types covering the full economic spectrum:
+              or governance activity. Entities give the Cat a rich world model to read and operate
+              on. There are 14 entity types covering the full economic spectrum:
             </p>
             <div className="grid sm:grid-cols-2 gap-3">
               {ENTITY_TYPES.map(entity => (
@@ -112,15 +114,13 @@ export default function DocsPage() {
             </p>
             <p className="text-gray-600 leading-relaxed">
               OrangeCat is not Bitcoin-only. Any payment method — Twint, PayPal, Venmo, Monero, bank
-              transfers — can be listed as a receiving option. Users choose the method that works for
-              them. Meet counterparties where they are.
+              transfers — can be listed as a receiving option. Users choose the method that works
+              for them. Meet counterparties where they are.
             </p>
             <div className="grid sm:grid-cols-3 gap-4">
               <div className="p-4 bg-orange-50 rounded-lg text-center">
                 <p className="font-medium text-orange-900 text-sm">No platform fees</p>
-                <p className="text-orange-700 text-xs mt-1">
-                  Payments go directly between parties
-                </p>
+                <p className="text-orange-700 text-xs mt-1">Payments go directly between parties</p>
               </div>
               <div className="p-4 bg-blue-50 rounded-lg text-center">
                 <p className="font-medium text-blue-900 text-sm">Non-custodial</p>

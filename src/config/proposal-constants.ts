@@ -65,7 +65,7 @@ export const PROPOSAL_STATUS_CONFIG: Record<
   [PROPOSAL_STATUSES.EXECUTED]: {
     label: 'Executed',
     badgeVariant: 'default',
-    className: 'bg-purple-500',
+    className: 'bg-tiffany-500',
   },
   [PROPOSAL_STATUSES.CANCELLED]: {
     label: 'Cancelled',

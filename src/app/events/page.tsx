@@ -80,7 +80,7 @@ export default function EventsPage() {
       category: 'Art & Culture',
       icon: Palette,
       examples: ['Art Exhibits', 'Gallery Openings', 'Photography Shows', 'Cultural Festivals'],
-      color: BADGE_COLORS.purple,
+      color: BADGE_COLORS.tiffany,
     },
     {
       category: 'Adventure & Travel',

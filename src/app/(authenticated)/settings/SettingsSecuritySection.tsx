@@ -55,7 +55,7 @@ export function SettingsSecuritySection({
 
       <div className="border-t border-gray-100 pt-10">
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-          <Link2 className="w-6 h-6 mr-2 text-purple-600" />
+          <Link2 className="w-6 h-6 mr-2 text-tiffany-600" />
           Connected Accounts
         </h3>
         <p className="text-gray-600 mb-6">

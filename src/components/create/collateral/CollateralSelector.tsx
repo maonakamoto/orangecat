@@ -141,7 +141,7 @@ export function CollateralSelector({
                   <div
                     className={cn(
                       'h-8 w-8 rounded-full flex items-center justify-center',
-                      item.type === 'asset' ? BADGE_COLORS.info : BADGE_COLORS.purple
+                      item.type === 'asset' ? BADGE_COLORS.info : BADGE_COLORS.tiffany
                     )}
                   >
                     {item.type === 'asset' ? (

@@ -34,7 +34,7 @@ function getNotificationIcon(notification: Notification) {
     case 'follow':
       return <Users className="w-5 h-5 text-blue-500" />;
     case 'message':
-      return <MessageSquare className="w-5 h-5 text-purple-500" />;
+      return <MessageSquare className="w-5 h-5 text-tiffany-500" />;
     case 'comment':
       return <MessageSquare className="w-5 h-5 text-green-500" />;
     case 'like':

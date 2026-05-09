@@ -188,7 +188,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                 onClick={() => handleSwitchToGroup(group)}
                 className={cn(
                   'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 transition-colors',
-                  isGroupContext && context.group?.id === group.id && 'bg-purple-50'
+                  isGroupContext && context.group?.id === group.id && 'bg-tiffany-50'
                 )}
               >
                 <div className="flex-shrink-0">
@@ -202,8 +202,8 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                       unoptimized={group.avatar_url?.includes('supabase.co')}
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                      <Users className="w-4 h-4 text-purple-600" />
+                    <div className="w-8 h-8 rounded-full bg-tiffany-100 flex items-center justify-center">
+                      <Users className="w-4 h-4 text-tiffany-600" />
                     </div>
                   )}
                 </div>
@@ -212,7 +212,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                   <p className="text-xs text-gray-500 truncate">{group.slug}</p>
                 </div>
                 {isGroupContext && context.group?.id === group.id && (
-                  <div className="w-2 h-2 bg-purple-500 rounded-full flex-shrink-0" />
+                  <div className="w-2 h-2 bg-tiffany-500 rounded-full flex-shrink-0" />
                 )}
               </button>
             ))

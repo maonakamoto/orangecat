@@ -47,7 +47,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Your Cat (AI Agent)',
     icon: Bot,
-    color: 'text-purple-600',
+    color: 'text-tiffany-600',
     items: [
       {
         question: 'What is "My Cat"?',
