@@ -165,7 +165,7 @@ export default function AIAssistantChatPage() {
               <Link
                 key={conv.id}
                 href={`/ai-chat/${assistantId}/${conv.id}`}
-                className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-sky-300 hover:shadow-sm transition-all"
+                className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-tiffany-300 hover:shadow-sm transition-all"
               >
                 <div className="min-w-0">
                   <p className="font-medium text-gray-900 truncate">

@@ -22,7 +22,7 @@ export function TextFormatToolbar({
 
   const colorClasses =
     variant === 'sky'
-      ? 'text-sky-600 hover:bg-sky-50 active:bg-sky-100'
+      ? 'text-tiffany-600 hover:bg-tiffany-50 active:bg-tiffany-100'
       : 'text-orange-500 hover:bg-orange-50';
 
   return (
@@ -101,7 +101,7 @@ export function ProjectSelectionPanel({
               selectedProjects.includes(project.id)
                 ? variant === 'orange'
                   ? 'bg-tiffany-500 text-white border-tiffany-500 shadow-sm'
-                  : 'bg-sky-500 text-white border-sky-500 shadow-sm'
+                  : 'bg-tiffany-500 text-white border-tiffany-500 shadow-sm'
                 : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:bg-orange-50'
             )}
           >
@@ -142,10 +142,10 @@ export function ProjectToggleButton({
         'h-9 w-9 flex items-center justify-center rounded-full transition-colors touch-manipulation',
         isActive
           ? variant === 'sky'
-            ? 'text-sky-700 bg-sky-50'
+            ? 'text-tiffany-700 bg-tiffany-50'
             : 'text-orange-700 bg-orange-50'
           : variant === 'sky'
-            ? 'text-sky-600 hover:bg-sky-50 active:bg-sky-100'
+            ? 'text-tiffany-600 hover:bg-tiffany-50 active:bg-tiffany-100'
             : 'text-orange-600 hover:bg-orange-50 active:bg-orange-100'
       )}
       title="Cross-post to projects"

@@ -197,8 +197,8 @@ const ROUTE_CONFIGS: RouteConfig[] = [
       { icon: CheckCircle, text: 'Track repayment progress' },
       { icon: Shield, text: 'Secure, decentralized finance' },
     ],
-    color: 'text-cyan-600',
-    bgColor: 'bg-cyan-50',
+    color: 'text-tiffany-600',
+    bgColor: 'bg-tiffany-50',
   },
   {
     matches: p => p.startsWith('/organizations'),
@@ -225,8 +225,8 @@ const ROUTE_CONFIGS: RouteConfig[] = [
       { icon: Zap, text: 'Get instant notifications' },
       { icon: Shield, text: 'Secure, private messaging' },
     ],
-    color: 'text-violet-600',
-    bgColor: 'bg-violet-50',
+    color: 'text-tiffany-600',
+    bgColor: 'bg-tiffany-50',
   },
   {
     matches: p => p.startsWith('/settings'),
