@@ -56,7 +56,7 @@ export function WelcomeStep() {
           <div className="flex-1">
             <p className="font-semibold text-orange-900">Tell My Cat what you need</p>
             <p className="text-sm text-orange-700 mt-0.5">
-              Describe your goals — your AI assistant will suggest the right setup in seconds
+              Describe your goals — your AI agent will suggest the right setup in seconds
             </p>
           </div>
           {navigating ? (
