@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
+import { DAYS_OF_WEEK } from '@/config/schedule';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
 /**
@@ -14,9 +15,7 @@ const recurrencePatternSchema = z
     interval: z.number().int().positive().max(365).optional(),
     end_date: z.string().optional().nullable(),
     count: z.number().int().positive().max(1000).optional().nullable(),
-    days_of_week: z
-      .array(z.enum(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']))
-      .optional(),
+    days_of_week: z.array(z.enum(DAYS_OF_WEEK)).optional(),
     day_of_month: z.number().int().min(1).max(31).optional().nullable(),
     month_of_year: z.number().int().min(1).max(12).optional().nullable(),
   })

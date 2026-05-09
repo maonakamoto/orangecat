@@ -1,9 +1,15 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
 import { ENTITY_TYPES } from '@/config/entity-registry';
-import { RENTAL_PERIODS } from '@/config/assets';
+import { ASSET_TYPES, RENTAL_PERIODS } from '@/config/assets';
 import { LOAN_TYPES, LOAN_FULFILLMENT_TYPES } from '@/config/loans';
 import { INVESTMENT_TYPES, RETURN_FREQUENCIES, RISK_LEVELS } from '@/config/investments';
+import {
+  WALLET_CATEGORY_VALUES,
+  WALLET_BEHAVIOR_TYPE_VALUES,
+  BUDGET_PERIOD_VALUES,
+  ALLOWED_CATEGORY_ICONS,
+} from '@/types/wallet';
 import { lightningAddressSchema, optionalText } from './base';
 
 /**
@@ -38,19 +44,7 @@ export const assetSchema = z.object({
     .string()
     .min(3, 'Title must be at least 3 characters')
     .max(100, 'Title must be at most 100 characters'),
-  type: z.enum([
-    'real_estate',
-    'vehicle',
-    'luxury',
-    'equipment',
-    'computing',
-    'recreational',
-    'robot',
-    'drone',
-    'business',
-    'securities',
-    'other',
-  ]),
+  type: z.enum(ASSET_TYPES.map(t => t.value) as [string, ...string[]]),
   description: optionalText(2000),
   location: optionalText(200),
   estimated_value: z.number().positive().optional().nullable(),
@@ -162,48 +156,6 @@ export const investmentSchema = z
 // Wallet validation
 // ---------------------------------------------------------------------------
 
-const walletCategoryValues = [
-  'general',
-  'rent',
-  'food',
-  'medical',
-  'education',
-  'emergency',
-  'transportation',
-  'utilities',
-  'projects',
-  'legal',
-  'entertainment',
-  'custom',
-] as const;
-
-const walletBehaviorTypeValues = ['general', 'recurring_budget', 'one_time_goal'] as const;
-
-const budgetPeriodValues = [
-  'daily',
-  'weekly',
-  'biweekly',
-  'monthly',
-  'quarterly',
-  'yearly',
-  'custom',
-] as const;
-
-const allowedCategoryIcons = [
-  '💰',
-  '🏠',
-  '🍔',
-  '💊',
-  '🎓',
-  '🚨',
-  '🚗',
-  '💡',
-  '🚀',
-  '⚖️',
-  '🎭',
-  '📦',
-] as const;
-
 /** Schema for POST /api/wallets — create a new wallet */
 export const walletCreateSchema = z
   .object({
@@ -225,13 +177,13 @@ export const walletCreateSchema = z
     lightning_address: z.string().max(200).optional().nullable(),
 
     // Category
-    category: z.enum(walletCategoryValues).default('general'),
-    category_icon: z.enum(allowedCategoryIcons).optional(),
+    category: z.enum(WALLET_CATEGORY_VALUES).default('general'),
+    category_icon: z.enum(ALLOWED_CATEGORY_ICONS).optional(),
 
     // Behavior
-    behavior_type: z.enum(walletBehaviorTypeValues).default('general'),
+    behavior_type: z.enum(WALLET_BEHAVIOR_TYPE_VALUES).default('general'),
     budget_amount: z.number().positive().optional().nullable(),
-    budget_period: z.enum(budgetPeriodValues).optional().nullable(),
+    budget_period: z.enum(BUDGET_PERIOD_VALUES).optional().nullable(),
 
     // Goal
     goal_amount: z
@@ -267,8 +219,8 @@ export const walletUpdateSchema = z
     label: z.string().min(1, 'Label cannot be empty').max(100).optional(),
     description: z.string().max(500).optional().nullable(),
     address_or_xpub: z.string().min(1).max(200).optional(),
-    category: z.enum(walletCategoryValues).optional(),
-    category_icon: z.enum(allowedCategoryIcons).optional(),
+    category: z.enum(WALLET_CATEGORY_VALUES).optional(),
+    category_icon: z.enum(ALLOWED_CATEGORY_ICONS).optional(),
     goal_amount: z.number().positive().max(1_000_000_000).optional().nullable(),
     goal_currency: z.enum(CURRENCY_CODES).optional().nullable(),
     goal_deadline: z.string().optional().nullable(),

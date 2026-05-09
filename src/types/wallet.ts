@@ -5,32 +5,41 @@ import bs58check from 'bs58check';
 
 type WalletType = 'address' | 'xpub';
 
-export type WalletBehaviorType = 'general' | 'recurring_budget' | 'one_time_goal';
+export const WALLET_BEHAVIOR_TYPE_VALUES = [
+  'general',
+  'recurring_budget',
+  'one_time_goal',
+] as const;
+export type WalletBehaviorType = (typeof WALLET_BEHAVIOR_TYPE_VALUES)[number];
 
-export type BudgetPeriod =
-  | 'daily'
-  | 'weekly'
-  | 'biweekly'
-  | 'monthly'
-  | 'quarterly'
-  | 'yearly'
-  | 'custom';
+export const BUDGET_PERIOD_VALUES = [
+  'daily',
+  'weekly',
+  'biweekly',
+  'monthly',
+  'quarterly',
+  'yearly',
+  'custom',
+] as const;
+export type BudgetPeriod = (typeof BUDGET_PERIOD_VALUES)[number];
 
 type GoalStatus = 'active' | 'paused' | 'reached' | 'purchased' | 'cancelled' | 'archived';
 
-export type WalletCategory =
-  | 'general'
-  | 'rent'
-  | 'food'
-  | 'medical'
-  | 'education'
-  | 'emergency'
-  | 'transportation'
-  | 'utilities'
-  | 'projects'
-  | 'legal'
-  | 'entertainment'
-  | 'custom';
+export const WALLET_CATEGORY_VALUES = [
+  'general',
+  'rent',
+  'food',
+  'medical',
+  'education',
+  'emergency',
+  'transportation',
+  'utilities',
+  'projects',
+  'legal',
+  'entertainment',
+  'custom',
+] as const;
+export type WalletCategory = (typeof WALLET_CATEGORY_VALUES)[number];
 
 // Constants for validation
 import { MAX_LABEL_LENGTH, MAX_DESCRIPTION_LENGTH } from '@/lib/wallets/constants';
@@ -102,7 +111,7 @@ export const WALLET_CATEGORIES: Record<
 };
 
 // Allowed emojis for icons (whitelist for security)
-const ALLOWED_CATEGORY_ICONS = [
+export const ALLOWED_CATEGORY_ICONS = [
   '💰',
   '🏠',
   '🍔',

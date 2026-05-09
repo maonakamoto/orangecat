@@ -3,6 +3,7 @@ import { CURRENCY_CODES } from '@/config/currencies';
 import { CAUSE_CATEGORIES } from '@/config/causes';
 import { PRODUCT_TYPES, PRODUCT_FULFILLMENT_TYPES } from '@/config/products';
 import { SERVICE_LOCATION_TYPES } from '@/config/services';
+import { DAYS_OF_WEEK } from '@/config/schedule';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
 // =============================================================================
@@ -18,9 +19,7 @@ import { lightningAddressSchema, optionalText, optionalUrl } from './base';
  */
 const availabilityScheduleSchema = z
   .object({
-    days: z
-      .array(z.enum(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']))
-      .optional(),
+    days: z.array(z.enum(DAYS_OF_WEEK)).optional(),
     hours: z
       .array(
         z.object({
