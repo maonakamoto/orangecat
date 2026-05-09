@@ -12,6 +12,7 @@ interface EmptyStateProps {
   hasContext: boolean;
   isLoadingSuggestions: boolean;
   onSuggestionClick: (suggestion: string) => void;
+  isNewUser?: boolean;
 }
 
 export function EmptyState({
@@ -19,6 +20,7 @@ export function EmptyState({
   hasContext,
   isLoadingSuggestions,
   onSuggestionClick,
+  isNewUser,
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-4 py-12">
@@ -30,9 +32,16 @@ export function EmptyState({
       >
         <Cat className="h-8 w-8 text-white" />
       </div>
-      <h2 className="text-2xl font-semibold text-gray-900 mb-2">Hi, I'm your Cat</h2>
+      <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+        {isNewUser ? 'Welcome — I’m your Cat' : 'Hi, I’m your Cat'}
+      </h2>
       <p className="text-gray-500 mb-8 max-w-md">
-        {hasContext ? (
+        {isNewUser ? (
+          <>
+            I help you earn, fund, lend, invest, and govern — with any currency, under any identity.
+            What would you like to do?
+          </>
+        ) : hasContext ? (
           <>
             I know your profile and what you're working on. Ask me anything — I'll give you
             personalised advice.
@@ -44,7 +53,7 @@ export function EmptyState({
           </>
         )}
       </p>
-      {hasContext && (
+      {!isNewUser && hasContext && (
         <p className="text-xs text-tiffany-600 mb-4 flex items-center gap-1">
           <Sparkles className="h-3 w-3" />
           Personalised based on your profile and activity

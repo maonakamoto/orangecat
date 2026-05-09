@@ -14,7 +14,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'sonner';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
 import { cn } from '@/lib/utils';
@@ -33,14 +32,11 @@ export default function CatHubPage() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabValue>('chat');
 
-  // Get initial tab from URL; show welcome toast for new registrations
+  // Get initial tab from URL params
   useEffect(() => {
     const tab = searchParams?.get('tab') as TabValue | null;
     if (tab && ['chat', 'context', 'settings'].includes(tab)) {
       setActiveTab(tab);
-    }
-    if (searchParams?.get('welcome') === 'true') {
-      toast.success('Welcome to OrangeCat! Your Cat is ready to help.', { duration: 5000 });
     }
   }, [searchParams]);
 
@@ -66,6 +62,7 @@ export default function CatHubPage() {
 
   // Pre-seed the Cat with a message from onboarding (or any ?q= link)
   const initialMessage = searchParams?.get('q') || undefined;
+  const isNewUser = searchParams?.get('welcome') === 'true';
 
   return (
     <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
@@ -122,7 +119,7 @@ export default function CatHubPage() {
           <div className="px-4 pb-24 sm:pb-8">
             {/* Chat Tab */}
             <TabsContent value="chat" className="mt-4 focus:outline-none">
-              <ModernChatPanel initialMessage={initialMessage} />
+              <ModernChatPanel initialMessage={initialMessage} isNewUser={isNewUser} />
             </TabsContent>
 
             {/* Context Tab */}

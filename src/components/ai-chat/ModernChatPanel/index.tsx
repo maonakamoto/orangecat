@@ -175,6 +175,7 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
             hasContext={hasContext}
             isLoadingSuggestions={isLoadingSuggestions}
             onSuggestionClick={handleSuggestionClick}
+            isNewUser={isNewUser}
           />
         ) : (
           <div className="space-y-4">
