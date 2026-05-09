@@ -62,7 +62,7 @@ export const DOCUMENT_TYPE_ICONS: Record<DocumentType, string> = {
 export const documentEntityConfig: EntityConfig<DocumentListItem> = {
   name: 'Document',
   namePlural: 'Documents',
-  colorTheme: 'purple',
+  colorTheme: 'tiffany',
 
   listPath: ENTITY_REGISTRY['document'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['document'].basePath}/${id}`,
