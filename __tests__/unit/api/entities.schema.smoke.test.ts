@@ -60,7 +60,7 @@ describe('Entity schema smoke validation', () => {
     const result = userCauseSchema.safeParse({
       title: 'Smoke Cause',
       description: 'desc',
-      cause_category: 'charity',
+      cause_category: 'Healthcare',
       goal_amount: 20000,
       currency: 'SATS',
       lightning_address: '',

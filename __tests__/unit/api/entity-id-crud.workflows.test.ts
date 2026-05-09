@@ -103,7 +103,7 @@ const cases: Case[] = [
     putHandler: putCause as any,
     validUpdate: {
       title: 'Updated Cause',
-      cause_category: 'charity',
+      cause_category: 'Healthcare',
       lightning_address: '',
     },
   },
@@ -122,7 +122,13 @@ describe('Entity [id] CRUD workflows (service/product/cause)', () => {
 
   describe.each(cases)('$name id routes', ({ table, getHandler, putHandler, validUpdate }) => {
     it('GET returns active entity detail', async () => {
-      const entity = { id: '00000000-0000-0000-0000-000000000001', user_id: 'u1', actor_id: 'a1', title: 'Entity', status: 'active' };
+      const entity = {
+        id: '00000000-0000-0000-0000-000000000001',
+        user_id: 'u1',
+        actor_id: 'a1',
+        title: 'Entity',
+        status: 'active',
+      };
 
       const fetchQuery = {
         select: jest.fn().mockReturnThis(),
@@ -140,7 +146,9 @@ describe('Entity [id] CRUD workflows (service/product/cause)', () => {
 
       (createServerClient as jest.Mock).mockResolvedValue(supabase);
 
-      const response = await getHandler({} as any, { params: { id: '00000000-0000-0000-0000-000000000001' } });
+      const response = await getHandler({} as any, {
+        params: { id: '00000000-0000-0000-0000-000000000001' },
+      });
       const body = await response.json();
 
       expect(response.status).toBe(200);
@@ -149,7 +157,12 @@ describe('Entity [id] CRUD workflows (service/product/cause)', () => {
     });
 
     it('PUT updates own entity', async () => {
-      const existing = { id: '00000000-0000-0000-0000-000000000001', user_id: 'u1', actor_id: 'a1', title: 'Old Title' };
+      const existing = {
+        id: '00000000-0000-0000-0000-000000000001',
+        user_id: 'u1',
+        actor_id: 'a1',
+        title: 'Old Title',
+      };
       const updated = { ...existing, title: String(validUpdate.title) };
 
       const fetchQuery = {
@@ -178,7 +191,9 @@ describe('Entity [id] CRUD workflows (service/product/cause)', () => {
       (createServerClient as jest.Mock).mockResolvedValue(supabase);
 
       const request = { json: jest.fn().mockResolvedValue(validUpdate) };
-      const response = await putHandler(request as any, { params: { id: '00000000-0000-0000-0000-000000000001' } });
+      const response = await putHandler(request as any, {
+        params: { id: '00000000-0000-0000-0000-000000000001' },
+      });
       const body = await response.json();
 
       expect(response.status).toBe(200);
@@ -211,7 +226,9 @@ describe('Entity [id] CRUD workflows (service/product/cause)', () => {
       (createServerClient as jest.Mock).mockResolvedValue(supabase);
 
       const request = { json: jest.fn().mockResolvedValue(validUpdate) };
-      const response = await putHandler(request as any, { params: { id: '00000000-0000-0000-0000-000000000001' } });
+      const response = await putHandler(request as any, {
+        params: { id: '00000000-0000-0000-0000-000000000001' },
+      });
       const body = await response.json();
 
       expect(response.status).toBe(403);
