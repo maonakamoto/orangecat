@@ -34,6 +34,7 @@ import {
   Gift,
   FileText,
   TrendingUp,
+  FlaskConical,
 } from 'lucide-react';
 
 // ==================== ENTITY TYPES ====================
@@ -348,7 +349,7 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     namePlural: 'Research',
     tableName: 'research_entities', // Database table name (unchanged for compatibility)
     userIdField: 'actor_id',
-    icon: Bot,
+    icon: FlaskConical,
     colorTheme: 'tiffany',
     basePath: '/dashboard/research',
     createPath: '/dashboard/research/create',

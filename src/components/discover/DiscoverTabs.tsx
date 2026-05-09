@@ -1,22 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import {
-  Target,
-  Users,
-  Grid3X3,
-  DollarSign,
-  TrendingUp,
-  Heart,
-  Package,
-  Briefcase,
-  Calendar,
-  Building2,
-  Gift,
-  FlaskConical,
-  Bot,
-  Building,
-} from 'lucide-react';
+import { Grid3X3, Users } from 'lucide-react';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import type { EntityType } from '@/config/entity-registry';
 import { BADGE_COLORS } from '@/config/badge-colors';
 
 export type DiscoverTabType =
@@ -42,27 +29,50 @@ interface DiscoverTabsProps {
   loading?: boolean;
 }
 
+/** Maps plural discover tab IDs to their singular EntityType in the registry. */
+const TAB_TO_ENTITY: Partial<Record<DiscoverTabType, EntityType>> = {
+  projects: 'project',
+  causes: 'cause',
+  investments: 'investment',
+  loans: 'loan',
+  assets: 'asset',
+  products: 'product',
+  services: 'service',
+  events: 'event',
+  groups: 'group',
+  wishlists: 'wishlist',
+  research: 'research',
+  ai_assistants: 'ai_assistant',
+};
+
 interface TabConfig {
   id: DiscoverTabType;
   label: string;
-  icon: React.ReactNode;
+  Icon: React.ElementType;
 }
 
 const tabs: TabConfig[] = [
-  { id: 'all', label: 'All', icon: <Grid3X3 className="w-4 h-4" /> },
-  { id: 'projects', label: 'Projects', icon: <Target className="w-4 h-4" /> },
-  { id: 'causes', label: 'Causes', icon: <Heart className="w-4 h-4" /> },
-  { id: 'investments', label: 'Investments', icon: <TrendingUp className="w-4 h-4" /> },
-  { id: 'loans', label: 'Loans', icon: <DollarSign className="w-4 h-4" /> },
-  { id: 'assets', label: 'Assets', icon: <Building className="w-4 h-4" /> },
-  { id: 'products', label: 'Products', icon: <Package className="w-4 h-4" /> },
-  { id: 'services', label: 'Services', icon: <Briefcase className="w-4 h-4" /> },
-  { id: 'events', label: 'Events', icon: <Calendar className="w-4 h-4" /> },
-  { id: 'groups', label: 'Groups', icon: <Building2 className="w-4 h-4" /> },
-  { id: 'wishlists', label: 'Wishlists', icon: <Gift className="w-4 h-4" /> },
-  { id: 'research', label: 'Research', icon: <FlaskConical className="w-4 h-4" /> },
-  { id: 'ai_assistants', label: 'AI Assistants', icon: <Bot className="w-4 h-4" /> },
-  { id: 'profiles', label: 'People', icon: <Users className="w-4 h-4" /> },
+  { id: 'all', label: 'All', Icon: Grid3X3 },
+  ...(
+    [
+      'projects',
+      'causes',
+      'investments',
+      'loans',
+      'assets',
+      'products',
+      'services',
+      'events',
+      'groups',
+      'wishlists',
+      'research',
+      'ai_assistants',
+    ] as DiscoverTabType[]
+  ).map(id => {
+    const meta = ENTITY_REGISTRY[TAB_TO_ENTITY[id]!];
+    return { id, label: meta.namePlural, Icon: meta.icon };
+  }),
+  { id: 'profiles', label: 'People', Icon: Users },
 ];
 
 export default function DiscoverTabs({
@@ -76,14 +86,14 @@ export default function DiscoverTabs({
   return (
     <div className="border-b border-gray-200 bg-white/80 backdrop-blur-sm rounded-t-2xl sticky top-0 z-10 overflow-x-auto">
       <nav className="-mb-px flex space-x-6 px-6 pt-4 min-w-max" aria-label="Tabs">
-        {tabs.map(tab => {
-          const isActive = activeTab === tab.id;
-          const count = tab.id === 'all' ? allCount : counts[tab.id] || 0;
+        {tabs.map(({ id, label, Icon }) => {
+          const isActive = activeTab === id;
+          const count = id === 'all' ? allCount : counts[id] || 0;
 
           return (
             <button
-              key={tab.id}
-              onClick={() => onTabChange(tab.id)}
+              key={id}
+              onClick={() => onTabChange(id)}
               className={`
                 group relative inline-flex items-center gap-2 px-1 py-3 text-sm font-medium
                 transition-colors duration-200
@@ -102,11 +112,11 @@ export default function DiscoverTabs({
                 ${isActive ? 'text-orange-600' : 'text-gray-400 group-hover:text-gray-600'}
               `}
               >
-                {tab.icon}
+                <Icon className="w-4 h-4" />
               </span>
 
               {/* Label */}
-              <span>{tab.label}</span>
+              <span>{label}</span>
 
               {/* Count Badge */}
               {!loading && count > 0 && (
