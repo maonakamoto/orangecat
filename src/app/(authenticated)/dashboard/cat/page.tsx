@@ -86,7 +86,9 @@ export default function CatHubPage() {
       <div className="max-w-4xl mx-auto">
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           {/* Tab Navigation - Fixed at top on mobile, inline on desktop */}
-          <div className="sticky top-[73px] z-20 bg-gradient-to-br from-orange-50/80 via-white/80 to-tiffany-50/80 backdrop-blur-sm px-4 py-2">
+          <div
+            className={`sticky top-[73px] z-20 ${GRADIENTS.pageBgFrost} backdrop-blur-sm px-4 py-2`}
+          >
             <TabsList className="w-full grid grid-cols-3 h-12 bg-white/80 border border-gray-200 shadow-sm">
               <TabsTrigger
                 value="chat"

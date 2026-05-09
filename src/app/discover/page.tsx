@@ -9,6 +9,7 @@ import DiscoverFilters from '@/components/discover/DiscoverFilters';
 import DiscoverHero from '@/components/discover/DiscoverHero';
 import DiscoverEmptyState from '@/components/discover/DiscoverEmptyState';
 import DiscoverResults from '@/components/discover/DiscoverResults';
+import { GRADIENTS } from '@/config/gradients';
 import { useDiscoverState } from './useDiscoverState';
 
 export default function DiscoverPage() {
@@ -103,7 +104,7 @@ export default function DiscoverPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/50 via-white to-tiffany-50/30">
+    <div className={`min-h-screen ${GRADIENTS.pageBg}`}>
       {/* Hero Section */}
       <DiscoverHero
         totalProjects={stats.totalProjects}

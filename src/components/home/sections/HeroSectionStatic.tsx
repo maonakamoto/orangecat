@@ -11,7 +11,7 @@ import { GRADIENTS } from '@/config/gradients';
  */
 export default function HeroSectionStatic() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-tiffany-50 to-orange-100">
+    <section className={`relative overflow-hidden ${GRADIENTS.heroSection}`}>
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent" />
 

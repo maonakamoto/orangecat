@@ -36,7 +36,7 @@ export default function ChannelComingSoonPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/40 via-white to-teal-50/40">
+    <div className={`min-h-screen ${GRADIENTS.pageBg}`}>
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">

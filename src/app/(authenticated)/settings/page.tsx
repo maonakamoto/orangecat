@@ -6,6 +6,8 @@ import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import { useSettingsForm } from './useSettingsForm';
 import { SettingsEmailSection } from './SettingsEmailSection';
 import { SettingsPasswordSection } from './SettingsPasswordSection';
@@ -47,7 +49,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-teal-50">
+    <div className={cn(GRADIENTS.pageBgSolid, 'min-h-screen')}>
       <div className="bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center">

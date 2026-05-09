@@ -31,10 +31,12 @@ export const GRADIENTS = {
   brandTiffanyBr: 'bg-gradient-to-br from-tiffany-400 to-tiffany-600',
   grayLight: 'bg-gradient-to-br from-gray-50 to-gray-100',
   graySubtle: 'bg-gradient-to-br from-gray-50 via-white to-gray-100',
+  heroSection: 'bg-gradient-to-br from-orange-50 via-tiffany-50 to-orange-100',
 
   // ── Page background gradients (full-bleed wrappers) ───────────────────────
   pageBg: 'bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20',
   pageBgSolid: 'bg-gradient-to-br from-orange-50 via-white to-tiffany-50',
+  pageBgFrost: 'bg-gradient-to-br from-orange-50/80 via-white/80 to-tiffany-50/80',
   pageBgOrange: 'bg-gradient-to-br from-orange-50 via-white to-orange-50',
   pageBgBlue: 'bg-gradient-to-br from-orange-50 via-white to-blue-50',
 
