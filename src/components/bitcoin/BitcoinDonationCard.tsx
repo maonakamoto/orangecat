@@ -2,6 +2,7 @@
 
 import { QRCodeSVG } from 'qrcode.react';
 import { Bitcoin, Zap, Copy, ExternalLink } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 import Button from '@/components/ui/Button';
 import { toast } from 'sonner';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
@@ -135,7 +136,7 @@ export default function BitcoinDonationCard({
 
   return (
     <div
-      className={`bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border-2 border-orange-200 p-6 ${className}`}
+      className={`${GRADIENTS.sectionOrangeAmber} rounded-xl border-2 border-orange-200 p-6 ${className}`}
     >
       <div className="flex items-center justify-between mb-4">
         <div>

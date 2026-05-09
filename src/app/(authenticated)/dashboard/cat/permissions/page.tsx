@@ -160,7 +160,7 @@ export default function CatPermissionsPage() {
               Back to My Cat
             </Link>
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl">
+              <div className={`p-3 ${GRADIENTS.iconIndigoPurple} rounded-xl`}>
                 <Cat className="h-8 w-8 text-white" />
               </div>
               <div>

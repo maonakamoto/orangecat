@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ExternalLink, ArrowRight, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
+import { GRADIENTS } from '@/config/gradients';
 import type { Resource } from './config';
 
 interface ResourceCardProps {
@@ -16,7 +17,9 @@ export function ResourceCard({ resource, featured = false }: ResourceCardProps) 
 
   if (featured) {
     return (
-      <Card className="group hover:shadow-lg transition-all duration-200 border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50">
+      <Card
+        className={`group hover:shadow-lg transition-all duration-200 border-2 border-orange-200 ${GRADIENTS.sectionOrangeAmber}`}
+      >
         <CardContent className="p-8">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center group-hover:bg-orange-200 transition-colors">

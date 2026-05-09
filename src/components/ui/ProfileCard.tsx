@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Users } from 'lucide-react';
 import { getInitial } from '@/utils/string';
+import { GRADIENTS } from '@/config/gradients';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import DefaultAvatar from '@/components/ui/DefaultAvatar';
@@ -31,7 +32,9 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
       <Card className="p-4 hover:shadow-lg transition-shadow">
         <div className="flex items-center gap-4">
           <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-tiffany-100 to-tiffany-200 flex-shrink-0">
+            <div
+              className={`relative w-12 h-12 rounded-full overflow-hidden ${GRADIENTS.tiffanyMuted} flex-shrink-0`}
+            >
               {profile.avatar_url ? (
                 <Image src={profile.avatar_url} alt={displayName} fill className="object-cover" />
               ) : (
@@ -77,7 +80,9 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
     <Card className="p-6 hover:shadow-lg transition-shadow">
       <div className="text-center">
         <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-          <div className="relative w-20 h-20 rounded-full overflow-hidden bg-gradient-to-br from-tiffany-100 to-tiffany-200 mx-auto mb-4">
+          <div
+            className={`relative w-20 h-20 rounded-full overflow-hidden ${GRADIENTS.tiffanyMuted} mx-auto mb-4`}
+          >
             {profile.avatar_url ? (
               <Image src={profile.avatar_url} alt={displayName} fill className="object-cover" />
             ) : (

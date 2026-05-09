@@ -3,6 +3,7 @@
 import React, { useRef } from 'react';
 import { LucideIcon, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { GRADIENTS } from '@/config/gradients';
 import TimelineLayout from './TimelineLayout';
 import { TimelineFeedResponse } from '@/types/timeline';
 import TimelineComposer from './TimelineComposer';
@@ -91,7 +92,7 @@ export default function SocialTimeline({
 
   if (hydrated && authCheckComplete && !isLoading && !user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-purple-50/20 flex items-center justify-center">
+      <div className={`min-h-screen ${GRADIENTS.pageBgCool} flex items-center justify-center`}>
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">Please sign in</h2>
           <p className="text-gray-600 mb-6">You need to be signed in to view this page.</p>
@@ -103,7 +104,7 @@ export default function SocialTimeline({
 
   if (!authCheckComplete) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-purple-50/20 p-4">
+      <div className={`min-h-screen ${GRADIENTS.pageBgCool} p-4`}>
         <TimelineSkeleton count={5} />
       </div>
     );

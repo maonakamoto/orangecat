@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ArrowLeft, Upload, PenLine, Cat, FileText, Sparkles } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
+import { GRADIENTS } from '@/config/gradients';
 
 interface Props {
   onUpload: () => void;
@@ -21,7 +22,7 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
           Back to My Context
         </Link>
         <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl">
+          <div className={`p-2 ${GRADIENTS.iconIndigoPurple} rounded-xl`}>
             <Cat className="h-6 w-6 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Create Context for My Cat</h1>

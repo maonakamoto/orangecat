@@ -2,6 +2,7 @@
 
 import { User, Target, Building2, Users } from 'lucide-react';
 import { PROFILE_CATEGORIES } from '@/types/profile';
+import { GRADIENTS } from '@/config/gradients';
 
 /** Map profile types to Lucide icons (avoids emojis in UI) */
 const PROFILE_TYPE_ICONS = {
@@ -35,7 +36,7 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
     <div className="relative overflow-hidden bg-gradient-to-r from-orange-50/50 to-tiffany-50/50 rounded-xl border border-gray-100 p-5 sm:p-6">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-gradient-to-br from-orange-500 to-tiffany-500 rounded-xl">
+          <div className={`p-3 ${GRADIENTS.brandMixedBr} rounded-xl`}>
             <User className="h-6 w-6 text-white" />
           </div>
           <div className="min-w-0 flex-1">

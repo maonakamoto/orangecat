@@ -5,6 +5,7 @@ import BottomSheet from '@/components/ui/BottomSheet';
 import { Check, ArrowLeft, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { GRADIENTS } from '@/config/gradients';
 
 interface Project {
   id: string;
@@ -68,7 +69,9 @@ export default function ProjectSelectionModal({
             aria-label="Everyone (default)"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center">
+              <div
+                className={`w-10 h-10 rounded-full ${GRADIENTS.brandOrangeYellow} flex items-center justify-center`}
+              >
                 <Users className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
@@ -113,7 +116,9 @@ export default function ProjectSelectionModal({
                           />
                         </div>
                       ) : (
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center flex-shrink-0">
+                        <div
+                          className={`w-10 h-10 rounded-lg ${GRADIENTS.brandOrangeYellow} flex items-center justify-center flex-shrink-0`}
+                        >
                           <span className="text-white font-semibold text-sm">
                             {project.title[0]?.toUpperCase() || 'P'}
                           </span>

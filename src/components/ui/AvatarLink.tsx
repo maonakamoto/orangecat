@@ -15,6 +15,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { getInitial } from '@/utils/string';
+import { GRADIENTS } from '@/config/gradients';
 
 interface AvatarLinkProps {
   /**
@@ -116,7 +117,7 @@ export default function AvatarLink({
         <div
           className={cn(
             'rounded-full flex items-center justify-center border-2 border-white shadow-sm',
-            'bg-gradient-to-br from-orange-400 to-yellow-500',
+            GRADIENTS.brandOrangeYellow,
             'text-white font-semibold transition-all duration-200'
           )}
           style={{ width: size, height: size, fontSize: `${size * 0.4}px` }}

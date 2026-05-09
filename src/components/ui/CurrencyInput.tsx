@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowLeftRight, Bitcoin, Info } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 import { Input } from '@/components/ui/Input';
 import { Currency, ALL_CURRENCIES } from '@/types/settings';
 import { formatCurrency, bitcoinToSats } from '@/services/currency';
@@ -125,7 +126,9 @@ export function CurrencyInput({
       )}
 
       {showBreakdown && breakdown && value && value > 0 && (
-        <div className="mt-3 p-3 rounded-lg bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100">
+        <div
+          className={`mt-3 p-3 rounded-lg ${GRADIENTS.sectionOrangeAmber} border border-orange-100`}
+        >
           <div className="flex items-center gap-2 mb-2">
             <ArrowLeftRight className="w-4 h-4 text-orange-600" />
             <span className="text-xs font-semibold text-gray-900">

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/Card';
+import { GRADIENTS } from '@/config/gradients';
 import BottomSheet from '@/components/ui/BottomSheet';
 import AvatarLink from '@/components/ui/AvatarLink';
 import { Globe, ChevronDown, ImageIcon } from 'lucide-react';
@@ -115,7 +116,9 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                     }}
                   />
                 ) : (
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-600 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                  <div
+                    className={`w-10 h-10 ${GRADIENTS.brandOrangeYellow} rounded-full flex items-center justify-center border-2 border-white shadow-sm`}
+                  >
                     <span className="text-white font-semibold text-sm">
                       {getInitial(user?.user_metadata?.name || user?.email)}
                     </span>
