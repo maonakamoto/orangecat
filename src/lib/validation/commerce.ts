@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
+import { CAUSE_CATEGORIES } from '@/config/causes';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
 // =============================================================================
@@ -106,7 +107,7 @@ export const userServiceSchema = z
 export const userCauseSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100, 'Title must be at most 100 characters'),
   description: optionalText(1000),
-  cause_category: z.string().min(1, 'Category is required').max(50),
+  cause_category: z.enum(CAUSE_CATEGORIES),
   goal_amount: z.number().positive().optional().nullable(),
   currency: z.enum(CURRENCY_CODES).optional(),
   bitcoin_address: optionalText(),

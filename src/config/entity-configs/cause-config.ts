@@ -15,7 +15,7 @@ import { CAUSE_TEMPLATES, type CauseTemplate } from '@/components/create/templat
 import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { WalletSelectorField } from '@/components/create/wallet-selector';
-import { CAUSE_CATEGORY_OPTIONS } from '@/config/causes';
+import { CAUSE_CATEGORIES, CAUSE_CATEGORY_OPTIONS } from '@/config/causes';
 
 // ==================== FIELD GROUPS ====================
 
@@ -99,7 +99,7 @@ const fieldGroups: FieldGroup[] = [
 const defaultValues: UserCauseFormData = {
   title: '',
   description: '',
-  cause_category: '',
+  cause_category: CAUSE_CATEGORIES[0],
   goal_amount: null,
   currency: undefined, // Will be set from user's profile preference in EntityForm
   bitcoin_address: '',
