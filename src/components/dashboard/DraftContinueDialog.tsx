@@ -81,7 +81,7 @@ export default function DraftContinueDialog({
         <Card className="w-full bg-white shadow-2xl border-0">
           <CardContent className="p-0">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b border-gray-200">
+            <div className="bg-gradient-to-r from-tiffany-50 to-orange-50 p-6 border-b border-gray-200">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <FileText className="w-6 h-6 text-blue-600" />

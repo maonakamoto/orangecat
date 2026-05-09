@@ -30,7 +30,7 @@ const WIZARD_THEMES: Record<string, { gradient: string; ring: string; bg: string
     bg: 'bg-rose-500',
   },
   blue: {
-    gradient: 'from-blue-500 to-indigo-500',
+    gradient: 'from-blue-500 to-cyan-500',
     ring: 'ring-blue-100',
     bg: 'bg-blue-500',
   },
@@ -38,16 +38,6 @@ const WIZARD_THEMES: Record<string, { gradient: string; ring: string; bg: string
     gradient: 'from-green-500 to-emerald-500',
     ring: 'ring-green-100',
     bg: 'bg-green-500',
-  },
-  purple: {
-    gradient: 'from-purple-500 to-violet-500',
-    ring: 'ring-purple-100',
-    bg: 'bg-purple-500',
-  },
-  indigo: {
-    gradient: 'from-indigo-500 to-blue-500',
-    ring: 'ring-indigo-100',
-    bg: 'bg-indigo-500',
   },
 };
 

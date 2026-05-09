@@ -94,7 +94,7 @@ export interface EntityMetadata {
   /** Lucide icon component */
   icon: LucideIcon;
   /** Color theme */
-  colorTheme: 'orange' | 'tiffany' | 'rose' | 'blue' | 'green' | 'purple' | 'indigo';
+  colorTheme: 'orange' | 'tiffany' | 'rose' | 'blue' | 'green';
   /** Base URL path (dashboard) */
   basePath: string;
   /** Create page URL */
@@ -229,7 +229,7 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     tableName: 'ai_assistants',
     userIdField: 'actor_id',
     icon: Bot,
-    colorTheme: 'purple',
+    colorTheme: 'tiffany',
     basePath: '/dashboard/ai-assistants',
     createPath: '/dashboard/ai-assistants/create',
     publicBasePath: '/ai-assistants',
@@ -250,7 +250,7 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     tableName: 'groups',
     userIdField: 'created_by',
     icon: Users,
-    colorTheme: 'purple',
+    colorTheme: 'tiffany',
     basePath: '/dashboard/groups',
     createPath: '/dashboard/groups/create',
     publicBasePath: '/groups',
@@ -349,7 +349,7 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     tableName: 'research_entities', // Database table name (unchanged for compatibility)
     userIdField: 'actor_id',
     icon: Bot,
-    colorTheme: 'purple',
+    colorTheme: 'tiffany',
     basePath: '/dashboard/research',
     createPath: '/dashboard/research/create',
     publicBasePath: '/research',
@@ -392,7 +392,7 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     tableName: 'user_documents',
     userIdField: 'actor_id',
     icon: FileText,
-    colorTheme: 'indigo',
+    colorTheme: 'tiffany',
     basePath: '/dashboard/documents',
     createPath: '/dashboard/documents/create',
     publicBasePath: '/documents',
@@ -418,8 +418,6 @@ export const COLOR_CLASSES: Record<EntityMetadata['colorTheme'], { text: string;
   rose: { text: 'text-rose-600', bg: 'bg-rose-50' },
   blue: { text: 'text-blue-600', bg: 'bg-blue-50' },
   green: { text: 'text-green-600', bg: 'bg-green-50' },
-  purple: { text: 'text-purple-600', bg: 'bg-purple-50' },
-  indigo: { text: 'text-indigo-600', bg: 'bg-indigo-50' },
 };
 
 // ==================== UTILITY FUNCTIONS ====================

@@ -83,8 +83,8 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     title: 'Govern Together',
     description: 'Organize and decide as one',
     icon: Scale,
-    color: 'from-purple-500 to-purple-600',
-    bgColor: 'bg-purple-50',
+    color: 'from-tiffany-500 to-tiffany-600',
+    bgColor: 'bg-tiffany-50',
     features: [
       { title: 'Groups', description: 'Shared treasuries, collective decisions, governance rules' },
       {
@@ -144,8 +144,8 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     title: 'Meet Your Cat',
     description:
       'Your AI economic agent is ready. Tell it what you want to do — sell, fund, lend, invest, or govern.',
-    color: 'from-purple-500 to-purple-600',
-    bgColor: 'bg-purple-50',
+    color: 'from-tiffany-500 to-tiffany-600',
+    bgColor: 'bg-tiffany-50',
   },
   {
     number: '3',
@@ -265,7 +265,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
       'Artists, writers, and makers can raise funds, sell work, and accept support — from anywhere, in any currency, under any identity.',
     transparencyExample:
       'Share receipts and progress updates publicly, or keep it private. Your choice.',
-    gradient: 'from-purple-50 to-pink-50',
+    gradient: 'from-orange-50 to-tiffany-50',
   },
   {
     emoji: '🚀',

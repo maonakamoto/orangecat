@@ -41,8 +41,6 @@ const GRADIENT_CLASSES: Record<string, string> = {
   rose: 'from-rose-50/50 via-white to-tiffany-50/30',
   orange: 'from-orange-50/50 via-white to-tiffany-50/30',
   green: 'from-green-50/50 via-white to-tiffany-50/30',
-  purple: 'from-purple-50/50 via-white to-tiffany-50/30',
-  indigo: 'from-indigo-50/50 via-white to-tiffany-50/30',
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

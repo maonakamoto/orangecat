@@ -21,7 +21,7 @@ import type { Currency } from '@/types/settings';
 export const aiAssistantEntityConfig: EntityConfig<AIAssistant> = {
   name: 'AI Assistant',
   namePlural: 'AI Assistants',
-  colorTheme: 'purple',
+  colorTheme: 'tiffany',
 
   listPath: ENTITY_REGISTRY['ai_assistant'].basePath,
   detailPath: id => `${ENTITY_REGISTRY['ai_assistant'].basePath}/${id}`,
@@ -112,7 +112,7 @@ export const aiAssistantEntityConfig: EntityConfig<AIAssistant> = {
     description: 'Create your first AI assistant to start earning from your expertise.',
     action: (
       <Link href={ROUTES.DASHBOARD.AI_ASSISTANTS_CREATE}>
-        <Button className={GRADIENTS.brandPurple}>Create AI Assistant</Button>
+        <Button className={GRADIENTS.brandTiffany}>Create AI Assistant</Button>
       </Link>
     ),
   },

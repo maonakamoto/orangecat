@@ -92,7 +92,7 @@ export default function SocialTimeline({
 
   if (hydrated && authCheckComplete && !isLoading && !user) {
     return (
-      <div className={`min-h-screen ${GRADIENTS.pageBgCool} flex items-center justify-center`}>
+      <div className={`min-h-screen ${GRADIENTS.pageBg} flex items-center justify-center`}>
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">Please sign in</h2>
           <p className="text-gray-600 mb-6">You need to be signed in to view this page.</p>
@@ -104,7 +104,7 @@ export default function SocialTimeline({
 
   if (!authCheckComplete) {
     return (
-      <div className={`min-h-screen ${GRADIENTS.pageBgCool} p-4`}>
+      <div className={`min-h-screen ${GRADIENTS.pageBg} p-4`}>
         <TimelineSkeleton count={5} />
       </div>
     );

@@ -87,7 +87,7 @@ export function GroupsDashboard() {
 
   const headerActions = (
     <Link href={ROUTES.DASHBOARD.GROUPS_CREATE}>
-      <Button className={`gap-2 ${GRADIENTS.brandPurple}`}>
+      <Button className={`gap-2 ${GRADIENTS.brandTiffany}`}>
         <Plus className="h-4 w-4" />
         Create Group
       </Button>

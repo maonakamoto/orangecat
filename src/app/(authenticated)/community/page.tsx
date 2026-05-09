@@ -20,7 +20,7 @@ export default function CommunityPage() {
       icon={Globe}
       gradientFrom="from-blue-50/30"
       gradientVia="via-white"
-      gradientTo="to-purple-50/20"
+      gradientTo="to-tiffany-50/20"
       mode="community"
       showShareButton={false}
       defaultSort="trending"

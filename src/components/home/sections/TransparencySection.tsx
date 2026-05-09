@@ -127,7 +127,7 @@ export default function TransparencySection() {
               <div className="space-y-4 sm:space-y-6">
                 {/* Profile Info */}
                 <div className="flex items-start gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-gray-100">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-tiffany-400 to-orange-400 rounded-full flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
                     👩‍🎨
                   </div>
                   <div className="flex-1 min-w-0">

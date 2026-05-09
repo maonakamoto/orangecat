@@ -17,7 +17,6 @@ export const GRADIENTS = {
   brandPrimary: 'bg-gradient-to-r from-tiffany-600 to-orange-600',
   brandOrangeAmber: 'bg-gradient-to-r from-orange-500 to-amber-500',
   brandGreen: 'bg-gradient-to-r from-green-600 to-green-700',
-  brandPurple: 'bg-gradient-to-r from-purple-600 to-purple-700',
   brandBlue: 'bg-gradient-to-r from-blue-600 to-blue-700',
 
   // ── Section / card background tints ───────────────────────────────────────
@@ -35,7 +34,7 @@ export const GRADIENTS = {
   heroSection: 'bg-gradient-to-br from-orange-50 via-tiffany-50 to-orange-100',
   brandOrangeYellow: 'bg-gradient-to-br from-orange-500 to-yellow-500',
   brandMixedBr: 'bg-gradient-to-br from-orange-500 to-tiffany-500',
-  iconIndigoPurple: 'bg-gradient-to-br from-indigo-500 to-purple-600',
+  iconTiffanyOrange: 'bg-gradient-to-br from-tiffany-500 to-orange-500',
   tiffanyMuted: 'bg-gradient-to-br from-tiffany-100 to-tiffany-200',
   sectionOrangeAmber: 'bg-gradient-to-br from-orange-50 to-amber-50',
   sectionTiffanyOrange: 'bg-gradient-to-br from-tiffany-50 to-orange-50',
@@ -46,7 +45,6 @@ export const GRADIENTS = {
   pageBg: 'bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20',
   pageBgSolid: 'bg-gradient-to-br from-orange-50 via-white to-tiffany-50',
   pageBgFrost: 'bg-gradient-to-br from-orange-50/80 via-white/80 to-tiffany-50/80',
-  pageBgCool: 'bg-gradient-to-br from-blue-50/30 via-white to-purple-50/20',
   pageBgOrange: 'bg-gradient-to-br from-orange-50 via-white to-orange-50',
   pageBgBlue: 'bg-gradient-to-br from-orange-50 via-white to-blue-50',
 
