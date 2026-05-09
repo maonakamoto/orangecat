@@ -3,6 +3,8 @@
  * Mirrors the ROUTES pattern from src/config/routes.ts (which covers frontend paths).
  * Use these constants in fetch() calls instead of hardcoded strings.
  */
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
+
 export const API_ROUTES = {
   CAT: {
     CHAT: '/api/cat/chat',
@@ -26,7 +28,7 @@ export const API_ROUTES = {
     UNREAD_COUNT: '/api/messages/unread-count',
   },
   WALLETS: {
-    BASE: '/api/wallets',
+    BASE: ENTITY_REGISTRY['wallet'].apiEndpoint,
     TRANSFER: '/api/wallets/transfer',
   },
   ENTITY_WALLETS: '/api/entity-wallets',
@@ -44,7 +46,7 @@ export const API_ROUTES = {
     ENTITIES: (id: string, entityType: string) => `/api/profiles/${id}/entities/${entityType}`,
     WISHLIST_TIERS: (id: string) => `/api/profiles/${id}/wishlist-tiers`,
   },
-  RESEARCH: '/api/research',
+  RESEARCH: ENTITY_REGISTRY['research'].apiEndpoint,
   SOCIAL: {
     FOLLOW: '/api/social/follow',
     UNFOLLOW: '/api/social/unfollow',
@@ -75,15 +77,16 @@ export const API_ROUTES = {
     VERIFY_CAPTCHA: '/api/auth/verify-captcha',
   },
   DOCUMENTS: {
-    BASE: '/api/documents',
-    BY_ID: (id: string) => `/api/documents/${id}`,
-    EXTRACT: '/api/documents/extract',
+    BASE: ENTITY_REGISTRY['document'].apiEndpoint,
+    BY_ID: (id: string) => `${ENTITY_REGISTRY['document'].apiEndpoint}/${id}`,
+    EXTRACT: `${ENTITY_REGISTRY['document'].apiEndpoint}/extract`,
   },
   WISHLISTS: {
-    BASE: '/api/wishlists',
-    PROOFS: '/api/wishlists/proofs',
-    FEEDBACK: '/api/wishlists/feedback',
-    ITEM_PROOFS: (itemId: string) => `/api/wishlists/items/${itemId}/proofs`,
+    BASE: ENTITY_REGISTRY['wishlist'].apiEndpoint,
+    PROOFS: `${ENTITY_REGISTRY['wishlist'].apiEndpoint}/proofs`,
+    FEEDBACK: `${ENTITY_REGISTRY['wishlist'].apiEndpoint}/feedback`,
+    ITEM_PROOFS: (itemId: string) =>
+      `${ENTITY_REGISTRY['wishlist'].apiEndpoint}/items/${itemId}/proofs`,
   },
   ENTITIES: {
     STATUS: (entityType: string, id: string) => `/api/entities/${entityType}/${id}/status`,
@@ -98,39 +101,45 @@ export const API_ROUTES = {
     SEND: '/api/payments/send',
   },
   PROJECTS: {
-    BASE: '/api/projects',
-    BY_ID: (id: string) => `/api/projects/${id}`,
-    STATUS: (id: string) => `/api/projects/${id}/status`,
-    REFRESH_BALANCE: (id: string) => `/api/projects/${id}/refresh-balance`,
-    UPDATES: (id: string) => `/api/projects/${id}/updates`,
-    FAVORITE: (id: string) => `/api/projects/${id}/favorite`,
-    FAVORITES: '/api/projects/favorites',
+    BASE: ENTITY_REGISTRY['project'].apiEndpoint,
+    BY_ID: (id: string) => `${ENTITY_REGISTRY['project'].apiEndpoint}/${id}`,
+    STATUS: (id: string) => `${ENTITY_REGISTRY['project'].apiEndpoint}/${id}/status`,
+    REFRESH_BALANCE: (id: string) =>
+      `${ENTITY_REGISTRY['project'].apiEndpoint}/${id}/refresh-balance`,
+    UPDATES: (id: string) => `${ENTITY_REGISTRY['project'].apiEndpoint}/${id}/updates`,
+    FAVORITE: (id: string) => `${ENTITY_REGISTRY['project'].apiEndpoint}/${id}/favorite`,
+    FAVORITES: `${ENTITY_REGISTRY['project'].apiEndpoint}/favorites`,
   },
   LOANS: {
-    BASE: '/api/loans',
+    BASE: ENTITY_REGISTRY['loan'].apiEndpoint,
     COLLATERAL: '/api/loan-collateral',
   },
   PROFILE: '/api/profile',
   GROUPS: {
-    BASE: '/api/groups',
-    EVENTS: (slug: string) => `/api/groups/${slug}/events`,
-    PROPOSALS: (slug: string) => `/api/groups/${slug}/proposals`,
-    PROPOSAL: (slug: string, id: string) => `/api/groups/${slug}/proposals/${id}`,
-    PROPOSAL_VOTES: (slug: string, id: string) => `/api/groups/${slug}/proposals/${id}/votes`,
-    PROPOSAL_VOTE: (slug: string, id: string) => `/api/groups/${slug}/proposals/${id}/vote`,
-    PROPOSAL_ACTIVATE: (slug: string, id: string) => `/api/groups/${slug}/proposals/${id}/activate`,
+    BASE: ENTITY_REGISTRY['group'].apiEndpoint,
+    EVENTS: (slug: string) => `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/events`,
+    PROPOSALS: (slug: string) => `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/proposals`,
+    PROPOSAL: (slug: string, id: string) =>
+      `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/proposals/${id}`,
+    PROPOSAL_VOTES: (slug: string, id: string) =>
+      `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/proposals/${id}/votes`,
+    PROPOSAL_VOTE: (slug: string, id: string) =>
+      `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/proposals/${id}/vote`,
+    PROPOSAL_ACTIVATE: (slug: string, id: string) =>
+      `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/proposals/${id}/activate`,
     WALLET_REFRESH: (slug: string, walletId: string) =>
-      `/api/groups/${slug}/wallets/${walletId}/refresh`,
+      `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/wallets/${walletId}/refresh`,
   },
   JOBS: '/api/jobs',
   DELETE_USER: '/api/delete-user',
   WAITLIST: '/api/waitlist',
   AI_ASSISTANTS: {
-    BASE: '/api/ai-assistants',
-    BY_ID: (id: string) => `/api/ai-assistants/${id}`,
-    CONVERSATIONS: (id: string) => `/api/ai-assistants/${id}/conversations`,
+    BASE: ENTITY_REGISTRY['ai_assistant'].apiEndpoint,
+    BY_ID: (id: string) => `${ENTITY_REGISTRY['ai_assistant'].apiEndpoint}/${id}`,
+    CONVERSATIONS: (id: string) =>
+      `${ENTITY_REGISTRY['ai_assistant'].apiEndpoint}/${id}/conversations`,
     CONVERSATION: (assistantId: string, conversationId: string) =>
-      `/api/ai-assistants/${assistantId}/conversations/${conversationId}`,
+      `${ENTITY_REGISTRY['ai_assistant'].apiEndpoint}/${assistantId}/conversations/${conversationId}`,
   },
   TRANSACTIONS: '/api/transactions',
   BOOKINGS: {
