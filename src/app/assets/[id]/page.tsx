@@ -8,38 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { ROUTES } from '@/config/routes';
 import { displayBTC } from '@/services/currency';
+import {
+  ASSET_TYPE_LABELS,
+  ASSET_VERIFICATION_COLORS,
+  ASSET_VERIFICATION_LABELS,
+  ASSET_RENTAL_PERIOD_LABELS,
+} from '@/config/assets';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
-
-const ASSET_TYPE_LABELS: Record<string, string> = {
-  real_estate: 'Real Estate',
-  business: 'Business',
-  vehicle: 'Vehicle',
-  equipment: 'Equipment',
-  securities: 'Securities',
-  other: 'Other',
-};
-
-const VERIFICATION_COLORS: Record<string, string> = {
-  third_party_verified: 'bg-green-100 text-green-800',
-  user_provided: 'bg-yellow-100 text-yellow-800',
-  unverified: 'bg-gray-100 text-gray-800',
-};
-
-const VERIFICATION_LABELS: Record<string, string> = {
-  third_party_verified: 'Third-Party Verified',
-  user_provided: 'Self-Verified',
-  unverified: 'Unverified',
-};
-
-const RENTAL_PERIOD_LABELS: Record<string, string> = {
-  day: 'day',
-  week: 'week',
-  month: 'month',
-  year: 'year',
-};
 
 const config: EntityDetailConfig = {
   entityType: 'asset',
@@ -56,10 +34,10 @@ const config: EntityDetailConfig = {
     return (
       <span
         className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
-          VERIFICATION_COLORS[verificationStatus] ?? 'bg-gray-100 text-gray-800'
+          ASSET_VERIFICATION_COLORS[verificationStatus] ?? 'bg-gray-100 text-gray-800'
         }`}
       >
-        {VERIFICATION_LABELS[verificationStatus] ?? verificationStatus}
+        {ASSET_VERIFICATION_LABELS[verificationStatus] ?? verificationStatus}
       </span>
     );
   },
@@ -136,7 +114,7 @@ const config: EntityDetailConfig = {
                     <span className="text-sm text-gray-500">Rental Price</span>
                     <span className="font-bold text-blue-700">
                       {displayBTC(Number(entity.rental_price_btc))} /{' '}
-                      {RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
+                      {ASSET_RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
                     </span>
                   </div>
                 )}
@@ -144,7 +122,7 @@ const config: EntityDetailConfig = {
                   <span className="text-sm text-gray-500">Minimum Period</span>
                   <span className="font-medium">
                     {entity.min_rental_period}{' '}
-                    {RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
+                    {ASSET_RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
                     {Number(entity.min_rental_period) !== 1 ? 's' : ''}
                   </span>
                 </div>
@@ -153,7 +131,7 @@ const config: EntityDetailConfig = {
                     <span className="text-sm text-gray-500">Maximum Period</span>
                     <span className="font-medium">
                       {entity.max_rental_period}{' '}
-                      {RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
+                      {ASSET_RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
                       {Number(entity.max_rental_period) !== 1 ? 's' : ''}
                     </span>
                   </div>

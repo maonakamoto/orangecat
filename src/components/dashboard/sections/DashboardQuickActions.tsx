@@ -6,18 +6,11 @@ import Button from '@/components/ui/Button';
 import { Eye, Star, ArrowRight, Cat } from 'lucide-react';
 import { ENTITY_REGISTRY, getEntitiesByCategory } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
+import { ONBOARDING_CATEGORIES, CATEGORY_LABELS } from '@/config/onboarding';
 
 interface DashboardQuickActionsProps {
   hasProjects: boolean;
 }
-
-/** Categories shown in getting-started cards */
-const GETTING_STARTED_CATEGORIES = ['business', 'community', 'finance'] as const;
-const CATEGORY_LABELS: Record<string, string> = {
-  business: 'Commerce',
-  community: 'Community',
-  finance: 'Finance',
-};
 
 /**
  * DashboardQuickActions - Quick action buttons + getting-started entity cards
@@ -90,7 +83,7 @@ export function DashboardQuickActions({ hasProjects }: DashboardQuickActionsProp
         </Link>
 
         {/* Entity type cards by category */}
-        {GETTING_STARTED_CATEGORIES.map(category => {
+        {ONBOARDING_CATEGORIES.map(category => {
           const entities = entitiesByCategory[category];
           if (!entities?.length) {
             return null;
