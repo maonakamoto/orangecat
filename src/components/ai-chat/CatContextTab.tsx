@@ -13,7 +13,11 @@ import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useEntityList } from '@/hooks/useEntityList';
 import { useCatContext } from '@/hooks/useCatContext';
-import { documentEntityConfig, type DocumentListItem } from '@/config/entities/documents';
+import {
+  documentEntityConfig,
+  DOCUMENT_TYPE_LABELS,
+  type DocumentListItem,
+} from '@/config/entities/documents';
 import {
   Plus,
   FileText,
@@ -35,15 +39,6 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
   business_plan: Briefcase,
   notes: FileText,
   other: Folder,
-};
-
-const TYPE_LABELS: Record<string, string> = {
-  goals: 'Goals & Aspirations',
-  skills: 'Skills & Expertise',
-  finances: 'Financial Info',
-  business_plan: 'Business Plan',
-  notes: 'Notes',
-  other: 'Other',
 };
 
 export function CatContextTab() {
@@ -149,7 +144,7 @@ export function CatContextTab() {
         <div className="space-y-4">
           {Object.entries(documentsByType).map(([type, docs]) => {
             const Icon = TYPE_ICONS[type] || FileText;
-            const label = TYPE_LABELS[type] || type;
+            const label = (DOCUMENT_TYPE_LABELS as Record<string, string>)[type] || type;
             return (
               <div
                 key={type}
