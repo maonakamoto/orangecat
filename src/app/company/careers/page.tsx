@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
 
 export const metadata: Metadata = {
-  title: 'Careers at BitBaum - Join Our Bitcoin Mission',
+  title: 'Careers at OrangeCat - Join Our Mission',
   description:
-    'Work with us to build the future of Bitcoin commerce. Join BitBaum and help create platforms that empower communities worldwide.',
+    'Work with us to build universal economic participation. Join OrangeCat and help anyone — any identity, any currency — earn, fund, invest, and govern freely.',
 };
 
 export default function CareersPage() {
@@ -18,21 +18,23 @@ export default function CareersPage() {
       location: 'Remote / Switzerland',
       type: 'Full-time',
       description:
-        'Build Bitcoin-native applications and smart contracts. Experience with Lightning Network preferred.',
+        'Build Bitcoin-native applications and integrations. Experience with Lightning Network, NWC, and BTCPay Server preferred.',
     },
     {
       title: 'Community Manager',
       department: 'Operations',
       location: 'Remote',
       type: 'Full-time',
-      description: 'Help grow and nurture our Bitcoin creator and supporter communities worldwide.',
+      description:
+        'Help grow and nurture communities of creators, researchers, entrepreneurs, and groups using OrangeCat worldwide.',
     },
     {
       title: 'Product Designer',
       department: 'Design',
       location: 'Remote / Switzerland',
       type: 'Full-time',
-      description: 'Design intuitive interfaces for Bitcoin commerce and community platforms.',
+      description:
+        'Design intuitive interfaces for economic participation — from funding to governance to AI-assisted workflows.',
     },
     {
       title: 'DevRel Engineer',
@@ -40,16 +42,16 @@ export default function CareersPage() {
       location: 'Remote',
       type: 'Full-time',
       description:
-        'Build developer tools, documentation, and community around our Bitcoin platforms.',
+        'Build developer tools, documentation, and community around the OrangeCat platform and Cat agent ecosystem.',
     },
   ];
 
   const values = [
     {
       icon: <Heart className="w-6 h-6" />,
-      title: 'Bitcoin First',
+      title: 'Open Economic Access',
       description:
-        'We build everything with Bitcoin at its core, creating transparent and censorship-resistant platforms.',
+        'We believe any person, pseudonym, or organization should be able to participate in the full economic spectrum — without gatekeepers.',
     },
     {
       icon: <Users className="w-6 h-6" />,
@@ -67,7 +69,7 @@ export default function CareersPage() {
       icon: <Globe className="w-6 h-6" />,
       title: 'Global Impact',
       description:
-        'Our work empowers creators, communities, and individuals worldwide to thrive economically.',
+        'Our work empowers creators, communities, and individuals worldwide to participate economically — in any currency, under any identity.',
     },
   ];
 
@@ -92,11 +94,11 @@ export default function CareersPage() {
               <Briefcase className="w-8 h-8 text-orange-600" />
             </div>
             <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl mb-4">
-              Join <span className="text-orange-600">BitBaum</span>
+              Join <span className="text-orange-600">OrangeCat</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Help us build the future of Bitcoin commerce. Work on platforms that empower
-              communities, creators, and individuals worldwide.
+              Help us build universal economic participation. Work on a platform that lets anyone —
+              any identity, any currency — earn, fund, invest, and govern freely.
             </p>
           </div>
         </div>
@@ -105,11 +107,12 @@ export default function CareersPage() {
       {/* Our Mission */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-16">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Why BitBaum?</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Why OrangeCat?</h2>
           <p className="text-lg text-gray-600 max-w-4xl mx-auto">
-            We're not just building software – we're creating the infrastructure for a more
-            transparent, community-driven economy powered by Bitcoin. Every role at BitBaum
-            contributes to this mission.
+            We&apos;re not just building software — we&apos;re creating infrastructure for open
+            economic participation. Bitcoin-native and any-currency-first, with an AI agent (the
+            Cat) that acts on behalf of every user. Every role at OrangeCat contributes to this
+            mission.
           </p>
         </div>
 
@@ -167,8 +170,8 @@ export default function CareersPage() {
                 No Open Positions Right Now
               </h3>
               <p className="text-gray-600 mb-6">
-                We're always growing! Send us your resume and we'll keep you in mind for future
-                opportunities.
+                We&apos;re always growing! Send us your resume and we&apos;ll keep you in mind for
+                future opportunities.
               </p>
               <button className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
                 Send Your Resume
@@ -206,8 +209,8 @@ export default function CareersPage() {
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">Ready to Join Our Mission?</h2>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Whether we have an open position or not, we'd love to hear from talented individuals who
-            share our passion for Bitcoin and community building.
+            Whether we have an open position or not, we&apos;d love to hear from talented
+            individuals who share our passion for open economic participation and Bitcoin.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
