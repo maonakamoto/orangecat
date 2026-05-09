@@ -3,121 +3,45 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { Eye, Star, ArrowRight, Cat } from 'lucide-react';
-import { ENTITY_REGISTRY, getEntitiesByCategory } from '@/config/entity-registry';
+import { Eye, Star, Cat } from 'lucide-react';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
-import { ONBOARDING_CATEGORIES, CATEGORY_LABELS } from '@/config/onboarding';
-
-interface DashboardQuickActionsProps {
-  hasProjects: boolean;
-}
 
 /**
- * DashboardQuickActions - Quick action buttons + getting-started entity cards
- * When user has no projects, shows entity type cards to guide first creation.
- * My Cat is always surfaced as a shortcut — it's the primary interface.
- * Uses ENTITY_REGISTRY for entity-related routes (SSOT).
+ * DashboardQuickActions - Quick navigation shortcuts for users who have projects.
+ * Only rendered when hasProjects === true; new-user guidance lives in DashboardJourney.
  */
-export function DashboardQuickActions({ hasProjects }: DashboardQuickActionsProps) {
-  if (hasProjects) {
-    return (
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Common tasks</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-3">
-            <Link href={ROUTES.DASHBOARD.CAT}>
-              <Button
-                variant="outline"
-                className="min-h-11 border-orange-200 text-orange-700 hover:bg-orange-50"
-              >
-                <Cat className="w-4 h-4 mr-2" />
-                Ask My Cat
-              </Button>
-            </Link>
-            <Link href={ENTITY_REGISTRY.project.basePath}>
-              <Button variant="outline" className="min-h-11">
-                <Eye className="w-4 h-4 mr-2" />
-                Manage Projects
-              </Button>
-            </Link>
-            <Link href="/profile">
-              <Button variant="outline" className="min-h-11">
-                <Star className="w-4 h-4 mr-2" />
-                Update Profile
-              </Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  const entitiesByCategory = getEntitiesByCategory();
-
+export function DashboardQuickActions() {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle>Get Started</CardTitle>
-        <CardDescription>
-          Not sure where to begin? Ask My Cat — or pick a category below.
-        </CardDescription>
+        <CardTitle>Quick Actions</CardTitle>
+        <CardDescription>Common tasks</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-5">
-        {/* Cat CTA — primary guidance option */}
-        <Link href={ROUTES.DASHBOARD.CAT}>
-          <div className="flex items-center gap-3 p-3 rounded-lg border border-orange-200 bg-orange-50/60 hover:bg-orange-100/60 hover:border-orange-300 transition-all cursor-pointer min-h-11">
-            <div className="p-1.5 bg-orange-100 rounded-md flex-shrink-0">
-              <Cat className="h-4 w-4 text-orange-600" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-orange-900">Ask My Cat</p>
-              <p className="text-xs text-orange-700">
-                Describe your goals — My Cat will suggest the right first step
-              </p>
-            </div>
-            <ArrowRight className="h-4 w-4 text-orange-400 flex-shrink-0" />
-          </div>
-        </Link>
-
-        {/* Entity type cards by category */}
-        {ONBOARDING_CATEGORIES.map(category => {
-          const entities = entitiesByCategory[category];
-          if (!entities?.length) {
-            return null;
-          }
-
-          return (
-            <div key={category}>
-              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                {CATEGORY_LABELS[category] ?? category}
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {entities.slice(0, 4).map(entity => {
-                  const Icon = entity.icon;
-                  return (
-                    <Link key={entity.type} href={entity.createPath}>
-                      <div className="flex items-center gap-3 p-3 rounded-lg border hover:border-orange-300 hover:bg-orange-50/50 transition-all cursor-pointer min-h-11">
-                        <div className="p-1.5 bg-orange-50 rounded-md flex-shrink-0">
-                          <Icon className="h-4 w-4 text-orange-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium">{entity.name}</p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {entity.description}
-                          </p>
-                        </div>
-                        <ArrowRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
+      <CardContent>
+        <div className="flex flex-wrap gap-3">
+          <Link href={ROUTES.DASHBOARD.CAT}>
+            <Button
+              variant="outline"
+              className="min-h-11 border-orange-200 text-orange-700 hover:bg-orange-50"
+            >
+              <Cat className="w-4 h-4 mr-2" />
+              Ask My Cat
+            </Button>
+          </Link>
+          <Link href={ENTITY_REGISTRY.project.basePath}>
+            <Button variant="outline" className="min-h-11">
+              <Eye className="w-4 h-4 mr-2" />
+              Manage Projects
+            </Button>
+          </Link>
+          <Link href="/profile">
+            <Button variant="outline" className="min-h-11">
+              <Star className="w-4 h-4 mr-2" />
+              Update Profile
+            </Button>
+          </Link>
+        </div>
       </CardContent>
     </Card>
   );
