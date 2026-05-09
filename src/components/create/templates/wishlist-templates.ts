@@ -115,7 +115,7 @@ const weddingTemplates: WishlistTemplate[] = [
   {
     id: 'wedding-honeymoon',
     name: 'Honeymoon Fund',
-    tagline: 'Crowdfund your honeymoon adventure',
+    tagline: 'Fund your honeymoon adventure together',
     icon: React.createElement(Plane, { className: 'w-4 h-4' }),
     defaults: {
       title: 'Honeymoon Fund',
@@ -259,7 +259,7 @@ const housewarmingTemplates: WishlistTemplate[] = [
   {
     id: 'home-renovation',
     name: 'Renovation Fund',
-    tagline: 'Crowdfund home improvements',
+    tagline: 'Get support for home improvements',
     icon: React.createElement(Hammer, { className: 'w-4 h-4' }),
     defaults: {
       title: 'Home Renovation Fund',
@@ -315,7 +315,7 @@ const travelTemplates: WishlistTemplate[] = [
   {
     id: 'dream-vacation',
     name: 'Dream Vacation',
-    tagline: 'Crowdfund your dream trip',
+    tagline: 'Fund your dream trip with support from friends',
     icon: React.createElement(Palmtree, { className: 'w-4 h-4' }),
     defaults: {
       title: 'Dream Vacation Fund',
