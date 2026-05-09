@@ -5,10 +5,12 @@
 
 import { type LucideIcon } from 'lucide-react';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { COLOR_CLASSES } from '@/config/entity-registry';
+import type { EntityMetadata } from '@/config/entity-registry';
 
 interface FormHeaderProps {
   icon: LucideIcon;
-  colorTheme: string;
+  colorTheme: EntityMetadata['colorTheme'];
   name: string;
   namePlural: string;
   pageDescription: string;
@@ -35,7 +37,7 @@ export function FormHeader({
         className="mb-4"
       />
       <div className="flex items-center gap-3">
-        <Icon className={`w-8 h-8 text-${colorTheme}-600`} />
+        <Icon className={`w-8 h-8 ${COLOR_CLASSES[colorTheme].text}`} />
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             {mode === 'create' ? 'Create' : 'Edit'} {name}
