@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
 import { ENTITY_TYPES } from '@/config/entity-registry';
+import { RENTAL_PERIODS } from '@/config/assets';
 import { lightningAddressSchema, optionalText } from './base';
 
 /**
@@ -61,7 +62,10 @@ export const assetSchema = z.object({
   // Rental options
   is_for_rent: z.boolean().optional().default(false),
   rental_price_btc: z.number().positive().optional().nullable(),
-  rental_period_type: z.enum(['hourly', 'daily', 'weekly', 'monthly']).optional().default('daily'),
+  rental_period_type: z
+    .enum(RENTAL_PERIODS.map(r => r.value) as [string, ...string[]])
+    .optional()
+    .default('daily'),
   min_rental_period: z.number().int().positive().optional().default(1),
   max_rental_period: z.number().int().positive().optional().nullable(),
 
