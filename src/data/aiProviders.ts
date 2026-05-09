@@ -456,28 +456,3 @@ export function validateApiKeyFormat(
 
   return { valid: true };
 }
-
-// ==================== CONSTANTS ====================
-
-/** Default provider ID */
-export const DEFAULT_PROVIDER_ID = 'openrouter';
-
-/** Provider type labels */
-export const PROVIDER_TYPE_LABELS: Record<AIProvider['type'], string> = {
-  aggregator: 'Aggregator',
-  direct: 'Direct Provider',
-};
-
-/** Provider difficulty labels */
-export const PROVIDER_DIFFICULTY_LABELS: Record<AIProvider['difficulty'], string> = {
-  beginner: 'Beginner',
-  intermediate: 'Intermediate',
-  advanced: 'Advanced',
-};
-
-/** Provider difficulty descriptions */
-export const PROVIDER_DIFFICULTY_DESCRIPTIONS: Record<AIProvider['difficulty'], string> = {
-  beginner: 'Easy to set up, simple billing, great documentation',
-  intermediate: 'Requires some technical knowledge, more configuration options',
-  advanced: 'For power users, complex billing, advanced features',
-};
