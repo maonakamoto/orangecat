@@ -42,10 +42,10 @@ export type VerificationLevel = (typeof VERIFICATION_LEVELS)[number]['value'];
 // ==================== RENTAL PERIODS ====================
 
 export const RENTAL_PERIODS = [
-  { value: 'day', label: 'day' },
-  { value: 'week', label: 'week' },
-  { value: 'month', label: 'month' },
-  { value: 'year', label: 'year' },
+  { value: 'hourly', label: 'Per Hour' },
+  { value: 'daily', label: 'Per Day' },
+  { value: 'weekly', label: 'Per Week' },
+  { value: 'monthly', label: 'Per Month' },
 ] as const;
 
 export type RentalPeriod = (typeof RENTAL_PERIODS)[number]['value'];

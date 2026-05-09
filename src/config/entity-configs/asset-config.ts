@@ -5,6 +5,7 @@ import { currencySelectOptions, DEFAULT_CURRENCY } from '@/config/currencies';
 import { assetSchema, type AssetFormData } from '@/lib/validation';
 import { ASSET_TEMPLATES, type AssetTemplate } from '@/components/create/templates';
 import { createEntityConfig } from './base-config-factory';
+import { ASSET_TYPES, RENTAL_PERIODS } from '@/config/assets';
 
 const fieldGroups: FieldGroup[] = [
   {
@@ -25,19 +26,7 @@ const fieldGroups: FieldGroup[] = [
         label: 'Asset Type',
         type: 'select',
         required: true,
-        options: [
-          { value: 'real_estate', label: 'Real Estate' },
-          { value: 'vehicle', label: 'Vehicle' },
-          { value: 'luxury', label: 'Luxury Item' },
-          { value: 'equipment', label: 'Equipment' },
-          { value: 'computing', label: 'Computing' },
-          { value: 'recreational', label: 'Recreational' },
-          { value: 'robot', label: 'Robot / Automation' },
-          { value: 'drone', label: 'Drone / UAV' },
-          { value: 'business', label: 'Business' },
-          { value: 'securities', label: 'Securities' },
-          { value: 'other', label: 'Other' },
-        ],
+        options: [...ASSET_TYPES],
         colSpan: 2,
       },
       {
@@ -77,7 +66,13 @@ const fieldGroups: FieldGroup[] = [
         hint: 'Enable if you want to sell this asset',
         colSpan: 2,
       },
-      { name: 'sale_price_btc', label: 'Sale Price', type: 'number', min: 1, colSpan: 2 },
+      {
+        name: 'sale_price_btc',
+        label: 'Sale Price (BTC)',
+        type: 'number',
+        min: 0.00001,
+        colSpan: 2,
+      },
     ],
   },
   {
@@ -92,17 +87,12 @@ const fieldGroups: FieldGroup[] = [
         hint: 'Enable if you want to rent out this asset',
         colSpan: 2,
       },
-      { name: 'rental_price_btc', label: 'Rental Price', type: 'number', min: 1 },
+      { name: 'rental_price_btc', label: 'Rental Price (BTC)', type: 'number', min: 0.00001 },
       {
         name: 'rental_period_type',
         label: 'Rental Period',
         type: 'select',
-        options: [
-          { value: 'hourly', label: 'Per Hour' },
-          { value: 'daily', label: 'Per Day' },
-          { value: 'weekly', label: 'Per Week' },
-          { value: 'monthly', label: 'Per Month' },
-        ],
+        options: [...RENTAL_PERIODS],
       },
       { name: 'min_rental_period', label: 'Minimum Rental Period', type: 'number', min: 1 },
       { name: 'max_rental_period', label: 'Maximum Rental Period', type: 'number', min: 1 },
@@ -122,9 +112,9 @@ const fieldGroups: FieldGroup[] = [
       },
       {
         name: 'deposit_amount_btc',
-        label: 'Deposit Amount (sats)',
+        label: 'Deposit Amount (BTC)',
         type: 'number',
-        min: 1,
+        min: 0.00001,
         colSpan: 2,
       },
     ],
