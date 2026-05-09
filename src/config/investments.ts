@@ -29,6 +29,18 @@ export const RISK_LEVELS = [
 
 export type RiskLevel = (typeof RISK_LEVELS)[number]['value'];
 
+// ==================== RETURN FREQUENCIES ====================
+
+export const RETURN_FREQUENCIES = [
+  { value: 'monthly', label: 'Monthly' },
+  { value: 'quarterly', label: 'Quarterly' },
+  { value: 'annually', label: 'Annually' },
+  { value: 'at_exit', label: 'At Exit' },
+  { value: 'custom', label: 'Custom' },
+] as const;
+
+export type ReturnFrequency = (typeof RETURN_FREQUENCIES)[number]['value'];
+
 // ==================== DERIVED LOOKUP MAPS ====================
 
 export const INVESTMENT_TYPE_LABELS: Record<string, string> = Object.fromEntries(

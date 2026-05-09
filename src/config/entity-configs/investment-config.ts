@@ -14,6 +14,7 @@ import {
   investmentGuidanceContent,
   investmentDefaultGuidance,
 } from '@/lib/entity-guidance/investment-guidance';
+import { RISK_LEVELS, RETURN_FREQUENCIES } from '@/config/investments';
 
 // ==================== FIELD GROUPS ====================
 
@@ -126,13 +127,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'return_frequency',
         label: 'Return Frequency',
         type: 'select',
-        options: [
-          { value: 'monthly', label: 'Monthly' },
-          { value: 'quarterly', label: 'Quarterly' },
-          { value: 'annually', label: 'Annually' },
-          { value: 'at_exit', label: 'At Exit' },
-          { value: 'custom', label: 'Custom' },
-        ],
+        options: [...RETURN_FREQUENCIES],
         hint: 'How often returns are distributed',
       },
       {
@@ -161,11 +156,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'risk_level',
         label: 'Risk Level',
         type: 'select',
-        options: [
-          { value: 'low', label: 'Low Risk' },
-          { value: 'medium', label: 'Medium Risk' },
-          { value: 'high', label: 'High Risk' },
-        ],
+        options: RISK_LEVELS.map(({ value, label }) => ({ value, label })),
         hint: 'Honest assessment of investment risk',
       },
       {
