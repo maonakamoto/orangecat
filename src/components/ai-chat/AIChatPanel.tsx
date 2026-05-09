@@ -5,6 +5,7 @@ import { AIChatInput } from './AIChatInput';
 import { ModelSelector, ModelBadge } from './ModelSelector';
 import { Loader2, Bot, ArrowLeft, Key, Gift, AlertCircle } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import Button from '@/components/ui/Button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -62,7 +63,7 @@ export function AIChatPanel({
     <div className="flex flex-col h-full bg-gray-50">
       <div className="flex items-center gap-3 p-4 bg-white border-b border-gray-200">
         <Link
-          href={`/dashboard/ai-assistants`}
+          href={ENTITY_REGISTRY['ai_assistant'].basePath}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
         >
           <ArrowLeft className="h-5 w-5 text-gray-600" />

@@ -22,6 +22,7 @@ import { ResearchEntity } from '@/types/research';
 import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { ROUTES } from '@/config/routes';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { API_ROUTES } from '@/config/api-routes';
 import { PROJECT_STATUS, VALID_PROJECT_STATUSES } from '@/config/project-statuses';
 import {
@@ -207,7 +208,7 @@ export default function ResearchDashboard() {
             <Card
               key={entity.id}
               className="cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => router.push(`/dashboard/research/${entity.id}`)}
+              onClick={() => router.push(`${ENTITY_REGISTRY['research'].basePath}/${entity.id}`)}
             >
               <CardHeader>
                 <div className="flex justify-between items-start">
