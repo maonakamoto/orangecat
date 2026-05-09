@@ -8,26 +8,12 @@ import { Progress } from '@/components/ui/progress';
 import { formatRelativeTime } from '@/utils/dates';
 import type { Investment } from '@/types/investments';
 import { formatCurrency as formatCurrencyFn } from '@/services/currency';
-import { BADGE_COLORS } from '@/config/badge-colors';
+import { INVESTMENT_TYPE_LABELS, INVESTMENT_RISK_COLORS } from '@/config/investments';
 
 interface InvestmentCardProps {
   investment: Investment;
   viewMode?: 'grid' | 'list';
 }
-
-const RISK_COLORS: Record<string, string> = {
-  low: BADGE_COLORS.success,
-  medium: BADGE_COLORS.warning,
-  high: BADGE_COLORS.error,
-};
-
-const TYPE_LABELS: Record<string, string> = {
-  equity: 'Equity',
-  revenue_share: 'Revenue Share',
-  profit_share: 'Profit Share',
-  token: 'Token',
-  other: 'Other',
-};
 
 export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCardProps) {
   const formatAmount = (amount: number) => formatCurrencyFn(amount, investment.currency || 'USD');
@@ -85,7 +71,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
               </div>
             </div>
             <Badge variant="secondary" className="capitalize text-xs">
-              {TYPE_LABELS[investment.investment_type] ?? investment.investment_type}
+              {INVESTMENT_TYPE_LABELS[investment.investment_type] ?? investment.investment_type}
             </Badge>
           </div>
         </CardHeader>
@@ -120,7 +106,8 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
             {investment.risk_level && (
               <span
                 className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 ${
-                  RISK_COLORS[investment.risk_level] ?? BADGE_COLORS.neutral
+                  INVESTMENT_RISK_COLORS[investment.risk_level] ??
+                  'bg-gray-100 text-gray-700 border-gray-200'
                 }`}
               >
                 <Shield className="h-3 w-3" />

@@ -9,24 +9,11 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { ROUTES } from '@/config/routes';
 import { displayBTC } from '@/services/currency';
+import { INVESTMENT_TYPE_LABELS, INVESTMENT_RISK_COLORS } from '@/config/investments';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
-
-const INVESTMENT_TYPE_LABELS: Record<string, string> = {
-  equity: 'Equity',
-  revenue_share: 'Revenue Share',
-  profit_share: 'Profit Share',
-  token: 'Token',
-  other: 'Other',
-};
-
-const RISK_LEVEL_COLORS: Record<string, string> = {
-  low: 'bg-green-100 text-green-800',
-  medium: 'bg-yellow-100 text-yellow-800',
-  high: 'bg-red-100 text-red-800',
-};
 
 const config: EntityDetailConfig = {
   entityType: 'investment',
@@ -45,7 +32,10 @@ const config: EntityDetailConfig = {
   renderDetails: entity => {
     const progress =
       entity.target_amount && entity.total_raised
-        ? Math.min(Math.round((Number(entity.total_raised) / Number(entity.target_amount)) * 100), 100)
+        ? Math.min(
+            Math.round((Number(entity.total_raised) / Number(entity.target_amount)) * 100),
+            100
+          )
         : 0;
 
     return (
@@ -77,7 +67,8 @@ const config: EntityDetailConfig = {
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-500">Type</span>
                 <Badge variant="secondary">
-                  {INVESTMENT_TYPE_LABELS[entity.investment_type as string] ?? entity.investment_type}
+                  {INVESTMENT_TYPE_LABELS[entity.investment_type as string] ??
+                    entity.investment_type}
                 </Badge>
               </div>
             )}
@@ -86,17 +77,21 @@ const config: EntityDetailConfig = {
                 <span className="text-sm text-gray-500">Risk Level</span>
                 <span
                   className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
-                    RISK_LEVEL_COLORS[entity.risk_level as string] ?? 'bg-gray-100 text-gray-800'
+                    INVESTMENT_RISK_COLORS[entity.risk_level as string] ??
+                    'bg-gray-100 text-gray-800'
                   }`}
                 >
-                  {String(entity.risk_level).charAt(0).toUpperCase() + String(entity.risk_level).slice(1)}
+                  {String(entity.risk_level).charAt(0).toUpperCase() +
+                    String(entity.risk_level).slice(1)}
                 </span>
               </div>
             )}
             {entity.expected_return_rate !== null && entity.expected_return_rate !== undefined && (
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-500">Expected Return</span>
-                <span className="font-semibold">{Number(entity.expected_return_rate).toFixed(1)}%</span>
+                <span className="font-semibold">
+                  {Number(entity.expected_return_rate).toFixed(1)}%
+                </span>
               </div>
             )}
             {entity.term_months !== null && entity.term_months !== undefined && (

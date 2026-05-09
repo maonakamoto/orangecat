@@ -1,0 +1,40 @@
+/**
+ * Investment Entity Configuration - Single Source of Truth
+ *
+ * Display labels and colors for investment types and risk levels.
+ * Components should import from here instead of defining inline.
+ */
+
+import { BADGE_COLORS } from './badge-colors';
+
+// ==================== INVESTMENT TYPES ====================
+
+export const INVESTMENT_TYPES = [
+  { value: 'equity', label: 'Equity' },
+  { value: 'revenue_share', label: 'Revenue Share' },
+  { value: 'profit_share', label: 'Profit Share' },
+  { value: 'token', label: 'Token' },
+  { value: 'other', label: 'Other' },
+] as const;
+
+export type InvestmentType = (typeof INVESTMENT_TYPES)[number]['value'];
+
+// ==================== RISK LEVELS ====================
+
+export const RISK_LEVELS = [
+  { value: 'low', label: 'Low Risk', badgeColor: BADGE_COLORS.success },
+  { value: 'medium', label: 'Medium Risk', badgeColor: BADGE_COLORS.warning },
+  { value: 'high', label: 'High Risk', badgeColor: BADGE_COLORS.error },
+] as const;
+
+export type RiskLevel = (typeof RISK_LEVELS)[number]['value'];
+
+// ==================== DERIVED LOOKUP MAPS ====================
+
+export const INVESTMENT_TYPE_LABELS: Record<string, string> = Object.fromEntries(
+  INVESTMENT_TYPES.map(t => [t.value, t.label])
+);
+
+export const INVESTMENT_RISK_COLORS: Record<string, string> = Object.fromEntries(
+  RISK_LEVELS.map(r => [r.value, r.badgeColor])
+);

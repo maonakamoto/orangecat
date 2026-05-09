@@ -9,49 +9,15 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { ROUTES } from '@/config/routes';
 import { displayBTC } from '@/services/currency';
+import { RESEARCH_FIELDS, METHODOLOGIES, TIMELINES } from '@/config/research';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-const FIELD_LABELS: Record<string, string> = {
-  computer_science: 'Computer Science',
-  biology: 'Biology',
-  physics: 'Physics',
-  chemistry: 'Chemistry',
-  mathematics: 'Mathematics',
-  medicine: 'Medicine',
-  environmental_science: 'Environmental Science',
-  social_science: 'Social Science',
-  economics: 'Economics',
-  engineering: 'Engineering',
-  astronomy: 'Astronomy',
-  neuroscience: 'Neuroscience',
-  psychology: 'Psychology',
-  linguistics: 'Linguistics',
-  history: 'History',
-  other: 'Other',
-};
-
-const METHODOLOGY_LABELS: Record<string, string> = {
-  experimental: 'Experimental',
-  observational: 'Observational',
-  computational: 'Computational',
-  theoretical: 'Theoretical',
-  mixed_methods: 'Mixed Methods',
-  meta_analysis: 'Meta-Analysis',
-  case_study: 'Case Study',
-  survey: 'Survey',
-  literature_review: 'Literature Review',
-};
-
-const TIMELINE_LABELS: Record<string, string> = {
-  short_term: 'Short-term (< 6 months)',
-  medium_term: 'Medium-term (6–18 months)',
-  long_term: 'Long-term (18+ months)',
-  ongoing: 'Ongoing',
-  indefinite: 'Indefinite',
-};
+const FIELD_LABELS = Object.fromEntries(RESEARCH_FIELDS.map(f => [f.value, f.label]));
+const METHODOLOGY_LABELS = Object.fromEntries(METHODOLOGIES.map(m => [m.value, m.label]));
+const TIMELINE_LABELS = Object.fromEntries(TIMELINES.map(t => [t.value, t.label]));
 
 const config: EntityDetailConfig = {
   entityType: 'research',
@@ -60,7 +26,9 @@ const config: EntityDetailConfig = {
   metadataSelect: 'title, description',
   getViewRoute: id => ROUTES.RESEARCH.VIEW(id),
   renderHeaderExtra: entity => {
-    if (!entity.field) { return null; }
+    if (!entity.field) {
+      return null;
+    }
     return (
       <Badge variant="outline" className="capitalize">
         {FIELD_LABELS[entity.field] || entity.field}
@@ -82,9 +50,7 @@ const config: EntityDetailConfig = {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">
-                  {displayBTC(fundingRaised)} raised
-                </span>
+                <span className="text-sm text-gray-500">{displayBTC(fundingRaised)} raised</span>
                 <span className="font-bold text-lg text-purple-600">
                   {displayBTC(fundingGoal)} goal
                 </span>
@@ -139,8 +105,15 @@ const config: EntityDetailConfig = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const entity = await fetchEntityForMetadata('research', id, 'title, description');
-  if (!entity) { return { title: 'Research Not Found | OrangeCat' }; }
-  return generateEntityMetadata({ type: 'research', id, title: entity.title, description: entity.description });
+  if (!entity) {
+    return { title: 'Research Not Found | OrangeCat' };
+  }
+  return generateEntityMetadata({
+    type: 'research',
+    id,
+    title: entity.title,
+    description: entity.description,
+  });
 }
 
 export default async function PublicResearchPage({ params }: PageProps) {
