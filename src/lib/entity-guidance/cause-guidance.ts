@@ -59,7 +59,7 @@ export const causeGuidanceContent: Record<NonNullable<CauseFieldType>, GuidanceC
     icon: React.createElement(FileText, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Cause Description',
     description:
-      'Tell the story behind your cause. Help donors understand the impact of their contribution.',
+      'Tell the story behind your cause. Help supporters understand the impact of their contribution.',
     tips: [
       "Explain the problem you're addressing",
       'Share who will benefit and how',
@@ -77,12 +77,12 @@ export const causeGuidanceContent: Record<NonNullable<CauseFieldType>, GuidanceC
     icon: React.createElement(Tag, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Cause Category',
     description:
-      'Categories help donors find causes they care about. Choose the most accurate category.',
+      'Categories help supporters find causes they care about. Choose the most accurate category.',
     tips: [
       'Pick the primary focus of your cause',
       'If multiple apply, choose the main one',
       'Categories affect search and discovery',
-      'Consider what donors would search for',
+      'Consider what supporters would search for',
     ],
     examples: [
       'Education - Schools, scholarships, supplies',
@@ -115,7 +115,7 @@ export const causeGuidanceContent: Record<NonNullable<CauseFieldType>, GuidanceC
     description: 'Choose how to display your goal. All funding is received in Bitcoin.',
     tips: [
       'SATS is the Bitcoin standard',
-      'Fiat display helps donors understand value',
+      'Fiat display helps supporters understand value',
       'Goal can be shown in any currency',
       'Actual funding always in Bitcoin',
     ],
@@ -160,7 +160,7 @@ export const causeGuidanceContent: Record<NonNullable<CauseFieldType>, GuidanceC
       'Name specific individuals or organizations',
       'Explain their connection to the cause',
       'Include their consent if named',
-      'Increases donor trust',
+      'Increases supporter trust',
     ],
     examples: [
       'The children of San Miguel Elementary',
