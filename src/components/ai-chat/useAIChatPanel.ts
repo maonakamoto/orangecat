@@ -113,7 +113,7 @@ export function useAIChatPanel(assistantId: string, conversationId: string) {
         scrollToBottom();
 
         const response = await fetch(
-          `/api/ai-assistants/${assistantId}/conversations/${conversationId}/messages`,
+          API_ROUTES.AI_ASSISTANTS.CONVERSATION_MESSAGES(assistantId, conversationId),
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

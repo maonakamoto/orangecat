@@ -140,6 +140,8 @@ export const API_ROUTES = {
       `${ENTITY_REGISTRY['ai_assistant'].apiEndpoint}/${id}/conversations`,
     CONVERSATION: (assistantId: string, conversationId: string) =>
       `${ENTITY_REGISTRY['ai_assistant'].apiEndpoint}/${assistantId}/conversations/${conversationId}`,
+    CONVERSATION_MESSAGES: (assistantId: string, conversationId: string) =>
+      `${ENTITY_REGISTRY['ai_assistant'].apiEndpoint}/${assistantId}/conversations/${conversationId}/messages`,
   },
   TRANSACTIONS: '/api/transactions',
   BOOKINGS: {
