@@ -28,6 +28,23 @@ export const LOAN_FULFILLMENT_TYPES = [
 
 export type LoanFulfillmentType = (typeof LOAN_FULFILLMENT_TYPES)[number]['value'];
 
+// ==================== LOAN TYPES ====================
+
+export const LOAN_TYPES = [
+  {
+    value: 'new_request',
+    label: 'Request New Loan',
+    description: 'I need funding and want to find lenders',
+  },
+  {
+    value: 'existing_refinance',
+    label: 'Refinance Existing Loan',
+    description: 'I have an existing loan and want better terms',
+  },
+] as const;
+
+export type LoanType = (typeof LOAN_TYPES)[number]['value'];
+
 // ==================== OFFER TYPES ====================
 
 export const LOAN_OFFER_TYPES = [

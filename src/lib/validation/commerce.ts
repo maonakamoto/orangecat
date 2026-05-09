@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
 import { CAUSE_CATEGORIES } from '@/config/causes';
+import { PRODUCT_TYPES, PRODUCT_FULFILLMENT_TYPES } from '@/config/products';
+import { SERVICE_LOCATION_TYPES } from '@/config/services';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
 // =============================================================================
@@ -71,11 +73,15 @@ export const userProductSchema = z.object({
   // For best precision with fiat, consider storing in cents and converting for display
   price: z.number().positive('Price must be positive'),
   currency: z.enum(CURRENCY_CODES).optional(),
-  product_type: z.enum(['physical', 'digital', 'service']).default('physical'),
+  product_type: z
+    .enum(PRODUCT_TYPES.map(t => t.value) as [string, ...string[]])
+    .default('physical'),
   images: z.array(z.string().url()).optional().default([]),
   thumbnail_url: optionalUrl(),
   inventory_count: z.number().int().min(-1).default(-1), // -1 = unlimited
-  fulfillment_type: z.enum(['manual', 'automatic', 'digital']).default('manual'),
+  fulfillment_type: z
+    .enum(PRODUCT_FULFILLMENT_TYPES.map(t => t.value) as [string, ...string[]])
+    .default('manual'),
   category: optionalText(50),
   tags: z.array(z.string()).optional().default([]),
   status: z.enum(['draft', 'active', 'paused', 'sold_out']).default('draft'),
@@ -92,7 +98,9 @@ export const userServiceSchema = z
     currency: z.enum(CURRENCY_CODES).optional(),
     duration_minutes: z.number().positive().optional().nullable(),
     availability_schedule: availabilityScheduleSchema.optional().nullable(),
-    service_location_type: z.enum(['remote', 'onsite', 'both']).default('remote'),
+    service_location_type: z
+      .enum(SERVICE_LOCATION_TYPES.map(t => t.value) as [string, ...string[]])
+      .default('remote'),
     service_area: optionalText(200),
     images: z.array(z.string().url()).optional().default([]),
     portfolio_links: z.array(z.string().url()).optional().default([]),

@@ -18,6 +18,7 @@ import { SERVICE_TEMPLATES, type ServiceTemplate } from '@/components/create/tem
 import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { WALLET_FIELD_GROUP } from './wallet-field-group';
+import { SERVICE_LOCATION_TYPES } from '@/config/services';
 
 // ==================== CONSTANTS ====================
 
@@ -117,11 +118,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'service_location_type',
         label: 'Service Location',
         type: 'select',
-        options: [
-          { value: 'remote', label: 'Remote Only' },
-          { value: 'onsite', label: 'On-site Only' },
-          { value: 'both', label: 'Both Remote & On-site' },
-        ],
+        options: SERVICE_LOCATION_TYPES,
         colSpan: 2,
       },
       {

@@ -56,7 +56,7 @@ export interface FieldConfig {
   /** Whether field is required */
   required?: boolean;
   /** Options for select/radio fields */
-  options?: SelectOption[];
+  options?: SelectOption[] | readonly SelectOption[];
   /** Hint text shown below field */
   hint?: string;
   /** Min value for number fields */

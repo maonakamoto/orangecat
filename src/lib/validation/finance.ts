@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
 import { ENTITY_TYPES } from '@/config/entity-registry';
 import { RENTAL_PERIODS } from '@/config/assets';
+import { LOAN_TYPES, LOAN_FULFILLMENT_TYPES } from '@/config/loans';
 import { lightningAddressSchema, optionalText } from './base';
 
 /**
@@ -80,7 +81,7 @@ export const assetSchema = z.object({
 // Loan validation
 export const loanSchema = z.object({
   // Loan type: new_request (seeking new loan) or existing_refinance (refinancing existing)
-  loan_type: z.enum(['new_request', 'existing_refinance']).default('new_request'),
+  loan_type: z.enum(LOAN_TYPES.map(t => t.value) as [string, ...string[]]).default('new_request'),
 
   title: z
     .string()
@@ -96,7 +97,9 @@ export const loanSchema = z.object({
   interest_rate: z.number().min(0).max(100).optional().nullable(),
   bitcoin_address: optionalText(),
   lightning_address: lightningAddressSchema,
-  fulfillment_type: z.enum(['manual', 'automatic']).default('manual'),
+  fulfillment_type: z
+    .enum(LOAN_FULFILLMENT_TYPES.map(t => t.value) as [string, ...string[]])
+    .default('manual'),
   currency: z.string().optional(),
 
   // Fields specific to existing loans (refinancing)

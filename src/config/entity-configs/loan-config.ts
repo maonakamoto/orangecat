@@ -17,7 +17,7 @@ import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { LoanCollateralField } from '@/components/create/collateral/LoanCollateralField';
 import { WalletSelectorField } from '@/components/create/wallet-selector';
-import { LOAN_CATEGORIES, LOAN_FULFILLMENT_TYPES } from '@/config/loans';
+import { LOAN_CATEGORIES, LOAN_TYPES, LOAN_FULFILLMENT_TYPES } from '@/config/loans';
 
 // ==================== FIELD GROUPS ====================
 
@@ -32,18 +32,7 @@ const fieldGroups: FieldGroup[] = [
         label: 'Loan Type',
         type: 'select',
         required: true,
-        options: [
-          {
-            value: 'new_request',
-            label: 'Request New Loan',
-            description: 'I need funding and want to find lenders',
-          },
-          {
-            value: 'existing_refinance',
-            label: 'Refinance Existing Loan',
-            description: 'I have an existing loan and want better terms',
-          },
-        ],
+        options: LOAN_TYPES,
         hint: 'Select the type of loan listing you want to create',
         colSpan: 2,
       },

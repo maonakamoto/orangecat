@@ -18,6 +18,7 @@ import { PRODUCT_TEMPLATES, type ProductTemplate } from '@/components/create/tem
 import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { WALLET_FIELD_GROUP } from './wallet-field-group';
+import { PRODUCT_TYPES, PRODUCT_FULFILLMENT_TYPES } from '@/config/products';
 
 // ==================== FIELD GROUPS ====================
 
@@ -53,11 +54,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'product_type',
         label: 'Product Type',
         type: 'select',
-        options: [
-          { value: 'physical', label: 'Physical Product' },
-          { value: 'digital', label: 'Digital Product' },
-          { value: 'service', label: 'Service' },
-        ],
+        options: PRODUCT_TYPES,
       },
     ],
   },
@@ -108,11 +105,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'fulfillment_type',
         label: 'Fulfillment Type',
         type: 'select',
-        options: [
-          { value: 'manual', label: 'Manual' },
-          { value: 'automatic', label: 'Automatic' },
-          { value: 'digital', label: 'Digital Delivery' },
-        ],
+        options: PRODUCT_FULFILLMENT_TYPES,
       },
     ],
   },
