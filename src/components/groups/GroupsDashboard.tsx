@@ -28,6 +28,7 @@ import EntityListShell from '@/components/entity/EntityListShell';
 import Loading from '@/components/Loading';
 import { ROUTES } from '@/config/routes';
 import { GRADIENTS } from '@/config/gradients';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 export function GroupsDashboard() {
   const router = useRouter();
@@ -128,7 +129,9 @@ export function GroupsDashboard() {
           ) : (
             <GroupList
               groups={myGroups}
-              onGroupClick={group => router.push(`/dashboard/groups/${group.slug}`)}
+              onGroupClick={group =>
+                router.push(`${ENTITY_REGISTRY['group'].basePath}/${group.slug}`)
+              }
             />
           )}
         </TabsContent>
@@ -148,7 +151,9 @@ export function GroupsDashboard() {
           ) : (
             <GroupList
               groups={availableGroups}
-              onGroupClick={group => router.push(`/dashboard/groups/${group.slug}`)}
+              onGroupClick={group =>
+                router.push(`${ENTITY_REGISTRY['group'].basePath}/${group.slug}`)
+              }
             />
           )}
         </TabsContent>

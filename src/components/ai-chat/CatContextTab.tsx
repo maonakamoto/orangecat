@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { ROUTES } from '@/config/routes';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 const TYPE_ICONS: Record<string, React.ElementType> = {
   goals: Target,
@@ -159,7 +160,7 @@ export function CatContextTab() {
                   {docs.map(doc => (
                     <Link
                       key={doc.id}
-                      href={`/dashboard/documents/${doc.id}`}
+                      href={`${ENTITY_REGISTRY['document'].basePath}/${doc.id}`}
                       className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors"
                     >
                       <div className="min-w-0 flex-1">

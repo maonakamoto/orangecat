@@ -91,7 +91,12 @@ export default async function WishlistItemDetailPage({ params }: PageProps) {
               label: ENTITY_REGISTRY['wishlist'].namePlural,
               href: ENTITY_REGISTRY['wishlist'].basePath,
             },
-            { label: wishlist?.title || 'Wishlist', href: `/dashboard/wishlists/${wishlist?.id}` },
+            {
+              label: wishlist?.title || 'Wishlist',
+              href: wishlist?.id
+                ? `${ENTITY_REGISTRY['wishlist'].basePath}/${wishlist.id}`
+                : ENTITY_REGISTRY['wishlist'].basePath,
+            },
             { label: item.title },
           ]}
           className="mb-4"
