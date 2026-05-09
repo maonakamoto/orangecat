@@ -3,6 +3,7 @@ import { CURRENCY_CODES } from '@/config/currencies';
 import { ENTITY_TYPES } from '@/config/entity-registry';
 import { RENTAL_PERIODS } from '@/config/assets';
 import { LOAN_TYPES, LOAN_FULFILLMENT_TYPES } from '@/config/loans';
+import { INVESTMENT_TYPES, RETURN_FREQUENCIES, RISK_LEVELS } from '@/config/investments';
 import { lightningAddressSchema, optionalText } from './base';
 
 /**
@@ -124,19 +125,22 @@ export const investmentSchema = z
       .min(10, 'Description must be at least 10 characters')
       .max(2000, 'Description must be at most 2000 characters'),
     investment_type: z
-      .enum(['equity', 'revenue_share', 'profit_share', 'token', 'other'])
+      .enum(INVESTMENT_TYPES.map(t => t.value) as [string, ...string[]])
       .default('revenue_share'),
     target_amount: z.number().positive('Target amount must be greater than 0'),
     minimum_investment: z.number().positive('Minimum investment must be greater than 0'),
     maximum_investment: z.number().positive().optional().nullable(),
     expected_return_rate: z.number().min(0).max(1000).optional().nullable(),
     return_frequency: z
-      .enum(['monthly', 'quarterly', 'annually', 'at_exit', 'custom'])
+      .enum(RETURN_FREQUENCIES.map(f => f.value) as [string, ...string[]])
       .optional()
       .nullable(),
     term_months: z.number().int().positive().optional().nullable(),
     end_date: optionalText(),
-    risk_level: z.enum(['low', 'medium', 'high']).optional().nullable(),
+    risk_level: z
+      .enum(RISK_LEVELS.map(r => r.value) as [string, ...string[]])
+      .optional()
+      .nullable(),
     terms: optionalText(5000),
     is_public: z.boolean().optional().default(false),
     bitcoin_address: optionalText(),
