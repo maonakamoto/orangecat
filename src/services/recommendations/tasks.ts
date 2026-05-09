@@ -91,7 +91,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     description: 'Connect a wallet to receive Bitcoin payments and funding',
     priority: 'critical',
     category: 'setup',
-    action: { label: 'Manage Wallets', href: '/dashboard/wallets' },
+    action: { label: 'Manage Wallets', href: ENTITY_REGISTRY['wallet'].basePath },
     icon: Wallet,
     condition: ctx => !ctx.hasWallet,
   },
@@ -194,7 +194,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     description: 'Your wishlist is empty. Add items supporters can fund.',
     priority: 'medium',
     category: 'engage',
-    action: { label: 'Add Items', href: '/dashboard/wishlists' },
+    action: { label: 'Add Items', href: ENTITY_REGISTRY['wishlist'].basePath },
     icon: Gift,
     condition: ctx => (ctx.entityCounts.wishlist ?? 0) > 0 && ctx.wishlistItemCount === 0,
   },
@@ -301,7 +301,7 @@ export const SMART_QUESTIONS: SmartQuestion[] = [
   {
     id: 'share-wishlist-q',
     question: 'Your wishlist has items. Share it with supporters?',
-    action: { label: 'Share Wishlist', href: '/dashboard/wishlists' },
+    action: { label: 'Share Wishlist', href: ENTITY_REGISTRY['wishlist'].basePath },
     condition: ctx => ctx.profileCompletion === 100 && ctx.wishlistItemCount > 0,
   },
   {

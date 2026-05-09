@@ -246,7 +246,7 @@ function generateSuggestions(context: {
     suggestions.push({
       text: 'Connect a Bitcoin wallet to start receiving payments on your listings.',
       actionLabel: 'Add wallet',
-      actionUrl: `${APP_URL}/dashboard/wallets`,
+      actionUrl: `${APP_URL}${ENTITY_REGISTRY['wallet'].basePath}`,
     });
   }
 

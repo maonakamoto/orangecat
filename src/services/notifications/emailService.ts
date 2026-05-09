@@ -18,6 +18,7 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/admin';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getEmailClient } from '@/lib/email/client';
 import {
@@ -354,7 +355,7 @@ export class NotificationEmailService {
         displayName,
         dashboardUrl: `${APP_URL}/dashboard`,
         profileUrl: `${APP_URL}/dashboard/info/edit`,
-        walletUrl: `${APP_URL}/dashboard/wallets`,
+        walletUrl: `${APP_URL}${ENTITY_REGISTRY['wallet'].basePath}`,
         createUrl: `${APP_URL}/dashboard`,
         unsubscribeUrl,
       });
@@ -407,7 +408,7 @@ export class NotificationEmailService {
           | { entitiesCreated: number; profileComplete: boolean; walletAdded: boolean }
           | undefined,
         profileUrl: `${APP_URL}/dashboard/info/edit`,
-        walletUrl: `${APP_URL}/dashboard/wallets`,
+        walletUrl: `${APP_URL}${ENTITY_REGISTRY['wallet'].basePath}`,
         createUrl: `${APP_URL}/dashboard`,
         exploreUrl: `${APP_URL}/discover`,
         dashboardUrl: `${APP_URL}/dashboard`,
@@ -427,7 +428,7 @@ export class NotificationEmailService {
         displayName,
         activityType: groupMap[type],
         groupName: (data.groupName as string) || 'your group',
-        groupUrl: (data.groupUrl as string) || `${APP_URL}/dashboard/groups`,
+        groupUrl: (data.groupUrl as string) || `${APP_URL}${ENTITY_REGISTRY['group'].basePath}`,
         invitedBy: data.invitedBy as string | undefined,
         proposalTitle: data.proposalTitle as string | undefined,
         proposalUrl: data.proposalUrl as string | undefined,

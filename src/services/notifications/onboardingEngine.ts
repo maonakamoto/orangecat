@@ -194,7 +194,7 @@ export async function getNextOnboardingEmail(userId: string): Promise<Onboarding
       return {
         type: 'onboarding_day2_wallet',
         data: {
-          addWalletUrl: `${APP_URL}/dashboard/wallets`,
+          addWalletUrl: `${APP_URL}${ENTITY_REGISTRY['wallet'].basePath}`,
           accountAgeDays,
         },
       };
