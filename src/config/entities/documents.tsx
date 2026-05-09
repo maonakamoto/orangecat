@@ -38,6 +38,16 @@ export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
   other: 'Other',
 };
 
+/** Form select options for document types (include descriptions for form UX) */
+export const DOCUMENT_TYPE_OPTIONS = [
+  { value: 'goals', label: 'Goals & Aspirations', description: 'Your objectives and dreams' },
+  { value: 'finances', label: 'Financial Info', description: 'Budget, income, expenses' },
+  { value: 'skills', label: 'Skills & Expertise', description: 'Your abilities and experience' },
+  { value: 'business_plan', label: 'Business Plan', description: 'Startup ideas and strategies' },
+  { value: 'notes', label: 'Notes', description: 'General notes and information' },
+  { value: 'other', label: 'Other', description: 'Anything else' },
+] as const satisfies { value: DocumentType; label: string; description: string }[];
+
 /**
  * Human-readable labels for visibility levels
  */
@@ -46,6 +56,13 @@ export const VISIBILITY_LABELS: Record<DocumentVisibility, string> = {
   cat_visible: 'My Cat Only',
   public: 'Public',
 };
+
+/** Form select options for document visibility */
+export const VISIBILITY_OPTIONS = [
+  { value: 'cat_visible', label: 'My Cat Only', description: 'My Cat can use this for advice' },
+  { value: 'private', label: 'Private', description: 'Only you can see, My Cat cannot access' },
+  { value: 'public', label: 'Public', description: 'Anyone can see on your profile' },
+] as const satisfies { value: DocumentVisibility; label: string; description: string }[];
 
 /**
  * Icons/emojis for document types

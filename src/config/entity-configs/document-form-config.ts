@@ -18,6 +18,7 @@ import {
 } from '@/lib/entity-guidance/document-guidance';
 import type { FieldGroup } from '@/components/create/types';
 import { createEntityConfig } from './base-config-factory';
+import { DOCUMENT_TYPE_OPTIONS, VISIBILITY_OPTIONS } from '@/config/entities/documents';
 
 // ==================== FIELD GROUPS ====================
 
@@ -47,26 +48,7 @@ const fieldGroups: FieldGroup[] = [
         label: 'Type',
         type: 'select',
         required: true,
-        options: [
-          {
-            value: 'goals',
-            label: 'Goals & Aspirations',
-            description: 'Your objectives and dreams',
-          },
-          { value: 'finances', label: 'Financial Info', description: 'Budget, income, expenses' },
-          {
-            value: 'skills',
-            label: 'Skills & Expertise',
-            description: 'Your abilities and experience',
-          },
-          {
-            value: 'business_plan',
-            label: 'Business Plan',
-            description: 'Startup ideas and strategies',
-          },
-          { value: 'notes', label: 'Notes', description: 'General notes and information' },
-          { value: 'other', label: 'Other', description: 'Anything else' },
-        ],
+        options: [...DOCUMENT_TYPE_OPTIONS],
         colSpan: 1,
       },
       {
@@ -74,19 +56,7 @@ const fieldGroups: FieldGroup[] = [
         label: 'Visibility',
         type: 'select',
         required: true,
-        options: [
-          {
-            value: 'cat_visible',
-            label: 'My Cat Only',
-            description: 'My Cat can use this for advice',
-          },
-          {
-            value: 'private',
-            label: 'Private',
-            description: 'Only you can see, My Cat cannot access',
-          },
-          { value: 'public', label: 'Public', description: 'Anyone can see on your profile' },
-        ],
+        options: [...VISIBILITY_OPTIONS],
         colSpan: 1,
         hint: 'Choose "My Cat Only" for documents you want My Cat to use for personalized advice.',
       },
