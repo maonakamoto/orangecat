@@ -52,8 +52,8 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
               <div className="text-xs text-gray-600">Raised</div>
             </div>
           </div>
-          <div className="text-center p-2 bg-purple-50 rounded-lg">
-            <div className="text-lg font-bold text-purple-600">{totalSupporters}</div>
+          <div className="text-center p-2 bg-tiffany-50 rounded-lg">
+            <div className="text-lg font-bold text-tiffany-600">{totalSupporters}</div>
             <div className="text-xs text-gray-600">Supporters</div>
           </div>
         </CardContent>
@@ -61,17 +61,17 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
 
       {/* Getting Started / Analytics */}
       {totalProjects === 0 ? (
-        <Card className="border-l-4 border-l-emerald-500 bg-gradient-to-r from-emerald-50/50 to-teal-50/50">
+        <Card className="border-l-4 border-l-tiffany-500 bg-gradient-to-r from-tiffany-50/50 to-orange-50/50">
           <CardContent className="p-5 text-center">
-            <div className="p-3 bg-emerald-100 rounded-xl inline-flex mb-4">
-              <Target className="w-8 h-8 text-emerald-600" />
+            <div className="p-3 bg-tiffany-100 rounded-xl inline-flex mb-4">
+              <Target className="w-8 h-8 text-tiffany-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-3">Ready to Start Fundraising?</h3>
             <p className="text-sm text-gray-600 mb-4">
               Create your first project and start receiving support in minutes.
             </p>
             <Button
-              className={GRADIENTS.btnEmeraldTeal}
+              className={GRADIENTS.brandTiffany}
               onClick={() => router.push(ENTITY_REGISTRY.project.createPath)}
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -97,13 +97,8 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Success rate</span>
-                <span className="text-sm font-bold text-green-600">
-                  {totalProjects > 0
-                    ? Math.round(((totalProjects * 0.7) / totalProjects) * 100)
-                    : 0}
-                  %
-                </span>
+                <span className="text-sm text-gray-600">Supporters</span>
+                <span className="text-sm font-bold text-tiffany-600">{totalSupporters}</span>
               </div>
               <Button
                 size="sm"

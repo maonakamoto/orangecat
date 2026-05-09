@@ -61,8 +61,6 @@ export const GRADIENTS = {
   btnPrimary:
     'bg-gradient-to-r from-tiffany-600 to-orange-600 hover:from-tiffany-700 hover:to-orange-700',
   btnGreen: 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800',
-  btnEmeraldTeal:
-    'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700',
 } as const;
 
 export type GradientKey = keyof typeof GRADIENTS;
