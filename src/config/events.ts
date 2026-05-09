@@ -38,6 +38,27 @@ export const EVENT_CATEGORIES = [
 
 export type EventCategory = (typeof EVENT_CATEGORIES)[number];
 
+// ==================== GROUP EVENT TYPES (internal/governance use) ====================
+
+export const GROUP_EVENT_TYPES = [
+  { value: 'general', label: 'General' },
+  { value: 'meeting', label: 'Meeting' },
+  { value: 'celebration', label: 'Celebration' },
+  { value: 'assembly', label: 'Assembly' },
+] as const;
+
+export type GroupEventType = (typeof GROUP_EVENT_TYPES)[number]['value'];
+
+// ==================== LOCATION TYPES ====================
+
+export const EVENT_LOCATION_TYPES = [
+  { value: 'online', label: 'Online' },
+  { value: 'in_person', label: 'In Person' },
+  { value: 'hybrid', label: 'Hybrid' },
+] as const;
+
+export type EventLocationType = (typeof EVENT_LOCATION_TYPES)[number]['value'];
+
 // ==================== DERIVED LOOKUP MAPS ====================
 
 export const EVENT_TYPE_LABELS: Record<string, string> = Object.fromEntries(

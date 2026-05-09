@@ -29,6 +29,7 @@ import { Button } from '@/components/ui/Button';
 import { Switch } from '@/components/ui/switch';
 import { Loader2, Calendar } from 'lucide-react';
 import { useCreateEventForm } from './useCreateEventForm';
+import { GROUP_EVENT_TYPES, EVENT_LOCATION_TYPES } from '@/config/events';
 
 interface CreateEventDialogProps {
   open: boolean;
@@ -114,10 +115,11 @@ export function CreateEventDialog({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="general">General</SelectItem>
-                        <SelectItem value="meeting">Meeting</SelectItem>
-                        <SelectItem value="celebration">Celebration</SelectItem>
-                        <SelectItem value="assembly">Assembly</SelectItem>
+                        {GROUP_EVENT_TYPES.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -138,9 +140,11 @@ export function CreateEventDialog({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="online">Online</SelectItem>
-                        <SelectItem value="in_person">In Person</SelectItem>
-                        <SelectItem value="hybrid">Hybrid</SelectItem>
+                        {EVENT_LOCATION_TYPES.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
