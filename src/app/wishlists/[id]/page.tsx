@@ -14,6 +14,7 @@ import PublicEntityOwnerCard from '@/components/public/PublicEntityOwnerCard';
 import EntityShare from '@/components/sharing/EntityShare';
 import { PublicEntityPaymentSection } from '@/components/payment';
 import { WISHLIST_TYPE_LABELS } from '@/config/wishlists';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -123,7 +124,13 @@ export default async function PublicWishlistPage({ params }: PageProps) {
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
-              items={[{ label: 'Wishlists', href: '/wishlists' }, { label: wishlist.title }]}
+              items={[
+                {
+                  label: ENTITY_REGISTRY['wishlist'].namePlural,
+                  href: ENTITY_REGISTRY['wishlist'].publicBasePath,
+                },
+                { label: wishlist.title },
+              ]}
               className="mb-4"
             />
             <div className="flex items-start gap-4">

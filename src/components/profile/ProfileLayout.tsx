@@ -11,16 +11,7 @@ import ProfilePeopleTab from '@/components/profile/ProfilePeopleTab';
 import ProfileInfoTab from '@/components/profile/ProfileInfoTab';
 import ProfileWalletsTab from '@/components/profile/ProfileWalletsTab';
 import ProfileEntityTab from '@/components/profile/ProfileEntityTab';
-import {
-  Users,
-  User,
-  MessageSquare,
-  Target,
-  Globe,
-  ExternalLink,
-  Info,
-  Wallet,
-} from 'lucide-react';
+import { Users, User, MessageSquare, Globe, ExternalLink, Info, Wallet } from 'lucide-react';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { EntityType } from '@/config/entity-registry';
 import { cn } from '@/lib/utils';
@@ -124,8 +115,11 @@ export default function ProfileLayout({
     },
     {
       id: 'projects',
-      label: 'Projects',
-      icon: <Target className="w-4 h-4" />,
+      label: ENTITY_REGISTRY['project'].namePlural,
+      icon: (() => {
+        const Icon = ENTITY_REGISTRY['project'].icon;
+        return <Icon className="w-4 h-4" />;
+      })(),
       badge: stats?.projectCount,
       content: <ProfileProjectsTab profile={profile} isOwnProfile={isOwnProfile} />,
     },

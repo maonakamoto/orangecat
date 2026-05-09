@@ -84,7 +84,7 @@ export default async function WishlistDetailPage({ params }: PageProps) {
   );
 
   const breadcrumbItems = [
-    { label: 'Wishlists', href: wishlistBasePath },
+    { label: ENTITY_REGISTRY['wishlist'].namePlural, href: wishlistBasePath },
     { label: wishlist.title },
   ];
 

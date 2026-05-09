@@ -14,6 +14,7 @@ import { WishlistItemProofSection } from '@/components/wishlist/WishlistItemProo
 import { FormattedAmount } from '@/components/ui/FormattedAmount';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 interface PageProps {
   params: Promise<{ itemId: string }>;
@@ -86,7 +87,10 @@ export default async function WishlistItemDetailPage({ params }: PageProps) {
       <div className="mb-6">
         <Breadcrumb
           items={[
-            { label: 'Wishlists', href: '/dashboard/wishlists' },
+            {
+              label: ENTITY_REGISTRY['wishlist'].namePlural,
+              href: ENTITY_REGISTRY['wishlist'].basePath,
+            },
             { label: wishlist?.title || 'Wishlist', href: `/dashboard/wishlists/${wishlist?.id}` },
             { label: item.title },
           ]}
