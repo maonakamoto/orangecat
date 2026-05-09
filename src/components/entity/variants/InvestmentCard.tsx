@@ -9,6 +9,7 @@ import { formatRelativeTime } from '@/utils/dates';
 import type { Investment } from '@/types/investments';
 import { formatCurrency as formatCurrencyFn } from '@/services/currency';
 import { INVESTMENT_TYPE_LABELS, INVESTMENT_RISK_COLORS } from '@/config/investments';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 interface InvestmentCardProps {
   investment: Investment;
@@ -25,7 +26,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
 
   if (viewMode === 'list') {
     return (
-      <Link href={`/investments/${investment.id}`}>
+      <Link href={`${ENTITY_REGISTRY['investment'].publicBasePath}/${investment.id}`}>
         <Card className="hover:shadow-md transition-shadow">
           <div className="flex items-center p-4 gap-4">
             <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -55,7 +56,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
   }
 
   return (
-    <Link href={`/investments/${investment.id}`}>
+    <Link href={`${ENTITY_REGISTRY['investment'].publicBasePath}/${investment.id}`}>
       <Card className="hover:shadow-md transition-shadow h-full">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">

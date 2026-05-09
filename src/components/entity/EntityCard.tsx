@@ -99,7 +99,7 @@ export function EntityCard({
   const imageSrc = thumbnailUrl || imageUrl;
   const hasActions =
     editUrl || editHref || onEdit || onDelete || onToggleVisibility || onStatusChange;
-  const detailHref = href || `/dashboard/ai-assistants/${id}`;
+  const detailHref = href || '#';
 
   return (
     <div

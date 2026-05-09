@@ -17,6 +17,7 @@ import { Progress } from '@/components/ui/progress';
 import { formatRelativeTime } from '@/utils/dates';
 import type { Loan } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { formatCurrency as formatCurrencyFn } from '@/services/currency';
 import { calculateProgress } from '@/components/loans/useLoanList';
 
@@ -33,7 +34,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
 
   if (viewMode === 'list') {
     return (
-      <Link href={`/loans/${loan.id}`}>
+      <Link href={`${ENTITY_REGISTRY['loan'].publicBasePath}/${loan.id}`}>
         <Card className="hover:shadow-md transition-shadow">
           <div className="flex items-center p-4 gap-4">
             {/* Icon */}
@@ -66,7 +67,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
   }
 
   return (
-    <Link href={`/loans/${loan.id}`}>
+    <Link href={`${ENTITY_REGISTRY['loan'].publicBasePath}/${loan.id}`}>
       <Card className="hover:shadow-md transition-shadow h-full">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">

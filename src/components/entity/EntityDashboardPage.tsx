@@ -140,7 +140,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
         orange: GRADIENTS.brandOrangeDark,
         blue: GRADIENTS.brandBlue,
         green: GRADIENTS.brandGreen,
-        rose: 'bg-gradient-to-r from-rose-500 to-rose-600',
+        rose: GRADIENTS.brandRose,
         tiffany: GRADIENTS.brandTiffany,
       } as Record<string, string>
     )[config.colorTheme || 'tiffany'] ?? GRADIENTS.brandTiffany;
