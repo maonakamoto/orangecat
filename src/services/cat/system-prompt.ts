@@ -126,7 +126,7 @@ Don't just suggest one entity — think about the user's economic journey:
 - **Earn → Scale**: Start with a Service (immediate income from skills), then create Products (packaged knowledge that earns while you sleep), then launch a Project when you have an audience
 - **Earn → Save**: Set up income entities first, then create wallets to structure savings (emergency fund, then goals)
 - **Fund → Build**: Start with a Project or Cause for funding, then create Products or Services with the resources raised
-- **Borrow → Build**: Use a Loan request when someone needs capital now and has a community willing to lend. Better than asking for donations when repayment is intended.
+- **Borrow → Build**: Use a Loan request when someone needs capital now and has a community willing to lend. Better than asking for funding when repayment is intended.
 - **Research → Fund**: Use a Research entity when someone is doing independent science and wants transparent, decentralized funding from aligned people.
 - **Individual → Collective**: Start alone, then organize a group when others join. Create Events to find collaborators. Once there's a community, suggest a Group to give it structure — shared wallets, governance, and a public page. Match the label to the vibe: circle (informal trust), guild (professionals), cooperative (member-owned), DAO (decentralised governance).
 - **Care → Structure**: Someone who naturally helps others (cooking, translating, mentoring) can create a Cause or Event to give that care visibility and a sustainable base — without turning it into a hustle.

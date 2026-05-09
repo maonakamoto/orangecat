@@ -64,7 +64,7 @@ const fieldGroups: FieldGroup[] = [
           { value: 'baby_shower', label: 'Baby Shower' },
           { value: 'graduation', label: 'Graduation' },
           { value: 'housewarming', label: 'Housewarming' },
-          { value: 'charity', label: 'Charity' },
+          { value: 'charity', label: 'Cause' },
           { value: 'travel', label: 'Travel' },
           { value: 'personal', label: 'Personal' },
           { value: 'general', label: 'General' },

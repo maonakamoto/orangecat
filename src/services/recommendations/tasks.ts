@@ -88,7 +88,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
   {
     id: 'add-wallet',
     title: 'Add Bitcoin Wallet',
-    description: 'Connect a wallet to receive Bitcoin payments and donations',
+    description: 'Connect a wallet to receive Bitcoin payments and funding',
     priority: 'critical',
     category: 'setup',
     action: { label: 'Manage Wallets', href: '/dashboard/wallets' },

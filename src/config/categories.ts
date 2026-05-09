@@ -231,7 +231,7 @@ export const simpleCategories: SimpleCategory[] = [
     icon: '🌱',
     description: 'Cleanup, conservation, sustainability',
   },
-  { value: 'charity', label: 'Charity', icon: '❤️', description: 'Helping others' },
+  { value: 'charity', label: 'Community Support', icon: '❤️', description: 'Helping others' },
   { value: 'business', label: 'Business', icon: '🚀', description: 'Startups, ventures' },
   { value: 'personal', label: 'Personal', icon: '🌟', description: 'Personal goals' },
   { value: 'other', label: 'Other', icon: '✨', description: 'Everything else' },

@@ -181,7 +181,7 @@ function generateSuggestions(context: FullUserContext): ContextSummary['suggesti
 
   if (context.stats.totalProducts > 0 && context.stats.totalProjects === 0) {
     suggestions.push({
-      text: 'You have products but no projects. Want to crowdfund something bigger?',
+      text: 'You have products but no projects. Want to fund something bigger?',
       action: 'Create a Project',
       actionUrl: ROUTES.DASHBOARD.PROJECTS_CREATE,
     });

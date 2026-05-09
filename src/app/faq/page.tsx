@@ -60,7 +60,10 @@ const FAQ_SECTIONS: FaqSection[] = [
           <div>
             <p className="mb-2">Your Cat can:</p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>Create and manage your economic entities (projects, products, services, causes, loans, investments)</li>
+              <li>
+                Create and manage your economic entities (projects, products, services, causes,
+                loans, investments)
+              </li>
               <li>Draft descriptions, milestones, and terms in your voice</li>
               <li>Search the platform to find relevant opportunities, backers, or collaborators</li>
               <li>Send messages and coordinate with others on your behalf</li>
@@ -78,7 +81,7 @@ const FAQ_SECTIONS: FaqSection[] = [
       {
         question: 'Is the Cat reading all my data?',
         answer:
-          'The Cat only accesses data you have authorized it to see — your own entities, public profiles you interact with, and conversations you start. It does not access other users\' private data. You remain in control; the Cat proposes actions and waits for your confirmation before executing them.',
+          "The Cat only accesses data you have authorized it to see — your own entities, public profiles you interact with, and conversations you start. It does not access other users' private data. You remain in control; the Cat proposes actions and waits for your confirmation before executing them.",
       },
     ],
   },
@@ -93,12 +96,27 @@ const FAQ_SECTIONS: FaqSection[] = [
           <div>
             <p className="mb-2">The full economic spectrum:</p>
             <ul className="list-disc pl-5 space-y-1">
-              <li><strong>Exchange</strong> — Sell products (physical or digital) and services</li>
-              <li><strong>Fund</strong> — Launch projects with milestone-based accountability, or causes for outright giving</li>
-              <li><strong>Lend</strong> — Offer or take peer-to-peer loans with custom terms</li>
-              <li><strong>Invest</strong> — Equity-style or revenue-share investing without intermediaries</li>
-              <li><strong>Research</strong> — Decentralized science funding and collaboration</li>
-              <li><strong>Govern</strong> — Form groups with shared treasuries and collective decision-making</li>
+              <li>
+                <strong>Exchange</strong> — Sell products (physical or digital) and services
+              </li>
+              <li>
+                <strong>Fund</strong> — Launch projects with milestone-based accountability, or
+                causes for outright giving
+              </li>
+              <li>
+                <strong>Lend</strong> — Offer or take peer-to-peer loans with custom terms
+              </li>
+              <li>
+                <strong>Invest</strong> — Equity-style or revenue-share investing without
+                intermediaries
+              </li>
+              <li>
+                <strong>Research</strong> — Decentralized science funding and collaboration
+              </li>
+              <li>
+                <strong>Govern</strong> — Form groups with shared treasuries and collective
+                decision-making
+              </li>
             </ul>
           </div>
         ),
@@ -111,7 +129,7 @@ const FAQ_SECTIONS: FaqSection[] = [
       {
         question: 'What is the difference between a project and a cause?',
         answer:
-          'Projects have milestones and accountability — backers expect progress reports and deliverables. Causes are outright giving with no strings attached, suited for charitable or community support where the act of giving is the goal itself. Both can receive Bitcoin, Lightning, or other payment methods.',
+          'Projects have milestones and accountability — backers expect progress reports and deliverables. Causes are no-strings funding for meaningful purposes — community support, education, environment, or any cause where the act of giving is the goal itself. Both can receive Bitcoin, Lightning, or other payment methods.',
       },
       {
         question: 'How do loans work?',
@@ -133,7 +151,7 @@ const FAQ_SECTIONS: FaqSection[] = [
       {
         question: 'What is the Lightning Network?',
         answer:
-          'The Lightning Network is a payment layer built on top of Bitcoin. It enables near-instant transactions with fees of a fraction of a cent — far cheaper and faster than on-chain Bitcoin. Think of it as Bitcoin\'s payment rails for everyday transactions. OrangeCat supports Lightning addresses (e.g. yourname@orangecat.ch) for easy receiving.',
+          "The Lightning Network is a payment layer built on top of Bitcoin. It enables near-instant transactions with fees of a fraction of a cent — far cheaper and faster than on-chain Bitcoin. Think of it as Bitcoin's payment rails for everyday transactions. OrangeCat supports Lightning addresses (e.g. yourname@orangecat.ch) for easy receiving.",
       },
       {
         question: 'Does OrangeCat hold my Bitcoin?',
@@ -177,7 +195,7 @@ const FAQ_SECTIONS: FaqSection[] = [
       {
         question: 'How is my data protected?',
         answer:
-          'All data is stored in a PostgreSQL database with row-level security — meaning queries are enforced at the database level so one user cannot access another\'s private data. Authentication is handled by Supabase Auth with industry-standard practices. Passwords are hashed and never stored in plaintext.',
+          "All data is stored in a PostgreSQL database with row-level security — meaning queries are enforced at the database level so one user cannot access another's private data. Authentication is handled by Supabase Auth with industry-standard practices. Passwords are hashed and never stored in plaintext.",
       },
       {
         question: 'Can I delete my account?',
@@ -188,7 +206,15 @@ const FAQ_SECTIONS: FaqSection[] = [
   },
 ];
 
-function FaqAccordionItem({ item, isOpen, onToggle }: { item: FaqItem; isOpen: boolean; onToggle: () => void }) {
+function FaqAccordionItem({
+  item,
+  isOpen,
+  onToggle,
+}: {
+  item: FaqItem;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
       <button
@@ -226,9 +252,7 @@ export default function FAQPage() {
       {/* Header */}
       <div className="bg-gradient-to-b from-tiffany-50 to-white border-b border-tiffany-100 py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Frequently Asked Questions
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Everything you need to know about OrangeCat — your AI economic agent.
           </p>
@@ -268,8 +292,8 @@ export default function FAQPage() {
         <div className="text-center bg-tiffany-50 border border-tiffany-100 rounded-xl p-8">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Still have questions?</h3>
           <p className="text-gray-600 mb-4">
-            Ask your Cat — open the chat panel in your dashboard and type your question.
-            Or reach out directly.
+            Ask your Cat — open the chat panel in your dashboard and type your question. Or reach
+            out directly.
           </p>
           <a
             href="mailto:hello@orangecat.ch"
