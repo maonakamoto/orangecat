@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useSearchSuggestions } from '@/hooks/useSearchSuggestions';
 import { useAuth } from '@/hooks/useAuth';
+import { TRENDING_SEARCHES } from './useEnhancedSearch';
 
 interface MobileSearchModalProps {
   isOpen: boolean;
@@ -107,12 +108,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
     },
   ];
 
-  const trendingSearches = [
-    'Bitcoin Lightning Network',
-    'Open Source Projects',
-    'Education Initiatives',
-    'Environmental Projects',
-  ];
+  const trendingSearches = TRENDING_SEARCHES;
 
   if (!isOpen) {
     return null;

@@ -22,6 +22,13 @@ export interface UseEnhancedSearchProps {
   autoFocus?: boolean;
 }
 
+export const TRENDING_SEARCHES = [
+  'Bitcoin Lightning Network',
+  'Open Source Projects',
+  'Education Initiatives',
+  'Environmental Projects',
+];
+
 export function useEnhancedSearch({ showQuickActions = true }: UseEnhancedSearchProps = {}) {
   const router = useRouter();
   const { user } = useAuth();
@@ -48,15 +55,7 @@ export function useEnhancedSearch({ showQuickActions = true }: UseEnhancedSearch
     [router]
   );
 
-  const trendingSearches = useMemo(
-    () => [
-      'Bitcoin Lightning Network',
-      'Open Source Projects',
-      'Education Initiatives',
-      'Environmental Projects',
-    ],
-    []
-  );
+  const trendingSearches = TRENDING_SEARCHES;
 
   useEffect(() => {
     if (user) {
