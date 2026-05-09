@@ -269,16 +269,16 @@ export const bottomNavItems: NavItem[] = [];
  */
 export const footerNavigation = {
   product: [
-    { name: 'Features', href: '/docs#features' },
+    { name: 'Features', href: '/docs' },
     { name: 'Documentation', href: '/docs' },
-    { name: 'API Reference', href: '/docs/api' },
+    { name: 'How It Works', href: '/how-it-works' },
     { name: 'Status', href: '/status' },
   ],
   company: [
     { name: 'About OrangeCat', href: '/about' },
     { name: 'Careers', href: '/company/careers' },
     { name: 'Blog', href: '/blog' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'FAQ', href: '/faq' },
   ],
   legal: [
     { name: 'Privacy', href: '/privacy' },
