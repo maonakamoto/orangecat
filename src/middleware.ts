@@ -23,26 +23,18 @@ const publicRoutes = [
   '/loans', // Public loan pages (shareable)
   '/groups', // Public group pages (shareable)
   '/ai-assistants', // Public AI assistant pages (shareable)
+  '/investments', // Public investment pages (shareable)
+  '/assets', // Public asset pages (shareable)
+  '/wishlists', // Public wishlist pages (shareable)
+  '/research', // Public research pages (shareable)
   '/funding', // Public funding information
   '/onboarding', // Public onboarding flow
 ];
 
 // Routes that should redirect to /auth if user is not logged in
 // Note: /profiles/ is public, /profile/ is protected (own profile)
-const protectedRoutes = [
-  '/dashboard',
-  '/profile/',
-  '/settings',
-  '/assets',
-  '/timeline',
-  '/messages',
-  '/projects/create',
-  '/investments',
-  '/research/create',
-  '/wishlists/create',
-  '/documents/create',
-  '/loans/create',
-];
+// Note: entity create paths are under /dashboard (protected via /dashboard prefix)
+const protectedRoutes = ['/dashboard', '/profile/', '/settings', '/timeline', '/messages'];
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
