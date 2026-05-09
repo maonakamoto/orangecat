@@ -37,6 +37,8 @@ export const GRADIENTS = {
   iconIndigoPurple: 'bg-gradient-to-br from-indigo-500 to-purple-600',
   tiffanyMuted: 'bg-gradient-to-br from-tiffany-100 to-tiffany-200',
   sectionOrangeAmber: 'bg-gradient-to-br from-orange-50 to-amber-50',
+  sectionTiffanyOrange: 'bg-gradient-to-br from-tiffany-50 to-orange-50',
+  sectionGrayWhite: 'bg-gradient-to-br from-gray-50 via-white to-gray-50',
 
   // ── Page background gradients (full-bleed wrappers) ───────────────────────
   pageBg: 'bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20',

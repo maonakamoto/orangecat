@@ -38,7 +38,7 @@ export default function WhatCanYouDoSection() {
   const { whatCanYouDo } = SECTION_HEADERS;
 
   return (
-    <section className="py-12 sm:py-16 lg:py-24 bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <section className={`py-12 sm:py-16 lg:py-24 ${GRADIENTS.sectionGrayWhite}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div

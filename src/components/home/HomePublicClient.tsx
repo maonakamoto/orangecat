@@ -10,9 +10,7 @@ import HeroSectionStatic from '@/components/home/sections/HeroSectionStatic';
 const WhatCanYouDoSection = dynamic(
   () => import('@/components/home/sections/WhatCanYouDoSection'),
   {
-    loading: () => (
-      <div className="h-96 bg-gradient-to-br from-gray-50 via-white to-gray-50 animate-pulse" />
-    ),
+    loading: () => <div className={`h-96 ${GRADIENTS.sectionGrayWhite} animate-pulse`} />,
   }
 );
 
@@ -27,9 +25,7 @@ const HowItWorksSection = dynamic(() => import('@/components/home/sections/HowIt
 const TransparencySection = dynamic(
   () => import('@/components/home/sections/TransparencySection'),
   {
-    loading: () => (
-      <div className="h-96 bg-gradient-to-br from-tiffany-50 to-orange-50 animate-pulse" />
-    ),
+    loading: () => <div className={`h-96 ${GRADIENTS.sectionTiffanyOrange} animate-pulse`} />,
   }
 );
 
@@ -55,11 +51,7 @@ export default function HomePublicClient() {
       <HeroSectionStatic />
 
       {/* Below-fold sections - lazy loaded */}
-      <Suspense
-        fallback={
-          <div className="h-96 bg-gradient-to-br from-gray-50 via-white to-gray-50 animate-pulse" />
-        }
-      >
+      <Suspense fallback={<div className={`h-96 ${GRADIENTS.sectionGrayWhite} animate-pulse`} />}>
         <WhatCanYouDoSection />
       </Suspense>
 
@@ -72,9 +64,7 @@ export default function HomePublicClient() {
       </Suspense>
 
       <Suspense
-        fallback={
-          <div className="h-96 bg-gradient-to-br from-tiffany-50 to-orange-50 animate-pulse" />
-        }
+        fallback={<div className={`h-96 ${GRADIENTS.sectionTiffanyOrange} animate-pulse`} />}
       >
         <TransparencySection />
       </Suspense>

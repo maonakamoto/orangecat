@@ -10,7 +10,7 @@ export default function TransparencySection() {
   const { transparency } = SECTION_HEADERS;
 
   return (
-    <section className="py-12 sm:py-16 lg:py-24 bg-gradient-to-br from-tiffany-50 to-orange-50">
+    <section className={`py-12 sm:py-16 lg:py-24 ${GRADIENTS.sectionTiffanyOrange}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
