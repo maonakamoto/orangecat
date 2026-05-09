@@ -52,21 +52,11 @@ import {
 } from 'lucide-react';
 import type { EntityTemplate } from '../types';
 import type { CurrencyCode } from '@/config/currencies';
+import type { AssetType, RentalPeriod } from '@/config/assets';
 
 export interface AssetDefaults {
   title: string;
-  type:
-    | 'real_estate'
-    | 'vehicle'
-    | 'luxury'
-    | 'equipment'
-    | 'computing'
-    | 'robot'
-    | 'drone'
-    | 'recreational'
-    | 'business'
-    | 'securities'
-    | 'other';
+  type: AssetType;
   description?: string | null;
   location?: string | null;
   estimated_value?: number | null;
@@ -75,7 +65,7 @@ export interface AssetDefaults {
   sale_price_btc?: number | null;
   is_for_rent?: boolean;
   rental_price_btc?: number | null;
-  rental_period_type?: 'hourly' | 'daily' | 'weekly' | 'monthly';
+  rental_period_type?: RentalPeriod;
   min_rental_period?: number;
   max_rental_period?: number | null;
   requires_deposit?: boolean;

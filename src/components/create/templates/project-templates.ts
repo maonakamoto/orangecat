@@ -10,6 +10,7 @@
 import React from 'react';
 import { Sprout, Heart, Palette, Lightbulb } from 'lucide-react';
 import type { EntityTemplate } from '../types';
+import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 
 export interface ProjectDefaults {
   title: string;
@@ -78,8 +79,8 @@ export const PROJECT_TEMPLATES: EntityTemplate<ProjectDefaults>[] = [
       title: 'Open Source Privacy Tools',
       description:
         "Building free, open-source privacy tools that anyone can use, audit, and improve. Our mission is to make privacy accessible to everyone, not just technical experts.\n\nWe're developing a suite of privacy-focused applications including encrypted messaging, secure file sharing, and anonymous browsing tools. All code is open source, regularly audited, and available on GitHub. The project is maintained by a global community of contributors.",
-      goal_amount: 1000000,
-      currency: 'SATS',
+      goal_amount: 10000,
+      currency: PLATFORM_DEFAULT_CURRENCY,
       funding_purpose:
         'Developer time and compensation (60%), Infrastructure and hosting (20%), Security audits (10%), Documentation and tutorials (10%)',
       category: 'Technology',

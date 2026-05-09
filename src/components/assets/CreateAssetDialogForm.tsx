@@ -28,6 +28,7 @@ import { assetSchema } from '@/lib/validation';
 import { AssetTemplates } from '@/components/create/templates';
 import { currencySelectOptions, DEFAULT_CURRENCY } from '@/config/currencies';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { ASSET_TYPES } from '@/config/assets';
 
 const quickAssetSchema = assetSchema.pick({
   title: true,
@@ -138,12 +139,11 @@ export function CreateAssetDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="real_estate">Real Estate</SelectItem>
-                      <SelectItem value="business">Business</SelectItem>
-                      <SelectItem value="vehicle">Vehicle</SelectItem>
-                      <SelectItem value="equipment">Equipment</SelectItem>
-                      <SelectItem value="securities">Securities</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      {ASSET_TYPES.map(({ value, label }) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

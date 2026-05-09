@@ -2,6 +2,7 @@ import { listEntityPage, createEntity } from '@/domain/base/entityService';
 import { PROJECT_STATUS } from '@/config/project-statuses';
 import { STATUS } from '@/config/database-constants';
 import type { ProjectData } from '@/lib/validation';
+import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 
 export async function listProjectsPage(limit: number, offset: number, userId?: string) {
   const result = await listEntityPage('project', {
@@ -28,7 +29,7 @@ export async function createProject(userId: string, payload: ProjectData) {
     title: payload.title,
     description: payload.description,
     goal_amount: payload.goal_amount ?? null,
-    currency: payload.currency ?? 'SATS',
+    currency: payload.currency ?? PLATFORM_DEFAULT_CURRENCY,
     funding_purpose: payload.funding_purpose ?? null,
     bitcoin_address: payload.bitcoin_address ?? null,
     lightning_address: payload.lightning_address ?? null,

@@ -4,6 +4,7 @@ import type { UserProduct, UserService, UserCause } from '@/types/database';
 import { STATUS } from '@/config/database-constants';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import { createEntity } from '@/domain/base/entityService';
+import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 
 // Table type - using entity registry table names
 // Accept string to allow dynamic table names from entity registry
@@ -149,7 +150,7 @@ export async function createProduct(
     {
       user_id: userId,
       status: STATUS.PRODUCTS.DRAFT as typeof STATUS.PRODUCTS.DRAFT,
-      currency: input.currency ?? 'SATS',
+      currency: input.currency ?? PLATFORM_DEFAULT_CURRENCY,
       product_type: input.product_type ?? 'physical',
       images: input.images ?? [],
       thumbnail_url: input.thumbnail_url ?? null,

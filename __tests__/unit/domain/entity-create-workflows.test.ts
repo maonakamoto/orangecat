@@ -43,7 +43,7 @@ describe('Entity create workflows (project/product/cause)', () => {
     (createAdminClient as jest.Mock).mockReturnValue(mockAdminClient);
   });
 
-  it('creates a project with draft defaults and SATS currency fallback', async () => {
+  it('creates a project with draft defaults and CHF currency fallback', async () => {
     const created = { id: 'proj-1', title: 'P', status: 'draft' };
     mockServerChain.single.mockResolvedValue({ data: created, error: null });
 
@@ -59,7 +59,7 @@ describe('Entity create workflows (project/product/cause)', () => {
         actor_id: 'a1',
         title: 'P',
         status: 'draft',
-        currency: 'SATS',
+        currency: 'CHF',
       })
     );
     expect(result).toEqual(created);
@@ -81,7 +81,7 @@ describe('Entity create workflows (project/product/cause)', () => {
         title: 'Prod',
         price: 1000,
         status: 'draft',
-        currency: 'SATS',
+        currency: 'CHF',
         product_type: 'physical',
       })
     );
