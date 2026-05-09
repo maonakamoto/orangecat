@@ -50,7 +50,7 @@ export const PROJECT_TEMPLATES: EntityTemplate<ProjectDefaults>[] = [
       currency: 'CHF',
       funding_purpose:
         'Veterinary care and medical supplies ($4000), Food and nutrition ($2500), Shelter maintenance and improvements ($2000), Adoption program support ($1000), Educational materials ($500)',
-      category: 'Charity',
+      category: 'Cause',
     },
   },
   {
@@ -86,5 +86,3 @@ export const PROJECT_TEMPLATES: EntityTemplate<ProjectDefaults>[] = [
     },
   },
 ];
-
-

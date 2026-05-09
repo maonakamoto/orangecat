@@ -105,7 +105,7 @@ export function ProjectDonationSection({
               <div className="sm:hidden">
                 <Button
                   onClick={() => {
-                    const supportSection = document.getElementById('bitcoin-donation-section');
+                    const supportSection = document.getElementById('bitcoin-support-section');
                     if (supportSection) {
                       supportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
@@ -131,7 +131,7 @@ export function ProjectDonationSection({
 
       {bitcoinAddress && (
         <section
-          id="bitcoin-donation-section"
+          id="bitcoin-support-section"
           className="border-t pt-6"
           aria-labelledby="bitcoin-heading"
         >

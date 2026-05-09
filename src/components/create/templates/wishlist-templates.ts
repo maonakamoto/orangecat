@@ -270,7 +270,7 @@ const housewarmingTemplates: WishlistTemplate[] = [
   },
 ];
 
-// Charity & Giving Back
+// Causes & Giving Back
 const charityTemplates: WishlistTemplate[] = [
   {
     id: 'charity-instead',

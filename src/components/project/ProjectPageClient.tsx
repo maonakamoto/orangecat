@@ -81,7 +81,7 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
 
   // Scroll to support section
   const scrollToSupport = () => {
-    const supportSection = document.getElementById('bitcoin-donation-section');
+    const supportSection = document.getElementById('bitcoin-support-section');
     if (supportSection) {
       supportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
