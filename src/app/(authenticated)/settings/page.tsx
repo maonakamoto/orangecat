@@ -75,7 +75,7 @@ export default function SettingsPage() {
               <Lock className="w-8 h-8 mr-4" />
               <div>
                 <h2 className="text-2xl font-semibold">Account & Security</h2>
-                <p className="text-blue-100 text-base mt-1">
+                <p className="text-tiffany-100 text-base mt-1">
                   Manage your login credentials and account security
                 </p>
               </div>

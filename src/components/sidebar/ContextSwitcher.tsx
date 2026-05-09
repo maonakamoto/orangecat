@@ -157,8 +157,8 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
               !isGroupContext && 'bg-tiffany-50'
             )}
           >
-            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-              <User className="w-4 h-4 text-blue-600" />
+            <div className="w-8 h-8 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
+              <User className="w-4 h-4 text-tiffany-600" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-gray-900 truncate">

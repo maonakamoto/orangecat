@@ -96,7 +96,7 @@ export function CollateralSection({
                   </SelectItem>
                 ))}
               {/* Create Asset Option */}
-              <SelectItem value="__create_asset__" className="text-blue-600 font-medium">
+              <SelectItem value="__create_asset__" className="text-tiffany-600 font-medium">
                 ➕ Create New Asset
               </SelectItem>
             </SelectContent>

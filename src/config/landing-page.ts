@@ -53,7 +53,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     description: 'Buy and sell with anyone',
     icon: Package,
     color: 'from-blue-500 to-blue-600',
-    bgColor: 'bg-blue-50',
+    bgColor: 'bg-tiffany-50',
     features: [
       { title: 'Products', description: 'Sell physical or digital goods to anyone, anywhere' },
       { title: 'Services', description: 'Offer your expertise — hourly, fixed, or on your terms' },

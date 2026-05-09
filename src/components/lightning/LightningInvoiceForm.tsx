@@ -50,12 +50,12 @@ export function LightningInvoiceForm({
         />
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Zap className="w-5 h-5 text-blue-500 mt-0.5" />
+          <Zap className="w-5 h-5 text-tiffany-500 mt-0.5" />
           <div>
-            <h4 className="font-medium text-blue-900 mb-1">Lightning Benefits</h4>
-            <ul className="text-sm text-blue-700 space-y-1">
+            <h4 className="font-medium text-tiffany-900 mb-1">Lightning Benefits</h4>
+            <ul className="text-sm text-tiffany-700 space-y-1">
               <li>Instant payments (usually under 3 seconds)</li>
               <li>Extremely low fees (typically &lt; 1 sat)</li>
               <li>Perfect for small amounts and tips</li>

@@ -92,10 +92,10 @@ export function WalletSetupStep() {
           </CardContent>
         </Card>
 
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-tiffany-200 bg-tiffany-50">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-2">
-              <CheckCircle className="h-5 w-5 text-blue-600" />
+              <CheckCircle className="h-5 w-5 text-tiffany-600" />
               <span className="font-medium">No Fees</span>
             </div>
             <p className="text-sm text-muted-foreground">

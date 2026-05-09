@@ -83,8 +83,8 @@ export default function DraftContinueDialog({
             {/* Header */}
             <div className="bg-gradient-to-r from-tiffany-50 to-orange-50 p-6 border-b border-gray-200">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <FileText className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-tiffany-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <FileText className="w-6 h-6 text-tiffany-600" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-gray-900 mb-1">
@@ -106,7 +106,7 @@ export default function DraftContinueDialog({
                     UNSAVED
                   </div>
                 )}
-                <div className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">
+                <div className="px-2 py-1 bg-tiffany-100 text-tiffany-700 text-xs rounded-full font-medium">
                   {completionPercentage}% Complete
                 </div>
                 {totalDrafts > 1 && (
@@ -141,7 +141,7 @@ export default function DraftContinueDialog({
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    className="bg-tiffany-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${completionPercentage}%` }}
                   />
                 </div>
@@ -151,10 +151,10 @@ export default function DraftContinueDialog({
             {/* Action Options */}
             <div className="p-6 space-y-4">
               {/* Continue Draft - Primary Action */}
-              <div className="border-2 border-blue-200 rounded-xl p-4 bg-blue-50 hover:bg-blue-100 transition-colors">
+              <div className="border-2 border-tiffany-200 rounded-xl p-4 bg-tiffany-50 hover:bg-tiffany-100 transition-colors">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-tiffany-600 rounded-lg flex items-center justify-center">
                       <Edit3 className="w-5 h-5 text-white" />
                     </div>
                     <div>
@@ -166,12 +166,12 @@ export default function DraftContinueDialog({
                       </p>
                     </div>
                   </div>
-                  <div className="text-blue-600 text-sm font-medium">Recommended</div>
+                  <div className="text-tiffany-600 text-sm font-medium">Recommended</div>
                 </div>
 
                 <Button
                   onClick={onContinueDraft}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  className="w-full bg-tiffany-600 hover:bg-tiffany-700 text-white"
                 >
                   <Edit3 className="w-4 h-4 mr-2" />
                   Continue Editing

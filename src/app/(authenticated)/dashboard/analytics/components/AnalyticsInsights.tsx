@@ -71,12 +71,12 @@ export default function AnalyticsInsights({ hasProjects }: AnalyticsInsightsProp
           <div className="space-y-4">
             {hasProjects ? (
               <>
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="p-4 bg-tiffany-50 border border-tiffany-200 rounded-lg">
                   <div className="flex items-start gap-3">
-                    <TrendingUp className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <TrendingUp className="w-5 h-5 text-tiffany-600 mt-0.5" />
                     <div>
-                      <h4 className="font-medium text-blue-900">Optimize Your Project Timing</h4>
-                      <p className="text-blue-700 text-sm mt-1">
+                      <h4 className="font-medium text-tiffany-900">Optimize Your Project Timing</h4>
+                      <p className="text-tiffany-700 text-sm mt-1">
                         Your projects perform 23% better when launched on Tuesdays. Consider timing
                         your next launch accordingly.
                       </p>

@@ -75,7 +75,7 @@ export default function BitBaumAboutPage() {
                 <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
                   Swiss-Based
                 </span>
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                <span className="px-3 py-1 bg-tiffany-100 text-tiffany-700 rounded-full text-sm">
                   Innovation
                 </span>
               </div>
@@ -126,8 +126,8 @@ export default function BitBaumAboutPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-blue-600" />
+              <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-tiffany-600" />
               </div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">Bitcoin First</h4>
               <p className="text-gray-600 text-sm">

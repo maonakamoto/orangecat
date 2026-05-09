@@ -77,14 +77,14 @@ export function ProviderStep({ selectedProvider, onSelectProvider }: ProviderSte
       </div>
 
       {/* Info Box */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Lightbulb className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <Lightbulb className="w-5 h-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
           <div className="text-left">
-            <h4 className="font-semibold text-blue-900 mb-1">
+            <h4 className="font-semibold text-tiffany-900 mb-1">
               {aiOnboardingContent.provider.whyTitle}
             </h4>
-            <p className="text-blue-800 text-sm">{aiOnboardingContent.provider.whyContent}</p>
+            <p className="text-tiffany-800 text-sm">{aiOnboardingContent.provider.whyContent}</p>
           </div>
         </div>
       </div>

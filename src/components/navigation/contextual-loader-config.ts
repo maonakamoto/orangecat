@@ -69,8 +69,8 @@ const ROUTE_CONFIGS: RouteConfig[] = [
       { icon: Plus, text: 'Create new projects or services' },
       { icon: BarChart3, text: 'View analytics and insights' },
     ],
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
+    color: 'text-tiffany-600',
+    bgColor: 'bg-tiffany-50',
   },
   {
     matches: p => p.startsWith('/profiles') || p.startsWith(ROUTES.DASHBOARD.INFO),
@@ -253,8 +253,8 @@ const ROUTE_CONFIGS: RouteConfig[] = [
       { icon: Target, text: 'Understand our goals' },
       { icon: Heart, text: "See how we're making an impact" },
     ],
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
+    color: 'text-tiffany-600',
+    bgColor: 'bg-tiffany-50',
   },
   {
     matches: p => p.startsWith('/blog'),

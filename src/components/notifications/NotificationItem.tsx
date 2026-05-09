@@ -32,7 +32,7 @@ function getNotificationIcon(notification: Notification) {
     case 'project_funded':
       return <Bitcoin className="w-5 h-5 text-bitcoin-orange" />;
     case 'follow':
-      return <Users className="w-5 h-5 text-blue-500" />;
+      return <Users className="w-5 h-5 text-tiffany-500" />;
     case 'message':
       return <MessageSquare className="w-5 h-5 text-tiffany-500" />;
     case 'comment':
@@ -66,7 +66,7 @@ export function NotificationItem({
       className={`group relative p-3 rounded-lg border transition-colors cursor-pointer ${
         notification.read
           ? 'bg-white border-gray-200 hover:bg-gray-50'
-          : 'bg-blue-50 border-blue-200 hover:bg-blue-100'
+          : 'bg-tiffany-50 border-tiffany-200 hover:bg-tiffany-100'
       }`}
       onClick={() => onClick(notification)}
     >
@@ -118,7 +118,7 @@ export function NotificationItem({
       </div>
 
       {!notification.read && (
-        <div className="absolute top-3 right-3 w-2 h-2 bg-blue-500 rounded-full" />
+        <div className="absolute top-3 right-3 w-2 h-2 bg-tiffany-500 rounded-full" />
       )}
     </div>
   );

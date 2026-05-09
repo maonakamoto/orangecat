@@ -95,7 +95,7 @@ export interface EntityMetadata {
   /** Lucide icon component */
   icon: LucideIcon;
   /** Color theme */
-  colorTheme: 'orange' | 'tiffany' | 'rose' | 'blue' | 'green';
+  colorTheme: 'orange' | 'tiffany' | 'rose' | 'green';
   /** Base URL path (dashboard) */
   basePath: string;
   /** Create page URL */
@@ -173,7 +173,7 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     tableName: 'user_products',
     userIdField: 'actor_id',
     icon: Package,
-    colorTheme: 'blue',
+    colorTheme: 'tiffany',
     basePath: '/dashboard/store',
     createPath: '/dashboard/store/create',
     publicBasePath: '/products',
@@ -329,7 +329,7 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     tableName: 'events',
     userIdField: 'actor_id',
     icon: Calendar,
-    colorTheme: 'blue',
+    colorTheme: 'tiffany',
     basePath: '/dashboard/events',
     createPath: '/dashboard/events/create',
     publicBasePath: '/events',
@@ -417,7 +417,7 @@ export const COLOR_CLASSES: Record<EntityMetadata['colorTheme'], { text: string;
   orange: { text: 'text-orange-600', bg: 'bg-orange-50' },
   tiffany: { text: 'text-tiffany-600', bg: 'bg-tiffany-50' },
   rose: { text: 'text-rose-600', bg: 'bg-rose-50' },
-  blue: { text: 'text-blue-600', bg: 'bg-blue-50' },
+  blue: { text: 'text-tiffany-600', bg: 'bg-tiffany-50' },
   green: { text: 'text-green-600', bg: 'bg-green-50' },
 };
 

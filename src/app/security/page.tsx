@@ -79,7 +79,7 @@ export default function SecurityPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">
-            <Shield className="w-16 h-16 text-blue-600" />
+            <Shield className="w-16 h-16 text-tiffany-600" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Security & Privacy</h1>
           <p className="text-xl text-gray-600">
@@ -96,9 +96,9 @@ export default function SecurityPage() {
             design our systems to minimize the data we collect while maximizing security.
           </p>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="font-semibold text-blue-900 mb-2">Bitcoin Security</h3>
-              <p className="text-blue-700 text-sm">
+            <div className="bg-tiffany-50 p-6 rounded-lg">
+              <h3 className="font-semibold text-tiffany-900 mb-2">Bitcoin Security</h3>
+              <p className="text-tiffany-700 text-sm">
                 Your Bitcoin remains under your control. We facilitate payments but never custody
                 funds.
               </p>
@@ -121,7 +121,7 @@ export default function SecurityPage() {
             {securityFeatures.map((feature, index) => (
               <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center mb-4">
-                  <feature.icon className="w-8 h-8 text-blue-600 mr-3" />
+                  <feature.icon className="w-8 h-8 text-tiffany-600 mr-3" />
                   <h3 className="font-semibold text-gray-900">{feature.title}</h3>
                 </div>
                 <p className="text-gray-600 text-sm">{feature.description}</p>
@@ -138,7 +138,7 @@ export default function SecurityPage() {
               <ul className="space-y-3">
                 {practice.items.map((item, itemIndex) => (
                   <li key={itemIndex} className="flex items-start">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-tiffany-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
                     <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
@@ -158,7 +158,7 @@ export default function SecurityPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="mailto:security@orangecat.ch"
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-tiffany-600 text-white font-medium rounded-lg hover:bg-tiffany-700 transition-colors"
               >
                 Report Security Issue
               </a>

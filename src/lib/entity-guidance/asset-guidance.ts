@@ -14,7 +14,9 @@ import { Briefcase } from 'lucide-react';
 import type { DefaultGuidance, GuidanceContent } from '@/components/create/types';
 
 const assetIcon = (size: 'sm' | 'md' = 'md') =>
-  React.createElement(Briefcase, { className: size === 'sm' ? 'w-4 h-4 text-blue-600' : 'w-5 h-5 text-blue-600' });
+  React.createElement(Briefcase, {
+    className: size === 'sm' ? 'w-4 h-4 text-tiffany-600' : 'w-5 h-5 text-tiffany-600',
+  });
 
 export const assetDefaultGuidance: DefaultGuidance = {
   title: 'About Assets',
@@ -32,7 +34,8 @@ export const assetGuidanceContent: Record<string, GuidanceContent> = {
   title: {
     icon: assetIcon('sm'),
     title: 'Title',
-    description: 'A short, clear name identifying the asset. Example: “123 Main St Apartment” or “Café Orange LLC”.',
+    description:
+      'A short, clear name identifying the asset. Example: “123 Main St Apartment” or “Café Orange LLC”.',
     tips: ['Keep it under 100 characters', 'Avoid sensitive info'],
     examples: ['Investment Property – 2BR Apartment', 'OrangeCat Equipment – S19 Miner'],
   },
@@ -46,7 +49,11 @@ export const assetGuidanceContent: Record<string, GuidanceContent> = {
     icon: assetIcon('sm'),
     title: 'Description',
     description: 'Key facts about your asset. Keep it accurate and concise.',
-    tips: ['Condition and location context', 'Ownership details (if relevant)', 'No sensitive personal data'],
+    tips: [
+      'Condition and location context',
+      'Ownership details (if relevant)',
+      'No sensitive personal data',
+    ],
   },
   location: {
     icon: assetIcon('sm'),
@@ -67,4 +74,3 @@ export const assetGuidanceContent: Record<string, GuidanceContent> = {
     tips: ['Choose currency you track this asset in'],
   },
 };
-

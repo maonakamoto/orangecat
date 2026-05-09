@@ -30,8 +30,8 @@ function generateCreateOptions(): CreateOption[] {
     description: 'Share an update on your timeline',
     href: '/timeline?compose=true',
     icon: MessageSquare,
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
+    color: 'text-tiffany-600',
+    bgColor: 'bg-tiffany-50',
     category: 'content',
   };
 

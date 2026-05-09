@@ -213,7 +213,7 @@ export function CollateralSelector({
                 <p className="text-base text-gray-500 mb-2">No assets available</p>
                 <a
                   href={ROUTES.DASHBOARD.ASSETS_CREATE}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-sm text-tiffany-600 hover:text-tiffany-700 font-medium"
                 >
                   Create an asset
                 </a>
@@ -257,7 +257,7 @@ export function CollateralSelector({
                 <p className="text-base text-gray-500 mb-2">No wallets available</p>
                 <a
                   href={ROUTES.DASHBOARD.WALLETS_CREATE}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-sm text-tiffany-600 hover:text-tiffany-700 font-medium"
                 >
                   Create a wallet
                 </a>

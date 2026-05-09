@@ -168,7 +168,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Groups & Governance',
     icon: Users,
-    color: 'text-blue-600',
+    color: 'text-tiffany-600',
     items: [
       {
         question: 'What are Groups?',

@@ -26,9 +26,9 @@ export function FormInfoBanner({ banner }: FormInfoBannerProps) {
       content: 'text-green-700',
     },
     info: {
-      bg: 'bg-blue-50 border-blue-200',
-      title: 'text-blue-900',
-      content: 'text-blue-700',
+      bg: 'bg-tiffany-50 border-tiffany-200',
+      title: 'text-tiffany-900',
+      content: 'text-tiffany-700',
     },
   };
 

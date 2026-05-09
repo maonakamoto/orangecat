@@ -183,9 +183,9 @@ export default function TaskDetailPage() {
             )}
 
             {task.instructions && (
-              <div className="mb-6 bg-blue-50 rounded-lg p-4">
-                <h2 className="text-sm font-medium text-blue-800 mb-2">Instructions</h2>
-                <p className="text-blue-700 whitespace-pre-wrap">{task.instructions}</p>
+              <div className="mb-6 bg-tiffany-50 rounded-lg p-4">
+                <h2 className="text-sm font-medium text-tiffany-800 mb-2">Instructions</h2>
+                <p className="text-tiffany-700 whitespace-pre-wrap">{task.instructions}</p>
               </div>
             )}
 

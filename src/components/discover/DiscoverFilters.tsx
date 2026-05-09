@@ -18,7 +18,7 @@ const STATUS_STYLES = {
     label: 'Paused',
   },
   completed: {
-    selected: 'bg-blue-100 border-blue-300 text-blue-700',
+    selected: 'bg-tiffany-100 border-tiffany-300 text-tiffany-700',
     label: 'Completed',
   },
   cancelled: {

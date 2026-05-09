@@ -58,12 +58,14 @@ export function DuplicateWalletDialog({
         <div className="p-4">
           <div className="space-y-4">
             {/* Current wallet info */}
-            <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="p-3 bg-tiffany-50 rounded-lg border border-tiffany-200">
               <div className="flex items-center gap-2 mb-2">
-                <Plus className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-medium text-blue-900">New wallet you're adding:</span>
+                <Plus className="w-4 h-4 text-tiffany-600" />
+                <span className="text-sm font-medium text-tiffany-900">
+                  New wallet you're adding:
+                </span>
               </div>
-              <div className="text-sm text-blue-800">
+              <div className="text-sm text-tiffany-800">
                 <div className="font-medium">{walletData.label}</div>
                 <div className="text-xs opacity-75 truncate">{walletData.address_or_xpub}</div>
                 <div className="text-xs opacity-75 capitalize">
@@ -118,7 +120,7 @@ export function DuplicateWalletDialog({
                 type="checkbox"
                 checked={dontShowAgain}
                 onChange={e => setDontShowAgain(e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 text-tiffany-600 focus:ring-tiffany-500"
               />
               <span>Don't show this warning again</span>
             </label>

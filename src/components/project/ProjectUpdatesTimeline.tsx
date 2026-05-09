@@ -76,7 +76,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
         return <Trophy className="w-4 h-4 text-yellow-600" />;
       case 'update':
       default:
-        return <MessageSquare className="w-4 h-4 text-blue-600" />;
+        return <MessageSquare className="w-4 h-4 text-tiffany-600" />;
     }
   };
 
@@ -89,7 +89,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
         return 'bg-yellow-100';
       case 'update':
       default:
-        return 'bg-blue-100';
+        return 'bg-tiffany-100';
     }
   };
 

@@ -97,10 +97,10 @@ export function WelcomeStep() {
           </CardContent>
         </Card>
 
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-tiffany-200 bg-tiffany-50">
           <CardHeader className="pb-2 pt-4 px-4">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Users className="h-4 w-4 text-blue-600" />
+              <Users className="h-4 w-4 text-tiffany-600" />
               Any Identity
             </CardTitle>
           </CardHeader>

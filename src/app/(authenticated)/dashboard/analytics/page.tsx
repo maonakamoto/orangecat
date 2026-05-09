@@ -52,7 +52,7 @@ export default function AnalyticsPage() {
         label: 'Active Projects',
         value: activeProjects.length,
         icon: Target,
-        color: 'text-blue-600',
+        color: 'text-tiffany-600',
       },
       { label: 'Total Supporters', value: totalSupporters, icon: Users, color: 'text-tiffany-600' },
       {

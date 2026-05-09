@@ -136,14 +136,14 @@ export function AddKeyStep({
       </Card>
 
       {/* Security Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Shield className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <Shield className="w-5 h-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
           <div>
-            <h4 className="font-semibold text-blue-900 mb-1">
+            <h4 className="font-semibold text-tiffany-900 mb-1">
               {aiOnboardingContent.addKey.whyTitle}
             </h4>
-            <p className="text-sm text-blue-800">{aiOnboardingContent.addKey.whyContent}</p>
+            <p className="text-sm text-tiffany-800">{aiOnboardingContent.addKey.whyContent}</p>
           </div>
         </div>
       </div>

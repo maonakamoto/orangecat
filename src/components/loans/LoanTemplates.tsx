@@ -56,7 +56,7 @@ const templates: LoanTemplate[] = [
   {
     id: 'working-capital',
     name: 'Working Capital (SMB)',
-    icon: <Briefcase className="w-5 h-5 text-blue-600" />,
+    icon: <Briefcase className="w-5 h-5 text-tiffany-600" />,
     data: {
       title: 'Working Capital for Q1 Inventory',
       description:
@@ -164,7 +164,7 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
           </Card>
         ))}
       </div>
-      <div className="text-xs text-blue-800 bg-blue-50 border border-blue-200 rounded-lg p-3">
+      <div className="text-xs text-tiffany-800 bg-tiffany-50 border border-tiffany-200 rounded-lg p-3">
         💡 Templates are starting points. Adjust amounts, rates, and collateral to match the actual
         deal.
       </div>

@@ -52,5 +52,5 @@ export const EXPLORE_OPTIONS = [
 export const EXPLORE_COLOR_CLASSES: Record<string, { bg: string; text: string; border: string }> = {
   orange: { bg: 'bg-orange-50', text: 'text-orange-600', border: 'hover:border-orange-300' },
   tiffany: { bg: 'bg-tiffany-50', text: 'text-tiffany-600', border: 'hover:border-tiffany-300' },
-  blue: { bg: 'bg-blue-50', text: 'text-blue-600', border: 'hover:border-blue-300' },
+  blue: { bg: 'bg-tiffany-50', text: 'text-tiffany-600', border: 'hover:border-tiffany-300' },
 };

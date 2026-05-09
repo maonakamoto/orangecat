@@ -40,7 +40,7 @@ export type ProposalFieldType =
 
 export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, GuidanceContent> = {
   title: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-blue-600' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-tiffany-600' }),
     title: 'Proposal Title',
     description: 'Write a clear, concise title that summarizes what the proposal aims to achieve.',
     tips: [
@@ -59,7 +59,7 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
     ],
   },
   description: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-blue-600' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-tiffany-600' }),
     title: 'Proposal Description',
     description:
       'Provide detailed context, rationale, and expected outcomes. Help members understand why this proposal matters.',
@@ -77,7 +77,7 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
     ],
   },
   proposal_type: {
-    icon: React.createElement(Target, { className: 'w-5 h-5 text-blue-600' }),
+    icon: React.createElement(Target, { className: 'w-5 h-5 text-tiffany-600' }),
     title: 'Proposal Type',
     description:
       'Choose the category that best fits your proposal. This helps organize and filter proposals.',
@@ -97,7 +97,7 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
     ],
   },
   voting_threshold: {
-    icon: React.createElement(Percent, { className: 'w-5 h-5 text-blue-600' }),
+    icon: React.createElement(Percent, { className: 'w-5 h-5 text-tiffany-600' }),
     title: 'Voting Threshold',
     description:
       "The minimum percentage of yes votes required for the proposal to pass. Leave empty to use the group's default threshold.",
@@ -116,7 +116,7 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
     ],
   },
   voting_ends_at: {
-    icon: React.createElement(Calendar, { className: 'w-5 h-5 text-blue-600' }),
+    icon: React.createElement(Calendar, { className: 'w-5 h-5 text-tiffany-600' }),
     title: 'Voting End Date',
     description:
       'When voting should close. Leave empty to use the default (7 days after activation).',
@@ -135,7 +135,7 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
     ],
   },
   is_public: {
-    icon: React.createElement(Globe, { className: 'w-5 h-5 text-blue-600' }),
+    icon: React.createElement(Globe, { className: 'w-5 h-5 text-tiffany-600' }),
     title: 'Public Proposal',
     description:
       'Make this proposal visible to non-members. Useful for job postings and public initiatives.',
@@ -152,7 +152,7 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
     ],
   },
   amount_btc: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-blue-600' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-tiffany-600' }),
     title: 'Amount (BTC)',
     description:
       'The amount to spend in satoshis. 1 BTC = 100,000,000 sats. Be specific and justify the amount.',
@@ -170,7 +170,7 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
     ],
   },
   recipient_address: {
-    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-blue-600' }),
+    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-tiffany-600' }),
     title: 'Recipient Bitcoin Address',
     description:
       'The Bitcoin address where funds will be sent if the proposal passes. Must be a valid Bitcoin address.',
@@ -188,7 +188,7 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
     ],
   },
   wallet_id: {
-    icon: React.createElement(Wallet, { className: 'w-5 h-5 text-blue-600' }),
+    icon: React.createElement(Wallet, { className: 'w-5 h-5 text-tiffany-600' }),
     title: 'Source Wallet',
     description:
       "Optional: Specify which wallet to spend from. Leave empty to use the group's default treasury wallet.",
@@ -211,23 +211,23 @@ export const proposalDefaultGuidance: DefaultGuidance = {
     'Proposals enable democratic decision-making in your group. Create clear, well-reasoned proposals to help members make informed decisions.',
   features: [
     {
-      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-blue-600' }),
+      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-tiffany-600' }),
       text: 'Transparent voting with automatic resolution',
     },
     {
-      icon: React.createElement(Shield, { className: 'w-4 h-4 text-blue-600' }),
+      icon: React.createElement(Shield, { className: 'w-4 h-4 text-tiffany-600' }),
       text: 'Governance-aware thresholds and rules',
     },
     {
-      icon: React.createElement(Lightbulb, { className: 'w-4 h-4 text-blue-600' }),
+      icon: React.createElement(Lightbulb, { className: 'w-4 h-4 text-tiffany-600' }),
       text: 'Action execution when proposals pass',
     },
     {
-      icon: React.createElement(Users, { className: 'w-4 h-4 text-blue-600' }),
+      icon: React.createElement(Users, { className: 'w-4 h-4 text-tiffany-600' }),
       text: 'Member participation and engagement',
     },
     {
-      icon: React.createElement(FileText, { className: 'w-4 h-4 text-blue-600' }),
+      icon: React.createElement(FileText, { className: 'w-4 h-4 text-tiffany-600' }),
       text: 'Clear documentation of group decisions',
     },
   ],

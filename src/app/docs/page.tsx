@@ -122,9 +122,9 @@ export default function DocsPage() {
                 <p className="font-medium text-orange-900 text-sm">No platform fees</p>
                 <p className="text-orange-700 text-xs mt-1">Payments go directly between parties</p>
               </div>
-              <div className="p-4 bg-blue-50 rounded-lg text-center">
-                <p className="font-medium text-blue-900 text-sm">Non-custodial</p>
-                <p className="text-blue-700 text-xs mt-1">OrangeCat never holds your funds</p>
+              <div className="p-4 bg-tiffany-50 rounded-lg text-center">
+                <p className="font-medium text-tiffany-900 text-sm">Non-custodial</p>
+                <p className="text-tiffany-700 text-xs mt-1">OrangeCat never holds your funds</p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg text-center">
                 <p className="font-medium text-green-900 text-sm">Any currency</p>
@@ -186,8 +186,8 @@ export default function DocsPage() {
         {/* Groups & Governance */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-blue-100">
-              <Users className="h-5 w-5 text-blue-600" />
+            <div className="p-2 rounded-lg bg-tiffany-100">
+              <Users className="h-5 w-5 text-tiffany-600" />
             </div>
             <h2 className="text-2xl font-semibold text-gray-900">Groups & Governance</h2>
           </div>

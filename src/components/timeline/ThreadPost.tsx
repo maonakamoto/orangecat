@@ -61,7 +61,7 @@ export function ThreadPost({
       >
         {/* Quote reply indicator */}
         {isQuoteReply && event.quotedContent && (
-          <div className="mb-2 p-3 bg-gray-50 border-l-4 border-blue-400 rounded-r-md">
+          <div className="mb-2 p-3 bg-gray-50 border-l-4 border-tiffany-400 rounded-r-md">
             <div className="text-sm text-gray-600 italic">"{event.quotedContent}"</div>
           </div>
         )}

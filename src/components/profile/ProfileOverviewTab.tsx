@@ -120,7 +120,7 @@ export default function ProfileOverviewTab({
                   href={profile.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline break-all text-sm sm:text-base"
+                  className="text-tiffany-600 hover:underline break-all text-sm sm:text-base"
                 >
                   {profile.website.replace(/^https?:\/\//, '')}
                 </a>
@@ -181,7 +181,7 @@ export default function ProfileOverviewTab({
               {publicContactEmail ? (
                 <a
                   href={`mailto:${publicContactEmail}`}
-                  className="text-blue-600 hover:underline break-all text-sm sm:text-base"
+                  className="text-tiffany-600 hover:underline break-all text-sm sm:text-base"
                 >
                   {publicContactEmail}
                 </a>
@@ -209,7 +209,7 @@ export default function ProfileOverviewTab({
               {profile.phone ? (
                 <a
                   href={`tel:${profile.phone}`}
-                  className="text-blue-600 hover:underline text-sm sm:text-base"
+                  className="text-tiffany-600 hover:underline text-sm sm:text-base"
                 >
                   {profile.phone}
                 </a>

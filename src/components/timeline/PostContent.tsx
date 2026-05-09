@@ -46,7 +46,7 @@ export function PostContent({ event }: PostContentProps) {
         <div className="-mt-1 mb-1 text-xs text-gray-500">
           Replying in a thread ·{' '}
           <button
-            className="text-blue-600 hover:underline"
+            className="text-tiffany-600 hover:underline"
             onClick={() => {
               try {
                 const url = new URL(window.location.href);
@@ -78,7 +78,7 @@ export function PostContent({ event }: PostContentProps) {
           {event.subject && event.subject.url && (
             <Link
               href={event.subject.url}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              className="text-tiffany-600 hover:text-tiffany-800 text-sm font-medium"
             >
               {event.subject.name}
             </Link>
@@ -87,7 +87,7 @@ export function PostContent({ event }: PostContentProps) {
           {event.target && event.target.url && (
             <Link
               href={event.target.url}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              className="text-tiffany-600 hover:text-tiffany-800 text-sm font-medium"
             >
               {event.target.name}
             </Link>
@@ -131,7 +131,7 @@ export function PostContent({ event }: PostContentProps) {
                 Original post
                 <Link
                   href={`?focus=${originalEventId}`}
-                  className="ml-2 text-blue-600 hover:text-blue-800 font-medium"
+                  className="ml-2 text-tiffany-600 hover:text-tiffany-800 font-medium"
                 >
                   View
                 </Link>

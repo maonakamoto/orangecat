@@ -66,8 +66,8 @@ export default function ShareContent({
     {
       name: 'Facebook',
       icon: Facebook,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50 hover:bg-blue-100',
+      color: 'text-tiffany-600',
+      bgColor: 'bg-tiffany-50 hover:bg-tiffany-100',
       action: (shareUrl, shareTitle) => {
         const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareTitle)}`;
         window.open(facebookUrl, '_blank', 'width=550,height=420');
@@ -76,8 +76,8 @@ export default function ShareContent({
     {
       name: 'LinkedIn',
       icon: Linkedin,
-      color: 'text-blue-700',
-      bgColor: 'bg-blue-50 hover:bg-blue-100',
+      color: 'text-tiffany-700',
+      bgColor: 'bg-tiffany-50 hover:bg-tiffany-100',
       action: (shareUrl, shareTitle, shareDescription) => {
         const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}&summary=${encodeURIComponent(shareDescription || '')}`;
         window.open(linkedinUrl, '_blank', 'width=550,height=420');

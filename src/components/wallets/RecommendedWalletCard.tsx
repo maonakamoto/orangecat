@@ -50,7 +50,7 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
             className={cn(
               'text-xs',
               wallet.platform === 'mobile'
-                ? 'bg-blue-50 text-blue-700 border-blue-200'
+                ? 'bg-tiffany-50 text-tiffany-700 border-tiffany-200'
                 : 'bg-tiffany-50 text-tiffany-700 border-tiffany-200'
             )}
           >

@@ -106,7 +106,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
               </div>
               <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-blue-500 transition-all"
+                  className="h-full bg-tiffany-500 transition-all"
                   style={{ width: `${yesPercentage}%` }}
                 />
               </div>

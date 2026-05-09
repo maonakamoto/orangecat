@@ -32,7 +32,7 @@ const WIZARD_THEMES: Record<string, { gradient: string; ring: string; bg: string
   blue: {
     gradient: 'from-blue-500 to-cyan-500',
     ring: 'ring-blue-100',
-    bg: 'bg-blue-500',
+    bg: 'bg-tiffany-500',
   },
   green: {
     gradient: 'from-green-500 to-emerald-500',

@@ -1,11 +1,11 @@
-import * as React from "react"
-import { ReactNode } from 'react'
-import { cn } from '@/lib/utils'
+import * as React from 'react';
+import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface AlertProps {
-  children: ReactNode
-  variant?: 'success' | 'error' | 'warning' | 'info' | 'destructive'
-  className?: string
+  children: ReactNode;
+  variant?: 'success' | 'error' | 'warning' | 'info' | 'destructive';
+  className?: string;
 }
 
 export function Alert({ children, variant = 'info', className }: AlertProps) {
@@ -13,35 +13,25 @@ export function Alert({ children, variant = 'info', className }: AlertProps) {
     success: 'bg-green-50 text-green-800 border-green-200',
     error: 'bg-red-50 text-red-800 border-red-200',
     warning: 'bg-yellow-50 text-yellow-800 border-yellow-200',
-    info: 'bg-blue-50 text-blue-800 border-blue-200',
-    destructive: 'bg-red-50 text-red-800 border-red-200'
-  }
+    info: 'bg-tiffany-50 text-tiffany-800 border-tiffany-200',
+    destructive: 'bg-red-50 text-red-800 border-red-200',
+  };
 
   return (
-    <div
-      className={cn(
-        'p-4 rounded-md border',
-        variants[variant],
-        className
-      )}
-    >
-      {children}
-    </div>
-  )
+    <div className={cn('p-4 rounded-md border', variants[variant], className)}>{children}</div>
+  );
 }
 
 export function AlertTitle({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <h5 className={cn('font-medium leading-none tracking-tight', className)}>
-      {children}
-    </h5>
-  )
+  return <h5 className={cn('font-medium leading-none tracking-tight', className)}>{children}</h5>;
 }
 
-export function AlertDescription({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <div className={cn('text-sm [&_p]:leading-relaxed', className)}>
-      {children}
-    </div>
-  )
-} 
+export function AlertDescription({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <div className={cn('text-sm [&_p]:leading-relaxed', className)}>{children}</div>;
+}

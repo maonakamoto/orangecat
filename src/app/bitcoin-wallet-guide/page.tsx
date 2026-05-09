@@ -60,12 +60,12 @@ export default function BitcoinWalletGuidePage() {
             </div>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-3xl mx-auto">
+          <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-4 max-w-3xl mx-auto">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <AlertTriangle className="w-5 h-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
               <div className="text-left">
-                <h3 className="font-semibold text-blue-900 mb-1">New to Bitcoin?</h3>
-                <p className="text-blue-800 text-sm">
+                <h3 className="font-semibold text-tiffany-900 mb-1">New to Bitcoin?</h3>
+                <p className="text-tiffany-800 text-sm">
                   A Bitcoin wallet is like a digital bank account that lets you receive, store, and
                   send Bitcoin. You control your wallet completely - no bank or company can freeze
                   your funds.

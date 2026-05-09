@@ -87,7 +87,7 @@ function getStrengthLevel(strength: number): {
     return { label: 'Fair', colorClass: 'text-yellow-600', bgClass: 'bg-yellow-500' };
   }
   if (strength < 100) {
-    return { label: 'Good', colorClass: 'text-blue-600', bgClass: 'bg-blue-500' };
+    return { label: 'Good', colorClass: 'text-tiffany-600', bgClass: 'bg-tiffany-500' };
   }
   return { label: 'Strong', colorClass: 'text-green-600', bgClass: 'bg-green-500' };
 }

@@ -124,7 +124,7 @@ export default function JobsPage() {
                       </CardDescription>
                     )}
                   </div>
-                  <Badge variant="default" className="bg-blue-500">
+                  <Badge variant="default" className="bg-tiffany-500">
                     Active
                   </Badge>
                 </div>

@@ -26,7 +26,6 @@ import type { ReactNode } from 'react';
 
 // Color theme → Tailwind class mapping
 const THEME_CLASSES: Record<string, { bg: string; icon: string; text: string }> = {
-  blue: { bg: 'bg-blue-100', icon: 'text-blue-600', text: 'text-blue-600' },
   tiffany: { bg: 'bg-tiffany-100', icon: 'text-tiffany-600', text: 'text-tiffany-600' },
   rose: { bg: 'bg-rose-100', icon: 'text-rose-600', text: 'text-rose-600' },
   orange: { bg: 'bg-orange-100', icon: 'text-orange-600', text: 'text-orange-600' },
@@ -34,8 +33,7 @@ const THEME_CLASSES: Record<string, { bg: string; icon: string; text: string }> 
 };
 
 const GRADIENT_CLASSES: Record<string, string> = {
-  blue: 'from-blue-50/50 via-white to-tiffany-50/30',
-  tiffany: 'from-tiffany-50/50 via-white to-blue-50/30',
+  tiffany: 'from-tiffany-50/50 via-white to-orange-50/30',
   rose: 'from-rose-50/50 via-white to-tiffany-50/30',
   orange: 'from-orange-50/50 via-white to-tiffany-50/30',
   green: 'from-green-50/50 via-white to-tiffany-50/30',

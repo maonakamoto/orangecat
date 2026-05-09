@@ -123,21 +123,21 @@ export default async function StatusPage() {
         </div>
 
         {/* Contact */}
-        <div className="bg-blue-50 rounded-lg p-6">
+        <div className="bg-tiffany-50 rounded-lg p-6">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <AlertTriangle className="w-5 h-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="text-lg font-semibold text-blue-900 mb-1">Experiencing Issues?</h3>
-              <p className="text-blue-700 mb-4">
+              <h3 className="text-lg font-semibold text-tiffany-900 mb-1">Experiencing Issues?</h3>
+              <p className="text-tiffany-700 mb-4">
                 If you&apos;re experiencing problems, check our FAQ or reach out to support.
               </p>
               <div className="flex gap-4">
-                <Link href="/faq" className="text-blue-600 hover:text-blue-800 font-medium">
+                <Link href="/faq" className="text-tiffany-600 hover:text-tiffany-800 font-medium">
                   Visit FAQ →
                 </Link>
                 <a
                   href="mailto:support@orangecat.ch"
-                  className="text-blue-600 hover:text-blue-800 font-medium"
+                  className="text-tiffany-600 hover:text-tiffany-800 font-medium"
                 >
                   Contact Support →
                 </a>

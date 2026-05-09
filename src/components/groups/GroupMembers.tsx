@@ -67,7 +67,7 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
       case STATUS.GROUP_MEMBERS.FOUNDER:
         return <Crown className="h-4 w-4 text-yellow-600" />;
       case STATUS.GROUP_MEMBERS.ADMIN:
-        return <Shield className="h-4 w-4 text-blue-600" />;
+        return <Shield className="h-4 w-4 text-tiffany-600" />;
       default:
         return <User className="h-4 w-4 text-gray-600" />;
     }

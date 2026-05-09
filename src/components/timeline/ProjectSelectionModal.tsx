@@ -79,7 +79,7 @@ export default function ProjectSelectionModal({
                 <div className="text-sm text-gray-500">Post to your timeline</div>
               </div>
             </div>
-            <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full bg-tiffany-500 flex items-center justify-center">
               <Check className="w-4 h-4 text-white" />
             </div>
           </button>

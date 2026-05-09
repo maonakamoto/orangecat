@@ -65,8 +65,8 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       label: 'Requests',
       value: formatNumber(usage.totalRequests),
       icon: MessageSquare,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100',
+      color: 'text-tiffany-600',
+      bgColor: 'bg-tiffany-100',
     },
     {
       label: 'Tokens',

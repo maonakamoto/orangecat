@@ -56,8 +56,8 @@ export function GetStartedStep({
 
         <QuickActionButton
           onClick={() => onQuickAction(ENTITY_REGISTRY.wallet.basePath)}
-          iconBg="bg-blue-100"
-          iconColor="text-blue-600"
+          iconBg="bg-tiffany-100"
+          iconColor="text-tiffany-600"
           icon={Wallet}
           title="Add a wallet"
           description="Connect your Bitcoin wallet to receive funding"

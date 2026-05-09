@@ -50,7 +50,7 @@ export const PROPOSAL_STATUS_CONFIG: Record<
   [PROPOSAL_STATUSES.ACTIVE]: {
     label: 'Active',
     badgeVariant: 'default',
-    className: 'bg-blue-500',
+    className: 'bg-tiffany-500',
   },
   [PROPOSAL_STATUSES.PASSED]: {
     label: 'Passed',

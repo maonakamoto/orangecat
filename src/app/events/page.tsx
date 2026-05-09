@@ -139,7 +139,7 @@ export default function EventsPage() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <Card key={index} className="p-6 text-center">
-              <feature.icon className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+              <feature.icon className="w-12 h-12 text-tiffany-500 mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
               <p className="text-gray-600">{feature.description}</p>
             </Card>
@@ -158,7 +158,7 @@ export default function EventsPage() {
               <ul className="text-gray-600 space-y-2">
                 {type.examples.map((example, i) => (
                   <li key={i} className="flex items-center text-sm">
-                    <Check className="w-4 h-4 text-blue-500 mr-2 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-tiffany-500 mr-2 flex-shrink-0" />
                     {example}
                   </li>
                 ))}
@@ -176,7 +176,7 @@ export default function EventsPage() {
             <div className="space-y-4">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start">
-                  <Check className="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" />
+                  <Check className="w-5 h-5 text-tiffany-500 mr-3 mt-0.5 flex-shrink-0" />
                   <span className="text-gray-700">{benefit}</span>
                 </div>
               ))}
@@ -184,22 +184,22 @@ export default function EventsPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Card className="p-6 text-center">
-              <Bitcoin className="w-8 h-8 text-blue-500 mx-auto mb-3" />
+              <Bitcoin className="w-8 h-8 text-tiffany-500 mx-auto mb-3" />
               <div className="text-2xl font-bold text-gray-900">0%</div>
               <div className="text-sm text-gray-600">Processing Fees</div>
             </Card>
             <Card className="p-6 text-center">
-              <Zap className="w-8 h-8 text-blue-500 mx-auto mb-3" />
+              <Zap className="w-8 h-8 text-tiffany-500 mx-auto mb-3" />
               <div className="text-2xl font-bold text-gray-900">&lt; 2min</div>
               <div className="text-sm text-gray-600">Ticket Setup</div>
             </Card>
             <Card className="p-6 text-center">
-              <Users className="w-8 h-8 text-blue-500 mx-auto mb-3" />
+              <Users className="w-8 h-8 text-tiffany-500 mx-auto mb-3" />
               <div className="text-2xl font-bold text-gray-900">Global</div>
               <div className="text-sm text-gray-600">Attendee Reach</div>
             </Card>
             <Card className="p-6 text-center">
-              <QrCode className="w-8 h-8 text-blue-500 mx-auto mb-3" />
+              <QrCode className="w-8 h-8 text-tiffany-500 mx-auto mb-3" />
               <div className="text-2xl font-bold text-gray-900">Instant</div>
               <div className="text-sm text-gray-600">Check-in</div>
             </Card>
@@ -212,8 +212,8 @@ export default function EventsPage() {
         <h2 className="text-2xl font-semibold text-center mb-12">How Event Organization Works</h2>
         <div className="grid md:grid-cols-4 gap-6">
           <div className="text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-bold text-blue-600">1</span>
+            <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-tiffany-600">1</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Create Your Event</h3>
             <p className="text-gray-600">
@@ -221,8 +221,8 @@ export default function EventsPage() {
             </p>
           </div>
           <div className="text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-bold text-blue-600">2</span>
+            <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-tiffany-600">2</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Promote & Sell</h3>
             <p className="text-gray-600">
@@ -230,8 +230,8 @@ export default function EventsPage() {
             </p>
           </div>
           <div className="text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-bold text-blue-600">3</span>
+            <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-tiffany-600">3</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Manage Attendees</h3>
             <p className="text-gray-600">
@@ -239,8 +239,8 @@ export default function EventsPage() {
             </p>
           </div>
           <div className="text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-bold text-blue-600">4</span>
+            <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-tiffany-600">4</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Run the Event</h3>
             <p className="text-gray-600">
@@ -262,7 +262,7 @@ export default function EventsPage() {
             <Button
               onClick={handleGetStarted}
               size="lg"
-              className="bg-blue-500 hover:bg-blue-600 text-white"
+              className="bg-tiffany-500 hover:bg-tiffany-600 text-white"
             >
               Create Your Event
               <ArrowRight className="ml-2 h-5 w-5" />

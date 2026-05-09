@@ -202,9 +202,9 @@ export function ThreadContext({
 
       {/* Current Post Highlight */}
       {currentPost && (
-        <div className="p-4 bg-blue-50 border-t border-gray-100">
-          <div className="flex items-center gap-2 text-sm text-blue-700">
-            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+        <div className="p-4 bg-tiffany-50 border-t border-gray-100">
+          <div className="flex items-center gap-2 text-sm text-tiffany-700">
+            <div className="w-2 h-2 bg-tiffany-500 rounded-full"></div>
             Currently viewing: {currentPost.actor.name}'s post
           </div>
         </div>
@@ -250,6 +250,3 @@ export function ThreadIndicator({
     </div>
   );
 }
-
-
-

@@ -30,7 +30,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
         <p className="text-gray-600 mb-3">
           This will help people understand who you are and what you're about.
         </p>
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-tiffany-50 text-tiffany-700 text-xs rounded-full">
           <span>💡</span>
           <span>Only username is required - everything else is optional</span>
         </div>

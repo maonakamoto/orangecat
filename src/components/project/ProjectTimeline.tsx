@@ -68,9 +68,9 @@ export default function ProjectTimeline({
       )}
 
       {!user && (
-        <Card className="bg-blue-50 border-blue-200">
+        <Card className="bg-tiffany-50 border-tiffany-200">
           <CardContent className="p-4">
-            <p className="text-sm text-blue-700">
+            <p className="text-sm text-tiffany-700">
               <strong>Want to post updates?</strong> Sign in to share progress about this project.
             </p>
           </CardContent>

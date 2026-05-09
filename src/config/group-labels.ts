@@ -152,7 +152,7 @@ export type GroupLabel = keyof typeof GROUP_LABELS;
 export const GROUP_LABEL_ICON_CLASSES: Record<string, string> = {
   tiffany: 'text-tiffany-500',
   amber: 'text-amber-500',
-  blue: 'text-blue-500',
+  blue: 'text-tiffany-500',
   slate: 'text-gray-500',
   rose: 'text-rose-500',
   green: 'text-green-500',
