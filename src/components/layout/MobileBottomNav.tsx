@@ -57,17 +57,17 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
   const navItems = isAuthenticated
     ? [
         {
+          icon: Cat,
+          label: 'My Cat',
+          href: ROUTES.DASHBOARD.CAT,
+          active: pathname?.startsWith(ROUTES.DASHBOARD.CAT),
+        },
+        {
           icon: Home,
           label: 'Dashboard',
           href: ROUTES.DASHBOARD.HOME,
           active:
             pathname === ROUTES.DASHBOARD.HOME || pathname.startsWith(`${ROUTES.DASHBOARD.HOME}/`),
-        },
-        {
-          icon: BookOpen,
-          label: 'Timeline',
-          href: ROUTES.TIMELINE,
-          active: pathname?.startsWith(ROUTES.TIMELINE),
         },
         {
           icon: Plus,
@@ -78,10 +78,10 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
           createAction, // Pass the action for the click handler
         },
         {
-          icon: Cat,
-          label: 'My Cat',
-          href: ROUTES.DASHBOARD.CAT,
-          active: pathname?.startsWith(ROUTES.DASHBOARD.CAT),
+          icon: BookOpen,
+          label: 'Timeline',
+          href: ROUTES.TIMELINE,
+          active: pathname?.startsWith(ROUTES.TIMELINE),
         },
         {
           icon: User,
