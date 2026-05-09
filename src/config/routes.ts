@@ -204,45 +204,45 @@ export const ROUTES = {
 
   // Project routes
   PROJECTS: {
-    LIST: '/projects',
-    CREATE: '/projects/create',
-    VIEW: (id: string) => `/projects/${id}`,
-    EDIT: (id: string) => `/projects/create?edit=${id}`, // Reuse create page with edit param
+    LIST: ENTITY_REGISTRY['project'].publicBasePath,
+    CREATE: ENTITY_REGISTRY['project'].createPath,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['project'].publicBasePath}/${id}`,
+    EDIT: (id: string) => `${ENTITY_REGISTRY['project'].createPath}?edit=${id}`,
   },
 
   // Public entity routes
   PRODUCTS: {
-    VIEW: (id: string) => `/products/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['product'].publicBasePath}/${id}`,
   },
   SERVICES: {
-    VIEW: (id: string) => `/services/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['service'].publicBasePath}/${id}`,
   },
   CAUSES: {
-    VIEW: (id: string) => `/causes/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['cause'].publicBasePath}/${id}`,
   },
   LOANS: {
-    VIEW: (id: string) => `/loans/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['loan'].publicBasePath}/${id}`,
   },
   INVESTMENTS: {
-    VIEW: (id: string) => `/investments/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['investment'].publicBasePath}/${id}`,
   },
   EVENTS: {
-    VIEW: (id: string) => `/events/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['event'].publicBasePath}/${id}`,
   },
   WISHLISTS: {
-    VIEW: (id: string) => `/wishlists/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['wishlist'].publicBasePath}/${id}`,
   },
   RESEARCH: {
-    VIEW: (id: string) => `/research/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['research'].publicBasePath}/${id}`,
   },
   AI_ASSISTANTS: {
-    VIEW: (id: string) => `/ai-assistants/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['ai_assistant'].publicBasePath}/${id}`,
   },
   ASSETS: {
-    VIEW: (id: string) => `/assets/${id}`,
+    VIEW: (id: string) => `${ENTITY_REGISTRY['asset'].publicBasePath}/${id}`,
   },
   GROUPS: {
-    VIEW: (slug: string) => `/groups/${slug}`,
+    VIEW: (slug: string) => `${ENTITY_REGISTRY['group'].publicBasePath}/${slug}`,
   },
 
   // Dashboard routes
