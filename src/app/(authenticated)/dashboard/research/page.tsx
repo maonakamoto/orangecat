@@ -24,34 +24,12 @@ import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';
 import { PROJECT_STATUS, VALID_PROJECT_STATUSES } from '@/config/project-statuses';
-import { RESEARCH_FIELDS, type ResearchField } from '@/config/research';
-
-const FIELD_COLORS: Record<ResearchField, string> = {
-  fundamental_physics: 'bg-purple-100 text-purple-800',
-  mathematics: 'bg-orange-100 text-orange-800',
-  computer_science: 'bg-blue-100 text-blue-800',
-  biology: 'bg-green-100 text-green-800',
-  chemistry: 'bg-teal-100 text-teal-800',
-  neuroscience: 'bg-violet-100 text-violet-800',
-  psychology: 'bg-rose-100 text-rose-800',
-  economics: 'bg-amber-100 text-amber-800',
-  philosophy: 'bg-slate-100 text-slate-800',
-  engineering: 'bg-indigo-100 text-indigo-800',
-  medicine: 'bg-red-100 text-red-800',
-  environmental_science: 'bg-emerald-100 text-emerald-800',
-  social_science: 'bg-sky-100 text-sky-800',
-  artificial_intelligence: 'bg-pink-100 text-pink-800',
-  blockchain_cryptography: 'bg-yellow-100 text-yellow-800',
-  other: 'bg-gray-100 text-gray-800',
-};
-
-const STATUS_COLORS: Record<string, string> = {
-  [PROJECT_STATUS.ACTIVE]: 'bg-green-500',
-  [PROJECT_STATUS.DRAFT]: 'bg-yellow-500',
-  [PROJECT_STATUS.COMPLETED]: 'bg-blue-500',
-  [PROJECT_STATUS.PAUSED]: 'bg-orange-500',
-  [PROJECT_STATUS.CANCELLED]: 'bg-red-500',
-};
+import {
+  RESEARCH_FIELDS,
+  RESEARCH_FIELD_COLORS,
+  RESEARCH_STATUS_DOT_COLORS,
+  type ResearchField,
+} from '@/config/research';
 
 export default function ResearchDashboard() {
   const router = useRouter();
@@ -239,7 +217,11 @@ export default function ResearchDashboard() {
                       {entity.description}
                     </CardDescription>
                   </div>
-                  <Badge className={STATUS_COLORS[entity.status || 'draft'] ?? 'bg-gray-500'}>
+                  <Badge
+                    className={
+                      RESEARCH_STATUS_DOT_COLORS[entity.status || 'draft'] ?? 'bg-gray-500'
+                    }
+                  >
                     {entity.status || 'draft'}
                   </Badge>
                 </div>
@@ -247,7 +229,8 @@ export default function ResearchDashboard() {
               <CardContent className="space-y-4">
                 <Badge
                   className={
-                    FIELD_COLORS[entity.field as ResearchField] ?? 'bg-gray-100 text-gray-800'
+                    RESEARCH_FIELD_COLORS[entity.field as ResearchField] ??
+                    'bg-gray-100 text-gray-800'
                   }
                 >
                   {RESEARCH_FIELDS.find(f => f.value === entity.field)?.label ??
