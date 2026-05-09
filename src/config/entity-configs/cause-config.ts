@@ -138,10 +138,9 @@ export const causeConfig = createEntityConfig<UserCauseFormData>({
   backUrl: ENTITY_REGISTRY['cause'].basePath,
   successUrl: `${ENTITY_REGISTRY['cause'].basePath}/[id]`,
   pageTitle: 'Create Cause',
-  pageDescription: 'Start a charitable fundraising campaign',
+  pageDescription: 'Start a cause — no-strings funding for what matters',
   formTitle: 'Cause Details',
-  formDescription:
-    'Fill in the information for your charitable cause. Be clear about how funds will be used.',
+  formDescription: 'Fill in the information for your cause. Be clear about how funds will be used.',
   fieldGroups,
   validationSchema: userCauseSchema,
   defaultValues,

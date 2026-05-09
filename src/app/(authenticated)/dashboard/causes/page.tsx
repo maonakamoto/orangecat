@@ -7,7 +7,7 @@ import type { UserCause } from '@/types/database';
 /**
  * Causes Dashboard Page
  *
- * Create and manage charitable fundraising campaigns.
+ * Create and manage causes — no-strings funding for what matters.
  *
  * Created: 2025-01-27
  * Last Modified: 2025-01-03
@@ -18,7 +18,7 @@ export default function CausesPage() {
     <EntityDashboardPage<UserCause>
       config={causeEntityConfig}
       title="My Causes"
-      description="Create and manage charitable fundraising campaigns"
+      description="Create and manage causes — no-strings funding for what matters"
       createButtonLabel="Create Cause"
     />
   );

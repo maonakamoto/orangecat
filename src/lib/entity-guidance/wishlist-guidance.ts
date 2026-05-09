@@ -68,8 +68,7 @@ export const wishlistGuidanceContent: Record<NonNullable<WishlistFieldType>, Gui
   description: {
     icon: React.createElement(FileText, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Description',
-    description:
-      'Tell contributors about your wishlist. What is it for? Why does it matter?',
+    description: 'Tell contributors about your wishlist. What is it for? Why does it matter?',
     tips: [
       'Share the story or occasion',
       'Explain how contributions will be used',
@@ -93,7 +92,7 @@ export const wishlistGuidanceContent: Record<NonNullable<WishlistFieldType>, Gui
       'Graduation - for graduates',
       'Travel - for trip funding',
       'Personal - for personal goals',
-      'Charity - for charitable causes',
+      'Cause - for causes and community support',
     ],
     examples: [
       'Wedding - traditional gift registry',
@@ -104,8 +103,7 @@ export const wishlistGuidanceContent: Record<NonNullable<WishlistFieldType>, Gui
   visibility: {
     icon: React.createElement(Eye, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Visibility',
-    description:
-      'Control who can see your wishlist.',
+    description: 'Control who can see your wishlist.',
     tips: [
       'Public - anyone can find and view',
       'Unlisted - only people with the link',
@@ -121,8 +119,7 @@ export const wishlistGuidanceContent: Record<NonNullable<WishlistFieldType>, Gui
   event_date: {
     icon: React.createElement(Calendar, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Event Date',
-    description:
-      'Optional: Set a date for your event (wedding, birthday, etc.) to create urgency.',
+    description: 'Optional: Set a date for your event (wedding, birthday, etc.) to create urgency.',
     tips: [
       'Helps contributors know when to give by',
       'Creates a sense of occasion',
@@ -138,8 +135,7 @@ export const wishlistGuidanceContent: Record<NonNullable<WishlistFieldType>, Gui
   cover_image_url: {
     icon: React.createElement(Image, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Cover Image',
-    description:
-      'Add a cover image to make your wishlist more personal and appealing.',
+    description: 'Add a cover image to make your wishlist more personal and appealing.',
     tips: [
       'Use a relevant, high-quality image',
       'Personal photos work well',
@@ -154,7 +150,10 @@ export const wishlistGuidanceContent: Record<NonNullable<WishlistFieldType>, Gui
   },
 };
 
-export const wishlistItemGuidanceContent: Record<NonNullable<WishlistItemFieldType>, GuidanceContent> = {
+export const wishlistItemGuidanceContent: Record<
+  NonNullable<WishlistItemFieldType>,
+  GuidanceContent
+> = {
   title: {
     icon: React.createElement(Gift, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Item Title',
@@ -174,8 +173,7 @@ export const wishlistItemGuidanceContent: Record<NonNullable<WishlistItemFieldTy
   description: {
     icon: React.createElement(FileText, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Item Description',
-    description:
-      'Explain why you want this item and how it will be used.',
+    description: 'Explain why you want this item and how it will be used.',
     tips: [
       'Share why this item matters to you',
       'Explain how you will use it',
@@ -189,8 +187,7 @@ export const wishlistItemGuidanceContent: Record<NonNullable<WishlistItemFieldTy
   target_amount_btc: {
     icon: React.createElement(Target, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Target Amount',
-    description:
-      'Set the total amount needed for this item in satoshis.',
+    description: 'Set the total amount needed for this item in satoshis.',
     tips: [
       'Research the actual price',
       'Include shipping if applicable',
@@ -206,8 +203,7 @@ export const wishlistItemGuidanceContent: Record<NonNullable<WishlistItemFieldTy
   external_url: {
     icon: React.createElement(Link, { className: 'w-5 h-5 text-rose-600' }),
     title: 'External URL',
-    description:
-      'Link to the item on an external website (Amazon, Etsy, any store).',
+    description: 'Link to the item on an external website (Amazon, Etsy, any store).',
     tips: [
       'Use the direct product URL',
       'Check that the link works',
@@ -223,41 +219,30 @@ export const wishlistItemGuidanceContent: Record<NonNullable<WishlistItemFieldTy
   external_source: {
     icon: React.createElement(Link, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Source',
-    description:
-      'Where is this item from? Helps contributors understand context.',
+    description: 'Where is this item from? Helps contributors understand context.',
     tips: [
       'Amazon, Etsy, local store, etc.',
       'Use "custom" for unique items',
       'Helps with transparency',
     ],
-    examples: [
-      'amazon',
-      'etsy',
-      'local_store',
-      'custom',
-    ],
+    examples: ['amazon', 'etsy', 'local_store', 'custom'],
   },
   use_dedicated_wallet: {
     icon: React.createElement(Wallet, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Dedicated Wallet',
-    description:
-      'Choose whether contributions go to a dedicated address or your main wallet.',
+    description: 'Choose whether contributions go to a dedicated address or your main wallet.',
     tips: [
       'Dedicated wallet = separate tracking',
       'Main wallet = simpler management',
       'Use dedicated for large items',
       'Main wallet is fine for most items',
     ],
-    examples: [
-      'Dedicated wallet for house down payment',
-      'Main wallet for small birthday gifts',
-    ],
+    examples: ['Dedicated wallet for house down payment', 'Main wallet for small birthday gifts'],
   },
   dedicated_wallet_address: {
     icon: React.createElement(Wallet, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Wallet Address',
-    description:
-      'If using a dedicated wallet, provide the Bitcoin address.',
+    description: 'If using a dedicated wallet, provide the Bitcoin address.',
     tips: [
       'Use a fresh address for this item',
       'Double-check the address',
@@ -272,25 +257,19 @@ export const wishlistItemGuidanceContent: Record<NonNullable<WishlistItemFieldTy
   priority: {
     icon: React.createElement(Target, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Priority',
-    description:
-      'Set priority to sort items in your wishlist. Higher = more wanted.',
+    description: 'Set priority to sort items in your wishlist. Higher = more wanted.',
     tips: [
       'Higher numbers appear first',
       'Use for items you want most',
       'Help contributors choose',
       '0 = normal priority',
     ],
-    examples: [
-      '10 = highest priority item',
-      '5 = medium priority',
-      '0 = nice to have',
-    ],
+    examples: ['10 = highest priority item', '5 = medium priority', '0 = nice to have'],
   },
   allow_partial_funding: {
     icon: React.createElement(ThumbsUp, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Partial Funding',
-    description:
-      'Allow contributors to fund part of the item cost.',
+    description: 'Allow contributors to fund part of the item cost.',
     tips: [
       'Enabled by default',
       'Good for expensive items',
@@ -305,18 +284,13 @@ export const wishlistItemGuidanceContent: Record<NonNullable<WishlistItemFieldTy
   quantity_wanted: {
     icon: React.createElement(Gift, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Quantity',
-    description:
-      'How many of this item do you want? Default is 1.',
+    description: 'How many of this item do you want? Default is 1.',
     tips: [
       'Set higher for consumables',
       'Useful for multiples (towels, plates)',
       'Keep at 1 for unique items',
     ],
-    examples: [
-      '1 for a laptop',
-      '4 for a set of wine glasses',
-      '12 for monthly subscriptions',
-    ],
+    examples: ['1 for a laptop', '4 for a set of wine glasses', '12 for monthly subscriptions'],
   },
 };
 

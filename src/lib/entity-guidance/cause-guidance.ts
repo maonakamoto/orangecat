@@ -173,7 +173,7 @@ export const causeGuidanceContent: Record<NonNullable<CauseFieldType>, GuidanceC
 export const causeDefaultGuidance: DefaultGuidance = {
   title: 'What is a Cause?',
   description:
-    'Causes are charitable fundraisers for meaningful purposes. Education, healthcare, environment, or community - raise Bitcoin for what matters.',
+    'Causes are no-strings funding for meaningful purposes. Education, healthcare, environment, or community — raise funding for what matters.',
   features: [
     {
       icon: React.createElement(Heart, { className: 'w-4 h-4 text-rose-600' }),

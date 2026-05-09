@@ -275,7 +275,7 @@ const charityTemplates: WishlistTemplate[] = [
   {
     id: 'charity-instead',
     name: 'Charity in Lieu of Gifts',
-    tagline: 'Redirect gifts to charitable causes',
+    tagline: 'Redirect gifts to causes you care about',
     icon: React.createElement(HandHeart, { className: 'w-4 h-4' }),
     defaults: {
       title: 'Support Charity Instead',
