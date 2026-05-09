@@ -125,6 +125,13 @@ const simplifiedSections: NavSection[] = [
     requiresAuth: false,
     items: [
       {
+        name: 'My Cat',
+        href: ROUTES.DASHBOARD.CAT,
+        icon: Cat,
+        description: 'Your AI agent',
+        requiresAuth: true,
+      },
+      {
         name: 'Home',
         href: '/dashboard',
         icon: Home,
@@ -143,13 +150,6 @@ const simplifiedSections: NavSection[] = [
         href: '/messages',
         icon: MessageSquare,
         description: 'Private messages',
-        requiresAuth: true,
-      },
-      {
-        name: 'My Cat',
-        href: ROUTES.DASHBOARD.CAT,
-        icon: Cat,
-        description: 'AI assistant',
         requiresAuth: true,
       },
       {
