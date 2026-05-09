@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
 
 export const metadata: Metadata = {
-  title: 'About OrangeCat',
+  title: 'About',
   description:
     'OrangeCat is your AI economic agent — buy, sell, fund, lend, invest, and govern with any identity, in any currency, without gatekeepers.',
 };

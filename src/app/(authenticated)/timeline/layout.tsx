@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'My Timeline - OrangeCat',
+  title: 'My Timeline',
   description:
     'Share your personal timeline, achievements, and updates with the OrangeCat community.',
   keywords: ['bitcoin', 'timeline', 'achievements', 'community', 'economic agent'],

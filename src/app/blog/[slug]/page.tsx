@@ -128,12 +128,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!post) {
     return {
-      title: 'Post Not Found - OrangeCat Blog',
+      title: 'Post Not Found',
     };
   }
 
   return {
-    title: `${post.title} - OrangeCat Blog`,
+    title: post.title,
     description: post.excerpt,
     openGraph: {
       title: post.title,

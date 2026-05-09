@@ -26,10 +26,9 @@ export function generateEntityMetadata({
   const url = `${BASE_URL}${entityMeta.publicBasePath}/${id}`;
   const image = imageUrl || '/images/og-default.png';
   const desc = description || `${title} on OrangeCat - Bitcoin-native marketplace.`;
-  const fullTitle = `${title} | OrangeCat`;
 
   return {
-    title: fullTitle,
+    title,
     description: desc,
     alternates: { canonical: url },
     openGraph: {

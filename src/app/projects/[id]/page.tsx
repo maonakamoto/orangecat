@@ -107,7 +107,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : 0;
 
   const creatorName = creatorProfile?.name || creatorProfile?.username || 'Creator';
-  const title = `${project.title} | OrangeCat`;
+  const title = project.title;
   const description =
     project.description ||
     `Support ${project.title} on OrangeCat. ${progress > 0 ? `${progress}% funded. ` : ''}Community-funded project by ${creatorName}.`;

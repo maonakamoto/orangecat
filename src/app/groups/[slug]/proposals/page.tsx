@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `Proposals - ${g.name} | OrangeCat`,
+    title: `Proposals - ${g.name}`,
     description: `View and vote on proposals for ${g.name}`,
   };
 }

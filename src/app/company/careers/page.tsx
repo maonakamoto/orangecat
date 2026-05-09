@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
 
 export const metadata: Metadata = {
-  title: 'Careers at OrangeCat - Join Our Mission',
+  title: 'Careers — Join Our Mission',
   description:
     'Work with us to build universal economic participation. Join OrangeCat and help anyone — any identity, any currency — earn, fund, invest, and govern freely.',
 };
