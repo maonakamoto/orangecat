@@ -274,11 +274,11 @@ const housewarmingTemplates: WishlistTemplate[] = [
 const charityTemplates: WishlistTemplate[] = [
   {
     id: 'charity-instead',
-    name: 'Charity in Lieu of Gifts',
+    name: 'Give to a Cause Instead',
     tagline: 'Redirect gifts to causes you care about',
     icon: React.createElement(HandHeart, { className: 'w-4 h-4' }),
     defaults: {
-      title: 'Support Charity Instead',
+      title: 'Support a Cause Instead',
       type: 'charity',
       description: 'Instead of gifts for me, please consider supporting these causes I care about.',
       visibility: 'public',
@@ -829,7 +829,7 @@ export const WISHLIST_TEMPLATE_CATEGORIES = {
   'Baby & Parenting': babyTemplates,
   Graduation: graduationTemplates,
   Housewarming: housewarmingTemplates,
-  Charity: charityTemplates,
+  Causes: charityTemplates,
   Travel: travelTemplates,
   Personal: personalTemplates,
   General: generalTemplates,
