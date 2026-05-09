@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
+import { WISHLIST_TYPES } from '@/config/wishlists';
 import { optionalText, optionalUrl } from './base';
 
 // =============================================================================
@@ -12,19 +13,7 @@ export const wishlistSchema = z.object({
     .min(3, 'Title must be at least 3 characters')
     .max(100, 'Title must be at most 100 characters'),
   description: optionalText(1000),
-  type: z
-    .enum([
-      'birthday',
-      'wedding',
-      'baby_shower',
-      'graduation',
-      'housewarming',
-      'charity',
-      'travel',
-      'personal',
-      'general',
-    ])
-    .default('general'),
+  type: z.enum(WISHLIST_TYPES.map(t => t.value) as [string, ...string[]]).default('general'),
   visibility: z.enum(['public', 'unlisted', 'private']).default('public'),
   event_date: z.string().or(z.date()).optional().nullable(),
   cover_image_url: optionalUrl(),

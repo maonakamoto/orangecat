@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
+import { EVENT_TYPES } from '@/config/events';
 import { DAYS_OF_WEEK } from '@/config/schedule';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
@@ -30,18 +31,7 @@ export const eventSchema = z
       .max(100, 'Title must be at most 100 characters'),
     description: optionalText(2000),
     category: optionalText(50),
-    event_type: z
-      .enum([
-        'meetup',
-        'conference',
-        'workshop',
-        'party',
-        'exhibition',
-        'festival',
-        'retreat',
-        'other',
-      ])
-      .default('meetup'),
+    event_type: z.enum(EVENT_TYPES.map(t => t.value) as [string, ...string[]]).default('meetup'),
     tags: z.array(z.string()).optional().default([]),
 
     // Date & Time
