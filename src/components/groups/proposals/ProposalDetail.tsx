@@ -159,7 +159,7 @@ export function ProposalDetail({
   return (
     <div className="space-y-6">
       {/* Back Button */}
-      <Link href={`/groups/${groupSlug}`}>
+      <Link href={`${ENTITY_REGISTRY['group'].publicBasePath}/${groupSlug}`}>
         <Button variant="outline" size="sm">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Group
