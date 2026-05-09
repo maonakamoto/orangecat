@@ -56,7 +56,7 @@ export function CatSettingsTab() {
       {/* AI Model Selection */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center gap-2">
-          <Bot className="h-4 w-4 text-indigo-600" />
+          <Bot className="h-4 w-4 text-gray-600" />
           <span className="text-sm font-semibold text-gray-900">AI Model</span>
         </div>
         <div className="p-4 space-y-3">
@@ -72,24 +72,24 @@ export function CatSettingsTab() {
                 disabled={aiLoading}
                 className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
                   isSelected
-                    ? 'border-indigo-500 bg-indigo-50'
+                    ? 'border-gray-700 bg-gray-50'
                     : 'border-gray-200 hover:border-gray-300 bg-white'
                 }`}
               >
-                <div className={`p-2 rounded-lg ${isSelected ? 'bg-indigo-100' : 'bg-gray-100'}`}>
-                  <Icon className={`h-4 w-4 ${isSelected ? 'text-indigo-600' : 'text-gray-500'}`} />
+                <div className={`p-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'bg-gray-100'}`}>
+                  <Icon className={`h-4 w-4 ${isSelected ? 'text-gray-700' : 'text-gray-500'}`} />
                 </div>
                 <div className="flex-1 text-left">
                   <p
                     className={`text-sm font-medium ${
-                      isSelected ? 'text-indigo-900' : 'text-gray-900'
+                      isSelected ? 'text-gray-900' : 'text-gray-900'
                     }`}
                   >
                     {tier.name}
                   </p>
                   <p className="text-sm text-gray-500">{tier.description}</p>
                 </div>
-                {isSelected && <Check className="h-5 w-5 text-indigo-600" />}
+                {isSelected && <Check className="h-5 w-5 text-gray-700" />}
               </button>
             );
           })}
@@ -138,7 +138,7 @@ export function CatSettingsTab() {
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-purple-600" />
+            <Shield className="h-4 w-4 text-gray-600" />
             <span className="text-sm font-semibold text-gray-900">Permissions</span>
           </div>
           {permissions && (
@@ -189,7 +189,7 @@ export function CatSettingsTab() {
       {/* Link to full settings */}
       <Link
         href="/settings/ai"
-        className="block text-center text-sm text-indigo-600 hover:text-indigo-800 py-2"
+        className="block text-center text-sm text-gray-600 hover:text-gray-800 py-2"
       >
         View all AI settings
       </Link>
