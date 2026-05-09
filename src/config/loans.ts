@@ -28,6 +28,15 @@ export const LOAN_FULFILLMENT_TYPES = [
 
 export type LoanFulfillmentType = (typeof LOAN_FULFILLMENT_TYPES)[number]['value'];
 
+// ==================== OFFER TYPES ====================
+
+export const LOAN_OFFER_TYPES = [
+  { value: 'refinance', label: 'Refinance - Lower rate, better terms' },
+  { value: 'payoff', label: 'Payoff - Pay off the loan completely' },
+] as const;
+
+export type LoanOfferType = (typeof LOAN_OFFER_TYPES)[number]['value'];
+
 // ==================== DERIVED LOOKUP MAPS ====================
 
 export const LOAN_CATEGORY_LABELS: Record<string, string> = Object.fromEntries(
