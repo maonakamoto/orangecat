@@ -70,7 +70,7 @@ export default async function WishlistDetailPage({ params }: PageProps) {
   const headerActions = (
     <div className="flex items-center gap-2">
       {(wishlist.visibility === 'public' || wishlist.visibility === 'unlisted') && (
-        <Link href={`/wishlists/${id}`} target="_blank">
+        <Link href={`${ENTITY_REGISTRY['wishlist'].publicBasePath}/${id}`} target="_blank">
           <Button variant="outline" size="sm">
             <ExternalLink className="w-4 h-4 mr-1" />
             View Public Page

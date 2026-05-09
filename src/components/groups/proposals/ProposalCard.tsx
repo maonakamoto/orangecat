@@ -18,6 +18,7 @@ import { formatRelativeTime } from '@/utils/dates';
 import { Clock, CheckCircle2, XCircle } from 'lucide-react';
 import { getStatusBadge, getStatusIcon, getTypeLabel } from './utils';
 import { PROPOSAL_STATUSES, type ProposalStatus } from '@/config/proposal-constants';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 interface ProposalCardProps {
   proposal: {
@@ -148,7 +149,9 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
             )}
 
           <div className="pt-2">
-            <Link href={`/groups/${proposal.groupSlug}/proposals/${proposal.id}`}>
+            <Link
+              href={`${ENTITY_REGISTRY['group'].publicBasePath}/${proposal.groupSlug}/proposals/${proposal.id}`}
+            >
               <Button variant="outline" className="w-full">
                 View Details
               </Button>

@@ -15,6 +15,7 @@ import EntityCard from '@/components/entity/EntityCard';
 import { Users } from 'lucide-react';
 import type { Group, GroupWithRelations } from '@/types/group';
 import { GROUP_LABELS, type GroupLabel } from '@/config/group-labels';
+import { ROUTES } from '@/config/routes';
 
 interface GroupCardProps {
   group: Group | GroupWithRelations;
@@ -35,9 +36,7 @@ export function GroupCard({ group, onClick, className }: GroupCardProps) {
         <Users className="h-4 w-4" />
         <span>{memberCount ?? 0} members</span>
       </div>
-      {group.tags && group.tags.length > 0 && (
-        <span className="text-xs">{group.tags[0]}</span>
-      )}
+      {group.tags && group.tags.length > 0 && <span className="text-xs">{group.tags[0]}</span>}
     </div>
   );
 
@@ -47,7 +46,7 @@ export function GroupCard({ group, onClick, className }: GroupCardProps) {
       title={group.name}
       description={group.description || undefined}
       thumbnailUrl={group.avatar_url || undefined}
-      href={`/groups/${group.slug}`}
+      href={ROUTES.GROUPS.VIEW(group.slug)}
       badge={labelConfig?.name || 'Group'}
       badgeVariant={group.is_public ? 'default' : 'info'}
       metadata={metadata}

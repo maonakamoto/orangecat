@@ -9,6 +9,7 @@
  */
 
 import supabase from '@/lib/supabase/browser';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { logger } from '@/utils/logger';
 import type { TimelineDisplayEvent, TimelineEventDb, TimelineActorType } from '@/types/timeline';
 import {
@@ -94,7 +95,7 @@ export function transformEnrichedEventToDisplay(event: EnrichedEventRow): Timeli
           url:
             event.subject_data.type === 'profile'
               ? `/profiles/${event.subject_data.username || event.subject_data.id}`
-              : `/projects/${event.subject_data.id}`,
+              : `${ENTITY_REGISTRY['project'].publicBasePath}/${event.subject_data.id}`,
         }
       : undefined,
     target: event.target_data
@@ -108,7 +109,7 @@ export function transformEnrichedEventToDisplay(event: EnrichedEventRow): Timeli
           url:
             event.target_data.type === 'profile'
               ? `/profiles/${event.target_data.username || event.target_data.id}`
-              : `/projects/${event.target_data.id}`,
+              : `${ENTITY_REGISTRY['project'].publicBasePath}/${event.target_data.id}`,
         }
       : undefined,
     formattedAmount: formatAmount(timelineEvent),

@@ -19,6 +19,7 @@ import { Briefcase, MapPin, Clock, Building2, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { formatRelativeTime } from '@/utils/dates';
 import { API_ROUTES } from '@/config/api-routes';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 export default function JobsPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -109,7 +110,10 @@ export default function JobsPage() {
                     {job.groups && (
                       <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
                         <Building2 className="h-4 w-4" />
-                        <Link href={`/groups/${job.groups.slug}`} className="hover:underline">
+                        <Link
+                          href={`${ENTITY_REGISTRY['group'].publicBasePath}/${job.groups.slug}`}
+                          className="hover:underline"
+                        >
                           {job.groups.name}
                         </Link>
                       </div>
@@ -139,7 +143,9 @@ export default function JobsPage() {
                       {formatRelativeTime(job.created_at)}
                     </div>
                   </div>
-                  <Link href={`/groups/${job.groups?.slug}/proposals/${job.id}`}>
+                  <Link
+                    href={`${ENTITY_REGISTRY['group'].publicBasePath}/${job.groups?.slug}/proposals/${job.id}`}
+                  >
                     <Button>View Details</Button>
                   </Link>
                 </div>

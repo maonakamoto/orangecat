@@ -63,7 +63,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
   const handleSwitchToGroup = (group: GroupContextInfo) => {
     switchToGroup(group);
     setIsOpen(false);
-    router.push(`/groups/${group.slug}`);
+    router.push(ROUTES.GROUPS.VIEW(group.slug));
   };
 
   const displayName = isGroupContext

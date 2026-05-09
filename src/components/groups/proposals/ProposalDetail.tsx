@@ -26,6 +26,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { getStatusBadge, getTypeLabel } from './utils';
 import { PROPOSAL_STATUSES, type ProposalStatus } from '@/config/proposal-constants';
 import type { Proposal } from '@/services/groups/queries/proposals';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 interface ProposalDetailProps {
   proposalId: string;
@@ -144,7 +145,7 @@ export function ProposalDetail({
       <Card>
         <CardContent className="py-12 text-center">
           <p className="text-gray-500">Proposal not found</p>
-          <Link href={`/groups/${groupSlug}`}>
+          <Link href={`${ENTITY_REGISTRY['group'].publicBasePath}/${groupSlug}`}>
             <Button variant="outline" className="mt-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Group

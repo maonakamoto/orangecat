@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useGroupDetail } from './useGroupDetail';
 import { GroupDetailSidebar } from './GroupDetailSidebar';
 import { GroupDetailTabs } from './GroupDetailTabs';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 interface GroupDetailProps {
   groupSlug: string;
@@ -54,7 +55,7 @@ export function GroupDetail({ groupSlug }: GroupDetailProps) {
   }
 
   const headerActions = isOwner ? (
-    <Link href={`/groups/${group.slug}/settings`}>
+    <Link href={`${ENTITY_REGISTRY['group'].publicBasePath}/${group.slug}/settings`}>
       <Button variant="outline">
         <Settings className="h-4 w-4 mr-2" />
         Settings

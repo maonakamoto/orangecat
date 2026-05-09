@@ -90,7 +90,7 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
           {projects.slice(0, 6).map(project => (
             <ProjectCard
               key={project.id}
-              href={`/projects/${project.id}`}
+              href={`${ENTITY_REGISTRY['project'].publicBasePath}/${project.id}`}
               project={
                 {
                   ...project,

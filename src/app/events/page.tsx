@@ -22,6 +22,7 @@ import {
   Music,
 } from 'lucide-react';
 import { BADGE_COLORS } from '@/config/badge-colors';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 export default function EventsPage() {
   const _router = useRouter();
@@ -114,9 +115,9 @@ export default function EventsPage() {
 
   const handleGetStarted = () => {
     if (session) {
-      _router.push('/events/create');
+      _router.push(`${ENTITY_REGISTRY['event'].publicBasePath}/create`);
     } else {
-      _router.push('/auth?mode=login&redirect=/events/create');
+      _router.push(`/auth?mode=login&redirect=${ENTITY_REGISTRY['event'].publicBasePath}/create`);
     }
   };
 

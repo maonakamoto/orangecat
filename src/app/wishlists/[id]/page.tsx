@@ -283,7 +283,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                 entityTitle={wishlist.title}
                 sellerProfileId={owner?.id ?? null}
                 sellerUserId={owner?.user_id ?? null}
-                signInRedirect={`/wishlists/${id}`}
+                signInRedirect={`${ENTITY_REGISTRY['wishlist'].publicBasePath}/${id}`}
               />
             </div>
           </div>

@@ -10,7 +10,7 @@
 
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
-import { getTableName } from '@/config/entity-registry';
+import { getTableName, ENTITY_REGISTRY } from '@/config/entity-registry';
 import type {
   TimelineDisplayEvent,
   TimelineActorType,
@@ -70,7 +70,7 @@ export async function getSubjectInfo(
         id,
         name: project?.title || 'Unknown Project',
         type: 'project',
-        url: `/projects/${id}`,
+        url: `${ENTITY_REGISTRY['project'].publicBasePath}/${id}`,
       };
     case 'profile':
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -18,6 +18,7 @@ import Link from 'next/link';
 import type { GroupEvent } from '@/services/groups/types';
 import { STATUS } from '@/config/database-constants';
 import { formatDate, formatShortTime } from '@/utils/dates';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 interface EventCardProps {
   event: GroupEvent & {
@@ -90,7 +91,7 @@ export function EventCard({ event, groupSlug, onUpdate: _onUpdate }: EventCardPr
           {event.is_public && <Badge variant="secondary">Public</Badge>}
         </div>
 
-        <Link href={`/groups/${groupSlug}/events/${event.id}`}>
+        <Link href={`${ENTITY_REGISTRY['group'].publicBasePath}/${groupSlug}/events/${event.id}`}>
           <Button variant="outline" className="w-full mt-2">
             View Details
           </Button>
