@@ -13,6 +13,7 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import PublicEntityOwnerCard from '@/components/public/PublicEntityOwnerCard';
 import EntityShare from '@/components/sharing/EntityShare';
 import { PublicEntityPaymentSection } from '@/components/payment';
+import { WISHLIST_TYPE_LABELS } from '@/config/wishlists';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -43,16 +44,6 @@ interface Wishlist {
   created_at: string;
   updated_at: string;
 }
-
-const TYPE_LABELS: Record<string, string> = {
-  birthday: 'Birthday',
-  wedding: 'Wedding',
-  baby_shower: 'Baby Shower',
-  graduation: 'Graduation',
-  holiday: 'Holiday',
-  general: 'General',
-  personal: 'Personal',
-};
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
@@ -152,7 +143,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{wishlist.title}</h1>
                 <div className="flex items-center gap-3 mt-2">
                   <Badge variant="secondary" className="capitalize">
-                    {TYPE_LABELS[wishlist.type] || wishlist.type}
+                    {WISHLIST_TYPE_LABELS[wishlist.type] || wishlist.type}
                   </Badge>
                   {wishlist.event_date && (
                     <span className="text-sm text-gray-500">

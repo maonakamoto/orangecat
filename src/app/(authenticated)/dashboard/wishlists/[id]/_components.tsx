@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/Button';
+import { WISHLIST_TYPE_LABELS } from '@/config/wishlists';
 
 export interface WishlistWithStats {
   id: string;
@@ -38,16 +39,6 @@ export interface WishlistItem {
   priority: number;
   created_at: string;
 }
-
-const TYPE_LABELS: Record<string, string> = {
-  birthday: 'Birthday',
-  wedding: 'Wedding',
-  baby_shower: 'Baby Shower',
-  graduation: 'Graduation',
-  holiday: 'Holiday',
-  general: 'General',
-  personal: 'Personal',
-};
 
 export function WishlistItemCard({
   item,
@@ -171,7 +162,7 @@ export function WishlistDetailsSidebar({ wishlist }: { wishlist: WishlistWithSta
           <div>
             <div className="text-gray-500">Type</div>
             <div className="font-medium capitalize">
-              {TYPE_LABELS[wishlist.type] || wishlist.type}
+              {WISHLIST_TYPE_LABELS[wishlist.type] || wishlist.type}
             </div>
           </div>
           <div>
