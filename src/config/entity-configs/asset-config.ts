@@ -170,7 +170,7 @@ export const assetConfig = createEntityConfig<AssetFormData>({
   name: 'Asset',
   namePlural: 'Assets',
   icon: Briefcase,
-  colorTheme: 'blue',
+  colorTheme: 'tiffany',
   backUrl: '/assets',
   successUrl: '/assets/[id]',
   pageTitle: 'Create Asset',

@@ -219,7 +219,7 @@ export const loanConfig = createEntityConfig<LoanFormData>({
   name: 'Loan',
   namePlural: 'Loans',
   icon: DollarSign,
-  colorTheme: 'blue',
+  colorTheme: 'tiffany',
   backUrl: ENTITY_REGISTRY['loan'].basePath,
   successUrl: `${ENTITY_REGISTRY['loan'].basePath}/[id]`,
   pageTitle: 'Create Loan Listing',

@@ -350,7 +350,7 @@ export const eventConfig = createEntityConfig<EventFormData>({
   name: 'Event',
   namePlural: 'Events',
   icon: Calendar,
-  colorTheme: 'blue',
+  colorTheme: 'tiffany',
   backUrl: ENTITY_REGISTRY['event'].basePath,
   successUrl: `${ENTITY_REGISTRY['event'].basePath}/[id]`,
   pageTitle: 'Create Event',

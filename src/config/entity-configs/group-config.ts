@@ -134,7 +134,7 @@ export const groupConfig = createEntityConfig<CreateGroupSchemaType>({
   name: 'Group',
   namePlural: 'Groups',
   icon: Users,
-  colorTheme: 'blue',
+  colorTheme: 'tiffany',
   backUrl: '/groups',
   successUrl: '/groups/[slug]',
   pageTitle: 'Create Group',

@@ -417,7 +417,6 @@ export const COLOR_CLASSES: Record<EntityMetadata['colorTheme'], { text: string;
   orange: { text: 'text-orange-600', bg: 'bg-orange-50' },
   tiffany: { text: 'text-tiffany-600', bg: 'bg-tiffany-50' },
   rose: { text: 'text-rose-600', bg: 'bg-rose-50' },
-  blue: { text: 'text-tiffany-600', bg: 'bg-tiffany-50' },
   green: { text: 'text-green-600', bg: 'bg-green-50' },
 };
 

@@ -104,8 +104,8 @@ export default async function PublicEntityDetailPage({
   config: EntityDetailConfig;
 }) {
   const meta = getEntityMetadata(config.entityType);
-  const theme = THEME_CLASSES[meta.colorTheme] || THEME_CLASSES.blue;
-  const gradient = GRADIENT_CLASSES[meta.colorTheme] || GRADIENT_CLASSES.blue;
+  const theme = THEME_CLASSES[meta.colorTheme] || THEME_CLASSES.tiffany;
+  const gradient = GRADIENT_CLASSES[meta.colorTheme] || GRADIENT_CLASSES.tiffany;
   const Icon = meta.icon;
 
   const supabase = await createServerClient();

@@ -101,7 +101,7 @@ export interface BaseConfigOptions<T extends Record<string, any>> {
   /** Entity icon */
   icon: LucideIcon;
   /** Primary color theme */
-  colorTheme: 'orange' | 'tiffany' | 'rose' | 'blue' | 'green';
+  colorTheme: 'orange' | 'tiffany' | 'rose' | 'green';
   /** Back link URL */
   backUrl: string;
   /** Success redirect URL */
