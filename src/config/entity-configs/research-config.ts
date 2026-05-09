@@ -2,45 +2,33 @@ import { EntityConfig } from '@/types/entity';
 import { ResearchEntity } from '@/types/research';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { z } from 'zod';
+import {
+  RESEARCH_FIELDS,
+  METHODOLOGIES,
+  TIMELINES,
+  FUNDING_MODELS,
+  PROGRESS_FREQUENCIES,
+  TRANSPARENCY_LEVELS,
+} from '@/config/research';
+
+// Derive Zod enum values from the SSOT arrays in research.ts
+const researchFieldValues = RESEARCH_FIELDS.map(f => f.value) as [string, ...string[]];
+const methodologyValues = METHODOLOGIES.map(m => m.value) as [string, ...string[]];
+const timelineValues = TIMELINES.map(t => t.value) as [string, ...string[]];
+const fundingModelValues = FUNDING_MODELS.map(f => f.value) as [string, ...string[]];
+const progressFrequencyValues = PROGRESS_FREQUENCIES.map(p => p.value) as [string, ...string[]];
+const transparencyLevelValues = TRANSPARENCY_LEVELS.map(t => t.value) as [string, ...string[]];
 
 // Research entity validation schema
 export const researchEntitySchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().min(1).max(2000),
-  field: z.enum([
-    'fundamental_physics',
-    'mathematics',
-    'computer_science',
-    'biology',
-    'chemistry',
-    'neuroscience',
-    'psychology',
-    'economics',
-    'philosophy',
-    'engineering',
-    'medicine',
-    'environmental_science',
-    'social_science',
-    'artificial_intelligence',
-    'blockchain_cryptography',
-    'other',
-  ]),
-  methodology: z.enum([
-    'theoretical',
-    'experimental',
-    'computational',
-    'empirical',
-    'qualitative',
-    'mixed_methods',
-    'meta_analysis',
-    'survey',
-    'case_study',
-    'action_research',
-  ]),
+  field: z.enum(researchFieldValues),
+  methodology: z.enum(methodologyValues),
   expected_outcome: z.string().min(1).max(1000),
-  timeline: z.enum(['short_term', 'medium_term', 'long_term', 'ongoing', 'indefinite']),
+  timeline: z.enum(timelineValues),
   funding_goal_btc: z.number().positive('Funding goal must be greater than 0'),
-  funding_model: z.enum(['donation', 'subscription', 'milestone', 'royalty', 'hybrid']),
+  funding_model: z.enum(fundingModelValues),
   resource_needs: z
     .array(
       z.object({
@@ -72,8 +60,8 @@ export const researchEntitySchema = z.object({
     )
     .optional(),
   open_collaboration: z.boolean().optional(),
-  progress_frequency: z.enum(['weekly', 'biweekly', 'monthly', 'milestone', 'as_needed']),
-  transparency_level: z.enum(['full', 'progress', 'milestone', 'minimal']),
+  progress_frequency: z.enum(progressFrequencyValues),
+  transparency_level: z.enum(transparencyLevelValues),
   voting_enabled: z.boolean().optional(),
   impact_areas: z
     .array(
@@ -160,42 +148,14 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
       label: 'Research Field',
       type: 'select',
       required: true,
-      options: [
-        { value: 'fundamental_physics', label: 'Fundamental Physics' },
-        { value: 'mathematics', label: 'Mathematics' },
-        { value: 'computer_science', label: 'Computer Science' },
-        { value: 'biology', label: 'Biology' },
-        { value: 'chemistry', label: 'Chemistry' },
-        { value: 'neuroscience', label: 'Neuroscience' },
-        { value: 'psychology', label: 'Psychology' },
-        { value: 'economics', label: 'Economics' },
-        { value: 'philosophy', label: 'Philosophy' },
-        { value: 'engineering', label: 'Engineering' },
-        { value: 'medicine', label: 'Medicine' },
-        { value: 'environmental_science', label: 'Environmental Science' },
-        { value: 'social_science', label: 'Social Science' },
-        { value: 'artificial_intelligence', label: 'Artificial Intelligence' },
-        { value: 'blockchain_cryptography', label: 'Blockchain & Cryptography' },
-        { value: 'other', label: 'Other' },
-      ],
+      options: [...RESEARCH_FIELDS],
     },
     {
       name: 'methodology',
       label: 'Research Methodology',
       type: 'select',
       required: true,
-      options: [
-        { value: 'theoretical', label: 'Theoretical Research' },
-        { value: 'experimental', label: 'Experimental Research' },
-        { value: 'computational', label: 'Computational Research' },
-        { value: 'empirical', label: 'Empirical Research' },
-        { value: 'qualitative', label: 'Qualitative Research' },
-        { value: 'mixed_methods', label: 'Mixed Methods' },
-        { value: 'meta_analysis', label: 'Meta-Analysis' },
-        { value: 'survey', label: 'Survey Research' },
-        { value: 'case_study', label: 'Case Study' },
-        { value: 'action_research', label: 'Action Research' },
-      ],
+      options: [...METHODOLOGIES],
     },
     {
       name: 'expected_outcome',
@@ -210,13 +170,7 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
       label: 'Research Timeline',
       type: 'select',
       required: true,
-      options: [
-        { value: 'short_term', label: 'Short-term (3-6 months)' },
-        { value: 'medium_term', label: 'Medium-term (6-18 months)' },
-        { value: 'long_term', label: 'Long-term (1-3 years)' },
-        { value: 'ongoing', label: 'Ongoing Research' },
-        { value: 'indefinite', label: 'Indefinite/Exploratory' },
-      ],
+      options: [...TIMELINES],
     },
   ],
 
@@ -229,24 +183,18 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
       fields: [
         {
           name: 'funding_goal_btc',
-          label: 'Funding Goal (sats)',
+          label: 'Funding Goal (BTC)',
           type: 'number',
           required: true,
           placeholder: 'How much BTC do you need to complete this research?',
-          min: 1000, // Minimum 1000 sats
+          min: 0.00001, // Minimum ~1000 sats
         },
         {
           name: 'funding_model',
           label: 'Funding Model',
           type: 'select',
           required: true,
-          options: [
-            { value: 'donation', label: 'Funding-based (pure support)' },
-            { value: 'subscription', label: 'Subscription (ongoing support)' },
-            { value: 'milestone', label: 'Milestone-based (progress payments)' },
-            { value: 'royalty', label: 'Royalty-share (revenue sharing)' },
-            { value: 'hybrid', label: 'Hybrid (multiple models)' },
-          ],
+          options: [...FUNDING_MODELS],
         },
         {
           name: 'resource_needs',
@@ -313,25 +261,14 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
           label: 'Progress Update Frequency',
           type: 'select',
           required: true,
-          options: [
-            { value: 'weekly', label: 'Weekly Updates' },
-            { value: 'biweekly', label: 'Bi-weekly Updates' },
-            { value: 'monthly', label: 'Monthly Updates' },
-            { value: 'milestone', label: 'Milestone-based Updates' },
-            { value: 'as_needed', label: 'As-needed Updates' },
-          ],
+          options: [...PROGRESS_FREQUENCIES],
         },
         {
           name: 'transparency_level',
           label: 'Transparency Level',
           type: 'select',
           required: true,
-          options: [
-            { value: 'full', label: 'Full Transparency (all findings public)' },
-            { value: 'progress', label: 'Progress Updates (methods/results shared)' },
-            { value: 'milestone', label: 'Milestone Updates (key achievements)' },
-            { value: 'minimal', label: 'Minimal Updates (basic status)' },
-          ],
+          options: [...TRANSPARENCY_LEVELS],
         },
         {
           name: 'voting_enabled',
@@ -423,8 +360,8 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
     custom: [
       {
         field: 'funding_goal_btc',
-        rule: (value: unknown) => typeof value === 'number' && value >= 1000,
-        message: 'Funding goal must be at least 1,000',
+        rule: (value: unknown) => typeof value === 'number' && value >= 0.00001,
+        message: 'Funding goal must be at least 0.00001 BTC (~1,000 sats)',
       },
       {
         field: 'team_members',
