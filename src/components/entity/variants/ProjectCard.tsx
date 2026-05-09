@@ -13,6 +13,7 @@
 import { EntityCard, EntityCardProps } from '@/components/entity/EntityCard';
 import { Badge } from '@/components/ui/badge';
 import { PROJECT_STATUSES } from '@/config/project-statuses';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import BTCAmountDisplay from '@/components/ui/BTCAmountDisplay';
 import type { SearchFundingPage } from '@/services/search';
@@ -131,7 +132,7 @@ export function ProjectCard({
       title={project.title || 'Untitled Project'}
       description={compact ? null : project.description || null}
       thumbnailUrl={project.cover_image_url || project.banner_url || undefined}
-      href={props.href || `/projects/${project.id}`}
+      href={props.href || `${ENTITY_REGISTRY['project'].publicBasePath}/${project.id}`}
       headerSlot={statusBadge}
       progressSlot={progressSlot}
       metricsSlot={metricsSlot}
