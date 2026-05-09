@@ -17,6 +17,7 @@ import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { LoanCollateralField } from '@/components/create/collateral/LoanCollateralField';
 import { WalletSelectorField } from '@/components/create/wallet-selector';
+import { LOAN_CATEGORIES, LOAN_FULFILLMENT_TYPES } from '@/config/loans';
 
 // ==================== FIELD GROUPS ====================
 
@@ -173,25 +174,14 @@ const fieldGroups: FieldGroup[] = [
         name: 'loan_category_id',
         label: 'Loan Category',
         type: 'select',
-        options: [
-          { value: 'personal', label: 'Personal Loan' },
-          { value: 'business', label: 'Business Loan' },
-          { value: 'education', label: 'Education Loan' },
-          { value: 'home_improvement', label: 'Home Improvement' },
-          { value: 'debt_consolidation', label: 'Debt Consolidation' },
-          { value: 'emergency', label: 'Emergency Loan' },
-          { value: 'other', label: 'Other' },
-        ],
+        options: [...LOAN_CATEGORIES],
         hint: 'Choose the category that best describes your loan purpose',
       },
       {
         name: 'fulfillment_type',
         label: 'Fulfillment Type',
         type: 'select',
-        options: [
-          { value: 'manual', label: 'Manual Repayment' },
-          { value: 'automatic', label: 'Automatic Deduction' },
-        ],
+        options: [...LOAN_FULFILLMENT_TYPES],
         hint: 'How you prefer to make loan repayments',
       },
     ],

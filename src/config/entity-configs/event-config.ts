@@ -16,22 +16,7 @@ import { EVENT_TEMPLATES, type EventTemplate } from '@/components/create/templat
 import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { WalletSelectorField } from '@/components/create/wallet-selector';
-
-// ==================== CONSTANTS ====================
-
-const EVENT_CATEGORIES = [
-  'Social',
-  'Business',
-  'Education',
-  'Arts & Culture',
-  'Technology',
-  'Sports & Fitness',
-  'Food & Drink',
-  'Music',
-  'Networking',
-  'Community',
-  'Other',
-];
+import { EVENT_TYPES, EVENT_CATEGORIES } from '@/config/events';
 
 // ==================== FIELD GROUPS ====================
 
@@ -62,16 +47,7 @@ const fieldGroups: FieldGroup[] = [
         label: 'Event Type',
         type: 'select',
         required: true,
-        options: [
-          { value: 'meetup', label: 'Meetup' },
-          { value: 'conference', label: 'Conference' },
-          { value: 'workshop', label: 'Workshop' },
-          { value: 'party', label: 'Party' },
-          { value: 'exhibition', label: 'Exhibition' },
-          { value: 'festival', label: 'Festival' },
-          { value: 'retreat', label: 'Retreat' },
-          { value: 'other', label: 'Other' },
-        ],
+        options: [...EVENT_TYPES],
       },
       {
         name: 'category',

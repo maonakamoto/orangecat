@@ -20,6 +20,7 @@ import type { FieldGroup } from '@/components/create/types';
 import { WISHLIST_TEMPLATES, type WishlistTemplate } from '@/components/create/templates';
 import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { WISHLIST_TYPES } from '@/config/wishlists';
 
 // ==================== FIELD GROUPS ====================
 
@@ -58,17 +59,7 @@ const fieldGroups: FieldGroup[] = [
         label: 'Type',
         type: 'select',
         required: true,
-        options: [
-          { value: 'birthday', label: 'Birthday' },
-          { value: 'wedding', label: 'Wedding' },
-          { value: 'baby_shower', label: 'Baby Shower' },
-          { value: 'graduation', label: 'Graduation' },
-          { value: 'housewarming', label: 'Housewarming' },
-          { value: 'charity', label: 'Cause' },
-          { value: 'travel', label: 'Travel' },
-          { value: 'personal', label: 'Personal' },
-          { value: 'general', label: 'General' },
-        ],
+        options: [...WISHLIST_TYPES],
         colSpan: 1,
       },
       {
