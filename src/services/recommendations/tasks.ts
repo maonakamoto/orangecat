@@ -123,7 +123,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     id: 'chat-with-cat',
     title: 'Ask My Cat what to create first',
     description:
-      'My Cat is your personal AI assistant — describe your goals and it will suggest the right first step',
+      'My Cat is your AI economic agent — describe your goals and it will suggest the right first step',
     priority: 'high',
     category: 'setup',
     action: { label: 'Open My Cat', href: '/dashboard/cat' },

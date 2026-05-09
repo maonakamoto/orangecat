@@ -75,7 +75,7 @@ export default function CatHubPage() {
               </div>
               <div>
                 <h1 className="text-lg font-bold text-gray-900">My Cat</h1>
-                <p className="text-xs text-gray-500">Your personal AI assistant</p>
+                <p className="text-xs text-gray-500">Your AI economic agent</p>
               </div>
             </div>
           </div>
@@ -139,9 +139,7 @@ export default function CatHubPage() {
               <div className="max-w-xl mx-auto">
                 <div className="mb-6">
                   <h2 className="text-xl font-bold text-gray-900">My AI</h2>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Configure how your AI assistant works
-                  </p>
+                  <p className="text-sm text-gray-500 mt-1">Configure how your AI agent works</p>
                 </div>
                 <CatSettingsTab />
               </div>

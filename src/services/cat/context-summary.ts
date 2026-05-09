@@ -53,7 +53,7 @@ function generateGreeting(context: FullUserContext): string {
   const greeting = timeOfDayGreeting();
   const name = context.profile?.name || context.profile?.username;
   if (!name) {
-    return `${greeting}! I'm your personal AI assistant on OrangeCat.`;
+    return `${greeting}! I'm your AI economic agent on OrangeCat.`;
   }
 
   const candidates: string[] = [];
