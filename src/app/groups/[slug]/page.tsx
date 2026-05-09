@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { data: group } = await supabase
     .from(DATABASE_TABLES.GROUPS)
-    .select('name, description, visibility, member_count')
+    .select('name, description, visibility')
     .eq('slug', slug)
     .single();
 
@@ -38,19 +38,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     name: string;
     description: string | null;
     visibility: string;
-    member_count: number | null;
   } | null;
   if (!g) {
     return {
-      title: 'Group Not Found | OrangeCat',
+      title: 'Group Not Found',
       description: 'The group you are looking for does not exist.',
     };
   }
 
-  const title = `${g.name} | OrangeCat`;
-  const description =
-    g.description ||
-    `Join ${g.name} on OrangeCat. ${g.member_count ? `${g.member_count} members.` : ''} Bitcoin community group.`;
+  const title = g.name;
+  const description = g.description || `Join ${g.name} on OrangeCat. Bitcoin community group.`;
   const url = `https://orangecat.ch/groups/${slug}`;
 
   return {

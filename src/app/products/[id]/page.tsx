@@ -29,9 +29,7 @@ const config: EntityDetailConfig = {
           <CardTitle className="text-lg">Price</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-bold text-blue-600">
-            {displayBTC(entity.price_btc)}
-          </p>
+          <p className="text-2xl font-bold text-blue-600">{displayBTC(entity.price_btc)}</p>
         </CardContent>
       </Card>
     ) : null,
@@ -42,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const product = await fetchEntityForMetadata('product', id);
   if (!product) {
     return {
-      title: 'Product Not Found | OrangeCat',
+      title: 'Product Not Found',
       description: 'The product you are looking for does not exist.',
     };
   }

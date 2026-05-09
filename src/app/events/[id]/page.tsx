@@ -90,7 +90,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   );
   if (!event) {
     return {
-      title: 'Event Not Found | OrangeCat',
+      title: 'Event Not Found',
       description: 'The event you are looking for does not exist.',
     };
   }

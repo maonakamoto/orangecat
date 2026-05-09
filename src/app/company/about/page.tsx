@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
 
 export const metadata: Metadata = {
-  title: 'About BitBaum | OrangeCat',
+  title: 'About BitBaum',
   description:
     'Learn about BitBaum AG, the Swiss company behind OrangeCat — building open economic infrastructure for the Bitcoin era.',
 };

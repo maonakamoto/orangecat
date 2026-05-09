@@ -160,7 +160,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const asset = await fetchEntityForMetadata('asset', id, 'title, description');
   if (!asset) {
     return {
-      title: 'Asset Not Found | OrangeCat',
+      title: 'Asset Not Found',
       description: 'The asset you are looking for does not exist.',
     };
   }

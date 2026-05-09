@@ -19,7 +19,9 @@ const config: EntityDetailConfig = {
   metadataSelect: 'title, description, avatar_url',
   getViewRoute: id => ROUTES.AI_ASSISTANTS.VIEW(id),
   renderHeaderExtra: entity => {
-    if (!entity.category) { return null; }
+    if (!entity.category) {
+      return null;
+    }
     return (
       <Badge variant="outline" className="capitalize">
         {entity.category}
@@ -28,7 +30,9 @@ const config: EntityDetailConfig = {
   },
   renderDetails: entity => {
     const tags: string[] = Array.isArray(entity.tags) ? entity.tags : [];
-    const traits: string[] = Array.isArray(entity.personality_traits) ? entity.personality_traits : [];
+    const traits: string[] = Array.isArray(entity.personality_traits)
+      ? entity.personality_traits
+      : [];
     const welcome = entity.welcome_message as string | null | undefined;
 
     return (
@@ -55,7 +59,9 @@ const config: EntityDetailConfig = {
                   <p className="text-sm text-gray-500 mb-2">Tags</p>
                   <div className="flex flex-wrap gap-2">
                     {tags.map(tag => (
-                      <Badge key={tag} variant="secondary">{tag}</Badge>
+                      <Badge key={tag} variant="secondary">
+                        {tag}
+                      </Badge>
                     ))}
                   </div>
                 </div>
@@ -65,7 +71,9 @@ const config: EntityDetailConfig = {
                   <p className="text-sm text-gray-500 mb-2">Personality</p>
                   <div className="flex flex-wrap gap-2">
                     {traits.map(trait => (
-                      <Badge key={trait} variant="outline">{trait}</Badge>
+                      <Badge key={trait} variant="outline">
+                        {trait}
+                      </Badge>
                     ))}
                   </div>
                 </div>
@@ -81,7 +89,9 @@ const config: EntityDetailConfig = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const entity = await fetchEntityForMetadata('ai_assistant', id, 'title, description, avatar_url');
-  if (!entity) { return { title: 'AI Assistant Not Found | OrangeCat' }; }
+  if (!entity) {
+    return { title: 'AI Assistant Not Found' };
+  }
   return generateEntityMetadata({
     type: 'ai_assistant',
     id,

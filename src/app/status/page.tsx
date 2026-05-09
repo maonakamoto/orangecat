@@ -4,7 +4,7 @@ import { checkHealth } from '@/lib/health';
 import type { ServiceStatus } from '@/lib/health';
 
 export const metadata = {
-  title: 'System Status | OrangeCat',
+  title: 'System Status',
   description: 'Current system status for OrangeCat platform services.',
 };
 

@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const g = group as { name: string } | null;
   if (!g) {
-    return { title: 'Proposals | OrangeCat' };
+    return { title: 'Proposals' };
   }
 
   return {

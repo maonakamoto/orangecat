@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!loan) {
     return {
-      title: 'Loan Not Found | OrangeCat',
+      title: 'Loan Not Found',
       description: 'The loan you are looking for does not exist.',
     };
   }

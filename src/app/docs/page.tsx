@@ -15,7 +15,7 @@ import {
 import { ENTITY_REGISTRY, ENTITY_TYPES as ENTITY_TYPE_KEYS } from '@/config/entity-registry';
 
 export const metadata: Metadata = {
-  title: 'Documentation | OrangeCat',
+  title: 'Documentation',
   description:
     'Platform documentation for OrangeCat — how the AI economic agent works, entity types, payments, and security.',
 };

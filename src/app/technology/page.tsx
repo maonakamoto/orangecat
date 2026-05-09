@@ -4,11 +4,11 @@ import { Bitcoin, Shield, Zap, Lock, Globe, Code, Server, CheckCircle } from 'lu
 import { GRADIENTS } from '@/config/gradients';
 
 export const metadata: Metadata = {
-  title: 'Technology | OrangeCat',
+  title: 'Technology',
   description:
     'Learn about the technology powering OrangeCat - Bitcoin-native economic infrastructure with transparency, security, and zero platform fees.',
   openGraph: {
-    title: 'Our Technology | OrangeCat',
+    title: 'Our Technology',
     description: 'Bitcoin-native economic infrastructure built on modern web technology',
     type: 'website',
   },

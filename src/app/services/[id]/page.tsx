@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const service = await fetchEntityForMetadata('service', id);
   if (!service) {
     return {
-      title: 'Service Not Found | OrangeCat',
+      title: 'Service Not Found',
       description: 'The service you are looking for does not exist.',
     };
   }

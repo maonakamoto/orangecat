@@ -106,7 +106,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
   const entity = await fetchEntityForMetadata('research', id, 'title, description');
   if (!entity) {
-    return { title: 'Research Not Found | OrangeCat' };
+    return { title: 'Research Not Found' };
   }
   return generateEntityMetadata({
     type: 'research',

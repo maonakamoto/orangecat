@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const project = projectData as ProjectMeta | null;
   if (!project) {
     return {
-      title: 'Project Not Found | OrangeCat',
+      title: 'Project Not Found',
       description: 'The project you are looking for does not exist.',
     };
   }

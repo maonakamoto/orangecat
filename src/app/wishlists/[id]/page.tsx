@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!data) {
     return {
-      title: 'Wishlist Not Found | OrangeCat',
+      title: 'Wishlist Not Found',
       description: 'The wishlist you are looking for does not exist.',
     };
   }

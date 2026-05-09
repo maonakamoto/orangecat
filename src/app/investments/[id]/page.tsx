@@ -133,7 +133,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const investment = await fetchEntityForMetadata('investment', id, 'title, description');
   if (!investment) {
     return {
-      title: 'Investment Not Found | OrangeCat',
+      title: 'Investment Not Found',
       description: 'The investment you are looking for does not exist.',
     };
   }

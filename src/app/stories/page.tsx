@@ -18,11 +18,11 @@ const StoriesPageClient = nextDynamic(() => import('@/components/stories/Stories
 });
 
 export const metadata: Metadata = {
-  title: 'Success Stories | OrangeCat',
+  title: 'Success Stories',
   description:
     'Real stories from people using OrangeCat to fund projects, sell services, and build economic independence. From artists to entrepreneurs, researchers to educators—peer-to-peer economic participation without middlemen.',
   openGraph: {
-    title: 'Success Stories | OrangeCat',
+    title: 'Success Stories',
     description:
       'Real stories from real people using OrangeCat. No fees, no middlemen, just direct support.',
     type: 'website',

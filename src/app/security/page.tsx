@@ -2,7 +2,7 @@ import React from 'react';
 import { Shield, Lock, Eye, Server, Key, AlertTriangle } from 'lucide-react';
 
 export const metadata = {
-  title: 'Security | OrangeCat',
+  title: 'Security',
   description:
     "Learn about OrangeCat's security practices, data protection, and commitment to user privacy",
 };
