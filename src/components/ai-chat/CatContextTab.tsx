@@ -119,7 +119,7 @@ export function CatContextTab() {
       {/* Add context button */}
       <Link
         href={ROUTES.DASHBOARD.DOCUMENTS_CREATE}
-        className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm"
+        className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-tiffany-500 to-tiffany-600 text-white rounded-xl hover:from-tiffany-600 hover:to-tiffany-700 transition-all shadow-sm"
       >
         <Plus className="h-5 w-5" />
         <span className="font-medium">Add Context</span>

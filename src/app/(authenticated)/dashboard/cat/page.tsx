@@ -103,7 +103,7 @@ export default function CatHubPage() {
               </TabsTrigger>
               <TabsTrigger
                 value="context"
-                className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-600 data-[state=active]:text-white"
+                className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-tiffany-500 data-[state=active]:to-tiffany-600 data-[state=active]:text-white"
               >
                 <FolderOpen className="h-4 w-4" />
                 <span className="hidden sm:inline">Context</span>

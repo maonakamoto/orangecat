@@ -22,7 +22,7 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
           Back to My Context
         </Link>
         <div className="flex items-center gap-3 mb-2">
-          <div className={`p-2 ${GRADIENTS.iconIndigoPurple} rounded-xl`}>
+          <div className={`p-2 ${GRADIENTS.brandTiffanyBr} rounded-xl`}>
             <Cat className="h-6 w-6 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Create Context for My Cat</h1>
@@ -33,12 +33,12 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
         </p>
       </div>
 
-      <div className="bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl p-6 mb-8">
+      <div className="bg-gradient-to-r from-tiffany-50 to-tiffany-100/50 border border-tiffany-200 rounded-xl p-6 mb-8">
         <div className="flex items-start gap-3">
-          <Sparkles className="h-5 w-5 text-indigo-600 mt-0.5 flex-shrink-0" />
+          <Sparkles className="h-5 w-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
           <div>
-            <h3 className="font-semibold text-indigo-900">The more context, the better advice</h3>
-            <p className="text-sm text-indigo-700 mt-1">
+            <h3 className="font-semibold text-tiffany-900">The more context, the better advice</h3>
+            <p className="text-sm text-tiffany-700 mt-1">
               Share your goals, skills, financial situation, or business plans. My Cat uses this to
               give you personalized advice tailored to your unique situation.
             </p>
@@ -49,13 +49,13 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
       <div className="grid md:grid-cols-2 gap-6">
         <button
           onClick={onUpload}
-          className="group relative bg-white border-2 border-gray-200 rounded-2xl p-8 text-left hover:border-indigo-400 hover:shadow-lg transition-all duration-200"
+          className="group relative bg-white border-2 border-gray-200 rounded-2xl p-8 text-left hover:border-tiffany-400 hover:shadow-lg transition-all duration-200"
         >
-          <div className="absolute top-4 right-4 px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
+          <div className="absolute top-4 right-4 px-2 py-1 bg-tiffany-100 text-tiffany-700 text-xs font-medium rounded-full">
             Easiest
           </div>
-          <div className="p-4 bg-indigo-100 rounded-xl w-fit mb-4 group-hover:bg-indigo-200 transition-colors">
-            <Upload className="h-8 w-8 text-indigo-600" />
+          <div className="p-4 bg-tiffany-100 rounded-xl w-fit mb-4 group-hover:bg-tiffany-200 transition-colors">
+            <Upload className="h-8 w-8 text-tiffany-600" />
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Upload a file</h3>
           <p className="text-gray-600 mb-4">
@@ -73,10 +73,10 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
 
         <button
           onClick={onWrite}
-          className="group bg-white border-2 border-gray-200 rounded-2xl p-8 text-left hover:border-indigo-400 hover:shadow-lg transition-all duration-200"
+          className="group bg-white border-2 border-gray-200 rounded-2xl p-8 text-left hover:border-tiffany-400 hover:shadow-lg transition-all duration-200"
         >
-          <div className="p-4 bg-purple-100 rounded-xl w-fit mb-4 group-hover:bg-purple-200 transition-colors">
-            <PenLine className="h-8 w-8 text-purple-600" />
+          <div className="p-4 bg-orange-100 rounded-xl w-fit mb-4 group-hover:bg-orange-200 transition-colors">
+            <PenLine className="h-8 w-8 text-orange-600" />
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Write from scratch</h3>
           <p className="text-gray-600 mb-4">Type or paste your content directly into the form.</p>
@@ -100,7 +100,7 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
             'Your 2026 goals and aspirations',
             'Your skills and expertise',
             'Your financial situation and budget',
-            'Business ideas you’re working on',
+            "Business ideas you're working on",
           ].map(idea => (
             <div key={idea} className="flex items-start gap-2">
               <FileText className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
