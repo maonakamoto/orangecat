@@ -119,7 +119,7 @@ export function AIRevenuePanel() {
                   className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg text-sm"
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                    <div className="h-8 w-8 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
                       {assistant.avatar_url ? (
                         <Image
                           src={assistant.avatar_url}
@@ -130,7 +130,7 @@ export function AIRevenuePanel() {
                           unoptimized
                         />
                       ) : (
-                        <Bot className="h-4 w-4 text-purple-600" />
+                        <Bot className="h-4 w-4 text-tiffany-600" />
                       )}
                     </div>
                     <div className="min-w-0">

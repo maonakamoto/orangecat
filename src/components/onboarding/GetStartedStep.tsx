@@ -74,8 +74,8 @@ export function GetStartedStep({
 
         <QuickActionButton
           onClick={() => onQuickAction(ROUTES.DASHBOARD.CAT)}
-          iconBg="bg-purple-100"
-          iconColor="text-purple-600"
+          iconBg="bg-tiffany-100"
+          iconColor="text-tiffany-600"
           icon={MessageCircle}
           title="Chat with your Cat"
           description="Ask anything about the platform"

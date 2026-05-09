@@ -93,7 +93,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           <div
             className={cn(
               'absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 border-2 border-white rounded-full',
-              isGroupContext ? 'bg-purple-500' : 'bg-green-500'
+              isGroupContext ? 'bg-tiffany-500' : 'bg-green-500'
             )}
           />
         </div>
@@ -119,8 +119,8 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
               unoptimized={avatarUrl?.includes('supabase.co')}
             />
           ) : isGroupContext ? (
-            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-              <Users className="w-5 h-5 text-purple-600" />
+            <div className="w-10 h-10 rounded-full bg-tiffany-100 flex items-center justify-center">
+              <Users className="w-5 h-5 text-tiffany-600" />
             </div>
           ) : (
             <DefaultAvatar size={40} className="rounded-full" />
@@ -128,7 +128,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           <div
             className={cn(
               'absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 border-2 border-white rounded-full',
-              isGroupContext ? 'bg-purple-500' : 'bg-green-500'
+              isGroupContext ? 'bg-tiffany-500' : 'bg-green-500'
             )}
           />
         </div>

@@ -31,8 +31,6 @@ const THEME_CLASSES: Record<string, { bg: string; icon: string; text: string }> 
   rose: { bg: 'bg-rose-100', icon: 'text-rose-600', text: 'text-rose-600' },
   orange: { bg: 'bg-orange-100', icon: 'text-orange-600', text: 'text-orange-600' },
   green: { bg: 'bg-green-100', icon: 'text-green-600', text: 'text-green-600' },
-  purple: { bg: 'bg-purple-100', icon: 'text-purple-600', text: 'text-purple-600' },
-  indigo: { bg: 'bg-indigo-100', icon: 'text-indigo-600', text: 'text-indigo-600' },
 };
 
 const GRADIENT_CLASSES: Record<string, string> = {

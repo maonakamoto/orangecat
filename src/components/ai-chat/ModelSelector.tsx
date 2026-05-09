@@ -24,14 +24,14 @@ interface ModelSelectorProps {
   showPricing?: boolean;
 }
 
-export function ModelSelector({ 
-  selectedModel, 
+export function ModelSelector({
+  selectedModel,
   onModelChange,
   size = 'default',
-  showPricing = false
+  showPricing = false,
 }: ModelSelectorProps) {
   const models = Object.values(MODEL_REGISTRY);
-  
+
   return (
     <Select value={selectedModel} onValueChange={onModelChange}>
       <SelectTrigger className={size === 'sm' ? 'h-8 text-xs' : ''}>
@@ -48,7 +48,7 @@ export function ModelSelector({
           <SelectItem key={model.id} value={model.id}>
             <div className="flex items-center gap-2">
               {model.tier === 'free' && <Zap className="h-3 w-3 text-emerald-600" />}
-              {model.tier === 'paid' && <Crown className="h-3 w-3 text-purple-600" />}
+              {model.tier === 'paid' && <Crown className="h-3 w-3 text-orange-600" />}
               <span>{model.name}</span>
               {showPricing && model.costPerMessage && (
                 <span className="text-xs text-muted-foreground">
@@ -69,7 +69,7 @@ interface ModelBadgeProps {
 
 export function ModelBadge({ modelId }: ModelBadgeProps) {
   const model = MODEL_REGISTRY[modelId];
-  
+
   if (!model) {
     return (
       <Badge variant="secondary" className="text-xs">
@@ -77,13 +77,13 @@ export function ModelBadge({ modelId }: ModelBadgeProps) {
       </Badge>
     );
   }
-  
+
   const tierColors = {
     free: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     freemium: 'bg-green-50 text-green-700 border-green-200',
-    paid: 'bg-purple-50 text-purple-700 border-purple-200',
+    paid: 'bg-orange-50 text-orange-700 border-orange-200',
   };
-  
+
   return (
     <Badge variant="outline" className={`text-xs ${tierColors[model.tier]}`}>
       {model.tier === 'free' && <Zap className="h-3 w-3 mr-1" />}

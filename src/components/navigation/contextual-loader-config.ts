@@ -83,8 +83,8 @@ const ROUTE_CONFIGS: RouteConfig[] = [
       { icon: FileText, text: 'Share your story and expertise' },
       { icon: Star, text: 'Highlight your achievements' },
     ],
-    color: 'text-purple-600',
-    bgColor: 'bg-purple-50',
+    color: 'text-tiffany-600',
+    bgColor: 'bg-tiffany-50',
   },
   {
     matches: p => p.startsWith('/timeline'),
@@ -127,8 +127,8 @@ const ROUTE_CONFIGS: RouteConfig[] = [
       { icon: Users, text: 'Build your supporter community' },
       { icon: DollarSign, text: 'Manage funds and rewards' },
     ],
-    color: 'text-indigo-600',
-    bgColor: 'bg-indigo-50',
+    color: 'text-orange-600',
+    bgColor: 'bg-orange-50',
   },
   {
     matches: p => p.startsWith(ENTITY_REGISTRY['service'].basePath),
@@ -267,8 +267,8 @@ const ROUTE_CONFIGS: RouteConfig[] = [
       { icon: Users, text: 'Discover community stories' },
       { icon: Lightbulb, text: 'Get inspired by new ideas' },
     ],
-    color: 'text-indigo-600',
-    bgColor: 'bg-indigo-50',
+    color: 'text-tiffany-600',
+    bgColor: 'bg-tiffany-50',
   },
   {
     matches: p => p.startsWith('/docs'),

@@ -72,8 +72,8 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       label: 'Tokens',
       value: formatNumber(usage.totalTokens),
       icon: BarChart2,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-100',
+      color: 'text-tiffany-600',
+      bgColor: 'bg-tiffany-100',
     },
     {
       label: 'Cost',

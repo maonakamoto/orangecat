@@ -92,7 +92,7 @@ const templates: LoanTemplate[] = [
   {
     id: 'btc-collateralized',
     name: 'BTC-Collateralized',
-    icon: <Banknote className="w-5 h-5 text-purple-600" />,
+    icon: <Banknote className="w-5 h-5 text-tiffany-600" />,
     data: {
       title: 'BTC-Collateralized Personal Loan',
       description:
@@ -145,7 +145,8 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
               <p className="text-xs text-gray-600 line-clamp-3">{t.data.description}</p>
               <div className="mt-2 text-xs text-gray-700 space-y-1">
                 <div>
-                  <span className="font-semibold">Amount:</span> {t.data.original_amount} {t.data.currency}
+                  <span className="font-semibold">Amount:</span> {t.data.original_amount}{' '}
+                  {t.data.currency}
                 </div>
                 {t.data.interest_rate !== undefined && (
                   <div>
@@ -154,7 +155,8 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
                 )}
                 {t.data.monthly_payment !== undefined && (
                   <div>
-                    <span className="font-semibold">Monthly:</span> {t.data.monthly_payment} {t.data.currency}
+                    <span className="font-semibold">Monthly:</span> {t.data.monthly_payment}{' '}
+                    {t.data.currency}
                   </div>
                 )}
               </div>
@@ -163,9 +165,9 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
         ))}
       </div>
       <div className="text-xs text-blue-800 bg-blue-50 border border-blue-200 rounded-lg p-3">
-        💡 Templates are starting points. Adjust amounts, rates, and collateral to match the actual deal.
+        💡 Templates are starting points. Adjust amounts, rates, and collateral to match the actual
+        deal.
       </div>
     </div>
   );
 }
-

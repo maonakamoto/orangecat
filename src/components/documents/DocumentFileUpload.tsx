@@ -182,17 +182,17 @@ export function DocumentFileUpload({
           'relative rounded-xl border-2 border-dashed transition-all duration-200',
           'flex flex-col items-center justify-center p-8 text-center',
           state === 'idle' &&
-            'border-gray-300 bg-gray-50 hover:border-indigo-400 hover:bg-indigo-50 cursor-pointer',
-          state === 'dragging' && 'border-indigo-500 bg-indigo-50 scale-[1.02]',
-          state === 'uploading' && 'border-indigo-400 bg-indigo-50 cursor-wait',
+            'border-gray-300 bg-gray-50 hover:border-tiffany-400 hover:bg-tiffany-50 cursor-pointer',
+          state === 'dragging' && 'border-tiffany-500 bg-tiffany-50 scale-[1.02]',
+          state === 'uploading' && 'border-tiffany-400 bg-tiffany-50 cursor-wait',
           state === 'success' && 'border-green-400 bg-green-50',
           state === 'error' && 'border-red-400 bg-red-50 cursor-pointer'
         )}
       >
         {state === 'idle' && (
           <>
-            <div className="p-4 bg-indigo-100 rounded-full mb-4">
-              <Upload className="h-8 w-8 text-indigo-600" />
+            <div className="p-4 bg-tiffany-100 rounded-full mb-4">
+              <Upload className="h-8 w-8 text-tiffany-600" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-1">Upload a file</h3>
             <p className="text-base text-gray-600 mb-3">Drag & drop or click to browse</p>
@@ -211,17 +211,17 @@ export function DocumentFileUpload({
 
         {state === 'dragging' && (
           <>
-            <div className="p-4 bg-indigo-200 rounded-full mb-4 animate-pulse">
-              <Upload className="h-8 w-8 text-indigo-700" />
+            <div className="p-4 bg-tiffany-200 rounded-full mb-4 animate-pulse">
+              <Upload className="h-8 w-8 text-tiffany-700" />
             </div>
-            <h3 className="text-lg font-semibold text-indigo-900">Drop your file here</h3>
+            <h3 className="text-lg font-semibold text-tiffany-900">Drop your file here</h3>
           </>
         )}
 
         {state === 'uploading' && (
           <>
-            <div className="p-4 bg-indigo-100 rounded-full mb-4">
-              <Loader2 className="h-8 w-8 text-indigo-600 animate-spin" />
+            <div className="p-4 bg-tiffany-100 rounded-full mb-4">
+              <Loader2 className="h-8 w-8 text-tiffany-600 animate-spin" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-1">Processing...</h3>
             <p className="text-base text-gray-600">Extracting content from {fileName}</p>
