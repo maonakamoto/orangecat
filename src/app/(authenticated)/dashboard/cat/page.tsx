@@ -14,6 +14,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
 import { cn } from '@/lib/utils';
@@ -32,11 +33,14 @@ export default function CatHubPage() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabValue>('chat');
 
-  // Get initial tab from URL
+  // Get initial tab from URL; show welcome toast for new registrations
   useEffect(() => {
     const tab = searchParams?.get('tab') as TabValue | null;
     if (tab && ['chat', 'context', 'settings'].includes(tab)) {
       setActiveTab(tab);
+    }
+    if (searchParams?.get('welcome') === 'true') {
+      toast.success('Welcome to OrangeCat! Your Cat is ready to help.', { duration: 5000 });
     }
   }, [searchParams]);
 
