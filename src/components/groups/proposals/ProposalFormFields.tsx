@@ -24,6 +24,7 @@ import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
 import { Switch } from '@/components/ui/switch';
 import { Loader2 } from 'lucide-react';
+import { PROPOSAL_TYPE_SELECT_OPTIONS } from '@/config/proposal-constants';
 
 interface ProposalFormFieldsProps {
   form: UseFormReturn<ProposalFormData>;
@@ -115,11 +116,11 @@ export function ProposalFormFields({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="general">General</SelectItem>
-                  <SelectItem value="treasury">Treasury (Spending)</SelectItem>
-                  <SelectItem value="membership">Membership</SelectItem>
-                  <SelectItem value="governance">Governance</SelectItem>
-                  <SelectItem value="employment">Employment (Job Posting)</SelectItem>
+                  {PROPOSAL_TYPE_SELECT_OPTIONS.map(opt => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormDescription>Category of the proposal</FormDescription>

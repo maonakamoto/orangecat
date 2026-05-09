@@ -20,7 +20,7 @@ export const PROPOSAL_STATUSES = {
 
 export type ProposalStatus = (typeof PROPOSAL_STATUSES)[keyof typeof PROPOSAL_STATUSES];
 
-const PROPOSAL_TYPES = {
+export const PROPOSAL_TYPES = {
   GENERAL: 'general',
   TREASURY: 'treasury',
   MEMBERSHIP: 'membership',
@@ -37,6 +37,14 @@ export const PROPOSAL_TYPE_LABELS: Record<ProposalType, string> = {
   [PROPOSAL_TYPES.GOVERNANCE]: 'Governance',
   [PROPOSAL_TYPES.EMPLOYMENT]: 'Employment',
 };
+
+export const PROPOSAL_TYPE_SELECT_OPTIONS: { value: ProposalType; label: string }[] = [
+  { value: PROPOSAL_TYPES.GENERAL, label: 'General' },
+  { value: PROPOSAL_TYPES.TREASURY, label: 'Treasury (Spending)' },
+  { value: PROPOSAL_TYPES.MEMBERSHIP, label: 'Membership' },
+  { value: PROPOSAL_TYPES.GOVERNANCE, label: 'Governance' },
+  { value: PROPOSAL_TYPES.EMPLOYMENT, label: 'Employment (Job Posting)' },
+];
 
 export const PROPOSAL_STATUS_CONFIG: Record<
   ProposalStatus,
