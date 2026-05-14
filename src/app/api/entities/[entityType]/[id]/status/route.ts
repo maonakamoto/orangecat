@@ -27,20 +27,40 @@ import {
   getUserIdField,
   type EntityType,
 } from '@/config/entity-registry';
+import { STATUS } from '@/config/database-constants';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { checkOwnership } from '@/services/actors';
 import { z } from 'zod';
 
+// Some entity types use a non-generic status for "published/live".
+// Client always sends 'active' as the publish intent; we resolve to the real DB value.
+const ENTITY_PUBLISH_STATUS: Partial<Record<string, string>> = {
+  event: STATUS.EVENTS.PUBLISHED, // events CHECK: draft|published|open|full|ongoing|completed|cancelled
+  investment: STATUS.INVESTMENTS.OPEN, // investments go draft→open (accepting) before active (funded/running)
+};
+
+// Valid transitions for each status value. Covers generic entity statuses and
+// entity-specific statuses (event, investment) so the API handles all flows.
 const VALID_TRANSITIONS: Record<string, string[]> = {
-  draft: ['active'],
+  // Generic
+  draft: ['active', 'published', 'open'], // 'active' may resolve to 'published'/'open' below
   active: ['paused', 'draft', 'archived'],
   paused: ['active', 'draft'],
   completed: ['draft'],
   cancelled: ['draft'],
   archived: ['draft'],
+  // Event-specific live states
+  published: ['open', 'paused', 'cancelled', 'draft'],
+  open: ['full', 'ongoing', 'paused', 'cancelled', 'draft'],
+  full: ['open', 'ongoing', 'cancelled'],
+  ongoing: ['completed', 'cancelled'],
+  // Investment-specific live states
+  funded: ['active', 'closed', 'cancelled'],
+  closed: ['draft'],
 };
 
 const statusUpdateSchema = z.object({
+  // Client always sends a generic intent; entity-specific resolution happens in the handler.
   status: z.enum(['draft', 'active', 'paused', 'completed', 'cancelled', 'archived']),
 });
 
@@ -76,7 +96,12 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
       );
     }
 
-    const { status: newStatus } = parseResult.data;
+    const { status: clientStatus } = parseResult.data;
+    // Resolve entity-specific publish status: events → 'published', investments → 'open', others → as-is
+    const newStatus =
+      clientStatus === 'active' && ENTITY_PUBLISH_STATUS[entityType]
+        ? ENTITY_PUBLISH_STATUS[entityType]!
+        : clientStatus;
     const tableName = getTableName(entityType as EntityType);
     const userIdField = getUserIdField(entityType as EntityType);
 
