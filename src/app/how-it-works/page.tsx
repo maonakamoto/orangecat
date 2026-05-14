@@ -103,7 +103,7 @@ export default function HowItWorksPage() {
                       {/* Step Number & Icon */}
                       <div className="flex-shrink-0">
                         <div
-                          className={`bg-gradient-to-br ${step.color} w-16 h-16 rounded-full flex items-center justify-center text-white mb-4 md:mb-0`}
+                          className={`${step.iconGradient} w-16 h-16 rounded-full flex items-center justify-center text-white mb-4 md:mb-0`}
                         >
                           <Icon className="w-8 h-8" />
                         </div>
@@ -113,7 +113,7 @@ export default function HowItWorksPage() {
                       <div className="flex-1">
                         <div className="flex items-start gap-3 mb-3">
                           <span
-                            className={`bg-gradient-to-br ${step.color} text-white text-sm font-bold px-3 py-1 rounded-full`}
+                            className={`${step.iconGradient} text-white text-sm font-bold px-3 py-1 rounded-full`}
                           >
                             Step {step.number}
                           </span>
@@ -161,7 +161,7 @@ export default function HowItWorksPage() {
                               className="text-sm text-gray-500 flex items-center gap-2"
                             >
                               <div
-                                className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${category.color}`}
+                                className={`w-1.5 h-1.5 rounded-full ${category.iconGradient}`}
                               />
                               {feature.title}: {feature.description}
                             </li>

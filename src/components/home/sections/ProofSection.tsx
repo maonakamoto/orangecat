@@ -41,7 +41,7 @@ export default function ProofSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`bg-gradient-to-br ${useCase.gradient} rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 border border-gray-100 hover:shadow-lg transition-shadow duration-300`}
+              className={`${useCase.gradient} rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 border border-gray-100 hover:shadow-lg transition-shadow duration-300`}
             >
               {/* Category Badge */}
               <div className="flex items-start justify-between mb-4">

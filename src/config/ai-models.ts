@@ -11,6 +11,7 @@
  * Last Modified: 2026-01-08
  */
 
+import { BADGE_COLORS } from '@/config/badge-colors';
 // ==================== TYPES ====================
 
 export const MODEL_TIERS = ['free', 'economy', 'standard', 'premium'] as const;
@@ -429,28 +430,28 @@ export const DEFAULT_BTC_PRICE_USD = 100000;
 /** Tier display configuration */
 export const TIER_CONFIG: Record<
   ModelTier,
-  { label: string; description: string; color: string; badge?: string }
+  { label: string; description: string; badgeClass: string; badge?: string }
 > = {
   free: {
     label: 'Free',
     description: 'No API cost - rate limited',
-    color: 'emerald',
+    badgeClass: BADGE_COLORS.success,
     badge: 'FREE',
   },
   economy: {
     label: 'Economy',
     description: 'Fast & affordable for simple tasks',
-    color: 'green',
+    badgeClass: BADGE_COLORS.info,
   },
   standard: {
     label: 'Standard',
     description: 'Balanced performance & cost',
-    color: 'blue',
+    badgeClass: BADGE_COLORS.tiffany,
   },
   premium: {
     label: 'Premium',
     description: 'Maximum capability for complex tasks',
-    color: 'orange',
+    badgeClass: BADGE_COLORS.orange,
   },
 };
 

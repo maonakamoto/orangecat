@@ -101,7 +101,7 @@ export function ConfigureStep({
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-medium text-sm">{config.label}</span>
                   {config.badge && (
-                    <Badge className="bg-emerald-100 text-emerald-700 text-xs px-1.5 py-0">
+                    <Badge className={`${config.badgeClass} text-xs px-1.5 py-0`}>
                       {config.badge}
                     </Badge>
                   )}

@@ -26,6 +26,7 @@ import {
   TrendingUp,
   Bot,
 } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 // ==================== SUPER-APP CATEGORIES ====================
 
@@ -38,7 +39,7 @@ interface SuperAppCategory {
   title: string;
   description: string;
   icon: LucideIcon;
-  color: string;
+  iconGradient: string;
   bgColor: string;
   features: {
     title: string;
@@ -52,7 +53,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     title: 'Exchange',
     description: 'Buy and sell with anyone',
     icon: Package,
-    color: 'from-blue-500 to-blue-600',
+    iconGradient: GRADIENTS.iconBlue,
     bgColor: 'bg-tiffany-50',
     features: [
       { title: 'Products', description: 'Sell physical or digital goods to anyone, anywhere' },
@@ -64,7 +65,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     title: 'Fund & Finance',
     description: 'From gifts to investments',
     icon: Coins,
-    color: 'from-orange-500 to-orange-600',
+    iconGradient: GRADIENTS.iconOrange,
     bgColor: 'bg-orange-50',
     features: [
       {
@@ -83,7 +84,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     title: 'Govern Together',
     description: 'Organize and decide as one',
     icon: Scale,
-    color: 'from-tiffany-500 to-tiffany-600',
+    iconGradient: GRADIENTS.iconTiffany,
     bgColor: 'bg-tiffany-50',
     features: [
       { title: 'Groups', description: 'Shared treasuries, collective decisions, governance rules' },
@@ -98,7 +99,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     title: 'Your Cat',
     description: 'An AI agent that acts on your behalf',
     icon: Bot,
-    color: 'from-tiffany-500 to-tiffany-600',
+    iconGradient: GRADIENTS.iconTiffany,
     bgColor: 'bg-tiffany-50',
     features: [
       {
@@ -125,7 +126,7 @@ interface HowItWorksStep {
   icon: LucideIcon;
   title: string;
   description: string;
-  color: string;
+  iconGradient: string;
   bgColor: string;
 }
 
@@ -135,7 +136,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     icon: Lock,
     title: 'Choose Your Identity',
     description: 'Use your real name, a handle, or anything in between. Your identity, your rules.',
-    color: 'from-tiffany-500 to-tiffany-600',
+    iconGradient: GRADIENTS.iconTiffany,
     bgColor: 'bg-tiffany-50',
   },
   {
@@ -144,7 +145,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     title: 'Meet Your Cat',
     description:
       'Your AI economic agent is ready. Tell it what you want to do — sell, fund, lend, invest, or govern.',
-    color: 'from-tiffany-500 to-tiffany-600',
+    iconGradient: GRADIENTS.iconTiffany,
     bgColor: 'bg-tiffany-50',
   },
   {
@@ -153,7 +154,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     title: 'Pick Your Currency',
     description:
       'Bitcoin and Lightning native — but Twint, PayPal, Monero, and local payment methods worldwide are all first-class. Meet your counterparty where they are.',
-    color: 'from-orange-500 to-orange-600',
+    iconGradient: GRADIENTS.iconOrange,
     bgColor: 'bg-orange-50',
   },
   {
@@ -162,7 +163,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     title: 'Economic Activity Begins',
     description:
       'Buy, sell, fund, lend, invest, or govern. Your Cat keeps track, surfaces insights, and acts on your behalf.',
-    color: 'from-green-500 to-green-600',
+    iconGradient: GRADIENTS.iconGreen,
     bgColor: 'bg-green-50',
   },
 ];
@@ -265,7 +266,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
       'Artists, writers, and makers can raise funds, sell work, and accept support — from anywhere, in any currency, under any identity.',
     transparencyExample:
       'Share receipts and progress updates publicly, or keep it private. Your choice.',
-    gradient: 'from-orange-50 to-tiffany-50',
+    gradient: GRADIENTS.sectionOrangeTiffanyBr,
   },
   {
     emoji: '🚀',
@@ -275,7 +276,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
       'Launch products, offer services, and raise funding — no platform approval, no geography limits, no identity requirements.',
     transparencyExample:
       'Your Cat helps you set up your store, manage pricing, and track payments automatically.',
-    gradient: 'from-amber-50 to-orange-50',
+    gradient: GRADIENTS.sectionAmberOrange,
   },
   {
     emoji: '🔬',
@@ -284,7 +285,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
     description:
       'Fund equipment, studies, and publications. Accept Bitcoin, PayPal, Twint — whatever your supporters use.',
     transparencyExample: 'Publish findings, share lab updates, build scientific credibility.',
-    gradient: 'from-blue-50 to-cyan-50',
+    gradient: GRADIENTS.sectionBlueCyan,
   },
   {
     emoji: '🏛️',
@@ -294,7 +295,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
       'Organize shared treasuries, collective decisions, and community governance — with or without revealing identities.',
     transparencyExample:
       'Groups have their own Cat. It manages the treasury and executes collective decisions.',
-    gradient: 'from-green-50 to-emerald-50',
+    gradient: GRADIENTS.sectionGreenEmerald,
   },
 ];
 

@@ -25,6 +25,18 @@ export const GRADIENTS = {
   sectionOrangeTiffany: 'bg-gradient-to-r from-orange-50 to-tiffany-50',
   iconOrangeTiffany: 'bg-gradient-to-r from-orange-100 to-tiffany-100',
 
+  // ── Icon circle/badge gradients (diagonal, for icon backgrounds) ──────────
+  iconBlue: 'bg-gradient-to-br from-blue-500 to-blue-600',
+  iconOrange: 'bg-gradient-to-br from-orange-500 to-orange-600',
+  iconTiffany: 'bg-gradient-to-br from-tiffany-500 to-tiffany-600',
+  iconGreen: 'bg-gradient-to-br from-green-500 to-green-600',
+
+  // ── Card background section tints (diagonal) ──────────────────────────────
+  sectionBlueCyan: 'bg-gradient-to-br from-blue-50 to-cyan-50',
+  sectionAmberOrange: 'bg-gradient-to-br from-amber-50 to-orange-50',
+  sectionOrangeTiffanyBr: 'bg-gradient-to-br from-orange-50 to-tiffany-50',
+  sectionGreenEmerald: 'bg-gradient-to-br from-green-50 to-emerald-50',
+
   // ── Diagonal (br) gradients ───────────────────────────────────────────────
   brandOrangeBr: 'bg-gradient-to-br from-orange-400 to-orange-500',
   brandOrangeCircle: 'bg-gradient-to-br from-orange-500 to-orange-600',

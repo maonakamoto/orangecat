@@ -81,7 +81,7 @@ export default function WhatCanYouDoSection() {
                 <div className={`${category.bgColor} p-4 sm:p-6 border-b border-gray-200`}>
                   <div className="flex items-center gap-3 mb-2">
                     <div
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center`}
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${category.iconGradient} flex items-center justify-center`}
                     >
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
@@ -102,7 +102,7 @@ export default function WhatCanYouDoSection() {
                       className="flex items-start gap-3 p-3 sm:p-4 rounded-lg hover:bg-gray-50 transition-colors duration-200"
                     >
                       <div
-                        className={`w-2 h-2 rounded-full bg-gradient-to-r ${category.color} mt-2 flex-shrink-0`}
+                        className={`w-2 h-2 rounded-full ${category.iconGradient} mt-2 flex-shrink-0`}
                       />
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-gray-900 text-sm sm:text-base mb-1">

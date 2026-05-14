@@ -42,7 +42,7 @@ export default function HowItWorksSection() {
                   {/* Step Number Badge */}
                   <div className="mb-4 sm:mb-6">
                     <div
-                      className={`inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${step.color} text-white text-xl sm:text-2xl font-bold shadow-lg`}
+                      className={`inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl ${step.iconGradient} text-white text-xl sm:text-2xl font-bold shadow-lg`}
                     >
                       {step.number}
                     </div>
