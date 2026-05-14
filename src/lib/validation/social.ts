@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
 import { EVENT_TYPES, EVENT_STATUSES } from '@/config/events';
+import { STATUS } from '@/config/database-constants';
 import { DAYS_OF_WEEK, RECURRENCE_FREQUENCIES } from '@/config/schedule';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
@@ -103,7 +104,7 @@ export const eventSchema = z
     video_url: optionalUrl(),
 
     // Status
-    status: z.enum(EVENT_STATUSES).default('draft'),
+    status: z.enum(EVENT_STATUSES).default(STATUS.EVENTS.DRAFT),
   })
   .refine(
     data => {
