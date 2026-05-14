@@ -96,7 +96,7 @@ export const STATUS = {
     DRAFT: 'draft',
     ACTIVE: 'active',
     COMPLETED: 'completed',
-    PAUSED: 'paused',
+    CANCELLED: 'cancelled',
   },
   MESSAGES: {
     SENT: 'sent',

@@ -11,7 +11,7 @@ import { create } from 'zustand';
 import { logger } from '@/utils/logger';
 import supabase from '@/lib/supabase/browser';
 import { getTableName } from '@/config/entity-registry';
-import { PROJECT_STATUS } from '@/config/project-statuses';
+import { PROJECT_STATUS, type ProjectStatus } from '@/config/project-statuses';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { API_ROUTES } from '@/config/api-routes';
 
@@ -22,7 +22,7 @@ export interface Project extends FundingPage {
   isDraft: boolean;
   isActive: boolean;
   isPaused: boolean;
-  status?: 'draft' | 'active' | 'paused' | 'completed' | 'cancelled';
+  status?: ProjectStatus;
   creator_name?: string;
 }
 
@@ -41,10 +41,7 @@ export interface ProjectState {
   // ACTIONS
   loadProjects: (userId: string) => Promise<void>;
   deleteProject: (id: string) => Promise<void>;
-  updateProjectStatus: (
-    id: string,
-    status: 'draft' | 'active' | 'paused' | 'completed' | 'cancelled'
-  ) => Promise<void>;
+  updateProjectStatus: (id: string, status: ProjectStatus) => Promise<void>;
   getProjectById: (id: string) => Project | undefined;
   getStats: () => { totalProjects: number; totalActive: number };
 
@@ -158,10 +155,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
   },
 
-  updateProjectStatus: async (
-    id: string,
-    status: 'draft' | 'active' | 'paused' | 'completed' | 'cancelled'
-  ) => {
+  updateProjectStatus: async (id: string, status: ProjectStatus) => {
     set({ isLoading: true, error: null });
 
     try {

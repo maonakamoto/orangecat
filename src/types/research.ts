@@ -6,6 +6,7 @@ import type {
   TransparencyLevel,
   ProgressFrequency,
   ResearchTimeline as TimelineType,
+  ResearchStatus,
 } from '@/config/research';
 
 interface TeamMember {
@@ -138,7 +139,7 @@ export interface ResearchEntity extends BaseEntity {
   // Visibility
   is_public: boolean;
   is_featured?: boolean;
-  status?: 'draft' | 'active' | 'paused' | 'archived';
+  status?: ResearchStatus;
 }
 
 export interface ResearchEntityCreate extends Omit<

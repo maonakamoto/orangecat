@@ -26,7 +26,7 @@ interface ProposalCardProps {
     title: string;
     description?: string | null;
     proposal_type: string;
-    status: 'draft' | 'active' | 'passed' | 'failed' | 'executed' | 'cancelled';
+    status: ProposalStatus;
     voting_results?: {
       yes_votes: number;
       no_votes: number;

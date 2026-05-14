@@ -32,7 +32,8 @@ export const CAUSE_CATEGORY_OPTIONS = CAUSE_CATEGORIES.map(cat => ({ value: cat,
 
 // ==================== CAUSE STATUSES ====================
 
-export const CAUSE_STATUSES = ['draft', 'active', 'completed', 'paused'] as const;
+// DB constraint: CHECK (status IN ('draft', 'active', 'completed', 'cancelled'))
+export const CAUSE_STATUSES = ['draft', 'active', 'completed', 'cancelled'] as const;
 export type CauseStatus = (typeof CAUSE_STATUSES)[number];
 
 // ==================== DISTRIBUTION RULE TYPES ====================

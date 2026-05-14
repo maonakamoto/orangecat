@@ -113,6 +113,10 @@ export const RESEARCH_FIELD_COLORS: Record<ResearchField, string> = {
   other: 'bg-gray-100 text-gray-800',
 };
 
+// DB constraint: CHECK (status IN ('draft', 'active', 'completed', 'paused', 'cancelled'))
+export const RESEARCH_STATUSES = ['draft', 'active', 'completed', 'paused', 'cancelled'] as const;
+export type ResearchStatus = (typeof RESEARCH_STATUSES)[number];
+
 // Solid dot indicator colors for status — distinct from BADGE_COLORS (which uses lighter 100/700 pattern)
 export const RESEARCH_STATUS_DOT_COLORS: Record<string, string> = {
   active: 'bg-green-500',
