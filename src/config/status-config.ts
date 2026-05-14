@@ -15,9 +15,26 @@
 // ==================== STATUS TYPES ====================
 
 /**
- * Common entity statuses across the platform
+ * All entity statuses across the platform — generic + entity-specific live states.
+ * Generic: draft, active, paused, completed, cancelled, archived
+ * Events:  published, open, full, ongoing
+ * Investments: funded, closed
  */
-export type EntityStatus = 'draft' | 'active' | 'paused' | 'completed' | 'cancelled' | 'archived';
+export type EntityStatus =
+  | 'draft'
+  | 'active'
+  | 'paused'
+  | 'completed'
+  | 'cancelled'
+  | 'archived'
+  // Event-specific
+  | 'published'
+  | 'open'
+  | 'full'
+  | 'ongoing'
+  // Investment-specific
+  | 'funded'
+  | 'closed';
 
 // ==================== STATUS CONFIG ====================
 
@@ -33,6 +50,7 @@ interface StatusInfo {
 import { BADGE_COLORS } from '@/config/badge-colors';
 
 export const STATUS_CONFIG: Record<EntityStatus, StatusInfo> = {
+  // Generic statuses
   draft: { label: 'Draft', className: BADGE_COLORS.neutral, description: 'Not yet published' },
   active: { label: 'Active', className: BADGE_COLORS.success, description: 'Live and visible' },
   paused: { label: 'Paused', className: BADGE_COLORS.warning, description: 'Temporarily inactive' },
@@ -46,6 +64,38 @@ export const STATUS_CONFIG: Record<EntityStatus, StatusInfo> = {
     label: 'Archived',
     className: BADGE_COLORS.muted,
     description: 'Stored for reference',
+  },
+  // Event-specific live states
+  published: {
+    label: 'Published',
+    className: BADGE_COLORS.success,
+    description: 'Live and accepting registrations',
+  },
+  open: {
+    label: 'Open',
+    className: BADGE_COLORS.success,
+    description: 'Open for registrations or applications',
+  },
+  full: {
+    label: 'Full',
+    className: BADGE_COLORS.amber,
+    description: 'Capacity reached — no more registrations',
+  },
+  ongoing: {
+    label: 'Ongoing',
+    className: BADGE_COLORS.info,
+    description: 'Currently in progress',
+  },
+  // Investment-specific live states
+  funded: {
+    label: 'Funded',
+    className: BADGE_COLORS.success,
+    description: 'Fully funded and running',
+  },
+  closed: {
+    label: 'Closed',
+    className: BADGE_COLORS.muted,
+    description: 'No longer accepting investment',
   },
 };
 
@@ -77,7 +127,17 @@ export function getStatusInfo(status: string | null | undefined): StatusInfo {
  * Check if a status is considered "public" (visible to others)
  */
 export function isPublicStatus(status: string | null | undefined): boolean {
-  const publicStatuses: EntityStatus[] = ['active', 'completed'];
+  const publicStatuses: EntityStatus[] = [
+    'active',
+    'completed',
+    // Event live states
+    'published',
+    'open',
+    'full',
+    'ongoing',
+    // Investment live states
+    'funded',
+  ];
   return publicStatuses.includes((status?.toLowerCase() || '') as EntityStatus);
 }
 
@@ -87,7 +147,7 @@ export function isPublicStatus(status: string | null | undefined): boolean {
  * Statuses considered "normal" that don't need special visual emphasis
  * (e.g., no extra badge needed on entity cards)
  */
-export const NORMAL_VISIBLE_STATUSES: EntityStatus[] = ['active', 'draft'];
+export const NORMAL_VISIBLE_STATUSES: EntityStatus[] = ['active', 'draft', 'published'];
 
 /**
  * Typed status value constants — use these instead of raw string literals

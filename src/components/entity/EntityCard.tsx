@@ -6,7 +6,7 @@ import { ReactNode } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { EntityCardActions } from './EntityCardActions';
 import { EntityCardImage } from './EntityCardImage';
-import { isPublicStatus } from '@/config/status-config';
+import { getStatusInfo } from '@/config/status-config';
 import { BADGE_COLORS } from '@/config/badge-colors';
 
 export interface EntityCardProps {
@@ -190,11 +190,8 @@ export function EntityCard({
           <div className={cn(compact ? 'mt-2' : 'mt-3', 'flex items-center justify-between')}>
             <div className="flex items-center gap-2">
               {status && (
-                <Badge
-                  variant={isPublicStatus(status) ? 'default' : 'secondary'}
-                  className="text-xs"
-                >
-                  {status}
+                <Badge className={cn('text-xs', getStatusInfo(status).className)}>
+                  {getStatusInfo(status).label}
                 </Badge>
               )}
               {category && (
