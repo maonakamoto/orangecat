@@ -22,10 +22,12 @@ export interface RevenueData {
   assistants: AssistantRevenue[];
 }
 
+import type { AIWithdrawalStatus } from '@/config/database-constants';
+
 export interface Withdrawal {
   id: string;
   amount_btc: number;
-  status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
+  status: AIWithdrawalStatus;
   lightning_address: string | null;
   created_at: string;
 }

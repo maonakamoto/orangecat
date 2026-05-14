@@ -144,6 +144,14 @@ export const STATUS = {
     PAUSED: 'paused',
     ARCHIVED: 'archived',
   },
+  // DB constraint: CHECK (status IN ('pending', 'processing', 'completed', 'failed', 'cancelled'))
+  AI_WITHDRAWALS: {
+    PENDING: 'pending',
+    PROCESSING: 'processing',
+    COMPLETED: 'completed',
+    FAILED: 'failed',
+    CANCELLED: 'cancelled',
+  },
   INVESTMENTS: {
     DRAFT: 'draft',
     OPEN: 'open',
@@ -179,3 +187,4 @@ export const STATUS = {
  * Type helpers for status values (only export types that callers import from this file)
  */
 export type InvestmentStatus = (typeof STATUS.INVESTMENTS)[keyof typeof STATUS.INVESTMENTS];
+export type AIWithdrawalStatus = (typeof STATUS.AI_WITHDRAWALS)[keyof typeof STATUS.AI_WITHDRAWALS];
