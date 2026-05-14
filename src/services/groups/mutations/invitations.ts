@@ -355,7 +355,7 @@ export async function revokeInvitation(
 
     // Revoke
     const { error } = await fromTable(sb, DATABASE_TABLES.GROUP_INVITATIONS)
-      .update({ status: 'revoked' })
+      .update({ status: STATUS.GROUP_INVITATIONS.REVOKED })
       .eq('id', invitationId);
 
     if (error) {

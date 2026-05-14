@@ -232,7 +232,7 @@ export async function cancelProposal(proposalId: string, client?: AnySupabaseCli
     }
 
     const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
-      .update({ status: 'cancelled', updated_at: new Date().toISOString() })
+      .update({ status: STATUS.PROPOSALS.CANCELLED, updated_at: new Date().toISOString() })
       .eq('id', proposalId)
       .select()
       .single();

@@ -451,7 +451,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
 
     const { data, error } = await supabase
       .from(meta.tableName)
-      .update({ status: 'archived' })
+      .update({ status: ENTITY_STATUS.ARCHIVED })
       .eq('id', entityId)
       .eq('actor_id', actorId)
       .select('id, title, status')

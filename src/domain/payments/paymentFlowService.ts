@@ -12,6 +12,7 @@
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 import { getEntityMetadata, type EntityType } from '@/config/entity-registry';
 import { getAdminClient } from '@/lib/supabase/admin';
 import { resolveSellerWallet, getSellerUserId } from './walletResolutionService';
@@ -84,7 +85,10 @@ export async function initiatePayment(
       bolt11: invoice.bolt11,
       payment_hash: invoice.payment_hash,
       onchain_address: invoice.onchain_address,
-      status: invoice.bolt11 || invoice.onchain_address ? 'invoice_ready' : 'created',
+      status:
+        invoice.bolt11 || invoice.onchain_address
+          ? STATUS.PAYMENT_INTENTS.INVOICE_READY
+          : STATUS.PAYMENT_INTENTS.CREATED,
       description,
       expires_at: invoice.expires_at,
     })
@@ -111,7 +115,7 @@ export async function initiatePayment(
         entity_id,
         amount_btc: amountBtc,
         entity_title: entityTitle,
-        status: 'pending_payment',
+        status: STATUS.ORDERS.PENDING_PAYMENT,
         shipping_address_id: input.shipping_address_id || null,
         buyer_note: input.buyer_note || null,
       })
@@ -186,14 +190,20 @@ export async function checkPaymentStatus(
   }
 
   // If already terminal, return immediately
-  if (['paid', 'expired', 'failed'].includes(pi.status)) {
+  if (
+    [
+      STATUS.PAYMENT_INTENTS.PAID,
+      STATUS.PAYMENT_INTENTS.EXPIRED,
+      STATUS.PAYMENT_INTENTS.FAILED,
+    ].includes(pi.status)
+  ) {
     return { status: pi.status as PaymentIntentStatus, paid_at: pi.paid_at };
   }
 
   // Check expiry
   if (pi.expires_at && new Date(pi.expires_at) < new Date()) {
-    await updatePaymentStatus(supabase, paymentIntentId, 'expired');
-    return { status: 'expired', paid_at: null };
+    await updatePaymentStatus(supabase, paymentIntentId, STATUS.PAYMENT_INTENTS.EXPIRED);
+    return { status: STATUS.PAYMENT_INTENTS.EXPIRED, paid_at: null };
   }
 
   // For NWC, actively check via relay
@@ -201,7 +211,7 @@ export async function checkPaymentStatus(
     const paid = await checkNWCPaymentStatus(supabase, pi);
     if (paid) {
       await handlePaymentConfirmed(supabase, pi);
-      return { status: 'paid', paid_at: new Date().toISOString() };
+      return { status: STATUS.PAYMENT_INTENTS.PAID, paid_at: new Date().toISOString() };
     }
   }
 
@@ -211,12 +221,19 @@ export async function checkPaymentStatus(
 
     if (onchainStatus === 'confirmed') {
       await handlePaymentConfirmed(supabase, pi);
-      return { status: 'paid', paid_at: new Date().toISOString() };
+      return { status: STATUS.PAYMENT_INTENTS.PAID, paid_at: new Date().toISOString() };
     }
 
-    if (onchainStatus === 'in_mempool' && pi.status !== 'pending_confirmation') {
-      await updatePaymentStatus(supabase, paymentIntentId, 'pending_confirmation');
-      return { status: 'pending_confirmation', paid_at: null };
+    if (
+      onchainStatus === 'in_mempool' &&
+      pi.status !== STATUS.PAYMENT_INTENTS.PENDING_CONFIRMATION
+    ) {
+      await updatePaymentStatus(
+        supabase,
+        paymentIntentId,
+        STATUS.PAYMENT_INTENTS.PENDING_CONFIRMATION
+      );
+      return { status: STATUS.PAYMENT_INTENTS.PENDING_CONFIRMATION, paid_at: null };
     }
   }
 
@@ -242,12 +259,12 @@ export async function buyerConfirmPayment(
     throw new Error('Payment not found');
   }
 
-  if (pi.status === 'paid') {
-    return { status: 'paid', paid_at: pi.paid_at };
+  if (pi.status === STATUS.PAYMENT_INTENTS.PAID) {
+    return { status: STATUS.PAYMENT_INTENTS.PAID, paid_at: pi.paid_at };
   }
 
   // Mark as buyer_confirmed — seller verifies in their wallet
-  await updatePaymentStatus(supabase, paymentIntentId, 'buyer_confirmed');
+  await updatePaymentStatus(supabase, paymentIntentId, STATUS.PAYMENT_INTENTS.BUYER_CONFIRMED);
 
   // Update order status to paid (trust-based for v1)
   if (pi.entity_type) {
@@ -255,12 +272,12 @@ export async function buyerConfirmPayment(
     if (meta.paymentPattern === 'fixed_price') {
       await supabase
         .from(DATABASE_TABLES.ORDERS)
-        .update({ status: 'paid' })
+        .update({ status: STATUS.ORDERS.PAID })
         .eq('payment_intent_id', paymentIntentId);
     }
   }
 
-  return { status: 'buyer_confirmed', paid_at: null };
+  return { status: STATUS.PAYMENT_INTENTS.BUYER_CONFIRMED, paid_at: null };
 }
 
 // =====================================================================
@@ -350,7 +367,7 @@ async function handlePaymentConfirmed(
     // Update order status
     await supabase
       .from(DATABASE_TABLES.ORDERS)
-      .update({ status: 'paid' })
+      .update({ status: STATUS.ORDERS.PAID })
       .eq('payment_intent_id', piId);
 
     // Decrement inventory (atomic — prevents overselling)

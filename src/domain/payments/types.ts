@@ -5,6 +5,7 @@
  */
 
 import type { EntityType } from '@/config/entity-registry';
+import { STATUS } from '@/config/database-constants';
 
 // =====================================================================
 // PAYMENT METHOD
@@ -17,13 +18,7 @@ export type PaymentMethod = 'nwc' | 'lightning_address' | 'onchain';
 // =====================================================================
 
 export type PaymentIntentStatus =
-  | 'created'
-  | 'invoice_ready'
-  | 'pending_confirmation'
-  | 'paid'
-  | 'expired'
-  | 'failed'
-  | 'buyer_confirmed';
+  (typeof STATUS.PAYMENT_INTENTS)[keyof typeof STATUS.PAYMENT_INTENTS];
 
 export interface PaymentIntent {
   id: string;
@@ -48,7 +43,7 @@ export interface PaymentIntent {
 // ORDER
 // =====================================================================
 
-type OrderStatus = 'pending_payment' | 'paid' | 'shipped' | 'completed' | 'cancelled' | 'refunded';
+type OrderStatus = (typeof STATUS.ORDERS)[keyof typeof STATUS.ORDERS];
 
 export interface Order {
   id: string;

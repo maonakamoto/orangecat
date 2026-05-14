@@ -41,7 +41,7 @@ async function handleAccept(
   const updateInvite = () =>
     supabase
       .from(DATABASE_TABLES.GROUP_INVITATIONS)
-      .update({ status: 'accepted', responded_at: new Date().toISOString() })
+      .update({ status: STATUS.GROUP_INVITATIONS.ACCEPTED, responded_at: new Date().toISOString() })
       .eq('id', invitationId);
 
   if (existingMember) {
@@ -116,7 +116,7 @@ export const POST = withAuth(
       if (new Date(inv.expires_at) < new Date()) {
         await supabase
           .from(DATABASE_TABLES.GROUP_INVITATIONS)
-          .update({ status: 'expired' })
+          .update({ status: STATUS.GROUP_INVITATIONS.EXPIRED })
           .eq('id', invitationId);
         return apiValidationError('Invitation has expired');
       }
@@ -127,7 +127,10 @@ export const POST = withAuth(
 
       await supabase
         .from(DATABASE_TABLES.GROUP_INVITATIONS)
-        .update({ status: 'declined', responded_at: new Date().toISOString() })
+        .update({
+          status: STATUS.GROUP_INVITATIONS.DECLINED,
+          responded_at: new Date().toISOString(),
+        })
         .eq('id', invitationId);
 
       return apiSuccess({ message: 'Invitation declined' });
@@ -174,7 +177,7 @@ export const DELETE = withAuth(
 
       const { error } = await supabase
         .from(DATABASE_TABLES.GROUP_INVITATIONS)
-        .update({ status: 'revoked' })
+        .update({ status: STATUS.GROUP_INVITATIONS.REVOKED })
         .eq('id', invitationId);
 
       if (error) {
