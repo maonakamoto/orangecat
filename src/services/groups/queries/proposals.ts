@@ -2,6 +2,7 @@ import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 export type ProposalStatus = 'draft' | 'active' | 'passed' | 'failed' | 'executed' | 'cancelled';
@@ -276,7 +277,7 @@ export async function getPublicJobPostings(
       )
       .eq('proposal_type', 'employment')
       .eq('is_public', true)
-      .eq('status', 'active')
+      .eq('status', STATUS.PROPOSALS.ACTIVE)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 

@@ -11,6 +11,7 @@
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
+import { STATUS } from '@/config/database-constants';
 import { getCurrentUserId } from '../utils/helpers';
 import { canPerformAction } from '../permissions/resolver';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
@@ -127,7 +128,7 @@ export async function getUserInvitationCount(client?: AnySupabaseClient): Promis
     const { count, error } = await (sb.from(DATABASE_TABLES.GROUP_INVITATIONS) as any)
       .select('*', { count: 'exact', head: true })
       .eq('user_id', userId)
-      .eq('status', 'pending')
+      .eq('status', STATUS.GROUP_INVITATIONS.PENDING)
       .gt('expires_at', new Date().toISOString());
 
     if (error) {
@@ -285,7 +286,7 @@ export async function getInvitationByToken(
       `
       )
       .eq('token', token)
-      .eq('status', 'pending')
+      .eq('status', STATUS.GROUP_INVITATIONS.PENDING)
       .single();
 
     if (error || !data) {

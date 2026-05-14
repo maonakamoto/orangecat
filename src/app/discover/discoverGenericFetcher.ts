@@ -1,7 +1,7 @@
 import { logger } from '@/utils/logger';
 import supabase from '@/lib/supabase/browser';
 import { getTableName } from '@/config/entity-registry';
-import { STATUS } from '@/config/database-constants';
+import { STATUS, ENTITY_STATUS } from '@/config/database-constants';
 import type { DiscoverTabType } from '@/components/discover/DiscoverTabs';
 import type { GenericPublicEntity } from '@/components/entity/variants/GenericPublicCard';
 
@@ -94,7 +94,7 @@ export async function fetchDiscoverGenericData(
             supabase
               .from(getTableName('cause'))
               .select('id, title, description, status, cause_category, created_at')
-              .eq('status', 'active'),
+              .eq('status', STATUS.CAUSES.ACTIVE),
             'causes',
             8
           )
@@ -116,7 +116,7 @@ export async function fetchDiscoverGenericData(
             supabase
               .from(getTableName('product'))
               .select('id, title, description, status, category, created_at')
-              .eq('status', 'active'),
+              .eq('status', STATUS.PRODUCTS.ACTIVE),
             'products',
             8
           )
@@ -127,7 +127,7 @@ export async function fetchDiscoverGenericData(
             supabase
               .from(getTableName('service'))
               .select('id, title, description, status, category, created_at')
-              .eq('status', 'active'),
+              .eq('status', STATUS.SERVICES.ACTIVE),
             'services',
             8
           )
@@ -163,7 +163,7 @@ export async function fetchDiscoverGenericData(
               .from(getTableName('research'))
               .select('id, title, description, status, field, created_at')
               .eq('is_public', true)
-              .eq('status', 'active'),
+              .eq('status', ENTITY_STATUS.ACTIVE),
             'research',
             8
           )
@@ -175,7 +175,7 @@ export async function fetchDiscoverGenericData(
               .from(getTableName('ai_assistant'))
               .select('id, title, description, status, category, created_at')
               .eq('is_public', true)
-              .eq('status', 'active'),
+              .eq('status', STATUS.AI_ASSISTANTS.ACTIVE),
             'ai_assistants',
             8
           )

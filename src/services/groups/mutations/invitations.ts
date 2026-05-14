@@ -84,7 +84,7 @@ export async function createInvitation(
         .select('id')
         .eq('group_id', input.group_id)
         .eq('user_id', input.user_id)
-        .eq('status', 'pending')
+        .eq('status', STATUS.GROUP_INVITATIONS.PENDING)
         .maybeSingle();
 
       if (existing) {
@@ -274,7 +274,7 @@ export async function acceptInvitationByToken(
     )
       .select('id, group_id, status, expires_at')
       .eq('token', token)
-      .eq('status', 'pending')
+      .eq('status', STATUS.GROUP_INVITATIONS.PENDING)
       .maybeSingle();
 
     if (findError) {
