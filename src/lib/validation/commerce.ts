@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
-import { CAUSE_CATEGORIES } from '@/config/causes';
-import { PRODUCT_TYPES, PRODUCT_FULFILLMENT_TYPES } from '@/config/products';
-import { SERVICE_LOCATION_TYPES } from '@/config/services';
+import { CAUSE_CATEGORIES, CAUSE_STATUSES, DISTRIBUTION_RULE_TYPES } from '@/config/causes';
+import { PRODUCT_TYPES, PRODUCT_FULFILLMENT_TYPES, PRODUCT_STATUSES } from '@/config/products';
+import { SERVICE_LOCATION_TYPES, SERVICE_STATUSES } from '@/config/services';
 import { DAYS_OF_WEEK } from '@/config/schedule';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
@@ -41,7 +41,7 @@ const availabilityScheduleSchema = z
  */
 const distributionRulesSchema = z
   .object({
-    type: z.enum(['equal', 'weighted', 'custom']).optional(),
+    type: z.enum(DISTRIBUTION_RULE_TYPES).optional(),
     allocations: z.record(z.string(), z.number()).optional(),
   })
   .passthrough();
@@ -83,7 +83,7 @@ export const userProductSchema = z.object({
     .default('manual'),
   category: optionalText(50),
   tags: z.array(z.string()).optional().default([]),
-  status: z.enum(['draft', 'active', 'paused', 'sold_out']).default('draft'),
+  status: z.enum(PRODUCT_STATUSES).default('draft'),
   is_featured: z.boolean().default(false),
 });
 
@@ -104,7 +104,7 @@ export const userServiceSchema = z
     images: z.array(z.string().url()).optional().default([]),
     portfolio_links: z.array(z.string().url()).optional().default([]),
     show_on_profile: z.boolean().optional().default(true),
-    status: z.enum(['draft', 'active', 'paused', 'unavailable']).default('draft'),
+    status: z.enum(SERVICE_STATUSES).default('draft'),
   })
   .refine(data => data.hourly_rate || data.fixed_price, {
     message: 'At least one pricing method (hourly or fixed) is required',
@@ -121,7 +121,7 @@ export const userCauseSchema = z.object({
   lightning_address: lightningAddressSchema,
   distribution_rules: distributionRulesSchema.optional().nullable(),
   beneficiaries: z.array(beneficiarySchema).optional().default([]),
-  status: z.enum(['draft', 'active', 'completed', 'paused']).default('draft'),
+  status: z.enum(CAUSE_STATUSES).default('draft'),
 });
 
 // Types

@@ -24,3 +24,8 @@ export const PRODUCT_FULFILLMENT_TYPES = [
 ] as const;
 
 export type ProductFulfillmentType = (typeof PRODUCT_FULFILLMENT_TYPES)[number]['value'];
+
+// ==================== PRODUCT STATUSES ====================
+
+export const PRODUCT_STATUSES = ['draft', 'active', 'paused', 'sold_out'] as const;
+export type ProductStatus = (typeof PRODUCT_STATUSES)[number];

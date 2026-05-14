@@ -14,3 +14,8 @@ export const SERVICE_LOCATION_TYPES = [
 ] as const;
 
 export type ServiceLocationType = (typeof SERVICE_LOCATION_TYPES)[number]['value'];
+
+// ==================== SERVICE STATUSES ====================
+
+export const SERVICE_STATUSES = ['draft', 'active', 'paused', 'unavailable'] as const;
+export type ServiceStatus = (typeof SERVICE_STATUSES)[number];

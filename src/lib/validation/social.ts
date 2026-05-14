@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
-import { EVENT_TYPES } from '@/config/events';
-import { DAYS_OF_WEEK } from '@/config/schedule';
+import { EVENT_TYPES, EVENT_STATUSES } from '@/config/events';
+import { DAYS_OF_WEEK, RECURRENCE_FREQUENCIES } from '@/config/schedule';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
 /**
@@ -12,7 +12,7 @@ import { lightningAddressSchema, optionalText, optionalUrl } from './base';
  */
 const recurrencePatternSchema = z
   .object({
-    frequency: z.enum(['daily', 'weekly', 'biweekly', 'monthly', 'yearly']).optional(),
+    frequency: z.enum(RECURRENCE_FREQUENCIES).optional(),
     interval: z.number().int().positive().max(365).optional(),
     end_date: z.string().optional().nullable(),
     count: z.number().int().positive().max(1000).optional().nullable(),
@@ -103,9 +103,7 @@ export const eventSchema = z
     video_url: optionalUrl(),
 
     // Status
-    status: z
-      .enum(['draft', 'published', 'open', 'full', 'ongoing', 'completed', 'cancelled'])
-      .default('draft'),
+    status: z.enum(EVENT_STATUSES).default('draft'),
   })
   .refine(
     data => {

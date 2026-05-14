@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { CURRENCY_CODES } from '@/config/currencies';
-import { WISHLIST_TYPES } from '@/config/wishlists';
+import {
+  WISHLIST_TYPES,
+  WISHLIST_VISIBILITY_TYPES,
+  WISHLIST_PROOF_TYPES,
+  WISHLIST_FEEDBACK_TYPES,
+} from '@/config/wishlists';
 import { optionalText, optionalUrl } from './base';
 
 // =============================================================================
@@ -14,7 +19,7 @@ export const wishlistSchema = z.object({
     .max(100, 'Title must be at most 100 characters'),
   description: optionalText(1000),
   type: z.enum(WISHLIST_TYPES.map(t => t.value) as [string, ...string[]]).default('general'),
-  visibility: z.enum(['public', 'unlisted', 'private']).default('public'),
+  visibility: z.enum(WISHLIST_VISIBILITY_TYPES).default('public'),
   event_date: z.string().or(z.date()).optional().nullable(),
   cover_image_url: optionalUrl(),
   is_active: z.boolean().default(true),
@@ -57,7 +62,7 @@ export const wishlistItemSchema = z.object({
 
 export const wishlistFulfillmentProofSchema = z.object({
   wishlist_item_id: z.string().uuid(),
-  proof_type: z.enum(['receipt', 'screenshot', 'transaction', 'comment']),
+  proof_type: z.enum(WISHLIST_PROOF_TYPES),
   description: z.string().min(10, 'Description must be at least 10 characters').max(1000),
   image_url: z.string().url().optional().nullable(),
   transaction_id: z.string().max(100).optional().nullable(),
@@ -67,7 +72,7 @@ export const wishlistFeedbackSchema = z
   .object({
     wishlist_item_id: z.string().uuid(),
     fulfillment_proof_id: z.string().uuid().optional().nullable(),
-    feedback_type: z.enum(['like', 'dislike']),
+    feedback_type: z.enum(WISHLIST_FEEDBACK_TYPES),
     comment: z.string().max(500).optional().nullable(),
   })
   .refine(data => data.feedback_type !== 'dislike' || (data.comment && data.comment.length >= 10), {

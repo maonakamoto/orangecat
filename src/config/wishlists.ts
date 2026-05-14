@@ -26,3 +26,18 @@ export type WishlistType = (typeof WISHLIST_TYPES)[number]['value'];
 export const WISHLIST_TYPE_LABELS: Record<string, string> = Object.fromEntries(
   WISHLIST_TYPES.map(t => [t.value, t.label])
 );
+
+// ==================== WISHLIST VISIBILITY TYPES ====================
+
+export const WISHLIST_VISIBILITY_TYPES = ['public', 'unlisted', 'private'] as const;
+export type WishlistVisibility = (typeof WISHLIST_VISIBILITY_TYPES)[number];
+
+// ==================== WISHLIST PROOF TYPES ====================
+
+export const WISHLIST_PROOF_TYPES = ['receipt', 'screenshot', 'transaction', 'comment'] as const;
+export type WishlistProofType = (typeof WISHLIST_PROOF_TYPES)[number];
+
+// ==================== WISHLIST FEEDBACK TYPES ====================
+
+export const WISHLIST_FEEDBACK_TYPES = ['like', 'dislike'] as const;
+export type WishlistFeedbackType = (typeof WISHLIST_FEEDBACK_TYPES)[number];

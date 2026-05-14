@@ -11,7 +11,14 @@
 
 import { EntityConfig } from '@/types/entity';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
-import type { DocumentType, DocumentVisibility } from '@/lib/validation';
+import {
+  DOCUMENT_TYPES,
+  DOCUMENT_TYPE_LABELS,
+  DOCUMENT_VISIBILITY_TYPES,
+  DOCUMENT_VISIBILITY_LABELS,
+  type DocumentType,
+  type DocumentVisibility,
+} from '@/config/documents';
 
 export interface DocumentListItem {
   id: string;
@@ -26,43 +33,17 @@ export interface DocumentListItem {
   [key: string]: unknown;
 }
 
-/**
- * Human-readable labels for document types
- */
-export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
-  goals: 'Goals & Aspirations',
-  finances: 'Financial Info',
-  skills: 'Skills & Expertise',
-  notes: 'Notes',
-  business_plan: 'Business Plan',
-  other: 'Other',
-};
+/** Form select options for document types (re-exported from config/documents.ts) */
+export const DOCUMENT_TYPE_OPTIONS = DOCUMENT_TYPES;
 
-/** Form select options for document types (include descriptions for form UX) */
-export const DOCUMENT_TYPE_OPTIONS = [
-  { value: 'goals', label: 'Goals & Aspirations', description: 'Your objectives and dreams' },
-  { value: 'finances', label: 'Financial Info', description: 'Budget, income, expenses' },
-  { value: 'skills', label: 'Skills & Expertise', description: 'Your abilities and experience' },
-  { value: 'business_plan', label: 'Business Plan', description: 'Startup ideas and strategies' },
-  { value: 'notes', label: 'Notes', description: 'General notes and information' },
-  { value: 'other', label: 'Other', description: 'Anything else' },
-] as const satisfies { value: DocumentType; label: string; description: string }[];
+/** Type labels re-exported for backwards compatibility */
+export { DOCUMENT_TYPE_LABELS };
 
-/**
- * Human-readable labels for visibility levels
- */
-export const VISIBILITY_LABELS: Record<DocumentVisibility, string> = {
-  private: 'Private',
-  cat_visible: 'My Cat Only',
-  public: 'Public',
-};
+/** Form select options for document visibility (re-exported from config/documents.ts) */
+export const VISIBILITY_OPTIONS = DOCUMENT_VISIBILITY_TYPES;
 
-/** Form select options for document visibility */
-export const VISIBILITY_OPTIONS = [
-  { value: 'cat_visible', label: 'My Cat Only', description: 'My Cat can use this for advice' },
-  { value: 'private', label: 'Private', description: 'Only you can see, My Cat cannot access' },
-  { value: 'public', label: 'Public', description: 'Anyone can see on your profile' },
-] as const satisfies { value: DocumentVisibility; label: string; description: string }[];
+/** Visibility labels (re-exported from config/documents.ts) */
+export const VISIBILITY_LABELS = DOCUMENT_VISIBILITY_LABELS;
 
 /**
  * Icons/emojis for document types

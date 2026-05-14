@@ -29,3 +29,13 @@ export type CauseCategory = (typeof CAUSE_CATEGORIES)[number];
 
 /** Form select options derived from CAUSE_CATEGORIES */
 export const CAUSE_CATEGORY_OPTIONS = CAUSE_CATEGORIES.map(cat => ({ value: cat, label: cat }));
+
+// ==================== CAUSE STATUSES ====================
+
+export const CAUSE_STATUSES = ['draft', 'active', 'completed', 'paused'] as const;
+export type CauseStatus = (typeof CAUSE_STATUSES)[number];
+
+// ==================== DISTRIBUTION RULE TYPES ====================
+
+export const DISTRIBUTION_RULE_TYPES = ['equal', 'weighted', 'custom'] as const;
+export type DistributionRuleType = (typeof DISTRIBUTION_RULE_TYPES)[number];

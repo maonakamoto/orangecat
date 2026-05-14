@@ -64,3 +64,16 @@ export type EventLocationType = (typeof EVENT_LOCATION_TYPES)[number]['value'];
 export const EVENT_TYPE_LABELS: Record<string, string> = Object.fromEntries(
   EVENT_TYPES.map(t => [t.value, t.label])
 );
+
+// ==================== EVENT STATUSES ====================
+
+export const EVENT_STATUSES = [
+  'draft',
+  'published',
+  'open',
+  'full',
+  'ongoing',
+  'completed',
+  'cancelled',
+] as const;
+export type EventStatus = (typeof EVENT_STATUSES)[number];
