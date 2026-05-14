@@ -129,6 +129,12 @@ export const STATUS = {
     IN_PERSON: 'in_person',
     HYBRID: 'hybrid',
   },
+  // DB constraint: CHECK (vote IN ('yes', 'no', 'abstain'))
+  PROPOSAL_VOTES: {
+    YES: 'yes',
+    NO: 'no',
+    ABSTAIN: 'abstain',
+  },
   GROUP_INVITATIONS: {
     PENDING: 'pending',
     ACCEPTED: 'accepted',
@@ -194,3 +200,4 @@ export const STATUS = {
  */
 export type InvestmentStatus = (typeof STATUS.INVESTMENTS)[keyof typeof STATUS.INVESTMENTS];
 export type AIWithdrawalStatus = (typeof STATUS.AI_WITHDRAWALS)[keyof typeof STATUS.AI_WITHDRAWALS];
+export type ProposalVoteValue = (typeof STATUS.PROPOSAL_VOTES)[keyof typeof STATUS.PROPOSAL_VOTES];

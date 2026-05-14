@@ -1,6 +1,6 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
-import { STATUS } from '@/config/database-constants';
+import { STATUS, type ProposalVoteValue } from '@/config/database-constants';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getCurrentUserId, isGroupMember } from '../utils/helpers';
 import { getProposal, getProposalVotes } from '../queries/proposals';
@@ -10,7 +10,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 interface CastVoteInput {
   proposal_id: string;
-  vote: 'yes' | 'no' | 'abstain';
+  vote: ProposalVoteValue;
 }
 
 export async function castVote(input: CastVoteInput, client?: AnySupabaseClient) {

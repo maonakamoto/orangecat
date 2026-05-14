@@ -7,16 +7,22 @@
  * Last Modified Summary: Refactored to use withAuth middleware
  */
 
-import { handleApiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/standardResponse';
+import {
+  handleApiError,
+  apiSuccess,
+  apiBadRequest,
+  apiRateLimited,
+} from '@/lib/api/standardResponse';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { logger } from '@/utils/logger';
 import { castVote } from '@/services/groups/mutations/votes';
 import { z } from 'zod';
+import { STATUS, type ProposalVoteValue } from '@/config/database-constants';
 
 const voteBodySchema = z.object({
-  vote: z.enum(['yes', 'no', 'abstain']),
+  vote: z.enum(Object.values(STATUS.PROPOSAL_VOTES) as [ProposalVoteValue, ...ProposalVoteValue[]]),
 });
 
 interface RouteContext {
@@ -27,7 +33,9 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
   try {
     const { id } = await context.params;
     const idValidation = getValidationError(validateUUID(id, 'proposal ID'));
-    if (idValidation) { return idValidation; }
+    if (idValidation) {
+      return idValidation;
+    }
     const { user } = request;
 
     const rl = await rateLimitWriteAsync(user.id);
@@ -39,7 +47,9 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     const { supabase } = request;
     const body = await request.json();
     const parsed = voteBodySchema.safeParse(body);
-    if (!parsed.success) {return apiBadRequest('vote must be one of: yes, no, abstain');}
+    if (!parsed.success) {
+      return apiBadRequest('vote must be one of: yes, no, abstain');
+    }
     const result = await castVote({ proposal_id: id, vote: parsed.data.vote }, supabase);
     if (!result.success) {
       return apiBadRequest(result.error);
