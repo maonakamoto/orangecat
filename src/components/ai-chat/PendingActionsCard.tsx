@@ -117,6 +117,7 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
   const [rejecting, setRejecting] = useState(false);
   const [completed, setCompleted] = useState<'confirmed' | 'rejected' | null>(null);
   const [confirmMessage, setConfirmMessage] = useState<string | undefined>(undefined);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const Icon = ACTION_ICONS[action.actionId] || CATEGORY_ICONS[action.category] || Package;
   const timeLeft = formatTimeLeft(action.expiresAt);
@@ -124,10 +125,13 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
 
   const handleConfirm = async () => {
     setConfirming(true);
+    setActionError(null);
     try {
       const msg = await onConfirm(action.id);
       setConfirmMessage(msg);
       setCompleted('confirmed');
+    } catch (e) {
+      setActionError(e instanceof Error ? e.message : 'Failed to confirm action');
     } finally {
       setConfirming(false);
     }
@@ -135,9 +139,12 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
 
   const handleReject = async () => {
     setRejecting(true);
+    setActionError(null);
     try {
       await onReject(action.id);
       setCompleted('rejected');
+    } catch (e) {
+      setActionError(e instanceof Error ? e.message : 'Failed to reject action');
     } finally {
       setRejecting(false);
     }
@@ -225,6 +232,14 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
         </div>
       )}
 
+      {/* Error feedback */}
+      {actionError && (
+        <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 rounded-lg px-3 py-2">
+          <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0" />
+          <span>{actionError}</span>
+        </div>
+      )}
+
       {/* Actions */}
       <div className="flex gap-2 pt-1">
         <Button
@@ -268,6 +283,9 @@ export function usePendingActions() {
       method: 'POST',
     });
     const json = await res.json();
+    if (!res.ok) {
+      throw new Error(json?.error ?? `Failed to confirm action (${res.status})`);
+    }
     const data = json?.data as Record<string, unknown> | undefined;
     return typeof data?.displayMessage === 'string' ? data.displayMessage : undefined;
   };
@@ -278,11 +296,18 @@ export function usePendingActions() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ reason }),
     });
-    return res.json();
+    const json = await res.json();
+    if (!res.ok) {
+      throw new Error(json?.error ?? `Failed to reject action (${res.status})`);
+    }
+    return json;
   };
 
   const getPendingActions = async (): Promise<PendingAction[]> => {
     const res = await fetch(API_ROUTES.CAT.ACTIONS);
+    if (!res.ok) {
+      return [];
+    }
     const json = await res.json();
     return json.success ? json.data.pendingActions : [];
   };
