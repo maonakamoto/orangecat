@@ -12,6 +12,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { CAT_ACTIONS, type CatAction, type ActionCategory } from '@/config/cat-actions';
 import { CatPermissionService } from './permission-service';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 import { ACTION_HANDLERS } from './handlers';
 import { generateActionDescription } from './action-descriptions';
@@ -138,7 +139,7 @@ export class CatActionExecutor {
       .select('*')
       .eq('id', pendingActionId)
       .eq('user_id', userId)
-      .eq('status', 'pending')
+      .eq('status', STATUS.CAT_PENDING_ACTIONS.PENDING)
       .single();
 
     if (fetchError || !pending) {
@@ -153,7 +154,7 @@ export class CatActionExecutor {
     if (new Date(pending.expires_at) < new Date()) {
       await this.supabase
         .from(DATABASE_TABLES.CAT_PENDING_ACTIONS)
-        .update({ status: 'expired' })
+        .update({ status: STATUS.CAT_PENDING_ACTIONS.EXPIRED })
         .eq('id', pendingActionId);
 
       return {
@@ -166,7 +167,10 @@ export class CatActionExecutor {
 
     await this.supabase
       .from(DATABASE_TABLES.CAT_PENDING_ACTIONS)
-      .update({ status: 'confirmed', confirmed_at: new Date().toISOString() })
+      .update({
+        status: STATUS.CAT_PENDING_ACTIONS.CONFIRMED,
+        confirmed_at: new Date().toISOString(),
+      })
       .eq('id', pendingActionId);
 
     const action = CAT_ACTIONS[pending.action_id];
@@ -200,7 +204,7 @@ export class CatActionExecutor {
     await this.supabase
       .from(DATABASE_TABLES.CAT_PENDING_ACTIONS)
       .update({
-        status: 'rejected',
+        status: STATUS.CAT_PENDING_ACTIONS.REJECTED,
         rejected_at: new Date().toISOString(),
         rejection_reason: reason || null,
       })
@@ -216,7 +220,7 @@ export class CatActionExecutor {
       .from(DATABASE_TABLES.CAT_PENDING_ACTIONS)
       .select('*')
       .eq('user_id', userId)
-      .eq('status', 'pending')
+      .eq('status', STATUS.CAT_PENDING_ACTIONS.PENDING)
       .gt('expires_at', new Date().toISOString())
       .order('created_at', { ascending: false });
 

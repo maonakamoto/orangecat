@@ -202,6 +202,13 @@ export const STATUS = {
     COMPLETED: 'completed',
     CANCELLED: 'cancelled',
   },
+  // DB constraint: CHECK (status IN ('pending', 'confirmed', 'rejected', 'expired'))
+  CAT_PENDING_ACTIONS: {
+    PENDING: 'pending',
+    CONFIRMED: 'confirmed',
+    REJECTED: 'rejected',
+    EXPIRED: 'expired',
+  },
 } as const;
 
 /**
