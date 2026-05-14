@@ -16,6 +16,7 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { ENTITY_REGISTRY, ENTITY_TYPES, type EntityType } from '@/config/entity-registry';
+import { STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 
 const LOG_SOURCE = 'DigestBuilder';
@@ -134,7 +135,7 @@ async function fetchPaymentStats(
     .from(DATABASE_TABLES.PAYMENT_INTENTS)
     .select('amount_btc')
     .eq('seller_id', userId)
-    .eq('status', 'completed')
+    .in('status', [STATUS.PAYMENT_INTENTS.PAID, STATUS.PAYMENT_INTENTS.BUYER_CONFIRMED])
     .gte('created_at', since.toISOString());
 
   if (!currentPayments || currentPayments.length === 0) {

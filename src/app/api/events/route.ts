@@ -17,20 +17,21 @@ import { CURRENCY_CODES, PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
-
-// Event status values
-const EVENT_PUBLIC_STATUSES = ['published', 'open', 'full', 'ongoing', 'completed'] as const;
-const EVENT_DRAFT_STATUSES = ['draft', 'cancelled', ...EVENT_PUBLIC_STATUSES] as const;
+import { STATUS } from '@/config/database-constants';
 
 // Date fields that need normalization
 const EVENT_DATE_FIELDS = ['start_date', 'end_date', 'rsvp_deadline'] as const;
+
+const { DRAFT, CANCELLED, ...EVENT_PUBLIC_STATUS_MAP } = STATUS.EVENTS;
+const EVENT_PUBLIC_STATUSES = Object.values(EVENT_PUBLIC_STATUS_MAP);
+const EVENT_DRAFT_STATUSES = Object.values(STATUS.EVENTS);
 
 // GET /api/events - Get all published events
 export const GET = createEntityListHandler({
   entityType: 'event',
   userIdField: 'actor_id',
-  publicStatuses: [...EVENT_PUBLIC_STATUSES],
-  draftStatuses: [...EVENT_DRAFT_STATUSES],
+  publicStatuses: EVENT_PUBLIC_STATUSES,
+  draftStatuses: EVENT_DRAFT_STATUSES,
   orderBy: 'start_date',
   orderDirection: 'asc',
   additionalFilters: {

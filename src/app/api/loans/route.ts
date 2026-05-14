@@ -9,13 +9,14 @@ import { loanSchema } from '@/lib/validation';
 import { createLoan, type CreateLoanInput } from '@/domain/loans/service';
 import { createEntityListHandler } from '@/lib/api/entityListHandler';
 import { createEntityPostHandler } from '@/lib/api/entityPostHandler';
+import { STATUS } from '@/config/database-constants';
 
 // GET /api/loans - List loans with pagination and filtering
 // Uses generic entity list handler with status filter support
 export const GET = createEntityListHandler({
   entityType: 'loan',
   userIdField: 'actor_id',
-  publicStatuses: ['active'],
+  publicStatuses: [STATUS.LOANS.ACTIVE],
   additionalFilters: { status: 'status' }, // Allow status filter from URL params
 });
 

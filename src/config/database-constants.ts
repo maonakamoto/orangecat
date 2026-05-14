@@ -89,6 +89,15 @@ export const STATUS = {
     CANCELLED: 'cancelled',
     REFUNDED: 'refunded',
   },
+  // DB constraint: CHECK (status IN ('created', 'invoice_ready', 'paid', 'expired', 'failed', 'buyer_confirmed'))
+  PAYMENT_INTENTS: {
+    CREATED: 'created',
+    INVOICE_READY: 'invoice_ready',
+    PAID: 'paid',
+    EXPIRED: 'expired',
+    FAILED: 'failed',
+    BUYER_CONFIRMED: 'buyer_confirmed',
+  },
   PRODUCTS: {
     DRAFT: 'draft',
     ACTIVE: 'active',
