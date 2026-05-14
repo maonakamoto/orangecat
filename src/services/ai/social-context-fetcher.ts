@@ -138,7 +138,7 @@ export async function fetchInboundActivityForCat(
         .from(DATABASE_TABLES.ORDERS)
         .select('entity_title, entity_type, amount_btc, status, created_at')
         .eq('seller_id', userId)
-        .eq('status', 'paid')
+        .eq('status', STATUS.ORDERS.PAID)
         .order('created_at', { ascending: false })
         .limit(10),
 

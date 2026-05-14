@@ -80,6 +80,15 @@ export const STATUS = {
     COMPLETED: 'completed',
     FAILED: 'failed',
   },
+  // DB constraint: CHECK (status IN ('pending_payment', 'paid', 'shipped', 'completed', 'cancelled', 'refunded'))
+  ORDERS: {
+    PENDING_PAYMENT: 'pending_payment',
+    PAID: 'paid',
+    SHIPPED: 'shipped',
+    COMPLETED: 'completed',
+    CANCELLED: 'cancelled',
+    REFUNDED: 'refunded',
+  },
   PRODUCTS: {
     DRAFT: 'draft',
     ACTIVE: 'active',

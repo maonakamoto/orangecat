@@ -47,8 +47,7 @@ export const GET = withOptionalAuth(
       const { count: supportCount } = await supabase
         .from(DATABASE_TABLES.PROJECT_SUPPORT)
         .select('*', { count: 'exact', head: true })
-        .eq('project_id', projectId)
-        .eq('status', 'confirmed');
+        .eq('project_id', projectId);
       const supporterCount = supportCount ?? 0;
 
       // Calculate progress
