@@ -85,6 +85,9 @@ const config: Config = {
         },
         bitcoinOrange: 'rgb(var(--bitcoin-orange-channels) / <alpha-value>)',
         tiffany: {
+          DEFAULT: 'rgb(var(--tiffany-500) / <alpha-value>)',
+          light: 'rgb(var(--tiffany-50) / <alpha-value>)',
+          dark: 'rgb(var(--tiffany-700) / <alpha-value>)',
           '50': 'rgb(var(--tiffany-50) / <alpha-value>)',
           '100': 'rgb(var(--tiffany-100) / <alpha-value>)',
           '200': 'rgb(var(--tiffany-200) / <alpha-value>)',
