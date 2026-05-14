@@ -24,6 +24,7 @@ import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { API_ROUTES } from '@/config/api-routes';
+import { STATUS } from '@/config/database-constants';
 import {
   RESEARCH_FIELDS,
   RESEARCH_FIELD_COLORS,
@@ -105,7 +106,7 @@ export default function ResearchDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {loading ? '—' : entities.filter(e => e.status === 'active').length}
+              {loading ? '—' : entities.filter(e => e.status === STATUS.RESEARCH.ACTIVE).length}
             </div>
           </CardContent>
         </Card>

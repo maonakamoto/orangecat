@@ -8,6 +8,7 @@
  */
 
 import { Heart } from 'lucide-react';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import { userCauseSchema, type UserCauseFormData } from '@/lib/validation';
 import { causeGuidanceContent, causeDefaultGuidance } from '@/lib/entity-guidance/cause-guidance';
 import type { FieldGroup } from '@/components/create/types';
@@ -105,7 +106,7 @@ const defaultValues: UserCauseFormData = {
   bitcoin_address: '',
   lightning_address: '',
   beneficiaries: [],
-  status: 'draft',
+  status: ENTITY_STATUS.DRAFT,
 };
 
 // ==================== EXPORT CONFIG ====================

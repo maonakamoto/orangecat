@@ -234,6 +234,12 @@ export const STATUS = {
     REJECTED: 'rejected',
     EXPIRED: 'expired',
   },
+  PROFILES: {
+    ACTIVE: 'active',
+    INACTIVE: 'inactive',
+    SUSPENDED: 'suspended',
+    DELETED: 'deleted',
+  },
 } as const;
 
 /**

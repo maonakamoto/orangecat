@@ -27,6 +27,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import type { EntityTemplate } from '../types';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import type { AIAssistantFormData } from '@/lib/validation';
 
 export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
@@ -46,7 +47,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 1000,
       model_preference: 'gpt-4',
       temperature: 0.7,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -65,7 +66,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 2000,
       model_preference: 'gpt-4',
       temperature: 0.3,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -84,7 +85,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 500,
       model_preference: 'gpt-3.5-turbo',
       temperature: 0.5,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -98,12 +99,12 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
         'Personalized tutoring assistant that explains concepts, answers questions, and helps with homework across various subjects.',
       category: 'Education & Tutoring',
       system_prompt:
-        'You are a patient and encouraging tutor. Explain concepts clearly, use examples, and adapt to the student\'s learning style.',
+        "You are a patient and encouraging tutor. Explain concepts clearly, use examples, and adapt to the student's learning style.",
       pricing_model: 'per_message',
       price_per_message: 1500,
       model_preference: 'gpt-4',
       temperature: 0.6,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -122,7 +123,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 3000,
       model_preference: 'gpt-4',
       temperature: 0.5,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -141,7 +142,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 2000,
       model_preference: 'gpt-4',
       temperature: 0.8,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -160,7 +161,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_1k_tokens: 100,
       model_preference: 'gpt-4',
       temperature: 0.3,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -179,7 +180,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 800,
       model_preference: 'gpt-4',
       temperature: 0.2,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -198,7 +199,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 1500,
       model_preference: 'gpt-4',
       temperature: 0.6,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -217,7 +218,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 4000,
       model_preference: 'gpt-4',
       temperature: 0.4,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -236,7 +237,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 2000,
       model_preference: 'gpt-4',
       temperature: 0.9,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   // ==================== PROFESSIONAL AI ASSISTANTS ====================
@@ -256,7 +257,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 3000,
       model_preference: 'gpt-4',
       temperature: 0.3, // Low temperature for accuracy
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -275,7 +276,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 2500,
       model_preference: 'gpt-4',
       temperature: 0.7,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -289,12 +290,12 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
         'Personalized language tutor that teaches vocabulary, grammar, pronunciation, and conversational skills. Adapts to your level and learning goals. Supports all major languages.',
       category: 'Education & Languages',
       system_prompt:
-        'You are a patient and encouraging language tutor. Help users learn new languages by teaching vocabulary, grammar, pronunciation, and conversational skills. Adapt your teaching to the user\'s level (beginner, intermediate, advanced). Provide exercises, correct mistakes gently, and explain language rules clearly. Use the target language progressively as the user advances. Include cultural context when appropriate.',
+        "You are a patient and encouraging language tutor. Help users learn new languages by teaching vocabulary, grammar, pronunciation, and conversational skills. Adapt your teaching to the user's level (beginner, intermediate, advanced). Provide exercises, correct mistakes gently, and explain language rules clearly. Use the target language progressively as the user advances. Include cultural context when appropriate.",
       pricing_model: 'per_message',
       price_per_message: 1500,
       model_preference: 'gpt-4',
       temperature: 0.6,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -313,7 +314,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 4000,
       model_preference: 'gpt-4',
       temperature: 0.4,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -332,9 +333,7 @@ export const AI_ASSISTANT_TEMPLATES: EntityTemplate<AIAssistantFormData>[] = [
       price_per_message: 800,
       model_preference: 'gpt-4',
       temperature: 0.5,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
 ];
-
-

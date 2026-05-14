@@ -10,6 +10,7 @@
 import React from 'react';
 import { Briefcase, Palette, Camera, Sparkles, Globe2 } from 'lucide-react';
 import type { EntityTemplate } from '../types';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import type { UserServiceFormData } from '@/lib/validation';
 
 export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
@@ -28,7 +29,7 @@ export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
       duration_minutes: 60,
       service_location_type: 'remote',
       service_area: '',
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -47,7 +48,7 @@ export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
       duration_minutes: null,
       service_location_type: 'remote',
       service_area: '',
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -66,7 +67,7 @@ export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
       duration_minutes: 60,
       service_location_type: 'both',
       service_area: '',
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -85,7 +86,7 @@ export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
       duration_minutes: 60,
       service_location_type: 'remote',
       service_area: '',
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -104,7 +105,7 @@ export const SERVICE_TEMPLATES: EntityTemplate<UserServiceFormData>[] = [
       duration_minutes: 120,
       service_location_type: 'onsite',
       service_area: '',
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
 ];

@@ -8,6 +8,7 @@
  */
 
 import { Package } from 'lucide-react';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import { userProductSchema, type UserProductFormData } from '@/lib/validation';
 import {
   productGuidanceContent,
@@ -140,7 +141,7 @@ const defaultValues: UserProductFormData = {
   fulfillment_type: 'manual',
   category: '',
   tags: [],
-  status: 'draft',
+  status: ENTITY_STATUS.DRAFT,
   is_featured: false,
 };
 

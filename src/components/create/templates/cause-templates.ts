@@ -23,6 +23,7 @@ import {
   Music,
 } from 'lucide-react';
 import type { EntityTemplate } from '../types';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import type { UserCauseFormData } from '@/lib/validation';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 
@@ -39,7 +40,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Education',
       goal_amount: 5000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -54,7 +55,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Healthcare',
       goal_amount: 10000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -69,7 +70,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Environment',
       goal_amount: 3000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -84,7 +85,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Disaster Relief',
       goal_amount: 20000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -99,7 +100,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Poverty Relief',
       goal_amount: 5000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -114,7 +115,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Animal Welfare',
       goal_amount: 2500,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -129,7 +130,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Arts & Culture',
       goal_amount: 2000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -144,7 +145,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Community Development',
       goal_amount: 10000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -159,7 +160,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Children & Youth',
       goal_amount: 4000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -174,7 +175,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Technology Access',
       goal_amount: 6000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -189,7 +190,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Mental Health',
       goal_amount: 5000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -204,7 +205,7 @@ export const CAUSE_TEMPLATES: EntityTemplate<UserCauseFormData>[] = [
       cause_category: 'Veterans Support',
       goal_amount: 8000,
       currency: PLATFORM_DEFAULT_CURRENCY,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
 ];

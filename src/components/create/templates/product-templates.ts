@@ -10,6 +10,7 @@
 import React from 'react';
 import { FileDigit, ShoppingBag, Music, Ticket } from 'lucide-react';
 import type { EntityTemplate } from '../types';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import type { UserProductFormData } from '@/lib/validation';
 
 export const PRODUCT_TEMPLATES: EntityTemplate<UserProductFormData>[] = [
@@ -27,7 +28,7 @@ export const PRODUCT_TEMPLATES: EntityTemplate<UserProductFormData>[] = [
       currency: 'CHF',
       inventory_count: -1,
       fulfillment_type: 'digital',
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -44,7 +45,7 @@ export const PRODUCT_TEMPLATES: EntityTemplate<UserProductFormData>[] = [
       currency: 'CHF',
       inventory_count: 25,
       fulfillment_type: 'manual',
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -61,7 +62,7 @@ export const PRODUCT_TEMPLATES: EntityTemplate<UserProductFormData>[] = [
       currency: 'CHF',
       inventory_count: 50,
       fulfillment_type: 'digital',
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -78,7 +79,7 @@ export const PRODUCT_TEMPLATES: EntityTemplate<UserProductFormData>[] = [
       currency: 'CHF',
       inventory_count: -1,
       fulfillment_type: 'digital',
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
 ];

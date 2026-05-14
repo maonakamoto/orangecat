@@ -10,6 +10,7 @@
 import React from 'react';
 import { Calendar, Palette, Briefcase, Globe2 } from 'lucide-react';
 import type { EntityTemplate } from '../types';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import type { EventFormData } from '@/lib/validation';
 
 export const EVENT_TEMPLATES: EntityTemplate<EventFormData>[] = [
@@ -35,7 +36,7 @@ export const EVENT_TEMPLATES: EntityTemplate<EventFormData>[] = [
       max_attendees: 50,
       requires_rsvp: true,
       is_free: true,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -61,7 +62,7 @@ export const EVENT_TEMPLATES: EntityTemplate<EventFormData>[] = [
       requires_rsvp: true,
       ticket_price: 50000,
       is_free: false,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -88,7 +89,7 @@ export const EVENT_TEMPLATES: EntityTemplate<EventFormData>[] = [
       ticket_price: 200000,
       is_free: false,
       funding_goal: 1000000,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
   {
@@ -111,9 +112,7 @@ export const EVENT_TEMPLATES: EntityTemplate<EventFormData>[] = [
       max_attendees: null,
       requires_rsvp: true,
       is_free: true,
-      status: 'draft',
+      status: ENTITY_STATUS.DRAFT,
     },
   },
 ];
-
-

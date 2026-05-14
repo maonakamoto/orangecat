@@ -7,6 +7,7 @@
  */
 
 import type { ScalableProfile } from './types';
+import { STATUS } from '@/config/database-constants';
 
 type DbProfileRow = {
   id: string;
@@ -68,7 +69,7 @@ export class ProfileMapper {
       // Customization & Branding
 
       // Status & Temporal
-      status: 'active',
+      status: STATUS.PROFILES.ACTIVE,
       last_active_at: null,
       profile_completed_at: null,
       onboarding_completed: false,

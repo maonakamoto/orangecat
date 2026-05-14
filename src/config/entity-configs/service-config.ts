@@ -8,6 +8,7 @@
  */
 
 import { Briefcase } from 'lucide-react';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import { userServiceSchema, type UserServiceFormData } from '@/lib/validation';
 import {
   serviceGuidanceContent,
@@ -167,7 +168,7 @@ const defaultValues: UserServiceFormData = {
   images: [],
   portfolio_links: [],
   show_on_profile: true,
-  status: 'draft',
+  status: ENTITY_STATUS.DRAFT,
 };
 
 // ==================== EXPORT CONFIG ====================

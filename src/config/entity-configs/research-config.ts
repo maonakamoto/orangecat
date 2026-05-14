@@ -1,6 +1,7 @@
 import { EntityConfig } from '@/types/entity';
 import { ResearchEntity } from '@/types/research';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { STATUS } from '@/config/database-constants';
 import { z } from 'zod';
 import {
   RESEARCH_FIELDS,
@@ -119,8 +120,13 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
   // Card rendering
   makeHref: entity => `${ENTITY_REGISTRY['research'].publicBasePath}/${entity.id}`,
   makeCardProps: entity => ({
-    badge: entity.status === 'active' ? 'Active' : entity.status === 'draft' ? 'Draft' : undefined,
-    badgeVariant: entity.status === 'active' ? 'success' : 'default',
+    badge:
+      entity.status === STATUS.RESEARCH.ACTIVE
+        ? 'Active'
+        : entity.status === STATUS.RESEARCH.DRAFT
+          ? 'Draft'
+          : undefined,
+    badgeVariant: entity.status === STATUS.RESEARCH.ACTIVE ? 'success' : 'default',
     showEditButton: true,
     editHref: `${ENTITY_REGISTRY['research'].createPath}?edit=${entity.id}`,
   }),
@@ -350,7 +356,7 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
     progress_frequency: 'monthly',
     voting_enabled: true,
     open_collaboration: true,
-    status: 'draft',
+    status: STATUS.RESEARCH.DRAFT,
     is_public: true,
     is_featured: false,
   },

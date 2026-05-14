@@ -9,6 +9,7 @@
  */
 
 import { Bot } from 'lucide-react';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import { aiAssistantSchema, type AIAssistantFormData } from '@/lib/validation';
 import type { FieldGroup } from '@/components/create/types';
 import { aiAssistantGuidanceContent, aiAssistantDefaultGuidance } from '@/lib/entity-guidance';
@@ -240,7 +241,7 @@ const defaultValues: AIAssistantFormData = {
   free_messages_per_day: 5,
   is_public: true,
   is_featured: false,
-  status: 'draft',
+  status: ENTITY_STATUS.DRAFT,
   lightning_address: '',
   bitcoin_address: '',
 };

@@ -11,6 +11,7 @@ import { logger } from '@/utils/logger';
 import { ProfileMapper } from './mapper';
 import type { ScalableProfile, ScalableProfileFormData, ProfileServiceResponse } from './types';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 
 // =====================================================================
 // ✏️ PROFILE WRITE OPERATIONS
@@ -130,7 +131,7 @@ export class ProfileWriter {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         last_active_at: new Date().toISOString(),
-        status: 'active',
+        status: STATUS.PROFILES.ACTIVE,
         onboarding_completed: false,
       };
 

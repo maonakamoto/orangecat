@@ -12,6 +12,7 @@ import type { Database } from '@/types/database';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getTableName } from '@/config/entity-registry';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
+import { STATUS } from '@/config/database-constants';
 
 type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 type ProfileInsert = Database['public']['Tables']['profiles']['Insert'];
@@ -141,7 +142,9 @@ export class ProfileServerService {
       // Sanitize: replace dots and other invalid chars with underscores, keep only letters/numbers/underscores/hyphens
       const sanitizedEmailName = emailName ? emailName.replace(/[^a-zA-Z0-9_-]/g, '_') : null;
       const username =
-        sanitizedEmailName && sanitizedEmailName.length > 0 ? sanitizedEmailName : `user_${String(userId).slice(0, 8)}`;
+        sanitizedEmailName && sanitizedEmailName.length > 0
+          ? sanitizedEmailName
+          : `user_${String(userId).slice(0, 8)}`;
       const name =
         (userMetadata?.full_name as string | undefined) ||
         (userMetadata?.name as string | undefined) ||
@@ -154,7 +157,7 @@ export class ProfileServerService {
         username,
         name,
         email: safeEmail,
-        status: 'active',
+        status: STATUS.PROFILES.ACTIVE,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };

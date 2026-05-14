@@ -9,6 +9,7 @@
  */
 
 import { Calendar } from 'lucide-react';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import { eventSchema, type EventFormData } from '@/lib/validation';
 import { eventGuidanceContent, eventDefaultGuidance } from '@/lib/entity-guidance/event-guidance';
 import type { FieldGroup } from '@/components/create/types';
@@ -316,7 +317,7 @@ const defaultValues: EventFormData = {
   thumbnail_url: '',
   banner_url: '',
   video_url: '',
-  status: 'draft',
+  status: ENTITY_STATUS.DRAFT,
 };
 
 // ==================== EXPORT CONFIG ====================
