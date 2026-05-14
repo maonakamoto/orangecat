@@ -32,6 +32,9 @@ export function useCatContext(): UseCatContextReturn {
     async function fetchSummary() {
       try {
         const res = await fetch(API_ROUTES.CAT.CONTEXT);
+        if (!res.ok) {
+          return;
+        }
         const data = await res.json();
         if (data.success) {
           setSummary(data.data);

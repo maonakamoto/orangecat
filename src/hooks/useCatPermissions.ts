@@ -38,6 +38,9 @@ export function useCatPermissions(): UseCatPermissionsReturn {
   const fetchPermissions = useCallback(async () => {
     try {
       const res = await fetch(API_ROUTES.CAT.PERMISSIONS);
+      if (!res.ok) {
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setPermissions(data.data);
@@ -65,6 +68,9 @@ export function useCatPermissions(): UseCatPermissionsReturn {
           body: JSON.stringify({ category: categoryId, enabled }),
         });
         const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data?.error ?? `Request failed (${res.status})`);
+        }
         if (data.success) {
           await fetchPermissions();
         }

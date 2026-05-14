@@ -76,7 +76,9 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
 
         const response = await fetch(`${API_ROUTES.NOTIFICATIONS.BASE}?${params}`);
         const data = await response.json();
-
+        if (!response.ok) {
+          throw new Error(data?.error ?? `Failed to fetch notifications (${response.status})`);
+        }
         if (!data.success) {
           throw new Error(data.error || 'Failed to fetch notifications');
         }
@@ -105,8 +107,10 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
 
     try {
       const response = await fetch(API_ROUTES.NOTIFICATIONS.UNREAD);
+      if (!response.ok) {
+        return;
+      }
       const data = await response.json();
-
       if (data.success) {
         setUnreadCount(data.data.count);
       }
