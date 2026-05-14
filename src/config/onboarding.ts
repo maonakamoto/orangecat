@@ -31,26 +31,26 @@ export const EXPLORE_OPTIONS = [
     title: 'Discover Projects',
     description: 'Browse what others are building and find inspiration',
     href: ROUTES.DISCOVER,
-    color: 'orange',
+    bg: 'bg-orange-50',
+    text: 'text-orange-600',
+    border: 'hover:border-orange-300',
   },
   {
     icon: MessageCircle,
     title: 'My Cat',
     description: 'Your AI economic agent — ask it anything about OrangeCat',
     href: ROUTES.DASHBOARD.CAT,
-    color: 'tiffany',
+    bg: 'bg-tiffany-50',
+    text: 'text-tiffany-600',
+    border: 'hover:border-tiffany-300',
   },
   {
     icon: Users,
     title: 'Community',
     description: 'Connect with creators and supporters',
     href: ROUTES.COMMUNITY,
-    color: 'blue',
+    bg: 'bg-tiffany-50',
+    text: 'text-tiffany-600',
+    border: 'hover:border-tiffany-300',
   },
 ] as const;
-
-export const EXPLORE_COLOR_CLASSES: Record<string, { bg: string; text: string; border: string }> = {
-  orange: { bg: 'bg-orange-50', text: 'text-orange-600', border: 'hover:border-orange-300' },
-  tiffany: { bg: 'bg-tiffany-50', text: 'text-tiffany-600', border: 'hover:border-tiffany-300' },
-  blue: { bg: 'bg-tiffany-50', text: 'text-tiffany-600', border: 'hover:border-tiffany-300' },
-};

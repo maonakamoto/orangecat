@@ -19,6 +19,7 @@ export const GRADIENTS = {
   brandGreen: 'bg-gradient-to-r from-green-600 to-green-700',
   brandBlue: 'bg-gradient-to-r from-blue-600 to-blue-700',
   brandRose: 'bg-gradient-to-r from-rose-500 to-rose-600',
+  brandRoseDark: 'bg-gradient-to-r from-rose-600 to-rose-700',
 
   // ── Section / card background tints ───────────────────────────────────────
   sectionGreen: 'bg-gradient-to-r from-green-50 to-emerald-50',

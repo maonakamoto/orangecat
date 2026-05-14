@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Bitcoin, ArrowRight, Loader2 } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
-import { EXPLORE_OPTIONS, EXPLORE_COLOR_CLASSES } from '@/config/onboarding';
+import { EXPLORE_OPTIONS } from '@/config/onboarding';
 import { useOnboardingContext } from '../context';
 
 export function ExploreStep() {
@@ -32,24 +32,23 @@ export function ExploreStep() {
       <div className="space-y-3">
         {EXPLORE_OPTIONS.map(option => {
           const Icon = option.icon;
-          const colors = EXPLORE_COLOR_CLASSES[option.color];
           const isLoading = loadingHref === option.href;
           return (
             <Card
               key={option.title}
-              className={`transition-all ${isLoading ? `${colors.border.replace('hover:', '')} shadow-md` : loadingHref ? 'opacity-50 cursor-not-allowed' : `${colors.border} hover:shadow-md cursor-pointer`}`}
+              className={`transition-all ${isLoading ? `${option.border.replace('hover:', '')} shadow-md` : loadingHref ? 'opacity-50 cursor-not-allowed' : `${option.border} hover:shadow-md cursor-pointer`}`}
               onClick={() => handleOptionClick(option.href)}
             >
               <CardContent className="p-4 flex items-center gap-4">
-                <div className={`p-3 ${colors.bg} rounded-xl flex-shrink-0`}>
-                  <Icon className={`h-5 w-5 ${colors.text}`} />
+                <div className={`p-3 ${option.bg} rounded-xl flex-shrink-0`}>
+                  <Icon className={`h-5 w-5 ${option.text}`} />
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold">{option.title}</p>
                   <p className="text-sm text-muted-foreground">{option.description}</p>
                 </div>
                 {isLoading ? (
-                  <Loader2 className={`h-4 w-4 ${colors.text} animate-spin flex-shrink-0`} />
+                  <Loader2 className={`h-4 w-4 ${option.text} animate-spin flex-shrink-0`} />
                 ) : (
                   <ArrowRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
                 )}

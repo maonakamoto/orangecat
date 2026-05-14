@@ -22,7 +22,7 @@ interface FormActionsProps {
   mode: 'create' | 'edit';
   entityName: string;
   backUrl: string;
-  theme: { gradient: string };
+  theme: { btnGradient: string };
   wizardMode?: WizardMode;
   lastSavedAt?: Date | null;
   formatRelativeTime?: (timestamp: string) => string;
@@ -77,7 +77,7 @@ function WizardNavigation({
   wizardMode: WizardMode;
   isSubmitting: boolean;
   entityName: string;
-  theme: { gradient: string };
+  theme: { btnGradient: string };
 }) {
   return (
     <div className="flex justify-between">
@@ -102,11 +102,7 @@ function WizardNavigation({
             Next
           </Button>
         ) : wizardMode.isLastStep ? (
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className={`bg-gradient-to-r ${theme.gradient}`}
-          >
+          <Button type="submit" disabled={isSubmitting} className={theme.btnGradient}>
             {isSubmitting ? 'Creating...' : `Create ${entityName}`}
           </Button>
         ) : null}
@@ -126,15 +122,11 @@ function StandardActions({
   mode: 'create' | 'edit';
   entityName: string;
   backUrl: string;
-  theme: { gradient: string };
+  theme: { btnGradient: string };
 }) {
   return (
     <div className="flex gap-4">
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        className={`bg-gradient-to-r ${theme.gradient}`}
-      >
+      <Button type="submit" disabled={isSubmitting} className={theme.btnGradient}>
         {isSubmitting
           ? `${mode === 'create' ? 'Creating' : 'Saving'}...`
           : `${mode === 'create' ? 'Create' : 'Save'} ${entityName}`}

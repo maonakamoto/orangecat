@@ -25,31 +25,26 @@ export const PROJECT_STATUSES = {
     label: 'Draft',
     className: `border ${BADGE_COLORS.muted}`,
     badgeVariant: 'default' as const,
-    color: 'slate',
   },
   active: {
     label: 'Active',
     className: `border ${BADGE_COLORS.success}`,
     badgeVariant: 'success' as const,
-    color: 'green',
   },
   paused: {
     label: 'Paused',
     className: `border ${BADGE_COLORS.warning}`,
     badgeVariant: 'warning' as const,
-    color: 'yellow',
   },
   completed: {
     label: 'Completed',
     className: `border ${BADGE_COLORS.info}`,
     badgeVariant: 'info' as const,
-    color: 'blue',
   },
   cancelled: {
     label: 'Cancelled',
     className: `border ${BADGE_COLORS.error}`,
     badgeVariant: 'error' as const,
-    color: 'red',
   },
 };
 
