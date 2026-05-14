@@ -34,6 +34,7 @@ export const wishlistEntityConfig: EntityConfig<WishlistListItem> = {
   createPath: ENTITY_REGISTRY['wishlist'].createPath,
   editPath: id => `${ENTITY_REGISTRY['wishlist'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['wishlist'].type,
   apiEndpoint: ENTITY_REGISTRY['wishlist'].apiEndpoint,
 
   makeHref: item => `${ENTITY_REGISTRY['wishlist'].basePath}/${item.id}`,

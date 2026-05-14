@@ -51,6 +51,7 @@ export const projectEntityConfig: EntityConfig<ProjectListItem> = {
   createPath: ENTITY_REGISTRY['project'].createPath,
   editPath: id => `${ENTITY_REGISTRY['project'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['project'].type,
   apiEndpoint: ENTITY_REGISTRY['project'].apiEndpoint,
 
   makeHref: project => `${ENTITY_REGISTRY['project'].publicBasePath}/${project.id}`,

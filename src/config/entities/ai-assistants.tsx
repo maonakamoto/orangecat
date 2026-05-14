@@ -28,6 +28,7 @@ export const aiAssistantEntityConfig: EntityConfig<AIAssistant> = {
   createPath: ENTITY_REGISTRY['ai_assistant'].createPath,
   editPath: id => `${ENTITY_REGISTRY['ai_assistant'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['ai_assistant'].type,
   apiEndpoint: ENTITY_REGISTRY['ai_assistant'].apiEndpoint,
 
   makeHref: assistant => `${ENTITY_REGISTRY['ai_assistant'].basePath}/${assistant.id}`,

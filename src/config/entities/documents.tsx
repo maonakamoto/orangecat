@@ -67,6 +67,7 @@ export const documentEntityConfig: EntityConfig<DocumentListItem> = {
   createPath: ENTITY_REGISTRY['document'].createPath,
   editPath: id => `${ENTITY_REGISTRY['document'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['document'].type,
   apiEndpoint: ENTITY_REGISTRY['document'].apiEndpoint,
 
   makeHref: item => `${ENTITY_REGISTRY['document'].basePath}/${item.id}`,

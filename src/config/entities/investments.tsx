@@ -24,6 +24,7 @@ export const investmentEntityConfig: EntityConfig<Investment> = {
   createPath: ENTITY_REGISTRY['investment'].createPath,
   editPath: id => `${ENTITY_REGISTRY['investment'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['investment'].type,
   apiEndpoint: ENTITY_REGISTRY['investment'].apiEndpoint,
 
   makeHref: investment => `${ENTITY_REGISTRY['investment'].basePath}/${investment.id}`,

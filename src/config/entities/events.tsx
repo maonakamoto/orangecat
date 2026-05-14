@@ -73,6 +73,7 @@ export const eventEntityConfig: EntityConfig<Event> = {
   createPath: ENTITY_REGISTRY['event'].createPath,
   editPath: id => `${ENTITY_REGISTRY['event'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['event'].type,
   apiEndpoint: ENTITY_REGISTRY['event'].apiEndpoint,
 
   makeHref: event => `${ENTITY_REGISTRY['event'].basePath}/${event.id}`,

@@ -18,6 +18,7 @@ import { EntityConfig, BaseEntity } from '@/types/entity';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { GRADIENTS } from '@/config/gradients';
+import { API_ROUTES } from '@/config/api-routes';
 
 /**
  * EntityDashboardPage - Reusable dashboard page component for all entity types
@@ -63,6 +64,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
   const userCurrency = useUserCurrency();
   const { selectedIds, toggleSelect, toggleSelectAll, clearSelection } = useBulkSelection();
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
+  const [changingStatusIds, setChangingStatusIds] = useState<Set<string>>(new Set());
   const [showSelection, setShowSelection] = useState(false);
 
   const { items, loading, error, page, total, setPage, refresh } = useEntityList<T>({
@@ -89,6 +91,43 @@ export default function EntityDashboardPage<T extends BaseEntity>({
 
   // Memoize items to prevent unnecessary re-renders
   const memoizedItems = useMemo(() => items, [items]);
+
+  // Change status of a single item (publish/pause/resume)
+  const handleStatusChange = useCallback(
+    async (id: string, newStatus: string) => {
+      if (!config.entityType) {
+        return;
+      }
+      setChangingStatusIds(prev => new Set(prev).add(id));
+      try {
+        const response = await fetch(API_ROUTES.ENTITIES.STATUS(config.entityType, id), {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus }),
+        });
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `Failed to update ${config.name} status`);
+        }
+        await refresh();
+        toast.success(`${config.name} status updated`);
+      } catch (error) {
+        logger.error(
+          `Failed to update ${config.name} status`,
+          { error, id },
+          'EntityDashboardPage'
+        );
+        toast.error(`Failed to update ${config.name} status. Please try again.`);
+      } finally {
+        setChangingStatusIds(prev => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+      }
+    },
+    [config.entityType, config.name, refresh]
+  );
 
   // Delete a single item
   const handleDeleteItem = useCallback(
@@ -204,6 +243,8 @@ export default function EntityDashboardPage<T extends BaseEntity>({
               showSelection={showSelection}
               onDeleteItem={handleDeleteItem}
               deletingIds={deletingIds}
+              onStatusChange={config.entityType ? handleStatusChange : undefined}
+              changingStatusIds={changingStatusIds}
             />
             <CommercePagination page={page} limit={limit} total={total} onPageChange={setPage} />
           </>

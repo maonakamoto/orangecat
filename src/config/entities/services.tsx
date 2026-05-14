@@ -28,6 +28,7 @@ export const serviceEntityConfig: EntityConfig<UserService> = {
   createPath: ENTITY_REGISTRY['service'].createPath,
   editPath: id => `${ENTITY_REGISTRY['service'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['service'].type,
   apiEndpoint: ENTITY_REGISTRY['service'].apiEndpoint,
 
   makeHref: service => `${ENTITY_REGISTRY['service'].basePath}/${service.id}`,

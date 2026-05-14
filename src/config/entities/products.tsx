@@ -27,6 +27,7 @@ export const productEntityConfig: EntityConfig<UserProduct> = {
   createPath: ENTITY_REGISTRY['product'].createPath,
   editPath: id => `${ENTITY_REGISTRY['product'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['product'].type,
   apiEndpoint: ENTITY_REGISTRY['product'].apiEndpoint,
 
   makeHref: product => `${ENTITY_REGISTRY['product'].basePath}/${product.id}`,

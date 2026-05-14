@@ -3,6 +3,17 @@
 import { useState } from 'react';
 import { MoreHorizontal, Edit2, Trash2, Eye, EyeOff, Rocket, Pause } from 'lucide-react';
 import { ENTITY_STATUS } from '@/config/status-config';
+
+// Statuses that represent a "live" entity — covers both generic and entity-specific live states
+// (events: published/open/full/ongoing; investments: open/funded; generic: active)
+const LIVE_STATUSES = new Set([
+  ENTITY_STATUS.ACTIVE,
+  'published',
+  'open',
+  'funded',
+  'ongoing',
+  'full',
+]);
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -132,7 +143,7 @@ export function EntityCardActions({
               {isChangingStatus ? 'Publishing...' : 'Publish'}
             </DropdownMenuItem>
           )}
-          {onStatusChange && entityStatus === ENTITY_STATUS.ACTIVE && (
+          {onStatusChange && entityStatus && LIVE_STATUSES.has(entityStatus) && (
             <DropdownMenuItem
               onClick={e => handleStatusClick(e, ENTITY_STATUS.PAUSED)}
               disabled={isChangingStatus}

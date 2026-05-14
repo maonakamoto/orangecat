@@ -30,6 +30,7 @@ export const assetEntityConfig: EntityConfig<Asset> = {
   createPath: ENTITY_REGISTRY['asset'].createPath,
   editPath: id => `${ENTITY_REGISTRY['asset'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['asset'].type,
   apiEndpoint: ENTITY_REGISTRY['asset'].apiEndpoint,
 
   makeHref: asset => `${ENTITY_REGISTRY['asset'].basePath}/${asset.id}`,

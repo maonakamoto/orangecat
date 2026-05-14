@@ -26,6 +26,7 @@ export const loanEntityConfig: EntityConfig<Loan> = {
   createPath: ENTITY_REGISTRY['loan'].createPath,
   editPath: id => `${ENTITY_REGISTRY['loan'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['loan'].type,
   apiEndpoint: ENTITY_REGISTRY['loan'].apiEndpoint,
 
   makeHref: loan => `${ENTITY_REGISTRY['loan'].basePath}/${loan.id}`,

@@ -28,6 +28,7 @@ export const causeEntityConfig: EntityConfig<UserCause> = {
   createPath: ENTITY_REGISTRY['cause'].createPath,
   editPath: id => `${ENTITY_REGISTRY['cause'].createPath}?edit=${id}`,
 
+  entityType: ENTITY_REGISTRY['cause'].type,
   apiEndpoint: ENTITY_REGISTRY['cause'].apiEndpoint,
 
   makeHref: cause => `${ENTITY_REGISTRY['cause'].basePath}/${cause.id}`,
