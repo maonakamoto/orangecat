@@ -2,6 +2,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { logger } from '@/utils/logger';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 import type { EntitySummary, FullUserContext } from './document-context-types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -185,7 +186,13 @@ export async function fetchEntitiesForCat(
         select: 'id, title, description, status, venue_name, venue_city, venue_country',
         filterField: 'actor_id',
         filterValue: actorId,
-        statuses: [...DEFAULT_STATUSES],
+        statuses: [
+          STATUS.EVENTS.DRAFT,
+          STATUS.EVENTS.PUBLISHED,
+          STATUS.EVENTS.OPEN,
+          STATUS.EVENTS.FULL,
+          STATUS.EVENTS.ONGOING,
+        ],
       },
       r => ({
         id: r.id as string,
@@ -223,7 +230,7 @@ export async function fetchEntitiesForCat(
     stats.totalAssets = assets.length;
     entities.push(...assets);
 
-    // loans: extra status 'pending'; column is original_amount
+    // loans: show non-terminal statuses only
     const loans = await fetchEntityBatch(
       supabase,
       {
@@ -232,7 +239,7 @@ export async function fetchEntitiesForCat(
         select: 'id, title, description, status, original_amount, interest_rate',
         filterField: 'actor_id',
         filterValue: actorId,
-        statuses: ['active', 'draft', 'paused', 'pending'],
+        statuses: [STATUS.LOANS.DRAFT, STATUS.LOANS.ACTIVE],
       },
       r => ({
         id: r.id as string,
@@ -250,7 +257,7 @@ export async function fetchEntitiesForCat(
     stats.totalLoans = loans.length;
     entities.push(...loans);
 
-    // investments: different status set
+    // investments: non-terminal statuses (exclude closed/cancelled)
     const investments = await fetchEntityBatch(
       supabase,
       {
@@ -259,7 +266,12 @@ export async function fetchEntitiesForCat(
         select: 'id, title, description, status, investment_type, target_amount',
         filterField: 'actor_id',
         filterValue: actorId,
-        statuses: ['draft', 'open', 'active', 'funded'],
+        statuses: [
+          STATUS.INVESTMENTS.DRAFT,
+          STATUS.INVESTMENTS.OPEN,
+          STATUS.INVESTMENTS.ACTIVE,
+          STATUS.INVESTMENTS.FUNDED,
+        ],
       },
       r => ({
         id: r.id as string,
