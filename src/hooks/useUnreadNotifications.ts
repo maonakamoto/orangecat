@@ -20,6 +20,9 @@ export function useUnreadNotifications() {
     const fetchCount = async () => {
       try {
         const response = await fetch(API_ROUTES.NOTIFICATIONS.UNREAD);
+        if (!response.ok) {
+          return;
+        }
         const data = await response.json();
         if (data.success) {
           setCount(data.data.count);

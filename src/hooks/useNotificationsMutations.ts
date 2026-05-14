@@ -34,6 +34,9 @@ export function useNotificationsMutations({
         });
 
         const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data?.error ?? `Request failed (${response.status})`);
+        }
         if (!data.success) {
           throw new Error(data.error);
         }
@@ -68,6 +71,9 @@ export function useNotificationsMutations({
         });
 
         const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data?.error ?? `Request failed (${response.status})`);
+        }
         if (!data.success) {
           throw new Error(data.error);
         }
@@ -95,6 +101,9 @@ export function useNotificationsMutations({
       });
 
       const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error ?? `Request failed (${response.status})`);
+      }
       if (!data.success) {
         throw new Error(data.error);
       }

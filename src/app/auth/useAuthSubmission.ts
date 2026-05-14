@@ -84,9 +84,9 @@ export function useAuthSubmission({
             body: JSON.stringify({ token: captchaToken }),
           });
           const captchaResult = await captchaResponse.json();
-          if (!captchaResult.success) {
+          if (!captchaResponse.ok || !captchaResult.success) {
             setCaptchaToken(null);
-            throw new Error(captchaResult.error || 'CAPTCHA verification failed');
+            throw new Error(captchaResult?.error || 'CAPTCHA verification failed');
           }
         }
       }
