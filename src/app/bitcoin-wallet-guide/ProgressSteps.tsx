@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
-import { componentColors } from '@/lib/theme';
 import { setupSteps } from './config';
 
 interface ProgressStepsProps {
@@ -28,7 +27,7 @@ export function ProgressSteps({ currentStep, onStepClick }: ProgressStepsProps) 
               transition={{ delay: index * 0.1 }}
               className={`text-center p-6 rounded-xl border-2 transition-all cursor-pointer ${
                 isActive
-                  ? componentColors.bitcoinElement.className + ' border-bitcoinOrange shadow-lg'
+                  ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20 border-bitcoinOrange shadow-lg'
                   : isCompleted
                     ? 'bg-green-50 border-green-200 text-green-800'
                     : 'bg-white border-gray-200 hover:border-gray-300'

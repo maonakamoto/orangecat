@@ -16,6 +16,7 @@ import { AI_ASSISTANT_TEMPLATES, type AIAssistantTemplate } from '@/components/c
 import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { WalletSelectorField } from '@/components/create/wallet-selector';
+import { AI_COMPUTE_PROVIDER_TYPES, AI_PRICING_MODELS } from '@/config/ai-assistants';
 
 // ==================== CONSTANTS ====================
 
@@ -33,19 +34,6 @@ const AI_CATEGORIES = [
   'Legal & Finance',
   'Personal Assistant',
   'Other',
-];
-
-const PRICING_MODELS = [
-  { value: 'free', label: 'Free - No charge' },
-  { value: 'per_message', label: 'Per Message - Charge per message' },
-  { value: 'per_token', label: 'Per Token - Charge based on token usage' },
-  { value: 'subscription', label: 'Subscription - Monthly subscription' },
-];
-
-const COMPUTE_PROVIDERS = [
-  { value: 'api', label: 'API Provider - Use OpenAI, Anthropic, etc.' },
-  { value: 'self_hosted', label: 'Self-Hosted - Your own hardware' },
-  { value: 'community', label: 'Community - Shared community compute' },
 ];
 
 const MODEL_PREFERENCES = [
@@ -158,7 +146,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'compute_provider_type',
         label: 'Compute Provider',
         type: 'select',
-        options: COMPUTE_PROVIDERS,
+        options: [...AI_COMPUTE_PROVIDER_TYPES],
         colSpan: 1,
         hint: 'Where your AI runs',
       },
@@ -173,7 +161,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'pricing_model',
         label: 'Pricing Model',
         type: 'select',
-        options: PRICING_MODELS,
+        options: [...AI_PRICING_MODELS],
         required: true,
         colSpan: 2,
       },

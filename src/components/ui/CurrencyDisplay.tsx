@@ -10,7 +10,6 @@
  */
 
 import React from 'react';
-import { componentColors } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 
 interface CurrencyDisplayProps {
@@ -28,7 +27,8 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
   className,
   showSymbol = true,
 }) => {
-  const colorConfig = componentColors.currencyDisplay(currency as 'BTC' | 'USD' | 'CHF' | 'SATS');
+  const currencyColorClass =
+    currency === 'BTC' ? 'text-bitcoinOrange font-medium' : 'text-gray-600';
 
   const sizeClasses = {
     sm: 'text-sm',
@@ -90,8 +90,7 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
 
   return (
     <span
-      className={cn(colorConfig.className, sizeClasses[size], 'font-mono tabular-nums', className)}
-      style={colorConfig.style}
+      className={cn(currencyColorClass, sizeClasses[size], 'font-mono tabular-nums', className)}
     >
       {formatAmount(amount, currency)}
     </span>

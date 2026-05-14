@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import { Bitcoin, Smartphone, Monitor, Globe, Lock, Star, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
-import { componentColors } from '@/lib/theme';
 import type { WalletOption } from './config';
 
 function getTypeIcon(type: WalletOption['type']) {
@@ -57,7 +56,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div
-                className={`p-2 rounded-lg ${isSelected ? componentColors.bitcoinElement.className : 'bg-gray-100'}`}
+                className={`p-2 rounded-lg ${isSelected ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20' : 'bg-gray-100'}`}
               >
                 <TypeIcon
                   className={`w-5 h-5 ${isSelected ? 'text-bitcoinOrange' : 'text-gray-600'}`}

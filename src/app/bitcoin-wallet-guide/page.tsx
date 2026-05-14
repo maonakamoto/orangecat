@@ -7,7 +7,6 @@ import { Bitcoin, ArrowLeft, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
 import { BitcoinBadge } from '@/components/ui/BitcoinBadge';
-import { componentColors } from '@/lib/theme';
 import { walletOptions } from './config';
 import { ProgressSteps } from './ProgressSteps';
 import { WalletCard } from './WalletCard';
@@ -46,9 +45,7 @@ export default function BitcoinWalletGuidePage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div
-            className={`inline-flex items-center gap-3 p-4 rounded-2xl mb-6 ${componentColors.bitcoinElement.className}`}
-          >
+          <div className="inline-flex items-center gap-3 p-4 rounded-2xl mb-6 bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20">
             <Bitcoin className="w-12 h-12" />
             <div className="text-left">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900">

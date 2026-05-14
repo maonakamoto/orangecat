@@ -1,16 +1,15 @@
 /**
  * BitcoinBadge Component
- * 
+ *
  * Reusable component for Bitcoin-related badges that automatically uses
  * the correct Bitcoin Orange color from the centralized theme system.
- * 
+ *
  * Created: June 5, 2025
  * Last Modified: June 5, 2025
  * Last Modified Summary: Initial creation
  */
 
 import React from 'react';
-import { componentColors } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 
 interface BitcoinBadgeProps {
@@ -26,14 +25,12 @@ export const BitcoinBadge: React.FC<BitcoinBadgeProps> = ({
   size = 'md',
   className,
 }) => {
-  const _baseClasses = componentColors.bitcoinElement.className;
-  
   const variantClasses = {
     default: 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20',
     outline: 'bg-transparent text-bitcoinOrange border-bitcoinOrange',
     solid: 'bg-bitcoinOrange text-white border-bitcoinOrange',
   };
-  
+
   const sizeClasses = {
     sm: 'px-2 py-1 text-xs',
     md: 'px-3 py-1.5 text-sm',
@@ -54,4 +51,4 @@ export const BitcoinBadge: React.FC<BitcoinBadgeProps> = ({
   );
 };
 
-export default BitcoinBadge; 
+export default BitcoinBadge;

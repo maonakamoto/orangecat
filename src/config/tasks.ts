@@ -12,20 +12,18 @@
  * Created: 2026-02-05
  */
 
-import { colors } from '@/lib/theme';
 import { BADGE_COLORS } from '@/config/badge-colors';
 
 // Raw hex values for status/priority indicators — needed for inline style opacity
-// tricks (e.g. `${color}20`). Brand-shared tokens come from theme.ts; the rest
-// are task-specific Tailwind palette values consolidated here.
+// tricks (e.g. `${color}20`).
 const TASK_COLORS = {
-  gray: colors.neutral.gray500, // idle, unknown, normal-priority
+  gray: '#6B7280', // gray-500   — idle, unknown, normal-priority
   slate: '#64748b', // slate-500 — low priority
   amber: '#d97706', // amber-600 — needs attention
   blue: '#2563eb', // blue-600  — requested
   violet: '#7c3aed', // violet-600 — in progress
   orange: '#ea580c', // orange-600 — high priority
-  red: colors.status.error, // red-600   — urgent
+  red: '#DC2626', // red-600   — urgent
 } as const;
 
 // ==================== TASK TYPES ====================

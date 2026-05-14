@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Bitcoin, Download } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
-import { componentColors } from '@/lib/theme';
 
 interface GetStartedCTAProps {
   onGetWallet: () => void;
@@ -19,9 +18,7 @@ export function GetStartedCTA({ onGetWallet }: GetStartedCTAProps) {
       transition={{ delay: 0.4 }}
       className="mt-16 text-center"
     >
-      <Card
-        className={`max-w-2xl mx-auto ${componentColors.bitcoinElement.className} border-bitcoinOrange/30`}
-      >
+      <Card className="max-w-2xl mx-auto bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20 border-bitcoinOrange/30">
         <CardContent className="p-8">
           <Bitcoin className="w-16 h-16 text-bitcoinOrange mx-auto mb-4" />
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">Ready to Get Started?</h2>

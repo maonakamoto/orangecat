@@ -1,4 +1,9 @@
 import { z } from 'zod';
+import {
+  AI_COMPUTE_PROVIDER_TYPES,
+  AI_PRICING_MODELS,
+  AI_ASSISTANT_STATUSES,
+} from '@/config/ai-assistants';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
 /** Maximum character length for AI chat messages and system prompts */
@@ -34,13 +39,15 @@ export const aiAssistantSchema = z.object({
   temperature: z.number().min(0).max(2).default(0.7),
 
   // Compute Configuration
-  compute_provider_type: z.enum(['api', 'self_hosted', 'community']).default('api'),
+  compute_provider_type: z
+    .enum(AI_COMPUTE_PROVIDER_TYPES.map(t => t.value) as [string, ...string[]])
+    .default('api'),
   compute_provider_id: z.string().uuid().optional().nullable(),
   api_provider: optionalText(50),
 
   // Pricing
   pricing_model: z
-    .enum(['per_message', 'per_token', 'subscription', 'free'])
+    .enum(AI_PRICING_MODELS.map(t => t.value) as [string, ...string[]])
     .default('per_message'),
   price_per_message: z.number().min(0).default(0),
   price_per_1k_tokens: z.number().min(0).default(0),
@@ -48,7 +55,7 @@ export const aiAssistantSchema = z.object({
   free_messages_per_day: z.number().int().min(0).default(0),
 
   // Visibility & Status
-  status: z.enum(['draft', 'active', 'paused', 'archived']).default('draft'),
+  status: z.enum(AI_ASSISTANT_STATUSES.map(t => t.value) as [string, ...string[]]).default('draft'),
   is_public: z.boolean().default(false),
   is_featured: z.boolean().default(false),
 
