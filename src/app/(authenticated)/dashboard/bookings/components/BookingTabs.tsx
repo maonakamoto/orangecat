@@ -1,5 +1,6 @@
 import { Filter } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { STATUS } from '@/config/database-constants';
 
 type TabType = 'incoming' | 'confirmed' | 'history';
 type FilterStatus = 'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled';
@@ -67,8 +68,8 @@ export default function BookingTabs({
             className="text-sm border border-gray-300 rounded-md px-3 py-1.5"
           >
             <option value="all">All</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
+            <option value={STATUS.BOOKINGS.COMPLETED}>Completed</option>
+            <option value={STATUS.BOOKINGS.CANCELLED}>Cancelled</option>
           </select>
         </div>
       )}

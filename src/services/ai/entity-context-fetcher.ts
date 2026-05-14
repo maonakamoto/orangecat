@@ -44,7 +44,23 @@ async function fetchEntityBatch(
   return ((data as Record<string, unknown>[]) || []).map(map);
 }
 
-const DEFAULT_STATUSES = ['active', 'draft', 'paused'] as const;
+// Entity-specific status sets for Cat context queries (excludes terminal/hidden statuses)
+const PRODUCT_STATUSES = [STATUS.PRODUCTS.DRAFT, STATUS.PRODUCTS.ACTIVE, STATUS.PRODUCTS.PAUSED];
+const SERVICE_STATUSES = [STATUS.SERVICES.DRAFT, STATUS.SERVICES.ACTIVE, STATUS.SERVICES.PAUSED];
+const PROJECT_STATUSES = [
+  STATUS.PROJECTS.DRAFT,
+  STATUS.PROJECTS.ACTIVE,
+  STATUS.PROJECTS.PAUSED,
+  STATUS.PROJECTS.COMPLETED,
+];
+const CAUSE_STATUSES = [STATUS.CAUSES.DRAFT, STATUS.CAUSES.ACTIVE, STATUS.CAUSES.COMPLETED];
+const ASSET_STATUSES = [STATUS.ASSETS.DRAFT, STATUS.ASSETS.ACTIVE];
+const RESEARCH_STATUSES = [
+  STATUS.RESEARCH.DRAFT,
+  STATUS.RESEARCH.ACTIVE,
+  STATUS.RESEARCH.PAUSED,
+  STATUS.RESEARCH.COMPLETED,
+];
 
 export async function fetchEntitiesForCat(
   supabase: AnySupabaseClient,
@@ -97,7 +113,7 @@ export async function fetchEntitiesForCat(
         select: 'id, title, description, status, price',
         filterField: 'actor_id',
         filterValue: actorId,
-        statuses: [...DEFAULT_STATUSES],
+        statuses: PRODUCT_STATUSES,
       },
       r => ({
         id: r.id as string,
@@ -119,7 +135,7 @@ export async function fetchEntitiesForCat(
         select: 'id, title, description, status, hourly_rate, fixed_price',
         filterField: 'actor_id',
         filterValue: actorId,
-        statuses: [...DEFAULT_STATUSES],
+        statuses: SERVICE_STATUSES,
       },
       r => ({
         id: r.id as string,
@@ -141,7 +157,7 @@ export async function fetchEntitiesForCat(
         select: 'id, title, description, status, goal_amount',
         filterField: 'actor_id',
         filterValue: actorId,
-        statuses: [...DEFAULT_STATUSES],
+        statuses: PROJECT_STATUSES,
       },
       r => ({
         id: r.id as string,
@@ -163,7 +179,7 @@ export async function fetchEntitiesForCat(
         select: 'id, title, description, status, cause_category, goal_amount',
         filterField: 'actor_id',
         filterValue: actorId,
-        statuses: [...DEFAULT_STATUSES],
+        statuses: CAUSE_STATUSES,
       },
       r => ({
         id: r.id as string,
@@ -215,7 +231,7 @@ export async function fetchEntitiesForCat(
         select: 'id, title, description, status, location, estimated_value',
         filterField: 'actor_id',
         filterValue: actorId,
-        statuses: [...DEFAULT_STATUSES],
+        statuses: ASSET_STATUSES,
       },
       r => ({
         id: r.id as string,
@@ -295,7 +311,7 @@ export async function fetchEntitiesForCat(
         select: 'id, title, description, status, field, funding_goal_btc, funding_raised_btc',
         filterField: 'user_id',
         filterValue: userId,
-        statuses: [...DEFAULT_STATUSES],
+        statuses: RESEARCH_STATUSES,
       },
       r => ({
         id: r.id as string,

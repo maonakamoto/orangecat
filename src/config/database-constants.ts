@@ -60,6 +60,7 @@ export const STATUS = {
     REFINANCED: 'refinanced',
     CANCELLED: 'cancelled',
   },
+  // DB constraint: CHECK (status IN ('pending','confirmed','in_progress','completed','cancelled','rejected','no_show'))
   BOOKINGS: {
     PENDING: 'pending',
     CONFIRMED: 'confirmed',
@@ -67,6 +68,7 @@ export const STATUS = {
     CANCELLED: 'cancelled',
     COMPLETED: 'completed',
     IN_PROGRESS: 'in_progress',
+    NO_SHOW: 'no_show',
   },
   LOAN_OFFERS: {
     PENDING: 'pending',
@@ -113,6 +115,14 @@ export const STATUS = {
   CAUSES: {
     DRAFT: 'draft',
     ACTIVE: 'active',
+    COMPLETED: 'completed',
+    CANCELLED: 'cancelled',
+  },
+  // DB constraint: CHECK (status IN ('draft', 'active', 'completed', 'paused', 'cancelled'))
+  RESEARCH: {
+    DRAFT: 'draft',
+    ACTIVE: 'active',
+    PAUSED: 'paused',
     COMPLETED: 'completed',
     CANCELLED: 'cancelled',
   },

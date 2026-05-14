@@ -2,6 +2,7 @@
 
 import Input from '@/components/ui/Input';
 import { Search, X } from 'lucide-react';
+import { PROJECT_STATUS } from '@/config/project-statuses';
 
 interface Props {
   searchQuery: string;
@@ -52,11 +53,11 @@ export function ProjectsSearchFilter({
           aria-label="Filter by status"
         >
           <option value="all">All Status</option>
-          <option value="draft">Draft</option>
-          <option value="active">Active</option>
-          <option value="paused">Paused</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
+          <option value={PROJECT_STATUS.DRAFT}>Draft</option>
+          <option value={PROJECT_STATUS.ACTIVE}>Active</option>
+          <option value={PROJECT_STATUS.PAUSED}>Paused</option>
+          <option value={PROJECT_STATUS.COMPLETED}>Completed</option>
+          <option value={PROJECT_STATUS.CANCELLED}>Cancelled</option>
         </select>
       )}
     </div>

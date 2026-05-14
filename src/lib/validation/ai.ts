@@ -4,6 +4,7 @@ import {
   AI_PRICING_MODELS,
   AI_ASSISTANT_STATUSES,
 } from '@/config/ai-assistants';
+import { STATUS } from '@/config/database-constants';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
 
 /** Maximum character length for AI chat messages and system prompts */
@@ -55,7 +56,9 @@ export const aiAssistantSchema = z.object({
   free_messages_per_day: z.number().int().min(0).default(0),
 
   // Visibility & Status
-  status: z.enum(AI_ASSISTANT_STATUSES.map(t => t.value) as [string, ...string[]]).default('draft'),
+  status: z
+    .enum(AI_ASSISTANT_STATUSES.map(t => t.value) as [string, ...string[]])
+    .default(STATUS.AI_ASSISTANTS.DRAFT),
   is_public: z.boolean().default(false),
   is_featured: z.boolean().default(false),
 
