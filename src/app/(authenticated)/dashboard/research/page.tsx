@@ -24,13 +24,14 @@ import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { API_ROUTES } from '@/config/api-routes';
-import { PROJECT_STATUS, VALID_PROJECT_STATUSES } from '@/config/project-statuses';
 import {
   RESEARCH_FIELDS,
   RESEARCH_FIELD_COLORS,
   RESEARCH_STATUS_DOT_COLORS,
+  RESEARCH_STATUSES,
   type ResearchField,
 } from '@/config/research';
+import { ProjectCardSkeleton } from '@/components/ui/Skeleton';
 
 export default function ResearchDashboard() {
   const router = useRouter();
@@ -104,7 +105,7 @@ export default function ResearchDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {loading ? '—' : entities.filter(e => e.status === PROJECT_STATUS.ACTIVE).length}
+              {loading ? '—' : entities.filter(e => e.status === 'active').length}
             </div>
           </CardContent>
         </Card>
@@ -164,7 +165,7 @@ export default function ResearchDashboard() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Status</SelectItem>
-            {VALID_PROJECT_STATUSES.map(s => (
+            {RESEARCH_STATUSES.map((s: string) => (
               <SelectItem key={s} value={s}>
                 {s.charAt(0).toUpperCase() + s.slice(1)}
               </SelectItem>
@@ -177,15 +178,7 @@ export default function ResearchDashboard() {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map(i => (
-            <Card key={i} className="animate-pulse">
-              <CardHeader>
-                <div className="h-4 bg-gray-200 rounded w-3/4" />
-                <div className="h-3 bg-gray-200 rounded w-full mt-2" />
-              </CardHeader>
-              <CardContent>
-                <div className="h-2 bg-gray-200 rounded w-full mt-4" />
-              </CardContent>
-            </Card>
+            <ProjectCardSkeleton key={i} />
           ))}
         </div>
       ) : filteredEntities.length === 0 ? (
