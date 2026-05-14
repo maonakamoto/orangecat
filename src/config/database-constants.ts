@@ -174,6 +174,11 @@ export const STATUS = {
     PAUSED: 'paused',
     ARCHIVED: 'archived',
   },
+  // DB constraint: CHECK (status IN ('active', 'archived'))
+  AI_CONVERSATIONS: {
+    ACTIVE: 'active',
+    ARCHIVED: 'archived',
+  },
   // DB constraint: CHECK (status IN ('pending', 'processing', 'completed', 'failed', 'cancelled'))
   AI_WITHDRAWALS: {
     PENDING: 'pending',

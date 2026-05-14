@@ -4,6 +4,7 @@ import { TimelineVisibility } from '@/types/timeline';
 import { getTableName } from '@/config/entity-registry';
 import { DATABASE_TABLES, STORAGE_BUCKETS } from '@/config/database-tables';
 import { API_ROUTES } from '@/config/api-routes';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import { timelineService } from '@/services/timeline';
 import { offlineQueueService } from '@/lib/offline-queue';
 import type { TimelineSubjectType, TimelineDisplayEvent } from '@/types/timeline';
@@ -418,7 +419,7 @@ export async function fetchUserProjects(userId: string): Promise<UserProject[]> 
       `
       )
       .eq('actor_id', actor.id)
-      .neq('status', 'draft')
+      .neq('status', ENTITY_STATUS.DRAFT)
       .order('updated_at', { ascending: false })
       .limit(50);
 

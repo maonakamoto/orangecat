@@ -1,4 +1,5 @@
 import type { DocumentContext, EntitySummary, FullUserContext } from './document-context-types';
+import { ENTITY_STATUS } from '@/config/database-constants';
 
 const DOCUMENT_TYPE_LABELS: Record<string, string> = {
   goals: 'Goals & Aspirations',
@@ -141,7 +142,7 @@ export function buildFullContextString(context: FullUserContext): string {
       const itemList = items
         .map(item => {
           const parts = [`- **${item.title}**`];
-          if (item.status !== 'active') {
+          if (item.status !== ENTITY_STATUS.ACTIVE) {
             parts.push(` [${item.status}]`);
           }
           if (item.price_btc) {

@@ -152,7 +152,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
         price_per_1k_tokens: d.price_per_1k_tokens || 0,
         subscription_price: d.subscription_price || 0,
         free_messages_per_day: d.free_messages_per_day || 0,
-        status: 'draft',
+        status: STATUS.AI_ASSISTANTS.DRAFT,
         is_public: false,
         is_featured: false,
         lightning_address: d.lightning_address,

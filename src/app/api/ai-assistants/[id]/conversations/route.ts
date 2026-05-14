@@ -8,7 +8,6 @@
  * Last Modified Summary: Refactored to use withAuth middleware
  */
 
-
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { STATUS } from '@/config/database-constants';
@@ -21,7 +20,7 @@ import {
   apiInternalError,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 
 interface RouteContext {
@@ -31,7 +30,9 @@ interface RouteContext {
 export const GET = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id: assistantId } = await context.params;
   const idValidation = getValidationError(validateUUID(assistantId, 'assistant ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { user, supabase } = request;
 
@@ -69,7 +70,9 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context: Route
 export const POST = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id: assistantId } = await context.params;
   const idValidation = getValidationError(validateUUID(assistantId, 'assistant ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { user, supabase } = request;
 
@@ -80,9 +83,8 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     }
 
     // Verify assistant exists and is active
-    const { data: assistant, error: assistantError } = await (
-      supabase.from(DATABASE_TABLES.AI_ASSISTANTS)
-    )
+    const { data: assistant, error: assistantError } = await supabase
+      .from(DATABASE_TABLES.AI_ASSISTANTS)
       .select('id, title, status, system_prompt, welcome_message')
       .eq('id', assistantId)
       .single();
@@ -96,13 +98,12 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     }
 
     // Create new conversation
-    const { data: conversation, error: createError } = await (
-      supabase.from(DATABASE_TABLES.AI_CONVERSATIONS)
-    )
+    const { data: conversation, error: createError } = await supabase
+      .from(DATABASE_TABLES.AI_CONVERSATIONS)
       .insert({
         assistant_id: assistantId,
         user_id: user.id,
-        status: 'active',
+        status: STATUS.AI_CONVERSATIONS.ACTIVE,
       })
       .select()
       .single();

@@ -17,6 +17,7 @@ import {
 } from '@/lib/api/standardResponse';
 import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 import { z } from 'zod';
 import { resolveGroupBySlug, checkGroupAdmin } from '@/domain/groups/helpers.server';
@@ -50,7 +51,7 @@ export const GET = withAuth(
         return apiForbidden('Only admins can view invitations');
       }
 
-      const status = searchParams.get('status') || 'pending';
+      const status = searchParams.get('status') || STATUS.GROUP_INVITATIONS.PENDING;
       const limit = Math.min(
         parseInt(searchParams.get('limit') || String(DEFAULT_PAGE_SIZE), 10) || DEFAULT_PAGE_SIZE,
         MAX_PAGE_SIZE
@@ -128,7 +129,7 @@ export const POST = withAuth(
             .select('id')
             .eq('group_id', group.id)
             .eq('user_id', user_id)
-            .eq('status', 'pending')
+            .eq('status', STATUS.GROUP_INVITATIONS.PENDING)
             .maybeSingle(),
         ]);
         if (existingMember) {
