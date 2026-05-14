@@ -8,6 +8,7 @@ import { type Wallet } from '@/types/wallet';
 import { logger } from '@/utils/logger';
 import { auditSuccess, AUDIT_ACTIONS } from '@/lib/api/auditLog';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyClient = any;
@@ -115,7 +116,7 @@ export async function executeWalletTransfer(
       purpose: 'internal_transfer',
       anonymous: false,
       public_visibility: false,
-      status: 'completed',
+      status: STATUS.TRANSACTIONS.COMPLETED,
       initiated_at: now,
       confirmed_at: now,
       settled_at: now,

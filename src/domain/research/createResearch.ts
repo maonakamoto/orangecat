@@ -8,6 +8,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { logger } from '@/utils/logger';
 import { apiRateLimited, apiSuccess } from '@/lib/api/standardResponse';
 import { getTableName } from '@/config/entity-registry';
+import { STATUS } from '@/config/database-constants';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { ResearchEntityCreate } from '@/types/research';
 import type { NextResponse } from 'next/server';
@@ -31,7 +32,9 @@ export async function createResearch(
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId);
 
-  if (countError) {throw countError;}
+  if (countError) {
+    throw countError;
+  }
 
   if (count && count >= MAX_RESEARCH_PER_USER) {
     return {
@@ -67,7 +70,7 @@ export async function createResearch(
     impact_areas: validatedData.impact_areas || [],
     target_audience: validatedData.target_audience || [],
     sdg_alignment: validatedData.sdg_alignment || [],
-    status: 'draft',
+    status: STATUS.RESEARCH.DRAFT,
     is_public: validatedData.is_public ?? true,
     is_featured: false,
     completion_percentage: 0,

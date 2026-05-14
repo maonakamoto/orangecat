@@ -1,5 +1,6 @@
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 import { CONTRACT_TYPES } from '@/config/contract-types';
 import { getCurrentUserId } from '@/services/groups/utils/helpers';
@@ -61,7 +62,7 @@ export async function createContract(input: CreateContractInput) {
           party_b_actor_id: input.party_b_actor_id,
           contract_type: input.contract_type,
           terms: input.terms,
-          status: 'proposed',
+          status: STATUS.CONTRACTS.PROPOSED,
           created_by: userId,
           proposal_id: input.proposal_id || null,
         })

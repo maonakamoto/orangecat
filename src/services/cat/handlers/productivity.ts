@@ -1,4 +1,5 @@
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { TASK_STATUSES } from '@/config/tasks';
 import { parseReminderDate } from './date-utils';
 import type { ActionHandler } from './types';
 
@@ -10,7 +11,8 @@ export const productivityHandlers: Record<string, ActionHandler> = {
     const rawPriority = (params.priority as string) || 'normal';
     const priority = rawPriority === 'medium' ? 'normal' : rawPriority;
     // Accept both `description` and `notes` — system prompt documents `notes`
-    const description = (params.description as string | null) || (params.notes as string | null) || null;
+    const description =
+      (params.description as string | null) || (params.notes as string | null) || null;
 
     const { data, error } = await supabase
       .from(DATABASE_TABLES.TASKS)
@@ -21,7 +23,7 @@ export const productivityHandlers: Record<string, ActionHandler> = {
         priority,
         task_type: 'one_time',
         category: 'other',
-        current_status: 'idle',
+        current_status: TASK_STATUSES.IDLE,
         due_date: (params.due_date as string | null) || null,
       })
       .select()
@@ -32,14 +34,19 @@ export const productivityHandlers: Record<string, ActionHandler> = {
     }
     const taskTitle = params.title as string;
     const dueNote = params.due_date ? ` — due ${params.due_date}` : '';
-    return { success: true, data: { ...data, displayMessage: `✅ Task created: "${taskTitle}"${dueNote}` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `✅ Task created: "${taskTitle}"${dueNote}` },
+    };
   },
 
   set_reminder: async (supabase, userId, _actorId, params) => {
     // System prompt documents: title, due_date (ISO or natural language), notes
     // Handler also accepts legacy aliases: message (→title), when (→due_date)
-    const title = (params.title as string | undefined) || (params.message as string | undefined) || '';
-    const when = (params.due_date as string | undefined) || (params.when as string | undefined) || '';
+    const title =
+      (params.title as string | undefined) || (params.message as string | undefined) || '';
+    const when =
+      (params.due_date as string | undefined) || (params.when as string | undefined) || '';
     const notes = (params.notes as string | undefined) || null;
 
     if (!title) {
@@ -63,7 +70,7 @@ export const productivityHandlers: Record<string, ActionHandler> = {
         priority: 'normal',
         task_type: 'one_time',
         category: 'other',
-        current_status: 'idle',
+        current_status: TASK_STATUSES.IDLE,
         is_reminder: true,
         due_date: dueDate,
       })
@@ -174,7 +181,10 @@ export const productivityHandlers: Record<string, ActionHandler> = {
     }
 
     if (Object.keys(updates).length === 0) {
-      return { success: false, error: 'No fields to update — provide at least one of: title, notes, due_date, priority' };
+      return {
+        success: false,
+        error: 'No fields to update — provide at least one of: title, notes, due_date, priority',
+      };
     }
 
     const { data, error } = await supabase
@@ -189,9 +199,13 @@ export const productivityHandlers: Record<string, ActionHandler> = {
       return { success: false, error: error.message };
     }
 
-    const updatedTitle = (data as Record<string, unknown>)?.title as string ?? task.title as string;
+    const updatedTitle =
+      ((data as Record<string, unknown>)?.title as string) ?? (task.title as string);
     const dueDateDisplay = updates.due_date
-      ? new Date(updates.due_date as string).toLocaleString('en-CH', { dateStyle: 'medium', timeStyle: 'short' })
+      ? new Date(updates.due_date as string).toLocaleString('en-CH', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        })
       : null;
     const displayMessage = dueDateDisplay
       ? `📅 Updated "${updatedTitle}" — now due ${dueDateDisplay}`

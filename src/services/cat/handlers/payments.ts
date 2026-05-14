@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 import { NWCClient } from '@/lib/nostr/nwc';
 import { decrypt } from '@/domain/payments/encryptionService';
 import { generateInvoice } from '@/domain/payments/invoiceGenerationService';
@@ -16,13 +17,19 @@ export const paymentHandlers: Record<string, ActionHandler> = {
     // the user's primary lightning address from their existing wallets.
     const label = params.label as string | undefined;
     if (!label?.trim()) {
-      return { success: false, error: 'label is required — provide a name for the wallet (e.g. "Vacation Fund")' };
+      return {
+        success: false,
+        error: 'label is required — provide a name for the wallet (e.g. "Vacation Fund")',
+      };
     }
 
     const behaviorType = (params.behavior_type as string | undefined) || 'general';
     const validBehaviorTypes = ['general', 'one_time_goal', 'recurring_budget'];
     if (!validBehaviorTypes.includes(behaviorType)) {
-      return { success: false, error: `behavior_type must be one of: ${validBehaviorTypes.join(', ')}` };
+      return {
+        success: false,
+        error: `behavior_type must be one of: ${validBehaviorTypes.join(', ')}`,
+      };
     }
 
     // Resolve lightning address: use provided one, else look up user's primary
@@ -42,7 +49,8 @@ export const paymentHandlers: Record<string, ActionHandler> = {
     if (!lightningAddress) {
       return {
         success: false,
-        error: 'No lightning address available. Add one in Settings → Wallets first, or provide a lightning_address parameter.',
+        error:
+          'No lightning address available. Add one in Settings → Wallets first, or provide a lightning_address parameter.',
       };
     }
 
@@ -56,21 +64,35 @@ export const paymentHandlers: Record<string, ActionHandler> = {
       category: (params.category as string | undefined) || 'general',
     };
 
-    if (params.description) { walletRecord.description = params.description as string; }
+    if (params.description) {
+      walletRecord.description = params.description as string;
+    }
 
     // Goal fields (one_time_goal)
-    if (params.goal_amount !== undefined) { walletRecord.goal_amount = params.goal_amount as number; }
-    if (params.goal_currency) { walletRecord.goal_currency = params.goal_currency as string; }
-    if (params.goal_deadline) { walletRecord.goal_deadline = params.goal_deadline as string; }
+    if (params.goal_amount !== undefined) {
+      walletRecord.goal_amount = params.goal_amount as number;
+    }
+    if (params.goal_currency) {
+      walletRecord.goal_currency = params.goal_currency as string;
+    }
+    if (params.goal_deadline) {
+      walletRecord.goal_deadline = params.goal_deadline as string;
+    }
 
     // Budget fields (recurring_budget)
-    if (params.budget_amount !== undefined) { walletRecord.budget_amount = params.budget_amount as number; }
-    if (params.budget_period) { walletRecord.budget_period = params.budget_period as string; }
+    if (params.budget_amount !== undefined) {
+      walletRecord.budget_amount = params.budget_amount as number;
+    }
+    if (params.budget_period) {
+      walletRecord.budget_period = params.budget_period as string;
+    }
 
     const { data, error } = await supabase
       .from(DATABASE_TABLES.WALLETS)
       .insert(walletRecord)
-      .select('id, label, behavior_type, category, goal_amount, goal_currency, goal_deadline, budget_amount, budget_period')
+      .select(
+        'id, label, behavior_type, category, goal_amount, goal_currency, goal_deadline, budget_amount, budget_period'
+      )
       .single();
 
     if (error) {
@@ -80,7 +102,9 @@ export const paymentHandlers: Record<string, ActionHandler> = {
     const parts: string[] = [label.trim()];
     if (behaviorType === 'one_time_goal' && params.goal_amount) {
       parts.push(`goal: ${params.goal_amount} ${params.goal_currency ?? 'BTC'}`);
-      if (params.goal_deadline) { parts.push(`by ${params.goal_deadline}`); }
+      if (params.goal_deadline) {
+        parts.push(`by ${params.goal_deadline}`);
+      }
     } else if (behaviorType === 'recurring_budget' && params.budget_amount) {
       parts.push(`${params.budget_amount} BTC/${params.budget_period ?? 'month'}`);
     }
@@ -114,14 +138,21 @@ export const paymentHandlers: Record<string, ActionHandler> = {
       .limit(1);
 
     if (!senderWallets || senderWallets.length === 0 || !senderWallets[0].nwc_connection_uri) {
-      return { success: false, error: 'No Lightning wallet (NWC) connected. Add one in Settings → Wallet to enable automatic payments.' };
+      return {
+        success: false,
+        error:
+          'No Lightning wallet (NWC) connected. Add one in Settings → Wallet to enable automatic payments.',
+      };
     }
 
     let senderNwcUri: string;
     try {
       senderNwcUri = decrypt(senderWallets[0].nwc_connection_uri);
     } catch {
-      return { success: false, error: 'Wallet connection is corrupted. Please reconnect your wallet in Settings.' };
+      return {
+        success: false,
+        error: 'Wallet connection is corrupted. Please reconnect your wallet in Settings.',
+      };
     }
 
     // 2. Resolve recipient's lightning address
@@ -133,7 +164,9 @@ export const paymentHandlers: Record<string, ActionHandler> = {
       lightningAddress = trimmedRecipient;
     } else {
       // Username lookup: @alice or alice
-      const username = trimmedRecipient.startsWith('@') ? trimmedRecipient.slice(1) : trimmedRecipient;
+      const username = trimmedRecipient.startsWith('@')
+        ? trimmedRecipient.slice(1)
+        : trimmedRecipient;
       const admin = getAdminClient() as unknown as SupabaseClient;
 
       const { data: profile } = await admin
@@ -155,8 +188,15 @@ export const paymentHandlers: Record<string, ActionHandler> = {
         .order('is_primary', { ascending: false })
         .limit(1);
 
-      if (!recipientWallets || recipientWallets.length === 0 || !recipientWallets[0].lightning_address) {
-        return { success: false, error: `@${username} has no Lightning address configured. Ask them to add one in their settings.` };
+      if (
+        !recipientWallets ||
+        recipientWallets.length === 0 ||
+        !recipientWallets[0].lightning_address
+      ) {
+        return {
+          success: false,
+          error: `@${username} has no Lightning address configured. Ask them to add one in their settings.`,
+        };
       }
 
       lightningAddress = recipientWallets[0].lightning_address;
@@ -200,7 +240,10 @@ export const paymentHandlers: Record<string, ActionHandler> = {
       };
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
-      return { success: false, error: `Lightning payment failed: ${msg}. Check your wallet has sufficient balance.` };
+      return {
+        success: false,
+        error: `Lightning payment failed: ${msg}. Check your wallet has sufficient balance.`,
+      };
     } finally {
       sendNwcClient.disconnect();
     }
@@ -226,14 +269,21 @@ export const paymentHandlers: Record<string, ActionHandler> = {
       .limit(1);
 
     if (!senderWallets || senderWallets.length === 0 || !senderWallets[0].nwc_connection_uri) {
-      return { success: false, error: 'No Lightning wallet (NWC) connected. Add one in Settings → Wallet to fund projects automatically.' };
+      return {
+        success: false,
+        error:
+          'No Lightning wallet (NWC) connected. Add one in Settings → Wallet to fund projects automatically.',
+      };
     }
 
     let senderNwcUri: string;
     try {
       senderNwcUri = decrypt(senderWallets[0].nwc_connection_uri);
     } catch {
-      return { success: false, error: 'Wallet connection is corrupted. Please reconnect your wallet in Settings.' };
+      return {
+        success: false,
+        error: 'Wallet connection is corrupted. Please reconnect your wallet in Settings.',
+      };
     }
 
     // 2. Resolve project owner's payment method (uses admin internally for cross-user lookup)
@@ -244,11 +294,19 @@ export const paymentHandlers: Record<string, ActionHandler> = {
     );
 
     if (!projectWallet) {
-      return { success: false, error: 'This project has no payment method configured. The project creator needs to add a wallet first.' };
+      return {
+        success: false,
+        error:
+          'This project has no payment method configured. The project creator needs to add a wallet first.',
+      };
     }
 
     if (projectWallet.method === 'onchain') {
-      return { success: false, error: 'This project only accepts on-chain Bitcoin. Use the Fund button on the project page to get the payment address.' };
+      return {
+        success: false,
+        error:
+          'This project only accepts on-chain Bitcoin. Use the Fund button on the project page to get the payment address.',
+      };
     }
 
     // 3. Fetch project title for invoice description
@@ -300,7 +358,7 @@ export const paymentHandlers: Record<string, ActionHandler> = {
           bolt11: invoice.bolt11,
           payment_hash: payResult.payment_hash ?? null,
           onchain_address: null,
-          status: 'paid',
+          status: STATUS.PAYMENT_INTENTS.PAID,
           description,
           paid_at: new Date().toISOString(),
         })
@@ -309,17 +367,15 @@ export const paymentHandlers: Record<string, ActionHandler> = {
 
       // 8. Record contribution (fire-and-forget; payment is already confirmed)
       if (pi) {
-        await supabase
-          .from(DATABASE_TABLES.CONTRIBUTIONS)
-          .insert({
-            payment_intent_id: pi.id,
-            contributor_id: userId,
-            entity_type: 'project',
-            entity_id: projectId,
-            amount_btc: amountBtc,
-            message: message ?? null,
-            is_anonymous: false,
-          });
+        await supabase.from(DATABASE_TABLES.CONTRIBUTIONS).insert({
+          payment_intent_id: pi.id,
+          contributor_id: userId,
+          entity_type: 'project',
+          entity_id: projectId,
+          amount_btc: amountBtc,
+          message: message ?? null,
+          is_anonymous: false,
+        });
       }
 
       const projectTitle = project?.title ?? 'the project';
@@ -337,7 +393,10 @@ export const paymentHandlers: Record<string, ActionHandler> = {
       };
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
-      return { success: false, error: `Lightning payment failed: ${msg}. Check your wallet has sufficient balance.` };
+      return {
+        success: false,
+        error: `Lightning payment failed: ${msg}. Check your wallet has sufficient balance.`,
+      };
     } finally {
       fundNwcClient.disconnect();
     }
