@@ -8,6 +8,7 @@ import { apiSuccess, apiNotFound, handleApiError } from '@/lib/api/standardRespo
 import { logger } from '@/utils/logger';
 import { getTableName } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 
 const TransactionSchema = z.object({
   projectId: z.string().min(1).max(64),
@@ -53,7 +54,7 @@ export const POST = compose(
         to_entity_type: 'project',
         to_entity_id: project.id,
         payment_method: data.payment_method,
-        status: 'pending',
+        status: STATUS.TRANSACTIONS.PENDING,
         anonymous: false,
         message: data.message || null,
         public_visibility: true,

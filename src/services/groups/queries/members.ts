@@ -14,6 +14,7 @@ import { logger } from '@/utils/logger';
 import type { GroupMembersResponse, GroupMemberDetail } from '../types';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 import { checkGroupPermission } from '../permissions';
 import { getCurrentUserId } from '../utils/helpers';
 import { fromTable, type AnySupabaseClient } from '../db-helpers';
@@ -104,7 +105,7 @@ export async function getGroupMembers(
       user_id: member.user_id,
       role: member.role,
       role_type: member.role, // Map role to role_type for compatibility
-      status: 'active',
+      status: STATUS.GROUP_MEMBER_STATUS.ACTIVE,
       joined_at: member.joined_at,
       invited_by: member.invited_by || null,
       voting_weight: 1.0, // group_members doesn't have voting_weight, use default

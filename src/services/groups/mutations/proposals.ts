@@ -55,7 +55,7 @@ export async function createProposal(input: CreateProposalInput, client?: AnySup
         voting_threshold: input.voting_threshold || null,
         voting_starts_at: input.voting_starts_at || null,
         voting_ends_at: input.voting_ends_at || null,
-        status: 'draft',
+        status: STATUS.PROPOSALS.DRAFT,
         is_public: input.is_public ?? false,
       })
       .select()
@@ -108,7 +108,7 @@ export async function activateProposal(proposalId: string, client?: AnySupabaseC
 
     const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .update({
-        status: 'active',
+        status: STATUS.PROPOSALS.ACTIVE,
         voting_starts_at: votingStartsAt.toISOString(),
         voting_ends_at: votingEndsAt.toISOString(),
         voting_threshold: threshold,
