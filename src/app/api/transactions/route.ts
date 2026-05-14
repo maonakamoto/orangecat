@@ -12,7 +12,7 @@ import { STATUS } from '@/config/database-constants';
 
 const TransactionSchema = z.object({
   projectId: z.string().min(1).max(64),
-  amount_btc: z.number().int().positive().max(1_000_000_000_000),
+  amount_btc: z.number().positive().max(21_000_000),
   payment_method: z.enum(['lightning', 'on-chain']),
   message: z.string().max(200).optional().nullable(),
 });

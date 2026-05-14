@@ -22,9 +22,10 @@ import { STATUS } from '@/config/database-constants';
 // Date fields that need normalization
 const EVENT_DATE_FIELDS = ['start_date', 'end_date', 'rsvp_deadline'] as const;
 
-const { DRAFT, CANCELLED, ...EVENT_PUBLIC_STATUS_MAP } = STATUS.EVENTS;
-const EVENT_PUBLIC_STATUSES = Object.values(EVENT_PUBLIC_STATUS_MAP);
 const EVENT_DRAFT_STATUSES = Object.values(STATUS.EVENTS);
+const EVENT_PUBLIC_STATUSES = EVENT_DRAFT_STATUSES.filter(
+  s => s !== STATUS.EVENTS.DRAFT && s !== STATUS.EVENTS.CANCELLED
+);
 
 // GET /api/events - Get all published events
 export const GET = createEntityListHandler({

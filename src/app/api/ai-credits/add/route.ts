@@ -12,7 +12,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 
 // Schema for adding credits
 const addCreditsSchema = z.object({
-  amount_btc: z.number().int().positive().min(1).max(1000000), // Max 1M sats for safety
+  amount_btc: z.number().positive().max(21_000_000),
   description: z.string().max(200).optional(),
 });
 

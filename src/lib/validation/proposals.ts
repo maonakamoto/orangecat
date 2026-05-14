@@ -12,7 +12,7 @@ export const proposalSchema = z.object({
   voting_ends_at: z.string().optional(),
   is_public: z.boolean().optional().default(false),
   // Treasury proposal fields
-  amount_btc: z.number().int().min(1).optional(),
+  amount_btc: z.number().positive().optional(),
   recipient_address: z.string().optional(),
   wallet_id: z.string().uuid().optional(),
   // Action type for proposals that execute actions

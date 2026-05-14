@@ -22,7 +22,7 @@ export const supportProjectSchema = z
     support_type: supportTypeSchema,
 
     // Bitcoin donation fields
-    amount_btc: z.number().positive().int().optional(),
+    amount_btc: z.number().positive().optional(),
     lightning_invoice: z.string().optional(),
     transaction_hash: z.string().optional(),
 

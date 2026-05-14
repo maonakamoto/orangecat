@@ -17,15 +17,14 @@ import {
 import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
-import { MIN_WITHDRAWAL_SATS } from '@/components/ai/types';
+import { MIN_WITHDRAWAL_BTC } from '@/components/ai/types';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 
 const withdrawalRequestSchema = z.object({
   amount_btc: z
     .number()
-    .int()
     .positive()
-    .min(MIN_WITHDRAWAL_SATS, `Minimum withdrawal is ${MIN_WITHDRAWAL_SATS} sat`),
+    .min(MIN_WITHDRAWAL_BTC, `Minimum withdrawal is ${MIN_WITHDRAWAL_BTC} BTC`),
   lightning_address: z
     .string()
     .min(1, 'Lightning address is required')

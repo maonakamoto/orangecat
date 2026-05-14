@@ -40,3 +40,4 @@ export interface EarningsData {
 }
 
 export const MIN_WITHDRAWAL_SATS = 1000;
+export const MIN_WITHDRAWAL_BTC = MIN_WITHDRAWAL_SATS / 100_000_000;

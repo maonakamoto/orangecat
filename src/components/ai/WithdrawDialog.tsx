@@ -64,7 +64,10 @@ export function WithdrawDialog({
       const response = await fetch(API_ROUTES.AI_CREDITS.WITHDRAWALS, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount_btc: amount, lightning_address: lightningAddress }),
+        body: JSON.stringify({
+          amount_btc: amount / 100_000_000,
+          lightning_address: lightningAddress,
+        }),
       });
       const result = await response.json();
       if (!response.ok) {
