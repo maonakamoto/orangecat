@@ -123,6 +123,12 @@ export const STATUS = {
     MAYBE: 'maybe',
     NOT_GOING: 'not_going',
   },
+  // DB constraint: CHECK (location_type IN ('online', 'in_person', 'hybrid'))
+  GROUP_EVENT_LOCATION_TYPES: {
+    ONLINE: 'online',
+    IN_PERSON: 'in_person',
+    HYBRID: 'hybrid',
+  },
   GROUP_INVITATIONS: {
     PENDING: 'pending',
     ACCEPTED: 'accepted',

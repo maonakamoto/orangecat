@@ -5,55 +5,93 @@
  */
 
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import { apiSuccess, apiForbidden, apiNotFound, apiValidationError, apiRateLimited, handleApiError } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import {
+  apiSuccess,
+  apiForbidden,
+  apiNotFound,
+  apiValidationError,
+  apiRateLimited,
+  handleApiError,
+} from '@/lib/api/standardResponse';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import { z } from 'zod';
+import { STATUS } from '@/config/database-constants';
 
 const rsvpSchema = z.object({
-  status: z.enum(['going', 'maybe', 'not_going']),
+  status: z.enum(Object.values(STATUS.GROUP_EVENT_RSVPS) as [string, ...string[]]),
 });
 
 export const POST = withAuth(
-  async (req: AuthenticatedRequest, { params }: { params: Promise<{ slug: string; eventId: string }> }) => {
+  async (
+    req: AuthenticatedRequest,
+    { params }: { params: Promise<{ slug: string; eventId: string }> }
+  ) => {
     const { slug, eventId } = await params;
     const idValidation = getValidationError(validateUUID(eventId, 'event ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     try {
       const { user } = req;
 
       const rl = await rateLimitWriteAsync(user.id);
-      if (!rl.success) {return apiRateLimited('Too many RSVP requests. Please slow down.', retryAfterSeconds(rl));}
+      if (!rl.success) {
+        return apiRateLimited('Too many RSVP requests. Please slow down.', retryAfterSeconds(rl));
+      }
 
       const { supabase } = req;
 
-      const { data: group, error: groupError } = await supabase.from(DATABASE_TABLES.GROUPS).select('id').eq('slug', slug).single();
-      if (groupError || !group) {return apiNotFound('Group not found');}
+      const { data: group, error: groupError } = await supabase
+        .from(DATABASE_TABLES.GROUPS)
+        .select('id')
+        .eq('slug', slug)
+        .single();
+      if (groupError || !group) {
+        return apiNotFound('Group not found');
+      }
 
       const { data: event, error: eventError } = await supabase
         .from(DATABASE_TABLES.GROUP_EVENTS)
         .select('id, group_id, is_public, requires_rsvp')
-        .eq('id', eventId).eq('group_id', group.id)
+        .eq('id', eventId)
+        .eq('group_id', group.id)
         .single();
-      if (eventError || !event) {return apiNotFound('Event not found');}
+      if (eventError || !event) {
+        return apiNotFound('Event not found');
+      }
 
       if (!event.is_public) {
         const { data: membership } = await supabase
-          .from(DATABASE_TABLES.GROUP_MEMBERS).select('id').eq('group_id', group.id).eq('user_id', user.id).maybeSingle();
-        if (!membership) {return apiForbidden('You do not have access to this event');}
+          .from(DATABASE_TABLES.GROUP_MEMBERS)
+          .select('id')
+          .eq('group_id', group.id)
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (!membership) {
+          return apiForbidden('You do not have access to this event');
+        }
       }
 
       const body = await req.json();
       const validation = rsvpSchema.safeParse(body);
       if (!validation.success) {
-        return apiValidationError('Invalid request data', { fields: validation.error.issues.map(i => ({ field: i.path.join('.'), message: i.message })) });
+        return apiValidationError('Invalid request data', {
+          fields: validation.error.issues.map(i => ({
+            field: i.path.join('.'),
+            message: i.message,
+          })),
+        });
       }
 
       const { data: rsvp, error: rsvpError } = await supabase
         .from(DATABASE_TABLES.GROUP_EVENT_RSVPS)
-        .upsert({ event_id: eventId, user_id: user.id, status: validation.data.status }, { onConflict: 'event_id,user_id' })
+        .upsert(
+          { event_id: eventId, user_id: user.id, status: validation.data.status },
+          { onConflict: 'event_id,user_id' }
+        )
         .select('*, user:profiles!group_event_rsvps_user_id_fkey (id, name, avatar_url)')
         .single();
 

@@ -7,19 +7,29 @@
  */
 
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import { apiSuccess, apiForbidden, apiNotFound, apiValidationError, apiRateLimited, handleApiError } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import {
+  apiSuccess,
+  apiForbidden,
+  apiNotFound,
+  apiValidationError,
+  apiRateLimited,
+  handleApiError,
+} from '@/lib/api/standardResponse';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import { z } from 'zod';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { resolveGroupBySlug, canEditEvent, checkGroupMember } from '@/domain/groups/helpers.server';
+import { STATUS } from '@/config/database-constants';
 
 const updateEventSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().max(5000).optional(),
-  event_type: z.enum(['general', 'meeting', 'celebration', 'assembly']).optional(),
-  location_type: z.enum(['online', 'in_person', 'hybrid']).optional(),
+  event_type: z.enum(Object.values(STATUS.GROUP_EVENTS) as [string, ...string[]]).optional(),
+  location_type: z
+    .enum(Object.values(STATUS.GROUP_EVENT_LOCATION_TYPES) as [string, ...string[]])
+    .optional(),
   location_details: z.string().max(500).optional(),
   starts_at: z.string().datetime().optional(),
   ends_at: z.string().datetime().optional(),
@@ -30,25 +40,40 @@ const updateEventSchema = z.object({
 });
 
 export const GET = withAuth(
-  async (req: AuthenticatedRequest, { params }: { params: Promise<{ slug: string; eventId: string }> }) => {
+  async (
+    req: AuthenticatedRequest,
+    { params }: { params: Promise<{ slug: string; eventId: string }> }
+  ) => {
     const { slug, eventId } = await params;
     const idValidation = getValidationError(validateUUID(eventId, 'event ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     try {
       const { user, supabase } = req;
 
       const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {return apiNotFound('Group not found');}
+      if (!group) {
+        return apiNotFound('Group not found');
+      }
 
       const { data: event, error: eventError } = await supabase
         .from(DATABASE_TABLES.GROUP_EVENTS)
-        .select(`*, creator:profiles!group_events_creator_id_fkey (id, name, avatar_url),
+        .select(
+          `*, creator:profiles!group_events_creator_id_fkey (id, name, avatar_url),
           group:groups!group_events_group_id_fkey (id, name, slug, avatar_url),
-          rsvps:group_event_rsvps (id, user_id, status, created_at, user:profiles!group_event_rsvps_user_id_fkey (id, name, avatar_url))`)
-        .eq('id', eventId).eq('group_id', group.id).single();
+          rsvps:group_event_rsvps (id, user_id, status, created_at, user:profiles!group_event_rsvps_user_id_fkey (id, name, avatar_url))`
+        )
+        .eq('id', eventId)
+        .eq('group_id', group.id)
+        .single();
 
-      if (eventError || !event) {return apiNotFound('Event not found');}
-      if (!event.is_public && !await checkGroupMember(supabase, group.id, user.id)) {return apiForbidden('This event is private');}
+      if (eventError || !event) {
+        return apiNotFound('Event not found');
+      }
+      if (!event.is_public && !(await checkGroupMember(supabase, group.id, user.id))) {
+        return apiForbidden('This event is private');
+      }
 
       return apiSuccess({ event });
     } catch (error) {
@@ -59,31 +84,57 @@ export const GET = withAuth(
 );
 
 export const PUT = withAuth(
-  async (req: AuthenticatedRequest, { params }: { params: Promise<{ slug: string; eventId: string }> }) => {
+  async (
+    req: AuthenticatedRequest,
+    { params }: { params: Promise<{ slug: string; eventId: string }> }
+  ) => {
     const { slug, eventId } = await params;
     const idValidation = getValidationError(validateUUID(eventId, 'event ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     try {
       const { user, supabase } = req;
 
       const rl = await rateLimitWriteAsync(user.id);
-      if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+      if (!rl.success) {
+        return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+      }
 
       const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {return apiNotFound('Group not found');}
+      if (!group) {
+        return apiNotFound('Group not found');
+      }
 
       const { data: event, error: eventError } = await supabase
-        .from(DATABASE_TABLES.GROUP_EVENTS).select('id, group_id, creator_id').eq('id', eventId).eq('group_id', group.id).single();
-      if (eventError || !event) {return apiNotFound('Event not found');}
-      if (!await canEditEvent(supabase, group.id, user.id, event.creator_id)) {return apiForbidden('Only event creator or group admins can update events');}
+        .from(DATABASE_TABLES.GROUP_EVENTS)
+        .select('id, group_id, creator_id')
+        .eq('id', eventId)
+        .eq('group_id', group.id)
+        .single();
+      if (eventError || !event) {
+        return apiNotFound('Event not found');
+      }
+      if (!(await canEditEvent(supabase, group.id, user.id, event.creator_id))) {
+        return apiForbidden('Only event creator or group admins can update events');
+      }
 
       const body = await req.json();
       const validation = updateEventSchema.safeParse(body);
-      if (!validation.success) {return apiValidationError('Invalid request data', validation.error.flatten());}
+      if (!validation.success) {
+        return apiValidationError('Invalid request data', validation.error.flatten());
+      }
 
       const { data: updatedEvent, error: updateError } = await supabase
-        .from(DATABASE_TABLES.GROUP_EVENTS).update(validation.data).eq('id', eventId).select().single();
-      if (updateError) { logger.error('Failed to update event', { error: updateError, eventId }, 'Groups'); return handleApiError(updateError); }
+        .from(DATABASE_TABLES.GROUP_EVENTS)
+        .update(validation.data)
+        .eq('id', eventId)
+        .select()
+        .single();
+      if (updateError) {
+        logger.error('Failed to update event', { error: updateError, eventId }, 'Groups');
+        return handleApiError(updateError);
+      }
 
       return apiSuccess({ event: updatedEvent });
     } catch (error) {
@@ -94,26 +145,49 @@ export const PUT = withAuth(
 );
 
 export const DELETE = withAuth(
-  async (req: AuthenticatedRequest, { params }: { params: Promise<{ slug: string; eventId: string }> }) => {
+  async (
+    req: AuthenticatedRequest,
+    { params }: { params: Promise<{ slug: string; eventId: string }> }
+  ) => {
     const { slug, eventId } = await params;
     const idValidation = getValidationError(validateUUID(eventId, 'event ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     try {
       const { user, supabase } = req;
 
       const rl = await rateLimitWriteAsync(user.id);
-      if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+      if (!rl.success) {
+        return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+      }
 
       const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {return apiNotFound('Group not found');}
+      if (!group) {
+        return apiNotFound('Group not found');
+      }
 
       const { data: event, error: eventError } = await supabase
-        .from(DATABASE_TABLES.GROUP_EVENTS).select('id, group_id, creator_id').eq('id', eventId).eq('group_id', group.id).single();
-      if (eventError || !event) {return apiNotFound('Event not found');}
-      if (!await canEditEvent(supabase, group.id, user.id, event.creator_id)) {return apiForbidden('Only event creator or group admins can delete events');}
+        .from(DATABASE_TABLES.GROUP_EVENTS)
+        .select('id, group_id, creator_id')
+        .eq('id', eventId)
+        .eq('group_id', group.id)
+        .single();
+      if (eventError || !event) {
+        return apiNotFound('Event not found');
+      }
+      if (!(await canEditEvent(supabase, group.id, user.id, event.creator_id))) {
+        return apiForbidden('Only event creator or group admins can delete events');
+      }
 
-      const { error: deleteError } = await supabase.from(DATABASE_TABLES.GROUP_EVENTS).delete().eq('id', eventId);
-      if (deleteError) { logger.error('Failed to delete event', { error: deleteError, eventId }, 'Groups'); return handleApiError(deleteError); }
+      const { error: deleteError } = await supabase
+        .from(DATABASE_TABLES.GROUP_EVENTS)
+        .delete()
+        .eq('id', eventId);
+      if (deleteError) {
+        logger.error('Failed to delete event', { error: deleteError, eventId }, 'Groups');
+        return handleApiError(deleteError);
+      }
 
       return apiSuccess({ message: 'Event deleted successfully' });
     } catch (error) {

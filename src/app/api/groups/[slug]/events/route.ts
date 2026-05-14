@@ -21,14 +21,17 @@ import { z } from 'zod';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { resolveGroupBySlug, checkGroupMember } from '@/domain/groups/helpers.server';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
+import { STATUS } from '@/config/database-constants';
 
 type UntypedTable = any;
 
 const createEventSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().max(5000).optional(),
-  event_type: z.enum(['general', 'meeting', 'celebration', 'assembly']).optional(),
-  location_type: z.enum(['online', 'in_person', 'hybrid']).optional(),
+  event_type: z.enum(Object.values(STATUS.GROUP_EVENTS) as [string, ...string[]]).optional(),
+  location_type: z
+    .enum(Object.values(STATUS.GROUP_EVENT_LOCATION_TYPES) as [string, ...string[]])
+    .optional(),
   location_details: z.string().max(500).optional(),
   starts_at: z.string().datetime(),
   ends_at: z.string().datetime().optional(),
