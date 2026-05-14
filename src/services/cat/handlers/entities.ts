@@ -1,6 +1,21 @@
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { STATUS, ENTITY_STATUS } from '@/config/database-constants';
 import type { ActionHandler } from './types';
 import { bitcoinToSats } from '@/services/currency';
+
+// Each entity type has its own "published" status value.
+// Using 'active' for events or investments would violate the DB CHECK constraint.
+const ENTITY_PUBLISH_STATUS: Record<string, string> = {
+  product: STATUS.PRODUCTS.ACTIVE,
+  service: STATUS.SERVICES.ACTIVE,
+  project: STATUS.PROJECTS.ACTIVE,
+  cause: STATUS.CAUSES.ACTIVE,
+  event: STATUS.EVENTS.PUBLISHED,
+  asset: STATUS.ASSETS.ACTIVE,
+  investment: STATUS.INVESTMENTS.OPEN,
+  loan: STATUS.LOANS.ACTIVE,
+  research: ENTITY_STATUS.ACTIVE,
+};
 
 export const entityHandlers: Record<string, ActionHandler> = {
   create_product: async (supabase, _userId, actorId, params) => {
@@ -19,7 +34,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
         images: [],
         fulfillment_type: 'manual',
         category: params.category || null,
-        status: params.publish ? 'active' : 'draft',
+        status: params.publish ? STATUS.PRODUCTS.ACTIVE : STATUS.PRODUCTS.DRAFT,
       })
       .select()
       .single();
@@ -57,7 +72,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
         service_location_type: 'remote',
         images: [],
         portfolio_links: [],
-        status: params.publish ? 'active' : 'draft',
+        status: params.publish ? STATUS.SERVICES.ACTIVE : STATUS.SERVICES.DRAFT,
       })
       .select()
       .single();
@@ -87,7 +102,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
         goal_amount: goalAmount,
         currency: 'BTC',
         category: params.category || null,
-        status: params.publish ? 'active' : 'draft',
+        status: params.publish ? STATUS.PROJECTS.ACTIVE : STATUS.PROJECTS.DRAFT,
       })
       .select()
       .single();
@@ -120,7 +135,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
           (params.cause_category as string | null) ?? (params.category as string | null) ?? null,
         target_amount: targetAmount,
         currency: 'BTC',
-        status: params.publish ? 'active' : 'draft',
+        status: params.publish ? STATUS.CAUSES.ACTIVE : STATUS.CAUSES.DRAFT,
       })
       .select()
       .single();
@@ -145,7 +160,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
         description: params.description || null,
         start_date: params.start_date,
         location: params.location,
-        status: params.publish ? 'active' : 'draft',
+        status: params.publish ? STATUS.EVENTS.PUBLISHED : STATUS.EVENTS.DRAFT,
       })
       .select()
       .single();
@@ -173,7 +188,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
         currency: 'BTC',
         verification_status: 'unverified',
         public_visibility: false,
-        status: params.publish ? 'active' : 'draft',
+        status: params.publish ? STATUS.ASSETS.ACTIVE : STATUS.ASSETS.DRAFT,
       })
       .select()
       .single();
@@ -210,7 +225,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
         total_raised: 0,
         investor_count: 0,
         is_public: Boolean(params.publish),
-        status: params.publish ? 'open' : 'draft',
+        status: params.publish ? STATUS.INVESTMENTS.OPEN : STATUS.INVESTMENTS.DRAFT,
       })
       .select()
       .single();
@@ -247,7 +262,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
         currency: 'BTC',
         interest_rate: (params.interest_rate as number | undefined) ?? null,
         fulfillment_type: 'manual',
-        status: 'active',
+        status: STATUS.LOANS.ACTIVE,
       })
       .select()
       .single();
@@ -316,7 +331,7 @@ export const entityHandlers: Record<string, ActionHandler> = {
         impact_areas: [],
         target_audience: [],
         sdg_alignment: [],
-        status: 'draft',
+        status: ENTITY_STATUS.DRAFT,
         is_public: true,
         is_featured: false,
         completion_percentage: 0,
@@ -399,9 +414,11 @@ export const entityHandlers: Record<string, ActionHandler> = {
       return { success: false, error: `Unknown entity type: ${entityType}` };
     }
 
+    const publishStatus = ENTITY_PUBLISH_STATUS[entityType] ?? ENTITY_STATUS.ACTIVE;
+
     const { data, error } = await supabase
       .from(meta.tableName)
-      .update({ status: 'active' })
+      .update({ status: publishStatus })
       .eq('id', entityId)
       .eq('actor_id', actorId)
       .select()
