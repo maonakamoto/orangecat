@@ -1,6 +1,7 @@
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { STATUS } from '@/config/database-constants';
 import type {
   ConversationSummary,
   SaleRecord,
@@ -156,7 +157,7 @@ export async function fetchInboundActivityForCat(
             `
             )
             .in('provider_actor_id', actorIds)
-            .in('status', ['confirmed', 'pending'])
+            .in('status', [STATUS.BOOKINGS.CONFIRMED, STATUS.BOOKINGS.PENDING])
             .gte('starts_at', now)
             .order('starts_at', { ascending: true })
             .limit(5)

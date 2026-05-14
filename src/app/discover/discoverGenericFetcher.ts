@@ -1,6 +1,7 @@
 import { logger } from '@/utils/logger';
 import supabase from '@/lib/supabase/browser';
 import { getTableName } from '@/config/entity-registry';
+import { STATUS } from '@/config/database-constants';
 import type { DiscoverTabType } from '@/components/discover/DiscoverTabs';
 import type { GenericPublicEntity } from '@/components/entity/variants/GenericPublicCard';
 
@@ -104,7 +105,7 @@ export async function fetchDiscoverGenericData(
             supabase
               .from(getTableName('event'))
               .select('id, title, description, status, category, created_at')
-              .in('status', ['published', 'open', 'ongoing']),
+              .in('status', [STATUS.EVENTS.PUBLISHED, STATUS.EVENTS.OPEN, STATUS.EVENTS.ONGOING]),
             'events',
             8
           )
