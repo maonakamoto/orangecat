@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Cpu, ChevronDown, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { BADGE_COLORS } from '@/config/badge-colors';
 import { cn } from '@/lib/utils';
 import {
   AI_MODEL_REGISTRY,
@@ -84,9 +85,7 @@ export function AIModelSelector({
                 <div className="text-xs text-gray-500">{model.provider}</div>
               </div>
               <div className="flex items-center gap-2">
-                {model.isFree && (
-                  <Badge className="bg-emerald-100 text-emerald-700 text-xs">FREE</Badge>
-                )}
+                {model.isFree && <Badge className={`${BADGE_COLORS.success} text-xs`}>FREE</Badge>}
                 {model.capabilities.includes('vision') && (
                   <span title="Vision capable">
                     <Eye className="w-3 h-3 text-gray-400" />

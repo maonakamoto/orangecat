@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { BADGE_COLORS } from '@/config/badge-colors';
 import { Sparkles, Zap, Crown } from 'lucide-react';
 
 interface ModelSelectorProps {
@@ -79,9 +80,9 @@ export function ModelBadge({ modelId }: ModelBadgeProps) {
   }
 
   const tierColors = {
-    free: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    freemium: 'bg-green-50 text-green-700 border-green-200',
-    paid: 'bg-orange-50 text-orange-700 border-orange-200',
+    free: BADGE_COLORS.success,
+    freemium: BADGE_COLORS.tiffany,
+    paid: BADGE_COLORS.orange,
   };
 
   return (

@@ -67,13 +67,13 @@ export default function TaskAnalyticsPage() {
               icon={CheckCircle}
               label="Completed today"
               value={stats.completedToday}
-              color="green"
+              color="success"
             />
             <StatCard
               icon={TrendingUp}
               label="This week"
               value={stats.completedThisWeek}
-              color="blue"
+              color="info"
             />
             <StatCard
               icon={AlertTriangle}

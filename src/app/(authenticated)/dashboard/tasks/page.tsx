@@ -204,8 +204,13 @@ export default function TasksPage() {
     >
       {/* Quick Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <QuickStatCard icon={ClipboardList} label="Total" value={taskCounts.total} color="gray" />
-        <QuickStatCard icon={Clock} label="Ready" value={taskCounts.idle} color="blue" />
+        <QuickStatCard
+          icon={ClipboardList}
+          label="Total"
+          value={taskCounts.total}
+          color="neutral"
+        />
+        <QuickStatCard icon={Clock} label="Ready" value={taskCounts.idle} color="info" />
         <QuickStatCard
           icon={AlertTriangle}
           label="Needs attention"
@@ -216,7 +221,7 @@ export default function TasksPage() {
           icon={Play}
           label="In progress"
           value={taskCounts.inProgress}
-          color="green"
+          color="success"
         />
       </div>
 

@@ -24,3 +24,18 @@ export const BADGE_COLORS = {
 } as const;
 
 export type BadgeColorKey = keyof typeof BADGE_COLORS;
+
+/**
+ * Stat panel accent colors — for full-card colored panels (stat cards, KPI tiles).
+ * Lighter variant: bg-*-50 text-*-600 border-*-200
+ * Use BADGE_COLORS for small pill badges; use STAT_COLORS for panel backgrounds.
+ */
+export const STAT_COLORS = {
+  neutral: 'bg-gray-50 text-gray-600 border-gray-200',
+  info: 'bg-blue-50 text-blue-600 border-blue-200',
+  amber: 'bg-amber-50 text-amber-600 border-amber-200',
+  success: 'bg-green-50 text-green-600 border-green-200',
+  tiffany: 'bg-tiffany-50 text-tiffany-600 border-tiffany-200',
+} as const;
+
+export type StatColorKey = keyof typeof STAT_COLORS;

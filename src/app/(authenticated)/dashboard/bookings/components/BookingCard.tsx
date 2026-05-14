@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
+import { BADGE_COLORS } from '@/config/badge-colors';
 import type { Booking as BookingBase } from '@/services/bookings';
 
 type Booking = BookingBase & {
@@ -36,21 +37,21 @@ interface BookingCardProps {
   onViewDetails: (bookingId: string) => void;
 }
 
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    confirmed: 'bg-blue-100 text-blue-800',
-    in_progress: 'bg-orange-100 text-orange-800',
-    completed: 'bg-green-100 text-green-800',
-    cancelled: 'bg-gray-100 text-gray-800',
-    rejected: 'bg-red-100 text-red-800',
-  };
+const BOOKING_STATUS_COLORS: Record<string, string> = {
+  pending: BADGE_COLORS.warning,
+  confirmed: BADGE_COLORS.info,
+  in_progress: BADGE_COLORS.orange,
+  completed: BADGE_COLORS.success,
+  cancelled: BADGE_COLORS.neutral,
+  rejected: BADGE_COLORS.error,
+};
 
+function StatusBadge({ status }: { status: string }) {
   return (
     <span
       className={cn(
         'px-2 py-1 text-xs font-medium rounded-full',
-        styles[status] || 'bg-gray-100 text-gray-800'
+        BOOKING_STATUS_COLORS[status] ?? BADGE_COLORS.neutral
       )}
     >
       {status.replace('_', ' ')}

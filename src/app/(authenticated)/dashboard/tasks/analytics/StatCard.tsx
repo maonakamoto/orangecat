@@ -1,22 +1,16 @@
 import { BarChart3 } from 'lucide-react';
-
-const colorClasses = {
-  green: 'bg-green-50 text-green-600 border-green-200',
-  blue: 'bg-blue-50 text-blue-600 border-blue-200',
-  amber: 'bg-amber-50 text-amber-600 border-amber-200',
-  tiffany: 'bg-tiffany-50 text-tiffany-600 border-tiffany-200',
-} as const;
+import { STAT_COLORS, type StatColorKey } from '@/config/badge-colors';
 
 interface StatCardProps {
   icon: typeof BarChart3;
   label: string;
   value: number;
-  color: keyof typeof colorClasses;
+  color: StatColorKey;
 }
 
 export function StatCard({ icon: Icon, label, value, color }: StatCardProps) {
   return (
-    <div className={`rounded-xl border p-4 ${colorClasses[color]}`}>
+    <div className={`rounded-xl border p-4 ${STAT_COLORS[color]}`}>
       <div className="flex items-center gap-2 mb-2">
         <Icon className="h-5 w-5" />
       </div>
