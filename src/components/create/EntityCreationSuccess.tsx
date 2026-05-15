@@ -98,8 +98,10 @@ export function EntityCreationSuccess({
 
           {/* Success message */}
           <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-gray-900">{entityTypeName} created!</h2>
-            <p className="text-sm text-gray-600">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground">
+              {entityTypeName} created!
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-muted-foreground">
               &ldquo;{entityTitle}&rdquo; is saved as a <span className="font-medium">draft</span>.
               It&apos;s not visible to anyone yet.
             </p>
@@ -127,7 +129,7 @@ export function EntityCreationSuccess({
           </div>
 
           {/* Hint */}
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-400 dark:text-muted-foreground">
             You can always publish or unpublish from your dashboard.
           </p>
         </CardContent>

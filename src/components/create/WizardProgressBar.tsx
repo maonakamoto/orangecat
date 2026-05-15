@@ -27,7 +27,7 @@ export function WizardProgressBar({
   return (
     <div className="max-w-4xl mx-auto mb-8">
       <div className="flex justify-between items-center mb-4">
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-sm font-medium text-gray-700 dark:text-foreground">
           Step {currentStep + 1} of {wizardSteps.length}
         </span>
         <div className="flex items-center gap-2">
@@ -38,7 +38,7 @@ export function WizardProgressBar({
           )}
         </div>
       </div>
-      <Progress value={progress} className="h-2 bg-gray-200" />
+      <Progress value={progress} className="h-2 bg-gray-200 dark:bg-muted" />
 
       <div className="flex justify-between mt-6">
         {wizardSteps.map((step, index) => {
@@ -61,14 +61,16 @@ export function WizardProgressBar({
                     ? 'bg-green-500 text-white'
                     : isCurrent
                       ? `${theme.bg} text-white ring-4 ${theme.ring}`
-                      : 'bg-gray-200 text-gray-600'
+                      : 'bg-gray-200 dark:bg-muted text-gray-600 dark:text-muted-foreground'
                 }`}
               >
                 {isCompleted ? <Check className="w-5 h-5" /> : index + 1}
               </div>
               <span
                 className={`text-xs font-medium max-w-[100px] text-center ${
-                  isCurrent ? 'text-gray-900' : 'text-gray-600'
+                  isCurrent
+                    ? 'text-gray-900 dark:text-foreground'
+                    : 'text-gray-600 dark:text-muted-foreground'
                 }`}
               >
                 {step.title.split(' (')[0]}

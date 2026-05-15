@@ -48,9 +48,13 @@ export function FormFieldGroups<T extends Record<string, unknown>>({
         return (
           <div key={group.id} className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">{group.title}</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
+                {group.title}
+              </h3>
               {group.description && (
-                <p className="text-base text-gray-600 mt-1">{group.description}</p>
+                <p className="text-base text-gray-600 dark:text-muted-foreground mt-1">
+                  {group.description}
+                </p>
               )}
             </div>
 

@@ -57,7 +57,9 @@ export function FormField({
               <VoiceInputButton
                 size="sm"
                 ariaLabel={`Voice input for ${label}`}
-                onTranscript={t => onChange(((value as string) || '').trim().length ? `${(value as string)} ${t}` : t)}
+                onTranscript={t =>
+                  onChange(((value as string) || '').trim().length ? `${value as string} ${t}` : t)
+                }
               />
             )}
           </div>
@@ -113,7 +115,7 @@ export function FormField({
             onBlur={onBlur}
             disabled={disabled}
             className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:border-transparent transition-colors ${baseInputClass} ${
-              disabled ? 'bg-gray-50 cursor-not-allowed' : ''
+              disabled ? 'bg-gray-50 dark:bg-muted cursor-not-allowed' : ''
             }`}
           >
             <option value="">Select {label.toLowerCase()}</option>
@@ -141,9 +143,13 @@ export function FormField({
                   className="mt-1"
                 />
                 <div>
-                  <span className="text-sm font-medium text-gray-900">{option.label}</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-foreground">
+                    {option.label}
+                  </span>
                   {option.description && (
-                    <p className="text-xs text-gray-500">{option.description}</p>
+                    <p className="text-xs text-gray-500 dark:text-muted-foreground">
+                      {option.description}
+                    </p>
                   )}
                 </div>
               </label>
@@ -163,7 +169,9 @@ export function FormField({
               disabled={disabled}
               className="w-4 h-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
             />
-            <span className="text-sm text-gray-700">{placeholder || label}</span>
+            <span className="text-sm text-gray-700 dark:text-foreground">
+              {placeholder || label}
+            </span>
           </label>
         );
 
@@ -238,7 +246,9 @@ export function FormField({
               <VoiceInputButton
                 size="sm"
                 ariaLabel={`Voice input for ${label}`}
-                onTranscript={t => onChange(((value as string) || '').trim().length ? `${(value as string)} ${t}` : t)}
+                onTranscript={t =>
+                  onChange(((value as string) || '').trim().length ? `${value as string} ${t}` : t)
+                }
               />
             )}
           </div>
@@ -258,12 +268,17 @@ export function FormField({
 
   return (
     <div>
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-2">
+      <label
+        htmlFor={name}
+        className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2"
+      >
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       {renderInput()}
-      {hint && !error && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
+      {hint && !error && (
+        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">{hint}</p>
+      )}
       {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
     </div>
   );

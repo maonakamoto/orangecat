@@ -20,13 +20,15 @@ export function WizardTemplateOnlyView<T extends Record<string, unknown>>({
       <div className="mb-8">
         <button
           onClick={onCancel}
-          className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+          className="inline-flex items-center text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Cancel
         </button>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{config.pageTitle}</h1>
-        <p className="text-gray-600">{config.pageDescription}</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-foreground mb-2">
+          {config.pageTitle}
+        </h1>
+        <p className="text-gray-600 dark:text-muted-foreground">{config.pageDescription}</p>
       </div>
 
       <WizardTemplatePicker
@@ -36,11 +38,11 @@ export function WizardTemplateOnlyView<T extends Record<string, unknown>>({
         showStartFromScratch
       />
 
-      <div className="text-center pt-6 border-t border-gray-200 mt-6">
+      <div className="text-center pt-6 border-t border-gray-200 dark:border-border mt-6">
         <button
           type="button"
           onClick={() => onSelectTemplate(null)}
-          className="text-sm text-gray-600 hover:text-gray-900 font-medium"
+          className="text-sm text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground font-medium"
         >
           Or start from scratch →
         </button>

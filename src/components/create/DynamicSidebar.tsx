@@ -77,37 +77,39 @@ function CurrencyBreakdown({ amount, currency }: { amount: number; currency: str
   };
 
   return (
-    <div className="mt-4 pt-4 border-t border-gray-100">
+    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-border">
       <div className="flex items-center gap-2 mb-3">
         <ArrowLeftRight className="w-4 h-4 text-orange-600" />
-        <h4 className="text-sm font-semibold text-gray-900">Amount Breakdown</h4>
+        <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground">
+          Amount Breakdown
+        </h4>
       </div>
       <div className="space-y-2 text-sm">
         <div className="flex justify-between">
-          <span className="text-gray-600">Bitcoin (BTC)</span>
+          <span className="text-gray-600 dark:text-muted-foreground">Bitcoin (BTC)</span>
           <span className="font-mono font-semibold">₿ {btc.toFixed(8)}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">Lightning (sats)</span>
+          <span className="text-gray-600 dark:text-muted-foreground">Lightning (sats)</span>
           <span className="font-mono font-semibold">{fmt(Math.round(btc * 100_000_000), 0)}</span>
         </div>
-        <div className="border-t border-gray-100 pt-2 space-y-1 text-xs">
-          <div className="flex justify-between text-gray-500">
+        <div className="border-t border-gray-100 dark:border-border pt-2 space-y-1 text-xs">
+          <div className="flex justify-between text-gray-500 dark:text-muted-foreground">
             <span>USD</span>
             <span className="font-mono">${fmt(usd)}</span>
           </div>
-          <div className="flex justify-between text-gray-500">
+          <div className="flex justify-between text-gray-500 dark:text-muted-foreground">
             <span>EUR</span>
             <span className="font-mono">€{fmt(eur)}</span>
           </div>
-          <div className="flex justify-between text-gray-500">
+          <div className="flex justify-between text-gray-500 dark:text-muted-foreground">
             <span>CHF</span>
             <span className="font-mono">CHF {fmt(chf)}</span>
           </div>
         </div>
       </div>
-      <div className="mt-3 pt-3 border-t border-gray-100">
-        <p className="text-xs text-gray-500 flex items-start gap-1">
+      <div className="mt-3 pt-3 border-t border-gray-100 dark:border-border">
+        <p className="text-xs text-gray-500 dark:text-muted-foreground flex items-start gap-1">
           <TrendingUp className="w-3 h-3 mt-0.5 flex-shrink-0" />
           <span>{rates ? 'Live rates.' : 'Estimated rates.'} All funding settles in Bitcoin.</span>
         </p>
@@ -133,9 +135,13 @@ export function DynamicSidebar<T extends string = string>({
     return (
       <div className={`sticky top-4 ${className}`}>
         <div className="p-4 rounded-xl border border-orange-200 bg-orange-50/60">
-          <h2 className="font-semibold text-gray-900 mb-2">{defaultContent.title}</h2>
-          <p className="text-sm text-gray-700 mb-3">{defaultContent.description}</p>
-          <ul className="text-sm text-gray-700 space-y-2">
+          <h2 className="font-semibold text-gray-900 dark:text-foreground mb-2">
+            {defaultContent.title}
+          </h2>
+          <p className="text-sm text-gray-700 dark:text-foreground mb-3">
+            {defaultContent.description}
+          </p>
+          <ul className="text-sm text-gray-700 dark:text-foreground space-y-2">
             {defaultContent.features.map((feature, index) => (
               <li key={index} className="flex items-start gap-2">
                 <span className="mt-0.5 flex-shrink-0">{feature.icon}</span>
@@ -144,7 +150,9 @@ export function DynamicSidebar<T extends string = string>({
             ))}
           </ul>
           {defaultContent.hint && (
-            <p className="text-xs text-gray-500 mt-3">{defaultContent.hint}</p>
+            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-3">
+              {defaultContent.hint}
+            </p>
           )}
         </div>
       </div>
@@ -159,7 +167,9 @@ export function DynamicSidebar<T extends string = string>({
     return (
       <div className={`sticky top-4 ${className}`}>
         <Card className="p-4">
-          <p className="text-sm text-gray-600">No guidance available for this field.</p>
+          <p className="text-sm text-gray-600 dark:text-muted-foreground">
+            No guidance available for this field.
+          </p>
         </Card>
       </div>
     );
@@ -169,27 +179,32 @@ export function DynamicSidebar<T extends string = string>({
     <div className={`sticky top-4 ${className}`}>
       <Card className="p-4">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100">
+        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100 dark:border-border">
           <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
             {content.icon}
           </div>
           <div>
-            <h3 className="text-base font-semibold text-gray-900">{content.title}</h3>
-            <p className="text-xs text-gray-500">Guidance</p>
+            <h3 className="text-base font-semibold text-gray-900 dark:text-foreground">
+              {content.title}
+            </h3>
+            <p className="text-xs text-gray-500 dark:text-muted-foreground">Guidance</p>
           </div>
         </div>
 
         {/* Description */}
-        <p className="text-sm text-gray-700 mb-3">{content.description}</p>
+        <p className="text-sm text-gray-700 dark:text-foreground mb-3">{content.description}</p>
 
         {/* Tips */}
         <div>
-          <h4 className="text-xs font-semibold text-gray-900 uppercase tracking-wide mb-2">
+          <h4 className="text-xs font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide mb-2">
             Best Practices
           </h4>
           <ul className="space-y-1.5">
             {content.tips.map((tip, index) => (
-              <li key={index} className="flex items-start gap-2 text-xs text-gray-600">
+              <li
+                key={index}
+                className="flex items-start gap-2 text-xs text-gray-600 dark:text-muted-foreground"
+              >
                 <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                 <span>{tip}</span>
               </li>
@@ -199,15 +214,15 @@ export function DynamicSidebar<T extends string = string>({
 
         {/* Examples */}
         {content.examples && content.examples.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-gray-100">
-            <h4 className="text-xs font-semibold text-gray-900 uppercase tracking-wide mb-2">
+          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-border">
+            <h4 className="text-xs font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide mb-2">
               Examples
             </h4>
             <div className="space-y-1.5">
               {content.examples.map((example, index) => (
                 <div
                   key={index}
-                  className="text-xs text-gray-600 bg-gray-50 rounded px-2 py-1.5 border border-gray-200"
+                  className="text-xs text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted rounded px-2 py-1.5 border border-gray-200 dark:border-border"
                 >
                   {example}
                 </div>
