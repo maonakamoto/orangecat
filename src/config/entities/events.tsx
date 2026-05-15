@@ -120,36 +120,25 @@ export const eventEntityConfig: EntityConfig<Event> = {
       }
     }
 
+    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
+      [STATUS.EVENTS.PUBLISHED]: { label: 'Published', variant: 'success' },
+      [STATUS.EVENTS.OPEN]: { label: 'Open', variant: 'success' },
+      [STATUS.EVENTS.FULL]: { label: 'Full', variant: 'warning' },
+      [STATUS.EVENTS.ONGOING]: { label: 'Ongoing', variant: 'success' },
+      [STATUS.EVENTS.COMPLETED]: { label: 'Completed', variant: 'default' },
+      [STATUS.EVENTS.DRAFT]: { label: 'Draft', variant: 'default' },
+    };
+    const statusBadge = statusBadgeMap[event.status];
+
     return {
       priceLabel,
-      badge:
-        event.status === STATUS.EVENTS.PUBLISHED
-          ? 'Published'
-          : event.status === STATUS.EVENTS.OPEN
-            ? 'Open'
-            : event.status === STATUS.EVENTS.FULL
-              ? 'Full'
-              : event.status === STATUS.EVENTS.ONGOING
-                ? 'Ongoing'
-                : event.status === STATUS.EVENTS.COMPLETED
-                  ? 'Completed'
-                  : event.status === STATUS.EVENTS.DRAFT
-                    ? 'Draft'
-                    : undefined,
-      badgeVariant:
-        event.status === STATUS.EVENTS.PUBLISHED
-          ? 'success'
-          : event.status === STATUS.EVENTS.OPEN
-            ? 'success'
-            : event.status === STATUS.EVENTS.FULL
-              ? 'warning'
-              : event.status === STATUS.EVENTS.ONGOING
-                ? 'success'
-                : event.status === STATUS.EVENTS.COMPLETED
-                  ? 'default'
-                  : event.status === STATUS.EVENTS.DRAFT
-                    ? 'default'
-                    : 'default',
+      badge: statusBadge?.label,
+      badgeVariant: statusBadge?.variant as
+        | 'success'
+        | 'default'
+        | 'warning'
+        | 'destructive'
+        | undefined,
       metadata:
         metadataParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-gray-500">

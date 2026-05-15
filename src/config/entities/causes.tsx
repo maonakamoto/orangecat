@@ -70,24 +70,22 @@ export const causeEntityConfig: EntityConfig<UserCause> = {
       progressParts.push(`${percentage}% funded`);
     }
 
+    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
+      [STATUS.CAUSES.ACTIVE]: { label: 'Active', variant: 'success' },
+      [STATUS.CAUSES.COMPLETED]: { label: 'Completed', variant: 'default' },
+      [STATUS.CAUSES.DRAFT]: { label: 'Draft', variant: 'default' },
+    };
+    const statusBadge = statusBadgeMap[cause.status];
+
     return {
       priceLabel: goalLabel,
-      badge:
-        cause.status === STATUS.CAUSES.ACTIVE
-          ? 'Active'
-          : cause.status === STATUS.CAUSES.COMPLETED
-            ? 'Completed'
-            : cause.status === STATUS.CAUSES.DRAFT
-              ? 'Draft'
-              : undefined,
-      badgeVariant:
-        cause.status === STATUS.CAUSES.ACTIVE
-          ? 'success'
-          : cause.status === STATUS.CAUSES.COMPLETED
-            ? 'default'
-            : cause.status === STATUS.CAUSES.DRAFT
-              ? 'default'
-              : 'default',
+      badge: statusBadge?.label,
+      badgeVariant: statusBadge?.variant as
+        | 'success'
+        | 'default'
+        | 'warning'
+        | 'destructive'
+        | undefined,
       metadata:
         progressParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-gray-500">

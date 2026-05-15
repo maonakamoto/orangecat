@@ -55,32 +55,24 @@ export const loanEntityConfig: EntityConfig<Loan> = {
         ? Math.round(((loan.original_amount - loan.remaining_balance) / loan.original_amount) * 100)
         : 0;
 
+    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
+      [STATUS.LOANS.ACTIVE]: { label: 'Active', variant: 'success' },
+      [STATUS.LOANS.PAID_OFF]: { label: 'Paid Off', variant: 'success' },
+      [STATUS.LOANS.REFINANCED]: { label: 'Refinanced', variant: 'default' },
+      [STATUS.LOANS.DEFAULTED]: { label: 'Defaulted', variant: 'destructive' },
+      [STATUS.LOANS.CANCELLED]: { label: 'Cancelled', variant: 'warning' },
+    };
+    const statusBadge = statusBadgeMap[loan.status];
+
     return {
       priceLabel: balanceLabel,
-      badge:
-        loan.status === STATUS.LOANS.ACTIVE
-          ? 'Active'
-          : loan.status === STATUS.LOANS.PAID_OFF
-            ? 'Paid Off'
-            : loan.status === STATUS.LOANS.REFINANCED
-              ? 'Refinanced'
-              : loan.status === STATUS.LOANS.DEFAULTED
-                ? 'Defaulted'
-                : loan.status === STATUS.LOANS.CANCELLED
-                  ? 'Cancelled'
-                  : undefined,
-      badgeVariant:
-        loan.status === STATUS.LOANS.ACTIVE
-          ? 'success'
-          : loan.status === STATUS.LOANS.PAID_OFF
-            ? 'success'
-            : loan.status === STATUS.LOANS.REFINANCED
-              ? 'default'
-              : loan.status === STATUS.LOANS.DEFAULTED
-                ? 'destructive'
-                : loan.status === STATUS.LOANS.CANCELLED
-                  ? 'warning'
-                  : 'default',
+      badge: statusBadge?.label,
+      badgeVariant: statusBadge?.variant as
+        | 'success'
+        | 'default'
+        | 'warning'
+        | 'destructive'
+        | undefined,
       metadata:
         metadataParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-gray-500">

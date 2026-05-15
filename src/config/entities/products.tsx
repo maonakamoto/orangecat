@@ -50,28 +50,23 @@ export const productEntityConfig: EntityConfig<UserProduct> = {
           })()
         : undefined;
 
+    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
+      [STATUS.PRODUCTS.ACTIVE]: { label: 'Active', variant: 'success' },
+      [STATUS.PRODUCTS.DRAFT]: { label: 'Draft', variant: 'default' },
+      [STATUS.PRODUCTS.PAUSED]: { label: 'Paused', variant: 'warning' },
+      [STATUS.PRODUCTS.SOLD_OUT]: { label: 'Sold Out', variant: 'destructive' },
+    };
+    const statusBadge = statusBadgeMap[product.status];
+
     return {
       priceLabel,
-      badge:
-        product.status === STATUS.PRODUCTS.ACTIVE
-          ? 'Active'
-          : product.status === STATUS.PRODUCTS.DRAFT
-            ? 'Draft'
-            : product.status === STATUS.PRODUCTS.PAUSED
-              ? 'Paused'
-              : product.status === STATUS.PRODUCTS.SOLD_OUT
-                ? 'Sold Out'
-                : undefined,
-      badgeVariant:
-        product.status === STATUS.PRODUCTS.ACTIVE
-          ? 'success'
-          : product.status === STATUS.PRODUCTS.DRAFT
-            ? 'default'
-            : product.status === STATUS.PRODUCTS.PAUSED
-              ? 'warning'
-              : product.status === STATUS.PRODUCTS.SOLD_OUT
-                ? 'destructive'
-                : 'default',
+      badge: statusBadge?.label,
+      badgeVariant: statusBadge?.variant as
+        | 'success'
+        | 'default'
+        | 'warning'
+        | 'destructive'
+        | undefined,
       showEditButton: true,
       editHref: `${ENTITY_REGISTRY['product'].createPath}?edit=${product.id}`,
       // Removed duplicate actions button - edit icon overlay is sufficient

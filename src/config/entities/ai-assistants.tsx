@@ -72,28 +72,23 @@ export const aiAssistantEntityConfig: EntityConfig<AIAssistant> = {
       metadataParts.push(`${assistant.average_rating.toFixed(1)} rating`);
     }
 
+    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
+      [STATUS.AI_ASSISTANTS.ACTIVE]: { label: 'Active', variant: 'success' },
+      [STATUS.AI_ASSISTANTS.PAUSED]: { label: 'Paused', variant: 'warning' },
+      [STATUS.AI_ASSISTANTS.DRAFT]: { label: 'Draft', variant: 'default' },
+      [STATUS.AI_ASSISTANTS.ARCHIVED]: { label: 'Archived', variant: 'default' },
+    };
+    const statusBadge = statusBadgeMap[assistant.status];
+
     return {
       priceLabel: getPricingLabel(),
-      badge:
-        assistant.status === STATUS.AI_ASSISTANTS.ACTIVE
-          ? 'Active'
-          : assistant.status === STATUS.AI_ASSISTANTS.PAUSED
-            ? 'Paused'
-            : assistant.status === STATUS.AI_ASSISTANTS.DRAFT
-              ? 'Draft'
-              : assistant.status === STATUS.AI_ASSISTANTS.ARCHIVED
-                ? 'Archived'
-                : undefined,
-      badgeVariant:
-        assistant.status === STATUS.AI_ASSISTANTS.ACTIVE
-          ? 'success'
-          : assistant.status === STATUS.AI_ASSISTANTS.PAUSED
-            ? 'warning'
-            : assistant.status === STATUS.AI_ASSISTANTS.DRAFT
-              ? 'default'
-              : assistant.status === STATUS.AI_ASSISTANTS.ARCHIVED
-                ? 'default'
-                : 'default',
+      badge: statusBadge?.label,
+      badgeVariant: statusBadge?.variant as
+        | 'success'
+        | 'default'
+        | 'warning'
+        | 'destructive'
+        | undefined,
       metadata:
         metadataParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-gray-500">

@@ -70,28 +70,23 @@ export const serviceEntityConfig: EntityConfig<UserService> = {
       );
     }
 
+    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
+      [STATUS.SERVICES.ACTIVE]: { label: 'Active', variant: 'success' },
+      [STATUS.SERVICES.DRAFT]: { label: 'Draft', variant: 'default' },
+      [STATUS.SERVICES.PAUSED]: { label: 'Paused', variant: 'warning' },
+      [STATUS.SERVICES.UNAVAILABLE]: { label: 'Unavailable', variant: 'destructive' },
+    };
+    const statusBadge = statusBadgeMap[service.status];
+
     return {
       priceLabel,
-      badge:
-        service.status === STATUS.SERVICES.ACTIVE
-          ? 'Active'
-          : service.status === STATUS.SERVICES.DRAFT
-            ? 'Draft'
-            : service.status === STATUS.SERVICES.PAUSED
-              ? 'Paused'
-              : service.status === STATUS.SERVICES.UNAVAILABLE
-                ? 'Unavailable'
-                : undefined,
-      badgeVariant:
-        service.status === STATUS.SERVICES.ACTIVE
-          ? 'success'
-          : service.status === STATUS.SERVICES.DRAFT
-            ? 'default'
-            : service.status === STATUS.SERVICES.PAUSED
-              ? 'warning'
-              : service.status === STATUS.SERVICES.UNAVAILABLE
-                ? 'destructive'
-                : 'default',
+      badge: statusBadge?.label,
+      badgeVariant: statusBadge?.variant as
+        | 'success'
+        | 'default'
+        | 'warning'
+        | 'destructive'
+        | undefined,
       metadata:
         metadataParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-gray-500">
