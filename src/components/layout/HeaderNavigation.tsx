@@ -63,7 +63,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-3 py-2 min-h-11 rounded-lg text-base text-gray-700 hover:text-tiffany-600 hover:bg-tiffany-50"
+                className="block px-3 py-2 min-h-11 rounded-lg text-base text-gray-700 dark:text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground"
                 onClick={onClose}
               >
                 {item.name}
@@ -73,7 +73,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
         </div>
 
         {/* Footer sections */}
-        <div className="mt-auto border-t border-gray-100">
+        <div className="mt-auto border-t border-gray-100 dark:border-border">
           {(['product', 'company', 'legal'] as const).map(sectionKey => {
             const section = footer?.[sectionKey] || [];
             if (!section || section.length === 0) {
@@ -81,7 +81,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
             }
             return (
               <div key={sectionKey} className="p-4">
-                <div className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                <div className="text-xs font-semibold text-gray-500 dark:text-muted-foreground uppercase mb-2">
                   {sectionKey}
                 </div>
                 <div className="grid grid-cols-1 gap-1">
@@ -89,7 +89,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
                     <Link
                       key={`${sectionKey}-${link.href}`}
                       href={link.href}
-                      className="px-3 py-2 min-h-11 rounded-lg text-sm text-gray-600 hover:text-tiffany-600 hover:bg-tiffany-50"
+                      className="px-3 py-2 min-h-11 rounded-lg text-sm text-gray-600 dark:text-muted-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground"
                       onClick={onClose}
                     >
                       {link.name}
@@ -146,8 +146,8 @@ function HeaderNavLink({ href, label, isActive }: HeaderNavLinkProps) {
   const linkClasses = cn(
     'px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 relative',
     isActive
-      ? 'text-tiffany-600 bg-tiffany-50 shadow-sm'
-      : 'text-gray-700 hover:text-tiffany-600 hover:bg-tiffany-50'
+      ? 'text-tiffany-600 bg-tiffany-50 dark:bg-accent dark:text-accent-foreground shadow-sm'
+      : 'text-gray-700 dark:text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
   );
 
   return (
@@ -201,8 +201,8 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
         className={cn(
           'px-4 py-2.5 min-h-11 text-sm font-medium rounded-xl transition-all duration-150 relative flex items-center gap-1',
           hasActiveChild
-            ? 'text-tiffany-600 bg-tiffany-50 shadow-sm'
-            : 'text-gray-700 hover:text-tiffany-600 hover:bg-tiffany-50'
+            ? 'text-tiffany-600 bg-tiffany-50 dark:bg-accent dark:text-accent-foreground shadow-sm'
+            : 'text-gray-700 dark:text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
         )}
       >
         {item.name}
@@ -213,7 +213,7 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+        <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-card rounded-xl shadow-lg border border-gray-200 dark:border-border py-2 z-50">
           {item.children?.map((child, _index) => {
             // Skip children without href
             if (!child.href) {
@@ -227,14 +227,16 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
                 className={cn(
                   'block px-4 py-2.5 min-h-11 text-sm transition-colors',
                   isActive(child.href)
-                    ? 'text-tiffany-600 bg-tiffany-50 font-medium'
-                    : 'text-gray-700 hover:text-tiffany-600 hover:bg-tiffany-50'
+                    ? 'text-tiffany-600 bg-tiffany-50 dark:bg-accent dark:text-accent-foreground font-medium'
+                    : 'text-gray-700 dark:text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
                 )}
                 onClick={() => setIsOpen(false)}
               >
                 <div className="font-medium">{child.name}</div>
                 {child.description && (
-                  <div className="text-xs text-gray-500 mt-0.5">{child.description}</div>
+                  <div className="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">
+                    {child.description}
+                  </div>
                 )}
               </Link>
             );
