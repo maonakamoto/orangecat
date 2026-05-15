@@ -128,10 +128,12 @@ export function Sidebar({
 
             {/* Desktop Collapse Toggle Button */}
             {isDesktop && (
-              <div className={`border-t border-gray-100 ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}>
+              <div
+                className={`border-t border-gray-100 dark:border-border ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}
+              >
                 <button
                   onClick={toggleSidebarCollapse}
-                  className={`w-full flex items-center gap-3 p-2 text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-xl transition-colors duration-200 ${
+                  className={`w-full flex items-center gap-3 p-2 text-gray-500 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-xl transition-colors duration-200 ${
                     !isExpanded ? 'justify-center' : ''
                   }`}
                   aria-label={
@@ -155,10 +157,12 @@ export function Sidebar({
 
             {/* Mobile Close Button */}
             {navigationState.isSidebarOpen && !isDesktop && (
-              <div className={`border-t border-gray-100 ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}>
+              <div
+                className={`border-t border-gray-100 dark:border-border ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}
+              >
                 <button
                   onClick={toggleSidebar}
-                  className="w-full flex items-center gap-3 p-2 text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-xl transition-colors duration-200 min-h-11"
+                  className="w-full flex items-center gap-3 p-2 text-gray-500 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-xl transition-colors duration-200 min-h-11"
                   aria-label={navigationLabels.SIDEBAR_COLLAPSE}
                 >
                   <X className="h-5 w-5" />

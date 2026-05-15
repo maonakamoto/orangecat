@@ -127,7 +127,7 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
       [STATUS.RESEARCH.COMPLETED]: { label: 'Completed', variant: 'default' },
       [STATUS.RESEARCH.CANCELLED]: { label: 'Cancelled', variant: 'destructive' },
     };
-    const statusBadge = statusBadgeMap[entity.status];
+    const statusBadge = entity.status ? statusBadgeMap[entity.status] : undefined;
     return {
       badge: statusBadge?.label,
       badgeVariant: statusBadge?.variant as

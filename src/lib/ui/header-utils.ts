@@ -27,8 +27,8 @@ export function getHeaderClasses(
     'fixed top-0 left-0 right-0 transition-all duration-200',
     Z_INDEX_CLASSES.HEADER,
     isScrolled
-      ? 'bg-white/95 backdrop-blur-xl shadow-sm border-b border-gray-200/50'
-      : 'bg-white/95 backdrop-blur-lg shadow-sm border-b',
+      ? 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl shadow-sm border-b border-gray-200/50 dark:border-gray-800/50'
+      : 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-lg shadow-sm border-b dark:border-gray-800',
     isHidden ? '-translate-y-full' : 'translate-y-0',
     className
   );

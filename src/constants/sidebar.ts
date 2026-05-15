@@ -65,12 +65,12 @@ export const SIDEBAR_SPACING = {
  * Sidebar colors
  */
 export const SIDEBAR_COLORS = {
-  BACKGROUND: 'bg-white',
-  BORDER: 'border-gray-200',
-  ACTIVE_BACKGROUND: 'bg-gradient-to-r from-tiffany-100 to-tiffany-50',
-  ACTIVE_TEXT: 'text-tiffany-700',
-  ACTIVE_BORDER: 'border-tiffany-200',
-  HOVER_BACKGROUND: 'hover:bg-gray-50',
-  TEXT_PRIMARY: 'text-gray-700',
-  TEXT_SECONDARY: 'text-gray-500',
+  BACKGROUND: 'bg-white dark:bg-card',
+  BORDER: 'border-gray-200 dark:border-border',
+  ACTIVE_BACKGROUND: 'bg-gradient-to-r from-tiffany-100 to-tiffany-50 dark:bg-accent',
+  ACTIVE_TEXT: 'text-tiffany-700 dark:text-accent-foreground',
+  ACTIVE_BORDER: 'border-tiffany-200 dark:border-accent',
+  HOVER_BACKGROUND: 'hover:bg-gray-50 dark:hover:bg-muted',
+  TEXT_PRIMARY: 'text-gray-700 dark:text-foreground',
+  TEXT_SECONDARY: 'text-gray-500 dark:text-muted-foreground',
 } as const;
