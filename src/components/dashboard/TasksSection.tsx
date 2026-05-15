@@ -103,8 +103,10 @@ export default function TasksSection({
     return (
       <Card className={className}>
         <CardContent className="p-6 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
-          <span className="ml-2 text-gray-500">Loading recommendations...</span>
+          <Loader2 className="w-6 h-6 animate-spin text-gray-400 dark:text-muted-foreground" />
+          <span className="ml-2 text-gray-500 dark:text-muted-foreground">
+            Loading recommendations...
+          </span>
         </CardContent>
       </Card>
     );
@@ -121,7 +123,7 @@ export default function TasksSection({
           <CardContent className="p-6 text-center relative">
             <button
               onClick={dismissCelebration}
-              className="absolute top-3 right-3 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-white/60 rounded-lg transition-colors"
+              className="absolute top-3 right-3 p-1.5 text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground hover:bg-white/60 dark:hover:bg-muted/60 rounded-lg transition-colors"
               aria-label="Dismiss"
             >
               <X className="w-4 h-4" />
@@ -129,8 +131,12 @@ export default function TasksSection({
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Sparkles className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">{celebration.title}</h3>
-            <p className="text-gray-600 mb-4">{celebration.description}</p>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+              {celebration.title}
+            </h3>
+            <p className="text-gray-600 dark:text-muted-foreground mb-4">
+              {celebration.description}
+            </p>
             {showQuestions && questions.length > 0 && (
               <SmartQuestionsPanel questions={questions} className="mt-6 text-left" />
             )}
@@ -157,20 +163,22 @@ export default function TasksSection({
                 <Target className="w-5 h-5 text-tiffany-600" />
                 Recommended Next Steps
               </CardTitle>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1">
                 Complete these to get the most out of OrangeCat
               </p>
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <div className="text-sm font-medium text-gray-900">{taskCompletion}% Setup</div>
-                <div className="text-xs text-gray-500">
+                <div className="text-sm font-medium text-gray-900 dark:text-foreground">
+                  {taskCompletion}% Setup
+                </div>
+                <div className="text-xs text-gray-500 dark:text-muted-foreground">
                   {tasks.length} task{tasks.length !== 1 ? 's' : ''} remaining
                 </div>
               </div>
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors"
                 aria-label={isExpanded ? 'Collapse tasks' : 'Expand tasks'}
               >
                 {isExpanded ? (
@@ -182,7 +190,7 @@ export default function TasksSection({
             </div>
           </div>
 
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+          <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-2 mt-3">
             <div
               className="bg-tiffany-600 h-2 rounded-full transition-all duration-500"
               style={{ width: `${taskCompletion}%` }}
@@ -236,12 +244,12 @@ function TaskCard({
     <div
       className={`
         flex items-start gap-4 p-4 border rounded-lg transition-all
-        ${isCompleted ? 'border-green-200 bg-green-50 opacity-60' : 'border-gray-200 hover:border-tiffany-300 hover:shadow-sm'}
+        ${isCompleted ? 'border-green-200 bg-green-50 opacity-60' : 'border-gray-200 dark:border-border hover:border-tiffany-300 hover:shadow-sm'}
       `}
     >
       <button
         onClick={onComplete}
-        className="mt-0.5 text-gray-400 hover:text-tiffany-600 transition-colors flex-shrink-0"
+        className="mt-0.5 text-gray-400 dark:text-muted-foreground hover:text-tiffany-600 transition-colors flex-shrink-0"
         aria-label={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
       >
         {isCompleted ? (
@@ -255,9 +263,9 @@ function TaskCard({
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <IconComponent className="w-4 h-4 text-gray-600 flex-shrink-0" />
+              <IconComponent className="w-4 h-4 text-gray-600 dark:text-muted-foreground flex-shrink-0" />
               <h4
-                className={`font-medium ${isCompleted ? 'line-through text-gray-500' : 'text-gray-900'}`}
+                className={`font-medium ${isCompleted ? 'line-through text-gray-500 dark:text-muted-foreground' : 'text-gray-900 dark:text-foreground'}`}
               >
                 {task.title}
               </h4>
@@ -268,7 +276,9 @@ function TaskCard({
               </span>
             </div>
 
-            <p className="text-sm text-gray-600 mb-3">{task.description}</p>
+            <p className="text-sm text-gray-600 dark:text-muted-foreground mb-3">
+              {task.description}
+            </p>
 
             {!isCompleted && (
               <Link href={task.action.href}>

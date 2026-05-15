@@ -229,7 +229,7 @@ export function WalletForm({
             />
             <span className="text-sm font-medium">Set as primary wallet</span>
           </label>
-          <p className="text-xs text-gray-500 mt-1 ml-6">
+          <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1 ml-6">
             The primary wallet is displayed prominently on your profile. Only one wallet can be
             primary at a time.
           </p>

@@ -38,23 +38,25 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
         <CardContent className="p-4">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-5 h-5 text-orange-600" />
-            <h3 className="text-base font-semibold text-gray-900">Your Impact</h3>
+            <h3 className="text-base font-semibold text-gray-900 dark:text-foreground">
+              Your Impact
+            </h3>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div className="text-center p-3 bg-orange-50 rounded-lg">
               <div className="text-2xl font-bold text-orange-600">{totalProjects}</div>
-              <div className="text-xs text-gray-600">Projects</div>
+              <div className="text-xs text-gray-600 dark:text-muted-foreground">Projects</div>
             </div>
             <div className="text-center p-3 bg-green-50 rounded-lg">
               <div className="text-lg font-bold text-green-600">
                 <CurrencyDisplay amount={totalRaised} currency={primaryCurrency} />
               </div>
-              <div className="text-xs text-gray-600">Raised</div>
+              <div className="text-xs text-gray-600 dark:text-muted-foreground">Raised</div>
             </div>
           </div>
           <div className="text-center p-2 bg-tiffany-50 rounded-lg">
             <div className="text-lg font-bold text-tiffany-600">{totalSupporters}</div>
-            <div className="text-xs text-gray-600">Supporters</div>
+            <div className="text-xs text-gray-600 dark:text-muted-foreground">Supporters</div>
           </div>
         </CardContent>
       </Card>
@@ -66,8 +68,10 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
             <div className="p-3 bg-tiffany-100 rounded-xl inline-flex mb-4">
               <Target className="w-8 h-8 text-tiffany-600" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-3">Ready to Start Fundraising?</h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <h3 className="font-semibold text-gray-900 dark:text-foreground mb-3">
+              Ready to Start Fundraising?
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-muted-foreground mb-4">
               Create your first project and start receiving support in minutes.
             </p>
             <Button
@@ -84,12 +88,16 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-4">
               <BarChart3 className="w-5 h-5 text-green-600" />
-              <h3 className="text-base font-semibold text-gray-900">Analytics</h3>
+              <h3 className="text-base font-semibold text-gray-900 dark:text-foreground">
+                Analytics
+              </h3>
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Avg per project</span>
-                <span className="text-sm font-bold text-gray-900">
+                <span className="text-sm text-gray-600 dark:text-muted-foreground">
+                  Avg per project
+                </span>
+                <span className="text-sm font-bold text-gray-900 dark:text-foreground">
                   <CurrencyDisplay
                     amount={totalProjects > 0 ? totalRaised / totalProjects : 0}
                     currency={primaryCurrency}
@@ -97,7 +105,7 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Supporters</span>
+                <span className="text-sm text-gray-600 dark:text-muted-foreground">Supporters</span>
                 <span className="text-sm font-bold text-tiffany-600">{totalSupporters}</span>
               </div>
               <Button

@@ -38,10 +38,10 @@ export function DashboardInviteCTA({ profile, userId }: DashboardInviteCTAProps)
     >
       <div className="space-y-3">
         <div>
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-foreground">
             Invite friends to OrangeCat
           </h3>
-          <p className="text-xs sm:text-sm text-gray-600 mt-1">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground mt-1">
             Share your profile link and start building your network
           </p>
         </div>
