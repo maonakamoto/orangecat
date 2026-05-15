@@ -39,7 +39,7 @@ export default function PostPage() {
   } = usePostThread(postId);
 
   const pageHeader = (
-    <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b border-gray-200">
+    <header className="sticky top-0 z-10 bg-white/80 dark:bg-card/80 backdrop-blur-sm border-b border-gray-200 dark:border-border">
       <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-4">
         <Button variant="ghost" size="sm" onClick={() => router.back()} className="-ml-2">
           <ArrowLeft className="w-5 h-5" />
@@ -55,7 +55,9 @@ export default function PostPage() {
         <div
           key={reply.id}
           className={cn(
-            depth === 0 ? 'border-b border-gray-200' : 'border-l border-gray-100',
+            depth === 0
+              ? 'border-b border-gray-200 dark:border-border'
+              : 'border-l border-gray-100 dark:border-border',
             depth > 0 ? 'pl-4 ml-4' : ''
           )}
         >
@@ -73,7 +75,7 @@ export default function PostPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white dark:bg-background">
         {pageHeader}
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
@@ -84,7 +86,7 @@ export default function PostPage() {
 
   if (error || !mainPost) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white dark:bg-background">
         {pageHeader}
         <div className="flex flex-col items-center justify-center py-20 text-center px-4">
           <p className="text-xl font-bold text-gray-900 mb-2">This post doesn&apos;t exist</p>
@@ -98,7 +100,7 @@ export default function PostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-background">
       {pageHeader}
 
       <div className="max-w-2xl mx-auto">
@@ -108,7 +110,7 @@ export default function PostPage() {
             {parentPosts.map((parent, _index) => (
               <div key={parent.id} className="relative">
                 <div
-                  className="absolute left-[34px] top-[52px] bottom-0 w-0.5 bg-gray-200"
+                  className="absolute left-[34px] top-[52px] bottom-0 w-0.5 bg-gray-200 dark:bg-border"
                   style={{ height: 'calc(100% - 52px + 12px)' }}
                 />
                 <PostCard
@@ -122,7 +124,7 @@ export default function PostPage() {
         )}
 
         {/* Main post - expanded view */}
-        <div className="border-b border-gray-200">
+        <div className="border-b border-gray-200 dark:border-border">
           <PostCard
             event={mainPost}
             onUpdate={updates => handlePostUpdate(mainPost.id, updates)}
@@ -130,23 +132,29 @@ export default function PostPage() {
           />
 
           {/* Engagement stats bar */}
-          <div className="px-4 py-3 border-t border-gray-100 flex items-center gap-6 text-sm">
+          <div className="px-4 py-3 border-t border-gray-100 dark:border-border flex items-center gap-6 text-sm">
             {(mainPost.repostsCount || 0) > 0 && (
               <button className="hover:underline">
-                <span className="font-bold text-gray-900">{mainPost.repostsCount}</span>
-                <span className="text-gray-500 ml-1">Reposts</span>
+                <span className="font-bold text-gray-900 dark:text-foreground">
+                  {mainPost.repostsCount}
+                </span>
+                <span className="text-gray-500 dark:text-muted-foreground ml-1">Reposts</span>
               </button>
             )}
             {(mainPost.likesCount || 0) > 0 && (
               <button className="hover:underline">
-                <span className="font-bold text-gray-900">{mainPost.likesCount}</span>
-                <span className="text-gray-500 ml-1">Likes</span>
+                <span className="font-bold text-gray-900 dark:text-foreground">
+                  {mainPost.likesCount}
+                </span>
+                <span className="text-gray-500 dark:text-muted-foreground ml-1">Likes</span>
               </button>
             )}
             {(mainPost.commentsCount || 0) > 0 && (
               <button className="hover:underline">
-                <span className="font-bold text-gray-900">{mainPost.commentsCount}</span>
-                <span className="text-gray-500 ml-1">
+                <span className="font-bold text-gray-900 dark:text-foreground">
+                  {mainPost.commentsCount}
+                </span>
+                <span className="text-gray-500 dark:text-muted-foreground ml-1">
                   {mainPost.commentsCount === 1 ? 'Reply' : 'Replies'}
                 </span>
               </button>
@@ -156,7 +164,7 @@ export default function PostPage() {
 
         {/* Reply composer */}
         {user && (
-          <div className="border-b border-gray-200">
+          <div className="border-b border-gray-200 dark:border-border">
             <TimelineComposer
               placeholder={`Reply to @${mainPost.actor.username || mainPost.actor.name}`}
               buttonText="Reply"
@@ -170,8 +178,8 @@ export default function PostPage() {
         {/* Replies section */}
         {replies.length > 0 && (
           <div>
-            <div className="px-4 py-3 border-b border-gray-200">
-              <h2 className="font-bold text-gray-900">Replies</h2>
+            <div className="px-4 py-3 border-b border-gray-200 dark:border-border">
+              <h2 className="font-bold text-gray-900 dark:text-foreground">Replies</h2>
             </div>
             {renderReplies(replies)}
           </div>
@@ -179,8 +187,12 @@ export default function PostPage() {
 
         {replies.length === 0 && (
           <div className="py-12 text-center">
-            <p className="text-gray-500">No replies yet</p>
-            {user && <p className="text-sm text-gray-400 mt-1">Be the first to reply!</p>}
+            <p className="text-gray-500 dark:text-muted-foreground">No replies yet</p>
+            {user && (
+              <p className="text-sm text-gray-400 dark:text-muted-foreground mt-1">
+                Be the first to reply!
+              </p>
+            )}
           </div>
         )}
       </div>

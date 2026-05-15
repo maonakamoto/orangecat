@@ -47,7 +47,7 @@ export function BulkActionsToolbar({
   return (
     <div
       className={cn(
-        'sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200',
+        'sticky top-0 z-30 bg-white/95 dark:bg-card/95 backdrop-blur-md border-b border-gray-200 dark:border-border',
         'px-4 py-2.5 transition-all duration-200',
         className
       )}
@@ -61,7 +61,7 @@ export function BulkActionsToolbar({
             disabled={isProcessing}
             className={cn(
               'flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-colors',
-              'hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed',
+              'hover:bg-gray-100 dark:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
               allSelected ? 'text-tiffany-600' : 'text-gray-600'
             )}
             aria-label={allSelected ? 'Deselect all' : 'Select all'}
@@ -71,8 +71,10 @@ export function BulkActionsToolbar({
           </button>
 
           {/* Selection count */}
-          <div className="text-sm text-gray-600">
-            <span className="font-semibold text-gray-900">{selectedCount}</span>
+          <div className="text-sm text-gray-600 dark:text-muted-foreground">
+            <span className="font-semibold text-gray-900 dark:text-foreground">
+              {selectedCount}
+            </span>
             <span className="hidden sm:inline"> of {totalCount}</span>
             <span className="sm:hidden">/{totalCount}</span>
             <span className="ml-1">{selectedCount === 1 ? 'post' : 'posts'}</span>
@@ -98,13 +100,13 @@ export function BulkActionsToolbar({
               <>
                 {/* Backdrop to close menu */}
                 <div className="fixed inset-0 z-40" onClick={() => setShowVisibilityMenu(false)} />
-                <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-gray-200 rounded-xl shadow-lg z-50 py-1">
+                <div className="absolute right-0 top-full mt-1 w-44 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl shadow-lg z-50 py-1">
                   <button
                     onClick={() => {
                       onBulkVisibilityChange('public');
                       setShowVisibilityMenu(false);
                     }}
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-muted flex items-center gap-2"
                     disabled={isProcessing}
                   >
                     <Globe className="w-4 h-4 text-green-600" />
@@ -115,7 +117,7 @@ export function BulkActionsToolbar({
                       onBulkVisibilityChange('private');
                       setShowVisibilityMenu(false);
                     }}
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-muted flex items-center gap-2"
                     disabled={isProcessing}
                   >
                     <Lock className="w-4 h-4 text-gray-600" />
@@ -149,7 +151,7 @@ export function BulkActionsToolbar({
             size="sm"
             onClick={onExitSelectionMode}
             disabled={isProcessing}
-            className="text-gray-500 hover:text-gray-700 p-2 min-h-11 min-w-11 flex items-center justify-center"
+            className="text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground p-2 min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Exit selection mode"
           >
             <X className="w-4 h-4" />

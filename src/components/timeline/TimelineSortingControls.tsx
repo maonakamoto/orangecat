@@ -16,12 +16,12 @@ interface TimelineSortingControlsProps {
 
 export function TimelineSortingControls({ sortBy, onSortChange }: TimelineSortingControlsProps) {
   return (
-    <div className="flex bg-white/50 rounded-xl p-1">
+    <div className="flex bg-white/50 dark:bg-muted/30 rounded-xl p-1">
       <Button
         variant={sortBy === 'trending' ? 'secondary' : 'ghost'}
         size="sm"
         onClick={() => onSortChange('trending')}
-        className={`px-3 py-2 text-sm ${sortBy === 'trending' ? 'bg-white shadow-sm' : 'hover:bg-white/50'}`}
+        className={`px-3 py-2 text-sm ${sortBy === 'trending' ? 'bg-white dark:bg-card shadow-sm' : 'hover:bg-white/50 dark:hover:bg-muted/30'}`}
       >
         <TrendingUp className="w-4 h-4 mr-1" />
         Trending
@@ -30,7 +30,7 @@ export function TimelineSortingControls({ sortBy, onSortChange }: TimelineSortin
         variant={sortBy === 'recent' ? 'secondary' : 'ghost'}
         size="sm"
         onClick={() => onSortChange('recent')}
-        className={`px-3 py-2 text-sm ${sortBy === 'recent' ? 'bg-white shadow-sm' : 'hover:bg-white/50'}`}
+        className={`px-3 py-2 text-sm ${sortBy === 'recent' ? 'bg-white dark:bg-card shadow-sm' : 'hover:bg-white/50 dark:hover:bg-muted/30'}`}
       >
         <Clock className="w-4 h-4 mr-1" />
         Recent
@@ -39,7 +39,7 @@ export function TimelineSortingControls({ sortBy, onSortChange }: TimelineSortin
         variant={sortBy === 'popular' ? 'secondary' : 'ghost'}
         size="sm"
         onClick={() => onSortChange('popular')}
-        className={`px-3 py-2 text-sm ${sortBy === 'popular' ? 'bg-white shadow-sm' : 'hover:bg-white/50'}`}
+        className={`px-3 py-2 text-sm ${sortBy === 'popular' ? 'bg-white dark:bg-card shadow-sm' : 'hover:bg-white/50 dark:hover:bg-muted/30'}`}
       >
         <Flame className="w-4 h-4 mr-1" />
         Popular
