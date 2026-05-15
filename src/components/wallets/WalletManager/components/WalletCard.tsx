@@ -65,7 +65,7 @@ export function WalletCard({
   };
 
   return (
-    <div className="border rounded-lg p-4 sm:p-6 hover:border-orange-300 hover:shadow-md transition-all bg-white">
+    <div className="border rounded-lg p-4 sm:p-6 hover:border-orange-300 hover:shadow-md transition-all bg-white dark:bg-card dark:border-border">
       {/* Header with icon, title, and action buttons */}
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -83,9 +83,13 @@ export function WalletCard({
               )}
             </div>
             {wallet.description && (
-              <p className="text-sm text-gray-600 mt-1 line-clamp-2">{wallet.description}</p>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1 line-clamp-2">
+                {wallet.description}
+              </p>
             )}
-            <p className="text-xs text-gray-500 mt-1">{categoryInfo.label}</p>
+            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+              {categoryInfo.label}
+            </p>
           </div>
         </div>
 
@@ -104,7 +108,7 @@ export function WalletCard({
             )}
             <button
               onClick={onEdit}
-              className="p-2 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-muted text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Edit wallet"
               aria-label="Edit wallet"
             >
@@ -123,13 +127,15 @@ export function WalletCard({
       </div>
 
       {/* Balance */}
-      <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-4">
+      <div className="bg-gray-50 dark:bg-muted rounded-lg p-3 sm:p-4 mb-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-900">Current Balance</span>
+          <span className="text-sm font-medium text-gray-900 dark:text-foreground">
+            Current Balance
+          </span>
           {isOwner && wallet.balance_updated_at && (
             <button
               onClick={onRefresh}
-              className="p-1.5 rounded-md hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-muted/50 text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Refresh balance"
               aria-label="Refresh balance"
             >
@@ -141,7 +147,7 @@ export function WalletCard({
           {wallet.balance_btc.toFixed(8)} BTC
         </div>
         {wallet.balance_updated_at && (
-          <div className="text-xs text-gray-500 mt-2">
+          <div className="text-xs text-gray-500 dark:text-muted-foreground mt-2">
             Updated {new Date(wallet.balance_updated_at).toLocaleString()}
           </div>
         )}
@@ -151,30 +157,32 @@ export function WalletCard({
       {wallet.goal_amount && (
         <div className="mb-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-gray-600 font-medium">Goal</span>
-            <span className="font-semibold text-gray-900">
+            <span className="text-gray-600 dark:text-muted-foreground font-medium">Goal</span>
+            <span className="font-semibold text-gray-900 dark:text-foreground">
               {wallet.balance_btc.toFixed(4)} / {wallet.goal_amount} {wallet.goal_currency}
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5 mb-1">
+          <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-2.5 mb-1">
             <div
               className="bg-orange-500 h-2.5 rounded-full transition-all"
               style={{ width: `${Math.min(progressPercent, 100)}%` }}
             />
           </div>
-          <div className="text-xs text-gray-500">{progressPercent.toFixed(1)}% funded</div>
+          <div className="text-xs text-gray-500 dark:text-muted-foreground">
+            {progressPercent.toFixed(1)}% funded
+          </div>
         </div>
       )}
 
       {/* Address (truncated) */}
-      <div className="pt-4 border-t border-gray-200">
+      <div className="pt-4 border-t border-gray-200 dark:border-border">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium text-gray-600">
+          <span className="text-xs font-medium text-gray-600 dark:text-muted-foreground">
             {wallet.wallet_type === 'xpub' ? 'Extended Public Key' : 'Bitcoin Address'}
           </span>
           <button
             onClick={handleCopy}
-            className="p-1.5 rounded-md hover:bg-gray-100 text-gray-600 hover:text-orange-600 transition-colors flex items-center gap-1 min-h-11"
+            className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-muted text-gray-600 dark:text-muted-foreground hover:text-orange-600 transition-colors flex items-center gap-1 min-h-11"
             title="Copy address"
             aria-label="Copy address"
           >
@@ -182,7 +190,7 @@ export function WalletCard({
             <span className="text-xs hidden sm:inline">Copy</span>
           </button>
         </div>
-        <code className="text-xs text-gray-700 block font-mono break-all bg-gray-50 p-2 rounded border">
+        <code className="text-xs text-gray-700 dark:text-foreground block font-mono break-all bg-gray-50 dark:bg-muted p-2 rounded border dark:border-border">
           {truncateAddress(wallet.address_or_xpub, 20, 10)}
         </code>
       </div>

@@ -134,7 +134,7 @@ export default function BottomSheet({
         {/* Sheet */}
         <div
           ref={sheetRef}
-          className="relative w-full bg-white rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out"
+          className="relative w-full bg-white dark:bg-card rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out"
           style={{
             maxHeight,
             transform: isOpen ? 'translateY(0)' : 'translateY(100%)',
@@ -145,20 +145,23 @@ export default function BottomSheet({
         >
           {/* Drag handle */}
           <div className="flex justify-center pt-3 pb-2">
-            <div className="w-12 h-1.5 bg-gray-300 rounded-full" aria-hidden="true" />
+            <div className="w-12 h-1.5 bg-gray-300 dark:bg-muted rounded-full" aria-hidden="true" />
           </div>
 
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-              <h2 id="bottom-sheet-title" className="text-lg font-semibold text-gray-900">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-border">
+              <h2
+                id="bottom-sheet-title"
+                className="text-lg font-semibold text-gray-900 dark:text-foreground"
+              >
                 {title || ''}
               </h2>
 
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="text-gray-400 hover:text-gray-600 min-h-11 min-w-11 flex items-center justify-center"
+                  className="text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground min-h-11 min-w-11 flex items-center justify-center"
                   aria-label="Close"
                 >
                   <X className="w-5 h-5" />
