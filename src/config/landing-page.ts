@@ -317,10 +317,11 @@ export const TRUST_SIGNALS = [
  * Consistent CTA labels across the site
  */
 export const CTA_LABELS = {
-  primaryAction: 'Get Started Free',
+  primaryAction: 'Start Creating',
   secondaryAction: 'Explore the Platform',
   discoverAction: 'Discover',
   createAccount: 'Create Free Account',
+  startCreating: 'Start Creating',
   viewProject: 'View Project',
   learnMore: 'Learn More',
   browseAll: 'Browse All',
@@ -333,18 +334,18 @@ export const CTA_LABELS = {
  */
 export const SECTION_HEADERS = {
   whatCanYouDo: {
-    title: 'The Full Economic Spectrum',
+    title: 'Everyone Can Make Things',
     subtitle:
-      'Your Cat manages it all — exchange, funding, lending, investing, and governance — in any currency, for any identity.',
+      'Products, services, projects, causes, events, loans, investments — anyone can create any of these, in any currency, under any identity.',
   },
   howItWorks: {
     title: 'Meet Your Cat',
     subtitle: 'Your AI economic agent handles the complexity. You focus on what matters.',
   },
   exampleUseCases: {
-    title: 'Built for Everyone',
+    title: 'Built for Makers',
     subtitle:
-      'Any person, pseudonym, or organization can participate fully. Here are some examples.',
+      'Any person, pseudonym, or organization can create and participate fully. Here are some examples.',
   },
   transparency: {
     title: 'Private Where It Matters, Transparent Where You Choose',

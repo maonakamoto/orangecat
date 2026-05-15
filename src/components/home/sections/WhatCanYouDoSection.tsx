@@ -50,7 +50,7 @@ export default function WhatCanYouDoSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-tiffany-50 text-tiffany-700 mb-4">
             <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">Economic Agency</span>
+            <span className="text-sm font-medium">For Makers</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4">
             {whatCanYouDo.title}
@@ -127,24 +127,24 @@ export default function WhatCanYouDoSection() {
           className="text-center"
         >
           <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
-            Ready to explore? These features work together seamlessly.
+            Ready to make something? These features work together seamlessly.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
-              href="/discover"
+              href="/auth"
               className={cn(
                 GRADIENTS.btnBitcoin,
                 'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
               )}
             >
-              {CTA_LABELS.secondaryAction}
+              {CTA_LABELS.startCreating}
               <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
             </Link>
             <Link
-              href="/auth"
+              href="/discover"
               className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-gray-700 bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-gray-400 rounded-lg transition-all duration-200"
             >
-              {CTA_LABELS.createAccount}
+              {CTA_LABELS.discoverAction}
             </Link>
           </div>
         </motion.div>
