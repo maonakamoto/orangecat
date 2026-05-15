@@ -13,17 +13,12 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircle2, ArrowLeftRight, TrendingUp } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import type { FieldGuidanceContent, DefaultContent } from '@/lib/project-guidance';
-
-// Mock rates (production: fetch from API)
-const MOCK_RATES = {
-  BTC_TO_USD: 98000,
-  BTC_TO_EUR: 92000,
-  BTC_TO_CHF: 88000,
-};
+import { currencyConverter } from '@/services/currency';
+import type { ExchangeRates } from '@/services/currency/types';
 
 export type FieldType = string | null;
 
@@ -37,6 +32,17 @@ interface DynamicSidebarProps<T extends string = string> {
 }
 
 function CurrencyBreakdown({ amount, currency }: { amount: number; currency: string }) {
+  const [rates, setRates] = useState<ExchangeRates | null>(null);
+
+  useEffect(() => {
+    currencyConverter
+      .getRates()
+      .then(setRates)
+      .catch(() => {});
+  }, []);
+
+  const r = rates ?? { btcToUsd: 97000, btcToEur: 91000, btcToChf: 86000 };
+
   const toBtc = (): number => {
     if (!amount || isNaN(amount)) {
       return 0;
@@ -45,20 +51,20 @@ function CurrencyBreakdown({ amount, currency }: { amount: number; currency: str
       case 'BTC':
         return amount;
       case 'USD':
-        return amount / MOCK_RATES.BTC_TO_USD;
+        return amount / r.btcToUsd;
       case 'EUR':
-        return amount / MOCK_RATES.BTC_TO_EUR;
+        return amount / r.btcToEur;
       case 'CHF':
-        return amount / MOCK_RATES.BTC_TO_CHF;
+        return amount / r.btcToChf;
       default:
         return 0;
     }
   };
 
   const btc = toBtc();
-  const usd = btc * MOCK_RATES.BTC_TO_USD;
-  const eur = btc * MOCK_RATES.BTC_TO_EUR;
-  const chf = btc * MOCK_RATES.BTC_TO_CHF;
+  const usd = btc * r.btcToUsd;
+  const eur = btc * r.btcToEur;
+  const chf = btc * r.btcToChf;
 
   const fmt = (num: number, decimals: number = 2): string => {
     if (num === 0) {
@@ -103,7 +109,7 @@ function CurrencyBreakdown({ amount, currency }: { amount: number; currency: str
       <div className="mt-3 pt-3 border-t border-gray-100">
         <p className="text-xs text-gray-500 flex items-start gap-1">
           <TrendingUp className="w-3 h-3 mt-0.5 flex-shrink-0" />
-          <span>Live rates. All funding settles in Bitcoin.</span>
+          <span>{rates ? 'Live rates.' : 'Estimated rates.'} All funding settles in Bitcoin.</span>
         </p>
       </div>
     </div>
