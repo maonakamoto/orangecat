@@ -1034,30 +1034,39 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
 };
 
 // Categories with metadata
-export const ACTION_CATEGORIES: Record<ActionCategory, { name: string; description: string }> = {
+export const ACTION_CATEGORIES: Record<
+  ActionCategory,
+  { name: string; description: string; icon: LucideIcon }
+> = {
   entities: {
     name: 'Entities',
     description: 'Create and manage products, services, projects, causes, and events',
+    icon: Package,
   },
   communication: {
     name: 'Communication',
     description: 'Post to timeline and send messages',
+    icon: MessageSquare,
   },
   payments: {
     name: 'Payments',
     description: 'Send Bitcoin and fund projects',
+    icon: Wallet,
   },
   organization: {
     name: 'Organizations',
     description: 'Create and manage organizations',
+    icon: Users,
   },
   settings: {
     name: 'Settings',
     description: 'Manage your account settings',
+    icon: Settings,
   },
   context: {
     name: 'Context',
     description: 'Manage what My Cat knows about you',
+    icon: FileText,
   },
 };
 

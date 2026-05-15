@@ -12,24 +12,10 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  CheckCircle,
-  XCircle,
-  Clock,
-  AlertTriangle,
-  Package,
-  Briefcase,
-  Rocket,
-  Heart,
-  Calendar,
-  MessageSquare,
-  Wallet,
-  Users,
-  FileText,
-  Loader2,
-} from 'lucide-react';
+import { CheckCircle, XCircle, Clock, AlertTriangle, FileText, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { API_ROUTES } from '@/config/api-routes';
+import CAT_ACTIONS, { ACTION_CATEGORIES } from '@/config/cat-actions';
 
 interface PendingAction {
   id: string;
@@ -47,52 +33,7 @@ interface PendingActionsCardProps {
   onReject: (actionId: string) => Promise<void>;
 }
 
-const CATEGORY_ICONS: Record<string, React.ElementType> = {
-  entities: Package,
-  communication: MessageSquare,
-  payments: Wallet,
-  organization: Users,
-  context: FileText,
-  settings: FileText,
-};
-
-const ACTION_ICONS: Record<string, React.ElementType> = {
-  // Entity creation
-  create_product: Package,
-  create_service: Briefcase,
-  create_project: Rocket,
-  create_cause: Heart,
-  create_event: Calendar,
-  create_asset: FileText,
-  create_loan: FileText,
-  create_investment: Rocket,
-  create_research: FileText,
-  create_wishlist: Heart,
-  create_ai_assistant: FileText,
-  // Entity management
-  update_entity: FileText,
-  publish_entity: Rocket,
-  archive_entity: FileText,
-  // Communication
-  post_to_timeline: MessageSquare,
-  send_message: MessageSquare,
-  reply_to_message: MessageSquare,
-  // Payments
-  send_payment: Wallet,
-  fund_project: Rocket,
-  add_wallet: Wallet,
-  // Productivity
-  set_reminder: Clock,
-  create_task: FileText,
-  complete_task: FileText,
-  update_task: FileText,
-  // Organization
-  create_organization: Users,
-  invite_to_organization: Users,
-  // Context
-  add_context: FileText,
-  update_profile: Users,
-};
+const FALLBACK_ICON = FileText;
 
 function formatTimeLeft(expiresAt: string): string {
   const now = new Date();
@@ -119,7 +60,10 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
   const [confirmMessage, setConfirmMessage] = useState<string | undefined>(undefined);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  const Icon = ACTION_ICONS[action.actionId] || CATEGORY_ICONS[action.category] || Package;
+  const Icon =
+    CAT_ACTIONS[action.actionId]?.icon ||
+    ACTION_CATEGORIES[action.category as keyof typeof ACTION_CATEGORIES]?.icon ||
+    FALLBACK_ICON;
   const timeLeft = formatTimeLeft(action.expiresAt);
   const isExpired = timeLeft === 'Expired';
 
