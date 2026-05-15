@@ -1,8 +1,10 @@
 'use client';
 
-import { User, Target, Building2, Users } from 'lucide-react';
+import Link from 'next/link';
+import { User, Target, Building2, Users, Plus } from 'lucide-react';
 import { PROFILE_CATEGORIES } from '@/types/profile';
 import { GRADIENTS } from '@/config/gradients';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 /** Map profile types to Lucide icons (avoids emojis in UI) */
 const PROFILE_TYPE_ICONS = {
@@ -50,17 +52,27 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
             </p>
           </div>
         </div>
-        {profileCategory && (
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border border-orange-200 text-orange-700 shrink-0">
-            {(() => {
-              const profileType = (profile?.profile_type ||
-                'individual') as keyof typeof PROFILE_TYPE_ICONS;
-              const Icon = PROFILE_TYPE_ICONS[profileType] || User;
-              return <Icon className="h-4 w-4" />;
-            })()}
-            {profileCategory.label}
-          </div>
-        )}
+        <div className="flex items-center gap-2 shrink-0">
+          {totalProjects === 0 && (
+            <Link href={ENTITY_REGISTRY.project.createPath}>
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-tiffany-600 text-white hover:bg-tiffany-700 transition-colors cursor-pointer">
+                <Plus className="h-4 w-4" />
+                Start Creating
+              </div>
+            </Link>
+          )}
+          {profileCategory && (
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border border-orange-200 text-orange-700">
+              {(() => {
+                const profileType = (profile?.profile_type ||
+                  'individual') as keyof typeof PROFILE_TYPE_ICONS;
+                const Icon = PROFILE_TYPE_ICONS[profileType] || User;
+                return <Icon className="h-4 w-4" />;
+              })()}
+              {profileCategory.label}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

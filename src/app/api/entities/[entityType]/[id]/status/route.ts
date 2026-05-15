@@ -27,7 +27,7 @@ import {
   getUserIdField,
   type EntityType,
 } from '@/config/entity-registry';
-import { STATUS } from '@/config/database-constants';
+import { STATUS, ENTITY_STATUS } from '@/config/database-constants';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { checkOwnership } from '@/services/actors';
 import { z } from 'zod';
@@ -99,7 +99,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
     const { status: clientStatus } = parseResult.data;
     // Resolve entity-specific publish status: events → 'published', investments → 'open', others → as-is
     const newStatus =
-      clientStatus === 'active' && ENTITY_PUBLISH_STATUS[entityType]
+      clientStatus === ENTITY_STATUS.ACTIVE && ENTITY_PUBLISH_STATUS[entityType]
         ? ENTITY_PUBLISH_STATUS[entityType]!
         : clientStatus;
     const tableName = getTableName(entityType as EntityType);

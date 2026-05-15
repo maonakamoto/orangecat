@@ -16,7 +16,7 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { ENTITY_REGISTRY, ENTITY_TYPES, type EntityType } from '@/config/entity-registry';
-import { STATUS } from '@/config/database-constants';
+import { STATUS, ENTITY_STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 
 const LOG_SOURCE = 'DigestBuilder';
@@ -259,7 +259,8 @@ function generateSuggestions(context: {
     });
   }
 
-  const allDraft = context.entities.length > 0 && context.entities.every(e => e.status === 'draft');
+  const allDraft =
+    context.entities.length > 0 && context.entities.every(e => e.status === ENTITY_STATUS.DRAFT);
   if (allDraft) {
     suggestions.push({
       text: 'You have draft listings waiting. Publish them so others can discover and support your work.',

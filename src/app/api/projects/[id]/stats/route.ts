@@ -4,6 +4,7 @@ import { apiSuccess, apiNotFound, handleApiError } from '@/lib/api/standardRespo
 import { getTableName } from '@/config/entity-registry';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { ENTITY_STATUS } from '@/config/database-constants';
 
 const DEFAULT_CAMPAIGN_DURATION_DAYS = 30;
 
@@ -116,7 +117,7 @@ export const GET = withOptionalAuth(
           categoryRank,
         },
         status: project.status,
-        visibility: project.status === 'active' ? 'public' : project.status,
+        visibility: project.status === ENTITY_STATUS.ACTIVE ? 'public' : project.status,
       });
     } catch (error) {
       logger.error(

@@ -19,6 +19,7 @@ import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { GRADIENTS } from '@/config/gradients';
+import { ENTITY_STATUS } from '@/config/database-constants';
 
 export const assetEntityConfig: EntityConfig<Asset> = {
   name: ENTITY_REGISTRY['asset'].name,
@@ -60,7 +61,7 @@ export const assetEntityConfig: EntityConfig<Asset> = {
           ? 'Verified'
           : asset.verification_status === 'user_provided'
             ? 'Self-Verified'
-            : asset.status === 'draft'
+            : asset.status === ENTITY_STATUS.DRAFT
               ? 'Draft'
               : undefined,
       badgeVariant:
