@@ -14,10 +14,11 @@ interface SortViewControlProps {
   onViewModeChange: (mode: ViewMode) => void;
 }
 
-const SELECT_CLASS = 'w-full px-3 py-2 bg-white/80 border border-gray-200/80 rounded-xl text-sm';
-const LABEL_CLASS = 'block text-sm font-medium text-gray-700 mb-2';
+const SELECT_CLASS =
+  'w-full px-3 py-2 bg-white/80 dark:bg-muted border border-gray-200/80 dark:border-border rounded-xl text-sm dark:text-foreground';
+const LABEL_CLASS = 'block text-sm font-medium text-gray-700 dark:text-foreground mb-2';
 const VIEW_WRAP_CLASS =
-  'bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200/80 p-1 flex gap-1';
+  'bg-white/80 dark:bg-muted backdrop-blur-sm rounded-xl border border-gray-200/80 dark:border-border p-1 flex gap-1';
 
 export function SortViewControl({
   isMobile,

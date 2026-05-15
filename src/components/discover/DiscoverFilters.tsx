@@ -85,21 +85,23 @@ export default function DiscoverFilters({
   return (
     <>
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+          Search
+        </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400" />
+            <Search className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
           </div>
           <Input
             type="text"
             placeholder="Search projects..."
             value={searchTerm}
             onChange={e => onSearchChange(e.target.value)}
-            className="pl-10 pr-4 py-2 text-sm bg-white/80 border-gray-200/80 rounded-xl"
+            className="pl-10 pr-4 py-2 text-sm bg-white/80 dark:bg-muted border-gray-200/80 dark:border-border rounded-xl"
           />
           {loading && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+              <Loader2 className="h-4 w-4 animate-spin text-gray-400 dark:text-muted-foreground" />
             </div>
           )}
         </div>
@@ -115,7 +117,9 @@ export default function DiscoverFilters({
 
       {showStatusFilter && (
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Project Status</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+            Project Status
+          </label>
           <div className="flex flex-wrap gap-2">
             {(Object.keys(STATUS_STYLES) as StatusKey[]).map(statusKey => (
               <button
@@ -124,14 +128,14 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedStatuses.includes(statusKey)
                     ? STATUS_STYLES[statusKey].selected
-                    : 'bg-white/80 border-gray-200 text-gray-700 hover:bg-gray-50'
+                    : 'bg-white/80 dark:bg-muted border-gray-200 dark:border-border text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted/80'
                 }`}
               >
                 {STATUS_STYLES[statusKey].label}
               </button>
             ))}
           </div>
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-gray-500 dark:text-muted-foreground mt-2">
             Draft projects are not shown in search results
           </p>
         </div>
@@ -139,7 +143,9 @@ export default function DiscoverFilters({
 
       {showCategoryFilter && (
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Categories</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+            Categories
+          </label>
           <div className="flex flex-wrap gap-2">
             {simpleCategories.map(cat => (
               <button
@@ -148,7 +154,7 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedCategories.includes(cat.value)
                     ? 'bg-orange-100 border-orange-300 text-orange-700'
-                    : 'bg-white/80 border-gray-200 text-gray-700 hover:bg-gray-50'
+                    : 'bg-white/80 dark:bg-muted border-gray-200 dark:border-border text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted/80'
                 }`}
               >
                 {cat.label}
@@ -159,29 +165,31 @@ export default function DiscoverFilters({
       )}
 
       <div className="space-y-3 mb-6">
-        <label className="block text-sm font-medium text-gray-700">Location</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground">
+          Location
+        </label>
         <input
           value={country}
           onChange={e => onCountryChange(e.target.value)}
           placeholder="Country"
-          className="w-full px-3 py-2 bg-white/80 border border-gray-200/80 rounded-xl text-sm"
+          className="w-full px-3 py-2 bg-white/80 dark:bg-muted border border-gray-200/80 dark:border-border rounded-xl text-sm dark:text-foreground"
         />
         <input
           value={city}
           onChange={e => onCityChange(e.target.value)}
           placeholder="City/Region"
-          className="w-full px-3 py-2 bg-white/80 border border-gray-200/80 rounded-xl text-sm"
+          className="w-full px-3 py-2 bg-white/80 dark:bg-muted border border-gray-200/80 dark:border-border rounded-xl text-sm dark:text-foreground"
         />
         <input
           value={postal}
           onChange={e => onPostalChange(e.target.value)}
           placeholder="Postal code"
-          className="w-full px-3 py-2 bg-white/80 border border-gray-200/80 rounded-xl text-sm"
+          className="w-full px-3 py-2 bg-white/80 dark:bg-muted border border-gray-200/80 dark:border-border rounded-xl text-sm dark:text-foreground"
         />
         <select
           value={radiusKm}
           onChange={e => onRadiusChange(Number(e.target.value))}
-          className="w-full px-3 py-2 bg-white/80 border border-gray-200/80 rounded-xl text-sm"
+          className="w-full px-3 py-2 bg-white/80 dark:bg-muted border border-gray-200/80 dark:border-border rounded-xl text-sm dark:text-foreground"
         >
           <option value={0}>Anywhere</option>
           <option value={10}>Within 10 km</option>
@@ -199,8 +207,10 @@ export default function DiscoverFilters({
           postal ||
           radiusKm ||
           sortBy !== 'recent') && (
-          <div className="mb-6 pb-6 border-b border-gray-200">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Active filters</label>
+          <div className="mb-6 pb-6 border-b border-gray-200 dark:border-border">
+            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+              Active filters
+            </label>
             <div className="flex flex-wrap gap-2">
               {searchTerm && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
@@ -210,7 +220,7 @@ export default function DiscoverFilters({
               {selectedCategories.map(cat => (
                 <span
                   key={cat}
-                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700"
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground"
                 >
                   {cat}
                 </span>
