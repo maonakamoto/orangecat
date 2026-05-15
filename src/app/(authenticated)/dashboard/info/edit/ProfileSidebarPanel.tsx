@@ -30,12 +30,14 @@ export function ProfileSidebarPanel({
       <Card className="p-6 shadow-sm border-gray-200">
         <div className="mb-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-semibold text-gray-900">Profile Completion</h3>
-            <span className="text-sm font-semibold text-gray-700 bg-gray-100 px-2.5 py-1 rounded-full">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-foreground">
+              Profile Completion
+            </h3>
+            <span className="text-sm font-semibold text-gray-700 bg-gray-100 dark:text-foreground dark:bg-muted px-2.5 py-1 rounded-full">
               {completionPercentage}%
             </span>
           </div>
-          <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+          <div className="w-full bg-gray-100 dark:bg-muted rounded-full h-3 overflow-hidden">
             <div
               className={`${GRADIENTS.progressBitcoin} h-3 rounded-full transition-all duration-700 ease-out shadow-sm`}
               style={{ width: `${completionPercentage}%` }}
@@ -43,7 +45,7 @@ export function ProfileSidebarPanel({
           </div>
         </div>
         {completionPercentage < 100 && (
-          <div className="mt-3 text-base text-gray-700">
+          <div className="mt-3 text-base text-gray-700 dark:text-foreground">
             <div className="font-medium mb-1">To reach 100%, add:</div>
             <ul className="list-disc list-inside space-y-0.5">
               {missingFields.map(field => (
