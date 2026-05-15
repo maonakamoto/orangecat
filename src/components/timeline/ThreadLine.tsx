@@ -66,7 +66,7 @@ export function ThreadConnector({
       {/* Vertical thread line */}
       <div className="flex flex-col items-center w-8 flex-shrink-0">
         {/* Line above current post */}
-        {depth > 0 && <div className="w-0.5 bg-gray-300 h-2" />}
+        {depth > 0 && <div className="w-0.5 bg-gray-300 dark:bg-muted h-2" />}
 
         {/* Thread node */}
         <div className="w-2 h-2 bg-gray-400 dark:bg-muted-foreground rounded-full flex-shrink-0" />

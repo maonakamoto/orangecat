@@ -50,7 +50,7 @@ export function PostActions({
         {/* Reply */}
         <button
           onClick={onToggleComments}
-          className="group flex items-center gap-1 text-gray-500 hover:text-tiffany-500 hover:bg-tiffany-50/50 rounded-full p-2 -ml-2 transition-colors min-h-11"
+          className="group flex items-center gap-1 text-gray-500 dark:text-muted-foreground hover:text-tiffany-500 hover:bg-tiffany-50/50 rounded-full p-2 -ml-2 transition-colors min-h-11"
         >
           <MessageCircle className="w-5 h-5" />
           <span className="text-sm">
@@ -72,7 +72,7 @@ export function PostActions({
           className={`group flex items-center gap-1 rounded-full p-2 transition-colors min-h-11 ${
             event.userReposted
               ? 'text-green-500 hover:bg-green-50/50'
-              : 'text-gray-500 hover:text-green-500 hover:bg-green-50/50'
+              : 'text-gray-500 dark:text-muted-foreground hover:text-green-500 hover:bg-green-50/50'
           } disabled:opacity-50 disabled:cursor-not-allowed`}
         >
           <Repeat2 className={`w-5 h-5 ${event.userReposted ? 'fill-current' : ''}`} />
@@ -86,7 +86,7 @@ export function PostActions({
           className={`group flex items-center gap-1 rounded-full p-2 transition-colors min-h-11 ${
             event.userLiked
               ? 'text-red-500 hover:bg-red-50/50'
-              : 'text-gray-500 hover:text-red-500 hover:bg-red-50/50'
+              : 'text-gray-500 dark:text-muted-foreground hover:text-red-500 hover:bg-red-50/50'
           } disabled:opacity-50 disabled:cursor-not-allowed`}
         >
           <Heart className={`w-5 h-5 ${event.userLiked ? 'fill-current' : ''}`} />
@@ -100,7 +100,7 @@ export function PostActions({
           className={`group flex items-center gap-1 rounded-full p-2 transition-colors min-h-11 ${
             event.userDisliked
               ? 'text-orange-500 hover:bg-orange-50/50'
-              : 'text-gray-500 hover:text-orange-500 hover:bg-orange-50/50'
+              : 'text-gray-500 dark:text-muted-foreground hover:text-orange-500 hover:bg-orange-50/50'
           } disabled:opacity-50 disabled:cursor-not-allowed`}
           title="Dislike this post (wisdom of crowds - helps detect scams)"
         >
@@ -117,7 +117,7 @@ export function PostActions({
           className={`group flex items-center gap-1 rounded-full p-2 transition-colors min-h-11 ${
             event.userShared
               ? 'text-tiffany-500 hover:bg-tiffany-50/50'
-              : 'text-gray-500 hover:text-tiffany-500 hover:bg-tiffany-50/50'
+              : 'text-gray-500 dark:text-muted-foreground hover:text-tiffany-500 hover:bg-tiffany-50/50'
           } disabled:opacity-50 disabled:cursor-not-allowed`}
         >
           <Share2 className="w-5 h-5" />

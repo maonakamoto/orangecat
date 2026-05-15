@@ -107,7 +107,7 @@ export function ThreadContext({
   if (loading) {
     return (
       <div className={cn('flex items-center justify-center py-8', className)}>
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-muted"></div>
       </div>
     );
   }
@@ -125,8 +125,8 @@ export function ThreadContext({
 
   if (!threadPosts.length) {
     return (
-      <div className={cn('text-center py-8 text-gray-500', className)}>
-        <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+      <div className={cn('text-center py-8 text-gray-500 dark:text-muted-foreground', className)}>
+        <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
         <p>No posts in this thread.</p>
       </div>
     );
@@ -136,14 +136,19 @@ export function ThreadContext({
   const threadParticipants = Array.from(new Set(threadPosts.map(post => post.actor.id))).length;
 
   return (
-    <div className={cn('bg-white border border-gray-200 rounded-lg', className)}>
+    <div
+      className={cn(
+        'bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg',
+        className
+      )}
+    >
       {/* Thread Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-100">
+      <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-border">
         <div className="flex items-center gap-3">
-          <MessageCircle className="w-5 h-5 text-gray-600" />
+          <MessageCircle className="w-5 h-5 text-gray-600 dark:text-muted-foreground" />
           <div>
-            <h3 className="font-semibold text-gray-900">Thread</h3>
-            <p className="text-sm text-gray-500">
+            <h3 className="font-semibold text-gray-900 dark:text-foreground">Thread</h3>
+            <p className="text-sm text-gray-500 dark:text-muted-foreground">
               {threadPosts.length} posts
               {threadParticipants > 1 && (
                 <>
@@ -168,7 +173,7 @@ export function ThreadContext({
             <ChevronUp className="w-4 h-4" />
           </Button>
 
-          <span className="text-sm text-gray-500 min-w-[3rem] text-center">
+          <span className="text-sm text-gray-500 dark:text-muted-foreground min-w-[3rem] text-center">
             {currentIndex + 1} / {threadPosts.length}
           </span>
 
@@ -202,7 +207,7 @@ export function ThreadContext({
 
       {/* Current Post Highlight */}
       {currentPost && (
-        <div className="p-4 bg-tiffany-50 border-t border-gray-100">
+        <div className="p-4 bg-tiffany-50 dark:bg-muted border-t border-gray-100 dark:border-border">
           <div className="flex items-center gap-2 text-sm text-tiffany-700">
             <div className="w-2 h-2 bg-tiffany-500 rounded-full"></div>
             Currently viewing: {currentPost.actor.name}'s post
@@ -234,7 +239,12 @@ export function ThreadIndicator({
   }
 
   return (
-    <div className={cn('flex items-center gap-1 text-xs text-gray-500', className)}>
+    <div
+      className={cn(
+        'flex items-center gap-1 text-xs text-gray-500 dark:text-muted-foreground',
+        className
+      )}
+    >
       <MessageCircle className="w-3 h-3" />
       <span>Part of thread ({replyCount} replies)</span>
       {onShowThread && (
