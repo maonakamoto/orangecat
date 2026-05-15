@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Receipt, Camera, Bitcoin, MessageSquare, Upload, Loader2 } from 'lucide-react';
+import { Bitcoin, Upload, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -9,35 +9,16 @@ import { Textarea } from '@/components/ui/Textarea';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import type { ProofUploadFormProps, ProofType } from './types';
+import { PROOF_TYPE_META } from './types';
 import { useProofUploadForm } from './useProofUploadForm';
 import { ProofImageUpload } from './ProofImageUpload';
 
-const PROOF_TYPE_OPTIONS: Array<{
-  value: ProofType;
-  icon: React.ElementType;
-  label: string;
-  description: string;
-}> = [
-  { value: 'receipt', icon: Receipt, label: 'Receipt', description: 'Upload a receipt or invoice' },
-  {
-    value: 'screenshot',
-    icon: Camera,
-    label: 'Screenshot',
-    description: 'Order confirmation or delivery proof',
-  },
-  {
-    value: 'transaction',
-    icon: Bitcoin,
-    label: 'Transaction',
-    description: 'Bitcoin transaction ID',
-  },
-  {
-    value: 'comment',
-    icon: MessageSquare,
-    label: 'Description',
-    description: 'Text explanation only',
-  },
-];
+const PROOF_TYPE_OPTIONS = (Object.keys(PROOF_TYPE_META) as ProofType[]).map(value => ({
+  value,
+  icon: PROOF_TYPE_META[value].icon,
+  label: PROOF_TYPE_META[value].label,
+  description: PROOF_TYPE_META[value].description,
+}));
 
 export function ProofUploadForm({
   wishlistItemId,

@@ -1,58 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { MessageSquare, LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import {
-  getEntitiesForCreateMenu,
-  COLOR_CLASSES,
-  type EntityMetadata,
-  type EntityCategory,
-} from '@/config/entity-registry';
-
-interface CreateOption {
-  name: string;
-  description: string;
-  href: string;
-  icon: LucideIcon;
-  color: string;
-  bgColor: string;
-  category: EntityCategory | 'content';
-}
-
-/**
- * Generate create options from entity registry (SSOT)
- * Post is added as a special case since it's content, not a structured entity
- */
-function generateCreateOptions(): CreateOption[] {
-  const postOption: CreateOption = {
-    name: 'Post',
-    description: 'Share an update on your timeline',
-    href: '/timeline?compose=true',
-    icon: MessageSquare,
-    color: 'text-tiffany-600',
-    bgColor: 'bg-tiffany-50',
-    category: 'content',
-  };
-
-  const entityOptions: CreateOption[] = getEntitiesForCreateMenu().map((entity: EntityMetadata) => {
-    const colors = COLOR_CLASSES[entity.colorTheme];
-    return {
-      name: entity.name,
-      description: entity.createActionLabel,
-      href: entity.createPath,
-      icon: entity.icon,
-      color: colors.text,
-      bgColor: colors.bg,
-      category: entity.category,
-    };
-  });
-
-  return [postOption, ...entityOptions];
-}
-
-// Generate options once (they don't change at runtime)
-const CREATE_OPTIONS = generateCreateOptions();
+import { CREATE_OPTIONS, type CreateOption } from '@/components/dashboard/SmartCreateButton';
 
 interface MobileCreateSheetProps {
   /** Whether the sheet is visible */
@@ -68,7 +18,6 @@ interface MobileCreateSheetProps {
  *
  * A bottom sheet that displays all create options for mobile users.
  * Used by MobileBottomNav when the "+" button triggers a menu.
- * Reusable component extracted from SmartCreateButton's MobileCreateButton.
  */
 export function MobileCreateSheet({ isOpen, onClose, onSelect }: MobileCreateSheetProps) {
   if (!isOpen) {

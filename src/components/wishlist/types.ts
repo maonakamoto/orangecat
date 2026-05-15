@@ -7,10 +7,9 @@
  * Last Modified: 2026-01-06
  */
 
-import type {
-  WishlistFulfillmentProofFormData,
-  WishlistFeedbackFormData,
-} from '@/lib/validation';
+import type { ElementType } from 'react';
+import { Receipt, Camera, Bitcoin, MessageSquare } from 'lucide-react';
+import type { WishlistFulfillmentProofFormData, WishlistFeedbackFormData } from '@/lib/validation';
 
 // ==================== PROOF TYPES ====================
 
@@ -100,6 +99,7 @@ export const PROOF_TYPE_META: Record<
     description: string;
     requiresImage: boolean;
     requiresTransaction: boolean;
+    icon: ElementType;
   }
 > = {
   receipt: {
@@ -107,23 +107,27 @@ export const PROOF_TYPE_META: Record<
     description: 'Upload a receipt or invoice showing the purchase',
     requiresImage: true,
     requiresTransaction: false,
+    icon: Receipt,
   },
   screenshot: {
     label: 'Screenshot',
     description: 'Share a screenshot of the order confirmation or delivery',
     requiresImage: true,
     requiresTransaction: false,
+    icon: Camera,
   },
   transaction: {
     label: 'Transaction',
     description: 'Provide the Bitcoin transaction ID as proof',
     requiresImage: false,
     requiresTransaction: true,
+    icon: Bitcoin,
   },
   comment: {
     label: 'Description Only',
     description: 'Add a text description explaining how funds were used',
     requiresImage: false,
     requiresTransaction: false,
+    icon: MessageSquare,
   },
 };

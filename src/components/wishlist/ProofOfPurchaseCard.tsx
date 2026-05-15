@@ -14,15 +14,7 @@ import React from 'react';
 import Image from 'next/image';
 import { formatRelativeTime } from '@/utils/dates';
 import { getInitial } from '@/utils/string';
-import {
-  Receipt,
-  Camera,
-  Bitcoin,
-  MessageSquare,
-  ExternalLink,
-  Trash2,
-  MoreVertical,
-} from 'lucide-react';
+import { Bitcoin, ExternalLink, Trash2, MoreVertical } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/badge';
@@ -34,15 +26,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { FeedbackButtons } from './FeedbackButtons';
-import { PROOF_TYPE_META, type ProofOfPurchaseCardProps, type ProofType } from './types';
+import { PROOF_TYPE_META, type ProofOfPurchaseCardProps } from './types';
 import { cn } from '@/lib/utils';
-
-const PROOF_TYPE_ICONS: Record<ProofType, React.ElementType> = {
-  receipt: Receipt,
-  screenshot: Camera,
-  transaction: Bitcoin,
-  comment: MessageSquare,
-};
 
 export function ProofOfPurchaseCard({
   proof,
@@ -52,8 +37,8 @@ export function ProofOfPurchaseCard({
   onDelete,
   isLoading = false,
 }: ProofOfPurchaseCardProps) {
-  const ProofIcon = PROOF_TYPE_ICONS[proof.proof_type];
   const proofMeta = PROOF_TYPE_META[proof.proof_type];
+  const ProofIcon = proofMeta.icon;
   const timeAgo = formatRelativeTime(proof.created_at);
 
   return (
