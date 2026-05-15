@@ -119,8 +119,10 @@ export default function BookingsDashboardPage() {
     <div className="max-w-6xl mx-auto px-4 py-8">
       <Breadcrumb items={[{ label: 'Bookings' }]} className="mb-4" />
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Manage Bookings</h1>
-        <p className="text-gray-600 mt-1">Review and manage booking requests for your services</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground">Manage Bookings</h1>
+        <p className="text-gray-600 dark:text-muted-foreground mt-1">
+          Review and manage booking requests for your services
+        </p>
       </div>
 
       <BookingTabs
@@ -134,7 +136,7 @@ export default function BookingsDashboardPage() {
       {/* Bookings List */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-muted-foreground" />
         </div>
       ) : filteredBookings.length === 0 ? (
         <EmptyState
