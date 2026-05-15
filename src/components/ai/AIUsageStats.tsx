@@ -101,12 +101,17 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
           </CardTitle>
           {periodSelector}
         </div>
-        {usage.periodLabel && <p className="text-sm text-gray-500">{usage.periodLabel}</p>}
+        {usage.periodLabel && (
+          <p className="text-sm text-gray-500 dark:text-muted-foreground">{usage.periodLabel}</p>
+        )}
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map(stat => (
-            <div key={stat.label} className="p-4 rounded-lg border border-gray-100 bg-gray-50/50">
+            <div
+              key={stat.label}
+              className="p-4 rounded-lg border border-gray-100 dark:border-border bg-gray-50/50 dark:bg-muted"
+            >
               <div className="flex items-center gap-2 mb-2">
                 <div
                   className={cn(
@@ -117,19 +122,21 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
                   <stat.icon className={cn('w-4 h-4', stat.color)} />
                 </div>
               </div>
-              <div className="text-2xl font-semibold text-gray-900">{stat.value}</div>
-              <div className="text-sm text-gray-500">{stat.label}</div>
+              <div className="text-2xl font-semibold text-gray-900 dark:text-foreground">
+                {stat.value}
+              </div>
+              <div className="text-sm text-gray-500 dark:text-muted-foreground">{stat.label}</div>
             </div>
           ))}
         </div>
 
         {/* Zero State */}
         {usage.totalRequests === 0 && (
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+          <div className="mt-4 p-4 bg-gray-50 dark:bg-muted rounded-lg border border-gray-100 dark:border-border">
             <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-gray-400 mt-0.5" />
+              <Info className="w-5 h-5 text-gray-400 dark:text-muted-foreground mt-0.5" />
               <div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-muted-foreground">
                   No usage recorded yet. Start a conversation with My Cat to see your statistics.
                 </p>
               </div>
@@ -148,7 +155,7 @@ export function AIUsageStatsCompact({ usage }: { usage: UsageData }) {
   const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
   return (
-    <div className="flex items-center gap-4 text-sm text-gray-600">
+    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-muted-foreground">
       <div className="flex items-center gap-1">
         <MessageSquare className="w-4 h-4" />
         <span>{usage.totalRequests.toLocaleString()} requests</span>

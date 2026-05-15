@@ -61,7 +61,9 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Provider</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+            Provider
+          </label>
           <div
             className="grid grid-cols-2 md:grid-cols-4 gap-2"
             onFocus={() => onFieldFocus?.('provider')}
@@ -76,18 +78,18 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
                   'p-3 rounded-lg border-2 text-left transition-all',
                   selectedProvider === p.id
                     ? 'border-tiffany-500 bg-tiffany-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    : 'border-gray-200 dark:border-border hover:border-gray-300 dark:hover:border-border'
                 )}
               >
                 <div className="font-medium text-sm">{p.name}</div>
-                <div className="text-xs text-gray-500">{p.type}</div>
+                <div className="text-xs text-gray-500 dark:text-muted-foreground">{p.type}</div>
               </button>
             ))}
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
             Key Name (optional)
           </label>
           <Input
@@ -98,7 +100,9 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">API Key</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+            API Key
+          </label>
           <div className="relative">
             <Input
               type={showKey ? 'text' : 'password'}
@@ -115,13 +119,13 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
             <button
               type="button"
               onClick={() => setShowKey(!showKey)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-gray-700"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
             >
               {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
           {provider && (
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
               Get your key at{' '}
               <a
                 href={provider.apiKeyUrl}

@@ -98,10 +98,14 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
               className="p-6"
             >
               {/* Header */}
-              <h3 className="font-semibold text-gray-900 mb-2">{aiDefaultContent.title}</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-foreground mb-2">
+                {aiDefaultContent.title}
+              </h3>
 
               {/* Description */}
-              <p className="text-sm text-gray-600 mb-4">{aiDefaultContent.description}</p>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground mb-4">
+                {aiDefaultContent.description}
+              </p>
 
               {/* Features */}
               <div className="space-y-3 mb-4">
