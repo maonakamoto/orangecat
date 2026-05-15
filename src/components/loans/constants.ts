@@ -10,8 +10,6 @@
 
 import { DEFAULT_CURRENCY } from '@/config/currencies';
 import type { LoanDialogFormData } from './validation';
-import { STATUS } from '@/config/database-constants';
-import { BADGE_COLORS } from '@/config/badge-colors';
 
 export const DEFAULT_LOAN_FORM_VALUES: LoanDialogFormData = {
   title: '',
@@ -38,13 +36,3 @@ export const CONTACT_METHODS = [
   { value: 'email', label: 'Email' },
   { value: 'phone', label: 'Phone' },
 ] as const;
-
-const LOAN_OFFER_STATUS_COLORS: Record<string, string> = {
-  [STATUS.LOAN_OFFERS.PENDING]: BADGE_COLORS.warning,
-  [STATUS.LOAN_OFFERS.ACCEPTED]: BADGE_COLORS.success,
-  [STATUS.LOAN_OFFERS.REJECTED]: BADGE_COLORS.error,
-  [STATUS.LOAN_OFFERS.EXPIRED]: BADGE_COLORS.neutral,
-};
-
-export const getLoanOfferStatusColor = (status: string): string =>
-  LOAN_OFFER_STATUS_COLORS[status] ?? BADGE_COLORS.neutral;

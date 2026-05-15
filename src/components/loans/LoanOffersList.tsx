@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Target, TrendingUp, Clock, CheckCircle, XCircle, Edit, MessageSquare } from 'lucide-react';
 import { STATUS } from '@/config/database-constants';
 import { formatRelativeTime } from '@/utils/dates';
-import { getLoanOfferStatusColor } from './constants';
+import { getLoanOfferStatusColor } from '@/config/loans';
 import { formatLoanAmount } from './useLoanList';
 
 interface LoanOffersListProps {
