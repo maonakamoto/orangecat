@@ -42,7 +42,7 @@ export function ContributionAmountInput({
 
   return (
     <div className="space-y-3">
-      <label className="text-sm font-medium text-gray-700">Amount</label>
+      <label className="text-sm font-medium text-gray-700 dark:text-foreground">Amount</label>
 
       {/* Quick select buttons */}
       <div className="flex flex-wrap gap-2">
@@ -95,7 +95,9 @@ export function ContributionAmountInput({
         />
       )}
 
-      {value > 0 && <p className="text-sm text-gray-500">{formatAmount(value)}</p>}
+      {value > 0 && (
+        <p className="text-sm text-gray-500 dark:text-muted-foreground">{formatAmount(value)}</p>
+      )}
     </div>
   );
 }

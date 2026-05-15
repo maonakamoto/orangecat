@@ -47,7 +47,7 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
 
   return (
     <div
-      className={`bg-white rounded-lg border-2 p-6 ${isBitcoin ? 'border-orange-200' : 'border-yellow-200'}`}
+      className={`bg-white dark:bg-card rounded-lg border-2 p-6 ${isBitcoin ? 'border-orange-200' : 'border-yellow-200'}`}
       data-bitcoin-card={isBitcoin ? 'true' : undefined}
       data-lightning-card={!isBitcoin ? 'true' : undefined}
     >
@@ -55,14 +55,14 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
       <div className="flex items-center gap-2 mb-4">
         <Icon className={`w-5 h-5 ${isBitcoin ? 'text-orange-600' : 'text-yellow-600'}`} />
         <div>
-          <h4 className="font-semibold text-gray-900 text-sm">{label}</h4>
-          <p className="text-xs text-gray-500">{description}</p>
+          <h4 className="font-semibold text-gray-900 dark:text-foreground text-sm">{label}</h4>
+          <p className="text-xs text-gray-500 dark:text-muted-foreground">{description}</p>
         </div>
       </div>
 
       {/* QR Code - Always Visible */}
       <div className="flex justify-center mb-4">
-        <div className="bg-white p-3 rounded-lg border-2 border-gray-200 shadow-sm">
+        <div className="bg-white dark:bg-card p-3 rounded-lg border-2 border-gray-200 dark:border-border shadow-sm">
           <QRCodeSVG
             value={isBitcoin ? `bitcoin:${address}` : address}
             size={200}
@@ -74,11 +74,13 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
 
       {/* Address - Clickable to Copy */}
       <div
-        className="bg-gray-50 rounded-lg p-3 mb-3 cursor-pointer hover:bg-gray-100 transition-colors border border-gray-200"
+        className="bg-gray-50 dark:bg-muted rounded-lg p-3 mb-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors border border-gray-200 dark:border-border"
         onClick={handleAddressClick}
         title="Click to copy address"
       >
-        <code className="text-xs font-mono text-gray-900 break-all select-all">{address}</code>
+        <code className="text-xs font-mono text-gray-900 dark:text-foreground break-all select-all">
+          {address}
+        </code>
       </div>
 
       {/* Action Buttons */}
@@ -140,17 +142,21 @@ export default function BitcoinDonationCard({
     >
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground flex items-center gap-2">
             <Bitcoin className="w-5 h-5 text-orange-500" />
             Accept Bitcoin Funding
           </h3>
-          <p className="text-xs text-gray-600 mt-0.5">Send Bitcoin directly to this profile</p>
+          <p className="text-xs text-gray-600 dark:text-muted-foreground mt-0.5">
+            Send Bitcoin directly to this profile
+          </p>
         </div>
         {balance !== undefined && balance > 0 && (
           <div className="text-right">
-            <div className="text-xs text-gray-500">Balance</div>
-            <div className="text-sm font-bold text-gray-900">{formatBalance(balance)}</div>
-            <div className="text-xs text-gray-400">
+            <div className="text-xs text-gray-500 dark:text-muted-foreground">Balance</div>
+            <div className="text-sm font-bold text-gray-900 dark:text-foreground">
+              {formatBalance(balance)}
+            </div>
+            <div className="text-xs text-gray-400 dark:text-muted-foreground">
               ≈ {formatCurrency(balance, 'SATS', { compact: true })}
             </div>
           </div>

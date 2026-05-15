@@ -62,7 +62,9 @@ export default function BitcoinWalletStatsCompact({
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-lg p-4 border border-gray-200 ${className}`}>
+      <div
+        className={`bg-white dark:bg-card rounded-lg p-4 border border-gray-200 dark:border-border ${className}`}
+      >
         <div className="flex items-center justify-center py-4">
           <RefreshCw className="w-5 h-5 animate-spin text-orange-500" />
         </div>
@@ -72,8 +74,10 @@ export default function BitcoinWalletStatsCompact({
 
   if (error || balance === null) {
     return (
-      <div className={`bg-white rounded-lg p-4 border border-gray-200 ${className}`}>
-        <div className="text-center text-gray-500 py-2">
+      <div
+        className={`bg-white dark:bg-card rounded-lg p-4 border border-gray-200 dark:border-border ${className}`}
+      >
+        <div className="text-center text-gray-500 dark:text-muted-foreground py-2">
           <p className="text-sm mb-2">Unable to load wallet data</p>
           <Button variant="outline" size="sm" onClick={fetchData}>
             <RefreshCw className="w-3 h-3 mr-1" />
@@ -91,7 +95,9 @@ export default function BitcoinWalletStatsCompact({
   const hasTransactions = transactions.length > 0;
 
   return (
-    <div className={`bg-white rounded-lg border border-gray-200 overflow-hidden ${className}`}>
+    <div
+      className={`bg-white dark:bg-card rounded-lg border border-gray-200 dark:border-border overflow-hidden ${className}`}
+    >
       {/* Balance Display */}
       <div className={`${GRADIENTS.brandOrangeAmber} p-4 text-white`}>
         <div className="flex items-center justify-between mb-1">
@@ -118,7 +124,7 @@ export default function BitcoinWalletStatsCompact({
       {/* Transaction Summary */}
       {hasTransactions ? (
         <div className="p-4">
-          <h4 className="text-xs font-semibold text-gray-700 mb-3 flex items-center gap-1">
+          <h4 className="text-xs font-semibold text-gray-700 dark:text-foreground mb-3 flex items-center gap-1">
             <TrendingUp className="w-3 h-3" />
             Recent Activity
           </h4>
@@ -127,7 +133,7 @@ export default function BitcoinWalletStatsCompact({
             {transactions.slice(0, 3).map(tx => (
               <div
                 key={tx.txid}
-                className="flex items-center justify-between text-sm p-2 bg-gray-50 rounded"
+                className="flex items-center justify-between text-sm p-2 bg-gray-50 dark:bg-muted rounded"
               >
                 <div className="flex items-center gap-2">
                   {tx.type === 'received' ? (
@@ -149,7 +155,7 @@ export default function BitcoinWalletStatsCompact({
                     </span>
                   )}
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 dark:text-muted-foreground">
                   {tx.timestamp ? formatDate(new Date(tx.timestamp * 1000)) : 'Unconfirmed'}
                 </div>
               </div>
@@ -165,7 +171,7 @@ export default function BitcoinWalletStatsCompact({
           )}
         </div>
       ) : (
-        <div className="p-4 text-center text-gray-500">
+        <div className="p-4 text-center text-gray-500 dark:text-muted-foreground">
           <p className="text-xs">No transactions yet</p>
         </div>
       )}
