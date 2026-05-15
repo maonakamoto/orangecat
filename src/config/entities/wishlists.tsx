@@ -10,6 +10,7 @@
 
 import { EntityConfig } from '@/types/entity';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { WISHLIST_TYPE_LABELS } from '@/config/wishlists';
 
 export interface WishlistListItem {
   id: string;
@@ -41,7 +42,7 @@ export const wishlistEntityConfig: EntityConfig<WishlistListItem> = {
 
   makeCardProps: item => ({
     imageUrl: item.cover_image_url,
-    badge: item.type,
+    badge: WISHLIST_TYPE_LABELS[item.type] || item.type,
     status: item.is_active ? 'active' : 'inactive',
     showEditButton: true,
     editHref: `${ENTITY_REGISTRY['wishlist'].createPath}?edit=${item.id}`,
