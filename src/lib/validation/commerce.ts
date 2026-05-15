@@ -5,6 +5,7 @@ import { PRODUCT_TYPES, PRODUCT_FULFILLMENT_TYPES, PRODUCT_STATUSES } from '@/co
 import { SERVICE_LOCATION_TYPES, SERVICE_STATUSES } from '@/config/services';
 import { DAYS_OF_WEEK } from '@/config/schedule';
 import { lightningAddressSchema, optionalText, optionalUrl } from './base';
+import { ENTITY_STATUS } from '@/config/database-constants';
 
 // =============================================================================
 // REUSABLE SUB-SCHEMAS FOR JSON FIELDS
@@ -83,7 +84,7 @@ export const userProductSchema = z.object({
     .default('manual'),
   category: optionalText(50),
   tags: z.array(z.string()).optional().default([]),
-  status: z.enum(PRODUCT_STATUSES).default('draft'),
+  status: z.enum(PRODUCT_STATUSES).default(ENTITY_STATUS.DRAFT),
   is_featured: z.boolean().default(false),
 });
 
@@ -104,7 +105,7 @@ export const userServiceSchema = z
     images: z.array(z.string().url()).optional().default([]),
     portfolio_links: z.array(z.string().url()).optional().default([]),
     show_on_profile: z.boolean().optional().default(true),
-    status: z.enum(SERVICE_STATUSES).default('draft'),
+    status: z.enum(SERVICE_STATUSES).default(ENTITY_STATUS.DRAFT),
   })
   .refine(data => data.hourly_rate || data.fixed_price, {
     message: 'At least one pricing method (hourly or fixed) is required',
@@ -121,7 +122,7 @@ export const userCauseSchema = z.object({
   lightning_address: lightningAddressSchema,
   distribution_rules: distributionRulesSchema.optional().nullable(),
   beneficiaries: z.array(beneficiarySchema).optional().default([]),
-  status: z.enum(CAUSE_STATUSES).default('draft'),
+  status: z.enum(CAUSE_STATUSES).default(ENTITY_STATUS.DRAFT),
 });
 
 // Types
