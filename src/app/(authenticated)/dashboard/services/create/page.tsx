@@ -29,10 +29,12 @@ export default function CreateServicePage() {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center">
         <h3 className="text-lg font-semibold mb-2">{editError}</h3>
-        <p className="text-gray-500 mb-4">Unable to load {meta.name.toLowerCase()} for editing.</p>
+        <p className="text-gray-500 dark:text-muted-foreground mb-4">
+          Unable to load {meta.name.toLowerCase()} for editing.
+        </p>
         <button
           onClick={() => router.push(meta.basePath)}
-          className="text-sm font-medium text-gray-600 hover:text-gray-900 underline"
+          className="text-sm font-medium text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground underline"
         >
           Back to {meta.namePlural.toLowerCase()}
         </button>
