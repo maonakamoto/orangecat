@@ -57,10 +57,10 @@ export function CatSettingsTab() {
   return (
     <div className="space-y-6">
       {/* AI Model Selection */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center gap-2">
-          <Bot className="h-4 w-4 text-gray-600" />
-          <span className="text-sm font-semibold text-gray-900">AI Model</span>
+      <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
+        <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
+          <Bot className="h-4 w-4 text-gray-600 dark:text-muted-foreground" />
+          <span className="text-sm font-semibold text-gray-900 dark:text-foreground">AI Model</span>
         </div>
         <div className="p-4 space-y-3">
           {MODEL_TIERS.map(tierId => {
@@ -73,18 +73,26 @@ export function CatSettingsTab() {
                 disabled={aiLoading}
                 className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
                   isSelected
-                    ? 'border-gray-700 bg-gray-50'
-                    : 'border-gray-200 hover:border-gray-300 bg-white'
+                    ? 'border-gray-700 bg-gray-50 dark:border-foreground dark:bg-muted'
+                    : 'border-gray-200 hover:border-gray-300 bg-white dark:border-border dark:hover:border-muted-foreground dark:bg-card'
                 }`}
               >
-                <div className={`p-2 rounded-lg ${isSelected ? 'bg-gray-200' : 'bg-gray-100'}`}>
-                  <Icon className={`h-4 w-4 ${isSelected ? 'text-gray-700' : 'text-gray-500'}`} />
+                <div
+                  className={`p-2 rounded-lg ${isSelected ? 'bg-gray-200 dark:bg-accent' : 'bg-gray-100 dark:bg-muted'}`}
+                >
+                  <Icon
+                    className={`h-4 w-4 ${isSelected ? 'text-gray-700 dark:text-foreground' : 'text-gray-500 dark:text-muted-foreground'}`}
+                  />
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-gray-900">{TIER_CONFIG[tierId].label}</p>
-                  <p className="text-sm text-gray-500">{TIER_CONFIG[tierId].description}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-foreground">
+                    {TIER_CONFIG[tierId].label}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-muted-foreground">
+                    {TIER_CONFIG[tierId].description}
+                  </p>
                 </div>
-                {isSelected && <Check className="h-5 w-5 text-gray-700" />}
+                {isSelected && <Check className="h-5 w-5 text-gray-700 dark:text-foreground" />}
               </button>
             );
           })}
@@ -92,10 +100,10 @@ export function CatSettingsTab() {
       </div>
 
       {/* API Keys Status */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center gap-2">
+      <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
+        <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
           <Key className="h-4 w-4 text-amber-600" />
-          <span className="text-sm font-semibold text-gray-900">API Keys</span>
+          <span className="text-sm font-semibold text-gray-900 dark:text-foreground">API Keys</span>
         </div>
         <div className="p-4">
           {hasByok ? (
@@ -121,23 +129,27 @@ export function CatSettingsTab() {
           )}
           <Link
             href={ROUTES.SETTINGS_AI}
-            className="mt-3 flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+            className="mt-3 flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-muted transition-colors"
           >
-            <span className="text-sm text-gray-700">Manage API Keys</span>
-            <ChevronRight className="h-4 w-4 text-gray-400" />
+            <span className="text-sm text-gray-700 dark:text-muted-foreground">
+              Manage API Keys
+            </span>
+            <ChevronRight className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
           </Link>
         </div>
       </div>
 
       {/* Permissions */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+      <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
+        <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-gray-600" />
-            <span className="text-sm font-semibold text-gray-900">Permissions</span>
+            <Shield className="h-4 w-4 text-gray-600 dark:text-muted-foreground" />
+            <span className="text-sm font-semibold text-gray-900 dark:text-foreground">
+              Permissions
+            </span>
           </div>
           {permissions && (
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-500 dark:text-muted-foreground">
               {permissions.summary.enabledActions}/{permissions.summary.totalActions} enabled
             </span>
           )}
@@ -148,14 +160,18 @@ export function CatSettingsTab() {
             <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
           </div>
         ) : permissions ? (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-100 dark:divide-border">
             {permissions.summary.categories.map(cat => {
               const isSaving = saving === cat.category;
               return (
                 <div key={cat.category} className="flex items-center justify-between px-4 py-3">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900">{cat.name}</p>
-                    <p className="text-sm text-gray-500 truncate">{cat.description}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-foreground">
+                      {cat.name}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-muted-foreground truncate">
+                      {cat.description}
+                    </p>
                   </div>
                   <div className="flex items-center gap-2 ml-3">
                     {isSaving && <Loader2 className="h-4 w-4 animate-spin text-gray-400" />}
@@ -170,7 +186,9 @@ export function CatSettingsTab() {
             })}
           </div>
         ) : (
-          <div className="p-4 text-center text-sm text-gray-500">Failed to load permissions</div>
+          <div className="p-4 text-center text-sm text-gray-500 dark:text-muted-foreground">
+            Failed to load permissions
+          </div>
         )}
 
         {permissions?.summary.highRiskEnabled && (
@@ -184,7 +202,7 @@ export function CatSettingsTab() {
       {/* Link to full settings */}
       <Link
         href={ROUTES.SETTINGS_AI}
-        className="block text-center text-sm text-gray-600 hover:text-gray-800 py-2"
+        className="block text-center text-sm text-gray-600 dark:text-muted-foreground hover:text-gray-800 dark:hover:text-foreground py-2"
       >
         View all AI settings
       </Link>

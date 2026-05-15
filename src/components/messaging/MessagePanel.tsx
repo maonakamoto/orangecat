@@ -77,19 +77,21 @@ export default function MessagePanel({
   const content = (
     <div
       className={cn(
-        'flex h-full bg-white shadow-lg relative flex-col md:flex-row overflow-hidden',
-        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-2xl border border-gray-200'
+        'flex h-full bg-white dark:bg-card shadow-lg relative flex-col md:flex-row overflow-hidden',
+        fullPage
+          ? 'w-full rounded-none'
+          : 'w-full max-w-5xl rounded-2xl border border-gray-200 dark:border-border'
       )}
     >
       {/* Conversations Sidebar */}
       <div
         className={cn(
-          'border-r border-gray-200 flex flex-col bg-gray-50/60 transition-transform duration-300 ease-in-out',
+          'border-r border-gray-200 dark:border-border flex flex-col bg-gray-50/60 dark:bg-muted/40 transition-transform duration-300 ease-in-out',
           selectedConversationId ? 'hidden md:flex md:w-80' : 'flex w-full md:w-80',
           fullPage && 'w-[23rem]'
         )}
       >
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-white">
+        <div className="p-4 border-b border-gray-200 dark:border-border flex items-center justify-between bg-white dark:bg-card">
           <div className="flex items-center gap-2">
             {!fullPage && (
               <Button variant="ghost" size="sm" onClick={onClose} className="-ml-2">
@@ -97,8 +99,10 @@ export default function MessagePanel({
               </Button>
             )}
             <div>
-              <h1 className="text-xl font-semibold text-gray-900">Messages</h1>
-              <p className="text-xs text-gray-500">Reach anyone on OrangeCat</p>
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-foreground">Messages</h1>
+              <p className="text-xs text-gray-500 dark:text-muted-foreground">
+                Reach anyone on OrangeCat
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -107,7 +111,7 @@ export default function MessagePanel({
                 variant="ghost"
                 size="sm"
                 onClick={() => setConvSelectionMode(true)}
-                className="text-gray-600"
+                className="text-gray-600 dark:text-muted-foreground"
               >
                 Select
               </Button>
@@ -145,7 +149,7 @@ export default function MessagePanel({
           </div>
         </div>
 
-        <div className="p-4 border-b border-gray-100 space-y-3 bg-white/80">
+        <div className="p-4 border-b border-gray-100 dark:border-border space-y-3 bg-white/80 dark:bg-card/80">
           <div className="flex items-center gap-2">
             {(['all', 'requests'] as const).map(tab => (
               <button
@@ -154,8 +158,8 @@ export default function MessagePanel({
                 className={cn(
                   'px-3 py-1.5 rounded-full text-sm font-medium transition-all border',
                   activeTab === tab
-                    ? 'bg-tiffany-50 text-tiffany-700 border-tiffany-200 shadow-sm'
-                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    ? 'bg-tiffany-50 text-tiffany-700 border-tiffany-200 shadow-sm dark:bg-accent dark:text-accent-foreground dark:border-accent'
+                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 dark:bg-card dark:text-muted-foreground dark:border-border dark:hover:bg-muted'
                 )}
               >
                 {tab === 'all' ? 'All' : 'Requests'}
@@ -169,7 +173,7 @@ export default function MessagePanel({
               placeholder="Search conversations"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500 transition-all shadow-sm"
+              className="w-full pl-10 pr-4 py-3 bg-white dark:bg-background border border-gray-200 dark:border-border rounded-xl text-sm text-gray-900 dark:text-foreground placeholder:text-gray-400 dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500 transition-all shadow-sm"
             />
           </div>
         </div>
@@ -199,7 +203,7 @@ export default function MessagePanel({
       {/* Message View */}
       <div
         className={cn(
-          'flex-1 flex flex-col bg-white transition-opacity duration-200 ease-in-out min-h-0',
+          'flex-1 flex flex-col bg-white dark:bg-card transition-opacity duration-200 ease-in-out min-h-0',
           selectedConversationId ? 'flex w-full' : 'hidden md:flex'
         )}
       >
@@ -219,13 +223,15 @@ export default function MessagePanel({
             <div className="px-4 pt-2">
               <ConnectionStatusIndicator />
             </div>
-            <div className="flex-1 flex items-center justify-center text-gray-500 bg-gray-50">
+            <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-muted-foreground bg-gray-50 dark:bg-muted/30">
               <div className="text-center p-10 max-w-md">
-                <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center">
-                  <MessageSquare className="w-8 h-8 text-gray-400" />
+                <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-white dark:bg-card border border-gray-200 dark:border-border shadow-sm flex items-center justify-center">
+                  <MessageSquare className="w-8 h-8 text-gray-400 dark:text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Select a chat</h3>
-                <p className="text-sm text-gray-600 mb-5">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+                  Select a chat
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-muted-foreground mb-5">
                   Choose from your existing conversations or start a new one.
                 </p>
                 <Button

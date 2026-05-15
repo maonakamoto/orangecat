@@ -73,19 +73,19 @@ export default function BookingCard({
   } | null>(null);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
+    <div className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg p-6">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           {/* Header */}
           <div className="flex items-center gap-3 mb-3">
-            <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
-              <User className="h-5 w-5 text-gray-500" />
+            <div className="h-10 w-10 rounded-full bg-gray-100 dark:bg-muted flex items-center justify-center">
+              <User className="h-5 w-5 text-gray-500 dark:text-muted-foreground" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">
+              <p className="font-medium text-gray-900 dark:text-foreground">
                 {booking.customer?.display_name || booking.customer?.username || 'Customer'}
               </p>
-              <p className="text-base text-gray-500">
+              <p className="text-base text-gray-500 dark:text-muted-foreground">
                 {(booking.metadata?.service_title as string) || 'Service booking'}
               </p>
             </div>
@@ -95,25 +95,31 @@ export default function BookingCard({
           {/* Details */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div className="flex items-center gap-2 text-sm">
-              <Calendar className="h-4 w-4 text-gray-400" />
-              <span className="text-gray-600">{formatDate(booking.starts_at)}</span>
+              <Calendar className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
+              <span className="text-gray-600 dark:text-muted-foreground">
+                {formatDate(booking.starts_at)}
+              </span>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <Clock className="h-4 w-4 text-gray-400" />
-              <span className="text-gray-600">
+              <Clock className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
+              <span className="text-gray-600 dark:text-muted-foreground">
                 {formatTime(booking.starts_at)} - {formatTime(booking.ends_at)}
               </span>
             </div>
-            <div className="text-sm font-medium text-gray-900">
+            <div className="text-sm font-medium text-gray-900 dark:text-foreground">
               {formatAmount(booking.price_btc)}
             </div>
           </div>
 
           {/* Customer Notes */}
           {booking.customer_notes && (
-            <div className="bg-gray-50 rounded-md p-3 mb-4">
-              <p className="text-xs font-medium text-gray-500 mb-1">Customer notes:</p>
-              <p className="text-base text-gray-700">{booking.customer_notes}</p>
+            <div className="bg-gray-50 dark:bg-muted rounded-md p-3 mb-4">
+              <p className="text-xs font-medium text-gray-500 dark:text-muted-foreground mb-1">
+                Customer notes:
+              </p>
+              <p className="text-base text-gray-700 dark:text-foreground">
+                {booking.customer_notes}
+              </p>
             </div>
           )}
 
@@ -215,7 +221,7 @@ export default function BookingCard({
       </div>
 
       {/* Footer */}
-      <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-border flex items-center justify-between text-xs text-gray-500 dark:text-muted-foreground">
         <span>
           Requested{' '}
           {new Date(booking.created_at).toLocaleDateString([], {
@@ -240,7 +246,7 @@ export default function BookingCard({
             </DialogTitle>
           </DialogHeader>
           <textarea
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none text-sm focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-border rounded-lg resize-none text-sm bg-white dark:bg-background text-gray-900 dark:text-foreground focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500"
             rows={3}
             placeholder="Reason (optional)"
             value={reasonDialog?.reason ?? ''}
