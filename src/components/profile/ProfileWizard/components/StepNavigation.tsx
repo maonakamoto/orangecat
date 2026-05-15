@@ -31,8 +31,8 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                     : isCurrent
                       ? 'bg-orange-500 border-orange-500 text-white shadow-lg animate-pulse'
                       : isUpcoming
-                        ? 'bg-white border-gray-300 text-gray-400'
-                        : 'bg-gray-200 border-gray-300 text-gray-500'
+                        ? 'bg-white dark:bg-card border-gray-300 dark:border-border text-gray-400 dark:text-muted-foreground'
+                        : 'bg-gray-200 dark:bg-muted border-gray-300 dark:border-border text-gray-500 dark:text-muted-foreground'
                 }`}
               >
                 {isCompleted ? (
@@ -51,14 +51,22 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
               <div className="mt-3 text-center">
                 <div
                   className={`text-sm font-semibold transition-colors ${
-                    isCompleted ? 'text-green-600' : isCurrent ? 'text-orange-600' : 'text-gray-500'
+                    isCompleted
+                      ? 'text-green-600'
+                      : isCurrent
+                        ? 'text-orange-600'
+                        : 'text-gray-500 dark:text-muted-foreground'
                   }`}
                 >
                   {step.title.split(' ').slice(1).join(' ')}
                 </div>
                 <div
                   className={`text-xs mt-1 transition-colors ${
-                    isCompleted ? 'text-green-500' : isCurrent ? 'text-orange-500' : 'text-gray-400'
+                    isCompleted
+                      ? 'text-green-500'
+                      : isCurrent
+                        ? 'text-orange-500'
+                        : 'text-gray-400 dark:text-muted-foreground'
                   }`}
                 >
                   {isCompleted
@@ -75,7 +83,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
               {index < steps.length - 1 && (
                 <div
                   className={`absolute top-6 left-1/2 w-full h-0.5 transition-colors ${
-                    isCompleted ? 'bg-green-400' : 'bg-gray-300'
+                    isCompleted ? 'bg-green-400' : 'bg-gray-300 dark:bg-border'
                   }`}
                   style={{
                     width: 'calc(100% - 3rem)',
@@ -90,7 +98,9 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
 
       {/* Current Step Description */}
       <div className="mt-6 text-center max-w-md mx-auto">
-        <p className="text-sm text-gray-600 leading-relaxed">{steps[currentStep].description}</p>
+        <p className="text-sm text-gray-600 dark:text-muted-foreground leading-relaxed">
+          {steps[currentStep].description}
+        </p>
         {steps[currentStep].required && (
           <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 bg-red-50 text-red-600 text-xs rounded-full">
             <span>⚠️</span>

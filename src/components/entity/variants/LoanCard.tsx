@@ -44,8 +44,10 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 truncate">{loan.title}</h3>
-              <p className="text-sm text-gray-500 truncate">
+              <h3 className="font-semibold text-gray-900 dark:text-foreground truncate">
+                {loan.title}
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-muted-foreground truncate">
                 {formatAmount(loan.remaining_balance, loan.currency)} remaining
               </p>
             </div>
@@ -58,7 +60,9 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
                   {loan.interest_rate}%
                 </Badge>
               )}
-              <span className="text-gray-500">{formatRelativeTime(loan.created_at)}</span>
+              <span className="text-gray-500 dark:text-muted-foreground">
+                {formatRelativeTime(loan.created_at)}
+              </span>
             </div>
           </div>
         </Card>
@@ -94,7 +98,9 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
         <CardContent className="space-y-3">
           {/* Description */}
           {loan.description && (
-            <p className="text-sm text-gray-600 line-clamp-2">{loan.description}</p>
+            <p className="text-sm text-gray-600 dark:text-muted-foreground line-clamp-2">
+              {loan.description}
+            </p>
           )}
 
           {/* Financial Summary */}
@@ -116,13 +122,13 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
           <div className="flex items-center justify-between text-sm">
             {loan.interest_rate && (
               <div className="flex items-center gap-1">
-                <Percent className="h-3 w-3 text-gray-400" />
+                <Percent className="h-3 w-3 text-gray-400 dark:text-muted-foreground" />
                 <span>{loan.interest_rate}% APR</span>
               </div>
             )}
             {loan.monthly_payment && (
               <div className="flex items-center gap-1">
-                <TrendingUp className="h-3 w-3 text-gray-400" />
+                <TrendingUp className="h-3 w-3 text-gray-400 dark:text-muted-foreground" />
                 <span>{formatAmount(loan.monthly_payment, loan.currency)}/mo</span>
               </div>
             )}

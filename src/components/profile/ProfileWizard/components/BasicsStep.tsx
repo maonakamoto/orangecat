@@ -24,10 +24,10 @@ export function BasicsStep({ form }: BasicsStepProps) {
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-2">
           Welcome! Let's set up your profile
         </h2>
-        <p className="text-gray-600 mb-3">
+        <p className="text-gray-600 dark:text-muted-foreground mb-3">
           This will help people understand who you are and what you're about.
         </p>
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-tiffany-50 text-tiffany-700 text-xs rounded-full">
@@ -41,10 +41,12 @@ export function BasicsStep({ form }: BasicsStepProps) {
         name="username"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-1">
+            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground flex items-center gap-1">
               Username
               <span className="text-red-500 text-xs font-bold">*</span>
-              <span className="text-xs text-gray-500 font-normal">(required)</span>
+              <span className="text-xs text-gray-500 dark:text-muted-foreground font-normal">
+                (required)
+              </span>
             </FormLabel>
             <FormControl>
               <Input
@@ -54,7 +56,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
                 className="text-sm"
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500">
+            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
               This will be your public profile URL: orangecat.ch/@username
             </FormDescription>
             <FormMessage />
@@ -67,7 +69,9 @@ export function BasicsStep({ form }: BasicsStepProps) {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700">Display Name</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
+              Display Name
+            </FormLabel>
             <FormControl>
               <Input
                 {...field}
@@ -76,7 +80,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
                 className="text-sm"
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500">
+            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
               Optional: How you want to be displayed publicly
             </FormDescription>
             <FormMessage />
@@ -89,7 +93,9 @@ export function BasicsStep({ form }: BasicsStepProps) {
         name="bio"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700">Bio</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
+              Bio
+            </FormLabel>
             <FormControl>
               <Textarea
                 {...field}
@@ -99,7 +105,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
                 rows={4}
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500">
+            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
               Optional: Share your story to build trust with supporters
             </FormDescription>
             <FormMessage />

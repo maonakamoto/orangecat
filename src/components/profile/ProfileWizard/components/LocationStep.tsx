@@ -25,8 +25,12 @@ export function LocationStep({ form }: LocationStepProps) {
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">Where are you located?</h2>
-        <p className="text-gray-600 mb-3">Help local people find and support your projects.</p>
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-2">
+          Where are you located?
+        </h2>
+        <p className="text-gray-600 dark:text-muted-foreground mb-3">
+          Help local people find and support your projects.
+        </p>
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 text-xs rounded-full">
           <span>🌍</span>
           <span>All location fields are optional</span>
@@ -38,7 +42,7 @@ export function LocationStep({ form }: LocationStepProps) {
         name="location_search"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-2">
+            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground flex items-center gap-2">
               <MapPin className="w-4 h-4" />
               Location
             </FormLabel>
@@ -82,7 +86,7 @@ export function LocationStep({ form }: LocationStepProps) {
                 placeholder="Search for your city or address..."
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500">
+            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
               Start typing to find your location. This helps local people and projects find you.
             </FormDescription>
             <FormMessage />
@@ -95,7 +99,9 @@ export function LocationStep({ form }: LocationStepProps) {
         name="location_context"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700">Location Context</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
+              Location Context
+            </FormLabel>
             <FormControl>
               <Textarea
                 {...field}
@@ -105,7 +111,7 @@ export function LocationStep({ form }: LocationStepProps) {
                 rows={2}
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500">
+            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
               Optional: Add context to help people understand your location better
             </FormDescription>
             <FormMessage />

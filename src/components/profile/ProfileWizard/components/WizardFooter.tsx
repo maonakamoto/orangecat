@@ -34,13 +34,13 @@ export function WizardFooter({
     <div className={`px-6 py-6 ${GRADIENTS.sectionGrayOrange} border-t`}>
       {/* Progress encouragement */}
       <div className="text-center mb-4">
-        <div className="text-sm text-gray-600 mb-2">
+        <div className="text-sm text-gray-600 dark:text-muted-foreground mb-2">
           {currentStep === 0 && "🚀 Let's get your profile started!"}
           {currentStep === 1 && '📍 Great! Local supporters will love this.'}
           {currentStep === 2 && '📖 Your story matters - share it!'}
           {isLastStep && '₿ Almost there! Funding awaits.'}
         </div>
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-gray-500 dark:text-muted-foreground">
           {steps.filter((_, i) => i <= currentStep).length} of {steps.length} steps completed
         </div>
       </div>
@@ -70,7 +70,7 @@ export function WizardFooter({
               variant="ghost"
               onClick={onNext}
               disabled={isSaving}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
             >
               Skip for now
             </Button>
@@ -102,7 +102,7 @@ export function WizardFooter({
       {/* Optional encouragement for completion */}
       {isLastStep && (
         <div className="mt-4 text-center">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-muted-foreground">
             🎉 Completing your profile unlocks funding features and helps you stand out!
           </p>
         </div>

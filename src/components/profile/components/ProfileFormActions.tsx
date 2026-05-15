@@ -19,11 +19,16 @@ interface ProfileFormActionsProps {
   variant?: 'inline' | 'modal';
 }
 
-export function ProfileFormActions({ isSaving, isValid, onCancel, variant = 'inline' }: ProfileFormActionsProps) {
+export function ProfileFormActions({
+  isSaving,
+  isValid,
+  onCancel,
+  variant = 'inline',
+}: ProfileFormActionsProps) {
   const containerClass =
     variant === 'inline'
-      ? 'flex items-center justify-between gap-3 pt-6 border-t border-gray-200 mt-6 bg-gray-50 -mx-6 px-6 py-4 rounded-b-xl'
-      : 'flex items-center justify-between gap-3 pt-6 border-t border-gray-200 bg-gray-50 -mx-6 px-6 py-4 rounded-b-lg';
+      ? 'flex items-center justify-between gap-3 pt-6 border-t border-gray-200 dark:border-border mt-6 bg-gray-50 dark:bg-muted -mx-6 px-6 py-4 rounded-b-xl'
+      : 'flex items-center justify-between gap-3 pt-6 border-t border-gray-200 dark:border-border bg-gray-50 dark:bg-muted -mx-6 px-6 py-4 rounded-b-lg';
 
   return (
     <div className={containerClass}>
@@ -32,7 +37,7 @@ export function ProfileFormActions({ isSaving, isValid, onCancel, variant = 'inl
         variant="ghost"
         onClick={onCancel}
         disabled={isSaving}
-        className="px-4 text-gray-600 hover:text-gray-900"
+        className="px-4 text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground"
       >
         Cancel
       </Button>
@@ -56,5 +61,3 @@ export function ProfileFormActions({ isSaving, isValid, onCancel, variant = 'inl
     </div>
   );
 }
-
-

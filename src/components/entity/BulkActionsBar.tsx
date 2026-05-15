@@ -22,7 +22,7 @@ interface BulkActionsBarProps {
 
 /**
  * BulkActionsBar - Reusable bulk actions component for entity list pages
- * 
+ *
  * Displays a fixed bottom bar when items are selected, allowing bulk operations.
  * Used across all entity list pages (services, products, assets, etc.)
  */
@@ -47,7 +47,7 @@ export default function BulkActionsBar({
   return (
     <div
       className={cn(
-        'fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40',
+        'fixed bottom-0 left-0 right-0 bg-white dark:bg-card border-t border-gray-200 dark:border-border shadow-lg z-40',
         'pb-safe', // Safe area for mobile
         className
       )}
@@ -56,17 +56,15 @@ export default function BulkActionsBar({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 flex-1 min-w-0">
-            <span className="text-sm font-medium text-gray-900 whitespace-nowrap">
+            <span className="text-sm font-medium text-gray-900 dark:text-foreground whitespace-nowrap">
               {selectedCount} {entityNamePlural} selected
             </span>
-            {additionalInfo && (
-              <div className="flex-1 min-w-0">{additionalInfo}</div>
-            )}
+            {additionalInfo && <div className="flex-1 min-w-0">{additionalInfo}</div>}
           </div>
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 flex-wrap justify-end">
             <button
               onClick={onClearSelection}
-              className="text-sm text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap"
+              className="text-sm text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors whitespace-nowrap"
               disabled={isDisabled}
             >
               Clear
