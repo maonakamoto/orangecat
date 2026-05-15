@@ -20,7 +20,6 @@ import type {
 import {
   mapDbEventToTimelineEvent,
   getEventIcon,
-  getEventColor,
   getEventDisplayType,
   formatAmount,
   getTimeAgo,
@@ -110,7 +109,6 @@ export async function enrichEventsForDisplay(events: unknown[]): Promise<Timelin
     const displayEvent: TimelineDisplayEvent = {
       ...timelineEvent,
       icon: getEventIcon(timelineEvent.eventType),
-      iconColor: getEventColor(timelineEvent.eventType),
       displayType: getEventDisplayType(timelineEvent.eventType),
       displaySubtype: timelineEvent.eventSubtype,
       actor,

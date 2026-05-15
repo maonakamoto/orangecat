@@ -150,19 +150,6 @@ export function getEventIcon(eventType: TimelineEventType): LucideIcon {
 }
 
 /**
- * Get color for event type
- */
-export function getEventColor(eventType: TimelineEventType): string {
-  const colorMap: Record<string, string> = {
-    project_created: 'blue',
-    support_received: 'green',
-    user_followed: 'tiffany',
-    project_completed: 'orange',
-  };
-  return colorMap[eventType] || 'gray';
-}
-
-/**
  * Get display type for event
  */
 export function getEventDisplayType(eventType: TimelineEventType): string {

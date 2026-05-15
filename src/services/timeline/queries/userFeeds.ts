@@ -32,7 +32,6 @@ import {
 import {
   mapDbEventToTimelineEvent,
   getEventIcon,
-  getEventColor,
   getEventDisplayType,
   formatAmount,
   getTimeAgo,
@@ -384,7 +383,6 @@ export async function getEnrichedUserFeed(
         return {
           ...eventWithoutTypes,
           icon: getEventIcon(timelineEvent.eventType),
-          iconColor: getEventColor(timelineEvent.eventType),
           displayType: getEventDisplayType(timelineEvent.eventType),
           displaySubtype: timelineEvent.eventSubtype,
           actor,

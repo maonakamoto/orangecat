@@ -10,7 +10,6 @@ import { offlineQueueService } from '@/lib/offline-queue';
 import type { TimelineSubjectType, TimelineDisplayEvent } from '@/types/timeline';
 import {
   getEventIcon,
-  getEventColor,
   getEventDisplayType,
   getTimeAgo,
   isEventRecent,
@@ -120,7 +119,6 @@ function createOptimisticEvent(params: CreateOptimisticEventParams): TimelineDis
       type: 'user',
     },
     icon: getEventIcon('status_update'),
-    iconColor: getEventColor('status_update'),
     displayType: getEventDisplayType('status_update'),
     timeAgo: getTimeAgo(now),
     isRecent: isEventRecent(now),

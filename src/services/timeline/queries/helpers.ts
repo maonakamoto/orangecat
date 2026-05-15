@@ -15,7 +15,6 @@ import type { TimelineDisplayEvent, TimelineEventDb, TimelineActorType } from '@
 import {
   mapDbEventToTimelineEvent,
   getEventIcon,
-  getEventColor,
   getEventDisplayType,
   formatAmount,
   getTimeAgo,
@@ -67,7 +66,6 @@ export function transformEnrichedEventToDisplay(event: EnrichedEventRow): Timeli
   return {
     ...eventWithoutTypes,
     icon: getEventIcon(timelineEvent.eventType),
-    iconColor: getEventColor(timelineEvent.eventType),
     displayType: getEventDisplayType(timelineEvent.eventType),
     displaySubtype: timelineEvent.eventSubtype,
     // Actor, subject, target data already pre-joined in VIEW

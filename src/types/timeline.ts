@@ -252,7 +252,6 @@ interface TimelineDeviceInfo {
 export interface TimelineDisplayEvent extends Omit<TimelineEvent, 'eventType' | 'eventSubtype'> {
   // UI-specific fields
   icon: LucideIcon;
-  iconColor: string;
   displayType: string;
   displaySubtype?: string;
 
