@@ -67,7 +67,7 @@ export default function CatHubPage() {
   return (
     <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-30">
+      <div className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm border-b border-gray-200 dark:border-border sticky top-0 z-30">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -90,7 +90,7 @@ export default function CatHubPage() {
           <div
             className={`sticky top-[73px] z-20 ${GRADIENTS.pageBgFrost} backdrop-blur-sm px-4 py-2`}
           >
-            <TabsList className="w-full grid grid-cols-3 h-12 bg-white/80 border border-gray-200 shadow-sm">
+            <TabsList className="w-full grid grid-cols-3 h-12 bg-white/80 dark:bg-gray-950/80 border border-gray-200 dark:border-border shadow-sm">
               <TabsTrigger
                 value="chat"
                 className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white"

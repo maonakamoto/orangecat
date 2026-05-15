@@ -21,7 +21,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
   return (
     <div
       className={`flex items-center justify-between p-3 rounded-lg ${
-        isCategoryEnabled ? 'bg-white' : 'bg-gray-100 opacity-60'
+        isCategoryEnabled ? 'bg-white dark:bg-card' : 'bg-gray-100 dark:bg-muted opacity-60'
       }`}
     >
       <div className="flex items-center gap-3 flex-1">
@@ -37,7 +37,9 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
         </Tooltip>
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-medium text-gray-900 text-sm">{action.name}</span>
+            <span className="font-medium text-gray-900 dark:text-foreground text-sm">
+              {action.name}
+            </span>
             {action.requiresConfirmation && (
               <Badge variant="outline" className="text-xs">
                 <Zap className="h-3 w-3 mr-1" />
@@ -45,7 +47,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
               </Badge>
             )}
           </div>
-          <p className="text-sm text-gray-500">{action.description}</p>
+          <p className="text-sm text-gray-500 dark:text-muted-foreground">{action.description}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -68,7 +70,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
         ) : (
           <Tooltip>
             <TooltipTrigger>
-              <Info className="h-4 w-4 text-gray-400" />
+              <Info className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent>
               <p>Enable the category first to configure this action</p>
@@ -100,27 +102,27 @@ export function CategoryRow({
   onToggleAction,
 }: CategoryRowProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center gap-3 flex-1">
           <button
             onClick={() => onToggleExpanded(cat.category)}
-            className="p-1 hover:bg-gray-100 rounded"
+            className="p-1 hover:bg-gray-100 dark:hover:bg-muted rounded"
           >
             {isExpanded ? (
-              <ChevronDown className="h-5 w-5 text-gray-400" />
+              <ChevronDown className="h-5 w-5 text-gray-400 dark:text-muted-foreground" />
             ) : (
-              <ChevronRight className="h-5 w-5 text-gray-400" />
+              <ChevronRight className="h-5 w-5 text-gray-400 dark:text-muted-foreground" />
             )}
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-gray-900">{cat.name}</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-foreground">{cat.name}</h3>
               <Badge variant="secondary" className="text-xs">
                 {cat.enabledActionCount}/{cat.actionCount}
               </Badge>
             </div>
-            <p className="text-base text-gray-500">{cat.description}</p>
+            <p className="text-base text-gray-500 dark:text-muted-foreground">{cat.description}</p>
           </div>
         </div>
         <Switch
@@ -131,7 +133,7 @@ export function CategoryRow({
       </div>
 
       {isExpanded && (
-        <div className="border-t border-gray-100 bg-gray-50 p-4">
+        <div className="border-t border-gray-100 dark:border-border bg-gray-50 dark:bg-muted p-4">
           <div className="space-y-3">
             {actions.map(action => (
               <ActionRow

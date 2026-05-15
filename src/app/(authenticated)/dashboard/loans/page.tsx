@@ -115,7 +115,9 @@ export default function LoansPage() {
 
           <TabsContent value="my-loans" className="space-y-6">
             {error ? (
-              <div className="rounded-xl border bg-white p-6 text-red-600">{error}</div>
+              <div className="rounded-xl border bg-white dark:bg-card p-6 text-red-600">
+                {error}
+              </div>
             ) : (
               <>
                 {showSelection && myLoans.length > 0 && (

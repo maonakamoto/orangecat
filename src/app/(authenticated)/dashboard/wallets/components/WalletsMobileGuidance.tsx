@@ -55,11 +55,13 @@ export function WalletsMobileGuidance({
           onClick={() => onShowMobileGuidance(false)}
         >
           <div
-            className="w-full bg-white rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto"
+            className="w-full bg-white dark:bg-card rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">Wallet Help & Guidance</h3>
+            <div className="sticky top-0 bg-white dark:bg-card border-b border-gray-200 dark:border-border px-4 py-3 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
+                Wallet Help & Guidance
+              </h3>
               <button
                 onClick={() => onShowMobileGuidance(false)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
