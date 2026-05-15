@@ -7,6 +7,7 @@ import { BarChart3 } from 'lucide-react';
 import { ProjectCard } from '@/components/entity/variants/ProjectCard';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { GRADIENTS } from '@/config/gradients';
+import { ENTITY_STATUS } from '@/config/database-constants';
 
 // Use a generic interface compatible with the project store
 interface DashboardProjectsProps {
@@ -99,12 +100,12 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
                   raised_amount: project.total_funding || 0,
                   goal_amount: project.goal_amount || 0,
                   status: project.isDraft
-                    ? 'draft'
+                    ? ENTITY_STATUS.DRAFT
                     : project.isPaused
-                      ? 'paused'
+                      ? ENTITY_STATUS.PAUSED
                       : project.isActive
-                        ? 'active'
-                        : 'draft',
+                        ? ENTITY_STATUS.ACTIVE
+                        : ENTITY_STATUS.DRAFT,
                 } as Parameters<typeof ProjectCard>[0]['project']
               }
               compact

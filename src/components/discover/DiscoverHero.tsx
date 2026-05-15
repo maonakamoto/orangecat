@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { Plus, ArrowRight } from 'lucide-react';
 
 interface DiscoverHeroProps {
   totalProjects: number;
@@ -73,6 +74,23 @@ export default function DiscoverHero({
               <div className="text-fluid-xl font-bold text-bitcoinOrange">{totalFinancial}</div>
               <div className="text-sm text-gray-600 mt-1">Finance</div>
             </div>
+          </motion.div>
+
+          {/* Creator CTA */}
+          <motion.div
+            className="mt-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.1 }}
+          >
+            <Link
+              href="/auth"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-tiffany-600 hover:bg-tiffany-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              <Plus className="w-4 h-4" />
+              Start Creating
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </motion.div>
         </motion.div>
       </div>

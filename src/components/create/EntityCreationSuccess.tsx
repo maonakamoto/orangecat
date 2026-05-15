@@ -19,6 +19,7 @@ import { logger } from '@/utils/logger';
 import { entityEvents } from '@/lib/analytics';
 import { GRADIENTS } from '@/config/gradients';
 import { API_ROUTES } from '@/config/api-routes';
+import { ENTITY_STATUS } from '@/config/database-constants';
 
 interface EntityCreationSuccessProps {
   /** Entity type identifier (e.g. 'product', 'service') */
@@ -53,7 +54,7 @@ export function EntityCreationSuccess({
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ status: 'active' }),
+        body: JSON.stringify({ status: ENTITY_STATUS.ACTIVE }),
       });
 
       if (!response.ok) {
