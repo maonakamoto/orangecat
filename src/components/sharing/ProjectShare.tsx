@@ -65,8 +65,12 @@ export default function ProjectShare({
           </DialogTitle>
           <CardContent className="space-y-4 p-0">
             <div>
-              <h4 className="font-medium text-gray-900 mb-1">{projectTitle}</h4>
-              <p className="text-sm text-gray-600 line-clamp-2">{projectDescription}</p>
+              <h4 className="font-medium text-gray-900 dark:text-foreground mb-1">
+                {projectTitle}
+              </h4>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground line-clamp-2">
+                {projectDescription}
+              </p>
             </div>
             <ShareContent
               title={shareTitle}

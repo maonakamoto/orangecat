@@ -22,8 +22,8 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'X',
     icon: XIcon,
-    color: 'text-gray-900',
-    bgColor: 'bg-gray-50 hover:bg-gray-100',
+    color: 'text-gray-900 dark:text-foreground',
+    bgColor: 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const text = `${shareTitle}\n\n${shareDescription}\n\n#Bitcoin #OrangeCat`;
       window.open(
@@ -74,8 +74,8 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'Email',
     icon: Mail,
-    color: 'text-gray-600',
-    bgColor: 'bg-gray-50 hover:bg-gray-100',
+    color: 'text-gray-600 dark:text-muted-foreground',
+    bgColor: 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const subject = encodeURIComponent(`Check out ${shareTitle}`);
       const body = encodeURIComponent(`${shareDescription}\n\n${shareUrl}`);

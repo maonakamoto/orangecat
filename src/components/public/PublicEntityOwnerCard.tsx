@@ -21,7 +21,7 @@ export default function PublicEntityOwnerCard({ owner, label }: PublicEntityOwne
       <CardContent>
         <Link
           href={profileHref}
-          className={`flex items-center gap-3 -m-2 p-2 rounded-lg transition-colors ${isClickable ? 'hover:bg-gray-50' : 'cursor-default'}`}
+          className={`flex items-center gap-3 -m-2 p-2 rounded-lg transition-colors ${isClickable ? 'hover:bg-gray-50 dark:hover:bg-muted' : 'cursor-default'}`}
         >
           {owner.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -31,15 +31,19 @@ export default function PublicEntityOwnerCard({ owner, label }: PublicEntityOwne
               className="w-12 h-12 rounded-full object-cover"
             />
           ) : (
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-              <User className="w-6 h-6 text-gray-500" />
+            <div className="w-12 h-12 bg-gray-200 dark:bg-muted rounded-full flex items-center justify-center">
+              <User className="w-6 h-6 text-gray-500 dark:text-muted-foreground" />
             </div>
           )}
           <div>
-            <div className="font-medium text-gray-900">
+            <div className="font-medium text-gray-900 dark:text-foreground">
               {owner.name || owner.username || 'Anonymous'}
             </div>
-            {owner.username && <div className="text-sm text-gray-500">@{owner.username}</div>}
+            {owner.username && (
+              <div className="text-sm text-gray-500 dark:text-muted-foreground">
+                @{owner.username}
+              </div>
+            )}
           </div>
         </Link>
       </CardContent>
