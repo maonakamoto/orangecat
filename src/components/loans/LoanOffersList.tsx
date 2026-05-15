@@ -103,7 +103,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
             {offer.terms && (
               <div className="space-y-2">
                 <p className="text-sm font-medium">Terms & Conditions</p>
-                <p className="text-sm text-muted-foreground bg-gray-50 p-3 rounded">
+                <p className="text-sm text-muted-foreground bg-gray-50 dark:bg-muted p-3 rounded">
                   {offer.terms}
                 </p>
               </div>

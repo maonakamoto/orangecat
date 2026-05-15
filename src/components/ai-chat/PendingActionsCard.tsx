@@ -98,7 +98,9 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
     return (
       <div
         className={`rounded-xl border p-4 ${
-          completed === 'confirmed' ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
+          completed === 'confirmed'
+            ? 'bg-green-50 border-green-200'
+            : 'bg-gray-50 dark:bg-muted border-gray-200 dark:border-border'
         }`}
       >
         <div className="flex items-center gap-3">
@@ -111,8 +113,10 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
             </>
           ) : (
             <>
-              <XCircle className="h-5 w-5 text-gray-500" />
-              <span className="text-sm font-medium text-gray-600">Action rejected</span>
+              <XCircle className="h-5 w-5 text-gray-500 dark:text-muted-foreground" />
+              <span className="text-sm font-medium text-gray-600 dark:text-muted-foreground">
+                Action rejected
+              </span>
             </>
           )}
         </div>
@@ -122,8 +126,8 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
 
   if (isExpired) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-        <div className="flex items-center gap-3 text-gray-500">
+      <div className="rounded-xl border border-gray-200 dark:border-border bg-gray-50 dark:bg-muted p-4">
+        <div className="flex items-center gap-3 text-gray-500 dark:text-muted-foreground">
           <Clock className="h-5 w-5" />
           <span className="text-sm">This action has expired</span>
         </div>
@@ -158,7 +162,7 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
 
       {/* Parameters preview */}
       {Object.keys(action.parameters).length > 0 && (
-        <div className="bg-white/50 rounded-lg p-3 text-xs">
+        <div className="bg-white/50 dark:bg-card/50 rounded-lg p-3 text-xs">
           <div className="font-medium text-amber-800 mb-1">Details:</div>
           <ul className="space-y-0.5 text-amber-700">
             {Object.entries(action.parameters)

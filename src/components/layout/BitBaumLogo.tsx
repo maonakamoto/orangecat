@@ -2,7 +2,13 @@
 
 import Link from 'next/link';
 
-export default function BitBaumLogo({ className = '', showText = true }: { className?: string; showText?: boolean }) {
+export default function BitBaumLogo({
+  className = '',
+  showText = true,
+}: {
+  className?: string;
+  showText?: boolean;
+}) {
   return (
     <Link
       href="https://bitbaum.com"
@@ -21,34 +27,12 @@ export default function BitBaumLogo({ className = '', showText = true }: { class
           xmlns="http://www.w3.org/2000/svg"
         >
           {/* Tree trunk */}
-          <rect
-            x="14"
-            y="20"
-            width="4"
-            height="10"
-            fill="#8B4513"
-            rx="2"
-          />
+          <rect x="14" y="20" width="4" height="10" fill="#8B4513" rx="2" />
 
           {/* Tree crown - layered circles for depth */}
-          <circle
-            cx="16"
-            cy="12"
-            r="8"
-            fill="#228B22"
-          />
-          <circle
-            cx="16"
-            cy="10"
-            r="6"
-            fill="#32CD32"
-          />
-          <circle
-            cx="16"
-            cy="8"
-            r="4"
-            fill="#90EE90"
-          />
+          <circle cx="16" cy="12" r="8" fill="#228B22" />
+          <circle cx="16" cy="10" r="6" fill="#32CD32" />
+          <circle cx="16" cy="8" r="4" fill="#90EE90" />
 
           {/* Bitcoin symbol integrated into tree */}
           <g transform="translate(12, 6)">
@@ -61,13 +45,10 @@ export default function BitBaumLogo({ className = '', showText = true }: { class
       </span>
 
       {showText && (
-        <span className="text-lg font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
+        <span className="text-lg font-bold text-gray-900 dark:text-foreground group-hover:text-orange-600 transition-colors">
           BitBaum
         </span>
       )}
     </Link>
   );
 }
-
-
-

@@ -21,7 +21,7 @@ export default function AuthButtons({ className = '' }: AuthButtonsProps) {
   if (!authState.hydrated) {
     return (
       <div className={`flex items-center justify-center ${className}`}>
-        <div className="w-3 h-3 bg-gray-200 rounded-full animate-pulse"></div>
+        <div className="w-3 h-3 bg-gray-200 dark:bg-muted rounded-full animate-pulse"></div>
       </div>
     );
   }

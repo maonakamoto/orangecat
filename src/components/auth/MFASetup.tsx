@@ -61,7 +61,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                   <p className="text-sm font-medium text-gray-900 dark:text-foreground">
                     Install an authenticator app
                   </p>
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-gray-600 dark:text-muted-foreground">
                     We recommend Google Authenticator, Authy, or 1Password.
                   </p>
                 </div>

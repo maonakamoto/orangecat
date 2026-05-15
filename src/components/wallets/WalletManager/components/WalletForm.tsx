@@ -225,7 +225,7 @@ export function WalletForm({
               type="checkbox"
               checked={formData.is_primary || false}
               onChange={e => setFormData({ ...formData, is_primary: e.target.checked })}
-              className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+              className="w-4 h-4 text-orange-600 border-gray-300 dark:border-border rounded focus:ring-orange-500"
             />
             <span className="text-sm font-medium">Set as primary wallet</span>
           </label>

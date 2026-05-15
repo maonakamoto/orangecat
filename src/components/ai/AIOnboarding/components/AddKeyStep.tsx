@@ -47,15 +47,17 @@ export function AddKeyStep({
         <div className="space-y-4">
           {/* Provider Display */}
           {provider && (
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-muted rounded-lg">
               <div className="w-10 h-10 bg-tiffany-100 rounded-lg flex items-center justify-center">
                 <Layers className="w-5 h-5 text-tiffany-600" />
               </div>
               <div>
                 <p className="font-medium">{provider.name}</p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-muted-foreground">
                   Key format:{' '}
-                  <code className="bg-gray-200 px-1 rounded">{provider.apiKeyExample}</code>
+                  <code className="bg-gray-200 dark:bg-muted px-1 rounded">
+                    {provider.apiKeyExample}
+                  </code>
                 </p>
               </div>
             </div>
@@ -63,7 +65,7 @@ export function AddKeyStep({
 
           {/* Key Name Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
               Key Name (optional)
             </label>
             <Input
@@ -73,12 +75,14 @@ export function AddKeyStep({
               onChange={e => onKeyNameChange(e.target.value)}
               disabled={keyAdded}
             />
-            <p className="text-xs text-gray-500 mt-1">A friendly name to identify this key later</p>
+            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+              A friendly name to identify this key later
+            </p>
           </div>
 
           {/* API Key Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
               API Key <span className="text-red-500">*</span>
             </label>
             <Input
@@ -151,9 +155,12 @@ export function AddKeyStep({
       {/* Encryption Details */}
       <div className="flex flex-wrap gap-3">
         {aiOnboardingContent.addKey.tips?.map((tip, index) => (
-          <div key={index} className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-full">
-            <Lock className="w-4 h-4 text-gray-500" />
-            <span className="text-sm text-gray-600">{tip}</span>
+          <div
+            key={index}
+            className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-muted rounded-full"
+          >
+            <Lock className="w-4 h-4 text-gray-500 dark:text-muted-foreground" />
+            <span className="text-sm text-gray-600 dark:text-muted-foreground">{tip}</span>
           </div>
         ))}
       </div>

@@ -23,10 +23,10 @@ export function AIRevenuePanel() {
       <Card>
         <CardContent className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+            <div className="h-8 bg-gray-200 dark:bg-muted rounded w-1/3"></div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="h-16 bg-gray-200 rounded"></div>
-              <div className="h-16 bg-gray-200 rounded"></div>
+              <div className="h-16 bg-gray-200 dark:bg-muted rounded"></div>
+              <div className="h-16 bg-gray-200 dark:bg-muted rounded"></div>
             </div>
           </div>
         </CardContent>
@@ -78,8 +78,8 @@ export function AIRevenuePanel() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="flex items-center gap-2 text-gray-600 text-sm">
+          <div className="bg-gray-50 dark:bg-muted rounded-lg p-3">
+            <div className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground text-sm">
               <Users className="h-4 w-4" />
               Conversations
             </div>
@@ -87,8 +87,8 @@ export function AIRevenuePanel() {
               {summary.total_conversations.toLocaleString()}
             </div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="flex items-center gap-2 text-gray-600 text-sm">
+          <div className="bg-gray-50 dark:bg-muted rounded-lg p-3">
+            <div className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground text-sm">
               <MessageSquare className="h-4 w-4" />
               Messages
             </div>
@@ -112,12 +112,12 @@ export function AIRevenuePanel() {
         {/* Per-Assistant Breakdown */}
         {assistants.length > 0 && (
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-700">By Assistant</h4>
+            <h4 className="text-sm font-medium text-gray-700 dark:text-foreground">By Assistant</h4>
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {assistants.map(assistant => (
                 <div
                   key={assistant.id}
-                  className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg text-sm"
+                  className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-muted rounded-lg text-sm"
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <div className="h-8 w-8 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
@@ -136,7 +136,7 @@ export function AIRevenuePanel() {
                     </div>
                     <div className="min-w-0">
                       <div className="font-medium truncate">{assistant.name}</div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-500 dark:text-muted-foreground">
                         {assistant.total_conversations} chats, {assistant.total_messages} msgs
                       </div>
                     </div>
@@ -153,7 +153,7 @@ export function AIRevenuePanel() {
         )}
 
         {assistants.length === 0 && (
-          <div className="text-center py-4 text-gray-500 text-base">
+          <div className="text-center py-4 text-gray-500 dark:text-muted-foreground text-base">
             No AI assistants yet. Create one to start earning!
           </div>
         )}

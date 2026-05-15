@@ -72,13 +72,13 @@ function CapabilityToggleCard({
           disabled={disabled}
           className={cn(
             'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
-            checked ? 'bg-tiffany-600' : 'bg-gray-200',
+            checked ? 'bg-tiffany-600' : 'bg-gray-200 dark:bg-muted',
             disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
           <span
             className={cn(
-              'inline-block h-3 w-3 transform rounded-full bg-white transition-transform',
+              'inline-block h-3 w-3 transform rounded-full bg-white dark:bg-foreground transition-transform',
               checked ? 'translate-x-5' : 'translate-x-1'
             )}
           />
@@ -129,13 +129,13 @@ export function AIModelPreferences({
             disabled={disabled}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              preferences.autoRouterEnabled ? 'bg-tiffany-600' : 'bg-gray-200',
+              preferences.autoRouterEnabled ? 'bg-tiffany-600' : 'bg-gray-200 dark:bg-muted',
               disabled && 'opacity-50 cursor-not-allowed'
             )}
           >
             <span
               className={cn(
-                'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                'inline-block h-4 w-4 transform rounded-full bg-white dark:bg-foreground transition-transform',
                 preferences.autoRouterEnabled ? 'translate-x-6' : 'translate-x-1'
               )}
             />
@@ -207,7 +207,9 @@ export function AIModelPreferences({
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
           Default Model
-          <span className="text-gray-500 font-normal ml-2">(optional)</span>
+          <span className="text-gray-500 dark:text-muted-foreground font-normal ml-2">
+            (optional)
+          </span>
         </label>
         <AIModelSelector
           defaultModelId={preferences.defaultModelId}
