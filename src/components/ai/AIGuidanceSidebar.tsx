@@ -38,21 +38,28 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
                 <div className="w-10 h-10 rounded-lg bg-tiffany-100 flex items-center justify-center">
                   {content.icon}
                 </div>
-                <h3 className="font-semibold text-gray-900">{content.title}</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-foreground">
+                  {content.title}
+                </h3>
               </div>
 
               {/* Description */}
-              <p className="text-sm text-gray-600 mb-4">{content.description}</p>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground mb-4">
+                {content.description}
+              </p>
 
               {/* Tips */}
               {content.tips && content.tips.length > 0 && (
                 <div className="space-y-2 mb-4">
-                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                  <h4 className="text-xs font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wide">
                     Tips
                   </h4>
                   <ul className="space-y-2">
                     {content.tips.map((tip, index) => (
-                      <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
+                      <li
+                        key={index}
+                        className="flex items-start gap-2 text-sm text-gray-600 dark:text-muted-foreground"
+                      >
                         <CheckCircle className="w-4 h-4 text-tiffany-600 mt-0.5 flex-shrink-0" />
                         <span>{tip}</span>
                       </li>
@@ -71,7 +78,7 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
                     {content.examples.map((example, index) => (
                       <li
                         key={index}
-                        className="text-sm text-gray-500 italic pl-3 border-l-2 border-gray-200"
+                        className="text-sm text-gray-500 dark:text-muted-foreground italic pl-3 border-l-2 border-gray-200 dark:border-border"
                       >
                         {example}
                       </li>
@@ -100,10 +107,12 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
               <div className="space-y-3 mb-4">
                 {aiDefaultContent.features.map((feature, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-muted flex items-center justify-center flex-shrink-0">
                       {feature.icon}
                     </div>
-                    <span className="text-sm text-gray-600 pt-1">{feature.text}</span>
+                    <span className="text-sm text-gray-600 dark:text-muted-foreground pt-1">
+                      {feature.text}
+                    </span>
                   </div>
                 ))}
               </div>

@@ -35,8 +35,8 @@ export function AICreditsPanel() {
       <Card>
         <CardContent className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-            <div className="h-16 bg-gray-200 rounded"></div>
+            <div className="h-8 bg-gray-200 dark:bg-muted rounded w-1/3"></div>
+            <div className="h-16 bg-gray-200 dark:bg-muted rounded"></div>
           </div>
         </CardContent>
       </Card>
@@ -82,20 +82,24 @@ export function AICreditsPanel() {
 
           {data?.transactions && data.transactions.length > 0 && (
             <div className="space-y-2">
-              <h4 className="text-sm font-medium text-gray-700">Recent Activity</h4>
+              <h4 className="text-sm font-medium text-gray-700 dark:text-foreground">
+                Recent Activity
+              </h4>
               <div className="space-y-2 max-h-48 overflow-y-auto">
                 {data.transactions.slice(0, 5).map(tx => (
                   <div
                     key={tx.id}
-                    className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg text-sm"
+                    className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-muted rounded-lg text-sm"
                   >
                     <div className="flex items-center gap-2">
                       {getTransactionIcon(tx.transaction_type)}
                       <div>
-                        <div className="font-medium">
+                        <div className="font-medium dark:text-foreground">
                           {tx.assistant?.name || tx.description || tx.transaction_type}
                         </div>
-                        <div className="text-xs text-gray-500">{formatDate(tx.created_at)}</div>
+                        <div className="text-xs text-gray-500 dark:text-muted-foreground">
+                          {formatDate(tx.created_at)}
+                        </div>
                       </div>
                     </div>
                     <div className={`font-medium ${getTransactionColor(tx.transaction_type)}`}>
@@ -109,7 +113,7 @@ export function AICreditsPanel() {
           )}
 
           {(!data?.transactions || data.transactions.length === 0) && (
-            <div className="text-center py-4 text-gray-500 text-base">
+            <div className="text-center py-4 text-gray-500 dark:text-muted-foreground text-base">
               No transactions yet. Add credits to start chatting with AI assistants.
             </div>
           )}
@@ -143,7 +147,9 @@ export function AICreditsPanel() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700">Custom Amount</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-foreground">
+                Custom Amount
+              </label>
               <Input
                 type="number"
                 value={depositAmount}
@@ -152,7 +158,7 @@ export function AICreditsPanel() {
                 max={1000000}
                 className="mt-1"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
                 Minimum: {formatAmount(100)} | Maximum: {formatAmount(1000000)}
               </p>
             </div>
