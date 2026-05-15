@@ -43,7 +43,7 @@ export function ProfileBannerSection({
           <Image src={profile.banner_url} alt="Profile banner" fill className="object-cover" />
         )}
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        <div className={`absolute inset-0 ${GRADIENTS.overlayDarkBottom}`}></div>
       </div>
 
       {/* Avatar */}

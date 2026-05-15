@@ -59,6 +59,9 @@ export const GRADIENTS = {
   sectionTiffanyOrange: 'bg-gradient-to-br from-tiffany-50 to-orange-50',
   sectionGrayWhite: 'bg-gradient-to-br from-gray-50 via-white to-gray-50',
 
+  // ── Overlay gradients (dark overlays over images) ───────────────────────
+  overlayDarkBottom: 'bg-gradient-to-t from-black/40 to-transparent',
+
   // ── Page background gradients (full-bleed wrappers) ───────────────────────
   pageBgOrangeDown: 'bg-gradient-to-b from-orange-50 to-white',
   pageBgTiffanyDown: 'bg-gradient-to-b from-tiffany-50 to-white',

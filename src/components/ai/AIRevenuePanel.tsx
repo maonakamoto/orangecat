@@ -11,6 +11,7 @@ import { MIN_WITHDRAWAL_SATS } from './types';
 import { useAIRevenue } from './useAIRevenue';
 import { WithdrawDialog } from './WithdrawDialog';
 import { RecentWithdrawals } from './RecentWithdrawals';
+import { GRADIENTS } from '@/config/gradients';
 
 export function AIRevenuePanel() {
   const { formatAmount, formatAmountBtc } = useDisplayCurrency();
@@ -57,7 +58,7 @@ export function AIRevenuePanel() {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Revenue Summary */}
-        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+        <div className={`${GRADIENTS.sectionGreenEmerald} rounded-lg p-4 border border-green-200`}>
           <div className="text-sm text-green-800 mb-1">Total Earnings</div>
           <div className="text-3xl font-bold text-green-900">
             {formatAmountBtc(earnings?.total_earned_btc || summary.total_revenue_btc)}
