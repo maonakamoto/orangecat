@@ -278,7 +278,7 @@ export default async function EntityDetailPage<T extends BaseEntity>({
           <div className="space-y-3 text-sm">
             {(fields.right ?? []).map((field, idx) => (
               <div key={idx}>
-                <div className="text-gray-500">{field.label}</div>
+                <div className="text-gray-500 dark:text-muted-foreground">{field.label}</div>
                 <div className="font-medium mt-1">{field.value}</div>
               </div>
             ))}

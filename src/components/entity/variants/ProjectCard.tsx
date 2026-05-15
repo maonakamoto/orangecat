@@ -62,7 +62,7 @@ export function ProjectCard({
     compact ? (
       // Compact progress: just bar and percentage
       <div className="w-full space-y-1">
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-muted">
           <div
             className={`h-full ${GRADIENTS.brandOrangeAmber} transition-all duration-500`}
             style={{ width: `${progressPercentage}%` }}
@@ -72,17 +72,19 @@ export function ProjectCard({
           <span className="font-medium">
             <CurrencyDisplay amount={currentAmount} currency={projectCurrency} />
           </span>
-          <span className="text-gray-500">{Math.round(progressPercentage)}%</span>
+          <span className="text-gray-500 dark:text-muted-foreground">
+            {Math.round(progressPercentage)}%
+          </span>
         </div>
       </div>
     ) : (
       // Full progress: label, bar, amounts
       <div className="w-full space-y-2">
-        <div className="flex items-center justify-between text-xs text-gray-600">
+        <div className="flex items-center justify-between text-xs text-gray-600 dark:text-muted-foreground">
           <span>Progress</span>
           <span className="font-medium">{Math.round(progressPercentage)}%</span>
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-muted">
           <div
             className={`h-full ${GRADIENTS.brandOrangeAmber} transition-all duration-500`}
             style={{ width: `${progressPercentage}%` }}
@@ -92,7 +94,7 @@ export function ProjectCard({
           <span>
             <CurrencyDisplay amount={currentAmount} currency={projectCurrency} />
           </span>
-          <span className="text-gray-500">
+          <span className="text-gray-500 dark:text-muted-foreground">
             of <CurrencyDisplay amount={goalAmount} currency={projectCurrency} />
           </span>
         </div>
@@ -103,14 +105,14 @@ export function ProjectCard({
   // Metrics slot - hide in compact mode (shown in progress slot)
   const metricsSlot =
     showMetrics && !compact ? (
-      <div className="flex items-center gap-4 text-sm text-gray-600">
+      <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-muted-foreground">
         {currentAmount > 0 && (
           <div className="flex items-center gap-1">
             <span className="font-medium">
               <CurrencyDisplay amount={currentAmount} currency={projectCurrency} />
             </span>
             {projectCurrency !== 'BTC' && (
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-muted-foreground">
                 (<BTCAmountDisplay amount={currentAmount} currency={projectCurrency} />)
               </span>
             )}

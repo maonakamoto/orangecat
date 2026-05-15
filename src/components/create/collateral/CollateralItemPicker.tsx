@@ -32,7 +32,7 @@ export function CollateralItemPicker({
         <p className="text-base text-gray-500 dark:text-muted-foreground">Loading...</p>
       ) : items.length === 0 ? (
         <div className="text-center py-4">
-          <p className="text-base text-gray-500 mb-2">{emptyMessage}</p>
+          <p className="text-base text-gray-500 dark:text-muted-foreground mb-2">{emptyMessage}</p>
           <a
             href={emptyLinkHref}
             className="text-sm text-tiffany-600 hover:text-tiffany-700 font-medium"

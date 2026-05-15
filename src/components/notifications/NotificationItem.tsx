@@ -109,7 +109,7 @@ export function NotificationItem({
                   e.stopPropagation();
                   onDelete(notification.id);
                 }}
-                className="p-1 hover:bg-white rounded min-h-11 min-w-11 flex items-center justify-center"
+                className="p-1 hover:bg-white dark:hover:bg-muted rounded min-h-11 min-w-11 flex items-center justify-center"
                 title="Delete notification"
               >
                 <Trash2 className="w-3 h-3 text-red-500" />

@@ -133,14 +133,14 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
             placeholder={`Describe what you want to create — AI will fill the form for you.\n\nExample: "I'm an artist selling original watercolour prints of Swiss landscapes, priced around 80 CHF each, shipping worldwide."`}
             disabled={isGenerating || disabled}
             rows={3}
-            className="block w-full rounded-lg px-3 py-2 text-sm border border-tiffany-200 bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tiffany-300 focus:border-tiffany-300 disabled:opacity-50 resize-none"
+            className="block w-full rounded-lg px-3 py-2 text-sm border border-tiffany-200 bg-white dark:bg-muted placeholder:text-gray-400 dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-300 focus:border-tiffany-300 disabled:opacity-50 resize-none"
           />
 
           <div className="flex items-center justify-between gap-2">
             {/* Example chips */}
             {examples.length > 0 && !description && (
               <div className="flex items-center gap-2 flex-wrap">
-                <div className="flex items-center gap-1 text-xs text-gray-400">
+                <div className="flex items-center gap-1 text-xs text-gray-400 dark:text-muted-foreground">
                   <Lightbulb className="h-3 w-3" />
                   <span>Try:</span>
                 </div>
@@ -200,7 +200,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
             }}
             placeholder='Tell AI what to change — e.g. "make the title shorter" or "increase the price"'
             disabled={isRefining || disabled}
-            className="flex-1 rounded-lg px-3 py-2 text-sm border border-tiffany-200 bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-tiffany-300 disabled:opacity-50"
+            className="flex-1 rounded-lg px-3 py-2 text-sm border border-tiffany-200 bg-white dark:bg-muted placeholder:text-gray-400 dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-300 disabled:opacity-50"
           />
           <Button
             type="button"

@@ -123,7 +123,7 @@ export default function MessageHeader({ conversation, currentUserId, onBack }: M
               <h2 className="font-semibold text-gray-900 dark:text-foreground">{displayName}</h2>
             </Link>
           ) : (
-            <h2 className="font-semibold text-gray-900">{displayName}</h2>
+            <h2 className="font-semibold text-gray-900 dark:text-foreground">{displayName}</h2>
           )}
           <p className="text-sm text-gray-500 dark:text-muted-foreground">{subtitle}</p>
         </div>

@@ -75,7 +75,9 @@ function MessageStatusIcon({ message }: { message: Message }) {
   }
 
   // Default: show as delivered (message exists in DB)
-  return <Check className="h-3 w-3 text-gray-400" aria-label="Delivered" />;
+  return (
+    <Check className="h-3 w-3 text-gray-400 dark:text-muted-foreground" aria-label="Delivered" />
+  );
 }
 
 export default function MessageItem({
@@ -198,7 +200,7 @@ export default function MessageItem({
                         onEditCancel?.();
                       }
                     }}
-                    className="text-xs px-2 py-1 rounded bg-white text-tiffany-600 font-medium hover:bg-white/90"
+                    className="text-xs px-2 py-1 rounded bg-white dark:bg-card text-tiffany-600 font-medium hover:bg-white/90 dark:hover:bg-card/90"
                   >
                     Save
                   </button>

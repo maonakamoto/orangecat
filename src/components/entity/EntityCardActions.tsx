@@ -166,7 +166,7 @@ export function EntityCardActions({
             <DropdownMenuItem
               onClick={handleVisibilityClick}
               disabled={isTogglingVisibility}
-              className={showOnProfile === false ? 'text-gray-500' : ''}
+              className={showOnProfile === false ? 'text-gray-500 dark:text-muted-foreground' : ''}
             >
               {showOnProfile === false ? (
                 <>

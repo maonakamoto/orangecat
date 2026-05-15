@@ -26,7 +26,7 @@ export function LightningInvoiceForm({
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
           Amount ({displayCurrency})
         </label>
         <Input
@@ -40,7 +40,9 @@ export function LightningInvoiceForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Message (optional)</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+          Message (optional)
+        </label>
         <Input
           type="text"
           value={message}
