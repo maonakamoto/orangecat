@@ -79,8 +79,10 @@ export function CollateralSelector({
         {selectedCollateral.length > 0 && (
           <div className={`${GRADIENTS.iconTiffanyLight} border border-tiffany-200 rounded-lg p-4`}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">Total Collateral Value</span>
-              <span className="text-lg font-bold text-gray-900">
+              <span className="text-sm font-medium text-gray-700 dark:text-muted-foreground">
+                Total Collateral Value
+              </span>
+              <span className="text-lg font-bold text-gray-900 dark:text-foreground">
                 {totalCollateral.toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -91,7 +93,7 @@ export function CollateralSelector({
             {loanAmount && coveragePercentage !== null && (
               <>
                 <div className="flex items-center gap-2 mt-2">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                  <div className="flex-1 bg-gray-200 dark:bg-muted rounded-full h-2">
                     <div
                       className={cn(
                         'h-2 rounded-full transition-all',
@@ -104,7 +106,7 @@ export function CollateralSelector({
                       style={{ width: `${Math.min(100, coveragePercentage)}%` }}
                     />
                   </div>
-                  <span className="text-xs text-gray-600 font-medium">
+                  <span className="text-xs text-gray-600 dark:text-muted-foreground font-medium">
                     {coveragePercentage.toFixed(0)}% coverage
                   </span>
                 </div>
@@ -136,7 +138,7 @@ export function CollateralSelector({
             {selectedCollateral.map(item => (
               <div
                 key={`${item.type}-${item.id}`}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
+                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-muted/50 rounded-lg border border-gray-200 dark:border-border"
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -153,12 +155,14 @@ export function CollateralSelector({
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-900">{item.name}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-foreground">
+                        {item.name}
+                      </span>
                       <Badge variant="outline" className="text-xs">
                         {item.type === 'asset' ? 'Asset' : 'Wallet'}
                       </Badge>
                     </div>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-muted-foreground">
                       {item.value.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -205,10 +209,14 @@ export function CollateralSelector({
         </div>
 
         {showAssetSelector && (
-          <div className="border border-gray-200 rounded-lg p-4 bg-white">
-            <h4 className="text-sm font-semibold text-gray-900 mb-3">Select Asset</h4>
+          <div className="border border-gray-200 dark:border-border rounded-lg p-4 bg-white dark:bg-card">
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground mb-3">
+              Select Asset
+            </h4>
             {loading ? (
-              <p className="text-base text-gray-500">Loading assets...</p>
+              <p className="text-base text-gray-500 dark:text-muted-foreground">
+                Loading assets...
+              </p>
             ) : assets.length === 0 ? (
               <div className="text-center py-4">
                 <p className="text-base text-gray-500 mb-2">No assets available</p>
@@ -230,12 +238,14 @@ export function CollateralSelector({
                       key={asset.id}
                       type="button"
                       onClick={() => handleAddAsset(asset)}
-                      className="w-full text-left p-2 hover:bg-gray-50 rounded border border-gray-200"
+                      className="w-full text-left p-2 hover:bg-gray-50 dark:hover:bg-muted rounded border border-gray-200 dark:border-border"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-900">{asset.title}</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-foreground">
+                          {asset.title}
+                        </span>
                         {asset.estimated_value && (
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 dark:text-muted-foreground">
                             {asset.estimated_value.toLocaleString()}{' '}
                             {asset.currency || DEFAULT_CURRENCY}
                           </span>
@@ -249,10 +259,14 @@ export function CollateralSelector({
         )}
 
         {showWalletSelector && (
-          <div className="border border-gray-200 rounded-lg p-4 bg-white">
-            <h4 className="text-sm font-semibold text-gray-900 mb-3">Select Wallet</h4>
+          <div className="border border-gray-200 dark:border-border rounded-lg p-4 bg-white dark:bg-card">
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground mb-3">
+              Select Wallet
+            </h4>
             {loading ? (
-              <p className="text-base text-gray-500">Loading wallets...</p>
+              <p className="text-base text-gray-500 dark:text-muted-foreground">
+                Loading wallets...
+              </p>
             ) : wallets.length === 0 ? (
               <div className="text-center py-4">
                 <p className="text-base text-gray-500 mb-2">No wallets available</p>
@@ -275,12 +289,14 @@ export function CollateralSelector({
                       key={wallet.id}
                       type="button"
                       onClick={() => handleAddWallet(wallet)}
-                      className="w-full text-left p-2 hover:bg-gray-50 rounded border border-gray-200"
+                      className="w-full text-left p-2 hover:bg-gray-50 dark:hover:bg-muted rounded border border-gray-200 dark:border-border"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-900">{wallet.label}</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-foreground">
+                          {wallet.label}
+                        </span>
                         {wallet.balance_btc && (
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 dark:text-muted-foreground">
                             {formatAmount(wallet.balance_btc)}
                           </span>
                         )}
