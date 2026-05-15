@@ -166,10 +166,10 @@ export default function ProjectHeader({
                 ?
               </div>
               <div>
-                <p className="text-sm text-gray-500">Created by</p>
+                <p className="text-sm text-gray-500 dark:text-muted-foreground">Created by</p>
                 <Link
                   href={`/profiles/${project.user_id}`}
-                  className="text-sm font-semibold text-gray-900 hover:text-orange-600 transition-colors"
+                  className="text-sm font-semibold text-gray-900 dark:text-foreground hover:text-orange-600 transition-colors"
                 >
                   User {project.user_id.substring(0, 8)}
                 </Link>
@@ -186,7 +186,7 @@ export default function ProjectHeader({
                 ?
               </div>
               <div>
-                <p className="text-sm text-gray-500">Created by</p>
+                <p className="text-sm text-gray-500 dark:text-muted-foreground">Created by</p>
                 <span className="text-sm font-semibold text-gray-900 dark:text-foreground">
                   Anonymous
                 </span>
