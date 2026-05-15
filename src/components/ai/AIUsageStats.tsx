@@ -86,8 +86,8 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       label: 'Last Used',
       value: formatRelativeCompact(usage.lastUsedAt),
       icon: Clock,
-      color: 'text-gray-600',
-      bgColor: 'bg-gray-100',
+      color: 'text-gray-600 dark:text-muted-foreground',
+      bgColor: 'bg-gray-100 dark:bg-muted',
     },
   ];
 

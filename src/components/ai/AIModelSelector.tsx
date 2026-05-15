@@ -97,7 +97,7 @@ export function AIModelSelector({
                 {model.isFree && <Badge className={`${BADGE_COLORS.success} text-xs`}>FREE</Badge>}
                 {model.capabilities.includes('vision') && (
                   <span title="Vision capable">
-                    <Eye className="w-3 h-3 text-gray-400" />
+                    <Eye className="w-3 h-3 text-gray-400 dark:text-muted-foreground" />
                   </span>
                 )}
               </div>

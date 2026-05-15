@@ -120,7 +120,7 @@ export function WithdrawDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700">Amount</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-foreground">Amount</label>
             <Input
               type="number"
               value={withdrawAmount}
@@ -133,7 +133,9 @@ export function WithdrawDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700">Lightning Address</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-foreground">
+              Lightning Address
+            </label>
             <Input
               type="email"
               value={lightningAddress}
@@ -141,7 +143,7 @@ export function WithdrawDialog({
               className="mt-1"
               placeholder="your@wallet.com"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
               Enter your Lightning address to receive the withdrawal
             </p>
           </div>

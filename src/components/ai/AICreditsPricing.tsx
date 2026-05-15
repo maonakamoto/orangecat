@@ -65,7 +65,7 @@ export function AICreditsPricing() {
             {operations.map(([key, op]) => (
               <div
                 key={key}
-                className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 text-sm"
+                className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 dark:bg-muted text-sm"
               >
                 <span>{op.label}</span>
                 <span className="font-medium text-orange-700">{formatAmount(op.cost_btc)}</span>

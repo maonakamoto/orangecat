@@ -39,7 +39,7 @@ export function ProviderStep({ selectedProvider, onSelectProvider }: ProviderSte
                     <Badge className="bg-tiffany-100 text-tiffany-700 text-xs">Recommended</Badge>
                   )}
                 </h3>
-                <p className="text-xs text-gray-500 capitalize">
+                <p className="text-xs text-gray-500 dark:text-muted-foreground capitalize">
                   {p.type === 'aggregator' ? 'Aggregator' : 'Direct Provider'}
                 </p>
               </div>
@@ -58,16 +58,23 @@ export function ProviderStep({ selectedProvider, onSelectProvider }: ProviderSte
               </Badge>
             </div>
 
-            <p className="text-sm text-gray-600 mb-3">{p.description}</p>
+            <p className="text-sm text-gray-600 dark:text-muted-foreground mb-3">{p.description}</p>
 
             <div className="flex flex-wrap gap-1.5">
               {p.supportedModels.slice(0, 3).map(model => (
-                <Badge key={model} variant="outline" className="text-xs text-gray-500">
+                <Badge
+                  key={model}
+                  variant="outline"
+                  className="text-xs text-gray-500 dark:text-muted-foreground"
+                >
                   {model}
                 </Badge>
               ))}
               {p.supportedModels.length > 3 && (
-                <Badge variant="outline" className="text-xs text-gray-400">
+                <Badge
+                  variant="outline"
+                  className="text-xs text-gray-400 dark:text-muted-foreground"
+                >
                   +{p.supportedModels.length - 3} more
                 </Badge>
               )}

@@ -14,9 +14,9 @@ function getStatusIcon(status: string) {
     case 'failed':
       return <XCircle className="h-4 w-4 text-red-500" />;
     case 'cancelled':
-      return <AlertCircle className="h-4 w-4 text-gray-500" />;
+      return <AlertCircle className="h-4 w-4 text-gray-500 dark:text-muted-foreground" />;
     default:
-      return <Clock className="h-4 w-4 text-gray-500" />;
+      return <Clock className="h-4 w-4 text-gray-500 dark:text-muted-foreground" />;
   }
 }
 
@@ -32,21 +32,25 @@ export function RecentWithdrawals({ withdrawals, formatAmountBtc }: RecentWithdr
 
   return (
     <div className="space-y-2">
-      <h4 className="text-sm font-medium text-gray-700">Recent Withdrawals</h4>
+      <h4 className="text-sm font-medium text-gray-700 dark:text-foreground">Recent Withdrawals</h4>
       <div className="space-y-2">
         {withdrawals.slice(0, 3).map(withdrawal => (
           <div
             key={withdrawal.id}
-            className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg text-sm"
+            className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-muted rounded-lg text-sm"
           >
             <div className="flex items-center gap-2">
               {getStatusIcon(withdrawal.status)}
               <div>
                 <div className="font-medium">{formatAmountBtc(withdrawal.amount_btc)}</div>
-                <div className="text-xs text-gray-500">{formatDate(withdrawal.created_at)}</div>
+                <div className="text-xs text-gray-500 dark:text-muted-foreground">
+                  {formatDate(withdrawal.created_at)}
+                </div>
               </div>
             </div>
-            <div className="text-xs text-gray-500 capitalize">{withdrawal.status}</div>
+            <div className="text-xs text-gray-500 dark:text-muted-foreground capitalize">
+              {withdrawal.status}
+            </div>
           </div>
         ))}
       </div>

@@ -71,7 +71,7 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
               {/* Examples */}
               {content.examples && content.examples.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                  <h4 className="text-xs font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wide mb-2">
                     Examples
                   </h4>
                   <ul className="space-y-1.5">
