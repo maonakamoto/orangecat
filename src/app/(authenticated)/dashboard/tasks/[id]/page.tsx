@@ -110,7 +110,7 @@ export default function TaskDetailPage() {
       <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
         <div className="max-w-3xl mx-auto">
           <Breadcrumb items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }]} className="mb-4" />
-          <div className="bg-white rounded-xl border border-red-200 p-6 text-red-600">
+          <div className="bg-white dark:bg-card rounded-xl border border-red-200 p-6 text-red-600">
             {error || 'Task not found'}
           </div>
         </div>
@@ -144,11 +144,13 @@ export default function TaskDetailPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
           <div className="p-6">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">{task.title}</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-2">
+                  {task.title}
+                </h1>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
                     className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
@@ -174,11 +176,13 @@ export default function TaskDetailPage() {
 
             {task.description && (
               <div className="mb-6">
-                <h2 className="text-sm font-medium text-gray-500 mb-2 flex items-center gap-2">
+                <h2 className="text-sm font-medium text-gray-500 dark:text-muted-foreground mb-2 flex items-center gap-2">
                   <FileText className="h-4 w-4" />
                   Description
                 </h2>
-                <p className="text-gray-700 whitespace-pre-wrap">{task.description}</p>
+                <p className="text-gray-700 dark:text-foreground whitespace-pre-wrap">
+                  {task.description}
+                </p>
               </div>
             )}
 
@@ -191,41 +195,41 @@ export default function TaskDetailPage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
               <div>
-                <span className="text-gray-500 flex items-center gap-1">
+                <span className="text-gray-500 dark:text-muted-foreground flex items-center gap-1">
                   <Tag className="h-4 w-4" />
                   Category
                 </span>
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-gray-900 dark:text-foreground">
                   {TASK_CATEGORY_LABELS[task.category as keyof typeof TASK_CATEGORY_LABELS]}
                 </span>
               </div>
               <div>
-                <span className="text-gray-500 flex items-center gap-1">
+                <span className="text-gray-500 dark:text-muted-foreground flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
                   Type
                 </span>
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-gray-900 dark:text-foreground">
                   {TASK_TYPE_LABELS[task.task_type as keyof typeof TASK_TYPE_LABELS]}
                 </span>
               </div>
               {task.estimated_minutes && (
                 <div>
-                  <span className="text-gray-500 flex items-center gap-1">
+                  <span className="text-gray-500 dark:text-muted-foreground flex items-center gap-1">
                     <Clock className="h-4 w-4" />
                     Estimated Time
                   </span>
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-gray-900 dark:text-foreground">
                     ~{task.estimated_minutes} minutes
                   </span>
                 </div>
               )}
               {task.creator && (
                 <div>
-                  <span className="text-gray-500 flex items-center gap-1">
+                  <span className="text-gray-500 dark:text-muted-foreground flex items-center gap-1">
                     <User className="h-4 w-4" />
                     Created by
                   </span>
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-gray-900 dark:text-foreground">
                     {task.creator.display_name || task.creator.username}
                   </span>
                 </div>
@@ -233,7 +237,7 @@ export default function TaskDetailPage() {
             </div>
           </div>
 
-          <div className="border-t border-gray-200 p-4 bg-gray-50 flex flex-wrap gap-2">
+          <div className="border-t border-gray-200 dark:border-border p-4 bg-gray-50 dark:bg-muted flex flex-wrap gap-2">
             <Button onClick={() => setActiveModal('complete')} className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4" />
               Done
