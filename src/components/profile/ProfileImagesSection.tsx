@@ -34,7 +34,7 @@ export function ProfileImagesSection({
       {/* Banner Upload */}
       <div className="relative">
         <div
-          className="relative h-32 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 cursor-pointer overflow-hidden"
+          className="relative h-32 bg-gray-100 dark:bg-muted rounded-lg border-2 border-dashed border-gray-300 dark:border-border cursor-pointer overflow-hidden"
           onClick={() => bannerInputRef.current?.click()}
         >
           {bannerPreview || profile.banner_url ? (
@@ -47,8 +47,11 @@ export function ProfileImagesSection({
           ) : (
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
-                <Camera className="w-8 h-8 mx-auto text-gray-400 mb-2" data-testid="camera-icon" />
-                <p className="text-sm text-gray-500">Add banner photo</p>
+                <Camera
+                  className="w-8 h-8 mx-auto text-gray-400 dark:text-muted-foreground mb-2"
+                  data-testid="camera-icon"
+                />
+                <p className="text-sm text-gray-500 dark:text-muted-foreground">Add banner photo</p>
               </div>
             </div>
           )}
@@ -65,7 +68,7 @@ export function ProfileImagesSection({
       {/* Avatar Upload */}
       <div className="flex items-start gap-4">
         <div
-          className="relative w-20 h-20 bg-gray-100 rounded-full border-2 border-gray-300 cursor-pointer overflow-hidden flex-shrink-0"
+          className="relative w-20 h-20 bg-gray-100 dark:bg-muted rounded-full border-2 border-gray-300 dark:border-border cursor-pointer overflow-hidden flex-shrink-0"
           onClick={() => avatarInputRef.current?.click()}
         >
           {avatarPreview || profile.avatar_url ? (
@@ -77,7 +80,10 @@ export function ProfileImagesSection({
             />
           ) : (
             <div className="flex items-center justify-center w-full h-full">
-              <User className="w-8 h-8 text-gray-400" data-testid="camera-icon" />
+              <User
+                className="w-8 h-8 text-gray-400 dark:text-muted-foreground"
+                data-testid="camera-icon"
+              />
             </div>
           )}
           <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 flex items-center justify-center rounded-full">
@@ -95,6 +101,3 @@ export function ProfileImagesSection({
     </div>
   );
 }
-
-
-
