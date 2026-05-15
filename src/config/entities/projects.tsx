@@ -107,30 +107,24 @@ export const projectEntityConfig: EntityConfig<ProjectListItem> = {
       metadataParts.push(project.category);
     }
 
+    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
+      [PROJECT_STATUS.DRAFT]: { label: 'Draft', variant: 'default' },
+      [PROJECT_STATUS.ACTIVE]: { label: 'Active', variant: 'success' },
+      [PROJECT_STATUS.PAUSED]: { label: 'Paused', variant: 'warning' },
+      [PROJECT_STATUS.COMPLETED]: { label: 'Completed', variant: 'success' },
+      [PROJECT_STATUS.CANCELLED]: { label: 'Cancelled', variant: 'destructive' },
+    };
+    const statusBadge = statusBadgeMap[project.status ?? ''];
+
     return {
       priceLabel: fundingLabel,
-      badge: project.isDraft
-        ? 'Draft'
-        : project.isActive
-          ? 'Active'
-          : project.isPaused
-            ? 'Paused'
-            : project.status === PROJECT_STATUS.COMPLETED
-              ? 'Completed'
-              : project.status === PROJECT_STATUS.CANCELLED
-                ? 'Cancelled'
-                : undefined,
-      badgeVariant: project.isDraft
-        ? 'default'
-        : project.isActive
-          ? 'success'
-          : project.isPaused
-            ? 'warning'
-            : project.status === PROJECT_STATUS.COMPLETED
-              ? 'success'
-              : project.status === PROJECT_STATUS.CANCELLED
-                ? 'destructive'
-                : 'default',
+      badge: statusBadge?.label,
+      badgeVariant: statusBadge?.variant as
+        | 'success'
+        | 'default'
+        | 'warning'
+        | 'destructive'
+        | undefined,
       metadata:
         metadataParts.length > 0 || progress > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-gray-500">

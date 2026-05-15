@@ -14,6 +14,7 @@ interface DashboardProjectsProps {
   projects: Array<{
     id: string;
     title: string;
+    status?: string;
     total_funding?: number;
     goal_amount?: number;
     isDraft?: boolean;
@@ -99,13 +100,7 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
                   title: project.title,
                   raised_amount: project.total_funding || 0,
                   goal_amount: project.goal_amount || 0,
-                  status: project.isDraft
-                    ? ENTITY_STATUS.DRAFT
-                    : project.isPaused
-                      ? ENTITY_STATUS.PAUSED
-                      : project.isActive
-                        ? ENTITY_STATUS.ACTIVE
-                        : ENTITY_STATUS.DRAFT,
+                  status: project.status ?? ENTITY_STATUS.DRAFT,
                 } as Parameters<typeof ProjectCard>[0]['project']
               }
               compact
