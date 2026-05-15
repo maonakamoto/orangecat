@@ -27,6 +27,9 @@ import {
   TrendingUp,
   Coins,
   Gift,
+  Shield,
+  ShieldCheck,
+  ShieldAlert,
   type LucideIcon,
 } from 'lucide-react';
 import { getApiEndpoint } from '@/config/entity-registry';
@@ -41,7 +44,7 @@ export type ActionCategory =
   | 'settings' // User settings
   | 'context'; // Managing My Cat's context
 
-type ActionRiskLevel = 'low' | 'medium' | 'high';
+export type ActionRiskLevel = 'low' | 'medium' | 'high';
 
 interface ActionParameter {
   name: string;
@@ -1075,5 +1078,17 @@ export const ACTION_CATEGORY_KEYS = Object.keys(ACTION_CATEGORIES) as [
   ActionCategory,
   ...ActionCategory[],
 ];
+
+export const RISK_COLORS: Record<ActionRiskLevel, string> = {
+  low: 'text-green-600 bg-green-50',
+  medium: 'text-amber-600 bg-amber-50',
+  high: 'text-red-600 bg-red-50',
+};
+
+export const RISK_ICONS: Record<ActionRiskLevel, LucideIcon> = {
+  low: ShieldCheck,
+  medium: Shield,
+  high: ShieldAlert,
+};
 
 export default CAT_ACTIONS;

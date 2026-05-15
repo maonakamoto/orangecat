@@ -1,30 +1,11 @@
 'use client';
 
-import {
-  Shield,
-  ShieldCheck,
-  ShieldAlert,
-  ChevronDown,
-  ChevronRight,
-  Info,
-  Zap,
-} from 'lucide-react';
+import { ChevronDown, ChevronRight, Info, Zap } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/Tooltip';
+import { RISK_COLORS, RISK_ICONS } from '@/config/cat-actions';
 import type { Action, CategorySummary } from './types';
-
-const RISK_COLORS = {
-  low: 'text-green-600 bg-green-50',
-  medium: 'text-amber-600 bg-amber-50',
-  high: 'text-red-600 bg-red-50',
-};
-
-const RISK_ICONS = {
-  low: ShieldCheck,
-  medium: Shield,
-  high: ShieldAlert,
-};
 
 interface ActionRowProps {
   action: Action;
