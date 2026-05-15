@@ -21,17 +21,17 @@ export default function CommercePagination({ page, limit, total, onPageChange }:
       <button
         disabled={prevDisabled}
         onClick={() => onPageChange(page - 1)}
-        className="px-3 py-1.5 rounded-lg border bg-white disabled:opacity-50"
+        className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-border bg-white dark:bg-card dark:text-foreground disabled:opacity-50"
       >
         Previous
       </button>
-      <span className="text-sm text-gray-600">
+      <span className="text-sm text-gray-600 dark:text-muted-foreground">
         Page {page} of {totalPages}
       </span>
       <button
         disabled={nextDisabled}
         onClick={() => onPageChange(page + 1)}
-        className="px-3 py-1.5 rounded-lg border bg-white disabled:opacity-50"
+        className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-border bg-white dark:bg-card dark:text-foreground disabled:opacity-50"
       >
         Next
       </button>

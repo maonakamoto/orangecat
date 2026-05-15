@@ -56,10 +56,10 @@ function CapabilityToggleCard({
     <Card variant="minimal" className="p-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Icon className="w-5 h-5 text-gray-500" />
+          <Icon className="w-5 h-5 text-gray-500 dark:text-muted-foreground" />
           <div>
             <span className="font-medium text-sm">{label}</span>
-            <p className="text-xs text-gray-500">{description}</p>
+            <p className="text-xs text-gray-500 dark:text-muted-foreground">{description}</p>
           </div>
         </div>
         <button
@@ -114,7 +114,7 @@ export function AIModelPreferences({
             </div>
             <div>
               <h3 className="font-medium">Auto Router</h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-muted-foreground">
                 Automatically selects the best model based on message complexity
               </p>
             </div>
@@ -155,10 +155,10 @@ export function AIModelPreferences({
       </Card>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
           Default Tier
           {preferences.autoRouterEnabled && (
-            <span className="text-gray-500 font-normal ml-2">
+            <span className="text-gray-500 dark:text-muted-foreground font-normal ml-2">
               (fallback when auto-router is uncertain)
             </span>
           )}
@@ -183,7 +183,7 @@ export function AIModelPreferences({
                   'p-3 rounded-lg border-2 text-left transition-all',
                   isSelected
                     ? 'border-tiffany-500 bg-tiffany-50'
-                    : 'border-gray-200 hover:border-gray-300',
+                    : 'border-gray-200 dark:border-border hover:border-gray-300',
                   disabled && 'opacity-50 cursor-not-allowed'
                 )}
               >
@@ -195,7 +195,9 @@ export function AIModelPreferences({
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-gray-500">{models.length} models</p>
+                <p className="text-xs text-gray-500 dark:text-muted-foreground">
+                  {models.length} models
+                </p>
               </button>
             );
           })}
@@ -203,7 +205,7 @@ export function AIModelPreferences({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
           Default Model
           <span className="text-gray-500 font-normal ml-2">(optional)</span>
         </label>
@@ -218,12 +220,12 @@ export function AIModelPreferences({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
           Maximum Cost per Request ({displayCurrency})
         </label>
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
-            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-muted-foreground" />
             <Input
               type="number"
               value={preferences.maxCostBtc}
@@ -236,15 +238,19 @@ export function AIModelPreferences({
               placeholder="100"
             />
           </div>
-          <span className="text-sm text-gray-500">{displayCurrency}</span>
+          <span className="text-sm text-gray-500 dark:text-muted-foreground">
+            {displayCurrency}
+          </span>
         </div>
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
           Set to 0 for unlimited. Auto-router will avoid models exceeding this limit.
         </p>
       </div>
 
       <div className="space-y-3">
-        <label className="block text-sm font-medium text-gray-700">Required Capabilities</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground">
+          Required Capabilities
+        </label>
         <CapabilityToggleCard
           icon={Eye}
           label="Vision"

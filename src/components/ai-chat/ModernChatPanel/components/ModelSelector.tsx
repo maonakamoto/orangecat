@@ -42,20 +42,25 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
         disabled={disabled}
         className={cn(
           'flex items-center gap-2 px-3 py-1.5 rounded-full text-sm',
-          'bg-gray-100 hover:bg-gray-200 transition-colors',
-          'border border-gray-200',
+          'bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/70 transition-colors',
+          'border border-gray-200 dark:border-border',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
-        <Sparkles className="h-4 w-4 text-gray-500" />
-        <span className="text-gray-700 max-w-[120px] truncate">{displayName}</span>
+        <Sparkles className="h-4 w-4 text-gray-500 dark:text-muted-foreground" />
+        <span className="text-gray-700 dark:text-foreground max-w-[120px] truncate">
+          {displayName}
+        </span>
         <ChevronDown
-          className={cn('h-4 w-4 text-gray-400 transition-transform', isOpen && 'rotate-180')}
+          className={cn(
+            'h-4 w-4 text-gray-400 dark:text-muted-foreground transition-transform',
+            isOpen && 'rotate-180'
+          )}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50 max-h-80 overflow-y-auto">
+        <div className="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-card rounded-xl shadow-lg border border-gray-200 dark:border-border py-2 z-50 max-h-80 overflow-y-auto">
           {/* Auto option */}
           <button
             onClick={() => {
@@ -63,23 +68,27 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
               setIsOpen(false);
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-left hover:bg-gray-50 flex items-center gap-3',
+              'w-full px-4 py-2.5 text-left hover:bg-gray-50 dark:hover:bg-muted flex items-center gap-3',
               selectedModel === 'auto' && 'bg-tiffany-50'
             )}
           >
             <div className="flex-1">
-              <div className="font-medium text-gray-900 flex items-center gap-2">
+              <div className="font-medium text-gray-900 dark:text-foreground flex items-center gap-2">
                 Auto (Best Free)
                 {selectedModel === 'auto' && <Check className="h-4 w-4 text-tiffany-500" />}
               </div>
-              <div className="text-xs text-gray-500">Automatically selects the best model</div>
+              <div className="text-xs text-gray-500 dark:text-muted-foreground">
+                Automatically selects the best model
+              </div>
             </div>
           </button>
 
-          <div className="h-px bg-gray-100 my-1" />
+          <div className="h-px bg-gray-100 dark:bg-border my-1" />
 
           {/* Free models */}
-          <div className="px-3 py-1.5 text-xs font-medium text-gray-500 uppercase">Free Models</div>
+          <div className="px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-muted-foreground uppercase">
+            Free Models
+          </div>
           {freeModels.map(model => (
             <button
               key={model.id}
@@ -88,18 +97,18 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
                 setIsOpen(false);
               }}
               className={cn(
-                'w-full px-4 py-2.5 text-left hover:bg-gray-50 flex items-center gap-3',
+                'w-full px-4 py-2.5 text-left hover:bg-gray-50 dark:hover:bg-muted flex items-center gap-3',
                 selectedModel === model.id && 'bg-tiffany-50'
               )}
             >
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-gray-900 flex items-center gap-2 truncate">
+                <div className="font-medium text-gray-900 dark:text-foreground flex items-center gap-2 truncate">
                   {model.name}
                   {selectedModel === model.id && (
                     <Check className="h-4 w-4 text-tiffany-500 flex-shrink-0" />
                   )}
                 </div>
-                <div className="text-xs text-gray-500 truncate">
+                <div className="text-xs text-gray-500 dark:text-muted-foreground truncate">
                   {model.provider} • {model.rateLimit}
                 </div>
               </div>
