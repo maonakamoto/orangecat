@@ -23,15 +23,17 @@ import {
   AlertTriangle,
   Check,
   Gift,
+  type LucideIcon,
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
+import { MODEL_TIERS, TIER_CONFIG, type ModelTier } from '@/config/ai-models';
 
-const MODEL_TIERS = [
-  { id: 'free', name: 'Free', description: 'No API cost, rate limited', icon: Gift },
-  { id: 'economy', name: 'Economy', description: 'Fast, cost-effective responses', icon: Zap },
-  { id: 'standard', name: 'Standard', description: 'Balanced performance', icon: Bot },
-  { id: 'premium', name: 'Premium', description: 'Best quality responses', icon: Sparkles },
-];
+const TIER_ICONS: Record<ModelTier, LucideIcon> = {
+  free: Gift,
+  economy: Zap,
+  standard: Bot,
+  premium: Sparkles,
+};
 
 export function CatSettingsTab() {
   const { preferences, hasByok, updatePreferences, isLoading: aiLoading } = useAISettings();
@@ -41,7 +43,7 @@ export function CatSettingsTab() {
     isSaving: saving,
     toggleCategory,
   } = useCatPermissions();
-  const handleTierChange = async (tier: 'free' | 'economy' | 'standard' | 'premium') => {
+  const handleTierChange = async (tier: ModelTier) => {
     try {
       await updatePreferences({ default_tier: tier });
     } catch {
@@ -60,15 +62,13 @@ export function CatSettingsTab() {
           <span className="text-sm font-semibold text-gray-900">AI Model</span>
         </div>
         <div className="p-4 space-y-3">
-          {MODEL_TIERS.map(tier => {
-            const Icon = tier.icon;
-            const isSelected = currentTier === tier.id;
+          {MODEL_TIERS.map(tierId => {
+            const Icon = TIER_ICONS[tierId];
+            const isSelected = currentTier === tierId;
             return (
               <button
-                key={tier.id}
-                onClick={() =>
-                  handleTierChange(tier.id as 'free' | 'economy' | 'standard' | 'premium')
-                }
+                key={tierId}
+                onClick={() => handleTierChange(tierId)}
                 disabled={aiLoading}
                 className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
                   isSelected
@@ -80,14 +80,8 @@ export function CatSettingsTab() {
                   <Icon className={`h-4 w-4 ${isSelected ? 'text-gray-700' : 'text-gray-500'}`} />
                 </div>
                 <div className="flex-1 text-left">
-                  <p
-                    className={`text-sm font-medium ${
-                      isSelected ? 'text-gray-900' : 'text-gray-900'
-                    }`}
-                  >
-                    {tier.name}
-                  </p>
-                  <p className="text-sm text-gray-500">{tier.description}</p>
+                  <p className="text-sm font-medium text-gray-900">{TIER_CONFIG[tierId].label}</p>
+                  <p className="text-sm text-gray-500">{TIER_CONFIG[tierId].description}</p>
                 </div>
                 {isSelected && <Check className="h-5 w-5 text-gray-700" />}
               </button>
