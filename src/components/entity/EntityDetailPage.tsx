@@ -261,13 +261,15 @@ export default async function EntityDetailPage<T extends BaseEntity>({
             <div className="grid grid-cols-2 gap-3 text-sm">
               {(fields.left ?? []).map((field, idx) => (
                 <div key={idx}>
-                  <div className="text-gray-500">{field.label}</div>
+                  <div className="text-gray-500 dark:text-muted-foreground">{field.label}</div>
                   <div className="font-medium mt-1">{field.value}</div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-gray-500 text-sm">No additional details available.</div>
+            <div className="text-gray-500 dark:text-muted-foreground text-sm">
+              No additional details available.
+            </div>
           )}
         </div>
       }

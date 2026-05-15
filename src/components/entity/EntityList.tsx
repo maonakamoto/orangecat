@@ -125,7 +125,7 @@ export default function EntityList<T extends EntityItem>({
   // Empty state
   if (!items || items.length === 0) {
     return (
-      <div className={cn('rounded-xl border bg-white p-8 sm:p-12', className)}>
+      <div className={cn('rounded-xl border bg-white dark:bg-card p-8 sm:p-12', className)}>
         <EmptyState
           title={emptyState.title}
           description={emptyState.description || defaultEmptyState.description}
@@ -146,8 +146,12 @@ export default function EntityList<T extends EntityItem>({
         const isChangingStatus = changingStatusIds?.has(item.id) || false;
 
         // Normalize title - some entities use 'name' instead of 'title'
-        const title = item.title || (item as Record<string, unknown>).name as string | undefined || 'Untitled';
-        const description = item.description || (item as Record<string, unknown>).bio as string | undefined || null;
+        const title =
+          item.title ||
+          ((item as Record<string, unknown>).name as string | undefined) ||
+          'Untitled';
+        const description =
+          item.description || ((item as Record<string, unknown>).bio as string | undefined) || null;
 
         // Get show_on_profile value (may be on item or in cardProps)
         const showOnProfile = (item.show_on_profile as boolean | null | undefined) ?? undefined;
@@ -185,7 +189,7 @@ export default function EntityList<T extends EntityItem>({
                   checked={isSelected}
                   onChange={() => onToggleSelect(item.id)}
                   onClick={e => e.stopPropagation()}
-                  className="h-5 w-5 rounded border-gray-300 bg-white shadow-lg text-orange-600 focus:ring-orange-500 cursor-pointer"
+                  className="h-5 w-5 rounded border-gray-300 dark:border-border bg-white dark:bg-muted shadow-lg text-orange-600 focus:ring-orange-500 cursor-pointer"
                   aria-label={`Select ${title}`}
                 />
               </div>
@@ -202,7 +206,7 @@ export default function EntityList<T extends EntityItem>({
  */
 function EntityCardSkeleton() {
   return (
-    <div className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white">
+    <div className="flex flex-col overflow-hidden rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card">
       {/* Image skeleton */}
       <Skeleton className="aspect-video w-full" />
 
@@ -224,7 +228,7 @@ function EntityCardSkeleton() {
         <Skeleton className="h-5 w-24" />
 
         {/* Actions skeleton */}
-        <div className="mt-auto pt-3 border-t border-gray-100">
+        <div className="mt-auto pt-3 border-t border-gray-100 dark:border-border">
           <Skeleton className="h-9 w-20 rounded-lg" />
         </div>
       </div>
