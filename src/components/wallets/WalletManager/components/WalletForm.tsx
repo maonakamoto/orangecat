@@ -82,8 +82,8 @@ export function WalletForm({
   const selectedCategory = WALLET_CATEGORIES[formData.category];
 
   return (
-    <div className="border rounded-lg p-4 bg-gray-50">
-      <h4 className="font-semibold mb-4">{submitLabel}</h4>
+    <div className="border dark:border-border rounded-lg p-4 bg-gray-50 dark:bg-muted">
+      <h4 className="font-semibold dark:text-foreground mb-4">{submitLabel}</h4>
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded mb-4">
@@ -93,7 +93,7 @@ export function WalletForm({
 
       {/* Category selection */}
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Category</label>
+        <label className="block text-sm font-medium dark:text-foreground mb-2">Category</label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {(Object.keys(WALLET_CATEGORIES) as WalletCategory[]).map(cat => {
             const catInfo = WALLET_CATEGORIES[cat];
@@ -108,21 +108,23 @@ export function WalletForm({
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   formData.category === cat
                     ? 'border-orange-500 bg-orange-50'
-                    : 'border-gray-300 hover:border-orange-300'
+                    : 'border-gray-300 dark:border-border hover:border-orange-300'
                 }`}
               >
                 <div className="text-2xl mb-1">{catInfo.icon}</div>
-                <div className="text-sm font-medium">{catInfo.label}</div>
+                <div className="text-sm font-medium dark:text-foreground">{catInfo.label}</div>
               </button>
             );
           })}
         </div>
-        <p className="text-xs text-gray-500 mt-2">{selectedCategory.description}</p>
+        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-2">
+          {selectedCategory.description}
+        </p>
       </div>
 
       {/* Label */}
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Wallet Name *</label>
+        <label className="block text-sm font-medium dark:text-foreground mb-2">Wallet Name *</label>
         <Input
           value={formData.label}
           onChange={e => setFormData({ ...formData, label: e.target.value })}
@@ -134,7 +136,9 @@ export function WalletForm({
 
       {/* Description */}
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Description (optional)</label>
+        <label className="block text-sm font-medium dark:text-foreground mb-2">
+          Description (optional)
+        </label>
         <Textarea
           value={formData.description ?? ''}
           onChange={e => setFormData({ ...formData, description: e.target.value })}
@@ -146,9 +150,9 @@ export function WalletForm({
 
       {/* Address or xpub */}
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium dark:text-foreground mb-2">
           Bitcoin Address or Extended Public Key
-          <span className="ml-2 text-xs font-normal text-gray-500">
+          <span className="ml-2 text-xs font-normal text-gray-500 dark:text-muted-foreground">
             (optional if Lightning address provided)
           </span>
         </label>
@@ -159,7 +163,7 @@ export function WalletForm({
           placeholder="zpub... (recommended) or bc1q..."
           required
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
           Extended public keys (xpub/ypub/zpub) automatically track all addresses and transactions.
           Single addresses work but only track that one address.
         </p>
@@ -167,21 +171,25 @@ export function WalletForm({
 
       {/* Lightning Address */}
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Lightning Address (optional)</label>
+        <label className="block text-sm font-medium dark:text-foreground mb-2">
+          Lightning Address (optional)
+        </label>
         <Input
           value={formData.lightning_address || ''}
           onChange={e => setFormData({ ...formData, lightning_address: e.target.value })}
           onFocus={() => onFieldFocus?.('label')}
           placeholder="you@getalby.com"
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
           Lightning address for instant, low-fee payments (e.g., you@getalby.com)
         </p>
       </div>
 
       {/* Goal (optional) */}
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Funding Goal (optional)</label>
+        <label className="block text-sm font-medium dark:text-foreground mb-2">
+          Funding Goal (optional)
+        </label>
         <div className="flex gap-2">
           <Input
             type="number"

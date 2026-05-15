@@ -107,7 +107,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
       <div
         className={cn(
           'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center',
-          isUser ? 'bg-gray-200' : GRADIENTS.brandOrangeBr
+          isUser ? 'bg-gray-200 dark:bg-muted' : GRADIENTS.brandOrangeBr
         )}
       >
         {isUser ? (
@@ -124,7 +124,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
             'inline-block rounded-2xl px-4 py-2.5 max-w-full',
             isUser
               ? 'bg-tiffany-500 text-white rounded-tr-sm'
-              : 'bg-gray-100 text-gray-900 rounded-tl-sm'
+              : 'bg-gray-100 dark:bg-muted text-gray-900 dark:text-foreground rounded-tl-sm'
           )}
         >
           <div
@@ -170,11 +170,11 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
 
         {/* Model used indicator + copy button */}
         {!isUser && message.modelUsed && displayContent && (
-          <div className="flex items-center justify-between text-xs text-gray-400 mt-1">
+          <div className="flex items-center justify-between text-xs text-gray-400 dark:text-muted-foreground mt-1">
             <span>{AI_MODEL_REGISTRY[message.modelUsed]?.name || message.modelUsed}</span>
             <button
               onClick={handleCopy}
-              className="text-gray-400 hover:text-gray-600 transition-colors p-0.5"
+              className="text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground transition-colors p-0.5"
               title="Copy response"
             >
               {copied ? (
