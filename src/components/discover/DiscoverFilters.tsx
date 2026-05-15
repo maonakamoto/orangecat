@@ -22,7 +22,8 @@ const STATUS_STYLES = {
     label: 'Completed',
   },
   cancelled: {
-    selected: 'bg-gray-100 border-gray-300 text-gray-700',
+    selected:
+      'bg-gray-100 dark:bg-muted border-gray-300 dark:border-border text-gray-700 dark:text-foreground',
     label: 'Cancelled',
   },
 } as const;
@@ -213,7 +214,7 @@ export default function DiscoverFilters({
             </label>
             <div className="flex flex-wrap gap-2">
               {searchTerm && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground">
                   &quot;{searchTerm}&quot;
                 </span>
               )}
@@ -226,12 +227,12 @@ export default function DiscoverFilters({
                 </span>
               ))}
               {(country || city || postal) && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground">
                   {country || city || postal}
                 </span>
               )}
               {sortBy !== 'recent' && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground">
                   {sortBy}
                 </span>
               )}

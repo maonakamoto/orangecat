@@ -17,7 +17,7 @@ export function DiscoverLoadingState({ viewMode, activeTab }: DiscoverLoadingSta
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between mb-6">
-        <div className="h-8 w-48 bg-gray-200 rounded animate-pulse" />
+        <div className="h-8 w-48 bg-gray-200 dark:bg-muted rounded animate-pulse" />
       </div>
       <div
         className={`grid gap-6 ${
