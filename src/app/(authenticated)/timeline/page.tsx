@@ -10,12 +10,16 @@ import Loading from '@/components/Loading';
 
 const SocialTimeline = dynamic(() => import('@/components/timeline/SocialTimeline'), {
   ssr: false,
-  loading: () => <div className="h-[400px] rounded-xl border border-gray-100 bg-white shadow-sm animate-pulse" />,
+  loading: () => (
+    <div className="h-[400px] rounded-xl border border-gray-100 dark:border-border bg-white dark:bg-card shadow-sm animate-pulse" />
+  ),
 });
 
 const PostComposerMobile = dynamic(() => import('@/components/timeline/PostComposerMobile'), {
   ssr: false,
-  loading: () => <div className="h-[320px] rounded-xl border border-gray-100 bg-white shadow-sm animate-pulse" />,
+  loading: () => (
+    <div className="h-[320px] rounded-xl border border-gray-100 dark:border-border bg-white dark:bg-card shadow-sm animate-pulse" />
+  ),
 });
 
 /**
