@@ -27,6 +27,7 @@ import {
   TrendingUp,
   Coins,
   Gift,
+  Bot,
   Shield,
   ShieldCheck,
   ShieldAlert,
@@ -481,6 +482,61 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
       'Make a personal wishlist for my followers',
     ],
     apiEndpoint: getApiEndpoint('wishlist'),
+    enabled: true,
+  },
+
+  create_ai_assistant: {
+    id: 'create_ai_assistant',
+    name: 'Create AI Assistant',
+    description:
+      'Build an autonomous AI service that earns Bitcoin — define its personality, capabilities, and pricing',
+    category: 'entities',
+    icon: Bot,
+    riskLevel: 'medium',
+    requiresConfirmation: true,
+    parameters: [
+      {
+        name: 'title',
+        type: 'string',
+        required: true,
+        description: 'Assistant name (e.g., "Bitcoin Tax Advisor", "Code Reviewer")',
+      },
+      {
+        name: 'description',
+        type: 'string',
+        required: false,
+        description: 'What the assistant does, who it helps, and how',
+      },
+      {
+        name: 'system_prompt',
+        type: 'string',
+        required: true,
+        description:
+          "Core instruction that defines the AI's behavior — the software you're creating",
+      },
+      {
+        name: 'pricing_model',
+        type: 'string',
+        required: false,
+        description:
+          'Pricing model: free, per_message, per_token, subscription (default: per_message)',
+        default: 'per_message',
+      },
+      {
+        name: 'category',
+        type: 'string',
+        required: false,
+        description:
+          'Category: Writing & Content, Code & Development, Customer Support, Education & Tutoring, Business & Consulting, Research & Analysis, Entertainment, Other',
+        default: 'Other',
+      },
+    ],
+    examples: [
+      'Create a Bitcoin tax advisor AI assistant',
+      'Build a code reviewer that charges per message',
+      'Launch a free educational assistant about Lightning Network',
+    ],
+    apiEndpoint: getApiEndpoint('ai_assistant'),
     enabled: true,
   },
 
