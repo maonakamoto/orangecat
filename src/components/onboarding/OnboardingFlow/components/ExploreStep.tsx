@@ -50,7 +50,7 @@ export function ExploreStep() {
                 {isLoading ? (
                   <Loader2 className={`h-4 w-4 ${option.text} animate-spin flex-shrink-0`} />
                 ) : (
-                  <ArrowRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <ArrowRight className="h-4 w-4 text-gray-400 dark:text-muted-foreground flex-shrink-0" />
                 )}
               </CardContent>
             </Card>

@@ -122,11 +122,11 @@ export function ProfileCompletionModal({
               key={s.id}
               className={cn(
                 'h-1.5 rounded-full flex-1 transition-colors',
-                idx <= currentStep ? 'bg-tiffany-500' : 'bg-gray-200'
+                idx <= currentStep ? 'bg-tiffany-500' : 'bg-gray-200 dark:bg-muted'
               )}
             />
           ))}
-          <span className="text-xs text-gray-400 ml-2 flex-shrink-0">
+          <span className="text-xs text-gray-400 dark:text-muted-foreground ml-2 flex-shrink-0">
             {currentStep + 1} of {TOTAL_STEPS}
           </span>
         </div>

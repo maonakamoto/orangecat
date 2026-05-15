@@ -106,12 +106,14 @@ export function WalletSetupStep() {
       </div>
 
       {/* Wallet Recommendations */}
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+      <div className="bg-gray-50 dark:bg-muted border border-gray-200 dark:border-border rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Bitcoin className="h-5 w-5 text-gray-600 mt-0.5 flex-shrink-0" />
+          <Bitcoin className="h-5 w-5 text-gray-600 dark:text-muted-foreground mt-0.5 flex-shrink-0" />
           <div>
-            <p className="text-sm font-medium text-gray-900">Need a Bitcoin wallet?</p>
-            <p className="text-xs text-gray-600 mt-1 mb-2">
+            <p className="text-sm font-medium text-gray-900 dark:text-foreground">
+              Need a Bitcoin wallet?
+            </p>
+            <p className="text-xs text-gray-600 dark:text-muted-foreground mt-1 mb-2">
               We recommend these beginner-friendly wallets:
             </p>
             <div className="flex flex-wrap gap-2">
@@ -123,7 +125,7 @@ export function WalletSetupStep() {
               >
                 Muun <ExternalLink className="h-3 w-3" />
               </a>
-              <span className="text-gray-300">|</span>
+              <span className="text-gray-300 dark:text-muted-foreground">|</span>
               <a
                 href="https://bluewallet.io"
                 target="_blank"
@@ -132,7 +134,7 @@ export function WalletSetupStep() {
               >
                 BlueWallet <ExternalLink className="h-3 w-3" />
               </a>
-              <span className="text-gray-300">|</span>
+              <span className="text-gray-300 dark:text-muted-foreground">|</span>
               <a
                 href="https://phoenix.acinq.co"
                 target="_blank"
@@ -142,7 +144,7 @@ export function WalletSetupStep() {
                 Phoenix <ExternalLink className="h-3 w-3" />
               </a>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-2">
               You can skip for now, but you'll need to add a wallet address before receiving any
               Bitcoin.
             </p>

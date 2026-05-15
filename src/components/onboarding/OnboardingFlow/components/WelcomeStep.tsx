@@ -116,7 +116,9 @@ export function WelcomeStep() {
       <div className="text-center">
         <p className="text-xs text-muted-foreground">
           Know exactly what you want to create?{' '}
-          <span className="text-gray-500">Continue below to browse all options.</span>
+          <span className="text-gray-500 dark:text-muted-foreground">
+            Continue below to browse all options.
+          </span>
         </p>
       </div>
     </div>

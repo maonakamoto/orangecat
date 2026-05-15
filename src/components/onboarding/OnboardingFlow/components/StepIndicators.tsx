@@ -29,7 +29,7 @@ export function StepIndicators({
               ? 'bg-primary'
               : completedSteps.has(index)
                 ? 'bg-primary/60'
-                : 'bg-gray-300'
+                : 'bg-gray-300 dark:bg-muted'
           }`}
           aria-label={`Go to step ${index + 1}: ${step.title}`}
         />

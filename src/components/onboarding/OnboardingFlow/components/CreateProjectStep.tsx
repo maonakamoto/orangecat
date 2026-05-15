@@ -68,7 +68,7 @@ export function CreateProjectStep() {
                       {loadingPath === entity.createPath ? (
                         <Loader2 className="h-4 w-4 text-orange-500 animate-spin flex-shrink-0" />
                       ) : (
-                        <ArrowRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                        <ArrowRight className="h-4 w-4 text-gray-400 dark:text-muted-foreground flex-shrink-0" />
                       )}
                     </CardContent>
                   </Card>
@@ -79,7 +79,7 @@ export function CreateProjectStep() {
         );
       })}
 
-      <div className="pt-4 border-t border-gray-200">
+      <div className="pt-4 border-t border-gray-200 dark:border-border">
         <p className="text-xs text-center text-muted-foreground">
           Not sure yet? Skip this step and explore what others have created.
         </p>

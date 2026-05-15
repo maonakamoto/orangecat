@@ -72,7 +72,7 @@ export default function IntelligentOnboarding() {
         {/* Back navigation */}
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground mb-6 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back
@@ -85,16 +85,18 @@ export default function IntelligentOnboarding() {
           >
             <Cat className="w-9 h-9 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Meet My Cat</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-2">
+            Meet My Cat
+          </h1>
+          <p className="text-gray-600 dark:text-muted-foreground">
             Tell My Cat what you&apos;re trying to do — it will suggest the right tools and help you
             get set up in minutes.
           </p>
         </div>
 
         {/* Input */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
-          <label className="block text-sm font-medium text-gray-700">
+        <div className="bg-white dark:bg-card rounded-2xl shadow-sm border border-gray-200 dark:border-border p-6 space-y-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-foreground">
             What are you here to do?
           </label>
 
@@ -123,13 +125,15 @@ export default function IntelligentOnboarding() {
 
           {/* Example prompts */}
           <div className="space-y-1">
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Examples</p>
+            <p className="text-xs text-gray-400 dark:text-muted-foreground font-medium uppercase tracking-wide">
+              Examples
+            </p>
             <div className="flex flex-wrap gap-2">
               {EXAMPLE_PROMPTS.map(prompt => (
                 <button
                   key={prompt}
                   onClick={() => setDescription(prompt)}
-                  className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:border-orange-300 hover:text-orange-700 hover:bg-orange-50 transition-colors text-left"
+                  className="text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-border text-gray-600 dark:text-muted-foreground hover:border-orange-300 hover:text-orange-700 hover:bg-orange-50 transition-colors text-left"
                 >
                   {prompt.length > 50 ? prompt.slice(0, 50) + '…' : prompt}
                 </button>
@@ -156,7 +160,7 @@ export default function IntelligentOnboarding() {
             )}
           </Button>
 
-          <p className="text-xs text-center text-gray-400">
+          <p className="text-xs text-center text-gray-400 dark:text-muted-foreground">
             My Cat will ask follow-up questions and suggest the right setup for your situation
           </p>
         </div>

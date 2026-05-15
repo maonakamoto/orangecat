@@ -68,7 +68,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
       </section>
 
       {/* Filters Section */}
-      <section className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+      <section className="bg-white dark:bg-card border-b border-gray-200 dark:border-border sticky top-0 z-10 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Search Input */}
@@ -78,13 +78,13 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                 placeholder="Search stories..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bitcoinOrange focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-border rounded-lg focus:ring-2 focus:ring-bitcoinOrange focus:border-transparent bg-white dark:bg-muted text-gray-900 dark:text-foreground"
               />
             </div>
 
             {/* Category Filter */}
             <div className="flex items-center gap-2 flex-wrap justify-center">
-              <Filter className="w-5 h-5 text-gray-500 hidden sm:block" />
+              <Filter className="w-5 h-5 text-gray-500 dark:text-muted-foreground hidden sm:block" />
               {categories.map(category => (
                 <button
                   key={category}
@@ -92,7 +92,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     selectedCategory === category
                       ? 'bg-bitcoinOrange text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      : 'bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
                   }`}
                 >
                   {category}
@@ -102,7 +102,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
           </div>
 
           {/* Results Count */}
-          <div className="mt-4 text-sm text-gray-600">
+          <div className="mt-4 text-sm text-gray-600 dark:text-muted-foreground">
             Showing {filteredStories.length} {filteredStories.length === 1 ? 'story' : 'stories'}
           </div>
         </div>
@@ -113,7 +113,9 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredStories.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-gray-600 text-lg">No stories found matching your criteria.</p>
+              <p className="text-gray-600 dark:text-muted-foreground text-lg">
+                No stories found matching your criteria.
+              </p>
               <Button
                 variant="outline"
                 className="mt-4"
