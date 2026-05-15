@@ -10,6 +10,7 @@ import { DEFAULT_CURRENCY } from '@/config/currencies';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/config/routes';
 import { useCollateralSelector } from './useCollateralSelector';
+import { CollateralItemPicker } from './CollateralItemPicker';
 import { BADGE_COLORS } from '@/config/badge-colors';
 import { GRADIENTS } from '@/config/gradients';
 
@@ -62,6 +63,24 @@ export function CollateralSelector({
     onCollateralChange,
     loanAmount,
   });
+
+  const assetPickerItems = assets
+    .filter(a => !selectedCollateral.some(c => c.id === a.id && c.type === 'asset'))
+    .map(a => ({
+      id: a.id,
+      label: a.title,
+      sublabel: a.estimated_value
+        ? `${a.estimated_value.toLocaleString()} ${a.currency || DEFAULT_CURRENCY}`
+        : undefined,
+    }));
+
+  const walletPickerItems = wallets
+    .filter(w => !selectedCollateral.some(c => c.id === w.id && c.type === 'wallet'))
+    .map(w => ({
+      id: w.id,
+      label: w.label,
+      sublabel: w.balance_btc ? formatAmount(w.balance_btc) : undefined,
+    }));
 
   return (
     <Card>
@@ -209,103 +228,27 @@ export function CollateralSelector({
         </div>
 
         {showAssetSelector && (
-          <div className="border border-gray-200 dark:border-border rounded-lg p-4 bg-white dark:bg-card">
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground mb-3">
-              Select Asset
-            </h4>
-            {loading ? (
-              <p className="text-base text-gray-500 dark:text-muted-foreground">
-                Loading assets...
-              </p>
-            ) : assets.length === 0 ? (
-              <div className="text-center py-4">
-                <p className="text-base text-gray-500 mb-2">No assets available</p>
-                <a
-                  href={ROUTES.DASHBOARD.ASSETS_CREATE}
-                  className="text-sm text-tiffany-600 hover:text-tiffany-700 font-medium"
-                >
-                  Create an asset
-                </a>
-              </div>
-            ) : (
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {assets
-                  .filter(
-                    asset => !selectedCollateral.some(c => c.id === asset.id && c.type === 'asset')
-                  )
-                  .map(asset => (
-                    <button
-                      key={asset.id}
-                      type="button"
-                      onClick={() => handleAddAsset(asset)}
-                      className="w-full text-left p-2 hover:bg-gray-50 dark:hover:bg-muted rounded border border-gray-200 dark:border-border"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-900 dark:text-foreground">
-                          {asset.title}
-                        </span>
-                        {asset.estimated_value && (
-                          <span className="text-xs text-gray-500 dark:text-muted-foreground">
-                            {asset.estimated_value.toLocaleString()}{' '}
-                            {asset.currency || DEFAULT_CURRENCY}
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  ))}
-              </div>
-            )}
-          </div>
+          <CollateralItemPicker
+            title="Select Asset"
+            loading={loading}
+            items={assetPickerItems}
+            emptyMessage="No assets available"
+            emptyLinkHref={ROUTES.DASHBOARD.ASSETS_CREATE}
+            emptyLinkText="Create an asset"
+            onSelect={item => handleAddAsset(assets.find(a => a.id === item.id)!)}
+          />
         )}
 
         {showWalletSelector && (
-          <div className="border border-gray-200 dark:border-border rounded-lg p-4 bg-white dark:bg-card">
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground mb-3">
-              Select Wallet
-            </h4>
-            {loading ? (
-              <p className="text-base text-gray-500 dark:text-muted-foreground">
-                Loading wallets...
-              </p>
-            ) : wallets.length === 0 ? (
-              <div className="text-center py-4">
-                <p className="text-base text-gray-500 mb-2">No wallets available</p>
-                <a
-                  href={ROUTES.DASHBOARD.WALLETS_CREATE}
-                  className="text-sm text-tiffany-600 hover:text-tiffany-700 font-medium"
-                >
-                  Create a wallet
-                </a>
-              </div>
-            ) : (
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {wallets
-                  .filter(
-                    wallet =>
-                      !selectedCollateral.some(c => c.id === wallet.id && c.type === 'wallet')
-                  )
-                  .map(wallet => (
-                    <button
-                      key={wallet.id}
-                      type="button"
-                      onClick={() => handleAddWallet(wallet)}
-                      className="w-full text-left p-2 hover:bg-gray-50 dark:hover:bg-muted rounded border border-gray-200 dark:border-border"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-900 dark:text-foreground">
-                          {wallet.label}
-                        </span>
-                        {wallet.balance_btc && (
-                          <span className="text-xs text-gray-500 dark:text-muted-foreground">
-                            {formatAmount(wallet.balance_btc)}
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  ))}
-              </div>
-            )}
-          </div>
+          <CollateralItemPicker
+            title="Select Wallet"
+            loading={loading}
+            items={walletPickerItems}
+            emptyMessage="No wallets available"
+            emptyLinkHref={ROUTES.DASHBOARD.WALLETS_CREATE}
+            emptyLinkText="Create a wallet"
+            onSelect={item => handleAddWallet(wallets.find(w => w.id === item.id)!)}
+          />
         )}
       </CardContent>
     </Card>
