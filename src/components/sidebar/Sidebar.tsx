@@ -87,14 +87,14 @@ export function Sidebar({
 
   return (
     <>
-      {/* Mobile overlay backdrop */}
-      {navigationState.isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
-          onClick={toggleSidebar}
-          aria-hidden="true"
-        />
-      )}
+      {/* Mobile overlay backdrop — always rendered so opacity can transition smoothly */}
+      <div
+        className={`fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden transition-opacity duration-300 ${
+          navigationState.isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={toggleSidebar}
+        aria-hidden="true"
+      />
 
       {/* Focus trap for mobile drawer (accessibility) */}
       {/* Disabled on desktop where sidebar is always visible */}

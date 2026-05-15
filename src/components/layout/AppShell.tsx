@@ -87,7 +87,7 @@ export function AppShell({ children }: AppShellProps) {
         {/* Main Content Area */}
         <main
           id="main-content"
-          className={`flex-1 ${
+          className={`flex-1 transition-[margin-left] duration-300 ease-in-out ${
             shouldShowSidebar
               ? navigationState.isSidebarCollapsed
                 ? 'lg:ml-16'
