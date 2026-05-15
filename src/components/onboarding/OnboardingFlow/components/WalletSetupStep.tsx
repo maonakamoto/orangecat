@@ -47,7 +47,7 @@ export function WalletSetupStep() {
         </div>
       </div>
 
-      <Card className="bg-gradient-to-r from-orange-50 to-yellow-50 border-orange-200">
+      <Card className={`${GRADIENTS.sectionOrangeWarm} border-orange-200`}>
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
             <Sparkles className="h-6 w-6 text-orange-600 mt-1 flex-shrink-0" />

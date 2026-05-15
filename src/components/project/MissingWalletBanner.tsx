@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { Wallet, AlertCircle, X, ExternalLink } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
+import { GRADIENTS } from '@/config/gradients';
 
 interface MissingWalletBannerProps {
   projectId: string;
@@ -40,7 +41,7 @@ export default function MissingWalletBanner({
 
   return (
     <div
-      className={`bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-300 rounded-lg p-4 shadow-sm ${className}`}
+      className={`${GRADIENTS.sectionOrangeWarm} border-2 border-orange-300 rounded-lg p-4 shadow-sm ${className}`}
     >
       <div className="flex items-start gap-4">
         {/* Icon */}

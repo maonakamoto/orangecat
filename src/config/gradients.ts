@@ -27,6 +27,7 @@ export const GRADIENTS = {
   sectionTiffanyMuted: 'bg-gradient-to-r from-tiffany-50 to-tiffany-100/50',
   iconOrangeTiffany: 'bg-gradient-to-r from-orange-100 to-tiffany-100',
   sectionGrayOrange: 'bg-gradient-to-r from-gray-50 to-orange-50',
+  sectionOrangeWarm: 'bg-gradient-to-r from-orange-50 to-yellow-50',
 
   // ── Icon circle/badge gradients (diagonal, for icon backgrounds) ──────────
   iconBlue: 'bg-gradient-to-br from-blue-500 to-blue-600',
