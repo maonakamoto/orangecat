@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { Share2, X as XIcon, Globe, MessageCircle, Mail, Copy, Check, X } from 'lucide-react';
+import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { GRADIENTS } from '@/config/gradients';
 
 // Brand icons removed in lucide-react 0.400+
 const Facebook = Globe;
 const Linkedin = Globe;
-import { toast } from 'sonner';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { GRADIENTS } from '@/config/gradients';
 
 export interface SharePlatform {
   name: string;
@@ -17,6 +17,72 @@ export interface SharePlatform {
   bgColor: string;
   action: (url: string, title: string, description?: string) => void;
 }
+
+export const SHARE_PLATFORMS: SharePlatform[] = [
+  {
+    name: 'X',
+    icon: XIcon,
+    color: 'text-gray-900',
+    bgColor: 'bg-gray-50 hover:bg-gray-100',
+    action: (shareUrl, shareTitle, shareDescription) => {
+      const text = `${shareTitle}\n\n${shareDescription}\n\n#Bitcoin #OrangeCat`;
+      window.open(
+        `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`,
+        '_blank',
+        'width=550,height=420'
+      );
+    },
+  },
+  {
+    name: 'Facebook',
+    icon: Facebook,
+    color: 'text-tiffany-600',
+    bgColor: 'bg-tiffany-50 hover:bg-tiffany-100',
+    action: (shareUrl, shareTitle) => {
+      window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareTitle)}`,
+        '_blank',
+        'width=550,height=420'
+      );
+    },
+  },
+  {
+    name: 'LinkedIn',
+    icon: Linkedin,
+    color: 'text-tiffany-700',
+    bgColor: 'bg-tiffany-50 hover:bg-tiffany-100',
+    action: (shareUrl, shareTitle, shareDescription) => {
+      window.open(
+        `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}&summary=${encodeURIComponent(shareDescription || '')}`,
+        '_blank',
+        'width=550,height=420'
+      );
+    },
+  },
+  {
+    name: 'WhatsApp',
+    icon: MessageCircle,
+    color: 'text-green-600',
+    bgColor: 'bg-green-50 hover:bg-green-100',
+    action: (shareUrl, shareTitle) => {
+      window.open(
+        `https://wa.me/?text=${encodeURIComponent(`${shareTitle} ${shareUrl}`)}`,
+        '_blank'
+      );
+    },
+  },
+  {
+    name: 'Email',
+    icon: Mail,
+    color: 'text-gray-600',
+    bgColor: 'bg-gray-50 hover:bg-gray-100',
+    action: (shareUrl, shareTitle, shareDescription) => {
+      const subject = encodeURIComponent(`Check out ${shareTitle}`);
+      const body = encodeURIComponent(`${shareDescription}\n\n${shareUrl}`);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    },
+  },
+];
 
 export interface ShareContentProps {
   title: string;
@@ -48,63 +114,6 @@ export default function ShareContent({
   titleText = 'Share',
 }: ShareContentProps) {
   const [copySuccess, setCopySuccess] = useState(false);
-
-  // Social media sharing platforms - X (formerly Twitter) first
-  const platforms: SharePlatform[] = [
-    {
-      name: 'X',
-      icon: XIcon,
-      color: 'text-gray-900',
-      bgColor: 'bg-gray-50 hover:bg-gray-100',
-      action: (shareUrl, shareTitle, shareDescription) => {
-        const text = `${shareTitle}\n\n${shareDescription}\n\n#Bitcoin #OrangeCat`;
-        // Use x.com instead of twitter.com
-        const xUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`;
-        window.open(xUrl, '_blank', 'width=550,height=420');
-      },
-    },
-    {
-      name: 'Facebook',
-      icon: Facebook,
-      color: 'text-tiffany-600',
-      bgColor: 'bg-tiffany-50 hover:bg-tiffany-100',
-      action: (shareUrl, shareTitle) => {
-        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareTitle)}`;
-        window.open(facebookUrl, '_blank', 'width=550,height=420');
-      },
-    },
-    {
-      name: 'LinkedIn',
-      icon: Linkedin,
-      color: 'text-tiffany-700',
-      bgColor: 'bg-tiffany-50 hover:bg-tiffany-100',
-      action: (shareUrl, shareTitle, shareDescription) => {
-        const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}&summary=${encodeURIComponent(shareDescription || '')}`;
-        window.open(linkedinUrl, '_blank', 'width=550,height=420');
-      },
-    },
-    {
-      name: 'WhatsApp',
-      icon: MessageCircle,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50 hover:bg-green-100',
-      action: (shareUrl, shareTitle) => {
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${shareTitle} ${shareUrl}`)}`;
-        window.open(whatsappUrl, '_blank');
-      },
-    },
-    {
-      name: 'Email',
-      icon: Mail,
-      color: 'text-gray-600',
-      bgColor: 'bg-gray-50 hover:bg-gray-100',
-      action: (shareUrl, shareTitle, shareDescription) => {
-        const subject = encodeURIComponent(`Check out ${shareTitle}`);
-        const body = encodeURIComponent(`${shareDescription}\n\n${shareUrl}`);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
-      },
-    },
-  ];
 
   // Handle native share (mobile)
   const handleNativeShare = async () => {
@@ -199,7 +208,7 @@ export default function ShareContent({
 
       {/* Social Platforms - Modern grid with icons */}
       <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 sm:gap-4 mb-5">
-        {platforms.map(platform => {
+        {SHARE_PLATFORMS.map(platform => {
           const Icon = platform.icon;
           return (
             <button
