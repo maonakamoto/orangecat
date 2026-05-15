@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { ROUTES } from '@/config/routes';
 
 interface AISettingsStatusProps {
   hasByok: boolean;
@@ -68,7 +69,7 @@ export function AISettingsStatus({
                 {compact ? 'BYOK Active' : `Provider: ${byokProvider || 'OpenRouter'}`}
               </span>
             </div>
-            <Link href="/settings/ai">
+            <Link href={ROUTES.SETTINGS_AI}>
               <Button variant="ghost" size="sm" className="text-green-600 hover:text-green-700">
                 Manage
                 <ArrowRight className="w-4 h-4 ml-1" />

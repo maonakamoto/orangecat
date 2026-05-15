@@ -10,6 +10,7 @@ import supabase from '@/lib/supabase/browser';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -283,7 +284,7 @@ export default function ResetPasswordPage() {
         {/* Footer */}
         <div className="mt-8 text-center">
           <Link
-            href="/auth?mode=login"
+            href={`${ROUTES.AUTH}?mode=login`}
             className="inline-flex items-center text-sm text-gray-600 hover:text-orange-600 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />

@@ -62,7 +62,7 @@ export function DashboardTimeline({
               Recent activities, posts, and updates
             </CardDescription>
           </div>
-          <Link href="/timeline" className="shrink-0">
+          <Link href={ROUTES.TIMELINE} className="shrink-0">
             <Button variant="outline" size="sm" className="w-full sm:w-auto">
               <BookOpen className="w-4 h-4 sm:mr-2" />
               <span className="hidden sm:inline">View Full Timeline</span>

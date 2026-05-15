@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { ROUTES } from '@/config/routes';
 import { TimelineDisplayEvent } from '@/types/timeline';
 import { usePostThread } from './usePostThread';
 
@@ -88,7 +89,7 @@ export default function PostPage() {
         <div className="flex flex-col items-center justify-center py-20 text-center px-4">
           <p className="text-xl font-bold text-gray-900 mb-2">This post doesn&apos;t exist</p>
           <p className="text-gray-500 mb-4">It may have been deleted or the link is incorrect.</p>
-          <Link href="/timeline">
+          <Link href={ROUTES.TIMELINE}>
             <Button>Go to Timeline</Button>
           </Link>
         </div>

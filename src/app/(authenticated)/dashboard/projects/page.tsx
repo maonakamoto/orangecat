@@ -13,6 +13,7 @@ import { Target, Heart } from 'lucide-react';
 import { useProjectList } from './useProjectList';
 import { ProjectsSearchFilter } from './ProjectsSearchFilter';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export default function ProjectsDashboardPage() {
   const {
@@ -165,7 +166,7 @@ export default function ProjectsDashboardPage() {
                 title: 'No favorites yet',
                 description: 'Start exploring projects and save your favorites to see them here.',
                 action: (
-                  <Button href="/discover?section=projects" variant="outline">
+                  <Button href={`${ROUTES.DISCOVER}?section=projects`} variant="outline">
                     Discover Projects
                   </Button>
                 ),

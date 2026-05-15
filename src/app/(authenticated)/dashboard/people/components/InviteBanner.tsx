@@ -4,6 +4,7 @@ import ProfileShare from '@/components/sharing/ProfileShare';
 import { Search, Share2, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 interface InviteBannerProps {
   showShare: boolean;
@@ -37,7 +38,7 @@ export default function InviteBanner({
             </p>
           </div>
           <div className="flex items-center gap-2 relative">
-            <Link href="/discover?section=people">
+            <Link href={`${ROUTES.DISCOVER}?section=people`}>
               <Button variant="outline">
                 <Search className="w-4 h-4 mr-2" /> Discover People
               </Button>

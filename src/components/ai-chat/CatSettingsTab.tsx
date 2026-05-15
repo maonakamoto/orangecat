@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { MODEL_TIERS, TIER_CONFIG, type ModelTier } from '@/config/ai-models';
+import { ROUTES } from '@/config/routes';
 
 const TIER_ICONS: Record<ModelTier, LucideIcon> = {
   free: Gift,
@@ -119,7 +120,7 @@ export function CatSettingsTab() {
             </div>
           )}
           <Link
-            href="/settings/ai"
+            href={ROUTES.SETTINGS_AI}
             className="mt-3 flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
           >
             <span className="text-sm text-gray-700">Manage API Keys</span>
@@ -182,7 +183,7 @@ export function CatSettingsTab() {
 
       {/* Link to full settings */}
       <Link
-        href="/settings/ai"
+        href={ROUTES.SETTINGS_AI}
         className="block text-center text-sm text-gray-600 hover:text-gray-800 py-2"
       >
         View all AI settings

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { ENTITY_REGISTRY, ENTITY_TYPES as ENTITY_TYPE_KEYS } from '@/config/entity-registry';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'Documentation',
@@ -264,7 +265,7 @@ export default function DocsPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href="/auth?mode=register"
+                href={`${ROUTES.AUTH}?mode=register`}
                 className="inline-flex items-center gap-2 bg-tiffany-500 hover:bg-tiffany-600 text-white font-medium px-5 py-2.5 rounded-lg transition-colors"
               >
                 Create Account

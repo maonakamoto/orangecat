@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import { Heart, Zap, TreePine, Cat } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -119,7 +120,7 @@ export default function AboutPage() {
               any currency.
             </p>
             <Link
-              href="/auth?mode=register"
+              href={`${ROUTES.AUTH}?mode=register`}
               className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-orange-600 bg-white hover:bg-gray-50 transition-colors"
             >
               Get Started Free

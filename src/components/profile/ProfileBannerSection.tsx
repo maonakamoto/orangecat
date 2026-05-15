@@ -8,6 +8,7 @@ import DefaultAvatar from '@/components/ui/DefaultAvatar';
 import ProfileShare from '@/components/sharing/ProfileShare';
 import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 import type { ScalableProfile } from '@/services/profile/types';
 
 interface ProfileBannerSectionProps {
@@ -106,7 +107,7 @@ export function ProfileBannerSection({
         </div>
 
         {isOwnProfile ? (
-          <Link href="/dashboard/info/edit">
+          <Link href={ROUTES.DASHBOARD.INFO_EDIT}>
             <Button
               size="sm"
               className="bg-tiffany-600 hover:bg-tiffany-700 text-white shadow-lg text-xs sm:text-sm"

@@ -188,6 +188,8 @@ export const ROUTES = {
   HOME: '/',
   AUTH: '/auth',
   DISCOVER: '/discover',
+  WALLETS: '/wallets',
+  CREATE: '/create',
   STUDY_BITCOIN: '/study-bitcoin',
   ONBOARDING: {
     STANDARD: '/onboarding',
@@ -310,4 +312,6 @@ export const ROUTES = {
 
   // Settings routes
   SETTINGS: '/settings',
+  SETTINGS_AI: '/settings/ai',
+  SETTINGS_AI_ONBOARDING: '/settings/ai/onboarding',
 } as const;

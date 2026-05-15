@@ -10,6 +10,7 @@ import { BADGE_COLORS } from '@/config/badge-colors';
 import { LightningInvoiceForm } from './LightningInvoiceForm';
 import { LightningInvoiceDisplay } from './LightningInvoiceDisplay';
 import { LightningPaymentSuccess } from './LightningPaymentSuccess';
+import { ROUTES } from '@/config/routes';
 
 export type { Invoice } from './useLightningPayment';
 
@@ -87,7 +88,7 @@ export default function LightningPayment({
             <AlertTriangle className="h-4 w-4 text-yellow-600" />
             <AlertDescription className="text-yellow-800 text-sm">
               <strong>Demo Mode</strong> — Invoices are simulated.{' '}
-              <Link href="/settings" className="text-yellow-900 underline font-medium">
+              <Link href={ROUTES.SETTINGS} className="text-yellow-900 underline font-medium">
                 Connect your wallet
               </Link>{' '}
               via NWC to make real Lightning payments.

@@ -6,6 +6,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Wallet as WalletIcon, ExternalLink } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 
 interface WalletEmptyStateProps {
   isOwner: boolean;
@@ -30,7 +31,7 @@ export function WalletEmptyState({ isOwner, onAddClick }: WalletEmptyStateProps)
       {isOwner && (
         <div className="text-center">
           <Link
-            href="/wallets"
+            href={ROUTES.WALLETS}
             className="text-sm text-gray-600 hover:text-orange-600 transition-colors inline-flex items-center gap-1"
           >
             I don't have a wallet yet

@@ -78,7 +78,7 @@ export default function MissingWalletBanner({
               </Button>
             </Link>
 
-            <Link href="/wallets" target="_blank">
+            <Link href={ROUTES.WALLETS} target="_blank">
               <Button
                 variant="outline"
                 className="border-orange-300 text-orange-700 hover:bg-orange-50"

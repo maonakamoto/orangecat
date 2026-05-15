@@ -10,6 +10,7 @@ import { resetPassword } from '@/services/supabase/auth';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -198,7 +199,7 @@ export default function ForgotPasswordPage() {
         {/* Footer */}
         <div className="mt-8 text-center">
           <Link
-            href="/auth?mode=login"
+            href={`${ROUTES.AUTH}?mode=login`}
             className="inline-flex items-center text-sm text-gray-600 hover:text-orange-600 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
@@ -211,7 +212,7 @@ export default function ForgotPasswordPage() {
           <p className="text-xs text-gray-500">
             Remember your password?{' '}
             <Link
-              href="/auth?mode=login"
+              href={`${ROUTES.AUTH}?mode=login`}
               className="text-orange-600 hover:text-orange-700 underline"
             >
               Sign in instead

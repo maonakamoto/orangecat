@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { footerNavigation } from '@/config/navigation';
-import { shouldShowFooter } from '@/config/routes';
+import { shouldShowFooter, ROUTES } from '@/config/routes';
 import Logo from './Logo';
 import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
@@ -173,7 +173,7 @@ const Footer = React.memo(function Footer() {
                 Get the latest updates on economic freedom, Bitcoin, and building on OrangeCat.
               </p>
               <Link
-                href="/auth?mode=register"
+                href={`${ROUTES.AUTH}?mode=register`}
                 className={`inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 text-sm font-medium text-white ${GRADIENTS.brandMixed} rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 min-h-11`}
               >
                 Get Started Today

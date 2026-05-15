@@ -58,14 +58,14 @@ export default function DiscoverHero({
             transition={{ duration: 0.8, delay: 0.9 }}
           >
             <Link
-              href="/discover?type=projects"
+              href={`${ROUTES.DISCOVER}?type=projects`}
               className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card hover:shadow-md hover:border-orange-200 transition-all duration-200 block"
             >
               <div className="text-fluid-xl font-bold text-gray-900">{totalProjects}</div>
               <div className="text-sm text-gray-600 mt-1">Active Projects</div>
             </Link>
             <Link
-              href="/discover?type=profiles"
+              href={`${ROUTES.DISCOVER}?type=profiles`}
               className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card hover:shadow-md hover:border-tiffany-200 transition-all duration-200 block"
             >
               <div className="text-fluid-xl font-bold text-tiffany-600">{totalProfiles}</div>

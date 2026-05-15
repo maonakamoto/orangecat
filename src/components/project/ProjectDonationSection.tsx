@@ -10,6 +10,7 @@ import { WishlistDonationTiers } from '@/components/wishlist/WishlistDonationTie
 import { convert, formatCurrency } from '@/services/currency';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { useProjectDonation } from './useProjectDonation';
+import { ROUTES } from '@/config/routes';
 
 interface ProjectDonationSectionProps {
   projectId: string;
@@ -82,7 +83,7 @@ export function ProjectDonationSection({
             </Button>
           ) : (
             <Button
-              href="/auth?from=favorite"
+              href={`${ROUTES.AUTH}?from=favorite`}
               variant="outline"
               className="flex-1 flex items-center justify-center gap-2 border-gray-300 hover:border-red-300 hover:text-red-600"
               aria-label="Sign in to favorite this project"

@@ -14,6 +14,7 @@ import PeopleTabBar from './components/PeopleTabBar';
 import PersonCard from './components/PersonCard';
 import { usePeopleConnections } from './components/usePeopleConnections';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export default function PeoplePage() {
   const { user, profile: currentProfile, isLoading: authLoading, hydrated, session } = useAuth();
@@ -109,7 +110,7 @@ export default function PeoplePage() {
 
         {/* Actions */}
         <div className="mb-6 flex gap-3">
-          <Link href="/discover?section=people">
+          <Link href={`${ROUTES.DISCOVER}?section=people`}>
             <Button>
               <Search className="w-4 h-4 mr-2" />
               Discover People
@@ -124,7 +125,7 @@ export default function PeoplePage() {
             title="No connections yet"
             description={emptyMessage}
             action={
-              <Link href="/discover?section=people">
+              <Link href={`${ROUTES.DISCOVER}?section=people`}>
                 <Button>
                   <Search className="w-4 h-4 mr-2" />
                   Discover People

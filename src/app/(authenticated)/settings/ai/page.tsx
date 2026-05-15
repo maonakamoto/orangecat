@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ROUTES } from '@/config/routes';
 import { ArrowLeft, Bot, Sparkles } from 'lucide-react';
 import { useRequireAuth } from '@/hooks/useAuth';
 import { useAISettings } from '@/hooks/useAISettings';
@@ -104,7 +105,7 @@ export default function AISettingsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
-              <Link href="/settings" className="text-gray-500 hover:text-gray-700">
+              <Link href={ROUTES.SETTINGS} className="text-gray-500 hover:text-gray-700">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div className="flex items-center gap-2">
@@ -113,7 +114,7 @@ export default function AISettingsPage() {
               </div>
             </div>
             {!hasByok && !preferences?.onboarding_completed && (
-              <Link href="/settings/ai/onboarding">
+              <Link href={ROUTES.SETTINGS_AI_ONBOARDING}>
                 <Button variant="primary" size="sm">
                   <Sparkles className="w-4 h-4 mr-2" />
                   Start Setup

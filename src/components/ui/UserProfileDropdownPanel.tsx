@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { LogOut, ExternalLink } from 'lucide-react';
 import DefaultAvatar from '@/components/ui/DefaultAvatar';
 import type { MutableRefObject } from 'react';
+import { ROUTES } from '@/config/routes';
 
 export interface MenuItem {
   label: string;
@@ -72,7 +73,7 @@ export function UserProfileDropdownPanel({
         <div className="p-6 bg-gradient-to-br from-gray-50 to-white border-b border-gray-100">
           <div className="flex items-center space-x-4">
             <Link
-              href="/profiles/me"
+              href={ROUTES.PROFILES.ME}
               onClick={e => {
                 e.stopPropagation();
                 close();
