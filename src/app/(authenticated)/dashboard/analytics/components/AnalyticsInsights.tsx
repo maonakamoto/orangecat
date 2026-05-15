@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { BarChart3, PieChart, Activity, TrendingUp, Share2, Heart } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 
 interface AnalyticsInsightsProps {
   hasProjects: boolean;
@@ -114,7 +115,7 @@ export default function AnalyticsInsights({ hasProjects }: AnalyticsInsightsProp
               <div className="text-center py-8 text-gray-500">
                 <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                 <p>Create your first project to see personalized insights</p>
-                <Button href="/projects/create" className="mt-4">
+                <Button href={ROUTES.PROJECTS.CREATE} className="mt-4">
                   Create Project
                 </Button>
               </div>

@@ -5,6 +5,7 @@ import { BookOpen, Wallet, Target } from 'lucide-react';
 import { PageLayout, PageHeader, PageSection } from '@/components/layout/PageLayout';
 import Button from '@/components/ui/Button';
 import { LEARNING_PATHS, QUICK_RESOURCES, WHY_LEARN_BENEFITS } from './config';
+import { ROUTES } from '@/config/routes';
 import { LearningPathCard } from './LearningPathCard';
 import { ResourceCard } from './ResourceCard';
 
@@ -134,7 +135,7 @@ export default function StudyBitcoinPage() {
               <Wallet className="w-5 h-5 mr-2" />
               Get Your First Wallet
             </Button>
-            <Button href="/projects/create" variant="outline" size="lg" className="min-h-12">
+            <Button href={ROUTES.PROJECTS.CREATE} variant="outline" size="lg" className="min-h-12">
               <Target className="w-5 h-5 mr-2" />
               Start a Project
             </Button>

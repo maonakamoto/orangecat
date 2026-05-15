@@ -119,17 +119,27 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
 
   // Card rendering
   makeHref: entity => `${ENTITY_REGISTRY['research'].publicBasePath}/${entity.id}`,
-  makeCardProps: entity => ({
-    badge:
-      entity.status === STATUS.RESEARCH.ACTIVE
-        ? 'Active'
-        : entity.status === STATUS.RESEARCH.DRAFT
-          ? 'Draft'
-          : undefined,
-    badgeVariant: entity.status === STATUS.RESEARCH.ACTIVE ? 'success' : 'default',
-    showEditButton: true,
-    editHref: `${ENTITY_REGISTRY['research'].createPath}?edit=${entity.id}`,
-  }),
+  makeCardProps: entity => {
+    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
+      [STATUS.RESEARCH.ACTIVE]: { label: 'Active', variant: 'success' },
+      [STATUS.RESEARCH.DRAFT]: { label: 'Draft', variant: 'default' },
+      [STATUS.RESEARCH.PAUSED]: { label: 'Paused', variant: 'warning' },
+      [STATUS.RESEARCH.COMPLETED]: { label: 'Completed', variant: 'default' },
+      [STATUS.RESEARCH.CANCELLED]: { label: 'Cancelled', variant: 'destructive' },
+    };
+    const statusBadge = statusBadgeMap[entity.status];
+    return {
+      badge: statusBadge?.label,
+      badgeVariant: statusBadge?.variant as
+        | 'success'
+        | 'default'
+        | 'warning'
+        | 'destructive'
+        | undefined,
+      showEditButton: true,
+      editHref: `${ENTITY_REGISTRY['research'].createPath}?edit=${entity.id}`,
+    };
+  },
 
   // Basic fields
   fields: [

@@ -93,7 +93,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
           {isOwnProfile ? "You haven't published any projects yet" : 'No projects to display'}
         </p>
         {isOwnProfile && (
-          <Link href="/projects/create">
+          <Link href={ROUTES.PROJECTS.CREATE}>
             <Button>
               <Target className="w-4 h-4 mr-2" />
               Create Your First Project
