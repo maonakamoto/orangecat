@@ -81,19 +81,19 @@ export default function ProfileInfoTab({
       <Card>
         <CardHeader>
           <h3 className="text-lg font-semibold flex items-center gap-2">
-            <Shield className="w-5 h-5 text-gray-500" />
+            <Shield className="w-5 h-5 text-gray-500 dark:text-muted-foreground" />
             Account Status
           </h3>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-gray-600">Email Verified</span>
+            <span className="text-gray-600 dark:text-muted-foreground">Email Verified</span>
             <span className={profile.email ? 'text-green-600 font-medium' : 'text-gray-400'}>
               {profile.email ? '✓ Verified' : 'Not verified'}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-600">Profile Complete</span>
+            <span className="text-gray-600 dark:text-muted-foreground">Profile Complete</span>
             <span className="text-green-600 font-medium">
               {profile.bio && profile.avatar_url ? '✓ Complete' : 'In Progress'}
             </span>

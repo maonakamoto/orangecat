@@ -50,8 +50,10 @@ export function SocialLinksEditor({ links, onChange, maxLinks = 15 }: SocialLink
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h4 className="text-sm font-medium text-gray-700">Social Media & Links</h4>
-          <p className="text-xs text-gray-500">
+          <h4 className="text-sm font-medium text-gray-700 dark:text-foreground">
+            Social Media & Links
+          </h4>
+          <p className="text-xs text-gray-500 dark:text-muted-foreground">
             {links.length} {links.length === 1 ? 'link' : 'links'} added
           </p>
         </div>
@@ -99,9 +101,11 @@ export function SocialLinksEditor({ links, onChange, maxLinks = 15 }: SocialLink
       </div>
 
       {links.length === 0 && !isAdding && (
-        <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-          <p className="text-sm text-gray-500 mb-2">No social links yet</p>
-          <p className="text-xs text-gray-400 mb-4">
+        <div className="text-center py-8 border-2 border-dashed border-gray-300 dark:border-border rounded-lg">
+          <p className="text-sm text-gray-500 dark:text-muted-foreground mb-2">
+            No social links yet
+          </p>
+          <p className="text-xs text-gray-400 dark:text-muted-foreground mb-4">
             Add links to build credibility and help supporters find you
           </p>
           {canAddMore && (
@@ -114,7 +118,7 @@ export function SocialLinksEditor({ links, onChange, maxLinks = 15 }: SocialLink
       )}
 
       {links.length > 0 && (
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-2">
           💡 More complete profiles build higher transparency scores
         </p>
       )}

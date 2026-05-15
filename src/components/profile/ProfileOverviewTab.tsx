@@ -48,13 +48,13 @@ export default function ProfileOverviewTab({
       <Card>
         <CardHeader className="p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
-            <User className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
+            <User className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 dark:text-muted-foreground" />
             About
           </h3>
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0">
           {profile.bio ? (
-            <p className="text-sm sm:text-base text-gray-700 whitespace-pre-wrap leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-700 dark:text-foreground whitespace-pre-wrap leading-relaxed">
               {profile.bio}
             </p>
           ) : isOwnProfile && isDashboardView ? (
@@ -62,13 +62,15 @@ export default function ProfileOverviewTab({
               href={`${ROUTES.DASHBOARD.INFO_EDIT}#bio`}
               className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline group text-sm sm:text-base"
             >
-              <span className="text-gray-400 italic group-hover:text-orange-600">
+              <span className="text-gray-400 dark:text-muted-foreground italic group-hover:text-orange-600">
                 Tell people more about yourself
               </span>
               <span className="text-xs uppercase tracking-wide">Add bio</span>
             </a>
           ) : (
-            <p className="text-sm sm:text-base text-gray-400 italic">No bio yet.</p>
+            <p className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
+              No bio yet.
+            </p>
           )}
         </CardContent>
       </Card>
@@ -82,7 +84,7 @@ export default function ProfileOverviewTab({
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold text-orange-600">
                   {stats.projectCount}
                 </div>
-                <div className="text-xs sm:text-sm text-gray-600 mt-1">
+                <div className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground mt-1">
                   {stats.projectCount === 1
                     ? ENTITY_REGISTRY.project.name
                     : ENTITY_REGISTRY.project.namePlural}
@@ -97,7 +99,9 @@ export default function ProfileOverviewTab({
                 <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-green-600">
                   ₿{stats.totalRaised.toFixed(8)}
                 </div>
-                <div className="text-xs sm:text-sm text-gray-600 mt-1">Total Raised</div>
+                <div className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground mt-1">
+                  Total Raised
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -111,10 +115,10 @@ export default function ProfileOverviewTab({
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0 space-y-2 sm:space-y-3">
           {/* Website */}
-          <div className="flex items-center gap-3 text-gray-700">
-            <Globe className="w-5 h-5 text-gray-400" />
+          <div className="flex items-center gap-3 text-gray-700 dark:text-foreground">
+            <Globe className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
             <div className="flex-1">
-              <div className="text-sm text-gray-500">Website</div>
+              <div className="text-sm text-gray-500 dark:text-muted-foreground">Website</div>
               {profile.website ? (
                 <a
                   href={profile.website}
@@ -133,7 +137,7 @@ export default function ProfileOverviewTab({
                   <span className="text-xs uppercase tracking-wide">Edit</span>
                 </a>
               ) : (
-                <span className="text-sm sm:text-base text-gray-400 italic">
+                <span className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
                   No website added yet.
                 </span>
               )}
@@ -141,7 +145,7 @@ export default function ProfileOverviewTab({
           </div>
 
           {/* Social Media & Links */}
-          <div className="pt-3 border-t border-gray-200">
+          <div className="pt-3 border-t border-gray-200 dark:border-border">
             {profile.social_links &&
             typeof profile.social_links === 'object' &&
             'links' in profile.social_links &&
@@ -157,11 +161,15 @@ export default function ProfileOverviewTab({
                 href={`${ROUTES.DASHBOARD.INFO_EDIT}#socialLinks`}
                 className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
               >
-                <span className="text-gray-400 italic">Add social links or profiles</span>
+                <span className="text-gray-400 dark:text-muted-foreground italic">
+                  Add social links or profiles
+                </span>
                 <span className="text-xs uppercase tracking-wide">Edit</span>
               </a>
             ) : (
-              <span className="text-sm sm:text-base text-gray-400 italic">No links added yet.</span>
+              <span className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
+                No links added yet.
+              </span>
             )}
           </div>
         </CardContent>
@@ -174,10 +182,10 @@ export default function ProfileOverviewTab({
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0 space-y-2 sm:space-y-3">
           {/* Contact Email (public) */}
-          <div className="flex items-center gap-3 text-gray-700 pt-3 border-t border-gray-200">
-            <Mail className="w-5 h-5 text-gray-400" />
+          <div className="flex items-center gap-3 text-gray-700 dark:text-foreground pt-3 border-t border-gray-200 dark:border-border">
+            <Mail className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
             <div className="flex-1">
-              <div className="text-sm text-gray-500">Contact email</div>
+              <div className="text-sm text-gray-500 dark:text-muted-foreground">Contact email</div>
               {publicContactEmail ? (
                 <a
                   href={`mailto:${publicContactEmail}`}
@@ -190,11 +198,13 @@ export default function ProfileOverviewTab({
                   href={`${ROUTES.DASHBOARD.INFO_EDIT}#contactEmail`}
                   className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
                 >
-                  <span className="text-gray-400 italic">Add a public contact email</span>
+                  <span className="text-gray-400 dark:text-muted-foreground italic">
+                    Add a public contact email
+                  </span>
                   <span className="text-xs uppercase tracking-wide">Edit</span>
                 </a>
               ) : (
-                <span className="text-sm sm:text-base text-gray-400 italic">
+                <span className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
                   No public email added.
                 </span>
               )}
@@ -202,10 +212,10 @@ export default function ProfileOverviewTab({
           </div>
 
           {/* Phone */}
-          <div className="flex items-center gap-3 text-gray-700">
-            <Phone className="w-5 h-5 text-gray-400" />
+          <div className="flex items-center gap-3 text-gray-700 dark:text-foreground">
+            <Phone className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
             <div className="flex-1">
-              <div className="text-sm text-gray-500">Phone</div>
+              <div className="text-sm text-gray-500 dark:text-muted-foreground">Phone</div>
               {profile.phone ? (
                 <a
                   href={`tel:${profile.phone}`}
@@ -218,11 +228,13 @@ export default function ProfileOverviewTab({
                   href={`${ROUTES.DASHBOARD.INFO_EDIT}#phone`}
                   className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
                 >
-                  <span className="text-gray-400 italic">Add a phone number</span>
+                  <span className="text-gray-400 dark:text-muted-foreground italic">
+                    Add a phone number
+                  </span>
                   <span className="text-xs uppercase tracking-wide">Edit</span>
                 </a>
               ) : (
-                <span className="text-sm sm:text-base text-gray-400 italic">
+                <span className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
                   No phone number added.
                 </span>
               )}
@@ -231,7 +243,7 @@ export default function ProfileOverviewTab({
 
           {/* Joined Date (contextual meta) */}
           {profile.created_at && (
-            <div className="flex items-center gap-3 text-gray-500 text-sm pt-3 border-t border-gray-200">
+            <div className="flex items-center gap-3 text-gray-500 dark:text-muted-foreground text-sm pt-3 border-t border-gray-200 dark:border-border">
               <Calendar className="w-4 h-4" />
               <span>
                 Joined{' '}
