@@ -76,7 +76,11 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
   };
 
   if (loading) {
-    return <div className="text-gray-500 text-sm py-8 text-center">Loading projects...</div>;
+    return (
+      <div className="text-gray-500 dark:text-muted-foreground text-sm py-8 text-center">
+        Loading projects...
+      </div>
+    );
   }
 
   // Filter out drafts for public display
@@ -87,9 +91,11 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
   if (publicProjects.length === 0) {
     return (
       <div className="text-center py-12">
-        <Target className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">No Projects Yet</h3>
-        <p className="text-gray-500 mb-6">
+        <Target className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-foreground mb-2">
+          No Projects Yet
+        </h3>
+        <p className="text-gray-500 dark:text-muted-foreground mb-6">
           {isOwnProfile ? "You haven't published any projects yet" : 'No projects to display'}
         </p>
         {isOwnProfile && (
@@ -108,7 +114,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
     <div className="space-y-4">
       {/* Header with count */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground flex items-center gap-2">
           <Target className="w-5 h-5 text-orange-500" />
           {publicProjects.length}{' '}
           {publicProjects.length === 1
@@ -144,7 +150,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
             <Link
               key={project.id}
               href={ROUTES.PROJECTS.VIEW(project.id)}
-              className="block overflow-hidden rounded-xl border-2 border-gray-200 hover:border-orange-300 hover:shadow-lg bg-white transition-all duration-200 group"
+              className="block overflow-hidden rounded-xl border-2 border-gray-200 dark:border-border hover:border-orange-300 hover:shadow-lg bg-white dark:bg-card transition-all duration-200 group"
             >
               <div className="flex flex-col sm:flex-row">
                 {/* Thumbnail */}
@@ -163,7 +169,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                   )}
                   {project.category && (
                     <div className="absolute top-2 left-2">
-                      <span className="px-2 py-1 bg-white/90 backdrop-blur-sm rounded-md text-xs font-medium text-gray-700">
+                      <span className="px-2 py-1 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-md text-xs font-medium text-gray-700 dark:text-foreground">
                         {project.category}
                       </span>
                     </div>
@@ -182,11 +188,11 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                 {/* Content */}
                 <div className="flex-1 p-4 sm:p-5 flex flex-col">
                   <div className="flex-1">
-                    <h4 className="font-bold text-gray-900 text-lg mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-1">
+                    <h4 className="font-bold text-gray-900 dark:text-foreground text-lg mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-1">
                       {project.title}
                     </h4>
                     {project.description && (
-                      <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                      <p className="text-sm text-gray-600 dark:text-muted-foreground line-clamp-2 mb-3">
                         {project.description}
                       </p>
                     )}
@@ -196,24 +202,26 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                   {goalAmount > 0 ? (
                     <div className="space-y-2 mb-3">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-600">Progress</span>
-                        <span className="font-semibold text-gray-900">{progress.toFixed(1)}%</span>
+                        <span className="text-gray-600 dark:text-muted-foreground">Progress</span>
+                        <span className="font-semibold text-gray-900 dark:text-foreground">
+                          {progress.toFixed(1)}%
+                        </span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-2 overflow-hidden">
                         <div
                           className={`${GRADIENTS.brandOrangeAmber} h-2 rounded-full transition-all duration-300`}
                           style={{ width: `${progress}%` }}
                         />
                       </div>
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-500">
+                        <span className="text-gray-500 dark:text-muted-foreground">
                           <CurrencyDisplay
                             amount={currentAmount}
                             currency={project.currency || PLATFORM_DEFAULT_CURRENCY}
                             size="sm"
                           />
                         </span>
-                        <span className="text-gray-500">
+                        <span className="text-gray-500 dark:text-muted-foreground">
                           of{' '}
                           <CurrencyDisplay
                             amount={goalAmount}
@@ -227,7 +235,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                     <div className="mb-3">
                       <div className="flex items-center gap-2">
                         <Bitcoin className="w-4 h-4 text-orange-500" />
-                        <span className="text-sm font-semibold text-gray-900">
+                        <span className="text-sm font-semibold text-gray-900 dark:text-foreground">
                           {balanceBTC > 0 ? (
                             formatBitcoinDisplay(balanceBTC, 'BTC')
                           ) : raisedAmount > 0 ? (
@@ -245,7 +253,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                   )}
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100">
+                  <div className="flex items-center justify-between text-xs text-gray-500 dark:text-muted-foreground pt-2 border-t border-gray-100 dark:border-border">
                     <span>{formatRelativeTimeCompact(project.created_at)}</span>
                     {project.bitcoin_address && (
                       <span className="flex items-center gap-1 text-orange-600">

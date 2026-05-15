@@ -29,10 +29,12 @@ export function ProfileDetailsCard({
 
   const locationValue = (() => {
     if (isLocationHidden(profile.location_context || '')) {
-      return <div className="font-medium text-gray-400">Hidden</div>;
+      return <div className="font-medium text-gray-400 dark:text-muted-foreground">Hidden</div>;
     }
     const label = profile.location_search || profile.location;
-    return label ? <div className="font-medium text-gray-900">{label}</div> : undefined;
+    return label ? (
+      <div className="font-medium text-gray-900 dark:text-foreground">{label}</div>
+    ) : undefined;
   })();
 
   const socialLinks =
@@ -48,7 +50,7 @@ export function ProfileDetailsCard({
     <Card>
       <CardHeader>
         <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
-          <Info className="w-5 h-5 text-gray-500" />
+          <Info className="w-5 h-5 text-gray-500 dark:text-muted-foreground" />
           {isDashboardView ? 'Profile & Account Details' : 'Profile Information'}
         </h3>
       </CardHeader>
@@ -57,18 +59,22 @@ export function ProfileDetailsCard({
           <div className="mb-3">
             <h4
               id="profile-section-heading"
-              className="text-sm font-semibold text-gray-900 uppercase tracking-wide"
+              className="text-sm font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide"
             >
               Profile
             </h4>
-            <p className="mt-1 text-xs text-gray-500">Basic information about who you are.</p>
+            <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
+              Basic information about who you are.
+            </p>
           </div>
           <div className="space-y-4">
             <ProfileField
               icon={User}
               label="Username"
               value={
-                <div className="font-medium text-gray-900">@{profile.username || 'Not set'}</div>
+                <div className="font-medium text-gray-900 dark:text-foreground">
+                  @{profile.username || 'Not set'}
+                </div>
               }
               isOwnProfile={isOwnProfile}
             />
@@ -77,7 +83,9 @@ export function ProfileDetailsCard({
               label="Display Name"
               value={
                 profile.name ? (
-                  <div className="font-medium text-gray-900">{profile.name}</div>
+                  <div className="font-medium text-gray-900 dark:text-foreground">
+                    {profile.name}
+                  </div>
                 ) : undefined
               }
               editHref={`${ROUTES.DASHBOARD.INFO_EDIT}#name`}
@@ -88,7 +96,9 @@ export function ProfileDetailsCard({
               label="Bio"
               value={
                 profile.bio ? (
-                  <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{profile.bio}</p>
+                  <p className="text-gray-700 dark:text-foreground whitespace-pre-wrap leading-relaxed">
+                    {profile.bio}
+                  </p>
                 ) : undefined
               }
               editHref={`${ROUTES.DASHBOARD.INFO_EDIT}#bio`}
@@ -110,16 +120,18 @@ export function ProfileDetailsCard({
 
         <section
           aria-labelledby="online-presence-section-heading"
-          className="pt-6 border-t border-gray-200"
+          className="pt-6 border-t border-gray-200 dark:border-border"
         >
           <div className="mb-3">
             <h4
               id="online-presence-section-heading"
-              className="text-sm font-semibold text-gray-900 uppercase tracking-wide"
+              className="text-sm font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide"
             >
               Online Presence
             </h4>
-            <p className="mt-1 text-xs text-gray-500">Where people can find you on the web.</p>
+            <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
+              Where people can find you on the web.
+            </p>
           </div>
           <div className="space-y-4">
             <ProfileField
@@ -153,16 +165,18 @@ export function ProfileDetailsCard({
 
         <section
           aria-labelledby="contact-section-heading"
-          className="pt-6 border-t border-gray-200"
+          className="pt-6 border-t border-gray-200 dark:border-border"
         >
           <div className="mb-3">
             <h4
               id="contact-section-heading"
-              className="text-sm font-semibold text-gray-900 uppercase tracking-wide"
+              className="text-sm font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide"
             >
               Contact Information
             </h4>
-            <p className="mt-1 text-xs text-gray-500">How people can reach you.</p>
+            <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
+              How people can reach you.
+            </p>
           </div>
           <div className="space-y-4">
             {isOwnProfile && (
@@ -171,10 +185,10 @@ export function ProfileDetailsCard({
                 label="Registration Email (private)"
                 value={
                   <div>
-                    <div className="font-medium text-gray-900 break-all">
+                    <div className="font-medium text-gray-900 dark:text-foreground break-all">
                       {profile.email || userEmail || 'Unknown'}
                     </div>
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
                       Used for account login. Not shown on public profile.
                     </p>
                   </div>
@@ -221,7 +235,7 @@ export function ProfileDetailsCard({
           <div className="mb-3">
             <h4
               id="meta-section-heading"
-              className="text-sm font-semibold text-gray-900 uppercase tracking-wide"
+              className="text-sm font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide"
             >
               Account Activity
             </h4>
@@ -232,7 +246,7 @@ export function ProfileDetailsCard({
                 icon={Calendar}
                 label="Member Since"
                 value={
-                  <div className="font-medium text-gray-900">
+                  <div className="font-medium text-gray-900 dark:text-foreground">
                     {format(joinDate, 'MMMM d, yyyy')}
                   </div>
                 }
@@ -243,7 +257,7 @@ export function ProfileDetailsCard({
                 icon={Clock}
                 label="Last Active"
                 value={
-                  <div className="font-medium text-gray-900">
+                  <div className="font-medium text-gray-900 dark:text-foreground">
                     {format(lastActive, 'MMMM d, yyyy')}
                   </div>
                 }

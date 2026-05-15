@@ -120,7 +120,7 @@ export function MessageContextMenu({
       <div
         ref={menuRef}
         className={cn(
-          'fixed z-50 bg-white rounded-lg shadow-xl border border-gray-200',
+          'fixed z-50 bg-white dark:bg-card rounded-lg shadow-xl border border-gray-200 dark:border-border',
           'min-w-40 py-1',
           'animate-in fade-in-0 zoom-in-95 duration-150'
         )}
@@ -139,13 +139,13 @@ export function MessageContextMenu({
               onClose();
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-left text-sm text-gray-700',
-              'hover:bg-gray-50 active:bg-gray-100',
+              'w-full px-4 py-2.5 text-left text-sm text-gray-700 dark:text-foreground',
+              'hover:bg-gray-50 dark:hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
               'flex items-center gap-3 transition-colors'
             )}
             role="menuitem"
           >
-            <Edit className="w-4 h-4 text-gray-500" />
+            <Edit className="w-4 h-4 text-gray-500 dark:text-muted-foreground" />
             <span>Edit</span>
           </button>
         )}
@@ -170,15 +170,15 @@ export function MessageContextMenu({
         )}
 
         {/* Close button (mobile) */}
-        <div className="border-t border-gray-100 mt-1 pt-1 md:hidden">
+        <div className="border-t border-gray-100 dark:border-border mt-1 pt-1 md:hidden">
           <button
             onClick={e => {
               e.stopPropagation();
               onClose();
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-center text-sm text-gray-500',
-              'hover:bg-gray-50 active:bg-gray-100',
+              'w-full px-4 py-2.5 text-center text-sm text-gray-500 dark:text-muted-foreground',
+              'hover:bg-gray-50 dark:hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
               'flex items-center justify-center gap-2 transition-colors'
             )}
             role="menuitem"

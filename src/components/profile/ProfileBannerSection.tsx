@@ -72,7 +72,7 @@ export function ProfileBannerSection({
             onClick={onShareToggle}
             variant="outline"
             size="sm"
-            className="bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg text-xs sm:text-sm"
+            className="bg-white/90 dark:bg-card/90 backdrop-blur-sm hover:bg-white dark:hover:bg-card shadow-lg text-xs sm:text-sm"
           >
             <Share2 className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
             <span className="hidden sm:inline">Share</span>
@@ -124,7 +124,7 @@ export function ProfileBannerSection({
             className={cn(
               'shadow-lg text-xs sm:text-sm',
               isFollowing
-                ? 'bg-gray-600 hover:bg-gray-700 text-white'
+                ? 'bg-gray-600 dark:bg-muted hover:bg-gray-700 dark:hover:bg-muted/80 text-white dark:text-foreground'
                 : 'bg-tiffany-500 hover:bg-tiffany-600 text-white'
             )}
           >

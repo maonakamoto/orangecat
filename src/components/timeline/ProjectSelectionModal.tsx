@@ -47,22 +47,24 @@ export default function ProjectSelectionModal({
       closeOnOverlayClick={true}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-border">
         <button
           onClick={onClose}
           className="p-2 -ml-2 min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Close"
         >
-          <ArrowLeft className="w-5 h-5 text-gray-700" />
+          <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-foreground" />
         </button>
-        <h2 className="text-lg font-semibold text-gray-900">Crosspost to projects</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground">
+          Crosspost to projects
+        </h2>
         <div className="w-9" /> {/* Spacer for centering */}
       </div>
 
       {/* Content */}
       <div className="overflow-y-auto max-h-[calc(100vh-60px)]">
         {/* Everyone option (default - always selected) */}
-        <div className="px-4 py-4 border-b border-gray-200">
+        <div className="px-4 py-4 border-b border-gray-200 dark:border-border">
           <button
             className="flex items-center justify-between w-full min-h-11"
             disabled
@@ -75,8 +77,12 @@ export default function ProjectSelectionModal({
                 <Users className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
-                <div className="text-base font-semibold text-gray-900">Everyone</div>
-                <div className="text-sm text-gray-500">Post to your timeline</div>
+                <div className="text-base font-semibold text-gray-900 dark:text-foreground">
+                  Everyone
+                </div>
+                <div className="text-sm text-gray-500 dark:text-muted-foreground">
+                  Post to your timeline
+                </div>
               </div>
             </div>
             <div className="w-6 h-6 rounded-full bg-tiffany-500 flex items-center justify-center">
@@ -88,7 +94,9 @@ export default function ProjectSelectionModal({
         {/* My Projects section */}
         {projects.length > 0 && (
           <div className="px-4 py-3">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">My Projects</h3>
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-foreground mb-3">
+              My Projects
+            </h3>
             <div className="space-y-1">
               {projects.map(project => {
                 const isSelected = selectedProjects.includes(project.id);
@@ -98,7 +106,7 @@ export default function ProjectSelectionModal({
                     onClick={() => onToggleProject(project.id)}
                     className={cn(
                       'flex items-center justify-between w-full px-3 py-3 rounded-lg transition-colors min-h-[60px]',
-                      'hover:bg-gray-50 active:bg-gray-100',
+                      'hover:bg-gray-50 dark:hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
                       isSelected && 'bg-orange-50'
                     )}
                     aria-label={`${isSelected ? 'Deselect' : 'Select'} ${project.title}`}
@@ -127,11 +135,11 @@ export default function ProjectSelectionModal({
 
                       {/* Project info */}
                       <div className="flex-1 min-w-0 text-left">
-                        <div className="text-base font-semibold text-gray-900 truncate">
+                        <div className="text-base font-semibold text-gray-900 dark:text-foreground truncate">
                           {project.title}
                         </div>
                         {project.contributor_count !== undefined && (
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-gray-500 dark:text-muted-foreground">
                             {project.contributor_count.toLocaleString()} supporter
                             {project.contributor_count !== 1 ? 's' : ''}
                           </div>
@@ -143,7 +151,9 @@ export default function ProjectSelectionModal({
                     <div
                       className={cn(
                         'w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ml-3',
-                        isSelected ? 'bg-tiffany-500 border-tiffany-500' : 'border-gray-300'
+                        isSelected
+                          ? 'bg-tiffany-500 border-tiffany-500'
+                          : 'border-gray-300 dark:border-border'
                       )}
                     >
                       {isSelected && <Check className="w-4 h-4 text-white" />}
@@ -158,8 +168,10 @@ export default function ProjectSelectionModal({
         {/* Empty state */}
         {!loading && projects.length === 0 && (
           <div className="px-4 py-12 text-center">
-            <div className="text-gray-500 text-sm">No projects available</div>
-            <div className="text-gray-400 text-xs mt-1">
+            <div className="text-gray-500 dark:text-muted-foreground text-sm">
+              No projects available
+            </div>
+            <div className="text-gray-400 dark:text-muted-foreground text-xs mt-1">
               Create a project to crosspost your updates
             </div>
           </div>
@@ -168,7 +180,9 @@ export default function ProjectSelectionModal({
         {/* Loading state */}
         {loading && (
           <div className="px-4 py-12 text-center">
-            <div className="text-gray-500 text-sm">Loading projects...</div>
+            <div className="text-gray-500 dark:text-muted-foreground text-sm">
+              Loading projects...
+            </div>
           </div>
         )}
       </div>
