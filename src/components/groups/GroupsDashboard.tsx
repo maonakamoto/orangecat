@@ -116,7 +116,7 @@ export function GroupsDashboard() {
 
         <TabsContent value="my-groups" className="space-y-4">
           {myGroups.length === 0 ? (
-            <div className="text-center py-12 px-4 bg-white rounded-lg border">
+            <div className="text-center py-12 px-4 bg-white dark:bg-card rounded-lg border dark:border-border">
               <h3 className="text-lg font-semibold mb-2">No groups yet</h3>
               <p className="text-muted-foreground mb-6">Create your first group to get started</p>
               <Link href={ROUTES.DASHBOARD.GROUPS_CREATE}>
@@ -138,7 +138,7 @@ export function GroupsDashboard() {
 
         <TabsContent value="discover" className="space-y-4">
           {availableGroups.length === 0 ? (
-            <div className="text-center py-12 px-4 bg-white rounded-lg border">
+            <div className="text-center py-12 px-4 bg-white dark:bg-card rounded-lg border dark:border-border">
               <h3 className="text-lg font-semibold mb-2">No groups available</h3>
               <p className="text-muted-foreground mb-6">Be the first to create a group!</p>
               <Link href={ROUTES.DASHBOARD.GROUPS_CREATE}>

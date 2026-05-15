@@ -26,9 +26,11 @@ interface GroupListProps {
 export function GroupList({ groups, onGroupClick, emptyState }: GroupListProps) {
   if (groups.length === 0) {
     return (
-      <div className="text-center py-12 px-4 bg-white rounded-lg border">
+      <div className="text-center py-12 px-4 bg-white dark:bg-card rounded-lg border dark:border-border">
         <h3 className="text-lg font-semibold mb-2">{emptyState?.title || 'No groups yet'}</h3>
-        <p className="text-muted-foreground mb-6">{emptyState?.description || 'Create your first group to get started'}</p>
+        <p className="text-muted-foreground mb-6">
+          {emptyState?.description || 'Create your first group to get started'}
+        </p>
         {/* Empty state action button will be handled by parent component */}
       </div>
     );
@@ -36,11 +38,9 @@ export function GroupList({ groups, onGroupClick, emptyState }: GroupListProps) 
 
   return (
     <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {groups.map((group) => (
+      {groups.map(group => (
         <GroupCard key={group.id} group={group} onClick={() => onGroupClick?.(group)} />
       ))}
     </div>
   );
 }
-
-

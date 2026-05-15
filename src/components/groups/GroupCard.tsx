@@ -31,7 +31,7 @@ export function GroupCard({ group, onClick, className }: GroupCardProps) {
   // Build metadata - use member_count from GroupWithRelations if available
   const memberCount = 'member_count' in group ? group.member_count : undefined;
   const metadata = (
-    <div className="flex items-center gap-4 text-sm text-gray-600">
+    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-muted-foreground">
       <div className="flex items-center gap-1">
         <Users className="h-4 w-4" />
         <span>{memberCount ?? 0} members</span>

@@ -69,7 +69,7 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
       case STATUS.GROUP_MEMBERS.ADMIN:
         return <Shield className="h-4 w-4 text-tiffany-600" />;
       default:
-        return <User className="h-4 w-4 text-gray-600" />;
+        return <User className="h-4 w-4 text-gray-600 dark:text-muted-foreground" />;
     }
   };
 
@@ -109,7 +109,9 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
         </CardHeader>
         <CardContent>
           {members.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">No members yet</div>
+            <div className="text-center py-8 text-gray-500 dark:text-muted-foreground">
+              No members yet
+            </div>
           ) : (
             <div className="space-y-3">
               {members.map(member => (
@@ -133,7 +135,9 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
                         </p>
                         {getRoleIcon(member.role)}
                       </div>
-                      <p className="text-sm text-gray-500 truncate">@{member.username || 'user'}</p>
+                      <p className="text-sm text-gray-500 dark:text-muted-foreground truncate">
+                        @{member.username || 'user'}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">{getRoleBadge(member.role)}</div>

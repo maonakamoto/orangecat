@@ -127,7 +127,7 @@ export function GroupDetailTabs({
             <CardTitle>Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-500">Activity feed coming soon...</p>
+            <p className="text-gray-500 dark:text-muted-foreground">Activity feed coming soon...</p>
           </CardContent>
         </Card>
       </TabsContent>
