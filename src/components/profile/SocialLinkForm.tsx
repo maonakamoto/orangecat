@@ -76,9 +76,9 @@ export function SocialLinkForm({
   const Icon = platformConfig?.icon || X;
 
   return (
-    <div className="border rounded-lg p-4 bg-white space-y-4">
+    <div className="border dark:border-border rounded-lg p-4 bg-white dark:bg-card space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-semibold text-gray-900">
+        <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground">
           {initialLink ? 'Edit Link' : 'Add Social Link'}
         </h4>
         <Button onClick={onCancel} variant="ghost" size="sm" className="h-6 w-6 p-0">
@@ -93,7 +93,9 @@ export function SocialLinkForm({
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Platform</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+          Platform
+        </label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {availablePlatforms.map(p => {
             const PlatformIcon = p.icon;
@@ -109,7 +111,7 @@ export function SocialLinkForm({
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   isSelected
                     ? 'border-orange-500 bg-orange-50'
-                    : 'border-gray-300 hover:border-orange-300'
+                    : 'border-gray-300 dark:border-border hover:border-orange-300'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -128,7 +130,7 @@ export function SocialLinkForm({
             className={`p-3 border rounded-lg text-left transition-colors ${
               platform === 'custom'
                 ? 'border-orange-500 bg-orange-50'
-                : 'border-gray-300 hover:border-orange-300'
+                : 'border-gray-300 dark:border-border hover:border-orange-300'
             }`}
           >
             <div className="flex items-center gap-2">
@@ -141,7 +143,9 @@ export function SocialLinkForm({
 
       {isCustom && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Platform Name *</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+            Platform Name *
+          </label>
           <Input
             value={label}
             onChange={e => {
@@ -161,7 +165,7 @@ export function SocialLinkForm({
         <div className="relative">
           {platformConfig && (
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-              <Icon className="w-4 h-4 text-gray-400" />
+              <Icon className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
             </div>
           )}
           <Input
@@ -176,7 +180,9 @@ export function SocialLinkForm({
           />
         </div>
         {platformConfig?.formatHint && (
-          <p className="mt-1 text-xs text-gray-500">{platformConfig.formatHint}</p>
+          <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
+            {platformConfig.formatHint}
+          </p>
         )}
       </div>
 

@@ -9,8 +9,21 @@
 
 'use client';
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { ProfileFieldType } from '@/lib/profile-guidance';
 import { Control } from 'react-hook-form';
 import { ProfileFormValues } from '../types';
@@ -22,17 +35,16 @@ interface PreferencesSectionProps {
   onFieldFocus?: (field: ProfileFieldType) => void;
 }
 
-export function PreferencesSection({
-  control,
-  onFieldFocus,
-}: PreferencesSectionProps) {
+export function PreferencesSection({ control, onFieldFocus }: PreferencesSectionProps) {
   return (
-    <div className="space-y-4 rounded-xl border border-gray-200 bg-white/80 px-4 py-5 sm:px-5 sm:py-6">
+    <div className="space-y-4 rounded-xl border border-gray-200 dark:border-border bg-white/80 dark:bg-card/80 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
-        <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide">
           {PROFILE_SECTIONS.PREFERENCES}
         </h3>
-        <p className="mt-1 text-xs text-gray-500">{PROFILE_SECTION_DESCRIPTIONS.PREFERENCES}</p>
+        <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
+          {PROFILE_SECTION_DESCRIPTIONS.PREFERENCES}
+        </p>
       </div>
 
       {/* Currency Preference */}
@@ -41,13 +53,10 @@ export function PreferencesSection({
         name="currency"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700">
+            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
               Default Currency
             </FormLabel>
-            <Select
-              onValueChange={field.onChange}
-              value={field.value || PLATFORM_DEFAULT_CURRENCY}
-            >
+            <Select onValueChange={field.onChange} value={field.value || PLATFORM_DEFAULT_CURRENCY}>
               <FormControl>
                 <SelectTrigger
                   className="w-full"
@@ -57,15 +66,16 @@ export function PreferencesSection({
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {currencySelectOptions.map((option) => (
+                {currencySelectOptions.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <FormDescription className="text-xs text-gray-500">
-              Prices and amounts will be displayed in this currency. All transactions are settled in Bitcoin.
+            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
+              Prices and amounts will be displayed in this currency. All transactions are settled in
+              Bitcoin.
             </FormDescription>
             <FormMessage />
           </FormItem>

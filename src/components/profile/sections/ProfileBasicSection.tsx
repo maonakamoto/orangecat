@@ -50,12 +50,14 @@ export function ProfileBasicSection({
   form,
 }: ProfileBasicSectionProps) {
   return (
-    <div className="space-y-4 rounded-xl border border-gray-200 bg-white/80 px-4 py-5 sm:px-5 sm:py-6">
+    <div className="space-y-4 rounded-xl border border-gray-200 dark:border-border bg-white/80 dark:bg-card/80 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
-        <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide">
           {PROFILE_SECTIONS.PROFILE}
         </h3>
-        <p className="mt-1 text-xs text-gray-500">{PROFILE_SECTION_DESCRIPTIONS.PROFILE}</p>
+        <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
+          {PROFILE_SECTION_DESCRIPTIONS.PROFILE}
+        </p>
       </div>
 
       {/* Username - Required field */}
@@ -66,12 +68,12 @@ export function ProfileBasicSection({
           const { value, ...rest } = field;
           return (
             <FormItem>
-              <FormLabel className="text-sm font-medium text-gray-700">
+              <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
                 Username <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 font-medium z-10 pointer-events-none">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 dark:text-muted-foreground font-medium z-10 pointer-events-none">
                     @
                   </span>
                   <Input
@@ -104,7 +106,7 @@ export function ProfileBasicSection({
                 onFocus={() => onFieldFocus?.('name')}
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500">
+            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
               This is how others will see you
             </FormDescription>
             <FormMessage />
@@ -128,7 +130,7 @@ export function ProfileBasicSection({
                 onFocus={() => onFieldFocus?.('bio')}
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500">
+            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
               Share your story with the community
             </FormDescription>
             <FormMessage />

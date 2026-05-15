@@ -23,12 +23,14 @@ export function OnlinePresenceSection({
   setSocialLinks,
 }: OnlinePresenceSectionProps) {
   return (
-    <div className="space-y-4 rounded-xl border border-gray-200 bg-white/80 px-4 py-5 sm:px-5 sm:py-6">
+    <div className="space-y-4 rounded-xl border border-gray-200 dark:border-border bg-white/80 dark:bg-card/80 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
-        <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide">
           {PROFILE_SECTIONS.ONLINE_PRESENCE}
         </h3>
-        <p className="mt-1 text-xs text-gray-500">{PROFILE_SECTION_DESCRIPTIONS.ONLINE_PRESENCE}</p>
+        <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
+          {PROFILE_SECTION_DESCRIPTIONS.ONLINE_PRESENCE}
+        </p>
       </div>
 
       {/* Website */}
@@ -37,7 +39,9 @@ export function OnlinePresenceSection({
         name="website"
         render={({ field }) => (
           <FormItem id="website">
-            <FormLabel className="text-sm font-medium text-gray-700">Website</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
+              Website
+            </FormLabel>
             <FormControl>
               <Input
                 placeholder="https://your-website.com"
@@ -52,7 +56,7 @@ export function OnlinePresenceSection({
       />
 
       {/* Social Media & Links */}
-      <div id="socialLinks" className="pt-4 mt-2 border-t border-gray-100">
+      <div id="socialLinks" className="pt-4 mt-2 border-t border-gray-100 dark:border-border">
         <div onFocus={() => onFieldFocus?.('socialLinks')} tabIndex={-1}>
           <SocialLinksEditor
             links={socialLinks}
@@ -60,7 +64,7 @@ export function OnlinePresenceSection({
             maxLinks={MAX_SOCIAL_LINKS}
           />
         </div>
-        <p className="text-xs text-gray-500 mt-3">
+        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-3">
           💡 Want to add wallets? Manage them in{' '}
           <a
             href={ROUTES.DASHBOARD.WALLETS}
