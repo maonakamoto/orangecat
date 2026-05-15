@@ -159,7 +159,7 @@ export function SocialLinkForm({
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
           {isCustom ? 'URL *' : platformConfig?.label || 'Value'} *
         </label>
         <div className="relative">

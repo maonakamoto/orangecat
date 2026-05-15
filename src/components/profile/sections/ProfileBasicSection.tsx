@@ -97,7 +97,9 @@ export function ProfileBasicSection({
         name="name"
         render={({ field }) => (
           <FormItem id="name">
-            <FormLabel className="text-sm font-medium text-gray-700">Name</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
+              Name
+            </FormLabel>
             <FormControl>
               <Input
                 placeholder="Your display name"
@@ -120,7 +122,9 @@ export function ProfileBasicSection({
         name="bio"
         render={({ field }) => (
           <FormItem id="bio">
-            <FormLabel className="text-sm font-medium text-gray-700">Bio</FormLabel>
+            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
+              Bio
+            </FormLabel>
             <FormControl>
               <Textarea
                 placeholder="Tell your story..."

@@ -133,7 +133,9 @@ export default function ProfileOverviewTab({
                   href={`${ROUTES.DASHBOARD.INFO_EDIT}#website`}
                   className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
                 >
-                  <span className="text-gray-400 italic">Add a website</span>
+                  <span className="text-gray-400 dark:text-muted-foreground italic">
+                    Add a website
+                  </span>
                   <span className="text-xs uppercase tracking-wide">Edit</span>
                 </a>
               ) : (

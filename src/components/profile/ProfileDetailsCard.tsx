@@ -231,7 +231,10 @@ export function ProfileDetailsCard({
           </div>
         </section>
 
-        <section aria-labelledby="meta-section-heading" className="pt-6 border-t border-gray-200">
+        <section
+          aria-labelledby="meta-section-heading"
+          className="pt-6 border-t border-gray-200 dark:border-border"
+        >
           <div className="mb-3">
             <h4
               id="meta-section-heading"
