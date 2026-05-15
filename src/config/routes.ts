@@ -197,11 +197,14 @@ export const ROUTES = {
   },
   COMMUNITY: '/community',
   ABOUT: '/about',
+  HOW_IT_WORKS: '/how-it-works',
   BLOG: '/blog',
   DOCS: '/docs',
   FAQ: '/faq',
   PRIVACY: '/privacy',
   TERMS: '/terms',
+  STATUS: '/status',
+  SECURITY: '/security',
 
   // Project routes
   PROJECTS: {

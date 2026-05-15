@@ -72,18 +72,18 @@ interface NavItem {
 const headerNavigationConfig = {
   /** Navigation for authenticated users */
   authenticated: [
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Discover', href: '/discover' },
-    { name: 'Community', href: '/community' },
-  ] as const,
+    { name: 'Dashboard', href: ROUTES.DASHBOARD.HOME },
+    { name: 'Discover', href: ROUTES.DISCOVER },
+    { name: 'Community', href: ROUTES.COMMUNITY },
+  ],
 
   /** Navigation for unauthenticated users */
   unauthenticated: [
-    { name: 'Discover', href: '/discover' },
-    { name: 'Community', href: '/community' },
-    { name: 'About', href: '/about' },
-  ] as const,
-} as const;
+    { name: 'Discover', href: ROUTES.DISCOVER },
+    { name: 'Community', href: ROUTES.COMMUNITY },
+    { name: 'About', href: ROUTES.ABOUT },
+  ],
+};
 
 /**
  * Get navigation items based on authentication state for header
@@ -133,28 +133,28 @@ const simplifiedSections: NavSection[] = [
       },
       {
         name: 'Home',
-        href: '/dashboard',
+        href: ROUTES.DASHBOARD.HOME,
         icon: Home,
         description: 'Your dashboard',
         requiresAuth: true,
       },
       {
         name: 'Timeline',
-        href: '/timeline',
+        href: ROUTES.TIMELINE,
         icon: BookOpen,
         description: 'Your feed',
         requiresAuth: true,
       },
       {
         name: 'Messages',
-        href: '/messages',
+        href: ROUTES.MESSAGES,
         icon: MessageSquare,
         description: 'Private messages',
         requiresAuth: true,
       },
       {
         name: 'Explore',
-        href: '/discover',
+        href: ROUTES.DISCOVER,
         icon: Search,
         description: 'Discover',
         requiresAuth: false,
@@ -215,35 +215,35 @@ const simplifiedSections: NavSection[] = [
     items: [
       {
         name: 'Profile',
-        href: '/profiles/me',
+        href: ROUTES.PROFILES.ME,
         icon: UserIcon,
         description: 'Your profile',
         requiresAuth: true,
       },
       {
         name: 'Settings',
-        href: '/settings',
+        href: ROUTES.SETTINGS,
         icon: Settings,
         description: 'Preferences',
         requiresAuth: true,
       },
       {
         name: 'Community',
-        href: '/community',
+        href: ROUTES.COMMUNITY,
         icon: Globe,
         description: 'Public feed',
         requiresAuth: false,
       },
       {
         name: 'About',
-        href: '/about',
+        href: ROUTES.ABOUT,
         icon: Info,
         description: 'About OrangeCat',
         requiresAuth: false,
       },
       {
         name: 'Help',
-        href: '/faq',
+        href: ROUTES.FAQ,
         icon: HelpCircle,
         description: 'FAQ & Support',
         requiresAuth: false,
@@ -269,21 +269,21 @@ export const bottomNavItems: NavItem[] = [];
  */
 export const footerNavigation = {
   product: [
-    { name: 'Features', href: '/docs' },
-    { name: 'Documentation', href: '/docs' },
-    { name: 'How It Works', href: '/how-it-works' },
-    { name: 'Status', href: '/status' },
+    { name: 'Features', href: ROUTES.DOCS },
+    { name: 'Documentation', href: ROUTES.DOCS },
+    { name: 'How It Works', href: ROUTES.HOW_IT_WORKS },
+    { name: 'Status', href: ROUTES.STATUS },
   ],
   company: [
-    { name: 'About OrangeCat', href: '/about' },
+    { name: 'About OrangeCat', href: ROUTES.ABOUT },
     { name: 'Careers', href: '/company/careers' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'FAQ', href: '/faq' },
+    { name: 'Blog', href: ROUTES.BLOG },
+    { name: 'FAQ', href: ROUTES.FAQ },
   ],
   legal: [
-    { name: 'Privacy', href: '/privacy' },
-    { name: 'Terms', href: '/terms' },
-    { name: 'Security', href: '/security' },
+    { name: 'Privacy', href: ROUTES.PRIVACY },
+    { name: 'Terms', href: ROUTES.TERMS },
+    { name: 'Security', href: ROUTES.SECURITY },
   ],
   social: [
     {
@@ -303,8 +303,8 @@ export const footerNavigation = {
  * Authentication navigation items
  */
 export const authNavigationItems = [
-  { name: 'Sign In', href: '/auth?mode=login' },
-  { name: 'Get Started', href: '/auth?mode=register' },
+  { name: 'Sign In', href: `${ROUTES.AUTH}?mode=login` },
+  { name: 'Get Started', href: `${ROUTES.AUTH}?mode=register` },
 ];
 
 /**
