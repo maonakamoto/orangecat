@@ -1,5 +1,6 @@
 import React from 'react';
 import { type LucideIcon, Inbox } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 interface EmptyStateProps {
   icon?: LucideIcon;
@@ -50,7 +51,9 @@ export function ProjectsEmptyState({
 
   return (
     <div className={`flex flex-col items-center justify-center ${sizeClasses[size]} text-center`}>
-      <div className="w-16 h-16 bg-gradient-to-br from-tiffany-50 to-tiffany-100 rounded-full flex items-center justify-center mb-6">
+      <div
+        className={`w-16 h-16 ${GRADIENTS.iconTiffanyLight} rounded-full flex items-center justify-center mb-6`}
+      >
         <svg
           className="w-8 h-8 text-tiffany-600"
           fill="none"

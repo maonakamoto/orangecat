@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ChevronDown, Bot, Coins, Users, Shield, Zap, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 
 interface FaqItem {
   question: string;
@@ -250,7 +251,7 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen pt-20 pb-24">
       {/* Header */}
-      <div className="bg-gradient-to-b from-tiffany-50 to-white border-b border-tiffany-100 py-16 px-4">
+      <div className={`${GRADIENTS.pageBgTiffanyDown} border-b border-tiffany-100 py-16 px-4`}>
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">

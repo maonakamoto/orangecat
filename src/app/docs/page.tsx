@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { ENTITY_REGISTRY, ENTITY_TYPES as ENTITY_TYPE_KEYS } from '@/config/entity-registry';
+import { GRADIENTS } from '@/config/gradients';
 
 export const metadata: Metadata = {
   title: 'Documentation',
@@ -25,7 +26,7 @@ const ENTITY_TYPES = ENTITY_TYPE_KEYS.filter(t => t !== 'wallet') // wallet is i
 
 export default function DocsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-tiffany-50 to-white py-12">
+    <div className={`min-h-screen ${GRADIENTS.pageBgTiffanyDown} py-12`}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-14">

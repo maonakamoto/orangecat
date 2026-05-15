@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import DefaultAvatar from '@/components/ui/DefaultAvatar';
 import { ProfileStorageService } from '@/services/profile/storage';
 import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 
 interface ProfileUploadSectionProps {
   userId: string;
@@ -85,7 +86,9 @@ export function ProfileUploadSection({
   return (
     <div className={cn('relative mb-8', className)}>
       {/* Banner */}
-      <div className="relative h-60 bg-gradient-to-r from-orange-400 via-orange-500 to-tiffany-500 rounded-2xl shadow-xl overflow-hidden group">
+      <div
+        className={`relative h-60 ${GRADIENTS.heroOrangeTiffany} rounded-2xl shadow-xl overflow-hidden group`}
+      >
         {(previewBanner || bannerUrl) && (
           <Image
             src={previewBanner || bannerUrl || ''}

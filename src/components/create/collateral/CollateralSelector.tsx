@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/config/routes';
 import { useCollateralSelector } from './useCollateralSelector';
 import { BADGE_COLORS } from '@/config/badge-colors';
+import { GRADIENTS } from '@/config/gradients';
 
 export interface CollateralItem {
   id: string;
@@ -76,7 +77,7 @@ export function CollateralSelector({
       </CardHeader>
       <CardContent className="space-y-4">
         {selectedCollateral.length > 0 && (
-          <div className="bg-gradient-to-br from-tiffany-50 to-tiffany-100 border border-tiffany-200 rounded-lg p-4">
+          <div className={`${GRADIENTS.iconTiffanyLight} border border-tiffany-200 rounded-lg p-4`}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-700">Total Collateral Value</span>
               <span className="text-lg font-bold text-gray-900">

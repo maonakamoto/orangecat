@@ -1,6 +1,7 @@
 'use client';
 
 import { CheckCircle2 } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 import { DynamicSidebar } from '@/components/create/DynamicSidebar';
 import {
   profileGuidanceContent,
@@ -36,7 +37,7 @@ export function ProfileSidebarPanel({
           </div>
           <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-bitcoinOrange via-orange-500 to-orange-600 h-3 rounded-full transition-all duration-700 ease-out shadow-sm"
+              className={`${GRADIENTS.progressBitcoin} h-3 rounded-full transition-all duration-700 ease-out shadow-sm`}
               style={{ width: `${completionPercentage}%` }}
             />
           </div>

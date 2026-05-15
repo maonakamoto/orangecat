@@ -24,15 +24,16 @@ export const GRADIENTS = {
   // ── Section / card background tints ───────────────────────────────────────
   sectionGreen: 'bg-gradient-to-r from-green-50 to-emerald-50',
   sectionOrangeTiffany: 'bg-gradient-to-r from-orange-50 to-tiffany-50',
+  sectionTiffanyMuted: 'bg-gradient-to-r from-tiffany-50 to-tiffany-100/50',
   iconOrangeTiffany: 'bg-gradient-to-r from-orange-100 to-tiffany-100',
+  sectionGrayOrange: 'bg-gradient-to-r from-gray-50 to-orange-50',
 
   // ── Icon circle/badge gradients (diagonal, for icon backgrounds) ──────────
   iconBlue: 'bg-gradient-to-br from-blue-500 to-blue-600',
   iconOrange: 'bg-gradient-to-br from-orange-500 to-orange-600',
   iconTiffany: 'bg-gradient-to-br from-tiffany-500 to-tiffany-600',
   iconGreen: 'bg-gradient-to-br from-green-500 to-green-600',
-
-  sectionGrayOrange: 'bg-gradient-to-r from-gray-50 to-orange-50',
+  iconTiffanyLight: 'bg-gradient-to-br from-tiffany-50 to-tiffany-100',
 
   // ── Card background section tints (diagonal) ──────────────────────────────
   sectionBlueCyan: 'bg-gradient-to-br from-blue-50 to-cyan-50',
@@ -48,6 +49,7 @@ export const GRADIENTS = {
   grayLight: 'bg-gradient-to-br from-gray-50 to-gray-100',
   graySubtle: 'bg-gradient-to-br from-gray-50 via-white to-gray-100',
   heroSection: 'bg-gradient-to-br from-orange-50 via-tiffany-50 to-orange-100',
+  heroOrangeTiffany: 'bg-gradient-to-r from-orange-400 via-orange-500 to-tiffany-500',
   brandOrangeYellow: 'bg-gradient-to-br from-orange-500 to-yellow-500',
   brandMixedBr: 'bg-gradient-to-br from-orange-500 to-tiffany-500',
   iconTiffanyOrange: 'bg-gradient-to-br from-tiffany-500 to-orange-500',
@@ -58,6 +60,7 @@ export const GRADIENTS = {
 
   // ── Page background gradients (full-bleed wrappers) ───────────────────────
   pageBgOrangeDown: 'bg-gradient-to-b from-orange-50 to-white',
+  pageBgTiffanyDown: 'bg-gradient-to-b from-tiffany-50 to-white',
   pageBg: 'bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20',
   pageBgSolid: 'bg-gradient-to-br from-orange-50 via-white to-tiffany-50',
   pageBgFrost: 'bg-gradient-to-br from-orange-50/80 via-white/80 to-tiffany-50/80',
@@ -66,6 +69,7 @@ export const GRADIENTS = {
 
   // ── Bitcoin gradients (only for Bitcoin-related UI) ──────────────────────
   brandBitcoin: 'bg-gradient-to-r from-bitcoinOrange to-orange-500',
+  progressBitcoin: 'bg-gradient-to-r from-bitcoinOrange via-orange-500 to-orange-600',
   btnBitcoin:
     'bg-gradient-to-r from-bitcoinOrange to-orange-500 hover:from-orange-600 hover:to-orange-600',
 

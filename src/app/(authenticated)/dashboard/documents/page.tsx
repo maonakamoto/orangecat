@@ -3,6 +3,7 @@
 import EntityDashboardPage from '@/components/entity/EntityDashboardPage';
 import { documentEntityConfig, type DocumentListItem } from '@/config/entities/documents';
 import { Cat } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 
 /**
  * Documents Dashboard Page
@@ -16,7 +17,9 @@ import { Cat } from 'lucide-react';
 
 function MyCatInfoBanner() {
   return (
-    <div className="bg-gradient-to-r from-tiffany-50 to-tiffany-100/50 border border-tiffany-200 rounded-lg p-4 mb-4">
+    <div
+      className={`${GRADIENTS.sectionTiffanyMuted} border border-tiffany-200 rounded-lg p-4 mb-4`}
+    >
       <div className="flex items-start gap-3">
         <div className="p-2 bg-tiffany-100 rounded-full">
           <Cat className="h-5 w-5 text-tiffany-600" />

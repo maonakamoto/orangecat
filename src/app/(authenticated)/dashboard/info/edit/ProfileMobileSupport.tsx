@@ -36,7 +36,7 @@ export function ProfileMobileSupport({
           </div>
           <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-bitcoinOrange via-orange-500 to-orange-600 h-2 rounded-full transition-all duration-700 ease-out"
+              className={`${GRADIENTS.progressBitcoin} h-2 rounded-full transition-all duration-700 ease-out`}
               style={{ width: `${completionPercentage}%` }}
             />
           </div>

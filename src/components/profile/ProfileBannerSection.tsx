@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import DefaultAvatar from '@/components/ui/DefaultAvatar';
 import ProfileShare from '@/components/sharing/ProfileShare';
 import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 import type { ScalableProfile } from '@/services/profile/types';
 
 interface ProfileBannerSectionProps {
@@ -35,7 +36,9 @@ export function ProfileBannerSection({
   return (
     <div className="relative mb-4 sm:mb-6 lg:mb-8">
       {/* Banner */}
-      <div className="relative h-32 sm:h-48 md:h-64 lg:h-80 bg-gradient-to-r from-orange-400 via-orange-500 to-tiffany-500 rounded-xl sm:rounded-2xl shadow-xl overflow-hidden">
+      <div
+        className={`relative h-32 sm:h-48 md:h-64 lg:h-80 ${GRADIENTS.heroOrangeTiffany} rounded-xl sm:rounded-2xl shadow-xl overflow-hidden`}
+      >
         {profile.banner_url && (
           <Image src={profile.banner_url} alt="Profile banner" fill className="object-cover" />
         )}

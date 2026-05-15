@@ -33,7 +33,9 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
         </p>
       </div>
 
-      <div className="bg-gradient-to-r from-tiffany-50 to-tiffany-100/50 border border-tiffany-200 rounded-xl p-6 mb-8">
+      <div
+        className={`${GRADIENTS.sectionTiffanyMuted} border border-tiffany-200 rounded-xl p-6 mb-8`}
+      >
         <div className="flex items-start gap-3">
           <Sparkles className="h-5 w-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
           <div>
