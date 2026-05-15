@@ -167,15 +167,15 @@ export default function ShareContent({
   // Modern share UI - Modal on mobile, dropdown on desktop
   const shareContent = (
     <div
-      className={`bg-white rounded-2xl shadow-2xl border border-gray-200/50 backdrop-blur-xl p-5 sm:p-6 w-full max-w-md mx-auto ${className}`}
+      className={`bg-white dark:bg-card rounded-2xl shadow-2xl border border-gray-200/50 dark:border-border/50 backdrop-blur-xl p-5 sm:p-6 w-full max-w-md mx-auto ${className}`}
       style={{
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       }}
       onClick={e => e.stopPropagation()}
     >
       {showTitle && (
-        <div className="flex items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-gray-100">
-          <h3 className="font-semibold text-gray-900 flex items-center gap-2 text-lg">
+        <div className="flex items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-gray-100 dark:border-border">
+          <h3 className="font-semibold text-gray-900 dark:text-foreground flex items-center gap-2 text-lg">
             <div
               className={`w-8 h-8 rounded-full ${GRADIENTS.brandOrange} flex items-center justify-center`}
             >
@@ -186,7 +186,7 @@ export default function ShareContent({
           {onClose && (
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
+              className="text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground transition-colors p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Close share menu"
             >
               <X className="w-5 h-5" />
@@ -222,7 +222,7 @@ export default function ShareContent({
               >
                 <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${platform.color}`} />
               </div>
-              <span className="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-gray-900">
+              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-muted-foreground group-hover:text-gray-900 dark:group-hover:text-foreground">
                 {platform.name}
               </span>
             </button>
@@ -236,7 +236,7 @@ export default function ShareContent({
         className={`w-full flex items-center justify-center gap-3 p-4 rounded-xl transition-all touch-manipulation active:scale-95 font-semibold ${
           copySuccess
             ? 'bg-green-50 hover:bg-green-100 text-green-700 border-2 border-green-200'
-            : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-2 border-gray-200'
+            : 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 text-gray-700 dark:text-foreground border-2 border-gray-200 dark:border-border'
         }`}
         aria-label="Copy URL to clipboard"
       >
