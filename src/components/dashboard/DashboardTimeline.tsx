@@ -40,7 +40,7 @@ export function DashboardTimeline({
   return (
     <div className="space-y-3 sm:space-y-4">
       {/* Composer surface matches timeline UI */}
-      <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl sm:rounded-2xl shadow-sm overflow-hidden">
         <TimelineComposer
           targetOwnerId={userId}
           targetOwnerType="profile"
@@ -52,13 +52,13 @@ export function DashboardTimeline({
       </div>
 
       {/* Timeline feed surface matches timeline UI */}
-      <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl shadow-sm overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-100">
+      <div className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl sm:rounded-2xl shadow-sm overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-100 dark:border-border">
           <div>
-            <CardTitle className="text-base sm:text-lg font-semibold text-gray-900">
+            <CardTitle className="text-base sm:text-lg font-semibold text-gray-900 dark:text-foreground">
               My Timeline
             </CardTitle>
-            <CardDescription className="text-xs sm:text-sm text-gray-500">
+            <CardDescription className="text-xs sm:text-sm text-gray-500 dark:text-muted-foreground">
               Recent activities, posts, and updates
             </CardDescription>
           </div>
@@ -81,7 +81,9 @@ export function DashboardTimeline({
             <div className="text-center py-8 sm:py-10 text-red-600 px-4 sm:px-6">
               <AlertCircle className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4" />
               <p className="text-sm sm:text-base font-medium mb-2">Failed to load timeline</p>
-              <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">{error}</p>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-muted-foreground mb-3 sm:mb-4">
+                {error}
+              </p>
               <Button variant="outline" onClick={onRefresh} size="sm">
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Retry
@@ -97,12 +99,12 @@ export function DashboardTimeline({
               />
             </div>
           ) : (
-            <div className="text-center py-8 sm:py-12 px-4 text-gray-500">
-              <MessageSquare className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-300" />
-              <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-2">
+            <div className="text-center py-8 sm:py-12 px-4 text-gray-500 dark:text-muted-foreground">
+              <MessageSquare className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-300 dark:text-muted-foreground" />
+              <h3 className="text-base sm:text-lg font-semibold text-gray-700 dark:text-foreground mb-2">
                 Start My Timeline
               </h3>
-              <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 max-w-md mx-auto">
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-muted-foreground mb-4 sm:mb-6 max-w-md mx-auto">
                 Share your first update! My timeline will show your posts, project updates, and
                 interactions with the community.
               </p>

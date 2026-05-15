@@ -80,14 +80,14 @@ export function SmartQuestionsPanel({
 function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDismiss: () => void }) {
   return (
     <div className="flex items-center justify-between gap-3 p-3 bg-amber-50 border border-amber-100 rounded-lg hover:bg-amber-100 transition-colors group">
-      <p className="text-sm text-gray-700 flex-1">{question.question}</p>
+      <p className="text-sm text-gray-700 dark:text-foreground flex-1">{question.question}</p>
 
       <div className="flex items-center gap-2 flex-shrink-0">
         <Link href={question.action.href}>
           <Button
             size="sm"
             variant="outline"
-            className="bg-white hover:bg-amber-100 border-amber-200 text-amber-700 hover:border-amber-300"
+            className="bg-white dark:bg-card hover:bg-amber-100 border-amber-200 text-amber-700 hover:border-amber-300"
           >
             {question.action.label}
             <ArrowRight className="w-3 h-3 ml-1" />
@@ -96,7 +96,7 @@ function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDism
 
         <button
           onClick={onDismiss}
-          className="p-1 text-gray-400 hover:text-gray-600 rounded opacity-0 group-hover:opacity-100 transition-opacity min-h-11 min-w-11 flex items-center justify-center"
+          className="p-1 text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground rounded opacity-0 group-hover:opacity-100 transition-opacity min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Dismiss question"
         >
           <X className="w-4 h-4" />
@@ -119,7 +119,7 @@ export function SmartQuestionInline({
   return (
     <div className="flex items-center gap-2 text-sm">
       <Lightbulb className="w-4 h-4 text-amber-500 flex-shrink-0" />
-      <span className="text-gray-600">{question.question}</span>
+      <span className="text-gray-600 dark:text-muted-foreground">{question.question}</span>
       <Link href={question.action.href}>
         <Button
           size="sm"
@@ -133,7 +133,7 @@ export function SmartQuestionInline({
       {onDismiss && (
         <button
           onClick={onDismiss}
-          className="p-1 text-gray-400 hover:text-gray-600 rounded min-h-11 min-w-11 flex items-center justify-center"
+          className="p-1 text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground rounded min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Dismiss"
         >
           <X className="w-3 h-3" />

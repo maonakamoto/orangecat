@@ -74,15 +74,15 @@ export default function NotificationCenter({
               </div>
             )}
 
-            <div className="flex gap-1 mb-4 bg-gray-100 rounded-lg p-1">
+            <div className="flex gap-1 mb-4 bg-gray-100 dark:bg-muted rounded-lg p-1">
               {FILTER_TABS.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setUIFilter(tab.key)}
                   className={`flex-1 px-3 py-1.5 text-sm rounded-md transition-colors ${
                     uiFilter === tab.key
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'bg-white dark:bg-card text-gray-900 dark:text-foreground shadow-sm'
+                      : 'text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
                   }`}
                 >
                   {tab.label}
@@ -92,7 +92,7 @@ export default function NotificationCenter({
 
             {unreadCount > 0 && (
               <div className="flex justify-between items-center mb-4">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-gray-600 dark:text-muted-foreground">
                   {unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}
                 </span>
                 <Button variant="ghost" size="sm" onClick={handleMarkAllAsRead}>
@@ -107,18 +107,18 @@ export default function NotificationCenter({
                 <div className="space-y-3">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="animate-pulse">
-                      <div className="flex items-start gap-3 p-3 bg-gray-100 rounded-lg">
-                        <div className="w-8 h-8 bg-gray-300 rounded-full" />
+                      <div className="flex items-start gap-3 p-3 bg-gray-100 dark:bg-muted rounded-lg">
+                        <div className="w-8 h-8 bg-gray-300 dark:bg-muted-foreground/30 rounded-full" />
                         <div className="flex-1">
-                          <div className="h-4 bg-gray-300 rounded mb-2" />
-                          <div className="h-3 bg-gray-300 rounded w-3/4" />
+                          <div className="h-4 bg-gray-300 dark:bg-muted-foreground/30 rounded mb-2" />
+                          <div className="h-3 bg-gray-300 dark:bg-muted-foreground/30 rounded w-3/4" />
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : notifications.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-500 dark:text-muted-foreground">
                   <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   <p>No notifications found</p>
                   {uiFilter !== 'all' && (
@@ -153,7 +153,7 @@ export default function NotificationCenter({
             </div>
 
             {notifications.length > 0 && (
-              <div className="pt-4 mt-4 border-t border-gray-200">
+              <div className="pt-4 mt-4 border-t border-gray-200 dark:border-border">
                 <div className="flex gap-2">
                   <Button
                     variant="outline"

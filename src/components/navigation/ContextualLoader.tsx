@@ -29,8 +29,10 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">{content.title}</h2>
-        <p className="text-gray-600 mb-8">{content.subtitle}</p>
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-2">
+          {content.title}
+        </h2>
+        <p className="text-gray-600 dark:text-muted-foreground mb-8">{content.subtitle}</p>
 
         <div className="space-y-4 text-left">
           {content.actions.map((action, index) => {
@@ -38,10 +40,12 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
             return (
               <div
                 key={index}
-                className="flex items-start space-x-3 p-3 rounded-lg bg-white/50 backdrop-blur-sm"
+                className="flex items-start space-x-3 p-3 rounded-lg bg-white/50 dark:bg-card/50 backdrop-blur-sm"
               >
                 <ActionIcon className={cn('w-5 h-5 mt-0.5 flex-shrink-0', content.color)} />
-                <span className="text-sm text-gray-700 leading-relaxed">{action.text}</span>
+                <span className="text-sm text-gray-700 dark:text-foreground leading-relaxed">
+                  {action.text}
+                </span>
               </div>
             );
           })}
@@ -64,7 +68,9 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
           </div>
         </div>
 
-        <p className="text-xs text-gray-500 mt-4">Preparing your personalized experience...</p>
+        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-4">
+          Preparing your personalized experience...
+        </p>
       </div>
     </div>
   );

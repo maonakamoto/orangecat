@@ -42,9 +42,9 @@ function getNotificationIcon(notification: Notification) {
     case 'mention':
       return <AtSign className="w-5 h-5 text-tiffany" />;
     case 'system':
-      return <Settings className="w-5 h-5 text-gray-500" />;
+      return <Settings className="w-5 h-5 text-gray-500 dark:text-muted-foreground" />;
     default:
-      return <Bell className="w-5 h-5 text-gray-500" />;
+      return <Bell className="w-5 h-5 text-gray-500 dark:text-muted-foreground" />;
   }
 }
 
@@ -65,7 +65,7 @@ export function NotificationItem({
     <div
       className={`group relative p-3 rounded-lg border transition-colors cursor-pointer ${
         notification.read
-          ? 'bg-white border-gray-200 hover:bg-gray-50'
+          ? 'bg-white dark:bg-card border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-muted'
           : 'bg-tiffany-50 border-tiffany-200 hover:bg-tiffany-100'
       }`}
       onClick={() => onClick(notification)}
@@ -76,15 +76,17 @@ export function NotificationItem({
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h4 className="text-sm font-medium text-gray-900">{notification.title}</h4>
+              <h4 className="text-sm font-medium text-gray-900 dark:text-foreground">
+                {notification.title}
+              </h4>
               {notification.message && (
                 <p
-                  className={`text-sm mt-1 ${notification.read ? 'text-gray-600' : 'text-gray-700'}`}
+                  className={`text-sm mt-1 ${notification.read ? 'text-gray-600 dark:text-muted-foreground' : 'text-gray-700 dark:text-foreground'}`}
                 >
                   {notification.message}
                 </p>
               )}
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-gray-500 dark:text-muted-foreground mt-2">
                 {formatRelativeTime(notification.created_at)}
               </p>
             </div>
@@ -96,7 +98,7 @@ export function NotificationItem({
                     e.stopPropagation();
                     onMarkAsRead(notification.id);
                   }}
-                  className="p-1 hover:bg-white rounded min-h-11 min-w-11 flex items-center justify-center"
+                  className="p-1 hover:bg-white dark:hover:bg-muted rounded min-h-11 min-w-11 flex items-center justify-center"
                   title="Mark as read"
                 >
                   <Check className="w-3 h-3 text-green-500" />
