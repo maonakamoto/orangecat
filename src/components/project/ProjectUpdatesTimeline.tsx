@@ -98,16 +98,18 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
       <Card className={className}>
         <CardContent className="pt-6">
           <div className="flex items-center gap-2 mb-4">
-            <Activity className="w-5 h-5 text-gray-400 animate-pulse" />
-            <h3 className="text-lg font-semibold text-gray-400">Loading activity...</h3>
+            <Activity className="w-5 h-5 text-gray-400 dark:text-muted-foreground animate-pulse" />
+            <h3 className="text-lg font-semibold text-gray-400 dark:text-muted-foreground">
+              Loading activity...
+            </h3>
           </div>
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
               <div key={i} className="flex gap-3 pb-4 border-b animate-pulse">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200" />
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 dark:bg-muted" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4" />
-                  <div className="h-3 bg-gray-200 rounded w-1/2" />
+                  <div className="h-4 bg-gray-200 dark:bg-muted rounded w-3/4" />
+                  <div className="h-3 bg-gray-200 dark:bg-muted rounded w-1/2" />
                 </div>
               </div>
             ))}
@@ -138,7 +140,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="font-medium text-gray-900">{update.title}</p>
+                    <p className="font-medium text-gray-900 dark:text-foreground">{update.title}</p>
                     {update.amount_btc && (
                       <span className="text-sm font-semibold text-orange-600 flex-shrink-0">
                         {formatAmount(update.amount_btc)}
@@ -146,9 +148,11 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
                     )}
                   </div>
                   {update.content && (
-                    <p className="text-sm text-gray-600 mt-1 line-clamp-2">{update.content}</p>
+                    <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1 line-clamp-2">
+                      {update.content}
+                    </p>
                   )}
-                  <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                  <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1 flex items-center gap-1">
                     <TrendingUp className="w-3 h-3" />
                     {formatRelativeTime(update.created_at)}
                   </p>
@@ -158,11 +162,13 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
           </div>
         ) : (
           <div className="text-center py-8">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-              <Activity className="w-8 h-8 text-gray-400" />
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-muted flex items-center justify-center">
+              <Activity className="w-8 h-8 text-gray-400 dark:text-muted-foreground" />
             </div>
-            <p className="text-sm text-gray-500 mb-1">No recent activity yet</p>
-            <p className="text-xs text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-muted-foreground mb-1">
+              No recent activity yet
+            </p>
+            <p className="text-xs text-gray-400 dark:text-muted-foreground">
               Updates will appear here as the project progresses
             </p>
           </div>

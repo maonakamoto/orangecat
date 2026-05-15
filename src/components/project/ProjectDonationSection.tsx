@@ -59,7 +59,7 @@ export function ProjectDonationSection({
               className={`flex-1 flex items-center justify-center gap-2 ${
                 isFavorited
                   ? 'bg-red-500 hover:bg-red-600 text-white border-red-500'
-                  : 'border-gray-300 hover:border-red-300 hover:text-red-600'
+                  : 'border-gray-300 dark:border-border hover:border-red-300 hover:text-red-600'
               }`}
               aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
             >
@@ -85,7 +85,7 @@ export function ProjectDonationSection({
             <Button
               href={`${ROUTES.AUTH}?from=favorite`}
               variant="outline"
-              className="flex-1 flex items-center justify-center gap-2 border-gray-300 hover:border-red-300 hover:text-red-600"
+              className="flex-1 flex items-center justify-center gap-2 border-gray-300 dark:border-border hover:border-red-300 hover:text-red-600"
               aria-label="Sign in to favorite this project"
             >
               <Heart className="w-4 h-4" aria-hidden="true" />
@@ -121,7 +121,7 @@ export function ProjectDonationSection({
             </div>
           )}
         </div>
-        <p className="text-sm text-gray-500 mt-3">
+        <p className="text-sm text-gray-500 dark:text-muted-foreground mt-3">
           {user
             ? isFavorited
               ? 'You can find this project in your Favorites to support later.'
@@ -142,8 +142,8 @@ export function ProjectDonationSection({
           </h3>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="flex flex-col items-center justify-center bg-white p-6 rounded-lg border border-gray-200">
-              <div className="bg-white p-3 rounded-lg shadow-sm">
+            <div className="flex flex-col items-center justify-center bg-white dark:bg-card p-6 rounded-lg border border-gray-200 dark:border-border">
+              <div className="bg-white dark:bg-muted p-3 rounded-lg shadow-sm">
                 <QRCodeSVG
                   value={`bitcoin:${bitcoinAddress}`}
                   size={180}
@@ -152,18 +152,18 @@ export function ProjectDonationSection({
                   className="w-full h-auto"
                 />
               </div>
-              <p className="text-xs text-center text-gray-500 mt-3">
+              <p className="text-xs text-center text-gray-500 dark:text-muted-foreground mt-3">
                 Scan with your Bitcoin wallet
               </p>
             </div>
 
             <div className="flex flex-col justify-center">
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <label className="text-xs font-medium text-gray-600 mb-2 block uppercase tracking-wide">
+              <div className="bg-gray-50 dark:bg-muted rounded-lg p-4 border border-gray-200 dark:border-border">
+                <label className="text-xs font-medium text-gray-600 dark:text-muted-foreground mb-2 block uppercase tracking-wide">
                   Bitcoin Address
                 </label>
                 <div className="flex items-start gap-2">
-                  <code className="text-sm font-mono text-gray-900 break-all flex-1 leading-relaxed">
+                  <code className="text-sm font-mono text-gray-900 dark:text-foreground break-all flex-1 leading-relaxed">
                     {bitcoinAddress}
                   </code>
                   <Button
@@ -177,7 +177,7 @@ export function ProjectDonationSection({
                   </Button>
                 </div>
               </div>
-              <div className="flex items-center gap-2 mt-3 text-sm text-gray-600">
+              <div className="flex items-center gap-2 mt-3 text-sm text-gray-600 dark:text-muted-foreground">
                 <ShieldCheck className="w-4 h-4 text-green-600" aria-hidden="true" />
                 <span>Address verified and monitored</span>
               </div>
@@ -196,7 +196,7 @@ export function ProjectDonationSection({
           )}
 
           <div className="mt-6 border-t pt-6">
-            <p className="text-sm font-medium text-gray-700 mb-3">
+            <p className="text-sm font-medium text-gray-700 dark:text-foreground mb-3">
               {ownerId && !isOwner ? 'Other amounts:' : 'Suggested support amounts:'}
             </p>
             <div className="grid grid-cols-3 gap-3">
@@ -216,18 +216,22 @@ export function ProjectDonationSection({
                         description: `Suggested ${label.toLowerCase()} support (≈ ${formattedAmount})`,
                       });
                     }}
-                    className="px-4 py-3 border-2 border-gray-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-all text-center group"
+                    className="px-4 py-3 border-2 border-gray-300 dark:border-border rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-all text-center group"
                   >
-                    <div className="font-semibold text-gray-900 group-hover:text-orange-700">
+                    <div className="font-semibold text-gray-900 dark:text-foreground group-hover:text-orange-700">
                       {formattedAmount}
                     </div>
-                    <div className="text-xs text-gray-400 mt-0.5">≈ {satsDisplay}</div>
-                    <div className="text-xs text-gray-500 mt-1">{label}</div>
+                    <div className="text-xs text-gray-400 dark:text-muted-foreground mt-0.5">
+                      ≈ {satsDisplay}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+                      {label}
+                    </div>
                   </button>
                 );
               })}
             </div>
-            <p className="text-xs text-gray-500 mt-3 text-center">
+            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-3 text-center">
               Click to copy address with suggested amount reminder
             </p>
           </div>
@@ -245,10 +249,10 @@ export function ProjectDonationSection({
             projectTitle={projectTitle}
             projectId={projectId}
           />
-          <div className="mt-3 bg-gray-50 rounded-lg p-3 border border-gray-200">
+          <div className="mt-3 bg-gray-50 dark:bg-muted rounded-lg p-3 border border-gray-200 dark:border-border">
             <div className="flex items-center justify-between gap-4">
               <code
-                className="text-xs font-mono text-gray-600 break-all"
+                className="text-xs font-mono text-gray-600 dark:text-muted-foreground break-all"
                 aria-label={`Lightning address: ${lightningAddress}`}
               >
                 {lightningAddress}

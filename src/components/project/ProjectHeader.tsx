@@ -92,7 +92,9 @@ export default function ProjectHeader({
     <div className="mb-6">
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex-1">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">{project.title}</h1>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-foreground mb-3">
+            {project.title}
+          </h1>
 
           {/* Categories - Show prominently for quick project understanding */}
           {(project.category || (project.tags && project.tags.length > 0)) && (
@@ -140,10 +142,10 @@ export default function ProjectHeader({
                   )}
                 </Link>
                 <div>
-                  <p className="text-sm text-gray-500">Created by</p>
+                  <p className="text-sm text-gray-500 dark:text-muted-foreground">Created by</p>
                   <Link
                     href={creatorProfileUrl}
-                    className="text-sm font-semibold text-gray-900 hover:text-orange-600 transition-colors"
+                    className="text-sm font-semibold text-gray-900 dark:text-foreground hover:text-orange-600 transition-colors"
                   >
                     {project.profiles.name ||
                       project.profiles.username ||
@@ -185,7 +187,9 @@ export default function ProjectHeader({
               </div>
               <div>
                 <p className="text-sm text-gray-500">Created by</p>
-                <span className="text-sm font-semibold text-gray-900">Anonymous</span>
+                <span className="text-sm font-semibold text-gray-900 dark:text-foreground">
+                  Anonymous
+                </span>
               </div>
             </div>
           )}
@@ -199,7 +203,10 @@ export default function ProjectHeader({
             >
               {statusInfo.label}
             </span>
-            <time dateTime={project.created_at} className="text-sm text-gray-500">
+            <time
+              dateTime={project.created_at}
+              className="text-sm text-gray-500 dark:text-muted-foreground"
+            >
               Created {formatRelativeTime(project.created_at)}
             </time>
           </div>

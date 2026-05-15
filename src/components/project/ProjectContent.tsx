@@ -51,7 +51,9 @@ export default function ProjectContent({ project }: ProjectContentProps) {
             <h3 id="about-heading" className="text-lg font-semibold mb-2">
               About
             </h3>
-            <p className="text-gray-700 whitespace-pre-wrap">{project.description}</p>
+            <p className="text-gray-700 dark:text-foreground whitespace-pre-wrap">
+              {project.description}
+            </p>
           </section>
 
           {/* Funding Purpose */}
@@ -60,7 +62,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
               <h3 id="funding-purpose-heading" className="text-lg font-semibold mb-2">
                 What the funds will be used for
               </h3>
-              <p className="text-gray-700">{project.funding_purpose}</p>
+              <p className="text-gray-700 dark:text-foreground">{project.funding_purpose}</p>
             </section>
           )}
 
@@ -93,7 +95,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 {getUniqueCategories(project.category, project.tags).map((category, idx) => (
                   <span
                     key={`${category}-${idx}`}
-                    className="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700"
+                    className="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground"
                     role="listitem"
                   >
                     {category}
@@ -124,7 +126,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                       }
                     />
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500 dark:text-muted-foreground">
                     of{' '}
                     <CurrencyDisplay
                       amount={project.goal_amount}
@@ -141,7 +143,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 </div>
               </div>
               <div
-                className="w-full bg-gray-200 rounded-full h-4"
+                className="w-full bg-gray-200 dark:bg-muted rounded-full h-4"
                 role="progressbar"
                 aria-valuenow={progressPercentage}
                 aria-valuemin={0}
@@ -156,7 +158,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>
-              <div className="text-sm text-gray-600 mt-2">
+              <div className="text-sm text-gray-600 dark:text-muted-foreground mt-2">
                 {progressPercentage.toFixed(1)}% funded
               </div>
             </section>
