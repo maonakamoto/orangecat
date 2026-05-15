@@ -51,6 +51,7 @@ export interface ContextContent {
   actions: ContextAction[];
   color: string;
   bgColor: string;
+  bgIconClass: string;
 }
 
 interface RouteConfig extends ContextContent {
@@ -71,6 +72,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-tiffany-600',
     bgColor: 'bg-tiffany-50',
+    bgIconClass: 'bg-tiffany-100',
   },
   {
     matches: p => p.startsWith('/profiles') || p.startsWith(ROUTES.DASHBOARD.INFO),
@@ -85,6 +87,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-tiffany-600',
     bgColor: 'bg-tiffany-50',
+    bgIconClass: 'bg-tiffany-100',
   },
   {
     matches: p => p.startsWith('/timeline'),
@@ -99,6 +102,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-green-600',
     bgColor: 'bg-green-50',
+    bgIconClass: 'bg-green-100',
   },
   {
     matches: p => p.startsWith('/discover') || p.startsWith('/community'),
@@ -113,6 +117,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-orange-600',
     bgColor: 'bg-orange-50',
+    bgIconClass: 'bg-orange-100',
   },
   {
     matches: p =>
@@ -129,6 +134,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-orange-600',
     bgColor: 'bg-orange-50',
+    bgIconClass: 'bg-orange-100',
   },
   {
     matches: p => p.startsWith(ENTITY_REGISTRY['service'].basePath),
@@ -143,6 +149,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-teal-600',
     bgColor: 'bg-teal-50',
+    bgIconClass: 'bg-teal-100',
   },
   {
     matches: p => p.startsWith(ENTITY_REGISTRY['cause'].basePath),
@@ -157,6 +164,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-pink-600',
     bgColor: 'bg-pink-50',
+    bgIconClass: 'bg-pink-100',
   },
   {
     matches: p => p.startsWith(ENTITY_REGISTRY['wallet'].basePath),
@@ -171,6 +179,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-50',
+    bgIconClass: 'bg-yellow-100',
   },
   {
     matches: p => p.startsWith('/assets'),
@@ -185,6 +194,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-emerald-600',
     bgColor: 'bg-emerald-50',
+    bgIconClass: 'bg-emerald-100',
   },
   {
     matches: p => p.startsWith('/loans'),
@@ -199,6 +209,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-tiffany-600',
     bgColor: 'bg-tiffany-50',
+    bgIconClass: 'bg-tiffany-100',
   },
   {
     matches: p => p.startsWith('/organizations'),
@@ -213,6 +224,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-gray-600',
     bgColor: 'bg-gray-50',
+    bgIconClass: 'bg-gray-100',
   },
   {
     matches: p => p.startsWith('/messages'),
@@ -227,6 +239,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-tiffany-600',
     bgColor: 'bg-tiffany-50',
+    bgIconClass: 'bg-tiffany-100',
   },
   {
     matches: p => p.startsWith('/settings'),
@@ -241,6 +254,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-gray-600',
     bgColor: 'bg-gray-50',
+    bgIconClass: 'bg-gray-100',
   },
   {
     matches: p => p.startsWith('/about'),
@@ -255,6 +269,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-tiffany-600',
     bgColor: 'bg-tiffany-50',
+    bgIconClass: 'bg-tiffany-100',
   },
   {
     matches: p => p.startsWith('/blog'),
@@ -269,6 +284,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-tiffany-600',
     bgColor: 'bg-tiffany-50',
+    bgIconClass: 'bg-tiffany-100',
   },
   {
     matches: p => p.startsWith('/docs'),
@@ -283,6 +299,7 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     ],
     color: 'text-green-600',
     bgColor: 'bg-green-50',
+    bgIconClass: 'bg-green-100',
   },
 ];
 
@@ -297,6 +314,7 @@ const DEFAULT_CONTENT: ContextContent = {
   ],
   color: 'text-gray-600',
   bgColor: 'bg-gray-50',
+  bgIconClass: 'bg-gray-100',
 };
 
 export function getContextualContent(pathname: string): ContextContent {

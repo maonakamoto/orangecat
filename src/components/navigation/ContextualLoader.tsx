@@ -22,7 +22,7 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
           <div
             className={cn(
               'w-16 h-16 rounded-full flex items-center justify-center',
-              content.color.replace('text-', 'bg-').replace('-600', '-100')
+              content.bgIconClass
             )}
           >
             <IconComponent className={cn('w-8 h-8', content.color)} />
