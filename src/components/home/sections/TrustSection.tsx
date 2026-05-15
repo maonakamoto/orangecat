@@ -1,13 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Check, X } from 'lucide-react';
+import Link from 'next/link';
+import { Check, X, ArrowRight, Plus } from 'lucide-react';
 import {
   PLATFORM_COMPARISON,
   PLATFORM_BENEFITS,
   TRUST_SIGNALS,
   SECTION_HEADERS,
+  CTA_LABELS,
 } from '@/config/landing-page';
+import { cn } from '@/lib/utils';
+import { GRADIENTS } from '@/config/gradients';
 
 export default function TrustSection() {
   const { whyBitcoin } = SECTION_HEADERS;
@@ -160,6 +164,38 @@ export default function TrustSection() {
                 <span className="text-xs sm:text-sm font-medium text-gray-700">{signal}</span>
               </div>
             ))}
+          </div>
+        </motion.div>
+
+        {/* Final CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="mt-12 sm:mt-16 lg:mt-20 text-center"
+        >
+          <p className="text-base sm:text-lg text-gray-600 mb-6">
+            Ready to make something? It&apos;s free, no gatekeepers.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <Link
+              href="/auth"
+              className={cn(
+                GRADIENTS.btnBitcoin,
+                'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
+              )}
+            >
+              <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              {CTA_LABELS.startCreating}
+              <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+            </Link>
+            <Link
+              href="/discover"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-gray-700 bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-gray-400 rounded-lg transition-all duration-200"
+            >
+              {CTA_LABELS.discoverAction}
+            </Link>
           </div>
         </motion.div>
       </div>
