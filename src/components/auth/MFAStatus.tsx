@@ -55,7 +55,7 @@ export function MFAStatus({
   if (loading) {
     return (
       <div className="flex items-center justify-center p-4">
-        <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+        <Loader2 className="h-5 w-5 animate-spin text-gray-400 dark:text-muted-foreground" />
       </div>
     );
   }
@@ -66,12 +66,20 @@ export function MFAStatus({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-full ${hasMFA ? 'bg-green-100' : 'bg-gray-100'}`}>
-            <Shield className={`h-5 w-5 ${hasMFA ? 'text-green-600' : 'text-gray-500'}`} />
+          <div
+            className={`p-2 rounded-full ${hasMFA ? 'bg-green-100' : 'bg-gray-100 dark:bg-muted'}`}
+          >
+            <Shield
+              className={`h-5 w-5 ${hasMFA ? 'text-green-600' : 'text-gray-500 dark:text-muted-foreground'}`}
+            />
           </div>
           <div>
-            <p className="font-medium text-gray-900">Two-Factor Authentication</p>
-            <p className="text-sm text-gray-600">{hasMFA ? 'Enabled' : 'Not enabled'}</p>
+            <p className="font-medium text-gray-900 dark:text-foreground">
+              Two-Factor Authentication
+            </p>
+            <p className="text-sm text-gray-600 dark:text-muted-foreground">
+              {hasMFA ? 'Enabled' : 'Not enabled'}
+            </p>
           </div>
         </div>
         {hasMFA ? (
@@ -99,7 +107,9 @@ export function MFAStatus({
       )}
 
       {hasMFA && (
-        <p className="text-xs text-gray-500">Added on {formatDate(factors[0].created_at)}</p>
+        <p className="text-xs text-gray-500 dark:text-muted-foreground">
+          Added on {formatDate(factors[0].created_at)}
+        </p>
       )}
     </div>
   );

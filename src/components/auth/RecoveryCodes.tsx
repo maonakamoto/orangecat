@@ -186,14 +186,16 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+        <div className="grid grid-cols-2 gap-2 p-4 bg-gray-50 dark:bg-muted border border-gray-200 dark:border-border rounded-lg">
           {formattedCodes.map(({ number, code }) => (
             <div
               key={code}
-              className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-100 rounded"
+              className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-card border border-gray-100 dark:border-border rounded"
             >
-              <span className="text-xs text-gray-400 w-4">{number}.</span>
-              <code className="text-sm font-mono text-gray-900">{code}</code>
+              <span className="text-xs text-gray-400 dark:text-muted-foreground w-4">
+                {number}.
+              </span>
+              <code className="text-sm font-mono text-gray-900 dark:text-foreground">{code}</code>
             </div>
           ))}
         </div>
@@ -218,11 +220,11 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           </Button>
         </div>
 
-        <div className="pt-4 border-t border-gray-200">
+        <div className="pt-4 border-t border-gray-200 dark:border-border">
           <button
             onClick={handleRegenerate}
             disabled={generating}
-            className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            className="flex items-center gap-2 text-sm text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground transition-colors"
           >
             {generating ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -231,7 +233,9 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
             )}
             Generate new codes
           </button>
-          <p className="text-xs text-gray-400 mt-1">This will invalidate your current codes</p>
+          <p className="text-xs text-gray-400 dark:text-muted-foreground mt-1">
+            This will invalidate your current codes
+          </p>
         </div>
 
         <label className="flex items-start gap-3 cursor-pointer">
@@ -241,7 +245,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
             onChange={e => setAcknowledged(e.target.checked)}
             className="mt-0.5 h-4 w-4 rounded border-gray-300 text-tiffany focus:ring-tiffany"
           />
-          <span className="text-sm text-gray-700">
+          <span className="text-sm text-gray-700 dark:text-foreground">
             I have saved my recovery codes in a secure location
           </span>
         </label>

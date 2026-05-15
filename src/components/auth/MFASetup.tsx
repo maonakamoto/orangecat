@@ -46,17 +46,21 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
               </div>
             </div>
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900">Secure Your Account</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
+                Secure Your Account
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground">
                 Two-factor authentication adds an extra layer of security to your account. You'll
                 need to enter a code from your authenticator app each time you sign in.
               </p>
             </div>
             <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                <Smartphone className="h-5 w-5 text-gray-500 mt-0.5" />
+              <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-muted rounded-lg">
+                <Smartphone className="h-5 w-5 text-gray-500 dark:text-muted-foreground mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Install an authenticator app</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-foreground">
+                    Install an authenticator app
+                  </p>
                   <p className="text-xs text-gray-600">
                     We recommend Google Authenticator, Authy, or 1Password.
                   </p>
@@ -83,14 +87,16 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
         return (
           <div className="space-y-6">
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900">Scan QR Code</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
+                Scan QR Code
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground">
                 Open your authenticator app and scan this QR code to add your account.
               </p>
             </div>
             {enrollmentData?.qrCode && (
               <div className="flex justify-center">
-                <div className="p-4 bg-white border-2 border-gray-200 rounded-lg">
+                <div className="p-4 bg-white dark:bg-card border-2 border-gray-200 dark:border-border rounded-lg">
                   <Image
                     src={enrollmentData.qrCode}
                     alt="QR Code for authenticator app"
@@ -103,16 +109,16 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
               </div>
             )}
             <div className="space-y-2">
-              <p className="text-xs text-gray-500 text-center">
+              <p className="text-xs text-gray-500 dark:text-muted-foreground text-center">
                 Can't scan? Enter this code manually:
               </p>
-              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded border border-gray-200">
-                <code className="flex-1 text-xs font-mono text-gray-700 break-all">
+              <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-muted rounded border border-gray-200 dark:border-border">
+                <code className="flex-1 text-xs font-mono text-gray-700 dark:text-foreground break-all">
                   {enrollmentData?.secret}
                 </code>
                 <button
                   onClick={handleCopySecret}
-                  className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+                  className="p-1.5 text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded transition-colors"
                   title="Copy to clipboard"
                 >
                   {secretCopied ? (
@@ -133,15 +139,17 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
         return (
           <div className="space-y-6">
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900">Verify Setup</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
+                Verify Setup
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground">
                 Enter the 6-digit code from your authenticator app to verify the setup.
               </p>
             </div>
             <div className="space-y-2">
               <label
                 htmlFor="verification-code"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 dark:text-foreground"
               >
                 Verification Code
               </label>
@@ -153,7 +161,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                 value={verificationCode}
                 onChange={handleCodeChange}
                 placeholder="000000"
-                className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-tiffany focus:border-tiffany"
+                className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-gray-300 dark:border-border rounded-lg focus:ring-2 focus:ring-tiffany focus:border-tiffany dark:bg-muted dark:text-foreground"
                 maxLength={6}
               />
             </div>
@@ -194,10 +202,10 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
               </div>
             </div>
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
                 Two-Factor Authentication Enabled
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-muted-foreground">
                 Your account is now protected with two-factor authentication. You'll need to enter a
                 code from your authenticator app each time you sign in.
               </p>

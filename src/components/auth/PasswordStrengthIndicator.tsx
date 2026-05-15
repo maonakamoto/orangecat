@@ -110,10 +110,13 @@ export function PasswordStrengthIndicator({
   if (!password) {
     return (
       <div className={cn('mt-2 space-y-2', className)}>
-        <p className="text-xs text-gray-500">Password must contain:</p>
+        <p className="text-xs text-gray-500 dark:text-muted-foreground">Password must contain:</p>
         <ul className="space-y-1">
           {PASSWORD_REQUIREMENTS.map(req => (
-            <li key={req.id} className="flex items-center gap-2 text-xs text-gray-400">
+            <li
+              key={req.id}
+              className="flex items-center gap-2 text-xs text-gray-400 dark:text-muted-foreground"
+            >
               <Circle className="h-3 w-3 flex-shrink-0" />
               <span>{req.label}</span>
             </li>
@@ -127,7 +130,7 @@ export function PasswordStrengthIndicator({
     <div className={cn('mt-2 space-y-2', className)}>
       {/* Strength Bar */}
       <div className="flex items-center gap-2">
-        <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+        <div className="flex-1 h-1.5 bg-gray-200 dark:bg-muted rounded-full overflow-hidden">
           <div
             className={cn('h-full transition-all duration-300', strengthLevel.bgClass)}
             style={{ width: `${strength}%` }}
@@ -149,13 +152,13 @@ export function PasswordStrengthIndicator({
               key={req.id}
               className={cn(
                 'flex items-center gap-2 text-xs transition-colors duration-200',
-                isMet ? 'text-green-600' : 'text-gray-500'
+                isMet ? 'text-green-600' : 'text-gray-500 dark:text-muted-foreground'
               )}
             >
               {isMet ? (
                 <Check className="h-3 w-3 flex-shrink-0 text-green-600" />
               ) : (
-                <X className="h-3 w-3 flex-shrink-0 text-gray-400" />
+                <X className="h-3 w-3 flex-shrink-0 text-gray-400 dark:text-muted-foreground" />
               )}
               <span className={isMet ? 'line-through opacity-70' : ''}>{req.label}</span>
             </li>
