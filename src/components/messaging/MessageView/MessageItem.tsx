@@ -56,7 +56,7 @@ function MessageStatusIcon({ message }: { message: Message }) {
   if (status === MESSAGE_STATUS.PENDING || isOptimisticMessage(message)) {
     return (
       <div
-        className="h-3 w-3 rounded-full border border-gray-400 animate-pulse"
+        className="h-3 w-3 rounded-full border border-gray-400 dark:border-muted-foreground animate-pulse"
         aria-label="Sending"
       />
     );
@@ -69,7 +69,9 @@ function MessageStatusIcon({ message }: { message: Message }) {
 
   // Delivered messages - single check
   if (isDelivered) {
-    return <Check className="h-3 w-3 text-gray-400" aria-label="Delivered" />;
+    return (
+      <Check className="h-3 w-3 text-gray-400 dark:text-muted-foreground" aria-label="Delivered" />
+    );
   }
 
   // Default: show as delivered (message exists in DB)
@@ -92,7 +94,9 @@ export default function MessageItem({
 
   // Reset draft whenever this message enters edit mode
   useEffect(() => {
-    if (isEditing) {setEditDraft(message.content || '');}
+    if (isEditing) {
+      setEditDraft(message.content || '');
+    }
   }, [isEditing, message.content]);
 
   const handleEditKeyDown = useCallback(
@@ -100,10 +104,15 @@ export default function MessageItem({
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         const trimmed = editDraft.trim();
-        if (trimmed && trimmed !== message.content) {onEditSave?.(trimmed);}
-        else {onEditCancel?.();}
+        if (trimmed && trimmed !== message.content) {
+          onEditSave?.(trimmed);
+        } else {
+          onEditCancel?.();
+        }
       }
-      if (e.key === 'Escape') {onEditCancel?.();}
+      if (e.key === 'Escape') {
+        onEditCancel?.();
+      }
     },
     [editDraft, message.content, onEditSave, onEditCancel]
   );
@@ -132,7 +141,7 @@ export default function MessageItem({
       {/* Date Divider */}
       {showDateDivider && dateDividerText && (
         <div className="flex justify-center my-4">
-          <div className="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full">
+          <div className="bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground text-xs px-3 py-1 rounded-full">
             {dateDividerText}
           </div>
         </div>
@@ -155,7 +164,9 @@ export default function MessageItem({
           <div
             className={cn(
               'rounded-2xl px-4 py-2',
-              isCurrentUser ? 'bg-tiffany-500 text-white' : 'bg-gray-100 text-gray-900',
+              isCurrentUser
+                ? 'bg-tiffany-500 text-white'
+                : 'bg-gray-100 dark:bg-muted text-gray-900 dark:text-foreground',
               isEditing && 'p-2'
             )}
           >
@@ -165,7 +176,7 @@ export default function MessageItem({
                   value={editDraft}
                   onChange={e => setEditDraft(e.target.value)}
                   onKeyDown={handleEditKeyDown}
-                  className="w-full min-w-[200px] bg-white text-gray-900 text-sm rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+                  className="w-full min-w-[200px] bg-white dark:bg-card text-gray-900 dark:text-foreground text-sm rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-tiffany-500"
                   rows={Math.min(6, editDraft.split('\n').length + 1)}
                   autoFocus
                 />
@@ -181,8 +192,11 @@ export default function MessageItem({
                     type="button"
                     onClick={() => {
                       const trimmed = editDraft.trim();
-                      if (trimmed && trimmed !== message.content) {onEditSave?.(trimmed);}
-                      else {onEditCancel?.();}
+                      if (trimmed && trimmed !== message.content) {
+                        onEditSave?.(trimmed);
+                      } else {
+                        onEditCancel?.();
+                      }
                     }}
                     className="text-xs px-2 py-1 rounded bg-white text-tiffany-600 font-medium hover:bg-white/90"
                   >
@@ -198,7 +212,7 @@ export default function MessageItem({
           {/* Timestamp and Read Receipt */}
           <div
             className={cn(
-              'flex items-center gap-1 mt-1 text-xs text-gray-500',
+              'flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-muted-foreground',
               isCurrentUser ? 'justify-end' : 'justify-start'
             )}
           >
@@ -212,7 +226,9 @@ export default function MessageItem({
             )}
 
             {/* Edited indicator */}
-            {message.edited_at && <span className="text-gray-400 italic">edited</span>}
+            {message.edited_at && (
+              <span className="text-gray-400 dark:text-muted-foreground italic">edited</span>
+            )}
           </div>
         </div>
       </div>

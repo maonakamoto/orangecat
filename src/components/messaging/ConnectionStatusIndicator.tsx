@@ -46,9 +46,9 @@ function getStatusDisplay(status: ConnectionStatus) {
       return {
         icon: <WifiOff className="w-4 h-4" />,
         text: 'Disconnected',
-        color: 'text-gray-600',
-        bgColor: 'bg-gray-50',
-        borderColor: 'border-gray-200',
+        color: 'text-gray-600 dark:text-muted-foreground',
+        bgColor: 'bg-gray-50 dark:bg-muted',
+        borderColor: 'border-gray-200 dark:border-border',
       };
     case 'error':
       return {
@@ -62,9 +62,9 @@ function getStatusDisplay(status: ConnectionStatus) {
       return {
         icon: <WifiOff className="w-4 h-4" />,
         text: 'Unknown',
-        color: 'text-gray-600',
-        bgColor: 'bg-gray-50',
-        borderColor: 'border-gray-200',
+        color: 'text-gray-600 dark:text-muted-foreground',
+        bgColor: 'bg-gray-50 dark:bg-muted',
+        borderColor: 'border-gray-200 dark:border-border',
       };
   }
 }

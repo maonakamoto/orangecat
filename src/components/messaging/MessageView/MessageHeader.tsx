@@ -76,7 +76,7 @@ export default function MessageHeader({ conversation, currentUserId, onBack }: M
     : 'Direct message';
 
   return (
-    <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+    <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-border bg-white dark:bg-card">
       <div className="flex items-center gap-3">
         <Button
           variant="ghost"
@@ -120,12 +120,12 @@ export default function MessageHeader({ conversation, currentUserId, onBack }: M
               }
               className="hover:underline"
             >
-              <h2 className="font-semibold text-gray-900">{displayName}</h2>
+              <h2 className="font-semibold text-gray-900 dark:text-foreground">{displayName}</h2>
             </Link>
           ) : (
             <h2 className="font-semibold text-gray-900">{displayName}</h2>
           )}
-          <p className="text-sm text-gray-500">{subtitle}</p>
+          <p className="text-sm text-gray-500 dark:text-muted-foreground">{subtitle}</p>
         </div>
       </div>
     </div>

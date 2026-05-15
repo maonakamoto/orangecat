@@ -162,29 +162,29 @@ export default function NewConversationModal({
         }
       }}
     >
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-md bg-white dark:bg-card rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">New Message</h3>
+        <div className="p-4 border-b border-gray-100 dark:border-border flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">New Message</h3>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="p-2 hover:bg-gray-100 hover:text-gray-700 rounded-full transition-all duration-200 min-h-11 min-w-11 flex items-center justify-center"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-full transition-all duration-200 min-h-11 min-w-11 flex items-center justify-center"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-gray-500 dark:text-muted-foreground" />
           </button>
         </div>
 
         {/* Search */}
-        <div className="p-4 border-b border-gray-100">
+        <div className="p-4 border-b border-gray-100 dark:border-border">
           <div className="relative">
-            <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-5 h-5 text-gray-400 dark:text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               ref={inputRef}
               value={search}
               onChange={e => handleChange(e.target.value)}
               placeholder="Search by name or @username"
-              className="w-full pl-11 pr-4 py-3 bg-gray-100 border-0 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:bg-white transition-all"
+              className="w-full pl-11 pr-4 py-3 bg-gray-100 dark:bg-muted border-0 rounded-xl text-sm dark:text-foreground dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:bg-white dark:focus:bg-card transition-all"
             />
           </div>
         </div>
@@ -200,15 +200,15 @@ export default function NewConversationModal({
         <div className="max-h-[50vh] overflow-y-auto">
           {loading && !creatingId ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+              <Loader2 className="w-6 h-6 animate-spin text-gray-400 dark:text-muted-foreground" />
             </div>
           ) : profiles.length === 0 ? (
             <div className="py-12 text-center">
-              <MessageSquare className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-              <p className="text-gray-500 font-medium">
+              <MessageSquare className="w-10 h-10 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
+              <p className="text-gray-500 dark:text-muted-foreground font-medium">
                 {search ? 'No people found' : 'Search for someone to message'}
               </p>
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-sm text-gray-400 dark:text-muted-foreground mt-1">
                 {search ? 'Try a different search term' : 'Type a name or username above'}
               </p>
             </div>
@@ -243,14 +243,16 @@ export default function NewConversationModal({
                   <img
                     src={p.avatar_url || '/default-avatar.svg'}
                     alt={p.name || p.username || 'User'}
-                    className="w-11 h-11 rounded-full object-cover bg-gray-200"
+                    className="w-11 h-11 rounded-full object-cover bg-gray-200 dark:bg-muted"
                   />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 truncate">
+                    <div className="font-medium text-gray-900 dark:text-foreground truncate">
                       {p.name || p.username || 'User'}
                     </div>
                     {p.username && (
-                      <div className="text-sm text-gray-500 truncate">@{p.username}</div>
+                      <div className="text-sm text-gray-500 dark:text-muted-foreground truncate">
+                        @{p.username}
+                      </div>
                     )}
                   </div>
                   <Button

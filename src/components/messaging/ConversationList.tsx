@@ -148,10 +148,10 @@ export default function ConversationList({
         {[...Array(3)].map((_, i) => (
           <div key={i} className="animate-pulse">
             <div className="flex items-center gap-3 p-3">
-              <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+              <div className="w-10 h-10 bg-gray-300 dark:bg-muted rounded-full"></div>
               <div className="flex-1">
-                <div className="h-4 bg-gray-300 rounded mb-2"></div>
-                <div className="h-3 bg-gray-300 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-300 dark:bg-muted rounded mb-2"></div>
+                <div className="h-3 bg-gray-300 dark:bg-muted rounded w-3/4"></div>
               </div>
             </div>
           </div>
@@ -183,13 +183,15 @@ export default function ConversationList({
     <>
       <div className="divide-y divide-gray-100">
         {filteredConversations.length === 0 ? (
-          <div className="p-10 text-center text-gray-500">
+          <div className="p-10 text-center text-gray-500 dark:text-muted-foreground">
             <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-60" />
             <p className="text-sm font-medium">
               {searchQuery ? 'No conversations match your search' : 'No conversations yet'}
             </p>
             {!searchQuery && (
-              <p className="text-xs mt-1 text-gray-400">Start a new conversation to get started.</p>
+              <p className="text-xs mt-1 text-gray-400 dark:text-muted-foreground">
+                Start a new conversation to get started.
+              </p>
             )}
           </div>
         ) : (

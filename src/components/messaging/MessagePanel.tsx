@@ -117,7 +117,9 @@ export default function MessagePanel({
               </Button>
             ) : (
               <>
-                <span className="text-sm text-gray-600">{selectedConvIds.size} selected</span>
+                <span className="text-sm text-gray-600 dark:text-muted-foreground">
+                  {selectedConvIds.size} selected
+                </span>
                 <Button
                   size="sm"
                   className="bg-red-600 hover:bg-red-700 text-white"
@@ -167,7 +169,7 @@ export default function MessagePanel({
             ))}
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-muted-foreground" />
             <input
               type="text"
               placeholder="Search conversations"

@@ -39,7 +39,7 @@ export default function MessageComposer({
 
   return (
     <div
-      className="border-t border-gray-200 bg-white p-3 sm:p-4 pb-safe md:pb-4"
+      className="border-t border-gray-200 dark:border-border bg-white dark:bg-card p-3 sm:p-4 pb-safe md:pb-4"
       style={{
         paddingBottom: 'max(0.75rem, calc(0.75rem + env(safe-area-inset-bottom, 0px) + 4rem))',
       }}
@@ -63,10 +63,11 @@ export default function MessageComposer({
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
             className={cn(
-              'w-full py-2.5 sm:py-3 pl-3 sm:pl-4 pr-3 sm:pr-4 border border-gray-200 rounded-lg resize-none',
+              'w-full py-2.5 sm:py-3 pl-3 sm:pl-4 pr-3 sm:pr-4 border border-gray-200 dark:border-border rounded-lg resize-none',
+              'bg-white dark:bg-muted text-gray-900 dark:text-foreground',
               'focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent',
               'max-h-32 min-h-11 text-sm sm:text-base',
-              'placeholder:text-gray-400',
+              'placeholder:text-gray-400 dark:placeholder:text-muted-foreground',
               isSending && 'opacity-50 cursor-not-allowed'
             )}
             rows={1}
@@ -95,18 +96,18 @@ export default function MessageComposer({
       </form>
 
       {typingText && (
-        <div className="mt-2 text-xs text-gray-500 flex items-center gap-1">
+        <div className="mt-2 text-xs text-gray-500 dark:text-muted-foreground flex items-center gap-1">
           <span className="inline-flex gap-0.5">
             <span
-              className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"
+              className="w-1.5 h-1.5 bg-gray-400 dark:bg-muted-foreground rounded-full animate-bounce"
               style={{ animationDelay: '0ms' }}
             />
             <span
-              className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"
+              className="w-1.5 h-1.5 bg-gray-400 dark:bg-muted-foreground rounded-full animate-bounce"
               style={{ animationDelay: '150ms' }}
             />
             <span
-              className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"
+              className="w-1.5 h-1.5 bg-gray-400 dark:bg-muted-foreground rounded-full animate-bounce"
               style={{ animationDelay: '300ms' }}
             />
           </span>
