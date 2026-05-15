@@ -26,7 +26,7 @@ export function ChatHeader({
   const router = useRouter();
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-border">
       <div className="flex items-center gap-3">
         <div
           className={`w-10 h-10 rounded-full ${GRADIENTS.brandOrangeBr} flex items-center justify-center`}
@@ -34,8 +34,8 @@ export function ChatHeader({
           <Cat className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="font-semibold text-gray-900">My Cat</h1>
-          <p className="text-xs text-gray-500">Private • Not saved</p>
+          <h1 className="font-semibold text-gray-900 dark:text-foreground">My Cat</h1>
+          <p className="text-xs text-gray-500 dark:text-muted-foreground">Private • Not saved</p>
         </div>
       </div>
 
@@ -49,7 +49,7 @@ export function ChatHeader({
         {hasMessages && (
           <button
             onClick={onClearChat}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+            className="p-2 text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Clear chat"
             title="Clear chat"
           >
@@ -59,7 +59,7 @@ export function ChatHeader({
 
         <button
           onClick={() => router.push('/settings/ai')}
-          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+          className="p-2 text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
           aria-label="AI settings"
           title="AI Settings"
         >

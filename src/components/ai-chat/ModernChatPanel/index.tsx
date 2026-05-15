@@ -153,7 +153,7 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
   );
 
   return (
-    <div className="flex flex-col h-[calc(100vh-12rem)] sm:h-[calc(100vh-8rem)] bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-12rem)] sm:h-[calc(100vh-8rem)] bg-white dark:bg-card rounded-2xl shadow-sm border border-gray-200 dark:border-border overflow-hidden">
       {/* Header */}
       <ChatHeader
         selectedModel={selectedModel}
@@ -167,7 +167,9 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
       <div className="flex-1 overflow-y-auto py-4">
         {isLoadingHistory ? (
           <div className="flex items-center justify-center h-full">
-            <div className="text-sm text-gray-400">Loading conversation...</div>
+            <div className="text-sm text-gray-400 dark:text-muted-foreground">
+              Loading conversation...
+            </div>
           </div>
         ) : messages.length === 0 ? (
           <EmptyState

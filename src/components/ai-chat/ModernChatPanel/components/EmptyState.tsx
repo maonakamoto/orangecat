@@ -32,10 +32,10 @@ export function EmptyState({
       >
         <Cat className="h-8 w-8 text-white" />
       </div>
-      <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+      <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-2">
         {isNewUser ? 'Welcome — I’m your Cat' : 'Hi, I’m your Cat'}
       </h2>
-      <p className="text-gray-500 mb-8 max-w-md">
+      <p className="text-gray-500 dark:text-muted-foreground mb-8 max-w-md">
         {isNewUser ? (
           <>
             I help you earn, fund, lend, invest, and govern — with any currency, under any identity.
@@ -66,7 +66,7 @@ export function EmptyState({
             {[1, 2, 3, 4].map(i => (
               <div
                 key={i}
-                className="h-9 bg-gray-100 rounded-full animate-pulse"
+                className="h-9 bg-gray-100 dark:bg-muted rounded-full animate-pulse"
                 style={{ width: `${100 + Math.random() * 80}px` }}
               />
             ))}
@@ -80,7 +80,7 @@ export function EmptyState({
                 'px-4 py-2 rounded-full text-sm transition-colors text-left',
                 hasContext
                   ? 'bg-tiffany-50 hover:bg-tiffany-100 text-tiffany-700 border border-tiffany-200'
-                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  : 'bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 text-gray-700 dark:text-foreground'
               )}
             >
               {suggestion}

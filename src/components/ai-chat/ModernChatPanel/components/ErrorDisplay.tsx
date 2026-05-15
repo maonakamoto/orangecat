@@ -48,7 +48,7 @@ export function ErrorDisplay({ error, onRetry, onDismiss }: ErrorDisplayProps) {
           <button
             onClick={onDismiss}
             aria-label="Dismiss error"
-            className="text-gray-400 hover:text-gray-600 flex-shrink-0"
+            className="text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground flex-shrink-0"
           >
             <X className="h-3.5 w-3.5" />
           </button>
