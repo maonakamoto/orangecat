@@ -32,6 +32,8 @@ export const GRADIENTS = {
   iconTiffany: 'bg-gradient-to-br from-tiffany-500 to-tiffany-600',
   iconGreen: 'bg-gradient-to-br from-green-500 to-green-600',
 
+  sectionGrayOrange: 'bg-gradient-to-r from-gray-50 to-orange-50',
+
   // ── Card background section tints (diagonal) ──────────────────────────────
   sectionBlueCyan: 'bg-gradient-to-br from-blue-50 to-cyan-50',
   sectionAmberOrange: 'bg-gradient-to-br from-amber-50 to-orange-50',

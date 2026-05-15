@@ -4,6 +4,7 @@
  */
 
 import { CheckCircle } from 'lucide-react';
+import { GRADIENTS } from '@/config/gradients';
 import type { WizardStep } from '../types';
 
 interface StepNavigationProps {
@@ -13,7 +14,7 @@ interface StepNavigationProps {
 
 export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
   return (
-    <div className="px-6 py-6 bg-gradient-to-r from-gray-50 to-orange-50 border-b relative">
+    <div className={`px-6 py-6 ${GRADIENTS.sectionGrayOrange} border-b relative`}>
       <div className="flex items-center justify-between max-w-2xl mx-auto relative">
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
