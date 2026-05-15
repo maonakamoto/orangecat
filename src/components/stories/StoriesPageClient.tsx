@@ -7,6 +7,7 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { ArrowLeft, Filter } from 'lucide-react';
 import type { Story } from '@/lib/stories';
+import { ROUTES } from '@/config/routes';
 
 interface StoriesPageClientProps {
   stories: Story[];
@@ -56,7 +57,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
               <Button
                 variant="outline"
                 size="lg"
-                href="/auth"
+                href={ROUTES.AUTH}
                 className="bg-white/10 border-white/30 hover:bg-white/20"
               >
                 Start Your Project

@@ -11,6 +11,7 @@ import {
   SUPER_APP_CATEGORIES,
 } from '@/config/landing-page';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 /**
  * How It Works Page - Detailed walkthrough
@@ -223,14 +224,14 @@ export default function HowItWorksPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
-                href="/auth?mode=register"
+                href={`${ROUTES.AUTH}?mode=register`}
                 size="lg"
                 className={`${GRADIENTS.brandTiffany} hover:from-tiffany-600 hover:to-tiffany-700 text-white group`}
               >
                 {CTA_LABELS.createAccount}
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button href="/discover" variant="outline" size="lg">
+              <Button href={ROUTES.DISCOVER} variant="outline" size="lg">
                 {CTA_LABELS.secondaryAction}
               </Button>
             </div>
@@ -244,7 +245,7 @@ export default function HowItWorksPage() {
         <div className="mt-12 text-center">
           <p className="text-gray-600 mb-4">Need more help?</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Button href="/discover" variant="ghost">
+            <Button href={ROUTES.DISCOVER} variant="ghost">
               See What Others Are Doing
             </Button>
             <Button href="/about" variant="ghost">

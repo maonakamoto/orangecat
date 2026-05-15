@@ -2,6 +2,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 import { Home, Search, ArrowLeft } from 'lucide-react';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export default function NotFound() {
   return (
@@ -27,7 +28,7 @@ export default function NotFound() {
         {/* Action buttons */}
         <div className="space-y-3">
           <Link
-            href="/dashboard"
+            href={ROUTES.DASHBOARD.HOME}
             className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
           >
             <Home className="h-4 w-4" />
@@ -35,7 +36,7 @@ export default function NotFound() {
           </Link>
 
           <Link
-            href="/discover"
+            href={ROUTES.DISCOVER}
             className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
           >
             <Search className="h-4 w-4" />

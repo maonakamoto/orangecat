@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Home, RefreshCw, ArrowLeft } from 'lucide-react';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export default function Error({
   error,
@@ -65,7 +66,7 @@ export default function Error({
         <div className="space-y-3">
           {isAuthError ? (
             <Link
-              href="/auth"
+              href={ROUTES.AUTH}
               className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
             >
               Sign In

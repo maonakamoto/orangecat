@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Bitcoin, Shield, Zap, Lock, Globe, Code, Server, CheckCircle } from 'lucide-react';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'Technology',
@@ -216,7 +217,7 @@ export default function TechnologyPage() {
           </p>
           <div className="flex justify-center gap-4">
             <Link
-              href="/discover"
+              href={ROUTES.DISCOVER}
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700"
             >
               Discover Projects

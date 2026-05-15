@@ -7,6 +7,7 @@
 
 import Link from 'next/link';
 import { ChevronRight, Home } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 
 export interface BreadcrumbItem {
   label: string;
@@ -25,7 +26,7 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
       className={`flex items-center gap-1.5 text-sm text-gray-500 ${className}`}
     >
       <Link
-        href="/dashboard"
+        href={ROUTES.DASHBOARD.HOME}
         className="flex items-center gap-1 hover:text-gray-900 transition-colors"
       >
         <Home className="h-3.5 w-3.5" />

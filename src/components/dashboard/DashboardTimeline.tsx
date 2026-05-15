@@ -10,6 +10,7 @@ import { TimelineFeedResponse } from '@/types/timeline';
 import { BookOpen, MessageSquare, Compass, RefreshCw, AlertCircle } from 'lucide-react';
 import { TimelinePostSkeleton } from '@/components/ui/Skeleton';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 interface DashboardTimelineProps {
   timelineFeed: TimelineFeedResponse | null;
@@ -114,7 +115,7 @@ export function DashboardTimeline({
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Share Your First Post
                 </Button>
-                <Link href="/discover">
+                <Link href={ROUTES.DISCOVER}>
                   <Button variant="outline" size="sm" className="w-full sm:w-auto">
                     <Compass className="w-4 h-4 mr-2" />
                     Explore Community

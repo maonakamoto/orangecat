@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { AlertCircle, RefreshCw, Home } from 'lucide-react';
 import { logger } from '@/utils/logger';
+import { ROUTES } from '@/config/routes';
 
 interface RouteErrorProps {
   error: Error & { digest?: string };
@@ -44,7 +45,7 @@ export function RouteError({ error, reset, context }: RouteErrorProps) {
           Try again
         </button>
         <Link
-          href="/dashboard"
+          href={ROUTES.DASHBOARD.HOME}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 transition-colors"
         >
           <Home className="h-4 w-4" />

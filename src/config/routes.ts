@@ -289,6 +289,7 @@ export const ROUTES = {
 
   // Profile routes (authenticated - own profile)
   PROFILE: {
+    SELF: '/profile',
     VIEW: (username: string) => `/profile/${username}`,
     SETTINGS: '/profile/settings',
     EDIT: '/dashboard/info',
