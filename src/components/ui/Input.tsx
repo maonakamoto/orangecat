@@ -37,7 +37,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-gray-900">
+          <label
+            htmlFor={inputId}
+            className="block text-sm font-medium text-gray-900 dark:text-foreground"
+          >
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -45,16 +48,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative">
           {Icon && (
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Icon className="h-5 w-5 text-gray-400" data-testid={`icon-${getIconTestId(Icon)}`} />
+              <Icon
+                className="h-5 w-5 text-gray-400 dark:text-muted-foreground"
+                data-testid={`icon-${getIconTestId(Icon)}`}
+              />
             </div>
           )}
           <input
             id={inputId}
             required={required}
             className={cn(
-              'block w-full rounded-md shadow-sm text-sm text-gray-900',
-              'border-gray-300 focus:border-tiffany-500 focus:ring-tiffany-500',
-              'placeholder:text-gray-400',
+              'block w-full rounded-md shadow-sm text-sm text-gray-900 dark:text-foreground',
+              'bg-white dark:bg-muted border-gray-300 dark:border-border focus:border-tiffany-500 focus:ring-tiffany-500',
+              'placeholder:text-gray-400 dark:placeholder:text-muted-foreground',
               error && 'border-red-300 focus:border-red-500 focus:ring-red-500',
               Icon && 'pl-10',
               className
@@ -66,7 +72,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
         </div>
         {description && !error && (
-          <p id={descriptionId} className="text-sm text-gray-600">
+          <p id={descriptionId} className="text-sm text-gray-600 dark:text-muted-foreground">
             {description}
           </p>
         )}

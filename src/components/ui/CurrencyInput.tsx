@@ -72,7 +72,10 @@ export function CurrencyInput({
   return (
     <div className="space-y-2">
       {label && (
-        <label htmlFor={id} className="block text-sm font-medium text-gray-900">
+        <label
+          htmlFor={id}
+          className="block text-sm font-medium text-gray-900 dark:text-foreground"
+        >
           {label}
         </label>
       )}
@@ -97,7 +100,7 @@ export function CurrencyInput({
               value={inputCurrency}
               onChange={e => handleCurrencyChange(e.target.value as Currency)}
               disabled={disabled}
-              className="px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-sm font-medium text-gray-700 focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
+              className="px-3 py-2 border border-l-0 border-gray-300 dark:border-border rounded-r-md bg-gray-50 dark:bg-muted text-sm font-medium text-gray-700 dark:text-foreground focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
             >
               {ALL_CURRENCIES.map(curr => (
                 <option key={curr} value={curr}>
@@ -106,7 +109,7 @@ export function CurrencyInput({
               ))}
             </select>
           ) : (
-            <div className="px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-sm font-medium text-gray-700">
+            <div className="px-3 py-2 border border-l-0 border-gray-300 dark:border-border rounded-r-md bg-gray-50 dark:bg-muted text-sm font-medium text-gray-700 dark:text-foreground">
               {inputCurrency}
             </div>
           )}
@@ -114,10 +117,10 @@ export function CurrencyInput({
       </div>
 
       {error && <p className="text-red-600 text-sm">{error}</p>}
-      {hint && !error && <p className="text-xs text-gray-500">{hint}</p>}
+      {hint && !error && <p className="text-xs text-gray-500 dark:text-muted-foreground">{hint}</p>}
 
       {!error && !hint && value && value > 0 && (
-        <div className="text-xs text-gray-500 mt-1">
+        <div className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
           <span className="flex items-center gap-1">
             <Info className="w-3 h-3" />
             <span>{getGoalExplanation(inputCurrency)}</span>
@@ -127,11 +130,11 @@ export function CurrencyInput({
 
       {showBreakdown && breakdown && value && value > 0 && (
         <div
-          className={`mt-3 p-3 rounded-lg ${GRADIENTS.sectionOrangeAmber} border border-orange-100`}
+          className={`mt-3 p-3 rounded-lg ${GRADIENTS.sectionOrangeAmber} border border-orange-100 dark:border-orange-900/30`}
         >
           <div className="flex items-center gap-2 mb-2">
             <ArrowLeftRight className="w-4 h-4 text-orange-600" />
-            <span className="text-xs font-semibold text-gray-900">
+            <span className="text-xs font-semibold text-gray-900 dark:text-foreground">
               Equivalent in other currencies
             </span>
           </div>
@@ -139,7 +142,7 @@ export function CurrencyInput({
           <div className="grid grid-cols-2 gap-2 text-xs">
             {inputCurrency !== 'BTC' && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 flex items-center gap-1">
+                <span className="text-gray-600 dark:text-muted-foreground flex items-center gap-1">
                   <Bitcoin className="w-3 h-3" />
                   BTC
                 </span>
@@ -162,17 +165,17 @@ export function CurrencyInput({
               .slice(0, inputCurrency === 'BTC' || inputCurrency === 'SATS' ? 3 : 2)
               .map(([curr, amount]) => (
                 <div key={curr} className="flex justify-between items-center">
-                  <span className="text-gray-600">{curr}</span>
-                  <span className="font-mono font-medium text-gray-700">
+                  <span className="text-gray-600 dark:text-muted-foreground">{curr}</span>
+                  <span className="font-mono font-medium text-gray-700 dark:text-foreground">
                     {formatCurrency(amount, curr as Currency, { showSymbol: false })}
                   </span>
                 </div>
               ))}
           </div>
 
-          <div className="mt-2 pt-2 border-t border-orange-100 flex items-start gap-1">
+          <div className="mt-2 pt-2 border-t border-orange-100 dark:border-orange-900/30 flex items-start gap-1">
             <Info className="w-3 h-3 text-orange-500 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-gray-600 dark:text-muted-foreground">
               All transactions settle in Bitcoin. Amounts shown are estimates based on current
               exchange rates.
               {isBitcoinNativeCurrency(inputCurrency) &&

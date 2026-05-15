@@ -30,7 +30,7 @@ function DropdownItem({ onClick, isFocused, children, itemRef }: DropdownItemPro
     <button
       ref={itemRef}
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-left ${
+      className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted rounded-lg transition-colors text-left ${
         isFocused ? 'bg-tiffany-50 border border-tiffany-200 text-tiffany-900' : ''
       }`}
       role="option"
@@ -61,9 +61,11 @@ export function QuickActionsSection({
   ];
 
   return (
-    <div className="p-3 border-b border-gray-100">
+    <div className="p-3 border-b border-gray-100 dark:border-border">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-medium text-gray-700 uppercase tracking-wide">Quick Actions</h4>
+        <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide">
+          Quick Actions
+        </h4>
       </div>
       <div className="space-y-1">
         {actions.map((action, index) => {
@@ -110,13 +112,16 @@ export function SearchHistorySection({
   }
 
   return (
-    <div className="p-3 border-b border-gray-100">
+    <div className="p-3 border-b border-gray-100 dark:border-border">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-medium text-gray-700 uppercase tracking-wide flex items-center gap-1">
+        <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide flex items-center gap-1">
           <History className="w-3 h-3" />
           Recent Searches
         </h4>
-        <button onClick={onClear} className="text-xs text-gray-500 hover:text-gray-700">
+        <button
+          onClick={onClear}
+          className="text-xs text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+        >
           Clear
         </button>
       </div>
@@ -158,9 +163,9 @@ export function TrendingSearchesSection({
   itemRefs,
 }: TrendingSearchesSectionProps) {
   return (
-    <div className="p-3 border-b border-gray-100">
+    <div className="p-3 border-b border-gray-100 dark:border-border">
       <div className="flex items-center mb-2">
-        <h4 className="text-xs font-medium text-gray-700 uppercase tracking-wide flex items-center gap-1">
+        <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide flex items-center gap-1">
           <Sparkles className="w-3 h-3" />
           Trending
         </h4>
@@ -211,7 +216,9 @@ export function SuggestionsSection({
   return (
     <div className="p-3">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-medium text-gray-700 uppercase tracking-wide">Suggestions</h4>
+        <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide">
+          Suggestions
+        </h4>
         {loading && (
           <div className="w-3 h-3 border border-orange-200 border-t-orange-500 rounded-full animate-spin" />
         )}
@@ -237,11 +244,15 @@ export function SuggestionsSection({
           })}
         </div>
       ) : (
-        !loading && <div className="text-sm text-gray-500 px-3 py-2">No suggestions found</div>
+        !loading && (
+          <div className="text-sm text-gray-500 dark:text-muted-foreground px-3 py-2">
+            No suggestions found
+          </div>
+        )
       )}
 
       {/* Search for exact query */}
-      <div className="mt-2 pt-2 border-t border-gray-100">
+      <div className="mt-2 pt-2 border-t border-gray-100 dark:border-border">
         <button
           ref={el => {
             itemRefs.current[searchQueryIndex] = el;
@@ -267,10 +278,14 @@ export function SuggestionsSection({
 export function EmptyState() {
   return (
     <div className="p-6 text-center">
-      <Search className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-      <p className="text-sm text-gray-500">Start typing to search</p>
-      <p className="text-xs text-gray-400 mt-1">Find projects, people, and organizations</p>
-      <p className="text-xs text-gray-400 mt-2">Use ↑↓ arrows to navigate, Enter to select</p>
+      <Search className="w-8 h-8 text-gray-300 dark:text-muted-foreground/40 mx-auto mb-2" />
+      <p className="text-sm text-gray-500 dark:text-muted-foreground">Start typing to search</p>
+      <p className="text-xs text-gray-400 dark:text-muted-foreground/70 mt-1">
+        Find projects, people, and organizations
+      </p>
+      <p className="text-xs text-gray-400 dark:text-muted-foreground/70 mt-2">
+        Use ↑↓ arrows to navigate, Enter to select
+      </p>
     </div>
   );
 }
