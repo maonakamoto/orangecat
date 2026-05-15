@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SUPER_APP_CATEGORIES, SECTION_HEADERS, CTA_LABELS } from '@/config/landing-page';
+import { ROUTES } from '@/config/routes';
 import { GRADIENTS } from '@/config/gradients';
 
 /**
@@ -131,7 +132,7 @@ export default function WhatCanYouDoSection() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
-              href="/auth"
+              href={ROUTES.AUTH}
               className={cn(
                 GRADIENTS.btnBitcoin,
                 'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
@@ -141,7 +142,7 @@ export default function WhatCanYouDoSection() {
               <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
             </Link>
             <Link
-              href="/discover"
+              href={ROUTES.DISCOVER}
               className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-gray-700 bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-gray-400 rounded-lg transition-all duration-200"
             >
               {CTA_LABELS.discoverAction}

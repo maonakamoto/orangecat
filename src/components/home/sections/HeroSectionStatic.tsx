@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, Globe, Zap, Cat, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 /**
  * Static Hero Section - Renders immediately without animations
@@ -54,14 +55,14 @@ export default function HeroSectionStatic() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
-              <Link href="/auth" className="w-full sm:w-auto">
+              <Link href={ROUTES.AUTH} className="w-full sm:w-auto">
                 <Button variant="gradient" size="lg" className="w-full sm:w-auto">
                   <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Start Creating
                   <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </Link>
-              <Link href="/discover" className="w-full sm:w-auto">
+              <Link href={ROUTES.DISCOVER} className="w-full sm:w-auto">
                 <Button variant="outline" size="lg" className="w-full sm:w-auto">
                   <Globe className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Discover
@@ -135,7 +136,7 @@ export default function HeroSectionStatic() {
 
                 {/* CTA Button in Demo */}
                 <Link
-                  href="/discover"
+                  href={ROUTES.DISCOVER}
                   className={`block w-full px-3 sm:px-4 py-2.5 sm:py-3 ${GRADIENTS.brandTiffany} text-white text-sm sm:text-base font-semibold rounded-lg hover:from-tiffany-600 hover:to-tiffany-700 transition-all duration-200 flex items-center justify-center gap-2`}
                 >
                   <Cat className="w-4 h-4 sm:w-5 sm:h-5" />

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Lightbulb } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { EXAMPLE_USE_CASES, SECTION_HEADERS, CTA_LABELS } from '@/config/landing-page';
+import { ROUTES } from '@/config/routes';
 
 /**
  * ProofSection - Example Use Cases
@@ -82,13 +83,13 @@ export default function ProofSection() {
             These are just examples. What will you create?
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link href="/discover">
+            <Link href={ROUTES.DISCOVER}>
               <Button size="lg" className="w-full sm:w-auto">
                 {CTA_LABELS.browseAll} Projects
                 <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </Link>
-            <Link href="/auth">
+            <Link href={ROUTES.AUTH}>
               <Button variant="outline" size="lg" className="w-full sm:w-auto">
                 {CTA_LABELS.primaryAction}
               </Button>

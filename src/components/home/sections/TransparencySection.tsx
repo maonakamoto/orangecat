@@ -1,10 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { Shield, Eye, TrendingUp, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SECTION_HEADERS } from '@/config/landing-page';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export default function TransparencySection() {
   const { transparency } = SECTION_HEADERS;
@@ -198,15 +200,15 @@ export default function TransparencySection() {
           <p className="text-sm sm:text-base lg:text-lg text-gray-600 mb-4 sm:mb-6">
             Transparency builds trust. Trust attracts support. Start building yours today.
           </p>
-          <a
-            href="/auth"
+          <Link
+            href={ROUTES.AUTH}
             className={cn(
               GRADIENTS.btnBitcoin,
               'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
             )}
           >
             Create Your Profile
-          </a>
+          </Link>
         </div>
       </div>
     </section>

@@ -1,9 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { HOW_IT_WORKS_STEPS, SECTION_HEADERS, CTA_LABELS } from '@/config/landing-page';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 export default function HowItWorksSection() {
   const { howItWorks } = SECTION_HEADERS;
@@ -96,15 +98,15 @@ export default function HowItWorksSection() {
           className="text-center mt-10 sm:mt-12"
         >
           <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Ready to get started?</p>
-          <a
-            href="/auth"
+          <Link
+            href={ROUTES.AUTH}
             className={cn(
               GRADIENTS.btnBitcoin,
               'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
             )}
           >
             {CTA_LABELS.createAccount}
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

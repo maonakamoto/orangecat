@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Plus, ArrowRight } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 
 interface DiscoverHeroProps {
   totalProjects: number;
@@ -84,7 +85,7 @@ export default function DiscoverHero({
             transition={{ duration: 0.8, delay: 1.1 }}
           >
             <Link
-              href="/auth"
+              href={ROUTES.AUTH}
               className="inline-flex items-center gap-2 px-6 py-3 bg-tiffany-600 hover:bg-tiffany-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
             >
               <Plus className="w-4 h-4" />
