@@ -146,9 +146,11 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
           'md:hidden fixed bottom-0 left-0 right-0 border-t',
           'transition-all duration-300 ease-in-out',
           shouldBeTransparent
-            ? 'bg-white/20 backdrop-blur-sm border-transparent'
-            : 'bg-white/95 backdrop-blur-md',
-          isAuthenticated ? 'border-orange-200/50 shadow-lg' : 'border-gray-200/50'
+            ? 'bg-white/20 dark:bg-gray-950/20 backdrop-blur-sm border-transparent'
+            : 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-md',
+          isAuthenticated
+            ? 'border-orange-200/50 shadow-lg'
+            : 'border-gray-200/50 dark:border-gray-800/50'
         )}
         style={{
           zIndex: Z_INDEX.MOBILE_BOTTOM_NAV,
@@ -196,9 +198,9 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                   'transition-all duration-200',
                   'touch-manipulation select-none',
                   '-webkit-tap-highlight-color-transparent',
-                  'active:scale-95 active:bg-gray-100',
+                  'active:scale-95 active:bg-gray-100 dark:active:bg-muted',
                   isActive && (isAuthenticated ? 'text-orange-600' : 'text-tiffany-600'),
-                  !isActive && 'text-gray-500',
+                  !isActive && 'text-gray-500 dark:text-muted-foreground',
                   item.primary && 'relative',
                   shouldBeSmall ? 'min-h-12 gap-0.5' : 'min-h-14 gap-1'
                 )}

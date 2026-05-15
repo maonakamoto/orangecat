@@ -75,7 +75,12 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
   // Collapsed mode: just show the avatar, no dropdown
   if (!isExpanded) {
     return (
-      <div className={cn('px-2 py-3 border-b border-gray-100 flex justify-center', className)}>
+      <div
+        className={cn(
+          'px-2 py-3 border-b border-gray-100 dark:border-border flex justify-center',
+          className
+        )}
+      >
         <div className="relative">
           {avatarUrl ? (
             <Image
@@ -92,7 +97,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           {/* Context indicator dot */}
           <div
             className={cn(
-              'absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 border-2 border-white rounded-full',
+              'absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 border-2 border-white dark:border-card rounded-full',
               isGroupContext ? 'bg-tiffany-500' : 'bg-green-500'
             )}
           />
@@ -102,11 +107,14 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
   }
 
   return (
-    <div ref={dropdownRef} className={cn('relative px-2 py-3 border-b border-gray-100', className)}>
+    <div
+      ref={dropdownRef}
+      className={cn('relative px-2 py-3 border-b border-gray-100 dark:border-border', className)}
+    >
       {/* Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-muted transition-colors"
       >
         <div className="relative flex-shrink-0">
           {avatarUrl ? (
@@ -127,44 +135,49 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           )}
           <div
             className={cn(
-              'absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 border-2 border-white rounded-full',
+              'absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 border-2 border-white dark:border-card rounded-full',
               isGroupContext ? 'bg-tiffany-500' : 'bg-green-500'
             )}
           />
         </div>
         <div className="flex-1 min-w-0 text-left">
           <div className="flex items-center gap-1.5">
-            <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-foreground truncate">
+              {displayName}
+            </p>
             <NWCStatusBadge />
           </div>
-          <p className="text-xs text-gray-500 truncate">
+          <p className="text-xs text-gray-500 dark:text-muted-foreground truncate">
             {isGroupContext ? 'Group' : `@${profile.username || 'user'}`}
           </p>
         </div>
         <ChevronDown
-          className={cn('w-4 h-4 text-gray-400 transition-transform', isOpen && 'rotate-180')}
+          className={cn(
+            'w-4 h-4 text-gray-400 dark:text-muted-foreground transition-transform',
+            isOpen && 'rotate-180'
+          )}
         />
       </button>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute left-2 right-2 top-full mt-1 bg-white rounded-lg border border-gray-200 shadow-lg z-50 py-1 max-h-80 overflow-y-auto">
+        <div className="absolute left-2 right-2 top-full mt-1 bg-white dark:bg-card rounded-lg border border-gray-200 dark:border-border shadow-lg z-50 py-1 max-h-80 overflow-y-auto">
           {/* Individual context option */}
           <button
             onClick={handleSwitchToIndividual}
             className={cn(
-              'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 transition-colors',
-              !isGroupContext && 'bg-tiffany-50'
+              'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-muted transition-colors',
+              !isGroupContext && 'bg-tiffany-50 dark:bg-accent'
             )}
           >
             <div className="w-8 h-8 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
               <User className="w-4 h-4 text-tiffany-600" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-gray-900 truncate">
+              <p className="text-sm font-medium text-gray-900 dark:text-foreground truncate">
                 {profile.name || profile.username || 'You'}
               </p>
-              <p className="text-xs text-gray-500">Personal</p>
+              <p className="text-xs text-gray-500 dark:text-muted-foreground">Personal</p>
             </div>
             {!isGroupContext && <div className="w-2 h-2 bg-tiffany rounded-full flex-shrink-0" />}
           </button>
@@ -172,23 +185,27 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           {/* Groups section */}
           {(userGroups.length > 0 || loadingGroups) && (
             <>
-              <div className="border-t border-gray-100 my-1" />
+              <div className="border-t border-gray-100 dark:border-border my-1" />
               <div className="px-3 py-1.5">
-                <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Groups</p>
+                <p className="text-xs font-medium text-gray-400 dark:text-muted-foreground uppercase tracking-wider">
+                  Groups
+                </p>
               </div>
             </>
           )}
 
           {loadingGroups ? (
-            <div className="px-3 py-2 text-xs text-gray-400">Loading groups...</div>
+            <div className="px-3 py-2 text-xs text-gray-400 dark:text-muted-foreground">
+              Loading groups...
+            </div>
           ) : (
             userGroups.map(group => (
               <button
                 key={group.id}
                 onClick={() => handleSwitchToGroup(group)}
                 className={cn(
-                  'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 transition-colors',
-                  isGroupContext && context.group?.id === group.id && 'bg-tiffany-50'
+                  'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-muted transition-colors',
+                  isGroupContext && context.group?.id === group.id && 'bg-tiffany-50 dark:bg-accent'
                 )}
               >
                 <div className="flex-shrink-0">
@@ -208,8 +225,12 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-gray-900 truncate">{group.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{group.slug}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-foreground truncate">
+                    {group.name}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-muted-foreground truncate">
+                    {group.slug}
+                  </p>
                 </div>
                 {isGroupContext && context.group?.id === group.id && (
                   <div className="w-2 h-2 bg-tiffany-500 rounded-full flex-shrink-0" />
@@ -219,18 +240,18 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           )}
 
           {/* Create group option */}
-          <div className="border-t border-gray-100 my-1" />
+          <div className="border-t border-gray-100 dark:border-border my-1" />
           <button
             onClick={() => {
               setIsOpen(false);
               router.push(`${ROUTES.DASHBOARD.GROUPS}/create`);
             }}
-            className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-muted transition-colors"
           >
-            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-              <Plus className="w-4 h-4 text-gray-500" />
+            <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-muted flex items-center justify-center flex-shrink-0">
+              <Plus className="w-4 h-4 text-gray-500 dark:text-muted-foreground" />
             </div>
-            <p className="text-sm text-gray-600">Create a group</p>
+            <p className="text-sm text-gray-600 dark:text-muted-foreground">Create a group</p>
           </button>
         </div>
       )}

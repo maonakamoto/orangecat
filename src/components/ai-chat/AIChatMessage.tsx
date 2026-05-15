@@ -38,7 +38,12 @@ export function AIChatMessage({
   }
 
   return (
-    <div className={cn('flex gap-3 py-4 px-4', isUser ? 'bg-gray-50' : 'bg-white')}>
+    <div
+      className={cn(
+        'flex gap-3 py-4 px-4',
+        isUser ? 'bg-gray-50 dark:bg-muted' : 'bg-white dark:bg-card'
+      )}
+    >
       <Avatar className="h-8 w-8 flex-shrink-0">
         {isUser ? (
           <>
@@ -59,19 +64,25 @@ export function AIChatMessage({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className="font-medium text-sm text-gray-900">
+          <span className="font-medium text-sm text-gray-900 dark:text-foreground">
             {isUser ? userName : assistantName}
           </span>
-          <span className="text-xs text-gray-400">{formatShortTime(message.created_at)}</span>
+          <span className="text-xs text-gray-400 dark:text-muted-foreground">
+            {formatShortTime(message.created_at)}
+          </span>
           {!isUser && message.tokens_used && message.tokens_used > 0 && (
-            <span className="text-xs text-gray-400">({message.tokens_used} tokens)</span>
+            <span className="text-xs text-gray-400 dark:text-muted-foreground">
+              ({message.tokens_used} tokens)
+            </span>
           )}
         </div>
-        <div className="prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap">
+        <div className="prose prose-sm max-w-none text-gray-700 dark:text-foreground whitespace-pre-wrap">
           {message.content}
         </div>
         {!isUser && message.cost_btc && message.cost_btc > 0 && (
-          <div className="mt-2 text-xs text-gray-400">Cost: {message.cost_btc.toFixed(8)} BTC</div>
+          <div className="mt-2 text-xs text-gray-400 dark:text-muted-foreground">
+            Cost: {message.cost_btc.toFixed(8)} BTC
+          </div>
         )}
       </div>
     </div>

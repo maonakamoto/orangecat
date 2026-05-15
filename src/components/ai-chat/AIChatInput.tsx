@@ -67,7 +67,7 @@ export function AIChatInput({
   }, []);
 
   return (
-    <div className="border-t border-gray-200 bg-white p-4">
+    <div className="border-t border-gray-200 dark:border-border bg-white dark:bg-card p-4">
       <div className="flex items-end gap-3">
         <div className="flex-1 relative">
           <textarea
@@ -78,10 +78,11 @@ export function AIChatInput({
             placeholder={placeholder}
             disabled={disabled || isSending}
             className={cn(
-              'w-full px-4 py-3 pr-12 border border-gray-200 rounded-lg resize-none',
+              'w-full px-4 py-3 pr-12 border border-gray-200 dark:border-border rounded-lg resize-none',
+              'bg-white dark:bg-background text-gray-900 dark:text-foreground',
               'focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent',
               'max-h-48 min-h-12 text-sm',
-              'placeholder:text-gray-400',
+              'placeholder:text-gray-400 dark:placeholder:text-muted-foreground',
               (disabled || isSending) && 'opacity-50 cursor-not-allowed'
             )}
             rows={1}
@@ -104,7 +105,9 @@ export function AIChatInput({
         </Button>
       </div>
 
-      <p className="text-xs text-gray-400 mt-2">Press Enter to send, Shift+Enter for new line</p>
+      <p className="text-xs text-gray-400 dark:text-muted-foreground mt-2">
+        Press Enter to send, Shift+Enter for new line
+      </p>
     </div>
   );
 }
