@@ -22,7 +22,7 @@ export default function ProofSection() {
         <div className="text-center mb-8 sm:mb-10 lg:mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 text-orange-700 mb-4">
             <Lightbulb className="w-4 h-4" />
-            <span className="text-sm font-medium">Possibilities</span>
+            <span className="text-sm font-medium">Makers</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4">
             {exampleUseCases.title}
