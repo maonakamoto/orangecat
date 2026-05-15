@@ -98,20 +98,24 @@ export default function AnalyticsPage() {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Project Analytics</h1>
-            <p className="text-gray-600 mt-1">Track your fundraising performance and insights</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground">
+              Project Analytics
+            </h1>
+            <p className="text-gray-600 dark:text-muted-foreground mt-1">
+              Track your fundraising performance and insights
+            </p>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex bg-gray-100 rounded-lg p-1">
+            <div className="flex bg-gray-100 dark:bg-muted rounded-lg p-1">
               {(['7d', '30d', '90d', 'all'] as const).map(range => (
                 <button
                   key={range}
                   onClick={() => setTimeRange(range)}
                   className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
                     timeRange === range
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'bg-white dark:bg-card text-gray-900 dark:text-foreground shadow-sm'
+                      : 'text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
                   }`}
                 >
                   {range === 'all' ? 'All Time' : range.toUpperCase()}
@@ -122,7 +126,7 @@ export default function AnalyticsPage() {
             <select
               value={selectedProject}
               onChange={e => setSelectedProject(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              className="border border-gray-300 dark:border-border dark:bg-muted dark:text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
             >
               <option value="all">All Projects</option>
               {projects.map(project => (

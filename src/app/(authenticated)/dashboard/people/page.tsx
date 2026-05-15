@@ -81,9 +81,9 @@ export default function PeoplePage() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Users className="w-8 h-8 text-orange-600" />
-            <h1 className="text-3xl font-bold text-gray-900">People</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-foreground">People</h1>
           </div>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-muted-foreground">
             Connect with Bitcoin enthusiasts and easily access their profiles to send Bitcoin
           </p>
         </div>

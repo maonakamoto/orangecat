@@ -21,13 +21,15 @@ export default function AnalyticsInsights({ hasProjects }: AnalyticsInsightsProp
             <CardDescription>Track your fundraising progress</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-center justify-center text-gray-500">
+            <div className="h-64 flex items-center justify-center text-gray-500 dark:text-muted-foreground">
               <div className="text-center">
-                <BarChart3 className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <BarChart3 className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
                 {process.env.NEXT_PUBLIC_FEATURE_ANALYTICS === 'true' ? (
                   <p>Interactive charts will render here</p>
                 ) : (
-                  <p className="text-gray-600">Analytics are disabled in this environment.</p>
+                  <p className="text-gray-600 dark:text-muted-foreground">
+                    Analytics are disabled in this environment.
+                  </p>
                 )}
                 <p className="text-sm">Real-time funding visualization</p>
               </div>
@@ -44,13 +46,15 @@ export default function AnalyticsInsights({ hasProjects }: AnalyticsInsightsProp
             <CardDescription>Understand your audience</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-center justify-center text-gray-500">
+            <div className="h-64 flex items-center justify-center text-gray-500 dark:text-muted-foreground">
               <div className="text-center">
-                <PieChart className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <PieChart className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
                 {process.env.NEXT_PUBLIC_FEATURE_ANALYTICS === 'true' ? (
                   <p>Demographic analysis will render here</p>
                 ) : (
-                  <p className="text-gray-600">This module is currently disabled.</p>
+                  <p className="text-gray-600 dark:text-muted-foreground">
+                    This module is currently disabled.
+                  </p>
                 )}
                 <p className="text-sm">Supporter behavior insights</p>
               </div>
@@ -112,8 +116,8 @@ export default function AnalyticsInsights({ hasProjects }: AnalyticsInsightsProp
                 </div>
               </>
             ) : (
-              <div className="text-center py-8 text-gray-500">
-                <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+              <div className="text-center py-8 text-gray-500 dark:text-muted-foreground">
+                <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
                 <p>Create your first project to see personalized insights</p>
                 <Button href={ROUTES.PROJECTS.CREATE} className="mt-4">
                   Create Project

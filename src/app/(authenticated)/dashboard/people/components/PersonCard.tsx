@@ -51,15 +51,19 @@ export default function PersonCard({
           {/* Info */}
           <div className="flex-1 min-w-0">
             <Link href={`/profiles/${profile.username || profile.id}`}>
-              <h3 className="font-semibold text-gray-900 hover:text-orange-600 transition-colors truncate">
+              <h3 className="font-semibold text-gray-900 dark:text-foreground hover:text-orange-600 transition-colors truncate">
                 {displayName}
               </h3>
             </Link>
             {profile.username && (
-              <p className="text-sm text-gray-500 truncate">@{profile.username}</p>
+              <p className="text-sm text-gray-500 dark:text-muted-foreground truncate">
+                @{profile.username}
+              </p>
             )}
             {profile.bio && (
-              <p className="text-sm text-gray-600 mt-1 line-clamp-2">{profile.bio}</p>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1 line-clamp-2">
+                {profile.bio}
+              </p>
             )}
 
             {/* Actions */}
