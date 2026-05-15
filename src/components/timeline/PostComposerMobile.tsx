@@ -133,7 +133,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
           {fullScreen && showProjectSelection && (
             <button
               onClick={() => setIsOptionsSheetOpen(true)}
-              className="mb-3 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 flex items-center gap-1 transition-colors min-h-8"
+              className="mb-3 px-3 py-1.5 bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 rounded-full text-sm font-medium text-gray-700 dark:text-muted-foreground flex items-center gap-1 transition-colors min-h-8"
             >
               {composer.selectedProjects.length > 0
                 ? `${composer.selectedProjects.length} project${composer.selectedProjects.length > 1 ? 's' : ''}`
@@ -145,7 +145,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
           {!compact && !fullScreen && (
             <div className="flex items-center gap-3 mb-4">
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-gray-900">
+                <div className="text-sm font-medium text-gray-900 dark:text-foreground">
                   {user?.user_metadata?.name ||
                     (typeof user?.email === 'string' && user.email.includes('@')
                       ? user.email.split('@')[0]
@@ -223,9 +223,9 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
       />
 
       {fullScreen && (
-        <div className="flex items-center gap-4 px-4 pt-4 border-t border-gray-200 mt-4">
+        <div className="flex items-center gap-4 px-4 pt-4 border-t border-gray-200 dark:border-border mt-4">
           <button
-            className="p-2 min-h-11 min-w-11 flex items-center justify-center text-gray-400 cursor-not-allowed rounded-full transition-colors"
+            className="p-2 min-h-11 min-w-11 flex items-center justify-center text-gray-400 dark:text-muted-foreground cursor-not-allowed rounded-full transition-colors"
             aria-label="Add image (coming soon)"
             title="Image upload (coming soon)"
             disabled

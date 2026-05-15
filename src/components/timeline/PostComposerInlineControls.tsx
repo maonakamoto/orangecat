@@ -32,12 +32,12 @@ export function PostComposerInlineControls({
 }: PostComposerInlineControlsProps) {
   return (
     <>
-      <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
+      <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-border">
         <div className="flex items-center gap-2">
           {!compact && showOptionsButton && (
             <button
               onClick={onShowOptions}
-              className="text-gray-700 hover:text-gray-700 p-3 min-h-11 min-w-11 flex items-center justify-center"
+              className="text-gray-700 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-muted-foreground p-3 min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Show post options"
             >
               <ChevronDown className="w-5 h-5" />
@@ -57,7 +57,7 @@ export function PostComposerInlineControls({
               size="sm"
               onClick={onCancel}
               disabled={isPosting}
-              className="text-gray-600"
+              className="text-gray-600 dark:text-muted-foreground"
             >
               Cancel
             </Button>
@@ -89,10 +89,12 @@ export function PostComposerInlineControls({
       </div>
 
       {loadingProjects && (
-        <div className="mt-2 text-xs text-gray-700">Loading your projects...</div>
+        <div className="mt-2 text-xs text-gray-700 dark:text-muted-foreground">
+          Loading your projects...
+        </div>
       )}
 
-      <div className="hidden sm:block mt-2 text-xs text-gray-400 text-center">
+      <div className="hidden sm:block mt-2 text-xs text-gray-400 dark:text-muted-foreground text-center">
         Press Ctrl+Enter to post
       </div>
     </>

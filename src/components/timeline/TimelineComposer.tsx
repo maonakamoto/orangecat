@@ -138,7 +138,7 @@ const TimelineComposer = React.memo(function TimelineComposer({
   );
 
   return (
-    <div className="max-w-2xl mx-auto border-b border-gray-200 bg-white px-4 sm:px-5 py-4 transition-all">
+    <div className="max-w-2xl mx-auto border-b border-gray-200 dark:border-border bg-white dark:bg-card px-4 sm:px-5 py-4 transition-all">
       <div className="flex gap-3">
         <div className="pt-0.5 sm:pt-1 flex-shrink-0">
           <AvatarLink
@@ -191,7 +191,7 @@ const TimelineComposer = React.memo(function TimelineComposer({
 
           <ComposerMessages error={postComposer.error} success={postComposer.postSuccess} />
 
-          <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+          <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-border">
             <div className="flex items-center gap-2 text-tiffany-500 flex-wrap">
               {!simpleMode && <TextFormatToolbar onFormat={handleFormat} />}
 
@@ -218,7 +218,7 @@ const TimelineComposer = React.memo(function TimelineComposer({
                           'px-3 py-1 rounded-full text-xs font-semibold border transition-colors',
                           isActive
                             ? 'bg-tiffany-500 text-white border-tiffany-500 shadow-sm'
-                            : 'bg-white text-gray-700 border-gray-200 hover:border-tiffany-300'
+                            : 'bg-white dark:bg-muted text-gray-700 dark:text-muted-foreground border-gray-200 dark:border-border hover:border-tiffany-300'
                         )}
                         title={preset.description}
                       >

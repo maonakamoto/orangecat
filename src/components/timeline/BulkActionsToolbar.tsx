@@ -62,7 +62,7 @@ export function BulkActionsToolbar({
             className={cn(
               'flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-colors',
               'hover:bg-gray-100 dark:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
-              allSelected ? 'text-tiffany-600' : 'text-gray-600'
+              allSelected ? 'text-tiffany-600' : 'text-gray-600 dark:text-muted-foreground'
             )}
             aria-label={allSelected ? 'Deselect all' : 'Select all'}
           >
@@ -120,7 +120,7 @@ export function BulkActionsToolbar({
                     className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-muted flex items-center gap-2"
                     disabled={isProcessing}
                   >
-                    <Lock className="w-4 h-4 text-gray-600" />
+                    <Lock className="w-4 h-4 text-gray-600 dark:text-muted-foreground" />
                     <span>Make Private</span>
                   </button>
                 </div>

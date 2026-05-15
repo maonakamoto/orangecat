@@ -54,7 +54,7 @@ export function DuplicateWalletDialog({
             className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-muted transition-colors"
             disabled={isLoading}
           >
-            <X className="w-4 h-4 text-gray-400" />
+            <X className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
           </button>
         </div>
 
@@ -124,7 +124,7 @@ export function DuplicateWalletDialog({
                 type="checkbox"
                 checked={dontShowAgain}
                 onChange={e => setDontShowAgain(e.target.checked)}
-                className="rounded border-gray-300 text-tiffany-600 focus:ring-tiffany-500"
+                className="rounded border-gray-300 dark:border-border text-tiffany-600 focus:ring-tiffany-500"
               />
               <span>Don't show this warning again</span>
             </label>

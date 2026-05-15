@@ -43,7 +43,7 @@ export function PostContent({ event }: PostContentProps) {
     <div className="space-y-2">
       {/* Thread affordance: one-level parent preview + view conversation link */}
       {event.parentEventId && !isRepost && (
-        <div className="-mt-1 mb-1 text-xs text-gray-500">
+        <div className="-mt-1 mb-1 text-xs text-gray-500 dark:text-muted-foreground">
           Replying in a thread ·{' '}
           <button
             className="text-tiffany-600 hover:underline"
@@ -67,7 +67,7 @@ export function PostContent({ event }: PostContentProps) {
 
       {/* Event Description/Content */}
       {displayContent && (!isRepost || isQuoteRepost) && (
-        <div className="text-gray-900 text-[15px] leading-relaxed whitespace-pre-line break-words">
+        <div className="text-gray-900 dark:text-foreground text-[15px] leading-relaxed whitespace-pre-line break-words">
           {renderMarkdownToReact(displayContent)}
         </div>
       )}
@@ -83,7 +83,7 @@ export function PostContent({ event }: PostContentProps) {
               {event.subject.name}
             </Link>
           )}
-          {event.target && <span className="text-gray-400">→</span>}
+          {event.target && <span className="text-gray-400 dark:text-muted-foreground">→</span>}
           {event.target && event.target.url && (
             <Link
               href={event.target.url}
@@ -97,7 +97,7 @@ export function PostContent({ event }: PostContentProps) {
 
       {/* Quoted Original Post (for quote reposts) */}
       {isQuoteRepost && originalEventId && (
-        <div className="mt-3 overflow-hidden rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+        <div className="mt-3 overflow-hidden rounded-2xl border border-gray-200 dark:border-border bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted transition-colors">
           <div className="p-3 sm:p-4 space-y-2">
             <div className="flex items-start gap-3">
               <Link href={`/profiles/${originalAuthor.username}`} className="flex-shrink-0">
@@ -112,22 +112,24 @@ export function PostContent({ event }: PostContentProps) {
                 <div className="flex items-center gap-1 flex-wrap">
                   <Link
                     href={`/profiles/${originalAuthor.username}`}
-                    className="font-semibold text-gray-900 hover:underline"
+                    className="font-semibold text-gray-900 dark:text-foreground hover:underline"
                   >
                     {originalAuthor.name}
                   </Link>
                   {originalAuthor.username && (
-                    <span className="text-gray-500 text-sm">@{originalAuthor.username}</span>
+                    <span className="text-gray-500 dark:text-muted-foreground text-sm">
+                      @{originalAuthor.username}
+                    </span>
                   )}
                 </div>
               </div>
             </div>
             {originalDescription ? (
-              <div className="text-gray-900 text-sm leading-relaxed whitespace-pre-line break-words">
+              <div className="text-gray-900 dark:text-foreground text-sm leading-relaxed whitespace-pre-line break-words">
                 {renderMarkdownToReact(originalDescription)}
               </div>
             ) : (
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-gray-500 dark:text-muted-foreground">
                 Original post
                 <Link
                   href={`?focus=${originalEventId}`}
@@ -143,7 +145,7 @@ export function PostContent({ event }: PostContentProps) {
 
       {/* Simple Repost: show original post inside a quoted card for consistency */}
       {isRepost && !isQuoteRepost && event.metadata?.original_event_id && (
-        <div className="mt-2 overflow-hidden rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+        <div className="mt-2 overflow-hidden rounded-2xl border border-gray-200 dark:border-border bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted transition-colors">
           <div className="p-3 sm:p-4 space-y-2">
             <div className="flex items-start gap-3">
               <Link href={`/profiles/${originalAuthor.username}`} className="flex-shrink-0">
@@ -158,18 +160,20 @@ export function PostContent({ event }: PostContentProps) {
                 <div className="flex items-center gap-1 flex-wrap">
                   <Link
                     href={`/profiles/${originalAuthor.username}`}
-                    className="font-semibold text-gray-900 hover:underline"
+                    className="font-semibold text-gray-900 dark:text-foreground hover:underline"
                   >
                     {originalAuthor.name}
                   </Link>
                   {originalAuthor.username && (
-                    <span className="text-gray-500 text-sm">@{originalAuthor.username}</span>
+                    <span className="text-gray-500 dark:text-muted-foreground text-sm">
+                      @{originalAuthor.username}
+                    </span>
                   )}
                 </div>
               </div>
             </div>
             {originalDescription && (
-              <div className="text-gray-900 text-sm leading-relaxed whitespace-pre-line break-words">
+              <div className="text-gray-900 dark:text-foreground text-sm leading-relaxed whitespace-pre-line break-words">
                 {renderMarkdownToReact(originalDescription)}
               </div>
             )}
@@ -184,8 +188,8 @@ export function PostContent({ event }: PostContentProps) {
         return attachments.length > 0 ? (
           <div className="mt-3 space-y-2">
             {attachments.map((attachment: { type: string; filename: string }, index: number) => (
-              <div key={index} className="bg-gray-100 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">
+              <div key={index} className="bg-gray-100 dark:bg-muted p-4 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-muted-foreground">
                   Media attachment: {attachment.type} - {attachment.filename}
                 </p>
               </div>
