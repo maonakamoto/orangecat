@@ -16,7 +16,7 @@ export default function DiscoverHero({
 }: DiscoverHeroProps) {
   return (
     <motion.div
-      className="relative overflow-hidden bg-gradient-to-br from-bitcoinOrange/5 via-tiffany-50/80 to-orange-50/60 border-b border-gray-100/50"
+      className="relative overflow-hidden bg-gradient-to-br from-bitcoinOrange/5 via-tiffany-50/80 to-orange-50/60 dark:from-muted/50 dark:via-muted/30 dark:to-muted/20 border-b border-gray-100/50 dark:border-border"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
@@ -29,7 +29,7 @@ export default function DiscoverHero({
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <motion.h1
-            className="text-fluid-3xl font-extrabold tracking-tight text-gray-900 mb-4"
+            className="text-fluid-3xl font-extrabold tracking-tight text-gray-900 dark:text-foreground mb-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
@@ -41,7 +41,7 @@ export default function DiscoverHero({
           </motion.h1>
 
           <motion.p
-            className="mt-4 max-w-2xl mx-auto text-fluid-lg text-gray-600"
+            className="mt-4 max-w-2xl mx-auto text-fluid-lg text-gray-600 dark:text-muted-foreground"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
@@ -59,21 +59,25 @@ export default function DiscoverHero({
           >
             <Link
               href={`${ROUTES.DISCOVER}?type=projects`}
-              className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card hover:shadow-md hover:border-orange-200 transition-all duration-200 block"
+              className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-xl p-4 border border-white/80 dark:border-border shadow-card hover:shadow-md hover:border-orange-200 transition-all duration-200 block"
             >
-              <div className="text-fluid-xl font-bold text-gray-900">{totalProjects}</div>
-              <div className="text-sm text-gray-600 mt-1">Active Projects</div>
+              <div className="text-fluid-xl font-bold text-gray-900 dark:text-foreground">
+                {totalProjects}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-muted-foreground mt-1">
+                Active Projects
+              </div>
             </Link>
             <Link
               href={`${ROUTES.DISCOVER}?type=profiles`}
-              className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card hover:shadow-md hover:border-tiffany-200 transition-all duration-200 block"
+              className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-xl p-4 border border-white/80 dark:border-border shadow-card hover:shadow-md hover:border-tiffany-200 transition-all duration-200 block"
             >
               <div className="text-fluid-xl font-bold text-tiffany-600">{totalProfiles}</div>
-              <div className="text-sm text-gray-600 mt-1">People</div>
+              <div className="text-sm text-gray-600 dark:text-muted-foreground mt-1">People</div>
             </Link>
-            <div className="bg-white/80 backdrop-blur-md rounded-xl p-4 border border-white/80 shadow-card">
+            <div className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-xl p-4 border border-white/80 dark:border-border shadow-card">
               <div className="text-fluid-xl font-bold text-bitcoinOrange">{totalFinancial}</div>
-              <div className="text-sm text-gray-600 mt-1">Finance</div>
+              <div className="text-sm text-gray-600 dark:text-muted-foreground mt-1">Finance</div>
             </div>
           </motion.div>
 

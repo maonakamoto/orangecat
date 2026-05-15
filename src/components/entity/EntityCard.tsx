@@ -104,9 +104,9 @@ export function EntityCard({
   return (
     <div
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white',
+        'group relative flex flex-col overflow-hidden rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card',
         'transition-all duration-200 ease-in-out',
-        'hover:shadow-lg hover:border-gray-300',
+        'hover:shadow-lg hover:border-gray-300 dark:hover:border-border',
         onClick && 'cursor-pointer',
         className
       )}
@@ -166,7 +166,7 @@ export function EntityCard({
         <Link href={detailHref}>
           <h3
             className={cn(
-              'font-semibold text-gray-900 group-hover:text-orange-600 group-hover:underline transition-colors line-clamp-1',
+              'font-semibold text-gray-900 dark:text-foreground group-hover:text-orange-600 group-hover:underline transition-colors line-clamp-1',
               compact ? 'text-sm' : 'text-lg'
             )}
           >
@@ -175,11 +175,18 @@ export function EntityCard({
         </Link>
 
         {description && !compact && (
-          <p className="mt-2 text-base text-gray-600 line-clamp-2">{description}</p>
+          <p className="mt-2 text-base text-gray-600 dark:text-muted-foreground line-clamp-2">
+            {description}
+          </p>
         )}
 
         {priceLabel && (
-          <p className={cn(compact ? 'mt-1' : 'mt-2', 'text-sm font-medium text-gray-900')}>
+          <p
+            className={cn(
+              compact ? 'mt-1' : 'mt-2',
+              'text-sm font-medium text-gray-900 dark:text-foreground'
+            )}
+          >
             {priceLabel}
           </p>
         )}
@@ -200,17 +207,23 @@ export function EntityCard({
                 </Badge>
               )}
             </div>
-            {goalAmount && <span className="text-sm font-medium text-gray-900">{goalAmount}</span>}
+            {goalAmount && (
+              <span className="text-sm font-medium text-gray-900 dark:text-foreground">
+                {goalAmount}
+              </span>
+            )}
           </div>
         )}
 
         {fundingProgress !== undefined && (
           <div className={cn(compact ? 'mt-2' : 'mt-3')}>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">Progress</span>
-              <span className="font-medium text-gray-900">{fundingProgress}%</span>
+              <span className="text-gray-600 dark:text-muted-foreground">Progress</span>
+              <span className="font-medium text-gray-900 dark:text-foreground">
+                {fundingProgress}%
+              </span>
             </div>
-            <div className="mt-1 h-2 w-full rounded-full bg-gray-200">
+            <div className="mt-1 h-2 w-full rounded-full bg-gray-200 dark:bg-muted">
               <div
                 className="h-2 rounded-full bg-tiffany-500 transition-all duration-300"
                 style={{ width: `${Math.min(100, fundingProgress)}%` }}
@@ -223,7 +236,12 @@ export function EntityCard({
         {metricsSlot && <div className={cn(compact ? 'mt-2' : 'mt-3')}>{metricsSlot}</div>}
 
         {footerSlot && (
-          <div className={cn(compact ? 'mt-2 pt-2' : 'mt-3 pt-3', 'border-t border-gray-100')}>
+          <div
+            className={cn(
+              compact ? 'mt-2 pt-2' : 'mt-3 pt-3',
+              'border-t border-gray-100 dark:border-border'
+            )}
+          >
             {footerSlot}
           </div>
         )}

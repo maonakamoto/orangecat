@@ -27,9 +27,13 @@ export default function EntityListShell({
       <Breadcrumb items={[{ label: title }]} className="mb-4" />
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">{title}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-foreground break-words">
+            {title}
+          </h1>
           {description && (
-            <p className="text-gray-600 mt-1 text-sm sm:text-base break-words">{description}</p>
+            <p className="text-gray-600 dark:text-muted-foreground mt-1 text-sm sm:text-base break-words">
+              {description}
+            </p>
           )}
         </div>
         {headerActions && (

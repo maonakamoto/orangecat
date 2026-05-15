@@ -29,8 +29,10 @@ export default function EntityDetailLayout({
       {breadcrumbItems && <Breadcrumb items={breadcrumbItems} className="mb-4" />}
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{title}</h1>
-          {subtitle && <p className="text-gray-600 mt-1">{subtitle}</p>}
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-foreground">
+            {title}
+          </h1>
+          {subtitle && <p className="text-gray-600 dark:text-muted-foreground mt-1">{subtitle}</p>}
         </div>
         {headerActions}
       </div>
