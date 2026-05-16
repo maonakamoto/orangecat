@@ -50,10 +50,7 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
         <Sparkles className="h-4 w-4 text-muted-foreground" />
         <span className="text-foreground max-w-[120px] truncate">{displayName}</span>
         <ChevronDown
-          className={cn(
-            'h-4 w-4 text-gray-400 dark:text-muted-foreground transition-transform',
-            isOpen && 'rotate-180'
-          )}
+          className={cn('h-4 w-4 text-muted-dim transition-transform', isOpen && 'rotate-180')}
         />
       </button>
 

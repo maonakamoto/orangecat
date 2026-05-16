@@ -225,7 +225,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
       {fullScreen && (
         <div className="flex items-center gap-4 px-4 pt-4 border-t border-border mt-4">
           <button
-            className="p-2 min-h-11 min-w-11 flex items-center justify-center text-gray-400 dark:text-muted-foreground cursor-not-allowed rounded-full transition-colors"
+            className="p-2 min-h-11 min-w-11 flex items-center justify-center text-muted-dim cursor-not-allowed rounded-full transition-colors"
             aria-label="Add image (coming soon)"
             title="Image upload (coming soon)"
             disabled

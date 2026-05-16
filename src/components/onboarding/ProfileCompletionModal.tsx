@@ -126,7 +126,7 @@ export function ProfileCompletionModal({
               )}
             />
           ))}
-          <span className="text-xs text-gray-400 dark:text-muted-foreground ml-2 flex-shrink-0">
+          <span className="text-xs text-muted-dim ml-2 flex-shrink-0">
             {currentStep + 1} of {TOTAL_STEPS}
           </span>
         </div>

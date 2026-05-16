@@ -240,9 +240,7 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
       {/* End of feed indicator */}
       {!feed.pagination.hasNext && events.length > 0 && (
         <div className="text-center py-6">
-          <span className="text-sm text-gray-400 dark:text-muted-foreground">
-            You've reached the end
-          </span>
+          <span className="text-sm text-muted-dim">You've reached the end</span>
         </div>
       )}
 

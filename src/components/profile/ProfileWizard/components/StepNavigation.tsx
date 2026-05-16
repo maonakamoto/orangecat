@@ -31,8 +31,8 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                     : isCurrent
                       ? 'bg-orange-500 border-orange-500 text-white shadow-lg animate-pulse'
                       : isUpcoming
-                        ? 'bg-card border-gray-300 dark:border-border text-gray-400 dark:text-muted-foreground'
-                        : 'bg-muted border-gray-300 dark:border-border text-muted-foreground'
+                        ? 'bg-card border-border-strong text-muted-dim'
+                        : 'bg-muted border-border-strong text-muted-foreground'
                 }`}
               >
                 {isCompleted ? (
@@ -66,7 +66,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                       ? 'text-green-500'
                       : isCurrent
                         ? 'text-orange-500'
-                        : 'text-gray-400 dark:text-muted-foreground'
+                        : 'text-muted-dim'
                   }`}
                 >
                   {isCompleted

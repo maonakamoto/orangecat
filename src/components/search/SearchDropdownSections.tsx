@@ -61,7 +61,7 @@ export function QuickActionsSection({
   ];
 
   return (
-    <div className="p-3 border-b border-gray-100 dark:border-border">
+    <div className="p-3 border-b border-border-subtle">
       <div className="flex items-center justify-between mb-2">
         <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide">
           Quick Actions
@@ -81,7 +81,7 @@ export function QuickActionsSection({
             >
               <div className="text-orange-500">{icons[index]}</div>
               <span>{action.label}</span>
-              <ArrowUpRight className="w-3 h-3 ml-auto text-gray-400 dark:text-muted-foreground" />
+              <ArrowUpRight className="w-3 h-3 ml-auto text-muted-dim" />
             </DropdownItem>
           );
         })}
@@ -112,7 +112,7 @@ export function SearchHistorySection({
   }
 
   return (
-    <div className="p-3 border-b border-gray-100 dark:border-border">
+    <div className="p-3 border-b border-border-subtle">
       <div className="flex items-center justify-between mb-2">
         <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide flex items-center gap-1">
           <History className="w-3 h-3" />
@@ -137,7 +137,7 @@ export function SearchHistorySection({
                 itemRefs.current[currentIndex] = el;
               }}
             >
-              <Clock className="w-3 h-3 text-gray-400 dark:text-muted-foreground" />
+              <Clock className="w-3 h-3 text-muted-dim" />
               <span>{item}</span>
             </DropdownItem>
           );
@@ -163,7 +163,7 @@ export function TrendingSearchesSection({
   itemRefs,
 }: TrendingSearchesSectionProps) {
   return (
-    <div className="p-3 border-b border-gray-100 dark:border-border">
+    <div className="p-3 border-b border-border-subtle">
       <div className="flex items-center mb-2">
         <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide flex items-center gap-1">
           <Sparkles className="w-3 h-3" />
@@ -237,7 +237,7 @@ export function SuggestionsSection({
                   itemRefs.current[currentIndex] = el;
                 }}
               >
-                <Search className="w-3 h-3 text-gray-400 dark:text-muted-foreground" />
+                <Search className="w-3 h-3 text-muted-dim" />
                 <span>{suggestion}</span>
               </DropdownItem>
             );
@@ -250,7 +250,7 @@ export function SuggestionsSection({
       )}
 
       {/* Search for exact query */}
-      <div className="mt-2 pt-2 border-t border-gray-100 dark:border-border">
+      <div className="mt-2 pt-2 border-t border-border-subtle">
         <button
           ref={el => {
             itemRefs.current[searchQueryIndex] = el;
@@ -278,12 +278,8 @@ export function EmptyState() {
     <div className="p-6 text-center">
       <Search className="w-8 h-8 text-gray-300 dark:text-muted-foreground/40 mx-auto mb-2" />
       <p className="text-sm text-muted-foreground">Start typing to search</p>
-      <p className="text-xs text-gray-400 dark:text-muted-foreground/70 mt-1">
-        Find projects, people, and organizations
-      </p>
-      <p className="text-xs text-gray-400 dark:text-muted-foreground/70 mt-2">
-        Use ↑↓ arrows to navigate, Enter to select
-      </p>
+      <p className="text-xs text-muted-dim/70 mt-1">Find projects, people, and organizations</p>
+      <p className="text-xs text-muted-dim/70 mt-2">Use ↑↓ arrows to navigate, Enter to select</p>
     </div>
   );
 }

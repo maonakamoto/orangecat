@@ -105,19 +105,19 @@ export function PostHeader({
       {/* Visibility Indicator */}
       {event.visibility === 'private' && (
         <span title="Only you can see this">
-          <Lock className="w-3.5 h-3.5 text-gray-400 dark:text-muted-foreground" />
+          <Lock className="w-3.5 h-3.5 text-muted-dim" />
         </span>
       )}
       {event.visibility === 'followers' && (
         <span title="Followers only">
-          <Users className="w-3.5 h-3.5 text-gray-400 dark:text-muted-foreground" />
+          <Users className="w-3.5 h-3.5 text-muted-dim" />
         </span>
       )}
 
       {/* Edited indicator */}
       {isEdited && (
         <span
-          className="text-gray-400 dark:text-muted-foreground text-xs"
+          className="text-muted-dim text-xs"
           title={updatedTimestamp ? `Edited ${formatRelativeTime(updatedTimestamp)}` : 'Edited'}
         >
           · edited
@@ -132,7 +132,7 @@ export function PostHeader({
               e.stopPropagation();
               onMenuToggle();
             }}
-            className="text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-full p-1.5 -mr-1.5 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+            className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-full p-1.5 -mr-1.5 transition-colors min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Post options"
             aria-expanded={showMenu}
             aria-haspopup="menu"

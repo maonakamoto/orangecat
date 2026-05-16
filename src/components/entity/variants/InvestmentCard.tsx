@@ -102,7 +102,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
             {investment.expected_return_rate !== null &&
               investment.expected_return_rate !== undefined && (
                 <div className="flex items-center gap-1">
-                  <Percent className="h-3 w-3 text-gray-400 dark:text-muted-foreground" />
+                  <Percent className="h-3 w-3 text-muted-dim" />
                   <span>{investment.expected_return_rate}% expected return</span>
                 </div>
               )}

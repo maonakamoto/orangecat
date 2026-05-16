@@ -109,7 +109,7 @@ export default function AIAssistantChatPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-muted-dim" />
       </div>
     );
   }
@@ -180,7 +180,7 @@ export default function AIAssistantChatPage() {
                     {conv.last_message_at && <> &middot; {formatDate(conv.last_message_at)}</>}
                   </p>
                 </div>
-                <MessageSquare className="h-5 w-5 text-gray-400 dark:text-muted-foreground flex-shrink-0" />
+                <MessageSquare className="h-5 w-5 text-muted-dim flex-shrink-0" />
               </Link>
             ))}
           </div>

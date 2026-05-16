@@ -109,9 +109,7 @@ export function WishlistDonationTiers({
               <span className="text-sm font-bold text-foreground group-hover:text-orange-700">
                 {formattedAmount}
               </span>
-              <span className="text-xs text-gray-400 dark:text-muted-foreground mt-0.5">
-                ≈ {satsDisplay}
-              </span>
+              <span className="text-xs text-muted-dim mt-0.5">≈ {satsDisplay}</span>
               <span className="text-xs text-muted-foreground mt-1 line-clamp-1">{item.title}</span>
               <div className="w-full bg-muted rounded-full h-1 mt-3">
                 <div

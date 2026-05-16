@@ -65,7 +65,7 @@ export default function BookingTabs({
           <select
             value={filterStatus}
             onChange={e => onFilterChange(e.target.value as FilterStatus)}
-            className="text-sm border border-gray-300 dark:border-border dark:bg-muted dark:text-foreground rounded-md px-3 py-1.5"
+            className="text-sm border border-border-strong dark:bg-muted dark:text-foreground rounded-md px-3 py-1.5"
           >
             <option value="all">All</option>
             <option value={STATUS.BOOKINGS.COMPLETED}>Completed</option>

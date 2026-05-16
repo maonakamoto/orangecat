@@ -109,7 +109,7 @@ export default function DiscoverTabs({
               <span
                 className={`
                 transition-colors duration-200
-                ${isActive ? 'text-orange-600' : 'text-gray-400 dark:text-muted-foreground group-hover:text-gray-600 dark:group-hover:text-foreground'}
+                ${isActive ? 'text-orange-600' : 'text-muted-dim group-hover:text-gray-600 dark:group-hover:text-foreground'}
               `}
               >
                 <Icon className="w-4 h-4" />

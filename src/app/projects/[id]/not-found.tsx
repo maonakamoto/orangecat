@@ -11,7 +11,7 @@ export default function ProjectNotFound() {
       <Card className="max-w-lg mx-auto shadow-xl">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <FileQuestion className="w-16 h-16 text-gray-400 dark:text-muted-foreground" />
+            <FileQuestion className="w-16 h-16 text-muted-dim" />
           </div>
           <CardTitle>Project Not Found</CardTitle>
         </CardHeader>

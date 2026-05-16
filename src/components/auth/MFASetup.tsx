@@ -155,7 +155,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                 value={verificationCode}
                 onChange={handleCodeChange}
                 placeholder="000000"
-                className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-gray-300 dark:border-border rounded-lg focus:ring-2 focus:ring-tiffany focus:border-tiffany dark:bg-muted dark:text-foreground"
+                className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-border-strong rounded-lg focus:ring-2 focus:ring-tiffany focus:border-tiffany dark:bg-muted dark:text-foreground"
                 maxLength={6}
               />
             </div>

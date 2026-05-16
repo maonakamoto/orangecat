@@ -36,7 +36,7 @@ export function TimelineSearchControls({
     <div className="border-b border-border bg-card px-4 py-3">
       <form onSubmit={onSearch} className="flex items-center gap-2">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-gray-400 dark:text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-muted-dim absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}

@@ -67,7 +67,7 @@ export default function MessageComposer({
               'bg-white dark:bg-muted text-foreground',
               'focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent',
               'max-h-32 min-h-11 text-sm sm:text-base',
-              'placeholder:text-gray-400 dark:placeholder:text-muted-foreground',
+              'placeholder:text-muted-dim',
               isSending && 'opacity-50 cursor-not-allowed'
             )}
             rows={1}

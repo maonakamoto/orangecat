@@ -148,7 +148,7 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
               onChange={handleCodeChange}
               placeholder="000000"
               disabled={verifying}
-              className="w-full px-4 py-4 text-center text-3xl font-mono tracking-[0.5em] border border-gray-300 dark:border-border rounded-lg focus:ring-2 focus:ring-tiffany focus:border-tiffany disabled:opacity-50 disabled:cursor-not-allowed dark:bg-muted dark:text-foreground"
+              className="w-full px-4 py-4 text-center text-3xl font-mono tracking-[0.5em] border border-border-strong rounded-lg focus:ring-2 focus:ring-tiffany focus:border-tiffany disabled:opacity-50 disabled:cursor-not-allowed dark:bg-muted dark:text-foreground"
               maxLength={6}
             />
           </div>

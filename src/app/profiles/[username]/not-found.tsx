@@ -11,7 +11,7 @@ export default function ProfileNotFound() {
       <Card className="max-w-lg mx-auto shadow-xl">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <UserX className="w-16 h-16 text-gray-400 dark:text-muted-foreground" />
+            <UserX className="w-16 h-16 text-muted-dim" />
           </div>
           <CardTitle>Profile Not Found</CardTitle>
         </CardHeader>

@@ -171,7 +171,7 @@ export function RepostModal({
                     }
                   }}
                   rows={4}
-                  className="w-full border border-border rounded-2xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none bg-muted placeholder:text-gray-500 dark:placeholder:text-muted-foreground dark:text-foreground"
+                  className="w-full border border-border rounded-2xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none bg-muted placeholder:text-muted-foreground dark:text-foreground"
                   placeholder="Add a comment"
                   maxLength={QUOTE_MAX_LENGTH}
                   aria-label="Add your comment before reposting"
@@ -189,13 +189,9 @@ export function RepostModal({
                   >
                     {remainingCharacters}
                   </span>
-                  <span className="text-gray-400 dark:text-muted-foreground">characters left</span>
-                  <span className="hidden sm:inline text-gray-400 dark:text-muted-foreground">
-                    ·
-                  </span>
-                  <span className="hidden sm:inline text-gray-400 dark:text-muted-foreground">
-                    Ctrl/Cmd + Enter to post
-                  </span>
+                  <span className="text-muted-dim">characters left</span>
+                  <span className="hidden sm:inline text-muted-dim">·</span>
+                  <span className="hidden sm:inline text-muted-dim">Ctrl/Cmd + Enter to post</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
@@ -245,9 +241,7 @@ export function RepostModal({
                           <span className="text-muted-foreground text-sm">
                             @{originalAuthor.username}
                           </span>
-                          <span className="text-gray-400 dark:text-muted-foreground text-sm">
-                            ·
-                          </span>
+                          <span className="text-muted-dim text-sm">·</span>
                         </>
                       )}
                       <span className="text-muted-foreground text-sm">{timeAgo}</span>

@@ -51,7 +51,7 @@ export function AIModelSelector({
         )}
       >
         <div className="flex items-center gap-3">
-          <Cpu className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
+          <Cpu className="w-5 h-5 text-muted-dim" />
           {selectedModel ? (
             <div>
               <span className="font-medium">{selectedModel.name}</span>
@@ -64,10 +64,7 @@ export function AIModelSelector({
           )}
         </div>
         <ChevronDown
-          className={cn(
-            'w-5 h-5 text-gray-400 dark:text-muted-foreground transition-transform',
-            isOpen && 'rotate-180'
-          )}
+          className={cn('w-5 h-5 text-muted-dim transition-transform', isOpen && 'rotate-180')}
         />
       </button>
 
@@ -91,7 +88,7 @@ export function AIModelSelector({
                 {model.isFree && <Badge className={`${BADGE_COLORS.success} text-xs`}>FREE</Badge>}
                 {model.capabilities.includes('vision') && (
                   <span title="Vision capable">
-                    <Eye className="w-3 h-3 text-gray-400 dark:text-muted-foreground" />
+                    <Eye className="w-3 h-3 text-muted-dim" />
                   </span>
                 )}
               </div>

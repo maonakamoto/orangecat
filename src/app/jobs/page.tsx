@@ -58,7 +58,7 @@ export default function JobsPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-gray-400 dark:text-muted-foreground" />
+          <Loader2 className="h-6 w-6 animate-spin text-muted-dim" />
         </div>
       </div>
     );
@@ -92,9 +92,9 @@ export default function JobsPage() {
       {jobs.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <Briefcase className="h-12 w-12 text-gray-400 dark:text-muted-foreground/50 mx-auto mb-4" />
+            <Briefcase className="h-12 w-12 text-muted-dim/50 mx-auto mb-4" />
             <p className="text-muted-foreground mb-2">No job postings available</p>
-            <p className="text-base text-gray-400 dark:text-muted-foreground/70">
+            <p className="text-base text-muted-dim/70">
               Check back later or create a group to post jobs
             </p>
           </CardContent>

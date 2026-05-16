@@ -192,7 +192,7 @@ export default function ConversationList({
               {searchQuery ? 'No conversations match your search' : 'No conversations yet'}
             </p>
             {!searchQuery && (
-              <p className="text-xs mt-1 text-gray-400 dark:text-muted-foreground">
+              <p className="text-xs mt-1 text-muted-dim">
                 Start a new conversation to get started.
               </p>
             )}

@@ -80,7 +80,7 @@ function getStrengthLevel(strength: number): {
   if (strength === 0) {
     return {
       label: '',
-      colorClass: 'text-gray-400 dark:text-muted-foreground',
+      colorClass: 'text-muted-dim',
       bgClass: 'bg-muted',
     };
   }
@@ -117,10 +117,7 @@ export function PasswordStrengthIndicator({
         <p className="text-xs text-muted-foreground">Password must contain:</p>
         <ul className="space-y-1">
           {PASSWORD_REQUIREMENTS.map(req => (
-            <li
-              key={req.id}
-              className="flex items-center gap-2 text-xs text-gray-400 dark:text-muted-foreground"
-            >
+            <li key={req.id} className="flex items-center gap-2 text-xs text-muted-dim">
               <Circle className="h-3 w-3 flex-shrink-0" />
               <span>{req.label}</span>
             </li>
@@ -162,7 +159,7 @@ export function PasswordStrengthIndicator({
               {isMet ? (
                 <Check className="h-3 w-3 flex-shrink-0 text-green-600" />
               ) : (
-                <X className="h-3 w-3 flex-shrink-0 text-gray-400 dark:text-muted-foreground" />
+                <X className="h-3 w-3 flex-shrink-0 text-muted-dim" />
               )}
               <span className={isMet ? 'line-through opacity-70' : ''}>{req.label}</span>
             </li>

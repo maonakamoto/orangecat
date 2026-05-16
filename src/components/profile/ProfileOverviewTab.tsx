@@ -62,15 +62,13 @@ export default function ProfileOverviewTab({
               href={`${ROUTES.DASHBOARD.INFO_EDIT}#bio`}
               className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline group text-sm sm:text-base"
             >
-              <span className="text-gray-400 dark:text-muted-foreground italic group-hover:text-orange-600">
+              <span className="text-muted-dim italic group-hover:text-orange-600">
                 Tell people more about yourself
               </span>
               <span className="text-xs uppercase tracking-wide">Add bio</span>
             </a>
           ) : (
-            <p className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
-              No bio yet.
-            </p>
+            <p className="text-sm sm:text-base text-muted-dim italic">No bio yet.</p>
           )}
         </CardContent>
       </Card>
@@ -114,7 +112,7 @@ export default function ProfileOverviewTab({
         <CardContent className="p-4 sm:p-6 pt-0 space-y-2 sm:space-y-3">
           {/* Website */}
           <div className="flex items-center gap-3 text-foreground">
-            <Globe className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
+            <Globe className="w-5 h-5 text-muted-dim" />
             <div className="flex-1">
               <div className="text-sm text-muted-foreground">Website</div>
               {profile.website ? (
@@ -131,13 +129,11 @@ export default function ProfileOverviewTab({
                   href={`${ROUTES.DASHBOARD.INFO_EDIT}#website`}
                   className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
                 >
-                  <span className="text-gray-400 dark:text-muted-foreground italic">
-                    Add a website
-                  </span>
+                  <span className="text-muted-dim italic">Add a website</span>
                   <span className="text-xs uppercase tracking-wide">Edit</span>
                 </a>
               ) : (
-                <span className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
+                <span className="text-sm sm:text-base text-muted-dim italic">
                   No website added yet.
                 </span>
               )}
@@ -161,13 +157,11 @@ export default function ProfileOverviewTab({
                 href={`${ROUTES.DASHBOARD.INFO_EDIT}#socialLinks`}
                 className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
               >
-                <span className="text-gray-400 dark:text-muted-foreground italic">
-                  Add social links or profiles
-                </span>
+                <span className="text-muted-dim italic">Add social links or profiles</span>
                 <span className="text-xs uppercase tracking-wide">Edit</span>
               </a>
             ) : (
-              <span className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
+              <span className="text-sm sm:text-base text-muted-dim italic">
                 No links added yet.
               </span>
             )}
@@ -183,7 +177,7 @@ export default function ProfileOverviewTab({
         <CardContent className="p-4 sm:p-6 pt-0 space-y-2 sm:space-y-3">
           {/* Contact Email (public) */}
           <div className="flex items-center gap-3 text-foreground pt-3 border-t border-border">
-            <Mail className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
+            <Mail className="w-5 h-5 text-muted-dim" />
             <div className="flex-1">
               <div className="text-sm text-muted-foreground">Contact email</div>
               {publicContactEmail ? (
@@ -198,13 +192,11 @@ export default function ProfileOverviewTab({
                   href={`${ROUTES.DASHBOARD.INFO_EDIT}#contactEmail`}
                   className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
                 >
-                  <span className="text-gray-400 dark:text-muted-foreground italic">
-                    Add a public contact email
-                  </span>
+                  <span className="text-muted-dim italic">Add a public contact email</span>
                   <span className="text-xs uppercase tracking-wide">Edit</span>
                 </a>
               ) : (
-                <span className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
+                <span className="text-sm sm:text-base text-muted-dim italic">
                   No public email added.
                 </span>
               )}
@@ -213,7 +205,7 @@ export default function ProfileOverviewTab({
 
           {/* Phone */}
           <div className="flex items-center gap-3 text-foreground">
-            <Phone className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
+            <Phone className="w-5 h-5 text-muted-dim" />
             <div className="flex-1">
               <div className="text-sm text-muted-foreground">Phone</div>
               {profile.phone ? (
@@ -228,13 +220,11 @@ export default function ProfileOverviewTab({
                   href={`${ROUTES.DASHBOARD.INFO_EDIT}#phone`}
                   className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
                 >
-                  <span className="text-gray-400 dark:text-muted-foreground italic">
-                    Add a phone number
-                  </span>
+                  <span className="text-muted-dim italic">Add a phone number</span>
                   <span className="text-xs uppercase tracking-wide">Edit</span>
                 </a>
               ) : (
-                <span className="text-sm sm:text-base text-gray-400 dark:text-muted-foreground italic">
+                <span className="text-sm sm:text-base text-muted-dim italic">
                   No phone number added.
                 </span>
               )}

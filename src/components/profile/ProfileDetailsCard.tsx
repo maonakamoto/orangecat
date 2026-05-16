@@ -29,7 +29,7 @@ export function ProfileDetailsCard({
 
   const locationValue = (() => {
     if (isLocationHidden(profile.location_context || '')) {
-      return <div className="font-medium text-gray-400 dark:text-muted-foreground">Hidden</div>;
+      return <div className="font-medium text-muted-dim">Hidden</div>;
     }
     const label = profile.location_search || profile.location;
     return label ? <div className="font-medium text-foreground">{label}</div> : undefined;

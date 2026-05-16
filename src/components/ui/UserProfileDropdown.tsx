@@ -203,7 +203,7 @@ export default function UserProfileDropdown({
                   </button>
                 );
               })}
-              <hr className="my-1 border-gray-100 dark:border-border" />
+              <hr className="my-1 border-border-subtle" />
               <button
                 onClick={handleSignOut}
                 className="flex items-center w-full px-4 py-2 text-sm text-foreground hover:bg-muted"

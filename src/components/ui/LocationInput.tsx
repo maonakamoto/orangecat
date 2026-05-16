@@ -60,7 +60,7 @@ export function LocationInput({
           {isLoading && (
             <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
           )}
-          <MapPin className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+          <MapPin className="w-4 h-4 text-muted-dim" />
         </div>
       </div>
 
@@ -74,10 +74,10 @@ export function LocationInput({
               key={suggestion.id}
               type="button"
               onClick={() => handleSuggestionSelect(suggestion)}
-              className="w-full px-4 py-3 min-h-11 text-left hover:bg-muted border-b border-gray-100 dark:border-border last:border-b-0 focus:outline-none focus:bg-gray-50 dark:focus:bg-muted"
+              className="w-full px-4 py-3 min-h-11 text-left hover:bg-muted border-b border-border-subtle last:border-b-0 focus:outline-none focus:bg-gray-50 dark:focus:bg-muted"
             >
               <div className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-gray-400 dark:text-muted-foreground mt-0.5 flex-shrink-0" />
+                <MapPin className="w-4 h-4 text-muted-dim mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-foreground truncate">{suggestion.mainText}</div>
                   {suggestion.secondaryText && (

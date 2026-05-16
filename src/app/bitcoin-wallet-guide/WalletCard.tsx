@@ -80,7 +80,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
               </div>
             </div>
             <ChevronRight
-              className={`w-5 h-5 transition-transform ${isSelected ? 'rotate-90 text-bitcoinOrange' : 'text-gray-400 dark:text-muted-foreground'}`}
+              className={`w-5 h-5 transition-transform ${isSelected ? 'rotate-90 text-bitcoinOrange' : 'text-muted-dim'}`}
             />
           </div>
         </CardHeader>

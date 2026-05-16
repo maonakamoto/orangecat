@@ -118,7 +118,7 @@ function QuickActionButton({
         <p className="text-sm font-medium text-foreground">{title}</p>
         <p className="text-xs text-muted-foreground">{description}</p>
       </div>
-      <ArrowRight className="h-4 w-4 text-gray-400 dark:text-muted-foreground group-hover:text-tiffany-600 transition-colors" />
+      <ArrowRight className="h-4 w-4 text-muted-dim group-hover:text-tiffany-600 transition-colors" />
     </button>
   );
 }

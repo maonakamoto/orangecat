@@ -23,9 +23,9 @@ export default function HeroSectionStatic() {
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
                 <span className="text-sm font-medium text-foreground">Create anything</span>
               </div>
-              <span className="text-gray-400 dark:text-muted-foreground">•</span>
+              <span className="text-muted-dim">•</span>
               <span className="text-sm font-medium text-foreground">Any identity</span>
-              <span className="text-gray-400 dark:text-muted-foreground">•</span>
+              <span className="text-muted-dim">•</span>
               <span className="text-sm font-medium text-foreground">Zero fees</span>
             </div>
 

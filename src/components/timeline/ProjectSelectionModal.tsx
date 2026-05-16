@@ -143,9 +143,7 @@ export default function ProjectSelectionModal({
                     <div
                       className={cn(
                         'w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ml-3',
-                        isSelected
-                          ? 'bg-tiffany-500 border-tiffany-500'
-                          : 'border-gray-300 dark:border-border'
+                        isSelected ? 'bg-tiffany-500 border-tiffany-500' : 'border-border-strong'
                       )}
                     >
                       {isSelected && <Check className="w-4 h-4 text-white" />}
@@ -161,7 +159,7 @@ export default function ProjectSelectionModal({
         {!loading && projects.length === 0 && (
           <div className="px-4 py-12 text-center">
             <div className="text-muted-foreground text-sm">No projects available</div>
-            <div className="text-gray-400 dark:text-muted-foreground text-xs mt-1">
+            <div className="text-muted-dim text-xs mt-1">
               Create a project to crosspost your updates
             </div>
           </div>

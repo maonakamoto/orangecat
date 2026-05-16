@@ -108,7 +108,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
           {stats.map(stat => (
             <div
               key={stat.label}
-              className="p-4 rounded-lg border border-gray-100 dark:border-border bg-gray-50/50 dark:bg-muted"
+              className="p-4 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-muted"
             >
               <div className="flex items-center gap-2 mb-2">
                 <div
@@ -128,9 +128,9 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
 
         {/* Zero State */}
         {usage.totalRequests === 0 && (
-          <div className="mt-4 p-4 bg-muted rounded-lg border border-gray-100 dark:border-border">
+          <div className="mt-4 p-4 bg-muted rounded-lg border border-border-subtle">
             <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-gray-400 dark:text-muted-foreground mt-0.5" />
+              <Info className="w-5 h-5 text-muted-dim mt-0.5" />
               <div>
                 <p className="text-sm text-muted-foreground">
                   No usage recorded yet. Start a conversation with My Cat to see your statistics.

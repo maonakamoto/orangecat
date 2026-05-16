@@ -233,7 +233,7 @@ export default function BitBaumAboutPage() {
 
         {/* Team Section Placeholder */}
         <div className="bg-card rounded-2xl shadow-lg p-8 text-center">
-          <Users className="w-12 h-12 text-gray-400 dark:text-muted-foreground/50 mx-auto mb-4" />
+          <Users className="w-12 h-12 text-muted-dim/50 mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-foreground mb-4">Our Team</h3>
           <p className="text-muted-foreground mb-6">
             A passionate team of Bitcoin enthusiasts, developers, and community builders working

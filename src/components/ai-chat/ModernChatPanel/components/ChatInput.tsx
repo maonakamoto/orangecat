@@ -34,7 +34,7 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
   };
 
   return (
-    <div className="p-4 border-t border-gray-100 dark:border-border">
+    <div className="p-4 border-t border-border-subtle">
       <div className="flex items-end gap-2 max-w-3xl mx-auto">
         <div className="flex-1 relative">
           <textarea
@@ -47,7 +47,7 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
             className={cn(
               'w-full resize-none rounded-2xl border border-border dark:bg-muted dark:text-foreground px-4 py-3 pr-12',
               'focus:outline-none focus:ring-2 focus:ring-tiffany-500/20 focus:border-tiffany-300',
-              'text-sm leading-relaxed placeholder:text-gray-400 dark:placeholder:text-muted-foreground',
+              'text-sm leading-relaxed placeholder:text-muted-dim',
               'max-h-[200px]'
             )}
           />
@@ -67,14 +67,14 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
               'flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all',
               value.trim() && !isLoading
                 ? 'bg-tiffany-500 hover:bg-tiffany-600 text-white shadow-md'
-                : 'bg-muted text-gray-400 dark:text-muted-foreground cursor-not-allowed'
+                : 'bg-muted text-muted-dim cursor-not-allowed'
             )}
           >
             <Send className="h-5 w-5" />
           </button>
         )}
       </div>
-      <p className="text-xs text-gray-400 dark:text-muted-foreground text-center mt-2">
+      <p className="text-xs text-muted-dim text-center mt-2">
         Using free AI models • No API key required
       </p>
     </div>

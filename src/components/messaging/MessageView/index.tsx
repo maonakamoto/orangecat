@@ -45,7 +45,7 @@ export default function MessageView({ conversationId, onBack }: MessageViewProps
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-muted-dim" />
       </div>
     );
   }
@@ -78,7 +78,7 @@ export default function MessageView({ conversationId, onBack }: MessageViewProps
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <MessageSquare className="h-12 w-12 text-gray-400 dark:text-muted-foreground mx-auto mb-4" />
+          <MessageSquare className="h-12 w-12 text-muted-dim mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-foreground mb-2">No conversation selected</h3>
           <p className="text-muted-foreground">Select a conversation to start messaging</p>
         </div>

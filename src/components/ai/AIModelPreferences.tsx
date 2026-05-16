@@ -223,7 +223,7 @@ export function AIModelPreferences({
         </label>
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
-            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-dim" />
             <Input
               type="number"
               value={preferences.maxCostBtc}

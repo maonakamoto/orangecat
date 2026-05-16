@@ -207,7 +207,7 @@ export default function DraftContinueDialog({
                 <Button
                   onClick={onStartFresh}
                   variant="outline"
-                  className="w-full border-gray-300 dark:border-border hover:bg-muted"
+                  className="w-full border-border-strong hover:bg-muted"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Start Fresh

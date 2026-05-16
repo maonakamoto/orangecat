@@ -138,7 +138,7 @@ export function ThreadContext({
   return (
     <div className={cn('bg-card border border-border rounded-lg', className)}>
       {/* Thread Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-border">
+      <div className="flex items-center justify-between p-4 border-b border-border-subtle">
         <div className="flex items-center gap-3">
           <MessageCircle className="w-5 h-5 text-muted-foreground" />
           <div>
@@ -202,7 +202,7 @@ export function ThreadContext({
 
       {/* Current Post Highlight */}
       {currentPost && (
-        <div className="p-4 bg-tiffany-50 dark:bg-muted border-t border-gray-100 dark:border-border">
+        <div className="p-4 bg-tiffany-50 dark:bg-muted border-t border-border-subtle">
           <div className="flex items-center gap-2 text-sm text-tiffany-700">
             <div className="w-2 h-2 bg-tiffany-500 rounded-full"></div>
             Currently viewing: {currentPost.actor.name}'s post

@@ -11,7 +11,7 @@ function ImagePlaceholder() {
     <div className={cn('flex h-full w-full items-center justify-center', GRADIENTS.grayLight)}>
       <div className="text-center">
         <svg
-          className="mx-auto h-12 w-12 text-gray-400 dark:text-muted-foreground"
+          className="mx-auto h-12 w-12 text-muted-dim"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -33,7 +33,7 @@ function ImagePlaceholder() {
 function ImageLoader() {
   return (
     <div className={cn('absolute inset-0 flex items-center justify-center', GRADIENTS.grayLight)}>
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 dark:border-border border-t-orange-500" />
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-border-strong border-t-orange-500" />
     </div>
   );
 }

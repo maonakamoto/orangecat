@@ -35,7 +35,7 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
       : PROFILE_CATEGORIES.individual;
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-orange-50/50 to-tiffany-50/50 dark:from-muted/30 dark:to-accent/20 rounded-xl border border-gray-100 dark:border-border p-5 sm:p-6">
+    <div className="relative overflow-hidden bg-gradient-to-r from-orange-50/50 to-tiffany-50/50 dark:from-muted/30 dark:to-accent/20 rounded-xl border border-border-subtle p-5 sm:p-6">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className={`p-3 ${GRADIENTS.brandMixedBr} rounded-xl`}>

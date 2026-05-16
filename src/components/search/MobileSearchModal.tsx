@@ -128,14 +128,14 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
         </button>
 
         <form onSubmit={handleSubmit} className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-dim" />
           <input
             type="text"
             placeholder="Search projects, people, organizations..."
             value={query}
             onChange={e => setQuery(e.target.value)}
             autoFocus
-            className="w-full pl-10 pr-4 py-3 text-base border border-gray-300 dark:border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent bg-muted dark:text-foreground dark:placeholder:text-muted-foreground"
+            className="w-full pl-10 pr-4 py-3 text-base border border-border-strong rounded-xl focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent bg-muted dark:text-foreground dark:placeholder:text-muted-foreground"
           />
         </form>
       </div>
@@ -144,7 +144,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
       <div className="flex-1 overflow-y-auto">
         {/* Quick Actions */}
         {query.length === 0 && (
-          <div className="p-4 border-b border-gray-100 dark:border-border">
+          <div className="p-4 border-b border-border-subtle">
             <h4 className="text-sm font-medium text-gray-700 dark:text-muted-foreground mb-3 uppercase tracking-wide">
               Quick Actions
             </h4>
@@ -157,7 +157,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                 >
                   <div className="text-orange-500">{action.icon}</div>
                   <span className="text-base">{action.label}</span>
-                  <ArrowUpRight className="w-4 h-4 ml-auto text-gray-400 dark:text-muted-foreground" />
+                  <ArrowUpRight className="w-4 h-4 ml-auto text-muted-dim" />
                 </button>
               ))}
             </div>
@@ -166,7 +166,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
 
         {/* Search History */}
         {query.length === 0 && searchHistory.length > 0 && (
-          <div className="p-4 border-b border-gray-100 dark:border-border">
+          <div className="p-4 border-b border-border-subtle">
             <div className="flex items-center justify-between mb-3">
               <h4 className="text-sm font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide flex items-center gap-2">
                 <History className="w-4 h-4" />
@@ -186,7 +186,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                   onClick={() => handleSearch(historyItem)}
                   className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
                 >
-                  <Clock className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+                  <Clock className="w-4 h-4 text-muted-dim" />
                   <span className="text-base">{historyItem}</span>
                 </button>
               ))}
@@ -196,7 +196,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
 
         {/* Trending Searches */}
         {query.length === 0 && (
-          <div className="p-4 border-b border-gray-100 dark:border-border">
+          <div className="p-4 border-b border-border-subtle">
             <h4 className="text-sm font-medium text-gray-700 dark:text-muted-foreground mb-3 uppercase tracking-wide flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
               Trending
@@ -237,7 +237,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                     onClick={() => handleSearch(suggestion)}
                     className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
                   >
-                    <Search className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+                    <Search className="w-4 h-4 text-muted-dim" />
                     <span className="text-base">{suggestion}</span>
                   </button>
                 ))}
@@ -249,7 +249,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
             )}
 
             {/* Search for exact query */}
-            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-border">
+            <div className="mt-4 pt-4 border-t border-border-subtle">
               <button
                 onClick={() => handleSearch(query)}
                 className="w-full flex items-center gap-4 px-4 py-3 text-tiffany-600 hover:bg-tiffany-50 rounded-lg transition-colors font-medium"
@@ -267,9 +267,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
           <div className="p-8 text-center">
             <Search className="w-12 h-12 text-gray-300 dark:text-muted mx-auto mb-4" />
             <p className="text-muted-foreground text-lg">Start typing to search</p>
-            <p className="text-gray-400 dark:text-muted-foreground mt-2">
-              Find projects, people, and organizations
-            </p>
+            <p className="text-muted-dim mt-2">Find projects, people, and organizations</p>
           </div>
         )}
       </div>

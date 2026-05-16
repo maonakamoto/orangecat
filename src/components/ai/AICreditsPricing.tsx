@@ -41,7 +41,7 @@ export function AICreditsPricing() {
                 <div className="text-xs text-muted-foreground mt-1">
                   {formatAmount(tier.monthly_credits_btc)} credits/month
                 </div>
-                <div className="mt-2 pt-2 border-t border-gray-100 dark:border-border">
+                <div className="mt-2 pt-2 border-t border-border-subtle">
                   <div className="flex items-center gap-1.5 text-xs text-green-700">
                     <Check className="h-3 w-3" />
                     {tier.label === 'Free' ? 'No payment required' : 'Priority processing'}

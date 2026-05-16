@@ -252,7 +252,7 @@ export default function TasksPage() {
         </div>
       ) : tasks.length === 0 ? (
         <div className="bg-card rounded-xl border border-border p-12 text-center">
-          <ClipboardList className="h-12 w-12 text-gray-400 dark:text-muted-foreground mx-auto mb-4" />
+          <ClipboardList className="h-12 w-12 text-muted-dim mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-foreground mb-2">No tasks found</h3>
           <p className="text-muted-foreground mb-6">
             {categoryFilter || statusFilter || typeFilter

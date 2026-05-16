@@ -75,7 +75,7 @@ export function GuidancePanel({
     <div className="sticky top-4">
       <Card className="p-4">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100 dark:border-border">
+        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-border-subtle">
           <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
             {content.icon}
           </div>
@@ -105,7 +105,7 @@ export function GuidancePanel({
 
         {/* Examples */}
         {content.examples && content.examples.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-border">
+          <div className="mt-3 pt-3 border-t border-border-subtle">
             <h4 className="text-xs font-semibold text-foreground uppercase tracking-wide mb-2">
               Examples
             </h4>
@@ -124,9 +124,7 @@ export function GuidancePanel({
 
         {/* Additional Content (e.g., currency converter) */}
         {additionalContent && (
-          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-border">
-            {additionalContent}
-          </div>
+          <div className="mt-3 pt-3 border-t border-border-subtle">{additionalContent}</div>
         )}
       </Card>
     </div>

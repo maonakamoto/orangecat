@@ -101,7 +101,7 @@ export function PaymentQRCode({
               ? 'text-red-600 font-medium'
               : secondsLeft < 60
                 ? 'text-red-500'
-                : 'text-gray-400 dark:text-muted-foreground'
+                : 'text-muted-dim'
           }`}
         >
           <Timer className="h-3 w-3" />

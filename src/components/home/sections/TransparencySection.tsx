@@ -128,7 +128,7 @@ export default function TransparencySection() {
 
               <div className="space-y-4 sm:space-y-6">
                 {/* Profile Info */}
-                <div className="flex items-start gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-gray-100 dark:border-border">
+                <div className="flex items-start gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-border-subtle">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-muted rounded-full flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
                     👩‍🎨
                   </div>
@@ -182,7 +182,7 @@ export default function TransparencySection() {
                 </div>
 
                 {/* What Gets Tracked */}
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-gray-100 dark:border-border">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-border-subtle">
                   <div>
                     <div className="text-lg sm:text-xl font-bold text-foreground">Supporters</div>
                     <div className="text-xs text-muted-foreground">Who trust your transparency</div>

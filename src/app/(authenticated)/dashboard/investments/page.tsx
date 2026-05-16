@@ -142,7 +142,7 @@ export default function InvestmentsPage() {
                           selectedIds.size === myInvestments.length && myInvestments.length > 0
                         }
                         onChange={() => toggleSelectAll(myInvestments.map(i => i.id))}
-                        className="h-4 w-4 rounded border-gray-300 dark:border-border text-green-600 focus:ring-green-500"
+                        className="h-4 w-4 rounded border-border-strong text-green-600 focus:ring-green-500"
                       />
                       <span>Select All</span>
                     </label>

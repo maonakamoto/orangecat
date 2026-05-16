@@ -99,10 +99,8 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
       <Card className={className}>
         <CardContent className="pt-6">
           <div className="flex items-center gap-2 mb-4">
-            <Activity className="w-5 h-5 text-gray-400 dark:text-muted-foreground animate-pulse" />
-            <h3 className="text-lg font-semibold text-gray-400 dark:text-muted-foreground">
-              Loading activity...
-            </h3>
+            <Activity className="w-5 h-5 text-muted-dim animate-pulse" />
+            <h3 className="text-lg font-semibold text-muted-dim">Loading activity...</h3>
           </div>
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
@@ -168,10 +166,10 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
         ) : (
           <div className="text-center py-8">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
-              <Activity className="w-8 h-8 text-gray-400 dark:text-muted-foreground" />
+              <Activity className="w-8 h-8 text-muted-dim" />
             </div>
             <p className="text-sm text-muted-foreground mb-1">No recent activity yet</p>
-            <p className="text-xs text-gray-400 dark:text-muted-foreground">
+            <p className="text-xs text-muted-dim">
               Updates will appear here as the project progresses
             </p>
           </div>

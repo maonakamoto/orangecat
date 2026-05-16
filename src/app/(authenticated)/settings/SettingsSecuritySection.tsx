@@ -20,7 +20,7 @@ export function SettingsSecuritySection({
 }: Props) {
   return (
     <>
-      <div className="border-t border-gray-100 dark:border-border pt-10">
+      <div className="border-t border-border-subtle pt-10">
         <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
           <Shield className="w-6 h-6 mr-2 text-tiffany-600" />
           Two-Factor Authentication
@@ -53,7 +53,7 @@ export function SettingsSecuritySection({
         </div>
       </div>
 
-      <div className="border-t border-gray-100 dark:border-border pt-10">
+      <div className="border-t border-border-subtle pt-10">
         <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
           <Link2 className="w-6 h-6 mr-2 text-tiffany-600" />
           Connected Accounts

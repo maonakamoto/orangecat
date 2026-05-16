@@ -191,7 +191,7 @@ export function MobileCreateButton() {
                   <Link
                     href={option.href}
                     onClick={() => setIsOpen(false)}
-                    className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-100 dark:border-border hover:border-orange-200 hover:bg-orange-50/50 transition-colors"
+                    className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-border-subtle hover:border-orange-200 hover:bg-orange-50/50 transition-colors"
                   >
                     <div className={cn('p-2.5 rounded-xl', option.bgColor)}>
                       <option.icon className={cn('w-5 h-5', option.color)} />

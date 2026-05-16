@@ -78,7 +78,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                 placeholder="Search stories..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-border rounded-lg focus:ring-2 focus:ring-bitcoinOrange focus:border-transparent bg-white dark:bg-muted text-foreground"
+                className="w-full px-4 py-2 border border-border-strong rounded-lg focus:ring-2 focus:ring-bitcoinOrange focus:border-transparent bg-white dark:bg-muted text-foreground"
               />
             </div>
 

@@ -125,7 +125,7 @@ export default function LoansPage() {
                         type="checkbox"
                         checked={selectedIds.size === myLoans.length && myLoans.length > 0}
                         onChange={() => toggleSelectAll(myLoans.map(l => l.id))}
-                        className="h-4 w-4 rounded border-gray-300 dark:border-border text-tiffany-600 focus:ring-tiffany-500"
+                        className="h-4 w-4 rounded border-border-strong text-tiffany-600 focus:ring-tiffany-500"
                       />
                       <span>Select All</span>
                     </label>

@@ -95,11 +95,11 @@ export default function BookingCard({
           {/* Details */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div className="flex items-center gap-2 text-sm">
-              <Calendar className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
+              <Calendar className="h-4 w-4 text-muted-dim" />
               <span className="text-muted-foreground">{formatDate(booking.starts_at)}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <Clock className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
+              <Clock className="h-4 w-4 text-muted-dim" />
               <span className="text-muted-foreground">
                 {formatTime(booking.starts_at)} - {formatTime(booking.ends_at)}
               </span>
@@ -215,7 +215,7 @@ export default function BookingCard({
       </div>
 
       {/* Footer */}
-      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-border flex items-center justify-between text-xs text-muted-foreground">
+      <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-muted-foreground">
         <span>
           Requested{' '}
           {new Date(booking.created_at).toLocaleDateString([], {
@@ -240,7 +240,7 @@ export default function BookingCard({
             </DialogTitle>
           </DialogHeader>
           <textarea
-            className="w-full px-3 py-2 border border-gray-300 dark:border-border rounded-lg resize-none text-sm bg-white dark:bg-background text-foreground focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500"
+            className="w-full px-3 py-2 border border-border-strong rounded-lg resize-none text-sm bg-white dark:bg-background text-foreground focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500"
             rows={3}
             placeholder="Reason (optional)"
             value={reasonDialog?.reason ?? ''}

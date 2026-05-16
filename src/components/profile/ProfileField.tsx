@@ -29,7 +29,7 @@ export function ProfileField({
 }: ProfileFieldProps) {
   return (
     <div className="flex items-start gap-3">
-      <Icon className="w-5 h-5 text-gray-400 dark:text-muted-foreground mt-0.5" />
+      <Icon className="w-5 h-5 text-muted-dim mt-0.5" />
       <div className="flex-1">
         <div className="text-sm text-muted-foreground">{label}</div>
         {value ? (
@@ -39,14 +39,12 @@ export function ProfileField({
             href={editHref}
             className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline group"
           >
-            <span className="text-gray-400 dark:text-muted-foreground italic group-hover:text-orange-600">
-              {emptyText}
-            </span>
+            <span className="text-muted-dim italic group-hover:text-orange-600">{emptyText}</span>
             <EditIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
             <span className="text-xs">Click to add</span>
           </Link>
         ) : (
-          <div className="text-gray-400 dark:text-muted-foreground italic">{emptyText}</div>
+          <div className="text-muted-dim italic">{emptyText}</div>
         )}
       </div>
     </div>

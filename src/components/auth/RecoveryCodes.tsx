@@ -190,11 +190,9 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           {formattedCodes.map(({ number, code }) => (
             <div
               key={code}
-              className="flex items-center gap-2 px-3 py-2 bg-card border border-gray-100 dark:border-border rounded"
+              className="flex items-center gap-2 px-3 py-2 bg-card border border-border-subtle rounded"
             >
-              <span className="text-xs text-gray-400 dark:text-muted-foreground w-4">
-                {number}.
-              </span>
+              <span className="text-xs text-muted-dim w-4">{number}.</span>
               <code className="text-sm font-mono text-foreground">{code}</code>
             </div>
           ))}
@@ -233,9 +231,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
             )}
             Generate new codes
           </button>
-          <p className="text-xs text-gray-400 dark:text-muted-foreground mt-1">
-            This will invalidate your current codes
-          </p>
+          <p className="text-xs text-muted-dim mt-1">This will invalidate your current codes</p>
         </div>
 
         <label className="flex items-start gap-3 cursor-pointer">
@@ -243,7 +239,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
             type="checkbox"
             checked={acknowledged}
             onChange={e => setAcknowledged(e.target.checked)}
-            className="mt-0.5 h-4 w-4 rounded border-gray-300 dark:border-border text-tiffany focus:ring-tiffany"
+            className="mt-0.5 h-4 w-4 rounded border-border-strong text-tiffany focus:ring-tiffany"
           />
           <span className="text-sm text-foreground">
             I have saved my recovery codes in a secure location

@@ -104,14 +104,14 @@ export function CatContextTab() {
 
           {/* Tips */}
           {summary.tips.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-border">
+            <div className="mt-4 pt-4 border-t border-border-subtle">
               <p className="text-xs font-medium text-gray-700 dark:text-muted-foreground mb-2">
                 Tips to improve:
               </p>
               <ul className="space-y-1">
                 {summary.tips.map((tip, i) => (
                   <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
-                    <Plus className="h-3 w-3 text-gray-400 dark:text-muted-foreground flex-shrink-0 mt-0.5" />
+                    <Plus className="h-3 w-3 text-muted-dim flex-shrink-0 mt-0.5" />
                     {tip}
                   </li>
                 ))}
@@ -133,12 +133,12 @@ export function CatContextTab() {
       {/* Documents list */}
       {documentsLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-gray-400 dark:text-muted-foreground" />
+          <Loader2 className="h-6 w-6 animate-spin text-muted-dim" />
         </div>
       ) : documents.length === 0 ? (
         <div className="text-center py-12 px-4">
           <div className="mx-auto w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-4">
-            <FileText className="h-6 w-6 text-gray-400 dark:text-muted-foreground" />
+            <FileText className="h-6 w-6 text-muted-dim" />
           </div>
           <h3 className="font-semibold text-foreground mb-2">No context yet</h3>
           <p className="text-base text-muted-foreground mb-4">
@@ -152,12 +152,10 @@ export function CatContextTab() {
             const label = (DOCUMENT_TYPE_LABELS as Record<string, string>)[type] || type;
             return (
               <div key={type} className="bg-card rounded-xl border border-border overflow-hidden">
-                <div className="px-4 py-3 bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
+                <div className="px-4 py-3 bg-muted border-b border-border-subtle flex items-center gap-2">
                   <Icon className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium text-foreground">{label}</span>
-                  <span className="text-xs text-gray-400 dark:text-muted-foreground ml-auto">
-                    {docs.length}
-                  </span>
+                  <span className="text-xs text-muted-dim ml-auto">{docs.length}</span>
                 </div>
                 <div className="divide-y divide-gray-100 dark:divide-border">
                   {docs.map(doc => (
@@ -176,7 +174,7 @@ export function CatContextTab() {
                           </p>
                         )}
                       </div>
-                      <ChevronRight className="h-4 w-4 text-gray-400 dark:text-muted-foreground flex-shrink-0 ml-2" />
+                      <ChevronRight className="h-4 w-4 text-muted-dim flex-shrink-0 ml-2" />
                     </Link>
                   ))}
                 </div>

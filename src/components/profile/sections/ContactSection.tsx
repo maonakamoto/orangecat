@@ -68,9 +68,9 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
 
       {/* Registration Email (read-only) */}
       {userEmail && (
-        <div className="p-3 bg-muted rounded-lg border border-gray-100 dark:border-border">
+        <div className="p-3 bg-muted rounded-lg border border-border-subtle">
           <div className="flex items-center gap-2 mb-1">
-            <Mail className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+            <Mail className="w-4 h-4 text-muted-dim" />
             <span className="text-xs font-medium text-muted-foreground">
               Registration Email (private)
             </span>

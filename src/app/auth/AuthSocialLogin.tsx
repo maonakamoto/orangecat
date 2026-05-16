@@ -57,7 +57,7 @@ export function AuthSocialLogin({
               variant="outline"
               disabled={loading}
               onClick={() => onOAuthSignIn(id)}
-              className="h-11 w-full border-gray-300 dark:border-border hover:border-gray-400 hover:bg-muted"
+              className="h-11 w-full border-border-strong hover:border-gray-400 hover:bg-muted"
               aria-label={`Sign in with ${name}`}
             >
               <Icon className="h-5 w-5" />
@@ -93,7 +93,7 @@ export function AuthSocialLogin({
               'Continue without account'
             )}
           </Button>
-          <p className="mt-2 text-xs text-gray-400 dark:text-muted-foreground">
+          <p className="mt-2 text-xs text-muted-dim">
             Anonymous accounts can be upgraded to full accounts anytime.
           </p>
         </div>

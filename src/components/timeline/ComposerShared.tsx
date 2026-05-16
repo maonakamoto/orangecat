@@ -237,7 +237,7 @@ export function CharacterCounter({
       ? 'text-red-500'
       : count > warningThreshold
         ? 'text-orange-500'
-        : 'text-gray-400 dark:text-muted-foreground';
+        : 'text-muted-dim';
 
   return (
     <div className={cn('text-sm font-medium', colorClass, className)}>

@@ -41,7 +41,7 @@ export function HeaderCreateButton() {
 
       {isOpen && (
         <div
-          className="fixed z-50 rounded-xl shadow-xl bg-card border border-gray-100 dark:border-border animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
+          className="fixed z-50 rounded-xl shadow-xl bg-card border border-border-subtle animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
           style={{
             top: buttonRef.current ? buttonRef.current.getBoundingClientRect().bottom + 12 : 'auto',
             right: buttonRef.current
@@ -80,7 +80,7 @@ export function HeaderCreateButton() {
                     </div>
                   </Link>
                   {shouldShowDivider(option, CREATE_OPTIONS[index + 1]) && (
-                    <div className="my-1.5 mx-3 border-t border-gray-100 dark:border-border" />
+                    <div className="my-1.5 mx-3 border-t border-border-subtle" />
                   )}
                 </div>
               ))}

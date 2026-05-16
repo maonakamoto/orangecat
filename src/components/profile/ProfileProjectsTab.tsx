@@ -249,7 +249,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                   )}
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-gray-100 dark:border-border">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border-subtle">
                     <span>{formatRelativeTimeCompact(project.created_at)}</span>
                     {project.bitcoin_address && (
                       <span className="flex items-center gap-1 text-orange-600">

@@ -65,7 +65,7 @@ export function AuthFormBody({
           onChange={e => setFormData({ ...formData, email: e.target.value })}
           disabled={loading}
           placeholder="Enter your email"
-          className="w-full h-12 px-4 rounded-lg border-gray-300 dark:border-border focus:border-orange-500 focus:ring-orange-500 bg-white dark:bg-muted dark:text-foreground"
+          className="w-full h-12 px-4 rounded-lg border-border-strong focus:border-orange-500 focus:ring-orange-500 bg-white dark:bg-muted dark:text-foreground"
           autoComplete="email"
           required
         />
@@ -86,7 +86,7 @@ export function AuthFormBody({
               onBlur={() => setIsPasswordFocused(false)}
               disabled={loading}
               placeholder="Enter your password"
-              className="w-full h-12 px-4 pr-12 rounded-lg border-gray-300 dark:border-border focus:border-orange-500 focus:ring-orange-500 bg-white dark:bg-muted dark:text-foreground"
+              className="w-full h-12 px-4 pr-12 rounded-lg border-border-strong focus:border-orange-500 focus:ring-orange-500 bg-white dark:bg-muted dark:text-foreground"
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               required
             />
@@ -125,7 +125,7 @@ export function AuthFormBody({
               onChange={e => setFormData({ ...formData, confirmPassword: e.target.value })}
               disabled={loading}
               placeholder="Confirm your password"
-              className="w-full h-12 px-4 pr-12 rounded-lg border-gray-300 dark:border-border focus:border-orange-500 focus:ring-orange-500 bg-white dark:bg-muted dark:text-foreground"
+              className="w-full h-12 px-4 pr-12 rounded-lg border-border-strong focus:border-orange-500 focus:ring-orange-500 bg-white dark:bg-muted dark:text-foreground"
               autoComplete="new-password"
               required
             />
@@ -164,7 +164,7 @@ export function AuthFormBody({
               checked={rememberMe}
               onChange={e => setRememberMe(e.target.checked)}
               disabled={loading}
-              className="h-4 w-4 rounded border-gray-300 dark:border-border text-orange-600 focus:ring-orange-500 cursor-pointer"
+              className="h-4 w-4 rounded border-border-strong text-orange-600 focus:ring-orange-500 cursor-pointer"
             />
             <span className="text-sm text-muted-foreground">Remember me</span>
           </label>

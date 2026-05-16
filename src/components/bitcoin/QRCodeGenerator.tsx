@@ -43,7 +43,7 @@ export default function QRCodeGenerator({
     <div className={`flex flex-col items-center space-y-4 ${className}`}>
       {label && <h3 className="text-lg font-semibold text-foreground">{label}</h3>}
 
-      <div className="bg-card p-4 rounded-xl shadow-lg border-2 border-gray-100 dark:border-border">
+      <div className="bg-card p-4 rounded-xl shadow-lg border-2 border-border-subtle">
         <canvas ref={canvasRef} width={size} height={size} className="block" />
       </div>
 

@@ -68,7 +68,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
         ) : (
           <Tooltip>
             <TooltipTrigger>
-              <Info className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
+              <Info className="h-4 w-4 text-muted-dim" />
             </TooltipTrigger>
             <TooltipContent>
               <p>Enable the category first to configure this action</p>
@@ -108,9 +108,9 @@ export function CategoryRow({
             className="p-1 hover:bg-gray-100 dark:hover:bg-muted rounded"
           >
             {isExpanded ? (
-              <ChevronDown className="h-5 w-5 text-gray-400 dark:text-muted-foreground" />
+              <ChevronDown className="h-5 w-5 text-muted-dim" />
             ) : (
-              <ChevronRight className="h-5 w-5 text-gray-400 dark:text-muted-foreground" />
+              <ChevronRight className="h-5 w-5 text-muted-dim" />
             )}
           </button>
           <div>
@@ -131,7 +131,7 @@ export function CategoryRow({
       </div>
 
       {isExpanded && (
-        <div className="border-t border-gray-100 dark:border-border bg-muted p-4">
+        <div className="border-t border-border-subtle bg-muted p-4">
           <div className="space-y-3">
             {actions.map(action => (
               <ActionRow

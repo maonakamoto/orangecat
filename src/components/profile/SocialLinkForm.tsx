@@ -109,7 +109,7 @@ export function SocialLinkForm({
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   isSelected
                     ? 'border-orange-500 bg-orange-50'
-                    : 'border-gray-300 dark:border-border hover:border-orange-300'
+                    : 'border-border-strong hover:border-orange-300'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export function SocialLinkForm({
             className={`p-3 border rounded-lg text-left transition-colors ${
               platform === 'custom'
                 ? 'border-orange-500 bg-orange-50'
-                : 'border-gray-300 dark:border-border hover:border-orange-300'
+                : 'border-border-strong hover:border-orange-300'
             }`}
           >
             <div className="flex items-center gap-2">
@@ -161,7 +161,7 @@ export function SocialLinkForm({
         <div className="relative">
           {platformConfig && (
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-              <Icon className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+              <Icon className="w-4 h-4 text-muted-dim" />
             </div>
           )}
           <Input

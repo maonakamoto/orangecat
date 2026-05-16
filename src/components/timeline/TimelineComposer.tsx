@@ -191,7 +191,7 @@ const TimelineComposer = React.memo(function TimelineComposer({
 
           <ComposerMessages error={postComposer.error} success={postComposer.postSuccess} />
 
-          <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-border">
+          <div className="flex items-center justify-between mt-4 pt-3 border-t border-border-subtle">
             <div className="flex items-center gap-2 text-tiffany-500 flex-wrap">
               {!simpleMode && <TextFormatToolbar onFormat={handleFormat} />}
 

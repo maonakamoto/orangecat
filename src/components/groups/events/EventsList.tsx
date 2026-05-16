@@ -85,7 +85,7 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
     return (
       <Card>
         <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-muted-foreground" />
+          <Loader2 className="h-8 w-8 animate-spin text-muted-dim" />
         </CardContent>
       </Card>
     );
@@ -122,7 +122,7 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
       {events.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <Calendar className="h-12 w-12 text-gray-400 dark:text-muted-foreground mb-4" />
+            <Calendar className="h-12 w-12 text-muted-dim mb-4" />
             <h3 className="text-lg font-semibold mb-2">No events yet</h3>
             <p className="text-muted-foreground text-center mb-4">
               {statusFilter === 'upcoming'

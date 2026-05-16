@@ -55,7 +55,7 @@ export function GenericPublicCard({
                   {entity.status}
                 </Badge>
               )}
-              <span className="text-gray-400 dark:text-muted-foreground whitespace-nowrap">
+              <span className="text-muted-dim whitespace-nowrap">
                 {formatRelativeTime(entity.created_at)}
               </span>
             </div>

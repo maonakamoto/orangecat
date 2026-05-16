@@ -97,7 +97,7 @@ export function CurrencyInput({
               value={inputCurrency}
               onChange={e => handleCurrencyChange(e.target.value as Currency)}
               disabled={disabled}
-              className="px-3 py-2 border border-l-0 border-gray-300 dark:border-border rounded-r-md bg-muted text-sm font-medium text-foreground focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
+              className="px-3 py-2 border border-l-0 border-border-strong rounded-r-md bg-muted text-sm font-medium text-foreground focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
             >
               {ALL_CURRENCIES.map(curr => (
                 <option key={curr} value={curr}>
@@ -106,7 +106,7 @@ export function CurrencyInput({
               ))}
             </select>
           ) : (
-            <div className="px-3 py-2 border border-l-0 border-gray-300 dark:border-border rounded-r-md bg-muted text-sm font-medium text-foreground">
+            <div className="px-3 py-2 border border-l-0 border-border-strong rounded-r-md bg-muted text-sm font-medium text-foreground">
               {inputCurrency}
             </div>
           )}

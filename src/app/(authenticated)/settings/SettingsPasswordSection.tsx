@@ -24,7 +24,7 @@ export function SettingsPasswordSection({
   onSubmit,
 }: Props) {
   return (
-    <div className="border-t border-gray-100 dark:border-border pt-10">
+    <div className="border-t border-border-subtle pt-10">
       <h3 className="text-lg font-semibold text-foreground mb-4">Change Password</h3>
       <p className="text-muted-foreground mb-6">
         Choose a strong password to keep your account secure.

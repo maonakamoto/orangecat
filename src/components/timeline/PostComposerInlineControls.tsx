@@ -94,7 +94,7 @@ export function PostComposerInlineControls({
         </div>
       )}
 
-      <div className="hidden sm:block mt-2 text-xs text-gray-400 dark:text-muted-foreground text-center">
+      <div className="hidden sm:block mt-2 text-xs text-muted-dim text-center">
         Press Ctrl+Enter to post
       </div>
     </>

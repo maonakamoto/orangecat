@@ -137,13 +137,7 @@ export function VoiceInputButton({
         title="Voice input not supported in this browser"
         disabled
       >
-        <MicOff
-          className={
-            size === 'sm'
-              ? 'h-4 w-4 text-gray-400 dark:text-muted-foreground'
-              : 'h-5 w-5 text-gray-400 dark:text-muted-foreground'
-          }
-        />
+        <MicOff className={size === 'sm' ? 'h-4 w-4 text-muted-dim' : 'h-5 w-5 text-muted-dim'} />
       </button>
     );
   }

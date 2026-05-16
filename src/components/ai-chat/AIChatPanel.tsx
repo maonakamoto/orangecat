@@ -41,7 +41,7 @@ export function AIChatPanel({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-muted-dim" />
       </div>
     );
   }
@@ -149,11 +149,9 @@ export function AIChatPanel({
               {assistant?.welcome_message?.trim() ||
                 `Send a message to begin chatting with ${assistant?.title || 'your Cat'}.`}
             </p>
-            <p className="text-sm text-gray-400 dark:text-muted-foreground mt-2">
-              Type a message below to begin
-            </p>
+            <p className="text-sm text-muted-dim mt-2">Type a message below to begin</p>
             {!userStatus?.hasByok && (
-              <p className="text-sm text-gray-400 dark:text-muted-foreground mt-4">
+              <p className="text-sm text-muted-dim mt-4">
                 Using free tier • {userStatus?.freeMessagesRemaining || 0} messages remaining today
               </p>
             )}

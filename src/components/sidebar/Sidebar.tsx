@@ -129,7 +129,7 @@ export function Sidebar({
             {/* Desktop Collapse Toggle Button */}
             {isDesktop && (
               <div
-                className={`border-t border-gray-100 dark:border-border ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}
+                className={`border-t border-border-subtle ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}
               >
                 <button
                   onClick={toggleSidebarCollapse}
@@ -158,7 +158,7 @@ export function Sidebar({
             {/* Mobile Close Button */}
             {navigationState.isSidebarOpen && !isDesktop && (
               <div
-                className={`border-t border-gray-100 dark:border-border ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}
+                className={`border-t border-border-subtle ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}
               >
                 <button
                   onClick={toggleSidebar}

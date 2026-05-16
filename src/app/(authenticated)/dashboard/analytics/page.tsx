@@ -142,7 +142,7 @@ export default function AnalyticsPage() {
             <select
               value={selectedProject}
               onChange={e => setSelectedProject(e.target.value)}
-              className="border border-gray-300 dark:border-border dark:bg-muted dark:text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              className="border border-border-strong dark:bg-muted dark:text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
             >
               <option value="all">All Projects</option>
               {projects.map(project => (

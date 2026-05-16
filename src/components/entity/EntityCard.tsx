@@ -225,12 +225,7 @@ export function EntityCard({
         {metricsSlot && <div className={cn(compact ? 'mt-2' : 'mt-3')}>{metricsSlot}</div>}
 
         {footerSlot && (
-          <div
-            className={cn(
-              compact ? 'mt-2 pt-2' : 'mt-3 pt-3',
-              'border-t border-gray-100 dark:border-border'
-            )}
-          >
+          <div className={cn(compact ? 'mt-2 pt-2' : 'mt-3 pt-3', 'border-t border-border-subtle')}>
             {footerSlot}
           </div>
         )}

@@ -36,7 +36,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         ))}
       </div>
       {post.author && (
-        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-border">
+        <div className="mt-4 pt-4 border-t border-border-subtle">
           <p className="text-sm text-muted-foreground">By {post.author}</p>
         </div>
       )}

@@ -22,7 +22,7 @@ const STATUS_STYLES = {
     label: 'Completed',
   },
   cancelled: {
-    selected: 'bg-muted border-gray-300 dark:border-border text-foreground',
+    selected: 'bg-muted border-border-strong text-foreground',
     label: 'Cancelled',
   },
 } as const;
@@ -88,7 +88,7 @@ export default function DiscoverFilters({
         <label className="block text-sm font-medium text-foreground mb-2">Search</label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
+            <Search className="h-4 w-4 text-muted-dim" />
           </div>
           <Input
             type="text"
@@ -99,7 +99,7 @@ export default function DiscoverFilters({
           />
           {loading && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <Loader2 className="h-4 w-4 animate-spin text-gray-400 dark:text-muted-foreground" />
+              <Loader2 className="h-4 w-4 animate-spin text-muted-dim" />
             </div>
           )}
         </div>

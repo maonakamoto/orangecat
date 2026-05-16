@@ -75,7 +75,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
               {proposal.description ? (
                 <span className="line-clamp-2">{proposal.description}</span>
               ) : (
-                <span className="text-gray-400 dark:text-muted-foreground">No description</span>
+                <span className="text-muted-dim">No description</span>
               )}
             </CardDescription>
           </div>
@@ -97,9 +97,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
                 </span>
               )}
             </div>
-            <span className="text-gray-400 dark:text-muted-foreground">
-              {formatRelativeTime(proposal.created_at)}
-            </span>
+            <span className="text-muted-dim">{formatRelativeTime(proposal.created_at)}</span>
           </div>
 
           {proposal.status === PROPOSAL_STATUSES.ACTIVE && proposal.voting_results && (

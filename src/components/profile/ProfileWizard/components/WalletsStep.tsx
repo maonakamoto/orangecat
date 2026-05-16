@@ -80,7 +80,7 @@ export function WalletsStep({ form }: WalletsStepProps) {
 
       <div className="mt-8 bg-muted rounded-lg p-6 border border-border">
         <div className="text-center text-muted-foreground py-8">
-          <Wallet className="w-16 h-16 mx-auto mb-4 text-gray-400 dark:text-muted-foreground" />
+          <Wallet className="w-16 h-16 mx-auto mb-4 text-muted-dim" />
           <h3 className="text-lg font-medium text-foreground mb-2">Manage Wallets Later</h3>
           <p className="text-sm mb-4">
             You can add and manage multiple Bitcoin wallets from your profile page or dashboard

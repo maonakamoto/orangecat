@@ -54,7 +54,7 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
           <div className="text-center py-8 text-muted-foreground">
             <BarChart3 className="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
             <p className="text-sm mb-2">No projects yet</p>
-            <p className="text-xs text-gray-400 dark:text-muted-foreground mb-4">
+            <p className="text-xs text-muted-dim mb-4">
               Start your fundraising journey by creating your first project
             </p>
             <Link href={ENTITY_REGISTRY.project.createPath}>

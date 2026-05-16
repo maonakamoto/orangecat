@@ -133,7 +133,7 @@ export function ProposalDetail({
       <Card>
         <CardContent className="py-12">
           <div className="flex items-center justify-center">
-            <Loader2 className="h-6 w-6 animate-spin text-gray-400 dark:text-muted-foreground" />
+            <Loader2 className="h-6 w-6 animate-spin text-muted-dim" />
           </div>
         </CardContent>
       </Card>

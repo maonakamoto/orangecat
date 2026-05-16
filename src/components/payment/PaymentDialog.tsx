@@ -124,7 +124,7 @@ export function PaymentDialog({
                       type="checkbox"
                       checked={isAnonymous}
                       onChange={e => setIsAnonymous(e.target.checked)}
-                      className="rounded border-gray-300 dark:border-border"
+                      className="rounded border-border-strong"
                     />
                     Contribute anonymously
                   </label>
@@ -146,7 +146,7 @@ export function PaymentDialog({
           {/* Phase: Initiating */}
           {state.phase === 'initiating' && (
             <div className="flex flex-col items-center gap-4 py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-muted-foreground" />
+              <Loader2 className="h-8 w-8 animate-spin text-muted-dim" />
               <p className="text-sm text-muted-foreground">Creating invoice...</p>
             </div>
           )}

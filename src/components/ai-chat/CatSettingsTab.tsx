@@ -58,7 +58,7 @@ export function CatSettingsTab() {
     <div className="space-y-6">
       {/* AI Model Selection */}
       <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
+        <div className="px-4 py-3 bg-muted border-b border-border-subtle flex items-center gap-2">
           <Bot className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-semibold text-foreground">AI Model</span>
         </div>
@@ -97,7 +97,7 @@ export function CatSettingsTab() {
 
       {/* API Keys Status */}
       <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
+        <div className="px-4 py-3 bg-muted border-b border-border-subtle flex items-center gap-2">
           <Key className="h-4 w-4 text-amber-600" />
           <span className="text-sm font-semibold text-foreground">API Keys</span>
         </div>
@@ -130,14 +130,14 @@ export function CatSettingsTab() {
             <span className="text-sm text-gray-700 dark:text-muted-foreground">
               Manage API Keys
             </span>
-            <ChevronRight className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
+            <ChevronRight className="h-4 w-4 text-muted-dim" />
           </Link>
         </div>
       </div>
 
       {/* Permissions */}
       <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-muted border-b border-gray-100 dark:border-border flex items-center justify-between">
+        <div className="px-4 py-3 bg-muted border-b border-border-subtle flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Shield className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-semibold text-foreground">Permissions</span>
@@ -151,7 +151,7 @@ export function CatSettingsTab() {
 
         {permLoading ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-5 w-5 animate-spin text-gray-400 dark:text-muted-foreground" />
+            <Loader2 className="h-5 w-5 animate-spin text-muted-dim" />
           </div>
         ) : permissions ? (
           <div className="divide-y divide-gray-100 dark:divide-border">
@@ -164,9 +164,7 @@ export function CatSettingsTab() {
                     <p className="text-sm text-muted-foreground truncate">{cat.description}</p>
                   </div>
                   <div className="flex items-center gap-2 ml-3">
-                    {isSaving && (
-                      <Loader2 className="h-4 w-4 animate-spin text-gray-400 dark:text-muted-foreground" />
-                    )}
+                    {isSaving && <Loader2 className="h-4 w-4 animate-spin text-muted-dim" />}
                     <Switch
                       checked={cat.enabled}
                       onCheckedChange={checked => toggleCategory(cat.category, checked)}

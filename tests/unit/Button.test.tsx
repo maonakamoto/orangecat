@@ -74,7 +74,7 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     test('should apply outline variant styling', () => {
       render(<Button variant="outline">Outline</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-2', 'border-gray-300', 'bg-transparent');
+      expect(button).toHaveClass('border-2', 'border-border-strong', 'bg-transparent');
     });
 
     test('should apply gradient variant (Bitcoin orange to tiffany)', () => {
@@ -329,7 +329,7 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
 
       const link = screen.getByRole('link');
       expect(link).toHaveAttribute('href', '/campaign/123');
-      expect(link).toHaveClass('border-2', 'border-gray-300');
+      expect(link).toHaveClass('border-2', 'border-border-strong');
     });
   });
 

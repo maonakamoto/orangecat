@@ -73,7 +73,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
         </div>
 
         {/* Footer sections */}
-        <div className="mt-auto border-t border-gray-100 dark:border-border">
+        <div className="mt-auto border-t border-border-subtle">
           {(['product', 'company', 'legal'] as const).map(sectionKey => {
             const section = footer?.[sectionKey] || [];
             if (!section || section.length === 0) {

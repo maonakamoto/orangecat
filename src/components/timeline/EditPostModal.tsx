@@ -118,7 +118,7 @@ export function EditPostModal({
       {/* Modal */}
       <div className="relative w-full max-w-xl bg-card rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-border">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border-subtle">
           <button
             onClick={onClose}
             className="text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-full p-2 -ml-2 transition-colors min-h-11 min-w-11 flex items-center justify-center"
@@ -161,7 +161,7 @@ export function EditPostModal({
             onChange={e => setContent(e.target.value)}
             placeholder="What's happening?"
             className={cn(
-              'min-h-[150px] text-base leading-relaxed border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-gray-500 dark:placeholder:text-muted-foreground',
+              'min-h-[150px] text-base leading-relaxed border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-muted-foreground',
               isOverLimit && 'text-red-600'
             )}
             disabled={isSaving}
@@ -169,7 +169,7 @@ export function EditPostModal({
           />
 
           {/* Footer */}
-          <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-border">
+          <div className="flex items-center justify-between mt-4 pt-3 border-t border-border-subtle">
             {/* Visibility selector */}
             <div className="flex items-center gap-2">
               <button
@@ -198,12 +198,7 @@ export function EditPostModal({
 
             {/* Character count */}
             <div
-              className={cn(
-                'text-sm',
-                isOverLimit
-                  ? 'text-red-600 font-medium'
-                  : 'text-gray-400 dark:text-muted-foreground'
-              )}
+              className={cn('text-sm', isOverLimit ? 'text-red-600 font-medium' : 'text-muted-dim')}
             >
               {charCount.toLocaleString()} / {maxChars.toLocaleString()}
             </div>

@@ -49,7 +49,7 @@ export function MessageActorSelector({
               </AvatarFallback>
             </Avatar>
             <span className="font-medium text-foreground">{selectedActor.name}</span>
-            <ChevronDown className="h-3 w-3 text-gray-400 dark:text-muted-foreground" />
+            <ChevronDown className="h-3 w-3 text-muted-dim" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-56">

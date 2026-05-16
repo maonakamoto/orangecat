@@ -37,11 +37,11 @@ function FieldError({ message }: { message?: string }) {
 
 const fieldClass = (hasError: boolean) =>
   `w-full rounded-lg border px-3 py-2 bg-white dark:bg-muted text-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 ${
-    hasError ? 'border-red-500' : 'border-gray-300 dark:border-border'
+    hasError ? 'border-red-500' : 'border-border-strong'
   }`;
 
 const selectClass =
-  'w-full rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500';
+  'w-full rounded-lg border border-border-strong bg-white dark:bg-muted text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500';
 
 export function TaskFormFields({
   formData,
@@ -213,7 +213,7 @@ export function TaskFormFields({
               }
             }}
             placeholder="Add tag..."
-            className="flex-1 rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+            className="flex-1 rounded-lg border border-border-strong bg-white dark:bg-muted text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
           />
           <Button type="button" variant="outline" onClick={onAddTag}>
             Add

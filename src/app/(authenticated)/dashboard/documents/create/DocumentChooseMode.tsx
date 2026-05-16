@@ -107,7 +107,7 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
             "Business ideas you're working on",
           ].map(idea => (
             <div key={idea} className="flex items-start gap-2">
-              <FileText className="h-4 w-4 text-gray-400 dark:text-muted-foreground mt-0.5 flex-shrink-0" />
+              <FileText className="h-4 w-4 text-muted-dim mt-0.5 flex-shrink-0" />
               <span>{idea}</span>
             </div>
           ))}

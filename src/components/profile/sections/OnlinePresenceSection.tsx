@@ -54,7 +54,7 @@ export function OnlinePresenceSection({
       />
 
       {/* Social Media & Links */}
-      <div id="socialLinks" className="pt-4 mt-2 border-t border-gray-100 dark:border-border">
+      <div id="socialLinks" className="pt-4 mt-2 border-t border-border-subtle">
         <div onFocus={() => onFieldFocus?.('socialLinks')} tabIndex={-1}>
           <SocialLinksEditor
             links={socialLinks}

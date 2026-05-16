@@ -123,9 +123,7 @@ export default function IntelligentOnboarding() {
 
           {/* Example prompts */}
           <div className="space-y-1">
-            <p className="text-xs text-gray-400 dark:text-muted-foreground font-medium uppercase tracking-wide">
-              Examples
-            </p>
+            <p className="text-xs text-muted-dim font-medium uppercase tracking-wide">Examples</p>
             <div className="flex flex-wrap gap-2">
               {EXAMPLE_PROMPTS.map(prompt => (
                 <button
@@ -158,7 +156,7 @@ export default function IntelligentOnboarding() {
             )}
           </Button>
 
-          <p className="text-xs text-center text-gray-400 dark:text-muted-foreground">
+          <p className="text-xs text-center text-muted-dim">
             My Cat will ask follow-up questions and suggest the right setup for your situation
           </p>
         </div>

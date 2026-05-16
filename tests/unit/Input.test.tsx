@@ -316,7 +316,13 @@ describe('🎨 Input Component - Form Foundation Tests', () => {
     test('should have proper base styling', () => {
       render(<Input placeholder="Base styles test" />);
       const input = screen.getByPlaceholderText('Base styles test');
-      expect(input).toHaveClass('block', 'w-full', 'rounded-md', 'border-gray-300', 'shadow-sm');
+      expect(input).toHaveClass(
+        'block',
+        'w-full',
+        'rounded-md',
+        'border-border-strong',
+        'shadow-sm'
+      );
     });
 
     test('should be accessible with proper label association', () => {

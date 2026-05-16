@@ -67,7 +67,7 @@ export default function CategoriesPage() {
                     >
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-foreground mb-2">{group.name}</h3>
-                        <ArrowRight className="w-5 h-5 text-gray-400 dark:text-muted-foreground group-hover:text-tiffany-500 transition-colors" />
+                        <ArrowRight className="w-5 h-5 text-muted-dim group-hover:text-tiffany-500 transition-colors" />
                       </div>
                       <p className="text-muted-foreground text-sm">{group.description}</p>
                     </Link>

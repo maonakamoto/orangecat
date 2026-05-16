@@ -131,7 +131,7 @@ export default function ProjectsDashboardPage() {
                           filteredProjects.length > 0
                         }
                         onChange={() => toggleSelectAll(filteredProjects.map(p => p.id))}
-                        className="h-4 w-4 rounded border-gray-300 dark:border-border text-orange-600 focus:ring-orange-500"
+                        className="h-4 w-4 rounded border-border-strong text-orange-600 focus:ring-orange-500"
                       />
                       <span>Select All</span>
                     </label>

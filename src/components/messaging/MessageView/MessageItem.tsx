@@ -69,15 +69,11 @@ function MessageStatusIcon({ message }: { message: Message }) {
 
   // Delivered messages - single check
   if (isDelivered) {
-    return (
-      <Check className="h-3 w-3 text-gray-400 dark:text-muted-foreground" aria-label="Delivered" />
-    );
+    return <Check className="h-3 w-3 text-muted-dim" aria-label="Delivered" />;
   }
 
   // Default: show as delivered (message exists in DB)
-  return (
-    <Check className="h-3 w-3 text-gray-400 dark:text-muted-foreground" aria-label="Delivered" />
-  );
+  return <Check className="h-3 w-3 text-muted-dim" aria-label="Delivered" />;
 }
 
 export default function MessageItem({
@@ -226,9 +222,7 @@ export default function MessageItem({
             )}
 
             {/* Edited indicator */}
-            {message.edited_at && (
-              <span className="text-gray-400 dark:text-muted-foreground italic">edited</span>
-            )}
+            {message.edited_at && <span className="text-muted-dim italic">edited</span>}
           </div>
         </div>
       </div>

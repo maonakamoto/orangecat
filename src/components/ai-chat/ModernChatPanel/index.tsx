@@ -167,9 +167,7 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
       <div className="flex-1 overflow-y-auto py-4">
         {isLoadingHistory ? (
           <div className="flex items-center justify-center h-full">
-            <div className="text-sm text-gray-400 dark:text-muted-foreground">
-              Loading conversation...
-            </div>
+            <div className="text-sm text-muted-dim">Loading conversation...</div>
           </div>
         ) : messages.length === 0 ? (
           <EmptyState

@@ -35,9 +35,7 @@ export function FormField({
   const userCurrency = useUserCurrency();
   const { name, label, type, placeholder, required, options, hint, min, max, rows = 4 } = config;
 
-  const baseInputClass = error
-    ? 'border-red-500 focus:ring-red-500'
-    : 'border-gray-300 dark:border-border';
+  const baseInputClass = error ? 'border-red-500 focus:ring-red-500' : 'border-border-strong';
 
   const renderInput = () => {
     switch (type) {
@@ -165,7 +163,7 @@ export function FormField({
               onChange={e => onChange(e.target.checked)}
               onFocus={onFocus}
               disabled={disabled}
-              className="w-4 h-4 rounded border-gray-300 dark:border-border text-orange-600 focus:ring-orange-500"
+              className="w-4 h-4 rounded border-border-strong text-orange-600 focus:ring-orange-500"
             />
             <span className="text-sm text-foreground">{placeholder || label}</span>
           </label>

@@ -67,9 +67,9 @@ export function SidebarNavigation({
                       aria-label={`${navigationLabels.SECTION_TOGGLE} ${section.title}`}
                     >
                       {isCollapsed ? (
-                        <ChevronRight className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+                        <ChevronRight className="w-4 h-4 text-muted-dim" />
                       ) : (
-                        <ChevronDown className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+                        <ChevronDown className="w-4 h-4 text-muted-dim" />
                       )}
                     </button>
                   )}
@@ -97,9 +97,7 @@ export function SidebarNavigation({
 
       {/* Bottom Navigation Items */}
       {bottomItems.length > 0 && (
-        <div
-          className={`border-t border-gray-100 dark:border-border py-2 space-y-1 ${isExpanded ? 'px-2' : ''}`}
-        >
+        <div className={`border-t border-border-subtle py-2 space-y-1 ${isExpanded ? 'px-2' : ''}`}>
           {bottomItems.map(item => (
             <SidebarNavItem
               key={item.name}

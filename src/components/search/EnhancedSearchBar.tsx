@@ -73,7 +73,7 @@ export default function EnhancedSearchBar({
   return (
     <div ref={searchRef} className={`relative ${className}`}>
       <form onSubmit={handleSubmit} className="relative">
-        <Search className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-muted-foreground" />
+        <Search className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-dim" />
         <input
           ref={inputRef}
           type="text"
@@ -83,7 +83,7 @@ export default function EnhancedSearchBar({
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleInputKeyDown}
           autoFocus={autoFocus}
-          className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 text-sm border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-muted hover:bg-white dark:hover:bg-card dark:text-foreground transition-all duration-200 placeholder-gray-500 dark:placeholder:text-muted-foreground"
+          className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 text-sm border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-muted hover:bg-white dark:hover:bg-card dark:text-foreground transition-all duration-200 placeholder:text-muted-dim"
           aria-label="Search"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
@@ -91,7 +91,7 @@ export default function EnhancedSearchBar({
           aria-autocomplete="list"
           aria-controls="search-results-listbox"
         />
-        <div className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 flex items-center text-xs text-gray-400 dark:text-muted-foreground">
+        <div className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 flex items-center text-xs text-muted-dim">
           <kbd className="hidden sm:inline-flex px-1.5 py-0.5 bg-muted rounded border dark:border-border text-xs dark:text-muted-foreground">
             ⌘K
           </kbd>

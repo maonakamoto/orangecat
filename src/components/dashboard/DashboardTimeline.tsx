@@ -53,7 +53,7 @@ export function DashboardTimeline({
 
       {/* Timeline feed surface matches timeline UI */}
       <div className="bg-card border border-border rounded-xl sm:rounded-2xl shadow-sm overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-100 dark:border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-5 py-3 sm:py-4 border-b border-border-subtle">
           <div>
             <CardTitle className="text-base sm:text-lg font-semibold text-foreground">
               My Timeline

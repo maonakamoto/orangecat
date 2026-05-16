@@ -27,7 +27,7 @@ export function ChatHeader({
   const router = useRouter();
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-border">
+    <div className="flex items-center justify-between px-4 py-3 border-b border-border-subtle">
       <div className="flex items-center gap-3">
         <div
           className={`w-10 h-10 rounded-full ${GRADIENTS.brandOrangeBr} flex items-center justify-center`}
@@ -50,7 +50,7 @@ export function ChatHeader({
         {hasMessages && (
           <button
             onClick={onClearChat}
-            className="p-2 text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+            className="p-2 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Clear chat"
             title="Clear chat"
           >
@@ -60,7 +60,7 @@ export function ChatHeader({
 
         <button
           onClick={() => router.push(ROUTES.SETTINGS_AI)}
-          className="p-2 text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+          className="p-2 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
           aria-label="AI settings"
           title="AI Settings"
         >

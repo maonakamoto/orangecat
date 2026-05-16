@@ -53,7 +53,7 @@ export default function TaskAnalyticsPage() {
           <select
             value={days}
             onChange={e => setDays(parseInt(e.target.value))}
-            className="rounded-lg border border-gray-300 dark:border-border bg-card text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+            className="rounded-lg border border-border-strong bg-card text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tiffany-500"
           >
             <option value={7}>Last 7 days</option>
             <option value={30}>Last 30 days</option>
@@ -114,7 +114,7 @@ export default function TaskAnalyticsPage() {
                       <span className="text-sm text-muted-foreground">
                         {contribution.totalCompletions} tasks
                         {contribution.totalMinutes > 0 && (
-                          <span className="text-gray-400 dark:text-muted-foreground ml-2">
+                          <span className="text-muted-dim ml-2">
                             ({Math.round(contribution.totalMinutes / 60)}h)
                           </span>
                         )}

@@ -207,7 +207,7 @@ export function ConversationListItem({
             <button
               type="button"
               aria-label="Delete conversation"
-              className="p-1 rounded-md text-gray-400 dark:text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 self-start"
+              className="p-1 rounded-md text-muted-dim hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 self-start"
               onClick={e => {
                 e.stopPropagation();
                 onDeleteRequest();

@@ -55,7 +55,7 @@ export default function PostPage() {
         <div
           key={reply.id}
           className={cn(
-            depth === 0 ? 'border-b border-border' : 'border-l border-gray-100 dark:border-border',
+            depth === 0 ? 'border-b border-border' : 'border-l border-border-subtle',
             depth > 0 ? 'pl-4 ml-4' : ''
           )}
         >
@@ -76,7 +76,7 @@ export default function PostPage() {
       <div className="min-h-screen bg-white dark:bg-background">
         {pageHeader}
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-gray-400 dark:text-muted-foreground" />
+          <Loader2 className="w-8 h-8 animate-spin text-muted-dim" />
         </div>
       </div>
     );
@@ -132,7 +132,7 @@ export default function PostPage() {
           />
 
           {/* Engagement stats bar */}
-          <div className="px-4 py-3 border-t border-gray-100 dark:border-border flex items-center gap-6 text-sm">
+          <div className="px-4 py-3 border-t border-border-subtle flex items-center gap-6 text-sm">
             {(mainPost.repostsCount || 0) > 0 && (
               <button className="hover:underline">
                 <span className="font-bold text-foreground">{mainPost.repostsCount}</span>
@@ -182,11 +182,7 @@ export default function PostPage() {
         {replies.length === 0 && (
           <div className="py-12 text-center">
             <p className="text-muted-foreground">No replies yet</p>
-            {user && (
-              <p className="text-sm text-gray-400 dark:text-muted-foreground mt-1">
-                Be the first to reply!
-              </p>
-            )}
+            {user && <p className="text-sm text-muted-dim mt-1">Be the first to reply!</p>}
           </div>
         )}
       </div>

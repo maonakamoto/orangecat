@@ -57,7 +57,7 @@ export function UserProfileDropdownPanel({
 }: UserProfileDropdownPanelProps) {
   return (
     <div
-      className="fixed z-50 rounded-2xl shadow-2xl bg-card border border-gray-100 dark:border-border animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
+      className="fixed z-50 rounded-2xl shadow-2xl bg-card border border-border-subtle animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
       style={{
         top: buttonRef.current ? buttonRef.current.getBoundingClientRect().bottom + 12 : 'auto',
         right: buttonRef.current
@@ -70,7 +70,7 @@ export function UserProfileDropdownPanel({
       aria-label="User menu"
     >
       {showUserInfo && (
-        <div className="p-6 bg-gradient-to-br from-gray-50 to-white dark:from-muted dark:to-card border-b border-gray-100 dark:border-border">
+        <div className="p-6 bg-gradient-to-br from-gray-50 to-white dark:from-muted dark:to-card border-b border-border-subtle">
           <div className="flex items-center space-x-4">
             <Link
               href={ROUTES.PROFILES.ME}
@@ -105,7 +105,7 @@ export function UserProfileDropdownPanel({
                 <h3 className="font-semibold text-lg text-foreground group-hover:text-tiffany-600 transition-colors duration-200 truncate">
                   {displayName}
                 </h3>
-                <ExternalLink className="w-4 h-4 text-gray-400 dark:text-muted-foreground group-hover:text-tiffany-500 transition-all duration-200 opacity-0 group-hover:opacity-100 transform group-hover:scale-110" />
+                <ExternalLink className="w-4 h-4 text-muted-dim group-hover:text-tiffany-500 transition-all duration-200 opacity-0 group-hover:opacity-100 transform group-hover:scale-110" />
               </button>
               {username && <p className="text-sm font-medium text-muted-foreground">@{username}</p>}
               {email && <p className="text-xs text-muted-foreground truncate mt-1">{email}</p>}
@@ -151,7 +151,7 @@ export function UserProfileDropdownPanel({
         })}
       </div>
 
-      <div className="border-t border-gray-100 dark:border-border my-1" />
+      <div className="border-t border-border-subtle my-1" />
 
       <div className="py-2">
         <button

@@ -62,22 +62,16 @@ export function AIChatMessage({
           <span className="font-medium text-sm text-foreground">
             {isUser ? userName : assistantName}
           </span>
-          <span className="text-xs text-gray-400 dark:text-muted-foreground">
-            {formatShortTime(message.created_at)}
-          </span>
+          <span className="text-xs text-muted-dim">{formatShortTime(message.created_at)}</span>
           {!isUser && message.tokens_used && message.tokens_used > 0 && (
-            <span className="text-xs text-gray-400 dark:text-muted-foreground">
-              ({message.tokens_used} tokens)
-            </span>
+            <span className="text-xs text-muted-dim">({message.tokens_used} tokens)</span>
           )}
         </div>
         <div className="prose prose-sm max-w-none text-foreground whitespace-pre-wrap">
           {message.content}
         </div>
         {!isUser && message.cost_btc && message.cost_btc > 0 && (
-          <div className="mt-2 text-xs text-gray-400 dark:text-muted-foreground">
-            Cost: {message.cost_btc.toFixed(8)} BTC
-          </div>
+          <div className="mt-2 text-xs text-muted-dim">Cost: {message.cost_btc.toFixed(8)} BTC</div>
         )}
       </div>
     </div>

@@ -75,12 +75,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
   // Collapsed mode: just show the avatar, no dropdown
   if (!isExpanded) {
     return (
-      <div
-        className={cn(
-          'px-2 py-3 border-b border-gray-100 dark:border-border flex justify-center',
-          className
-        )}
-      >
+      <div className={cn('px-2 py-3 border-b border-border-subtle flex justify-center', className)}>
         <div className="relative">
           {avatarUrl ? (
             <Image
@@ -109,7 +104,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
   return (
     <div
       ref={dropdownRef}
-      className={cn('relative px-2 py-3 border-b border-gray-100 dark:border-border', className)}
+      className={cn('relative px-2 py-3 border-b border-border-subtle', className)}
     >
       {/* Trigger */}
       <button
@@ -150,10 +145,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           </p>
         </div>
         <ChevronDown
-          className={cn(
-            'w-4 h-4 text-gray-400 dark:text-muted-foreground transition-transform',
-            isOpen && 'rotate-180'
-          )}
+          className={cn('w-4 h-4 text-muted-dim transition-transform', isOpen && 'rotate-180')}
         />
       </button>
 
@@ -183,9 +175,9 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           {/* Groups section */}
           {(userGroups.length > 0 || loadingGroups) && (
             <>
-              <div className="border-t border-gray-100 dark:border-border my-1" />
+              <div className="border-t border-border-subtle my-1" />
               <div className="px-3 py-1.5">
-                <p className="text-xs font-medium text-gray-400 dark:text-muted-foreground uppercase tracking-wider">
+                <p className="text-xs font-medium text-muted-dim uppercase tracking-wider">
                   Groups
                 </p>
               </div>
@@ -193,9 +185,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           )}
 
           {loadingGroups ? (
-            <div className="px-3 py-2 text-xs text-gray-400 dark:text-muted-foreground">
-              Loading groups...
-            </div>
+            <div className="px-3 py-2 text-xs text-muted-dim">Loading groups...</div>
           ) : (
             userGroups.map(group => (
               <button
@@ -234,7 +224,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           )}
 
           {/* Create group option */}
-          <div className="border-t border-gray-100 dark:border-border my-1" />
+          <div className="border-t border-border-subtle my-1" />
           <button
             onClick={() => {
               setIsOpen(false);

@@ -227,13 +227,13 @@ function FaqAccordionItem({
         <span className="font-medium text-foreground pr-4">{item.question}</span>
         <ChevronDown
           className={cn(
-            'h-5 w-5 text-gray-400 dark:text-muted-foreground flex-shrink-0 transition-transform duration-200',
+            'h-5 w-5 text-muted-dim flex-shrink-0 transition-transform duration-200',
             isOpen && 'rotate-180'
           )}
         />
       </button>
       {isOpen && (
-        <div className="px-5 pb-5 pt-1 bg-card border-t border-gray-100 dark:border-border">
+        <div className="px-5 pb-5 pt-1 bg-card border-t border-border-subtle">
           <div className="text-muted-foreground leading-relaxed text-[15px]">{item.answer}</div>
         </div>
       )}

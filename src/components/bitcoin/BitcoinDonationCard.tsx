@@ -152,7 +152,7 @@ export default function BitcoinDonationCard({
           <div className="text-right">
             <div className="text-xs text-muted-foreground">Balance</div>
             <div className="text-sm font-bold text-foreground">{formatBalance(balance)}</div>
-            <div className="text-xs text-gray-400 dark:text-muted-foreground">
+            <div className="text-xs text-muted-dim">
               ≈ {formatCurrency(balance, 'SATS', { compact: true })}
             </div>
           </div>

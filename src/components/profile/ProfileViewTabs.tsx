@@ -166,7 +166,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                       'mr-1.5 sm:mr-2 transition-colors flex-shrink-0',
                       isActive
                         ? 'text-orange-500'
-                        : 'text-gray-400 dark:text-muted-foreground group-hover:text-gray-500 dark:group-hover:text-foreground'
+                        : 'text-muted-dim group-hover:text-gray-500 dark:group-hover:text-foreground'
                     )}
                   >
                     {tab.icon}

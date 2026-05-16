@@ -174,7 +174,7 @@ export default function ShareContent({
       onClick={e => e.stopPropagation()}
     >
       {showTitle && (
-        <div className="flex items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-gray-100 dark:border-border">
+        <div className="flex items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-border-subtle">
           <h3 className="font-semibold text-foreground flex items-center gap-2 text-lg">
             <div
               className={`w-8 h-8 rounded-full ${GRADIENTS.brandOrange} flex items-center justify-center`}
@@ -186,7 +186,7 @@ export default function ShareContent({
           {onClose && (
             <button
               onClick={onClose}
-              className="text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground transition-colors p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
+              className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground transition-colors p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Close share menu"
             >
               <X className="w-5 h-5" />

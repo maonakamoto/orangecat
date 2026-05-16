@@ -55,7 +55,7 @@ export function MFAStatus({
   if (loading) {
     return (
       <div className="flex items-center justify-center p-4">
-        <Loader2 className="h-5 w-5 animate-spin text-gray-400 dark:text-muted-foreground" />
+        <Loader2 className="h-5 w-5 animate-spin text-muted-dim" />
       </div>
     );
   }

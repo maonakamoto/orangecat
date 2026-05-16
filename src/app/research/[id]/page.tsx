@@ -92,7 +92,7 @@ const config: EntityDetailConfig = {
               </div>
             )}
             {entity.expected_outcome && (
-              <div className="pt-2 border-t border-gray-100 dark:border-border">
+              <div className="pt-2 border-t border-border-subtle">
                 <p className="text-sm text-muted-foreground mb-1">Expected Outcome</p>
                 <p className="text-sm text-gray-700 dark:text-muted-foreground">
                   {entity.expected_outcome}

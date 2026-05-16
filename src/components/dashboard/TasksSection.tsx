@@ -103,7 +103,7 @@ export default function TasksSection({
     return (
       <Card className={className}>
         <CardContent className="p-6 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-gray-400 dark:text-muted-foreground" />
+          <Loader2 className="w-6 h-6 animate-spin text-muted-dim" />
           <span className="ml-2 text-muted-foreground">Loading recommendations...</span>
         </CardContent>
       </Card>
@@ -121,7 +121,7 @@ export default function TasksSection({
           <CardContent className="p-6 text-center relative">
             <button
               onClick={dismissCelebration}
-              className="absolute top-3 right-3 p-1.5 text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground hover:bg-white/60 dark:hover:bg-muted/60 rounded-lg transition-colors"
+              className="absolute top-3 right-3 p-1.5 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-white/60 dark:hover:bg-muted/60 rounded-lg transition-colors"
               aria-label="Dismiss"
             >
               <X className="w-4 h-4" />
@@ -241,7 +241,7 @@ function TaskCard({
     >
       <button
         onClick={onComplete}
-        className="mt-0.5 text-gray-400 dark:text-muted-foreground hover:text-tiffany-600 transition-colors flex-shrink-0"
+        className="mt-0.5 text-muted-dim hover:text-tiffany-600 transition-colors flex-shrink-0"
         aria-label={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
       >
         {isCompleted ? (

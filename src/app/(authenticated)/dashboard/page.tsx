@@ -21,7 +21,7 @@ const DashboardTimeline = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="rounded-xl border border-gray-100 dark:border-border bg-card p-4 shadow-sm">
+      <div className="rounded-xl border border-border-subtle bg-card p-4 shadow-sm">
         <div className="animate-pulse space-y-4">
           <div className="h-4 bg-muted rounded w-1/4"></div>
           <div className="h-24 bg-muted rounded"></div>

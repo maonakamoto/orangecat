@@ -170,11 +170,11 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
 
         {/* Model used indicator + copy button */}
         {!isUser && message.modelUsed && displayContent && (
-          <div className="flex items-center justify-between text-xs text-gray-400 dark:text-muted-foreground mt-1">
+          <div className="flex items-center justify-between text-xs text-muted-dim mt-1">
             <span>{AI_MODEL_REGISTRY[message.modelUsed]?.name || message.modelUsed}</span>
             <button
               onClick={handleCopy}
-              className="text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground transition-colors p-0.5"
+              className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground transition-colors p-0.5"
               title="Copy response"
             >
               {copied ? (

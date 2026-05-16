@@ -67,10 +67,7 @@ export function ProviderStep({ selectedProvider, onSelectProvider }: ProviderSte
                 </Badge>
               ))}
               {p.supportedModels.length > 3 && (
-                <Badge
-                  variant="outline"
-                  className="text-xs text-gray-400 dark:text-muted-foreground"
-                >
+                <Badge variant="outline" className="text-xs text-muted-dim">
                   +{p.supportedModels.length - 3} more
                 </Badge>
               )}

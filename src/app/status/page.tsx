@@ -82,9 +82,7 @@ export default async function StatusPage() {
           <p className="text-xl text-muted-foreground">
             Current status of OrangeCat platform services
           </p>
-          <p className="text-sm text-gray-400 dark:text-muted-foreground mt-2">
-            Last checked: {checkedAt}
-          </p>
+          <p className="text-sm text-muted-dim mt-2">Last checked: {checkedAt}</p>
         </div>
 
         {/* Overall Status */}

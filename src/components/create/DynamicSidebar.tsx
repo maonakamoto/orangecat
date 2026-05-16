@@ -77,7 +77,7 @@ function CurrencyBreakdown({ amount, currency }: { amount: number; currency: str
   };
 
   return (
-    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-border">
+    <div className="mt-4 pt-4 border-t border-border-subtle">
       <div className="flex items-center gap-2 mb-3">
         <ArrowLeftRight className="w-4 h-4 text-orange-600" />
         <h4 className="text-sm font-semibold text-foreground">Amount Breakdown</h4>
@@ -91,7 +91,7 @@ function CurrencyBreakdown({ amount, currency }: { amount: number; currency: str
           <span className="text-muted-foreground">Lightning (sats)</span>
           <span className="font-mono font-semibold">{fmt(Math.round(btc * 100_000_000), 0)}</span>
         </div>
-        <div className="border-t border-gray-100 dark:border-border pt-2 space-y-1 text-xs">
+        <div className="border-t border-border-subtle pt-2 space-y-1 text-xs">
           <div className="flex justify-between text-muted-foreground">
             <span>USD</span>
             <span className="font-mono">${fmt(usd)}</span>
@@ -106,7 +106,7 @@ function CurrencyBreakdown({ amount, currency }: { amount: number; currency: str
           </div>
         </div>
       </div>
-      <div className="mt-3 pt-3 border-t border-gray-100 dark:border-border">
+      <div className="mt-3 pt-3 border-t border-border-subtle">
         <p className="text-xs text-muted-foreground flex items-start gap-1">
           <TrendingUp className="w-3 h-3 mt-0.5 flex-shrink-0" />
           <span>{rates ? 'Live rates.' : 'Estimated rates.'} All funding settles in Bitcoin.</span>
@@ -169,7 +169,7 @@ export function DynamicSidebar<T extends string = string>({
     <div className={`sticky top-4 ${className}`}>
       <Card className="p-4">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100 dark:border-border">
+        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-border-subtle">
           <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
             {content.icon}
           </div>
@@ -199,7 +199,7 @@ export function DynamicSidebar<T extends string = string>({
 
         {/* Examples */}
         {content.examples && content.examples.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-border">
+          <div className="mt-3 pt-3 border-t border-border-subtle">
             <h4 className="text-xs font-semibold text-foreground uppercase tracking-wide mb-2">
               Examples
             </h4>

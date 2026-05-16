@@ -83,7 +83,7 @@ export function PostContent({ event }: PostContentProps) {
               {event.subject.name}
             </Link>
           )}
-          {event.target && <span className="text-gray-400 dark:text-muted-foreground">→</span>}
+          {event.target && <span className="text-muted-dim">→</span>}
           {event.target && event.target.url && (
             <Link
               href={event.target.url}

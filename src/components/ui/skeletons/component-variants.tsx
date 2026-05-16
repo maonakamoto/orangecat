@@ -3,7 +3,7 @@ import { Skeleton } from '../Skeleton';
 
 export function ProjectCardSkeleton() {
   return (
-    <div className="flex flex-col overflow-hidden rounded-2xl border border-gray-100 dark:border-border bg-card shadow-sm">
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-border-subtle bg-card shadow-sm">
       <Skeleton className="aspect-[16/10] w-full rounded-t-2xl" />
       <div className="flex flex-col gap-4 p-5">
         <Skeleton className="h-6 w-20 rounded-full" />
@@ -180,7 +180,7 @@ export function LoanCardSkeleton({ viewMode = 'grid' }: { viewMode?: 'grid' | 'l
   }
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-xl border border-gray-100 dark:border-border bg-card shadow-sm p-4">
+    <div className="flex flex-col overflow-hidden rounded-xl border border-border-subtle bg-card shadow-sm p-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <Skeleton className="h-8 w-8 rounded-full" />

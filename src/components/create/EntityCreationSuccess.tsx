@@ -127,7 +127,7 @@ export function EntityCreationSuccess({
           </div>
 
           {/* Hint */}
-          <p className="text-xs text-gray-400 dark:text-muted-foreground">
+          <p className="text-xs text-muted-dim">
             You can always publish or unpublish from your dashboard.
           </p>
         </CardContent>

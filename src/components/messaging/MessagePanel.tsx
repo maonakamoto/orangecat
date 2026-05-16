@@ -147,7 +147,7 @@ export default function MessagePanel({
           </div>
         </div>
 
-        <div className="p-4 border-b border-gray-100 dark:border-border space-y-3 bg-white/80 dark:bg-card/80">
+        <div className="p-4 border-b border-border-subtle space-y-3 bg-white/80 dark:bg-card/80">
           <div className="flex items-center gap-2">
             {(['all', 'requests'] as const).map(tab => (
               <button
@@ -165,13 +165,13 @@ export default function MessagePanel({
             ))}
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-dim" />
             <input
               type="text"
               placeholder="Search conversations"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white dark:bg-background border border-border rounded-xl text-sm text-foreground placeholder:text-gray-400 dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500 transition-all shadow-sm"
+              className="w-full pl-10 pr-4 py-3 bg-white dark:bg-background border border-border rounded-xl text-sm text-foreground placeholder:text-muted-dim focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500 transition-all shadow-sm"
             />
           </div>
         </div>
@@ -224,7 +224,7 @@ export default function MessagePanel({
             <div className="flex-1 flex items-center justify-center text-muted-foreground bg-muted/30">
               <div className="text-center p-10 max-w-md">
                 <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-card border border-border shadow-sm flex items-center justify-center">
-                  <MessageSquare className="w-8 h-8 text-gray-400 dark:text-muted-foreground" />
+                  <MessageSquare className="w-8 h-8 text-muted-dim" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">Select a chat</h3>
                 <p className="text-sm text-muted-foreground mb-5">

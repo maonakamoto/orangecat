@@ -59,7 +59,7 @@ export function ProjectDonationSection({
               className={`flex-1 flex items-center justify-center gap-2 ${
                 isFavorited
                   ? 'bg-red-500 hover:bg-red-600 text-white border-red-500'
-                  : 'border-gray-300 dark:border-border hover:border-red-300 hover:text-red-600'
+                  : 'border-border-strong hover:border-red-300 hover:text-red-600'
               }`}
               aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
             >
@@ -85,7 +85,7 @@ export function ProjectDonationSection({
             <Button
               href={`${ROUTES.AUTH}?from=favorite`}
               variant="outline"
-              className="flex-1 flex items-center justify-center gap-2 border-gray-300 dark:border-border hover:border-red-300 hover:text-red-600"
+              className="flex-1 flex items-center justify-center gap-2 border-border-strong hover:border-red-300 hover:text-red-600"
               aria-label="Sign in to favorite this project"
             >
               <Heart className="w-4 h-4" aria-hidden="true" />
@@ -216,14 +216,12 @@ export function ProjectDonationSection({
                         description: `Suggested ${label.toLowerCase()} support (≈ ${formattedAmount})`,
                       });
                     }}
-                    className="px-4 py-3 border-2 border-gray-300 dark:border-border rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-all text-center group"
+                    className="px-4 py-3 border-2 border-border-strong rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-all text-center group"
                   >
                     <div className="font-semibold text-foreground group-hover:text-orange-700">
                       {formattedAmount}
                     </div>
-                    <div className="text-xs text-gray-400 dark:text-muted-foreground mt-0.5">
-                      ≈ {satsDisplay}
-                    </div>
+                    <div className="text-xs text-muted-dim mt-0.5">≈ {satsDisplay}</div>
                     <div className="text-xs text-muted-foreground mt-1">{label}</div>
                   </button>
                 );

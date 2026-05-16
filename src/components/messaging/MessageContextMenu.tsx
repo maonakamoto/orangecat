@@ -170,7 +170,7 @@ export function MessageContextMenu({
         )}
 
         {/* Close button (mobile) */}
-        <div className="border-t border-gray-100 dark:border-border mt-1 pt-1 md:hidden">
+        <div className="border-t border-border-subtle mt-1 pt-1 md:hidden">
           <button
             onClick={e => {
               e.stopPropagation();

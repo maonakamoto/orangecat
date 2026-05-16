@@ -46,7 +46,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {Icon && (
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Icon
-                className="h-5 w-5 text-gray-400 dark:text-muted-foreground"
+                className="h-5 w-5 text-muted-dim"
                 data-testid={`icon-${getIconTestId(Icon)}`}
               />
             </div>
@@ -56,8 +56,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             required={required}
             className={cn(
               'block w-full rounded-md shadow-sm text-sm text-foreground',
-              'bg-white dark:bg-muted border-gray-300 dark:border-border focus:border-tiffany-500 focus:ring-tiffany-500',
-              'placeholder:text-gray-400 dark:placeholder:text-muted-foreground',
+              'bg-white dark:bg-muted border-border-strong focus:border-tiffany-500 focus:ring-tiffany-500',
+              'placeholder:text-muted-dim',
               error && 'border-red-300 focus:border-red-500 focus:ring-red-500',
               Icon && 'pl-10',
               className

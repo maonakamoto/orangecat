@@ -116,13 +116,13 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
           <div className="flex items-center justify-between text-sm">
             {loan.interest_rate && (
               <div className="flex items-center gap-1">
-                <Percent className="h-3 w-3 text-gray-400 dark:text-muted-foreground" />
+                <Percent className="h-3 w-3 text-muted-dim" />
                 <span>{loan.interest_rate}% APR</span>
               </div>
             )}
             {loan.monthly_payment && (
               <div className="flex items-center gap-1">
-                <TrendingUp className="h-3 w-3 text-gray-400 dark:text-muted-foreground" />
+                <TrendingUp className="h-3 w-3 text-muted-dim" />
                 <span>{formatAmount(loan.monthly_payment, loan.currency)}/mo</span>
               </div>
             )}

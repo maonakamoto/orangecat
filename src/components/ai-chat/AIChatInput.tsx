@@ -82,7 +82,7 @@ export function AIChatInput({
               'bg-white dark:bg-background text-foreground',
               'focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent',
               'max-h-48 min-h-12 text-sm',
-              'placeholder:text-gray-400 dark:placeholder:text-muted-foreground',
+              'placeholder:text-muted-dim',
               (disabled || isSending) && 'opacity-50 cursor-not-allowed'
             )}
             rows={1}
@@ -105,9 +105,7 @@ export function AIChatInput({
         </Button>
       </div>
 
-      <p className="text-xs text-gray-400 dark:text-muted-foreground mt-2">
-        Press Enter to send, Shift+Enter for new line
-      </p>
+      <p className="text-xs text-muted-dim mt-2">Press Enter to send, Shift+Enter for new line</p>
     </div>
   );
 }

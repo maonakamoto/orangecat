@@ -109,7 +109,7 @@ export default function ProfileEntityTab({
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Icon className="w-10 h-10 text-gray-400 dark:text-muted-foreground" />
+                      <Icon className="w-10 h-10 text-muted-dim" />
                     </div>
                   )}
                   {entity.category && (
@@ -177,7 +177,7 @@ export default function ProfileEntityTab({
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-gray-100 dark:border-border">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border-subtle">
                     <span>{getRelativeTime(entity.created_at)}</span>
                     {entityType === 'asset' && entity.verification_status === 'verified' && (
                       <span className="text-green-600 font-medium">Verified</span>
