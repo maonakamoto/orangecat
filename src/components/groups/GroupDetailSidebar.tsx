@@ -108,7 +108,7 @@ export function GroupDetailSidebar({
                 <div className="text-sm text-gray-500 dark:text-muted-foreground mb-1">
                   On-chain Address
                 </div>
-                <div className="font-mono text-xs break-all bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                <div className="font-mono text-xs break-all bg-muted p-2 rounded">
                   {group.bitcoin_address}
                 </div>
               </div>
@@ -119,7 +119,7 @@ export function GroupDetailSidebar({
                   <Zap className="h-3 w-3" />
                   Lightning Address
                 </div>
-                <div className="font-mono text-xs break-all bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                <div className="font-mono text-xs break-all bg-muted p-2 rounded">
                   {group.lightning_address}
                 </div>
               </div>

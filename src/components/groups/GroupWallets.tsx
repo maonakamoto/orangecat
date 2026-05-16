@@ -133,7 +133,7 @@ export function GroupWallets({
                           Bitcoin Address
                         </div>
                         <div className="flex items-center gap-2">
-                          <code className="flex-1 font-mono text-xs break-all text-sm bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                          <code className="flex-1 font-mono text-xs break-all text-sm bg-muted p-2 rounded">
                             {wallet.bitcoin_address}
                           </code>
                           <Button
@@ -165,7 +165,7 @@ export function GroupWallets({
                           Lightning Address
                         </div>
                         <div className="flex items-center gap-2">
-                          <code className="flex-1 font-mono text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                          <code className="flex-1 font-mono text-xs bg-muted p-2 rounded">
                             {wallet.lightning_address}
                           </code>
                           <Button

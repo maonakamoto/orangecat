@@ -54,7 +54,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     description: 'Buy and sell with anyone',
     icon: Package,
     iconGradient: GRADIENTS.iconBlue,
-    bgColor: 'bg-tiffany-50',
+    bgColor: 'bg-muted',
     features: [
       { title: 'Products', description: 'Sell physical or digital goods to anyone, anywhere' },
       { title: 'Services', description: 'Offer your expertise — hourly, fixed, or on your terms' },
@@ -66,7 +66,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     description: 'From gifts to investments',
     icon: Coins,
     iconGradient: GRADIENTS.iconOrange,
-    bgColor: 'bg-orange-50',
+    bgColor: 'bg-muted',
     features: [
       {
         title: 'Fund Projects & Causes',
@@ -85,7 +85,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     description: 'Organize and decide as one',
     icon: Scale,
     iconGradient: GRADIENTS.iconTiffany,
-    bgColor: 'bg-tiffany-50',
+    bgColor: 'bg-muted',
     features: [
       { title: 'Groups', description: 'Shared treasuries, collective decisions, governance rules' },
       {
@@ -100,7 +100,7 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     description: 'An AI agent that acts on your behalf',
     icon: Bot,
     iconGradient: GRADIENTS.iconTiffany,
-    bgColor: 'bg-tiffany-50',
+    bgColor: 'bg-muted',
     features: [
       {
         title: 'My Cat',
@@ -137,7 +137,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     title: 'Choose Your Identity',
     description: 'Use your real name, a handle, or anything in between. Your identity, your rules.',
     iconGradient: GRADIENTS.iconTiffany,
-    bgColor: 'bg-tiffany-50',
+    bgColor: 'bg-muted',
   },
   {
     number: '2',
@@ -146,7 +146,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     description:
       'Your AI economic agent is ready. Tell it what you want to do — sell, fund, lend, invest, or govern.',
     iconGradient: GRADIENTS.iconTiffany,
-    bgColor: 'bg-tiffany-50',
+    bgColor: 'bg-muted',
   },
   {
     number: '3',
@@ -155,7 +155,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     description:
       'Bitcoin and Lightning native — but Twint, PayPal, Monero, and local payment methods worldwide are all first-class. Meet your counterparty where they are.',
     iconGradient: GRADIENTS.iconOrange,
-    bgColor: 'bg-orange-50',
+    bgColor: 'bg-muted',
   },
   {
     number: '4',
@@ -164,7 +164,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     description:
       'Buy, sell, fund, lend, invest, or govern. Your Cat keeps track, surfaces insights, and acts on your behalf.',
     iconGradient: GRADIENTS.iconGreen,
-    bgColor: 'bg-green-50',
+    bgColor: 'bg-muted',
   },
 ];
 
@@ -266,7 +266,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
       'Artists, writers, and makers can raise funds, sell work, and accept support — from anywhere, in any currency, under any identity.',
     transparencyExample:
       'Share receipts and progress updates publicly, or keep it private. Your choice.',
-    gradient: GRADIENTS.sectionOrangeTiffanyBr,
+    gradient: 'bg-card',
   },
   {
     emoji: '🚀',
@@ -276,7 +276,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
       'Launch products, offer services, and raise funding — no platform approval, no geography limits, no identity requirements.',
     transparencyExample:
       'Your Cat helps you set up your store, manage pricing, and track payments automatically.',
-    gradient: GRADIENTS.sectionAmberOrange,
+    gradient: 'bg-card',
   },
   {
     emoji: '🔬',
@@ -285,7 +285,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
     description:
       'Fund equipment, studies, and publications. Accept Bitcoin, PayPal, Twint — whatever your supporters use.',
     transparencyExample: 'Publish findings, share lab updates, build scientific credibility.',
-    gradient: GRADIENTS.sectionBlueCyan,
+    gradient: 'bg-card',
   },
   {
     emoji: '🏛️',
@@ -295,7 +295,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
       'Organize shared treasuries, collective decisions, and community governance — with or without revealing identities.',
     transparencyExample:
       'Groups have their own Cat. It manages the treasury and executes collective decisions.',
-    gradient: GRADIENTS.sectionGreenEmerald,
+    gradient: 'bg-card',
   },
 ];
 

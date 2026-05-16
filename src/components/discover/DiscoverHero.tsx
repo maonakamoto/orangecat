@@ -18,7 +18,7 @@ export default function DiscoverHero({
 }: DiscoverHeroProps) {
   return (
     <motion.div
-      className="relative overflow-hidden bg-gradient-to-br from-bitcoinOrange/5 via-tiffany-50/80 to-orange-50/60 dark:from-muted/50 dark:via-muted/30 dark:to-muted/20 border-b border-gray-100/50 dark:border-border"
+      className="relative overflow-hidden bg-background border-b border-border"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
@@ -61,7 +61,7 @@ export default function DiscoverHero({
           >
             <Link
               href={`${ROUTES.DISCOVER}?type=projects`}
-              className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-xl p-4 border border-white/80 dark:border-border shadow-card hover:shadow-md hover:border-orange-200 transition-all duration-200 block"
+              className="bg-card rounded-xl p-4 border border-border shadow-sm hover:shadow-md hover:border-orange-300 dark:hover:border-orange-800 transition-all duration-200 block"
             >
               <div className="text-fluid-xl font-bold text-gray-900 dark:text-foreground">
                 {totalProjects}
@@ -72,12 +72,12 @@ export default function DiscoverHero({
             </Link>
             <Link
               href={`${ROUTES.DISCOVER}?type=profiles`}
-              className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-xl p-4 border border-white/80 dark:border-border shadow-card hover:shadow-md hover:border-tiffany-200 transition-all duration-200 block"
+              className="bg-card rounded-xl p-4 border border-border shadow-sm hover:shadow-md hover:border-tiffany-300 dark:hover:border-tiffany-800 transition-all duration-200 block"
             >
               <div className="text-fluid-xl font-bold text-tiffany-600">{totalProfiles}</div>
               <div className="text-sm text-gray-600 dark:text-muted-foreground mt-1">People</div>
             </Link>
-            <div className="bg-white/80 dark:bg-card/80 backdrop-blur-md rounded-xl p-4 border border-white/80 dark:border-border shadow-card">
+            <div className="bg-card rounded-xl p-4 border border-border shadow-sm">
               <div className="text-fluid-xl font-bold text-bitcoinOrange">{totalFinancial}</div>
               <div className="text-sm text-gray-600 dark:text-muted-foreground mt-1">Finance</div>
             </div>

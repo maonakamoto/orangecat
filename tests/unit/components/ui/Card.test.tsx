@@ -1,6 +1,6 @@
 /**
  * Card Component Tests
- * 
+ *
  * Testing critical card component used throughout the Bitcoin platform
  * Essential for displaying campaigns, transactions, and user information
  */
@@ -24,42 +24,62 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     test('should apply default variant styles', () => {
       render(<Card data-testid="card">Default card</Card>);
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-white', 'rounded-2xl', 'border', 'border-gray-100', 'shadow-sm');
+      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border', 'border-border', 'shadow-sm');
     });
 
     test('should apply elevated variant styles', () => {
-      render(<Card variant="elevated" data-testid="card">Elevated card</Card>);
+      render(
+        <Card variant="elevated" data-testid="card">
+          Elevated card
+        </Card>
+      );
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-white', 'rounded-2xl', 'border-0', 'shadow-lg');
+      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border-0', 'shadow-md');
     });
 
     test('should apply minimal variant styles', () => {
-      render(<Card variant="minimal" data-testid="card">Minimal card</Card>);
+      render(
+        <Card variant="minimal" data-testid="card">
+          Minimal card
+        </Card>
+      );
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-white', 'rounded-xl', 'border', 'border-gray-100');
+      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border', 'border-border');
     });
 
     test('should apply gradient variant styles', () => {
-      render(<Card variant="gradient" data-testid="card">Gradient card</Card>);
+      render(
+        <Card variant="gradient" data-testid="card">
+          Gradient card
+        </Card>
+      );
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-gradient-to-br', 'from-white', 'via-gray-50', 'to-gray-100');
+      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border-border');
     });
 
     test('should include interactive hover/transition styles', () => {
       render(<Card data-testid="card">Interactive card</Card>);
       const card = screen.getByTestId('card');
       // Card uses hover shadow and smooth transitions for interactivity
-      expect(card).toHaveClass('hover:shadow-lg', 'transition-all', 'duration-300');
+      expect(card).toHaveClass('hover:shadow-md', 'transition-all', 'duration-300');
     });
 
     test('should apply custom className', () => {
-      render(<Card className="custom-card-class" data-testid="card">Custom card</Card>);
+      render(
+        <Card className="custom-card-class" data-testid="card">
+          Custom card
+        </Card>
+      );
       const card = screen.getByTestId('card');
       expect(card).toHaveClass('custom-card-class');
     });
 
     test('should spread additional props', () => {
-      render(<Card data-testid="card" role="article" aria-label="Test card">Card with props</Card>);
+      render(
+        <Card data-testid="card" role="article" aria-label="Test card">
+          Card with props
+        </Card>
+      );
       const card = screen.getByTestId('card');
       expect(card).toHaveAttribute('role', 'article');
       expect(card).toHaveAttribute('aria-label', 'Test card');
@@ -67,9 +87,13 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
 
     test('should handle click events', () => {
       const handleClick = jest.fn();
-      render(<Card onClick={handleClick} data-testid="card">Clickable card</Card>);
+      render(
+        <Card onClick={handleClick} data-testid="card">
+          Clickable card
+        </Card>
+      );
       const card = screen.getByTestId('card');
-      
+
       fireEvent.click(card);
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
@@ -98,13 +122,21 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     });
 
     test('should apply custom className', () => {
-      render(<CardHeader className="custom-header" data-testid="header">Custom header</CardHeader>);
+      render(
+        <CardHeader className="custom-header" data-testid="header">
+          Custom header
+        </CardHeader>
+      );
       const header = screen.getByTestId('header');
       expect(header).toHaveClass('custom-header', 'p-6');
     });
 
     test('should spread additional props', () => {
-      render(<CardHeader data-testid="header" role="banner">Header with props</CardHeader>);
+      render(
+        <CardHeader data-testid="header" role="banner">
+          Header with props
+        </CardHeader>
+      );
       const header = screen.getByTestId('header');
       expect(header).toHaveAttribute('role', 'banner');
     });
@@ -118,9 +150,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
 
   describe('🏷️ CardTitle Component', () => {
     test('should render title with children', () => {
-      render(
-        <CardTitle>Bitcoin Campaign Title</CardTitle>
-      );
+      render(<CardTitle>Bitcoin Campaign Title</CardTitle>);
       expect(screen.getByText('Bitcoin Campaign Title')).toBeInTheDocument();
     });
 
@@ -131,13 +161,21 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     });
 
     test('should apply custom className', () => {
-      render(<CardTitle className="custom-title" data-testid="title">Custom title</CardTitle>);
+      render(
+        <CardTitle className="custom-title" data-testid="title">
+          Custom title
+        </CardTitle>
+      );
       const title = screen.getByTestId('title');
       expect(title).toHaveClass('custom-title', 'text-lg', 'font-semibold');
     });
 
     test('should spread additional props', () => {
-      render(<CardTitle data-testid="title" id="main-title">Title with props</CardTitle>);
+      render(
+        <CardTitle data-testid="title" id="main-title">
+          Title with props
+        </CardTitle>
+      );
       const title = screen.getByTestId('title');
       expect(title).toHaveAttribute('id', 'main-title');
     });
@@ -158,10 +196,10 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
 
   describe('📝 CardDescription Component', () => {
     test('should render description with children', () => {
-      render(
-        <CardDescription>This is a Bitcoin fundraising campaign description</CardDescription>
-      );
-      expect(screen.getByText('This is a Bitcoin fundraising campaign description')).toBeInTheDocument();
+      render(<CardDescription>This is a Bitcoin fundraising campaign description</CardDescription>);
+      expect(
+        screen.getByText('This is a Bitcoin fundraising campaign description')
+      ).toBeInTheDocument();
     });
 
     test('should apply description styles', () => {
@@ -171,13 +209,21 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     });
 
     test('should apply custom className', () => {
-      render(<CardDescription className="custom-description" data-testid="description">Custom description</CardDescription>);
+      render(
+        <CardDescription className="custom-description" data-testid="description">
+          Custom description
+        </CardDescription>
+      );
       const description = screen.getByTestId('description');
       expect(description).toHaveClass('custom-description', 'text-sm', 'text-gray-600');
     });
 
     test('should spread additional props', () => {
-      render(<CardDescription data-testid="description" aria-label="Campaign description">Description with props</CardDescription>);
+      render(
+        <CardDescription data-testid="description" aria-label="Campaign description">
+          Description with props
+        </CardDescription>
+      );
       const description = screen.getByTestId('description');
       expect(description).toHaveAttribute('aria-label', 'Campaign description');
     });
@@ -206,13 +252,21 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     });
 
     test('should apply custom className', () => {
-      render(<CardContent className="custom-content" data-testid="content">Custom content</CardContent>);
+      render(
+        <CardContent className="custom-content" data-testid="content">
+          Custom content
+        </CardContent>
+      );
       const content = screen.getByTestId('content');
       expect(content).toHaveClass('custom-content', 'p-6', 'pt-0');
     });
 
     test('should spread additional props', () => {
-      render(<CardContent data-testid="content" role="main">Content with props</CardContent>);
+      render(
+        <CardContent data-testid="content" role="main">
+          Content with props
+        </CardContent>
+      );
       const content = screen.getByTestId('content');
       expect(content).toHaveAttribute('role', 'main');
     });
@@ -262,7 +316,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
       );
 
       const card = screen.getByTestId('transaction-card');
-      expect(card).toHaveClass('bg-white', 'rounded-xl', 'border');
+      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border');
       expect(screen.getByText('Transaction #1234')).toBeInTheDocument();
       expect(screen.getByText('Amount: 0.001 BTC')).toBeInTheDocument();
       expect(screen.getByText('Status: Confirmed')).toBeInTheDocument();
@@ -284,7 +338,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
       );
 
       const card = screen.getByTestId('profile-card');
-      expect(card).toHaveClass('bg-gradient-to-br');
+      expect(card).toHaveClass('bg-card');
       expect(screen.getByText('Satoshi Nakamoto')).toBeInTheDocument();
       expect(screen.getByText('Transparency Score: 95%')).toBeInTheDocument();
     });
@@ -332,16 +386,16 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     test('should have proper hover and transition styles', () => {
       render(<Card data-testid="card">Transition test</Card>);
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('hover:shadow-lg', 'transition-all', 'duration-300');
+      expect(card).toHaveClass('hover:shadow-md', 'transition-all', 'duration-300');
     });
 
     test('should be keyboard navigable when interactive', () => {
       const handleClick = jest.fn();
       const handleKeyDown = jest.fn();
-      
+
       render(
-        <Card 
-          onClick={handleClick} 
+        <Card
+          onClick={handleClick}
           onKeyDown={handleKeyDown}
           tabIndex={0}
           data-testid="keyboard-card"
@@ -352,7 +406,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
 
       const card = screen.getByTestId('keyboard-card');
       expect(card).toHaveAttribute('tabIndex', '0');
-      
+
       fireEvent.keyDown(card, { key: 'Enter' });
       expect(handleKeyDown).toHaveBeenCalledTimes(1);
     });
@@ -373,7 +427,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
       const card = screen.getByTestId('semantic-card');
       expect(card).toHaveAttribute('role', 'article');
       expect(card).toHaveAttribute('aria-labelledby', 'card-title');
-      
+
       const title = screen.getByRole('heading', { level: 3 });
       expect(title).toHaveAttribute('id', 'card-title');
     });
@@ -425,13 +479,21 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
 
   describe('🔧 Edge Cases & Error Handling', () => {
     test('should handle undefined variant gracefully', () => {
-      render(<Card variant={undefined as any} data-testid="card">Undefined variant</Card>);
+      render(
+        <Card variant={undefined as any} data-testid="card">
+          Undefined variant
+        </Card>
+      );
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-white', 'rounded-2xl'); // Should fallback to default
+      expect(card).toHaveClass('bg-card', 'rounded-xl'); // Should fallback to default
     });
 
     test('should handle invalid variant gracefully', () => {
-      render(<Card variant={'invalid' as any} data-testid="card">Invalid variant</Card>);
+      render(
+        <Card variant={'invalid' as any} data-testid="card">
+          Invalid variant
+        </Card>
+      );
       const card = screen.getByTestId('card');
       expect(card).toBeInTheDocument(); // Should still render
     });
@@ -462,13 +524,9 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     });
 
     test('should not break with null children', () => {
-      render(
-        <Card data-testid="null-children-card">
-          {null}
-        </Card>
-      );
+      render(<Card data-testid="null-children-card">{null}</Card>);
 
       expect(screen.getByTestId('null-children-card')).toBeInTheDocument();
     });
   });
-}); 
+});

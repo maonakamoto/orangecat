@@ -146,11 +146,11 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
           'md:hidden fixed bottom-0 left-0 right-0 border-t',
           'transition-all duration-300 ease-in-out',
           shouldBeTransparent
-            ? 'bg-white/20 dark:bg-gray-950/20 backdrop-blur-sm border-transparent'
-            : 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-md',
+            ? 'bg-background/20 backdrop-blur-sm border-transparent'
+            : 'bg-background/95 backdrop-blur-md',
           isAuthenticated
-            ? 'border-orange-200/50 shadow-lg'
-            : 'border-gray-200/50 dark:border-gray-800/50'
+            ? 'border-orange-200/50 dark:border-orange-900/30 shadow-lg'
+            : 'border-border'
         )}
         style={{
           zIndex: Z_INDEX.MOBILE_BOTTOM_NAV,

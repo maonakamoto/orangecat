@@ -22,6 +22,9 @@ export const GRADIENTS = {
   brandRoseDark: 'bg-gradient-to-r from-rose-600 to-rose-700',
 
   // ── Section / card background tints ───────────────────────────────────────
+  sectionClean: 'bg-background',
+  sectionSubtle: 'bg-muted/30',
+  sectionAlt: 'bg-muted/50',
   sectionGreen: 'bg-gradient-to-r from-green-50 to-emerald-50',
   sectionOrangeTiffany: 'bg-gradient-to-r from-orange-50 to-tiffany-50',
   sectionTiffanyMuted: 'bg-gradient-to-r from-tiffany-50 to-tiffany-100/50',
@@ -47,29 +50,29 @@ export const GRADIENTS = {
   brandOrangeCircle: 'bg-gradient-to-br from-orange-500 to-orange-600',
   brandOrangeLightBr: 'bg-gradient-to-br from-orange-100 to-orange-200',
   brandTiffanyBr: 'bg-gradient-to-br from-tiffany-400 to-tiffany-600',
-  grayLight: 'bg-gradient-to-br from-gray-50 to-gray-100',
-  graySubtle: 'bg-gradient-to-br from-gray-50 via-white to-gray-100',
-  heroSection: 'bg-gradient-to-br from-orange-50 via-tiffany-50 to-orange-100',
+  grayLight: 'bg-muted/30',
+  graySubtle: 'bg-muted/20',
+  heroSection: 'bg-background',
   heroOrangeTiffany: 'bg-gradient-to-r from-orange-400 via-orange-500 to-tiffany-500',
   brandOrangeYellow: 'bg-gradient-to-br from-orange-500 to-yellow-500',
   brandMixedBr: 'bg-gradient-to-br from-orange-500 to-tiffany-500',
   iconTiffanyOrange: 'bg-gradient-to-br from-tiffany-500 to-orange-500',
   tiffanyMuted: 'bg-gradient-to-br from-tiffany-100 to-tiffany-200',
-  sectionOrangeAmber: 'bg-gradient-to-br from-orange-50 to-amber-50',
-  sectionTiffanyOrange: 'bg-gradient-to-br from-tiffany-50 to-orange-50',
-  sectionGrayWhite: 'bg-gradient-to-br from-gray-50 via-white to-gray-50',
+  sectionOrangeAmber: 'bg-muted/30',
+  sectionTiffanyOrange: 'bg-muted/20',
+  sectionGrayWhite: 'bg-background',
 
   // ── Overlay gradients (dark overlays over images) ───────────────────────
   overlayDarkBottom: 'bg-gradient-to-t from-black/40 to-transparent',
 
   // ── Page background gradients (full-bleed wrappers) ───────────────────────
-  pageBgOrangeDown: 'bg-gradient-to-b from-orange-50 to-white',
-  pageBgTiffanyDown: 'bg-gradient-to-b from-tiffany-50 to-white',
-  pageBg: 'bg-gradient-to-br from-orange-50/30 via-white to-tiffany-50/20',
-  pageBgSolid: 'bg-gradient-to-br from-orange-50 via-white to-tiffany-50',
-  pageBgFrost: 'bg-gradient-to-br from-orange-50/80 via-white/80 to-tiffany-50/80',
-  pageBgOrange: 'bg-gradient-to-br from-orange-50 via-white to-orange-50',
-  pageBgBlue: 'bg-gradient-to-br from-orange-50 via-white to-blue-50',
+  pageBgOrangeDown: 'bg-background',
+  pageBgTiffanyDown: 'bg-background',
+  pageBg: 'bg-background',
+  pageBgSolid: 'bg-muted/30',
+  pageBgFrost: 'bg-background',
+  pageBgOrange: 'bg-background',
+  pageBgBlue: 'bg-background',
 
   // ── Bitcoin gradients (only for Bitcoin-related UI) ──────────────────────
   brandBitcoin: 'bg-gradient-to-r from-bitcoinOrange to-orange-500',

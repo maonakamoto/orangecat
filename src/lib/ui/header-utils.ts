@@ -27,8 +27,8 @@ export function getHeaderClasses(
     'fixed top-0 left-0 right-0 transition-all duration-200',
     Z_INDEX_CLASSES.HEADER,
     isScrolled
-      ? 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl shadow-sm border-b border-gray-200/50 dark:border-gray-800/50'
-      : 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-lg shadow-sm border-b dark:border-gray-800',
+      ? 'bg-background/95 backdrop-blur-xl shadow-sm border-b border-border'
+      : 'bg-background/95 backdrop-blur-lg border-b border-border',
     isHidden ? '-translate-y-full' : 'translate-y-0',
     className
   );
@@ -56,7 +56,7 @@ export function getMobileMenuBackdropClasses(isOpen: boolean): string {
  */
 export function getMobileMenuPanelClasses(isOpen: boolean): string {
   return cn(
-    'fixed top-16 bottom-0 left-0 w-80 max-w-[85vw] sm:max-w-sm bg-white dark:bg-gray-900 shadow-2xl overflow-y-auto overscroll-contain transition-transform duration-300 ease-out',
+    'fixed top-16 bottom-0 left-0 w-80 max-w-[85vw] sm:max-w-sm bg-card shadow-2xl overflow-y-auto overscroll-contain transition-transform duration-300 ease-out',
     Z_INDEX_CLASSES.MOBILE_MENU,
     isOpen ? 'translate-x-0' : '-translate-x-full'
   );

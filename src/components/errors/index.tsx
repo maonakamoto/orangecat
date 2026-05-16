@@ -29,7 +29,7 @@ interface ErrorFallbackProps {
 
 function ErrorFallback({ icon, title, message, onRetry }: ErrorFallbackProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-6 text-center bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+    <div className="flex flex-col items-center justify-center p-6 text-center bg-card rounded-lg border border-border">
       <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
         {icon}
       </div>

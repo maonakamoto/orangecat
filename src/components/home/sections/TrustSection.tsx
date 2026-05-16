@@ -18,7 +18,7 @@ export default function TrustSection() {
   const { whyBitcoin } = SECTION_HEADERS;
 
   return (
-    <section className="py-12 sm:py-16 lg:py-24 bg-white dark:bg-background">
+    <section className="py-12 sm:py-16 lg:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
@@ -38,7 +38,7 @@ export default function TrustSection() {
           transition={{ duration: 0.5 }}
           className="mb-12 sm:mb-20 hidden md:block"
         >
-          <div className="bg-white dark:bg-card rounded-2xl shadow-xl border border-gray-200 dark:border-border overflow-hidden">
+          <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -49,7 +49,7 @@ export default function TrustSection() {
                     <th className="px-6 py-4 text-center text-sm font-semibold text-gray-600 dark:text-muted-foreground">
                       Traditional Platforms
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-bitcoinOrange bg-orange-50">
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-tiffany-600 dark:text-primary bg-muted/50">
                       OrangeCat
                     </th>
                   </tr>
@@ -75,7 +75,7 @@ export default function TrustSection() {
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-center bg-orange-50/50">
+                      <td className="px-6 py-4 text-center bg-muted/30">
                         <div className="flex items-center justify-center gap-2">
                           <Check className="w-4 h-4 text-green-600" />
                           <span
@@ -102,27 +102,25 @@ export default function TrustSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className={`bg-white dark:bg-card rounded-lg shadow-md border border-gray-200 dark:border-border p-4 ${row.highlight ? 'ring-2 ring-green-500' : ''}`}
+              className={`bg-card rounded-lg shadow-sm border border-border p-4 ${row.highlight ? 'ring-2 ring-green-500 dark:ring-green-600' : ''}`}
             >
               <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground mb-3">
                 {row.feature}
               </h4>
               <div className="grid grid-cols-2 gap-3">
-                <div className="text-center p-2 bg-red-50 rounded">
+                <div className="text-center p-2 bg-muted/50 rounded">
                   <div className="flex items-center justify-center gap-1 mb-1">
                     <X className="w-3 h-3 text-red-500" />
-                    <span className="text-xs font-medium text-gray-600 dark:text-muted-foreground">
-                      Traditional
-                    </span>
+                    <span className="text-xs font-medium text-muted-foreground">Traditional</span>
                   </div>
-                  <span className="text-xs text-gray-600 dark:text-muted-foreground">
-                    {row.traditional}
-                  </span>
+                  <span className="text-xs text-muted-foreground">{row.traditional}</span>
                 </div>
-                <div className="text-center p-2 bg-orange-50 rounded">
+                <div className="text-center p-2 bg-muted/50 rounded">
                   <div className="flex items-center justify-center gap-1 mb-1">
                     <Check className="w-3 h-3 text-green-600" />
-                    <span className="text-xs font-medium text-bitcoinOrange">OrangeCat</span>
+                    <span className="text-xs font-medium text-tiffany-600 dark:text-primary">
+                      OrangeCat
+                    </span>
                   </div>
                   <span
                     className={`text-xs font-semibold ${row.highlight ? 'text-green-700' : 'text-gray-900 dark:text-foreground'}`}
@@ -146,8 +144,8 @@ export default function TrustSection() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="text-center"
             >
-              <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-orange-100 to-orange-50 mb-3 sm:mb-4">
-                <benefit.icon className="w-6 h-6 sm:w-8 sm:h-8 text-bitcoinOrange" />
+              <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-muted mb-3 sm:mb-4">
+                <benefit.icon className="w-6 h-6 sm:w-8 sm:h-8 text-tiffany-600 dark:text-primary" />
               </div>
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
                 {benefit.title}
@@ -167,7 +165,7 @@ export default function TrustSection() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-10 sm:mt-12 lg:mt-16 text-center"
         >
-          <div className="inline-flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gray-50 dark:bg-muted rounded-xl sm:rounded-2xl">
+          <div className="inline-flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-muted rounded-xl">
             {TRUST_SIGNALS.map((signal, index) => (
               <div key={signal} className="flex items-center gap-1.5 sm:gap-2">
                 {index > 0 && (
@@ -207,7 +205,7 @@ export default function TrustSection() {
             </Link>
             <Link
               href={ROUTES.DISCOVER}
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-gray-700 dark:text-foreground bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted border-2 border-gray-300 dark:border-border hover:border-gray-400 rounded-lg transition-all duration-200"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-foreground bg-card hover:bg-muted border border-border rounded-lg transition-all duration-200"
             >
               {CTA_LABELS.discoverAction}
             </Link>

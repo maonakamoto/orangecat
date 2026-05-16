@@ -3,7 +3,7 @@ import { Skeleton } from '../Skeleton';
 
 export function ProjectCardSkeleton() {
   return (
-    <div className="flex flex-col overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-gray-100 dark:border-border bg-card shadow-sm">
       <Skeleton className="aspect-[16/10] w-full rounded-t-2xl" />
       <div className="flex flex-col gap-4 p-5">
         <Skeleton className="h-6 w-20 rounded-full" />
@@ -70,7 +70,7 @@ export function ProfileHeaderSkeleton() {
 
 export function DashboardStatSkeleton() {
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6">
+    <div className="flex flex-col gap-2 rounded-xl border border-border bg-card p-6">
       <Skeleton className="h-4 w-24 mb-2" />
       <Skeleton className="h-8 w-32" />
       <Skeleton className="h-3 w-20 mt-2" />

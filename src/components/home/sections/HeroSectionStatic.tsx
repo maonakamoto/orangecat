@@ -12,16 +12,13 @@ import { ROUTES } from '@/config/routes';
  */
 export default function HeroSectionStatic() {
   return (
-    <section className={`relative overflow-hidden ${GRADIENTS.heroSection}`}>
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-28">
+    <section className="relative overflow-hidden bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-28">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Column - Content */}
           <div>
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-card/60 backdrop-blur-sm border border-orange-200/50 dark:border-border/50 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-card border border-border mb-6">
               <div className="flex items-center gap-1.5">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
                 <span className="text-sm font-medium text-gray-700 dark:text-foreground">
@@ -97,9 +94,9 @@ export default function HeroSectionStatic() {
           {/* Right Column - Visual Demo */}
           <div className="relative">
             {/* Demo Card */}
-            <div className="relative bg-white dark:bg-card rounded-xl sm:rounded-2xl shadow-2xl border border-gray-200 dark:border-border overflow-hidden">
+            <div className="relative bg-card rounded-xl border border-border shadow-lg overflow-hidden">
               {/* Card Header */}
-              <div className="p-4 sm:p-6 border-b border-gray-100 dark:border-border">
+              <div className="p-4 sm:p-6 border-b border-border">
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div
                     className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${GRADIENTS.brandTiffanyBr} flex items-center justify-center text-xl sm:text-2xl flex-shrink-0`}
@@ -177,10 +174,6 @@ export default function HeroSectionStatic() {
                 🐱 AI-powered
               </div>
             </div>
-
-            {/* Background decoration dots */}
-            <div className="absolute -z-10 -top-4 -right-4 w-24 h-24 bg-tiffany-400/20 rounded-full blur-2xl" />
-            <div className="absolute -z-10 -bottom-4 -left-4 w-32 h-32 bg-tiffany-400/20 rounded-full blur-2xl" />
           </div>
         </div>
       </div>

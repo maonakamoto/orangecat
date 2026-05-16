@@ -11,7 +11,7 @@ export default function HowItWorksSection() {
   const { howItWorks } = SECTION_HEADERS;
 
   return (
-    <section className={`py-12 sm:py-16 lg:py-24 ${GRADIENTS.grayLight}`}>
+    <section className={`py-12 sm:py-16 lg:py-24 ${GRADIENTS.sectionSubtle}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
@@ -26,7 +26,7 @@ export default function HowItWorksSection() {
         {/* Timeline */}
         <div className="relative">
           {/* Connection Line (Desktop) */}
-          <div className="hidden lg:block absolute top-24 left-0 right-0 h-1 bg-gradient-to-r from-tiffany-500 via-orange-500 via-bitcoinOrange to-green-500 opacity-20" />
+          <div className="hidden lg:block absolute top-24 left-0 right-0 h-px bg-border" />
 
           {/* Steps Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
@@ -40,7 +40,7 @@ export default function HowItWorksSection() {
                 className="relative"
               >
                 {/* Card */}
-                <div className="bg-white dark:bg-card rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 sm:p-8 h-full">
+                <div className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-300 p-6 sm:p-8 h-full">
                   {/* Step Number Badge */}
                   <div className="mb-4 sm:mb-6">
                     <div

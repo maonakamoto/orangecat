@@ -39,7 +39,7 @@ export default function WhatCanYouDoSection() {
   const { whatCanYouDo } = SECTION_HEADERS;
 
   return (
-    <section className={`py-12 sm:py-16 lg:py-24 ${GRADIENTS.sectionGrayWhite}`}>
+    <section className="py-12 sm:py-16 lg:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -49,7 +49,7 @@ export default function WhatCanYouDoSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-10 sm:mb-12 lg:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-tiffany-50 text-tiffany-700 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted text-tiffany-600 dark:text-primary mb-4">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">For Makers</span>
           </div>
@@ -76,12 +76,10 @@ export default function WhatCanYouDoSection() {
               <motion.div
                 key={category.id}
                 variants={itemVariants}
-                className="bg-white dark:bg-card rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 dark:border-border overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                className="bg-card rounded-xl border border-border shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300"
               >
                 {/* Category Header */}
-                <div
-                  className={`${category.bgColor} p-4 sm:p-6 border-b border-gray-200 dark:border-border`}
-                >
+                <div className="p-4 sm:p-6 border-b border-border bg-muted/30">
                   <div className="flex items-center gap-3 mb-2">
                     <div
                       className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${category.iconGradient} flex items-center justify-center`}
@@ -104,7 +102,7 @@ export default function WhatCanYouDoSection() {
                   {category.features.map(feature => (
                     <div
                       key={feature.title}
-                      className="flex items-start gap-3 p-3 sm:p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-muted transition-colors duration-200"
+                      className="flex items-start gap-3 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors duration-200"
                     >
                       <div
                         className={`w-2 h-2 rounded-full ${category.iconGradient} mt-2 flex-shrink-0`}
@@ -149,7 +147,7 @@ export default function WhatCanYouDoSection() {
             </Link>
             <Link
               href={ROUTES.DISCOVER}
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-gray-700 dark:text-foreground bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted border-2 border-gray-300 dark:border-border hover:border-gray-400 rounded-lg transition-all duration-200"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-foreground bg-card hover:bg-muted border border-border rounded-lg transition-all duration-200"
             >
               {CTA_LABELS.discoverAction}
             </Link>
