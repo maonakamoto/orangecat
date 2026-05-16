@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { BarChart3, PieChart, Activity, TrendingUp, Target, Users } from 'lucide-react';
+import { BarChart3, Activity, TrendingUp, Target, Users } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 import type { Project } from '@/stores/projectStore';
 
@@ -83,6 +83,147 @@ const COLOR_CLASSES: Record<
   },
 };
 
+// Chart palette — cycles through brand colors per project
+const CHART_COLORS = [
+  { bar: '#089B96', label: 'tiffany' },
+  { bar: '#FF6B00', label: 'orange' },
+  { bar: '#3b82f6', label: 'blue' },
+  { bar: '#8b5cf6', label: 'purple' },
+  { bar: '#ec4899', label: 'pink' },
+];
+
+function FundingProgressChart({ projects }: { projects: Project[] }) {
+  const projectsWithGoal = projects.filter(p => p.goal_amount && p.goal_amount > 0);
+
+  if (projectsWithGoal.length === 0) {
+    return (
+      <div className="h-64 flex items-center justify-center">
+        <div className="text-center text-muted-foreground">
+          <BarChart3 className="w-10 h-10 mx-auto mb-3 opacity-30" />
+          <p className="text-sm">No projects with goals yet</p>
+          <p className="text-xs mt-1">Set a funding goal on your projects to see progress</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show up to 6 projects
+  const displayProjects = projectsWithGoal.slice(0, 6);
+
+  return (
+    <div className="space-y-3 py-2">
+      {displayProjects.map((project, i) => {
+        const goal = project.goal_amount!;
+        const raised = project.total_funding || 0;
+        const pct = Math.min((raised / goal) * 100, 100);
+        const color = CHART_COLORS[i % CHART_COLORS.length];
+        const reached = raised >= goal;
+
+        return (
+          <div key={project.id}>
+            <div className="flex justify-between items-center mb-1">
+              <span
+                className="text-sm font-medium text-foreground truncate max-w-[60%]"
+                title={project.title}
+              >
+                {project.title}
+              </span>
+              <span className="text-xs text-muted-foreground ml-2 shrink-0">
+                {pct.toFixed(0)}% of goal
+              </span>
+            </div>
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${pct}%`,
+                  backgroundColor: reached ? '#22c55e' : color.bar,
+                }}
+              />
+            </div>
+            <div className="flex justify-between mt-0.5">
+              <span className="text-xs text-muted-foreground">{raised.toFixed(4)} BTC raised</span>
+              <span className="text-xs text-muted-foreground">{goal.toFixed(4)} BTC goal</span>
+            </div>
+          </div>
+        );
+      })}
+      {projectsWithGoal.length > 6 && (
+        <p className="text-xs text-muted-foreground text-center pt-1">
+          +{projectsWithGoal.length - 6} more projects
+        </p>
+      )}
+    </div>
+  );
+}
+
+function SupporterDistributionChart({ projects }: { projects: Project[] }) {
+  const withSupporters = projects.filter(p => (p.contributor_count || 0) > 0);
+  const total = withSupporters.reduce((s, p) => s + (p.contributor_count || 0), 0);
+
+  if (total === 0) {
+    return (
+      <div className="h-64 flex items-center justify-center">
+        <div className="text-center text-muted-foreground">
+          <Users className="w-10 h-10 mx-auto mb-3 opacity-30" />
+          <p className="text-sm">No supporters yet</p>
+          <p className="text-xs mt-1">Supporters will appear here once you receive funding</p>
+        </div>
+      </div>
+    );
+  }
+
+  const displayProjects = withSupporters.slice(0, 6);
+
+  return (
+    <div className="space-y-2 py-2">
+      {/* Stacked bar */}
+      <div className="flex h-6 rounded-full overflow-hidden mb-4">
+        {displayProjects.map((project, i) => {
+          const pct = ((project.contributor_count || 0) / total) * 100;
+          const color = CHART_COLORS[i % CHART_COLORS.length];
+          return (
+            <div
+              key={project.id}
+              style={{ width: `${pct}%`, backgroundColor: color.bar }}
+              title={`${project.title}: ${project.contributor_count} supporters`}
+            />
+          );
+        })}
+        {withSupporters.length > 6 && <div className="flex-1 bg-muted" title="Other projects" />}
+      </div>
+
+      {/* Legend */}
+      {displayProjects.map((project, i) => {
+        const count = project.contributor_count || 0;
+        const pct = ((count / total) * 100).toFixed(0);
+        const color = CHART_COLORS[i % CHART_COLORS.length];
+        return (
+          <div key={project.id} className="flex items-center justify-between">
+            <div className="flex items-center gap-2 min-w-0">
+              <div
+                className="w-2.5 h-2.5 rounded-sm shrink-0"
+                style={{ backgroundColor: color.bar }}
+              />
+              <span className="text-sm text-foreground truncate" title={project.title}>
+                {project.title}
+              </span>
+            </div>
+            <span className="text-sm text-muted-foreground ml-2 shrink-0">
+              {count} ({pct}%)
+            </span>
+          </div>
+        );
+      })}
+
+      <div className="pt-2 border-t border-border flex justify-between text-xs text-muted-foreground">
+        <span>{withSupporters.length} projects</span>
+        <span>{total} total supporters</span>
+      </div>
+    </div>
+  );
+}
+
 export default function AnalyticsInsights({ projects }: AnalyticsInsightsProps) {
   const insights = deriveInsights(projects);
 
@@ -94,37 +235,25 @@ export default function AnalyticsInsights({ projects }: AnalyticsInsightsProps) 
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="w-5 h-5" />
-              Funding Over Time
+              Funding Progress
             </CardTitle>
-            <CardDescription>Track your fundraising progress</CardDescription>
+            <CardDescription>Each project vs its funding goal</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-center justify-center text-muted-foreground">
-              <div className="text-center">
-                <BarChart3 className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
-                <p className="text-muted-foreground">Time-series funding chart coming soon</p>
-                <p className="text-sm">Real-time funding visualization</p>
-              </div>
-            </div>
+            <FundingProgressChart projects={projects} />
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <PieChart className="w-5 h-5" />
-              Supporter Insights
+              <Users className="w-5 h-5" />
+              Supporter Distribution
             </CardTitle>
-            <CardDescription>Understand your audience</CardDescription>
+            <CardDescription>How supporters are spread across projects</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-center justify-center text-muted-foreground">
-              <div className="text-center">
-                <PieChart className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
-                <p className="text-muted-foreground">Supporter breakdown chart coming soon</p>
-                <p className="text-sm">Supporter behavior insights</p>
-              </div>
-            </div>
+            <SupporterDistributionChart projects={projects} />
           </CardContent>
         </Card>
       </div>
@@ -158,7 +287,7 @@ export default function AnalyticsInsights({ projects }: AnalyticsInsightsProps) 
               })
             ) : (
               <div className="text-center py-8 text-muted-foreground">
-                <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
+                <Activity className="w-12 h-12 mx-auto mb-4 opacity-30" />
                 <p>Create your first project to see insights</p>
                 <Button href={ROUTES.PROJECTS.CREATE} className="mt-4">
                   Create Project
