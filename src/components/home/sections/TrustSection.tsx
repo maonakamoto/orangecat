@@ -18,14 +18,14 @@ export default function TrustSection() {
   const { whyBitcoin } = SECTION_HEADERS;
 
   return (
-    <section className="py-12 sm:py-16 lg:py-24 bg-white">
+    <section className="py-12 sm:py-16 lg:py-24 bg-white dark:bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 dark:text-foreground mb-3 sm:mb-4">
             {whyBitcoin.title}
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
             {whyBitcoin.subtitle}
           </p>
         </div>
@@ -38,15 +38,15 @@ export default function TrustSection() {
           transition={{ duration: 0.5 }}
           className="mb-12 sm:mb-20 hidden md:block"
         >
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+          <div className="bg-white dark:bg-card rounded-2xl shadow-xl border border-gray-200 dark:border-border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                  <tr className="border-b border-gray-200 dark:border-border">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-muted-foreground">
                       Feature
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-600">
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-600 dark:text-muted-foreground">
                       Traditional Platforms
                     </th>
                     <th className="px-6 py-4 text-center text-sm font-semibold text-bitcoinOrange bg-orange-50">
@@ -54,7 +54,7 @@ export default function TrustSection() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-100 dark:divide-border">
                   {PLATFORM_COMPARISON.map((row, index) => (
                     <motion.tr
                       key={row.feature}
@@ -64,18 +64,22 @@ export default function TrustSection() {
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                       className={row.highlight ? 'bg-green-50' : ''}
                     >
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">{row.feature}</td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-foreground">
+                        {row.feature}
+                      </td>
                       <td className="px-6 py-4 text-center">
                         <div className="flex items-center justify-center gap-2">
                           <X className="w-4 h-4 text-red-500" />
-                          <span className="text-sm text-gray-600">{row.traditional}</span>
+                          <span className="text-sm text-gray-600 dark:text-muted-foreground">
+                            {row.traditional}
+                          </span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-center bg-orange-50/50">
                         <div className="flex items-center justify-center gap-2">
                           <Check className="w-4 h-4 text-green-600" />
                           <span
-                            className={`text-sm font-semibold ${row.highlight ? 'text-green-700' : 'text-gray-900'}`}
+                            className={`text-sm font-semibold ${row.highlight ? 'text-green-700' : 'text-gray-900 dark:text-foreground'}`}
                           >
                             {row.orangecat}
                           </span>
@@ -98,16 +102,22 @@ export default function TrustSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className={`bg-white rounded-lg shadow-md border border-gray-200 p-4 ${row.highlight ? 'ring-2 ring-green-500' : ''}`}
+              className={`bg-white dark:bg-card rounded-lg shadow-md border border-gray-200 dark:border-border p-4 ${row.highlight ? 'ring-2 ring-green-500' : ''}`}
             >
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">{row.feature}</h4>
+              <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground mb-3">
+                {row.feature}
+              </h4>
               <div className="grid grid-cols-2 gap-3">
                 <div className="text-center p-2 bg-red-50 rounded">
                   <div className="flex items-center justify-center gap-1 mb-1">
                     <X className="w-3 h-3 text-red-500" />
-                    <span className="text-xs font-medium text-gray-600">Traditional</span>
+                    <span className="text-xs font-medium text-gray-600 dark:text-muted-foreground">
+                      Traditional
+                    </span>
                   </div>
-                  <span className="text-xs text-gray-600">{row.traditional}</span>
+                  <span className="text-xs text-gray-600 dark:text-muted-foreground">
+                    {row.traditional}
+                  </span>
                 </div>
                 <div className="text-center p-2 bg-orange-50 rounded">
                   <div className="flex items-center justify-center gap-1 mb-1">
@@ -115,7 +125,7 @@ export default function TrustSection() {
                     <span className="text-xs font-medium text-bitcoinOrange">OrangeCat</span>
                   </div>
                   <span
-                    className={`text-xs font-semibold ${row.highlight ? 'text-green-700' : 'text-gray-900'}`}
+                    className={`text-xs font-semibold ${row.highlight ? 'text-green-700' : 'text-gray-900 dark:text-foreground'}`}
                   >
                     {row.orangecat}
                   </span>
@@ -139,10 +149,12 @@ export default function TrustSection() {
               <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-orange-100 to-orange-50 mb-3 sm:mb-4">
                 <benefit.icon className="w-6 h-6 sm:w-8 sm:h-8 text-bitcoinOrange" />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
                 {benefit.title}
               </h3>
-              <p className="text-sm text-gray-600 leading-relaxed">{benefit.description}</p>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground leading-relaxed">
+                {benefit.description}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -155,14 +167,16 @@ export default function TrustSection() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-10 sm:mt-12 lg:mt-16 text-center"
         >
-          <div className="inline-flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gray-50 rounded-xl sm:rounded-2xl">
+          <div className="inline-flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gray-50 dark:bg-muted rounded-xl sm:rounded-2xl">
             {TRUST_SIGNALS.map((signal, index) => (
               <div key={signal} className="flex items-center gap-1.5 sm:gap-2">
                 {index > 0 && (
-                  <div className="w-px h-3 sm:h-4 bg-gray-300 hidden sm:block mr-3 sm:mr-4 lg:mr-6" />
+                  <div className="w-px h-3 sm:h-4 bg-gray-300 dark:bg-border hidden sm:block mr-3 sm:mr-4 lg:mr-6" />
                 )}
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full" />
-                <span className="text-xs sm:text-sm font-medium text-gray-700">{signal}</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-foreground">
+                  {signal}
+                </span>
               </div>
             ))}
           </div>
@@ -176,7 +190,7 @@ export default function TrustSection() {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="mt-12 sm:mt-16 lg:mt-20 text-center"
         >
-          <p className="text-base sm:text-lg text-gray-600 mb-6">
+          <p className="text-base sm:text-lg text-gray-600 dark:text-muted-foreground mb-6">
             Ready to make something? It&apos;s free, no gatekeepers.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
@@ -193,7 +207,7 @@ export default function TrustSection() {
             </Link>
             <Link
               href={ROUTES.DISCOVER}
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-gray-700 bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-gray-400 rounded-lg transition-all duration-200"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-gray-700 dark:text-foreground bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted border-2 border-gray-300 dark:border-border hover:border-gray-400 rounded-lg transition-all duration-200"
             >
               {CTA_LABELS.discoverAction}
             </Link>

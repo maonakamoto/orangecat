@@ -15,7 +15,7 @@ const WhatCanYouDoSection = dynamic(
 );
 
 const ProofSection = dynamic(() => import('@/components/home/sections/ProofSection'), {
-  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />,
+  loading: () => <div className="h-96 bg-gray-50 dark:bg-muted animate-pulse" />,
 });
 
 const HowItWorksSection = dynamic(() => import('@/components/home/sections/HowItWorksSection'), {
@@ -30,7 +30,7 @@ const TransparencySection = dynamic(
 );
 
 const TrustSection = dynamic(() => import('@/components/home/sections/TrustSection'), {
-  loading: () => <div className="h-96 bg-white animate-pulse" />,
+  loading: () => <div className="h-96 bg-white dark:bg-background animate-pulse" />,
 });
 
 /**
@@ -55,7 +55,7 @@ export default function HomePublicClient() {
         <WhatCanYouDoSection />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-gray-50 animate-pulse" />}>
+      <Suspense fallback={<div className="h-96 bg-gray-50 dark:bg-muted animate-pulse" />}>
         <ProofSection />
       </Suspense>
 
@@ -69,7 +69,7 @@ export default function HomePublicClient() {
         <TransparencySection />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-white animate-pulse" />}>
+      <Suspense fallback={<div className="h-96 bg-white dark:bg-background animate-pulse" />}>
         <TrustSection />
       </Suspense>
     </div>
