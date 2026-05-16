@@ -24,16 +24,22 @@ export default function HeroSectionStatic() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-orange-200/50 mb-6">
               <div className="flex items-center gap-1.5">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <span className="text-sm font-medium text-gray-700">Create anything</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-foreground">
+                  Create anything
+                </span>
               </div>
-              <span className="text-gray-400">•</span>
-              <span className="text-sm font-medium text-gray-700">Any identity</span>
-              <span className="text-gray-400">•</span>
-              <span className="text-sm font-medium text-gray-700">Zero fees</span>
+              <span className="text-gray-400 dark:text-muted-foreground">•</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-foreground">
+                Any identity
+              </span>
+              <span className="text-gray-400 dark:text-muted-foreground">•</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-foreground">
+                Zero fees
+              </span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-4 sm:mb-6">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-foreground leading-tight mb-4 sm:mb-6">
               Everyone Can{' '}
               <span className="bg-gradient-to-r from-tiffany-500 to-tiffany-700 bg-clip-text text-transparent">
                 Make Things.
@@ -41,13 +47,13 @@ export default function HeroSectionStatic() {
             </h1>
 
             {/* Subheadline */}
-            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 leading-relaxed mb-3 sm:mb-4">
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-muted-foreground leading-relaxed mb-3 sm:mb-4">
               Create products, services, projects, causes, events, loans — with your own AI, under
               any identity, in any currency.
             </p>
 
             {/* Supporting text */}
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-muted-foreground leading-relaxed mb-6 sm:mb-8">
               OrangeCat gives every person and organization an AI agent to create and participate in
               the full economic spectrum. No gatekeepers. No fees. Bitcoin-native, but not
               Bitcoin-only.
@@ -77,7 +83,10 @@ export default function HeroSectionStatic() {
                 { icon: Globe, text: 'Any currency' },
                 { icon: Zap, text: 'Zero fees' },
               ].map(benefit => (
-                <div key={benefit.text} className="flex items-center gap-2 text-gray-600">
+                <div
+                  key={benefit.text}
+                  className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground"
+                >
                   <benefit.icon className="w-4 h-4 text-tiffany-600 flex-shrink-0" />
                   <span className="text-sm font-medium">{benefit.text}</span>
                 </div>
@@ -88,9 +97,9 @@ export default function HeroSectionStatic() {
           {/* Right Column - Visual Demo */}
           <div className="relative">
             {/* Demo Card */}
-            <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+            <div className="relative bg-white dark:bg-card rounded-xl sm:rounded-2xl shadow-2xl border border-gray-200 dark:border-border overflow-hidden">
               {/* Card Header */}
-              <div className="p-4 sm:p-6 border-b border-gray-100">
+              <div className="p-4 sm:p-6 border-b border-gray-100 dark:border-border">
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div
                     className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${GRADIENTS.brandTiffanyBr} flex items-center justify-center text-xl sm:text-2xl flex-shrink-0`}
@@ -98,8 +107,12 @@ export default function HeroSectionStatic() {
                     🐱
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base">My Cat</h3>
-                    <p className="text-xs sm:text-sm text-gray-600">Your AI economic agent</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-foreground text-sm sm:text-base">
+                      My Cat
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground">
+                      Your AI economic agent
+                    </p>
                   </div>
                 </div>
               </div>
@@ -113,7 +126,10 @@ export default function HeroSectionStatic() {
                     'Any currency accepted',
                     'AI-powered by your Cat',
                   ].map(feature => (
-                    <div key={feature} className="flex items-center gap-2 text-sm text-gray-600">
+                    <div
+                      key={feature}
+                      className="flex items-center gap-2 text-sm text-gray-600 dark:text-muted-foreground"
+                    >
                       <div className="w-4 h-4 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
                         <div className="w-1.5 h-1.5 rounded-full bg-tiffany-500" />
                       </div>
@@ -125,12 +141,20 @@ export default function HeroSectionStatic() {
                 {/* Stats */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-1 sm:pt-2">
                   <div>
-                    <div className="text-xl sm:text-2xl font-bold text-gray-900">0%</div>
-                    <div className="text-xs text-gray-600">Platform Fees</div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-foreground">
+                      0%
+                    </div>
+                    <div className="text-xs text-gray-600 dark:text-muted-foreground">
+                      Platform Fees
+                    </div>
                   </div>
                   <div>
-                    <div className="text-xl sm:text-2xl font-bold text-gray-900">100%</div>
-                    <div className="text-xs text-gray-600">To Creator</div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-foreground">
+                      100%
+                    </div>
+                    <div className="text-xs text-gray-600 dark:text-muted-foreground">
+                      To Creator
+                    </div>
                   </div>
                 </div>
 

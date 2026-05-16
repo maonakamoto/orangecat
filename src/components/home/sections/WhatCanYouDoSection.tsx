@@ -53,10 +53,10 @@ export default function WhatCanYouDoSection() {
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">For Makers</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 dark:text-foreground mb-3 sm:mb-4">
             {whatCanYouDo.title}
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
             {whatCanYouDo.subtitle}
           </p>
         </motion.div>
@@ -76,10 +76,12 @@ export default function WhatCanYouDoSection() {
               <motion.div
                 key={category.id}
                 variants={itemVariants}
-                className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                className="bg-white dark:bg-card rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 dark:border-border overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
                 {/* Category Header */}
-                <div className={`${category.bgColor} p-4 sm:p-6 border-b border-gray-200`}>
+                <div
+                  className={`${category.bgColor} p-4 sm:p-6 border-b border-gray-200 dark:border-border`}
+                >
                   <div className="flex items-center gap-3 mb-2">
                     <div
                       className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${category.iconGradient} flex items-center justify-center`}
@@ -87,10 +89,12 @@ export default function WhatCanYouDoSection() {
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-foreground">
                         {category.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-600">{category.description}</p>
+                      <p className="text-sm sm:text-base text-gray-600 dark:text-muted-foreground">
+                        {category.description}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -100,16 +104,18 @@ export default function WhatCanYouDoSection() {
                   {category.features.map(feature => (
                     <div
                       key={feature.title}
-                      className="flex items-start gap-3 p-3 sm:p-4 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                      className="flex items-start gap-3 p-3 sm:p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-muted transition-colors duration-200"
                     >
                       <div
                         className={`w-2 h-2 rounded-full ${category.iconGradient} mt-2 flex-shrink-0`}
                       />
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-gray-900 text-sm sm:text-base mb-1">
+                        <h4 className="font-semibold text-gray-900 dark:text-foreground text-sm sm:text-base mb-1">
                           {feature.title}
                         </h4>
-                        <p className="text-xs sm:text-sm text-gray-600">{feature.description}</p>
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground">
+                          {feature.description}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -127,7 +133,7 @@ export default function WhatCanYouDoSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center"
         >
-          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-muted-foreground mb-4 sm:mb-6">
             Ready to make something? These features work together seamlessly.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
@@ -143,7 +149,7 @@ export default function WhatCanYouDoSection() {
             </Link>
             <Link
               href={ROUTES.DISCOVER}
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-gray-700 bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-gray-400 rounded-lg transition-all duration-200"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-gray-700 dark:text-foreground bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted border-2 border-gray-300 dark:border-border hover:border-gray-400 rounded-lg transition-all duration-200"
             >
               {CTA_LABELS.discoverAction}
             </Link>

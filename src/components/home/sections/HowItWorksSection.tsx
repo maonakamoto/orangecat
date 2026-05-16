@@ -15,10 +15,10 @@ export default function HowItWorksSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 dark:text-foreground mb-3 sm:mb-4">
             {howItWorks.title}
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-muted-foreground max-w-2xl mx-auto">
             {howItWorks.subtitle}
           </p>
         </div>
@@ -40,7 +40,7 @@ export default function HowItWorksSection() {
                 className="relative"
               >
                 {/* Card */}
-                <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 sm:p-8 h-full">
+                <div className="bg-white dark:bg-card rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 sm:p-8 h-full">
                   {/* Step Number Badge */}
                   <div className="mb-4 sm:mb-6">
                     <div
@@ -54,14 +54,14 @@ export default function HowItWorksSection() {
                   <div
                     className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl ${step.bgColor} mb-3 sm:mb-4`}
                   >
-                    <step.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+                    <step.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 dark:text-foreground" />
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-foreground mb-2 sm:mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-muted-foreground leading-relaxed">
                     {step.description}
                   </p>
                 </div>
@@ -97,7 +97,9 @@ export default function HowItWorksSection() {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="text-center mt-10 sm:mt-12"
         >
-          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Ready to get started?</p>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-muted-foreground mb-4 sm:mb-6">
+            Ready to get started?
+          </p>
           <Link
             href={ROUTES.AUTH}
             className={cn(
