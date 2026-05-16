@@ -112,7 +112,7 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
               <>
                 <span>&bull;</span>
                 <span
-                  className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 font-medium' : 'text-gray-500'}`}
+                  className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 font-medium' : 'text-gray-500 dark:text-muted-foreground'}`}
                 >
                   <Clock className="h-3 w-3" />
                   {formatDueDate(task.due_date)}

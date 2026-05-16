@@ -17,13 +17,15 @@ export function DocumentUploadMode({ onBack, onWrite, onContentExtracted, onErro
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
+          className="inline-flex items-center text-sm text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to options
         </button>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Upload a file</h1>
-        <p className="text-gray-600">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-2">
+          Upload a file
+        </h1>
+        <p className="text-gray-600 dark:text-muted-foreground">
           Upload a text file and we&apos;ll extract the content for you.
         </p>
       </div>
@@ -31,7 +33,7 @@ export function DocumentUploadMode({ onBack, onWrite, onContentExtracted, onErro
       <DocumentFileUpload onContentExtracted={onContentExtracted} onError={onError} />
 
       <div className="mt-6 text-center">
-        <span className="text-gray-400 text-sm">or</span>
+        <span className="text-gray-400 dark:text-muted-foreground text-sm">or</span>
         <button
           onClick={onWrite}
           className="block mx-auto mt-2 text-sm text-tiffany-600 hover:text-tiffany-800 font-medium"

@@ -96,7 +96,7 @@ export function WishlistItemCard({
               {item.target_amount_btc > 0 && (
                 <div className="mt-2 space-y-1">
                   <Progress value={itemProgress} className="h-1" />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-muted-foreground">
                     {Number(item.funded_amount_btc).toFixed(8)} /{' '}
                     {Number(item.target_amount_btc).toFixed(8)} BTC
                   </p>

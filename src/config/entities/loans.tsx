@@ -75,7 +75,7 @@ export const loanEntityConfig: EntityConfig<Loan> = {
         | undefined,
       metadata:
         metadataParts.length > 0 ? (
-          <div className="flex flex-wrap gap-2 text-xs text-gray-500">
+          <div className="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-muted-foreground">
             {metadataParts.map((part, idx) => (
               <span key={idx} className="capitalize">
                 {part}

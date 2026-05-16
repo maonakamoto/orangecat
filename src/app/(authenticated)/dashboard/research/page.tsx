@@ -214,7 +214,8 @@ export default function ResearchDashboard() {
                   </div>
                   <Badge
                     className={
-                      RESEARCH_STATUS_DOT_COLORS[entity.status || 'draft'] ?? 'bg-gray-500'
+                      RESEARCH_STATUS_DOT_COLORS[entity.status || 'draft'] ??
+                      'bg-gray-500 dark:bg-muted'
                     }
                   >
                     {entity.status || 'draft'}
@@ -225,7 +226,7 @@ export default function ResearchDashboard() {
                 <Badge
                   className={
                     RESEARCH_FIELD_COLORS[entity.field as ResearchField] ??
-                    'bg-gray-100 text-gray-800'
+                    'bg-gray-100 dark:bg-muted text-gray-800 dark:text-foreground'
                   }
                 >
                   {RESEARCH_FIELDS.find(f => f.value === entity.field)?.label ??
