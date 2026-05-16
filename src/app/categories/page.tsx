@@ -33,7 +33,7 @@ export default function CategoriesPage() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold mb-4">Find Your Community</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-muted-foreground max-w-2xl mx-auto">
             Whether you&apos;re a creator, builder, educator, or organization, OrangeCat helps you
             exchange, fund, lend, invest, and govern—without gatekeepers.
           </p>
@@ -46,14 +46,18 @@ export default function CategoriesPage() {
               return null;
             }
             return (
-              <div key={category.id} className="bg-white rounded-lg shadow-sm p-6">
+              <div key={category.id} className="bg-white dark:bg-card rounded-lg shadow-sm p-6">
                 <div className="flex items-center mb-6">
                   <div className="w-12 h-12 rounded-full bg-tiffany-50 flex items-center justify-center">
                     <Icon className="w-6 h-6 text-tiffany-500" />
                   </div>
                   <div className="ml-4">
-                    <h2 className="text-2xl font-semibold text-gray-900">{category.name}</h2>
-                    <p className="text-gray-600">{category.description}</p>
+                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground">
+                      {category.name}
+                    </h2>
+                    <p className="text-gray-600 dark:text-muted-foreground">
+                      {category.description}
+                    </p>
                   </div>
                 </div>
 
@@ -62,13 +66,17 @@ export default function CategoriesPage() {
                     <Link
                       key={group.id}
                       href={`/browse?category=${category.id}&group=${group.id}`}
-                      className="block p-6 bg-gray-50 rounded-lg hover:bg-tiffany-50 transition-colors group"
+                      className="block p-6 bg-gray-50 dark:bg-muted rounded-lg hover:bg-tiffany-50 dark:hover:bg-muted/80 transition-colors group"
                     >
                       <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">{group.name}</h3>
-                        <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-tiffany-500 transition-colors" />
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+                          {group.name}
+                        </h3>
+                        <ArrowRight className="w-5 h-5 text-gray-400 dark:text-muted-foreground group-hover:text-tiffany-500 transition-colors" />
                       </div>
-                      <p className="text-gray-600 text-sm">{group.description}</p>
+                      <p className="text-gray-600 dark:text-muted-foreground text-sm">
+                        {group.description}
+                      </p>
                     </Link>
                   ))}
                 </div>
@@ -85,7 +93,7 @@ export default function CategoriesPage() {
             {session ? 'Start Creating' : 'Get Started'}
           </button>
           {!session && (
-            <p className="mt-4 text-sm text-gray-600">
+            <p className="mt-4 text-sm text-gray-600 dark:text-muted-foreground">
               Already have an account?{' '}
               <Link href="/auth?mode=login" className="text-tiffany-600 hover:text-tiffany-700">
                 Sign in

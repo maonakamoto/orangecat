@@ -12,7 +12,9 @@ interface ProgressStepsProps {
 export function ProgressSteps({ currentStep, onStepClick }: ProgressStepsProps) {
   return (
     <div className="mb-12">
-      <h2 className="text-2xl font-semibold text-gray-900 mb-6 text-center">How to Get Started</h2>
+      <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-6 text-center">
+        How to Get Started
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {setupSteps.map((step, index) => {
           const Icon = step.icon;
@@ -30,7 +32,7 @@ export function ProgressSteps({ currentStep, onStepClick }: ProgressStepsProps) 
                   ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20 border-bitcoinOrange shadow-lg'
                   : isCompleted
                     ? 'bg-green-50 border-green-200 text-green-800'
-                    : 'bg-white border-gray-200 hover:border-gray-300'
+                    : 'bg-white dark:bg-card border-gray-200 dark:border-border hover:border-gray-300 dark:hover:border-border'
               }`}
               onClick={() => onStepClick(index)}
             >
@@ -40,13 +42,13 @@ export function ProgressSteps({ currentStep, onStepClick }: ProgressStepsProps) 
                     ? 'bg-bitcoinOrange text-white'
                     : isCompleted
                       ? 'bg-green-500 text-white'
-                      : 'bg-gray-200 text-gray-600'
+                      : 'bg-gray-200 dark:bg-muted text-gray-600 dark:text-muted-foreground'
                 }`}
               >
                 {isCompleted ? <CheckCircle className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
               </div>
               <h3 className="font-semibold mb-2">{step.title}</h3>
-              <p className="text-sm text-gray-600">{step.description}</p>
+              <p className="text-sm text-gray-600 dark:text-muted-foreground">{step.description}</p>
             </motion.div>
           );
         })}

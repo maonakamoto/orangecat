@@ -124,8 +124,10 @@ export default function DiscoverPage() {
           {/* Left Sidebar - always visible on desktop, collapsible on mobile */}
           <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-20">
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200/60 p-5">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Filters</h3>
+              <div className="bg-white/70 dark:bg-card/70 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-border/60 p-5">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4">
+                  Filters
+                </h3>
                 <DiscoverFilters variant="desktop" {...filterProps} />
               </div>
             </div>
@@ -157,7 +159,7 @@ export default function DiscoverPage() {
               }
             />
 
-            <div className="bg-white/70 backdrop-blur-sm rounded-b-2xl border border-gray-200/60 border-t-0 p-6">
+            <div className="bg-white/70 dark:bg-card/70 backdrop-blur-sm rounded-b-2xl border border-gray-200/60 dark:border-border/60 border-t-0 p-6">
               {/* Mobile Filter Button */}
               <div className="lg:hidden mb-4">
                 <Button
@@ -180,7 +182,7 @@ export default function DiscoverPage() {
                     transition={{ duration: 0.3 }}
                     className="lg:hidden mb-6 overflow-hidden"
                   >
-                    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200/60 p-5">
+                    <div className="bg-white/70 dark:bg-card/70 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-border/60 p-5">
                       <DiscoverFilters variant="mobile" {...filterProps} />
                     </div>
                   </motion.div>

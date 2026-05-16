@@ -45,10 +45,10 @@ export default function ChannelComingSoonPage() {
           >
             <PlayCircle className="w-8 h-8" />
           </div>
-          <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
+          <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-foreground">
             Stream anything. Get paid directly.
           </h1>
-          <p className="mt-3 text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-3 text-gray-600 dark:text-muted-foreground max-w-2xl mx-auto">
             Share videos, audio, and live sessions. Build your audience, accept Bitcoin payments,
             and keep your creative freedom. We respect rights and make support simple.
           </p>
@@ -62,7 +62,9 @@ export default function ChannelComingSoonPage() {
                 <Video className="w-5 h-5 text-tiffany-600" />
                 <div>
                   <div className="font-semibold">Video uploads</div>
-                  <div className="text-base text-gray-600">Share long-form and shorts</div>
+                  <div className="text-base text-gray-600 dark:text-muted-foreground">
+                    Share long-form and shorts
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -73,7 +75,9 @@ export default function ChannelComingSoonPage() {
                 <Mic2 className="w-5 h-5 text-tiffany-600" />
                 <div>
                   <div className="font-semibold">Audio & podcasts</div>
-                  <div className="text-base text-gray-600">Episodes, clips, and more</div>
+                  <div className="text-base text-gray-600 dark:text-muted-foreground">
+                    Episodes, clips, and more
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -84,7 +88,9 @@ export default function ChannelComingSoonPage() {
                 <Radio className="w-5 h-5 text-tiffany-600" />
                 <div>
                   <div className="font-semibold">Live streaming</div>
-                  <div className="text-base text-gray-600">Connect with your audience</div>
+                  <div className="text-base text-gray-600 dark:text-muted-foreground">
+                    Connect with your audience
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -94,8 +100,10 @@ export default function ChannelComingSoonPage() {
         {/* Rights & Safety */}
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Rights & Safety</h3>
-            <p className="text-base text-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+              Rights & Safety
+            </h3>
+            <p className="text-base text-gray-700 dark:text-muted-foreground">
               Use original or licensed content, or ensure your use is transformative under fair use.
               We respect artists and owners: we will offer clear licensing metadata, an easy
               takedown process, and fair dispute handling. Our goal is to make direct creator
@@ -105,12 +113,14 @@ export default function ChannelComingSoonPage() {
         </Card>
 
         {/* CTA Card */}
-        <Card className="border-orange-200 bg-white/90">
+        <Card className="border-orange-200 bg-white/90 dark:bg-card/90 dark:border-border">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-center md:text-left">
-                <h3 className="text-lg font-semibold text-gray-900">Be the first to try it</h3>
-                <p className="text-base text-gray-600">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
+                  Be the first to try it
+                </h3>
+                <p className="text-base text-gray-600 dark:text-muted-foreground">
                   Invite friends, build your audience, and get notified when we launch.
                 </p>
                 <form
@@ -208,7 +218,9 @@ export default function ChannelComingSoonPage() {
                   <Clock className="w-5 h-5 text-orange-600 mt-0.5" />
                   <div>
                     <div className="font-semibold">{item.title}</div>
-                    <div className="text-base text-gray-600">{item.desc}</div>
+                    <div className="text-base text-gray-600 dark:text-muted-foreground">
+                      {item.desc}
+                    </div>
                   </div>
                 </div>
               </CardContent>

@@ -43,8 +43,10 @@ export default function StudyBitcoinPage() {
 
       <PageSection background="white">
         <div className="text-center mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Featured Resources</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
+            Featured Resources
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
             Start here with our most popular and essential Bitcoin education resources
           </p>
         </div>
@@ -57,8 +59,10 @@ export default function StudyBitcoinPage() {
 
       <PageSection>
         <div className="text-center mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Learning Paths</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
+            Learning Paths
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto mb-8">
             Structured courses designed to take you from beginner to Bitcoin expert
           </p>
           <div className="flex flex-wrap justify-center gap-2">
@@ -69,7 +73,7 @@ export default function StudyBitcoinPage() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedLevel === level
                     ? 'bg-orange-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
                 }`}
               >
                 {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -86,8 +90,10 @@ export default function StudyBitcoinPage() {
 
       <PageSection background="gray">
         <div className="text-center mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Quick Resources</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
+            Quick Resources
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
             Essential tools, guides, and external resources for your Bitcoin journey
           </p>
         </div>
@@ -100,8 +106,10 @@ export default function StudyBitcoinPage() {
 
       <PageSection background="white">
         <div className="text-center mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Why Learn About Bitcoin?</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
+            Why Learn About Bitcoin?
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
             Understanding Bitcoin is essential in today&apos;s digital economy
           </p>
         </div>
@@ -113,8 +121,12 @@ export default function StudyBitcoinPage() {
                 <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Icon className="w-8 h-8 text-orange-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+                  {benefit.title}
+                </h3>
+                <p className="text-gray-600 dark:text-muted-foreground leading-relaxed">
+                  {benefit.description}
+                </p>
               </div>
             );
           })}
@@ -123,10 +135,10 @@ export default function StudyBitcoinPage() {
 
       <PageSection background="tiffany">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
             Ready to Start Your Bitcoin Journey?
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-gray-600 dark:text-muted-foreground max-w-2xl mx-auto mb-8">
             Begin with our comprehensive wallet guide and take your first step into the world of
             Bitcoin
           </p>

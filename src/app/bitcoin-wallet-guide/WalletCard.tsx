@@ -29,7 +29,7 @@ function getDifficultyColor(difficulty: WalletOption['difficulty']) {
     case 'advanced':
       return 'text-red-600 bg-red-50 border-red-200';
     default:
-      return 'text-gray-600 bg-gray-50 border-gray-200';
+      return 'text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted border-gray-200 dark:border-border';
   }
 }
 
@@ -48,7 +48,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
         className={`cursor-pointer transition-all duration-200 ${
           isSelected
             ? 'ring-2 ring-bitcoinOrange border-bitcoinOrange shadow-lg'
-            : 'hover:shadow-md border-gray-200'
+            : 'hover:shadow-md border-gray-200 dark:border-border'
         } ${wallet.recommended ? 'ring-1 ring-green-200 bg-green-50/30' : ''}`}
         onClick={() => onSelect(wallet.id)}
       >
@@ -56,10 +56,10 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div
-                className={`p-2 rounded-lg ${isSelected ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20' : 'bg-gray-100'}`}
+                className={`p-2 rounded-lg ${isSelected ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20' : 'bg-gray-100 dark:bg-muted'}`}
               >
                 <TypeIcon
-                  className={`w-5 h-5 ${isSelected ? 'text-bitcoinOrange' : 'text-gray-600'}`}
+                  className={`w-5 h-5 ${isSelected ? 'text-bitcoinOrange' : 'text-gray-600 dark:text-muted-foreground'}`}
                 />
               </div>
               <div>
@@ -80,7 +80,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
               </div>
             </div>
             <ChevronRight
-              className={`w-5 h-5 transition-transform ${isSelected ? 'rotate-90 text-bitcoinOrange' : 'text-gray-400'}`}
+              className={`w-5 h-5 transition-transform ${isSelected ? 'rotate-90 text-bitcoinOrange' : 'text-gray-400 dark:text-muted-foreground'}`}
             />
           </div>
         </CardHeader>
@@ -91,13 +91,13 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
             {wallet.features.map(feature => (
               <span
                 key={feature}
-                className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
+                className="px-2 py-1 bg-gray-100 dark:bg-muted text-gray-700 dark:text-muted-foreground rounded-full text-xs"
               >
                 {feature}
               </span>
             ))}
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 dark:text-muted-foreground">
             <strong>Platforms:</strong> {wallet.supportedPlatforms.join(', ')}
           </div>
         </CardContent>

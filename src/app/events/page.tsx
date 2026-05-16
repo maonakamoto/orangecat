@@ -141,7 +141,7 @@ export default function EventsPage() {
             <Card key={index} className="p-6 text-center">
               <feature.icon className="w-12 h-12 text-tiffany-500 mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <p className="text-gray-600 dark:text-muted-foreground">{feature.description}</p>
             </Card>
           ))}
         </div>
@@ -155,7 +155,7 @@ export default function EventsPage() {
             <Card key={index} className="p-6">
               <type.icon className={`w-12 h-12 mx-auto mb-4 ${type.color}`} />
               <h3 className="text-lg font-semibold mb-4 text-center">{type.category}</h3>
-              <ul className="text-gray-600 space-y-2">
+              <ul className="text-gray-600 dark:text-muted-foreground space-y-2">
                 {type.examples.map((example, i) => (
                   <li key={i} className="flex items-center text-sm">
                     <Check className="w-4 h-4 text-tiffany-500 mr-2 flex-shrink-0" />
@@ -177,7 +177,7 @@ export default function EventsPage() {
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start">
                   <Check className="w-5 h-5 text-tiffany-500 mr-3 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">{benefit}</span>
+                  <span className="text-gray-700 dark:text-muted-foreground">{benefit}</span>
                 </div>
               ))}
             </div>
@@ -185,23 +185,25 @@ export default function EventsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Card className="p-6 text-center">
               <Bitcoin className="w-8 h-8 text-tiffany-500 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-900">0%</div>
-              <div className="text-sm text-gray-600">Processing Fees</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-foreground">0%</div>
+              <div className="text-sm text-gray-600 dark:text-muted-foreground">
+                Processing Fees
+              </div>
             </Card>
             <Card className="p-6 text-center">
               <Zap className="w-8 h-8 text-tiffany-500 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-900">&lt; 2min</div>
-              <div className="text-sm text-gray-600">Ticket Setup</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-foreground">&lt; 2min</div>
+              <div className="text-sm text-gray-600 dark:text-muted-foreground">Ticket Setup</div>
             </Card>
             <Card className="p-6 text-center">
               <Users className="w-8 h-8 text-tiffany-500 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-900">Global</div>
-              <div className="text-sm text-gray-600">Attendee Reach</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-foreground">Global</div>
+              <div className="text-sm text-gray-600 dark:text-muted-foreground">Attendee Reach</div>
             </Card>
             <Card className="p-6 text-center">
               <QrCode className="w-8 h-8 text-tiffany-500 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-900">Instant</div>
-              <div className="text-sm text-gray-600">Check-in</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-foreground">Instant</div>
+              <div className="text-sm text-gray-600 dark:text-muted-foreground">Check-in</div>
             </Card>
           </div>
         </div>
@@ -216,7 +218,7 @@ export default function EventsPage() {
               <span className="text-2xl font-bold text-tiffany-600">1</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Create Your Event</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-muted-foreground">
               Set up your event details, ticket pricing, and Bitcoin payment address
             </p>
           </div>
@@ -225,7 +227,7 @@ export default function EventsPage() {
               <span className="text-2xl font-bold text-tiffany-600">2</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Promote & Sell</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-muted-foreground">
               Share your event and sell tickets with instant Bitcoin payments
             </p>
           </div>
@@ -234,7 +236,7 @@ export default function EventsPage() {
               <span className="text-2xl font-bold text-tiffany-600">3</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Manage Attendees</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-muted-foreground">
               Track RSVPs, send updates, and manage your attendee list
             </p>
           </div>
@@ -243,7 +245,7 @@ export default function EventsPage() {
               <span className="text-2xl font-bold text-tiffany-600">4</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Run the Event</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-muted-foreground">
               Use QR check-in, track attendance, and create memorable experiences
             </p>
           </div>
@@ -254,7 +256,7 @@ export default function EventsPage() {
       <PageSection>
         <div className="text-center">
           <h2 className="text-2xl font-semibold mb-6">Ready to Organize Your Event?</h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join event organizers worldwide who use OrangeCat to create amazing experiences with
             seamless ticketing and Bitcoin-native payments.
           </p>
