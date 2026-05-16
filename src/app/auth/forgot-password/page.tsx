@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
             </p>
 
             {/* Instructions */}
-            <div className="text-left bg-gray-50 dark:bg-muted rounded-lg p-4 mb-6">
+            <div className="text-left bg-muted rounded-lg p-4 mb-6">
               <h3 className="font-medium text-foreground mb-2">Next steps:</h3>
               <ol className="text-sm text-muted-foreground space-y-1">
                 <li>1. Check your email inbox</li>

@@ -115,7 +115,7 @@ export function GuidancePanel({
               {content.examples.map((example, index) => (
                 <div
                   key={index}
-                  className="text-xs text-muted-foreground bg-gray-50 dark:bg-muted rounded px-2 py-1.5 border border-border"
+                  className="text-xs text-muted-foreground bg-muted rounded px-2 py-1.5 border border-border"
                 >
                   {example}
                 </div>

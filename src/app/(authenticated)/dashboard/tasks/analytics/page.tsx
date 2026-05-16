@@ -171,7 +171,7 @@ export default function TaskAnalyticsPage() {
               {fairnessData.slice(0, 10).map(item => (
                 <div
                   key={item.task.id}
-                  className="flex items-center gap-4 p-3 bg-gray-50 dark:bg-muted/50 rounded-lg hover:bg-gray-100 dark:hover:bg-muted transition-colors cursor-pointer"
+                  className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg hover:bg-gray-100 dark:hover:bg-muted transition-colors cursor-pointer"
                   onClick={() => router.push(`/dashboard/tasks/${item.task.id}`)}
                 >
                   <FairnessIndicator level={item.fairnessLevel} />

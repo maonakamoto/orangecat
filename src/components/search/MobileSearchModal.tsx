@@ -135,7 +135,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
             value={query}
             onChange={e => setQuery(e.target.value)}
             autoFocus
-            className="w-full pl-10 pr-4 py-3 text-base border border-gray-300 dark:border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent bg-gray-50 dark:bg-muted dark:text-foreground dark:placeholder:text-muted-foreground"
+            className="w-full pl-10 pr-4 py-3 text-base border border-gray-300 dark:border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent bg-muted dark:text-foreground dark:placeholder:text-muted-foreground"
           />
         </form>
       </div>
@@ -153,7 +153,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                 <button
                   key={index}
                   onClick={action.action}
-                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted rounded-lg transition-colors"
+                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
                 >
                   <div className="text-orange-500">{action.icon}</div>
                   <span className="text-base">{action.label}</span>
@@ -184,7 +184,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                 <button
                   key={index}
                   onClick={() => handleSearch(historyItem)}
-                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted rounded-lg transition-colors"
+                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
                 >
                   <Clock className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
                   <span className="text-base">{historyItem}</span>
@@ -206,7 +206,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                 <button
                   key={index}
                   onClick={() => handleSearch(trending)}
-                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted rounded-lg transition-colors"
+                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
                 >
                   <TrendingUp className="w-4 h-4 text-orange-500" />
                   <span className="text-base">{trending}</span>
@@ -235,7 +235,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                   <button
                     key={index}
                     onClick={() => handleSearch(suggestion)}
-                    className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted rounded-lg transition-colors"
+                    className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
                   >
                     <Search className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
                     <span className="text-base">{suggestion}</span>

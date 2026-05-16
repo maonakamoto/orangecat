@@ -17,10 +17,7 @@ interface WalletsHelpSectionProps {
 
 export function WalletsHelpSection({ isDesktop }: WalletsHelpSectionProps) {
   return (
-    <details
-      className="mt-6 lg:mt-8 bg-gray-50 dark:bg-muted rounded-lg overflow-hidden"
-      open={isDesktop}
-    >
+    <details className="mt-6 lg:mt-8 bg-muted rounded-lg overflow-hidden" open={isDesktop}>
       <summary className="p-4 lg:p-6 flex items-start gap-3 cursor-pointer list-none">
         <AlertCircle className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
         <div className="flex-1">

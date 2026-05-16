@@ -46,7 +46,7 @@ export function RouteError({ error, reset, context }: RouteErrorProps) {
         </button>
         <Link
           href={ROUTES.DASHBOARD.HOME}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-border text-gray-700 dark:text-foreground bg-card hover:bg-gray-50 dark:hover:bg-muted transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-border text-gray-700 dark:text-foreground bg-card hover:bg-muted transition-colors"
         >
           <Home className="h-4 w-4" />
           Go to Dashboard

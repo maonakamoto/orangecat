@@ -68,7 +68,7 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
               setIsOpen(false);
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-left hover:bg-gray-50 dark:hover:bg-muted flex items-center gap-3',
+              'w-full px-4 py-2.5 text-left hover:bg-muted flex items-center gap-3',
               selectedModel === 'auto' && 'bg-tiffany-50'
             )}
           >
@@ -97,7 +97,7 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
                 setIsOpen(false);
               }}
               className={cn(
-                'w-full px-4 py-2.5 text-left hover:bg-gray-50 dark:hover:bg-muted flex items-center gap-3',
+                'w-full px-4 py-2.5 text-left hover:bg-muted flex items-center gap-3',
                 selectedModel === model.id && 'bg-tiffany-50'
               )}
             >

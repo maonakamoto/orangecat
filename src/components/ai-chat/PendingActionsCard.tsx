@@ -98,9 +98,7 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
     return (
       <div
         className={`rounded-xl border p-4 ${
-          completed === 'confirmed'
-            ? 'bg-green-50 border-green-200'
-            : 'bg-gray-50 dark:bg-muted border-border'
+          completed === 'confirmed' ? 'bg-green-50 border-green-200' : 'bg-muted border-border'
         }`}
       >
         <div className="flex items-center gap-3">
@@ -124,7 +122,7 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
 
   if (isExpired) {
     return (
-      <div className="rounded-xl border border-border bg-gray-50 dark:bg-muted p-4">
+      <div className="rounded-xl border border-border bg-muted p-4">
         <div className="flex items-center gap-3 text-muted-foreground">
           <Clock className="h-5 w-5" />
           <span className="text-sm">This action has expired</span>

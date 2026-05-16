@@ -117,7 +117,7 @@ export function FormField({
             onBlur={onBlur}
             disabled={disabled}
             className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:border-transparent transition-colors ${baseInputClass} ${
-              disabled ? 'bg-gray-50 dark:bg-muted cursor-not-allowed' : ''
+              disabled ? 'bg-muted cursor-not-allowed' : ''
             }`}
           >
             <option value="">Select {label.toLowerCase()}</option>

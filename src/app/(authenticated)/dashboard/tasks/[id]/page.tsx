@@ -235,7 +235,7 @@ export default function TaskDetailPage() {
             </div>
           </div>
 
-          <div className="border-t border-border p-4 bg-gray-50 dark:bg-muted flex flex-wrap gap-2">
+          <div className="border-t border-border p-4 bg-muted flex flex-wrap gap-2">
             <Button onClick={() => setActiveModal('complete')} className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4" />
               Done

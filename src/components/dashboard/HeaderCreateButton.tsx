@@ -63,7 +63,7 @@ export function HeaderCreateButton() {
                   <Link
                     href={option.href}
                     onClick={close}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-muted transition-colors group"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors group"
                     role="menuitem"
                     tabIndex={isOpen ? 0 : -1}
                   >

@@ -74,7 +74,7 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
 
       {/* Address - Clickable to Copy */}
       <div
-        className="bg-gray-50 dark:bg-muted rounded-lg p-3 mb-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors border border-border"
+        className="bg-muted rounded-lg p-3 mb-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors border border-border"
         onClick={handleAddressClick}
         title="Click to copy address"
       >

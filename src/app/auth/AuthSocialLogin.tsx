@@ -57,7 +57,7 @@ export function AuthSocialLogin({
               variant="outline"
               disabled={loading}
               onClick={() => onOAuthSignIn(id)}
-              className="h-11 w-full border-gray-300 dark:border-border hover:border-gray-400 hover:bg-gray-50 dark:hover:bg-muted"
+              className="h-11 w-full border-gray-300 dark:border-border hover:border-gray-400 hover:bg-muted"
               aria-label={`Sign in with ${name}`}
             >
               <Icon className="h-5 w-5" />

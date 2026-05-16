@@ -79,7 +79,7 @@ export function AIModelSelector({
               type="button"
               onClick={() => handleModelSelect(model)}
               className={cn(
-                'w-full p-2 rounded-lg text-left hover:bg-gray-50 dark:hover:bg-muted flex items-center justify-between',
+                'w-full p-2 rounded-lg text-left hover:bg-muted flex items-center justify-between',
                 selectedModel?.id === model.id && 'bg-tiffany-50'
               )}
             >

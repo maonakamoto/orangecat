@@ -23,7 +23,7 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
     name: 'X',
     icon: XIcon,
     color: 'text-foreground',
-    bgColor: 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
+    bgColor: 'bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const text = `${shareTitle}\n\n${shareDescription}\n\n#Bitcoin #OrangeCat`;
       window.open(
@@ -75,7 +75,7 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
     name: 'Email',
     icon: Mail,
     color: 'text-muted-foreground',
-    bgColor: 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
+    bgColor: 'bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const subject = encodeURIComponent(`Check out ${shareTitle}`);
       const body = encodeURIComponent(`${shareDescription}\n\n${shareUrl}`);
@@ -236,7 +236,7 @@ export default function ShareContent({
         className={`w-full flex items-center justify-center gap-3 p-4 rounded-xl transition-all touch-manipulation active:scale-95 font-semibold ${
           copySuccess
             ? 'bg-green-50 hover:bg-green-100 text-green-700 border-2 border-green-200'
-            : 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 text-gray-700 dark:text-foreground border-2 border-border'
+            : 'bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 text-gray-700 dark:text-foreground border-2 border-border'
         }`}
         aria-label="Copy URL to clipboard"
       >

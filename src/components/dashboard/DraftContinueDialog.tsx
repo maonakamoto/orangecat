@@ -99,7 +99,7 @@ export default function DraftContinueDialog({
             </div>
 
             {/* Draft Summary */}
-            <div className="p-6 bg-gray-50 dark:bg-muted border-b border-border">
+            <div className="p-6 bg-muted border-b border-border">
               <div className="flex items-center gap-3 mb-3">
                 {isLocalDraft && (
                   <div className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium animate-pulse">
@@ -180,7 +180,7 @@ export default function DraftContinueDialog({
               </div>
 
               {/* Start Fresh - Secondary Action */}
-              <div className="border border-border rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-muted/50 transition-colors">
+              <div className="border border-border rounded-xl p-4 hover:bg-muted/50 transition-colors">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
@@ -207,7 +207,7 @@ export default function DraftContinueDialog({
                 <Button
                   onClick={onStartFresh}
                   variant="outline"
-                  className="w-full border-gray-300 dark:border-border hover:bg-gray-50 dark:hover:bg-muted"
+                  className="w-full border-gray-300 dark:border-border hover:bg-muted"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Start Fresh

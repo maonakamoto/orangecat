@@ -211,7 +211,7 @@ export default function ProjectMediaGallery({
             ))}
             {thumbs.length > 3 && (
               <div
-                className="aspect-[4/3] overflow-hidden rounded-md border border-border bg-gray-50 dark:bg-muted cursor-pointer group relative flex items-center justify-center"
+                className="aspect-[4/3] overflow-hidden rounded-md border border-border bg-muted cursor-pointer group relative flex items-center justify-center"
                 onClick={() => openLightbox(4)}
               >
                 <div className="text-center">

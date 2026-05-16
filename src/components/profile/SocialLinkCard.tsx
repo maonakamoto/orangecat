@@ -18,7 +18,7 @@ export function SocialLinkCard({ link, onEdit, onDelete }: SocialLinkCardProps) 
   const displayValue = link.value;
 
   return (
-    <div className="flex items-center justify-between p-3 border border-border rounded-lg hover:border-orange-300 transition-colors bg-gray-50 dark:bg-muted">
+    <div className="flex items-center justify-between p-3 border border-border rounded-lg hover:border-orange-300 transition-colors bg-muted">
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <div className="flex-shrink-0">
           <Icon className="w-5 h-5 text-muted-foreground" />

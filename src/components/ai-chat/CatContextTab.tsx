@@ -152,7 +152,7 @@ export function CatContextTab() {
             const label = (DOCUMENT_TYPE_LABELS as Record<string, string>)[type] || type;
             return (
               <div key={type} className="bg-card rounded-xl border border-border overflow-hidden">
-                <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
+                <div className="px-4 py-3 bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
                   <Icon className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium text-gray-700 dark:text-foreground">
                     {label}
@@ -166,7 +166,7 @@ export function CatContextTab() {
                     <Link
                       key={doc.id}
                       href={`${ENTITY_REGISTRY['document'].basePath}/${doc.id}`}
-                      className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-muted transition-colors"
+                      className="flex items-center justify-between px-4 py-3 hover:bg-muted transition-colors"
                     >
                       <div className="min-w-0 flex-1">
                         <p className="text-base font-medium text-foreground truncate">

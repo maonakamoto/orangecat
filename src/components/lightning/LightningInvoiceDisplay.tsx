@@ -64,7 +64,7 @@ export function LightningInvoiceDisplay({
           Lightning Invoice
         </label>
         <div className="flex gap-2">
-          <div className="flex-1 p-3 bg-gray-50 dark:bg-muted rounded-lg border border-border">
+          <div className="flex-1 p-3 bg-muted rounded-lg border border-border">
             <code className="text-xs text-muted-foreground break-all font-mono">
               {invoice.bolt11}
             </code>

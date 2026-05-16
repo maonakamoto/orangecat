@@ -127,7 +127,7 @@ export default function BitcoinWalletStatsCompact({
             {transactions.slice(0, 3).map(tx => (
               <div
                 key={tx.txid}
-                className="flex items-center justify-between text-sm p-2 bg-gray-50 dark:bg-muted rounded"
+                className="flex items-center justify-between text-sm p-2 bg-muted rounded"
               >
                 <div className="flex items-center gap-2">
                   {tx.type === 'received' ? (

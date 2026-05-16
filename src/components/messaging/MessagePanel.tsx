@@ -221,7 +221,7 @@ export default function MessagePanel({
             <div className="px-4 pt-2">
               <ConnectionStatusIndicator />
             </div>
-            <div className="flex-1 flex items-center justify-center text-muted-foreground bg-gray-50 dark:bg-muted/30">
+            <div className="flex-1 flex items-center justify-center text-muted-foreground bg-muted/30">
               <div className="text-center p-10 max-w-md">
                 <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-card border border-border shadow-sm flex items-center justify-center">
                   <MessageSquare className="w-8 h-8 text-gray-400 dark:text-muted-foreground" />

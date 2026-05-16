@@ -38,7 +38,7 @@ export function AIChatMessage({
   }
 
   return (
-    <div className={cn('flex gap-3 py-4 px-4', isUser ? 'bg-gray-50 dark:bg-muted' : 'bg-card')}>
+    <div className={cn('flex gap-3 py-4 px-4', isUser ? 'bg-muted' : 'bg-card')}>
       <Avatar className="h-8 w-8 flex-shrink-0">
         {isUser ? (
           <>

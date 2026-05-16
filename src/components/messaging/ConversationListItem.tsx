@@ -150,7 +150,7 @@ export function ConversationListItem({
       onPointerCancel={onPointerUp}
       onClick={onClick}
       className={cn(
-        'p-3 sm:p-4 hover:bg-gray-50 dark:hover:bg-muted/50 cursor-pointer transition-all duration-150 flex items-start gap-3 group',
+        'p-3 sm:p-4 hover:bg-muted/50 cursor-pointer transition-all duration-150 flex items-start gap-3 group',
         isActiveConversation && 'bg-card shadow-sm border-l-4 border-tiffany-500',
         selectionMode && 'pr-3'
       )}

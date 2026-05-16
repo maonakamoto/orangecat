@@ -89,7 +89,7 @@ export function AICreditsPanel() {
                 {data.transactions.slice(0, 5).map(tx => (
                   <div
                     key={tx.id}
-                    className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-muted rounded-lg text-sm"
+                    className="flex items-center justify-between py-2 px-3 bg-muted rounded-lg text-sm"
                   >
                     <div className="flex items-center gap-2">
                       {getTransactionIcon(tx.transaction_type)}

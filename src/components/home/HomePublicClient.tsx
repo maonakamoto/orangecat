@@ -15,7 +15,7 @@ const WhatCanYouDoSection = dynamic(
 );
 
 const ProofSection = dynamic(() => import('@/components/home/sections/ProofSection'), {
-  loading: () => <div className="h-96 bg-gray-50 dark:bg-muted animate-pulse" />,
+  loading: () => <div className="h-96 bg-muted animate-pulse" />,
 });
 
 const HowItWorksSection = dynamic(() => import('@/components/home/sections/HowItWorksSection'), {
@@ -55,7 +55,7 @@ export default function HomePublicClient() {
         <WhatCanYouDoSection />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-gray-50 dark:bg-muted animate-pulse" />}>
+      <Suspense fallback={<div className="h-96 bg-muted animate-pulse" />}>
         <ProofSection />
       </Suspense>
 

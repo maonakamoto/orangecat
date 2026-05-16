@@ -104,7 +104,7 @@ export function BulkActionsToolbar({
                       onBulkVisibilityChange('public');
                       setShowVisibilityMenu(false);
                     }}
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-muted flex items-center gap-2"
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2"
                     disabled={isProcessing}
                   >
                     <Globe className="w-4 h-4 text-green-600" />
@@ -115,7 +115,7 @@ export function BulkActionsToolbar({
                       onBulkVisibilityChange('private');
                       setShowVisibilityMenu(false);
                     }}
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-muted flex items-center gap-2"
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2"
                     disabled={isProcessing}
                   >
                     <Lock className="w-4 h-4 text-muted-foreground" />

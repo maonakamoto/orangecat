@@ -53,7 +53,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
               </p>
             </div>
             <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-muted rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
                 <Smartphone className="h-5 w-5 text-muted-foreground mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-foreground">
@@ -108,7 +108,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
               <p className="text-xs text-muted-foreground text-center">
                 Can't scan? Enter this code manually:
               </p>
-              <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-muted rounded border border-border">
+              <div className="flex items-center gap-2 p-2 bg-muted rounded border border-border">
                 <code className="flex-1 text-xs font-mono text-gray-700 dark:text-foreground break-all">
                   {enrollmentData?.secret}
                 </code>

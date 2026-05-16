@@ -30,7 +30,7 @@ function DropdownItem({ onClick, isFocused, children, itemRef }: DropdownItemPro
     <button
       ref={itemRef}
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted rounded-lg transition-colors text-left ${
+      className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-foreground hover:bg-muted rounded-lg transition-colors text-left ${
         isFocused ? 'bg-tiffany-50 border border-tiffany-200 text-tiffany-900' : ''
       }`}
       role="option"

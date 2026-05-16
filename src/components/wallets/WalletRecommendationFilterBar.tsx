@@ -20,7 +20,7 @@ interface WalletRecommendationFilterBarProps {
 
 const ACTIVE_CLASS = 'bg-orange-100 text-orange-700 border-2 border-orange-300';
 const INACTIVE_CLASS =
-  'bg-gray-50 dark:bg-muted text-gray-700 dark:text-foreground border-2 border-transparent hover:bg-gray-100 dark:hover:bg-muted/80';
+  'bg-muted text-gray-700 dark:text-foreground border-2 border-transparent hover:bg-gray-100 dark:hover:bg-muted/80';
 const BTN_BASE =
   'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all';
 

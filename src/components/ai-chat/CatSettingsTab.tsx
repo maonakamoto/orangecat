@@ -58,7 +58,7 @@ export function CatSettingsTab() {
     <div className="space-y-6">
       {/* AI Model Selection */}
       <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
+        <div className="px-4 py-3 bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
           <Bot className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-semibold text-foreground">AI Model</span>
         </div>
@@ -97,7 +97,7 @@ export function CatSettingsTab() {
 
       {/* API Keys Status */}
       <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
+        <div className="px-4 py-3 bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
           <Key className="h-4 w-4 text-amber-600" />
           <span className="text-sm font-semibold text-foreground">API Keys</span>
         </div>
@@ -125,7 +125,7 @@ export function CatSettingsTab() {
           )}
           <Link
             href={ROUTES.SETTINGS_AI}
-            className="mt-3 flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-muted transition-colors"
+            className="mt-3 flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors"
           >
             <span className="text-sm text-gray-700 dark:text-muted-foreground">
               Manage API Keys
@@ -137,7 +137,7 @@ export function CatSettingsTab() {
 
       {/* Permissions */}
       <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center justify-between">
+        <div className="px-4 py-3 bg-muted border-b border-gray-100 dark:border-border flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Shield className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-semibold text-foreground">Permissions</span>

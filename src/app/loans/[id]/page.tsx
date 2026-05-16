@@ -87,7 +87,7 @@ const loanConfig: EntityDetailConfig = {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {entity.interest_rate !== null && entity.interest_rate !== undefined && (
-                <div className="p-4 bg-gray-50 dark:bg-muted rounded-lg">
+                <div className="p-4 bg-muted rounded-lg">
                   <div className="flex items-center gap-2 text-muted-foreground text-sm mb-1">
                     <Percent className="w-4 h-4" />
                     Interest Rate
@@ -96,7 +96,7 @@ const loanConfig: EntityDetailConfig = {
                 </div>
               )}
               {entity.monthly_payment && (
-                <div className="p-4 bg-gray-50 dark:bg-muted rounded-lg">
+                <div className="p-4 bg-muted rounded-lg">
                   <div className="flex items-center gap-2 text-muted-foreground text-sm mb-1">
                     <TrendingUp className="w-4 h-4" />
                     Monthly Payment

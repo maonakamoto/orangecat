@@ -29,7 +29,7 @@ function getDifficultyColor(difficulty: WalletOption['difficulty']) {
     case 'advanced':
       return 'text-red-600 bg-red-50 border-red-200';
     default:
-      return 'text-muted-foreground bg-gray-50 dark:bg-muted border-border';
+      return 'text-muted-foreground bg-muted border-border';
   }
 }
 

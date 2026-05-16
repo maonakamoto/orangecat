@@ -47,7 +47,7 @@ export function CollateralItemPicker({
               key={item.id}
               type="button"
               onClick={() => onSelect(item)}
-              className="w-full text-left p-2 hover:bg-gray-50 dark:hover:bg-muted rounded border border-border"
+              className="w-full text-left p-2 hover:bg-muted rounded border border-border"
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-foreground">{item.label}</span>

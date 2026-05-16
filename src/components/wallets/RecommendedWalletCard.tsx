@@ -86,7 +86,7 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
 
           <Badge
             variant="outline"
-            className="text-xs bg-gray-50 dark:bg-muted text-gray-700 dark:text-foreground border-border"
+            className="text-xs bg-muted text-gray-700 dark:text-foreground border-border"
           >
             <Shield className="w-3 h-3 mr-1" />
             Non-custodial

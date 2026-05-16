@@ -82,7 +82,7 @@ export function DeletePostDialog({
 
           {/* Post preview */}
           {postPreview && (
-            <div className="mt-4 p-3 bg-gray-50 dark:bg-muted rounded-lg border border-gray-100 dark:border-border">
+            <div className="mt-4 p-3 bg-muted rounded-lg border border-gray-100 dark:border-border">
               <p className="text-gray-700 dark:text-foreground text-sm line-clamp-3">
                 {postPreview}
               </p>

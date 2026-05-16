@@ -21,7 +21,7 @@ export default function PublicEntityOwnerCard({ owner, label }: PublicEntityOwne
       <CardContent>
         <Link
           href={profileHref}
-          className={`flex items-center gap-3 -m-2 p-2 rounded-lg transition-colors ${isClickable ? 'hover:bg-gray-50 dark:hover:bg-muted' : 'cursor-default'}`}
+          className={`flex items-center gap-3 -m-2 p-2 rounded-lg transition-colors ${isClickable ? 'hover:bg-muted' : 'cursor-default'}`}
         >
           {owner.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element

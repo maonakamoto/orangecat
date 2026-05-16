@@ -87,10 +87,7 @@ export default function DocsPage() {
             </p>
             <div className="grid sm:grid-cols-2 gap-3">
               {ENTITY_TYPES.map(entity => (
-                <div
-                  key={entity.name}
-                  className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-muted rounded-lg"
-                >
+                <div key={entity.name} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
                   <div className="w-2 h-2 rounded-full bg-tiffany-500 mt-2 flex-shrink-0" />
                   <div>
                     <span className="font-medium text-foreground text-sm">{entity.name}</span>
@@ -276,7 +273,7 @@ export default function DocsPage() {
               </Link>
               <Link
                 href={ROUTES.FAQ}
-                className="inline-flex items-center gap-2 border border-border bg-card hover:bg-gray-50 dark:hover:bg-muted text-gray-700 dark:text-foreground font-medium px-5 py-2.5 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 border border-border bg-card hover:bg-muted text-gray-700 dark:text-foreground font-medium px-5 py-2.5 rounded-lg transition-colors"
               >
                 View FAQ
               </Link>

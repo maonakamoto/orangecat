@@ -171,7 +171,7 @@ export function RepostModal({
                     }
                   }}
                   rows={4}
-                  className="w-full border border-border rounded-2xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none bg-gray-50 dark:bg-muted placeholder:text-gray-500 dark:placeholder:text-muted-foreground dark:text-foreground"
+                  className="w-full border border-border rounded-2xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none bg-muted placeholder:text-gray-500 dark:placeholder:text-muted-foreground dark:text-foreground"
                   placeholder="Add a comment"
                   maxLength={QUOTE_MAX_LENGTH}
                   aria-label="Add your comment before reposting"
@@ -218,7 +218,7 @@ export function RepostModal({
               </div>
 
               {/* Original Post Preview (X-style) */}
-              <div className="border border-border rounded-2xl bg-gray-50 dark:bg-muted p-3 hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors">
+              <div className="border border-border rounded-2xl bg-muted p-3 hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors">
                 <div className="flex items-start gap-3">
                   <AvatarLink
                     username={originalAuthor.username || null}

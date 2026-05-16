@@ -69,7 +69,7 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
             onClick={() => handleSelect(null)}
             className={cn(
               'relative flex flex-col items-start p-4 sm:p-5 rounded-xl border-2 transition-all text-left min-h-[120px]',
-              'hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2',
+              'hover:border-gray-300 hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2',
               selected === null
                 ? 'border-orange-500 bg-orange-50/50 ring-2 ring-orange-200'
                 : 'border-border bg-card'

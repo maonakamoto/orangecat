@@ -115,7 +115,7 @@ export function ConfigureStep({
 
       {/* Tier Details */}
       {selectedTier && tierDescriptions[selectedTier] && (
-        <Card className="p-4 bg-gray-50 dark:bg-muted">
+        <Card className="p-4 bg-muted">
           <h4 className="font-medium mb-2">{tierDescriptions[selectedTier].title}</h4>
           <p className="text-sm text-muted-foreground mb-3">
             Best for: {tierDescriptions[selectedTier].bestFor}

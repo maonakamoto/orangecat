@@ -90,7 +90,7 @@ export function BlogFilters({
       </div>
 
       {(selectedTag || selectedTimeFilter !== 'all') && (
-        <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-muted rounded-lg">
+        <div className="flex items-center gap-4 p-4 bg-muted rounded-lg">
           <Filter className="w-4 h-4 text-muted-foreground" />
           <div className="flex items-center gap-2 text-sm">
             <span className="text-muted-foreground">Showing:</span>

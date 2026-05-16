@@ -140,7 +140,7 @@ export function MessageContextMenu({
             }}
             className={cn(
               'w-full px-4 py-2.5 text-left text-sm text-gray-700 dark:text-foreground',
-              'hover:bg-gray-50 dark:hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
+              'hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
               'flex items-center gap-3 transition-colors'
             )}
             role="menuitem"
@@ -178,7 +178,7 @@ export function MessageContextMenu({
             }}
             className={cn(
               'w-full px-4 py-2.5 text-center text-sm text-muted-foreground',
-              'hover:bg-gray-50 dark:hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
+              'hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
               'flex items-center justify-center gap-2 transition-colors'
             )}
             role="menuitem"

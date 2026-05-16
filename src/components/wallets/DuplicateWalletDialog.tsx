@@ -86,7 +86,7 @@ export function DuplicateWalletDialog({
                 {existingWallets.map(wallet => (
                   <div
                     key={wallet.id}
-                    className="text-sm text-muted-foreground bg-gray-50 dark:bg-muted px-3 py-2 rounded border dark:border-border"
+                    className="text-sm text-muted-foreground bg-muted px-3 py-2 rounded border dark:border-border"
                   >
                     <div className="font-medium">{wallet.label}</div>
                     <div className="text-xs opacity-75 capitalize">

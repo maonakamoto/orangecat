@@ -114,7 +114,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
       {/* Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-muted transition-colors"
+        className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-muted transition-colors"
       >
         <div className="relative flex-shrink-0">
           {avatarUrl ? (
@@ -164,7 +164,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           <button
             onClick={handleSwitchToIndividual}
             className={cn(
-              'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-muted transition-colors',
+              'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-muted transition-colors',
               !isGroupContext && 'bg-tiffany-50 dark:bg-accent'
             )}
           >
@@ -202,7 +202,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                 key={group.id}
                 onClick={() => handleSwitchToGroup(group)}
                 className={cn(
-                  'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-muted transition-colors',
+                  'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-muted transition-colors',
                   isGroupContext && context.group?.id === group.id && 'bg-tiffany-50 dark:bg-accent'
                 )}
               >
@@ -240,7 +240,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
               setIsOpen(false);
               router.push(`${ROUTES.DASHBOARD.GROUPS}/create`);
             }}
-            className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-muted transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-muted transition-colors"
           >
             <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
               <Plus className="w-4 h-4 text-muted-foreground" />

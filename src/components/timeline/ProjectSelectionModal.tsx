@@ -100,7 +100,7 @@ export default function ProjectSelectionModal({
                     onClick={() => onToggleProject(project.id)}
                     className={cn(
                       'flex items-center justify-between w-full px-3 py-3 rounded-lg transition-colors min-h-[60px]',
-                      'hover:bg-gray-50 dark:hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
+                      'hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
                       isSelected && 'bg-orange-50'
                     )}
                     aria-label={`${isSelected ? 'Deselect' : 'Select'} ${project.title}`}

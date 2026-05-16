@@ -71,7 +71,7 @@ export function PageHeader({ title, subtitle, description, className, children }
 export function PageSection({ children, className, background = 'default' }: PageSectionProps) {
   const backgroundClasses = {
     default: '',
-    gray: 'bg-gray-50 dark:bg-muted -mx-4 px-4 py-8 md:-mx-6 md:px-6',
+    gray: 'bg-muted -mx-4 px-4 py-8 md:-mx-6 md:px-6',
     white: 'bg-card -mx-4 px-4 py-8 md:-mx-6 md:px-6 shadow-sm rounded-lg',
     tiffany: 'bg-tiffany-50 dark:bg-accent -mx-4 px-4 py-8 md:-mx-6 md:px-6 rounded-lg',
   };

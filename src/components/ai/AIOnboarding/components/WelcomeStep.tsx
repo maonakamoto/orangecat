@@ -21,10 +21,7 @@ export function WelcomeStep() {
       {/* Benefits */}
       <div className="grid grid-cols-2 gap-4 text-left">
         {aiOnboardingContent.welcome.tips?.map((tip, index) => (
-          <div
-            key={index}
-            className="flex items-start gap-2 p-3 bg-gray-50 dark:bg-muted rounded-lg"
-          >
+          <div key={index} className="flex items-start gap-2 p-3 bg-muted rounded-lg">
             <CheckCircle className="w-5 h-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
             <span className="text-sm text-gray-700 dark:text-foreground">{tip}</span>
           </div>

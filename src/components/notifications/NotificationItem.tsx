@@ -65,7 +65,7 @@ export function NotificationItem({
     <div
       className={`group relative p-3 rounded-lg border transition-colors cursor-pointer ${
         notification.read
-          ? 'bg-card border-border hover:bg-gray-50 dark:hover:bg-muted'
+          ? 'bg-card border-border hover:bg-muted'
           : 'bg-tiffany-50 border-tiffany-200 hover:bg-tiffany-100'
       }`}
       onClick={() => onClick(notification)}

@@ -78,7 +78,7 @@ export function AIRevenuePanel() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-gray-50 dark:bg-muted rounded-lg p-3">
+          <div className="bg-muted rounded-lg p-3">
             <div className="flex items-center gap-2 text-muted-foreground text-sm">
               <Users className="h-4 w-4" />
               Conversations
@@ -87,7 +87,7 @@ export function AIRevenuePanel() {
               {summary.total_conversations.toLocaleString()}
             </div>
           </div>
-          <div className="bg-gray-50 dark:bg-muted rounded-lg p-3">
+          <div className="bg-muted rounded-lg p-3">
             <div className="flex items-center gap-2 text-muted-foreground text-sm">
               <MessageSquare className="h-4 w-4" />
               Messages
@@ -117,7 +117,7 @@ export function AIRevenuePanel() {
               {assistants.map(assistant => (
                 <div
                   key={assistant.id}
-                  className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-muted rounded-lg text-sm"
+                  className="flex items-center justify-between py-2 px-3 bg-muted rounded-lg text-sm"
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <div className="h-8 w-8 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">

@@ -125,7 +125,7 @@ export default function AboutPage() {
             </p>
             <Link
               href={`${ROUTES.AUTH}?mode=register`}
-              className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-orange-600 bg-card hover:bg-gray-50 dark:hover:bg-muted transition-colors"
+              className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-orange-600 bg-card hover:bg-muted transition-colors"
             >
               Get Started Free
             </Link>

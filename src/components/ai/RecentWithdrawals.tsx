@@ -37,7 +37,7 @@ export function RecentWithdrawals({ withdrawals, formatAmountBtc }: RecentWithdr
         {withdrawals.slice(0, 3).map(withdrawal => (
           <div
             key={withdrawal.id}
-            className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-muted rounded-lg text-sm"
+            className="flex items-center justify-between py-2 px-3 bg-muted rounded-lg text-sm"
           >
             <div className="flex items-center gap-2">
               {getStatusIcon(withdrawal.status)}

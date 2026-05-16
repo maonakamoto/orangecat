@@ -60,7 +60,7 @@ export function AIChatPanel({
   const assistant = conversation?.assistant;
 
   return (
-    <div className="flex flex-col h-full bg-gray-50 dark:bg-muted">
+    <div className="flex flex-col h-full bg-muted">
       <div className="flex items-center gap-3 p-4 bg-card border-b border-border">
         <Link
           href={ENTITY_REGISTRY['ai_assistant'].basePath}

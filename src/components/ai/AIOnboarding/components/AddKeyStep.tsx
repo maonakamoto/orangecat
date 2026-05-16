@@ -47,7 +47,7 @@ export function AddKeyStep({
         <div className="space-y-4">
           {/* Provider Display */}
           {provider && (
-            <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-muted rounded-lg">
+            <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
               <div className="w-10 h-10 bg-tiffany-100 rounded-lg flex items-center justify-center">
                 <Layers className="w-5 h-5 text-tiffany-600" />
               </div>
@@ -153,10 +153,7 @@ export function AddKeyStep({
       {/* Encryption Details */}
       <div className="flex flex-wrap gap-3">
         {aiOnboardingContent.addKey.tips?.map((tip, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-muted rounded-full"
-          >
+          <div key={index} className="flex items-center gap-2 px-3 py-2 bg-muted rounded-full">
             <Lock className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">{tip}</span>
           </div>

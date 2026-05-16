@@ -48,7 +48,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
 
         {/* Steps */}
         <div className="space-y-3 mb-6">
-          <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-muted/50 rounded-lg">
+          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
             <div className="w-6 h-6 rounded-full bg-tiffany-600 text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
               1
             </div>
@@ -59,7 +59,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
               </p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-muted/50 rounded-lg">
+          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
             <div className="w-6 h-6 rounded-full bg-tiffany-600 text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
               2
             </div>
@@ -68,7 +68,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
               <p className="text-xs text-muted-foreground">Usually under Settings or Account</p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-muted/50 rounded-lg">
+          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
             <div className="w-6 h-6 rounded-full bg-tiffany-600 text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
               3
             </div>
@@ -79,7 +79,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
               </p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-muted/50 rounded-lg">
+          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
             <div className="w-6 h-6 rounded-full bg-tiffany-600 text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
               4
             </div>

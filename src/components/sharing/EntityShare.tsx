@@ -36,7 +36,7 @@ export default function EntityShare({
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-gray-50 dark:hover:bg-muted text-sm font-medium text-gray-700 dark:text-foreground transition-colors ${className}`}
+        className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-muted text-sm font-medium text-gray-700 dark:text-foreground transition-colors ${className}`}
         aria-label={`Share ${title}`}
       >
         <Share2 className="w-4 h-4" />

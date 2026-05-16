@@ -29,7 +29,7 @@ export function SettingsSecuritySection({
           Add an extra layer of security to your account by requiring a code from your authenticator
           app when signing in.
         </p>
-        <div className="bg-gray-50 dark:bg-muted border border-border rounded-lg p-6 max-w-md">
+        <div className="bg-muted border border-border rounded-lg p-6 max-w-md">
           <MFAStatus
             key={mfaStatusKey}
             onEnableClick={onEnableMFA}

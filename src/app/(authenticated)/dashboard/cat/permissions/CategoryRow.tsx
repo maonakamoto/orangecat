@@ -131,7 +131,7 @@ export function CategoryRow({
       </div>
 
       {isExpanded && (
-        <div className="border-t border-gray-100 dark:border-border bg-gray-50 dark:bg-muted p-4">
+        <div className="border-t border-gray-100 dark:border-border bg-muted p-4">
           <div className="space-y-3">
             {actions.map(action => (
               <ActionRow

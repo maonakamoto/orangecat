@@ -23,7 +23,7 @@ export function WalletsSkeleton() {
                 <div className="h-3 w-24 bg-muted rounded animate-pulse" />
               </div>
             </div>
-            <div className="bg-gray-50 dark:bg-muted rounded-lg p-3 mb-3">
+            <div className="bg-muted rounded-lg p-3 mb-3">
               <div className="h-4 w-24 bg-muted rounded animate-pulse mb-2" />
               <div className="h-6 w-40 bg-muted rounded animate-pulse" />
             </div>

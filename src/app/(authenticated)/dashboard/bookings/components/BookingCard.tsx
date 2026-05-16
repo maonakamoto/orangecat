@@ -111,7 +111,7 @@ export default function BookingCard({
 
           {/* Customer Notes */}
           {booking.customer_notes && (
-            <div className="bg-gray-50 dark:bg-muted rounded-md p-3 mb-4">
+            <div className="bg-muted rounded-md p-3 mb-4">
               <p className="text-xs font-medium text-muted-foreground mb-1">Customer notes:</p>
               <p className="text-base text-gray-700 dark:text-foreground">
                 {booking.customer_notes}

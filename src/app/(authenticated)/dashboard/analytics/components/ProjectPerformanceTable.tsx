@@ -68,7 +68,7 @@ export default function ProjectPerformanceTable({ projects }: ProjectPerformance
                 return (
                   <tr
                     key={project.id}
-                    className="border-b border-gray-100 dark:border-border hover:bg-gray-50 dark:hover:bg-muted"
+                    className="border-b border-gray-100 dark:border-border hover:bg-muted"
                   >
                     <td className="py-3 px-4">
                       <div>

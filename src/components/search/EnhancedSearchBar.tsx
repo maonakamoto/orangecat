@@ -83,7 +83,7 @@ export default function EnhancedSearchBar({
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleInputKeyDown}
           autoFocus={autoFocus}
-          className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 text-sm border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-gray-50 dark:bg-muted hover:bg-white dark:hover:bg-card dark:text-foreground transition-all duration-200 placeholder-gray-500 dark:placeholder:text-muted-foreground"
+          className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 text-sm border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-muted hover:bg-white dark:hover:bg-card dark:text-foreground transition-all duration-200 placeholder-gray-500 dark:placeholder:text-muted-foreground"
           aria-label="Search"
           aria-expanded={isOpen}
           aria-haspopup="listbox"

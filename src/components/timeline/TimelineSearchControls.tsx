@@ -42,7 +42,7 @@ export function TimelineSearchControls({
             value={searchQuery}
             onChange={e => onSearchQueryChange(e.target.value)}
             placeholder="Search posts (title or description)..."
-            className="w-full rounded-full border border-border bg-gray-50 dark:bg-muted py-2 pl-9 pr-3 text-sm dark:text-foreground dark:placeholder:text-muted-foreground focus:border-tiffany-400 focus:outline-none focus:ring-2 focus:ring-tiffany-100"
+            className="w-full rounded-full border border-border bg-muted py-2 pl-9 pr-3 text-sm dark:text-foreground dark:placeholder:text-muted-foreground focus:border-tiffany-400 focus:outline-none focus:ring-2 focus:ring-tiffany-100"
           />
         </div>
         <Button type="submit" size="sm" disabled={searching} className="gap-2">

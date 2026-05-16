@@ -99,7 +99,7 @@ export function ProfileLocationSection({
       />
 
       {/* Location visibility/group controls */}
-      <div className="mt-2 rounded-lg border border-border bg-gray-50 dark:bg-muted p-3">
+      <div className="mt-2 rounded-lg border border-border bg-muted p-3">
         <div className="text-xs font-medium text-gray-700 dark:text-foreground mb-2">
           Location visibility
         </div>

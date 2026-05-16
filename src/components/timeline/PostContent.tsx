@@ -97,7 +97,7 @@ export function PostContent({ event }: PostContentProps) {
 
       {/* Quoted Original Post (for quote reposts) */}
       {isQuoteRepost && originalEventId && (
-        <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card hover:bg-gray-50 dark:hover:bg-muted transition-colors">
+        <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card hover:bg-muted transition-colors">
           <div className="p-3 sm:p-4 space-y-2">
             <div className="flex items-start gap-3">
               <Link href={`/profiles/${originalAuthor.username}`} className="flex-shrink-0">
@@ -145,7 +145,7 @@ export function PostContent({ event }: PostContentProps) {
 
       {/* Simple Repost: show original post inside a quoted card for consistency */}
       {isRepost && !isQuoteRepost && event.metadata?.original_event_id && (
-        <div className="mt-2 overflow-hidden rounded-2xl border border-border bg-card hover:bg-gray-50 dark:hover:bg-muted transition-colors">
+        <div className="mt-2 overflow-hidden rounded-2xl border border-border bg-card hover:bg-muted transition-colors">
           <div className="p-3 sm:p-4 space-y-2">
             <div className="flex items-start gap-3">
               <Link href={`/profiles/${originalAuthor.username}`} className="flex-shrink-0">

@@ -97,7 +97,7 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
         </button>
       </div>
 
-      <div className="mt-8 p-4 bg-gray-50 dark:bg-muted rounded-xl">
+      <div className="mt-8 p-4 bg-muted rounded-xl">
         <h4 className="font-medium text-foreground mb-3">Ideas for context to add:</h4>
         <div className="grid md:grid-cols-2 gap-3 text-sm text-muted-foreground">
           {[

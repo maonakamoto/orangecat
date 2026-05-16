@@ -187,7 +187,7 @@ export default class ErrorBoundary extends Component<Props, State> {
           </p>
 
           {showDetails && error && (
-            <div className="mb-6 p-4 bg-gray-50 dark:bg-muted rounded-lg text-left">
+            <div className="mb-6 p-4 bg-muted rounded-lg text-left">
               <h3 className="text-sm font-medium text-gray-700 dark:text-foreground mb-2">
                 Error Details:
               </h3>

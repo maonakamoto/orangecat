@@ -182,7 +182,7 @@ export function DocumentFileUpload({
           'relative rounded-xl border-2 border-dashed transition-all duration-200',
           'flex flex-col items-center justify-center p-8 text-center',
           state === 'idle' &&
-            'border-gray-300 dark:border-border bg-gray-50 dark:bg-muted hover:border-tiffany-400 hover:bg-tiffany-50 cursor-pointer',
+            'border-gray-300 dark:border-border bg-muted hover:border-tiffany-400 hover:bg-tiffany-50 cursor-pointer',
           state === 'dragging' && 'border-tiffany-500 bg-tiffany-50 scale-[1.02]',
           state === 'uploading' && 'border-tiffany-400 bg-tiffany-50 cursor-wait',
           state === 'success' && 'border-green-400 bg-green-50',

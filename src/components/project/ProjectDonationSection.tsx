@@ -158,7 +158,7 @@ export function ProjectDonationSection({
             </div>
 
             <div className="flex flex-col justify-center">
-              <div className="bg-gray-50 dark:bg-muted rounded-lg p-4 border border-border">
+              <div className="bg-muted rounded-lg p-4 border border-border">
                 <label className="text-xs font-medium text-muted-foreground mb-2 block uppercase tracking-wide">
                   Bitcoin Address
                 </label>
@@ -247,7 +247,7 @@ export function ProjectDonationSection({
             projectTitle={projectTitle}
             projectId={projectId}
           />
-          <div className="mt-3 bg-gray-50 dark:bg-muted rounded-lg p-3 border border-border">
+          <div className="mt-3 bg-muted rounded-lg p-3 border border-border">
             <div className="flex items-center justify-between gap-4">
               <code
                 className="text-xs font-mono text-muted-foreground break-all"

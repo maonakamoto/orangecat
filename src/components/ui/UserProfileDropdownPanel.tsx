@@ -129,8 +129,8 @@ export function UserProfileDropdownPanel({
               tabIndex={isOpen ? 0 : -1}
               className={`
                 w-full flex items-center px-4 py-3 text-sm transition-all duration-200 group outline-none
-                hover:bg-gray-50 dark:hover:bg-muted focus:bg-gray-50 dark:focus:bg-muted focus:ring-2 focus:ring-tiffany-400 focus:ring-inset
-                ${focusedIndex === index ? 'bg-gray-50 dark:bg-muted' : ''}
+                hover:bg-muted focus:bg-gray-50 dark:focus:bg-muted focus:ring-2 focus:ring-tiffany-400 focus:ring-inset
+                ${focusedIndex === index ? 'bg-muted' : ''}
               `}
             >
               <div className="p-2.5 rounded-xl bg-tiffany-50 group-hover:bg-tiffany-100 group-hover:shadow-sm transition-all duration-200 mr-4">

@@ -221,7 +221,7 @@ function FaqAccordionItem({
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-5 py-4 text-left bg-card hover:bg-gray-50 dark:hover:bg-muted transition-colors"
+        className="w-full flex items-center justify-between px-5 py-4 text-left bg-card hover:bg-muted transition-colors"
         aria-expanded={isOpen}
       >
         <span className="font-medium text-foreground pr-4">{item.question}</span>

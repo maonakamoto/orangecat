@@ -63,7 +63,7 @@ export default function CategoriesPage() {
                     <Link
                       key={group.id}
                       href={`/browse?category=${category.id}&group=${group.id}`}
-                      className="block p-6 bg-gray-50 dark:bg-muted rounded-lg hover:bg-tiffany-50 dark:hover:bg-muted/80 transition-colors group"
+                      className="block p-6 bg-muted rounded-lg hover:bg-tiffany-50 dark:hover:bg-muted/80 transition-colors group"
                     >
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-foreground mb-2">{group.name}</h3>

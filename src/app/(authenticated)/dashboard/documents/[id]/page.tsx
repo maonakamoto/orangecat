@@ -234,7 +234,7 @@ export default async function DocumentDetailPage({ params }: PageProps) {
       )}
 
       {doc.visibility === 'private' && (
-        <div className="text-sm text-muted-foreground bg-gray-50 dark:bg-muted border dark:border-border rounded-lg p-4">
+        <div className="text-sm text-muted-foreground bg-muted border dark:border-border rounded-lg p-4">
           <p>
             <strong>This document is private.</strong> Only you can see it. Change the visibility to
             "My Cat Only" if you want My Cat to use this as context for advice.

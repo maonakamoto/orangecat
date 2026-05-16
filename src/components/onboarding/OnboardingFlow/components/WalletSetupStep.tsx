@@ -106,7 +106,7 @@ export function WalletSetupStep() {
       </div>
 
       {/* Wallet Recommendations */}
-      <div className="bg-gray-50 dark:bg-muted border border-border rounded-lg p-4">
+      <div className="bg-muted border border-border rounded-lg p-4">
         <div className="flex items-start gap-3">
           <Bitcoin className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
           <div>

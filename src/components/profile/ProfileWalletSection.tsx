@@ -86,7 +86,7 @@ export default function ProfileWalletSection({
                   </div>
 
                   {/* Balance */}
-                  <div className="bg-gray-50 dark:bg-muted rounded-lg p-3 mb-3">
+                  <div className="bg-muted rounded-lg p-3 mb-3">
                     <div className="text-sm text-muted-foreground mb-1">Current Balance</div>
                     <div className="text-xl font-bold text-orange-600">
                       {formatAmount(wallet.balance_btc)}
@@ -146,7 +146,7 @@ export default function ProfileWalletSection({
                       </button>
                     </div>
                     <code
-                      className="text-xs text-gray-700 dark:text-foreground block font-mono break-all bg-gray-50 dark:bg-muted p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors"
+                      className="text-xs text-gray-700 dark:text-foreground block font-mono break-all bg-muted p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors"
                       onClick={() => {
                         navigator.clipboard.writeText(wallet.address_or_xpub);
                         toast.success('Address copied to clipboard');

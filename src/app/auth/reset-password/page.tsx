@@ -250,7 +250,7 @@ export default function ResetPasswordPage() {
           </div>
 
           {/* Password Requirements */}
-          <div className="bg-gray-50 dark:bg-muted rounded-lg p-4">
+          <div className="bg-muted rounded-lg p-4">
             <h3 className="text-sm font-medium text-foreground mb-2">Password Requirements:</h3>
             <ul className="text-xs text-muted-foreground space-y-1">
               <li className={formData.password.length >= 8 ? 'text-green-600' : ''}>

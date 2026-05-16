@@ -82,7 +82,7 @@ export function WalletForm({
   const selectedCategory = WALLET_CATEGORIES[formData.category];
 
   return (
-    <div className="border dark:border-border rounded-lg p-4 bg-gray-50 dark:bg-muted">
+    <div className="border dark:border-border rounded-lg p-4 bg-muted">
       <h4 className="font-semibold dark:text-foreground mb-4">{submitLabel}</h4>
 
       {error && (

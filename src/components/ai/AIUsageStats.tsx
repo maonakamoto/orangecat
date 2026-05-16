@@ -128,7 +128,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
 
         {/* Zero State */}
         {usage.totalRequests === 0 && (
-          <div className="mt-4 p-4 bg-gray-50 dark:bg-muted rounded-lg border border-gray-100 dark:border-border">
+          <div className="mt-4 p-4 bg-muted rounded-lg border border-gray-100 dark:border-border">
             <div className="flex items-start gap-3">
               <Info className="w-5 h-5 text-gray-400 dark:text-muted-foreground mt-0.5" />
               <div>

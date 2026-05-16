@@ -128,7 +128,7 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedStatuses.includes(statusKey)
                     ? STATUS_STYLES[statusKey].selected
-                    : 'bg-white/80 dark:bg-muted border-border text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted/80'
+                    : 'bg-white/80 dark:bg-muted border-border text-gray-700 dark:text-foreground hover:bg-muted/80'
                 }`}
               >
                 {STATUS_STYLES[statusKey].label}
@@ -154,7 +154,7 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedCategories.includes(cat.value)
                     ? 'bg-orange-100 border-orange-300 text-orange-700'
-                    : 'bg-white/80 dark:bg-muted border-border text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted/80'
+                    : 'bg-white/80 dark:bg-muted border-border text-gray-700 dark:text-foreground hover:bg-muted/80'
                 }`}
               >
                 {cat.label}

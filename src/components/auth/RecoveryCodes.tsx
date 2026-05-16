@@ -186,7 +186,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 p-4 bg-gray-50 dark:bg-muted border border-border rounded-lg">
+        <div className="grid grid-cols-2 gap-2 p-4 bg-muted border border-border rounded-lg">
           {formattedCodes.map(({ number, code }) => (
             <div
               key={code}
