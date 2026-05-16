@@ -28,6 +28,7 @@ export interface Profile {
   lightning_address?: string | null;
   // User preferences
   currency?: string | null; // User's preferred display currency (from CURRENCY_CODES)
+  preferences?: Record<string, unknown> | null; // Generic preference bag (theme, notifications, etc.)
   onboarding_completed?: boolean | null;
   created_at: string;
   updated_at: string;

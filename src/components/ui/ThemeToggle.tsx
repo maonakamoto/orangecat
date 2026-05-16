@@ -3,10 +3,12 @@
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useProfileTheme } from '@/hooks/useProfileTheme';
 
 export function ThemeToggle({ className = '' }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { saveThemePreference } = useProfileTheme();
 
   // Avoid hydration mismatch — render nothing until mounted on client
   useEffect(() => setMounted(true), []);
@@ -17,9 +19,15 @@ export function ThemeToggle({ className = '' }: { className?: string }) {
 
   const isDark = theme === 'dark';
 
+  const handleToggle = () => {
+    const newTheme = isDark ? 'light' : 'dark';
+    setTheme(newTheme);
+    saveThemePreference(newTheme);
+  };
+
   return (
     <button
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onClick={handleToggle}
       className={`flex items-center justify-center w-9 h-9 rounded-xl text-gray-500 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted hover:text-gray-700 dark:hover:text-foreground transition-colors ${className}`}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
