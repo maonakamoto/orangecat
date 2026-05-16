@@ -138,11 +138,16 @@ export function CreateLoanDialog({
               body: JSON.stringify(body),
             });
             if (!res.ok) {
-              // Do not fail the whole flow; just inform the user
               logger.warn('Collateral attach failed');
+              toast.warning(
+                'Loan created, but collateral could not be attached. Please try adding it again.'
+              );
             }
           } catch (e) {
             logger.warn('Collateral attach error', e);
+            toast.warning(
+              'Loan created, but collateral could not be attached. Please try adding it again.'
+            );
           }
         }
         toast.success(mode === 'edit' ? 'Loan updated' : 'Loan created successfully!');

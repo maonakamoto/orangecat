@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { MessageSquare, RefreshCw } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { useConversations } from '@/features/messaging/hooks';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -54,9 +55,11 @@ export default function ConversationList({
         body: JSON.stringify({ ids: [id] }),
       });
       if (!res.ok) {
+        toast.error('Could not delete conversation. Please try again.');
         await refresh();
       }
     } catch {
+      toast.error('Could not delete conversation. Please try again.');
       await refresh();
     }
   };

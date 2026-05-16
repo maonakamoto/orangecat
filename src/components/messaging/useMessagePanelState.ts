@@ -73,6 +73,7 @@ export function useMessagePanelState({
       }
     } catch (e) {
       logger.error('Bulk conversation leave error', e, 'Messaging');
+      toast.error('Could not delete conversations. Please try again.');
     }
   };
 
