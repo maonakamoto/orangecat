@@ -36,12 +36,12 @@ function FieldError({ message }: { message?: string }) {
 }
 
 const fieldClass = (hasError: boolean) =>
-  `w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500 ${
-    hasError ? 'border-red-500' : 'border-gray-300'
+  `w-full rounded-lg border px-3 py-2 bg-white dark:bg-muted text-gray-900 dark:text-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 ${
+    hasError ? 'border-red-500' : 'border-gray-300 dark:border-border'
   }`;
 
 const selectClass =
-  'w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500';
+  'w-full rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-gray-900 dark:text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500';
 
 export function TaskFormFields({
   formData,
@@ -61,7 +61,7 @@ export function TaskFormFields({
   return (
     <form onSubmit={onSubmit} className="p-6 space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
           Title <span className="text-red-500">*</span>
         </label>
         <input
@@ -76,7 +76,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
           Task Type <span className="text-red-500">*</span>
         </label>
         <select
@@ -92,7 +92,7 @@ export function TaskFormFields({
           ))}
         </select>
         {showTaskTypeHint && (
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
             {formData.task_type === TASK_TYPES.ONE_TIME &&
               'One-time task, marked as completed once done'}
             {formData.task_type === TASK_TYPES.RECURRING_SCHEDULED &&
@@ -105,7 +105,9 @@ export function TaskFormFields({
 
       {formData.task_type === TASK_TYPES.RECURRING_SCHEDULED && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Schedule</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+            Schedule
+          </label>
           <input
             type="text"
             name="schedule_human"
@@ -115,7 +117,7 @@ export function TaskFormFields({
             className={selectClass}
           />
           {showTaskTypeHint && (
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
               Describe when this task should be completed
             </p>
           )}
@@ -123,7 +125,7 @@ export function TaskFormFields({
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
           Category <span className="text-red-500">*</span>
         </label>
         <select
@@ -141,7 +143,9 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+          Priority
+        </label>
         <select
           name="priority"
           value={formData.priority}
@@ -157,7 +161,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
           Estimated Time (Minutes)
         </label>
         <input
@@ -174,7 +178,9 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+          Description
+        </label>
         <textarea
           name="description"
           value={formData.description}
@@ -187,7 +193,9 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Instructions</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+          Instructions
+        </label>
         <textarea
           name="instructions"
           value={formData.instructions}
@@ -200,7 +208,9 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+          Tags
+        </label>
         <div className="flex gap-2 mb-2">
           <input
             type="text"
@@ -213,7 +223,7 @@ export function TaskFormFields({
               }
             }}
             placeholder="Add tag..."
-            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+            className="flex-1 rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-gray-900 dark:text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
           />
           <Button type="button" variant="outline" onClick={onAddTag}>
             Add
@@ -224,13 +234,13 @@ export function TaskFormFields({
             {formData.tags.map(tag => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 rounded-full text-sm"
+                className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-muted rounded-full text-sm dark:text-foreground"
               >
                 {tag}
                 <button
                   type="button"
                   onClick={() => onRemoveTag(tag)}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
                 >
                   &times;
                 </button>
@@ -240,7 +250,7 @@ export function TaskFormFields({
         )}
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+      <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-border">
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>

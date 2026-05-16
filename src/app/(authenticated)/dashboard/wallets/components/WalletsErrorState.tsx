@@ -28,7 +28,7 @@ export function WalletsErrorState({ error, onRetry }: WalletsErrorStateProps) {
   return (
     <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-        <Card className="border-red-200 bg-white">
+        <Card className="border-red-200 bg-white dark:bg-card">
           <div className="p-6">
             <div className="flex items-start gap-3 mb-4">
               <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />

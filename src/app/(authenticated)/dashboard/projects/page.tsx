@@ -116,12 +116,14 @@ export default function ProjectsDashboardPage() {
 
           <TabsContent value="my-projects" className="space-y-6">
             {projectsError ? (
-              <div className="rounded-xl border bg-white p-6 text-red-600">{projectsError}</div>
+              <div className="rounded-xl border dark:border-border bg-white dark:bg-card p-6 text-red-600">
+                {projectsError}
+              </div>
             ) : (
               <>
                 {showSelection && filteredProjects.length > 0 && (
                   <div className="mb-4 flex items-center justify-between">
-                    <label className="flex items-center gap-2 text-sm text-gray-700">
+                    <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-foreground">
                       <input
                         type="checkbox"
                         checked={
@@ -129,7 +131,7 @@ export default function ProjectsDashboardPage() {
                           filteredProjects.length > 0
                         }
                         onChange={() => toggleSelectAll(filteredProjects.map(p => p.id))}
-                        className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                        className="h-4 w-4 rounded border-gray-300 dark:border-border text-orange-600 focus:ring-orange-500"
                       />
                       <span>Select All</span>
                     </label>

@@ -196,7 +196,7 @@ export default function BookingCard({
           {(booking.status === STATUS.BOOKINGS.COMPLETED ||
             booking.status === STATUS.BOOKINGS.CANCELLED ||
             booking.status === STATUS.BOOKINGS.REJECTED) && (
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 dark:text-muted-foreground">
               {booking.status === STATUS.BOOKINGS.COMPLETED && (
                 <span className="flex items-center gap-1 text-green-600">
                   <CheckCircle className="h-4 w-4" />
@@ -204,7 +204,7 @@ export default function BookingCard({
                 </span>
               )}
               {booking.status === STATUS.BOOKINGS.CANCELLED && (
-                <span className="flex items-center gap-1 text-gray-500">
+                <span className="flex items-center gap-1 text-gray-500 dark:text-muted-foreground">
                   <AlertCircle className="h-4 w-4" />
                   Cancelled
                 </span>

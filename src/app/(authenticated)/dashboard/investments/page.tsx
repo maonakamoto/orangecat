@@ -137,14 +137,14 @@ export default function InvestmentsPage() {
               <>
                 {showSelection && myInvestments.length > 0 && (
                   <div className="mb-4 flex items-center justify-between">
-                    <label className="flex items-center gap-2 text-sm text-gray-700">
+                    <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-foreground">
                       <input
                         type="checkbox"
                         checked={
                           selectedIds.size === myInvestments.length && myInvestments.length > 0
                         }
                         onChange={() => toggleSelectAll(myInvestments.map(i => i.id))}
-                        className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                        className="h-4 w-4 rounded border-gray-300 dark:border-border text-green-600 focus:ring-green-500"
                       />
                       <span>Select All</span>
                     </label>

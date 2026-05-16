@@ -96,12 +96,12 @@ export default async function WishlistDetailPage({ params }: PageProps) {
             <CardTitle className="text-base">Funding Progress</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="flex justify-between text-sm text-gray-600">
+            <div className="flex justify-between text-sm text-gray-600 dark:text-muted-foreground">
               <span>{Number(wishlist.total_funded_btc).toFixed(8)} BTC funded</span>
               <span>{Number(wishlist.total_target_btc).toFixed(8)} BTC total</span>
             </div>
             <Progress value={overallProgress} className="h-2" />
-            <div className="flex justify-between text-xs text-gray-500">
+            <div className="flex justify-between text-xs text-gray-500 dark:text-muted-foreground">
               <span>{overallProgress}% of goal</span>
               <span>
                 {wishlist.funded_item_count}/{wishlist.item_count} items funded

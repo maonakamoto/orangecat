@@ -14,7 +14,7 @@ export default function AIConversationPage() {
   if (!assistantId || !conversationId) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500">Invalid conversation</p>
+        <p className="text-gray-500 dark:text-muted-foreground">Invalid conversation</p>
       </div>
     );
   }

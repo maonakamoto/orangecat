@@ -46,23 +46,27 @@ export function CompleteModal({
         <DialogTitle>Complete Task</DialogTitle>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Duration (minutes)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+              Duration (minutes)
+            </label>
             <input
               type="number"
               value={duration}
               onChange={e => setDuration(e.target.value ? parseInt(e.target.value) : '')}
               placeholder={estimatedMinutes?.toString() || ''}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-gray-900 dark:text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Notes (optional)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+              Notes (optional)
+            </label>
             <textarea
               value={notes}
               onChange={e => setNotes(e.target.value)}
               rows={3}
               placeholder="Notes about the completion..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-gray-900 dark:text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
             />
           </div>
           <div className="flex justify-end gap-2">
@@ -102,17 +106,19 @@ export function AttentionModal({ actionLoading, onClose, onFlag }: AttentionModa
       <DialogContent className="max-w-md">
         <DialogTitle>Flag Task</DialogTitle>
         <div className="space-y-4">
-          <p className="text-base text-gray-600">
+          <p className="text-base text-gray-600 dark:text-muted-foreground">
             Flag this task as &quot;needs attention&quot;. All team members will be notified.
           </p>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Message (optional)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+              Message (optional)
+            </label>
             <textarea
               value={message}
               onChange={e => setMessage(e.target.value)}
               rows={3}
               placeholder="What is the problem?"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-gray-900 dark:text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
             />
           </div>
           <div className="flex justify-end gap-2">
@@ -159,11 +165,13 @@ export function RequestModal({ actionLoading, onClose, onRequest }: RequestModal
         <DialogTitle>Request Task</DialogTitle>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">To whom?</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+              To whom?
+            </label>
             <select
               value={userId}
               onChange={e => setUserId(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-gray-900 dark:text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
             >
               <option value="">
                 <Users className="h-4 w-4 inline mr-2" />
@@ -171,16 +179,20 @@ export function RequestModal({ actionLoading, onClose, onRequest }: RequestModal
               </option>
               {/* FUTURE: Populate with project team members — requires a team members API endpoint scoped to the current project/group actor */}
             </select>
-            <p className="text-xs text-gray-500 mt-1">Leave empty to notify all team members</p>
+            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+              Leave empty to notify all team members
+            </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Message (optional)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+              Message (optional)
+            </label>
             <textarea
               value={message}
               onChange={e => setMessage(e.target.value)}
               rows={3}
               placeholder="Could you take care of this task?"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-gray-900 dark:text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
             />
           </div>
           <div className="flex justify-end gap-2">

@@ -34,7 +34,7 @@ function getChangeColor(changeType?: string) {
     case 'decrease':
       return 'text-red-600';
     default:
-      return 'text-gray-600';
+      return 'text-gray-600 dark:text-muted-foreground';
   }
 }
 

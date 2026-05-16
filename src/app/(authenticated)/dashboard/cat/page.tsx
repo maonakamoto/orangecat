@@ -75,8 +75,10 @@ export default function CatHubPage() {
                 <Cat className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900">My Cat</h1>
-                <p className="text-xs text-gray-500">Your AI economic agent</p>
+                <h1 className="text-lg font-bold text-gray-900 dark:text-foreground">My Cat</h1>
+                <p className="text-xs text-gray-500 dark:text-muted-foreground">
+                  Your AI economic agent
+                </p>
               </div>
             </div>
           </div>
@@ -126,8 +128,10 @@ export default function CatHubPage() {
             <TabsContent value="context" className="mt-4 focus:outline-none">
               <div className="max-w-xl mx-auto">
                 <div className="mb-6">
-                  <h2 className="text-xl font-bold text-gray-900">My Context</h2>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-foreground">
+                    My Context
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
                     Add documents to help My Cat understand your goals, skills, and situation
                   </p>
                 </div>
@@ -139,8 +143,10 @@ export default function CatHubPage() {
             <TabsContent value="settings" className="mt-4 focus:outline-none">
               <div className="max-w-xl mx-auto">
                 <div className="mb-6">
-                  <h2 className="text-xl font-bold text-gray-900">My AI</h2>
-                  <p className="text-sm text-gray-500 mt-1">Configure how your AI agent works</p>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-foreground">My AI</h2>
+                  <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
+                    Configure how your AI agent works
+                  </p>
                 </div>
                 <CatSettingsTab />
               </div>

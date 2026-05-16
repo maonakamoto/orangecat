@@ -26,7 +26,7 @@ export function WalletsGuidanceSidebar({ focusedField }: WalletsGuidanceSidebarP
     <div className="hidden lg:block lg:col-span-5 lg:order-2">
       <div className="lg:sticky lg:top-8 space-y-6">
         {/* Simple explainer / checklist */}
-        <Card className="p-6 shadow-sm border-gray-200">
+        <Card className="p-6 shadow-sm border-gray-200 dark:border-border">
           <div className="mb-3">
             <h3 className="text-base font-semibold text-gray-900 dark:text-foreground">
               How wallet setup works

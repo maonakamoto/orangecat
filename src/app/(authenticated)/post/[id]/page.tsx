@@ -78,7 +78,7 @@ export default function PostPage() {
       <div className="min-h-screen bg-white dark:bg-background">
         {pageHeader}
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+          <Loader2 className="w-8 h-8 animate-spin text-gray-400 dark:text-muted-foreground" />
         </div>
       </div>
     );
@@ -89,8 +89,12 @@ export default function PostPage() {
       <div className="min-h-screen bg-white dark:bg-background">
         {pageHeader}
         <div className="flex flex-col items-center justify-center py-20 text-center px-4">
-          <p className="text-xl font-bold text-gray-900 mb-2">This post doesn&apos;t exist</p>
-          <p className="text-gray-500 mb-4">It may have been deleted or the link is incorrect.</p>
+          <p className="text-xl font-bold text-gray-900 dark:text-foreground mb-2">
+            This post doesn&apos;t exist
+          </p>
+          <p className="text-gray-500 dark:text-muted-foreground mb-4">
+            It may have been deleted or the link is incorrect.
+          </p>
           <Link href={ROUTES.TIMELINE}>
             <Button>Go to Timeline</Button>
           </Link>

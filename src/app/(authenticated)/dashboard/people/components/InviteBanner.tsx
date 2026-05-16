@@ -32,8 +32,10 @@ export default function InviteBanner({
       >
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div>
-            <h3 className="font-semibold text-gray-900">Invite friends to OrangeCat</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="font-semibold text-gray-900 dark:text-foreground">
+              Invite friends to OrangeCat
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-muted-foreground">
               Share your profile link and start building your network
             </p>
           </div>
