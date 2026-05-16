@@ -60,28 +60,32 @@ export function LocationInput({
           {isLoading && (
             <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
           )}
-          <MapPin className="w-4 h-4 text-gray-400" />
+          <MapPin className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
         </div>
       </div>
 
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+          className="absolute z-50 w-full mt-1 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg shadow-lg max-h-60 overflow-y-auto"
         >
           {suggestions.map(suggestion => (
             <button
               key={suggestion.id}
               type="button"
               onClick={() => handleSuggestionSelect(suggestion)}
-              className="w-full px-4 py-3 min-h-11 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 focus:outline-none focus:bg-gray-50"
+              className="w-full px-4 py-3 min-h-11 text-left hover:bg-gray-50 dark:hover:bg-muted border-b border-gray-100 dark:border-border last:border-b-0 focus:outline-none focus:bg-gray-50 dark:focus:bg-muted"
             >
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-gray-900 truncate">{suggestion.mainText}</div>
+                  <div className="font-medium text-gray-900 dark:text-foreground truncate">
+                    {suggestion.mainText}
+                  </div>
                   {suggestion.secondaryText && (
-                    <div className="text-sm text-gray-600 truncate">{suggestion.secondaryText}</div>
+                    <div className="text-sm text-gray-600 dark:text-muted-foreground truncate">
+                      {suggestion.secondaryText}
+                    </div>
                   )}
                 </div>
               </div>
@@ -91,8 +95,8 @@ export function LocationInput({
       )}
 
       {showSuggestions && inputValue.length >= 2 && suggestions.length === 0 && !isLoading && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-4">
-          <div className="text-sm text-gray-600 text-center">
+        <div className="absolute z-50 w-full mt-1 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg shadow-lg p-4">
+          <div className="text-sm text-gray-600 dark:text-muted-foreground text-center">
             No locations found. Try typing a city name or address.
           </div>
         </div>

@@ -19,13 +19,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       primary:
         'bg-tiffany-600 text-white hover:bg-tiffany-700 focus-visible:ring-tiffany-500 shadow-button hover:shadow-button-hover active:shadow-sm border-0',
       secondary:
-        'bg-gray-100 text-gray-900 hover:bg-gray-200 focus-visible:ring-gray-500 shadow-button hover:shadow-button-hover active:shadow-sm border border-gray-200',
+        'bg-gray-100 dark:bg-muted text-gray-900 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80 focus-visible:ring-gray-500 shadow-button hover:shadow-button-hover active:shadow-sm border border-gray-200 dark:border-border',
       ghost:
-        'hover:bg-gray-100 hover:text-gray-900 focus-visible:ring-gray-500 shadow-none hover:shadow-sm text-gray-700',
+        'hover:bg-gray-100 dark:hover:bg-muted hover:text-gray-900 dark:hover:text-foreground focus-visible:ring-gray-500 shadow-none hover:shadow-sm text-gray-700 dark:text-muted-foreground',
       danger:
         'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500 shadow-button hover:shadow-button-hover active:shadow-sm border-0',
       outline:
-        'border-2 border-gray-300 bg-transparent hover:bg-gray-50 hover:border-gray-400 focus-visible:ring-gray-500 shadow-sm hover:shadow-button active:shadow-sm text-gray-700',
+        'border-2 border-gray-300 dark:border-border bg-transparent hover:bg-gray-50 dark:hover:bg-muted hover:border-gray-400 focus-visible:ring-gray-500 shadow-sm hover:shadow-button active:shadow-sm text-gray-700 dark:text-foreground',
       gradient: `${GRADIENTS.btnPrimary} text-white shadow-button hover:shadow-button-hover active:shadow-sm border-0 focus-visible:ring-tiffany-500`,
     };
 

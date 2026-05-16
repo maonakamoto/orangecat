@@ -124,7 +124,7 @@ export function VoiceInputButton({
   const btnClasses = [
     'inline-flex items-center justify-center rounded-lg transition-colors',
     size === 'sm' ? 'p-2' : 'p-3',
-    disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100',
+    disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 dark:hover:bg-muted',
     className,
   ].join(' ');
 
@@ -137,7 +137,13 @@ export function VoiceInputButton({
         title="Voice input not supported in this browser"
         disabled
       >
-        <MicOff className={size === 'sm' ? 'h-4 w-4 text-gray-400' : 'h-5 w-5 text-gray-400'} />
+        <MicOff
+          className={
+            size === 'sm'
+              ? 'h-4 w-4 text-gray-400 dark:text-muted-foreground'
+              : 'h-5 w-5 text-gray-400 dark:text-muted-foreground'
+          }
+        />
       </button>
     );
   }
@@ -155,7 +161,13 @@ export function VoiceInputButton({
       {listening ? (
         <MicOff className={size === 'sm' ? 'h-4 w-4 text-red-600' : 'h-5 w-5 text-red-600'} />
       ) : (
-        <Mic className={size === 'sm' ? 'h-4 w-4 text-gray-700' : 'h-5 w-5 text-gray-700'} />
+        <Mic
+          className={
+            size === 'sm'
+              ? 'h-4 w-4 text-gray-700 dark:text-foreground'
+              : 'h-5 w-5 text-gray-700 dark:text-foreground'
+          }
+        />
       )}
     </button>
   );

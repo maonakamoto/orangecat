@@ -154,8 +154,8 @@ export function CurrencyInput({
 
             {inputCurrency !== 'SATS' && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">SATS</span>
-                <span className="font-mono font-medium text-gray-700">
+                <span className="text-gray-600 dark:text-muted-foreground">SATS</span>
+                <span className="font-mono font-medium text-gray-700 dark:text-foreground">
                   {bitcoinToSats(breakdown.btc).toLocaleString('en-US')}
                 </span>
               </div>

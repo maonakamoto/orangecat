@@ -180,7 +180,7 @@ export default function UserProfileDropdown({
           ref={buttonRef}
           onClick={toggle}
           disabled={false}
-          className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 focus:outline-none disabled:opacity-50"
+          className="flex items-center space-x-2 text-gray-700 dark:text-foreground hover:text-gray-900 dark:hover:text-foreground focus:outline-none disabled:opacity-50"
         >
           <span className="text-sm font-medium">{displayName}</span>
           <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
