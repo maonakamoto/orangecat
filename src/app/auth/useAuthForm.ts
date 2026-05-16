@@ -22,7 +22,10 @@ export function useAuthForm() {
   const { signIn, signUp, isLoading: authLoading, hydrated, session, profile, clear } = useAuth();
   const { isLoading: redirectLoading } = useRedirectIfAuthenticated();
 
-  const [mode, setMode] = useState<AuthMode>('login');
+  const [mode, setMode] = useState<AuthMode>(() => {
+    const modeParam = searchParams?.get('mode');
+    return modeParam === 'login' || modeParam === 'register' ? modeParam : 'login';
+  });
 
   useEffect(() => {
     const modeParam = searchParams?.get('mode');

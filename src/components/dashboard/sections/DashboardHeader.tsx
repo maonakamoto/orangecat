@@ -43,7 +43,13 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-foreground leading-tight">
-              Welcome back, {profile?.name || profile?.username || 'there'}!
+              Welcome back,{' '}
+              {profile === null ? (
+                <span className="inline-block h-5 w-28 animate-pulse rounded bg-gray-200 dark:bg-muted align-text-bottom" />
+              ) : (
+                profile.name || profile.username || 'there'
+              )}
+              !
             </h1>
             <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1">
               {totalProjects > 0
