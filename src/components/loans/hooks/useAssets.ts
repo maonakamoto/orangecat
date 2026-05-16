@@ -74,8 +74,8 @@ export function useAssets(enabled: boolean = true) {
       setLoading(true);
       setError(null);
       const res = await fetch(ENTITY_REGISTRY.asset.apiEndpoint, { credentials: 'include' });
+      const json = await res.json();
       if (res.ok) {
-        const json = await res.json();
         const items = (json.data || []).map((a: RawAsset) => ({
           id: a.id,
           title: a.title,
@@ -84,6 +84,8 @@ export function useAssets(enabled: boolean = true) {
           verification_status: a.verification_status || 'unverified',
         }));
         setAssets(items);
+      } else {
+        setError(json.error || 'Failed to refresh assets');
       }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Failed to refresh assets');

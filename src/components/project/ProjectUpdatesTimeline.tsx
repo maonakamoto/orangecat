@@ -36,6 +36,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
   const { formatAmountBtc: formatAmount } = useDisplayCurrency();
   const [updates, setUpdates] = useState<ProjectUpdate[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchFailed, setFetchFailed] = useState(false);
 
   useEffect(() => {
     const fetchUpdates = async () => {
@@ -48,7 +49,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
           setUpdates(data.data?.updates || []);
         } else {
           logger.warn('Failed to fetch project updates', { projectId }, 'ProjectUpdatesTimeline');
-          setUpdates([]);
+          setFetchFailed(true);
         }
       } catch (error) {
         logger.error(
@@ -56,7 +57,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
           { projectId, error },
           'ProjectUpdatesTimeline'
         );
-        setUpdates([]);
+        setFetchFailed(true);
       } finally {
         setLoading(false);
       }
@@ -127,7 +128,11 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
           Recent Activity
         </h3>
 
-        {updates.length > 0 ? (
+        {fetchFailed ? (
+          <p className="text-sm text-muted-foreground">
+            Could not load activity. Please refresh the page.
+          </p>
+        ) : updates.length > 0 ? (
           <div className="space-y-4">
             {updates.map(update => (
               <div key={update.id} className="flex gap-3 pb-4 border-b last:border-b-0 last:pb-0">
