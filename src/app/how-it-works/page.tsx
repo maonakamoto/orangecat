@@ -73,7 +73,7 @@ export default function HowItWorksPage() {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-tiffany-600 to-bitcoinOrange bg-clip-text text-transparent">
             {howItWorks.title}
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             One platform. Endless possibilities. Here's how to get started with anything on
             OrangeCat.
           </p>
@@ -118,9 +118,13 @@ export default function HowItWorksPage() {
                           >
                             Step {step.number}
                           </span>
-                          <h3 className="text-2xl font-bold text-gray-900 flex-1">{step.title}</h3>
+                          <h3 className="text-2xl font-bold text-gray-900 dark:text-foreground flex-1">
+                            {step.title}
+                          </h3>
                         </div>
-                        <p className="text-gray-600 text-lg leading-relaxed">{step.description}</p>
+                        <p className="text-gray-600 dark:text-muted-foreground text-lg leading-relaxed">
+                          {step.description}
+                        </p>
                       </div>
                     </div>
                   </Card>
@@ -134,7 +138,9 @@ export default function HowItWorksPage() {
         <motion.div className="mb-20" {...fadeInUp}>
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold mb-4">{whatCanYouDo.title}</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">{whatCanYouDo.subtitle}</p>
+            <p className="text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
+              {whatCanYouDo.subtitle}
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
@@ -150,16 +156,18 @@ export default function HowItWorksPage() {
                   <Card className="p-6 h-full hover:shadow-lg transition-shadow">
                     <div className="flex items-start gap-4">
                       <div className={`${category.bgColor} p-3 rounded-lg flex-shrink-0`}>
-                        <Icon className="w-6 h-6 text-gray-700" />
+                        <Icon className="w-6 h-6 text-gray-700 dark:text-foreground" />
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
-                        <p className="text-gray-600 mb-3">{category.description}</p>
+                        <p className="text-gray-600 dark:text-muted-foreground mb-3">
+                          {category.description}
+                        </p>
                         <ul className="space-y-1">
                           {category.features.map(feature => (
                             <li
                               key={feature.title}
-                              className="text-sm text-gray-500 flex items-center gap-2"
+                              className="text-sm text-gray-500 dark:text-muted-foreground flex items-center gap-2"
                             >
                               <div
                                 className={`w-1.5 h-1.5 rounded-full ${category.iconGradient}`}
@@ -181,7 +189,7 @@ export default function HowItWorksPage() {
         <motion.div className="mb-20" {...fadeInUp}>
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold mb-4">Why Bitcoin Powers Everything</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
               Bitcoin isn't just a payment method—it's the foundation for transparent, global,
               permissionless transactions.
             </p>
@@ -204,7 +212,9 @@ export default function HowItWorksPage() {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                        <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                        <p className="text-gray-600 dark:text-muted-foreground leading-relaxed">
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                   </Card>
@@ -218,7 +228,7 @@ export default function HowItWorksPage() {
         <motion.div className="text-center" {...fadeInUp}>
           <Card className="p-12 bg-gradient-to-br from-tiffany-50 via-white to-orange-50 border-2 border-tiffany-100">
             <h2 className="text-2xl font-semibold mb-4">Ready to Get Started?</h2>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-muted-foreground mb-8 max-w-2xl mx-auto">
               Exchange, fund, lend, invest, and govern — with your AI agent, under any identity, in
               any currency.
             </p>
@@ -235,7 +245,7 @@ export default function HowItWorksPage() {
                 {CTA_LABELS.secondaryAction}
               </Button>
             </div>
-            <p className="mt-6 text-sm text-gray-500">
+            <p className="mt-6 text-sm text-gray-500 dark:text-muted-foreground">
               No credit card required • Free forever • Set up in minutes
             </p>
           </Card>
@@ -243,7 +253,7 @@ export default function HowItWorksPage() {
 
         {/* Additional Help */}
         <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-4">Need more help?</p>
+          <p className="text-gray-600 dark:text-muted-foreground mb-4">Need more help?</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Button href={ROUTES.DISCOVER} variant="ghost">
               See What Others Are Doing

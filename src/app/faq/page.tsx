@@ -217,24 +217,26 @@ function FaqAccordionItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="border border-gray-200 dark:border-border rounded-lg overflow-hidden">
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-5 py-4 text-left bg-white hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between px-5 py-4 text-left bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted transition-colors"
         aria-expanded={isOpen}
       >
-        <span className="font-medium text-gray-900 pr-4">{item.question}</span>
+        <span className="font-medium text-gray-900 dark:text-foreground pr-4">{item.question}</span>
         <ChevronDown
           className={cn(
-            'h-5 w-5 text-gray-400 flex-shrink-0 transition-transform duration-200',
+            'h-5 w-5 text-gray-400 dark:text-muted-foreground flex-shrink-0 transition-transform duration-200',
             isOpen && 'rotate-180'
           )}
         />
       </button>
       {isOpen && (
-        <div className="px-5 pb-5 pt-1 bg-white border-t border-gray-100">
-          <div className="text-gray-600 leading-relaxed text-[15px]">{item.answer}</div>
+        <div className="px-5 pb-5 pt-1 bg-white dark:bg-card border-t border-gray-100 dark:border-border">
+          <div className="text-gray-600 dark:text-muted-foreground leading-relaxed text-[15px]">
+            {item.answer}
+          </div>
         </div>
       )}
     </div>
@@ -253,8 +255,10 @@ export default function FAQPage() {
       {/* Header */}
       <div className={`${GRADIENTS.pageBgTiffanyDown} border-b border-tiffany-100 py-16 px-4`}>
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-foreground mb-4">
+            Frequently Asked Questions
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-muted-foreground max-w-2xl mx-auto">
             Everything you need to know about OrangeCat — your AI economic agent.
           </p>
         </div>
@@ -267,10 +271,12 @@ export default function FAQPage() {
           return (
             <section key={section.title}>
               <div className="flex items-center gap-3 mb-5">
-                <div className={cn('p-2 rounded-lg bg-gray-100', section.color)}>
+                <div className={cn('p-2 rounded-lg bg-gray-100 dark:bg-muted', section.color)}>
                   <Icon className="h-5 w-5" />
                 </div>
-                <h2 className="text-xl font-semibold text-gray-900">{section.title}</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground">
+                  {section.title}
+                </h2>
               </div>
               <div className="space-y-2">
                 {section.items.map((item, i) => {
@@ -291,8 +297,10 @@ export default function FAQPage() {
 
         {/* Still have questions */}
         <div className="text-center bg-tiffany-50 border border-tiffany-100 rounded-xl p-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Still have questions?</h3>
-          <p className="text-gray-600 mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+            Still have questions?
+          </h3>
+          <p className="text-gray-600 dark:text-muted-foreground mb-4">
             Ask your Cat — open the chat panel in your dashboard and type your question. Or reach
             out directly.
           </p>

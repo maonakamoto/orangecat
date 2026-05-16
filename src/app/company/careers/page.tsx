@@ -87,16 +87,16 @@ export default function CareersPage() {
   return (
     <div className={cn(GRADIENTS.pageBgSolid, 'min-h-screen')}>
       {/* Hero Section */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-card border-b border-gray-200 dark:border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-8">
               <Briefcase className="w-8 h-8 text-orange-600" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl mb-4">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-foreground sm:text-5xl mb-4">
               Join <span className="text-orange-600">OrangeCat</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
               Help us build universal economic participation. Work on a platform that lets anyone —
               any identity, any currency — earn, fund, invest, and govern freely.
             </p>
@@ -107,8 +107,10 @@ export default function CareersPage() {
       {/* Our Mission */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-16">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Why OrangeCat?</h2>
-          <p className="text-lg text-gray-600 max-w-4xl mx-auto">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-6">
+            Why OrangeCat?
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-muted-foreground max-w-4xl mx-auto">
             We&apos;re not just building software — we&apos;re creating infrastructure for open
             economic participation. Bitcoin-native and any-currency-first, with an AI agent (the
             Cat) that acts on behalf of every user. Every role at OrangeCat contributes to this
@@ -119,30 +121,38 @@ export default function CareersPage() {
         {/* Values */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {values.map((value, index) => (
-            <div key={index} className="text-center p-6 bg-white rounded-xl shadow-sm">
+            <div key={index} className="text-center p-6 bg-white dark:bg-card rounded-xl shadow-sm">
               <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-600">
                 {value.icon}
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{value.title}</h3>
-              <p className="text-gray-600 text-sm">{value.description}</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+                {value.title}
+              </h3>
+              <p className="text-gray-600 dark:text-muted-foreground text-sm">
+                {value.description}
+              </p>
             </div>
           ))}
         </div>
 
         {/* Open Positions */}
         <div className="mb-16">
-          <h2 className="text-2xl font-semibold text-gray-900 text-center mb-12">Open Positions</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground text-center mb-12">
+            Open Positions
+          </h2>
 
           {openPositions.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {openPositions.map((position, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-xl shadow-sm p-6 border border-gray-200"
+                  className="bg-white dark:bg-card rounded-xl shadow-sm p-6 border border-gray-200 dark:border-border"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{position.title}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-1">
+                        {position.title}
+                      </h3>
                       <p className="text-orange-600 font-medium text-sm">{position.department}</p>
                     </div>
                     <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
@@ -153,7 +163,9 @@ export default function CareersPage() {
                   <p className="text-gray-600 text-sm mb-4">{position.description}</p>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">{position.location}</span>
+                    <span className="text-sm text-gray-500 dark:text-muted-foreground">
+                      {position.location}
+                    </span>
                     <button className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium">
                       Apply Now
                     </button>
@@ -163,13 +175,13 @@ export default function CareersPage() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Coffee className="w-8 h-8 text-gray-400" />
+              <div className="w-16 h-16 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <Coffee className="w-8 h-8 text-gray-400 dark:text-muted-foreground/50" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
                 No Open Positions Right Now
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 dark:text-muted-foreground mb-6">
                 We&apos;re always growing! Send us your resume and we&apos;ll keep you in mind for
                 future opportunities.
               </p>
@@ -181,8 +193,8 @@ export default function CareersPage() {
         </div>
 
         {/* Perks & Benefits */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-16">
-          <h2 className="text-2xl font-semibold text-gray-900 text-center mb-8">
+        <div className="bg-white dark:bg-card rounded-2xl shadow-lg p-8 mb-16">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground text-center mb-8">
             Why Work With Us?
           </h2>
 
@@ -192,13 +204,15 @@ export default function CareersPage() {
                 <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
                   <span className="text-orange-600 text-sm font-bold">✓</span>
                 </div>
-                <span className="text-gray-900 font-medium text-sm">{perk}</span>
+                <span className="text-gray-900 dark:text-foreground font-medium text-sm">
+                  {perk}
+                </span>
               </div>
             ))}
           </div>
 
           <div className="text-center">
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-muted-foreground mb-6">
               We believe in compensating our team fairly with competitive salaries, Bitcoin bonuses,
               and benefits that support work-life balance.
             </p>
@@ -207,8 +221,10 @@ export default function CareersPage() {
 
         {/* CTA */}
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Ready to Join Our Mission?</h2>
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
+            Ready to Join Our Mission?
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-muted-foreground mb-8 max-w-2xl mx-auto">
             Whether we have an open position or not, we&apos;d love to hear from talented
             individuals who share our passion for open economic participation and Bitcoin.
           </p>
@@ -222,7 +238,7 @@ export default function CareersPage() {
             </button>
           </div>
 
-          <p className="text-sm text-gray-500 mt-6">
+          <p className="text-sm text-gray-500 dark:text-muted-foreground mt-6">
             We are an equal opportunity employer and value diversity at our company. We do not
             discriminate on the basis of race, religion, color, national origin, gender, sexual
             orientation, age, marital status, veteran status, or disability status.

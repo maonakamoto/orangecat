@@ -15,37 +15,46 @@ import { GRADIENTS } from '@/config/gradients';
 const mdxComponents = {
   // Customize markdown elements
   h1: ({ children, ...props }: ComponentProps<'h1'>) => (
-    <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 leading-tight" {...props}>
+    <h1
+      className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-foreground mb-6 leading-tight"
+      {...props}
+    >
       {children}
     </h1>
   ),
   h2: ({ children, ...props }: ComponentProps<'h2'>) => (
-    <h2 className="text-2xl font-semibold text-gray-900 mb-6 mt-12 flex items-center" {...props}>
+    <h2
+      className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-6 mt-12 flex items-center"
+      {...props}
+    >
       {children}
     </h2>
   ),
   h3: ({ children, ...props }: ComponentProps<'h3'>) => (
-    <h3 className="text-lg font-semibold text-gray-900 mb-4 mt-8" {...props}>
+    <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4 mt-8" {...props}>
       {children}
     </h3>
   ),
   h4: ({ children, ...props }: ComponentProps<'h4'>) => (
-    <h4 className="text-base font-semibold text-gray-900 mb-3 mt-6" {...props}>
+    <h4 className="text-base font-semibold text-gray-900 dark:text-foreground mb-3 mt-6" {...props}>
       {children}
     </h4>
   ),
   p: ({ children, ...props }: ComponentProps<'p'>) => (
-    <p className="text-lg text-gray-700 leading-relaxed mb-6" {...props}>
+    <p className="text-lg text-gray-700 dark:text-muted-foreground leading-relaxed mb-6" {...props}>
       {children}
     </p>
   ),
   ul: ({ children, ...props }: ComponentProps<'ul'>) => (
-    <ul className="space-y-3 text-gray-700 mb-6 ml-6" {...props}>
+    <ul className="space-y-3 text-gray-700 dark:text-muted-foreground mb-6 ml-6" {...props}>
       {children}
     </ul>
   ),
   ol: ({ children, ...props }: ComponentProps<'ol'>) => (
-    <ol className="space-y-3 text-gray-700 mb-6 ml-6 list-decimal" {...props}>
+    <ol
+      className="space-y-3 text-gray-700 dark:text-muted-foreground mb-6 ml-6 list-decimal"
+      {...props}
+    >
       {children}
     </ol>
   ),
@@ -57,14 +66,17 @@ const mdxComponents = {
   ),
   blockquote: ({ children, ...props }: ComponentProps<'blockquote'>) => (
     <blockquote
-      className="border-l-4 border-tiffany-500 pl-6 my-8 bg-tiffany-50 py-4 rounded-r-lg"
+      className="border-l-4 border-tiffany-500 pl-6 my-8 bg-tiffany-50 dark:bg-accent py-4 rounded-r-lg"
       {...props}
     >
-      <div className="text-lg text-gray-700 italic">{children}</div>
+      <div className="text-lg text-gray-700 dark:text-muted-foreground italic">{children}</div>
     </blockquote>
   ),
   code: ({ children, ...props }: ComponentProps<'code'>) => (
-    <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-gray-800" {...props}>
+    <code
+      className="bg-gray-100 dark:bg-muted px-2 py-1 rounded text-sm font-mono text-gray-800 dark:text-foreground"
+      {...props}
+    >
       {children}
     </code>
   ),
@@ -99,12 +111,12 @@ const mdxComponents = {
     return <div className={`border rounded-xl p-6 mb-6 ${styles[type]}`}>{children}</div>;
   },
   SecurityFeature: ({ title, description }: { title: string; description: string }) => (
-    <div className="bg-white border border-green-200 rounded-xl p-6 mb-6">
-      <h4 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
+    <div className="bg-white dark:bg-card border border-green-200 dark:border-border rounded-xl p-6 mb-6">
+      <h4 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2 flex items-center">
         <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
         {title}
       </h4>
-      <p className="text-gray-700">{description}</p>
+      <p className="text-gray-700 dark:text-muted-foreground">{description}</p>
     </div>
   ),
 };
@@ -204,13 +216,15 @@ export default async function BlogPost({ params }: PageProps) {
                   <span className="bg-orange-100 px-3 py-1 rounded-full">Featured Article</span>
                 </div>
               )}
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-foreground mb-6 leading-tight">
                 {post.title}
               </h1>
-              <p className="text-xl text-gray-600 leading-relaxed mb-6">{post.excerpt}</p>
+              <p className="text-xl text-gray-600 dark:text-muted-foreground leading-relaxed mb-6">
+                {post.excerpt}
+              </p>
 
               {/* Post Meta */}
-              <div className="flex items-center text-sm text-gray-500 border-t border-b border-gray-200 py-4">
+              <div className="flex items-center text-sm text-gray-500 dark:text-muted-foreground border-t border-b border-gray-200 dark:border-border py-4">
                 <Calendar className="w-4 h-4 mr-2" />
                 {new Date(post.date).toLocaleDateString('en-US', {
                   year: 'numeric',
@@ -234,7 +248,7 @@ export default async function BlogPost({ params }: PageProps) {
                     <Link
                       key={tag}
                       href={`/blog?tag=${encodeURIComponent(tag)}`}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-muted text-gray-800 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
                     >
                       <Tag className="w-3 h-3 mr-1" />
                       {tag}
@@ -250,7 +264,7 @@ export default async function BlogPost({ params }: PageProps) {
             </article>
 
             {/* Share and Navigation */}
-            <div className="mt-16 pt-8 border-t border-gray-200">
+            <div className="mt-16 pt-8 border-t border-gray-200 dark:border-border">
               <div className="flex flex-col sm:flex-row justify-between items-center">
                 <Link href="/blog">
                   <Button variant="outline">
@@ -264,7 +278,7 @@ export default async function BlogPost({ params }: PageProps) {
                     description={post.excerpt}
                     url={`https://orangecat.ch/blog/${slug}`}
                   />
-                  <p className="text-gray-500 text-xs">
+                  <p className="text-gray-500 dark:text-muted-foreground text-xs">
                     Part of our commitment to building in public
                   </p>
                 </div>
@@ -273,8 +287,10 @@ export default async function BlogPost({ params }: PageProps) {
 
             {/* Related Posts CTA */}
             <div className={`mt-12 ${GRADIENTS.sectionOrangeTiffany} rounded-2xl p-8 text-center`}>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">More from OrangeCat</h3>
-              <p className="text-lg text-gray-700 mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-4">
+                More from OrangeCat
+              </h3>
+              <p className="text-lg text-gray-700 dark:text-muted-foreground mb-6">
                 Discover more insights about Bitcoin, security, and building in public.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
