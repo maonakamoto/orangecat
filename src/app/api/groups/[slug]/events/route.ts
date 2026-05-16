@@ -20,6 +20,7 @@ import { logger } from '@/utils/logger';
 import { z } from 'zod';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { resolveGroupBySlug, checkGroupMember } from '@/domain/groups/helpers.server';
+import { recordGroupActivity } from '@/services/groups/activities';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 import { STATUS } from '@/config/database-constants';
 
@@ -163,6 +164,13 @@ export const POST = withAuth(
         .select('id, name, avatar_url')
         .eq('id', user.id)
         .single();
+
+      void recordGroupActivity(req.supabase, {
+        group_id: group.id,
+        user_id: user.id,
+        activity_type: 'created_event',
+        metadata: { title: eventData.title, event_id: event.id },
+      });
 
       return apiCreated({
         event: {

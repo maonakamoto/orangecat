@@ -129,6 +129,7 @@ export const API_ROUTES = {
       `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/proposals/${id}/activate`,
     WALLET_REFRESH: (slug: string, walletId: string) =>
       `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/wallets/${walletId}/refresh`,
+    ACTIVITIES: (slug: string) => `${ENTITY_REGISTRY['group'].apiEndpoint}/${slug}/activities`,
   },
   JOBS: '/api/jobs',
   DELETE_USER: '/api/delete-user',

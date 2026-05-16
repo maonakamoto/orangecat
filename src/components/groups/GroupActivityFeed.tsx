@@ -1,0 +1,190 @@
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserPlus, FileText, Vote, CalendarPlus, Activity } from 'lucide-react';
+import { API_ROUTES } from '@/config/api-routes';
+import { logger } from '@/utils/logger';
+import type { ActivityType } from '@/services/groups/types';
+
+interface ActivityUser {
+  id: string;
+  name: string | null;
+  username: string | null;
+  avatar_url: string | null;
+}
+
+interface GroupActivity {
+  id: string;
+  activity_type: ActivityType;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  user_id: string;
+  user: ActivityUser | null;
+}
+
+const ACTIVITY_CONFIG: Record<
+  string,
+  { icon: React.ElementType; label: (meta: Record<string, unknown>) => string; color: string }
+> = {
+  joined_group: {
+    icon: UserPlus,
+    label: () => 'joined the group',
+    color: 'text-tiffany-600',
+  },
+  created_proposal: {
+    icon: FileText,
+    label: meta => (meta.title ? `created proposal "${meta.title}"` : 'created a proposal'),
+    color: 'text-blue-600',
+  },
+  voted: {
+    icon: Vote,
+    label: meta => (meta.vote ? `voted ${meta.vote} on a proposal` : 'voted on a proposal'),
+    color: 'text-purple-600',
+  },
+  created_event: {
+    icon: CalendarPlus,
+    label: meta => (meta.title ? `created event "${meta.title}"` : 'created an event'),
+    color: 'text-orange-600',
+  },
+};
+
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) {
+    return 'just now';
+  }
+  if (minutes < 60) {
+    return `${minutes}m ago`;
+  }
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) {
+    return `${hours}h ago`;
+  }
+  const days = Math.floor(hours / 24);
+  if (days < 30) {
+    return `${days}d ago`;
+  }
+  return new Date(dateStr).toLocaleDateString();
+}
+
+function displayName(user: ActivityUser | null): string {
+  if (!user) {
+    return 'Someone';
+  }
+  return user.name || user.username || 'A member';
+}
+
+function initials(user: ActivityUser | null): string {
+  const name = displayName(user);
+  return name.slice(0, 2).toUpperCase();
+}
+
+interface Props {
+  groupSlug: string;
+}
+
+export function GroupActivityFeed({ groupSlug }: Props) {
+  const [activities, setActivities] = useState<GroupActivity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchActivities = useCallback(async () => {
+    try {
+      const res = await fetch(API_ROUTES.GROUPS.ACTIVITIES(groupSlug));
+      if (res.ok) {
+        const data = await res.json();
+        setActivities(data.data?.activities ?? []);
+      }
+    } catch (e) {
+      logger.error('Failed to fetch group activities', { error: e }, 'GroupActivityFeed');
+    } finally {
+      setLoading(false);
+    }
+  }, [groupSlug]);
+
+  useEffect(() => {
+    void fetchActivities();
+  }, [fetchActivities]);
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Activity</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
+              <div className="flex-1 space-y-1.5">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/4" />
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (activities.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Activity</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <Activity className="h-10 w-10 text-muted-foreground mb-3" />
+            <p className="text-sm font-medium text-foreground">No activity yet</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Activity will appear when members join, create proposals, vote, or schedule events.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent Activity</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ol className="space-y-4">
+          {activities.map(activity => {
+            const config = ACTIVITY_CONFIG[activity.activity_type];
+            const Icon = config?.icon ?? Activity;
+            const label = config?.label(activity.metadata) ?? activity.activity_type;
+            const iconColor = config?.color ?? 'text-muted-foreground';
+
+            return (
+              <li key={activity.id} className="flex items-start gap-3">
+                <Avatar className="h-8 w-8 flex-shrink-0">
+                  {activity.user?.avatar_url && (
+                    <AvatarImage src={activity.user.avatar_url} alt={displayName(activity.user)} />
+                  )}
+                  <AvatarFallback className="text-xs">{initials(activity.user)}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-foreground leading-snug">
+                    <span className="font-medium">{displayName(activity.user)}</span>{' '}
+                    <span className="text-muted-foreground">{label}</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+                    <Icon className={`h-3 w-3 ${iconColor}`} />
+                    {timeAgo(activity.created_at)}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </CardContent>
+    </Card>
+  );
+}

@@ -12,6 +12,7 @@ import { GroupMembers } from './GroupMembers';
 import { GroupWallets } from './GroupWallets';
 import { ProposalsList } from './proposals/ProposalsList';
 import { EventsList } from './events/EventsList';
+import { GroupActivityFeed } from './GroupActivityFeed';
 
 interface GroupDetailTabsProps {
   group: Group;
@@ -122,14 +123,7 @@ export function GroupDetailTabs({
       )}
 
       <TabsContent value="activity">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-500 dark:text-muted-foreground">Activity feed coming soon...</p>
-          </CardContent>
-        </Card>
+        <GroupActivityFeed groupSlug={group.slug} />
       </TabsContent>
     </Tabs>
   );

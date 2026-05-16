@@ -20,6 +20,8 @@ import { logger } from '@/utils/logger';
 import { castVote } from '@/services/groups/mutations/votes';
 import { z } from 'zod';
 import { STATUS, type ProposalVoteValue } from '@/config/database-constants';
+import { recordGroupActivity } from '@/services/groups/activities';
+import { resolveGroupBySlug } from '@/domain/groups/helpers.server';
 
 const voteBodySchema = z.object({
   vote: z.enum(Object.values(STATUS.PROPOSAL_VOTES) as [ProposalVoteValue, ...ProposalVoteValue[]]),
@@ -31,7 +33,7 @@ interface RouteContext {
 
 export const POST = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   try {
-    const { id } = await context.params;
+    const { id, slug } = await context.params;
     const idValidation = getValidationError(validateUUID(id, 'proposal ID'));
     if (idValidation) {
       return idValidation;
@@ -54,6 +56,18 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     if (!result.success) {
       return apiBadRequest(result.error);
     }
+
+    void resolveGroupBySlug(supabase, slug).then(group => {
+      if (group) {
+        void recordGroupActivity(supabase, {
+          group_id: group.id,
+          user_id: user.id,
+          activity_type: 'voted',
+          metadata: { proposal_id: id, vote: parsed.data.vote },
+        });
+      }
+    });
+
     return apiSuccess(result.vote);
   } catch (error) {
     logger.error('Error in POST /api/groups/[slug]/proposals/[id]/vote', error, 'API');

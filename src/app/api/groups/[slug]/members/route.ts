@@ -12,8 +12,15 @@
 import { withAuth, withOptionalAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import groupsService from '@/services/groups';
 import { logger } from '@/utils/logger';
-import { apiSuccess, apiCreated, apiNotFound, apiInternalError, apiRateLimited } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import {
+  apiSuccess,
+  apiCreated,
+  apiNotFound,
+  apiInternalError,
+  apiRateLimited,
+} from '@/lib/api/standardResponse';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
+import { recordGroupActivity } from '@/services/groups/activities';
 
 interface RouteContext {
   params: Promise<{ slug: string }>;
@@ -72,6 +79,13 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     if (!result.success) {
       return apiInternalError(result.error || 'Failed to join group');
     }
+
+    void recordGroupActivity(request.supabase, {
+      group_id: groupResult.group.id,
+      user_id: user.id,
+      activity_type: 'joined_group',
+      metadata: { group_name: groupResult.group.name },
+    });
 
     return apiCreated({ success: true, message: 'Successfully joined group' });
   } catch (error) {

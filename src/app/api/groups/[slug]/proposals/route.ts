@@ -13,6 +13,7 @@ import { withAuth, withOptionalAuth, type AuthenticatedRequest } from '@/lib/api
 import { getGroup } from '@/services/groups/queries/groups';
 import { getGroupProposals, type ProposalStatus } from '@/services/groups/queries/proposals';
 import { createProposal } from '@/services/groups/mutations/proposals';
+import { recordGroupActivity } from '@/services/groups/activities';
 import { logger } from '@/utils/logger';
 import { z } from 'zod';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
@@ -103,6 +104,13 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     if (!result.success) {
       return apiBadRequest(result.error);
     }
+
+    void recordGroupActivity(request.supabase, {
+      group_id: groupResult.group.id,
+      user_id: user.id,
+      activity_type: 'created_proposal',
+      metadata: { title: parsed.data.title, proposal_id: result.proposal?.id },
+    });
 
     return apiCreated(result.proposal);
   } catch (error) {
