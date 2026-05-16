@@ -43,7 +43,9 @@ const config: EntityDetailConfig = {
               <CardTitle className="text-lg">Welcome Message</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-700 italic whitespace-pre-wrap">{welcome}</p>
+              <p className="text-sm text-gray-700 dark:text-foreground italic whitespace-pre-wrap">
+                {welcome}
+              </p>
             </CardContent>
           </Card>
         )}
@@ -56,7 +58,7 @@ const config: EntityDetailConfig = {
             <CardContent className="space-y-3">
               {tags.length > 0 && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-2">Tags</p>
+                  <p className="text-sm text-gray-500 dark:text-muted-foreground mb-2">Tags</p>
                   <div className="flex flex-wrap gap-2">
                     {tags.map(tag => (
                       <Badge key={tag} variant="secondary">
@@ -68,7 +70,9 @@ const config: EntityDetailConfig = {
               )}
               {traits.length > 0 && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-2">Personality</p>
+                  <p className="text-sm text-gray-500 dark:text-muted-foreground mb-2">
+                    Personality
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {traits.map(trait => (
                       <Badge key={trait} variant="outline">

@@ -42,13 +42,15 @@ const config: EntityDetailConfig = {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-500">{displayBTC(entity.raised_amount)} raised</span>
+            <span className="text-sm text-gray-500 dark:text-muted-foreground">
+              {displayBTC(entity.raised_amount)} raised
+            </span>
             <span className="font-bold text-lg text-rose-600">
               {displayBTC(entity.goal_amount)} goal
             </span>
           </div>
           <Progress value={progress} className="h-2" />
-          <p className="text-sm text-gray-500">{progress}% funded</p>
+          <p className="text-sm text-gray-500 dark:text-muted-foreground">{progress}% funded</p>
         </CardContent>
       </Card>
     );

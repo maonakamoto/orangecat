@@ -121,7 +121,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
     <>
       <JsonLdScript data={jsonLd} />
       <div className="min-h-screen bg-gradient-to-br from-rose-50/50 via-white to-orange-50/30">
-        <div className="bg-white border-b border-gray-200">
+        <div className="bg-white dark:bg-card border-b border-gray-200 dark:border-border">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
               items={[
@@ -147,13 +147,15 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{wishlist.title}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-foreground">
+                  {wishlist.title}
+                </h1>
                 <div className="flex items-center gap-3 mt-2">
                   <Badge variant="secondary" className="capitalize">
                     {WISHLIST_TYPE_LABELS[wishlist.type] || wishlist.type}
                   </Badge>
                   {wishlist.event_date && (
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-500 dark:text-muted-foreground">
                       {new Date(wishlist.event_date).toLocaleDateString('en-US', {
                         month: 'long',
                         day: 'numeric',
@@ -176,7 +178,9 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                     <CardTitle className="text-lg">About this Wishlist</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 whitespace-pre-wrap">{wishlist.description}</p>
+                    <p className="text-gray-700 dark:text-foreground whitespace-pre-wrap">
+                      {wishlist.description}
+                    </p>
                   </CardContent>
                 </Card>
               )}
@@ -187,19 +191,23 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                     <CardTitle className="text-lg">Overall Progress</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <div className="flex justify-between text-sm text-gray-600">
+                    <div className="flex justify-between text-sm text-gray-600 dark:text-muted-foreground">
                       <span>{totalFunded.toFixed(8)} BTC funded</span>
                       <span>{totalTarget.toFixed(8)} BTC total</span>
                     </div>
                     <Progress value={overallProgress} className="h-2" />
-                    <p className="text-sm text-gray-500">{overallProgress}% of total goal</p>
+                    <p className="text-sm text-gray-500 dark:text-muted-foreground">
+                      {overallProgress}% of total goal
+                    </p>
                   </CardContent>
                 </Card>
               )}
 
               {items.length > 0 ? (
                 <div className="space-y-4">
-                  <h2 className="text-xl font-semibold text-gray-900">Items ({items.length})</h2>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground">
+                    Items ({items.length})
+                  </h2>
                   {items.map(item => {
                     const itemProgress =
                       item.target_amount_btc > 0
@@ -219,7 +227,9 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                             )}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-start justify-between gap-2">
-                                <h3 className="font-semibold text-gray-900">{item.title}</h3>
+                                <h3 className="font-semibold text-gray-900 dark:text-foreground">
+                                  {item.title}
+                                </h3>
                                 {item.is_fully_funded && (
                                   <Badge variant="default" className="bg-green-500 flex-shrink-0">
                                     Funded
@@ -227,7 +237,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                                 )}
                               </div>
                               {item.description && (
-                                <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                                <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1 line-clamp-2">
                                   {item.description}
                                 </p>
                               )}
@@ -243,7 +253,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                               )}
                               {item.target_amount_btc > 0 && (
                                 <div className="mt-3 space-y-1">
-                                  <div className="flex justify-between text-xs text-gray-500">
+                                  <div className="flex justify-between text-xs text-gray-500 dark:text-muted-foreground">
                                     <span>{item.funded_amount_btc.toFixed(8)} BTC</span>
                                     <span>{item.target_amount_btc.toFixed(8)} BTC goal</span>
                                   </div>
@@ -259,8 +269,8 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                 </div>
               ) : (
                 <Card>
-                  <CardContent className="py-8 text-center text-gray-500">
-                    <Gift className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                  <CardContent className="py-8 text-center text-gray-500 dark:text-muted-foreground">
+                    <Gift className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-muted-foreground/50" />
                     <p>No items in this wishlist yet.</p>
                   </CardContent>
                 </Card>

@@ -65,7 +65,7 @@ const config: EntityDetailConfig = {
           <CardContent className="space-y-3">
             {entity.investment_type && (
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Type</span>
+                <span className="text-sm text-gray-500 dark:text-muted-foreground">Type</span>
                 <Badge variant="secondary">
                   {INVESTMENT_TYPE_LABELS[entity.investment_type as string] ??
                     entity.investment_type}
@@ -74,7 +74,7 @@ const config: EntityDetailConfig = {
             )}
             {entity.risk_level && (
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Risk Level</span>
+                <span className="text-sm text-gray-500 dark:text-muted-foreground">Risk Level</span>
                 <span
                   className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
                     INVESTMENT_RISK_COLORS[entity.risk_level as string] ??
@@ -88,7 +88,9 @@ const config: EntityDetailConfig = {
             )}
             {entity.expected_return_rate !== null && entity.expected_return_rate !== undefined && (
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Expected Return</span>
+                <span className="text-sm text-gray-500 dark:text-muted-foreground">
+                  Expected Return
+                </span>
                 <span className="font-semibold">
                   {Number(entity.expected_return_rate).toFixed(1)}%
                 </span>
@@ -96,7 +98,7 @@ const config: EntityDetailConfig = {
             )}
             {entity.term_months !== null && entity.term_months !== undefined && (
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Term</span>
+                <span className="text-sm text-gray-500 dark:text-muted-foreground">Term</span>
                 <span className="font-semibold">{entity.term_months} months</span>
               </div>
             )}
@@ -106,7 +108,9 @@ const config: EntityDetailConfig = {
             </div>
             {entity.maximum_investment !== null && entity.maximum_investment !== undefined && (
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">Maximum Investment</span>
+                <span className="text-sm text-gray-500 dark:text-muted-foreground">
+                  Maximum Investment
+                </span>
                 <span className="font-semibold">{displayBTC(entity.maximum_investment)}</span>
               </div>
             )}
@@ -119,7 +123,9 @@ const config: EntityDetailConfig = {
               <CardTitle className="text-lg">Terms & Conditions</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">{entity.terms as string}</p>
+              <p className="text-sm text-gray-700 dark:text-foreground whitespace-pre-wrap">
+                {entity.terms as string}
+              </p>
             </CardContent>
           </Card>
         )}
