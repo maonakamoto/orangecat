@@ -28,15 +28,32 @@ export default function AnalyticsPage() {
     return <Loading fullScreen />;
   }
 
+  const getFilteredProjects = () => {
+    let filtered = [...projects];
+
+    if (timeRange !== 'all') {
+      const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90;
+      const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+      filtered = filtered.filter(p => new Date(p.created_at) >= cutoff);
+    }
+
+    if (selectedProject !== 'all') {
+      filtered = filtered.filter(p => p.id === selectedProject);
+    }
+
+    return filtered;
+  };
+
   const calculateMetrics = (): AnalyticsMetric[] => {
-    const activeProjects = projects.filter(c => c.isActive);
-    const totalRaised = projects.reduce((sum, c) => sum + (c.total_funding || 0), 0);
-    const totalSupporters = projects.reduce((sum, c) => sum + (c.contributor_count || 0), 0);
+    const filtered = getFilteredProjects();
+    const activeProjects = filtered.filter(c => c.isActive);
+    const totalRaised = filtered.reduce((sum, c) => sum + (c.total_funding || 0), 0);
+    const totalSupporters = filtered.reduce((sum, c) => sum + (c.contributor_count || 0), 0);
     const avgContribution = totalSupporters > 0 ? totalRaised / totalSupporters : 0;
     const successRate =
-      projects.length > 0
-        ? (projects.filter(c => c.goal_amount && c.total_funding >= c.goal_amount).length /
-            projects.length) *
+      filtered.length > 0
+        ? (filtered.filter(c => c.goal_amount && c.total_funding >= c.goal_amount).length /
+            filtered.length) *
           100
         : 0;
 
@@ -72,7 +89,7 @@ export default function AnalyticsPage() {
   };
 
   const getProjectPerformance = (): ProjectPerformance[] => {
-    return projects.map(project => ({
+    return getFilteredProjects().map(project => ({
       id: project.id,
       title: project.title || 'Untitled Project',
       totalRaised: project.total_funding || 0,
