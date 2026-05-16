@@ -90,6 +90,7 @@ interface Props {
 export function GroupActivityFeed({ groupSlug }: Props) {
   const [activities, setActivities] = useState<GroupActivity[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
 
   const fetchActivities = useCallback(async () => {
     try {
@@ -97,9 +98,17 @@ export function GroupActivityFeed({ groupSlug }: Props) {
       if (res.ok) {
         const data = await res.json();
         setActivities(data.data?.activities ?? []);
+      } else {
+        logger.error(
+          'Failed to fetch group activities',
+          { status: res.status },
+          'GroupActivityFeed'
+        );
+        setFetchError(true);
       }
     } catch (e) {
       logger.error('Failed to fetch group activities', { error: e }, 'GroupActivityFeed');
+      setFetchError(true);
     } finally {
       setLoading(false);
     }
@@ -125,6 +134,23 @@ export function GroupActivityFeed({ groupSlug }: Props) {
               </div>
             </div>
           ))}
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Activity</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <Activity className="h-10 w-10 text-muted-foreground mb-3" />
+            <p className="text-sm font-medium text-foreground">Could not load activity</p>
+            <p className="text-xs text-muted-foreground mt-1">Try refreshing the page.</p>
+          </div>
         </CardContent>
       </Card>
     );
