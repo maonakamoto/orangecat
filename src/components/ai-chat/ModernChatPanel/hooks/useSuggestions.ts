@@ -6,13 +6,7 @@
 import { useEffect, useState } from 'react';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
-
-const DEFAULT_SUGGESTIONS = [
-  'Help me write a product description',
-  'Explain Bitcoin Lightning Network',
-  'Give me ideas for my project',
-  'How can I improve my service offering?',
-];
+import { DEFAULT_SUGGESTIONS } from '@/services/ai/suggestions';
 
 export function useSuggestions() {
   const [suggestions, setSuggestions] = useState<string[]>(DEFAULT_SUGGESTIONS);
