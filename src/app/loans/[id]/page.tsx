@@ -148,19 +148,19 @@ const loanConfig: EntityDetailConfig = {
             </Badge>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500">Negotiable</span>
+            <span className="text-gray-500 dark:text-muted-foreground">Negotiable</span>
             <span className="font-medium">{entity.is_negotiable ? 'Yes' : 'No'}</span>
           </div>
           {entity.minimum_offer_amount && (
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">Min Offer</span>
+              <span className="text-gray-500 dark:text-muted-foreground">Min Offer</span>
               <span className="font-medium">
                 {formatCurrency(entity.minimum_offer_amount, entity.currency ?? 'USD')}
               </span>
             </div>
           )}
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500">Contact Method</span>
+            <span className="text-gray-500 dark:text-muted-foreground">Contact Method</span>
             <span className="font-medium capitalize">{entity.contact_method || 'Platform'}</span>
           </div>
         </CardContent>

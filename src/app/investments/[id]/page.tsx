@@ -46,7 +46,7 @@ const config: EntityDetailConfig = {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-muted-foreground">
                 {displayBTC(entity.total_raised ?? 0)} raised
               </span>
               <span className="font-bold text-lg text-tiffany-dark">
@@ -54,7 +54,7 @@ const config: EntityDetailConfig = {
               </span>
             </div>
             <Progress value={progress} className="h-2" />
-            <p className="text-sm text-gray-500">{progress}% funded</p>
+            <p className="text-sm text-gray-500 dark:text-muted-foreground">{progress}% funded</p>
           </CardContent>
         </Card>
 
@@ -78,7 +78,7 @@ const config: EntityDetailConfig = {
                 <span
                   className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
                     INVESTMENT_RISK_COLORS[entity.risk_level as string] ??
-                    'bg-gray-100 text-gray-800'
+                    'bg-gray-100 dark:bg-muted text-gray-800 dark:text-foreground'
                   }`}
                 >
                   {String(entity.risk_level).charAt(0).toUpperCase() +
@@ -103,7 +103,9 @@ const config: EntityDetailConfig = {
               </div>
             )}
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-500">Minimum Investment</span>
+              <span className="text-sm text-gray-500 dark:text-muted-foreground">
+                Minimum Investment
+              </span>
               <span className="font-semibold">{displayBTC(entity.minimum_investment)}</span>
             </div>
             {entity.maximum_investment !== null && entity.maximum_investment !== undefined && (
