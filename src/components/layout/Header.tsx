@@ -22,6 +22,7 @@ import { MenuToggleButton } from './MenuToggleButton';
 import { DesktopNavigation } from './DesktopNavigation';
 import { MobileMenu } from './MobileMenu';
 import UserProfileDropdown from '@/components/ui/UserProfileDropdown';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 interface HeaderProps {
   /** Whether to show the sidebar toggle button (authenticated routes) */
@@ -129,6 +130,9 @@ export function Header({
             {authStatus.authenticated && (
               <NotificationsButton onClick={() => setShowNotifications(!showNotifications)} />
             )}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* User Menu or Auth Buttons */}
             <div className="flex-shrink-0">

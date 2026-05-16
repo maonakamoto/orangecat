@@ -55,9 +55,7 @@ export function AppShell({ children }: AppShellProps) {
   const filteredSections = getFilteredSections();
 
   return (
-    <div
-      className={`min-h-screen flex flex-col ${shouldShowSidebar ? 'dark bg-background' : 'bg-white dark:bg-background'}`}
-    >
+    <div className="min-h-screen flex flex-col bg-background">
       {/* Initialize message sync manager */}
       <MessageSyncManagerInitializer />
 

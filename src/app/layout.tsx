@@ -19,6 +19,7 @@ import './globals.css';
 import Script from 'next/script';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { QueryProvider } from '@/components/providers/QueryProvider';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { AppShell } from '@/components/layout/AppShell';
 import { Toaster } from '@/components/ui/sonner';
 import { Suspense } from 'react';
@@ -57,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="antialiased">
         {/* Structured data: Organization + WebSite */}
         <script
@@ -71,7 +72,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   name: 'OrangeCat',
                   url: SITE_URL,
                   logo: `${SITE_URL}/images/orange-cat-logo.svg`,
-                  description: 'Fund, lend, invest, trade, and govern with any identity, any currency.',
+                  description:
+                    'Fund, lend, invest, trade, and govern with any identity, any currency.',
                   sameAs: [],
                 },
                 {
@@ -97,13 +99,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
-        <QueryProvider>
-          <AuthProvider>
-            <AppShell>
-              <Suspense>{children}</Suspense>
-            </AppShell>
-          </AuthProvider>
-        </QueryProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <AuthProvider>
+              <AppShell>
+                <Suspense>{children}</Suspense>
+              </AppShell>
+            </AuthProvider>
+          </QueryProvider>
+        </ThemeProvider>
         <Toaster position="top-right" richColors closeButton />
         {gaId && (
           <>
