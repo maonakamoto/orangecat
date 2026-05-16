@@ -160,7 +160,9 @@ export default function CareersPage() {
                     </span>
                   </div>
 
-                  <p className="text-gray-600 text-sm mb-4">{position.description}</p>
+                  <p className="text-gray-600 dark:text-muted-foreground text-sm mb-4">
+                    {position.description}
+                  </p>
 
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500 dark:text-muted-foreground">

@@ -86,7 +86,7 @@ export default function DocsPage() {
             </h2>
           </div>
           <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border p-6">
-            <p className="text-gray-600 leading-relaxed mb-5">
+            <p className="text-gray-600 dark:text-muted-foreground leading-relaxed mb-5">
               Everything on OrangeCat is an <strong>entity</strong> — a structured unit of economic
               or governance activity. Entities give the Cat a rich world model to read and operate
               on. There are 14 entity types covering the full economic spectrum:
@@ -236,7 +236,7 @@ export default function DocsPage() {
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
             <div className="p-2 rounded-lg bg-gray-100 dark:bg-muted">
-              <Code2 className="h-5 w-5 text-gray-600" />
+              <Code2 className="h-5 w-5 text-gray-600 dark:text-muted-foreground" />
             </div>
             <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground">
               Technology Stack

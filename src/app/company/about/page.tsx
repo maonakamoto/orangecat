@@ -260,7 +260,7 @@ export default function BitBaumAboutPage() {
         </div>
 
         {/* Team Section Placeholder */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+        <div className="bg-white dark:bg-card rounded-2xl shadow-lg p-8 text-center">
           <Users className="w-12 h-12 text-gray-400 dark:text-muted-foreground/50 mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-4">Our Team</h3>
           <p className="text-gray-600 dark:text-muted-foreground mb-6">
