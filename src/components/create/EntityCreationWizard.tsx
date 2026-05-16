@@ -114,20 +114,22 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
 
   return (
     <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
-      <div className="max-w-4xl mx-auto mb-6">
-        <button
-          onClick={handleCancel}
-          className="inline-flex items-center text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Cancel
-        </button>
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-foreground">
+      <div className="max-w-4xl mx-auto mb-3">
+        <div className="flex items-center gap-3 mb-1">
+          <button
+            onClick={handleCancel}
+            className="inline-flex items-center text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors shrink-0"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Cancel
+          </button>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-foreground">
             {config.pageTitle}
           </h1>
-          <p className="text-gray-600 dark:text-muted-foreground mt-1">{config.pageDescription}</p>
         </div>
+        <p className="text-sm text-gray-600 dark:text-muted-foreground ml-12">
+          {config.pageDescription}
+        </p>
       </div>
 
       <WizardProgressBar
@@ -166,10 +168,6 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
               <CardContent>
                 {isTemplateStep ? (
                   <div className="space-y-4">
-                    <p className="text-sm text-gray-600 dark:text-muted-foreground">
-                      Choose a template to get started quickly, or start from scratch with a blank
-                      canvas.
-                    </p>
                     <WizardTemplatePicker
                       templates={(config.templates || []) as EntityTemplate<T>[]}
                       onSelectTemplate={handleTemplateSelect}

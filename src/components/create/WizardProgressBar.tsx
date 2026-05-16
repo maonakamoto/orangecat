@@ -25,8 +25,8 @@ export function WizardProgressBar({
   const currentStepConfig = wizardSteps[currentStep];
 
   return (
-    <div className="max-w-4xl mx-auto mb-8">
-      <div className="flex justify-between items-center mb-4">
+    <div className="max-w-4xl mx-auto mb-4">
+      <div className="flex justify-between items-center mb-2">
         <span className="text-sm font-medium text-gray-700 dark:text-foreground">
           Step {currentStep + 1} of {wizardSteps.length}
         </span>
@@ -40,7 +40,7 @@ export function WizardProgressBar({
       </div>
       <Progress value={progress} className="h-2 bg-gray-200 dark:bg-muted" />
 
-      <div className="flex justify-between mt-6">
+      <div className="flex justify-between mt-3">
         {wizardSteps.map((step, index) => {
           const isCompleted = completedSteps.has(index);
           const isCurrent = index === currentStep;
@@ -56,7 +56,7 @@ export function WizardProgressBar({
               }`}
             >
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all ${
+                className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm transition-all ${
                   isCompleted
                     ? 'bg-green-500 text-white'
                     : isCurrent
@@ -64,10 +64,10 @@ export function WizardProgressBar({
                       : 'bg-gray-200 dark:bg-muted text-gray-600 dark:text-muted-foreground'
                 }`}
               >
-                {isCompleted ? <Check className="w-5 h-5" /> : index + 1}
+                {isCompleted ? <Check className="w-4 h-4" /> : index + 1}
               </div>
               <span
-                className={`text-xs font-medium max-w-[100px] text-center ${
+                className={`text-xs font-medium max-w-[80px] text-center leading-tight ${
                   isCurrent
                     ? 'text-gray-900 dark:text-foreground'
                     : 'text-gray-600 dark:text-muted-foreground'
