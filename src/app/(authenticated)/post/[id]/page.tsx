@@ -110,7 +110,7 @@ export default function PostPage() {
             {parentPosts.map((parent, _index) => (
               <div key={parent.id} className="relative">
                 <div
-                  className="absolute left-[34px] top-[52px] bottom-0 w-0.5 bg-gray-200 dark:bg-border"
+                  className="absolute left-[34px] top-[52px] bottom-0 w-0.5 bg-border"
                   style={{ height: 'calc(100% - 52px + 12px)' }}
                 />
                 <PostCard

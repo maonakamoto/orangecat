@@ -83,7 +83,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
               {index < steps.length - 1 && (
                 <div
                   className={`absolute top-6 left-1/2 w-full h-0.5 transition-colors ${
-                    isCompleted ? 'bg-green-400' : 'bg-gray-300 dark:bg-border'
+                    isCompleted ? 'bg-green-400' : 'bg-border-strong'
                   }`}
                   style={{
                     width: 'calc(100% - 3rem)',

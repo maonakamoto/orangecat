@@ -163,7 +163,7 @@ export default function TrustSection() {
             {TRUST_SIGNALS.map((signal, index) => (
               <div key={signal} className="flex items-center gap-1.5 sm:gap-2">
                 {index > 0 && (
-                  <div className="w-px h-3 sm:h-4 bg-gray-300 dark:bg-border hidden sm:block mr-3 sm:mr-4 lg:mr-6" />
+                  <div className="w-px h-3 sm:h-4 bg-border-strong hidden sm:block mr-3 sm:mr-4 lg:mr-6" />
                 )}
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full" />
                 <span className="text-xs sm:text-sm font-medium text-foreground">{signal}</span>

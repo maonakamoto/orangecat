@@ -78,7 +78,7 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
             </div>
           </button>
 
-          <div className="h-px bg-gray-100 dark:bg-border my-1" />
+          <div className="h-px bg-border-subtle my-1" />
 
           {/* Free models */}
           <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground uppercase">
