@@ -40,6 +40,7 @@ export default function ResearchDashboard() {
   const { formatAmount } = useDisplayCurrency();
   const [entities, setEntities] = useState<ResearchEntity[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [fieldFilter, setFieldFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -53,12 +54,20 @@ export default function ResearchDashboard() {
   const fetchResearchEntities = async () => {
     try {
       const response = await fetch(API_ROUTES.RESEARCH);
+      const data = await response.json();
       if (response.ok) {
-        const data = await response.json();
         setEntities(data.data || []);
+      } else {
+        logger.error(
+          'Failed to fetch research entities',
+          { status: response.status, error: data.error },
+          'Research'
+        );
+        setFetchError(data.error || 'Failed to load research entities');
       }
     } catch (error) {
       logger.error('Failed to fetch research entities', error, 'Research');
+      setFetchError('Failed to load research entities');
     } finally {
       setLoading(false);
     }
@@ -174,6 +183,12 @@ export default function ResearchDashboard() {
           </SelectContent>
         </Select>
       </div>
+
+      {fetchError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 text-sm">
+          {fetchError}
+        </div>
+      )}
 
       {/* Research Entities Grid */}
       {loading ? (

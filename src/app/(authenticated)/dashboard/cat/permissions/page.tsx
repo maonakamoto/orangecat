@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Cat, AlertTriangle } from 'lucide-react';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
@@ -82,11 +83,11 @@ export default function CatPermissionsPage() {
         setData(prev => (prev ? { ...prev, summary: json.data.summary } : null));
       } else {
         setData(previousData);
-        setError('Failed to update permission');
+        toast.error(json.error || 'Failed to update permission');
       }
     } catch {
       setData(previousData);
-      setError('Failed to update permission');
+      toast.error('Failed to update permission');
     } finally {
       setSaving(null);
     }
@@ -94,6 +95,7 @@ export default function CatPermissionsPage() {
 
   const toggleAction = async (actionId: string, category: string, enabled: boolean) => {
     setSaving(actionId);
+    const previousData = data;
     try {
       const res = await fetch(API_ROUTES.CAT.PERMISSIONS, {
         method: enabled ? 'POST' : 'DELETE',
@@ -103,9 +105,13 @@ export default function CatPermissionsPage() {
       const json = await res.json();
       if (json.success && json.data?.summary) {
         setData(prev => (prev ? { ...prev, summary: json.data.summary } : null));
+      } else {
+        setData(previousData);
+        toast.error(json.error || 'Failed to update permission');
       }
     } catch {
-      setError('Failed to update permission');
+      setData(previousData);
+      toast.error('Failed to update permission');
     } finally {
       setSaving(null);
     }

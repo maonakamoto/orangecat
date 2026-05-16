@@ -10,7 +10,6 @@ import type { TaskFormData } from '../../task-form-types';
 export function useEditTaskForm(taskId: string, enabled: boolean) {
   const router = useRouter();
 
-  const [_task, setTask] = useState<Task | null>(null);
   const [formData, setFormData] = useState<TaskFormData | null>(null);
   const [tagInput, setTagInput] = useState('');
   const [loading, setLoading] = useState(true);
@@ -29,7 +28,6 @@ export function useEditTaskForm(taskId: string, enabled: boolean) {
         throw new Error(data.error || 'Failed to load task');
       }
       const loadedTask: Task = data.data?.task;
-      setTask(loadedTask);
       if (loadedTask) {
         setFormData({
           title: loadedTask.title || '',
