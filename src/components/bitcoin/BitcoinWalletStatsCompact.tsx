@@ -164,7 +164,7 @@ export default function BitcoinWalletStatsCompact({
 
           {transactions.length > 3 && (
             <div className="mt-3 text-center">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-muted-foreground">
                 +{transactions.length - 3} more transactions
               </span>
             </div>

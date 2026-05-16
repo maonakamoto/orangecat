@@ -127,7 +127,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
         </button>
 
         <form onSubmit={handleSubmit} className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-muted-foreground" />
           <input
             type="text"
             placeholder="Search projects, people, organizations..."
@@ -156,7 +156,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                 >
                   <div className="text-orange-500">{action.icon}</div>
                   <span className="text-base">{action.label}</span>
-                  <ArrowUpRight className="w-4 h-4 ml-auto text-gray-400" />
+                  <ArrowUpRight className="w-4 h-4 ml-auto text-gray-400 dark:text-muted-foreground" />
                 </button>
               ))}
             </div>
@@ -185,7 +185,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                   onClick={() => handleSearch(historyItem)}
                   className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted rounded-lg transition-colors"
                 >
-                  <Clock className="w-4 h-4 text-gray-400" />
+                  <Clock className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
                   <span className="text-base">{historyItem}</span>
                 </button>
               ))}
@@ -236,7 +236,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                     onClick={() => handleSearch(suggestion)}
                     className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted rounded-lg transition-colors"
                   >
-                    <Search className="w-4 h-4 text-gray-400" />
+                    <Search className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
                     <span className="text-base">{suggestion}</span>
                   </button>
                 ))}

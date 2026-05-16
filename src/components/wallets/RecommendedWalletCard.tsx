@@ -104,7 +104,7 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
                 href={wallet.downloadLinks.ios}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
               >
                 <Smartphone className="w-4 h-4" />
                 iOS App Store

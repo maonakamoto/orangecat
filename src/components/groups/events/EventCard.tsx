@@ -53,7 +53,7 @@ export function EventCard({ event, groupSlug, onUpdate: _onUpdate }: EventCardPr
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div className="flex items-center gap-2 text-sm text-gray-600">
+        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-muted-foreground">
           <Calendar className="h-4 w-4" />
           <span>
             {formatDate(startDate)} {formatShortTime(startDate)}

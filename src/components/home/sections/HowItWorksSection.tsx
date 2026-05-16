@@ -70,7 +70,7 @@ export default function HowItWorksSection() {
                 {index < HOW_IT_WORKS_STEPS.length - 1 && (
                   <div className="hidden lg:block absolute top-24 -right-4 transform translate-x-1/2 z-10">
                     <svg
-                      className="w-8 h-8 text-gray-300"
+                      className="w-8 h-8 text-gray-300 dark:text-muted-foreground"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"

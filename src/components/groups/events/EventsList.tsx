@@ -85,7 +85,7 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
     return (
       <Card>
         <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-muted-foreground" />
         </CardContent>
       </Card>
     );
@@ -96,7 +96,9 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold">Events</h3>
-          <p className="text-sm text-gray-500">Manage group events and RSVPs</p>
+          <p className="text-sm text-gray-500 dark:text-muted-foreground">
+            Manage group events and RSVPs
+          </p>
         </div>
         {canCreateEvent && (
           <Button onClick={() => setCreateDialogOpen(true)}>
@@ -122,9 +124,9 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
       {events.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <Calendar className="h-12 w-12 text-gray-400 mb-4" />
+            <Calendar className="h-12 w-12 text-gray-400 dark:text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">No events yet</h3>
-            <p className="text-gray-500 text-center mb-4">
+            <p className="text-gray-500 dark:text-muted-foreground text-center mb-4">
               {statusFilter === 'upcoming'
                 ? 'No upcoming events scheduled.'
                 : statusFilter === 'past'

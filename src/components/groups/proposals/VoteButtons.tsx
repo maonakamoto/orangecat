@@ -113,7 +113,7 @@ export function VoteButtons({
         onClick={() => handleVote('abstain')}
         disabled={voting || disabled}
         variant={getButtonVariant('abstain')}
-        className={`flex-1 ${selectedVote === 'abstain' ? 'bg-gray-500 hover:bg-gray-600' : ''}`}
+        className={`flex-1 ${selectedVote === 'abstain' ? 'bg-gray-500 hover:bg-gray-600 dark:bg-muted dark:hover:bg-muted/80' : ''}`}
       >
         {voting && selectedVote === 'abstain' ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

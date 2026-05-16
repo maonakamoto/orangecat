@@ -137,7 +137,9 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
 
             {/* Show badges in tooltip */}
             {item.comingSoon && (
-              <span className="text-xs bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded">Soon</span>
+              <span className="text-xs bg-gray-700 dark:bg-muted text-gray-300 dark:text-muted-foreground px-1.5 py-0.5 rounded">
+                Soon
+              </span>
             )}
             {item.badge && !item.comingSoon && (
               <span className="text-xs bg-orange-500 text-white px-1.5 py-0.5 rounded font-medium">

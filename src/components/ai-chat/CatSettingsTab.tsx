@@ -157,7 +157,7 @@ export function CatSettingsTab() {
 
         {permLoading ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+            <Loader2 className="h-5 w-5 animate-spin text-gray-400 dark:text-muted-foreground" />
           </div>
         ) : permissions ? (
           <div className="divide-y divide-gray-100 dark:divide-border">
@@ -174,7 +174,9 @@ export function CatSettingsTab() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2 ml-3">
-                    {isSaving && <Loader2 className="h-4 w-4 animate-spin text-gray-400" />}
+                    {isSaving && (
+                      <Loader2 className="h-4 w-4 animate-spin text-gray-400 dark:text-muted-foreground" />
+                    )}
                     <Switch
                       checked={cat.enabled}
                       onCheckedChange={checked => toggleCategory(cat.category, checked)}

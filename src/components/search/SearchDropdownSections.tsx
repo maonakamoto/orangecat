@@ -81,7 +81,7 @@ export function QuickActionsSection({
             >
               <div className="text-orange-500">{icons[index]}</div>
               <span>{action.label}</span>
-              <ArrowUpRight className="w-3 h-3 ml-auto text-gray-400" />
+              <ArrowUpRight className="w-3 h-3 ml-auto text-gray-400 dark:text-muted-foreground" />
             </DropdownItem>
           );
         })}
@@ -137,7 +137,7 @@ export function SearchHistorySection({
                 itemRefs.current[currentIndex] = el;
               }}
             >
-              <Clock className="w-3 h-3 text-gray-400" />
+              <Clock className="w-3 h-3 text-gray-400 dark:text-muted-foreground" />
               <span>{item}</span>
             </DropdownItem>
           );
@@ -237,7 +237,7 @@ export function SuggestionsSection({
                   itemRefs.current[currentIndex] = el;
                 }}
               >
-                <Search className="w-3 h-3 text-gray-400" />
+                <Search className="w-3 h-3 text-gray-400 dark:text-muted-foreground" />
                 <span>{suggestion}</span>
               </DropdownItem>
             );

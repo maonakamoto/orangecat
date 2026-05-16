@@ -31,7 +31,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-tiffany-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-tiffany-50 dark:from-background dark:to-background">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-bitcoinOrange via-orange-500 to-tiffany-500 text-white py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
