@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * STEP CONTENT COMPONENT
  * Animated container for step content with header
