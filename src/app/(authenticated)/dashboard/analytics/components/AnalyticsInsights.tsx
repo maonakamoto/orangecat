@@ -1,13 +1,91 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { BarChart3, PieChart, Activity, TrendingUp, Share2, Heart } from 'lucide-react';
+import { BarChart3, PieChart, Activity, TrendingUp, Target, Users } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
+import type { Project } from '@/stores/projectStore';
 
 interface AnalyticsInsightsProps {
-  hasProjects: boolean;
+  projects: Project[];
 }
 
-export default function AnalyticsInsights({ hasProjects }: AnalyticsInsightsProps) {
+function deriveInsights(projects: Project[]) {
+  if (projects.length === 0) {
+    return [];
+  }
+
+  const insights: { icon: React.ElementType; title: string; body: string; color: string }[] = [];
+
+  const bestProject = projects.reduce((best, p) =>
+    (p.total_funding || 0) > (best.total_funding || 0) ? p : best
+  );
+
+  if (bestProject.total_funding > 0) {
+    insights.push({
+      icon: TrendingUp,
+      title: 'Top-performing project',
+      body: `"${bestProject.title}" has raised the most across your selected projects.`,
+      color: 'tiffany',
+    });
+  }
+
+  const goalsReached = projects.filter(
+    p => p.goal_amount && (p.total_funding || 0) >= p.goal_amount
+  );
+  const successRate = Math.round((goalsReached.length / projects.length) * 100);
+  insights.push({
+    icon: Target,
+    title: `${successRate}% goal completion rate`,
+    body:
+      goalsReached.length === projects.length
+        ? 'All selected projects have reached their funding goal.'
+        : `${goalsReached.length} of ${projects.length} selected projects reached their goal.`,
+    color: 'green',
+  });
+
+  const totalSupporters = projects.reduce((sum, p) => sum + (p.contributor_count || 0), 0);
+  const avgSupporters = projects.length > 0 ? Math.round(totalSupporters / projects.length) : 0;
+  if (avgSupporters > 0) {
+    insights.push({
+      icon: Users,
+      title: `${avgSupporters} average supporters per project`,
+      body: `Across your selected ${projects.length} project${projects.length !== 1 ? 's' : ''}, you average ${avgSupporters} supporter${avgSupporters !== 1 ? 's' : ''} each.`,
+      color: 'orange',
+    });
+  }
+
+  return insights;
+}
+
+const COLOR_CLASSES: Record<
+  string,
+  { bg: string; border: string; title: string; body: string; icon: string }
+> = {
+  tiffany: {
+    bg: 'bg-tiffany-50',
+    border: 'border-tiffany-200',
+    title: 'text-tiffany-900',
+    body: 'text-tiffany-700',
+    icon: 'text-tiffany-600',
+  },
+  green: {
+    bg: 'bg-green-50',
+    border: 'border-green-200',
+    title: 'text-green-900',
+    body: 'text-green-700',
+    icon: 'text-green-600',
+  },
+  orange: {
+    bg: 'bg-orange-50',
+    border: 'border-orange-200',
+    title: 'text-orange-900',
+    body: 'text-orange-700',
+    icon: 'text-orange-600',
+  },
+};
+
+export default function AnalyticsInsights({ projects }: AnalyticsInsightsProps) {
+  const insights = deriveInsights(projects);
+
   return (
     <>
       {/* Charts Section */}
@@ -24,13 +102,9 @@ export default function AnalyticsInsights({ hasProjects }: AnalyticsInsightsProp
             <div className="h-64 flex items-center justify-center text-gray-500 dark:text-muted-foreground">
               <div className="text-center">
                 <BarChart3 className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
-                {process.env.NEXT_PUBLIC_FEATURE_ANALYTICS === 'true' ? (
-                  <p>Interactive charts will render here</p>
-                ) : (
-                  <p className="text-gray-600 dark:text-muted-foreground">
-                    Analytics are disabled in this environment.
-                  </p>
-                )}
+                <p className="text-gray-600 dark:text-muted-foreground">
+                  Time-series funding chart coming soon
+                </p>
                 <p className="text-sm">Real-time funding visualization</p>
               </div>
             </div>
@@ -49,13 +123,9 @@ export default function AnalyticsInsights({ hasProjects }: AnalyticsInsightsProp
             <div className="h-64 flex items-center justify-center text-gray-500 dark:text-muted-foreground">
               <div className="text-center">
                 <PieChart className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
-                {process.env.NEXT_PUBLIC_FEATURE_ANALYTICS === 'true' ? (
-                  <p>Demographic analysis will render here</p>
-                ) : (
-                  <p className="text-gray-600 dark:text-muted-foreground">
-                    This module is currently disabled.
-                  </p>
-                )}
+                <p className="text-gray-600 dark:text-muted-foreground">
+                  Supporter breakdown chart coming soon
+                </p>
                 <p className="text-sm">Supporter behavior insights</p>
               </div>
             </div>
@@ -63,62 +133,37 @@ export default function AnalyticsInsights({ hasProjects }: AnalyticsInsightsProp
         </Card>
       </div>
 
-      {/* Insights & Recommendations */}
+      {/* Insights */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Activity className="w-5 h-5" />
-            AI-Powered Insights
+            Project Insights
           </CardTitle>
-          <CardDescription>Personalized recommendations to improve your projects</CardDescription>
+          <CardDescription>Derived from your selected projects</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {hasProjects ? (
-              <>
-                <div className="p-4 bg-tiffany-50 border border-tiffany-200 rounded-lg">
-                  <div className="flex items-start gap-3">
-                    <TrendingUp className="w-5 h-5 text-tiffany-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-medium text-tiffany-900">Optimize Your Project Timing</h4>
-                      <p className="text-tiffany-700 text-sm mt-1">
-                        Your projects perform 23% better when launched on Tuesdays. Consider timing
-                        your next launch accordingly.
-                      </p>
+            {insights.length > 0 ? (
+              insights.map((insight, i) => {
+                const c = COLOR_CLASSES[insight.color];
+                const Icon = insight.icon;
+                return (
+                  <div key={i} className={`p-4 ${c.bg} border ${c.border} rounded-lg`}>
+                    <div className="flex items-start gap-3">
+                      <Icon className={`w-5 h-5 ${c.icon} mt-0.5`} />
+                      <div>
+                        <h4 className={`font-medium ${c.title}`}>{insight.title}</h4>
+                        <p className={`${c.body} text-sm mt-1`}>{insight.body}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-start gap-3">
-                    <Share2 className="w-5 h-5 text-green-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-medium text-green-900">Increase Social Sharing</h4>
-                      <p className="text-green-700 text-sm mt-1">
-                        Projects with regular social media updates raise 40% more on average. Share
-                        updates 2-3 times per week.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                  <div className="flex items-start gap-3">
-                    <Heart className="w-5 h-5 text-orange-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-medium text-orange-900">Engage Your Supporters</h4>
-                      <p className="text-orange-700 text-sm mt-1">
-                        Send personalized thank-you messages to increase repeat contributions by up
-                        to 60%.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </>
+                );
+              })
             ) : (
               <div className="text-center py-8 text-gray-500 dark:text-muted-foreground">
                 <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
-                <p>Create your first project to see personalized insights</p>
+                <p>Create your first project to see insights</p>
                 <Button href={ROUTES.PROJECTS.CREATE} className="mt-4">
                   Create Project
                 </Button>

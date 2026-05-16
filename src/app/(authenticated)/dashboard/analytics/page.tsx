@@ -105,6 +105,7 @@ export default function AnalyticsPage() {
     }));
   };
 
+  const filteredProjects = getFilteredProjects();
   const metrics = calculateMetrics();
   const projectPerformance = getProjectPerformance();
 
@@ -158,7 +159,7 @@ export default function AnalyticsPage() {
 
       <AnalyticsMetricsGrid metrics={metrics} />
       <ProjectPerformanceTable projects={projectPerformance} />
-      <AnalyticsInsights hasProjects={projects.length > 0} />
+      <AnalyticsInsights projects={filteredProjects} />
     </div>
   );
 }
