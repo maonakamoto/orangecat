@@ -127,7 +127,7 @@ export default function DiscoverTabs({
                     ${
                       isActive
                         ? `border ${BADGE_COLORS.orange}`
-                        : 'bg-gray-100 dark:bg-muted text-muted-foreground border border-border group-hover:bg-gray-200 dark:group-hover:bg-muted/80'
+                        : 'bg-muted text-muted-foreground border border-border group-hover:bg-gray-200 dark:group-hover:bg-muted/80'
                     }
                   `}
                 >

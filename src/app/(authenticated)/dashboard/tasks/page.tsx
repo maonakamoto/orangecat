@@ -245,8 +245,8 @@ export default function TasksPage() {
         <div className="space-y-4">
           {[1, 2, 3].map(i => (
             <div key={i} className="bg-card rounded-xl border border-border p-4 animate-pulse">
-              <div className="h-5 bg-gray-200 dark:bg-muted rounded w-1/3 mb-2" />
-              <div className="h-4 bg-gray-200 dark:bg-muted rounded w-2/3" />
+              <div className="h-5 bg-muted rounded w-1/3 mb-2" />
+              <div className="h-4 bg-muted rounded w-2/3" />
             </div>
           ))}
         </div>

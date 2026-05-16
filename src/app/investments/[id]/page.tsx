@@ -78,7 +78,7 @@ const config: EntityDetailConfig = {
                 <span
                   className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
                     INVESTMENT_RISK_COLORS[entity.risk_level as string] ??
-                    'bg-gray-100 dark:bg-muted text-gray-800 dark:text-foreground'
+                    'bg-muted text-gray-800 dark:text-foreground'
                   }`}
                 >
                   {String(entity.risk_level).charAt(0).toUpperCase() +

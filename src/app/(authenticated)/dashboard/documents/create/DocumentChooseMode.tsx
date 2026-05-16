@@ -64,10 +64,10 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
             Drop a .txt or .md file and we&apos;ll extract the content automatically.
           </p>
           <div className="flex flex-wrap gap-2">
-            <span className="px-2 py-1 bg-gray-100 dark:bg-muted rounded-md text-xs font-medium text-muted-foreground">
+            <span className="px-2 py-1 bg-muted rounded-md text-xs font-medium text-muted-foreground">
               .txt
             </span>
-            <span className="px-2 py-1 bg-gray-100 dark:bg-muted rounded-md text-xs font-medium text-muted-foreground">
+            <span className="px-2 py-1 bg-muted rounded-md text-xs font-medium text-muted-foreground">
               .md
             </span>
           </div>
@@ -88,7 +88,7 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
             {['Goals', 'Skills', 'Plans'].map(tag => (
               <span
                 key={tag}
-                className="px-2 py-1 bg-gray-100 dark:bg-muted rounded-md text-xs font-medium text-muted-foreground"
+                className="px-2 py-1 bg-muted rounded-md text-xs font-medium text-muted-foreground"
               >
                 {tag}
               </span>

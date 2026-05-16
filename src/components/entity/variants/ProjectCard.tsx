@@ -62,7 +62,7 @@ export function ProjectCard({
     compact ? (
       // Compact progress: just bar and percentage
       <div className="w-full space-y-1">
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-muted">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
           <div
             className={`h-full ${GRADIENTS.brandOrangeAmber} transition-all duration-500`}
             style={{ width: `${progressPercentage}%` }}
@@ -82,7 +82,7 @@ export function ProjectCard({
           <span>Progress</span>
           <span className="font-medium">{Math.round(progressPercentage)}%</span>
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-muted">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
           <div
             className={`h-full ${GRADIENTS.brandOrangeAmber} transition-all duration-500`}
             style={{ width: `${progressPercentage}%` }}

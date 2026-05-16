@@ -35,7 +35,7 @@ export function ProfileSidebarPanel({
               {completionPercentage}%
             </span>
           </div>
-          <div className="w-full bg-gray-100 dark:bg-muted rounded-full h-3 overflow-hidden">
+          <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
             <div
               className={`${GRADIENTS.progressBitcoin} h-3 rounded-full transition-all duration-700 ease-out shadow-sm`}
               style={{ width: `${completionPercentage}%` }}

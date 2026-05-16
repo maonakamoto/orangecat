@@ -103,7 +103,7 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
               <div className="space-y-3 mb-4">
                 {aiDefaultContent.features.map((feature, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-muted flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
                       {feature.icon}
                     </div>
                     <span className="text-sm text-muted-foreground pt-1">{feature.text}</span>

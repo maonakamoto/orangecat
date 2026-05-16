@@ -42,7 +42,7 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
         disabled={disabled}
         className={cn(
           'flex items-center gap-2 px-3 py-1.5 rounded-full text-sm',
-          'bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/70 transition-colors',
+          'bg-muted hover:bg-gray-200 dark:hover:bg-muted/70 transition-colors',
           'border border-border',
           disabled && 'opacity-50 cursor-not-allowed'
         )}

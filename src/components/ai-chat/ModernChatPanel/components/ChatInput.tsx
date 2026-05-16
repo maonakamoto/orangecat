@@ -67,7 +67,7 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
               'flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all',
               value.trim() && !isLoading
                 ? 'bg-tiffany-500 hover:bg-tiffany-600 text-white shadow-md'
-                : 'bg-gray-100 dark:bg-muted text-gray-400 dark:text-muted-foreground cursor-not-allowed'
+                : 'bg-muted text-gray-400 dark:text-muted-foreground cursor-not-allowed'
             )}
           >
             <Send className="h-5 w-5" />

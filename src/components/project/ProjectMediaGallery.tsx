@@ -146,11 +146,11 @@ export default function ProjectMediaGallery({
   if (loading) {
     return (
       <div className={`grid gap-2 ${className}`} aria-busy>
-        <div className="w-full aspect-video rounded-lg bg-gray-100 dark:bg-muted animate-pulse" />
+        <div className="w-full aspect-video rounded-lg bg-muted animate-pulse" />
         <div className="flex gap-2">
-          <div className="h-16 w-24 rounded bg-gray-100 dark:bg-muted animate-pulse" />
-          <div className="h-16 w-24 rounded bg-gray-100 dark:bg-muted animate-pulse" />
-          <div className="h-16 w-24 rounded bg-gray-100 dark:bg-muted animate-pulse" />
+          <div className="h-16 w-24 rounded bg-muted animate-pulse" />
+          <div className="h-16 w-24 rounded bg-muted animate-pulse" />
+          <div className="h-16 w-24 rounded bg-muted animate-pulse" />
         </div>
       </div>
     );

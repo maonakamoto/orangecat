@@ -120,7 +120,7 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
           </div>
         )}
       </div>
-      <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-3">
+      <div className="w-full bg-muted rounded-full h-3">
         <div className="bg-orange-500 h-3 rounded-full" style={{ width: `${progress}%` }} />
       </div>
 

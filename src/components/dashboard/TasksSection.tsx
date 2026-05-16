@@ -182,7 +182,7 @@ export default function TasksSection({
             </div>
           </div>
 
-          <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-2 mt-3">
+          <div className="w-full bg-muted rounded-full h-2 mt-3">
             <div
               className="bg-tiffany-600 h-2 rounded-full transition-all duration-500"
               style={{ width: `${taskCompletion}%` }}

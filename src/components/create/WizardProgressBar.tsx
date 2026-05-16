@@ -38,7 +38,7 @@ export function WizardProgressBar({
           )}
         </div>
       </div>
-      <Progress value={progress} className="h-2 bg-gray-200 dark:bg-muted" />
+      <Progress value={progress} className="h-2 bg-muted" />
 
       <div className="flex justify-between mt-3">
         {wizardSteps.map((step, index) => {
@@ -61,7 +61,7 @@ export function WizardProgressBar({
                     ? 'bg-green-500 text-white'
                     : isCurrent
                       ? `${theme.bg} text-white ring-4 ${theme.ring}`
-                      : 'bg-gray-200 dark:bg-muted text-muted-foreground'
+                      : 'bg-muted text-muted-foreground'
                 }`}
               >
                 {isCompleted ? <Check className="w-4 h-4" /> : index + 1}

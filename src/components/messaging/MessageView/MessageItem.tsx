@@ -143,7 +143,7 @@ export default function MessageItem({
       {/* Date Divider */}
       {showDateDivider && dateDividerText && (
         <div className="flex justify-center my-4">
-          <div className="bg-gray-100 dark:bg-muted text-muted-foreground text-xs px-3 py-1 rounded-full">
+          <div className="bg-muted text-muted-foreground text-xs px-3 py-1 rounded-full">
             {dateDividerText}
           </div>
         </div>
@@ -166,9 +166,7 @@ export default function MessageItem({
           <div
             className={cn(
               'rounded-2xl px-4 py-2',
-              isCurrentUser
-                ? 'bg-tiffany-500 text-white'
-                : 'bg-gray-100 dark:bg-muted text-foreground',
+              isCurrentUser ? 'bg-tiffany-500 text-white' : 'bg-muted text-foreground',
               isEditing && 'p-2'
             )}
           >

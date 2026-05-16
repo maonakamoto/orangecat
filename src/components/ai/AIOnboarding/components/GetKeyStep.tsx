@@ -87,9 +87,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
               <p className="text-sm font-medium">Copy your key</p>
               <p className="text-xs text-muted-foreground">
                 Keys start with{' '}
-                <code className="bg-gray-200 dark:bg-muted px-1 rounded">
-                  {provider.apiKeyPrefix || 'sk-'}
-                </code>
+                <code className="bg-muted px-1 rounded">{provider.apiKeyPrefix || 'sk-'}</code>
               </p>
             </div>
           </div>

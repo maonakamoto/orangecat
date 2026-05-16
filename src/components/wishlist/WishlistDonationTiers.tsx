@@ -113,7 +113,7 @@ export function WishlistDonationTiers({
                 ≈ {satsDisplay}
               </span>
               <span className="text-xs text-muted-foreground mt-1 line-clamp-1">{item.title}</span>
-              <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-1 mt-3">
+              <div className="w-full bg-muted rounded-full h-1 mt-3">
                 <div
                   className="bg-orange-500 h-1 rounded-full"
                   style={{

@@ -81,8 +81,8 @@ export function OnboardingFlow() {
       <div className={cn(GRADIENTS.pageBgBlue, 'min-h-screen')}>
         <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
           <div className="animate-pulse space-y-6">
-            <div className="h-8 bg-gray-200 dark:bg-muted rounded w-1/3 mx-auto" />
-            <div className="h-64 bg-gray-100 dark:bg-muted rounded-xl" />
+            <div className="h-8 bg-muted rounded w-1/3 mx-auto" />
+            <div className="h-64 bg-muted rounded-xl" />
           </div>
         </div>
       </div>

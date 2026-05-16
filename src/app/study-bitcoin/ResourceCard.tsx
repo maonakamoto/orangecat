@@ -53,7 +53,7 @@ export function ResourceCard({ resource, featured = false }: ResourceCardProps) 
     <Card className="group hover:shadow-md transition-all duration-200">
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-gray-100 dark:bg-muted rounded-lg flex items-center justify-center group-hover:bg-orange-100 dark:group-hover:bg-orange-900/20 transition-colors">
+          <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center group-hover:bg-orange-100 dark:group-hover:bg-orange-900/20 transition-colors">
             <Icon className="w-5 h-5 text-muted-foreground group-hover:text-orange-600 transition-colors" />
           </div>
           <div className="flex-1 min-w-0">

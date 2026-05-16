@@ -31,7 +31,7 @@ export default function PublicEntityOwnerCard({ owner, label }: PublicEntityOwne
               className="w-12 h-12 rounded-full object-cover"
             />
           ) : (
-            <div className="w-12 h-12 bg-gray-200 dark:bg-muted rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
               <User className="w-6 h-6 text-muted-foreground" />
             </div>
           )}

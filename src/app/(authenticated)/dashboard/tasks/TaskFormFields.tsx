@@ -234,7 +234,7 @@ export function TaskFormFields({
             {formData.tags.map(tag => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-muted rounded-full text-sm dark:text-foreground"
+                className="inline-flex items-center gap-1 px-2 py-1 bg-muted rounded-full text-sm dark:text-foreground"
               >
                 {tag}
                 <button

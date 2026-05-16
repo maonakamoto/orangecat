@@ -267,7 +267,7 @@ export default function FAQPage() {
           return (
             <section key={section.title}>
               <div className="flex items-center gap-3 mb-5">
-                <div className={cn('p-2 rounded-lg bg-gray-100 dark:bg-muted', section.color)}>
+                <div className={cn('p-2 rounded-lg bg-muted', section.color)}>
                   <Icon className="h-5 w-5" />
                 </div>
                 <h2 className="text-xl font-semibold text-foreground">{section.title}</h2>

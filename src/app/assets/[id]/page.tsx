@@ -35,7 +35,7 @@ const config: EntityDetailConfig = {
       <span
         className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
           ASSET_VERIFICATION_COLORS[verificationStatus] ??
-          'bg-gray-100 dark:bg-muted text-gray-800 dark:text-foreground'
+          'bg-muted text-gray-800 dark:text-foreground'
         }`}
       >
         {ASSET_VERIFICATION_LABELS[verificationStatus] ?? verificationStatus}

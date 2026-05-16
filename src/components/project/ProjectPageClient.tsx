@@ -218,7 +218,7 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
                 <div className="text-lg font-bold text-foreground truncate">
                   {formatCurrency(project.raised_amount ?? 0, project.currency)}
                 </div>
-                <div className="h-1.5 bg-gray-200 dark:bg-muted rounded-full mt-1">
+                <div className="h-1.5 bg-muted rounded-full mt-1">
                   <div
                     className="h-1.5 bg-orange-500 rounded-full transition-all duration-300"
                     style={{ width: `${progressPercentage}%` }}

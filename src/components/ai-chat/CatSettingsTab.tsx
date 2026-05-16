@@ -78,7 +78,7 @@ export function CatSettingsTab() {
                 }`}
               >
                 <div
-                  className={`p-2 rounded-lg ${isSelected ? 'bg-gray-200 dark:bg-accent' : 'bg-gray-100 dark:bg-muted'}`}
+                  className={`p-2 rounded-lg ${isSelected ? 'bg-gray-200 dark:bg-accent' : 'bg-muted'}`}
                 >
                   <Icon
                     className={`h-4 w-4 ${isSelected ? 'text-gray-700 dark:text-foreground' : 'text-muted-foreground'}`}

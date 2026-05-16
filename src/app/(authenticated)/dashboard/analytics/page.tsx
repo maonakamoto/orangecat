@@ -123,7 +123,7 @@ export default function AnalyticsPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex bg-gray-100 dark:bg-muted rounded-lg p-1">
+            <div className="flex bg-muted rounded-lg p-1">
               {(['7d', '30d', '90d', 'all'] as const).map(range => (
                 <button
                   key={range}

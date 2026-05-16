@@ -53,7 +53,7 @@ export function PublicEntityPaymentSection({
     return (
       <Card>
         <CardContent className="pt-6 flex justify-center">
-          <div className="h-11 w-full animate-pulse rounded-md bg-gray-100 dark:bg-muted" />
+          <div className="h-11 w-full animate-pulse rounded-md bg-muted" />
         </CardContent>
       </Card>
     );
@@ -83,7 +83,7 @@ export function PublicEntityPaymentSection({
     return (
       <Card>
         <CardContent className="pt-6 flex justify-center">
-          <div className="h-11 w-full animate-pulse rounded-md bg-gray-100 dark:bg-muted" />
+          <div className="h-11 w-full animate-pulse rounded-md bg-muted" />
         </CardContent>
       </Card>
     );

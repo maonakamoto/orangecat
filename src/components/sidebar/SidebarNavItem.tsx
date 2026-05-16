@@ -109,7 +109,7 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
 
         {/* Coming soon badge - mobile only */}
         {item.comingSoon && isExpanded && (
-          <span className="ml-auto text-xs bg-gray-100 dark:bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+          <span className="ml-auto text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
             Soon
           </span>
         )}

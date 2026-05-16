@@ -22,8 +22,7 @@ const STATUS_STYLES = {
     label: 'Completed',
   },
   cancelled: {
-    selected:
-      'bg-gray-100 dark:bg-muted border-gray-300 dark:border-border text-gray-700 dark:text-foreground',
+    selected: 'bg-muted border-gray-300 dark:border-border text-gray-700 dark:text-foreground',
     label: 'Cancelled',
   },
 } as const;
@@ -214,25 +213,25 @@ export default function DiscoverFilters({
             </label>
             <div className="flex flex-wrap gap-2">
               {searchTerm && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-gray-700 dark:text-foreground">
                   &quot;{searchTerm}&quot;
                 </span>
               )}
               {selectedCategories.map(cat => (
                 <span
                   key={cat}
-                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground"
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-gray-700 dark:text-foreground"
                 >
                   {cat}
                 </span>
               ))}
               {(country || city || postal) && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-gray-700 dark:text-foreground">
                   {country || city || postal}
                 </span>
               )}
               {sortBy !== 'recent' && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-gray-700 dark:text-foreground">
                   {sortBy}
                 </span>
               )}

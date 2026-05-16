@@ -184,7 +184,7 @@ export default function NewConversationModal({
               value={search}
               onChange={e => handleChange(e.target.value)}
               placeholder="Search by name or @username"
-              className="w-full pl-11 pr-4 py-3 bg-gray-100 dark:bg-muted border-0 rounded-xl text-sm dark:text-foreground dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:bg-white dark:focus:bg-card transition-all"
+              className="w-full pl-11 pr-4 py-3 bg-muted border-0 rounded-xl text-sm dark:text-foreground dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:bg-white dark:focus:bg-card transition-all"
             />
           </div>
         </div>
@@ -243,7 +243,7 @@ export default function NewConversationModal({
                   <img
                     src={p.avatar_url || '/default-avatar.svg'}
                     alt={p.name || p.username || 'User'}
-                    className="w-11 h-11 rounded-full object-cover bg-gray-200 dark:bg-muted"
+                    className="w-11 h-11 rounded-full object-cover bg-muted"
                   />
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-foreground truncate">

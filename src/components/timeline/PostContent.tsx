@@ -188,7 +188,7 @@ export function PostContent({ event }: PostContentProps) {
         return attachments.length > 0 ? (
           <div className="mt-3 space-y-2">
             {attachments.map((attachment: { type: string; filename: string }, index: number) => (
-              <div key={index} className="bg-gray-100 dark:bg-muted p-4 rounded-lg">
+              <div key={index} className="bg-muted p-4 rounded-lg">
                 <p className="text-sm text-muted-foreground">
                   Media attachment: {attachment.type} - {attachment.filename}
                 </p>

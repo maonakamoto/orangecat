@@ -55,7 +55,7 @@ export function EntityCardImage({ imageSrc, title, compact, href }: EntityCardIm
     <Link
       href={href}
       className={cn(
-        'relative w-full overflow-hidden bg-gray-100 dark:bg-muted block',
+        'relative w-full overflow-hidden bg-muted block',
         compact ? 'aspect-[4/3]' : 'aspect-video'
       )}
     >

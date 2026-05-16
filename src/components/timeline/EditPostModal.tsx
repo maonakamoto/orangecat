@@ -178,7 +178,7 @@ export function EditPostModal({
                   'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
                   visibility === 'public'
                     ? 'text-tiffany-500 bg-tiffany-50 hover:bg-tiffany-100'
-                    : 'text-muted-foreground bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/80'
+                    : 'text-muted-foreground bg-muted hover:bg-gray-200 dark:hover:bg-muted/80'
                 )}
                 disabled={isSaving}
               >

@@ -48,7 +48,7 @@ export default function BookingTabs({
                     'ml-2 py-0.5 px-2 rounded-full text-xs',
                     activeTab === tab.id
                       ? 'bg-tiffany-100 text-tiffany-600'
-                      : 'bg-gray-100 dark:bg-muted text-muted-foreground'
+                      : 'bg-muted text-muted-foreground'
                   )}
                 >
                   {tab.count}

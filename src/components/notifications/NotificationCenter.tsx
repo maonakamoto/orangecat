@@ -74,7 +74,7 @@ export default function NotificationCenter({
               </div>
             )}
 
-            <div className="flex gap-1 mb-4 bg-gray-100 dark:bg-muted rounded-lg p-1">
+            <div className="flex gap-1 mb-4 bg-muted rounded-lg p-1">
               {FILTER_TABS.map(tab => (
                 <button
                   key={tab.key}
@@ -107,7 +107,7 @@ export default function NotificationCenter({
                 <div className="space-y-3">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="animate-pulse">
-                      <div className="flex items-start gap-3 p-3 bg-gray-100 dark:bg-muted rounded-lg">
+                      <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
                         <div className="w-8 h-8 bg-gray-300 dark:bg-muted-foreground/30 rounded-full" />
                         <div className="flex-1">
                           <div className="h-4 bg-gray-300 dark:bg-muted-foreground/30 rounded mb-2" />

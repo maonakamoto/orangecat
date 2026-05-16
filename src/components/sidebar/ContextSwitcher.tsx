@@ -242,7 +242,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
             }}
             className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-muted transition-colors"
           >
-            <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-muted flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
               <Plus className="w-4 h-4 text-muted-foreground" />
             </div>
             <p className="text-sm text-muted-foreground">Create a group</p>

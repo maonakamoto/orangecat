@@ -95,7 +95,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 {getUniqueCategories(project.category, project.tags).map((category, idx) => (
                   <span
                     key={`${category}-${idx}`}
-                    className="px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground"
+                    className="px-3 py-1 rounded-full text-sm bg-muted text-gray-700 dark:text-foreground"
                     role="listitem"
                   >
                     {category}
@@ -143,7 +143,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 </div>
               </div>
               <div
-                className="w-full bg-gray-200 dark:bg-muted rounded-full h-4"
+                className="w-full bg-muted rounded-full h-4"
                 role="progressbar"
                 aria-valuenow={progressPercentage}
                 aria-valuemin={0}

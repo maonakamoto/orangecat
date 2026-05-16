@@ -44,7 +44,7 @@ export function BlogFilters({
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 !selectedTag
                   ? 'bg-tiffany-500 text-white'
-                  : 'bg-gray-100 dark:bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                  : 'bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
               }`}
             >
               All Topics
@@ -56,7 +56,7 @@ export function BlogFilters({
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedTag === tag
                     ? 'bg-tiffany-500 text-white'
-                    : 'bg-gray-100 dark:bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                    : 'bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
                 }`}
               >
                 {tag}
@@ -79,7 +79,7 @@ export function BlogFilters({
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 selectedTimeFilter === option.key
                   ? 'bg-orange-500 text-white'
-                  : 'bg-gray-100 dark:bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                  : 'bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
               }`}
             >
               {option.label}

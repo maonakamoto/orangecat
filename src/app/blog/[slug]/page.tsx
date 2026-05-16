@@ -69,7 +69,7 @@ const mdxComponents = {
   ),
   code: ({ children, ...props }: ComponentProps<'code'>) => (
     <code
-      className="bg-gray-100 dark:bg-muted px-2 py-1 rounded text-sm font-mono text-gray-800 dark:text-foreground"
+      className="bg-muted px-2 py-1 rounded text-sm font-mono text-gray-800 dark:text-foreground"
       {...props}
     >
       {children}
@@ -241,7 +241,7 @@ export default async function BlogPost({ params }: PageProps) {
                     <Link
                       key={tag}
                       href={`/blog?tag=${encodeURIComponent(tag)}`}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-muted text-gray-800 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-muted text-gray-800 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
                     >
                       <Tag className="w-3 h-3 mr-1" />
                       {tag}

@@ -66,9 +66,7 @@ export function MFAStatus({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div
-            className={`p-2 rounded-full ${hasMFA ? 'bg-green-100' : 'bg-gray-100 dark:bg-muted'}`}
-          >
+          <div className={`p-2 rounded-full ${hasMFA ? 'bg-green-100' : 'bg-muted'}`}>
             <Shield className={`h-5 w-5 ${hasMFA ? 'text-green-600' : 'text-muted-foreground'}`} />
           </div>
           <div>

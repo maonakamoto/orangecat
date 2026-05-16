@@ -117,7 +117,7 @@ export default async function WishlistItemDetailPage({ params }: PageProps) {
             <span className="text-muted-foreground">Funded:</span>
             <FormattedAmount sats={item.funded_amount_btc} className="font-medium" />
           </div>
-          <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-2 mt-4">
+          <div className="w-full bg-muted rounded-full h-2 mt-4">
             <div
               className="bg-orange-600 h-2 rounded-full"
               style={{

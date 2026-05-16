@@ -66,7 +66,7 @@ export function EmptyState({
             {[1, 2, 3, 4].map(i => (
               <div
                 key={i}
-                className="h-9 bg-gray-100 dark:bg-muted rounded-full animate-pulse"
+                className="h-9 bg-muted rounded-full animate-pulse"
                 style={{ width: `${100 + Math.random() * 80}px` }}
               />
             ))}
@@ -80,7 +80,7 @@ export function EmptyState({
                 'px-4 py-2 rounded-full text-sm transition-colors text-left',
                 hasContext
                   ? 'bg-tiffany-50 hover:bg-tiffany-100 text-tiffany-700 border border-tiffany-200'
-                  : 'bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 text-gray-700 dark:text-foreground'
+                  : 'bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 text-gray-700 dark:text-foreground'
               )}
             >
               {suggestion}

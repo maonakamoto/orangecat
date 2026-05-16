@@ -158,7 +158,7 @@ export function WalletCard({
               {wallet.balance_btc.toFixed(4)} / {wallet.goal_amount} {wallet.goal_currency}
             </span>
           </div>
-          <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-2.5 mb-1">
+          <div className="w-full bg-muted rounded-full h-2.5 mb-1">
             <div
               className="bg-orange-500 h-2.5 rounded-full transition-all"
               style={{ width: `${Math.min(progressPercent, 100)}%` }}

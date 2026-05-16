@@ -27,7 +27,7 @@ export default function EmptyState({
     <div
       className={`flex flex-col items-center justify-center py-12 text-center ${className ?? ''}`}
     >
-      <div className="w-12 h-12 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center mb-4">
+      <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-4">
         <Icon className="w-6 h-6 text-gray-400 dark:text-muted-foreground" />
       </div>
       <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>

@@ -137,7 +137,7 @@ export function CatContextTab() {
         </div>
       ) : documents.length === 0 ? (
         <div className="text-center py-12 px-4">
-          <div className="mx-auto w-12 h-12 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center mb-4">
+          <div className="mx-auto w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-4">
             <FileText className="h-6 w-6 text-gray-400 dark:text-muted-foreground" />
           </div>
           <h3 className="font-semibold text-foreground mb-2">No context yet</h3>

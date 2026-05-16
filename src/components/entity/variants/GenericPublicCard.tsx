@@ -40,7 +40,7 @@ export function GenericPublicCard({
       <Link href={href}>
         <Card className="hover:shadow-md transition-shadow">
           <div className="flex items-center p-4 gap-4">
-            <div className="flex-shrink-0 w-12 h-12 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center">
+            <div className="flex-shrink-0 w-12 h-12 bg-muted rounded-full flex items-center justify-center">
               {Icon && <Icon className="w-6 h-6 text-muted-foreground" />}
             </div>
             <div className="flex-1 min-w-0">
@@ -71,7 +71,7 @@ export function GenericPublicCard({
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
                 {Icon && <Icon className="w-4 h-4 text-muted-foreground" />}
               </div>
               <div className="flex-1 min-w-0">

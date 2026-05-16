@@ -67,7 +67,7 @@ export function WishlistItemCard({
                 className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
               />
             ) : (
-              <div className="w-14 h-14 bg-gray-100 dark:bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
+              <div className="w-14 h-14 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
                 <Gift className="w-6 h-6 text-gray-300 dark:text-muted-foreground/50" />
               </div>
             )}

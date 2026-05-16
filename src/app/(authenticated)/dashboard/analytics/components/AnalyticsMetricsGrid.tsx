@@ -48,7 +48,7 @@ export default function AnalyticsMetricsGrid({ metrics }: AnalyticsMetricsGridPr
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg bg-gray-100 dark:bg-muted`}>
+                  <div className={`p-2 rounded-lg bg-muted`}>
                     <Icon className={`w-5 h-5 ${metric.color}`} />
                   </div>
                   <div>

@@ -32,7 +32,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                       ? 'bg-orange-500 border-orange-500 text-white shadow-lg animate-pulse'
                       : isUpcoming
                         ? 'bg-card border-gray-300 dark:border-border text-gray-400 dark:text-muted-foreground'
-                        : 'bg-gray-200 dark:bg-muted border-gray-300 dark:border-border text-muted-foreground'
+                        : 'bg-muted border-gray-300 dark:border-border text-muted-foreground'
                 }`}
               >
                 {isCompleted ? (

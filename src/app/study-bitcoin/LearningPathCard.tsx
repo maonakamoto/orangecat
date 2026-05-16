@@ -37,7 +37,7 @@ export function LearningPathCard({ path }: LearningPathCardProps) {
               {path.level}
             </span>
             {path.status === 'coming-soon' && (
-              <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-muted text-muted-foreground">
+              <span className="px-2 py-1 text-xs font-medium rounded-full bg-muted text-muted-foreground">
                 Coming Soon
               </span>
             )}
@@ -65,7 +65,7 @@ export function LearningPathCard({ path }: LearningPathCardProps) {
           className={`inline-flex items-center justify-center w-full px-4 py-2 rounded-lg font-medium transition-colors ${
             path.status === 'available'
               ? 'bg-orange-600 text-white hover:bg-orange-700'
-              : 'bg-gray-100 dark:bg-muted text-muted-foreground cursor-not-allowed'
+              : 'bg-muted text-muted-foreground cursor-not-allowed'
           }`}
           {...(path.status === 'coming-soon' ? { 'aria-disabled': true } : {})}
         >

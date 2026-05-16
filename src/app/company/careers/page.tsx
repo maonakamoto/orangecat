@@ -164,7 +164,7 @@ export default function CareersPage() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
                 <Coffee className="w-8 h-8 text-gray-400 dark:text-muted-foreground/50" />
               </div>
               <h3 className="text-lg font-semibold text-foreground mb-2">

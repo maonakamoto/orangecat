@@ -139,7 +139,7 @@ export default function DraftContinueDialog({
                   <span>Project Progress</span>
                   <span>{completionPercentage}%</span>
                 </div>
-                <div className="w-full bg-gray-200 dark:bg-muted/60 rounded-full h-2">
+                <div className="w-full bg-muted/60 rounded-full h-2">
                   <div
                     className="bg-tiffany-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${completionPercentage}%` }}
@@ -183,7 +183,7 @@ export default function DraftContinueDialog({
               <div className="border border-border rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-muted/50 transition-colors">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gray-100 dark:bg-muted rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
                       <Plus className="w-5 h-5 text-muted-foreground" />
                     </div>
                     <div>

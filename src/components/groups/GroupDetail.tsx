@@ -38,8 +38,8 @@ export function GroupDetail({ groupSlug }: GroupDetailProps) {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="h-64 bg-gray-200 dark:bg-muted animate-pulse rounded-lg" />
-        <div className="h-32 bg-gray-200 dark:bg-muted animate-pulse rounded-lg" />
+        <div className="h-64 bg-muted animate-pulse rounded-lg" />
+        <div className="h-32 bg-muted animate-pulse rounded-lg" />
       </div>
     );
   }

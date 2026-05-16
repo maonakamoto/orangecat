@@ -241,7 +241,7 @@ export default function ResearchDashboard() {
                 <Badge
                   className={
                     RESEARCH_FIELD_COLORS[entity.field as ResearchField] ??
-                    'bg-gray-100 dark:bg-muted text-gray-800 dark:text-foreground'
+                    'bg-muted text-gray-800 dark:text-foreground'
                   }
                 >
                   {RESEARCH_FIELDS.find(f => f.value === entity.field)?.label ??

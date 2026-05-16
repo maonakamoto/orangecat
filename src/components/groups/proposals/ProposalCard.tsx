@@ -108,7 +108,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
                 <span className="text-muted-foreground">Voting Progress</span>
                 <span className="font-medium">{yesPercentage.toFixed(1)}% Yes</span>
               </div>
-              <div className="mt-2 h-2 bg-gray-200 dark:bg-muted rounded-full overflow-hidden">
+              <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
                 <div
                   className="h-full bg-tiffany-500 transition-all"
                   style={{ width: `${yesPercentage}%` }}

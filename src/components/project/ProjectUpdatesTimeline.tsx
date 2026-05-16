@@ -107,10 +107,10 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
               <div key={i} className="flex gap-3 pb-4 border-b animate-pulse">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 dark:bg-muted" />
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-muted" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 dark:bg-muted rounded w-3/4" />
-                  <div className="h-3 bg-gray-200 dark:bg-muted rounded w-1/2" />
+                  <div className="h-4 bg-muted rounded w-3/4" />
+                  <div className="h-3 bg-muted rounded w-1/2" />
                 </div>
               </div>
             ))}
@@ -167,7 +167,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
           </div>
         ) : (
           <div className="text-center py-8">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-muted flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
               <Activity className="w-8 h-8 text-gray-400 dark:text-muted-foreground" />
             </div>
             <p className="text-sm text-muted-foreground mb-1">No recent activity yet</p>

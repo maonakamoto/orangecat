@@ -72,7 +72,7 @@ function CapabilityToggleCard({
           disabled={disabled}
           className={cn(
             'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
-            checked ? 'bg-tiffany-600' : 'bg-gray-200 dark:bg-muted',
+            checked ? 'bg-tiffany-600' : 'bg-muted',
             disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -129,7 +129,7 @@ export function AIModelPreferences({
             disabled={disabled}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              preferences.autoRouterEnabled ? 'bg-tiffany-600' : 'bg-gray-200 dark:bg-muted',
+              preferences.autoRouterEnabled ? 'bg-tiffany-600' : 'bg-muted',
               disabled && 'opacity-50 cursor-not-allowed'
             )}
           >

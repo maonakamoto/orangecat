@@ -122,7 +122,7 @@ export function ProfileCompletionModal({
               key={s.id}
               className={cn(
                 'h-1.5 rounded-full flex-1 transition-colors',
-                idx <= currentStep ? 'bg-tiffany-500' : 'bg-gray-200 dark:bg-muted'
+                idx <= currentStep ? 'bg-tiffany-500' : 'bg-muted'
               )}
             />
           ))}

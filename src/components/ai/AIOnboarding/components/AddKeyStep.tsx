@@ -55,9 +55,7 @@ export function AddKeyStep({
                 <p className="font-medium">{provider.name}</p>
                 <p className="text-xs text-muted-foreground">
                   Key format:{' '}
-                  <code className="bg-gray-200 dark:bg-muted px-1 rounded">
-                    {provider.apiKeyExample}
-                  </code>
+                  <code className="bg-muted px-1 rounded">{provider.apiKeyExample}</code>
                 </p>
               </div>
             </div>

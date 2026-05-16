@@ -25,7 +25,7 @@ export function WizardHeader({ progress, onCancel }: WizardHeaderProps) {
         <div>
           <h1 className="text-xl font-semibold text-foreground">Complete Your Profile</h1>
           <div className="flex items-center gap-2 mt-1">
-            <div className="flex-1 bg-gray-200 dark:bg-muted rounded-full h-2">
+            <div className="flex-1 bg-muted rounded-full h-2">
               <div
                 className="bg-orange-500 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}

@@ -42,7 +42,7 @@ export function ProgressSteps({ currentStep, onStepClick }: ProgressStepsProps) 
                     ? 'bg-bitcoinOrange text-white'
                     : isCompleted
                       ? 'bg-green-500 text-white'
-                      : 'bg-gray-200 dark:bg-muted text-muted-foreground'
+                      : 'bg-muted text-muted-foreground'
                 }`}
               >
                 {isCompleted ? <CheckCircle className="w-6 h-6" /> : <Icon className="w-6 h-6" />}

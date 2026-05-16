@@ -81,7 +81,7 @@ function getStrengthLevel(strength: number): {
     return {
       label: '',
       colorClass: 'text-gray-400 dark:text-muted-foreground',
-      bgClass: 'bg-gray-200 dark:bg-muted',
+      bgClass: 'bg-muted',
     };
   }
   if (strength < 40) {
@@ -134,7 +134,7 @@ export function PasswordStrengthIndicator({
     <div className={cn('mt-2 space-y-2', className)}>
       {/* Strength Bar */}
       <div className="flex items-center gap-2">
-        <div className="flex-1 h-1.5 bg-gray-200 dark:bg-muted rounded-full overflow-hidden">
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
           <div
             className={cn('h-full transition-all duration-300', strengthLevel.bgClass)}
             style={{ width: `${strength}%` }}

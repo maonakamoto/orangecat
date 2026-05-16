@@ -270,7 +270,7 @@ export interface ContextIndicatorProps {
 export function ContextIndicator({ targetName }: ContextIndicatorProps) {
   return (
     <div className="mb-1.5 flex items-center">
-      <span className="text-xs sm:text-xs text-muted-foreground font-medium bg-gray-100 dark:bg-muted px-2 py-1 sm:py-0.5 rounded-full">
+      <span className="text-xs sm:text-xs text-muted-foreground font-medium bg-muted px-2 py-1 sm:py-0.5 rounded-full">
         To {targetName}
       </span>
     </div>

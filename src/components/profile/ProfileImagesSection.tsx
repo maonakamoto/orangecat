@@ -34,7 +34,7 @@ export function ProfileImagesSection({
       {/* Banner Upload */}
       <div className="relative">
         <div
-          className="relative h-32 bg-gray-100 dark:bg-muted rounded-lg border-2 border-dashed border-gray-300 dark:border-border cursor-pointer overflow-hidden"
+          className="relative h-32 bg-muted rounded-lg border-2 border-dashed border-gray-300 dark:border-border cursor-pointer overflow-hidden"
           onClick={() => bannerInputRef.current?.click()}
         >
           {bannerPreview || profile.banner_url ? (
@@ -68,7 +68,7 @@ export function ProfileImagesSection({
       {/* Avatar Upload */}
       <div className="flex items-start gap-4">
         <div
-          className="relative w-20 h-20 bg-gray-100 dark:bg-muted rounded-full border-2 border-gray-300 dark:border-border cursor-pointer overflow-hidden flex-shrink-0"
+          className="relative w-20 h-20 bg-muted rounded-full border-2 border-gray-300 dark:border-border cursor-pointer overflow-hidden flex-shrink-0"
           onClick={() => avatarInputRef.current?.click()}
         >
           {avatarPreview || profile.avatar_url ? (

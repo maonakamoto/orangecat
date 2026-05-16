@@ -69,7 +69,7 @@ export default function StudyBitcoinPage() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedLevel === level
                     ? 'bg-orange-600 text-white'
-                    : 'bg-gray-100 dark:bg-muted text-gray-700 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                    : 'bg-muted text-gray-700 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
                 }`}
               >
                 {level.charAt(0).toUpperCase() + level.slice(1)}

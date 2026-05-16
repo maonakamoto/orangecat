@@ -114,10 +114,8 @@ export default function DocsPage() {
             <p className="text-muted-foreground leading-relaxed">
               Bitcoin and Lightning Network are the native and preferred payment rails. OrangeCat
               supports Lightning addresses (e.g.{' '}
-              <code className="bg-gray-100 dark:bg-muted px-1 py-0.5 rounded text-sm">
-                yourname@orangecat.ch
-              </code>
-              ) for instant, near-zero-fee payments. On-chain Bitcoin is also supported.
+              <code className="bg-muted px-1 py-0.5 rounded text-sm">yourname@orangecat.ch</code>)
+              for instant, near-zero-fee payments. On-chain Bitcoin is also supported.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               OrangeCat is not Bitcoin-only. Any payment method — Twint, PayPal, Venmo, bank
@@ -215,7 +213,7 @@ export default function DocsPage() {
         {/* Tech Stack */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-gray-100 dark:bg-muted">
+            <div className="p-2 rounded-lg bg-muted">
               <Code2 className="h-5 w-5 text-muted-foreground" />
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Technology Stack</h2>

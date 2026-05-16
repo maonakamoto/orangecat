@@ -82,7 +82,7 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
                 </div>
               </div>
             )}
-            <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-gray-100 dark:bg-muted text-muted-foreground flex items-center justify-center mb-3 sm:mb-4">
+            <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-muted text-muted-foreground flex items-center justify-center mb-3 sm:mb-4">
               <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
             <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1">

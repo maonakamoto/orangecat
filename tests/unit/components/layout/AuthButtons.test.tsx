@@ -93,7 +93,7 @@ describe('🔐 AuthButtons Component Tests', () => {
       const pulseDiv = document.querySelector('.animate-pulse');
       expect(pulseDiv).toBeInTheDocument();
       // Component uses smaller indicator (w-3 h-3) for compact loading
-      expect(pulseDiv).toHaveClass('w-3', 'h-3', 'bg-gray-200', 'rounded-full', 'animate-pulse');
+      expect(pulseDiv).toHaveClass('w-3', 'h-3', 'bg-muted', 'rounded-full', 'animate-pulse');
     });
 
     test('should show loading spinner when hydrated but loading', () => {

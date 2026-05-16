@@ -46,7 +46,7 @@ export function ConfigureStep({
             onClick={() => onAutoRouterChange(!autoRouterEnabled)}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              autoRouterEnabled ? 'bg-tiffany-600' : 'bg-gray-200 dark:bg-muted'
+              autoRouterEnabled ? 'bg-tiffany-600' : 'bg-muted'
             )}
           >
             <span

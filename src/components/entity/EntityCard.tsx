@@ -212,7 +212,7 @@ export function EntityCard({
               <span className="text-muted-foreground">Progress</span>
               <span className="font-medium text-foreground">{fundingProgress}%</span>
             </div>
-            <div className="mt-1 h-2 w-full rounded-full bg-gray-200 dark:bg-muted">
+            <div className="mt-1 h-2 w-full rounded-full bg-muted">
               <div
                 className="h-2 rounded-full bg-tiffany-500 transition-all duration-300"
                 style={{ width: `${Math.min(100, fundingProgress)}%` }}

@@ -86,7 +86,7 @@ export default function ProjectPerformanceTable({ projects }: ProjectPerformance
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-16 bg-gray-200 dark:bg-muted rounded-full h-2">
+                        <div className="w-16 bg-muted rounded-full h-2">
                           <div
                             className="bg-green-500 h-2 rounded-full"
                             style={{ width: `${Math.min(progress, 100)}%` }}

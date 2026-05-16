@@ -36,7 +36,7 @@ export function MessageActorSelector({
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
+            className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
           >
             <Avatar className="h-4 w-4">
               <AvatarImage src={selectedActor.avatar_url || undefined} />
@@ -62,8 +62,7 @@ export function MessageActorSelector({
               onClick={() => onSelectActor(null)}
               className={cn(
                 'flex items-center gap-2 cursor-pointer',
-                (!selectedActorId || selectedActorId === personalActor.actor_id) &&
-                  'bg-gray-100 dark:bg-muted'
+                (!selectedActorId || selectedActorId === personalActor.actor_id) && 'bg-muted'
               )}
             >
               <Avatar className="h-6 w-6">
@@ -90,7 +89,7 @@ export function MessageActorSelector({
                   onClick={() => onSelectActor(actor.actor_id)}
                   className={cn(
                     'flex items-center gap-2 cursor-pointer',
-                    selectedActorId === actor.actor_id && 'bg-gray-100 dark:bg-muted'
+                    selectedActorId === actor.actor_id && 'bg-muted'
                   )}
                 >
                   <Avatar className="h-6 w-6">

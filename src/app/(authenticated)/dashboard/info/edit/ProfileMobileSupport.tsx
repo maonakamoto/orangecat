@@ -36,7 +36,7 @@ export function ProfileMobileSupport({
             </span>
             <span className="text-sm font-bold text-foreground">{completionPercentage}%</span>
           </div>
-          <div className="w-full bg-gray-100 dark:bg-muted rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
             <div
               className={`${GRADIENTS.progressBitcoin} h-2 rounded-full transition-all duration-700 ease-out`}
               style={{ width: `${completionPercentage}%` }}

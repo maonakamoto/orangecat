@@ -21,7 +21,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
   return (
     <div
       className={`flex items-center justify-between p-3 rounded-lg ${
-        isCategoryEnabled ? 'bg-card' : 'bg-gray-100 dark:bg-muted opacity-60'
+        isCategoryEnabled ? 'bg-card' : 'bg-muted opacity-60'
       }`}
     >
       <div className="flex items-center gap-3 flex-1">

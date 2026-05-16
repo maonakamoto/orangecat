@@ -120,7 +120,7 @@ export default function TaskAnalyticsPage() {
                         )}
                       </span>
                     </div>
-                    <div className="h-2 bg-gray-100 dark:bg-muted rounded-full overflow-hidden">
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
                       <div
                         className="h-full bg-tiffany-500 rounded-full transition-all duration-500"
                         style={{
@@ -136,7 +136,7 @@ export default function TaskAnalyticsPage() {
                           .map(([category, count]) => (
                             <span
                               key={category}
-                              className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-muted rounded-full text-muted-foreground"
+                              className="text-xs px-2 py-0.5 bg-muted rounded-full text-muted-foreground"
                             >
                               {TASK_CATEGORY_LABELS[
                                 category as keyof typeof TASK_CATEGORY_LABELS

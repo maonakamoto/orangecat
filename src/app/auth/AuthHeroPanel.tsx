@@ -47,7 +47,7 @@ export function AuthHeroPanel() {
             </span>
           </div>
           <div className="flex items-center justify-center lg:justify-start space-x-4">
-            <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-muted flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
               <Shield className="w-5 h-5 text-muted-foreground" />
             </div>
             <span className="text-lg text-gray-700 dark:text-foreground font-medium">

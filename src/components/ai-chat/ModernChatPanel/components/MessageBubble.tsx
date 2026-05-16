@@ -107,7 +107,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
       <div
         className={cn(
           'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center',
-          isUser ? 'bg-gray-200 dark:bg-muted' : GRADIENTS.brandOrangeBr
+          isUser ? 'bg-muted' : GRADIENTS.brandOrangeBr
         )}
       >
         {isUser ? (
@@ -124,7 +124,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
             'inline-block rounded-2xl px-4 py-2.5 max-w-full',
             isUser
               ? 'bg-tiffany-500 text-white rounded-tr-sm'
-              : 'bg-gray-100 dark:bg-muted text-foreground rounded-tl-sm'
+              : 'bg-muted text-foreground rounded-tl-sm'
           )}
         >
           <div
