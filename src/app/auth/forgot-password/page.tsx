@@ -73,16 +73,20 @@ export default function ForgotPasswordPage() {
             </div>
 
             {/* Success Message */}
-            <h1 className="text-2xl font-bold text-gray-900 mb-3">Check Your Email</h1>
-            <p className="text-gray-600 mb-2">We've sent password reset instructions to:</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-3">
+              Check Your Email
+            </h1>
+            <p className="text-gray-600 dark:text-muted-foreground mb-2">
+              We've sent password reset instructions to:
+            </p>
             <p className="text-sm font-medium text-orange-600 bg-orange-50 px-3 py-2 rounded-lg mb-6">
               {email}
             </p>
 
             {/* Instructions */}
-            <div className="text-left bg-gray-50 rounded-lg p-4 mb-6">
-              <h3 className="font-medium text-gray-900 mb-2">Next steps:</h3>
-              <ol className="text-sm text-gray-600 space-y-1">
+            <div className="text-left bg-gray-50 dark:bg-muted rounded-lg p-4 mb-6">
+              <h3 className="font-medium text-gray-900 dark:text-foreground mb-2">Next steps:</h3>
+              <ol className="text-sm text-gray-600 dark:text-muted-foreground space-y-1">
                 <li>1. Check your email inbox</li>
                 <li>2. Click the reset link in the email</li>
                 <li>3. Create your new password</li>
@@ -95,7 +99,7 @@ export default function ForgotPasswordPage() {
                 Back to Login
               </Button>
 
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-muted-foreground">
                 Didn't receive an email? Check your spam folder or{' '}
                 <button
                   onClick={handleRetry}
@@ -124,8 +128,10 @@ export default function ForgotPasswordPage() {
             </div>
 
             {/* Error Message */}
-            <h1 className="text-2xl font-bold text-gray-900 mb-3">Something Went Wrong</h1>
-            <p className="text-gray-600 mb-6">{error}</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-3">
+              Something Went Wrong
+            </h1>
+            <p className="text-gray-600 dark:text-muted-foreground mb-6">{error}</p>
 
             {/* Actions */}
             <div className="space-y-3">
@@ -160,8 +166,10 @@ export default function ForgotPasswordPage() {
             <Mail className="h-8 w-8 text-orange-600" />
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Reset Your Password</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-2">
+            Reset Your Password
+          </h1>
+          <p className="text-gray-600 dark:text-muted-foreground">
             Enter your email address and we'll send you instructions to reset your password.
           </p>
         </div>
@@ -200,7 +208,7 @@ export default function ForgotPasswordPage() {
         <div className="mt-8 text-center">
           <Link
             href={`${ROUTES.AUTH}?mode=login`}
-            className="inline-flex items-center text-sm text-gray-600 hover:text-orange-600 transition-colors"
+            className="inline-flex items-center text-sm text-gray-600 dark:text-muted-foreground hover:text-orange-600 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             Back to Login
@@ -209,7 +217,7 @@ export default function ForgotPasswordPage() {
 
         {/* Help Text */}
         <div className="mt-6 text-center">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-muted-foreground">
             Remember your password?{' '}
             <Link
               href={`${ROUTES.AUTH}?mode=login`}

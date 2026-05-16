@@ -23,7 +23,7 @@ export function AuthSocialLogin({
   if (mode === 'forgot') {
     return (
       <div className="mt-6 text-center">
-        <p className="text-gray-600 text-sm">Remember your password?</p>
+        <p className="text-gray-600 dark:text-muted-foreground text-sm">Remember your password?</p>
         <button
           onClick={() => setMode('login')}
           disabled={loading}
@@ -40,10 +40,12 @@ export function AuthSocialLogin({
       <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
+            <div className="w-full border-t border-gray-200 dark:border-border" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-gray-50 px-3 text-gray-500">or continue with</span>
+            <span className="bg-gray-50 dark:bg-background px-3 text-gray-500 dark:text-muted-foreground">
+              or continue with
+            </span>
           </div>
         </div>
 
@@ -55,7 +57,7 @@ export function AuthSocialLogin({
               variant="outline"
               disabled={loading}
               onClick={() => onOAuthSignIn(id)}
-              className="h-11 w-full border-gray-300 hover:border-gray-400 hover:bg-gray-50"
+              className="h-11 w-full border-gray-300 dark:border-border hover:border-gray-400 hover:bg-gray-50 dark:hover:bg-muted"
               aria-label={`Sign in with ${name}`}
             >
               <Icon className="h-5 w-5" />
@@ -68,10 +70,12 @@ export function AuthSocialLogin({
       <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
+            <div className="w-full border-t border-gray-200 dark:border-border" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-gray-50 px-3 text-gray-500">or</span>
+            <span className="bg-gray-50 dark:bg-background px-3 text-gray-500 dark:text-muted-foreground">
+              or
+            </span>
           </div>
         </div>
         <div className="mt-4 text-center">
@@ -80,7 +84,7 @@ export function AuthSocialLogin({
             variant="ghost"
             disabled={loading}
             onClick={onAnonymousSignIn}
-            className="w-full h-11 text-gray-600 hover:text-gray-800 hover:bg-gray-100 border border-gray-200 font-medium"
+            className="w-full h-11 text-gray-600 dark:text-muted-foreground hover:text-gray-800 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted border border-gray-200 dark:border-border font-medium"
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-2">
@@ -91,14 +95,14 @@ export function AuthSocialLogin({
               'Continue without account'
             )}
           </Button>
-          <p className="mt-2 text-xs text-gray-400">
+          <p className="mt-2 text-xs text-gray-400 dark:text-muted-foreground">
             Anonymous accounts can be upgraded to full accounts anytime.
           </p>
         </div>
       </div>
 
       <div className="mt-6 text-center">
-        <p className="text-gray-600 text-sm">
+        <p className="text-gray-600 dark:text-muted-foreground text-sm">
           {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}
         </p>
         <button

@@ -50,7 +50,7 @@ export default function AuthPage() {
 
   if (showMFAVerify) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center p-8">
         <MFAVerify
           onVerificationComplete={handleMFAVerificationComplete}
           onCancel={handleMFACancelled}
@@ -60,20 +60,20 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-gray-50 dark:bg-background flex flex-col lg:flex-row">
       <AuthHeroPanel />
 
-      <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-12 bg-gray-50">
+      <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-12 bg-gray-50 dark:bg-background">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold mb-2 text-gray-900">
+            <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-foreground">
               {mode === 'login'
                 ? 'Welcome back'
                 : mode === 'register'
                   ? 'Get started'
                   : 'Reset password'}
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-muted-foreground">
               {mode === 'login'
                 ? 'Sign in to your OrangeCat account'
                 : mode === 'register'
