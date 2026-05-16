@@ -54,7 +54,7 @@ export default function HowItWorksSection() {
                   <div
                     className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl ${step.bgColor} mb-3 sm:mb-4`}
                   >
-                    <step.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 dark:text-foreground" />
+                    <step.icon className="w-5 h-5 sm:w-6 sm:h-6 text-foreground" />
                   </div>
 
                   {/* Content */}

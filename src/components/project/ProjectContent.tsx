@@ -51,9 +51,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
             <h3 id="about-heading" className="text-lg font-semibold mb-2">
               About
             </h3>
-            <p className="text-gray-700 dark:text-foreground whitespace-pre-wrap">
-              {project.description}
-            </p>
+            <p className="text-foreground whitespace-pre-wrap">{project.description}</p>
           </section>
 
           {/* Funding Purpose */}
@@ -62,7 +60,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
               <h3 id="funding-purpose-heading" className="text-lg font-semibold mb-2">
                 What the funds will be used for
               </h3>
-              <p className="text-gray-700 dark:text-foreground">{project.funding_purpose}</p>
+              <p className="text-foreground">{project.funding_purpose}</p>
             </section>
           )}
 
@@ -95,7 +93,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 {getUniqueCategories(project.category, project.tags).map((category, idx) => (
                   <span
                     key={`${category}-${idx}`}
-                    className="px-3 py-1 rounded-full text-sm bg-muted text-gray-700 dark:text-foreground"
+                    className="px-3 py-1 rounded-full text-sm bg-muted text-foreground"
                     role="listitem"
                   >
                     {category}

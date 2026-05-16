@@ -119,7 +119,7 @@ const config: EntityDetailConfig = {
               <CardTitle className="text-lg">Terms & Conditions</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-700 dark:text-foreground whitespace-pre-wrap">
+              <p className="text-sm text-foreground whitespace-pre-wrap">
                 {entity.terms as string}
               </p>
             </CardContent>

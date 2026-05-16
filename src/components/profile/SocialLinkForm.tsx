@@ -93,9 +93,7 @@ export function SocialLinkForm({
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
-          Platform
-        </label>
+        <label className="block text-sm font-medium text-foreground mb-2">Platform</label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {availablePlatforms.map(p => {
             const PlatformIcon = p.icon;
@@ -143,9 +141,7 @@ export function SocialLinkForm({
 
       {isCustom && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
-            Platform Name *
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-2">Platform Name *</label>
           <Input
             value={label}
             onChange={e => {
@@ -159,7 +155,7 @@ export function SocialLinkForm({
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+        <label className="block text-sm font-medium text-foreground mb-2">
           {isCustom ? 'URL *' : platformConfig?.label || 'Value'} *
         </label>
         <div className="relative">

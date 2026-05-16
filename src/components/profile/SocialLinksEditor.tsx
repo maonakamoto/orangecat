@@ -50,9 +50,7 @@ export function SocialLinksEditor({ links, onChange, maxLinks = 15 }: SocialLink
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h4 className="text-sm font-medium text-gray-700 dark:text-foreground">
-            Social Media & Links
-          </h4>
+          <h4 className="text-sm font-medium text-foreground">Social Media & Links</h4>
           <p className="text-xs text-muted-foreground">
             {links.length} {links.length === 1 ? 'link' : 'links'} added
           </p>

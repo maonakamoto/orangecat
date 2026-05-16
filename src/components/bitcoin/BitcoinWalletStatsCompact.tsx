@@ -118,7 +118,7 @@ export default function BitcoinWalletStatsCompact({
       {/* Transaction Summary */}
       {hasTransactions ? (
         <div className="p-4">
-          <h4 className="text-xs font-semibold text-gray-700 dark:text-foreground mb-3 flex items-center gap-1">
+          <h4 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-1">
             <TrendingUp className="w-3 h-3" />
             Recent Activity
           </h4>

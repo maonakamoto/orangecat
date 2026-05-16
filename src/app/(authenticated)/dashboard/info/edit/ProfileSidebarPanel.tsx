@@ -43,7 +43,7 @@ export function ProfileSidebarPanel({
           </div>
         </div>
         {completionPercentage < 100 && (
-          <div className="mt-3 text-base text-gray-700 dark:text-foreground">
+          <div className="mt-3 text-base text-foreground">
             <div className="font-medium mb-1">To reach 100%, add:</div>
             <ul className="list-disc list-inside space-y-0.5">
               {missingFields.map(field => (

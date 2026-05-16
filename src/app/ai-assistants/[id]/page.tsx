@@ -43,9 +43,7 @@ const config: EntityDetailConfig = {
               <CardTitle className="text-lg">Welcome Message</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-700 dark:text-foreground italic whitespace-pre-wrap">
-                {welcome}
-              </p>
+              <p className="text-sm text-foreground italic whitespace-pre-wrap">{welcome}</p>
             </CardContent>
           </Card>
         )}

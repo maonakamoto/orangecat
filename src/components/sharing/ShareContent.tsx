@@ -236,7 +236,7 @@ export default function ShareContent({
         className={`w-full flex items-center justify-center gap-3 p-4 rounded-xl transition-all touch-manipulation active:scale-95 font-semibold ${
           copySuccess
             ? 'bg-green-50 hover:bg-green-100 text-green-700 border-2 border-green-200'
-            : 'bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 text-gray-700 dark:text-foreground border-2 border-border'
+            : 'bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 text-foreground border-2 border-border'
         }`}
         aria-label="Copy URL to clipboard"
       >

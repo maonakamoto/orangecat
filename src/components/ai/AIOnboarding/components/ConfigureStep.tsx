@@ -72,7 +72,7 @@ export function ConfigureStep({
 
       {/* Default Tier Selection */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+        <label className="block text-sm font-medium text-foreground mb-2">
           Default Tier
           {autoRouterEnabled && (
             <span className="text-muted-foreground font-normal ml-2">

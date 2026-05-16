@@ -36,9 +36,7 @@ export default function TaskFilters({
     <div className="bg-card rounded-xl border border-border p-4 mb-6 space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-            Category
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-1">Category</label>
           <select
             value={categoryFilter}
             onChange={e => onCategoryChange(e.target.value as TaskCategory | '')}
@@ -53,9 +51,7 @@ export default function TaskFilters({
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-            Status
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-1">Status</label>
           <select
             value={statusFilter}
             onChange={e => onStatusChange(e.target.value as TaskStatus | '')}
@@ -70,9 +66,7 @@ export default function TaskFilters({
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-            Type
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-1">Type</label>
           <select
             value={typeFilter}
             onChange={e => onTypeChange(e.target.value as TaskType | '')}
@@ -88,7 +82,7 @@ export default function TaskFilters({
         </div>
       </div>
       <div className="flex items-center">
-        <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-foreground">
+        <label className="flex items-center gap-2 text-sm text-foreground">
           <input
             type="checkbox"
             checked={showArchived}

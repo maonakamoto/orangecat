@@ -63,7 +63,7 @@ export function AddKeyStep({
 
           {/* Key Name Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Key Name (optional)
             </label>
             <Input
@@ -80,7 +80,7 @@ export function AddKeyStep({
 
           {/* API Key Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               API Key <span className="text-red-500">*</span>
             </label>
             <Input

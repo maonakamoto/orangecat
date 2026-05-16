@@ -27,7 +27,7 @@ export function WizardProgressBar({
   return (
     <div className="max-w-4xl mx-auto mb-4">
       <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium text-gray-700 dark:text-foreground">
+        <span className="text-sm font-medium text-foreground">
           Step {currentStep + 1} of {wizardSteps.length}
         </span>
         <div className="flex items-center gap-2">

@@ -143,7 +143,7 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
             </CardHeader>
             <CardContent className="pt-0">
               <p className="text-xs text-muted-foreground line-clamp-3">{t.data.description}</p>
-              <div className="mt-2 text-xs text-gray-700 dark:text-foreground space-y-1">
+              <div className="mt-2 text-xs text-foreground space-y-1">
                 <div>
                   <span className="font-semibold">Amount:</span> {t.data.original_amount}{' '}
                   {t.data.currency}

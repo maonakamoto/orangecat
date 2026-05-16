@@ -30,10 +30,7 @@ export function ShareModal({
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} title="Share Post">
       <div className="p-4 space-y-4">
-        <label
-          htmlFor="share-text"
-          className="text-sm font-medium text-gray-700 dark:text-foreground"
-        >
+        <label htmlFor="share-text" className="text-sm font-medium text-foreground">
           Add a comment (optional)
         </label>
         <textarea

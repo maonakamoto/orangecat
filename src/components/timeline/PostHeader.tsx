@@ -152,7 +152,7 @@ export function PostHeader({
                     e.stopPropagation();
                     onEdit?.();
                   }}
-                  className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-foreground hover:bg-muted flex items-center gap-3"
+                  className="w-full text-left px-4 py-2.5 text-sm text-foreground hover:bg-muted flex items-center gap-3"
                   role="menuitem"
                 >
                   <Pencil className="w-4 h-4" />

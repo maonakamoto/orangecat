@@ -146,7 +146,7 @@ export default function ProfileWalletSection({
                       </button>
                     </div>
                     <code
-                      className="text-xs text-gray-700 dark:text-foreground block font-mono break-all bg-muted p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors"
+                      className="text-xs text-foreground block font-mono break-all bg-muted p-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors"
                       onClick={() => {
                         navigator.clipboard.writeText(wallet.address_or_xpub);
                         toast.success('Address copied to clipboard');
@@ -190,9 +190,7 @@ export default function ProfileWalletSection({
       <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6">
         <div className="text-center text-muted-foreground py-8">
           <Bitcoin className="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-foreground mb-2">
-            Accept Bitcoin Funding
-          </h3>
+          <h3 className="text-lg font-semibold text-foreground mb-2">Accept Bitcoin Funding</h3>
           <p className="text-sm mb-4">
             Add Bitcoin wallets to start receiving funding from supporters
           </p>
@@ -225,9 +223,7 @@ export default function ProfileWalletSection({
   return (
     <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6 text-center text-muted-foreground">
       <Bitcoin className="w-10 h-10 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
-      <h3 className="text-lg font-semibold text-gray-700 dark:text-foreground mb-1">
-        No wallets shared yet
-      </h3>
+      <h3 className="text-lg font-semibold text-foreground mb-1">No wallets shared yet</h3>
       <p className="text-sm text-muted-foreground">
         This profile has not added any wallets you can send to yet.
       </p>

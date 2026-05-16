@@ -53,7 +53,7 @@ export default function ProjectSelectionModal({
           className="p-2 -ml-2 min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Close"
         >
-          <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-foreground" />
+          <ArrowLeft className="w-5 h-5 text-foreground" />
         </button>
         <h2 className="text-lg font-semibold text-foreground">Crosspost to projects</h2>
         <div className="w-9" /> {/* Spacer for centering */}
@@ -88,9 +88,7 @@ export default function ProjectSelectionModal({
         {/* My Projects section */}
         {projects.length > 0 && (
           <div className="px-4 py-3">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-foreground mb-3">
-              My Projects
-            </h3>
+            <h3 className="text-sm font-semibold text-foreground mb-3">My Projects</h3>
             <div className="space-y-1">
               {projects.map(project => {
                 const isSelected = selectedProjects.includes(project.id);

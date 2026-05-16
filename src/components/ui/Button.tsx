@@ -25,7 +25,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       danger:
         'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500 shadow-button hover:shadow-button-hover active:shadow-sm border-0',
       outline:
-        'border-2 border-gray-300 dark:border-border bg-transparent hover:bg-muted hover:border-gray-400 focus-visible:ring-gray-500 shadow-sm hover:shadow-button active:shadow-sm text-gray-700 dark:text-foreground',
+        'border-2 border-gray-300 dark:border-border bg-transparent hover:bg-muted hover:border-gray-400 focus-visible:ring-gray-500 shadow-sm hover:shadow-button active:shadow-sm text-foreground',
       gradient: `${GRADIENTS.btnPrimary} text-white shadow-button hover:shadow-button-hover active:shadow-sm border-0 focus-visible:ring-tiffany-500`,
     };
 

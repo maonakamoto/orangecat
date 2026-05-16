@@ -40,9 +40,7 @@ export function SocialLinksDisplay({
   return (
     <div className={className}>
       {!compact && (
-        <h4 className="text-sm font-semibold text-gray-700 dark:text-foreground mb-3">
-          Social Media & Links
-        </h4>
+        <h4 className="text-sm font-semibold text-foreground mb-3">Social Media & Links</h4>
       )}
       <div className="flex flex-wrap gap-3">
         {links.map(link => {
@@ -59,7 +57,7 @@ export function SocialLinksDisplay({
               href={normalizedUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-2 bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 border border-border rounded-lg transition-colors text-sm text-gray-700 dark:text-foreground hover:text-orange-600 dark:hover:text-foreground"
+              className="inline-flex items-center gap-2 px-3 py-2 bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 border border-border rounded-lg transition-colors text-sm text-foreground hover:text-orange-600 dark:hover:text-foreground"
             >
               <Icon className="w-4 h-4 flex-shrink-0" />
               <span className="font-medium">{displayLabel}</span>

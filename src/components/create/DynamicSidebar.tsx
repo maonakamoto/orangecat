@@ -134,10 +134,8 @@ export function DynamicSidebar<T extends string = string>({
       <div className={`sticky top-4 ${className}`}>
         <div className="p-4 rounded-xl border border-orange-200 bg-orange-50/60">
           <h2 className="font-semibold text-foreground mb-2">{defaultContent.title}</h2>
-          <p className="text-sm text-gray-700 dark:text-foreground mb-3">
-            {defaultContent.description}
-          </p>
-          <ul className="text-sm text-gray-700 dark:text-foreground space-y-2">
+          <p className="text-sm text-foreground mb-3">{defaultContent.description}</p>
+          <ul className="text-sm text-foreground space-y-2">
             {defaultContent.features.map((feature, index) => (
               <li key={index} className="flex items-start gap-2">
                 <span className="mt-0.5 flex-shrink-0">{feature.icon}</span>
@@ -182,7 +180,7 @@ export function DynamicSidebar<T extends string = string>({
         </div>
 
         {/* Description */}
-        <p className="text-sm text-gray-700 dark:text-foreground mb-3">{content.description}</p>
+        <p className="text-sm text-foreground mb-3">{content.description}</p>
 
         {/* Tips */}
         <div>

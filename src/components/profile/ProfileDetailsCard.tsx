@@ -90,7 +90,7 @@ export function ProfileDetailsCard({
               label="Bio"
               value={
                 profile.bio ? (
-                  <p className="text-gray-700 dark:text-foreground whitespace-pre-wrap leading-relaxed">
+                  <p className="text-foreground whitespace-pre-wrap leading-relaxed">
                     {profile.bio}
                   </p>
                 ) : undefined

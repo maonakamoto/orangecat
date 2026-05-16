@@ -54,7 +54,7 @@ export default function ProfileOverviewTab({
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0">
           {profile.bio ? (
-            <p className="text-sm sm:text-base text-gray-700 dark:text-foreground whitespace-pre-wrap leading-relaxed">
+            <p className="text-sm sm:text-base text-foreground whitespace-pre-wrap leading-relaxed">
               {profile.bio}
             </p>
           ) : isOwnProfile && isDashboardView ? (
@@ -113,7 +113,7 @@ export default function ProfileOverviewTab({
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0 space-y-2 sm:space-y-3">
           {/* Website */}
-          <div className="flex items-center gap-3 text-gray-700 dark:text-foreground">
+          <div className="flex items-center gap-3 text-foreground">
             <Globe className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
             <div className="flex-1">
               <div className="text-sm text-muted-foreground">Website</div>
@@ -182,7 +182,7 @@ export default function ProfileOverviewTab({
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0 space-y-2 sm:space-y-3">
           {/* Contact Email (public) */}
-          <div className="flex items-center gap-3 text-gray-700 dark:text-foreground pt-3 border-t border-border">
+          <div className="flex items-center gap-3 text-foreground pt-3 border-t border-border">
             <Mail className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
             <div className="flex-1">
               <div className="text-sm text-muted-foreground">Contact email</div>
@@ -212,7 +212,7 @@ export default function ProfileOverviewTab({
           </div>
 
           {/* Phone */}
-          <div className="flex items-center gap-3 text-gray-700 dark:text-foreground">
+          <div className="flex items-center gap-3 text-foreground">
             <Phone className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
             <div className="flex-1">
               <div className="text-sm text-muted-foreground">Phone</div>

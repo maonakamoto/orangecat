@@ -108,7 +108,7 @@ export function PaymentDialog({
                     onChange={setContributionAmount}
                   />
                   <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-foreground">
+                    <label className="text-sm font-medium text-foreground">
                       Message (optional)
                     </label>
                     <Textarea

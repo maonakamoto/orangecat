@@ -39,9 +39,7 @@ export function WalletsStep({ form }: WalletsStepProps) {
         name="bitcoin_address"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Bitcoin Address
-            </FormLabel>
+            <FormLabel className="text-sm font-medium text-foreground">Bitcoin Address</FormLabel>
             <FormControl>
               <Input
                 {...field}
@@ -63,9 +61,7 @@ export function WalletsStep({ form }: WalletsStepProps) {
         name="lightning_address"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Lightning Address
-            </FormLabel>
+            <FormLabel className="text-sm font-medium text-foreground">Lightning Address</FormLabel>
             <FormControl>
               <Input
                 {...field}

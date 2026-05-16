@@ -109,7 +109,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                 Can't scan? Enter this code manually:
               </p>
               <div className="flex items-center gap-2 p-2 bg-muted rounded border border-border">
-                <code className="flex-1 text-xs font-mono text-gray-700 dark:text-foreground break-all">
+                <code className="flex-1 text-xs font-mono text-foreground break-all">
                   {enrollmentData?.secret}
                 </code>
                 <button
@@ -143,7 +143,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
             <div className="space-y-2">
               <label
                 htmlFor="verification-code"
-                className="block text-sm font-medium text-gray-700 dark:text-foreground"
+                className="block text-sm font-medium text-foreground"
               >
                 Verification Code
               </label>

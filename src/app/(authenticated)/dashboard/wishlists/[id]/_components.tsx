@@ -208,9 +208,7 @@ export function WishlistDetailsSidebar({ wishlist }: { wishlist: WishlistWithSta
             <CardTitle className="text-base">Description</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-gray-700 dark:text-foreground whitespace-pre-wrap">
-              {wishlist.description}
-            </p>
+            <p className="text-sm text-foreground whitespace-pre-wrap">{wishlist.description}</p>
           </CardContent>
         </Card>
       )}

@@ -215,9 +215,7 @@ export default function ProjectMediaGallery({
                 onClick={() => openLightbox(4)}
               >
                 <div className="text-center">
-                  <div className="text-xl font-semibold text-gray-700 dark:text-foreground">
-                    +{thumbs.length - 3}
-                  </div>
+                  <div className="text-xl font-semibold text-foreground">+{thumbs.length - 3}</div>
                   <div className="text-xs text-muted-foreground">more</div>
                 </div>
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-200" />

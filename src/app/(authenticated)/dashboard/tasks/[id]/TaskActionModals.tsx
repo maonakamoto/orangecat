@@ -46,7 +46,7 @@ export function CompleteModal({
         <DialogTitle>Complete Task</DialogTitle>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Duration (minutes)
             </label>
             <input
@@ -58,7 +58,7 @@ export function CompleteModal({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Notes (optional)
             </label>
             <textarea
@@ -110,7 +110,7 @@ export function AttentionModal({ actionLoading, onClose, onFlag }: AttentionModa
             Flag this task as &quot;needs attention&quot;. All team members will be notified.
           </p>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Message (optional)
             </label>
             <textarea
@@ -165,9 +165,7 @@ export function RequestModal({ actionLoading, onClose, onRequest }: RequestModal
         <DialogTitle>Request Task</DialogTitle>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-              To whom?
-            </label>
+            <label className="block text-sm font-medium text-foreground mb-1">To whom?</label>
             <select
               value={userId}
               onChange={e => setUserId(e.target.value)}
@@ -184,7 +182,7 @@ export function RequestModal({ actionLoading, onClose, onRequest }: RequestModal
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+            <label className="block text-sm font-medium text-foreground mb-1">
               Message (optional)
             </label>
             <textarea

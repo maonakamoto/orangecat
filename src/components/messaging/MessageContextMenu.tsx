@@ -139,7 +139,7 @@ export function MessageContextMenu({
               onClose();
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-left text-sm text-gray-700 dark:text-foreground',
+              'w-full px-4 py-2.5 text-left text-sm text-foreground',
               'hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
               'flex items-center gap-3 transition-colors'
             )}

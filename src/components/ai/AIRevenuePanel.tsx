@@ -112,7 +112,7 @@ export function AIRevenuePanel() {
         {/* Per-Assistant Breakdown */}
         {assistants.length > 0 && (
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-foreground">By Assistant</h4>
+            <h4 className="text-sm font-medium text-foreground">By Assistant</h4>
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {assistants.map(assistant => (
                 <div

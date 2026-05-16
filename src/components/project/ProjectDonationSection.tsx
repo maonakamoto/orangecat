@@ -196,7 +196,7 @@ export function ProjectDonationSection({
           )}
 
           <div className="mt-6 border-t pt-6">
-            <p className="text-sm font-medium text-gray-700 dark:text-foreground mb-3">
+            <p className="text-sm font-medium text-foreground mb-3">
               {ownerId && !isOwner ? 'Other amounts:' : 'Suggested support amounts:'}
             </p>
             <div className="grid grid-cols-3 gap-3">

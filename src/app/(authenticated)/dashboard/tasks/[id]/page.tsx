@@ -178,9 +178,7 @@ export default function TaskDetailPage() {
                   <FileText className="h-4 w-4" />
                   Description
                 </h2>
-                <p className="text-gray-700 dark:text-foreground whitespace-pre-wrap">
-                  {task.description}
-                </p>
+                <p className="text-foreground whitespace-pre-wrap">{task.description}</p>
               </div>
             )}
 

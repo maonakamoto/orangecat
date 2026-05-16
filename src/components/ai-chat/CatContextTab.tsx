@@ -154,9 +154,7 @@ export function CatContextTab() {
               <div key={type} className="bg-card rounded-xl border border-border overflow-hidden">
                 <div className="px-4 py-3 bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
                   <Icon className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-foreground">
-                    {label}
-                  </span>
+                  <span className="text-sm font-medium text-foreground">{label}</span>
                   <span className="text-xs text-gray-400 dark:text-muted-foreground ml-auto">
                     {docs.length}
                   </span>

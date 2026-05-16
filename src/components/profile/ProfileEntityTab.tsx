@@ -47,9 +47,7 @@ export default function ProfileEntityTab({
     return (
       <div className="text-center py-12">
         <Icon className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
-        <h3 className="text-lg font-semibold text-gray-700 dark:text-foreground mb-2">
-          No {displayName} Yet
-        </h3>
+        <h3 className="text-lg font-semibold text-foreground mb-2">No {displayName} Yet</h3>
         <p className="text-muted-foreground text-base mb-6">
           {isOwnProfile
             ? `You haven't published any ${displayName.toLowerCase()} yet`
@@ -116,7 +114,7 @@ export default function ProfileEntityTab({
                   )}
                   {entity.category && (
                     <div className="absolute top-2 left-2">
-                      <span className="px-2 py-1 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-md text-xs font-medium text-gray-700 dark:text-foreground">
+                      <span className="px-2 py-1 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-md text-xs font-medium text-foreground">
                         {entity.category}
                       </span>
                     </div>

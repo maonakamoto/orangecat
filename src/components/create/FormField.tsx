@@ -167,9 +167,7 @@ export function FormField({
               disabled={disabled}
               className="w-4 h-4 rounded border-gray-300 dark:border-border text-orange-600 focus:ring-orange-500"
             />
-            <span className="text-sm text-gray-700 dark:text-foreground">
-              {placeholder || label}
-            </span>
+            <span className="text-sm text-foreground">{placeholder || label}</span>
           </label>
         );
 
@@ -266,10 +264,7 @@ export function FormField({
 
   return (
     <div>
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2"
-      >
+      <label htmlFor={name} className="block text-sm font-medium text-foreground mb-2">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>

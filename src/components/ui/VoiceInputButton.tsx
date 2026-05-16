@@ -161,13 +161,7 @@ export function VoiceInputButton({
       {listening ? (
         <MicOff className={size === 'sm' ? 'h-4 w-4 text-red-600' : 'h-5 w-5 text-red-600'} />
       ) : (
-        <Mic
-          className={
-            size === 'sm'
-              ? 'h-4 w-4 text-gray-700 dark:text-foreground'
-              : 'h-5 w-5 text-gray-700 dark:text-foreground'
-          }
-        />
+        <Mic className={size === 'sm' ? 'h-4 w-4 text-foreground' : 'h-5 w-5 text-foreground'} />
       )}
     </button>
   );

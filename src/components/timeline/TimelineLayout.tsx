@@ -66,7 +66,7 @@ export default function TimelineLayout({
             )}
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-muted text-gray-700 dark:text-foreground">
+              <div className="p-2 rounded-full bg-muted text-foreground">
                 <Icon className="w-5 h-5" />
               </div>
               <div>

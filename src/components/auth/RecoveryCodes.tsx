@@ -245,7 +245,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
             onChange={e => setAcknowledged(e.target.checked)}
             className="mt-0.5 h-4 w-4 rounded border-gray-300 dark:border-border text-tiffany focus:ring-tiffany"
           />
-          <span className="text-sm text-gray-700 dark:text-foreground">
+          <span className="text-sm text-foreground">
             I have saved my recovery codes in a secure location
           </span>
         </label>

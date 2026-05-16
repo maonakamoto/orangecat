@@ -154,7 +154,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                 {showVisibilityToggle && (
                   <button
                     onClick={() => setIsOptionsSheetOpen(true)}
-                    className="flex items-center gap-1 text-xs text-gray-700 dark:text-foreground hover:text-gray-700 dark:hover:text-foreground mt-1 min-h-11 px-2"
+                    className="flex items-center gap-1 text-xs text-foreground mt-1 min-h-11 px-2"
                     aria-expanded={isOptionsSheetOpen}
                     aria-controls="post-options-sheet"
                   >

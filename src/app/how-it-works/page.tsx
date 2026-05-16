@@ -156,7 +156,7 @@ export default function HowItWorksPage() {
                   <Card className="p-6 h-full hover:shadow-lg transition-shadow">
                     <div className="flex items-start gap-4">
                       <div className={`${category.bgColor} p-3 rounded-lg flex-shrink-0`}>
-                        <Icon className="w-6 h-6 text-gray-700 dark:text-foreground" />
+                        <Icon className="w-6 h-6 text-foreground" />
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold mb-2">{category.title}</h3>

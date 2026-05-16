@@ -42,7 +42,7 @@ export function ContributionAmountInput({
 
   return (
     <div className="space-y-3">
-      <label className="text-sm font-medium text-gray-700 dark:text-foreground">Amount</label>
+      <label className="text-sm font-medium text-foreground">Amount</label>
 
       {/* Quick select buttons */}
       <div className="flex flex-wrap gap-2">

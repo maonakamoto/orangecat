@@ -155,7 +155,7 @@ export function AIModelPreferences({
       </Card>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+        <label className="block text-sm font-medium text-foreground mb-2">
           Default Tier
           {preferences.autoRouterEnabled && (
             <span className="text-muted-foreground font-normal ml-2">
@@ -203,7 +203,7 @@ export function AIModelPreferences({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+        <label className="block text-sm font-medium text-foreground mb-2">
           Default Model
           <span className="text-muted-foreground font-normal ml-2">(optional)</span>
         </label>
@@ -218,7 +218,7 @@ export function AIModelPreferences({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+        <label className="block text-sm font-medium text-foreground mb-2">
           Maximum Cost per Request ({displayCurrency})
         </label>
         <div className="flex items-center gap-2">
@@ -244,9 +244,7 @@ export function AIModelPreferences({
       </div>
 
       <div className="space-y-3">
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground">
-          Required Capabilities
-        </label>
+        <label className="block text-sm font-medium text-foreground">Required Capabilities</label>
         <CapabilityToggleCard
           icon={Eye}
           label="Vision"

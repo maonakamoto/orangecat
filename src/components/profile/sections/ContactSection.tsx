@@ -46,7 +46,7 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
         name="contact_email"
         render={({ field }) => (
           <FormItem id="contactEmail">
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
+            <FormLabel className="text-sm font-medium text-foreground">
               Contact Email (public)
             </FormLabel>
             <FormControl>
@@ -86,9 +86,7 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
         name="phone"
         render={({ field }) => (
           <FormItem id="phone">
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Phone (optional)
-            </FormLabel>
+            <FormLabel className="text-sm font-medium text-foreground">Phone (optional)</FormLabel>
             <FormControl>
               <Input
                 type="tel"

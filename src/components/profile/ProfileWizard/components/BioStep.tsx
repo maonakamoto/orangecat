@@ -36,7 +36,7 @@ export function BioStep({ form }: BioStepProps) {
         name="background"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
+            <FormLabel className="text-sm font-medium text-foreground">
               Professional Background
             </FormLabel>
             <FormControl>
@@ -61,7 +61,7 @@ export function BioStep({ form }: BioStepProps) {
         name="inspiration_statement"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
+            <FormLabel className="text-sm font-medium text-foreground">
               What Inspires You?
             </FormLabel>
             <FormControl>

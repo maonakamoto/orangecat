@@ -63,7 +63,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-3 py-2 min-h-11 rounded-lg text-base text-gray-700 dark:text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground"
+                className="block px-3 py-2 min-h-11 rounded-lg text-base text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground"
                 onClick={onClose}
               >
                 {item.name}
@@ -147,7 +147,7 @@ function HeaderNavLink({ href, label, isActive }: HeaderNavLinkProps) {
     'px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 relative',
     isActive
       ? 'text-tiffany-600 bg-tiffany-50 dark:bg-accent dark:text-accent-foreground shadow-sm'
-      : 'text-gray-700 dark:text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
+      : 'text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
   );
 
   return (
@@ -202,7 +202,7 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
           'px-4 py-2.5 min-h-11 text-sm font-medium rounded-xl transition-all duration-150 relative flex items-center gap-1',
           hasActiveChild
             ? 'text-tiffany-600 bg-tiffany-50 dark:bg-accent dark:text-accent-foreground shadow-sm'
-            : 'text-gray-700 dark:text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
+            : 'text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
         )}
       >
         {item.name}
@@ -228,7 +228,7 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
                   'block px-4 py-2.5 min-h-11 text-sm transition-colors',
                   isActive(child.href)
                     ? 'text-tiffany-600 bg-tiffany-50 dark:bg-accent dark:text-accent-foreground font-medium'
-                    : 'text-gray-700 dark:text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
+                    : 'text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
                 )}
                 onClick={() => setIsOpen(false)}
               >

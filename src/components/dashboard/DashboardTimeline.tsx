@@ -99,7 +99,7 @@ export function DashboardTimeline({
           ) : (
             <div className="text-center py-8 sm:py-12 px-4 text-muted-foreground">
               <MessageSquare className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-300 dark:text-muted-foreground" />
-              <h3 className="text-base sm:text-lg font-semibold text-gray-700 dark:text-foreground mb-2">
+              <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
                 Start My Timeline
               </h3>
               <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6 max-w-md mx-auto">

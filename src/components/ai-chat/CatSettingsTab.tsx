@@ -81,14 +81,14 @@ export function CatSettingsTab() {
                   className={`p-2 rounded-lg ${isSelected ? 'bg-gray-200 dark:bg-accent' : 'bg-muted'}`}
                 >
                   <Icon
-                    className={`h-4 w-4 ${isSelected ? 'text-gray-700 dark:text-foreground' : 'text-muted-foreground'}`}
+                    className={`h-4 w-4 ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}
                   />
                 </div>
                 <div className="flex-1 text-left">
                   <p className="text-sm font-medium text-foreground">{TIER_CONFIG[tierId].label}</p>
                   <p className="text-sm text-muted-foreground">{TIER_CONFIG[tierId].description}</p>
                 </div>
-                {isSelected && <Check className="h-5 w-5 text-gray-700 dark:text-foreground" />}
+                {isSelected && <Check className="h-5 w-5 text-foreground" />}
               </button>
             );
           })}

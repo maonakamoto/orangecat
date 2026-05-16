@@ -39,9 +39,7 @@ export function OnlinePresenceSection({
         name="website"
         render={({ field }) => (
           <FormItem id="website">
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Website
-            </FormLabel>
+            <FormLabel className="text-sm font-medium text-foreground">Website</FormLabel>
             <FormControl>
               <Input
                 placeholder="https://your-website.com"

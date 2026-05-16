@@ -273,7 +273,7 @@ export default function DocsPage() {
               </Link>
               <Link
                 href={ROUTES.FAQ}
-                className="inline-flex items-center gap-2 border border-border bg-card hover:bg-muted text-gray-700 dark:text-foreground font-medium px-5 py-2.5 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 border border-border bg-card hover:bg-muted text-foreground font-medium px-5 py-2.5 rounded-lg transition-colors"
               >
                 View FAQ
               </Link>

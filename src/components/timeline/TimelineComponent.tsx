@@ -263,7 +263,7 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
                 </div>
               </div>
 
-              <p className="text-gray-700 dark:text-foreground mb-6">
+              <p className="text-foreground mb-6">
                 Are you sure you want to delete {selectedCount === 1 ? 'this post' : 'these posts'}?
                 {selectedCount > 1 && ' They will be'} permanently removed from your timeline.
               </p>

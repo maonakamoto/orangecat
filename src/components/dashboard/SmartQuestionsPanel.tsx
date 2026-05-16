@@ -58,7 +58,7 @@ export function SmartQuestionsPanel({
     <div className={className}>
       <div className="flex items-center gap-2 mb-4">
         <Lightbulb className="w-5 h-5 text-amber-500" />
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-foreground">{title}</h3>
+        <h3 className="text-sm font-semibold text-foreground">{title}</h3>
       </div>
 
       <div className="space-y-2">
@@ -80,7 +80,7 @@ export function SmartQuestionsPanel({
 function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDismiss: () => void }) {
   return (
     <div className="flex items-center justify-between gap-3 p-3 bg-amber-50 border border-amber-100 rounded-lg hover:bg-amber-100 transition-colors group">
-      <p className="text-sm text-gray-700 dark:text-foreground flex-1">{question.question}</p>
+      <p className="text-sm text-foreground flex-1">{question.question}</p>
 
       <div className="flex items-center gap-2 flex-shrink-0">
         <Link href={question.action.href}>

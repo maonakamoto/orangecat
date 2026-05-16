@@ -27,7 +27,7 @@ export default function ProjectPerformanceTable({ projects }: ProjectPerformance
         <CardContent>
           <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
             <BarChart3 className="h-10 w-10 mb-3 text-gray-300 dark:text-muted-foreground/50" />
-            <p className="font-medium text-gray-700 dark:text-foreground">No project data yet</p>
+            <p className="font-medium text-foreground">No project data yet</p>
             <p className="text-sm mt-1">
               Create a project and receive funding to see performance metrics here.
             </p>

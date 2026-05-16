@@ -220,7 +220,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
           <>
             {showSelection && memoizedItems.length > 0 && (
               <div className="mb-4 flex items-center justify-between">
-                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-foreground">
+                <label className="flex items-center gap-2 text-sm text-foreground">
                   <input
                     type="checkbox"
                     checked={selectedIds.size === memoizedItems.length && memoizedItems.length > 0}

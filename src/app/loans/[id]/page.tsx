@@ -123,9 +123,7 @@ const loanConfig: EntityDetailConfig = {
               <CardTitle className="text-lg">Preferred Terms</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-700 dark:text-foreground whitespace-pre-wrap">
-                {entity.preferred_terms}
-              </p>
+              <p className="text-foreground whitespace-pre-wrap">{entity.preferred_terms}</p>
             </CardContent>
           </Card>
         )}

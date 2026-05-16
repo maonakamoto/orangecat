@@ -184,7 +184,7 @@ export function WalletCard({
             <span className="text-xs hidden sm:inline">Copy</span>
           </button>
         </div>
-        <code className="text-xs text-gray-700 dark:text-foreground block font-mono break-all bg-muted p-2 rounded border dark:border-border">
+        <code className="text-xs text-foreground block font-mono break-all bg-muted p-2 rounded border dark:border-border">
           {truncateAddress(wallet.address_or_xpub, 20, 10)}
         </code>
       </div>

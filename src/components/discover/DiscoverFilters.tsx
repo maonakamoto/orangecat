@@ -22,7 +22,7 @@ const STATUS_STYLES = {
     label: 'Completed',
   },
   cancelled: {
-    selected: 'bg-muted border-gray-300 dark:border-border text-gray-700 dark:text-foreground',
+    selected: 'bg-muted border-gray-300 dark:border-border text-foreground',
     label: 'Cancelled',
   },
 } as const;
@@ -85,9 +85,7 @@ export default function DiscoverFilters({
   return (
     <>
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
-          Search
-        </label>
+        <label className="block text-sm font-medium text-foreground mb-2">Search</label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-4 w-4 text-gray-400 dark:text-muted-foreground" />
@@ -117,9 +115,7 @@ export default function DiscoverFilters({
 
       {showStatusFilter && (
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
-            Project Status
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-2">Project Status</label>
           <div className="flex flex-wrap gap-2">
             {(Object.keys(STATUS_STYLES) as StatusKey[]).map(statusKey => (
               <button
@@ -128,7 +124,7 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedStatuses.includes(statusKey)
                     ? STATUS_STYLES[statusKey].selected
-                    : 'bg-white/80 dark:bg-muted border-border text-gray-700 dark:text-foreground hover:bg-muted/80'
+                    : 'bg-white/80 dark:bg-muted border-border text-foreground hover:bg-muted/80'
                 }`}
               >
                 {STATUS_STYLES[statusKey].label}
@@ -143,9 +139,7 @@ export default function DiscoverFilters({
 
       {showCategoryFilter && (
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
-            Categories
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-2">Categories</label>
           <div className="flex flex-wrap gap-2">
             {simpleCategories.map(cat => (
               <button
@@ -154,7 +148,7 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedCategories.includes(cat.value)
                     ? 'bg-orange-100 border-orange-300 text-orange-700'
-                    : 'bg-white/80 dark:bg-muted border-border text-gray-700 dark:text-foreground hover:bg-muted/80'
+                    : 'bg-white/80 dark:bg-muted border-border text-foreground hover:bg-muted/80'
                 }`}
               >
                 {cat.label}
@@ -165,9 +159,7 @@ export default function DiscoverFilters({
       )}
 
       <div className="space-y-3 mb-6">
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground">
-          Location
-        </label>
+        <label className="block text-sm font-medium text-foreground">Location</label>
         <input
           value={country}
           onChange={e => onCountryChange(e.target.value)}
@@ -208,30 +200,28 @@ export default function DiscoverFilters({
           radiusKm ||
           sortBy !== 'recent') && (
           <div className="mb-6 pb-6 border-b border-border">
-            <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
-              Active filters
-            </label>
+            <label className="block text-sm font-medium text-foreground mb-2">Active filters</label>
             <div className="flex flex-wrap gap-2">
               {searchTerm && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-gray-700 dark:text-foreground">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-foreground">
                   &quot;{searchTerm}&quot;
                 </span>
               )}
               {selectedCategories.map(cat => (
                 <span
                   key={cat}
-                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-gray-700 dark:text-foreground"
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-foreground"
                 >
                   {cat}
                 </span>
               ))}
               {(country || city || postal) && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-gray-700 dark:text-foreground">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-foreground">
                   {country || city || postal}
                 </span>
               )}
               {sortBy !== 'recent' && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-gray-700 dark:text-foreground">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-foreground">
                   {sortBy}
                 </span>
               )}

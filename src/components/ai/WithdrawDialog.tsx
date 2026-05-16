@@ -120,7 +120,7 @@ export function WithdrawDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-foreground">Amount</label>
+            <label className="text-sm font-medium text-foreground">Amount</label>
             <Input
               type="number"
               value={withdrawAmount}
@@ -133,9 +133,7 @@ export function WithdrawDialog({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Lightning Address
-            </label>
+            <label className="text-sm font-medium text-foreground">Lightning Address</label>
             <Input
               type="email"
               value={lightningAddress}

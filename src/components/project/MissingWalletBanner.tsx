@@ -64,7 +64,7 @@ export default function MissingWalletBanner({
             </button>
           </div>
 
-          <p className="text-sm text-gray-700 dark:text-foreground mb-4">
+          <p className="text-sm text-foreground mb-4">
             Your project is live, but you can't receive funding yet! Add your Bitcoin or Lightning
             address so supporters can contribute.
           </p>

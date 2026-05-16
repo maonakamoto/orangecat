@@ -21,18 +21,12 @@ export default function HeroSectionStatic() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-card border border-border mb-6">
               <div className="flex items-center gap-1.5">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <span className="text-sm font-medium text-gray-700 dark:text-foreground">
-                  Create anything
-                </span>
+                <span className="text-sm font-medium text-foreground">Create anything</span>
               </div>
               <span className="text-gray-400 dark:text-muted-foreground">•</span>
-              <span className="text-sm font-medium text-gray-700 dark:text-foreground">
-                Any identity
-              </span>
+              <span className="text-sm font-medium text-foreground">Any identity</span>
               <span className="text-gray-400 dark:text-muted-foreground">•</span>
-              <span className="text-sm font-medium text-gray-700 dark:text-foreground">
-                Zero fees
-              </span>
+              <span className="text-sm font-medium text-foreground">Zero fees</span>
             </div>
 
             {/* Main Headline */}

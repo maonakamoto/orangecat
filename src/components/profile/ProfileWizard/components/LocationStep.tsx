@@ -40,7 +40,7 @@ export function LocationStep({ form }: LocationStepProps) {
         name="location_search"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground flex items-center gap-2">
+            <FormLabel className="text-sm font-medium text-foreground flex items-center gap-2">
               <MapPin className="w-4 h-4" />
               Location
             </FormLabel>
@@ -97,9 +97,7 @@ export function LocationStep({ form }: LocationStepProps) {
         name="location_context"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Location Context
-            </FormLabel>
+            <FormLabel className="text-sm font-medium text-foreground">Location Context</FormLabel>
             <FormControl>
               <Textarea
                 {...field}

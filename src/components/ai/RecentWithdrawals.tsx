@@ -32,7 +32,7 @@ export function RecentWithdrawals({ withdrawals, formatAmountBtc }: RecentWithdr
 
   return (
     <div className="space-y-2">
-      <h4 className="text-sm font-medium text-gray-700 dark:text-foreground">Recent Withdrawals</h4>
+      <h4 className="text-sm font-medium text-foreground">Recent Withdrawals</h4>
       <div className="space-y-2">
         {withdrawals.slice(0, 3).map(withdrawal => (
           <div

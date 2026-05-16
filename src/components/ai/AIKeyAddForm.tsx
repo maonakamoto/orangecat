@@ -61,9 +61,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
-            Provider
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-2">Provider</label>
           <div
             className="grid grid-cols-2 md:grid-cols-4 gap-2"
             onFocus={() => onFieldFocus?.('provider')}
@@ -89,7 +87,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             Key Name (optional)
           </label>
           <Input
@@ -100,9 +98,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-            API Key
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-1">API Key</label>
           <div className="relative">
             <Input
               type={showKey ? 'text' : 'password'}

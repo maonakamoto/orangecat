@@ -56,7 +56,7 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
       ? `${SIDEBAR_COLORS.ACTIVE_BACKGROUND} ${SIDEBAR_COLORS.ACTIVE_TEXT} shadow-sm border ${SIDEBAR_COLORS.ACTIVE_BORDER}`
       : item.comingSoon
         ? `text-muted-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND} hover:text-gray-800 dark:hover:text-foreground`
-        : `text-gray-700 dark:text-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND} hover:text-gray-900`,
+        : `text-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND}`,
   ].join(' ');
 
   const iconClasses = [

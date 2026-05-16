@@ -41,9 +41,7 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
                 className="flex items-start space-x-3 p-3 rounded-lg bg-white/50 dark:bg-card/50 backdrop-blur-sm"
               >
                 <ActionIcon className={cn('w-5 h-5 mt-0.5 flex-shrink-0', content.color)} />
-                <span className="text-sm text-gray-700 dark:text-foreground leading-relaxed">
-                  {action.text}
-                </span>
+                <span className="text-sm text-foreground leading-relaxed">{action.text}</span>
               </div>
             );
           })}

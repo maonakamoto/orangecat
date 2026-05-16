@@ -20,7 +20,7 @@ interface WalletRecommendationFilterBarProps {
 
 const ACTIVE_CLASS = 'bg-orange-100 text-orange-700 border-2 border-orange-300';
 const INACTIVE_CLASS =
-  'bg-muted text-gray-700 dark:text-foreground border-2 border-transparent hover:bg-gray-100 dark:hover:bg-muted/80';
+  'bg-muted text-foreground border-2 border-transparent hover:bg-gray-100 dark:hover:bg-muted/80';
 const BTN_BASE =
   'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all';
 
@@ -36,7 +36,7 @@ export function WalletRecommendationFilterBar({
     <div className="mb-8 space-y-4">
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-700 dark:text-foreground">Platform:</span>
+          <span className="text-sm font-medium text-foreground">Platform:</span>
           <button
             onClick={() => onTogglePlatform('mobile')}
             className={cn(
@@ -60,7 +60,7 @@ export function WalletRecommendationFilterBar({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-700 dark:text-foreground">Level:</span>
+          <span className="text-sm font-medium text-foreground">Level:</span>
           <button
             onClick={() => onToggleLevel('beginner')}
             className={cn(
@@ -82,7 +82,7 @@ export function WalletRecommendationFilterBar({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-700 dark:text-foreground">Features:</span>
+          <span className="text-sm font-medium text-foreground">Features:</span>
           <button
             onClick={onToggleLightning}
             className={cn(BTN_BASE, filters.lightning ? ACTIVE_CLASS : INACTIVE_CLASS)}

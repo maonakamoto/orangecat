@@ -180,7 +180,7 @@ export default function UserProfileDropdown({
           ref={buttonRef}
           onClick={toggle}
           disabled={false}
-          className="flex items-center space-x-2 text-gray-700 dark:text-foreground hover:text-gray-900 dark:hover:text-foreground focus:outline-none disabled:opacity-50"
+          className="flex items-center space-x-2 text-foreground focus:outline-none disabled:opacity-50"
         >
           <span className="text-sm font-medium">{displayName}</span>
           <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -195,7 +195,7 @@ export default function UserProfileDropdown({
                   <button
                     key={item.label}
                     onClick={() => handleNavigation(item.href)}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-foreground hover:bg-gray-100 dark:hover:bg-muted hover:text-gray-900 dark:hover:text-foreground"
+                    className="flex items-center w-full px-4 py-2 text-sm text-foreground hover:bg-muted"
                     role="menuitem"
                   >
                     <Icon className="w-4 h-4 mr-3" />
@@ -206,7 +206,7 @@ export default function UserProfileDropdown({
               <hr className="my-1 border-gray-100 dark:border-border" />
               <button
                 onClick={handleSignOut}
-                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-foreground hover:bg-gray-100 dark:hover:bg-muted hover:text-gray-900 dark:hover:text-foreground"
+                className="flex items-center w-full px-4 py-2 text-sm text-foreground hover:bg-muted"
                 role="menuitem"
               >
                 <LogOut className="w-4 h-4 mr-3" />
@@ -227,7 +227,7 @@ export default function UserProfileDropdown({
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
         disabled={isProfileLoading}
-        className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3 text-gray-700 dark:text-foreground hover:text-gray-900 dark:hover:text-foreground hover:bg-muted transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-1 rounded-xl px-1.5 sm:px-2 md:px-3 py-1.5 sm:py-2 md:py-2.5 min-h-9 sm:min-h-10 md:min-h-11 disabled:opacity-50"
+        className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3 text-foreground hover:bg-muted transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-1 rounded-xl px-1.5 sm:px-2 md:px-3 py-1.5 sm:py-2 md:py-2.5 min-h-9 sm:min-h-10 md:min-h-11 disabled:opacity-50"
         aria-haspopup="menu"
         aria-expanded={isOpen}
         aria-label="User menu"

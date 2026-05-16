@@ -41,7 +41,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
         name="username"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground flex items-center gap-1">
+            <FormLabel className="text-sm font-medium text-foreground flex items-center gap-1">
               Username
               <span className="text-red-500 text-xs font-bold">*</span>
               <span className="text-xs text-muted-foreground font-normal">(required)</span>
@@ -67,9 +67,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Display Name
-            </FormLabel>
+            <FormLabel className="text-sm font-medium text-foreground">Display Name</FormLabel>
             <FormControl>
               <Input
                 {...field}
@@ -91,9 +89,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
         name="bio"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Bio
-            </FormLabel>
+            <FormLabel className="text-sm font-medium text-foreground">Bio</FormLabel>
             <FormControl>
               <Textarea
                 {...field}

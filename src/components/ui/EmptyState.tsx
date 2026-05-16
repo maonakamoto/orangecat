@@ -94,7 +94,7 @@ export function ProjectsEmptyState({
         {onDiscoverProjects && (
           <button
             onClick={onDiscoverProjects}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-border text-sm font-medium rounded-md text-gray-700 dark:text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tiffany"
+            className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-border text-sm font-medium rounded-md text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tiffany"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

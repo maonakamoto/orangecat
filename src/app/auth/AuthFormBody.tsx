@@ -55,10 +55,7 @@ export function AuthFormBody({
   return (
     <form onSubmit={mode === 'forgot' ? handleForgotPassword : handleSubmit} className="space-y-4">
       <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2"
-        >
+        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
           Email address
         </label>
         <Input
@@ -76,10 +73,7 @@ export function AuthFormBody({
 
       {mode !== 'forgot' && (
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2"
-          >
+          <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
             Password
           </label>
           <div className="relative">
@@ -119,7 +113,7 @@ export function AuthFormBody({
         <div>
           <label
             htmlFor="confirmPassword"
-            className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2"
+            className="block text-sm font-medium text-foreground mb-2"
           >
             Confirm Password
           </label>
@@ -149,7 +143,7 @@ export function AuthFormBody({
 
       {mode === 'register' && captchaEnabled && turnstileSiteKey && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Verify you&apos;re human
           </label>
           <TurnstileCaptcha

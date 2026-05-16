@@ -71,7 +71,7 @@ export function AIChatMessage({
             </span>
           )}
         </div>
-        <div className="prose prose-sm max-w-none text-gray-700 dark:text-foreground whitespace-pre-wrap">
+        <div className="prose prose-sm max-w-none text-foreground whitespace-pre-wrap">
           {message.content}
         </div>
         {!isUser && message.cost_btc && message.cost_btc > 0 && (

@@ -34,25 +34,19 @@ export function AuthHeroPanel() {
             <div className="w-10 h-10 rounded-xl bg-tiffany-50 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-tiffany-600" />
             </div>
-            <span className="text-lg text-gray-700 dark:text-foreground font-medium">
-              Full Economic Spectrum
-            </span>
+            <span className="text-lg text-foreground font-medium">Full Economic Spectrum</span>
           </div>
           <div className="flex items-center justify-center lg:justify-start space-x-4">
             <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
               <Globe className="w-5 h-5 text-orange-600" />
             </div>
-            <span className="text-lg text-gray-700 dark:text-foreground font-medium">
-              Any Currency, Any Identity
-            </span>
+            <span className="text-lg text-foreground font-medium">Any Currency, Any Identity</span>
           </div>
           <div className="flex items-center justify-center lg:justify-start space-x-4">
             <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
               <Shield className="w-5 h-5 text-muted-foreground" />
             </div>
-            <span className="text-lg text-gray-700 dark:text-foreground font-medium">
-              Pseudonymous by Default
-            </span>
+            <span className="text-lg text-foreground font-medium">Pseudonymous by Default</span>
           </div>
         </div>
       </div>

@@ -53,9 +53,7 @@ export function PreferencesSection({ control, onFieldFocus }: PreferencesSection
         name="currency"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Default Currency
-            </FormLabel>
+            <FormLabel className="text-sm font-medium text-foreground">Default Currency</FormLabel>
             <Select onValueChange={field.onChange} value={field.value || PLATFORM_DEFAULT_CURRENCY}>
               <FormControl>
                 <SelectTrigger

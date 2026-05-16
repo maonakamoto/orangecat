@@ -97,7 +97,7 @@ export function CurrencyInput({
               value={inputCurrency}
               onChange={e => handleCurrencyChange(e.target.value as Currency)}
               disabled={disabled}
-              className="px-3 py-2 border border-l-0 border-gray-300 dark:border-border rounded-r-md bg-muted text-sm font-medium text-gray-700 dark:text-foreground focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
+              className="px-3 py-2 border border-l-0 border-gray-300 dark:border-border rounded-r-md bg-muted text-sm font-medium text-foreground focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
             >
               {ALL_CURRENCIES.map(curr => (
                 <option key={curr} value={curr}>
@@ -106,7 +106,7 @@ export function CurrencyInput({
               ))}
             </select>
           ) : (
-            <div className="px-3 py-2 border border-l-0 border-gray-300 dark:border-border rounded-r-md bg-muted text-sm font-medium text-gray-700 dark:text-foreground">
+            <div className="px-3 py-2 border border-l-0 border-gray-300 dark:border-border rounded-r-md bg-muted text-sm font-medium text-foreground">
               {inputCurrency}
             </div>
           )}
@@ -152,7 +152,7 @@ export function CurrencyInput({
             {inputCurrency !== 'SATS' && (
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">SATS</span>
-                <span className="font-mono font-medium text-gray-700 dark:text-foreground">
+                <span className="font-mono font-medium text-foreground">
                   {bitcoinToSats(breakdown.btc).toLocaleString('en-US')}
                 </span>
               </div>
@@ -163,7 +163,7 @@ export function CurrencyInput({
               .map(([curr, amount]) => (
                 <div key={curr} className="flex justify-between items-center">
                   <span className="text-muted-foreground">{curr}</span>
-                  <span className="font-mono font-medium text-gray-700 dark:text-foreground">
+                  <span className="font-mono font-medium text-foreground">
                     {formatCurrency(amount, curr as Currency, { showSymbol: false })}
                   </span>
                 </div>

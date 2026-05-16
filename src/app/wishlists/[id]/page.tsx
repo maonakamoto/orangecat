@@ -176,9 +176,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                     <CardTitle className="text-lg">About this Wishlist</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 dark:text-foreground whitespace-pre-wrap">
-                      {wishlist.description}
-                    </p>
+                    <p className="text-foreground whitespace-pre-wrap">{wishlist.description}</p>
                   </CardContent>
                 </Card>
               )}

@@ -82,9 +82,7 @@ export function AICreditsPanel() {
 
           {data?.transactions && data.transactions.length > 0 && (
             <div className="space-y-2">
-              <h4 className="text-sm font-medium text-gray-700 dark:text-foreground">
-                Recent Activity
-              </h4>
+              <h4 className="text-sm font-medium text-foreground">Recent Activity</h4>
               <div className="space-y-2 max-h-48 overflow-y-auto">
                 {data.transactions.slice(0, 5).map(tx => (
                   <div
@@ -147,9 +145,7 @@ export function AICreditsPanel() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 dark:text-foreground">
-                Custom Amount
-              </label>
+              <label className="text-sm font-medium text-foreground">Custom Amount</label>
               <Input
                 type="number"
                 value={depositAmount}

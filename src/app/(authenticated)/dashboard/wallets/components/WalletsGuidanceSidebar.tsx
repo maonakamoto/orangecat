@@ -34,7 +34,7 @@ export function WalletsGuidanceSidebar({ focusedField }: WalletsGuidanceSidebarP
               later.
             </p>
           </div>
-          <ul className="list-disc list-inside text-sm text-gray-700 dark:text-foreground space-y-1">
+          <ul className="list-disc list-inside text-sm text-foreground space-y-1">
             <li>Choose a clear category like Rent, Food, or Emergency</li>
             <li>Give the wallet a human name that explains its purpose</li>
             <li>Paste a Bitcoin address or xpub from your own wallet</li>

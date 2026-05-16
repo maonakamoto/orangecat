@@ -51,9 +51,7 @@ export function OnboardingHeader({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-foreground">
-                {currentStepTitle}
-              </span>
+              <span className="text-sm font-medium text-foreground">{currentStepTitle}</span>
               <span className="text-sm text-muted-foreground">
                 {Math.round(progress)}% Complete
               </span>

@@ -94,7 +94,7 @@ export default function IntelligentOnboarding() {
 
         {/* Input */}
         <div className="bg-card rounded-2xl shadow-sm border border-border p-6 space-y-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground">
+          <label className="block text-sm font-medium text-foreground">
             What are you here to do?
           </label>
 

@@ -79,7 +79,7 @@ export function NotificationItem({
               <h4 className="text-sm font-medium text-foreground">{notification.title}</h4>
               {notification.message && (
                 <p
-                  className={`text-sm mt-1 ${notification.read ? 'text-muted-foreground' : 'text-gray-700 dark:text-foreground'}`}
+                  className={`text-sm mt-1 ${notification.read ? 'text-muted-foreground' : 'text-foreground'}`}
                 >
                   {notification.message}
                 </p>

@@ -61,7 +61,7 @@ export function TaskFormFields({
   return (
     <form onSubmit={onSubmit} className="p-6 space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+        <label className="block text-sm font-medium text-foreground mb-1">
           Title <span className="text-red-500">*</span>
         </label>
         <input
@@ -76,7 +76,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+        <label className="block text-sm font-medium text-foreground mb-1">
           Task Type <span className="text-red-500">*</span>
         </label>
         <select
@@ -105,9 +105,7 @@ export function TaskFormFields({
 
       {formData.task_type === TASK_TYPES.RECURRING_SCHEDULED && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-            Schedule
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-1">Schedule</label>
           <input
             type="text"
             name="schedule_human"
@@ -125,7 +123,7 @@ export function TaskFormFields({
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+        <label className="block text-sm font-medium text-foreground mb-1">
           Category <span className="text-red-500">*</span>
         </label>
         <select
@@ -143,9 +141,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-          Priority
-        </label>
+        <label className="block text-sm font-medium text-foreground mb-1">Priority</label>
         <select
           name="priority"
           value={formData.priority}
@@ -161,7 +157,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
+        <label className="block text-sm font-medium text-foreground mb-1">
           Estimated Time (Minutes)
         </label>
         <input
@@ -178,9 +174,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-          Description
-        </label>
+        <label className="block text-sm font-medium text-foreground mb-1">Description</label>
         <textarea
           name="description"
           value={formData.description}
@@ -193,9 +187,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-          Instructions
-        </label>
+        <label className="block text-sm font-medium text-foreground mb-1">Instructions</label>
         <textarea
           name="instructions"
           value={formData.instructions}
@@ -208,9 +200,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-1">
-          Tags
-        </label>
+        <label className="block text-sm font-medium text-foreground mb-1">Tags</label>
         <div className="flex gap-2 mb-2">
           <input
             type="text"

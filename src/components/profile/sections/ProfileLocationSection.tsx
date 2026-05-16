@@ -37,9 +37,7 @@ export function ProfileLocationSection({
         name="location_search"
         render={({ field }) => (
           <FormItem id="location">
-            <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground">
-              Location
-            </FormLabel>
+            <FormLabel className="text-sm font-medium text-foreground">Location</FormLabel>
             <FormControl>
               <LocationInput
                 value={field.value || ''}
@@ -100,11 +98,9 @@ export function ProfileLocationSection({
 
       {/* Location visibility/group controls */}
       <div className="mt-2 rounded-lg border border-border bg-muted p-3">
-        <div className="text-xs font-medium text-gray-700 dark:text-foreground mb-2">
-          Location visibility
-        </div>
+        <div className="text-xs font-medium text-foreground mb-2">Location visibility</div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-          <label className="inline-flex items-center gap-2 text-sm text-gray-700 dark:text-foreground">
+          <label className="inline-flex items-center gap-2 text-sm text-foreground">
             <input
               type="radio"
               name="location_mode"
@@ -114,7 +110,7 @@ export function ProfileLocationSection({
             />
             Show actual city/region
           </label>
-          <label className="inline-flex items-center gap-2 text-sm text-gray-700 dark:text-foreground">
+          <label className="inline-flex items-center gap-2 text-sm text-foreground">
             <input
               type="radio"
               name="location_mode"
@@ -124,7 +120,7 @@ export function ProfileLocationSection({
             />
             Hide my location
           </label>
-          <label className="inline-flex items-center gap-2 text-sm text-gray-700 dark:text-foreground">
+          <label className="inline-flex items-center gap-2 text-sm text-foreground">
             <input
               type="radio"
               name="location_mode"
