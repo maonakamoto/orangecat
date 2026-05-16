@@ -21,7 +21,7 @@ export default function HeroSectionStatic() {
           {/* Left Column - Content */}
           <div>
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-orange-200/50 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-card/60 backdrop-blur-sm border border-orange-200/50 dark:border-border/50 mb-6">
               <div className="flex items-center gap-1.5">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
                 <span className="text-sm font-medium text-gray-700 dark:text-foreground">

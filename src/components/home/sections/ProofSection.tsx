@@ -47,7 +47,7 @@ export default function ProofSection() {
               {/* Category Badge */}
               <div className="flex items-start justify-between mb-4">
                 <span className="text-3xl sm:text-4xl">{useCase.emoji}</span>
-                <span className="px-3 py-1 bg-white/80 text-gray-600 text-xs sm:text-sm font-medium rounded-full">
+                <span className="px-3 py-1 bg-white/80 dark:bg-card/80 text-gray-600 dark:text-muted-foreground text-xs sm:text-sm font-medium rounded-full">
                   {useCase.category}
                 </span>
               </div>
@@ -61,7 +61,7 @@ export default function ProofSection() {
               </p>
 
               {/* Transparency Example */}
-              <div className="bg-white/60 rounded-lg p-3 sm:p-4">
+              <div className="bg-white/60 dark:bg-card/60 rounded-lg p-3 sm:p-4">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground">
                   <span className="font-semibold text-gray-800 dark:text-foreground">
                     Transparency in action:{' '}

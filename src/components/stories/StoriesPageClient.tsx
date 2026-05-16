@@ -143,51 +143,69 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                     <div className="p-8">
                       {/* Story Header */}
                       <div className="flex items-start gap-4 mb-6">
-                        <div className="w-16 h-16 text-4xl flex items-center justify-center bg-white rounded-2xl shadow-md">
+                        <div className="w-16 h-16 text-4xl flex items-center justify-center bg-white dark:bg-card rounded-2xl shadow-md">
                           {story.emoji}
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-2xl font-semibold text-gray-900 mb-1">
+                          <h3 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-1">
                             {story.name}
                           </h3>
-                          <p className="text-gray-700 font-medium">{story.role}</p>
-                          <p className="text-gray-600 text-sm">{story.location}</p>
+                          <p className="text-gray-700 dark:text-muted-foreground font-medium">
+                            {story.role}
+                          </p>
+                          <p className="text-gray-600 dark:text-muted-foreground text-sm">
+                            {story.location}
+                          </p>
                         </div>
                       </div>
 
                       {/* Funding Details */}
                       <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div className="bg-white/70 rounded-lg p-3">
-                          <p className="text-xs text-gray-600 mb-1">Goal</p>
-                          <p className="text-lg font-bold text-gray-900">{story.goal}</p>
+                        <div className="bg-white/70 dark:bg-card/70 rounded-lg p-3">
+                          <p className="text-xs text-gray-600 dark:text-muted-foreground mb-1">
+                            Goal
+                          </p>
+                          <p className="text-lg font-bold text-gray-900 dark:text-foreground">
+                            {story.goal}
+                          </p>
                         </div>
-                        <div className="bg-white/70 rounded-lg p-3">
-                          <p className="text-xs text-gray-600 mb-1">Raised</p>
+                        <div className="bg-white/70 dark:bg-card/70 rounded-lg p-3">
+                          <p className="text-xs text-gray-600 dark:text-muted-foreground mb-1">
+                            Raised
+                          </p>
                           <p className="text-lg font-bold text-green-600">{story.raised}</p>
                         </div>
-                        <div className="bg-white/70 rounded-lg p-3">
-                          <p className="text-xs text-gray-600 mb-1">Supporters</p>
-                          <p className="text-lg font-bold text-gray-900">{story.supporters}</p>
+                        <div className="bg-white/70 dark:bg-card/70 rounded-lg p-3">
+                          <p className="text-xs text-gray-600 dark:text-muted-foreground mb-1">
+                            Supporters
+                          </p>
+                          <p className="text-lg font-bold text-gray-900 dark:text-foreground">
+                            {story.supporters}
+                          </p>
                         </div>
-                        <div className="bg-white/70 rounded-lg p-3">
-                          <p className="text-xs text-gray-600 mb-1">Timeline</p>
-                          <p className="text-lg font-bold text-gray-900">{story.timeline}</p>
+                        <div className="bg-white/70 dark:bg-card/70 rounded-lg p-3">
+                          <p className="text-xs text-gray-600 dark:text-muted-foreground mb-1">
+                            Timeline
+                          </p>
+                          <p className="text-lg font-bold text-gray-900 dark:text-foreground">
+                            {story.timeline}
+                          </p>
                         </div>
                       </div>
 
                       {/* Summary */}
-                      <p className="text-gray-700 font-medium mb-6 leading-relaxed">
+                      <p className="text-gray-700 dark:text-muted-foreground font-medium mb-6 leading-relaxed">
                         {story.summary}
                       </p>
 
                       {/* Story Content (MDX) */}
-                      <div className="prose prose-sm max-w-none mb-6 text-gray-700">
+                      <div className="prose prose-sm max-w-none mb-6 text-gray-700 dark:text-muted-foreground">
                         <MDXRemote source={story.story} />
                       </div>
 
                       {/* Category Badge */}
                       <div className="mt-6">
-                        <span className="inline-block px-3 py-1 bg-white/70 text-gray-700 text-sm font-medium rounded-full">
+                        <span className="inline-block px-3 py-1 bg-white/70 dark:bg-card/70 text-gray-700 dark:text-muted-foreground text-sm font-medium rounded-full">
                           {story.category}
                         </span>
                       </div>
