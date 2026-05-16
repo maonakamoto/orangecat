@@ -43,11 +43,11 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
         className={cn(
           'flex items-center gap-2 px-3 py-1.5 rounded-full text-sm',
           'bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/70 transition-colors',
-          'border border-gray-200 dark:border-border',
+          'border border-border',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
-        <Sparkles className="h-4 w-4 text-gray-500 dark:text-muted-foreground" />
+        <Sparkles className="h-4 w-4 text-muted-foreground" />
         <span className="text-gray-700 dark:text-foreground max-w-[120px] truncate">
           {displayName}
         </span>
@@ -60,7 +60,7 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-card rounded-xl shadow-lg border border-gray-200 dark:border-border py-2 z-50 max-h-80 overflow-y-auto">
+        <div className="absolute top-full left-0 mt-2 w-72 bg-card rounded-xl shadow-lg border border-border py-2 z-50 max-h-80 overflow-y-auto">
           {/* Auto option */}
           <button
             onClick={() => {
@@ -73,11 +73,11 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
             )}
           >
             <div className="flex-1">
-              <div className="font-medium text-gray-900 dark:text-foreground flex items-center gap-2">
+              <div className="font-medium text-foreground flex items-center gap-2">
                 Auto (Best Free)
                 {selectedModel === 'auto' && <Check className="h-4 w-4 text-tiffany-500" />}
               </div>
-              <div className="text-xs text-gray-500 dark:text-muted-foreground">
+              <div className="text-xs text-muted-foreground">
                 Automatically selects the best model
               </div>
             </div>
@@ -86,7 +86,7 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
           <div className="h-px bg-gray-100 dark:bg-border my-1" />
 
           {/* Free models */}
-          <div className="px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-muted-foreground uppercase">
+          <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground uppercase">
             Free Models
           </div>
           {freeModels.map(model => (
@@ -102,13 +102,13 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
               )}
             >
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-gray-900 dark:text-foreground flex items-center gap-2 truncate">
+                <div className="font-medium text-foreground flex items-center gap-2 truncate">
                   {model.name}
                   {selectedModel === model.id && (
                     <Check className="h-4 w-4 text-tiffany-500 flex-shrink-0" />
                   )}
                 </div>
-                <div className="text-xs text-gray-500 dark:text-muted-foreground truncate">
+                <div className="text-xs text-muted-foreground truncate">
                   {model.provider} • {model.rateLimit}
                 </div>
               </div>

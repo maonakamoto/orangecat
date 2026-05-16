@@ -37,7 +37,7 @@ export default function ProfileEntityTab({
 
   if (loading) {
     return (
-      <div className="text-gray-500 dark:text-muted-foreground text-base py-8 text-center">
+      <div className="text-muted-foreground text-base py-8 text-center">
         Loading {displayName}...
       </div>
     );
@@ -50,7 +50,7 @@ export default function ProfileEntityTab({
         <h3 className="text-lg font-semibold text-gray-700 dark:text-foreground mb-2">
           No {displayName} Yet
         </h3>
-        <p className="text-gray-500 dark:text-muted-foreground text-base mb-6">
+        <p className="text-muted-foreground text-base mb-6">
           {isOwnProfile
             ? `You haven't published any ${displayName.toLowerCase()} yet`
             : `No ${displayName.toLowerCase()} to display`}
@@ -70,7 +70,7 @@ export default function ProfileEntityTab({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground flex items-center gap-2">
+        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
           <Icon className="w-5 h-5 text-orange-500" />
           {entities.length} {entities.length === 1 ? metadata?.name : metadata?.namePlural}
         </h3>
@@ -98,7 +98,7 @@ export default function ProfileEntityTab({
             <Link
               key={entity.id}
               href={getViewPath(entity.id)}
-              className="block overflow-hidden rounded-xl border-2 border-gray-200 dark:border-border hover:border-orange-300 dark:hover:border-orange-500 hover:shadow-lg bg-white dark:bg-card transition-all duration-200 group"
+              className="block overflow-hidden rounded-xl border-2 border-border hover:border-orange-300 dark:hover:border-orange-500 hover:shadow-lg bg-card transition-all duration-200 group"
             >
               <div className="flex flex-col sm:flex-row">
                 <div className="relative w-full sm:w-32 h-32 sm:h-auto flex-shrink-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-muted dark:to-muted">
@@ -134,17 +134,17 @@ export default function ProfileEntityTab({
 
                 <div className="flex-1 p-4 sm:p-5 flex flex-col">
                   <div className="flex-1">
-                    <h4 className="font-bold text-gray-900 dark:text-foreground text-lg mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-1">
+                    <h4 className="font-bold text-foreground text-lg mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-1">
                       {getTitle(entity)}
                     </h4>
                     {entity.description && (
-                      <p className="text-base text-gray-600 dark:text-muted-foreground line-clamp-2 mb-3">
+                      <p className="text-base text-muted-foreground line-clamp-2 mb-3">
                         {entity.description}
                       </p>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-muted-foreground mb-3">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
                     {entityType === 'event' && entity.start_date && (
                       <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
@@ -173,13 +173,13 @@ export default function ProfileEntityTab({
                       </span>
                     )}
                     {getPriceDisplay(entity) && (
-                      <span className="font-semibold text-gray-900 dark:text-foreground">
+                      <span className="font-semibold text-foreground">
                         {getPriceDisplay(entity)}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-gray-500 dark:text-muted-foreground pt-2 border-t border-gray-100 dark:border-border">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-gray-100 dark:border-border">
                     <span>{getRelativeTime(entity.created_at)}</span>
                     {entityType === 'asset' && entity.verification_status === 'verified' && (
                       <span className="text-green-600 font-medium">Verified</span>

@@ -129,14 +129,14 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedStatuses.includes(statusKey)
                     ? STATUS_STYLES[statusKey].selected
-                    : 'bg-white/80 dark:bg-muted border-gray-200 dark:border-border text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted/80'
+                    : 'bg-white/80 dark:bg-muted border-border text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted/80'
                 }`}
               >
                 {STATUS_STYLES[statusKey].label}
               </button>
             ))}
           </div>
-          <p className="text-xs text-gray-500 dark:text-muted-foreground mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             Draft projects are not shown in search results
           </p>
         </div>
@@ -155,7 +155,7 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedCategories.includes(cat.value)
                     ? 'bg-orange-100 border-orange-300 text-orange-700'
-                    : 'bg-white/80 dark:bg-muted border-gray-200 dark:border-border text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted/80'
+                    : 'bg-white/80 dark:bg-muted border-border text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted/80'
                 }`}
               >
                 {cat.label}
@@ -208,7 +208,7 @@ export default function DiscoverFilters({
           postal ||
           radiusKm ||
           sortBy !== 'recent') && (
-          <div className="mb-6 pb-6 border-b border-gray-200 dark:border-border">
+          <div className="mb-6 pb-6 border-b border-border">
             <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
               Active filters
             </label>

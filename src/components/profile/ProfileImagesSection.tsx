@@ -51,7 +51,7 @@ export function ProfileImagesSection({
                   className="w-8 h-8 mx-auto text-gray-400 dark:text-muted-foreground mb-2"
                   data-testid="camera-icon"
                 />
-                <p className="text-sm text-gray-500 dark:text-muted-foreground">Add banner photo</p>
+                <p className="text-sm text-muted-foreground">Add banner photo</p>
               </div>
             </div>
           )}

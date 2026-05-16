@@ -95,9 +95,7 @@ export function ContributionAmountInput({
         />
       )}
 
-      {value > 0 && (
-        <p className="text-sm text-gray-500 dark:text-muted-foreground">{formatAmount(value)}</p>
-      )}
+      {value > 0 && <p className="text-sm text-muted-foreground">{formatAmount(value)}</p>}
     </div>
   );
 }

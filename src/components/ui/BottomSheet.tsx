@@ -134,7 +134,7 @@ export default function BottomSheet({
         {/* Sheet */}
         <div
           ref={sheetRef}
-          className="relative w-full bg-white dark:bg-card rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out"
+          className="relative w-full bg-card rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out"
           style={{
             maxHeight,
             transform: isOpen ? 'translateY(0)' : 'translateY(100%)',
@@ -150,11 +150,8 @@ export default function BottomSheet({
 
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-border">
-              <h2
-                id="bottom-sheet-title"
-                className="text-lg font-semibold text-gray-900 dark:text-foreground"
-              >
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+              <h2 id="bottom-sheet-title" className="text-lg font-semibold text-foreground">
                 {title || ''}
               </h2>
 

@@ -186,7 +186,7 @@ export default function ConversationList({
     <>
       <div className="divide-y divide-gray-100">
         {filteredConversations.length === 0 ? (
-          <div className="p-10 text-center text-gray-500 dark:text-muted-foreground">
+          <div className="p-10 text-center text-muted-foreground">
             <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-60" />
             <p className="text-sm font-medium">
               {searchQuery ? 'No conversations match your search' : 'No conversations yet'}

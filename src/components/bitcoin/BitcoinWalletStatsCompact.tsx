@@ -62,9 +62,7 @@ export default function BitcoinWalletStatsCompact({
 
   if (loading) {
     return (
-      <div
-        className={`bg-white dark:bg-card rounded-lg p-4 border border-gray-200 dark:border-border ${className}`}
-      >
+      <div className={`bg-card rounded-lg p-4 border border-border ${className}`}>
         <div className="flex items-center justify-center py-4">
           <RefreshCw className="w-5 h-5 animate-spin text-orange-500" />
         </div>
@@ -74,10 +72,8 @@ export default function BitcoinWalletStatsCompact({
 
   if (error || balance === null) {
     return (
-      <div
-        className={`bg-white dark:bg-card rounded-lg p-4 border border-gray-200 dark:border-border ${className}`}
-      >
-        <div className="text-center text-gray-500 dark:text-muted-foreground py-2">
+      <div className={`bg-card rounded-lg p-4 border border-border ${className}`}>
+        <div className="text-center text-muted-foreground py-2">
           <p className="text-sm mb-2">Unable to load wallet data</p>
           <Button variant="outline" size="sm" onClick={fetchData}>
             <RefreshCw className="w-3 h-3 mr-1" />
@@ -95,9 +91,7 @@ export default function BitcoinWalletStatsCompact({
   const hasTransactions = transactions.length > 0;
 
   return (
-    <div
-      className={`bg-white dark:bg-card rounded-lg border border-gray-200 dark:border-border overflow-hidden ${className}`}
-    >
+    <div className={`bg-card rounded-lg border border-border overflow-hidden ${className}`}>
       {/* Balance Display */}
       <div className={`${GRADIENTS.brandOrangeAmber} p-4 text-white`}>
         <div className="flex items-center justify-between mb-1">
@@ -155,7 +149,7 @@ export default function BitcoinWalletStatsCompact({
                     </span>
                   )}
                 </div>
-                <div className="text-xs text-gray-500 dark:text-muted-foreground">
+                <div className="text-xs text-muted-foreground">
                   {tx.timestamp ? formatDate(new Date(tx.timestamp * 1000)) : 'Unconfirmed'}
                 </div>
               </div>
@@ -164,14 +158,14 @@ export default function BitcoinWalletStatsCompact({
 
           {transactions.length > 3 && (
             <div className="mt-3 text-center">
-              <span className="text-xs text-gray-500 dark:text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 +{transactions.length - 3} more transactions
               </span>
             </div>
           )}
         </div>
       ) : (
-        <div className="p-4 text-center text-gray-500 dark:text-muted-foreground">
+        <div className="p-4 text-center text-muted-foreground">
           <p className="text-xs">No transactions yet</p>
         </div>
       )}

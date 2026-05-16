@@ -30,10 +30,8 @@ export default function EmptyState({
       <div className="w-12 h-12 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center mb-4">
         <Icon className="w-6 h-6 text-gray-400 dark:text-muted-foreground" />
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">{title}</h3>
-      {description && (
-        <p className="text-gray-600 dark:text-muted-foreground mb-6 max-w-md">{description}</p>
-      )}
+      <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
+      {description && <p className="text-muted-foreground mb-6 max-w-md">{description}</p>}
       {action}
     </div>
   );
@@ -70,10 +68,8 @@ export function ProjectsEmptyState({
           />
         </svg>
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-3">
-        No projects found
-      </h3>
-      <p className="text-gray-600 dark:text-muted-foreground mb-8 max-w-md">
+      <h3 className="text-lg font-semibold text-foreground mb-3">No projects found</h3>
+      <p className="text-muted-foreground mb-8 max-w-md">
         {onDiscoverProjects
           ? 'Start exploring amazing projects or create your own to get started.'
           : 'Create your first project to showcase your work and connect with contributors.'}
@@ -98,7 +94,7 @@ export function ProjectsEmptyState({
         {onDiscoverProjects && (
           <button
             onClick={onDiscoverProjects}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-border text-sm font-medium rounded-md text-gray-700 dark:text-foreground bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tiffany"
+            className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-border text-sm font-medium rounded-md text-gray-700 dark:text-foreground bg-card hover:bg-gray-50 dark:hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tiffany"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

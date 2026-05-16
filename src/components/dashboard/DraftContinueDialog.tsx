@@ -78,19 +78,19 @@ export default function DraftContinueDialog({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="max-w-2xl p-0">
         <DialogTitle className="sr-only">You Have Unfinished Work</DialogTitle>
-        <Card className="w-full bg-white dark:bg-card shadow-2xl border-0">
+        <Card className="w-full bg-card shadow-2xl border-0">
           <CardContent className="p-0">
             {/* Header */}
-            <div className="bg-gradient-to-r from-tiffany-50 to-orange-50 p-6 border-b border-gray-200 dark:border-border">
+            <div className="bg-gradient-to-r from-tiffany-50 to-orange-50 p-6 border-b border-border">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-tiffany-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <FileText className="w-6 h-6 text-tiffany-600" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground mb-1">
+                  <h2 className="text-xl font-semibold text-foreground mb-1">
                     You Have Unfinished Work
                   </h2>
-                  <p className="text-gray-600 dark:text-muted-foreground">
+                  <p className="text-muted-foreground">
                     What would you like to do with your{' '}
                     {totalDrafts > 1 ? 'draft projects' : 'draft project'}?
                   </p>
@@ -99,7 +99,7 @@ export default function DraftContinueDialog({
             </div>
 
             {/* Draft Summary */}
-            <div className="p-6 bg-gray-50 dark:bg-muted border-b border-gray-200 dark:border-border">
+            <div className="p-6 bg-gray-50 dark:bg-muted border-b border-border">
               <div className="flex items-center gap-3 mb-3">
                 {isLocalDraft && (
                   <div className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium animate-pulse">
@@ -116,11 +116,11 @@ export default function DraftContinueDialog({
                 )}
               </div>
 
-              <h3 className="font-semibold text-gray-900 dark:text-foreground mb-2">
+              <h3 className="font-semibold text-foreground mb-2">
                 &ldquo;{primaryDraft.title}&rdquo;
               </h3>
 
-              <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-muted-foreground">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Clock className="w-4 h-4" />
                   <span>Last saved {formatLastUpdated(new Date(primaryDraft.updated_at))}</span>
@@ -135,7 +135,7 @@ export default function DraftContinueDialog({
 
               {/* Progress Bar */}
               <div className="mt-4">
-                <div className="flex justify-between text-xs text-gray-500 dark:text-muted-foreground mb-1">
+                <div className="flex justify-between text-xs text-muted-foreground mb-1">
                   <span>Project Progress</span>
                   <span>{completionPercentage}%</span>
                 </div>
@@ -158,10 +158,8 @@ export default function DraftContinueDialog({
                       <Edit3 className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-foreground">
-                        Continue Where You Left Off
-                      </h4>
-                      <p className="text-base text-gray-600 dark:text-muted-foreground">
+                      <h4 className="font-semibold text-foreground">Continue Where You Left Off</h4>
+                      <p className="text-base text-muted-foreground">
                         {isLocalDraft
                           ? 'Resume your unsaved progress and complete your project'
                           : 'Complete your draft project and publish it'}
@@ -182,17 +180,15 @@ export default function DraftContinueDialog({
               </div>
 
               {/* Start Fresh - Secondary Action */}
-              <div className="border border-gray-200 dark:border-border rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-muted/50 transition-colors">
+              <div className="border border-border rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-muted/50 transition-colors">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gray-100 dark:bg-muted rounded-lg flex items-center justify-center">
-                      <Plus className="w-5 h-5 text-gray-600 dark:text-muted-foreground" />
+                      <Plus className="w-5 h-5 text-muted-foreground" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-foreground">
-                        Start a New Project
-                      </h4>
-                      <p className="text-base text-gray-600 dark:text-muted-foreground">
+                      <h4 className="font-semibold text-foreground">Start a New Project</h4>
+                      <p className="text-base text-muted-foreground">
                         Create a completely new project from scratch
                       </p>
                     </div>
@@ -220,11 +216,11 @@ export default function DraftContinueDialog({
 
               {/* Additional Options */}
               {totalDrafts > 1 && (
-                <div className="pt-4 border-t border-gray-200 dark:border-border">
+                <div className="pt-4 border-t border-border">
                   <Link href={ROUTES.DASHBOARD.PROJECTS}>
                     <Button
                       variant="ghost"
-                      className="w-full text-gray-600 dark:text-muted-foreground hover:text-gray-800 dark:hover:text-foreground"
+                      className="w-full text-muted-foreground hover:text-gray-800 dark:hover:text-foreground"
                     >
                       View All {totalDrafts} Draft Projects
                     </Button>

@@ -37,21 +37,19 @@ export function LearningPathCard({ path }: LearningPathCardProps) {
               {path.level}
             </span>
             {path.status === 'coming-soon' && (
-              <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground">
+              <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-muted text-muted-foreground">
                 Coming Soon
               </span>
             )}
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2 group-hover:text-orange-600 transition-colors">
+        <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-orange-600 transition-colors">
           {path.title}
         </h3>
-        <p className="text-gray-600 dark:text-muted-foreground mb-4 leading-relaxed">
-          {path.description}
-        </p>
+        <p className="text-muted-foreground mb-4 leading-relaxed">{path.description}</p>
 
-        <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-muted-foreground mb-6">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
           <div className="flex items-center gap-1">
             <Clock className="w-4 h-4" />
             {path.duration}
@@ -67,7 +65,7 @@ export function LearningPathCard({ path }: LearningPathCardProps) {
           className={`inline-flex items-center justify-center w-full px-4 py-2 rounded-lg font-medium transition-colors ${
             path.status === 'available'
               ? 'bg-orange-600 text-white hover:bg-orange-700'
-              : 'bg-gray-100 dark:bg-muted text-gray-500 dark:text-muted-foreground cursor-not-allowed'
+              : 'bg-gray-100 dark:bg-muted text-muted-foreground cursor-not-allowed'
           }`}
           {...(path.status === 'coming-soon' ? { 'aria-disabled': true } : {})}
         >

@@ -118,11 +118,11 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
   return (
     <div className="fixed inset-0 z-50 bg-white dark:bg-background">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-border">
+      <div className="flex items-center gap-3 p-4 border-b border-border">
         <button
           onClick={onClose}
           aria-label="Close search"
-          className="p-2 -ml-2 text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground min-h-11 min-w-11 flex items-center justify-center"
+          className="p-2 -ml-2 text-muted-foreground hover:text-gray-700 dark:hover:text-foreground min-h-11 min-w-11 flex items-center justify-center"
         >
           <X className="w-5 h-5" />
         </button>
@@ -174,7 +174,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
               </h4>
               <button
                 onClick={clearHistory}
-                className="text-sm text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+                className="text-sm text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
               >
                 Clear
               </button>
@@ -244,9 +244,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
               </div>
             ) : (
               !loading && (
-                <div className="text-gray-500 dark:text-muted-foreground px-4 py-3">
-                  No suggestions found
-                </div>
+                <div className="text-muted-foreground px-4 py-3">No suggestions found</div>
               )
             )}
 
@@ -268,9 +266,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
         {query.length === 0 && searchHistory.length === 0 && (
           <div className="p-8 text-center">
             <Search className="w-12 h-12 text-gray-300 dark:text-muted mx-auto mb-4" />
-            <p className="text-gray-500 dark:text-muted-foreground text-lg">
-              Start typing to search
-            </p>
+            <p className="text-muted-foreground text-lg">Start typing to search</p>
             <p className="text-gray-400 dark:text-muted-foreground mt-2">
               Find projects, people, and organizations
             </p>

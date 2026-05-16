@@ -122,7 +122,7 @@ export function WishlistItemProofSection({ itemId, canAddProof }: WishlistItemPr
   }
 
   return (
-    <div className="bg-white dark:bg-card rounded-lg border dark:border-border p-6">
+    <div className="bg-card rounded-lg border dark:border-border p-6">
       <WishlistProofSection
         wishlistItemId={itemId}
         proofs={proofs}

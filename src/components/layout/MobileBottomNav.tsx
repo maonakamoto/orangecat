@@ -200,7 +200,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                   '-webkit-tap-highlight-color-transparent',
                   'active:scale-95 active:bg-gray-100 dark:active:bg-muted',
                   isActive && (isAuthenticated ? 'text-orange-600' : 'text-tiffany-600'),
-                  !isActive && 'text-gray-500 dark:text-muted-foreground',
+                  !isActive && 'text-muted-foreground',
                   item.primary && 'relative',
                   shouldBeSmall ? 'min-h-12 gap-0.5' : 'min-h-14 gap-1'
                 )}

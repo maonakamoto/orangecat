@@ -145,7 +145,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="font-medium text-gray-900 dark:text-foreground">{update.title}</p>
+                    <p className="font-medium text-foreground">{update.title}</p>
                     {update.amount_btc && (
                       <span className="text-sm font-semibold text-orange-600 flex-shrink-0">
                         {formatAmount(update.amount_btc)}
@@ -153,11 +153,11 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
                     )}
                   </div>
                   {update.content && (
-                    <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1 line-clamp-2">
+                    <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                       {update.content}
                     </p>
                   )}
-                  <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1 flex items-center gap-1">
+                  <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                     <TrendingUp className="w-3 h-3" />
                     {formatRelativeTime(update.created_at)}
                   </p>
@@ -170,9 +170,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-muted flex items-center justify-center">
               <Activity className="w-8 h-8 text-gray-400 dark:text-muted-foreground" />
             </div>
-            <p className="text-sm text-gray-500 dark:text-muted-foreground mb-1">
-              No recent activity yet
-            </p>
+            <p className="text-sm text-muted-foreground mb-1">No recent activity yet</p>
             <p className="text-xs text-gray-400 dark:text-muted-foreground">
               Updates will appear here as the project progresses
             </p>

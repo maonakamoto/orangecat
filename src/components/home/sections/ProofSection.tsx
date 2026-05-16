@@ -25,10 +25,10 @@ export default function ProofSection() {
             <Lightbulb className="w-4 h-4" />
             <span className="text-sm font-medium">Makers</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 dark:text-foreground mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-foreground mb-3 sm:mb-4">
             {exampleUseCases.title}
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
             {exampleUseCases.subtitle}
           </p>
         </div>
@@ -53,7 +53,7 @@ export default function ProofSection() {
               </div>
 
               {/* Title & Description */}
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-foreground mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
                 {useCase.title}
               </h3>
               <p className="text-sm sm:text-base text-gray-700 dark:text-muted-foreground mb-4 leading-relaxed">
@@ -62,7 +62,7 @@ export default function ProofSection() {
 
               {/* Transparency Example */}
               <div className="bg-muted/50 rounded-lg p-3 sm:p-4">
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   <span className="font-semibold text-gray-800 dark:text-foreground">
                     Transparency in action:{' '}
                   </span>
@@ -81,7 +81,7 @@ export default function ProofSection() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="text-center"
         >
-          <p className="text-sm sm:text-base text-gray-600 dark:text-muted-foreground mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
             These are just examples. What will you create?
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">

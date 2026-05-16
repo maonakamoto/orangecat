@@ -81,13 +81,13 @@ export default function ProfileInfoTab({
       <Card>
         <CardHeader>
           <h3 className="text-lg font-semibold flex items-center gap-2">
-            <Shield className="w-5 h-5 text-gray-500 dark:text-muted-foreground" />
+            <Shield className="w-5 h-5 text-muted-foreground" />
             Account Status
           </h3>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-gray-600 dark:text-muted-foreground">Email Verified</span>
+            <span className="text-muted-foreground">Email Verified</span>
             <span
               className={
                 profile.email
@@ -99,7 +99,7 @@ export default function ProfileInfoTab({
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-600 dark:text-muted-foreground">Profile Complete</span>
+            <span className="text-muted-foreground">Profile Complete</span>
             <span className="text-green-600 font-medium">
               {profile.bio && profile.avatar_url ? '✓ Complete' : 'In Progress'}
             </span>

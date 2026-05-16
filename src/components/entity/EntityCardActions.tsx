@@ -114,7 +114,7 @@ export function EntityCardActions({
             className="h-8 w-8 flex items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity"
             aria-label="Actions"
           >
-            <MoreHorizontal className="h-4 w-4 text-gray-600 dark:text-muted-foreground" />
+            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -166,7 +166,7 @@ export function EntityCardActions({
             <DropdownMenuItem
               onClick={handleVisibilityClick}
               disabled={isTogglingVisibility}
-              className={showOnProfile === false ? 'text-gray-500 dark:text-muted-foreground' : ''}
+              className={showOnProfile === false ? 'text-muted-foreground' : ''}
             >
               {showOnProfile === false ? (
                 <>

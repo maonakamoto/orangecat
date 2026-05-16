@@ -16,14 +16,14 @@ export default function PublicEntityTimestamps({
   return (
     <Card>
       <CardContent className="pt-6 space-y-3 text-sm">
-        <div className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground">
+        <div className="flex items-center gap-2 text-muted-foreground">
           <Calendar className="w-4 h-4" />
           <span>
             {createdLabel} {formatDate(createdAt)}
           </span>
         </div>
         {updatedAt && updatedAt !== createdAt && (
-          <div className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <Clock className="w-4 h-4" />
             <span>Updated {formatRelativeTime(updatedAt)}</span>
           </div>

@@ -143,7 +143,7 @@ export function WithdrawDialog({
               className="mt-1"
               placeholder="your@wallet.com"
             />
-            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Enter your Lightning address to receive the withdrawal
             </p>
           </div>

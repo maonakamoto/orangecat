@@ -49,7 +49,7 @@ export function ProjectsSearchFilter({
         <select
           value={statusFilter}
           onChange={e => setStatusFilter(e.target.value)}
-          className="px-3 py-2 border border-gray-300 dark:border-border rounded-lg text-sm bg-white dark:bg-card text-gray-900 dark:text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent w-full sm:w-auto min-w-[140px]"
+          className="px-3 py-2 border border-gray-300 dark:border-border rounded-lg text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent w-full sm:w-auto min-w-[140px]"
           aria-label="Filter by status"
         >
           <option value="all">All Status</option>

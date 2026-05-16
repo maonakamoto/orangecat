@@ -37,10 +37,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <label
-            htmlFor={inputId}
-            className="block text-sm font-medium text-gray-900 dark:text-foreground"
-          >
+          <label htmlFor={inputId} className="block text-sm font-medium text-foreground">
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -58,7 +55,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             required={required}
             className={cn(
-              'block w-full rounded-md shadow-sm text-sm text-gray-900 dark:text-foreground',
+              'block w-full rounded-md shadow-sm text-sm text-foreground',
               'bg-white dark:bg-muted border-gray-300 dark:border-border focus:border-tiffany-500 focus:ring-tiffany-500',
               'placeholder:text-gray-400 dark:placeholder:text-muted-foreground',
               error && 'border-red-300 focus:border-red-500 focus:ring-red-500',
@@ -72,7 +69,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
         </div>
         {description && !error && (
-          <p id={descriptionId} className="text-sm text-gray-600 dark:text-muted-foreground">
+          <p id={descriptionId} className="text-sm text-muted-foreground">
             {description}
           </p>
         )}

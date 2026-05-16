@@ -34,7 +34,7 @@ function getChangeColor(changeType?: string) {
     case 'decrease':
       return 'text-red-600';
     default:
-      return 'text-gray-600 dark:text-muted-foreground';
+      return 'text-muted-foreground';
   }
 }
 
@@ -52,10 +52,8 @@ export default function AnalyticsMetricsGrid({ metrics }: AnalyticsMetricsGridPr
                     <Icon className={`w-5 h-5 ${metric.color}`} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600 dark:text-muted-foreground">
-                      {metric.label}
-                    </p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-foreground">
+                    <p className="text-sm font-medium text-muted-foreground">{metric.label}</p>
+                    <p className="text-2xl font-bold text-foreground">
                       {metric.format === 'currency' && typeof metric.value === 'number'
                         ? formatCurrency(metric.value, 'BTC')
                         : metric.value}

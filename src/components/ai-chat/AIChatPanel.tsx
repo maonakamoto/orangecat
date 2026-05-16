@@ -61,12 +61,12 @@ export function AIChatPanel({
 
   return (
     <div className="flex flex-col h-full bg-gray-50 dark:bg-muted">
-      <div className="flex items-center gap-3 p-4 bg-white dark:bg-card border-b border-gray-200 dark:border-border">
+      <div className="flex items-center gap-3 p-4 bg-card border-b border-border">
         <Link
           href={ENTITY_REGISTRY['ai_assistant'].basePath}
           className="p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
         >
-          <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-muted-foreground" />
+          <ArrowLeft className="h-5 w-5 text-muted-foreground" />
         </Link>
 
         <Avatar className="h-10 w-10">
@@ -77,15 +77,13 @@ export function AIChatPanel({
         </Avatar>
 
         <div className="flex-1 min-w-0">
-          <h2 className="font-semibold text-gray-900 dark:text-foreground truncate">
+          <h2 className="font-semibold text-foreground truncate">
             {assistant?.title || 'AI Assistant'}
           </h2>
           <div className="flex items-center gap-2 mt-0.5">
             {lastModelUsed && <ModelBadge modelId={lastModelUsed} />}
             {conversation?.title && (
-              <span className="text-base text-gray-500 dark:text-muted-foreground truncate">
-                {conversation.title}
-              </span>
+              <span className="text-base text-muted-foreground truncate">{conversation.title}</span>
             )}
           </div>
         </div>
@@ -144,10 +142,10 @@ export function AIChatPanel({
                 <Bot className="h-8 w-8" />
               </AvatarFallback>
             </Avatar>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               {assistant?.welcome_message?.trim() ? assistant.title : 'Start a conversation'}
             </h3>
-            <p className="text-gray-600 dark:text-muted-foreground max-w-md whitespace-pre-wrap">
+            <p className="text-muted-foreground max-w-md whitespace-pre-wrap">
               {assistant?.welcome_message?.trim() ||
                 `Send a message to begin chatting with ${assistant?.title || 'your Cat'}.`}
             </p>

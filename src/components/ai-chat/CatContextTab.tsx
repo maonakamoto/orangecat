@@ -70,7 +70,7 @@ export function CatContextTab() {
     if (score >= 40) {
       return 'text-amber-600';
     }
-    return 'text-gray-500 dark:text-muted-foreground';
+    return 'text-muted-foreground';
   };
 
   // Group documents by type
@@ -90,17 +90,15 @@ export function CatContextTab() {
     <div className="space-y-6">
       {/* Completeness meter */}
       {!summaryLoading && summary && (
-        <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border p-6">
+        <div className="bg-card rounded-xl border border-border p-6">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-gray-900 dark:text-foreground">
-              Context Completeness
-            </h3>
+            <h3 className="font-semibold text-foreground">Context Completeness</h3>
             <span className={`text-sm font-medium ${getCompletenessColor(summary.completeness)}`}>
               {summary.completeness}%
             </span>
           </div>
           <Progress value={summary.completeness} className="h-2 mb-2" />
-          <p className="text-xs text-gray-500 dark:text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             {getCompletenessLabel(summary.completeness)}
           </p>
 
@@ -112,10 +110,7 @@ export function CatContextTab() {
               </p>
               <ul className="space-y-1">
                 {summary.tips.map((tip, i) => (
-                  <li
-                    key={i}
-                    className="text-xs text-gray-500 dark:text-muted-foreground flex items-start gap-2"
-                  >
+                  <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
                     <Plus className="h-3 w-3 text-gray-400 dark:text-muted-foreground flex-shrink-0 mt-0.5" />
                     {tip}
                   </li>
@@ -145,8 +140,8 @@ export function CatContextTab() {
           <div className="mx-auto w-12 h-12 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center mb-4">
             <FileText className="h-6 w-6 text-gray-400 dark:text-muted-foreground" />
           </div>
-          <h3 className="font-semibold text-gray-900 dark:text-foreground mb-2">No context yet</h3>
-          <p className="text-base text-gray-500 dark:text-muted-foreground mb-4">
+          <h3 className="font-semibold text-foreground mb-2">No context yet</h3>
+          <p className="text-base text-muted-foreground mb-4">
             Add documents about your goals, skills, and situation to get personalized advice.
           </p>
         </div>
@@ -156,12 +151,9 @@ export function CatContextTab() {
             const Icon = TYPE_ICONS[type] || FileText;
             const label = (DOCUMENT_TYPE_LABELS as Record<string, string>)[type] || type;
             return (
-              <div
-                key={type}
-                className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden"
-              >
+              <div key={type} className="bg-card rounded-xl border border-border overflow-hidden">
                 <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
-                  <Icon className="h-4 w-4 text-gray-500 dark:text-muted-foreground" />
+                  <Icon className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium text-gray-700 dark:text-foreground">
                     {label}
                   </span>
@@ -177,11 +169,11 @@ export function CatContextTab() {
                       className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-muted transition-colors"
                     >
                       <div className="min-w-0 flex-1">
-                        <p className="text-base font-medium text-gray-900 dark:text-foreground truncate">
+                        <p className="text-base font-medium text-foreground truncate">
                           {doc.title}
                         </p>
                         {doc.content && (
-                          <p className="text-sm text-gray-500 dark:text-muted-foreground truncate mt-0.5">
+                          <p className="text-sm text-muted-foreground truncate mt-0.5">
                             {doc.content.substring(0, 60)}...
                           </p>
                         )}

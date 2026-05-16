@@ -101,7 +101,7 @@ export default function AIAssistantChatPage() {
   if (!assistantId) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500 dark:text-muted-foreground">Invalid assistant</p>
+        <p className="text-muted-foreground">Invalid assistant</p>
       </div>
     );
   }
@@ -125,11 +125,11 @@ export default function AIAssistantChatPage() {
           </AvatarFallback>
         </Avatar>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground">
+          <h1 className="text-2xl font-bold text-foreground">
             {assistant?.title || 'AI Assistant'}
           </h1>
           {assistant?.description && (
-            <p className="text-gray-600 dark:text-muted-foreground mt-1">{assistant.description}</p>
+            <p className="text-muted-foreground mt-1">{assistant.description}</p>
           )}
         </div>
       </div>
@@ -163,21 +163,19 @@ export default function AIAssistantChatPage() {
       {/* Previous Conversations */}
       {conversations.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4">
-            Previous Conversations
-          </h2>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Previous Conversations</h2>
           <div className="space-y-2">
             {conversations.map(conv => (
               <Link
                 key={conv.id}
                 href={`/ai-chat/${assistantId}/${conv.id}`}
-                className="flex items-center justify-between p-4 bg-white dark:bg-card rounded-lg border border-gray-200 dark:border-border hover:border-tiffany-300 hover:shadow-sm transition-all"
+                className="flex items-center justify-between p-4 bg-card rounded-lg border border-border hover:border-tiffany-300 hover:shadow-sm transition-all"
               >
                 <div className="min-w-0">
-                  <p className="font-medium text-gray-900 dark:text-foreground truncate">
+                  <p className="font-medium text-foreground truncate">
                     {conv.title || 'Untitled conversation'}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {conv.total_messages} messages
                     {conv.last_message_at && <> &middot; {formatDate(conv.last_message_at)}</>}
                   </p>
@@ -190,7 +188,7 @@ export default function AIAssistantChatPage() {
       )}
 
       {conversations.length === 0 && !isLoading && (
-        <div className="text-center text-gray-500 dark:text-muted-foreground py-8">
+        <div className="text-center text-muted-foreground py-8">
           <MessageSquare className="h-12 w-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground/40" />
           <p>No conversations yet. Start your first one!</p>
         </div>

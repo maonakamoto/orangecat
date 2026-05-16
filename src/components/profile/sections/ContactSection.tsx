@@ -32,14 +32,12 @@ interface ContactSectionProps {
 
 export function ContactSection({ control, onFieldFocus, userEmail }: ContactSectionProps) {
   return (
-    <div className="space-y-4 rounded-xl border border-gray-200 dark:border-border bg-white/80 dark:bg-card/80 px-4 py-5 sm:px-5 sm:py-6">
+    <div className="space-y-4 rounded-xl border border-border bg-white/80 dark:bg-card/80 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
           {PROFILE_SECTIONS.CONTACT}
         </h3>
-        <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
-          {PROFILE_SECTION_DESCRIPTIONS.CONTACT}
-        </p>
+        <p className="mt-1 text-xs text-muted-foreground">{PROFILE_SECTION_DESCRIPTIONS.CONTACT}</p>
       </div>
 
       {/* Contact Email */}
@@ -60,7 +58,7 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
                 onFocus={() => onFieldFocus?.('contactEmail')}
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
+            <FormDescription className="text-xs text-muted-foreground">
               Visible on your public profile. Defaults to your registration email.
             </FormDescription>
             <FormMessage />
@@ -73,14 +71,12 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
         <div className="p-3 bg-gray-50 dark:bg-muted rounded-lg border border-gray-100 dark:border-border">
           <div className="flex items-center gap-2 mb-1">
             <Mail className="w-4 h-4 text-gray-400 dark:text-muted-foreground" />
-            <span className="text-xs font-medium text-gray-500 dark:text-muted-foreground">
+            <span className="text-xs font-medium text-muted-foreground">
               Registration Email (private)
             </span>
           </div>
-          <p className="text-sm text-gray-900 dark:text-foreground">{userEmail}</p>
-          <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
-            Used for account login only
-          </p>
+          <p className="text-sm text-foreground">{userEmail}</p>
+          <p className="text-xs text-muted-foreground mt-1">Used for account login only</p>
         </div>
       )}
 
@@ -102,7 +98,7 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
                 onFocus={() => onFieldFocus?.('phone')}
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
+            <FormDescription className="text-xs text-muted-foreground">
               Helps supporters contact you
             </FormDescription>
             <FormMessage />

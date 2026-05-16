@@ -50,7 +50,7 @@ const config: EntityDetailConfig = {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500 dark:text-muted-foreground">
+                <span className="text-sm text-muted-foreground">
                   {displayBTC(fundingRaised)} raised
                 </span>
                 <span className="font-bold text-lg text-tiffany-600">
@@ -58,7 +58,7 @@ const config: EntityDetailConfig = {
                 </span>
               </div>
               <Progress value={progress} className="h-2" />
-              <p className="text-sm text-gray-500 dark:text-muted-foreground">{progress}% funded</p>
+              <p className="text-sm text-muted-foreground">{progress}% funded</p>
             </CardContent>
           </Card>
         )}
@@ -71,7 +71,7 @@ const config: EntityDetailConfig = {
           <CardContent className="space-y-3">
             {entity.methodology && (
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500 dark:text-muted-foreground">Methodology</span>
+                <span className="text-muted-foreground">Methodology</span>
                 <span className="font-medium">
                   {METHODOLOGY_LABELS[entity.methodology] || entity.methodology}
                 </span>
@@ -79,7 +79,7 @@ const config: EntityDetailConfig = {
             )}
             {entity.timeline && (
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500 dark:text-muted-foreground">Timeline</span>
+                <span className="text-muted-foreground">Timeline</span>
                 <span className="font-medium">
                   {TIMELINE_LABELS[entity.timeline] || entity.timeline}
                 </span>
@@ -87,15 +87,13 @@ const config: EntityDetailConfig = {
             )}
             {entity.lead_researcher && (
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500 dark:text-muted-foreground">Lead Researcher</span>
+                <span className="text-muted-foreground">Lead Researcher</span>
                 <span className="font-medium">{entity.lead_researcher}</span>
               </div>
             )}
             {entity.expected_outcome && (
               <div className="pt-2 border-t border-gray-100 dark:border-border">
-                <p className="text-sm text-gray-500 dark:text-muted-foreground mb-1">
-                  Expected Outcome
-                </p>
+                <p className="text-sm text-muted-foreground mb-1">Expected Outcome</p>
                 <p className="text-sm text-gray-700 dark:text-muted-foreground">
                   {entity.expected_outcome}
                 </p>

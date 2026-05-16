@@ -41,11 +41,9 @@ export default function QRCodeGenerator({
 
   return (
     <div className={`flex flex-col items-center space-y-4 ${className}`}>
-      {label && (
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">{label}</h3>
-      )}
+      {label && <h3 className="text-lg font-semibold text-foreground">{label}</h3>}
 
-      <div className="bg-white dark:bg-card p-4 rounded-xl shadow-lg border-2 border-gray-100 dark:border-border">
+      <div className="bg-card p-4 rounded-xl shadow-lg border-2 border-gray-100 dark:border-border">
         <canvas ref={canvasRef} width={size} height={size} className="block" />
       </div>
 
@@ -70,7 +68,7 @@ export default function QRCodeGenerator({
         </Button>
       )}
 
-      <div className="text-xs text-gray-500 dark:text-muted-foreground text-center max-w-xs break-all font-mono">
+      <div className="text-xs text-muted-foreground text-center max-w-xs break-all font-mono">
         {value}
       </div>
     </div>

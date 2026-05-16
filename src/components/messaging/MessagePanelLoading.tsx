@@ -20,15 +20,13 @@ export function MessagePanelLoading({
   const inner = (
     <div
       className={cn(
-        'flex h-full bg-white dark:bg-card shadow-lg items-center justify-center',
-        fullPage
-          ? 'w-full rounded-none'
-          : 'w-full max-w-5xl rounded-2xl border border-gray-200 dark:border-border'
+        'flex h-full bg-card shadow-lg items-center justify-center',
+        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-2xl border border-border'
       )}
     >
       <div className="text-center p-10">
         <Loader2 className="w-8 h-8 animate-spin text-tiffany-500 mx-auto mb-4" />
-        <p className="text-gray-600 dark:text-muted-foreground">Loading messages...</p>
+        <p className="text-muted-foreground">Loading messages...</p>
       </div>
     </div>
   );

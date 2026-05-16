@@ -116,18 +116,18 @@ export function EditPostModal({
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-xl bg-white dark:bg-card rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
+      <div className="relative w-full max-w-xl bg-card rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-border">
           <button
             onClick={onClose}
-            className="text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-full p-2 -ml-2 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+            className="text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-full p-2 -ml-2 transition-colors min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
           </button>
 
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground">Edit post</h2>
+          <h2 className="text-lg font-semibold text-foreground">Edit post</h2>
 
           <Button
             onClick={handleSave}
@@ -178,7 +178,7 @@ export function EditPostModal({
                   'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
                   visibility === 'public'
                     ? 'text-tiffany-500 bg-tiffany-50 hover:bg-tiffany-100'
-                    : 'text-gray-600 dark:text-muted-foreground bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/80'
+                    : 'text-muted-foreground bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/80'
                 )}
                 disabled={isSaving}
               >

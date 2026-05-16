@@ -41,16 +41,12 @@ export function GenericPublicCard({
         <Card className="hover:shadow-md transition-shadow">
           <div className="flex items-center p-4 gap-4">
             <div className="flex-shrink-0 w-12 h-12 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center">
-              {Icon && <Icon className="w-6 h-6 text-gray-600 dark:text-muted-foreground" />}
+              {Icon && <Icon className="w-6 h-6 text-muted-foreground" />}
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 dark:text-foreground truncate">
-                {entity.title}
-              </h3>
+              <h3 className="font-semibold text-foreground truncate">{entity.title}</h3>
               {entity.description && (
-                <p className="text-sm text-gray-500 dark:text-muted-foreground truncate">
-                  {entity.description}
-                </p>
+                <p className="text-sm text-muted-foreground truncate">{entity.description}</p>
               )}
             </div>
             <div className="flex items-center gap-3 text-sm">
@@ -76,7 +72,7 @@ export function GenericPublicCard({
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gray-100 dark:bg-muted rounded-full flex items-center justify-center flex-shrink-0">
-                {Icon && <Icon className="w-4 h-4 text-gray-600 dark:text-muted-foreground" />}
+                {Icon && <Icon className="w-4 h-4 text-muted-foreground" />}
               </div>
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-base truncate">{entity.title}</CardTitle>
@@ -95,9 +91,7 @@ export function GenericPublicCard({
 
         <CardContent className="space-y-2">
           {entity.description && (
-            <p className="text-sm text-gray-600 dark:text-muted-foreground line-clamp-3">
-              {entity.description}
-            </p>
+            <p className="text-sm text-muted-foreground line-clamp-3">{entity.description}</p>
           )}
           {category && (
             <Badge variant="outline" className="text-xs capitalize">

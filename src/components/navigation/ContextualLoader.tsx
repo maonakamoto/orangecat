@@ -29,10 +29,8 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-2">
-          {content.title}
-        </h2>
-        <p className="text-gray-600 dark:text-muted-foreground mb-8">{content.subtitle}</p>
+        <h2 className="text-2xl font-semibold text-foreground mb-2">{content.title}</h2>
+        <p className="text-muted-foreground mb-8">{content.subtitle}</p>
 
         <div className="space-y-4 text-left">
           {content.actions.map((action, index) => {
@@ -68,7 +66,7 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
           </div>
         </div>
 
-        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-4">
+        <p className="text-xs text-muted-foreground mt-4">
           Preparing your personalized experience...
         </p>
       </div>

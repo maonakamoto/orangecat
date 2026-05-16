@@ -42,10 +42,8 @@ export function GetStartedStep({
             {summaryItems.map(item => (
               <div key={item.label} className="flex items-center gap-2 text-sm">
                 <Check className="h-3.5 w-3.5 text-tiffany-600 flex-shrink-0" />
-                <span className="text-gray-600 dark:text-muted-foreground">{item.label}:</span>
-                <span className="text-gray-900 dark:text-foreground font-medium truncate">
-                  {item.value}
-                </span>
+                <span className="text-muted-foreground">{item.label}:</span>
+                <span className="text-foreground font-medium truncate">{item.value}</span>
               </div>
             ))}
           </div>
@@ -54,7 +52,7 @@ export function GetStartedStep({
 
       {/* Quick actions */}
       <div className="space-y-3">
-        <p className="text-sm text-gray-500 dark:text-muted-foreground font-medium">
+        <p className="text-sm text-muted-foreground font-medium">
           What would you like to do first?
         </p>
 
@@ -111,14 +109,14 @@ function QuickActionButton({
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-border hover:border-tiffany-300 hover:bg-tiffany-50/30 dark:hover:bg-muted transition-all text-left group"
+      className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-tiffany-300 hover:bg-tiffany-50/30 dark:hover:bg-muted transition-all text-left group"
     >
       <div className={`p-2 ${iconBg} rounded-lg flex-shrink-0`}>
         <Icon className={`h-4 w-4 ${iconColor}`} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900 dark:text-foreground">{title}</p>
-        <p className="text-xs text-gray-500 dark:text-muted-foreground">{description}</p>
+        <p className="text-sm font-medium text-foreground">{title}</p>
+        <p className="text-xs text-muted-foreground">{description}</p>
       </div>
       <ArrowRight className="h-4 w-4 text-gray-400 dark:text-muted-foreground group-hover:text-tiffany-600 transition-colors" />
     </button>

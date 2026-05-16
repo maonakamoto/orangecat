@@ -16,7 +16,7 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
       <div className="mb-8">
         <Link
           href={`${ROUTES.DASHBOARD.CAT}?tab=context`}
-          className="inline-flex items-center text-sm text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to My Context
@@ -25,11 +25,9 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
           <div className={`p-2 ${GRADIENTS.brandTiffanyBr} rounded-xl`}>
             <Cat className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-foreground">
-            Create Context for My Cat
-          </h1>
+          <h1 className="text-3xl font-bold text-foreground">Create Context for My Cat</h1>
         </div>
-        <p className="text-gray-600 dark:text-muted-foreground text-lg">
+        <p className="text-muted-foreground text-lg">
           Help My Cat understand you better by adding context about your goals, skills, and
           situation.
         </p>
@@ -53,7 +51,7 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
       <div className="grid md:grid-cols-2 gap-6">
         <button
           onClick={onUpload}
-          className="group relative bg-white dark:bg-card border-2 border-gray-200 dark:border-border rounded-2xl p-8 text-left hover:border-tiffany-400 dark:hover:border-tiffany-500 hover:shadow-lg transition-all duration-200"
+          className="group relative bg-card border-2 border-border rounded-2xl p-8 text-left hover:border-tiffany-400 dark:hover:border-tiffany-500 hover:shadow-lg transition-all duration-200"
         >
           <div className="absolute top-4 right-4 px-2 py-1 bg-tiffany-100 text-tiffany-700 text-xs font-medium rounded-full">
             Easiest
@@ -61,17 +59,15 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
           <div className="p-4 bg-tiffany-100 rounded-xl w-fit mb-4 group-hover:bg-tiffany-200 transition-colors">
             <Upload className="h-8 w-8 text-tiffany-600" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
-            Upload a file
-          </h3>
-          <p className="text-gray-600 dark:text-muted-foreground mb-4">
+          <h3 className="text-lg font-semibold text-foreground mb-2">Upload a file</h3>
+          <p className="text-muted-foreground mb-4">
             Drop a .txt or .md file and we&apos;ll extract the content automatically.
           </p>
           <div className="flex flex-wrap gap-2">
-            <span className="px-2 py-1 bg-gray-100 dark:bg-muted rounded-md text-xs font-medium text-gray-600 dark:text-muted-foreground">
+            <span className="px-2 py-1 bg-gray-100 dark:bg-muted rounded-md text-xs font-medium text-muted-foreground">
               .txt
             </span>
-            <span className="px-2 py-1 bg-gray-100 dark:bg-muted rounded-md text-xs font-medium text-gray-600 dark:text-muted-foreground">
+            <span className="px-2 py-1 bg-gray-100 dark:bg-muted rounded-md text-xs font-medium text-muted-foreground">
               .md
             </span>
           </div>
@@ -79,22 +75,20 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
 
         <button
           onClick={onWrite}
-          className="group bg-white dark:bg-card border-2 border-gray-200 dark:border-border rounded-2xl p-8 text-left hover:border-tiffany-400 dark:hover:border-tiffany-500 hover:shadow-lg transition-all duration-200"
+          className="group bg-card border-2 border-border rounded-2xl p-8 text-left hover:border-tiffany-400 dark:hover:border-tiffany-500 hover:shadow-lg transition-all duration-200"
         >
           <div className="p-4 bg-orange-100 rounded-xl w-fit mb-4 group-hover:bg-orange-200 transition-colors">
             <PenLine className="h-8 w-8 text-orange-600" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
-            Write from scratch
-          </h3>
-          <p className="text-gray-600 dark:text-muted-foreground mb-4">
+          <h3 className="text-lg font-semibold text-foreground mb-2">Write from scratch</h3>
+          <p className="text-muted-foreground mb-4">
             Type or paste your content directly into the form.
           </p>
           <div className="flex flex-wrap gap-2">
             {['Goals', 'Skills', 'Plans'].map(tag => (
               <span
                 key={tag}
-                className="px-2 py-1 bg-gray-100 dark:bg-muted rounded-md text-xs font-medium text-gray-600 dark:text-muted-foreground"
+                className="px-2 py-1 bg-gray-100 dark:bg-muted rounded-md text-xs font-medium text-muted-foreground"
               >
                 {tag}
               </span>
@@ -104,10 +98,8 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
       </div>
 
       <div className="mt-8 p-4 bg-gray-50 dark:bg-muted rounded-xl">
-        <h4 className="font-medium text-gray-900 dark:text-foreground mb-3">
-          Ideas for context to add:
-        </h4>
-        <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-600 dark:text-muted-foreground">
+        <h4 className="font-medium text-foreground mb-3">Ideas for context to add:</h4>
+        <div className="grid md:grid-cols-2 gap-3 text-sm text-muted-foreground">
           {[
             'Your 2026 goals and aspirations',
             'Your skills and expertise',

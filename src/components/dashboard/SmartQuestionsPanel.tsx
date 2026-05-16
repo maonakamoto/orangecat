@@ -87,7 +87,7 @@ function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDism
           <Button
             size="sm"
             variant="outline"
-            className="bg-white dark:bg-card hover:bg-amber-100 border-amber-200 text-amber-700 hover:border-amber-300"
+            className="bg-card hover:bg-amber-100 border-amber-200 text-amber-700 hover:border-amber-300"
           >
             {question.action.label}
             <ArrowRight className="w-3 h-3 ml-1" />
@@ -119,7 +119,7 @@ export function SmartQuestionInline({
   return (
     <div className="flex items-center gap-2 text-sm">
       <Lightbulb className="w-4 h-4 text-amber-500 flex-shrink-0" />
-      <span className="text-gray-600 dark:text-muted-foreground">{question.question}</span>
+      <span className="text-muted-foreground">{question.question}</span>
       <Link href={question.action.href}>
         <Button
           size="sm"

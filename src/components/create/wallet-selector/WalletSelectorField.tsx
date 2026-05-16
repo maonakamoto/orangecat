@@ -116,7 +116,7 @@ export function WalletSelectorField({
             className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors ${
               mode === 'select'
                 ? 'border-tiffany bg-tiffany/5 text-tiffany-dark font-medium'
-                : 'border-gray-200 dark:border-border text-muted-foreground hover:border-gray-300 dark:hover:border-border'
+                : 'border-border text-muted-foreground hover:border-gray-300 dark:hover:border-border'
             }`}
           >
             <WalletIcon className="w-4 h-4" />
@@ -129,7 +129,7 @@ export function WalletSelectorField({
             className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors ${
               mode === 'manual'
                 ? 'border-tiffany bg-tiffany/5 text-tiffany-dark font-medium'
-                : 'border-gray-200 dark:border-border text-muted-foreground hover:border-gray-300 dark:hover:border-border'
+                : 'border-border text-muted-foreground hover:border-gray-300 dark:hover:border-border'
             }`}
           >
             <PenLine className="w-4 h-4" />

@@ -91,21 +91,21 @@ export function GetStartedStep({ hasWallet = false, hasProjects = false }: GetSt
       </Card>
 
       {/* Secondary Options */}
-      <div className="pt-4 border-t border-gray-200 dark:border-border">
+      <div className="pt-4 border-t border-border">
         <p className="text-sm text-muted-foreground text-center mb-4">
           Not ready to create? Explore first:
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <button
             onClick={() => router.push(ROUTES.DISCOVER)}
-            className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-muted-foreground hover:text-tiffany-600 transition-colors min-h-11"
+            className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-tiffany-600 transition-colors min-h-11"
           >
             <Users className="h-4 w-4" />
             Explore Projects
           </button>
           <button
             onClick={() => router.push(ROUTES.STUDY_BITCOIN)}
-            className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-muted-foreground hover:text-tiffany-600 transition-colors min-h-11"
+            className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-tiffany-600 transition-colors min-h-11"
           >
             <BookOpen className="h-4 w-4" />
             Learn About Bitcoin

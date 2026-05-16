@@ -94,12 +94,8 @@ export default function SocialTimeline({
     return (
       <div className={`min-h-screen ${GRADIENTS.pageBg} flex items-center justify-center`}>
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
-            Please sign in
-          </h2>
-          <p className="text-gray-600 dark:text-muted-foreground mb-6">
-            You need to be signed in to view this page.
-          </p>
+          <h2 className="text-2xl font-semibold text-foreground mb-4">Please sign in</h2>
+          <p className="text-muted-foreground mb-6">You need to be signed in to view this page.</p>
           <Button onClick={() => (window.location.href = '/auth')}>Sign In</Button>
         </div>
       </div>
@@ -215,10 +211,8 @@ export default function SocialTimeline({
     ) : activeFeed.events.length === 0 ? (
       <div className="text-center py-10">
         <Icon className="w-14 h-14 text-gray-300 dark:text-muted-foreground mx-auto mb-3" />
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-1">
-          No posts found
-        </h3>
-        <p className="text-gray-600 dark:text-muted-foreground">Try another search term.</p>
+        <h3 className="text-lg font-semibold text-foreground mb-1">No posts found</h3>
+        <p className="text-muted-foreground">Try another search term.</p>
         <div className="mt-4">
           <Button variant="secondary" onClick={handleClearSearch}>
             Clear search
@@ -239,10 +233,8 @@ export default function SocialTimeline({
   ) : timelineFeed?.events.length === 0 ? (
     <div className="text-center py-16">
       <Icon className="w-20 h-20 text-gray-300 dark:text-muted-foreground mx-auto mb-4" />
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
-        No posts yet
-      </h3>
-      <p className="text-gray-600 dark:text-muted-foreground max-w-md mx-auto">
+      <h3 className="text-lg font-semibold text-foreground mb-2">No posts yet</h3>
+      <p className="text-muted-foreground max-w-md mx-auto">
         {mode === 'timeline'
           ? "Share your first update about what you're working on!"
           : 'Be the first to share something productive with the community!'}

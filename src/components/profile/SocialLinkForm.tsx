@@ -76,9 +76,9 @@ export function SocialLinkForm({
   const Icon = platformConfig?.icon || X;
 
   return (
-    <div className="border dark:border-border rounded-lg p-4 bg-white dark:bg-card space-y-4">
+    <div className="border dark:border-border rounded-lg p-4 bg-card space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground">
+        <h4 className="text-sm font-semibold text-foreground">
           {initialLink ? 'Edit Link' : 'Add Social Link'}
         </h4>
         <Button onClick={onCancel} variant="ghost" size="sm" className="h-6 w-6 p-0">
@@ -180,9 +180,7 @@ export function SocialLinkForm({
           />
         </div>
         {platformConfig?.formatHint && (
-          <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
-            {platformConfig.formatHint}
-          </p>
+          <p className="mt-1 text-xs text-muted-foreground">{platformConfig.formatHint}</p>
         )}
       </div>
 

@@ -50,7 +50,7 @@ export default function SettingsPage() {
 
   return (
     <div className={cn(GRADIENTS.pageBgSolid, 'min-h-screen')}>
-      <div className="bg-white dark:bg-card border-b border-gray-100 dark:border-border shadow-sm">
+      <div className="bg-card border-b border-gray-100 dark:border-border shadow-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center">
             <Button
@@ -61,10 +61,8 @@ export default function SettingsPage() {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground">
-                Account Settings
-              </h1>
-              <p className="text-gray-600 dark:text-muted-foreground mt-1">
+              <h1 className="text-2xl font-bold text-foreground">Account Settings</h1>
+              <p className="text-muted-foreground mt-1">
                 Manage your email, password, and security
               </p>
             </div>
@@ -73,7 +71,7 @@ export default function SettingsPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white dark:bg-card rounded-2xl shadow-lg border border-gray-100 dark:border-border overflow-hidden">
+        <div className="bg-card rounded-2xl shadow-lg border border-gray-100 dark:border-border overflow-hidden">
           <div className="bg-gradient-to-r from-tiffany-500 to-orange-500 px-6 py-6">
             <div className="flex items-center text-white">
               <Lock className="w-8 h-8 mr-4" />

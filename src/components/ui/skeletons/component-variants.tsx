@@ -30,7 +30,7 @@ export function ProjectCardSkeleton() {
 
 export function TimelinePostSkeleton() {
   return (
-    <div className="flex gap-3 px-4 py-4 border-b border-gray-200 dark:border-border bg-white dark:bg-card">
+    <div className="flex gap-3 px-4 py-4 border-b border-border bg-card">
       <Skeleton className="h-11 w-11 rounded-full flex-shrink-0" />
       <div className="flex-1 space-y-3">
         <div className="flex items-center gap-2">
@@ -165,7 +165,7 @@ export function ButtonSkeleton({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
 export function LoanCardSkeleton({ viewMode = 'grid' }: { viewMode?: 'grid' | 'list' }) {
   if (viewMode === 'list') {
     return (
-      <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card">
+      <div className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card">
         <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
         <div className="flex-1 min-w-0 space-y-2">
           <Skeleton className="h-5 w-48" />
@@ -180,7 +180,7 @@ export function LoanCardSkeleton({ viewMode = 'grid' }: { viewMode?: 'grid' | 'l
   }
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-xl border border-gray-100 dark:border-border bg-white dark:bg-card shadow-sm p-4">
+    <div className="flex flex-col overflow-hidden rounded-xl border border-gray-100 dark:border-border bg-card shadow-sm p-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <Skeleton className="h-8 w-8 rounded-full" />
@@ -217,7 +217,7 @@ export function LoanCardSkeleton({ viewMode = 'grid' }: { viewMode?: 'grid' | 'l
 export function ProfileCardSkeleton({ viewMode = 'grid' }: { viewMode?: 'grid' | 'list' }) {
   if (viewMode === 'list') {
     return (
-      <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card">
+      <div className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card">
         <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
         <div className="flex-1 min-w-0 space-y-2">
           <div className="flex items-center gap-2">
@@ -233,7 +233,7 @@ export function ProfileCardSkeleton({ viewMode = 'grid' }: { viewMode?: 'grid' |
   }
 
   return (
-    <div className="p-6 rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card">
+    <div className="p-6 rounded-xl border border-border bg-card">
       <div className="text-center">
         <Skeleton className="w-20 h-20 rounded-full mx-auto mb-4" />
         <div className="flex items-center justify-center gap-2 mb-2">

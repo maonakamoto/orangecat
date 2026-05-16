@@ -99,12 +99,10 @@ export default function AnalyticsInsights({ projects }: AnalyticsInsightsProps) 
             <CardDescription>Track your fundraising progress</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-center justify-center text-gray-500 dark:text-muted-foreground">
+            <div className="h-64 flex items-center justify-center text-muted-foreground">
               <div className="text-center">
                 <BarChart3 className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
-                <p className="text-gray-600 dark:text-muted-foreground">
-                  Time-series funding chart coming soon
-                </p>
+                <p className="text-muted-foreground">Time-series funding chart coming soon</p>
                 <p className="text-sm">Real-time funding visualization</p>
               </div>
             </div>
@@ -120,12 +118,10 @@ export default function AnalyticsInsights({ projects }: AnalyticsInsightsProps) 
             <CardDescription>Understand your audience</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-center justify-center text-gray-500 dark:text-muted-foreground">
+            <div className="h-64 flex items-center justify-center text-muted-foreground">
               <div className="text-center">
                 <PieChart className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
-                <p className="text-gray-600 dark:text-muted-foreground">
-                  Supporter breakdown chart coming soon
-                </p>
+                <p className="text-muted-foreground">Supporter breakdown chart coming soon</p>
                 <p className="text-sm">Supporter behavior insights</p>
               </div>
             </div>
@@ -161,7 +157,7 @@ export default function AnalyticsInsights({ projects }: AnalyticsInsightsProps) 
                 );
               })
             ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-muted-foreground">
+              <div className="text-center py-8 text-muted-foreground">
                 <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
                 <p>Create your first project to see insights</p>
                 <Button href={ROUTES.PROJECTS.CREATE} className="mt-4">

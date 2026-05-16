@@ -40,12 +40,8 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
 
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
-            {wallet.name}
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-muted-foreground leading-relaxed">
-            {wallet.description}
-          </p>
+          <h3 className="text-lg font-semibold text-foreground mb-2">{wallet.name}</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">{wallet.description}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -90,7 +86,7 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
 
           <Badge
             variant="outline"
-            className="text-xs bg-gray-50 dark:bg-muted text-gray-700 dark:text-foreground border-gray-200 dark:border-border"
+            className="text-xs bg-gray-50 dark:bg-muted text-gray-700 dark:text-foreground border-border"
           >
             <Shield className="w-3 h-3 mr-1" />
             Non-custodial

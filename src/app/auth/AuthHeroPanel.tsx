@@ -4,7 +4,7 @@ import { GRADIENTS } from '@/config/gradients';
 
 export function AuthHeroPanel() {
   return (
-    <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-12 bg-white dark:bg-card border-r border-gray-200 dark:border-border">
+    <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-12 bg-card border-r border-border">
       <div className="max-w-lg text-center lg:text-left">
         {/* Logo */}
         <div className="mb-8 flex justify-center lg:justify-start">
@@ -18,12 +18,12 @@ export function AuthHeroPanel() {
           </div>
         </div>
 
-        <h1 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-900 dark:text-foreground leading-tight">
+        <h1 className="text-4xl lg:text-5xl font-bold mb-6 text-foreground leading-tight">
           Your AI
           <span className="block text-tiffany-600">Economic Agent</span>
         </h1>
 
-        <p className="text-xl text-gray-600 dark:text-muted-foreground mb-8 leading-relaxed">
+        <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
           Fund, lend, invest, trade, and govern — with any identity, any currency, any counterparty.
           No gatekeepers.
         </p>
@@ -48,7 +48,7 @@ export function AuthHeroPanel() {
           </div>
           <div className="flex items-center justify-center lg:justify-start space-x-4">
             <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-muted flex items-center justify-center">
-              <Shield className="w-5 h-5 text-gray-600 dark:text-muted-foreground" />
+              <Shield className="w-5 h-5 text-muted-foreground" />
             </div>
             <span className="text-lg text-gray-700 dark:text-foreground font-medium">
               Pseudonymous by Default

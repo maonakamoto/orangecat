@@ -147,9 +147,7 @@ export function PaymentDialog({
           {state.phase === 'initiating' && (
             <div className="flex flex-col items-center gap-4 py-8">
               <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-muted-foreground" />
-              <p className="text-sm text-gray-500 dark:text-muted-foreground">
-                Creating invoice...
-              </p>
+              <p className="text-sm text-muted-foreground">Creating invoice...</p>
             </div>
           )}
 
@@ -179,7 +177,7 @@ export function PaymentDialog({
             <div className="flex flex-col items-center gap-4 py-8">
               <CheckCircle2 className="h-12 w-12 text-green-600" />
               <p className="text-lg font-semibold text-green-700">Payment successful!</p>
-              <p className="text-sm text-gray-500 dark:text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {isContribution ? 'Thank you for your support!' : 'Your order has been placed.'}
               </p>
               <Button onClick={handleClose} className="min-h-11">
@@ -192,7 +190,7 @@ export function PaymentDialog({
           {state.phase === 'expired' && (
             <div className="flex flex-col items-center gap-4 py-8">
               <PaymentStatusIndicator status="expired" />
-              <p className="text-sm text-gray-500 dark:text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 The invoice has expired. Please try again.
               </p>
               <Button onClick={reset} variant="outline" className="min-h-11">

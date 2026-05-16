@@ -22,10 +22,10 @@ export default function TrustSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 dark:text-foreground mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-foreground mb-3 sm:mb-4">
             {whyBitcoin.title}
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
             {whyBitcoin.subtitle}
           </p>
         </div>
@@ -42,11 +42,11 @@ export default function TrustSection() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200 dark:border-border">
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-muted-foreground">
+                  <tr className="border-b border-border">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">
                       Feature
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-600 dark:text-muted-foreground">
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-muted-foreground">
                       Traditional Platforms
                     </th>
                     <th className="px-6 py-4 text-center text-sm font-semibold text-tiffany-600 dark:text-primary bg-muted/50">
@@ -64,22 +64,20 @@ export default function TrustSection() {
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                       className={row.highlight ? 'bg-green-50' : ''}
                     >
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-foreground">
+                      <td className="px-6 py-4 text-sm font-medium text-foreground">
                         {row.feature}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <div className="flex items-center justify-center gap-2">
                           <X className="w-4 h-4 text-red-500" />
-                          <span className="text-sm text-gray-600 dark:text-muted-foreground">
-                            {row.traditional}
-                          </span>
+                          <span className="text-sm text-muted-foreground">{row.traditional}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-center bg-muted/30">
                         <div className="flex items-center justify-center gap-2">
                           <Check className="w-4 h-4 text-green-600" />
                           <span
-                            className={`text-sm font-semibold ${row.highlight ? 'text-green-700' : 'text-gray-900 dark:text-foreground'}`}
+                            className={`text-sm font-semibold ${row.highlight ? 'text-green-700' : 'text-foreground'}`}
                           >
                             {row.orangecat}
                           </span>
@@ -104,9 +102,7 @@ export default function TrustSection() {
               transition={{ duration: 0.3, delay: index * 0.05 }}
               className={`bg-card rounded-lg shadow-sm border border-border p-4 ${row.highlight ? 'ring-2 ring-green-500 dark:ring-green-600' : ''}`}
             >
-              <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground mb-3">
-                {row.feature}
-              </h4>
+              <h4 className="text-sm font-semibold text-foreground mb-3">{row.feature}</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div className="text-center p-2 bg-muted/50 rounded">
                   <div className="flex items-center justify-center gap-1 mb-1">
@@ -123,7 +119,7 @@ export default function TrustSection() {
                     </span>
                   </div>
                   <span
-                    className={`text-xs font-semibold ${row.highlight ? 'text-green-700' : 'text-gray-900 dark:text-foreground'}`}
+                    className={`text-xs font-semibold ${row.highlight ? 'text-green-700' : 'text-foreground'}`}
                   >
                     {row.orangecat}
                   </span>
@@ -147,12 +143,10 @@ export default function TrustSection() {
               <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-muted mb-3 sm:mb-4">
                 <benefit.icon className="w-6 h-6 sm:w-8 sm:h-8 text-tiffany-600 dark:text-primary" />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+              <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
                 {benefit.title}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-muted-foreground leading-relaxed">
-                {benefit.description}
-              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{benefit.description}</p>
             </motion.div>
           ))}
         </div>
@@ -188,7 +182,7 @@ export default function TrustSection() {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="mt-12 sm:mt-16 lg:mt-20 text-center"
         >
-          <p className="text-base sm:text-lg text-gray-600 dark:text-muted-foreground mb-6">
+          <p className="text-base sm:text-lg text-muted-foreground mb-6">
             Ready to make something? It&apos;s free, no gatekeepers.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">

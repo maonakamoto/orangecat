@@ -31,7 +31,7 @@ export default function DiscoverHero({
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <motion.h1
-            className="text-fluid-3xl font-extrabold tracking-tight text-gray-900 dark:text-foreground mb-4"
+            className="text-fluid-3xl font-extrabold tracking-tight text-foreground mb-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
@@ -43,7 +43,7 @@ export default function DiscoverHero({
           </motion.h1>
 
           <motion.p
-            className="mt-4 max-w-2xl mx-auto text-fluid-lg text-gray-600 dark:text-muted-foreground"
+            className="mt-4 max-w-2xl mx-auto text-fluid-lg text-muted-foreground"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
@@ -63,23 +63,19 @@ export default function DiscoverHero({
               href={`${ROUTES.DISCOVER}?type=projects`}
               className="bg-card rounded-xl p-4 border border-border shadow-sm hover:shadow-md hover:border-orange-300 dark:hover:border-orange-800 transition-all duration-200 block"
             >
-              <div className="text-fluid-xl font-bold text-gray-900 dark:text-foreground">
-                {totalProjects}
-              </div>
-              <div className="text-sm text-gray-600 dark:text-muted-foreground mt-1">
-                Active Projects
-              </div>
+              <div className="text-fluid-xl font-bold text-foreground">{totalProjects}</div>
+              <div className="text-sm text-muted-foreground mt-1">Active Projects</div>
             </Link>
             <Link
               href={`${ROUTES.DISCOVER}?type=profiles`}
               className="bg-card rounded-xl p-4 border border-border shadow-sm hover:shadow-md hover:border-tiffany-300 dark:hover:border-tiffany-800 transition-all duration-200 block"
             >
               <div className="text-fluid-xl font-bold text-tiffany-600">{totalProfiles}</div>
-              <div className="text-sm text-gray-600 dark:text-muted-foreground mt-1">People</div>
+              <div className="text-sm text-muted-foreground mt-1">People</div>
             </Link>
             <div className="bg-card rounded-xl p-4 border border-border shadow-sm">
               <div className="text-fluid-xl font-bold text-bitcoinOrange">{totalFinancial}</div>
-              <div className="text-sm text-gray-600 dark:text-muted-foreground mt-1">Finance</div>
+              <div className="text-sm text-muted-foreground mt-1">Finance</div>
             </div>
           </motion.div>
 

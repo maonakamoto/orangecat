@@ -73,7 +73,7 @@ export function WishlistItemCard({
             )}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
-                <span className="font-medium text-gray-900 dark:text-foreground">{item.title}</span>
+                <span className="font-medium text-foreground">{item.title}</span>
                 <div className="flex gap-1 flex-shrink-0">
                   {item.is_fulfilled && (
                     <Badge variant="secondary" className="text-xs">
@@ -86,7 +86,7 @@ export function WishlistItemCard({
                 </div>
               </div>
               {item.description && (
-                <p className="text-sm text-gray-500 dark:text-muted-foreground mt-0.5 line-clamp-1">
+                <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">
                   {item.description}
                 </p>
               )}
@@ -96,7 +96,7 @@ export function WishlistItemCard({
               {item.target_amount_btc > 0 && (
                 <div className="mt-2 space-y-1">
                   <Progress value={itemProgress} className="h-1" />
-                  <p className="text-xs text-gray-500 dark:text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {Number(item.funded_amount_btc).toFixed(8)} /{' '}
                     {Number(item.target_amount_btc).toFixed(8)} BTC
                   </p>
@@ -132,9 +132,9 @@ export function WishlistItemList({
       </div>
 
       {items.length === 0 ? (
-        <div className="text-center py-10 border-2 border-dashed border-gray-200 dark:border-border rounded-lg">
+        <div className="text-center py-10 border-2 border-dashed border-border rounded-lg">
           <Gift className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-muted-foreground/50" />
-          <p className="text-gray-500 dark:text-muted-foreground mb-3">No items yet</p>
+          <p className="text-muted-foreground mb-3">No items yet</p>
           <Link href={`${wishlistBasePath}/items/new?wishlist_id=${id}`}>
             <Button size="sm">
               <Plus className="w-4 h-4 mr-1" />
@@ -162,22 +162,22 @@ export function WishlistDetailsSidebar({ wishlist }: { wishlist: WishlistWithSta
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
           <div>
-            <div className="text-gray-500 dark:text-muted-foreground">Type</div>
+            <div className="text-muted-foreground">Type</div>
             <div className="font-medium capitalize">
               {WISHLIST_TYPE_LABELS[wishlist.type] || wishlist.type}
             </div>
           </div>
           <div>
-            <div className="text-gray-500 dark:text-muted-foreground">Visibility</div>
+            <div className="text-muted-foreground">Visibility</div>
             <div className="font-medium capitalize">{wishlist.visibility}</div>
           </div>
           <div>
-            <div className="text-gray-500 dark:text-muted-foreground">Status</div>
+            <div className="text-muted-foreground">Status</div>
             <div className="font-medium">{wishlist.is_active ? 'Active' : 'Inactive'}</div>
           </div>
           {wishlist.event_date && (
             <div>
-              <div className="text-gray-500 dark:text-muted-foreground">Event Date</div>
+              <div className="text-muted-foreground">Event Date</div>
               <div className="font-medium">
                 {new Date(wishlist.event_date).toLocaleDateString('en-US', {
                   month: 'long',
@@ -188,12 +188,12 @@ export function WishlistDetailsSidebar({ wishlist }: { wishlist: WishlistWithSta
             </div>
           )}
           <div>
-            <div className="text-gray-500 dark:text-muted-foreground">Created</div>
+            <div className="text-muted-foreground">Created</div>
             <div className="font-medium">{formatDate(wishlist.created_at)}</div>
           </div>
           {wishlist.fulfilled_item_count > 0 && (
             <div>
-              <div className="text-gray-500 dark:text-muted-foreground">Fulfilled Items</div>
+              <div className="text-muted-foreground">Fulfilled Items</div>
               <div className="font-medium">
                 {wishlist.fulfilled_item_count} of {wishlist.item_count}
               </div>

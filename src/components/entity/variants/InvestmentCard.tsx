@@ -33,10 +33,8 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
               <TrendingUp className="w-6 h-6 text-green-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 dark:text-foreground truncate">
-                {investment.title}
-              </h3>
-              <p className="text-sm text-gray-500 dark:text-muted-foreground truncate">
+              <h3 className="font-semibold text-foreground truncate">{investment.title}</h3>
+              <p className="text-sm text-muted-foreground truncate">
                 {formatAmount(investment.total_raised)} raised of{' '}
                 {formatAmount(investment.target_amount)}
               </p>
@@ -49,7 +47,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
                     {investment.expected_return_rate}% return
                   </Badge>
                 )}
-              <span className="text-gray-500 dark:text-muted-foreground">
+              <span className="text-muted-foreground">
                 {formatRelativeTime(investment.created_at)}
               </span>
             </div>
@@ -83,9 +81,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
 
         <CardContent className="space-y-3">
           {investment.description && (
-            <p className="text-sm text-gray-600 dark:text-muted-foreground line-clamp-2">
-              {investment.description}
-            </p>
+            <p className="text-sm text-muted-foreground line-clamp-2">{investment.description}</p>
           )}
 
           <div className="space-y-2">
@@ -114,7 +110,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
               <span
                 className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 ${
                   INVESTMENT_RISK_COLORS[investment.risk_level] ??
-                  'bg-gray-100 dark:bg-muted text-gray-700 dark:text-muted-foreground border-gray-200 dark:border-border'
+                  'bg-gray-100 dark:bg-muted text-gray-700 dark:text-muted-foreground border-border'
                 }`}
               >
                 <Shield className="h-3 w-3" />

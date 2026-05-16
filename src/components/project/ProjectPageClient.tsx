@@ -205,17 +205,17 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
       {/* Floating CTA - Mobile Only */}
       {!isOwner && project.bitcoin_address && showFloatingCTA && (
         <div
-          className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-card border-t border-gray-200 dark:border-border shadow-2xl transition-transform duration-300 ${
+          className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border shadow-2xl transition-transform duration-300 ${
             showFloatingCTA ? 'translate-y-0' : 'translate-y-full'
           }`}
         >
           <div className="max-w-lg mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-3">
               <div className="flex-1 min-w-0">
-                <div className="text-xs text-gray-500 dark:text-muted-foreground">
+                <div className="text-xs text-muted-foreground">
                   Goal: {formatCurrency(project.goal_amount ?? 0, project.currency)}
                 </div>
-                <div className="text-lg font-bold text-gray-900 dark:text-foreground truncate">
+                <div className="text-lg font-bold text-foreground truncate">
                   {formatCurrency(project.raised_amount ?? 0, project.currency)}
                 </div>
                 <div className="h-1.5 bg-gray-200 dark:bg-muted rounded-full mt-1">

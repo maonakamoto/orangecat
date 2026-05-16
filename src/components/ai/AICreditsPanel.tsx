@@ -97,7 +97,7 @@ export function AICreditsPanel() {
                         <div className="font-medium dark:text-foreground">
                           {tx.assistant?.name || tx.description || tx.transaction_type}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-muted-foreground">
+                        <div className="text-xs text-muted-foreground">
                           {formatDate(tx.created_at)}
                         </div>
                       </div>
@@ -113,7 +113,7 @@ export function AICreditsPanel() {
           )}
 
           {(!data?.transactions || data.transactions.length === 0) && (
-            <div className="text-center py-4 text-gray-500 dark:text-muted-foreground text-base">
+            <div className="text-center py-4 text-muted-foreground text-base">
               No transactions yet. Add credits to start chatting with AI assistants.
             </div>
           )}
@@ -158,7 +158,7 @@ export function AICreditsPanel() {
                 max={1000000}
                 className="mt-1"
               />
-              <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Minimum: {formatAmount(100)} | Maximum: {formatAmount(1000000)}
               </p>
             </div>

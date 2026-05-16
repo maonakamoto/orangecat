@@ -22,16 +22,14 @@ export function WalletsPageHeader({ isDesktop }: WalletsPageHeaderProps) {
       <Breadcrumb items={[{ label: 'Wallets' }]} className="mb-4" />
       <div className="flex items-center gap-3 mb-2">
         <WalletIcon className="w-8 h-8 text-orange-600" />
-        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-foreground">
-          Manage Wallets
-        </h1>
+        <h1 className="text-2xl lg:text-3xl font-bold text-foreground">Manage Wallets</h1>
       </div>
       {/* Desktop: Full description, Mobile: Shortened */}
-      <p className="hidden lg:block text-gray-600 dark:text-muted-foreground mb-4 max-w-2xl">
+      <p className="hidden lg:block text-muted-foreground mb-4 max-w-2xl">
         Add and manage your Bitcoin wallets. Each wallet can represent a specific funding need such
         as rent, food, medical costs, or a one‑time savings goal.
       </p>
-      <p className="lg:hidden text-sm text-gray-600 dark:text-muted-foreground mb-3">
+      <p className="lg:hidden text-sm text-muted-foreground mb-3">
         Add Bitcoin wallets for different funding needs
       </p>
 

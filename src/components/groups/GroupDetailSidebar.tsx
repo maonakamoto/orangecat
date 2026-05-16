@@ -32,22 +32,20 @@ export function GroupDetailSidebar({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <LabelIcon
-              className={`h-5 w-5 ${labelConfig?.iconClass ?? 'text-gray-500 dark:text-muted-foreground'}`}
-            />
+            <LabelIcon className={`h-5 w-5 ${labelConfig?.iconClass ?? 'text-muted-foreground'}`} />
             Group Information
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="text-gray-500 dark:text-muted-foreground">Label</div>
+            <div className="text-muted-foreground">Label</div>
             <div className="font-medium">
               <Badge variant="secondary">{labelConfig?.name || group.label}</Badge>
             </div>
 
             {group.tags && group.tags.length > 0 && (
               <>
-                <div className="text-gray-500 dark:text-muted-foreground">Tags</div>
+                <div className="text-muted-foreground">Tags</div>
                 <div className="flex flex-wrap gap-1">
                   {group.tags.map(tag => (
                     <Badge key={tag} variant="outline" className="text-xs">
@@ -58,7 +56,7 @@ export function GroupDetailSidebar({
               </>
             )}
 
-            <div className="text-gray-500 dark:text-muted-foreground">Visibility</div>
+            <div className="text-muted-foreground">Visibility</div>
             <div className="font-medium flex items-center gap-1">
               {group.visibility === 'public' ? (
                 <>
@@ -78,15 +76,15 @@ export function GroupDetailSidebar({
               )}
             </div>
 
-            <div className="text-gray-500 dark:text-muted-foreground">Listed</div>
+            <div className="text-muted-foreground">Listed</div>
             <div className="font-medium">{group.is_public ? 'Yes' : 'No'}</div>
 
-            <div className="text-gray-500 dark:text-muted-foreground">Governance</div>
+            <div className="text-muted-foreground">Governance</div>
             <div className="font-medium">{governanceConfig?.name || group.governance_preset}</div>
 
             {group.voting_threshold && (
               <>
-                <div className="text-gray-500 dark:text-muted-foreground">Voting Threshold</div>
+                <div className="text-muted-foreground">Voting Threshold</div>
                 <div className="font-medium">{group.voting_threshold}%</div>
               </>
             )}
@@ -105,9 +103,7 @@ export function GroupDetailSidebar({
           <CardContent className="space-y-4">
             {group.bitcoin_address && (
               <div>
-                <div className="text-sm text-gray-500 dark:text-muted-foreground mb-1">
-                  On-chain Address
-                </div>
+                <div className="text-sm text-muted-foreground mb-1">On-chain Address</div>
                 <div className="font-mono text-xs break-all bg-muted p-2 rounded">
                   {group.bitcoin_address}
                 </div>
@@ -115,7 +111,7 @@ export function GroupDetailSidebar({
             )}
             {group.lightning_address && (
               <div>
-                <div className="text-sm text-gray-500 dark:text-muted-foreground mb-1 flex items-center gap-1">
+                <div className="text-sm text-muted-foreground mb-1 flex items-center gap-1">
                   <Zap className="h-3 w-3" />
                   Lightning Address
                 </div>
@@ -136,11 +132,11 @@ export function GroupDetailSidebar({
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-tiffany-600">{members.length}</div>
-              <div className="text-sm text-gray-500 dark:text-muted-foreground">Members</div>
+              <div className="text-sm text-muted-foreground">Members</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">{wallets.length}</div>
-              <div className="text-sm text-gray-500 dark:text-muted-foreground">Wallets</div>
+              <div className="text-sm text-muted-foreground">Wallets</div>
             </div>
           </div>
         </CardContent>

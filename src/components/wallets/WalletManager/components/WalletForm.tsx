@@ -117,9 +117,7 @@ export function WalletForm({
             );
           })}
         </div>
-        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-2">
-          {selectedCategory.description}
-        </p>
+        <p className="text-xs text-muted-foreground mt-2">{selectedCategory.description}</p>
       </div>
 
       {/* Label */}
@@ -152,7 +150,7 @@ export function WalletForm({
       <div className="mb-4">
         <label className="block text-sm font-medium dark:text-foreground mb-2">
           Bitcoin Address or Extended Public Key
-          <span className="ml-2 text-xs font-normal text-gray-500 dark:text-muted-foreground">
+          <span className="ml-2 text-xs font-normal text-muted-foreground">
             (optional if Lightning address provided)
           </span>
         </label>
@@ -163,7 +161,7 @@ export function WalletForm({
           placeholder="zpub... (recommended) or bc1q..."
           required
         />
-        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+        <p className="text-xs text-muted-foreground mt-1">
           Extended public keys (xpub/ypub/zpub) automatically track all addresses and transactions.
           Single addresses work but only track that one address.
         </p>
@@ -180,7 +178,7 @@ export function WalletForm({
           onFocus={() => onFieldFocus?.('label')}
           placeholder="you@getalby.com"
         />
-        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+        <p className="text-xs text-muted-foreground mt-1">
           Lightning address for instant, low-fee payments (e.g., you@getalby.com)
         </p>
       </div>
@@ -229,7 +227,7 @@ export function WalletForm({
             />
             <span className="text-sm font-medium">Set as primary wallet</span>
           </label>
-          <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1 ml-6">
+          <p className="text-xs text-muted-foreground mt-1 ml-6">
             The primary wallet is displayed prominently on your profile. Only one wallet can be
             primary at a time.
           </p>

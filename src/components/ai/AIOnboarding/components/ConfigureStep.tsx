@@ -34,7 +34,7 @@ export function ConfigureStep({
             </div>
             <div>
               <h3 className="font-medium">Auto Router</h3>
-              <p className="text-sm text-gray-600 dark:text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Automatically selects the best model based on message complexity
               </p>
             </div>
@@ -75,7 +75,7 @@ export function ConfigureStep({
         <label className="block text-sm font-medium text-gray-700 dark:text-foreground mb-2">
           Default Tier
           {autoRouterEnabled && (
-            <span className="text-gray-500 dark:text-muted-foreground font-normal ml-2">
+            <span className="text-muted-foreground font-normal ml-2">
               (fallback when auto-router is uncertain)
             </span>
           )}
@@ -95,7 +95,7 @@ export function ConfigureStep({
                   'p-4 rounded-lg border-2 text-left transition-all',
                   isSelected
                     ? 'border-tiffany-500 bg-tiffany-50'
-                    : 'border-gray-200 dark:border-border hover:border-gray-300 dark:hover:border-border'
+                    : 'border-border hover:border-gray-300 dark:hover:border-border'
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">
@@ -106,9 +106,7 @@ export function ConfigureStep({
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-gray-500 dark:text-muted-foreground">
-                  {tierInfo?.description}
-                </p>
+                <p className="text-xs text-muted-foreground">{tierInfo?.description}</p>
               </button>
             );
           })}
@@ -119,7 +117,7 @@ export function ConfigureStep({
       {selectedTier && tierDescriptions[selectedTier] && (
         <Card className="p-4 bg-gray-50 dark:bg-muted">
           <h4 className="font-medium mb-2">{tierDescriptions[selectedTier].title}</h4>
-          <p className="text-sm text-gray-600 dark:text-muted-foreground mb-3">
+          <p className="text-sm text-muted-foreground mb-3">
             Best for: {tierDescriptions[selectedTier].bestFor}
           </p>
           <div className="flex flex-wrap gap-1.5">

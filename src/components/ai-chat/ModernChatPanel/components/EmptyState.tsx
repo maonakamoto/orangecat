@@ -32,10 +32,10 @@ export function EmptyState({
       >
         <Cat className="h-8 w-8 text-white" />
       </div>
-      <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-2">
+      <h2 className="text-2xl font-semibold text-foreground mb-2">
         {isNewUser ? 'Welcome — I’m your Cat' : 'Hi, I’m your Cat'}
       </h2>
-      <p className="text-gray-500 dark:text-muted-foreground mb-8 max-w-md">
+      <p className="text-muted-foreground mb-8 max-w-md">
         {isNewUser ? (
           <>
             I help you earn, fund, lend, invest, and govern — with any currency, under any identity.

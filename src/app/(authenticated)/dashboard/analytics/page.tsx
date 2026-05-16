@@ -116,10 +116,8 @@ export default function AnalyticsPage() {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground">
-              Project Analytics
-            </h1>
-            <p className="text-gray-600 dark:text-muted-foreground mt-1">
+            <h1 className="text-2xl font-bold text-foreground">Project Analytics</h1>
+            <p className="text-muted-foreground mt-1">
               Track your fundraising performance and insights
             </p>
           </div>
@@ -132,8 +130,8 @@ export default function AnalyticsPage() {
                   onClick={() => setTimeRange(range)}
                   className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
                     timeRange === range
-                      ? 'bg-white dark:bg-card text-gray-900 dark:text-foreground shadow-sm'
-                      : 'text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
+                      ? 'bg-card text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
                   }`}
                 >
                   {range === 'all' ? 'All Time' : range.toUpperCase()}

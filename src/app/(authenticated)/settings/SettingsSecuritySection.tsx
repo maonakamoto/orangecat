@@ -21,15 +21,15 @@ export function SettingsSecuritySection({
   return (
     <>
       <div className="border-t border-gray-100 dark:border-border pt-10">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4 flex items-center">
+        <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
           <Shield className="w-6 h-6 mr-2 text-tiffany-600" />
           Two-Factor Authentication
         </h3>
-        <p className="text-gray-600 dark:text-muted-foreground mb-6">
+        <p className="text-muted-foreground mb-6">
           Add an extra layer of security to your account by requiring a code from your authenticator
           app when signing in.
         </p>
-        <div className="bg-gray-50 dark:bg-muted border border-gray-200 dark:border-border rounded-lg p-6 max-w-md">
+        <div className="bg-gray-50 dark:bg-muted border border-border rounded-lg p-6 max-w-md">
           <MFAStatus
             key={mfaStatusKey}
             onEnableClick={onEnableMFA}
@@ -38,7 +38,7 @@ export function SettingsSecuritySection({
               onMFADisableComplete();
             }}
           />
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-border">
+          <div className="mt-4 pt-4 border-t border-border">
             <button
               type="button"
               onClick={onViewRecoveryCodes}
@@ -46,7 +46,7 @@ export function SettingsSecuritySection({
             >
               View Recovery Codes
             </button>
-            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Backup codes for when you lose access to your authenticator
             </p>
           </div>
@@ -54,11 +54,11 @@ export function SettingsSecuritySection({
       </div>
 
       <div className="border-t border-gray-100 dark:border-border pt-10">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4 flex items-center">
+        <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
           <Link2 className="w-6 h-6 mr-2 text-tiffany-600" />
           Connected Accounts
         </h3>
-        <p className="text-gray-600 dark:text-muted-foreground mb-6">
+        <p className="text-muted-foreground mb-6">
           Connect external services for enhanced features like Lightning payments.
         </p>
         <div className="max-w-md">

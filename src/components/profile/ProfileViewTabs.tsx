@@ -125,7 +125,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
   return (
     <div className={cn('w-full', className)}>
       {/* Tab Navigation - X/Twitter-style horizontal scroll on mobile, flex on desktop */}
-      <div className="border-b border-gray-200 dark:border-border mb-4 sm:mb-6 relative">
+      <div className="border-b border-border mb-4 sm:mb-6 relative">
         {/* Left fade indicator - only on mobile when scrolled */}
         {showLeftFade && (
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white dark:from-background to-transparent pointer-events-none z-10 sm:hidden" />
@@ -156,7 +156,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                   'group inline-flex items-center justify-center sm:justify-start py-2.5 sm:py-3 lg:py-4 px-3 sm:px-1 md:px-2 border-b-2 font-medium text-sm sm:text-sm transition-colors whitespace-nowrap touch-manipulation min-h-11 flex-shrink-0',
                   isActive
                     ? 'border-orange-500 text-orange-600'
-                    : 'border-transparent text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:border-gray-300 dark:hover:border-border'
+                    : 'border-transparent text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:border-gray-300 dark:hover:border-border'
                 )}
                 aria-current={isActive ? 'page' : undefined}
               >
@@ -179,7 +179,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                       'ml-1.5 sm:ml-2 py-0.5 px-1.5 sm:px-2 rounded-full text-2xs sm:text-xs font-medium flex-shrink-0',
                       isActive
                         ? 'bg-orange-100 text-orange-600'
-                        : 'bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground'
+                        : 'bg-gray-100 dark:bg-muted text-muted-foreground'
                     )}
                   >
                     {tab.badge}

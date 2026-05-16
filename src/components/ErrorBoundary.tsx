@@ -175,16 +175,14 @@ export default class ErrorBoundary extends Component<Props, State> {
 
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white dark:bg-card rounded-lg shadow-lg p-6 text-center">
+        <div className="max-w-md w-full bg-card rounded-lg shadow-lg p-6 text-center">
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
             <AlertTriangle className="h-6 w-6 text-red-600" />
           </div>
 
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground mb-2">
-            Something went wrong
-          </h2>
+          <h2 className="text-xl font-semibold text-foreground mb-2">Something went wrong</h2>
 
-          <p className="text-gray-600 dark:text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-6">
             We encountered an unexpected error. Our team has been notified.
           </p>
 
@@ -193,14 +191,8 @@ export default class ErrorBoundary extends Component<Props, State> {
               <h3 className="text-sm font-medium text-gray-700 dark:text-foreground mb-2">
                 Error Details:
               </h3>
-              <p className="text-xs text-gray-600 dark:text-muted-foreground font-mono break-all">
-                {error.message}
-              </p>
-              {eventId && (
-                <p className="text-xs text-gray-500 dark:text-muted-foreground mt-2">
-                  Event ID: {eventId}
-                </p>
-              )}
+              <p className="text-xs text-muted-foreground font-mono break-all">{error.message}</p>
+              {eventId && <p className="text-xs text-muted-foreground mt-2">Event ID: {eventId}</p>}
             </div>
           )}
 

@@ -47,7 +47,7 @@ export default function ProjectSelectionModal({
       closeOnOverlayClick={true}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-border">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border">
         <button
           onClick={onClose}
           className="p-2 -ml-2 min-h-11 min-w-11 flex items-center justify-center"
@@ -55,16 +55,14 @@ export default function ProjectSelectionModal({
         >
           <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-foreground" />
         </button>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground">
-          Crosspost to projects
-        </h2>
+        <h2 className="text-lg font-semibold text-foreground">Crosspost to projects</h2>
         <div className="w-9" /> {/* Spacer for centering */}
       </div>
 
       {/* Content */}
       <div className="overflow-y-auto max-h-[calc(100vh-60px)]">
         {/* Everyone option (default - always selected) */}
-        <div className="px-4 py-4 border-b border-gray-200 dark:border-border">
+        <div className="px-4 py-4 border-b border-border">
           <button
             className="flex items-center justify-between w-full min-h-11"
             disabled
@@ -77,12 +75,8 @@ export default function ProjectSelectionModal({
                 <Users className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
-                <div className="text-base font-semibold text-gray-900 dark:text-foreground">
-                  Everyone
-                </div>
-                <div className="text-sm text-gray-500 dark:text-muted-foreground">
-                  Post to your timeline
-                </div>
+                <div className="text-base font-semibold text-foreground">Everyone</div>
+                <div className="text-sm text-muted-foreground">Post to your timeline</div>
               </div>
             </div>
             <div className="w-6 h-6 rounded-full bg-tiffany-500 flex items-center justify-center">
@@ -135,11 +129,11 @@ export default function ProjectSelectionModal({
 
                       {/* Project info */}
                       <div className="flex-1 min-w-0 text-left">
-                        <div className="text-base font-semibold text-gray-900 dark:text-foreground truncate">
+                        <div className="text-base font-semibold text-foreground truncate">
                           {project.title}
                         </div>
                         {project.contributor_count !== undefined && (
-                          <div className="text-sm text-gray-500 dark:text-muted-foreground">
+                          <div className="text-sm text-muted-foreground">
                             {project.contributor_count.toLocaleString()} supporter
                             {project.contributor_count !== 1 ? 's' : ''}
                           </div>
@@ -168,9 +162,7 @@ export default function ProjectSelectionModal({
         {/* Empty state */}
         {!loading && projects.length === 0 && (
           <div className="px-4 py-12 text-center">
-            <div className="text-gray-500 dark:text-muted-foreground text-sm">
-              No projects available
-            </div>
+            <div className="text-muted-foreground text-sm">No projects available</div>
             <div className="text-gray-400 dark:text-muted-foreground text-xs mt-1">
               Create a project to crosspost your updates
             </div>
@@ -180,9 +172,7 @@ export default function ProjectSelectionModal({
         {/* Loading state */}
         {loading && (
           <div className="px-4 py-12 text-center">
-            <div className="text-gray-500 dark:text-muted-foreground text-sm">
-              Loading projects...
-            </div>
+            <div className="text-muted-foreground text-sm">Loading projects...</div>
           </div>
         )}
       </div>

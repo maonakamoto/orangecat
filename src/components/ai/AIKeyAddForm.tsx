@@ -78,11 +78,11 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
                   'p-3 rounded-lg border-2 text-left transition-all',
                   selectedProvider === p.id
                     ? 'border-tiffany-500 bg-tiffany-50'
-                    : 'border-gray-200 dark:border-border hover:border-gray-300 dark:hover:border-border'
+                    : 'border-border hover:border-gray-300 dark:hover:border-border'
                 )}
               >
                 <div className="font-medium text-sm">{p.name}</div>
-                <div className="text-xs text-gray-500 dark:text-muted-foreground">{p.type}</div>
+                <div className="text-xs text-muted-foreground">{p.type}</div>
               </button>
             ))}
           </div>
@@ -119,13 +119,13 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
             <button
               type="button"
               onClick={() => setShowKey(!showKey)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
             >
               {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
           {provider && (
-            <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
+            <p className="mt-1 text-xs text-muted-foreground">
               Get your key at{' '}
               <a
                 href={provider.apiKeyUrl}

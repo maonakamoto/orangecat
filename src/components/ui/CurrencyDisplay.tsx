@@ -28,9 +28,7 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
   showSymbol = true,
 }) => {
   const currencyColorClass =
-    currency === 'BTC'
-      ? 'text-bitcoinOrange font-medium'
-      : 'text-gray-600 dark:text-muted-foreground';
+    currency === 'BTC' ? 'text-bitcoinOrange font-medium' : 'text-muted-foreground';
 
   const sizeClasses = {
     sm: 'text-sm',

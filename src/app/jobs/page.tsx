@@ -84,7 +84,7 @@ export default function JobsPage() {
           <Briefcase className="h-8 w-8" />
           Job Postings
         </h1>
-        <p className="text-gray-600 dark:text-muted-foreground">
+        <p className="text-muted-foreground">
           Browse employment opportunities from network states and groups
         </p>
       </div>
@@ -93,9 +93,7 @@ export default function JobsPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <Briefcase className="h-12 w-12 text-gray-400 dark:text-muted-foreground/50 mx-auto mb-4" />
-            <p className="text-gray-500 dark:text-muted-foreground mb-2">
-              No job postings available
-            </p>
+            <p className="text-muted-foreground mb-2">No job postings available</p>
             <p className="text-base text-gray-400 dark:text-muted-foreground/70">
               Check back later or create a group to post jobs
             </p>
@@ -110,7 +108,7 @@ export default function JobsPage() {
                   <div className="flex-1">
                     <CardTitle className="text-xl mb-2">{job.title}</CardTitle>
                     {job.groups && (
-                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-muted-foreground mb-2">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                         <Building2 className="h-4 w-4" />
                         <Link
                           href={`${ENTITY_REGISTRY['group'].publicBasePath}/${job.groups.slug}`}
@@ -133,7 +131,7 @@ export default function JobsPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-muted-foreground">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     {job.action_data?.location && (
                       <div className="flex items-center gap-1">
                         <MapPin className="h-4 w-4" />

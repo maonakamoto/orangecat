@@ -21,10 +21,8 @@ export function GetStartedCTA({ onGetWallet }: GetStartedCTAProps) {
       <Card className="max-w-2xl mx-auto bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20 border-bitcoinOrange/30">
         <CardContent className="p-8">
           <Bitcoin className="w-16 h-16 text-bitcoinOrange mx-auto mb-4" />
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
-            Ready to Get Started?
-          </h2>
-          <p className="text-gray-600 dark:text-muted-foreground mb-6">
+          <h2 className="text-2xl font-semibold text-foreground mb-4">Ready to Get Started?</h2>
+          <p className="text-muted-foreground mb-6">
             Once you have your Bitcoin wallet set up, you can add your Bitcoin address to your
             OrangeCat profile and start receiving funding for your projects.
           </p>

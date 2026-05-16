@@ -31,7 +31,7 @@ export default function PeopleTabBar({
   return (
     <>
       {/* Tabs */}
-      <div className="mb-6 flex gap-4 border-b border-gray-200 dark:border-border">
+      <div className="mb-6 flex gap-4 border-b border-border">
         {tabs.map(tab => (
           <button
             key={tab.id}

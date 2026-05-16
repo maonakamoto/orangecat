@@ -42,15 +42,13 @@ export function LightningInvoiceDisplay({
           className="text-xl font-semibold"
         />
         {invoice.description && (
-          <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1">
-            {invoice.description}
-          </p>
+          <p className="text-sm text-muted-foreground mt-1">{invoice.description}</p>
         )}
       </div>
 
       {/* QR Code */}
       {paymentStatus !== 'expired' && (
-        <div className="flex justify-center p-4 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg">
+        <div className="flex justify-center p-4 bg-card border border-border rounded-lg">
           <QRCodeSVG
             value={invoice.bolt11.toUpperCase()}
             size={200}
@@ -66,8 +64,8 @@ export function LightningInvoiceDisplay({
           Lightning Invoice
         </label>
         <div className="flex gap-2">
-          <div className="flex-1 p-3 bg-gray-50 dark:bg-muted rounded-lg border border-gray-200 dark:border-border">
-            <code className="text-xs text-gray-600 dark:text-muted-foreground break-all font-mono">
+          <div className="flex-1 p-3 bg-gray-50 dark:bg-muted rounded-lg border border-border">
+            <code className="text-xs text-muted-foreground break-all font-mono">
               {invoice.bolt11}
             </code>
           </div>
@@ -103,7 +101,7 @@ export function LightningInvoiceDisplay({
 
       {/* Timer */}
       {timeLeft !== null && timeLeft > 0 && (
-        <div className="text-center text-sm text-gray-500 dark:text-muted-foreground">
+        <div className="text-center text-sm text-muted-foreground">
           Invoice expires in {formatTime(timeLeft)}
         </div>
       )}

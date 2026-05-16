@@ -35,7 +35,7 @@ export function BlogFilters({
       {tags.length > 0 && (
         <div>
           <div className="flex items-center mb-4">
-            <Tag className="w-4 h-4 mr-2 text-gray-600 dark:text-muted-foreground" />
+            <Tag className="w-4 h-4 mr-2 text-muted-foreground" />
             <h3 className="text-lg font-semibold">Filter by Topic</h3>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -44,7 +44,7 @@ export function BlogFilters({
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 !selectedTag
                   ? 'bg-tiffany-500 text-white'
-                  : 'bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                  : 'bg-gray-100 dark:bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
               }`}
             >
               All Topics
@@ -56,7 +56,7 @@ export function BlogFilters({
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedTag === tag
                     ? 'bg-tiffany-500 text-white'
-                    : 'bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                    : 'bg-gray-100 dark:bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
                 }`}
               >
                 {tag}
@@ -68,7 +68,7 @@ export function BlogFilters({
 
       <div>
         <div className="flex items-center mb-4">
-          <Calendar className="w-4 h-4 mr-2 text-gray-600 dark:text-muted-foreground" />
+          <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
           <h3 className="text-lg font-semibold">Filter by Time</h3>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -79,7 +79,7 @@ export function BlogFilters({
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 selectedTimeFilter === option.key
                   ? 'bg-orange-500 text-white'
-                  : 'bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                  : 'bg-gray-100 dark:bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
               }`}
             >
               {option.label}
@@ -91,9 +91,9 @@ export function BlogFilters({
 
       {(selectedTag || selectedTimeFilter !== 'all') && (
         <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-muted rounded-lg">
-          <Filter className="w-4 h-4 text-gray-500 dark:text-muted-foreground" />
+          <Filter className="w-4 h-4 text-muted-foreground" />
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-600 dark:text-muted-foreground">Showing:</span>
+            <span className="text-muted-foreground">Showing:</span>
             {selectedTag && (
               <span className="px-2 py-1 bg-tiffany-100 text-tiffany-700 rounded text-xs font-medium">
                 {selectedTag}
@@ -104,14 +104,14 @@ export function BlogFilters({
                 {timeFilterOptions.find(opt => opt.key === selectedTimeFilter)?.label}
               </span>
             )}
-            <span className="text-gray-500 dark:text-muted-foreground">•</span>
-            <span className="text-gray-600 dark:text-muted-foreground font-medium">
+            <span className="text-muted-foreground">•</span>
+            <span className="text-muted-foreground font-medium">
               {filteredPosts.length} post{filteredPosts.length !== 1 ? 's' : ''}
             </span>
           </div>
           <button
             onClick={clearFilters}
-            className="ml-auto text-xs text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground underline"
+            className="ml-auto text-xs text-muted-foreground hover:text-gray-700 dark:hover:text-foreground underline"
           >
             Clear all filters
           </button>

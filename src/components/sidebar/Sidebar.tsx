@@ -133,7 +133,7 @@ export function Sidebar({
               >
                 <button
                   onClick={toggleSidebarCollapse}
-                  className={`w-full flex items-center gap-3 p-2 text-gray-500 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-xl transition-colors duration-200 ${
+                  className={`w-full flex items-center gap-3 p-2 text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-xl transition-colors duration-200 ${
                     !isExpanded ? 'justify-center' : ''
                   }`}
                   aria-label={
@@ -162,7 +162,7 @@ export function Sidebar({
               >
                 <button
                   onClick={toggleSidebar}
-                  className="w-full flex items-center gap-3 p-2 text-gray-500 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-xl transition-colors duration-200 min-h-11"
+                  className="w-full flex items-center gap-3 p-2 text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-xl transition-colors duration-200 min-h-11"
                   aria-label={navigationLabels.SIDEBAR_COLLAPSE}
                 >
                   <X className="h-5 w-5" />

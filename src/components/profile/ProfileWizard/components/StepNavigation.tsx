@@ -31,8 +31,8 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                     : isCurrent
                       ? 'bg-orange-500 border-orange-500 text-white shadow-lg animate-pulse'
                       : isUpcoming
-                        ? 'bg-white dark:bg-card border-gray-300 dark:border-border text-gray-400 dark:text-muted-foreground'
-                        : 'bg-gray-200 dark:bg-muted border-gray-300 dark:border-border text-gray-500 dark:text-muted-foreground'
+                        ? 'bg-card border-gray-300 dark:border-border text-gray-400 dark:text-muted-foreground'
+                        : 'bg-gray-200 dark:bg-muted border-gray-300 dark:border-border text-muted-foreground'
                 }`}
               >
                 {isCompleted ? (
@@ -55,7 +55,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                       ? 'text-green-600'
                       : isCurrent
                         ? 'text-orange-600'
-                        : 'text-gray-500 dark:text-muted-foreground'
+                        : 'text-muted-foreground'
                   }`}
                 >
                   {step.title.split(' ').slice(1).join(' ')}
@@ -98,7 +98,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
 
       {/* Current Step Description */}
       <div className="mt-6 text-center max-w-md mx-auto">
-        <p className="text-sm text-gray-600 dark:text-muted-foreground leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed">
           {steps[currentStep].description}
         </p>
         {steps[currentStep].required && (

@@ -144,7 +144,7 @@ export function ProposalDetail({
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <p className="text-gray-500 dark:text-muted-foreground">Proposal not found</p>
+          <p className="text-muted-foreground">Proposal not found</p>
           <Link href={`${ENTITY_REGISTRY['group'].publicBasePath}/${groupSlug}`}>
             <Button variant="outline" className="mt-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -186,7 +186,7 @@ export function ProposalDetail({
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Proposal Metadata */}
-          <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 dark:text-muted-foreground">
+          <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
             {proposal.proposer && (
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -215,7 +215,7 @@ export function ProposalDetail({
                 {activating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Activate Proposal
               </Button>
-              <p className="text-sm text-gray-500 dark:text-muted-foreground mt-2">
+              <p className="text-sm text-muted-foreground mt-2">
                 Activating will start the voting period. This cannot be undone.
               </p>
             </div>

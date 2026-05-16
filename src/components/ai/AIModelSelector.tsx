@@ -46,9 +46,7 @@ export function AIModelSelector({
         disabled={disabled}
         className={cn(
           'w-full p-3 rounded-lg border-2 text-left transition-all flex items-center justify-between',
-          isOpen
-            ? 'border-tiffany-500 bg-tiffany-50'
-            : 'border-gray-200 dark:border-border hover:border-gray-300',
+          isOpen ? 'border-tiffany-500 bg-tiffany-50' : 'border-border hover:border-gray-300',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
@@ -57,12 +55,10 @@ export function AIModelSelector({
           {selectedModel ? (
             <div>
               <span className="font-medium">{selectedModel.name}</span>
-              <span className="text-sm text-gray-500 dark:text-muted-foreground ml-2">
-                {selectedModel.provider}
-              </span>
+              <span className="text-sm text-muted-foreground ml-2">{selectedModel.provider}</span>
             </div>
           ) : (
-            <span className="text-gray-500 dark:text-muted-foreground">
+            <span className="text-muted-foreground">
               {autoRouterEnabled ? 'Auto-selected based on tier' : 'Select a model...'}
             </span>
           )}
@@ -76,7 +72,7 @@ export function AIModelSelector({
       </button>
 
       {isOpen && (
-        <div className="mt-2 p-2 border border-gray-200 dark:border-border rounded-lg bg-white dark:bg-card shadow-lg max-h-64 overflow-y-auto">
+        <div className="mt-2 p-2 border border-border rounded-lg bg-card shadow-lg max-h-64 overflow-y-auto">
           {getModelsByTier(defaultTier).map(model => (
             <button
               key={model.id}
@@ -89,9 +85,7 @@ export function AIModelSelector({
             >
               <div>
                 <div className="font-medium text-sm">{model.name}</div>
-                <div className="text-xs text-gray-500 dark:text-muted-foreground">
-                  {model.provider}
-                </div>
+                <div className="text-xs text-muted-foreground">{model.provider}</div>
               </div>
               <div className="flex items-center gap-2">
                 {model.isFree && <Badge className={`${BADGE_COLORS.success} text-xs`}>FREE</Badge>}

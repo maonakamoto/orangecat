@@ -24,10 +24,10 @@ export function BasicsStep({ form }: BasicsStepProps) {
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-2">
+        <h2 className="text-2xl font-semibold text-foreground mb-2">
           Welcome! Let's set up your profile
         </h2>
-        <p className="text-gray-600 dark:text-muted-foreground mb-3">
+        <p className="text-muted-foreground mb-3">
           This will help people understand who you are and what you're about.
         </p>
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-tiffany-50 text-tiffany-700 text-xs rounded-full">
@@ -44,9 +44,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
             <FormLabel className="text-sm font-medium text-gray-700 dark:text-foreground flex items-center gap-1">
               Username
               <span className="text-red-500 text-xs font-bold">*</span>
-              <span className="text-xs text-gray-500 dark:text-muted-foreground font-normal">
-                (required)
-              </span>
+              <span className="text-xs text-muted-foreground font-normal">(required)</span>
             </FormLabel>
             <FormControl>
               <Input
@@ -56,7 +54,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
                 className="text-sm"
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
+            <FormDescription className="text-xs text-muted-foreground">
               This will be your public profile URL: orangecat.ch/@username
             </FormDescription>
             <FormMessage />
@@ -80,7 +78,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
                 className="text-sm"
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
+            <FormDescription className="text-xs text-muted-foreground">
               Optional: How you want to be displayed publicly
             </FormDescription>
             <FormMessage />
@@ -105,7 +103,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
                 rows={4}
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
+            <FormDescription className="text-xs text-muted-foreground">
               Optional: Share your story to build trust with supporters
             </FormDescription>
             <FormMessage />

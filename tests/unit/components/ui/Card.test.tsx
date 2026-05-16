@@ -157,7 +157,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     test('should apply title styles', () => {
       render(<CardTitle data-testid="title">Title test</CardTitle>);
       const title = screen.getByTestId('title');
-      expect(title).toHaveClass('text-lg', 'font-semibold', 'leading-tight', 'text-gray-900');
+      expect(title).toHaveClass('text-lg', 'font-semibold', 'leading-tight', 'text-foreground');
     });
 
     test('should apply custom className', () => {
@@ -205,7 +205,12 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     test('should apply description styles', () => {
       render(<CardDescription data-testid="description">Description test</CardDescription>);
       const description = screen.getByTestId('description');
-      expect(description).toHaveClass('text-sm', 'text-gray-600', 'leading-relaxed', 'mt-1');
+      expect(description).toHaveClass(
+        'text-sm',
+        'text-muted-foreground',
+        'leading-relaxed',
+        'mt-1'
+      );
     });
 
     test('should apply custom className', () => {
@@ -215,7 +220,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
         </CardDescription>
       );
       const description = screen.getByTestId('description');
-      expect(description).toHaveClass('custom-description', 'text-sm', 'text-gray-600');
+      expect(description).toHaveClass('custom-description', 'text-sm', 'text-muted-foreground');
     });
 
     test('should spread additional props', () => {

@@ -81,8 +81,8 @@ export default function NotificationCenter({
                   onClick={() => setUIFilter(tab.key)}
                   className={`flex-1 px-3 py-1.5 text-sm rounded-md transition-colors ${
                     uiFilter === tab.key
-                      ? 'bg-white dark:bg-card text-gray-900 dark:text-foreground shadow-sm'
-                      : 'text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
+                      ? 'bg-card text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
                   }`}
                 >
                   {tab.label}
@@ -92,7 +92,7 @@ export default function NotificationCenter({
 
             {unreadCount > 0 && (
               <div className="flex justify-between items-center mb-4">
-                <span className="text-sm text-gray-600 dark:text-muted-foreground">
+                <span className="text-sm text-muted-foreground">
                   {unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}
                 </span>
                 <Button variant="ghost" size="sm" onClick={handleMarkAllAsRead}>
@@ -118,7 +118,7 @@ export default function NotificationCenter({
                   ))}
                 </div>
               ) : notifications.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 dark:text-muted-foreground">
+                <div className="text-center py-8 text-muted-foreground">
                   <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   <p>No notifications found</p>
                   {uiFilter !== 'all' && (
@@ -153,7 +153,7 @@ export default function NotificationCenter({
             </div>
 
             {notifications.length > 0 && (
-              <div className="pt-4 mt-4 border-t border-gray-200 dark:border-border">
+              <div className="pt-4 mt-4 border-t border-border">
                 <div className="flex gap-2">
                   <Button
                     variant="outline"

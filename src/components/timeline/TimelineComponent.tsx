@@ -178,7 +178,7 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
         <>
           {!isSelectionMode ? (
             // Entry point to selection mode - small button
-            <div className="sticky top-16 z-10 bg-white/95 dark:bg-card/95 backdrop-blur-md border-b border-gray-200 dark:border-border px-4 py-2.5">
+            <div className="sticky top-16 z-10 bg-white/95 dark:bg-card/95 backdrop-blur-md border-b border-border px-4 py-2.5">
               <Button
                 variant="outline"
                 size="sm"
@@ -227,7 +227,7 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
       {feed.pagination.hasNext && onLoadMore && (
         <div ref={sentinelRef} className="flex items-center justify-center py-6">
           {isLoadingMore ? (
-            <div className="flex items-center gap-2 text-gray-500 dark:text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <Loader2 className="h-5 w-5 animate-spin" />
               <span className="text-sm">Loading more posts...</span>
             </div>
@@ -259,9 +259,7 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
                   <h2 className="text-xl font-semibold">
                     Delete {selectedCount} {selectedCount === 1 ? 'post' : 'posts'}?
                   </h2>
-                  <p className="text-sm text-gray-600 dark:text-muted-foreground">
-                    This action cannot be undone
-                  </p>
+                  <p className="text-sm text-muted-foreground">This action cannot be undone</p>
                 </div>
               </div>
 

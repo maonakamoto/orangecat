@@ -35,8 +35,8 @@ export function ChatHeader({
           <Cat className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="font-semibold text-gray-900 dark:text-foreground">My Cat</h1>
-          <p className="text-xs text-gray-500 dark:text-muted-foreground">Private • Not saved</p>
+          <h1 className="font-semibold text-foreground">My Cat</h1>
+          <p className="text-xs text-muted-foreground">Private • Not saved</p>
         </div>
       </div>
 

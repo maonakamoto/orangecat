@@ -16,7 +16,7 @@ export default function CauseNotFound() {
           <CardTitle>Cause Not Found</CardTitle>
         </CardHeader>
         <CardContent className="p-6 text-center">
-          <p className="text-gray-600 dark:text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-6">
             The cause you are looking for does not exist or may have been removed.
           </p>
           <div className="flex gap-2 justify-center">

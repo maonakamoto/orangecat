@@ -32,7 +32,7 @@ export function PostComposerInlineControls({
 }: PostComposerInlineControlsProps) {
   return (
     <>
-      <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-border">
+      <div className="flex items-center justify-between mt-4 pt-3 border-t border-border">
         <div className="flex items-center gap-2">
           {!compact && showOptionsButton && (
             <button
@@ -57,7 +57,7 @@ export function PostComposerInlineControls({
               size="sm"
               onClick={onCancel}
               disabled={isPosting}
-              className="text-gray-600 dark:text-muted-foreground"
+              className="text-muted-foreground"
             >
               Cancel
             </Button>

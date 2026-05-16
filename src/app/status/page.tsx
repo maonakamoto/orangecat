@@ -78,10 +78,8 @@ export default async function StatusPage() {
       <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-foreground mb-4">
-            System Status
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-muted-foreground">
+          <h1 className="text-4xl font-bold text-foreground mb-4">System Status</h1>
+          <p className="text-xl text-muted-foreground">
             Current status of OrangeCat platform services
           </p>
           <p className="text-sm text-gray-400 dark:text-muted-foreground mt-2">
@@ -90,29 +88,27 @@ export default async function StatusPage() {
         </div>
 
         {/* Overall Status */}
-        <div className="bg-white dark:bg-card rounded-lg shadow-sm border border-gray-200 dark:border-border p-6 mb-8">
+        <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8">
           <div className="flex items-center space-x-3">
             <StatusIcon status={report.overall} size="lg" />
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground">{title}</h2>
-              <p className="text-gray-600 dark:text-muted-foreground">{body}</p>
+              <h2 className="text-2xl font-semibold text-foreground">{title}</h2>
+              <p className="text-muted-foreground">{body}</p>
             </div>
           </div>
         </div>
 
         {/* Per-service Status */}
-        <div className="bg-white dark:bg-card rounded-lg shadow-sm border border-gray-200 dark:border-border overflow-hidden mb-8">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-border">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">Services</h3>
+        <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden mb-8">
+          <div className="px-6 py-4 border-b border-border">
+            <h3 className="text-lg font-semibold text-foreground">Services</h3>
           </div>
           <div className="divide-y divide-gray-200 dark:divide-border">
             {report.services.map(service => (
               <div key={service.name} className="px-6 py-4 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <StatusIcon status={service.status} />
-                  <span className="font-medium text-gray-900 dark:text-foreground">
-                    {service.name}
-                  </span>
+                  <span className="font-medium text-foreground">{service.name}</span>
                 </div>
                 <StatusBadge status={service.status} />
               </div>
@@ -121,17 +117,13 @@ export default async function StatusPage() {
         </div>
 
         {/* Incident History */}
-        <div className="bg-white dark:bg-card rounded-lg shadow-sm border border-gray-200 dark:border-border overflow-hidden mb-8">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-border">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
-              Recent Incidents
-            </h3>
+        <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden mb-8">
+          <div className="px-6 py-4 border-b border-border">
+            <h3 className="text-lg font-semibold text-foreground">Recent Incidents</h3>
           </div>
           <div className="px-6 py-8 text-center">
             <Clock className="w-8 h-8 text-gray-300 dark:text-muted-foreground/50 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-muted-foreground">
-              No incidents reported in the last 30 days.
-            </p>
+            <p className="text-muted-foreground">No incidents reported in the last 30 days.</p>
           </div>
         </div>
 

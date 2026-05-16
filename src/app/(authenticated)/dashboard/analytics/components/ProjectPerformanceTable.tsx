@@ -25,7 +25,7 @@ export default function ProjectPerformanceTable({ projects }: ProjectPerformance
           <CardDescription>Detailed breakdown of your project metrics</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col items-center justify-center py-10 text-center text-gray-500 dark:text-muted-foreground">
+          <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
             <BarChart3 className="h-10 w-10 mb-3 text-gray-300 dark:text-muted-foreground/50" />
             <p className="font-medium text-gray-700 dark:text-foreground">No project data yet</p>
             <p className="text-sm mt-1">
@@ -47,23 +47,13 @@ export default function ProjectPerformanceTable({ projects }: ProjectPerformance
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-border">
-                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-foreground">
-                  Project
-                </th>
-                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-foreground">
-                  Raised
-                </th>
-                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-foreground">
-                  Goal
-                </th>
-                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-foreground">
-                  Progress
-                </th>
-                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-foreground">
-                  Supporters
-                </th>
-                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-foreground">
+              <tr className="border-b border-border">
+                <th className="text-left py-3 px-4 font-medium text-foreground">Project</th>
+                <th className="text-left py-3 px-4 font-medium text-foreground">Raised</th>
+                <th className="text-left py-3 px-4 font-medium text-foreground">Goal</th>
+                <th className="text-left py-3 px-4 font-medium text-foreground">Progress</th>
+                <th className="text-left py-3 px-4 font-medium text-foreground">Supporters</th>
+                <th className="text-left py-3 px-4 font-medium text-foreground">
                   Avg Contribution
                 </th>
               </tr>
@@ -82,10 +72,8 @@ export default function ProjectPerformanceTable({ projects }: ProjectPerformance
                   >
                     <td className="py-3 px-4">
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-foreground">
-                          {project.title}
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-muted-foreground">
+                        <p className="font-medium text-foreground">{project.title}</p>
+                        <p className="text-sm text-muted-foreground">
                           {project.daysActive} days active
                         </p>
                       </div>
@@ -93,7 +81,7 @@ export default function ProjectPerformanceTable({ projects }: ProjectPerformance
                     <td className="py-3 px-4 font-medium">
                       {formatCurrency(project.totalRaised, 'BTC')}
                     </td>
-                    <td className="py-3 px-4 text-gray-600 dark:text-muted-foreground">
+                    <td className="py-3 px-4 text-muted-foreground">
                       {formatCurrency(project.goalAmount, 'BTC')}
                     </td>
                     <td className="py-3 px-4">
@@ -108,7 +96,7 @@ export default function ProjectPerformanceTable({ projects }: ProjectPerformance
                       </div>
                     </td>
                     <td className="py-3 px-4 font-medium">{project.supporters}</td>
-                    <td className="py-3 px-4 text-gray-600 dark:text-muted-foreground">
+                    <td className="py-3 px-4 text-muted-foreground">
                       {formatCurrency(project.avgContribution, 'BTC')}
                     </td>
                   </tr>

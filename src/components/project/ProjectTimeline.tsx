@@ -38,10 +38,8 @@ export default function ProjectTimeline({
         <div className="flex items-center gap-3">
           <Activity className="w-6 h-6 text-orange-600" />
           <div>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground">
-              Project Updates
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-muted-foreground">
+            <h2 className="text-2xl font-semibold text-foreground">Project Updates</h2>
+            <p className="text-sm text-muted-foreground">
               Insights and progress for {projectTitle}
             </p>
           </div>

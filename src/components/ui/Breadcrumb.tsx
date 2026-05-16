@@ -23,7 +23,7 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className={`flex items-center gap-1.5 text-sm text-gray-500 dark:text-muted-foreground ${className}`}
+      className={`flex items-center gap-1.5 text-sm text-muted-foreground ${className}`}
     >
       <Link
         href={ROUTES.DASHBOARD.HOME}
@@ -44,7 +44,7 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
               {item.label}
             </Link>
           ) : (
-            <span className="text-gray-900 dark:text-foreground font-medium">{item.label}</span>
+            <span className="text-foreground font-medium">{item.label}</span>
           )}
         </span>
       ))}

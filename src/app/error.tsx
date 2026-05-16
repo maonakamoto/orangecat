@@ -33,7 +33,7 @@ export default function Error({
     <div
       className={`min-h-screen flex items-center justify-center ${GRADIENTS.pageBgOrangeDown} px-4`}
     >
-      <div className="max-w-lg w-full space-y-8 p-6 bg-white dark:bg-card rounded-xl shadow-xl border border-orange-100 dark:border-border">
+      <div className="max-w-lg w-full space-y-8 p-6 bg-card rounded-xl shadow-xl border border-orange-100 dark:border-border">
         {/* Icon */}
         <div className="text-center">
           <div className="mx-auto h-16 w-16 bg-orange-100 rounded-full flex items-center justify-center">
@@ -43,15 +43,13 @@ export default function Error({
 
         {/* Title */}
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground">
-            Oops! Something went wrong
-          </h2>
+          <h2 className="text-2xl font-semibold text-foreground">Oops! Something went wrong</h2>
           {isAuthError ? (
-            <p className="mt-3 text-base text-gray-600 dark:text-muted-foreground">
+            <p className="mt-3 text-base text-muted-foreground">
               It looks like you need to be logged in to access this page.
             </p>
           ) : (
-            <p className="mt-3 text-base text-gray-600 dark:text-muted-foreground">
+            <p className="mt-3 text-base text-muted-foreground">
               We encountered an unexpected error. Don't worry, your data is safe.
             </p>
           )}
@@ -85,7 +83,7 @@ export default function Error({
 
           <button
             onClick={() => router.back()}
-            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-gray-300 dark:border-border text-sm font-medium rounded-md text-gray-700 dark:text-foreground bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-gray-300 dark:border-border text-sm font-medium rounded-md text-gray-700 dark:text-foreground bg-card hover:bg-gray-50 dark:hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Go Back
@@ -93,7 +91,7 @@ export default function Error({
 
           <Link
             href={ROUTES.HOME}
-            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-gray-300 dark:border-border text-sm font-medium rounded-md text-gray-700 dark:text-foreground bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-gray-300 dark:border-border text-sm font-medium rounded-md text-gray-700 dark:text-foreground bg-card hover:bg-gray-50 dark:hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
           >
             <Home className="h-4 w-4" />
             Go to Homepage
@@ -101,8 +99,8 @@ export default function Error({
         </div>
 
         {/* Help text */}
-        <div className="text-center pt-4 border-t border-gray-200 dark:border-border">
-          <p className="text-sm text-gray-500 dark:text-muted-foreground">
+        <div className="text-center pt-4 border-t border-border">
+          <p className="text-sm text-muted-foreground">
             Still having issues?{' '}
             <Link href={ROUTES.FAQ} className="text-orange-600 hover:text-orange-700 font-medium">
               Visit our FAQ

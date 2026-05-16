@@ -25,23 +25,21 @@ interface GetKeyStepProps {
 export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) {
   if (!provider) {
     return (
-      <div className="text-center py-8 text-gray-500 dark:text-muted-foreground">
-        Please select a provider first.
-      </div>
+      <div className="text-center py-8 text-muted-foreground">Please select a provider first.</div>
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Provider Info */}
-      <Card className="p-6 bg-white dark:bg-card">
+      <Card className="p-6 bg-card">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-12 h-12 bg-tiffany-100 rounded-lg flex items-center justify-center">
             <Key className="w-6 h-6 text-tiffany-600" />
           </div>
           <div>
             <h3 className="font-semibold">{provider.name}</h3>
-            <p className="text-sm text-gray-600 dark:text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               {provider.type === 'aggregator' ? 'Aggregator' : 'Direct Provider'} • Setup time: ~
               {provider.setupTime} min
             </p>
@@ -56,7 +54,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
             </div>
             <div>
               <p className="text-sm font-medium">Visit {provider.name}</p>
-              <p className="text-xs text-gray-500 dark:text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Create an account if you do not have one
               </p>
             </div>
@@ -67,9 +65,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
             </div>
             <div>
               <p className="text-sm font-medium">Go to API Keys page</p>
-              <p className="text-xs text-gray-500 dark:text-muted-foreground">
-                Usually under Settings or Account
-              </p>
+              <p className="text-xs text-muted-foreground">Usually under Settings or Account</p>
             </div>
           </div>
           <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-muted/50 rounded-lg">
@@ -78,7 +74,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
             </div>
             <div>
               <p className="text-sm font-medium">Create a new API key</p>
-              <p className="text-xs text-gray-500 dark:text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Name it "OrangeCat" for easy identification
               </p>
             </div>
@@ -89,7 +85,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
             </div>
             <div>
               <p className="text-sm font-medium">Copy your key</p>
-              <p className="text-xs text-gray-500 dark:text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Keys start with{' '}
                 <code className="bg-gray-200 dark:bg-muted px-1 rounded">
                   {provider.apiKeyPrefix || 'sk-'}

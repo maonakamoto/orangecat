@@ -36,7 +36,7 @@ export default function HeroSectionStatic() {
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-foreground leading-tight mb-4 sm:mb-6">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-foreground leading-tight mb-4 sm:mb-6">
               Everyone Can{' '}
               <span className="bg-gradient-to-r from-tiffany-500 to-tiffany-700 bg-clip-text text-transparent">
                 Make Things.
@@ -44,13 +44,13 @@ export default function HeroSectionStatic() {
             </h1>
 
             {/* Subheadline */}
-            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-muted-foreground leading-relaxed mb-3 sm:mb-4">
+            <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed mb-3 sm:mb-4">
               Create products, services, projects, causes, events, loans — with your own AI, under
               any identity, in any currency.
             </p>
 
             {/* Supporting text */}
-            <p className="text-base sm:text-lg text-gray-600 dark:text-muted-foreground leading-relaxed mb-6 sm:mb-8">
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-6 sm:mb-8">
               OrangeCat gives every person and organization an AI agent to create and participate in
               the full economic spectrum. No gatekeepers. No fees. Bitcoin-native, but not
               Bitcoin-only.
@@ -80,10 +80,7 @@ export default function HeroSectionStatic() {
                 { icon: Globe, text: 'Any currency' },
                 { icon: Zap, text: 'Zero fees' },
               ].map(benefit => (
-                <div
-                  key={benefit.text}
-                  className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground"
-                >
+                <div key={benefit.text} className="flex items-center gap-2 text-muted-foreground">
                   <benefit.icon className="w-4 h-4 text-tiffany-600 flex-shrink-0" />
                   <span className="text-sm font-medium">{benefit.text}</span>
                 </div>
@@ -104,10 +101,8 @@ export default function HeroSectionStatic() {
                     🐱
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 dark:text-foreground text-sm sm:text-base">
-                      My Cat
-                    </h3>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground">
+                    <h3 className="font-semibold text-foreground text-sm sm:text-base">My Cat</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Your AI economic agent
                     </p>
                   </div>
@@ -125,7 +120,7 @@ export default function HeroSectionStatic() {
                   ].map(feature => (
                     <div
                       key={feature}
-                      className="flex items-center gap-2 text-sm text-gray-600 dark:text-muted-foreground"
+                      className="flex items-center gap-2 text-sm text-muted-foreground"
                     >
                       <div className="w-4 h-4 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
                         <div className="w-1.5 h-1.5 rounded-full bg-tiffany-500" />
@@ -138,20 +133,12 @@ export default function HeroSectionStatic() {
                 {/* Stats */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-1 sm:pt-2">
                   <div>
-                    <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-foreground">
-                      0%
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-muted-foreground">
-                      Platform Fees
-                    </div>
+                    <div className="text-xl sm:text-2xl font-bold text-foreground">0%</div>
+                    <div className="text-xs text-muted-foreground">Platform Fees</div>
                   </div>
                   <div>
-                    <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-foreground">
-                      100%
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-muted-foreground">
-                      To Creator
-                    </div>
+                    <div className="text-xl sm:text-2xl font-bold text-foreground">100%</div>
+                    <div className="text-xs text-muted-foreground">To Creator</div>
                   </div>
                 </div>
 

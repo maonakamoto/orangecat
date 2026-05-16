@@ -42,7 +42,7 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
             <User className="h-6 w-6 text-white" />
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-foreground leading-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground leading-tight">
               Welcome back,{' '}
               {profile === null ? (
                 <span className="inline-block h-5 w-28 animate-pulse rounded bg-gray-200 dark:bg-muted align-text-bottom" />
@@ -51,7 +51,7 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
               )}
               !
             </h1>
-            <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               {totalProjects > 0
                 ? `${totalProjects} project${totalProjects !== 1 ? 's' : ''}${totalDrafts > 0 ? ` • ${totalDrafts} draft${totalDrafts !== 1 ? 's' : ''}` : ''}`
                 : "Let's get started"}

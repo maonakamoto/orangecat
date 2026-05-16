@@ -67,7 +67,7 @@ export function AIChatInput({
   }, []);
 
   return (
-    <div className="border-t border-gray-200 dark:border-border bg-white dark:bg-card p-4">
+    <div className="border-t border-border bg-card p-4">
       <div className="flex items-end gap-3">
         <div className="flex-1 relative">
           <textarea
@@ -78,8 +78,8 @@ export function AIChatInput({
             placeholder={placeholder}
             disabled={disabled || isSending}
             className={cn(
-              'w-full px-4 py-3 pr-12 border border-gray-200 dark:border-border rounded-lg resize-none',
-              'bg-white dark:bg-background text-gray-900 dark:text-foreground',
+              'w-full px-4 py-3 pr-12 border border-border rounded-lg resize-none',
+              'bg-white dark:bg-background text-foreground',
               'focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent',
               'max-h-48 min-h-12 text-sm',
               'placeholder:text-gray-400 dark:placeholder:text-muted-foreground',

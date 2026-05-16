@@ -49,10 +49,8 @@ export default function TimelineView({
   if (hydrated && !authLoading && !user && (feedType === 'journey' || feedType === 'community')) {
     return (
       <div className="text-center py-16">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
-          Please sign in
-        </h2>
-        <p className="text-gray-600 dark:text-muted-foreground mb-6">
+        <h2 className="text-2xl font-semibold text-foreground mb-4">Please sign in</h2>
+        <p className="text-muted-foreground mb-6">
           You need to be signed in to view this timeline.
         </p>
         <Button onClick={() => (window.location.href = '/auth')}>Sign In</Button>
@@ -64,10 +62,7 @@ export default function TimelineView({
     return (
       <div className="space-y-4">
         {[...Array(3)].map((_, i) => (
-          <div
-            key={i}
-            className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg p-4 animate-pulse"
-          >
+          <div key={i} className="bg-card border border-border rounded-lg p-4 animate-pulse">
             <div className="flex items-start space-x-3">
               <div className="w-12 h-12 bg-gray-200 dark:bg-muted rounded-full" />
               <div className="flex-1 space-y-2">
@@ -110,10 +105,10 @@ export default function TimelineView({
 
     return (
       <div className="text-center py-16">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+        <h3 className="text-lg font-semibold text-foreground mb-2">
           {emptyStateTitle || defaultTitle}
         </h3>
-        <p className="text-gray-600 dark:text-muted-foreground max-w-md mx-auto">
+        <p className="text-muted-foreground max-w-md mx-auto">
           {emptyStateDescription || defaultDescription}
         </p>
       </div>
@@ -141,11 +136,11 @@ export default function TimelineView({
             showBanner={Boolean(ownerId && ownerId !== user.id)}
           />
         ) : (
-          <div className="rounded-xl border border-dashed border-gray-200 dark:border-border bg-white/80 dark:bg-card/80 px-4 py-5 shadow-sm">
+          <div className="rounded-xl border border-dashed border-border bg-white/80 dark:bg-card/80 px-4 py-5 shadow-sm">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="font-medium text-gray-900 dark:text-foreground">Sign in to post</p>
-                <p className="text-sm text-gray-600 dark:text-muted-foreground">
+                <p className="font-medium text-foreground">Sign in to post</p>
+                <p className="text-sm text-muted-foreground">
                   You need to be signed in to write on this timeline.
                 </p>
               </div>

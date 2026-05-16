@@ -56,10 +56,10 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
 
   return (
     <div
-      className={`bg-white dark:bg-card rounded-xl border p-4 hover:shadow-md transition-shadow cursor-pointer ${
+      className={`bg-card rounded-xl border p-4 hover:shadow-md transition-shadow cursor-pointer ${
         isOverdue
           ? 'border-red-200 dark:border-red-900/30 bg-red-50/30 dark:bg-red-950/10'
-          : 'border-gray-200 dark:border-border'
+          : 'border-border'
       }`}
       onClick={onClick}
     >
@@ -69,9 +69,7 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
             {task.is_reminder && (
               <Bell className="h-3.5 w-3.5 text-tiffany flex-shrink-0" aria-label="Reminder" />
             )}
-            <h3 className="text-base font-semibold text-gray-900 dark:text-foreground truncate">
-              {task.title}
-            </h3>
+            <h3 className="text-base font-semibold text-foreground truncate">{task.title}</h3>
             <span
               className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
               style={{
@@ -94,11 +92,9 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
             )}
           </div>
           {task.description && (
-            <p className="text-sm text-gray-600 dark:text-muted-foreground line-clamp-2 mb-2">
-              {task.description}
-            </p>
+            <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{task.description}</p>
           )}
-          <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-muted-foreground">
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <span>{TASK_CATEGORY_LABELS[task.category as keyof typeof TASK_CATEGORY_LABELS]}</span>
             <span>&bull;</span>
             <span>{TASK_TYPE_LABELS[task.task_type as keyof typeof TASK_TYPE_LABELS]}</span>
@@ -112,7 +108,7 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
               <>
                 <span>&bull;</span>
                 <span
-                  className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 font-medium' : 'text-gray-500 dark:text-muted-foreground'}`}
+                  className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 font-medium' : 'text-muted-foreground'}`}
                 >
                   <Clock className="h-3 w-3" />
                   {formatDueDate(task.due_date)}

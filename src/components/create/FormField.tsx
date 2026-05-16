@@ -145,13 +145,9 @@ export function FormField({
                   className="mt-1"
                 />
                 <div>
-                  <span className="text-sm font-medium text-gray-900 dark:text-foreground">
-                    {option.label}
-                  </span>
+                  <span className="text-sm font-medium text-foreground">{option.label}</span>
                   {option.description && (
-                    <p className="text-xs text-gray-500 dark:text-muted-foreground">
-                      {option.description}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{option.description}</p>
                   )}
                 </div>
               </label>
@@ -278,9 +274,7 @@ export function FormField({
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       {renderInput()}
-      {hint && !error && (
-        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">{hint}</p>
-      )}
+      {hint && !error && <p className="text-xs text-muted-foreground mt-1">{hint}</p>}
       {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
     </div>
   );

@@ -45,7 +45,7 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
             placeholder="Message your Cat..."
             rows={1}
             className={cn(
-              'w-full resize-none rounded-2xl border border-gray-200 dark:border-border dark:bg-muted dark:text-foreground px-4 py-3 pr-12',
+              'w-full resize-none rounded-2xl border border-border dark:bg-muted dark:text-foreground px-4 py-3 pr-12',
               'focus:outline-none focus:ring-2 focus:ring-tiffany-500/20 focus:border-tiffany-300',
               'text-sm leading-relaxed placeholder:text-gray-400 dark:placeholder:text-muted-foreground',
               'max-h-[200px]'

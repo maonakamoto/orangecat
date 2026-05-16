@@ -162,16 +162,16 @@ export default function NewConversationModal({
         }
       }}
     >
-      <div className="w-full max-w-md bg-white dark:bg-card rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-md bg-card rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="p-4 border-b border-gray-100 dark:border-border flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">New Message</h3>
+          <h3 className="text-lg font-semibold text-foreground">New Message</h3>
           <button
             onClick={onClose}
             aria-label="Close"
             className="p-2 hover:bg-gray-100 dark:hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-full transition-all duration-200 min-h-11 min-w-11 flex items-center justify-center"
           >
-            <X className="w-5 h-5 text-gray-500 dark:text-muted-foreground" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
@@ -205,7 +205,7 @@ export default function NewConversationModal({
           ) : profiles.length === 0 ? (
             <div className="py-12 text-center">
               <MessageSquare className="w-10 h-10 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
-              <p className="text-gray-500 dark:text-muted-foreground font-medium">
+              <p className="text-muted-foreground font-medium">
                 {search ? 'No people found' : 'Search for someone to message'}
               </p>
               <p className="text-sm text-gray-400 dark:text-muted-foreground mt-1">
@@ -246,13 +246,11 @@ export default function NewConversationModal({
                     className="w-11 h-11 rounded-full object-cover bg-gray-200 dark:bg-muted"
                   />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 dark:text-foreground truncate">
+                    <div className="font-medium text-foreground truncate">
                       {p.name || p.username || 'User'}
                     </div>
                     {p.username && (
-                      <div className="text-sm text-gray-500 dark:text-muted-foreground truncate">
-                        @{p.username}
-                      </div>
+                      <div className="text-sm text-muted-foreground truncate">@{p.username}</div>
                     )}
                   </div>
                   <Button

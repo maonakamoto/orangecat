@@ -70,7 +70,7 @@ export function PublicEntityPaymentSection({
               Sign in to continue
             </Button>
           </Link>
-          <p className="text-xs text-gray-500 dark:text-muted-foreground text-center">
+          <p className="text-xs text-muted-foreground text-center">
             Sign in to buy or support with Bitcoin
           </p>
         </CardContent>

@@ -175,12 +175,12 @@ export default function DiscoverResults({
 
   const resultsHeader = (
     <div className="flex items-center justify-between mb-6">
-      <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground">
+      <h2 className="text-2xl font-semibold text-foreground">
         {totalResults > 0 ? (
           <>
             {totalResults} result{totalResults !== 1 ? 's' : ''} found
             {displayedCount < totalResults && (
-              <span className="text-gray-500 dark:text-muted-foreground text-lg font-normal ml-2">
+              <span className="text-muted-foreground text-lg font-normal ml-2">
                 (showing {displayedCount})
               </span>
             )}

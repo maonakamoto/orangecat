@@ -58,9 +58,7 @@ export default function Loading({
   const content = (
     <div className="flex flex-col items-center space-y-3" suppressHydrationWarning>
       <Loader2 className={`${sizeClasses[size]} animate-spin text-tiffany-500`} />
-      {message && (
-        <p className="text-sm text-gray-600 dark:text-muted-foreground font-sans">{message}</p>
-      )}
+      {message && <p className="text-sm text-muted-foreground font-sans">{message}</p>}
     </div>
   );
 
@@ -95,7 +93,7 @@ export function GlobalAuthErrorBanner() {
     <div className="fixed top-0 left-0 right-0 z-toast bg-red-600 text-white text-center py-3 shadow-lg animate-fade-in-up">
       <span>{authError}</span>
       <button
-        className="ml-4 px-3 py-1 bg-white dark:bg-card text-red-600 rounded hover:bg-gray-100 dark:hover:bg-muted transition-colors duration-150"
+        className="ml-4 px-3 py-1 bg-card text-red-600 rounded hover:bg-gray-100 dark:hover:bg-muted transition-colors duration-150"
         onClick={() => {
           setAuthError(null);
           // Error dismissed by user

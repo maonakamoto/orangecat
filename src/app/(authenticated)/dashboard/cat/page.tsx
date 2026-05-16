@@ -67,7 +67,7 @@ export default function CatHubPage() {
   return (
     <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
       {/* Header */}
-      <div className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm border-b border-gray-200 dark:border-border sticky top-0 z-30">
+      <div className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm border-b border-border sticky top-0 z-30">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -75,10 +75,8 @@ export default function CatHubPage() {
                 <Cat className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900 dark:text-foreground">My Cat</h1>
-                <p className="text-xs text-gray-500 dark:text-muted-foreground">
-                  Your AI economic agent
-                </p>
+                <h1 className="text-lg font-bold text-foreground">My Cat</h1>
+                <p className="text-xs text-muted-foreground">Your AI economic agent</p>
               </div>
             </div>
           </div>
@@ -92,7 +90,7 @@ export default function CatHubPage() {
           <div
             className={`sticky top-[73px] z-20 ${GRADIENTS.pageBgFrost} backdrop-blur-sm px-4 py-2`}
           >
-            <TabsList className="w-full grid grid-cols-3 h-12 bg-white/80 dark:bg-gray-950/80 border border-gray-200 dark:border-border shadow-sm">
+            <TabsList className="w-full grid grid-cols-3 h-12 bg-white/80 dark:bg-gray-950/80 border border-border shadow-sm">
               <TabsTrigger
                 value="chat"
                 className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white"
@@ -128,10 +126,8 @@ export default function CatHubPage() {
             <TabsContent value="context" className="mt-4 focus:outline-none">
               <div className="max-w-xl mx-auto">
                 <div className="mb-6">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-foreground">
-                    My Context
-                  </h2>
-                  <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
+                  <h2 className="text-xl font-bold text-foreground">My Context</h2>
+                  <p className="text-sm text-muted-foreground mt-1">
                     Add documents to help My Cat understand your goals, skills, and situation
                   </p>
                 </div>
@@ -143,8 +139,8 @@ export default function CatHubPage() {
             <TabsContent value="settings" className="mt-4 focus:outline-none">
               <div className="max-w-xl mx-auto">
                 <div className="mb-6">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-foreground">My AI</h2>
-                  <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
+                  <h2 className="text-xl font-bold text-foreground">My AI</h2>
+                  <p className="text-sm text-muted-foreground mt-1">
                     Configure how your AI agent works
                   </p>
                 </div>

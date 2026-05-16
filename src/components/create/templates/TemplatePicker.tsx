@@ -62,10 +62,8 @@ export function TemplatePicker<T extends GenericTemplate>({
           <Lightbulb className="w-4 h-4" />
         </div>
         <div className="flex-1">
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-foreground">
-            Need inspiration?
-          </h3>
-          <p className="text-xs text-gray-500 dark:text-muted-foreground">
+          <h3 className="text-sm font-semibold text-foreground">Need inspiration?</h3>
+          <p className="text-xs text-muted-foreground">
             Quick-start with a template and customize from there.
           </p>
         </div>
@@ -76,7 +74,7 @@ export function TemplatePicker<T extends GenericTemplate>({
           <button
             key={template.id}
             onClick={() => onSelectTemplate(template)}
-            className="w-full text-left border border-gray-200 dark:border-border rounded-xl p-3 hover:border-orange-300 hover:shadow-md hover:bg-white dark:hover:bg-muted transition-all bg-white/80 dark:bg-muted/80"
+            className="w-full text-left border border-border rounded-xl p-3 hover:border-orange-300 hover:shadow-md hover:bg-white dark:hover:bg-muted transition-all bg-white/80 dark:bg-muted/80"
             type="button"
           >
             <div className="flex items-start gap-3">
@@ -84,12 +82,8 @@ export function TemplatePicker<T extends GenericTemplate>({
                 {template.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-semibold text-gray-900 dark:text-foreground mb-0.5">
-                  {template.name}
-                </h4>
-                <p className="text-xs text-gray-500 dark:text-muted-foreground line-clamp-2">
-                  {template.tagline}
-                </p>
+                <h4 className="text-sm font-semibold text-foreground mb-0.5">{template.name}</h4>
+                <p className="text-xs text-muted-foreground line-clamp-2">{template.tagline}</p>
               </div>
             </div>
           </button>

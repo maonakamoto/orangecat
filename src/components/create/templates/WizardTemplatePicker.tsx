@@ -72,7 +72,7 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
               'hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2',
               selected === null
                 ? 'border-orange-500 bg-orange-50/50 ring-2 ring-orange-200'
-                : 'border-gray-200 dark:border-border bg-white dark:bg-card'
+                : 'border-border bg-card'
             )}
           >
             {selected === null && (
@@ -82,13 +82,13 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
                 </div>
               </div>
             )}
-            <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground flex items-center justify-center mb-3 sm:mb-4">
+            <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-gray-100 dark:bg-muted text-muted-foreground flex items-center justify-center mb-3 sm:mb-4">
               <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-foreground mb-1">
+            <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1">
               Start from scratch
             </h3>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               {entityLabel
                 ? `Create a blank ${entityLabel.toLowerCase()}`
                 : 'Start with a blank form'}
@@ -109,7 +109,7 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
                 'hover:border-orange-300 hover:bg-orange-50/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2',
                 isSelected
                   ? 'border-orange-500 bg-orange-50/50 ring-2 ring-orange-200'
-                  : 'border-gray-200 dark:border-border bg-white dark:bg-card'
+                  : 'border-border bg-card'
               )}
             >
               {isSelected && (
@@ -122,10 +122,10 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
               <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-3 sm:mb-4 border border-orange-200">
                 {template.icon}
               </div>
-              <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-foreground mb-1 pr-8">
+              <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1 pr-8">
                 {template.name}
               </h3>
-              <p className="text-xs sm:text-sm text-gray-500 dark:text-muted-foreground line-clamp-2">
+              <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                 {template.tagline}
               </p>
             </button>

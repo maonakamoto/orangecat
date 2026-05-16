@@ -101,7 +101,7 @@ export function CollateralSelector({
               <span className="text-sm font-medium text-gray-700 dark:text-muted-foreground">
                 Total Collateral Value
               </span>
-              <span className="text-lg font-bold text-gray-900 dark:text-foreground">
+              <span className="text-lg font-bold text-foreground">
                 {totalCollateral.toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -125,7 +125,7 @@ export function CollateralSelector({
                       style={{ width: `${Math.min(100, coveragePercentage)}%` }}
                     />
                   </div>
-                  <span className="text-xs text-gray-600 dark:text-muted-foreground font-medium">
+                  <span className="text-xs text-muted-foreground font-medium">
                     {coveragePercentage.toFixed(0)}% coverage
                   </span>
                 </div>
@@ -157,7 +157,7 @@ export function CollateralSelector({
             {selectedCollateral.map(item => (
               <div
                 key={`${item.type}-${item.id}`}
-                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-muted/50 rounded-lg border border-gray-200 dark:border-border"
+                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-muted/50 rounded-lg border border-border"
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -174,14 +174,12 @@ export function CollateralSelector({
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-900 dark:text-foreground">
-                        {item.name}
-                      </span>
+                      <span className="text-sm font-medium text-foreground">{item.name}</span>
                       <Badge variant="outline" className="text-xs">
                         {item.type === 'asset' ? 'Asset' : 'Wallet'}
                       </Badge>
                     </div>
-                    <span className="text-xs text-gray-500 dark:text-muted-foreground">
+                    <span className="text-xs text-muted-foreground">
                       {item.value.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,

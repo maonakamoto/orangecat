@@ -56,14 +56,14 @@ export default function DiscoverEmptyState({
           >
             <EntityIcon className="w-8 h-8 text-orange-600" />
           </div>
-          <h3 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-3">
+          <h3 className="text-2xl font-semibold text-foreground mb-3">
             {activeTab === 'profiles'
               ? 'No People Found'
               : activeTab === 'all'
                 ? 'Nothing Here Yet'
                 : `No ${meta?.namePlural ?? 'Results'} Yet`}
           </h3>
-          <p className="text-lg text-gray-600 dark:text-muted-foreground mb-6 leading-relaxed">
+          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
             {activeTab === 'profiles'
               ? 'No profiles match your search criteria. Try adjusting your filters or browse all people.'
               : activeTab === 'all'
@@ -81,7 +81,7 @@ export default function DiscoverEmptyState({
                 {meta.createActionLabel}
               </Button>
 
-              <p className="text-sm text-gray-500 dark:text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Already have an account?{' '}
                 <a href={ROUTES.AUTH} className="text-orange-600 hover:underline font-medium">
                   Sign in
@@ -105,10 +105,8 @@ export default function DiscoverEmptyState({
     >
       <div className="max-w-md mx-auto">
         <EntityIcon className="w-16 h-16 text-orange-300 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
-          No matches found
-        </h3>
-        <p className="text-gray-600 dark:text-muted-foreground mb-8">
+        <h3 className="text-lg font-semibold text-foreground mb-2">No matches found</h3>
+        <p className="text-muted-foreground mb-8">
           {activeTab === 'profiles'
             ? 'Try different filters or browse all people to discover someone new.'
             : `Try different filters or browse all ${meta?.namePlural?.toLowerCase() ?? 'results'} to discover something new.`}

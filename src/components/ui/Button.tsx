@@ -19,7 +19,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       primary:
         'bg-tiffany-600 text-white hover:bg-tiffany-700 focus-visible:ring-tiffany-500 shadow-button hover:shadow-button-hover active:shadow-sm border-0',
       secondary:
-        'bg-gray-100 dark:bg-muted text-gray-900 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80 focus-visible:ring-gray-500 shadow-button hover:shadow-button-hover active:shadow-sm border border-gray-200 dark:border-border',
+        'bg-gray-100 dark:bg-muted text-foreground hover:bg-gray-200 dark:hover:bg-muted/80 focus-visible:ring-gray-500 shadow-button hover:shadow-button-hover active:shadow-sm border border-border',
       ghost:
         'hover:bg-gray-100 dark:hover:bg-muted hover:text-gray-900 dark:hover:text-foreground focus-visible:ring-gray-500 shadow-none hover:shadow-sm text-gray-700 dark:text-muted-foreground',
       danger:

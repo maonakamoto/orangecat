@@ -79,7 +79,7 @@ export function CreateProjectStep() {
         );
       })}
 
-      <div className="pt-4 border-t border-gray-200 dark:border-border">
+      <div className="pt-4 border-t border-border">
         <p className="text-xs text-center text-muted-foreground">
           Not sure yet? Skip this step and explore what others have created.
         </p>

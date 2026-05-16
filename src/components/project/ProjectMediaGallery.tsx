@@ -167,7 +167,7 @@ export default function ProjectMediaGallery({
       <div className={`grid gap-2 ${className}`}>
         {/* Main Image - Clickable - Smaller and Elegant */}
         <div
-          className="w-full overflow-hidden rounded-lg border border-gray-200 dark:border-border bg-white dark:bg-card cursor-pointer group relative aspect-[16/9] max-h-[400px]"
+          className="w-full overflow-hidden rounded-lg border border-border bg-card cursor-pointer group relative aspect-[16/9] max-h-[400px]"
           onClick={() => openLightbox(0)}
         >
           <Image
@@ -194,7 +194,7 @@ export default function ProjectMediaGallery({
             {thumbs.slice(0, 3).map((thumb, idx) => (
               <div
                 key={thumb.id}
-                className="aspect-[4/3] overflow-hidden rounded-md border border-gray-200 dark:border-border bg-white dark:bg-card cursor-pointer group relative"
+                className="aspect-[4/3] overflow-hidden rounded-md border border-border bg-card cursor-pointer group relative"
                 onClick={() => openLightbox(idx + 1)}
               >
                 <Image
@@ -211,14 +211,14 @@ export default function ProjectMediaGallery({
             ))}
             {thumbs.length > 3 && (
               <div
-                className="aspect-[4/3] overflow-hidden rounded-md border border-gray-200 dark:border-border bg-gray-50 dark:bg-muted cursor-pointer group relative flex items-center justify-center"
+                className="aspect-[4/3] overflow-hidden rounded-md border border-border bg-gray-50 dark:bg-muted cursor-pointer group relative flex items-center justify-center"
                 onClick={() => openLightbox(4)}
               >
                 <div className="text-center">
                   <div className="text-xl font-semibold text-gray-700 dark:text-foreground">
                     +{thumbs.length - 3}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-muted-foreground">more</div>
+                  <div className="text-xs text-muted-foreground">more</div>
                 </div>
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-200" />
               </div>

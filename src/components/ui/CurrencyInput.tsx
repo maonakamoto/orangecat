@@ -72,10 +72,7 @@ export function CurrencyInput({
   return (
     <div className="space-y-2">
       {label && (
-        <label
-          htmlFor={id}
-          className="block text-sm font-medium text-gray-900 dark:text-foreground"
-        >
+        <label htmlFor={id} className="block text-sm font-medium text-foreground">
           {label}
         </label>
       )}
@@ -117,10 +114,10 @@ export function CurrencyInput({
       </div>
 
       {error && <p className="text-red-600 text-sm">{error}</p>}
-      {hint && !error && <p className="text-xs text-gray-500 dark:text-muted-foreground">{hint}</p>}
+      {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
 
       {!error && !hint && value && value > 0 && (
-        <div className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+        <div className="text-xs text-muted-foreground mt-1">
           <span className="flex items-center gap-1">
             <Info className="w-3 h-3" />
             <span>{getGoalExplanation(inputCurrency)}</span>
@@ -134,7 +131,7 @@ export function CurrencyInput({
         >
           <div className="flex items-center gap-2 mb-2">
             <ArrowLeftRight className="w-4 h-4 text-orange-600" />
-            <span className="text-xs font-semibold text-gray-900 dark:text-foreground">
+            <span className="text-xs font-semibold text-foreground">
               Equivalent in other currencies
             </span>
           </div>
@@ -142,7 +139,7 @@ export function CurrencyInput({
           <div className="grid grid-cols-2 gap-2 text-xs">
             {inputCurrency !== 'BTC' && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 dark:text-muted-foreground flex items-center gap-1">
+                <span className="text-muted-foreground flex items-center gap-1">
                   <Bitcoin className="w-3 h-3" />
                   BTC
                 </span>
@@ -154,7 +151,7 @@ export function CurrencyInput({
 
             {inputCurrency !== 'SATS' && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 dark:text-muted-foreground">SATS</span>
+                <span className="text-muted-foreground">SATS</span>
                 <span className="font-mono font-medium text-gray-700 dark:text-foreground">
                   {bitcoinToSats(breakdown.btc).toLocaleString('en-US')}
                 </span>
@@ -165,7 +162,7 @@ export function CurrencyInput({
               .slice(0, inputCurrency === 'BTC' || inputCurrency === 'SATS' ? 3 : 2)
               .map(([curr, amount]) => (
                 <div key={curr} className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-muted-foreground">{curr}</span>
+                  <span className="text-muted-foreground">{curr}</span>
                   <span className="font-mono font-medium text-gray-700 dark:text-foreground">
                     {formatCurrency(amount, curr as Currency, { showSymbol: false })}
                   </span>
@@ -175,7 +172,7 @@ export function CurrencyInput({
 
           <div className="mt-2 pt-2 border-t border-orange-100 dark:border-orange-900/30 flex items-start gap-1">
             <Info className="w-3 h-3 text-orange-500 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-gray-600 dark:text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               All transactions settle in Bitcoin. Amounts shown are estimates based on current
               exchange rates.
               {isBitcoinNativeCurrency(inputCurrency) &&

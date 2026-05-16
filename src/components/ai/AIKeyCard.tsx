@@ -52,7 +52,7 @@ export function AIKeyCard({ apiKey: key, isLoading, onSetPrimary, onDelete }: AI
                 </Badge>
               )}
             </div>
-            <div className="text-sm text-gray-500 dark:text-muted-foreground flex items-center gap-2">
+            <div className="text-sm text-muted-foreground flex items-center gap-2">
               <span>{keyProvider?.name || key.provider}</span>
               <span>•</span>
               <span className="font-mono">****{key.key_hint}</span>

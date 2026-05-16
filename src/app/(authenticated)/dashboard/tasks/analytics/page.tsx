@@ -33,9 +33,7 @@ export default function TaskAnalyticsPage() {
             items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: 'Analytics' }]}
             className="mb-4"
           />
-          <div className="bg-white dark:bg-card rounded-xl border border-red-200 p-6 text-red-600">
-            {error}
-          </div>
+          <div className="bg-card rounded-xl border border-red-200 p-6 text-red-600">{error}</div>
         </div>
       </div>
     );
@@ -51,11 +49,11 @@ export default function TaskAnalyticsPage() {
         />
 
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground">Task Statistics</h1>
+          <h1 className="text-2xl font-bold text-foreground">Task Statistics</h1>
           <select
             value={days}
             onChange={e => setDays(parseInt(e.target.value))}
-            className="rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-card text-gray-900 dark:text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+            className="rounded-lg border border-gray-300 dark:border-border bg-card text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tiffany-500"
           >
             <option value={7}>Last 7 days</option>
             <option value={30}>Last 30 days</option>
@@ -92,13 +90,13 @@ export default function TaskAnalyticsPage() {
           </div>
         )}
 
-        <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4 flex items-center gap-2">
+        <div className="bg-card rounded-xl border border-border p-6">
+          <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <Users className="h-5 w-5" />
             Contributions by Person
           </h2>
           {contributions.length === 0 ? (
-            <p className="text-gray-500 dark:text-muted-foreground text-base text-center py-8">
+            <p className="text-muted-foreground text-base text-center py-8">
               No data for the selected period
             </p>
           ) : (
@@ -110,10 +108,10 @@ export default function TaskAnalyticsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-gray-900 dark:text-foreground truncate">
+                      <span className="font-medium text-foreground truncate">
                         {contribution.user.display_name || contribution.user.username}
                       </span>
-                      <span className="text-sm text-gray-600 dark:text-muted-foreground">
+                      <span className="text-sm text-muted-foreground">
                         {contribution.totalCompletions} tasks
                         {contribution.totalMinutes > 0 && (
                           <span className="text-gray-400 dark:text-muted-foreground ml-2">
@@ -138,7 +136,7 @@ export default function TaskAnalyticsPage() {
                           .map(([category, count]) => (
                             <span
                               key={category}
-                              className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-muted rounded-full text-gray-600 dark:text-muted-foreground"
+                              className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-muted rounded-full text-muted-foreground"
                             >
                               {TASK_CATEGORY_LABELS[
                                 category as keyof typeof TASK_CATEGORY_LABELS
@@ -155,17 +153,17 @@ export default function TaskAnalyticsPage() {
           )}
         </div>
 
-        <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4 flex items-center gap-2">
+        <div className="bg-card rounded-xl border border-border p-6">
+          <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <Award className="h-5 w-5" />
             Fairness Overview
           </h2>
-          <p className="text-base text-gray-600 dark:text-muted-foreground mb-4">
+          <p className="text-base text-muted-foreground mb-4">
             Shows how evenly recurring tasks are distributed. Low values indicate that a task is
             being completed by only a few people.
           </p>
           {fairnessData.length === 0 ? (
-            <p className="text-gray-500 dark:text-muted-foreground text-base text-center py-8">
+            <p className="text-muted-foreground text-base text-center py-8">
               No recurring tasks with completions
             </p>
           ) : (
@@ -178,19 +176,17 @@ export default function TaskAnalyticsPage() {
                 >
                   <FairnessIndicator level={item.fairnessLevel} />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 dark:text-foreground truncate">
-                      {item.task.title}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-muted-foreground">
+                    <div className="font-medium text-foreground truncate">{item.task.title}</div>
+                    <div className="text-sm text-muted-foreground">
                       {item.totalCompletions} completions by {item.uniqueCompleterCount} person
                       {item.uniqueCompleterCount !== 1 && 's'}
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-semibold text-gray-900 dark:text-foreground">
+                    <div className="text-lg font-semibold text-foreground">
                       {item.fairnessScore}%
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-muted-foreground">Fairness</div>
+                    <div className="text-xs text-muted-foreground">Fairness</div>
                   </div>
                 </div>
               ))}

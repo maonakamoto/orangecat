@@ -66,14 +66,14 @@ export default function AuthPage() {
       <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-12 bg-gray-50 dark:bg-background">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-foreground">
+            <h2 className="text-2xl font-semibold mb-2 text-foreground">
               {mode === 'login'
                 ? 'Welcome back'
                 : mode === 'register'
                   ? 'Get started'
                   : 'Reset password'}
             </h2>
-            <p className="text-gray-600 dark:text-muted-foreground">
+            <p className="text-muted-foreground">
               {mode === 'login'
                 ? 'Sign in to your OrangeCat account'
                 : mode === 'register'

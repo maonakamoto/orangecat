@@ -125,7 +125,7 @@ export function ThreadContext({
 
   if (!threadPosts.length) {
     return (
-      <div className={cn('text-center py-8 text-gray-500 dark:text-muted-foreground', className)}>
+      <div className={cn('text-center py-8 text-muted-foreground', className)}>
         <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
         <p>No posts in this thread.</p>
       </div>
@@ -136,19 +136,14 @@ export function ThreadContext({
   const threadParticipants = Array.from(new Set(threadPosts.map(post => post.actor.id))).length;
 
   return (
-    <div
-      className={cn(
-        'bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg',
-        className
-      )}
-    >
+    <div className={cn('bg-card border border-border rounded-lg', className)}>
       {/* Thread Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-border">
         <div className="flex items-center gap-3">
-          <MessageCircle className="w-5 h-5 text-gray-600 dark:text-muted-foreground" />
+          <MessageCircle className="w-5 h-5 text-muted-foreground" />
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-foreground">Thread</h3>
-            <p className="text-sm text-gray-500 dark:text-muted-foreground">
+            <h3 className="font-semibold text-foreground">Thread</h3>
+            <p className="text-sm text-muted-foreground">
               {threadPosts.length} posts
               {threadParticipants > 1 && (
                 <>
@@ -173,7 +168,7 @@ export function ThreadContext({
             <ChevronUp className="w-4 h-4" />
           </Button>
 
-          <span className="text-sm text-gray-500 dark:text-muted-foreground min-w-[3rem] text-center">
+          <span className="text-sm text-muted-foreground min-w-[3rem] text-center">
             {currentIndex + 1} / {threadPosts.length}
           </span>
 
@@ -239,12 +234,7 @@ export function ThreadIndicator({
   }
 
   return (
-    <div
-      className={cn(
-        'flex items-center gap-1 text-xs text-gray-500 dark:text-muted-foreground',
-        className
-      )}
-    >
+    <div className={cn('flex items-center gap-1 text-xs text-muted-foreground', className)}>
       <MessageCircle className="w-3 h-3" />
       <span>Part of thread ({replyCount} replies)</span>
       {onShowThread && (

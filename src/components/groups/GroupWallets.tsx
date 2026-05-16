@@ -251,9 +251,7 @@ export function GroupWallets({
         </CardHeader>
         <CardContent>
           {typedWallets.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 dark:text-muted-foreground">
-              No wallets yet
-            </div>
+            <div className="text-center py-8 text-muted-foreground">No wallets yet</div>
           ) : (
             <div className="space-y-4">
               {typedWallets.map(wallet => (
@@ -274,16 +272,14 @@ export function GroupWallets({
                   <CardContent className="space-y-3">
                     {wallet.purpose && (
                       <div className="text-sm">
-                        <span className="text-gray-500 dark:text-muted-foreground">Purpose: </span>
+                        <span className="text-muted-foreground">Purpose: </span>
                         <span className="font-medium capitalize">{wallet.purpose}</span>
                       </div>
                     )}
 
                     {wallet.bitcoin_address && (
                       <div className="space-y-1">
-                        <div className="text-sm text-gray-500 dark:text-muted-foreground">
-                          Bitcoin Address
-                        </div>
+                        <div className="text-sm text-muted-foreground">Bitcoin Address</div>
                         <div className="flex items-center gap-2">
                           <code className="flex-1 font-mono text-xs break-all text-sm bg-muted p-2 rounded">
                             {wallet.bitcoin_address}
@@ -313,9 +309,7 @@ export function GroupWallets({
 
                     {wallet.lightning_address && (
                       <div className="space-y-1">
-                        <div className="text-sm text-gray-500 dark:text-muted-foreground">
-                          Lightning Address
-                        </div>
+                        <div className="text-sm text-muted-foreground">Lightning Address</div>
                         <div className="flex items-center gap-2">
                           <code className="flex-1 font-mono text-xs bg-muted p-2 rounded">
                             {wallet.lightning_address}
@@ -335,9 +329,7 @@ export function GroupWallets({
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <div>
-                            <div className="text-sm text-gray-500 dark:text-muted-foreground">
-                              Balance
-                            </div>
+                            <div className="text-sm text-muted-foreground">Balance</div>
                             <div className="text-lg font-bold text-green-600">
                               {formatAmount(wallet.current_balance_btc)}
                             </div>
@@ -360,7 +352,7 @@ export function GroupWallets({
                         </div>
                       </div>
                       {wallet.required_signatures > 1 && (
-                        <div className="text-sm text-gray-500 dark:text-muted-foreground">
+                        <div className="text-sm text-muted-foreground">
                           Multi-sig: {wallet.required_signatures} signatures required
                         </div>
                       )}

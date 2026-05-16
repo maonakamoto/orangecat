@@ -64,10 +64,7 @@ export function ProjectsSkeleton() {
       <div className="h-6 w-32 bg-gray-200 dark:bg-muted rounded animate-pulse mb-6" />
       <div className="space-y-4">
         {[1, 2, 3].map(i => (
-          <div
-            key={i}
-            className="rounded-xl border-2 border-gray-200 dark:border-border bg-white dark:bg-card overflow-hidden"
-          >
+          <div key={i} className="rounded-xl border-2 border-border bg-card overflow-hidden">
             <div className="flex flex-col sm:flex-row">
               <div className="w-full sm:w-32 h-48 sm:h-auto flex-shrink-0 bg-gray-200 dark:bg-muted animate-pulse" />
               <div className="flex-1 p-4 sm:p-5">

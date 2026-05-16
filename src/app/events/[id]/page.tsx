@@ -30,7 +30,7 @@ const config: EntityDetailConfig = {
   }),
   renderHeaderExtra: entity =>
     entity.start_date ? (
-      <span className="text-gray-500 dark:text-muted-foreground text-sm">
+      <span className="text-muted-foreground text-sm">
         {format(new Date(entity.start_date as string), 'EEEE, MMMM d, yyyy')}
       </span>
     ) : null,
@@ -49,7 +49,7 @@ const config: EntityDetailConfig = {
               <div className="font-medium">
                 {format(new Date(entity.start_date as string), 'EEEE, MMMM d, yyyy')}
               </div>
-              <div className="text-sm text-gray-500 dark:text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 {format(new Date(entity.start_date as string), 'h:mm a')}
                 {entity.end_date && ` - ${format(new Date(entity.end_date as string), 'h:mm a')}`}
               </div>

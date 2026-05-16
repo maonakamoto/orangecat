@@ -98,10 +98,8 @@ export function EntityCreationSuccess({
 
           {/* Success message */}
           <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-foreground">
-              {entityTypeName} created!
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-muted-foreground">
+            <h2 className="text-xl font-semibold text-foreground">{entityTypeName} created!</h2>
+            <p className="text-sm text-muted-foreground">
               &ldquo;{entityTitle}&rdquo; is saved as a <span className="font-medium">draft</span>.
               It&apos;s not visible to anyone yet.
             </p>

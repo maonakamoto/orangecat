@@ -194,17 +194,13 @@ export function DocumentFileUpload({
             <div className="p-4 bg-tiffany-100 rounded-full mb-4">
               <Upload className="h-8 w-8 text-tiffany-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-1">
-              Upload a file
-            </h3>
-            <p className="text-base text-gray-600 dark:text-muted-foreground mb-3">
-              Drag & drop or click to browse
-            </p>
+            <h3 className="text-lg font-semibold text-foreground mb-1">Upload a file</h3>
+            <p className="text-base text-muted-foreground mb-3">Drag & drop or click to browse</p>
             <div className="flex flex-wrap justify-center gap-2">
               {ACCEPTED_EXTENSIONS.map(ext => (
                 <span
                   key={ext}
-                  className="px-2 py-1 bg-white dark:bg-card rounded-md text-xs font-medium text-gray-600 dark:text-muted-foreground border border-gray-200 dark:border-border"
+                  className="px-2 py-1 bg-card rounded-md text-xs font-medium text-muted-foreground border border-border"
                 >
                   {ext}
                 </span>
@@ -227,12 +223,8 @@ export function DocumentFileUpload({
             <div className="p-4 bg-tiffany-100 rounded-full mb-4">
               <Loader2 className="h-8 w-8 text-tiffany-600 animate-spin" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-1">
-              Processing...
-            </h3>
-            <p className="text-base text-gray-600 dark:text-muted-foreground">
-              Extracting content from {fileName}
-            </p>
+            <h3 className="text-lg font-semibold text-foreground mb-1">Processing...</h3>
+            <p className="text-base text-muted-foreground">Extracting content from {fileName}</p>
           </>
         )}
 
@@ -262,7 +254,7 @@ export function DocumentFileUpload({
             </div>
             <h3 className="text-lg font-semibold text-red-900 mb-1">Upload failed</h3>
             <p className="text-base text-red-600 mb-3">{errorMessage}</p>
-            <p className="text-base text-gray-600 dark:text-muted-foreground">Click to try again</p>
+            <p className="text-base text-muted-foreground">Click to try again</p>
           </>
         )}
       </div>

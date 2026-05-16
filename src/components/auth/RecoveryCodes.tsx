@@ -186,16 +186,16 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 p-4 bg-gray-50 dark:bg-muted border border-gray-200 dark:border-border rounded-lg">
+        <div className="grid grid-cols-2 gap-2 p-4 bg-gray-50 dark:bg-muted border border-border rounded-lg">
           {formattedCodes.map(({ number, code }) => (
             <div
               key={code}
-              className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-card border border-gray-100 dark:border-border rounded"
+              className="flex items-center gap-2 px-3 py-2 bg-card border border-gray-100 dark:border-border rounded"
             >
               <span className="text-xs text-gray-400 dark:text-muted-foreground w-4">
                 {number}.
               </span>
-              <code className="text-sm font-mono text-gray-900 dark:text-foreground">{code}</code>
+              <code className="text-sm font-mono text-foreground">{code}</code>
             </div>
           ))}
         </div>
@@ -220,11 +220,11 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           </Button>
         </div>
 
-        <div className="pt-4 border-t border-gray-200 dark:border-border">
+        <div className="pt-4 border-t border-border">
           <button
             onClick={handleRegenerate}
             disabled={generating}
-            className="flex items-center gap-2 text-sm text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-gray-700 dark:hover:text-foreground transition-colors"
           >
             {generating ? (
               <Loader2 className="h-4 w-4 animate-spin" />

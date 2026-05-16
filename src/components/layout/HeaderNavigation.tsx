@@ -81,7 +81,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
             }
             return (
               <div key={sectionKey} className="p-4">
-                <div className="text-xs font-semibold text-gray-500 dark:text-muted-foreground uppercase mb-2">
+                <div className="text-xs font-semibold text-muted-foreground uppercase mb-2">
                   {sectionKey}
                 </div>
                 <div className="grid grid-cols-1 gap-1">
@@ -89,7 +89,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
                     <Link
                       key={`${sectionKey}-${link.href}`}
                       href={link.href}
-                      className="px-3 py-2 min-h-11 rounded-lg text-sm text-gray-600 dark:text-muted-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground"
+                      className="px-3 py-2 min-h-11 rounded-lg text-sm text-muted-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground"
                       onClick={onClose}
                     >
                       {link.name}
@@ -213,7 +213,7 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-card rounded-xl shadow-lg border border-gray-200 dark:border-border py-2 z-50">
+        <div className="absolute top-full left-0 mt-2 w-56 bg-card rounded-xl shadow-lg border border-border py-2 z-50">
           {item.children?.map((child, _index) => {
             // Skip children without href
             if (!child.href) {
@@ -234,9 +234,7 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
               >
                 <div className="font-medium">{child.name}</div>
                 {child.description && (
-                  <div className="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">
-                    {child.description}
-                  </div>
+                  <div className="text-xs text-muted-foreground mt-0.5">{child.description}</div>
                 )}
               </Link>
             );

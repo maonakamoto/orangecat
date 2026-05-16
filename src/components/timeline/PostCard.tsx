@@ -94,7 +94,7 @@ export function PostCard({
       <article
         onClick={handlePostClick}
         className={cn(
-          'px-4 py-3 border-b border-gray-200 dark:border-border hover:bg-gray-50/50 dark:hover:bg-muted/30 transition-colors cursor-pointer',
+          'px-4 py-3 border-b border-border hover:bg-gray-50/50 dark:hover:bg-muted/30 transition-colors cursor-pointer',
           compact && 'py-2',
           isSelectionMode && 'pl-2',
           isSelected && 'bg-tiffany-50/70 hover:bg-tiffany-50'
@@ -104,7 +104,7 @@ export function PostCard({
         {isSimpleRepost && (
           <div
             className={cn(
-              'flex items-center gap-2 text-gray-500 dark:text-muted-foreground text-xs mb-1',
+              'flex items-center gap-2 text-muted-foreground text-xs mb-1',
               isSelectionMode ? 'ml-14' : 'ml-12'
             )}
           >
@@ -124,7 +124,7 @@ export function PostCard({
                   'w-5 h-5 rounded border-2 flex items-center justify-center transition-all',
                   isSelected
                     ? 'bg-tiffany-500 border-tiffany-500 text-white'
-                    : 'border-gray-300 dark:border-border hover:border-tiffany-400 bg-white dark:bg-card'
+                    : 'border-gray-300 dark:border-border hover:border-tiffany-400 bg-card'
                 )}
                 aria-label={isSelected ? 'Deselect post' : 'Select post'}
                 aria-checked={isSelected}

@@ -38,27 +38,23 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
                 <div className="w-10 h-10 rounded-lg bg-tiffany-100 flex items-center justify-center">
                   {content.icon}
                 </div>
-                <h3 className="font-semibold text-gray-900 dark:text-foreground">
-                  {content.title}
-                </h3>
+                <h3 className="font-semibold text-foreground">{content.title}</h3>
               </div>
 
               {/* Description */}
-              <p className="text-sm text-gray-600 dark:text-muted-foreground mb-4">
-                {content.description}
-              </p>
+              <p className="text-sm text-muted-foreground mb-4">{content.description}</p>
 
               {/* Tips */}
               {content.tips && content.tips.length > 0 && (
                 <div className="space-y-2 mb-4">
-                  <h4 className="text-xs font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wide">
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     Tips
                   </h4>
                   <ul className="space-y-2">
                     {content.tips.map((tip, index) => (
                       <li
                         key={index}
-                        className="flex items-start gap-2 text-sm text-gray-600 dark:text-muted-foreground"
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
                       >
                         <CheckCircle className="w-4 h-4 text-tiffany-600 mt-0.5 flex-shrink-0" />
                         <span>{tip}</span>
@@ -71,14 +67,14 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
               {/* Examples */}
               {content.examples && content.examples.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wide mb-2">
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
                     Examples
                   </h4>
                   <ul className="space-y-1.5">
                     {content.examples.map((example, index) => (
                       <li
                         key={index}
-                        className="text-sm text-gray-500 dark:text-muted-foreground italic pl-3 border-l-2 border-gray-200 dark:border-border"
+                        className="text-sm text-muted-foreground italic pl-3 border-l-2 border-border"
                       >
                         {example}
                       </li>
@@ -98,14 +94,10 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
               className="p-6"
             >
               {/* Header */}
-              <h3 className="font-semibold text-gray-900 dark:text-foreground mb-2">
-                {aiDefaultContent.title}
-              </h3>
+              <h3 className="font-semibold text-foreground mb-2">{aiDefaultContent.title}</h3>
 
               {/* Description */}
-              <p className="text-sm text-gray-600 dark:text-muted-foreground mb-4">
-                {aiDefaultContent.description}
-              </p>
+              <p className="text-sm text-muted-foreground mb-4">{aiDefaultContent.description}</p>
 
               {/* Features */}
               <div className="space-y-3 mb-4">
@@ -114,9 +106,7 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
                     <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-muted flex items-center justify-center flex-shrink-0">
                       {feature.icon}
                     </div>
-                    <span className="text-sm text-gray-600 dark:text-muted-foreground pt-1">
-                      {feature.text}
-                    </span>
+                    <span className="text-sm text-muted-foreground pt-1">{feature.text}</span>
                   </div>
                 ))}
               </div>

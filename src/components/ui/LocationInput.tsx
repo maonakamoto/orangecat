@@ -67,7 +67,7 @@ export function LocationInput({
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          className="absolute z-50 w-full mt-1 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg shadow-lg max-h-60 overflow-y-auto"
+          className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto"
         >
           {suggestions.map(suggestion => (
             <button
@@ -79,11 +79,9 @@ export function LocationInput({
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-gray-400 dark:text-muted-foreground mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-gray-900 dark:text-foreground truncate">
-                    {suggestion.mainText}
-                  </div>
+                  <div className="font-medium text-foreground truncate">{suggestion.mainText}</div>
                   {suggestion.secondaryText && (
-                    <div className="text-sm text-gray-600 dark:text-muted-foreground truncate">
+                    <div className="text-sm text-muted-foreground truncate">
                       {suggestion.secondaryText}
                     </div>
                   )}
@@ -95,8 +93,8 @@ export function LocationInput({
       )}
 
       {showSuggestions && inputValue.length >= 2 && suggestions.length === 0 && !isLoading && (
-        <div className="absolute z-50 w-full mt-1 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg shadow-lg p-4">
-          <div className="text-sm text-gray-600 dark:text-muted-foreground text-center">
+        <div className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-lg p-4">
+          <div className="text-sm text-muted-foreground text-center">
             No locations found. Try typing a city name or address.
           </div>
         </div>

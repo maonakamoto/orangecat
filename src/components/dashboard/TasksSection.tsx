@@ -104,9 +104,7 @@ export default function TasksSection({
       <Card className={className}>
         <CardContent className="p-6 flex items-center justify-center">
           <Loader2 className="w-6 h-6 animate-spin text-gray-400 dark:text-muted-foreground" />
-          <span className="ml-2 text-gray-500 dark:text-muted-foreground">
-            Loading recommendations...
-          </span>
+          <span className="ml-2 text-muted-foreground">Loading recommendations...</span>
         </CardContent>
       </Card>
     );
@@ -131,12 +129,8 @@ export default function TasksSection({
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Sparkles className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
-              {celebration.title}
-            </h3>
-            <p className="text-gray-600 dark:text-muted-foreground mb-4">
-              {celebration.description}
-            </p>
+            <h3 className="text-lg font-semibold text-foreground mb-2">{celebration.title}</h3>
+            <p className="text-muted-foreground mb-4">{celebration.description}</p>
             {showQuestions && questions.length > 0 && (
               <SmartQuestionsPanel questions={questions} className="mt-6 text-left" />
             )}
@@ -163,16 +157,14 @@ export default function TasksSection({
                 <Target className="w-5 h-5 text-tiffany-600" />
                 Recommended Next Steps
               </CardTitle>
-              <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 Complete these to get the most out of OrangeCat
               </p>
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <div className="text-sm font-medium text-gray-900 dark:text-foreground">
-                  {taskCompletion}% Setup
-                </div>
-                <div className="text-xs text-gray-500 dark:text-muted-foreground">
+                <div className="text-sm font-medium text-foreground">{taskCompletion}% Setup</div>
+                <div className="text-xs text-muted-foreground">
                   {tasks.length} task{tasks.length !== 1 ? 's' : ''} remaining
                 </div>
               </div>
@@ -244,7 +236,7 @@ function TaskCard({
     <div
       className={`
         flex items-start gap-4 p-4 border rounded-lg transition-all
-        ${isCompleted ? 'border-green-200 bg-green-50 opacity-60' : 'border-gray-200 dark:border-border hover:border-tiffany-300 hover:shadow-sm'}
+        ${isCompleted ? 'border-green-200 bg-green-50 opacity-60' : 'border-border hover:border-tiffany-300 hover:shadow-sm'}
       `}
     >
       <button
@@ -263,9 +255,9 @@ function TaskCard({
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <IconComponent className="w-4 h-4 text-gray-600 dark:text-muted-foreground flex-shrink-0" />
+              <IconComponent className="w-4 h-4 text-muted-foreground flex-shrink-0" />
               <h4
-                className={`font-medium ${isCompleted ? 'line-through text-gray-500 dark:text-muted-foreground' : 'text-gray-900 dark:text-foreground'}`}
+                className={`font-medium ${isCompleted ? 'line-through text-muted-foreground' : 'text-foreground'}`}
               >
                 {task.title}
               </h4>
@@ -276,9 +268,7 @@ function TaskCard({
               </span>
             </div>
 
-            <p className="text-sm text-gray-600 dark:text-muted-foreground mb-3">
-              {task.description}
-            </p>
+            <p className="text-sm text-muted-foreground mb-3">{task.description}</p>
 
             {!isCompleted && (
               <Link href={task.action.href}>

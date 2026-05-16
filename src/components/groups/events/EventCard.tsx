@@ -53,7 +53,7 @@ export function EventCard({ event, groupSlug, onUpdate: _onUpdate }: EventCardPr
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-muted-foreground">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
           <span>
             {formatDate(startDate)} {formatShortTime(startDate)}
@@ -61,7 +61,7 @@ export function EventCard({ event, groupSlug, onUpdate: _onUpdate }: EventCardPr
         </div>
 
         {endDate && (
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Clock className="h-4 w-4" />
             <span>
               Ends: {formatDate(endDate)} {formatShortTime(endDate)}
@@ -70,14 +70,14 @@ export function EventCard({ event, groupSlug, onUpdate: _onUpdate }: EventCardPr
         )}
 
         {event.location_details && (
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
             <span className="truncate">{event.location_details}</span>
           </div>
         )}
 
         {event.requires_rsvp && (
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Users className="h-4 w-4" />
             <span>
               {rsvpCount} {rsvpCount === 1 ? 'person' : 'people'} going

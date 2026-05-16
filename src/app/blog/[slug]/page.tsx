@@ -16,28 +16,22 @@ import { ROUTES } from '@/config/routes';
 const mdxComponents = {
   // Customize markdown elements
   h1: ({ children, ...props }: ComponentProps<'h1'>) => (
-    <h1
-      className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-foreground mb-6 leading-tight"
-      {...props}
-    >
+    <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-6 leading-tight" {...props}>
       {children}
     </h1>
   ),
   h2: ({ children, ...props }: ComponentProps<'h2'>) => (
-    <h2
-      className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-6 mt-12 flex items-center"
-      {...props}
-    >
+    <h2 className="text-2xl font-semibold text-foreground mb-6 mt-12 flex items-center" {...props}>
       {children}
     </h2>
   ),
   h3: ({ children, ...props }: ComponentProps<'h3'>) => (
-    <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4 mt-8" {...props}>
+    <h3 className="text-lg font-semibold text-foreground mb-4 mt-8" {...props}>
       {children}
     </h3>
   ),
   h4: ({ children, ...props }: ComponentProps<'h4'>) => (
-    <h4 className="text-base font-semibold text-gray-900 dark:text-foreground mb-3 mt-6" {...props}>
+    <h4 className="text-base font-semibold text-foreground mb-3 mt-6" {...props}>
       {children}
     </h4>
   ),
@@ -112,8 +106,8 @@ const mdxComponents = {
     return <div className={`border rounded-xl p-6 mb-6 ${styles[type]}`}>{children}</div>;
   },
   SecurityFeature: ({ title, description }: { title: string; description: string }) => (
-    <div className="bg-white dark:bg-card border border-green-200 dark:border-border rounded-xl p-6 mb-6">
-      <h4 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2 flex items-center">
+    <div className="bg-card border border-green-200 dark:border-border rounded-xl p-6 mb-6">
+      <h4 className="text-lg font-semibold text-foreground mb-2 flex items-center">
         <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
         {title}
       </h4>
@@ -217,15 +211,13 @@ export default async function BlogPost({ params }: PageProps) {
                   <span className="bg-orange-100 px-3 py-1 rounded-full">Featured Article</span>
                 </div>
               )}
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-foreground mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
                 {post.title}
               </h1>
-              <p className="text-xl text-gray-600 dark:text-muted-foreground leading-relaxed mb-6">
-                {post.excerpt}
-              </p>
+              <p className="text-xl text-muted-foreground leading-relaxed mb-6">{post.excerpt}</p>
 
               {/* Post Meta */}
-              <div className="flex items-center text-sm text-gray-500 dark:text-muted-foreground border-t border-b border-gray-200 dark:border-border py-4">
+              <div className="flex items-center text-sm text-muted-foreground border-t border-b border-border py-4">
                 <Calendar className="w-4 h-4 mr-2" />
                 {new Date(post.date).toLocaleDateString('en-US', {
                   year: 'numeric',
@@ -265,7 +257,7 @@ export default async function BlogPost({ params }: PageProps) {
             </article>
 
             {/* Share and Navigation */}
-            <div className="mt-16 pt-8 border-t border-gray-200 dark:border-border">
+            <div className="mt-16 pt-8 border-t border-border">
               <div className="flex flex-col sm:flex-row justify-between items-center">
                 <Link href={ROUTES.BLOG}>
                   <Button variant="outline">
@@ -279,7 +271,7 @@ export default async function BlogPost({ params }: PageProps) {
                     description={post.excerpt}
                     url={`https://orangecat.ch/blog/${slug}`}
                   />
-                  <p className="text-gray-500 dark:text-muted-foreground text-xs">
+                  <p className="text-muted-foreground text-xs">
                     Part of our commitment to building in public
                   </p>
                 </div>
@@ -288,9 +280,7 @@ export default async function BlogPost({ params }: PageProps) {
 
             {/* Related Posts CTA */}
             <div className={`mt-12 ${GRADIENTS.sectionOrangeTiffany} rounded-2xl p-8 text-center`}>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-4">
-                More from OrangeCat
-              </h3>
+              <h3 className="text-2xl font-bold text-foreground mb-4">More from OrangeCat</h3>
               <p className="text-lg text-gray-700 dark:text-muted-foreground mb-6">
                 Discover more insights about Bitcoin, security, and building in public.
               </p>

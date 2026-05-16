@@ -14,9 +14,9 @@ function getStatusIcon(status: string) {
     case 'failed':
       return <XCircle className="h-4 w-4 text-red-500" />;
     case 'cancelled':
-      return <AlertCircle className="h-4 w-4 text-gray-500 dark:text-muted-foreground" />;
+      return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     default:
-      return <Clock className="h-4 w-4 text-gray-500 dark:text-muted-foreground" />;
+      return <Clock className="h-4 w-4 text-muted-foreground" />;
   }
 }
 
@@ -43,14 +43,12 @@ export function RecentWithdrawals({ withdrawals, formatAmountBtc }: RecentWithdr
               {getStatusIcon(withdrawal.status)}
               <div>
                 <div className="font-medium">{formatAmountBtc(withdrawal.amount_btc)}</div>
-                <div className="text-xs text-gray-500 dark:text-muted-foreground">
+                <div className="text-xs text-muted-foreground">
                   {formatDate(withdrawal.created_at)}
                 </div>
               </div>
             </div>
-            <div className="text-xs text-gray-500 dark:text-muted-foreground capitalize">
-              {withdrawal.status}
-            </div>
+            <div className="text-xs text-muted-foreground capitalize">{withdrawal.status}</div>
           </div>
         ))}
       </div>

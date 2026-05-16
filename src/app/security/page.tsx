@@ -82,19 +82,15 @@ export default function SecurityPage() {
           <div className="flex justify-center mb-4">
             <Shield className="w-16 h-16 text-tiffany-600" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-foreground mb-4">
-            Security & Privacy
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-muted-foreground">
+          <h1 className="text-4xl font-bold text-foreground mb-4">Security & Privacy</h1>
+          <p className="text-xl text-muted-foreground">
             Your security and privacy are our top priorities at OrangeCat
           </p>
         </div>
 
         {/* Security Overview */}
-        <div className="bg-white dark:bg-card rounded-lg shadow-sm border border-gray-200 dark:border-border p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-4">
-            Our Security Philosophy
-          </h2>
+        <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8">
+          <h2 className="text-2xl font-semibold text-foreground mb-4">Our Security Philosophy</h2>
           <p className="text-gray-700 dark:text-muted-foreground mb-6">
             OrangeCat is built on Bitcoin-first principles, which means we prioritize
             decentralization, self-custody, and transparency. We never hold your funds, and we
@@ -119,24 +115,17 @@ export default function SecurityPage() {
 
         {/* Security Features Grid */}
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-8 text-center">
+          <h2 className="text-2xl font-semibold text-foreground mb-8 text-center">
             Security Features
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {securityFeatures.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-card rounded-lg shadow-sm border border-gray-200 dark:border-border p-6"
-              >
+              <div key={index} className="bg-card rounded-lg shadow-sm border border-border p-6">
                 <div className="flex items-center mb-4">
                   <feature.icon className="w-8 h-8 text-tiffany-600 mr-3" />
-                  <h3 className="font-semibold text-gray-900 dark:text-foreground">
-                    {feature.title}
-                  </h3>
+                  <h3 className="font-semibold text-foreground">{feature.title}</h3>
                 </div>
-                <p className="text-gray-600 dark:text-muted-foreground text-sm">
-                  {feature.description}
-                </p>
+                <p className="text-muted-foreground text-sm">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -145,13 +134,8 @@ export default function SecurityPage() {
         {/* Security Practices */}
         <div className="space-y-8">
           {securityPractices.map((practice, index) => (
-            <div
-              key={index}
-              className="bg-white dark:bg-card rounded-lg shadow-sm border border-gray-200 dark:border-border p-6"
-            >
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-6">
-                {practice.title}
-              </h3>
+            <div key={index} className="bg-card rounded-lg shadow-sm border border-border p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-6">{practice.title}</h3>
               <ul className="space-y-3">
                 {practice.items.map((item, itemIndex) => (
                   <li key={itemIndex} className="flex items-start">
@@ -190,7 +174,7 @@ export default function SecurityPage() {
         </div>
 
         {/* Last Updated */}
-        <div className="mt-8 text-center text-gray-500 dark:text-muted-foreground">
+        <div className="mt-8 text-center text-muted-foreground">
           <p className="text-sm">
             This security page was last updated on {new Date().toLocaleDateString()}. Our security
             practices are continuously reviewed and updated.

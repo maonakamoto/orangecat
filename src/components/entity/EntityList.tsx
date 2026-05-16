@@ -125,7 +125,7 @@ export default function EntityList<T extends EntityItem>({
   // Empty state
   if (!items || items.length === 0) {
     return (
-      <div className={cn('rounded-xl border bg-white dark:bg-card p-8 sm:p-12', className)}>
+      <div className={cn('rounded-xl border bg-card p-8 sm:p-12', className)}>
         <EmptyState
           title={emptyState.title}
           description={emptyState.description || defaultEmptyState.description}
@@ -206,7 +206,7 @@ export default function EntityList<T extends EntityItem>({
  */
 function EntityCardSkeleton() {
   return (
-    <div className="flex flex-col overflow-hidden rounded-xl border border-gray-200 dark:border-border bg-white dark:bg-card">
+    <div className="flex flex-col overflow-hidden rounded-xl border border-border bg-card">
       {/* Image skeleton */}
       <Skeleton className="aspect-video w-full" />
 

@@ -118,18 +118,14 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
         <div className="flex items-center gap-3 mb-1">
           <button
             onClick={handleCancel}
-            className="inline-flex items-center text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors shrink-0"
+            className="inline-flex items-center text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors shrink-0"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             Cancel
           </button>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-foreground">
-            {config.pageTitle}
-          </h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">{config.pageTitle}</h1>
         </div>
-        <p className="text-sm text-gray-600 dark:text-muted-foreground ml-12">
-          {config.pageDescription}
-        </p>
+        <p className="text-sm text-muted-foreground ml-12">{config.pageDescription}</p>
       </div>
 
       <WizardProgressBar

@@ -41,7 +41,7 @@ export function HeaderCreateButton() {
 
       {isOpen && (
         <div
-          className="fixed z-50 rounded-xl shadow-xl bg-white dark:bg-card border border-gray-100 dark:border-border animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
+          className="fixed z-50 rounded-xl shadow-xl bg-card border border-gray-100 dark:border-border animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
           style={{
             top: buttonRef.current ? buttonRef.current.getBoundingClientRect().bottom + 12 : 'auto',
             right: buttonRef.current
@@ -54,7 +54,7 @@ export function HeaderCreateButton() {
           aria-label="Create new"
         >
           <div className="p-2 max-h-[70vh] overflow-y-auto">
-            <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">
+            <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Create New
             </div>
             <div className="space-y-0.5">
@@ -71,10 +71,10 @@ export function HeaderCreateButton() {
                       <option.icon className={cn('w-4 h-4', option.color)} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900 dark:text-foreground group-hover:text-orange-600 transition-colors">
+                      <div className="font-medium text-foreground group-hover:text-orange-600 transition-colors">
                         {option.name}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-muted-foreground truncate">
+                      <div className="text-xs text-muted-foreground truncate">
                         {option.description}
                       </div>
                     </div>

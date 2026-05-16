@@ -57,7 +57,7 @@ export function UserProfileDropdownPanel({
 }: UserProfileDropdownPanelProps) {
   return (
     <div
-      className="fixed z-50 rounded-2xl shadow-2xl bg-white dark:bg-card border border-gray-100 dark:border-border animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
+      className="fixed z-50 rounded-2xl shadow-2xl bg-card border border-gray-100 dark:border-border animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
       style={{
         top: buttonRef.current ? buttonRef.current.getBoundingClientRect().bottom + 12 : 'auto',
         right: buttonRef.current
@@ -102,21 +102,13 @@ export function UserProfileDropdownPanel({
                 onClick={handlePublicProfileClick}
                 className="group flex items-center space-x-2 hover:text-tiffany-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-tiffany-400 focus:ring-offset-1 rounded-lg p-1 -m-1"
               >
-                <h3 className="font-semibold text-lg text-gray-900 dark:text-foreground group-hover:text-tiffany-600 transition-colors duration-200 truncate">
+                <h3 className="font-semibold text-lg text-foreground group-hover:text-tiffany-600 transition-colors duration-200 truncate">
                   {displayName}
                 </h3>
                 <ExternalLink className="w-4 h-4 text-gray-400 dark:text-muted-foreground group-hover:text-tiffany-500 transition-all duration-200 opacity-0 group-hover:opacity-100 transform group-hover:scale-110" />
               </button>
-              {username && (
-                <p className="text-sm font-medium text-gray-600 dark:text-muted-foreground">
-                  @{username}
-                </p>
-              )}
-              {email && (
-                <p className="text-xs text-gray-500 dark:text-muted-foreground truncate mt-1">
-                  {email}
-                </p>
-              )}
+              {username && <p className="text-sm font-medium text-muted-foreground">@{username}</p>}
+              {email && <p className="text-xs text-muted-foreground truncate mt-1">{email}</p>}
             </div>
           </div>
         </div>
@@ -145,11 +137,11 @@ export function UserProfileDropdownPanel({
                 <Icon className="w-5 h-5 text-tiffany-600 group-hover:text-tiffany-700 transition-colors duration-200" />
               </div>
               <div className="flex-1 text-left">
-                <div className="font-semibold text-gray-900 dark:text-foreground group-hover:text-tiffany-600 transition-colors duration-200">
+                <div className="font-semibold text-foreground group-hover:text-tiffany-600 transition-colors duration-200">
                   {item.label}
                 </div>
                 {showDescriptions && (
-                  <div className="text-sm text-gray-500 dark:text-muted-foreground group-hover:text-gray-600 transition-colors duration-200">
+                  <div className="text-sm text-muted-foreground group-hover:text-gray-600 transition-colors duration-200">
                     {item.description}
                   </div>
                 )}

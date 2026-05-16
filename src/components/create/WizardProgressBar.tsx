@@ -61,16 +61,14 @@ export function WizardProgressBar({
                     ? 'bg-green-500 text-white'
                     : isCurrent
                       ? `${theme.bg} text-white ring-4 ${theme.ring}`
-                      : 'bg-gray-200 dark:bg-muted text-gray-600 dark:text-muted-foreground'
+                      : 'bg-gray-200 dark:bg-muted text-muted-foreground'
                 }`}
               >
                 {isCompleted ? <Check className="w-4 h-4" /> : index + 1}
               </div>
               <span
                 className={`text-xs font-medium max-w-[80px] text-center leading-tight ${
-                  isCurrent
-                    ? 'text-gray-900 dark:text-foreground'
-                    : 'text-gray-600 dark:text-muted-foreground'
+                  isCurrent ? 'text-foreground' : 'text-muted-foreground'
                 }`}
               >
                 {step.title.split(' (')[0]}

@@ -32,7 +32,7 @@ const config: EntityDetailConfig = {
       <CardContent className="space-y-4">
         {entity.price_btc && (
           <div className="flex items-center justify-between">
-            <span className="text-gray-500 dark:text-muted-foreground">Price</span>
+            <span className="text-muted-foreground">Price</span>
             <span className="text-xl font-bold text-tiffany-600">
               {displayBTC(entity.price_btc)}
             </span>
@@ -40,7 +40,7 @@ const config: EntityDetailConfig = {
         )}
         {entity.duration_minutes && (
           <div className="flex items-center justify-between">
-            <span className="text-gray-500 dark:text-muted-foreground">Duration</span>
+            <span className="text-muted-foreground">Duration</span>
             <span className="font-medium">{entity.duration_minutes} minutes</span>
           </div>
         )}

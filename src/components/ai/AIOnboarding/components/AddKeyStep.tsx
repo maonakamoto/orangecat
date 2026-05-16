@@ -53,7 +53,7 @@ export function AddKeyStep({
               </div>
               <div>
                 <p className="font-medium">{provider.name}</p>
-                <p className="text-xs text-gray-500 dark:text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Key format:{' '}
                   <code className="bg-gray-200 dark:bg-muted px-1 rounded">
                     {provider.apiKeyExample}
@@ -75,7 +75,7 @@ export function AddKeyStep({
               onChange={e => onKeyNameChange(e.target.value)}
               disabled={keyAdded}
             />
-            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               A friendly name to identify this key later
             </p>
           </div>
@@ -159,8 +159,8 @@ export function AddKeyStep({
             key={index}
             className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-muted rounded-full"
           >
-            <Lock className="w-4 h-4 text-gray-500 dark:text-muted-foreground" />
-            <span className="text-sm text-gray-600 dark:text-muted-foreground">{tip}</span>
+            <Lock className="w-4 h-4 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">{tip}</span>
           </div>
         ))}
       </div>

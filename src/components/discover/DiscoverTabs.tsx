@@ -84,7 +84,7 @@ export default function DiscoverTabs({
   const allCount = Object.values(counts).reduce((sum, n) => sum + (n || 0), 0);
 
   return (
-    <div className="border-b border-gray-200 dark:border-border bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-t-2xl sticky top-0 z-10 overflow-x-auto">
+    <div className="border-b border-border bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-t-2xl sticky top-0 z-10 overflow-x-auto">
       <nav className="-mb-px flex space-x-6 px-6 pt-4 min-w-max" aria-label="Tabs">
         {tabs.map(({ id, label, Icon }) => {
           const isActive = activeTab === id;
@@ -100,7 +100,7 @@ export default function DiscoverTabs({
                 ${
                   isActive
                     ? 'text-orange-600'
-                    : 'text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:border-gray-300'
+                    : 'text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:border-gray-300'
                 }
               `}
               aria-current={isActive ? 'page' : undefined}
@@ -127,7 +127,7 @@ export default function DiscoverTabs({
                     ${
                       isActive
                         ? `border ${BADGE_COLORS.orange}`
-                        : 'bg-gray-100 dark:bg-muted text-gray-600 dark:text-muted-foreground border border-gray-200 dark:border-border group-hover:bg-gray-200 dark:group-hover:bg-muted/80'
+                        : 'bg-gray-100 dark:bg-muted text-muted-foreground border border-border group-hover:bg-gray-200 dark:group-hover:bg-muted/80'
                     }
                   `}
                 >

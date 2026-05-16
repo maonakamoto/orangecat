@@ -96,7 +96,7 @@ export default function BitcoinPaymentModal({
             <>
               <div className="text-center">
                 <h3 className="font-semibold mb-1">Supporting</h3>
-                <p className="text-gray-600 dark:text-muted-foreground">{projectTitle}</p>
+                <p className="text-muted-foreground">{projectTitle}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -147,13 +147,11 @@ export default function BitcoinPaymentModal({
                 label={paymentType === 'lightning' ? 'Lightning Invoice' : 'Bitcoin Address'}
               />
 
-              <div className="text-base text-gray-600 dark:text-muted-foreground">
+              <div className="text-base text-muted-foreground">
                 Amount: {formatAmount(paymentRequest.amount_btc)}
               </div>
               {transactionId && (
-                <div className="text-xs text-gray-500 dark:text-muted-foreground">
-                  Transaction created
-                </div>
+                <div className="text-xs text-muted-foreground">Transaction created</div>
               )}
             </div>
           )}

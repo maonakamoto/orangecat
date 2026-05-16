@@ -48,7 +48,7 @@ export default function ProfileOverviewTab({
       <Card>
         <CardHeader className="p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
-            <User className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 dark:text-muted-foreground" />
+            <User className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
             About
           </h3>
         </CardHeader>
@@ -84,7 +84,7 @@ export default function ProfileOverviewTab({
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold text-orange-600">
                   {stats.projectCount}
                 </div>
-                <div className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground mt-1">
+                <div className="text-xs sm:text-sm text-muted-foreground mt-1">
                   {stats.projectCount === 1
                     ? ENTITY_REGISTRY.project.name
                     : ENTITY_REGISTRY.project.namePlural}
@@ -99,9 +99,7 @@ export default function ProfileOverviewTab({
                 <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-green-600">
                   ₿{stats.totalRaised.toFixed(8)}
                 </div>
-                <div className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground mt-1">
-                  Total Raised
-                </div>
+                <div className="text-xs sm:text-sm text-muted-foreground mt-1">Total Raised</div>
               </div>
             </CardContent>
           </Card>
@@ -118,7 +116,7 @@ export default function ProfileOverviewTab({
           <div className="flex items-center gap-3 text-gray-700 dark:text-foreground">
             <Globe className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
             <div className="flex-1">
-              <div className="text-sm text-gray-500 dark:text-muted-foreground">Website</div>
+              <div className="text-sm text-muted-foreground">Website</div>
               {profile.website ? (
                 <a
                   href={profile.website}
@@ -147,7 +145,7 @@ export default function ProfileOverviewTab({
           </div>
 
           {/* Social Media & Links */}
-          <div className="pt-3 border-t border-gray-200 dark:border-border">
+          <div className="pt-3 border-t border-border">
             {profile.social_links &&
             typeof profile.social_links === 'object' &&
             'links' in profile.social_links &&
@@ -184,10 +182,10 @@ export default function ProfileOverviewTab({
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0 space-y-2 sm:space-y-3">
           {/* Contact Email (public) */}
-          <div className="flex items-center gap-3 text-gray-700 dark:text-foreground pt-3 border-t border-gray-200 dark:border-border">
+          <div className="flex items-center gap-3 text-gray-700 dark:text-foreground pt-3 border-t border-border">
             <Mail className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
             <div className="flex-1">
-              <div className="text-sm text-gray-500 dark:text-muted-foreground">Contact email</div>
+              <div className="text-sm text-muted-foreground">Contact email</div>
               {publicContactEmail ? (
                 <a
                   href={`mailto:${publicContactEmail}`}
@@ -217,7 +215,7 @@ export default function ProfileOverviewTab({
           <div className="flex items-center gap-3 text-gray-700 dark:text-foreground">
             <Phone className="w-5 h-5 text-gray-400 dark:text-muted-foreground" />
             <div className="flex-1">
-              <div className="text-sm text-gray-500 dark:text-muted-foreground">Phone</div>
+              <div className="text-sm text-muted-foreground">Phone</div>
               {profile.phone ? (
                 <a
                   href={`tel:${profile.phone}`}
@@ -245,7 +243,7 @@ export default function ProfileOverviewTab({
 
           {/* Joined Date (contextual meta) */}
           {profile.created_at && (
-            <div className="flex items-center gap-3 text-gray-500 dark:text-muted-foreground text-sm pt-3 border-t border-gray-200 dark:border-border">
+            <div className="flex items-center gap-3 text-muted-foreground text-sm pt-3 border-t border-border">
               <Calendar className="w-4 h-4" />
               <span>
                 Joined{' '}

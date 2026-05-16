@@ -59,7 +59,7 @@ export function SocialLinksDisplay({
               href={normalizedUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 border border-gray-200 dark:border-border rounded-lg transition-colors text-sm text-gray-700 dark:text-foreground hover:text-orange-600 dark:hover:text-foreground"
+              className="inline-flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 border border-border rounded-lg transition-colors text-sm text-gray-700 dark:text-foreground hover:text-orange-600 dark:hover:text-foreground"
             >
               <Icon className="w-4 h-4 flex-shrink-0" />
               <span className="font-medium">{displayLabel}</span>

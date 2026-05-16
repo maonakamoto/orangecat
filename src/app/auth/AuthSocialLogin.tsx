@@ -23,7 +23,7 @@ export function AuthSocialLogin({
   if (mode === 'forgot') {
     return (
       <div className="mt-6 text-center">
-        <p className="text-gray-600 dark:text-muted-foreground text-sm">Remember your password?</p>
+        <p className="text-muted-foreground text-sm">Remember your password?</p>
         <button
           onClick={() => setMode('login')}
           disabled={loading}
@@ -40,10 +40,10 @@ export function AuthSocialLogin({
       <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200 dark:border-border" />
+            <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-gray-50 dark:bg-background px-3 text-gray-500 dark:text-muted-foreground">
+            <span className="bg-gray-50 dark:bg-background px-3 text-muted-foreground">
               or continue with
             </span>
           </div>
@@ -70,12 +70,10 @@ export function AuthSocialLogin({
       <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200 dark:border-border" />
+            <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-gray-50 dark:bg-background px-3 text-gray-500 dark:text-muted-foreground">
-              or
-            </span>
+            <span className="bg-gray-50 dark:bg-background px-3 text-muted-foreground">or</span>
           </div>
         </div>
         <div className="mt-4 text-center">
@@ -84,7 +82,7 @@ export function AuthSocialLogin({
             variant="ghost"
             disabled={loading}
             onClick={onAnonymousSignIn}
-            className="w-full h-11 text-gray-600 dark:text-muted-foreground hover:text-gray-800 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted border border-gray-200 dark:border-border font-medium"
+            className="w-full h-11 text-muted-foreground hover:text-gray-800 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted border border-border font-medium"
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-2">
@@ -102,7 +100,7 @@ export function AuthSocialLogin({
       </div>
 
       <div className="mt-6 text-center">
-        <p className="text-gray-600 dark:text-muted-foreground text-sm">
+        <p className="text-muted-foreground text-sm">
           {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}
         </p>
         <button

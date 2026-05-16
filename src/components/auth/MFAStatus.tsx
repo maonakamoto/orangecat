@@ -69,17 +69,11 @@ export function MFAStatus({
           <div
             className={`p-2 rounded-full ${hasMFA ? 'bg-green-100' : 'bg-gray-100 dark:bg-muted'}`}
           >
-            <Shield
-              className={`h-5 w-5 ${hasMFA ? 'text-green-600' : 'text-gray-500 dark:text-muted-foreground'}`}
-            />
+            <Shield className={`h-5 w-5 ${hasMFA ? 'text-green-600' : 'text-muted-foreground'}`} />
           </div>
           <div>
-            <p className="font-medium text-gray-900 dark:text-foreground">
-              Two-Factor Authentication
-            </p>
-            <p className="text-sm text-gray-600 dark:text-muted-foreground">
-              {hasMFA ? 'Enabled' : 'Not enabled'}
-            </p>
+            <p className="font-medium text-foreground">Two-Factor Authentication</p>
+            <p className="text-sm text-muted-foreground">{hasMFA ? 'Enabled' : 'Not enabled'}</p>
           </div>
         </div>
         {hasMFA ? (
@@ -107,7 +101,7 @@ export function MFAStatus({
       )}
 
       {hasMFA && (
-        <p className="text-xs text-gray-500 dark:text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           Added on {formatDate(factors[0].created_at)}
         </p>
       )}

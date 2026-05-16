@@ -64,7 +64,7 @@ export function DeletePostDialog({
       />
 
       {/* Dialog */}
-      <div className="relative w-full max-w-sm bg-white dark:bg-card rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
+      <div className="relative w-full max-w-sm bg-card rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
         <div className="p-6">
           {/* Icon */}
           <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -72,12 +72,10 @@ export function DeletePostDialog({
           </div>
 
           {/* Title */}
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground text-center mb-2">
-            Delete post?
-          </h2>
+          <h2 className="text-lg font-semibold text-foreground text-center mb-2">Delete post?</h2>
 
           {/* Description */}
-          <p className="text-gray-600 dark:text-muted-foreground text-center text-sm mb-2">
+          <p className="text-muted-foreground text-center text-sm mb-2">
             This can&apos;t be undone and it will be removed from your profile, the timeline, and
             search results.
           </p>

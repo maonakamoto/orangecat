@@ -125,9 +125,7 @@ export default function DiscoverPage() {
           <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-20">
               <div className="bg-white/70 dark:bg-card/70 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-border/60 p-5">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4">
-                  Filters
-                </h3>
+                <h3 className="text-lg font-semibold text-foreground mb-4">Filters</h3>
                 <DiscoverFilters variant="desktop" {...filterProps} />
               </div>
             </div>

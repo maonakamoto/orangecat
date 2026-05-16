@@ -120,7 +120,7 @@ export function MessageContextMenu({
       <div
         ref={menuRef}
         className={cn(
-          'fixed z-50 bg-white dark:bg-card rounded-lg shadow-xl border border-gray-200 dark:border-border',
+          'fixed z-50 bg-card rounded-lg shadow-xl border border-border',
           'min-w-40 py-1',
           'animate-in fade-in-0 zoom-in-95 duration-150'
         )}
@@ -145,7 +145,7 @@ export function MessageContextMenu({
             )}
             role="menuitem"
           >
-            <Edit className="w-4 h-4 text-gray-500 dark:text-muted-foreground" />
+            <Edit className="w-4 h-4 text-muted-foreground" />
             <span>Edit</span>
           </button>
         )}
@@ -177,7 +177,7 @@ export function MessageContextMenu({
               onClose();
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-center text-sm text-gray-500 dark:text-muted-foreground',
+              'w-full px-4 py-2.5 text-center text-sm text-muted-foreground',
               'hover:bg-gray-50 dark:hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
               'flex items-center justify-center gap-2 transition-colors'
             )}

@@ -79,7 +79,7 @@ export function AIRevenuePanel() {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-gray-50 dark:bg-muted rounded-lg p-3">
-            <div className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground text-sm">
+            <div className="flex items-center gap-2 text-muted-foreground text-sm">
               <Users className="h-4 w-4" />
               Conversations
             </div>
@@ -88,7 +88,7 @@ export function AIRevenuePanel() {
             </div>
           </div>
           <div className="bg-gray-50 dark:bg-muted rounded-lg p-3">
-            <div className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground text-sm">
+            <div className="flex items-center gap-2 text-muted-foreground text-sm">
               <MessageSquare className="h-4 w-4" />
               Messages
             </div>
@@ -136,7 +136,7 @@ export function AIRevenuePanel() {
                     </div>
                     <div className="min-w-0">
                       <div className="font-medium truncate">{assistant.name}</div>
-                      <div className="text-xs text-gray-500 dark:text-muted-foreground">
+                      <div className="text-xs text-muted-foreground">
                         {assistant.total_conversations} chats, {assistant.total_messages} msgs
                       </div>
                     </div>
@@ -153,7 +153,7 @@ export function AIRevenuePanel() {
         )}
 
         {assistants.length === 0 && (
-          <div className="text-center py-4 text-gray-500 dark:text-muted-foreground text-base">
+          <div className="text-center py-4 text-muted-foreground text-base">
             No AI assistants yet. Create one to start earning!
           </div>
         )}

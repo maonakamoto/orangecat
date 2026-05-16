@@ -22,18 +22,18 @@ export function WalletsHelpSection({ isDesktop }: WalletsHelpSectionProps) {
       open={isDesktop}
     >
       <summary className="p-4 lg:p-6 flex items-start gap-3 cursor-pointer list-none">
-        <AlertCircle className="w-5 h-5 text-gray-600 dark:text-muted-foreground mt-0.5 flex-shrink-0" />
+        <AlertCircle className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
         <div className="flex-1">
-          <p className="font-medium text-sm lg:text-base text-gray-900 dark:text-foreground mb-0 lg:mb-2">
+          <p className="font-medium text-sm lg:text-base text-foreground mb-0 lg:mb-2">
             Quick tips
           </p>
           {/* Mobile: Show only key point, Desktop: Show all */}
-          <p className="lg:hidden text-xs text-gray-600 dark:text-muted-foreground mt-1">
+          <p className="lg:hidden text-xs text-muted-foreground mt-1">
             Use xpub/ypub/zpub for best tracking • Never paste seed phrase
           </p>
         </div>
         <svg
-          className="w-5 h-5 text-gray-600 dark:text-muted-foreground flex-shrink-0 lg:hidden transition-transform"
+          className="w-5 h-5 text-muted-foreground flex-shrink-0 lg:hidden transition-transform"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -41,7 +41,7 @@ export function WalletsHelpSection({ isDesktop }: WalletsHelpSectionProps) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </summary>
-      <div className="px-4 pb-4 lg:px-6 lg:pb-6 pt-0 border-t border-gray-200 dark:border-border">
+      <div className="px-4 pb-4 lg:px-6 lg:pb-6 pt-0 border-t border-border">
         <div className="text-sm text-gray-700 dark:text-muted-foreground">
           <ul className="list-disc list-inside space-y-1.5">
             <li>
@@ -56,7 +56,7 @@ export function WalletsHelpSection({ isDesktop }: WalletsHelpSectionProps) {
             <summary className="cursor-pointer text-orange-600 hover:text-orange-700 text-xs font-medium">
               Why use extended public keys?
             </summary>
-            <p className="mt-2 text-xs text-gray-600 dark:text-muted-foreground pl-4">
+            <p className="mt-2 text-xs text-muted-foreground pl-4">
               Bitcoin wallets generate new addresses after each transaction for privacy. With an
               extended public key (xpub/ypub/zpub), we can automatically track all these addresses
               and show your complete balance and transaction history. A single address only shows

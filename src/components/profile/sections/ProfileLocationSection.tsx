@@ -89,7 +89,7 @@ export function ProfileLocationSection({
                 placeholder="Type your city or address..."
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
+            <FormDescription className="text-xs text-muted-foreground">
               Choose how this appears below: show real city, hide it, or use a custom group like
               &quot;Moon&quot; or &quot;Hell&quot;.
             </FormDescription>
@@ -99,7 +99,7 @@ export function ProfileLocationSection({
       />
 
       {/* Location visibility/group controls */}
-      <div className="mt-2 rounded-lg border border-gray-200 dark:border-border bg-gray-50 dark:bg-muted p-3">
+      <div className="mt-2 rounded-lg border border-border bg-gray-50 dark:bg-muted p-3">
         <div className="text-xs font-medium text-gray-700 dark:text-foreground mb-2">
           Location visibility
         </div>
@@ -143,7 +143,7 @@ export function ProfileLocationSection({
               onChange={e => setLocationGroupLabel(e.target.value)}
               className="max-w-sm"
             />
-            <span className="text-xs text-gray-500 dark:text-muted-foreground">
+            <span className="text-xs text-muted-foreground">
               People with the same label see each other.
             </span>
           </div>

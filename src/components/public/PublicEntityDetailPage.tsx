@@ -140,7 +140,7 @@ export default async function PublicEntityDetailPage({
     <>
       <JsonLdScript data={jsonLd} />
       <div className={`min-h-screen bg-gradient-to-br ${gradient}`}>
-        <div className="bg-white dark:bg-card border-b border-gray-200 dark:border-border">
+        <div className="bg-card border-b border-border">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
               items={[
@@ -157,9 +157,7 @@ export default async function PublicEntityDetailPage({
                   <Icon className={`w-8 h-8 ${theme.icon}`} />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-foreground">
-                    {entity.title}
-                  </h1>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{entity.title}</h1>
                   <div className="flex items-center gap-3 mt-2">
                     <Badge variant="default" className="capitalize">
                       {entity.status}

@@ -23,12 +23,12 @@ export default function BitcoinWalletGuidePage() {
   return (
     <div className={cn(GRADIENTS.pageBgOrange, 'min-h-screen')}>
       {/* Header */}
-      <div className="bg-white dark:bg-card border-b border-orange-100 dark:border-border">
+      <div className="bg-card border-b border-orange-100 dark:border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link
               href="/"
-              className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors"
+              className="flex items-center gap-2 text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               Back to OrangeCat
@@ -48,10 +48,10 @@ export default function BitcoinWalletGuidePage() {
           <div className="inline-flex items-center gap-3 p-4 rounded-2xl mb-6 bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20">
             <Bitcoin className="w-12 h-12" />
             <div className="text-left">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-foreground">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
                 Get Your Bitcoin Wallet
               </h1>
-              <p className="text-lg text-gray-600 dark:text-muted-foreground mt-2">
+              <p className="text-lg text-muted-foreground mt-2">
                 Start receiving Bitcoin funding on OrangeCat
               </p>
             </div>
@@ -77,9 +77,7 @@ export default function BitcoinWalletGuidePage() {
         {/* Wallet picker + detail */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-6">
-              Choose Your Wallet
-            </h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-6">Choose Your Wallet</h2>
             <div className="space-y-4">
               {walletOptions.map(wallet => (
                 <WalletCard

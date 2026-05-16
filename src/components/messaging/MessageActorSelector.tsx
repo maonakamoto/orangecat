@@ -30,7 +30,7 @@ export function MessageActorSelector({
   onSelectActor,
 }: MessageActorSelectorProps) {
   return (
-    <div className="mb-2 flex items-center gap-2 text-xs text-gray-500 dark:text-muted-foreground">
+    <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
       <span>Sending as:</span>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -74,14 +74,14 @@ export function MessageActorSelector({
               </Avatar>
               <div className="flex-1">
                 <p className="text-sm font-medium">{personalActor.name}</p>
-                <p className="text-xs text-gray-500 dark:text-muted-foreground">Personal account</p>
+                <p className="text-xs text-muted-foreground">Personal account</p>
               </div>
             </DropdownMenuItem>
           )}
           {groupActors.length > 0 && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuLabel className="text-xs text-gray-500 dark:text-muted-foreground">
+              <DropdownMenuLabel className="text-xs text-muted-foreground">
                 Organizations
               </DropdownMenuLabel>
               {groupActors.map(actor => (
@@ -101,7 +101,7 @@ export function MessageActorSelector({
                   </Avatar>
                   <div className="flex-1">
                     <p className="text-sm font-medium">{actor.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-muted-foreground">Organization</p>
+                    <p className="text-xs text-muted-foreground">Organization</p>
                   </div>
                 </DropdownMenuItem>
               ))}

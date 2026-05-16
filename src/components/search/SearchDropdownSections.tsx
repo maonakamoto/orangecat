@@ -120,7 +120,7 @@ export function SearchHistorySection({
         </h4>
         <button
           onClick={onClear}
-          className="text-xs text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+          className="text-xs text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
         >
           Clear
         </button>
@@ -245,9 +245,7 @@ export function SuggestionsSection({
         </div>
       ) : (
         !loading && (
-          <div className="text-sm text-gray-500 dark:text-muted-foreground px-3 py-2">
-            No suggestions found
-          </div>
+          <div className="text-sm text-muted-foreground px-3 py-2">No suggestions found</div>
         )
       )}
 
@@ -279,7 +277,7 @@ export function EmptyState() {
   return (
     <div className="p-6 text-center">
       <Search className="w-8 h-8 text-gray-300 dark:text-muted-foreground/40 mx-auto mb-2" />
-      <p className="text-sm text-gray-500 dark:text-muted-foreground">Start typing to search</p>
+      <p className="text-sm text-muted-foreground">Start typing to search</p>
       <p className="text-xs text-gray-400 dark:text-muted-foreground/70 mt-1">
         Find projects, people, and organizations
       </p>

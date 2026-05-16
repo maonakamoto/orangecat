@@ -111,7 +111,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
         )}
       >
         {isUser ? (
-          <User className="h-4 w-4 text-gray-600 dark:text-muted-foreground" />
+          <User className="h-4 w-4 text-muted-foreground" />
         ) : (
           <Cat className="h-4 w-4 text-white" />
         )}
@@ -124,7 +124,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
             'inline-block rounded-2xl px-4 py-2.5 max-w-full',
             isUser
               ? 'bg-tiffany-500 text-white rounded-tr-sm'
-              : 'bg-gray-100 dark:bg-muted text-gray-900 dark:text-foreground rounded-tl-sm'
+              : 'bg-gray-100 dark:bg-muted text-foreground rounded-tl-sm'
           )}
         >
           <div

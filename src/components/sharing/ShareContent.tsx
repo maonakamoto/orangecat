@@ -22,7 +22,7 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'X',
     icon: XIcon,
-    color: 'text-gray-900 dark:text-foreground',
+    color: 'text-foreground',
     bgColor: 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const text = `${shareTitle}\n\n${shareDescription}\n\n#Bitcoin #OrangeCat`;
@@ -74,7 +74,7 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'Email',
     icon: Mail,
-    color: 'text-gray-600 dark:text-muted-foreground',
+    color: 'text-muted-foreground',
     bgColor: 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const subject = encodeURIComponent(`Check out ${shareTitle}`);
@@ -167,7 +167,7 @@ export default function ShareContent({
   // Modern share UI - Modal on mobile, dropdown on desktop
   const shareContent = (
     <div
-      className={`bg-white dark:bg-card rounded-2xl shadow-2xl border border-gray-200/50 dark:border-border/50 backdrop-blur-xl p-5 sm:p-6 w-full max-w-md mx-auto ${className}`}
+      className={`bg-card rounded-2xl shadow-2xl border border-gray-200/50 dark:border-border/50 backdrop-blur-xl p-5 sm:p-6 w-full max-w-md mx-auto ${className}`}
       style={{
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       }}
@@ -175,7 +175,7 @@ export default function ShareContent({
     >
       {showTitle && (
         <div className="flex items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-gray-100 dark:border-border">
-          <h3 className="font-semibold text-gray-900 dark:text-foreground flex items-center gap-2 text-lg">
+          <h3 className="font-semibold text-foreground flex items-center gap-2 text-lg">
             <div
               className={`w-8 h-8 rounded-full ${GRADIENTS.brandOrange} flex items-center justify-center`}
             >
@@ -236,7 +236,7 @@ export default function ShareContent({
         className={`w-full flex items-center justify-center gap-3 p-4 rounded-xl transition-all touch-manipulation active:scale-95 font-semibold ${
           copySuccess
             ? 'bg-green-50 hover:bg-green-100 text-green-700 border-2 border-green-200'
-            : 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 text-gray-700 dark:text-foreground border-2 border-gray-200 dark:border-border'
+            : 'bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 text-gray-700 dark:text-foreground border-2 border-border'
         }`}
         aria-label="Copy URL to clipboard"
       >

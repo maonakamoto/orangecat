@@ -21,7 +21,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
   return (
     <div
       className={`flex items-center justify-between p-3 rounded-lg ${
-        isCategoryEnabled ? 'bg-white dark:bg-card' : 'bg-gray-100 dark:bg-muted opacity-60'
+        isCategoryEnabled ? 'bg-card' : 'bg-gray-100 dark:bg-muted opacity-60'
       }`}
     >
       <div className="flex items-center gap-3 flex-1">
@@ -37,9 +37,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
         </Tooltip>
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-medium text-gray-900 dark:text-foreground text-sm">
-              {action.name}
-            </span>
+            <span className="font-medium text-foreground text-sm">{action.name}</span>
             {action.requiresConfirmation && (
               <Badge variant="outline" className="text-xs">
                 <Zap className="h-3 w-3 mr-1" />
@@ -47,7 +45,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
               </Badge>
             )}
           </div>
-          <p className="text-sm text-gray-500 dark:text-muted-foreground">{action.description}</p>
+          <p className="text-sm text-muted-foreground">{action.description}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -102,7 +100,7 @@ export function CategoryRow({
   onToggleAction,
 }: CategoryRowProps) {
   return (
-    <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
+    <div className="bg-card rounded-xl border border-border overflow-hidden">
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center gap-3 flex-1">
           <button
@@ -117,12 +115,12 @@ export function CategoryRow({
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-gray-900 dark:text-foreground">{cat.name}</h3>
+              <h3 className="font-semibold text-foreground">{cat.name}</h3>
               <Badge variant="secondary" className="text-xs">
                 {cat.enabledActionCount}/{cat.actionCount}
               </Badge>
             </div>
-            <p className="text-base text-gray-500 dark:text-muted-foreground">{cat.description}</p>
+            <p className="text-base text-muted-foreground">{cat.description}</p>
           </div>
         </div>
         <Switch

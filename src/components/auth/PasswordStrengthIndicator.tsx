@@ -114,7 +114,7 @@ export function PasswordStrengthIndicator({
   if (!password) {
     return (
       <div className={cn('mt-2 space-y-2', className)}>
-        <p className="text-xs text-gray-500 dark:text-muted-foreground">Password must contain:</p>
+        <p className="text-xs text-muted-foreground">Password must contain:</p>
         <ul className="space-y-1">
           {PASSWORD_REQUIREMENTS.map(req => (
             <li
@@ -156,7 +156,7 @@ export function PasswordStrengthIndicator({
               key={req.id}
               className={cn(
                 'flex items-center gap-2 text-xs transition-colors duration-200',
-                isMet ? 'text-green-600' : 'text-gray-500 dark:text-muted-foreground'
+                isMet ? 'text-green-600' : 'text-muted-foreground'
               )}
             >
               {isMet ? (

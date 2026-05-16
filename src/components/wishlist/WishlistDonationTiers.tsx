@@ -91,9 +91,7 @@ export function WishlistDonationTiers({
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <Gift className="h-5 w-5 text-rose-500" />
-        <h4 className="font-semibold text-gray-900 dark:text-foreground">
-          Support a specific goal:
-        </h4>
+        <h4 className="font-semibold text-foreground">Support a specific goal:</h4>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -106,17 +104,15 @@ export function WishlistDonationTiers({
             <button
               key={item.id}
               onClick={() => handleTierClick(item)}
-              className="flex flex-col items-start p-4 border-2 border-gray-200 dark:border-border rounded-xl hover:border-orange-500 hover:bg-orange-50 transition-all text-left group"
+              className="flex flex-col items-start p-4 border-2 border-border rounded-xl hover:border-orange-500 hover:bg-orange-50 transition-all text-left group"
             >
-              <span className="text-sm font-bold text-gray-900 dark:text-foreground group-hover:text-orange-700">
+              <span className="text-sm font-bold text-foreground group-hover:text-orange-700">
                 {formattedAmount}
               </span>
               <span className="text-xs text-gray-400 dark:text-muted-foreground mt-0.5">
                 ≈ {satsDisplay}
               </span>
-              <span className="text-xs text-gray-600 dark:text-muted-foreground mt-1 line-clamp-1">
-                {item.title}
-              </span>
+              <span className="text-xs text-muted-foreground mt-1 line-clamp-1">{item.title}</span>
               <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-1 mt-3">
                 <div
                   className="bg-orange-500 h-1 rounded-full"

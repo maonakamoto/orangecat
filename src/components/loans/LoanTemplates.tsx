@@ -119,11 +119,9 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Banknote className="w-5 h-5 text-orange-600" />
-          <p className="text-sm font-semibold text-gray-900 dark:text-foreground">Loan examples</p>
+          <p className="text-sm font-semibold text-foreground">Loan examples</p>
         </div>
-        <p className="text-xs text-gray-500 dark:text-muted-foreground">
-          Click to prefill the form
-        </p>
+        <p className="text-xs text-muted-foreground">Click to prefill the form</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {templates.map(t => (
@@ -144,9 +142,7 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
               </div>
             </CardHeader>
             <CardContent className="pt-0">
-              <p className="text-xs text-gray-600 dark:text-muted-foreground line-clamp-3">
-                {t.data.description}
-              </p>
+              <p className="text-xs text-muted-foreground line-clamp-3">{t.data.description}</p>
               <div className="mt-2 text-xs text-gray-700 dark:text-foreground space-y-1">
                 <div>
                   <span className="font-semibold">Amount:</span> {t.data.original_amount}{' '}

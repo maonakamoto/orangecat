@@ -34,7 +34,7 @@ export function FAQSection() {
       transition={{ delay: 0.3 }}
       className="mt-16"
     >
-      <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-8 text-center">
+      <h2 className="text-2xl font-semibold text-foreground mb-8 text-center">
         Frequently Asked Questions
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
@@ -44,7 +44,7 @@ export function FAQSection() {
               <CardTitle className="text-lg">{question}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 dark:text-muted-foreground text-sm">{answer}</p>
+              <p className="text-muted-foreground text-sm">{answer}</p>
             </CardContent>
           </Card>
         ))}

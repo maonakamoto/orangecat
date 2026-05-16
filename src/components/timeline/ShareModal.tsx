@@ -47,7 +47,7 @@ export function ShareModal({
             }
           }}
           rows={4}
-          className="w-full border border-gray-200 dark:border-border rounded-md p-3 text-sm bg-white dark:bg-muted text-gray-900 dark:text-foreground placeholder:text-gray-500 dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="w-full border border-border rounded-md p-3 text-sm bg-white dark:bg-muted text-foreground placeholder:text-gray-500 dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
           maxLength={500}
           placeholder="Add context to your share..."
         />

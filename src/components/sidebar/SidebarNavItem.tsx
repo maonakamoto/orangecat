@@ -55,7 +55,7 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
     isActive
       ? `${SIDEBAR_COLORS.ACTIVE_BACKGROUND} ${SIDEBAR_COLORS.ACTIVE_TEXT} shadow-sm border ${SIDEBAR_COLORS.ACTIVE_BORDER}`
       : item.comingSoon
-        ? `text-gray-600 dark:text-muted-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND} hover:text-gray-800 dark:hover:text-foreground`
+        ? `text-muted-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND} hover:text-gray-800 dark:hover:text-foreground`
         : `text-gray-700 dark:text-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND} hover:text-gray-900`,
   ].join(' ');
 
@@ -64,8 +64,8 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
     isActive
       ? 'text-tiffany-600'
       : item.comingSoon
-        ? 'text-gray-500 dark:text-muted-foreground group-hover:text-gray-600 dark:group-hover:text-muted-foreground'
-        : 'text-gray-500 dark:text-muted-foreground group-hover:text-gray-700 dark:group-hover:text-foreground',
+        ? 'text-muted-foreground group-hover:text-gray-600 dark:group-hover:text-muted-foreground'
+        : 'text-muted-foreground group-hover:text-gray-700 dark:group-hover:text-foreground',
   ].join(' ');
 
   return (
@@ -95,7 +95,7 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
               {item.name}
             </span>
             {item.description && (
-              <span className="block text-xs text-gray-500 dark:text-muted-foreground mt-0.5 leading-tight line-clamp-1">
+              <span className="block text-xs text-muted-foreground mt-0.5 leading-tight line-clamp-1">
                 {item.description}
               </span>
             )}
@@ -109,7 +109,7 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
 
         {/* Coming soon badge - mobile only */}
         {item.comingSoon && isExpanded && (
-          <span className="ml-auto text-xs bg-gray-100 dark:bg-muted text-gray-500 dark:text-muted-foreground px-2 py-0.5 rounded-full">
+          <span className="ml-auto text-xs bg-gray-100 dark:bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
             Soon
           </span>
         )}

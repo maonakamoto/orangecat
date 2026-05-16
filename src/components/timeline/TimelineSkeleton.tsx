@@ -11,10 +11,7 @@ export function TimelineSkeleton({ count = 3, compact = false }: TimelineSkeleto
   return (
     <div className="space-y-0">
       {Array.from({ length: count }).map((_, i) => (
-        <div
-          key={i}
-          className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg animate-pulse"
-        >
+        <div key={i} className="bg-card border border-border rounded-lg animate-pulse">
           <div className={`p-4 ${compact ? 'p-3' : 'p-4'}`}>
             <div className="flex items-start space-x-3">
               {/* Avatar skeleton */}

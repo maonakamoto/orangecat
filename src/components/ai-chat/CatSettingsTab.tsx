@@ -57,10 +57,10 @@ export function CatSettingsTab() {
   return (
     <div className="space-y-6">
       {/* AI Model Selection */}
-      <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
         <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
-          <Bot className="h-4 w-4 text-gray-600 dark:text-muted-foreground" />
-          <span className="text-sm font-semibold text-gray-900 dark:text-foreground">AI Model</span>
+          <Bot className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-semibold text-foreground">AI Model</span>
         </div>
         <div className="p-4 space-y-3">
           {MODEL_TIERS.map(tierId => {
@@ -81,16 +81,12 @@ export function CatSettingsTab() {
                   className={`p-2 rounded-lg ${isSelected ? 'bg-gray-200 dark:bg-accent' : 'bg-gray-100 dark:bg-muted'}`}
                 >
                   <Icon
-                    className={`h-4 w-4 ${isSelected ? 'text-gray-700 dark:text-foreground' : 'text-gray-500 dark:text-muted-foreground'}`}
+                    className={`h-4 w-4 ${isSelected ? 'text-gray-700 dark:text-foreground' : 'text-muted-foreground'}`}
                   />
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-gray-900 dark:text-foreground">
-                    {TIER_CONFIG[tierId].label}
-                  </p>
-                  <p className="text-sm text-gray-500 dark:text-muted-foreground">
-                    {TIER_CONFIG[tierId].description}
-                  </p>
+                  <p className="text-sm font-medium text-foreground">{TIER_CONFIG[tierId].label}</p>
+                  <p className="text-sm text-muted-foreground">{TIER_CONFIG[tierId].description}</p>
                 </div>
                 {isSelected && <Check className="h-5 w-5 text-gray-700 dark:text-foreground" />}
               </button>
@@ -100,10 +96,10 @@ export function CatSettingsTab() {
       </div>
 
       {/* API Keys Status */}
-      <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
         <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center gap-2">
           <Key className="h-4 w-4 text-amber-600" />
-          <span className="text-sm font-semibold text-gray-900 dark:text-foreground">API Keys</span>
+          <span className="text-sm font-semibold text-foreground">API Keys</span>
         </div>
         <div className="p-4">
           {hasByok ? (
@@ -140,16 +136,14 @@ export function CatSettingsTab() {
       </div>
 
       {/* Permissions */}
-      <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
         <div className="px-4 py-3 bg-gray-50 dark:bg-muted border-b border-gray-100 dark:border-border flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-gray-600 dark:text-muted-foreground" />
-            <span className="text-sm font-semibold text-gray-900 dark:text-foreground">
-              Permissions
-            </span>
+            <Shield className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-semibold text-foreground">Permissions</span>
           </div>
           {permissions && (
-            <span className="text-xs text-gray-500 dark:text-muted-foreground">
+            <span className="text-xs text-muted-foreground">
               {permissions.summary.enabledActions}/{permissions.summary.totalActions} enabled
             </span>
           )}
@@ -166,12 +160,8 @@ export function CatSettingsTab() {
               return (
                 <div key={cat.category} className="flex items-center justify-between px-4 py-3">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-foreground">
-                      {cat.name}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-muted-foreground truncate">
-                      {cat.description}
-                    </p>
+                    <p className="text-sm font-medium text-foreground">{cat.name}</p>
+                    <p className="text-sm text-muted-foreground truncate">{cat.description}</p>
                   </div>
                   <div className="flex items-center gap-2 ml-3">
                     {isSaving && (
@@ -188,7 +178,7 @@ export function CatSettingsTab() {
             })}
           </div>
         ) : (
-          <div className="p-4 text-center text-sm text-gray-500 dark:text-muted-foreground">
+          <div className="p-4 text-center text-sm text-muted-foreground">
             Failed to load permissions
           </div>
         )}
@@ -204,7 +194,7 @@ export function CatSettingsTab() {
       {/* Link to full settings */}
       <Link
         href={ROUTES.SETTINGS_AI}
-        className="block text-center text-sm text-gray-600 dark:text-muted-foreground hover:text-gray-800 dark:hover:text-foreground py-2"
+        className="block text-center text-sm text-muted-foreground hover:text-gray-800 dark:hover:text-foreground py-2"
       >
         View all AI settings
       </Link>

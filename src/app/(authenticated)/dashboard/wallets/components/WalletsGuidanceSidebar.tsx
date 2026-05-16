@@ -26,12 +26,10 @@ export function WalletsGuidanceSidebar({ focusedField }: WalletsGuidanceSidebarP
     <div className="hidden lg:block lg:col-span-5 lg:order-2">
       <div className="lg:sticky lg:top-8 space-y-6">
         {/* Simple explainer / checklist */}
-        <Card className="p-6 shadow-sm border-gray-200 dark:border-border">
+        <Card className="p-6 shadow-sm border-border">
           <div className="mb-3">
-            <h3 className="text-base font-semibold text-gray-900 dark:text-foreground">
-              How wallet setup works
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1">
+            <h3 className="text-base font-semibold text-foreground">How wallet setup works</h3>
+            <p className="text-sm text-muted-foreground mt-1">
               Create one wallet per funding goal or budget. You can always edit or archive wallets
               later.
             </p>

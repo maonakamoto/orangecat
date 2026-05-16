@@ -27,16 +27,14 @@ export function OnboardingHeader({
   return (
     <>
       {/* Header */}
-      <div className="bg-white dark:bg-card border-b border-tiffany-100 dark:border-border">
+      <div className="bg-card border-b border-tiffany-100 dark:border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               <Bot className="w-8 h-8 text-tiffany-600" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-foreground">
-                  Set Up My AI
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-muted-foreground">
+                <h1 className="text-xl font-bold text-foreground">Set Up My AI</h1>
+                <p className="text-sm text-muted-foreground">
                   Step {currentStep + 1} of {totalSteps}
                 </p>
               </div>
@@ -49,14 +47,14 @@ export function OnboardingHeader({
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-white dark:bg-card border-b border-gray-200 dark:border-border">
+      <div className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-700 dark:text-foreground">
                 {currentStepTitle}
               </span>
-              <span className="text-sm text-gray-500 dark:text-muted-foreground">
+              <span className="text-sm text-muted-foreground">
                 {Math.round(progress)}% Complete
               </span>
             </div>

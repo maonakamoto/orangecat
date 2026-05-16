@@ -116,7 +116,7 @@ export default function ProjectsDashboardPage() {
 
           <TabsContent value="my-projects" className="space-y-6">
             {projectsError ? (
-              <div className="rounded-xl border dark:border-border bg-white dark:bg-card p-6 text-red-600">
+              <div className="rounded-xl border dark:border-border bg-card p-6 text-red-600">
                 {projectsError}
               </div>
             ) : (

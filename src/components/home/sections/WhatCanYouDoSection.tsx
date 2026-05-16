@@ -53,10 +53,10 @@ export default function WhatCanYouDoSection() {
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">For Makers</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 dark:text-foreground mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-foreground mb-3 sm:mb-4">
             {whatCanYouDo.title}
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
             {whatCanYouDo.subtitle}
           </p>
         </motion.div>
@@ -87,10 +87,10 @@ export default function WhatCanYouDoSection() {
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-foreground">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-foreground">
                         {category.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-600 dark:text-muted-foreground">
+                      <p className="text-sm sm:text-base text-muted-foreground">
                         {category.description}
                       </p>
                     </div>
@@ -108,10 +108,10 @@ export default function WhatCanYouDoSection() {
                         className={`w-2 h-2 rounded-full ${category.iconGradient} mt-2 flex-shrink-0`}
                       />
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-gray-900 dark:text-foreground text-sm sm:text-base mb-1">
+                        <h4 className="font-semibold text-foreground text-sm sm:text-base mb-1">
                           {feature.title}
                         </h4>
-                        <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground">
+                        <p className="text-xs sm:text-sm text-muted-foreground">
                           {feature.description}
                         </p>
                       </div>
@@ -131,7 +131,7 @@ export default function WhatCanYouDoSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center"
         >
-          <p className="text-sm sm:text-base text-gray-600 dark:text-muted-foreground mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
             Ready to make something? These features work together seamlessly.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">

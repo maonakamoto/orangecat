@@ -56,7 +56,7 @@ const loanConfig: EntityDetailConfig = {
       entity.interest_rate !== undefined && { annualPercentageRate: entity.interest_rate }),
   }),
   renderHeaderExtra: (entity: EntityData) => (
-    <span className="text-gray-500 dark:text-muted-foreground text-sm">
+    <span className="text-muted-foreground text-sm">
       Listed {formatRelativeTime(entity.created_at)}
     </span>
   ),
@@ -71,15 +71,13 @@ const loanConfig: EntityDetailConfig = {
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500 dark:text-muted-foreground">
-                  Remaining Balance
-                </span>
+                <span className="text-sm text-muted-foreground">Remaining Balance</span>
                 <span className="font-bold text-xl text-tiffany-600">
                   {formatCurrency(entity.remaining_balance, entity.currency ?? 'USD')}
                 </span>
               </div>
               <Progress value={progress} className="h-2" />
-              <div className="flex justify-between text-xs text-gray-500 dark:text-muted-foreground">
+              <div className="flex justify-between text-xs text-muted-foreground">
                 <span>{progress.toFixed(1)}% funded</span>
                 <span>
                   Original: {formatCurrency(entity.original_amount, entity.currency ?? 'USD')}
@@ -90,7 +88,7 @@ const loanConfig: EntityDetailConfig = {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {entity.interest_rate !== null && entity.interest_rate !== undefined && (
                 <div className="p-4 bg-gray-50 dark:bg-muted rounded-lg">
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-muted-foreground text-sm mb-1">
+                  <div className="flex items-center gap-2 text-muted-foreground text-sm mb-1">
                     <Percent className="w-4 h-4" />
                     Interest Rate
                   </div>
@@ -99,7 +97,7 @@ const loanConfig: EntityDetailConfig = {
               )}
               {entity.monthly_payment && (
                 <div className="p-4 bg-gray-50 dark:bg-muted rounded-lg">
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-muted-foreground text-sm mb-1">
+                  <div className="flex items-center gap-2 text-muted-foreground text-sm mb-1">
                     <TrendingUp className="w-4 h-4" />
                     Monthly Payment
                   </div>
@@ -111,7 +109,7 @@ const loanConfig: EntityDetailConfig = {
             </div>
 
             {entity.lender_name && (
-              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-muted-foreground border-t dark:border-border pt-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground border-t dark:border-border pt-4">
                 <User className="w-4 h-4" />
                 <span>Current Lender: {entity.lender_name}</span>
               </div>
@@ -142,25 +140,25 @@ const loanConfig: EntityDetailConfig = {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500 dark:text-muted-foreground">Loan Type</span>
+            <span className="text-muted-foreground">Loan Type</span>
             <Badge variant="secondary" className="capitalize">
               {entity.loan_category_id || 'General'}
             </Badge>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500 dark:text-muted-foreground">Negotiable</span>
+            <span className="text-muted-foreground">Negotiable</span>
             <span className="font-medium">{entity.is_negotiable ? 'Yes' : 'No'}</span>
           </div>
           {entity.minimum_offer_amount && (
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500 dark:text-muted-foreground">Min Offer</span>
+              <span className="text-muted-foreground">Min Offer</span>
               <span className="font-medium">
                 {formatCurrency(entity.minimum_offer_amount, entity.currency ?? 'USD')}
               </span>
             </div>
           )}
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500 dark:text-muted-foreground">Contact Method</span>
+            <span className="text-muted-foreground">Contact Method</span>
             <span className="font-medium capitalize">{entity.contact_method || 'Platform'}</span>
           </div>
         </CardContent>

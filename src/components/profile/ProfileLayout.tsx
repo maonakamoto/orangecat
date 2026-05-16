@@ -190,7 +190,7 @@ export default function ProfileLayout({
 
         <div className="mt-12 sm:mt-16 md:mt-20">
           <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl border-0 p-4 sm:p-6 mb-4 sm:mb-6">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-foreground mb-1 sm:mb-2">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-1 sm:mb-2">
               {profile.name || profile.username || 'User'}
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-orange-600 font-medium mb-3 sm:mb-4">

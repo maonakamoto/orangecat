@@ -28,15 +28,15 @@ export function WalletsErrorState({ error, onRetry }: WalletsErrorStateProps) {
   return (
     <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-        <Card className="border-red-200 bg-white dark:bg-card">
+        <Card className="border-red-200 bg-card">
           <div className="p-6">
             <div className="flex items-start gap-3 mb-4">
               <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+                <h2 className="text-lg font-semibold text-foreground mb-2">
                   Failed to Load Wallets
                 </h2>
-                <p className="text-sm text-gray-600 dark:text-muted-foreground mb-4">{error}</p>
+                <p className="text-sm text-muted-foreground mb-4">{error}</p>
                 <div className="flex gap-3">
                   <Button
                     onClick={() => {

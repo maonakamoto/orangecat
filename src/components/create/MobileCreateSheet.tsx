@@ -36,7 +36,7 @@ export function MobileCreateSheet({ isOpen, onClose, onSelect }: MobileCreateShe
 
       {/* Sheet */}
       <div
-        className="absolute bottom-0 left-0 right-0 bg-white dark:bg-card rounded-t-2xl p-4 pb-8 animate-in slide-in-from-bottom duration-300 max-h-[85vh] overflow-y-auto"
+        className="absolute bottom-0 left-0 right-0 bg-card rounded-t-2xl p-4 pb-8 animate-in slide-in-from-bottom duration-300 max-h-[85vh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
         style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
       >
@@ -44,9 +44,7 @@ export function MobileCreateSheet({ isOpen, onClose, onSelect }: MobileCreateShe
         <div className="w-12 h-1 bg-gray-300 dark:bg-muted rounded-full mx-auto mb-4" />
 
         {/* Header */}
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4 px-2">
-          Create New
-        </h3>
+        <h3 className="text-lg font-semibold text-foreground mb-4 px-2">Create New</h3>
 
         {/* Options Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -60,9 +58,7 @@ export function MobileCreateSheet({ isOpen, onClose, onSelect }: MobileCreateShe
               <div className={cn('p-2.5 rounded-xl', option.bgColor)}>
                 <option.icon className={cn('w-5 h-5', option.color)} />
               </div>
-              <span className="text-xs font-medium text-gray-900 dark:text-foreground text-center">
-                {option.name}
-              </span>
+              <span className="text-xs font-medium text-foreground text-center">{option.name}</span>
             </Link>
           ))}
         </div>

@@ -56,7 +56,7 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     test('should apply secondary variant styling', () => {
       render(<Button variant="secondary">Secondary</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('bg-gray-100', 'text-gray-900', 'hover:bg-gray-200');
+      expect(button).toHaveClass('bg-gray-100', 'text-foreground', 'hover:bg-gray-200');
     });
 
     test('should apply ghost variant styling', () => {

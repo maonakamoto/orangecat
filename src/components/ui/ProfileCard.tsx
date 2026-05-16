@@ -48,21 +48,17 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-                <h3 className="font-semibold text-gray-900 dark:text-foreground hover:text-tiffany-600 transition-colors truncate">
+                <h3 className="font-semibold text-foreground hover:text-tiffany-600 transition-colors truncate">
                   {displayName}
                 </h3>
               </Link>
               <TypeBadge />
             </div>
             {profile.username && (
-              <p className="text-sm text-gray-600 dark:text-muted-foreground truncate">
-                @{profile.username}
-              </p>
+              <p className="text-sm text-muted-foreground truncate">@{profile.username}</p>
             )}
             {profile.bio && (
-              <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1 line-clamp-2">
-                {profile.bio}
-              </p>
+              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{profile.bio}</p>
             )}
           </div>
 
@@ -97,7 +93,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
 
         <div className="flex items-center justify-center gap-2 mb-2">
           <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-            <h3 className="font-semibold text-gray-900 dark:text-foreground hover:text-tiffany-600 transition-colors">
+            <h3 className="font-semibold text-foreground hover:text-tiffany-600 transition-colors">
               {displayName}
             </h3>
           </Link>
@@ -105,15 +101,11 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
         </div>
 
         {profile.username && (
-          <p className="text-sm text-gray-600 dark:text-muted-foreground mb-3">
-            @{profile.username}
-          </p>
+          <p className="text-sm text-muted-foreground mb-3">@{profile.username}</p>
         )}
 
         {profile.bio && (
-          <p className="text-sm text-gray-600 dark:text-muted-foreground mb-4 line-clamp-3">
-            {profile.bio}
-          </p>
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{profile.bio}</p>
         )}
 
         <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>

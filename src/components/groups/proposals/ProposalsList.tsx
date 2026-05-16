@@ -114,7 +114,7 @@ export function ProposalsList({
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold">Proposals</h3>
-          <p className="text-sm text-gray-500 dark:text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {proposals.length} proposal{proposals.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -150,7 +150,7 @@ export function ProposalsList({
         <Card>
           <CardContent className="py-12 text-center">
             <FileText className="h-12 w-12 text-gray-400 dark:text-muted-foreground mx-auto mb-4" />
-            <p className="text-gray-500 dark:text-muted-foreground mb-2">No proposals found</p>
+            <p className="text-muted-foreground mb-2">No proposals found</p>
             <p className="text-sm text-gray-400 dark:text-muted-foreground">
               {statusFilter !== 'all'
                 ? `No ${statusFilter} proposals`

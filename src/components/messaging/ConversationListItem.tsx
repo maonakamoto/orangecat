@@ -107,7 +107,7 @@ function getConversationAvatar(
 
   return (
     <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-muted flex items-center justify-center">
-      <MessageSquare className="w-5 h-5 text-gray-600 dark:text-muted-foreground" />
+      <MessageSquare className="w-5 h-5 text-muted-foreground" />
     </div>
   );
 }
@@ -151,7 +151,7 @@ export function ConversationListItem({
       onClick={onClick}
       className={cn(
         'p-3 sm:p-4 hover:bg-gray-50 dark:hover:bg-muted/50 cursor-pointer transition-all duration-150 flex items-start gap-3 group',
-        isActiveConversation && 'bg-white dark:bg-card shadow-sm border-l-4 border-tiffany-500',
+        isActiveConversation && 'bg-card shadow-sm border-l-4 border-tiffany-500',
         selectionMode && 'pr-3'
       )}
     >
@@ -171,7 +171,7 @@ export function ConversationListItem({
         <div className="flex items-start gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="font-medium text-gray-900 dark:text-foreground truncate">
+              <h3 className="font-medium text-foreground truncate">
                 {profileHref ? (
                   <Link href={profileHref} className="hover:underline">
                     {displayName}
@@ -186,10 +186,10 @@ export function ConversationListItem({
                 </span>
               )}
             </div>
-            <p className="text-sm text-gray-600 dark:text-muted-foreground truncate">
+            <p className="text-sm text-muted-foreground truncate">
               {conversation.last_message_preview || 'No messages yet'}
             </p>
-            <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-muted-foreground">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>
                 {conversation.last_message_at
                   ? formatRelativeTime(conversation.last_message_at)

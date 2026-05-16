@@ -141,11 +141,11 @@ export function RepostModal({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="max-w-xl p-0">
         <DialogTitle className="sr-only">Repost</DialogTitle>
-        <Card className="w-full bg-white dark:bg-card rounded-2xl shadow-2xl">
+        <Card className="w-full bg-card rounded-2xl shadow-2xl">
           <CardContent className="p-0">
             {/* Header */}
-            <div className="flex items-center px-4 py-3 border-b border-gray-200 dark:border-border">
-              <div className="text-sm font-semibold text-gray-900 dark:text-foreground">Repost</div>
+            <div className="flex items-center px-4 py-3 border-b border-border">
+              <div className="text-sm font-semibold text-foreground">Repost</div>
             </div>
 
             {/* Quote-first layout like X */}
@@ -171,7 +171,7 @@ export function RepostModal({
                     }
                   }}
                   rows={4}
-                  className="w-full border border-gray-200 dark:border-border rounded-2xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none bg-gray-50 dark:bg-muted placeholder:text-gray-500 dark:placeholder:text-muted-foreground dark:text-foreground"
+                  className="w-full border border-border rounded-2xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none bg-gray-50 dark:bg-muted placeholder:text-gray-500 dark:placeholder:text-muted-foreground dark:text-foreground"
                   placeholder="Add a comment"
                   maxLength={QUOTE_MAX_LENGTH}
                   aria-label="Add your comment before reposting"
@@ -179,12 +179,12 @@ export function RepostModal({
                 />
               </div>
               <div className="flex items-center justify-between text-sm px-1">
-                <div className="flex items-center gap-2 text-gray-500 dark:text-muted-foreground">
+                <div className="flex items-center gap-2 text-muted-foreground">
                   <span
                     className={
                       remainingCharacters <= 20
                         ? 'text-orange-600 font-semibold'
-                        : 'text-gray-500 dark:text-muted-foreground'
+                        : 'text-muted-foreground'
                     }
                   >
                     {remainingCharacters}
@@ -218,7 +218,7 @@ export function RepostModal({
               </div>
 
               {/* Original Post Preview (X-style) */}
-              <div className="border border-gray-200 dark:border-border rounded-2xl bg-gray-50 dark:bg-muted p-3 hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors">
+              <div className="border border-border rounded-2xl bg-gray-50 dark:bg-muted p-3 hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors">
                 <div className="flex items-start gap-3">
                   <AvatarLink
                     username={originalAuthor.username || null}
@@ -236,13 +236,13 @@ export function RepostModal({
                             ? `/profiles/${originalAuthor.username}`
                             : `/profiles/${originalAuthor.id}`
                         }
-                        className="font-semibold text-sm text-gray-900 dark:text-foreground hover:underline"
+                        className="font-semibold text-sm text-foreground hover:underline"
                       >
                         {originalAuthor.name}
                       </Link>
                       {originalAuthor.username && (
                         <>
-                          <span className="text-gray-500 dark:text-muted-foreground text-sm">
+                          <span className="text-muted-foreground text-sm">
                             @{originalAuthor.username}
                           </span>
                           <span className="text-gray-400 dark:text-muted-foreground text-sm">
@@ -250,12 +250,10 @@ export function RepostModal({
                           </span>
                         </>
                       )}
-                      <span className="text-gray-500 dark:text-muted-foreground text-sm">
-                        {timeAgo}
-                      </span>
+                      <span className="text-muted-foreground text-sm">{timeAgo}</span>
                     </div>
                     {originalBody && (
-                      <p className="text-sm text-gray-900 dark:text-foreground whitespace-pre-wrap break-words leading-relaxed">
+                      <p className="text-sm text-foreground whitespace-pre-wrap break-words leading-relaxed">
                         {originalBody}
                       </p>
                     )}

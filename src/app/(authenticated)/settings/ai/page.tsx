@@ -101,21 +101,19 @@ export default function AISettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-background">
       {/* Header */}
-      <div className="bg-white dark:bg-card border-b border-gray-200 dark:border-border">
+      <div className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               <Link
                 href={ROUTES.SETTINGS}
-                className="text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+                className="text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div className="flex items-center gap-2">
                 <Bot className="w-6 h-6 text-tiffany-600" />
-                <h1 className="text-xl font-semibold text-gray-900 dark:text-foreground">
-                  AI Settings
-                </h1>
+                <h1 className="text-xl font-semibold text-foreground">AI Settings</h1>
               </div>
             </div>
             {!hasByok && !preferences?.onboarding_completed && (
@@ -154,9 +152,7 @@ export default function AISettingsPage() {
 
             {/* API Keys */}
             <section>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4">
-                API Keys
-              </h2>
+              <h2 className="text-lg font-semibold text-foreground mb-4">API Keys</h2>
               <AIKeyManager
                 keys={keys}
                 onAdd={addKey}
@@ -169,9 +165,7 @@ export default function AISettingsPage() {
 
             {/* Model Preferences */}
             <section>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4">
-                Model Preferences
-              </h2>
+              <h2 className="text-lg font-semibold text-foreground mb-4">Model Preferences</h2>
               <AIModelPreferences
                 preferences={componentPreferences}
                 onChange={handlePreferencesChange}
@@ -194,9 +188,7 @@ export default function AISettingsPage() {
 
             {/* Credits Pricing */}
             <section>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4">
-                Credits & Pricing
-              </h2>
+              <h2 className="text-lg font-semibold text-foreground mb-4">Credits & Pricing</h2>
               <AICreditsPricing />
             </section>
           </div>

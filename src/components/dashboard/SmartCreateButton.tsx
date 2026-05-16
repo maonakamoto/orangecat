@@ -179,14 +179,12 @@ export function MobileCreateButton() {
         <div className="fixed inset-0 z-50" onClick={() => setIsOpen(false)}>
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
           <div
-            className="absolute bottom-0 left-0 right-0 bg-white dark:bg-card rounded-t-2xl p-4 pb-8 animate-slide-up max-h-[85vh] overflow-y-auto"
+            className="absolute bottom-0 left-0 right-0 bg-card rounded-t-2xl p-4 pb-8 animate-slide-up max-h-[85vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
             style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
           >
             <div className="w-12 h-1 bg-gray-300 dark:bg-muted rounded-full mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4 px-2">
-              Create New
-            </h3>
+            <h3 className="text-lg font-semibold text-foreground mb-4 px-2">Create New</h3>
             <div className="grid grid-cols-3 gap-2">
               {CREATE_OPTIONS.map(option => (
                 <div key={option.name} className="contents">
@@ -198,7 +196,7 @@ export function MobileCreateButton() {
                     <div className={cn('p-2.5 rounded-xl', option.bgColor)}>
                       <option.icon className={cn('w-5 h-5', option.color)} />
                     </div>
-                    <span className="text-xs font-medium text-gray-900 dark:text-foreground text-center">
+                    <span className="text-xs font-medium text-foreground text-center">
                       {option.name}
                     </span>
                   </Link>

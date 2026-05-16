@@ -68,7 +68,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
       </section>
 
       {/* Filters Section */}
-      <section className="bg-white dark:bg-card border-b border-gray-200 dark:border-border sticky top-0 z-10 shadow-sm">
+      <section className="bg-card border-b border-border sticky top-0 z-10 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Search Input */}
@@ -78,13 +78,13 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                 placeholder="Search stories..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-border rounded-lg focus:ring-2 focus:ring-bitcoinOrange focus:border-transparent bg-white dark:bg-muted text-gray-900 dark:text-foreground"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-border rounded-lg focus:ring-2 focus:ring-bitcoinOrange focus:border-transparent bg-white dark:bg-muted text-foreground"
               />
             </div>
 
             {/* Category Filter */}
             <div className="flex items-center gap-2 flex-wrap justify-center">
-              <Filter className="w-5 h-5 text-gray-500 dark:text-muted-foreground hidden sm:block" />
+              <Filter className="w-5 h-5 text-muted-foreground hidden sm:block" />
               {categories.map(category => (
                 <button
                   key={category}
@@ -102,7 +102,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
           </div>
 
           {/* Results Count */}
-          <div className="mt-4 text-sm text-gray-600 dark:text-muted-foreground">
+          <div className="mt-4 text-sm text-muted-foreground">
             Showing {filteredStories.length} {filteredStories.length === 1 ? 'story' : 'stories'}
           </div>
         </div>
@@ -113,7 +113,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredStories.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-gray-600 dark:text-muted-foreground text-lg">
+              <p className="text-muted-foreground text-lg">
                 No stories found matching your criteria.
               </p>
               <Button
@@ -143,53 +143,37 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                     <div className="p-8">
                       {/* Story Header */}
                       <div className="flex items-start gap-4 mb-6">
-                        <div className="w-16 h-16 text-4xl flex items-center justify-center bg-white dark:bg-card rounded-2xl shadow-md">
+                        <div className="w-16 h-16 text-4xl flex items-center justify-center bg-card rounded-2xl shadow-md">
                           {story.emoji}
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-1">
+                          <h3 className="text-2xl font-semibold text-foreground mb-1">
                             {story.name}
                           </h3>
                           <p className="text-gray-700 dark:text-muted-foreground font-medium">
                             {story.role}
                           </p>
-                          <p className="text-gray-600 dark:text-muted-foreground text-sm">
-                            {story.location}
-                          </p>
+                          <p className="text-muted-foreground text-sm">{story.location}</p>
                         </div>
                       </div>
 
                       {/* Funding Details */}
                       <div className="grid grid-cols-2 gap-4 mb-6">
                         <div className="bg-white/70 dark:bg-card/70 rounded-lg p-3">
-                          <p className="text-xs text-gray-600 dark:text-muted-foreground mb-1">
-                            Goal
-                          </p>
-                          <p className="text-lg font-bold text-gray-900 dark:text-foreground">
-                            {story.goal}
-                          </p>
+                          <p className="text-xs text-muted-foreground mb-1">Goal</p>
+                          <p className="text-lg font-bold text-foreground">{story.goal}</p>
                         </div>
                         <div className="bg-white/70 dark:bg-card/70 rounded-lg p-3">
-                          <p className="text-xs text-gray-600 dark:text-muted-foreground mb-1">
-                            Raised
-                          </p>
+                          <p className="text-xs text-muted-foreground mb-1">Raised</p>
                           <p className="text-lg font-bold text-green-600">{story.raised}</p>
                         </div>
                         <div className="bg-white/70 dark:bg-card/70 rounded-lg p-3">
-                          <p className="text-xs text-gray-600 dark:text-muted-foreground mb-1">
-                            Supporters
-                          </p>
-                          <p className="text-lg font-bold text-gray-900 dark:text-foreground">
-                            {story.supporters}
-                          </p>
+                          <p className="text-xs text-muted-foreground mb-1">Supporters</p>
+                          <p className="text-lg font-bold text-foreground">{story.supporters}</p>
                         </div>
                         <div className="bg-white/70 dark:bg-card/70 rounded-lg p-3">
-                          <p className="text-xs text-gray-600 dark:text-muted-foreground mb-1">
-                            Timeline
-                          </p>
-                          <p className="text-lg font-bold text-gray-900 dark:text-foreground">
-                            {story.timeline}
-                          </p>
+                          <p className="text-xs text-muted-foreground mb-1">Timeline</p>
+                          <p className="text-lg font-bold text-foreground">{story.timeline}</p>
                         </div>
                       </div>
 

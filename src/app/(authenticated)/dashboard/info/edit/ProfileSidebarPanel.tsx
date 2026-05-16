@@ -27,12 +27,10 @@ export function ProfileSidebarPanel({
 
   return (
     <div className="lg:sticky lg:top-8 space-y-6">
-      <Card className="p-6 shadow-sm border-gray-200 dark:border-border">
+      <Card className="p-6 shadow-sm border-border">
         <div className="mb-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-semibold text-gray-900 dark:text-foreground">
-              Profile Completion
-            </h3>
+            <h3 className="text-base font-semibold text-foreground">Profile Completion</h3>
             <span className="text-sm font-semibold text-gray-700 bg-gray-100 dark:text-foreground dark:bg-muted px-2.5 py-1 rounded-full">
               {completionPercentage}%
             </span>

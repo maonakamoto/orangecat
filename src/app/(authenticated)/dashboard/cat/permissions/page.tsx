@@ -160,7 +160,7 @@ export default function CatPermissionsPage() {
           <div className="mb-6">
             <Link
               href={ROUTES.DASHBOARD.CAT}
-              className="inline-flex items-center gap-2 text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to My Cat
@@ -170,10 +170,8 @@ export default function CatPermissionsPage() {
                 <Cat className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground">
-                  My Cat Permissions
-                </h1>
-                <p className="text-gray-600 dark:text-muted-foreground">
+                <h1 className="text-2xl font-bold text-foreground">My Cat Permissions</h1>
+                <p className="text-muted-foreground">
                   Control what actions My Cat can perform on your behalf
                 </p>
               </div>

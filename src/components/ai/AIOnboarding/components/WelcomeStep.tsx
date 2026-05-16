@@ -15,9 +15,7 @@ export function WelcomeStep() {
 
       <div>
         <h3 className="text-lg font-semibold mb-2">{aiOnboardingContent.welcome.whyTitle}</h3>
-        <p className="text-gray-600 dark:text-muted-foreground">
-          {aiOnboardingContent.welcome.whyContent}
-        </p>
+        <p className="text-muted-foreground">{aiOnboardingContent.welcome.whyContent}</p>
       </div>
 
       {/* Benefits */}

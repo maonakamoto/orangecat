@@ -77,7 +77,7 @@ export function PostHeader({
       {/* User Info - X-style inline */}
       <Link
         href={`/profiles/${displayAuthor.username}`}
-        className="font-bold text-sm text-gray-900 dark:text-foreground hover:underline"
+        className="font-bold text-sm text-foreground hover:underline"
         onClick={e => e.stopPropagation()}
       >
         {displayAuthor.name}
@@ -85,18 +85,18 @@ export function PostHeader({
 
       <Link
         href={`/profiles/${displayAuthor.username}`}
-        className="text-gray-500 dark:text-muted-foreground text-sm"
+        className="text-muted-foreground text-sm"
         onClick={e => e.stopPropagation()}
       >
         @{displayAuthor.username}
       </Link>
 
-      <span className="text-gray-500 dark:text-muted-foreground">·</span>
+      <span className="text-muted-foreground">·</span>
 
       {/* Timestamp */}
       <time
         dateTime={timestamp}
-        className="text-gray-500 dark:text-muted-foreground text-sm hover:underline"
+        className="text-muted-foreground text-sm hover:underline"
         title={timestamp ? new Date(timestamp).toLocaleString() : undefined}
       >
         {timestamp ? formatRelativeTime(timestamp) : ''}
@@ -143,7 +143,7 @@ export function PostHeader({
           {/* Dropdown Menu */}
           {showMenu && (
             <div
-              className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl shadow-lg z-50"
+              className="absolute right-0 top-full mt-1 w-48 bg-card border border-border rounded-xl shadow-lg z-50"
               role="menu"
             >
               <div className="py-1">

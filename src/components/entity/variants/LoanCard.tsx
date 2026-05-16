@@ -44,10 +44,8 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 dark:text-foreground truncate">
-                {loan.title}
-              </h3>
-              <p className="text-sm text-gray-500 dark:text-muted-foreground truncate">
+              <h3 className="font-semibold text-foreground truncate">{loan.title}</h3>
+              <p className="text-sm text-muted-foreground truncate">
                 {formatAmount(loan.remaining_balance, loan.currency)} remaining
               </p>
             </div>
@@ -60,9 +58,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
                   {loan.interest_rate}%
                 </Badge>
               )}
-              <span className="text-gray-500 dark:text-muted-foreground">
-                {formatRelativeTime(loan.created_at)}
-              </span>
+              <span className="text-muted-foreground">{formatRelativeTime(loan.created_at)}</span>
             </div>
           </div>
         </Card>
@@ -98,9 +94,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
         <CardContent className="space-y-3">
           {/* Description */}
           {loan.description && (
-            <p className="text-sm text-gray-600 dark:text-muted-foreground line-clamp-2">
-              {loan.description}
-            </p>
+            <p className="text-sm text-muted-foreground line-clamp-2">{loan.description}</p>
           )}
 
           {/* Financial Summary */}

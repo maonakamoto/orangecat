@@ -55,10 +55,7 @@ function TimelineLoadingSkeleton() {
   return (
     <div className="space-y-4 animate-pulse">
       {[...Array(3)].map((_, i) => (
-        <div
-          key={i}
-          className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg p-4"
-        >
+        <div key={i} className="bg-card border border-border rounded-lg p-4">
           <div className="flex items-start space-x-3">
             <div className="w-10 h-10 bg-gray-200 dark:bg-muted rounded-full" />
             <div className="flex-1 space-y-2">

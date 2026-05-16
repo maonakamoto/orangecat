@@ -14,10 +14,8 @@ interface Props {
 export function SettingsEmailSection({ email, isSubmitting, onChange, onSubmit }: Props) {
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-4">
-        Email Address
-      </h3>
-      <p className="text-gray-600 dark:text-muted-foreground mb-6">
+      <h3 className="text-lg font-semibold text-foreground mb-4">Email Address</h3>
+      <p className="text-muted-foreground mb-6">
         This is the email address associated with your account. You&apos;ll receive important
         notifications here.
       </p>

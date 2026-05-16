@@ -153,7 +153,7 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
   );
 
   return (
-    <div className="flex flex-col h-[calc(100vh-12rem)] sm:h-[calc(100vh-8rem)] bg-white dark:bg-card rounded-2xl shadow-sm border border-gray-200 dark:border-border overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-12rem)] sm:h-[calc(100vh-8rem)] bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
       {/* Header */}
       <ChatHeader
         selectedModel={selectedModel}

@@ -36,12 +36,12 @@ function FieldError({ message }: { message?: string }) {
 }
 
 const fieldClass = (hasError: boolean) =>
-  `w-full rounded-lg border px-3 py-2 bg-white dark:bg-muted text-gray-900 dark:text-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 ${
+  `w-full rounded-lg border px-3 py-2 bg-white dark:bg-muted text-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 ${
     hasError ? 'border-red-500' : 'border-gray-300 dark:border-border'
   }`;
 
 const selectClass =
-  'w-full rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-gray-900 dark:text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500';
+  'w-full rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500';
 
 export function TaskFormFields({
   formData,
@@ -92,7 +92,7 @@ export function TaskFormFields({
           ))}
         </select>
         {showTaskTypeHint && (
-          <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {formData.task_type === TASK_TYPES.ONE_TIME &&
               'One-time task, marked as completed once done'}
             {formData.task_type === TASK_TYPES.RECURRING_SCHEDULED &&
@@ -117,7 +117,7 @@ export function TaskFormFields({
             className={selectClass}
           />
           {showTaskTypeHint && (
-            <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Describe when this task should be completed
             </p>
           )}
@@ -223,7 +223,7 @@ export function TaskFormFields({
               }
             }}
             placeholder="Add tag..."
-            className="flex-1 rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-gray-900 dark:text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+            className="flex-1 rounded-lg border border-gray-300 dark:border-border bg-white dark:bg-muted text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
           />
           <Button type="button" variant="outline" onClick={onAddTag}>
             Add
@@ -240,7 +240,7 @@ export function TaskFormFields({
                 <button
                   type="button"
                   onClick={() => onRemoveTag(tag)}
-                  className="text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+                  className="text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
                 >
                   &times;
                 </button>
@@ -250,7 +250,7 @@ export function TaskFormFields({
         )}
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-border">
+      <div className="flex justify-end gap-3 pt-4 border-t border-border">
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>

@@ -145,7 +145,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
           {!compact && !fullScreen && (
             <div className="flex items-center gap-3 mb-4">
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-gray-900 dark:text-foreground">
+                <div className="text-sm font-medium text-foreground">
                   {user?.user_metadata?.name ||
                     (typeof user?.email === 'string' && user.email.includes('@')
                       ? user.email.split('@')[0]
@@ -223,7 +223,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
       />
 
       {fullScreen && (
-        <div className="flex items-center gap-4 px-4 pt-4 border-t border-gray-200 dark:border-border mt-4">
+        <div className="flex items-center gap-4 px-4 pt-4 border-t border-border mt-4">
           <button
             className="p-2 min-h-11 min-w-11 flex items-center justify-center text-gray-400 dark:text-muted-foreground cursor-not-allowed rounded-full transition-colors"
             aria-label="Add image (coming soon)"

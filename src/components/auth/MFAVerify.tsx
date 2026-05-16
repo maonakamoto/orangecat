@@ -118,9 +118,7 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
       <Card className="w-full max-w-md mx-auto">
         <CardContent className="flex flex-col items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-tiffany mb-4" />
-          <p className="text-sm text-gray-600 dark:text-muted-foreground">
-            Loading authentication...
-          </p>
+          <p className="text-sm text-muted-foreground">Loading authentication...</p>
         </CardContent>
       </Card>
     );
@@ -176,7 +174,7 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
           </Button>
 
           {/* Help text */}
-          <p className="text-xs text-gray-500 dark:text-muted-foreground text-center">
+          <p className="text-xs text-muted-foreground text-center">
             Open your authenticator app (Google Authenticator, Authy, etc.) and enter the code for
             OrangeCat.
           </p>

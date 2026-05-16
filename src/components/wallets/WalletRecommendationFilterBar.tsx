@@ -95,7 +95,7 @@ export function WalletRecommendationFilterBar({
         {hasActiveFilters && (
           <button
             onClick={onReset}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted transition-all"
           >
             <X className="w-4 h-4" />
             Reset filters
@@ -103,7 +103,7 @@ export function WalletRecommendationFilterBar({
         )}
       </div>
 
-      <p className="text-xs text-gray-500 dark:text-muted-foreground flex items-center gap-1">
+      <p className="text-xs text-muted-foreground flex items-center gap-1">
         <Shield className="w-3 h-3" />
         All wallets shown are non-custodial — you control your keys
       </p>

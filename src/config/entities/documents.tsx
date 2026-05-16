@@ -78,7 +78,7 @@ export const documentEntityConfig: EntityConfig<DocumentListItem> = {
     showEditButton: true,
     editHref: `${ENTITY_REGISTRY['document'].createPath}?edit=${item.id}`,
     metadata: (
-      <div className="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-muted-foreground">
+      <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
         <span>
           {DOCUMENT_TYPE_ICONS[item.document_type] || ''}{' '}
           {DOCUMENT_TYPE_LABELS[item.document_type] || item.document_type}

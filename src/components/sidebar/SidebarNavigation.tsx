@@ -51,13 +51,13 @@ export function SidebarNavigation({
             <div key={section.id} className="space-y-1 overflow-visible">
               {/* Section Divider - Only on desktop for visual separation between icon groups */}
               {!isExpanded && section.id !== sections[0].id && (
-                <div className="mx-2 my-2 border-t border-gray-200 dark:border-border" />
+                <div className="mx-2 my-2 border-t border-border" />
               )}
 
               {/* Section Header - Hidden on desktop (icons only), visible on mobile (expanded) */}
               {isExpanded && (
                 <div className="flex items-center justify-between px-3 mb-1">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-muted-foreground">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     {section.title}
                   </h3>
                   {section.collapsible && (

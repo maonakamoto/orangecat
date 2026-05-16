@@ -27,12 +27,10 @@ export default function ResultsSection({
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {icon && <span className="text-gray-600 dark:text-muted-foreground">{icon}</span>}
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
+          {icon && <span className="text-muted-foreground">{icon}</span>}
+          <h3 className="text-lg font-semibold text-foreground">
             {title}
-            <span className="ml-2 text-base font-normal text-gray-500 dark:text-muted-foreground">
-              ({count})
-            </span>
+            <span className="ml-2 text-base font-normal text-muted-foreground">({count})</span>
           </h3>
         </div>
 

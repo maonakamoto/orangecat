@@ -102,21 +102,19 @@ export default async function WishlistItemDetailPage({ params }: PageProps) {
           className="mb-4"
         />
         <h1 className="text-3xl font-bold mt-2">{item.title}</h1>
-        {item.description && (
-          <p className="text-gray-600 dark:text-muted-foreground mt-2">{item.description}</p>
-        )}
+        {item.description && <p className="text-muted-foreground mt-2">{item.description}</p>}
       </div>
 
       {/* Funding Status */}
-      <div className="bg-white dark:bg-card rounded-lg border border-gray-200 dark:border-border p-6 mb-6">
+      <div className="bg-card rounded-lg border border-border p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">Funding Status</h2>
         <div className="space-y-2">
           <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-muted-foreground">Target:</span>
+            <span className="text-muted-foreground">Target:</span>
             <FormattedAmount sats={item.target_amount_btc} className="font-medium" />
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-muted-foreground">Funded:</span>
+            <span className="text-muted-foreground">Funded:</span>
             <FormattedAmount sats={item.funded_amount_btc} className="font-medium" />
           </div>
           <div className="w-full bg-gray-200 dark:bg-muted rounded-full h-2 mt-4">

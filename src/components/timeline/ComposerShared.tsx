@@ -102,7 +102,7 @@ export function ProjectSelectionPanel({
                 ? variant === 'orange'
                   ? 'bg-tiffany-500 text-white border-tiffany-500 shadow-sm'
                   : 'bg-tiffany-500 text-white border-tiffany-500 shadow-sm'
-                : 'bg-white dark:bg-muted text-gray-600 dark:text-muted-foreground border-gray-200 dark:border-border hover:border-orange-300 hover:bg-orange-50'
+                : 'bg-white dark:bg-muted text-muted-foreground border-border hover:border-orange-300 hover:bg-orange-50'
             )}
           >
             {project.title}
@@ -110,7 +110,7 @@ export function ProjectSelectionPanel({
         ))}
       </div>
       {selectedProjects.length > 0 && (
-        <p className="mt-2 text-xs text-gray-600 dark:text-muted-foreground">
+        <p className="mt-2 text-xs text-muted-foreground">
           This post will appear on {selectedProjects.length} project timeline
           {selectedProjects.length > 1 ? 's' : ''}
         </p>
@@ -270,7 +270,7 @@ export interface ContextIndicatorProps {
 export function ContextIndicator({ targetName }: ContextIndicatorProps) {
   return (
     <div className="mb-1.5 flex items-center">
-      <span className="text-xs sm:text-xs text-gray-500 dark:text-muted-foreground font-medium bg-gray-100 dark:bg-muted px-2 py-1 sm:py-0.5 rounded-full">
+      <span className="text-xs sm:text-xs text-muted-foreground font-medium bg-gray-100 dark:bg-muted px-2 py-1 sm:py-0.5 rounded-full">
         To {targetName}
       </span>
     </div>

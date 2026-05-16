@@ -29,7 +29,7 @@ function getDifficultyColor(difficulty: WalletOption['difficulty']) {
     case 'advanced':
       return 'text-red-600 bg-red-50 border-red-200';
     default:
-      return 'text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted border-gray-200 dark:border-border';
+      return 'text-muted-foreground bg-gray-50 dark:bg-muted border-border';
   }
 }
 
@@ -48,7 +48,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
         className={`cursor-pointer transition-all duration-200 ${
           isSelected
             ? 'ring-2 ring-bitcoinOrange border-bitcoinOrange shadow-lg'
-            : 'hover:shadow-md border-gray-200 dark:border-border'
+            : 'hover:shadow-md border-border'
         } ${wallet.recommended ? 'ring-1 ring-green-200 bg-green-50/30' : ''}`}
         onClick={() => onSelect(wallet.id)}
       >
@@ -59,7 +59,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
                 className={`p-2 rounded-lg ${isSelected ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20' : 'bg-gray-100 dark:bg-muted'}`}
               >
                 <TypeIcon
-                  className={`w-5 h-5 ${isSelected ? 'text-bitcoinOrange' : 'text-gray-600 dark:text-muted-foreground'}`}
+                  className={`w-5 h-5 ${isSelected ? 'text-bitcoinOrange' : 'text-muted-foreground'}`}
                 />
               </div>
               <div>
@@ -97,7 +97,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
               </span>
             ))}
           </div>
-          <div className="text-sm text-gray-600 dark:text-muted-foreground">
+          <div className="text-sm text-muted-foreground">
             <strong>Platforms:</strong> {wallet.supportedPlatforms.join(', ')}
           </div>
         </CardContent>

@@ -142,12 +142,10 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
         </div>
         <div className="flex-1 min-w-0 text-left">
           <div className="flex items-center gap-1.5">
-            <p className="text-sm font-semibold text-gray-900 dark:text-foreground truncate">
-              {displayName}
-            </p>
+            <p className="text-sm font-semibold text-foreground truncate">{displayName}</p>
             <NWCStatusBadge />
           </div>
-          <p className="text-xs text-gray-500 dark:text-muted-foreground truncate">
+          <p className="text-xs text-muted-foreground truncate">
             {isGroupContext ? 'Group' : `@${profile.username || 'user'}`}
           </p>
         </div>
@@ -161,7 +159,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute left-2 right-2 top-full mt-1 bg-white dark:bg-card rounded-lg border border-gray-200 dark:border-border shadow-lg z-50 py-1 max-h-80 overflow-y-auto">
+        <div className="absolute left-2 right-2 top-full mt-1 bg-card rounded-lg border border-border shadow-lg z-50 py-1 max-h-80 overflow-y-auto">
           {/* Individual context option */}
           <button
             onClick={handleSwitchToIndividual}
@@ -174,10 +172,10 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
               <User className="w-4 h-4 text-tiffany-600" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-gray-900 dark:text-foreground truncate">
+              <p className="text-sm font-medium text-foreground truncate">
                 {profile.name || profile.username || 'You'}
               </p>
-              <p className="text-xs text-gray-500 dark:text-muted-foreground">Personal</p>
+              <p className="text-xs text-muted-foreground">Personal</p>
             </div>
             {!isGroupContext && <div className="w-2 h-2 bg-tiffany rounded-full flex-shrink-0" />}
           </button>
@@ -225,12 +223,8 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-gray-900 dark:text-foreground truncate">
-                    {group.name}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-muted-foreground truncate">
-                    {group.slug}
-                  </p>
+                  <p className="text-sm font-medium text-foreground truncate">{group.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{group.slug}</p>
                 </div>
                 {isGroupContext && context.group?.id === group.id && (
                   <div className="w-2 h-2 bg-tiffany-500 rounded-full flex-shrink-0" />
@@ -249,9 +243,9 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
             className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-muted transition-colors"
           >
             <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-muted flex items-center justify-center flex-shrink-0">
-              <Plus className="w-4 h-4 text-gray-500 dark:text-muted-foreground" />
+              <Plus className="w-4 h-4 text-muted-foreground" />
             </div>
-            <p className="text-sm text-gray-600 dark:text-muted-foreground">Create a group</p>
+            <p className="text-sm text-muted-foreground">Create a group</p>
           </button>
         </div>
       )}

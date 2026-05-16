@@ -61,11 +61,9 @@ export default function DashboardInfoEditPage() {
             <div className="p-2 bg-orange-100 rounded-lg">
               <Edit className="w-5 h-5 text-orange-600" />
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-foreground">
-              Edit Profile
-            </h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-foreground">Edit Profile</h1>
           </div>
-          <p className="text-base text-gray-600 dark:text-muted-foreground ml-12">
+          <p className="text-base text-muted-foreground ml-12">
             Update your profile details. This information will be visible on your public profile.
           </p>
         </div>

@@ -23,12 +23,12 @@ export function OnlinePresenceSection({
   setSocialLinks,
 }: OnlinePresenceSectionProps) {
   return (
-    <div className="space-y-4 rounded-xl border border-gray-200 dark:border-border bg-white/80 dark:bg-card/80 px-4 py-5 sm:px-5 sm:py-6">
+    <div className="space-y-4 rounded-xl border border-border bg-white/80 dark:bg-card/80 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-foreground uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
           {PROFILE_SECTIONS.ONLINE_PRESENCE}
         </h3>
-        <p className="mt-1 text-xs text-gray-500 dark:text-muted-foreground">
+        <p className="mt-1 text-xs text-muted-foreground">
           {PROFILE_SECTION_DESCRIPTIONS.ONLINE_PRESENCE}
         </p>
       </div>
@@ -64,7 +64,7 @@ export function OnlinePresenceSection({
             maxLinks={MAX_SOCIAL_LINKS}
           />
         </div>
-        <p className="text-xs text-gray-500 dark:text-muted-foreground mt-3">
+        <p className="text-xs text-muted-foreground mt-3">
           💡 Want to add wallets? Manage them in{' '}
           <a
             href={ROUTES.DASHBOARD.WALLETS}

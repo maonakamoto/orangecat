@@ -86,7 +86,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       label: 'Last Used',
       value: formatRelativeCompact(usage.lastUsedAt),
       icon: Clock,
-      color: 'text-gray-600 dark:text-muted-foreground',
+      color: 'text-muted-foreground',
       bgColor: 'bg-gray-100 dark:bg-muted',
     },
   ];
@@ -101,9 +101,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
           </CardTitle>
           {periodSelector}
         </div>
-        {usage.periodLabel && (
-          <p className="text-sm text-gray-500 dark:text-muted-foreground">{usage.periodLabel}</p>
-        )}
+        {usage.periodLabel && <p className="text-sm text-muted-foreground">{usage.periodLabel}</p>}
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -122,10 +120,8 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
                   <stat.icon className={cn('w-4 h-4', stat.color)} />
                 </div>
               </div>
-              <div className="text-2xl font-semibold text-gray-900 dark:text-foreground">
-                {stat.value}
-              </div>
-              <div className="text-sm text-gray-500 dark:text-muted-foreground">{stat.label}</div>
+              <div className="text-2xl font-semibold text-foreground">{stat.value}</div>
+              <div className="text-sm text-muted-foreground">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -136,7 +132,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
             <div className="flex items-start gap-3">
               <Info className="w-5 h-5 text-gray-400 dark:text-muted-foreground mt-0.5" />
               <div>
-                <p className="text-sm text-gray-600 dark:text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   No usage recorded yet. Start a conversation with My Cat to see your statistics.
                 </p>
               </div>
@@ -155,7 +151,7 @@ export function AIUsageStatsCompact({ usage }: { usage: UsageData }) {
   const { formatAmountBtc: formatAmount } = useDisplayCurrency();
 
   return (
-    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-muted-foreground">
+    <div className="flex items-center gap-4 text-sm text-muted-foreground">
       <div className="flex items-center gap-1">
         <MessageSquare className="w-4 h-4" />
         <span>{usage.totalRequests.toLocaleString()} requests</span>

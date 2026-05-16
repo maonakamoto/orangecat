@@ -42,12 +42,10 @@ export default function NewTaskPage() {
           className="mb-6"
         />
 
-        <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border overflow-hidden">
-          <div className="p-6 border-b border-gray-200 dark:border-border">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground">Create Task</h1>
-            <p className="text-base text-gray-600 dark:text-muted-foreground mt-1">
-              Create a new task for the team
-            </p>
+        <div className="bg-card rounded-xl border border-border overflow-hidden">
+          <div className="p-6 border-b border-border">
+            <h1 className="text-2xl font-bold text-foreground">Create Task</h1>
+            <p className="text-base text-muted-foreground mt-1">Create a new task for the team</p>
           </div>
 
           <TaskFormFields

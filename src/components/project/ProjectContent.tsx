@@ -126,7 +126,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                       }
                     />
                   </div>
-                  <div className="text-sm text-gray-500 dark:text-muted-foreground">
+                  <div className="text-sm text-muted-foreground">
                     of{' '}
                     <CurrencyDisplay
                       amount={project.goal_amount}
@@ -158,7 +158,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>
-              <div className="text-sm text-gray-600 dark:text-muted-foreground mt-2">
+              <div className="text-sm text-muted-foreground mt-2">
                 {progressPercentage.toFixed(1)}% funded
               </div>
             </section>

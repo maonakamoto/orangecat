@@ -56,14 +56,12 @@ export function PageLayout({
 export function PageHeader({ title, subtitle, description, className, children }: PageHeaderProps) {
   return (
     <div className={cn('text-center mb-12', className)}>
-      <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-foreground">{title}</h1>
+      <h1 className="text-4xl font-bold mb-4 text-foreground">{title}</h1>
       {subtitle && (
         <p className="text-xl text-tiffany-600 dark:text-primary font-medium mb-4">{subtitle}</p>
       )}
       {description && (
-        <p className="text-lg text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
-          {description}
-        </p>
+        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">{description}</p>
       )}
       {children}
     </div>
@@ -74,7 +72,7 @@ export function PageSection({ children, className, background = 'default' }: Pag
   const backgroundClasses = {
     default: '',
     gray: 'bg-gray-50 dark:bg-muted -mx-4 px-4 py-8 md:-mx-6 md:px-6',
-    white: 'bg-white dark:bg-card -mx-4 px-4 py-8 md:-mx-6 md:px-6 shadow-sm rounded-lg',
+    white: 'bg-card -mx-4 px-4 py-8 md:-mx-6 md:px-6 shadow-sm rounded-lg',
     tiffany: 'bg-tiffany-50 dark:bg-accent -mx-4 px-4 py-8 md:-mx-6 md:px-6 rounded-lg',
   };
 

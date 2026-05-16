@@ -32,17 +32,15 @@ export default function PublicEntityOwnerCard({ owner, label }: PublicEntityOwne
             />
           ) : (
             <div className="w-12 h-12 bg-gray-200 dark:bg-muted rounded-full flex items-center justify-center">
-              <User className="w-6 h-6 text-gray-500 dark:text-muted-foreground" />
+              <User className="w-6 h-6 text-muted-foreground" />
             </div>
           )}
           <div>
-            <div className="font-medium text-gray-900 dark:text-foreground">
+            <div className="font-medium text-foreground">
               {owner.name || owner.username || 'Anonymous'}
             </div>
             {owner.username && (
-              <div className="text-sm text-gray-500 dark:text-muted-foreground">
-                @{owner.username}
-              </div>
+              <div className="text-sm text-muted-foreground">@{owner.username}</div>
             )}
           </div>
         </Link>

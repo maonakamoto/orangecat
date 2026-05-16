@@ -54,14 +54,14 @@ export default function MessageView({ conversationId, onBack }: MessageViewProps
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+          <h3 className="text-lg font-semibold text-foreground mb-2">
             {error === 'forbidden'
               ? 'Access Denied'
               : error === 'not_found'
                 ? 'Conversation Not Found'
                 : 'Error Loading Messages'}
           </h3>
-          <p className="text-gray-600 dark:text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4">
             {error === 'forbidden'
               ? "You don't have access to this conversation"
               : error === 'not_found'
@@ -79,19 +79,15 @@ export default function MessageView({ conversationId, onBack }: MessageViewProps
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
           <MessageSquare className="h-12 w-12 text-gray-400 dark:text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
-            No conversation selected
-          </h3>
-          <p className="text-gray-600 dark:text-muted-foreground">
-            Select a conversation to start messaging
-          </p>
+          <h3 className="text-lg font-semibold text-foreground mb-2">No conversation selected</h3>
+          <p className="text-muted-foreground">Select a conversation to start messaging</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-card">
+    <div className="flex flex-col h-full bg-card">
       <MessageHeader
         conversation={conversation}
         currentUserId={currentUserId}

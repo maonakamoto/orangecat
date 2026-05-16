@@ -22,7 +22,7 @@ export function PostComposerFullScreenHeader({
   onPost,
 }: PostComposerFullScreenHeaderProps) {
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-border">
+    <div className="flex items-center justify-between px-4 py-3 border-b border-border">
       <button
         onClick={onClose || onCancel}
         className="p-2 -ml-2 min-h-11 min-w-11 flex items-center justify-center"

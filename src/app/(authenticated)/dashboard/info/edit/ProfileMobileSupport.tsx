@@ -29,14 +29,12 @@ export function ProfileMobileSupport({
     <>
       {/* Progress bar at top (mobile only) */}
       <div className="lg:hidden mb-6">
-        <div className="bg-white dark:bg-card rounded-xl border border-gray-200 dark:border-border shadow-sm p-4">
+        <div className="bg-card rounded-xl border border-border shadow-sm p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-700 dark:text-muted-foreground">
               Profile Completion
             </span>
-            <span className="text-sm font-bold text-gray-900 dark:text-foreground">
-              {completionPercentage}%
-            </span>
+            <span className="text-sm font-bold text-foreground">{completionPercentage}%</span>
           </div>
           <div className="w-full bg-gray-100 dark:bg-muted rounded-full h-2 overflow-hidden">
             <div
@@ -83,19 +81,17 @@ export function ProfileMobileSupport({
           onClick={() => setShowMobileGuidance(false)}
         >
           <div
-            className="w-full bg-white dark:bg-card rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto"
+            className="w-full bg-card rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-white dark:bg-card border-b border-gray-200 dark:border-border px-4 py-3 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground">
-                Help & Guidance
-              </h3>
+            <div className="sticky top-0 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-foreground">Help & Guidance</h3>
               <button
                 onClick={() => setShowMobileGuidance(false)}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors"
               >
                 <svg
-                  className="w-5 h-5 text-gray-500 dark:text-muted-foreground"
+                  className="w-5 h-5 text-muted-foreground"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

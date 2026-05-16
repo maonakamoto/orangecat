@@ -16,10 +16,10 @@ export default function TransparencySection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-900 dark:text-foreground mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-foreground mb-3 sm:mb-4">
             {transparency.title}
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
             {transparency.subtitle}
           </p>
         </div>
@@ -38,7 +38,7 @@ export default function TransparencySection() {
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-500 rounded-lg flex items-center justify-center">
                   <Eye className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-foreground">
+                <h3 className="text-xl sm:text-2xl font-semibold text-foreground">
                   How Transparency Works
                 </h3>
               </div>
@@ -49,10 +49,10 @@ export default function TransparencySection() {
                     <span className="text-orange-500 font-semibold text-xs sm:text-sm">1</span>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
+                    <p className="font-semibold text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
                       You receive Bitcoin support
                     </p>
-                    <p className="text-gray-600 dark:text-muted-foreground text-xs sm:text-sm">
+                    <p className="text-muted-foreground text-xs sm:text-sm">
                       All transactions are visible on the blockchain
                     </p>
                   </div>
@@ -63,10 +63,10 @@ export default function TransparencySection() {
                     <span className="text-orange-500 font-semibold text-xs sm:text-sm">2</span>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
+                    <p className="font-semibold text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
                       You withdraw or spend funds
                     </p>
-                    <p className="text-gray-600 dark:text-muted-foreground text-xs sm:text-sm">
+                    <p className="text-muted-foreground text-xs sm:text-sm">
                       Supporters can see when Bitcoin moves
                     </p>
                   </div>
@@ -77,10 +77,10 @@ export default function TransparencySection() {
                     <span className="text-orange-500 font-semibold text-xs sm:text-sm">3</span>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
+                    <p className="font-semibold text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
                       You explain your spending
                     </p>
-                    <p className="text-gray-600 dark:text-muted-foreground text-xs sm:text-sm">
+                    <p className="text-muted-foreground text-xs sm:text-sm">
                       Post updates with receipts, photos, or progress reports
                     </p>
                   </div>
@@ -91,10 +91,10 @@ export default function TransparencySection() {
                     <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
+                    <p className="font-semibold text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
                       Your transparency score increases
                     </p>
-                    <p className="text-gray-600 dark:text-muted-foreground text-xs sm:text-sm">
+                    <p className="text-muted-foreground text-xs sm:text-sm">
                       Build trust and credibility with supporters
                     </p>
                   </div>
@@ -117,7 +117,7 @@ export default function TransparencySection() {
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 rounded-lg flex items-center justify-center">
                     <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-foreground">
+                  <h3 className="text-lg sm:text-xl font-semibold text-foreground">
                     Profile Preview
                   </h3>
                 </div>
@@ -133,10 +133,10 @@ export default function TransparencySection() {
                     👩‍🎨
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 dark:text-foreground text-sm sm:text-base">
+                    <p className="font-semibold text-foreground text-sm sm:text-base">
                       Your Name Here
                     </p>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Your projects • Your journey
                     </p>
                   </div>
@@ -156,7 +156,7 @@ export default function TransparencySection() {
                       style={{ width: '85%' }}
                     />
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-muted-foreground mt-1.5 sm:mt-2">
+                  <p className="text-xs text-muted-foreground mt-1.5 sm:mt-2">
                     <Shield className="w-2.5 h-2.5 sm:w-3 sm:h-3 inline mr-1" />
                     Score increases as you share updates and receipts
                   </p>
@@ -164,7 +164,7 @@ export default function TransparencySection() {
 
                 {/* How Updates Work */}
                 <div>
-                  <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-foreground mb-2 sm:mb-3">
+                  <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">
                     How Updates Work:
                   </p>
                   <div className="bg-muted/50 rounded-lg p-3 sm:p-4">
@@ -172,7 +172,7 @@ export default function TransparencySection() {
                       &quot;Received funding for my project. Withdrew funds and posted receipts
                       showing exactly how it was spent.&quot;
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-muted-foreground">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span className="bg-green-100 text-green-700 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded text-xs">
                         Score increases
                       </span>
@@ -184,20 +184,12 @@ export default function TransparencySection() {
                 {/* What Gets Tracked */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-gray-100 dark:border-border">
                   <div>
-                    <div className="text-lg sm:text-xl font-bold text-gray-900 dark:text-foreground">
-                      Supporters
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-muted-foreground">
-                      Who trust your transparency
-                    </div>
+                    <div className="text-lg sm:text-xl font-bold text-foreground">Supporters</div>
+                    <div className="text-xs text-muted-foreground">Who trust your transparency</div>
                   </div>
                   <div>
-                    <div className="text-lg sm:text-xl font-bold text-gray-900 dark:text-foreground">
-                      Updates
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-muted-foreground">
-                      You've shared publicly
-                    </div>
+                    <div className="text-lg sm:text-xl font-bold text-foreground">Updates</div>
+                    <div className="text-xs text-muted-foreground">You've shared publicly</div>
                   </div>
                 </div>
               </div>
@@ -207,7 +199,7 @@ export default function TransparencySection() {
 
         {/* Bottom CTA */}
         <div className="text-center">
-          <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-muted-foreground mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-4 sm:mb-6">
             Transparency builds trust. Trust attracts support. Start building yours today.
           </p>
           <Link

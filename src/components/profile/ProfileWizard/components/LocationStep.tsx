@@ -25,10 +25,8 @@ export function LocationStep({ form }: LocationStepProps) {
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-foreground mb-2">
-          Where are you located?
-        </h2>
-        <p className="text-gray-600 dark:text-muted-foreground mb-3">
+        <h2 className="text-2xl font-semibold text-foreground mb-2">Where are you located?</h2>
+        <p className="text-muted-foreground mb-3">
           Help local people find and support your projects.
         </p>
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 text-xs rounded-full">
@@ -86,7 +84,7 @@ export function LocationStep({ form }: LocationStepProps) {
                 placeholder="Search for your city or address..."
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
+            <FormDescription className="text-xs text-muted-foreground">
               Start typing to find your location. This helps local people and projects find you.
             </FormDescription>
             <FormMessage />
@@ -111,7 +109,7 @@ export function LocationStep({ form }: LocationStepProps) {
                 rows={2}
               />
             </FormControl>
-            <FormDescription className="text-xs text-gray-500 dark:text-muted-foreground">
+            <FormDescription className="text-xs text-muted-foreground">
               Optional: Add context to help people understand your location better
             </FormDescription>
             <FormMessage />

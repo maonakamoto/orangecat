@@ -84,7 +84,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-muted-foreground">
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1">
                 <Badge variant="outline" className="text-xs">
@@ -92,7 +92,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
                 </Badge>
               </span>
               {proposal.proposer && (
-                <span className="text-gray-500 dark:text-muted-foreground">
+                <span className="text-muted-foreground">
                   by {proposal.proposer.name || 'Unknown'}
                 </span>
               )}
@@ -105,7 +105,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
           {proposal.status === PROPOSAL_STATUSES.ACTIVE && proposal.voting_results && (
             <div className="pt-2 border-t">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600 dark:text-muted-foreground">Voting Progress</span>
+                <span className="text-muted-foreground">Voting Progress</span>
                 <span className="font-medium">{yesPercentage.toFixed(1)}% Yes</span>
               </div>
               <div className="mt-2 h-2 bg-gray-200 dark:bg-muted rounded-full overflow-hidden">
@@ -114,7 +114,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
                   style={{ width: `${yesPercentage}%` }}
                 />
               </div>
-              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-muted-foreground mt-1">
+              <div className="flex items-center justify-between text-xs text-muted-foreground mt-1">
                 <span>
                   {proposal.voting_results.yes_votes} Yes, {proposal.voting_results.no_votes} No
                 </span>

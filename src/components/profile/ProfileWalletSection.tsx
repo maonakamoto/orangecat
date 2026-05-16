@@ -79,21 +79,15 @@ export default function ProfileWalletSection({
                         )}
                       </h4>
                       {wallet.description && (
-                        <p className="text-sm text-gray-600 dark:text-muted-foreground mt-1">
-                          {wallet.description}
-                        </p>
+                        <p className="text-sm text-muted-foreground mt-1">{wallet.description}</p>
                       )}
-                      <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
-                        {categoryInfo.label}
-                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">{categoryInfo.label}</p>
                     </div>
                   </div>
 
                   {/* Balance */}
                   <div className="bg-gray-50 dark:bg-muted rounded-lg p-3 mb-3">
-                    <div className="text-sm text-gray-600 dark:text-muted-foreground mb-1">
-                      Current Balance
-                    </div>
+                    <div className="text-sm text-muted-foreground mb-1">Current Balance</div>
                     <div className="text-xl font-bold text-orange-600">
                       {formatAmount(wallet.balance_btc)}
                     </div>
@@ -103,7 +97,7 @@ export default function ProfileWalletSection({
                   {wallet.goal_amount && (
                     <div className="mb-3">
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600 dark:text-muted-foreground">Goal</span>
+                        <span className="text-muted-foreground">Goal</span>
                         <span className="font-medium">
                           {formatAmount(wallet.balance_btc)} / {wallet.goal_amount}{' '}
                           {wallet.goal_currency}
@@ -115,7 +109,7 @@ export default function ProfileWalletSection({
                           style={{ width: `${Math.min(progressPercent, 100)}%` }}
                         />
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-muted-foreground mt-1">
+                      <div className="text-xs text-muted-foreground mt-1">
                         {progressPercent.toFixed(1)}% funded
                       </div>
                     </div>
@@ -123,7 +117,7 @@ export default function ProfileWalletSection({
 
                   {/* QR Code for easy scanning */}
                   <div className="mb-4 flex justify-center">
-                    <div className="bg-white dark:bg-card p-3 rounded-lg border-2 border-gray-200 dark:border-border shadow-sm">
+                    <div className="bg-card p-3 rounded-lg border-2 border-border shadow-sm">
                       <QRCodeSVG
                         value={`bitcoin:${wallet.address_or_xpub}`}
                         size={120}
@@ -136,7 +130,7 @@ export default function ProfileWalletSection({
                   {/* Address with copy button */}
                   <div className="pt-3 border-t">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-gray-500 dark:text-muted-foreground">
+                      <span className="text-xs text-muted-foreground">
                         {wallet.wallet_type === 'xpub' ? 'Extended Public Key' : 'Bitcoin Address'}
                       </span>
                       <button
@@ -194,7 +188,7 @@ export default function ProfileWalletSection({
   if (wallets.length === 0 && isOwnProfile) {
     return (
       <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6">
-        <div className="text-center text-gray-500 dark:text-muted-foreground py-8">
+        <div className="text-center text-muted-foreground py-8">
           <Bitcoin className="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
           <h3 className="text-lg font-semibold text-gray-700 dark:text-foreground mb-2">
             Accept Bitcoin Funding
@@ -229,12 +223,12 @@ export default function ProfileWalletSection({
 
   // No wallets and not own profile - show nothing
   return (
-    <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6 text-center text-gray-600 dark:text-muted-foreground">
+    <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6 text-center text-muted-foreground">
       <Bitcoin className="w-10 h-10 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
       <h3 className="text-lg font-semibold text-gray-700 dark:text-foreground mb-1">
         No wallets shared yet
       </h3>
-      <p className="text-sm text-gray-500 dark:text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         This profile has not added any wallets you can send to yet.
       </p>
     </div>

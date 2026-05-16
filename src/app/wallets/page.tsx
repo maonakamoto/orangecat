@@ -15,10 +15,8 @@ export default function WalletsPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-foreground">
-          Get a Bitcoin Wallet
-        </h1>
-        <p className="text-gray-600 dark:text-muted-foreground mt-2">
+        <h1 className="text-3xl font-bold text-foreground">Get a Bitcoin Wallet</h1>
+        <p className="text-muted-foreground mt-2">
           No wallet yet? Start here. Pick a beginner-friendly option and you'll be ready in minutes.
         </p>
       </div>
@@ -28,7 +26,7 @@ export default function WalletsPage() {
 
       {/* Educational Section */}
       <div className="mt-10 p-6 rounded-lg bg-orange-50 border border-orange-200">
-        <h4 className="font-semibold text-gray-900 dark:text-foreground mb-2">What is a wallet?</h4>
+        <h4 className="font-semibold text-foreground mb-2">What is a wallet?</h4>
         <p className="text-sm text-gray-700 dark:text-muted-foreground mb-3">
           A Bitcoin wallet lets you receive payments. It gives you a Bitcoin address (looks like
           bc1...) and often a Lightning address (looks like email). You control it. We don't keep

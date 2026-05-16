@@ -148,9 +148,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
 
   if (loading) {
     return (
-      <div className="text-gray-500 dark:text-muted-foreground text-sm py-8 text-center">
-        Loading connections...
-      </div>
+      <div className="text-muted-foreground text-sm py-8 text-center">Loading connections...</div>
     );
   }
 
@@ -160,13 +158,13 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
   return (
     <div className="space-y-6">
       {/* Toggle between Followers and Following */}
-      <div className="flex gap-2 sm:gap-4 border-b border-gray-200 dark:border-border">
+      <div className="flex gap-2 sm:gap-4 border-b border-border">
         <button
           onClick={() => setActiveView('followers')}
           className={`pb-2 sm:pb-3 px-2 sm:px-4 text-sm sm:text-base font-medium transition-colors ${
             activeView === 'followers'
               ? 'text-orange-600 border-b-2 border-orange-600'
-              : 'text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
+              : 'text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
           }`}
         >
           Followers ({followers.length})
@@ -176,7 +174,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
           className={`pb-2 sm:pb-3 px-2 sm:px-4 text-sm sm:text-base font-medium transition-colors ${
             activeView === 'following'
               ? 'text-orange-600 border-b-2 border-orange-600'
-              : 'text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
+              : 'text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
           }`}
         >
           Following ({following.length})
@@ -187,10 +185,10 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
       {!hasConnections && (
         <div className="text-center py-12">
           <Users className="w-16 h-16 text-gray-300 dark:text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
+          <h3 className="text-lg font-semibold text-foreground mb-2">
             {activeView === 'following' ? 'No Following Yet' : 'No Followers Yet'}
           </h3>
-          <p className="text-gray-600 dark:text-muted-foreground">
+          <p className="text-muted-foreground">
             {isOwnProfile
               ? activeView === 'following'
                 ? 'Start following people to see them here'
@@ -216,7 +214,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
               <Link
                 key={person.id}
                 href={`/profiles/${person.username}`}
-                className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-border hover:border-orange-300 dark:hover:border-orange-500 hover:shadow-md transition-all"
+                className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-border hover:border-orange-300 dark:hover:border-orange-500 hover:shadow-md transition-all"
               >
                 {person.avatar_url ? (
                   <Image
@@ -230,14 +228,14 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
                   <DefaultAvatar size={40} className="rounded-lg flex-shrink-0 sm:!w-12 sm:!h-12" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-gray-900 dark:text-foreground truncate text-sm sm:text-base">
+                  <h4 className="font-semibold text-foreground truncate text-sm sm:text-base">
                     {person.name || person.username}
                   </h4>
-                  <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground mb-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">
                     @{person.username}
                   </p>
                   {person.bio && (
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-muted-foreground line-clamp-1 sm:line-clamp-2">
+                    <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1 sm:line-clamp-2">
                       {person.bio}
                     </p>
                   )}
