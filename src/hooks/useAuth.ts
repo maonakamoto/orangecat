@@ -120,7 +120,7 @@ export function useAuth() {
         currentPath.startsWith('/profile') ||
         currentPath.startsWith('/settings')
       ) {
-        router.push('/auth');
+        router.push(ROUTES.AUTH);
       }
     } catch (error) {
       logger.error(

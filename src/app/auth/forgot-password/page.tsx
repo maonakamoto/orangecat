@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
   };
 
   const handleBackToLogin = () => {
-    router.push('/auth?mode=login');
+    router.push(ROUTES.AUTH_LOGIN);
   };
 
   if (step === 'success') {

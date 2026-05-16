@@ -7,6 +7,7 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAIProvider, getRecommendedProvider, validateApiKeyFormat } from '@/data/aiProviders';
 import { logger } from '@/utils/logger';
+import { ROUTES } from '@/config/routes';
 import type { ModelTier } from '@/config/ai-models';
 import type { AIOnboardingProps, OnboardingState, OnboardingActions } from '../types';
 
@@ -109,7 +110,7 @@ export function useOnboardingState(
     }
 
     onComplete?.();
-    router.push('/settings/ai');
+    router.push(ROUTES.SETTINGS_AI);
   }, [onUpdatePreferences, onComplete, router, selectedTier, autoRouterEnabled]);
 
   // Navigation

@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { ROUTES } from '@/config/routes';
 
 export default function AIAssistantsPage() {
-  redirect('/discover?type=ai_assistants');
+  redirect(ROUTES.DISCOVER_TYPE('ai_assistants'));
 }

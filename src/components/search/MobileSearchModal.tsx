@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useSearchSuggestions } from '@/hooks/useSearchSuggestions';
 import { useAuth } from '@/hooks/useAuth';
+import { ROUTES } from '@/config/routes';
 import { TRENDING_SEARCHES } from './useEnhancedSearch';
 
 interface MobileSearchModalProps {
@@ -86,7 +87,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
       icon: <Users className="w-5 h-5" />,
       label: 'Find People',
       action: () => {
-        router.push('/discover?type=profiles');
+        router.push(ROUTES.DISCOVER_TYPE('profiles'));
         onClose();
       },
     },
@@ -94,7 +95,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
       icon: <Target className="w-5 h-5" />,
       label: 'Browse Projects',
       action: () => {
-        router.push('/discover?type=projects');
+        router.push(ROUTES.DISCOVER_TYPE('projects'));
         onClose();
       },
     },
@@ -102,7 +103,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
       icon: <TrendingUp className="w-5 h-5" />,
       label: 'Trending',
       action: () => {
-        router.push('/discover?trending=true');
+        router.push(ROUTES.DISCOVER_TRENDING);
         onClose();
       },
     },

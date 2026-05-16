@@ -148,7 +148,7 @@ export default function AISettingsPage() {
                       }
                     : undefined
                 }
-                onSetupClick={() => router.push('/settings/ai/onboarding')}
+                onSetupClick={() => router.push(ROUTES.SETTINGS_AI_ONBOARDING)}
               />
             </section>
 

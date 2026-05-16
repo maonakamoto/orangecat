@@ -12,6 +12,7 @@
 'use client';
 
 import Link from 'next/link';
+import { ROUTES } from '@/config/routes';
 import { CatIcon } from './CatIcon';
 
 export interface LogoProps {
@@ -33,7 +34,7 @@ const iconSizeClasses = {
 export default function Logo({ className = '', showText = true, size = 'md' }: LogoProps) {
   return (
     <Link
-      href="/"
+      href={ROUTES.HOME}
       className={`flex items-center space-x-1.5 sm:space-x-2 group min-h-11 py-2 ${className}`.trim()}
       aria-label="OrangeCat - Your AI Economic Agent"
     >

@@ -110,7 +110,7 @@ export function DashboardTimeline({
               </p>
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
                 <Button
-                  onClick={() => router.push('/timeline?compose=true')}
+                  onClick={() => router.push(`${ROUTES.TIMELINE}?compose=true`)}
                   className={GRADIENTS.btnOrange}
                   size="sm"
                 >

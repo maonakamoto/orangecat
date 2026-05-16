@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth';
 import { createBrowserClient } from '@supabase/ssr';
 import { toast } from 'sonner';
 import { API_ROUTES } from '@/config/api-routes';
+import { ROUTES } from '@/config/routes';
 import { getErrorMessage } from '@/types/common';
 import type { User } from '@supabase/supabase-js';
 
@@ -110,7 +111,7 @@ export function useSettingsForm(user: User | null) {
       }
       toast.success('Account deleted. You will be signed out.');
       await signOut();
-      router.push('/');
+      router.push(ROUTES.HOME);
     } catch (error: unknown) {
       toast.error(getErrorMessage(error) || 'Failed to delete account.');
     } finally {

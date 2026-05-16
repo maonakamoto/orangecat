@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, Lock, Eye, Server, Key, AlertTriangle } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 
 export const metadata = {
   title: 'Security',
@@ -179,7 +180,7 @@ export default function SecurityPage() {
                 Report Security Issue
               </a>
               <a
-                href="/docs"
+                href={ROUTES.DOCS}
                 className="inline-flex items-center px-6 py-3 bg-gray-700 text-white font-medium rounded-lg hover:bg-gray-600 transition-colors"
               >
                 View Documentation

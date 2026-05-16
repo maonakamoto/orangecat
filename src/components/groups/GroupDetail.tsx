@@ -9,6 +9,7 @@ import { useGroupDetail } from './useGroupDetail';
 import { GroupDetailSidebar } from './GroupDetailSidebar';
 import { GroupDetailTabs } from './GroupDetailTabs';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { ROUTES } from '@/config/routes';
 
 interface GroupDetailProps {
   groupSlug: string;
@@ -47,7 +48,7 @@ export function GroupDetail({ groupSlug }: GroupDetailProps) {
     return (
       <div className="text-center py-12">
         <p className="text-red-600">{error || 'Group not found'}</p>
-        <Button onClick={() => router.push('/groups')} className="mt-4">
+        <Button onClick={() => router.push(ROUTES.GROUPS.LIST)} className="mt-4">
           Back to Groups
         </Button>
       </div>

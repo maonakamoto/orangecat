@@ -37,7 +37,7 @@ export default function PeoplePage() {
   // Redirect if not authenticated
   useEffect(() => {
     if (hydrated && !authLoading && (!user || !session)) {
-      router.push('/auth?from=/dashboard/people');
+      router.push(`${ROUTES.AUTH}?from=${ROUTES.DASHBOARD.PEOPLE}`);
     }
   }, [user, session, hydrated, authLoading, router]);
 

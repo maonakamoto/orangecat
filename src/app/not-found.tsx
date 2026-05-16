@@ -46,7 +46,7 @@ export default function NotFound() {
           </Link>
 
           <Link
-            href="/"
+            href={ROUTES.HOME}
             className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-gray-300 dark:border-border text-sm font-medium rounded-md text-gray-700 dark:text-foreground bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -58,7 +58,7 @@ export default function NotFound() {
         <div className="text-center pt-4 border-t border-gray-200 dark:border-border">
           <p className="text-sm text-gray-500 dark:text-muted-foreground">
             Looking for something specific?{' '}
-            <Link href="/faq" className="text-orange-600 hover:text-orange-700 font-medium">
+            <Link href={ROUTES.FAQ} className="text-orange-600 hover:text-orange-700 font-medium">
               Visit our FAQ
             </Link>
           </p>

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Palette, Code, GraduationCap, Building2, Heart, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/config/routes';
 
 const iconMap = {
   Palette,
@@ -22,9 +23,9 @@ export default function CategoriesPage() {
 
   const handleCreatePage = () => {
     if (session) {
-      router.push('/create');
+      router.push(ROUTES.CREATE);
     } else {
-      router.push('/auth?mode=register');
+      router.push(ROUTES.AUTH_REGISTER);
     }
   };
 
@@ -95,7 +96,7 @@ export default function CategoriesPage() {
           {!session && (
             <p className="mt-4 text-sm text-gray-600 dark:text-muted-foreground">
               Already have an account?{' '}
-              <Link href="/auth?mode=login" className="text-tiffany-600 hover:text-tiffany-700">
+              <Link href={ROUTES.AUTH_LOGIN} className="text-tiffany-600 hover:text-tiffany-700">
                 Sign in
               </Link>
             </p>

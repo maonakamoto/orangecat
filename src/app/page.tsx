@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import HomePublicClient from '@/components/home/HomePublicClient';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { ROUTES } from '@/config/routes';
 
 export default async function Home() {
   const supabase = await createServerClient();
@@ -18,9 +19,9 @@ export default async function Home() {
       .single<{ onboarding_completed: boolean | null }>();
 
     if (!profile?.onboarding_completed) {
-      redirect('/onboarding');
+      redirect(ROUTES.ONBOARDING.STANDARD);
     }
-    redirect('/dashboard');
+    redirect(ROUTES.DASHBOARD.HOME);
   }
 
   return <HomePublicClient />;

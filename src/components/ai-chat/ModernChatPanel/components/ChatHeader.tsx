@@ -6,6 +6,7 @@
 import { useRouter } from 'next/navigation';
 import { Cat, Trash2, Settings2 } from 'lucide-react';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 import { ModelSelector } from './ModelSelector';
 
 interface ChatHeaderProps {
@@ -58,7 +59,7 @@ export function ChatHeader({
         )}
 
         <button
-          onClick={() => router.push('/settings/ai')}
+          onClick={() => router.push(ROUTES.SETTINGS_AI)}
           className="p-2 text-gray-400 dark:text-muted-foreground hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
           aria-label="AI settings"
           title="AI Settings"

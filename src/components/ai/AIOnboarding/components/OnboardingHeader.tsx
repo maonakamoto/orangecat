@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Bot } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
+import { ROUTES } from '@/config/routes';
 
 interface OnboardingHeaderProps {
   currentStep: number;
@@ -40,7 +41,7 @@ export function OnboardingHeader({
                 </p>
               </div>
             </div>
-            <Button variant="outline" onClick={() => router.push('/settings/ai')}>
+            <Button variant="outline" onClick={() => router.push(ROUTES.SETTINGS_AI)}>
               Skip for Now
             </Button>
           </div>

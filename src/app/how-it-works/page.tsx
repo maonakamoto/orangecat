@@ -258,7 +258,7 @@ export default function HowItWorksPage() {
             <Button href={ROUTES.DISCOVER} variant="ghost">
               See What Others Are Doing
             </Button>
-            <Button href="/about" variant="ghost">
+            <Button href={ROUTES.ABOUT} variant="ghost">
               About OrangeCat
             </Button>
           </div>

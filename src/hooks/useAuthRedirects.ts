@@ -37,7 +37,7 @@ export function useRequireAuth() {
     const isAuthenticated = !!user;
 
     if (!isAuthenticated) {
-      router.push('/auth?from=protected');
+      router.push(`${ROUTES.AUTH}?from=protected`);
     }
 
     setCheckedAuth(true);

@@ -259,7 +259,7 @@ export default function TechnologyPage() {
               Discover Projects
             </Link>
             <Link
-              href="/faq"
+              href={ROUTES.FAQ}
               className="inline-flex items-center px-6 py-3 border border-orange-600 text-base font-medium rounded-md text-orange-600 bg-white dark:bg-card hover:bg-orange-50"
             >
               Learn More

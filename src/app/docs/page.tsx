@@ -301,7 +301,7 @@ export default function DocsPage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/faq"
+                href={ROUTES.FAQ}
                 className="inline-flex items-center gap-2 border border-gray-200 dark:border-border bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted text-gray-700 dark:text-foreground font-medium px-5 py-2.5 rounded-lg transition-colors"
               >
                 View FAQ

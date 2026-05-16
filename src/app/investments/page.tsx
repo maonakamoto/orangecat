@@ -1,12 +1,6 @@
-/**
- * Public Investments Browse Page
- *
- * Redirects to the discover page with investments tab selected.
- * Investments are discoverable alongside loans in the finance section of Discover.
- */
-
 import { redirect } from 'next/navigation';
+import { ROUTES } from '@/config/routes';
 
 export default function InvestmentsPage() {
-  redirect('/discover?type=investments');
+  redirect(ROUTES.DISCOVER_TYPE('investments'));
 }

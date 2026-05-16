@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { ROUTES } from '@/config/routes';
 
 export default function ProductsPage() {
-  redirect('/discover?type=products');
+  redirect(ROUTES.DISCOVER_TYPE('products'));
 }

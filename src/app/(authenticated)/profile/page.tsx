@@ -6,8 +6,8 @@
  */
 
 import { redirect } from 'next/navigation';
+import { ROUTES } from '@/config/routes';
 
 export default function ProfileRedirect() {
-  // Redirect to the canonical profile URL
-  redirect('/profiles/me');
+  redirect(ROUTES.PROFILES.ME);
 }

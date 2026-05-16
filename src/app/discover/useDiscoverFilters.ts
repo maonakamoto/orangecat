@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import type { useRouter } from 'next/navigation';
 import type { SortOption, SearchFilters } from '@/services/search';
 import { PUBLIC_SEARCH_STATUSES } from '@/config/project-statuses';
+import { ROUTES } from '@/config/routes';
 
 type StatusType = 'active' | 'paused' | 'completed' | 'cancelled';
 
@@ -72,7 +73,7 @@ export function useDiscoverFilters({
     setCity('');
     setPostal('');
     setRadiusKm(0);
-    router.push('/discover');
+    router.push(ROUTES.DISCOVER);
   };
 
   return {

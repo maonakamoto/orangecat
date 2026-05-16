@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
+import { ROUTES } from '@/config/routes';
 
 export default function ProfileSetupRedirect() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function ProfileSetupRedirect() {
   useEffect(() => {
     if (!isLoading && user) {
       // Redirect to profile page (edit modal will open automatically)
-      router.push('/profiles/me');
+      router.push(ROUTES.PROFILES.ME);
     }
   }, [user, isLoading, router]);
 

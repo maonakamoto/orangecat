@@ -5,6 +5,7 @@
 
 import { useRouter } from 'next/navigation';
 import { AlertCircle, Key, X } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 
 interface ErrorDisplayProps {
   error: string;
@@ -27,7 +28,7 @@ export function ErrorDisplay({ error, onRetry, onDismiss }: ErrorDisplayProps) {
           <div className="flex items-center gap-3 mt-1">
             {showApiKeyLink && (
               <button
-                onClick={() => router.push('/settings/ai')}
+                onClick={() => router.push(ROUTES.SETTINGS_AI)}
                 className="text-xs text-red-600 hover:text-red-800 flex items-center gap-1"
               >
                 <Key className="h-3 w-3" />

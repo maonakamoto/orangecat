@@ -192,7 +192,7 @@ const Footer = React.memo(function Footer() {
             {/* Additional Links */}
             <div className="flex items-center space-x-6 text-sm">
               <Link
-                href="/docs"
+                href={ROUTES.DOCS}
                 className="text-gray-500 dark:text-muted-foreground hover:text-orange-600 dark:hover:text-foreground transition-colors duration-300 hover:underline"
               >
                 Documentation
@@ -206,13 +206,13 @@ const Footer = React.memo(function Footer() {
                 Source Code
               </a>
               <Link
-                href="/technology"
+                href={ROUTES.TECHNOLOGY}
                 className="text-gray-500 dark:text-muted-foreground hover:text-orange-600 dark:hover:text-foreground transition-colors duration-300 hover:underline"
               >
                 Technology
               </Link>
               <Link
-                href="/faq"
+                href={ROUTES.FAQ}
                 className="text-gray-500 dark:text-muted-foreground hover:text-orange-600 dark:hover:text-foreground transition-colors duration-300 hover:underline"
               >
                 FAQ

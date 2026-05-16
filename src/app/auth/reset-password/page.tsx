@@ -102,11 +102,11 @@ export default function ResetPasswordPage() {
   };
 
   const handleReturnToLogin = () => {
-    router.push('/auth?mode=login');
+    router.push(ROUTES.AUTH_LOGIN);
   };
 
   const handleRequestNewReset = () => {
-    router.push('/auth/forgot-password');
+    router.push(ROUTES.AUTH_FORGOT_PASSWORD);
   };
 
   if (step === 'loading') {

@@ -109,7 +109,7 @@ export default function UserProfileDropdown({
       } else {
         toast.dismiss(loadingToast);
         toast.success('Signed out successfully!');
-        router.push('/');
+        router.push(ROUTES.HOME);
       }
     } else {
       // Simple variant - direct signout
@@ -125,7 +125,7 @@ export default function UserProfileDropdown({
   const handlePublicProfileClick = () => {
     const username = profile?.username;
     if (username) {
-      handleNavigation('/profile');
+      handleNavigation(ROUTES.PROFILE.SELF);
     } else {
       if (variant === 'advanced') {
         toast.error('Please set up your username first');

@@ -8,6 +8,7 @@ import type { EntityType } from '@/config/entity-registry';
 import { safeJsonLdString } from '@/lib/seo/structured-data';
 import type { ScalableProfile } from '@/services/profile/types';
 import { mapProjectRow } from '@/types/project';
+import { ROUTES } from '@/config/routes';
 
 interface PageProps {
   params: Promise<{ username: string }>;
@@ -121,7 +122,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
     } = await supabase.auth.getUser();
     if (!user) {
       // Not authenticated, redirect to login
-      redirect('/auth?redirect=/profiles/me');
+      redirect(`${ROUTES.AUTH}?redirect=${ROUTES.PROFILES.ME}`);
     }
 
     // Get username for current user

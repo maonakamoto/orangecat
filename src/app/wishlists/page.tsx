@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { ROUTES } from '@/config/routes';
 
 export default function WishlistsPage() {
-  redirect('/discover?type=wishlists');
+  redirect(ROUTES.DISCOVER_TYPE('wishlists'));
 }

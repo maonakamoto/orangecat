@@ -10,6 +10,7 @@ import { ComponentProps } from 'react';
 import { JsonLdScript } from '@/lib/seo/structured-data';
 import BlogShareButton from './BlogShareButton';
 import { GRADIENTS } from '@/config/gradients';
+import { ROUTES } from '@/config/routes';
 
 // MDX Components
 const mdxComponents = {
@@ -201,7 +202,7 @@ export default async function BlogPost({ params }: PageProps) {
           <div className="max-w-4xl mx-auto">
             {/* Back to Blog */}
             <div className="mb-8">
-              <Link href="/blog">
+              <Link href={ROUTES.BLOG}>
                 <Button variant="outline" className="mb-4">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Blog
@@ -266,7 +267,7 @@ export default async function BlogPost({ params }: PageProps) {
             {/* Share and Navigation */}
             <div className="mt-16 pt-8 border-t border-gray-200 dark:border-border">
               <div className="flex flex-col sm:flex-row justify-between items-center">
-                <Link href="/blog">
+                <Link href={ROUTES.BLOG}>
                   <Button variant="outline">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to Blog
@@ -294,12 +295,12 @@ export default async function BlogPost({ params }: PageProps) {
                 Discover more insights about Bitcoin, security, and building in public.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/blog">
+                <Link href={ROUTES.BLOG}>
                   <Button size="lg" className={GRADIENTS.btnOrange}>
                     Read More Articles
                   </Button>
                 </Link>
-                <Link href="/auth?mode=register">
+                <Link href={ROUTES.AUTH_REGISTER}>
                   <Button variant="outline" size="lg">
                     Join OrangeCat
                   </Button>

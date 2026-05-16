@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearchSuggestions } from '@/hooks/useSearchSuggestions';
 import { useAuth } from '@/hooks/useAuth';
+import { ROUTES } from '@/config/routes';
 import { useEnhancedSearchKeyboard } from './useEnhancedSearchKeyboard';
 
 export interface SearchItem {
@@ -44,13 +45,17 @@ export function useEnhancedSearch({ showQuickActions = true }: UseEnhancedSearch
 
   const quickActions: QuickAction[] = useMemo(
     () => [
-      { icon: null, label: 'Find People', action: () => router.push('/discover?type=profiles') },
+      {
+        icon: null,
+        label: 'Find People',
+        action: () => router.push(ROUTES.DISCOVER_TYPE('profiles')),
+      },
       {
         icon: null,
         label: 'Browse Projects',
-        action: () => router.push('/discover?type=projects'),
+        action: () => router.push(ROUTES.DISCOVER_TYPE('projects')),
       },
-      { icon: null, label: 'Trending', action: () => router.push('/discover?trending=true') },
+      { icon: null, label: 'Trending', action: () => router.push(ROUTES.DISCOVER_TRENDING) },
     ],
     [router]
   );

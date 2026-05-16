@@ -1,6 +1,7 @@
 import { CheckCircle, AlertTriangle, XCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { checkHealth } from '@/lib/health';
+import { ROUTES } from '@/config/routes';
 import type { ServiceStatus } from '@/lib/health';
 
 export const metadata = {
@@ -144,7 +145,10 @@ export default async function StatusPage() {
                 If you&apos;re experiencing problems, check our FAQ or reach out to support.
               </p>
               <div className="flex gap-4">
-                <Link href="/faq" className="text-tiffany-600 hover:text-tiffany-800 font-medium">
+                <Link
+                  href={ROUTES.FAQ}
+                  className="text-tiffany-600 hover:text-tiffany-800 font-medium"
+                >
                   Visit FAQ →
                 </Link>
                 <a

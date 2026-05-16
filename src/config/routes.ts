@@ -187,6 +187,9 @@ export const ROUTES = {
   // Public routes
   HOME: '/',
   AUTH: '/auth',
+  AUTH_LOGIN: '/auth?mode=login',
+  AUTH_REGISTER: '/auth?mode=register',
+  AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   DISCOVER: '/discover',
   WALLETS: '/wallets',
   CREATE: '/create',
@@ -201,10 +204,13 @@ export const ROUTES = {
   BLOG: '/blog',
   DOCS: '/docs',
   FAQ: '/faq',
+  TECHNOLOGY: '/technology',
   PRIVACY: '/privacy',
   TERMS: '/terms',
   STATUS: '/status',
   SECURITY: '/security',
+  DISCOVER_TYPE: (type: string) => `/discover?type=${type}`,
+  DISCOVER_TRENDING: '/discover?trending=true',
 
   // Project routes
   PROJECTS: {
@@ -246,6 +252,7 @@ export const ROUTES = {
     VIEW: (id: string) => `${ENTITY_REGISTRY['asset'].publicBasePath}/${id}`,
   },
   GROUPS: {
+    LIST: ENTITY_REGISTRY['group'].publicBasePath,
     VIEW: (slug: string) => `${ENTITY_REGISTRY['group'].publicBasePath}/${slug}`,
   },
 

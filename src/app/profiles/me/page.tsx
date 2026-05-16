@@ -6,6 +6,7 @@
 import { redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { ROUTES } from '@/config/routes';
 
 export default async function MyProfilePage() {
   const supabase = await createServerClient();
@@ -14,7 +15,7 @@ export default async function MyProfilePage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/auth?mode=login');
+    redirect(ROUTES.AUTH_LOGIN);
   }
 
   const { data: profileData } = await supabase
