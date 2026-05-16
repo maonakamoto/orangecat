@@ -170,7 +170,7 @@ export default function TasksSection({
               </div>
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors"
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
                 aria-label={isExpanded ? 'Collapse tasks' : 'Expand tasks'}
               >
                 {isExpanded ? (

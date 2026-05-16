@@ -145,7 +145,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
         {/* Quick Actions */}
         {query.length === 0 && (
           <div className="p-4 border-b border-border-subtle">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-muted-foreground mb-3 uppercase tracking-wide">
+            <h4 className="text-sm font-medium text-muted-strong mb-3 uppercase tracking-wide">
               Quick Actions
             </h4>
             <div className="space-y-2">
@@ -153,7 +153,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                 <button
                   key={index}
                   onClick={action.action}
-                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
+                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-muted-strong hover:bg-muted rounded-lg transition-colors"
                 >
                   <div className="text-orange-500">{action.icon}</div>
                   <span className="text-base">{action.label}</span>
@@ -168,7 +168,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
         {query.length === 0 && searchHistory.length > 0 && (
           <div className="p-4 border-b border-border-subtle">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide flex items-center gap-2">
+              <h4 className="text-sm font-medium text-muted-strong uppercase tracking-wide flex items-center gap-2">
                 <History className="w-4 h-4" />
                 Recent Searches
               </h4>
@@ -184,7 +184,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                 <button
                   key={index}
                   onClick={() => handleSearch(historyItem)}
-                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
+                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-muted-strong hover:bg-muted rounded-lg transition-colors"
                 >
                   <Clock className="w-4 h-4 text-muted-dim" />
                   <span className="text-base">{historyItem}</span>
@@ -197,7 +197,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
         {/* Trending Searches */}
         {query.length === 0 && (
           <div className="p-4 border-b border-border-subtle">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-muted-foreground mb-3 uppercase tracking-wide flex items-center gap-2">
+            <h4 className="text-sm font-medium text-muted-strong mb-3 uppercase tracking-wide flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
               Trending
             </h4>
@@ -206,7 +206,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                 <button
                   key={index}
                   onClick={() => handleSearch(trending)}
-                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
+                  className="w-full flex items-center gap-4 px-4 py-3 text-left text-muted-strong hover:bg-muted rounded-lg transition-colors"
                 >
                   <TrendingUp className="w-4 h-4 text-orange-500" />
                   <span className="text-base">{trending}</span>
@@ -220,7 +220,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
         {query.length > 1 && (
           <div className="p-4">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide">
+              <h4 className="text-sm font-medium text-muted-strong uppercase tracking-wide">
                 Suggestions
               </h4>
 
@@ -235,7 +235,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                   <button
                     key={index}
                     onClick={() => handleSearch(suggestion)}
-                    className="w-full flex items-center gap-4 px-4 py-3 text-left text-gray-700 dark:text-muted-foreground hover:bg-muted rounded-lg transition-colors"
+                    className="w-full flex items-center gap-4 px-4 py-3 text-left text-muted-strong hover:bg-muted rounded-lg transition-colors"
                   >
                     <Search className="w-4 h-4 text-muted-dim" />
                     <span className="text-base">{suggestion}</span>

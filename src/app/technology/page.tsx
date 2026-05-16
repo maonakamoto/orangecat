@@ -217,7 +217,7 @@ export default function TechnologyPage() {
         <div className="bg-gradient-to-r from-orange-100 to-orange-50 rounded-lg p-6 text-center">
           <Code className="h-16 w-16 text-orange-600 mx-auto mb-4" />
           <h2 className="text-2xl font-semibold text-foreground mb-4">Open Source Philosophy</h2>
-          <p className="text-lg text-gray-700 dark:text-muted-foreground mb-6 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-strong mb-6 max-w-3xl mx-auto">
             We believe in transparency and community-driven development. Our code is open for
             review, contributions, and audits by the Bitcoin community.
           </p>

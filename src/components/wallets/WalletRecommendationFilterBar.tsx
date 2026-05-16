@@ -19,8 +19,7 @@ interface WalletRecommendationFilterBarProps {
 }
 
 const ACTIVE_CLASS = 'bg-orange-100 text-orange-700 border-2 border-orange-300';
-const INACTIVE_CLASS =
-  'bg-muted text-foreground border-2 border-transparent hover:bg-gray-100 dark:hover:bg-muted/80';
+const INACTIVE_CLASS = 'bg-muted text-foreground border-2 border-transparent hover:bg-muted/80';
 const BTN_BASE =
   'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all';
 
@@ -95,7 +94,7 @@ export function WalletRecommendationFilterBar({
         {hasActiveFilters && (
           <button
             onClick={onReset}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:bg-muted transition-all"
           >
             <X className="w-4 h-4" />
             Reset filters

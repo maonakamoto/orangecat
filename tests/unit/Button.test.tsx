@@ -62,7 +62,7 @@ describe('🎨 Button Component - UI Foundation Tests', () => {
     test('should apply ghost variant styling', () => {
       render(<Button variant="ghost">Ghost</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('hover:bg-gray-100', 'text-gray-700');
+      expect(button).toHaveClass('hover:bg-muted', 'text-muted-strong');
     });
 
     test('should apply danger variant styling', () => {

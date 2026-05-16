@@ -105,9 +105,7 @@ export function CatContextTab() {
           {/* Tips */}
           {summary.tips.length > 0 && (
             <div className="mt-4 pt-4 border-t border-border-subtle">
-              <p className="text-xs font-medium text-gray-700 dark:text-muted-foreground mb-2">
-                Tips to improve:
-              </p>
+              <p className="text-xs font-medium text-muted-strong mb-2">Tips to improve:</p>
               <ul className="space-y-1">
                 {summary.tips.map((tip, i) => (
                   <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">

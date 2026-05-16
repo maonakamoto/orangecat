@@ -110,7 +110,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
               <span
                 className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 ${
                   INVESTMENT_RISK_COLORS[investment.risk_level] ??
-                  'bg-muted text-gray-700 dark:text-muted-foreground border-border'
+                  'bg-muted text-muted-strong border-border'
                 }`}
               >
                 <Shield className="h-3 w-3" />

@@ -105,7 +105,7 @@ export function CategoryRow({
         <div className="flex items-center gap-3 flex-1">
           <button
             onClick={() => onToggleExpanded(cat.category)}
-            className="p-1 hover:bg-gray-100 dark:hover:bg-muted rounded"
+            className="p-1 hover:bg-muted rounded"
           >
             {isExpanded ? (
               <ChevronDown className="h-5 w-5 text-muted-dim" />

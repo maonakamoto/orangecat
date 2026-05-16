@@ -127,9 +127,7 @@ export function CatSettingsTab() {
             href={ROUTES.SETTINGS_AI}
             className="mt-3 flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors"
           >
-            <span className="text-sm text-gray-700 dark:text-muted-foreground">
-              Manage API Keys
-            </span>
+            <span className="text-sm text-muted-strong">Manage API Keys</span>
             <ChevronRight className="h-4 w-4 text-muted-dim" />
           </Link>
         </div>

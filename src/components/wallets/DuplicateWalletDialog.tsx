@@ -47,7 +47,7 @@ export function DuplicateWalletDialog({
           <button
             onClick={onClose}
             aria-label="Close dialog"
-            className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-muted transition-colors"
+            className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
             disabled={isLoading}
           >
             <X className="w-4 h-4 text-muted-dim" />

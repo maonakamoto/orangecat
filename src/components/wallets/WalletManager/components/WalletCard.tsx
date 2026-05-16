@@ -106,7 +106,7 @@ export function WalletCard({
             )}
             <button
               onClick={onEdit}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-muted text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Edit wallet"
               aria-label="Edit wallet"
             >
@@ -176,7 +176,7 @@ export function WalletCard({
           </span>
           <button
             onClick={handleCopy}
-            className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-muted text-muted-foreground hover:text-orange-600 transition-colors flex items-center gap-1 min-h-11"
+            className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-orange-600 transition-colors flex items-center gap-1 min-h-11"
             title="Copy address"
             aria-label="Copy address"
           >

@@ -114,7 +114,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                 </code>
                 <button
                   onClick={handleCopySecret}
-                  className="p-1.5 text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded transition-colors"
+                  className="p-1.5 text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:bg-muted rounded transition-colors"
                   title="Copy to clipboard"
                 >
                   {secretCopied ? (

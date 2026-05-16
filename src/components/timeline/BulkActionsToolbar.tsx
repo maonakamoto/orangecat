@@ -61,7 +61,7 @@ export function BulkActionsToolbar({
             disabled={isProcessing}
             className={cn(
               'flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-colors',
-              'hover:bg-gray-100 dark:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
+              'hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
               allSelected ? 'text-tiffany-600' : 'text-muted-foreground'
             )}
             aria-label={allSelected ? 'Deselect all' : 'Select all'}

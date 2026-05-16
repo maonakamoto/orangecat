@@ -133,7 +133,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
           {fullScreen && showProjectSelection && (
             <button
               onClick={() => setIsOptionsSheetOpen(true)}
-              className="mb-3 px-3 py-1.5 bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 rounded-full text-sm font-medium text-gray-700 dark:text-muted-foreground flex items-center gap-1 transition-colors min-h-8"
+              className="mb-3 px-3 py-1.5 bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 rounded-full text-sm font-medium text-muted-strong flex items-center gap-1 transition-colors min-h-8"
             >
               {composer.selectedProjects.length > 0
                 ? `${composer.selectedProjects.length} project${composer.selectedProjects.length > 1 ? 's' : ''}`

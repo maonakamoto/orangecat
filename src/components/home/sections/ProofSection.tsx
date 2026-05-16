@@ -56,16 +56,14 @@ export default function ProofSection() {
               <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
                 {useCase.title}
               </h3>
-              <p className="text-sm sm:text-base text-gray-700 dark:text-muted-foreground mb-4 leading-relaxed">
+              <p className="text-sm sm:text-base text-muted-strong mb-4 leading-relaxed">
                 {useCase.description}
               </p>
 
               {/* Transparency Example */}
               <div className="bg-muted/50 rounded-lg p-3 sm:p-4">
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  <span className="font-semibold text-gray-800 dark:text-foreground">
-                    Transparency in action:{' '}
-                  </span>
+                  <span className="font-semibold text-foreground">Transparency in action: </span>
                   {useCase.transparencyExample}
                 </p>
               </div>

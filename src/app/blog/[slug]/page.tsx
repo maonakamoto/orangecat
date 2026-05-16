@@ -36,20 +36,17 @@ const mdxComponents = {
     </h4>
   ),
   p: ({ children, ...props }: ComponentProps<'p'>) => (
-    <p className="text-lg text-gray-700 dark:text-muted-foreground leading-relaxed mb-6" {...props}>
+    <p className="text-lg text-muted-strong leading-relaxed mb-6" {...props}>
       {children}
     </p>
   ),
   ul: ({ children, ...props }: ComponentProps<'ul'>) => (
-    <ul className="space-y-3 text-gray-700 dark:text-muted-foreground mb-6 ml-6" {...props}>
+    <ul className="space-y-3 text-muted-strong mb-6 ml-6" {...props}>
       {children}
     </ul>
   ),
   ol: ({ children, ...props }: ComponentProps<'ol'>) => (
-    <ol
-      className="space-y-3 text-gray-700 dark:text-muted-foreground mb-6 ml-6 list-decimal"
-      {...props}
-    >
+    <ol className="space-y-3 text-muted-strong mb-6 ml-6 list-decimal" {...props}>
       {children}
     </ol>
   ),
@@ -64,14 +61,11 @@ const mdxComponents = {
       className="border-l-4 border-tiffany-500 pl-6 my-8 bg-tiffany-50 dark:bg-accent py-4 rounded-r-lg"
       {...props}
     >
-      <div className="text-lg text-gray-700 dark:text-muted-foreground italic">{children}</div>
+      <div className="text-lg text-muted-strong italic">{children}</div>
     </blockquote>
   ),
   code: ({ children, ...props }: ComponentProps<'code'>) => (
-    <code
-      className="bg-muted px-2 py-1 rounded text-sm font-mono text-gray-800 dark:text-foreground"
-      {...props}
-    >
+    <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground" {...props}>
       {children}
     </code>
   ),
@@ -111,7 +105,7 @@ const mdxComponents = {
         <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
         {title}
       </h4>
-      <p className="text-gray-700 dark:text-muted-foreground">{description}</p>
+      <p className="text-muted-strong">{description}</p>
     </div>
   ),
 };
@@ -241,7 +235,7 @@ export default async function BlogPost({ params }: PageProps) {
                     <Link
                       key={tag}
                       href={`/blog?tag=${encodeURIComponent(tag)}`}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-muted text-gray-800 dark:text-foreground hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-muted text-foreground hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
                     >
                       <Tag className="w-3 h-3 mr-1" />
                       {tag}
@@ -281,7 +275,7 @@ export default async function BlogPost({ params }: PageProps) {
             {/* Related Posts CTA */}
             <div className={`mt-12 ${GRADIENTS.sectionOrangeTiffany} rounded-2xl p-8 text-center`}>
               <h3 className="text-2xl font-bold text-foreground mb-4">More from OrangeCat</h3>
-              <p className="text-lg text-gray-700 dark:text-muted-foreground mb-6">
+              <p className="text-lg text-muted-strong mb-6">
                 Discover more insights about Bitcoin, security, and building in public.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

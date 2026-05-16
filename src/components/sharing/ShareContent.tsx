@@ -23,7 +23,7 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
     name: 'X',
     icon: XIcon,
     color: 'text-foreground',
-    bgColor: 'bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
+    bgColor: 'bg-muted hover:bg-muted/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const text = `${shareTitle}\n\n${shareDescription}\n\n#Bitcoin #OrangeCat`;
       window.open(
@@ -75,7 +75,7 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
     name: 'Email',
     icon: Mail,
     color: 'text-muted-foreground',
-    bgColor: 'bg-muted hover:bg-gray-100 dark:hover:bg-muted/80',
+    bgColor: 'bg-muted hover:bg-muted/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const subject = encodeURIComponent(`Check out ${shareTitle}`);
       const body = encodeURIComponent(`${shareDescription}\n\n${shareUrl}`);
@@ -186,7 +186,7 @@ export default function ShareContent({
           {onClose && (
             <button
               onClick={onClose}
-              className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground transition-colors p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
+              className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground transition-colors p-2 hover:bg-muted rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Close share menu"
             >
               <X className="w-5 h-5" />
@@ -222,7 +222,7 @@ export default function ShareContent({
               >
                 <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${platform.color}`} />
               </div>
-              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-muted-foreground group-hover:text-gray-900 dark:group-hover:text-foreground">
+              <span className="text-xs sm:text-sm font-medium text-muted-strong group-hover:text-gray-900 dark:group-hover:text-foreground">
                 {platform.name}
               </span>
             </button>
@@ -236,7 +236,7 @@ export default function ShareContent({
         className={`w-full flex items-center justify-center gap-3 p-4 rounded-xl transition-all touch-manipulation active:scale-95 font-semibold ${
           copySuccess
             ? 'bg-green-50 hover:bg-green-100 text-green-700 border-2 border-green-200'
-            : 'bg-muted hover:bg-gray-100 dark:hover:bg-muted/80 text-foreground border-2 border-border'
+            : 'bg-muted hover:bg-muted/80 text-foreground border-2 border-border'
         }`}
         aria-label="Copy URL to clipboard"
       >

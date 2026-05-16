@@ -28,7 +28,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         {post.tags.map(tag => (
           <span
             key={tag}
-            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-gray-800 dark:text-foreground"
+            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-foreground"
           >
             <Tag className="w-3 h-3 mr-1" />
             {tag}

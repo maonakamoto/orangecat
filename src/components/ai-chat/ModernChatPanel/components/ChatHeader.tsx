@@ -50,7 +50,7 @@ export function ChatHeader({
         {hasMessages && (
           <button
             onClick={onClearChat}
-            className="p-2 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+            className="p-2 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Clear chat"
             title="Clear chat"
           >
@@ -60,7 +60,7 @@ export function ChatHeader({
 
         <button
           onClick={() => router.push(ROUTES.SETTINGS_AI)}
-          className="p-2 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+          className="p-2 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
           aria-label="AI settings"
           title="AI Settings"
         >

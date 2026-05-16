@@ -94,9 +94,7 @@ const config: EntityDetailConfig = {
             {entity.expected_outcome && (
               <div className="pt-2 border-t border-border-subtle">
                 <p className="text-sm text-muted-foreground mb-1">Expected Outcome</p>
-                <p className="text-sm text-gray-700 dark:text-muted-foreground">
-                  {entity.expected_outcome}
-                </p>
+                <p className="text-sm text-muted-strong">{entity.expected_outcome}</p>
               </div>
             )}
           </CardContent>

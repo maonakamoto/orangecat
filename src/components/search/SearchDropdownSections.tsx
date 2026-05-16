@@ -63,7 +63,7 @@ export function QuickActionsSection({
   return (
     <div className="p-3 border-b border-border-subtle">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide">
+        <h4 className="text-xs font-medium text-muted-strong uppercase tracking-wide">
           Quick Actions
         </h4>
       </div>
@@ -114,7 +114,7 @@ export function SearchHistorySection({
   return (
     <div className="p-3 border-b border-border-subtle">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide flex items-center gap-1">
+        <h4 className="text-xs font-medium text-muted-strong uppercase tracking-wide flex items-center gap-1">
           <History className="w-3 h-3" />
           Recent Searches
         </h4>
@@ -165,7 +165,7 @@ export function TrendingSearchesSection({
   return (
     <div className="p-3 border-b border-border-subtle">
       <div className="flex items-center mb-2">
-        <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide flex items-center gap-1">
+        <h4 className="text-xs font-medium text-muted-strong uppercase tracking-wide flex items-center gap-1">
           <Sparkles className="w-3 h-3" />
           Trending
         </h4>
@@ -216,7 +216,7 @@ export function SuggestionsSection({
   return (
     <div className="p-3">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-medium text-gray-700 dark:text-muted-foreground uppercase tracking-wide">
+        <h4 className="text-xs font-medium text-muted-strong uppercase tracking-wide">
           Suggestions
         </h4>
         {loading && (

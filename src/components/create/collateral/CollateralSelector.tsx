@@ -98,9 +98,7 @@ export function CollateralSelector({
         {selectedCollateral.length > 0 && (
           <div className={`${GRADIENTS.iconTiffanyLight} border border-tiffany-200 rounded-lg p-4`}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-muted-foreground">
-                Total Collateral Value
-              </span>
+              <span className="text-sm font-medium text-muted-strong">Total Collateral Value</span>
               <span className="text-lg font-bold text-foreground">
                 {totalCollateral.toLocaleString(undefined, {
                   minimumFractionDigits: 2,

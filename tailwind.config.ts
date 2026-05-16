@@ -122,6 +122,7 @@ const config: Config = {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--muted-foreground))',
           dim: 'hsl(var(--muted-dim))',
+          strong: 'hsl(var(--muted-strong))',
         },
         accent: {
           DEFAULT: 'hsl(var(--accent))',

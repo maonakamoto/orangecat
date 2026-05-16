@@ -27,12 +27,12 @@ export default function WalletsPage() {
       {/* Educational Section */}
       <div className="mt-10 p-6 rounded-lg bg-orange-50 border border-orange-200">
         <h4 className="font-semibold text-foreground mb-2">What is a wallet?</h4>
-        <p className="text-sm text-gray-700 dark:text-muted-foreground mb-3">
+        <p className="text-sm text-muted-strong mb-3">
           A Bitcoin wallet lets you receive payments. It gives you a Bitcoin address (looks like
           bc1...) and often a Lightning address (looks like email). You control it. We don't keep
           your funds.
         </p>
-        <div className="text-sm text-gray-700 dark:text-muted-foreground">
+        <div className="text-sm text-muted-strong">
           <div className="mb-1">
             • On-chain address: starts with bc1, slower, best for larger amounts.
           </div>

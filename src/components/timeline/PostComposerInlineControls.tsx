@@ -37,7 +37,7 @@ export function PostComposerInlineControls({
           {!compact && showOptionsButton && (
             <button
               onClick={onShowOptions}
-              className="text-gray-700 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-muted-foreground p-3 min-h-11 min-w-11 flex items-center justify-center"
+              className="text-muted-strong hover:text-gray-700 dark:hover:text-muted-foreground p-3 min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Show post options"
             >
               <ChevronDown className="w-5 h-5" />
@@ -89,9 +89,7 @@ export function PostComposerInlineControls({
       </div>
 
       {loadingProjects && (
-        <div className="mt-2 text-xs text-gray-700 dark:text-muted-foreground">
-          Loading your projects...
-        </div>
+        <div className="mt-2 text-xs text-muted-strong">Loading your projects...</div>
       )}
 
       <div className="hidden sm:block mt-2 text-xs text-muted-dim text-center">

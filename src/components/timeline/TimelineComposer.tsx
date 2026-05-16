@@ -218,7 +218,7 @@ const TimelineComposer = React.memo(function TimelineComposer({
                           'px-3 py-1 rounded-full text-xs font-semibold border transition-colors',
                           isActive
                             ? 'bg-tiffany-500 text-white border-tiffany-500 shadow-sm'
-                            : 'bg-white dark:bg-muted text-gray-700 dark:text-muted-foreground border-border hover:border-tiffany-300'
+                            : 'bg-white dark:bg-muted text-muted-strong border-border hover:border-tiffany-300'
                         )}
                         title={preset.description}
                       >

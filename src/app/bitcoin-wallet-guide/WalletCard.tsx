@@ -91,7 +91,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
             {wallet.features.map(feature => (
               <span
                 key={feature}
-                className="px-2 py-1 bg-muted text-gray-700 dark:text-muted-foreground rounded-full text-xs"
+                className="px-2 py-1 bg-muted text-muted-strong rounded-full text-xs"
               >
                 {feature}
               </span>

@@ -177,7 +177,7 @@ export default function EventsPage() {
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start">
                   <Check className="w-5 h-5 text-tiffany-500 mr-3 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-muted-foreground">{benefit}</span>
+                  <span className="text-muted-strong">{benefit}</span>
                 </div>
               ))}
             </div>

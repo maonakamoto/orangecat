@@ -95,7 +95,7 @@ export default function ChannelComingSoonPage() {
         <Card className="mb-8">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold text-foreground mb-2">Rights & Safety</h3>
-            <p className="text-base text-gray-700 dark:text-muted-foreground">
+            <p className="text-base text-muted-strong">
               Use original or licensed content, or ensure your use is transformative under fair use.
               We respect artists and owners: we will offer clear licensing metadata, an easy
               takedown process, and fair dispute handling. Our goal is to make direct creator

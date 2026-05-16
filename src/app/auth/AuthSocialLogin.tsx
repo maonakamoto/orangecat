@@ -82,7 +82,7 @@ export function AuthSocialLogin({
             variant="ghost"
             disabled={loading}
             onClick={onAnonymousSignIn}
-            className="w-full h-11 text-muted-foreground hover:text-gray-800 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted border border-border font-medium"
+            className="w-full h-11 text-muted-foreground hover:text-gray-800 dark:hover:text-foreground hover:bg-muted border border-border font-medium"
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-2">

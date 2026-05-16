@@ -39,7 +39,7 @@ export function WalletsHelpSection({ isDesktop }: WalletsHelpSectionProps) {
         </svg>
       </summary>
       <div className="px-4 pb-4 lg:px-6 lg:pb-6 pt-0 border-t border-border">
-        <div className="text-sm text-gray-700 dark:text-muted-foreground">
+        <div className="text-sm text-muted-strong">
           <ul className="list-disc list-inside space-y-1.5">
             <li>
               <strong>Recommended:</strong> Use extended public keys (xpub, ypub, zpub) to

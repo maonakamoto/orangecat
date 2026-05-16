@@ -150,9 +150,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                           <h3 className="text-2xl font-semibold text-foreground mb-1">
                             {story.name}
                           </h3>
-                          <p className="text-gray-700 dark:text-muted-foreground font-medium">
-                            {story.role}
-                          </p>
+                          <p className="text-muted-strong font-medium">{story.role}</p>
                           <p className="text-muted-foreground text-sm">{story.location}</p>
                         </div>
                       </div>
@@ -178,18 +176,18 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                       </div>
 
                       {/* Summary */}
-                      <p className="text-gray-700 dark:text-muted-foreground font-medium mb-6 leading-relaxed">
+                      <p className="text-muted-strong font-medium mb-6 leading-relaxed">
                         {story.summary}
                       </p>
 
                       {/* Story Content (MDX) */}
-                      <div className="prose prose-sm max-w-none mb-6 text-gray-700 dark:text-muted-foreground">
+                      <div className="prose prose-sm max-w-none mb-6 text-muted-strong">
                         <MDXRemote source={story.story} />
                       </div>
 
                       {/* Category Badge */}
                       <div className="mt-6">
-                        <span className="inline-block px-3 py-1 bg-white/70 dark:bg-card/70 text-gray-700 dark:text-muted-foreground text-sm font-medium rounded-full">
+                        <span className="inline-block px-3 py-1 bg-white/70 dark:bg-card/70 text-muted-strong text-sm font-medium rounded-full">
                           {story.category}
                         </span>
                       </div>

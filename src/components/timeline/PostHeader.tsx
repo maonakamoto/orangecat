@@ -132,7 +132,7 @@ export function PostHeader({
               e.stopPropagation();
               onMenuToggle();
             }}
-            className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-gray-100 dark:hover:bg-muted rounded-full p-1.5 -mr-1.5 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+            className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-muted rounded-full p-1.5 -mr-1.5 transition-colors min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Post options"
             aria-expanded={showMenu}
             aria-haspopup="menu"

@@ -28,7 +28,7 @@ export function PostComposerFullScreenHeader({
         className="p-2 -ml-2 min-h-11 min-w-11 flex items-center justify-center"
         aria-label="Close composer"
       >
-        <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-muted-foreground" />
+        <ArrowLeft className="w-5 h-5 text-muted-strong" />
       </button>
       <Button
         onClick={onPost}

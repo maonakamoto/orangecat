@@ -31,9 +31,7 @@ export function ProfileMobileSupport({
       <div className="lg:hidden mb-6">
         <div className="bg-card rounded-xl border border-border shadow-sm p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700 dark:text-muted-foreground">
-              Profile Completion
-            </span>
+            <span className="text-sm font-medium text-muted-strong">Profile Completion</span>
             <span className="text-sm font-bold text-foreground">{completionPercentage}%</span>
           </div>
           <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
@@ -48,7 +46,7 @@ export function ProfileMobileSupport({
               <span className="font-medium">Profile complete!</span>
             </div>
           ) : (
-            <div className="mt-3 text-xs text-gray-700 dark:text-muted-foreground">
+            <div className="mt-3 text-xs text-muted-strong">
               <div className="font-medium mb-1">To reach 100%, add:</div>
               <ul className="list-disc list-inside space-y-0.5">
                 {missingFields.map(field => (
@@ -88,7 +86,7 @@ export function ProfileMobileSupport({
               <h3 className="text-lg font-semibold text-foreground">Help & Guidance</h3>
               <button
                 onClick={() => setShowMobileGuidance(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors"
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
               >
                 <svg
                   className="w-5 h-5 text-muted-foreground"

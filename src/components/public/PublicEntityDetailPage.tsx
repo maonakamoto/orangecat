@@ -187,9 +187,7 @@ export default async function PublicEntityDetailPage({
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 dark:text-muted-foreground whitespace-pre-wrap">
-                      {entity.description}
-                    </p>
+                    <p className="text-muted-strong whitespace-pre-wrap">{entity.description}</p>
                   </CardContent>
                 </Card>
               )}

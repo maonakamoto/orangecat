@@ -124,7 +124,7 @@ export function VoiceInputButton({
   const btnClasses = [
     'inline-flex items-center justify-center rounded-lg transition-colors',
     size === 'sm' ? 'p-2' : 'p-3',
-    disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 dark:hover:bg-muted',
+    disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-muted',
     className,
   ].join(' ');
 

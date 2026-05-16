@@ -64,7 +64,7 @@ export function AIChatPanel({
       <div className="flex items-center gap-3 p-4 bg-card border-b border-border">
         <Link
           href={ENTITY_REGISTRY['ai_assistant'].basePath}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+          className="p-2 hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
         >
           <ArrowLeft className="h-5 w-5 text-muted-foreground" />
         </Link>

@@ -214,7 +214,7 @@ export function RepostModal({
               </div>
 
               {/* Original Post Preview (X-style) */}
-              <div className="border border-border rounded-2xl bg-muted p-3 hover:bg-gray-100 dark:hover:bg-muted/80 transition-colors">
+              <div className="border border-border rounded-2xl bg-muted p-3 hover:bg-muted/80 transition-colors">
                 <div className="flex items-start gap-3">
                   <AvatarLink
                     username={originalAuthor.username || null}

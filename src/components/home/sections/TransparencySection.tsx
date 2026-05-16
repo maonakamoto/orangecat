@@ -145,7 +145,7 @@ export default function TransparencySection() {
                 {/* Transparency Score */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-                    <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-muted-foreground">
+                    <span className="text-xs sm:text-sm font-medium text-muted-strong">
                       Transparency Score
                     </span>
                     <span className="text-xl sm:text-2xl font-bold text-green-600">High</span>
@@ -168,7 +168,7 @@ export default function TransparencySection() {
                     How Updates Work:
                   </p>
                   <div className="bg-muted/50 rounded-lg p-3 sm:p-4">
-                    <p className="text-xs sm:text-sm text-gray-700 dark:text-muted-foreground mb-1.5 sm:mb-2">
+                    <p className="text-xs sm:text-sm text-muted-strong mb-1.5 sm:mb-2">
                       &quot;Received funding for my project. Withdrew funds and posted receipts
                       showing exactly how it was spent.&quot;
                     </p>

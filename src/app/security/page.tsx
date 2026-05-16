@@ -91,7 +91,7 @@ export default function SecurityPage() {
         {/* Security Overview */}
         <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8">
           <h2 className="text-2xl font-semibold text-foreground mb-4">Our Security Philosophy</h2>
-          <p className="text-gray-700 dark:text-muted-foreground mb-6">
+          <p className="text-muted-strong mb-6">
             OrangeCat is built on Bitcoin-first principles, which means we prioritize
             decentralization, self-custody, and transparency. We never hold your funds, and we
             design our systems to minimize the data we collect while maximizing security.
@@ -140,7 +140,7 @@ export default function SecurityPage() {
                 {practice.items.map((item, itemIndex) => (
                   <li key={itemIndex} className="flex items-start">
                     <div className="w-2 h-2 bg-tiffany-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <span className="text-gray-700 dark:text-muted-foreground">{item}</span>
+                    <span className="text-muted-strong">{item}</span>
                   </li>
                 ))}
               </ul>
