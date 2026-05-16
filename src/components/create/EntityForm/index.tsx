@@ -97,6 +97,7 @@ export function EntityForm<T extends Record<string, unknown>>({
     setErrors,
     onEntityCreated: setCreatedEntity,
     handleFieldChange,
+    wizardMode,
   });
 
   const handleTemplateSelect = useCallback(

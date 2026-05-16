@@ -98,7 +98,7 @@ function WizardNavigation({
           </Button>
         )}
         {wizardMode.onNext ? (
-          <Button type="button" onClick={wizardMode.onNext} disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Next
           </Button>
         ) : wizardMode.isLastStep ? (

@@ -7,6 +7,16 @@ import { API_ROUTES } from '@/config/api-routes';
 import type { EntityConfig, FormState } from '../../types';
 import { executeEntityFormSubmit } from './entityFormSubmitAction';
 
+interface WizardMode {
+  currentStep: number;
+  totalSteps: number;
+  visibleFields: string[];
+  onNext?: () => void;
+  onPrevious?: () => void;
+  onSkip?: () => void;
+  isLastStep?: boolean;
+}
+
 interface UseEntityFormSubmitParams<T extends Record<string, unknown>> {
   config: EntityConfig<T>;
   formState: FormState<T>;
@@ -20,6 +30,7 @@ interface UseEntityFormSubmitParams<T extends Record<string, unknown>> {
   setErrors: (errors: Record<string, string>) => void;
   onEntityCreated: (entity: { id: string; title: string }) => void;
   handleFieldChange: (name: keyof T, value: unknown) => void;
+  wizardMode?: WizardMode;
 }
 
 export function useEntityFormSubmit<T extends Record<string, unknown>>({
@@ -35,6 +46,7 @@ export function useEntityFormSubmit<T extends Record<string, unknown>>({
   setErrors,
   onEntityCreated,
   handleFieldChange,
+  wizardMode,
 }: UseEntityFormSubmitParams<T>) {
   const router = useRouter();
   const existingWalletLinkIdRef = useRef<string | undefined>(undefined);
@@ -78,6 +90,7 @@ export function useEntityFormSubmit<T extends Record<string, unknown>>({
         onEntityCreated,
         router,
         existingWalletLinkIdRef,
+        wizardMode,
       });
     },
     [
@@ -93,6 +106,7 @@ export function useEntityFormSubmit<T extends Record<string, unknown>>({
       setErrors,
       user,
       onEntityCreated,
+      wizardMode,
     ]
   );
 

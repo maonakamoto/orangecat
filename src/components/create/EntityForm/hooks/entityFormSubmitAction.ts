@@ -5,6 +5,11 @@ import { API_ROUTES } from '@/config/api-routes';
 import { entityEvents } from '@/lib/analytics';
 import type { EntityConfig } from '../../types';
 
+interface WizardMode {
+  visibleFields: string[];
+  onNext?: () => void;
+}
+
 interface EntityFormSubmitParams<T extends Record<string, unknown>> {
   config: EntityConfig<T>;
   formStateData: T;
@@ -19,6 +24,7 @@ interface EntityFormSubmitParams<T extends Record<string, unknown>> {
   onEntityCreated: (entity: { id: string; title: string }) => void;
   router: { push: (url: string) => void };
   existingWalletLinkIdRef: { current: string | undefined };
+  wizardMode?: WizardMode;
 }
 
 export async function executeEntityFormSubmit<T extends Record<string, unknown>>({
@@ -35,7 +41,37 @@ export async function executeEntityFormSubmit<T extends Record<string, unknown>>
   onEntityCreated,
   router,
   existingWalletLinkIdRef,
+  wizardMode,
 }: EntityFormSubmitParams<T>): Promise<void> {
+  // Wizard intermediate step: validate only visible fields, then advance without submitting.
+  if (wizardMode?.onNext) {
+    const dataToValidate = { ...config.defaultValues, ...formStateData };
+    try {
+      config.validationSchema.parse(dataToValidate);
+      // Full schema passed — safe to advance
+      setErrors({});
+      wizardMode.onNext();
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const visibleErrors = error.errors.filter(err =>
+          wizardMode.visibleFields.includes(err.path[0] as string)
+        );
+        if (visibleErrors.length > 0) {
+          const fieldErrors: Record<string, string> = {};
+          visibleErrors.forEach(err => {
+            fieldErrors[err.path[0] as string] = err.message;
+          });
+          setErrors(fieldErrors);
+          return;
+        }
+        // No errors on visible fields — advance (errors on hidden fields caught at final submit)
+        setErrors({});
+        wizardMode.onNext();
+      }
+    }
+    return;
+  }
+
   try {
     setSubmitting(true);
 
