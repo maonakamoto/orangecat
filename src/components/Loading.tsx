@@ -95,7 +95,7 @@ export function GlobalAuthErrorBanner() {
     <div className="fixed top-0 left-0 right-0 z-toast bg-red-600 text-white text-center py-3 shadow-lg animate-fade-in-up">
       <span>{authError}</span>
       <button
-        className="ml-4 px-3 py-1 bg-white text-red-600 rounded hover:bg-gray-100 transition-colors duration-150"
+        className="ml-4 px-3 py-1 bg-white dark:bg-card text-red-600 rounded hover:bg-gray-100 dark:hover:bg-muted transition-colors duration-150"
         onClick={() => {
           setAuthError(null);
           // Error dismissed by user

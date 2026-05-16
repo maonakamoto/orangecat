@@ -111,7 +111,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
         )}
       >
         {isUser ? (
-          <User className="h-4 w-4 text-gray-600" />
+          <User className="h-4 w-4 text-gray-600 dark:text-muted-foreground" />
         ) : (
           <Cat className="h-4 w-4 text-white" />
         )}
@@ -134,15 +134,15 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
             {isLast && !isUser && !displayContent && (
               <span className="inline-flex items-center gap-1">
                 <span
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  className="w-2 h-2 bg-gray-400 dark:bg-muted-foreground rounded-full animate-bounce"
                   style={{ animationDelay: '0ms' }}
                 />
                 <span
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  className="w-2 h-2 bg-gray-400 dark:bg-muted-foreground rounded-full animate-bounce"
                   style={{ animationDelay: '150ms' }}
                 />
                 <span
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  className="w-2 h-2 bg-gray-400 dark:bg-muted-foreground rounded-full animate-bounce"
                   style={{ animationDelay: '300ms' }}
                 />
               </span>

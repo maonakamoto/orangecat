@@ -41,7 +41,7 @@ export function AIChatPanel({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400 dark:text-muted-foreground" />
       </div>
     );
   }
@@ -60,13 +60,13 @@ export function AIChatPanel({
   const assistant = conversation?.assistant;
 
   return (
-    <div className="flex flex-col h-full bg-gray-50">
-      <div className="flex items-center gap-3 p-4 bg-white border-b border-gray-200">
+    <div className="flex flex-col h-full bg-gray-50 dark:bg-muted">
+      <div className="flex items-center gap-3 p-4 bg-white dark:bg-card border-b border-gray-200 dark:border-border">
         <Link
           href={ENTITY_REGISTRY['ai_assistant'].basePath}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+          className="p-2 hover:bg-gray-100 dark:hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
         >
-          <ArrowLeft className="h-5 w-5 text-gray-600" />
+          <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-muted-foreground" />
         </Link>
 
         <Avatar className="h-10 w-10">
@@ -77,13 +77,15 @@ export function AIChatPanel({
         </Avatar>
 
         <div className="flex-1 min-w-0">
-          <h2 className="font-semibold text-gray-900 truncate">
+          <h2 className="font-semibold text-gray-900 dark:text-foreground truncate">
             {assistant?.title || 'AI Assistant'}
           </h2>
           <div className="flex items-center gap-2 mt-0.5">
             {lastModelUsed && <ModelBadge modelId={lastModelUsed} />}
             {conversation?.title && (
-              <span className="text-base text-gray-500 truncate">{conversation.title}</span>
+              <span className="text-base text-gray-500 dark:text-muted-foreground truncate">
+                {conversation.title}
+              </span>
             )}
           </div>
         </div>
@@ -142,16 +144,18 @@ export function AIChatPanel({
                 <Bot className="h-8 w-8" />
               </AvatarFallback>
             </Avatar>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-2">
               {assistant?.welcome_message?.trim() ? assistant.title : 'Start a conversation'}
             </h3>
-            <p className="text-gray-600 max-w-md whitespace-pre-wrap">
+            <p className="text-gray-600 dark:text-muted-foreground max-w-md whitespace-pre-wrap">
               {assistant?.welcome_message?.trim() ||
                 `Send a message to begin chatting with ${assistant?.title || 'your Cat'}.`}
             </p>
-            <p className="text-sm text-gray-400 mt-2">Type a message below to begin</p>
+            <p className="text-sm text-gray-400 dark:text-muted-foreground mt-2">
+              Type a message below to begin
+            </p>
             {!userStatus?.hasByok && (
-              <p className="text-sm text-gray-400 mt-4">
+              <p className="text-sm text-gray-400 dark:text-muted-foreground mt-4">
                 Using free tier • {userStatus?.freeMessagesRemaining || 0} messages remaining today
               </p>
             )}
