@@ -12,7 +12,7 @@ interface BlogPostCardProps {
 export function BlogPostCard({ post }: BlogPostCardProps) {
   return (
     <Card className="p-6 hover:shadow-lg transition-shadow">
-      <div className="flex items-center text-sm text-gray-500 mb-4">
+      <div className="flex items-center text-sm text-gray-500 dark:text-muted-foreground mb-4">
         <Calendar className="w-4 h-4 mr-2" />
         {post.date}
         <Clock className="w-4 h-4 ml-4 mr-2" />
@@ -23,12 +23,12 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           {post.title}
         </h2>
       </Link>
-      <p className="text-base text-gray-600 mb-4">{post.excerpt}</p>
+      <p className="text-base text-gray-600 dark:text-muted-foreground mb-4">{post.excerpt}</p>
       <div className="flex flex-wrap gap-2">
         {post.tags.map(tag => (
           <span
             key={tag}
-            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-muted text-gray-800 dark:text-foreground"
           >
             <Tag className="w-3 h-3 mr-1" />
             {tag}
@@ -36,8 +36,8 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         ))}
       </div>
       {post.author && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <p className="text-sm text-gray-500">By {post.author}</p>
+        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-border">
+          <p className="text-sm text-gray-500 dark:text-muted-foreground">By {post.author}</p>
         </div>
       )}
     </Card>

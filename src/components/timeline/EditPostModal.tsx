@@ -161,7 +161,7 @@ export function EditPostModal({
             onChange={e => setContent(e.target.value)}
             placeholder="What's happening?"
             className={cn(
-              'min-h-[150px] text-base leading-relaxed border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-gray-500',
+              'min-h-[150px] text-base leading-relaxed border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-gray-500 dark:placeholder:text-muted-foreground',
               isOverLimit && 'text-red-600'
             )}
             disabled={isSaving}

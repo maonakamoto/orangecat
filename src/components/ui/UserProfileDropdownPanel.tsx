@@ -105,7 +105,7 @@ export function UserProfileDropdownPanel({
                 <h3 className="font-semibold text-lg text-gray-900 dark:text-foreground group-hover:text-tiffany-600 transition-colors duration-200 truncate">
                   {displayName}
                 </h3>
-                <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-tiffany-500 transition-all duration-200 opacity-0 group-hover:opacity-100 transform group-hover:scale-110" />
+                <ExternalLink className="w-4 h-4 text-gray-400 dark:text-muted-foreground group-hover:text-tiffany-500 transition-all duration-200 opacity-0 group-hover:opacity-100 transform group-hover:scale-110" />
               </button>
               {username && (
                 <p className="text-sm font-medium text-gray-600 dark:text-muted-foreground">

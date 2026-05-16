@@ -199,7 +199,7 @@ export function PostCard({
                     value={replyText}
                     onChange={e => setReplyText(e.target.value)}
                     placeholder="Post your reply"
-                    className="min-h-11 text-sm border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-gray-500"
+                    className="min-h-11 text-sm border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-gray-500 dark:placeholder:text-muted-foreground"
                     disabled={isReplying}
                     autoFocus
                   />

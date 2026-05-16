@@ -182,7 +182,7 @@ export function DocumentFileUpload({
           'relative rounded-xl border-2 border-dashed transition-all duration-200',
           'flex flex-col items-center justify-center p-8 text-center',
           state === 'idle' &&
-            'border-gray-300 bg-gray-50 hover:border-tiffany-400 hover:bg-tiffany-50 cursor-pointer',
+            'border-gray-300 dark:border-border bg-gray-50 dark:bg-muted hover:border-tiffany-400 hover:bg-tiffany-50 cursor-pointer',
           state === 'dragging' && 'border-tiffany-500 bg-tiffany-50 scale-[1.02]',
           state === 'uploading' && 'border-tiffany-400 bg-tiffany-50 cursor-wait',
           state === 'success' && 'border-green-400 bg-green-50',
@@ -194,13 +194,17 @@ export function DocumentFileUpload({
             <div className="p-4 bg-tiffany-100 rounded-full mb-4">
               <Upload className="h-8 w-8 text-tiffany-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">Upload a file</h3>
-            <p className="text-base text-gray-600 mb-3">Drag & drop or click to browse</p>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-1">
+              Upload a file
+            </h3>
+            <p className="text-base text-gray-600 dark:text-muted-foreground mb-3">
+              Drag & drop or click to browse
+            </p>
             <div className="flex flex-wrap justify-center gap-2">
               {ACCEPTED_EXTENSIONS.map(ext => (
                 <span
                   key={ext}
-                  className="px-2 py-1 bg-white rounded-md text-xs font-medium text-gray-600 border border-gray-200"
+                  className="px-2 py-1 bg-white dark:bg-card rounded-md text-xs font-medium text-gray-600 dark:text-muted-foreground border border-gray-200 dark:border-border"
                 >
                   {ext}
                 </span>
@@ -223,8 +227,12 @@ export function DocumentFileUpload({
             <div className="p-4 bg-tiffany-100 rounded-full mb-4">
               <Loader2 className="h-8 w-8 text-tiffany-600 animate-spin" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">Processing...</h3>
-            <p className="text-base text-gray-600">Extracting content from {fileName}</p>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-foreground mb-1">
+              Processing...
+            </h3>
+            <p className="text-base text-gray-600 dark:text-muted-foreground">
+              Extracting content from {fileName}
+            </p>
           </>
         )}
 
@@ -254,7 +262,7 @@ export function DocumentFileUpload({
             </div>
             <h3 className="text-lg font-semibold text-red-900 mb-1">Upload failed</h3>
             <p className="text-base text-red-600 mb-3">{errorMessage}</p>
-            <p className="text-base text-gray-600">Click to try again</p>
+            <p className="text-base text-gray-600 dark:text-muted-foreground">Click to try again</p>
           </>
         )}
       </div>

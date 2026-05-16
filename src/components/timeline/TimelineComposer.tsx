@@ -172,7 +172,7 @@ const TimelineComposer = React.memo(function TimelineComposer({
               'leading-relaxed break-words',
               'max-h-[60vh] overflow-y-auto',
               'empty:before:content-[attr(data-placeholder)]',
-              'empty:before:text-gray-400',
+              'empty:before:text-gray-400 dark:empty:before:text-muted-foreground',
               'empty:before:pointer-events-none',
               postComposer.isPosting && 'opacity-50 cursor-not-allowed'
             )}
