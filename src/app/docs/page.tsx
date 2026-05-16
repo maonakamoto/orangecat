@@ -130,7 +130,7 @@ export default function DocsPage() {
               ) for instant, near-zero-fee payments. On-chain Bitcoin is also supported.
             </p>
             <p className="text-gray-600 dark:text-muted-foreground leading-relaxed">
-              OrangeCat is not Bitcoin-only. Any payment method — Twint, PayPal, Venmo, Monero, bank
+              OrangeCat is not Bitcoin-only. Any payment method — Twint, PayPal, Venmo, bank
               transfers — can be listed as a receiving option. Users choose the method that works
               for them. Meet counterparties where they are.
             </p>

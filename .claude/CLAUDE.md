@@ -16,7 +16,7 @@
 
 1. **The Cat is the interface** — "My Cat" is the primary AI agent for every user and group. Entities provide structured context the Cat reads and operates on. Build for the Cat first.
 2. **Pseudonymous by default** — real identity is opt-in, never required. Any pseudonymous actor is a full economic participant.
-3. **Any currency** — Bitcoin/Lightning is native and preferred, but any payment method — local or global (Twint, PayPal, Venmo, Monero, and regional equivalents worldwide) — is a first-class citizen. Meet users where they are.
+3. **Any currency** — Bitcoin/Lightning is native and preferred, but any payment method — local or global (Twint, PayPal, Venmo, bank transfers, and regional fiat equivalents worldwide) — is a first-class citizen. Meet users where they are.
 4. **Full economic spectrum** — from gift (no strings) to loan (some strings) to investment (more strings). All forms of value coordination belong on this platform.
 5. **Private where needed, transparent where chosen** — E2E encrypted messaging, Nostr as the censorship-resistant layer, Bitcoin's on-chain transparency available when appropriate.
 6. **Entities are the Cat's world model** — every entity type represents a form of economic or governance activity. The richer the entity structure, the smarter the Cat can be.
@@ -40,7 +40,7 @@
 
 - When adding features, ask: does this serve the Cat, or does it serve a human manually? Prefer both.
 - Payment fields should support any payment method, not just Bitcoin addresses.
-- "Wallet" is a subset of "payment methods" — a user may have Lightning, Monero, PayPal, and Twint all as valid receiving options.
+- "Wallet" is a subset of "payment methods" — a user may have Lightning, PayPal, and Twint all as valid receiving options.
 - Messaging should be built with E2E encryption and Nostr integration in mind, even if not yet implemented.
 - All entity types in the taxonomy are in the registry. When the Cat creates an entity, it uses the registry to find the API endpoint and schema.
 

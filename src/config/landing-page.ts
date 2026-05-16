@@ -153,7 +153,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     icon: Wallet,
     title: 'Pick Your Currency',
     description:
-      'Bitcoin and Lightning native — but Twint, PayPal, Monero, and local payment methods worldwide are all first-class. Meet your counterparty where they are.',
+      'Bitcoin and Lightning native — but Twint, PayPal, and local fiat payment methods worldwide are all first-class. Meet your counterparty where they are.',
     iconGradient: GRADIENTS.iconOrange,
     bgColor: 'bg-muted',
   },
@@ -191,7 +191,7 @@ export const PLATFORM_COMPARISON: ComparisonRow[] = [
   {
     feature: 'Payment methods',
     traditional: 'One currency, their rules',
-    orangecat: 'Any currency — Bitcoin, Twint, PayPal, Monero…',
+    orangecat: 'Any currency — Bitcoin, Twint, PayPal, fiat…',
     highlight: true,
   },
   { feature: 'Platform fees', traditional: '5–10%', orangecat: '0%' },
@@ -233,7 +233,7 @@ export const PLATFORM_BENEFITS: PlatformBenefit[] = [
     icon: Wallet,
     title: 'Any Currency',
     description:
-      'Bitcoin and Lightning are native, but Twint, PayPal, Monero, and local payment methods worldwide are first-class.',
+      'Bitcoin and Lightning are native, but Twint, PayPal, and local fiat payment methods worldwide are first-class.',
   },
   {
     icon: Lock,

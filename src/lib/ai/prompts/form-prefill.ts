@@ -20,7 +20,7 @@ export function getSystemPrompt(entityType: EntityType): string {
 Your task is to extract structured data from a user's natural language description to help them create a ${entityName} listing.
 
 IMPORTANT CONTEXT:
-- OrangeCat supports Bitcoin/Lightning and any payment method (Twint, PayPal, Monero, etc.)
+- OrangeCat supports Bitcoin/Lightning and any fiat payment method (Twint, PayPal, Venmo, bank transfers, etc.)
 - Express Bitcoin prices in BTC (e.g., 0.001 BTC), not satoshis
 - Keep fiat prices in their original currency (CHF, USD, EUR, etc.)
 - Price examples: "0.001 BTC", "CHF 50", "$25", "€100"
