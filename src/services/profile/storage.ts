@@ -16,7 +16,8 @@ import type { ServiceResult } from '@/types/common';
 export type { FileUploadResult, FileUploadProgress };
 
 export class ProfileStorageService {
-  private static readonly BUCKET_NAME = STORAGE_BUCKETS.AVATARS;
+  private static readonly AVATAR_BUCKET = STORAGE_BUCKETS.AVATARS;
+  private static readonly BANNER_BUCKET = STORAGE_BUCKETS.BANNERS;
   private static readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB for profile images
   private static readonly ALLOWED_TYPES = [
     'image/jpeg',
@@ -34,7 +35,7 @@ export class ProfileStorageService {
     file: File,
     onProgress?: (progress: FileUploadProgress) => void
   ): Promise<FileUploadResult> {
-    return this.uploadFile(file, `${userId}/avatar`, 'avatar', onProgress);
+    return this.uploadFile(file, this.AVATAR_BUCKET, `${userId}/avatar`, 'avatar', onProgress);
   }
 
   /**
@@ -45,7 +46,7 @@ export class ProfileStorageService {
     file: File,
     onProgress?: (progress: FileUploadProgress) => void
   ): Promise<FileUploadResult> {
-    return this.uploadFile(file, `${userId}/banner`, 'banner', onProgress);
+    return this.uploadFile(file, this.BANNER_BUCKET, `${userId}/banner`, 'banner', onProgress);
   }
 
   /**
@@ -53,6 +54,7 @@ export class ProfileStorageService {
    */
   private static async uploadFile(
     file: File,
+    bucketName: string,
     path: string,
     type: string,
     onProgress?: (progress: FileUploadProgress) => void
@@ -89,7 +91,7 @@ export class ProfileStorageService {
 
       // Upload to Supabase Storage
       const { data: _data, error } = await supabase.storage
-        .from(this.BUCKET_NAME)
+        .from(bucketName)
         .upload(fileName, file, {
           cacheControl: '31536000', // 1 year
           upsert: true, // Replace if exists
@@ -115,7 +117,7 @@ export class ProfileStorageService {
       // Get public URL
       const {
         data: { publicUrl },
-      } = supabase.storage.from(this.BUCKET_NAME).getPublicUrl(fileName);
+      } = supabase.storage.from(bucketName).getPublicUrl(fileName);
 
       logger.info(`Successfully uploaded ${type}`, { fileName, url: publicUrl });
 
@@ -159,9 +161,12 @@ export class ProfileStorageService {
   /**
    * Delete a file from storage
    */
-  static async deleteFile(filePath: string): Promise<ServiceResult> {
+  static async deleteFile(
+    filePath: string,
+    bucketName: string = ProfileStorageService.AVATAR_BUCKET
+  ): Promise<ServiceResult> {
     try {
-      const { error } = await supabase.storage.from(this.BUCKET_NAME).remove([filePath]);
+      const { error } = await supabase.storage.from(bucketName).remove([filePath]);
 
       if (error) {
         logger.error('Failed to delete file', { error, filePath });

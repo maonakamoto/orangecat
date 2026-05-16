@@ -9,13 +9,14 @@
 
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
+import { STORAGE_BUCKETS } from '@/config/database-tables';
 import type { FileUploadResult, FileUploadProgress } from '@/types/storage';
 import type { ServiceResult } from '@/types/common';
 
 export type { FileUploadResult, FileUploadProgress };
 
 export class ProofStorageService {
-  private static readonly BUCKET_NAME = 'proofs';
+  private static readonly BUCKET_NAME = STORAGE_BUCKETS.PROOFS;
   private static readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB for proof images
   private static readonly ALLOWED_TYPES = [
     'image/jpeg',

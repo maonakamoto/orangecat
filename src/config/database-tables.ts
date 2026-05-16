@@ -164,5 +164,8 @@ export const TIMELINE_TABLES = {
  */
 export const STORAGE_BUCKETS = {
   AVATARS: 'avatars',
+  BANNERS: 'banners',
   PROJECT_MEDIA: 'project-media',
+  PROOFS: 'proofs',
+  DOCUMENTS: 'documents',
 } as const;

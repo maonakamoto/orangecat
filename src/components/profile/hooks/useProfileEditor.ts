@@ -134,7 +134,9 @@ export function useProfileEditor({
     const setPreview = type === 'avatar' ? setAvatarPreview : setBannerPreview;
     try {
       setPreview(URL.createObjectURL(file));
-      const result = await ProfileStorageService.uploadAvatar(userId, file);
+      const result = await (type === 'avatar'
+        ? ProfileStorageService.uploadAvatar(userId, file)
+        : ProfileStorageService.uploadBanner(userId, file));
       if (result.success && result.url) {
         form.setValue(`${type}_url` as keyof ProfileFormValues, result.url);
         setPreview(result.url);
