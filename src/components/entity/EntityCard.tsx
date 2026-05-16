@@ -60,7 +60,7 @@ const badgeVariantClasses: Record<string, string> = {
 };
 
 export function EntityCard({
-  id,
+  id: _id,
   title,
   description,
   status,
