@@ -107,8 +107,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </AppShell>
             </AuthProvider>
           </QueryProvider>
+          <Toaster position="top-right" richColors closeButton />
         </ThemeProvider>
-        <Toaster position="top-right" richColors closeButton />
         {gaId && (
           <>
             <Script
