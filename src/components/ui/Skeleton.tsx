@@ -14,7 +14,11 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Skeleton({ className, ...props }: SkeletonProps) {
   return (
     <div
-      className={cn('animate-pulse rounded-md bg-gray-200 dark:bg-gray-700', className)}
+      className={cn(
+        // eslint-disable-next-line no-restricted-syntax -- skeleton shimmer requires mid-tone gray; bg-muted dark (11%) is too dark for the animate-pulse effect
+        'animate-pulse rounded-md bg-gray-200 dark:bg-gray-700',
+        className
+      )}
       {...props}
     />
   );

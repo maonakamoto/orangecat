@@ -57,6 +57,14 @@
       {
         "selector": "Identifier[name=/[Cc]rowdfund/]",
         "message": "CLAUDE.md bans 'crowdfund' terminology — use 'fund' / 'funding' / 'project' instead."
+      },
+      {
+        "selector": "Literal[value=/dark:(?:bg|text|border|ring|from|to|via|fill|stroke)-(?:gray|slate|zinc|neutral|stone)-\\d+/]",
+        "message": "Raw Tailwind gray in dark: variant — use a semantic token (bg-muted, bg-border, border, text-foreground, text-muted-foreground, etc.). See globals.css :root for available tokens. Add eslint-disable-next-line with a reason comment if this is an intentional design exception."
+      },
+      {
+        "selector": "Literal[value=/dark:(?:bg|text|border|ring)-\\[#[0-9a-fA-F]+\\]/]",
+        "message": "Arbitrary hex color in dark: variant — define a CSS custom property in globals.css and use a semantic Tailwind class instead."
       }
     ],
 

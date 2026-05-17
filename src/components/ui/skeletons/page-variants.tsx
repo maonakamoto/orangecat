@@ -1,9 +1,5 @@
 import { Skeleton } from '../Skeleton';
-import {
-  ListItemSkeleton,
-  PageHeaderSkeleton,
-  TimelinePostSkeleton,
-} from './component-variants';
+import { ListItemSkeleton, PageHeaderSkeleton, TimelinePostSkeleton } from './component-variants';
 
 /**
  * Entity List Page Skeleton
@@ -16,7 +12,7 @@ export function EntityListPageSkeleton() {
         <PageHeaderSkeleton />
         <Skeleton className="h-10 w-32 rounded-lg" />
       </div>
-      <div className="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+      <div className="rounded-xl border border-border overflow-hidden">
         <ListItemSkeleton />
         <ListItemSkeleton />
         <ListItemSkeleton />
@@ -104,10 +100,7 @@ export function SettingsPageSkeleton() {
     <div className="space-y-6 p-4 md:p-6 max-w-3xl mx-auto">
       <PageHeaderSkeleton />
       {Array.from({ length: 3 }).map((_, i) => (
-        <div
-          key={i}
-          className="space-y-4 rounded-xl border border-gray-200 dark:border-gray-800 p-6"
-        >
+        <div key={i} className="space-y-4 rounded-xl border border-border p-6">
           <Skeleton className="h-5 w-40" />
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-3/4" />
@@ -125,14 +118,14 @@ export function SettingsPageSkeleton() {
 export function ChatPageSkeleton() {
   return (
     <div className="flex h-[calc(100vh-4rem)]">
-      <div className="hidden md:block w-64 border-r border-gray-200 dark:border-gray-800 p-4 space-y-3">
+      <div className="hidden md:block w-64 border-r border-border p-4 space-y-3">
         <Skeleton className="h-10 w-full rounded-lg" />
         {Array.from({ length: 5 }).map((_, i) => (
           <Skeleton key={i} className="h-12 w-full rounded-lg" />
         ))}
       </div>
       <div className="flex-1 flex flex-col">
-        <div className="border-b border-gray-200 dark:border-gray-800 p-4">
+        <div className="border-b border-border p-4">
           <Skeleton className="h-6 w-48" />
         </div>
         <div className="flex-1 p-4 space-y-4">
@@ -149,7 +142,7 @@ export function ChatPageSkeleton() {
             <Skeleton className="h-24 w-2/3 rounded-xl" />
           </div>
         </div>
-        <div className="border-t border-gray-200 dark:border-gray-800 p-4">
+        <div className="border-t border-border p-4">
           <Skeleton className="h-12 w-full rounded-xl" />
         </div>
       </div>

@@ -25,7 +25,7 @@ export function RouteError({ error, reset, context }: RouteErrorProps) {
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center">
       <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
       <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
-      <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-md">
+      <p className="text-muted-foreground mb-4 max-w-md">
         There was a problem loading this page. Please try again.
       </p>
 

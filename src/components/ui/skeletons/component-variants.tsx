@@ -19,7 +19,7 @@ export function ProjectCardSkeleton() {
             <Skeleton className="h-4 w-24" />
           </div>
         </div>
-        <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+        <div className="flex items-center gap-2 pt-2 border-t border-subtle">
           <Skeleton className="h-8 w-8 rounded-full" />
           <Skeleton className="h-4 w-32" />
         </div>
@@ -57,6 +57,7 @@ export function ProfileHeaderSkeleton() {
     <div className="relative">
       <Skeleton className="h-48 md:h-64 lg:h-80 w-full rounded-2xl" />
       <div className="absolute -bottom-12 left-4 md:-bottom-16 md:left-8">
+        {/* eslint-disable-next-line no-restricted-syntax -- avatar photo ring uses white/gray-900 to separate from cover image; no semantic token covers this visual boundary */}
         <Skeleton className="h-24 w-24 md:h-32 md:w-32 rounded-2xl border-4 border-white dark:border-gray-900" />
       </div>
       <div className="mt-16 md:mt-20 space-y-4">
@@ -96,7 +97,7 @@ export function CommentSkeleton() {
 
 export function ListItemSkeleton() {
   return (
-    <div className="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-800">
+    <div className="flex items-center gap-4 p-4 border-b border-border">
       <Skeleton className="h-12 w-12 rounded-lg flex-shrink-0" />
       <div className="flex-1 space-y-2">
         <Skeleton className="h-4 w-3/4" />
@@ -125,7 +126,7 @@ export function GridSkeleton({ count = 6, children, className }: GridSkeletonPro
 
 export function TableRowSkeleton({ columns = 4 }: { columns?: number }) {
   return (
-    <div className="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-800">
+    <div className="flex items-center gap-4 p-4 border-b border-border">
       {Array.from({ length: columns }).map((_, index) => (
         <Skeleton
           key={index}

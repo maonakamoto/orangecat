@@ -34,7 +34,7 @@ function ErrorFallback({ icon, title, message, onRetry }: ErrorFallbackProps) {
         {icon}
       </div>
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{title}</h3>
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 max-w-sm">{message}</p>
+      <p className="text-sm text-muted-foreground mb-4 max-w-sm">{message}</p>
       {onRetry && (
         <Button onClick={onRetry} variant="secondary" size="sm">
           <RefreshCw className="w-4 h-4 mr-2" />
