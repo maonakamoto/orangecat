@@ -206,7 +206,7 @@
     "shadcn": "^3.4.2",
     "supabase": "^2.58.5",
     "ts-jest": "^29.4.9",
-    "ws": "^8.18.2"
+    "ws": "^8.20.1"
   },
   "optionalDependencies": {
     "sharp": "^0.34.5"
