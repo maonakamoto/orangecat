@@ -18,6 +18,7 @@ browser-screenshots/
 playwright-report/
 playwright/.cache/
 .playwright-mcp/
+tests/.auth/
 
 # Code analysis reports
 report/

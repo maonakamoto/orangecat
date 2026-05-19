@@ -27,12 +27,12 @@ module.exports = async () => {
   const page = await browser.newPage();
 
   try {
-    await page.goto(`${baseURL}/auth?mode=login`, { waitUntil: 'networkidle' });
+    await page.goto(`${baseURL}/auth?mode=login`, { waitUntil: 'domcontentloaded' });
+    await page.locator('input[type="email"]').waitFor({ state: 'visible', timeout: 15000 });
 
-    // Fill login form and submit
     await page.locator('input[type="email"]').fill(email);
     await page.locator('input[type="password"]').fill(password);
-    const submit = page.getByRole('button', { name: /sign in|log in|login/i });
+    const submit = page.locator('form button[type="submit"]').first();
     await submit.click();
 
     // Wait for a successful redirect to an authenticated route
@@ -48,4 +48,3 @@ module.exports = async () => {
     await browser.close();
   }
 };
-

@@ -5,6 +5,8 @@ const email = process.env.E2E_TEST_USER_EMAIL as string;
 const password = process.env.E2E_TEST_USER_PASSWORD as string;
 
 test.describe('Login Only Test', () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeAll(() => {
     if (!email || !password) {
       throw new Error('Missing E2E_TEST_USER_EMAIL/E2E_TEST_USER_PASSWORD in environment');
@@ -12,24 +14,19 @@ test.describe('Login Only Test', () => {
   });
 
   test('just login and check redirect', async ({ page }) => {
-    console.log('Testing login with:', email);
+    console.log('Testing credential login flow');
 
-    // Go to login page
-    await page.goto(`${baseURL}/auth?mode=login`);
-    await page.waitForLoadState('networkidle');
+    await page.goto(`${baseURL}/auth?mode=login`, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('input[type="email"]')).toBeVisible({ timeout: 15000 });
 
-    // Take screenshot of login page
     await page.screenshot({ path: 'screenshots/login-page.png' });
 
-    // Fill form
     await page.locator('input[type="email"]').fill(email);
     await page.locator('input[type="password"]').fill(password);
 
-    // Take screenshot before submit
     await page.screenshot({ path: 'screenshots/login-filled.png' });
 
-    // Submit
-    const submitBtn = page.getByRole('button', { name: /sign in|log in|login/i });
+    const submitBtn = page.locator('form button[type="submit"]').first();
     await submitBtn.click();
 
     // Wait for navigation or error
@@ -50,6 +47,3 @@ test.describe('Login Only Test', () => {
     }
   });
 });
-
-
-
