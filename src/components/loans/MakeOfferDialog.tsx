@@ -71,7 +71,7 @@ export function MakeOfferDialog({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Remaining Balance</p>
-                <p className="text-lg font-semibold text-red-600">
+                <p className="text-lg font-semibold text-destructive">
                   {formatLoanCurrency(loan.remaining_balance, loan.currency)}
                 </p>
               </div>

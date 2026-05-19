@@ -16,9 +16,9 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { convert, formatCurrency } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { PROJECT_STATUS } from '@/config/project-statuses';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { getStatusBadge } from '@/config/entity-status';
 import type { Currency } from '@/types/settings';
 import { GRADIENTS } from '@/config/gradients';
 
@@ -107,24 +107,12 @@ export const projectEntityConfig: EntityConfig<ProjectListItem> = {
       metadataParts.push(project.category);
     }
 
-    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
-      [PROJECT_STATUS.DRAFT]: { label: 'Draft', variant: 'default' },
-      [PROJECT_STATUS.ACTIVE]: { label: 'Active', variant: 'success' },
-      [PROJECT_STATUS.PAUSED]: { label: 'Paused', variant: 'warning' },
-      [PROJECT_STATUS.COMPLETED]: { label: 'Completed', variant: 'success' },
-      [PROJECT_STATUS.CANCELLED]: { label: 'Cancelled', variant: 'destructive' },
-    };
-    const statusBadge = statusBadgeMap[project.status ?? ''];
+    const statusBadge = getStatusBadge('project', project.status);
 
     return {
       priceLabel: fundingLabel,
       badge: statusBadge?.label,
-      badgeVariant: statusBadge?.variant as
-        | 'success'
-        | 'default'
-        | 'warning'
-        | 'destructive'
-        | undefined,
+      badgeVariant: statusBadge?.variant,
       metadata:
         metadataParts.length > 0 || progress > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">

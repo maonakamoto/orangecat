@@ -92,7 +92,7 @@ export const documentEntityConfig: EntityConfig<DocumentListItem> = {
   emptyState: {
     title: 'No context documents yet',
     description:
-      'Add documents about your goals, skills, or plans to help My Cat give you personalized advice. The more context you provide, the better My Cat can help you.',
+      'Add documents about your goals, skills, or plans to help your Cat give you personalized advice.',
   },
 
   gridCols: {

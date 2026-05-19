@@ -41,7 +41,7 @@ export default function ChannelComingSoonPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div
-            className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${GRADIENTS.brandOrangeCircle} text-white shadow-lg`}
+            className={`inline-flex items-center justify-center w-14 h-14 rounded-lg ${GRADIENTS.brandOrangeCircle} text-white shadow-sm`}
           >
             <PlayCircle className="w-8 h-8" />
           </div>
@@ -105,7 +105,7 @@ export default function ChannelComingSoonPage() {
         </Card>
 
         {/* CTA Card */}
-        <Card className="border-orange-200 bg-white/90 dark:bg-card/90 dark:border-border">
+        <Card className="border-orange-200 bg-card/90 dark:bg-card/90 dark:border-border">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-center md:text-left">
@@ -144,7 +144,7 @@ export default function ChannelComingSoonPage() {
                     <Input
                       type="email"
                       placeholder="your@email.com"
-                      className={`pr-28 w-72 max-w-full${formErrors.email ? ' border-red-500' : ''}`}
+                      className={`pr-28 w-72 max-w-full${formErrors.email ? ' border-destructive' : ''}`}
                       {...register('email')}
                     />
                     <Button

@@ -5,6 +5,7 @@ import { getTableName } from '@/config/entity-registry';
 import { DATABASE_TABLES, STORAGE_BUCKETS } from '@/config/database-tables';
 import { API_ROUTES } from '@/config/api-routes';
 import { ENTITY_STATUS } from '@/config/database-constants';
+import { TIMELINE_CONTENT_LIMITS } from '@/config/timeline';
 import { timelineService } from '@/services/timeline';
 import { offlineQueueService } from '@/lib/offline-queue';
 import type { TimelineSubjectType, TimelineDisplayEvent } from '@/types/timeline';
@@ -178,7 +179,9 @@ export function formatPostError(err: unknown): string {
  * Truncates post content into a title that satisfies a DB NOT NULL constraint.
  */
 function truncateToTitle(postContent: string): string {
-  return postContent.length <= 120 ? postContent : `${postContent.slice(0, 117).trimEnd()}...`;
+  return postContent.length <= TIMELINE_CONTENT_LIMITS.title
+    ? postContent
+    : `${postContent.slice(0, TIMELINE_CONTENT_LIMITS.titleTruncateAt).trimEnd()}...`;
 }
 
 /**

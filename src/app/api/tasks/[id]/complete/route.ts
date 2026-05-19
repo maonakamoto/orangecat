@@ -18,7 +18,7 @@ import {
   apiSuccess,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { taskCompletionSchema } from '@/lib/schemas/tasks';
@@ -32,15 +32,21 @@ interface RouteContext {
 export const POST = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id: taskId } = await context.params;
   const idValidation = getValidationError(validateUUID(taskId, 'task ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
     const body = await request.json().catch(() => ({}));
     const result = taskCompletionSchema.safeParse(body);
-    if (!result.success) {return apiValidationError('Validation failed', result.error.flatten());}
+    if (!result.success) {
+      return apiValidationError('Validation failed', result.error.flatten());
+    }
 
     const completionData = result.data;
 
@@ -51,7 +57,9 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
       .single();
 
     if (taskError) {
-      if (taskError.code === 'PGRST116') {return apiNotFound('Task not found');}
+      if (taskError.code === 'PGRST116') {
+        return apiNotFound('Task not found');
+      }
       logger.error('Failed to fetch task for completion', { error: taskError, taskId }, 'TasksAPI');
       return apiInternalError();
     }
@@ -75,7 +83,11 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
       .single();
 
     if (completionError) {
-      logger.error('Failed to create task completion', { error: completionError, taskId }, 'TasksAPI');
+      logger.error(
+        'Failed to create task completion',
+        { error: completionError, taskId },
+        'TasksAPI'
+      );
       return apiInternalError('Failed to complete task');
     }
 

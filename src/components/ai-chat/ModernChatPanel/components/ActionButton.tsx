@@ -9,7 +9,6 @@ import { cn } from '@/lib/utils';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { Plus } from 'lucide-react';
 import type { CatAction } from '../types';
-import { GRADIENTS } from '@/config/gradients';
 
 interface ActionButtonProps {
   action: CatAction;
@@ -23,10 +22,9 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
       <button
         onClick={onClick}
         className={cn(
-          'flex items-center gap-2 px-4 py-2.5 rounded-xl',
-          GRADIENTS.btnOrange,
-          'text-white font-medium text-sm shadow-md hover:shadow-lg',
-          'transition-all transform hover:scale-[1.02]'
+          'flex items-center gap-2 rounded-md px-4 py-2.5',
+          'bg-foreground text-sm font-medium text-background hover:bg-foreground/90',
+          'transition-colors'
         )}
       >
         <Plus className="h-4 w-4" />
@@ -59,14 +57,14 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
     <button
       onClick={onClick}
       className={cn(
-        'flex items-center gap-2 px-4 py-2.5 rounded-xl',
+        'flex items-center gap-2 rounded-md px-4 py-2.5',
         action.type === 'publish_entity'
-          ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
+          ? 'bg-green-700 hover:bg-green-700/90 dark:bg-green-600 dark:hover:bg-green-600/90'
           : action.type === 'update_entity'
-            ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
-            : `${GRADIENTS.brandTiffany} hover:from-tiffany-600 hover:to-tiffany-700`,
-        'text-white font-medium text-sm shadow-md hover:shadow-lg',
-        'transition-all transform hover:scale-[1.02]'
+            ? 'bg-muted-strong hover:bg-muted-strong/90'
+            : 'bg-foreground hover:bg-foreground/90',
+        'text-sm font-medium text-background',
+        'transition-colors'
       )}
     >
       <Plus className="h-4 w-4" />

@@ -34,9 +34,9 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
   };
 
   return (
-    <div className="p-4 border-t border-border-subtle">
-      <div className="flex items-end gap-2 max-w-3xl mx-auto">
-        <div className="flex-1 relative">
+    <div className="border-t border-border-subtle bg-background p-4">
+      <div className="mx-auto flex max-w-3xl items-end gap-2">
+        <div className="relative flex-1">
           <textarea
             ref={inputRef}
             value={value}
@@ -45,17 +45,16 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
             placeholder="Message your Cat..."
             rows={1}
             className={cn(
-              'w-full resize-none rounded-2xl border border-border dark:bg-muted dark:text-foreground px-4 py-3 pr-12',
-              'focus:outline-none focus:ring-2 focus:ring-tiffany-500/20 focus:border-tiffany-300',
-              'text-sm leading-relaxed placeholder:text-muted-dim',
-              'max-h-[200px]'
+              'max-h-[200px] w-full resize-none rounded-md border border-border-subtle bg-background px-4 py-3 pr-12 text-foreground',
+              'focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring',
+              'text-sm leading-relaxed placeholder:text-muted-dim'
             )}
           />
         </div>
         {isLoading && onStop ? (
           <button
             onClick={onStop}
-            className="flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all bg-red-500 hover:bg-red-600 text-white shadow-md"
+            className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md bg-destructive text-destructive-foreground transition-colors hover:bg-destructive/90"
           >
             <Square className="h-4 w-4 fill-current" />
           </button>
@@ -64,9 +63,9 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
             onClick={onSend}
             disabled={!value.trim() || isLoading}
             className={cn(
-              'flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all',
+              'flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md transition-colors',
               value.trim() && !isLoading
-                ? 'bg-tiffany-500 hover:bg-tiffany-600 text-white shadow-md'
+                ? 'bg-foreground text-background hover:bg-foreground/90'
                 : 'bg-muted text-muted-dim cursor-not-allowed'
             )}
           >
@@ -74,8 +73,8 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
           </button>
         )}
       </div>
-      <p className="text-xs text-muted-dim text-center mt-2">
-        Using free AI models • No API key required
+      <p className="mt-2 text-center text-xs text-muted-dim">
+        Private workspace. Cat can use context and approved actions.
       </p>
     </div>
   );

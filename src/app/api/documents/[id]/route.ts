@@ -35,7 +35,9 @@ export const GET = compose(
   try {
     const { id } = await context.params;
     const idValidation = getValidationError(validateUUID(id, 'document ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
 
     const document = await getDocument(id);
     if (!document) {
@@ -52,7 +54,9 @@ export const GET = compose(
 export const PUT = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id } = await context.params;
   const idValidation = getValidationError(validateUUID(id, 'document ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   const { user } = request;
   try {
     const body = await (request as NextRequest).json();
@@ -74,7 +78,9 @@ export const PUT = withAuth(async (request: AuthenticatedRequest, context: Route
 export const DELETE = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id } = await context.params;
   const idValidation = getValidationError(validateUUID(id, 'document ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   const { user } = request;
   try {
     await deleteDocument(id, user.id);

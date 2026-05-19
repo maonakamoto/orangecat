@@ -11,7 +11,7 @@ interface BlogPostCardProps {
 
 export function BlogPostCard({ post }: BlogPostCardProps) {
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow">
+    <Card className="p-6 oc-card-link">
       <div className="flex items-center text-sm text-muted-foreground mb-4">
         <Calendar className="w-4 h-4 mr-2" />
         {post.date}

@@ -18,11 +18,11 @@ export function ResourceCard({ resource, featured = false }: ResourceCardProps) 
   if (featured) {
     return (
       <Card
-        className={`group hover:shadow-lg transition-all duration-200 border-2 border-orange-200 ${GRADIENTS.sectionOrangeAmber}`}
+        className={`group oc-card-link duration-200 border-2 border-orange-200 ${GRADIENTS.sectionOrangeAmber}`}
       >
         <CardContent className="p-8">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center group-hover:bg-orange-200 transition-colors">
+            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition-colors">
               <Icon className="w-6 h-6 text-orange-600" />
             </div>
             <div className="flex-1">
@@ -50,7 +50,7 @@ export function ResourceCard({ resource, featured = false }: ResourceCardProps) 
   }
 
   return (
-    <Card className="group hover:shadow-md transition-all duration-200">
+    <Card className="group oc-card-link duration-200">
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center group-hover:bg-orange-100 dark:group-hover:bg-orange-900/20 transition-colors">

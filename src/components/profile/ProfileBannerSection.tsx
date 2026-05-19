@@ -38,7 +38,7 @@ export function ProfileBannerSection({
     <div className="relative mb-4 sm:mb-6 lg:mb-8">
       {/* Banner */}
       <div
-        className={`relative h-32 sm:h-48 md:h-64 lg:h-80 ${GRADIENTS.heroOrangeTiffany} rounded-xl sm:rounded-2xl shadow-xl overflow-hidden`}
+        className={`relative h-32 sm:h-48 md:h-64 lg:h-80 ${GRADIENTS.heroOrangeTiffany} rounded-lg sm:rounded-md shadow-none overflow-hidden`}
       >
         {profile.banner_url && (
           <Image src={profile.banner_url} alt="Profile banner" fill className="object-cover" />
@@ -55,12 +55,12 @@ export function ProfileBannerSection({
             alt={profile.name || 'User'}
             width={128}
             height={128}
-            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-xl sm:rounded-2xl object-cover border-2 sm:border-4 border-white shadow-2xl"
+            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-lg sm:rounded-lg object-cover border-2 sm:border-4 border-card shadow-sm"
           />
         ) : (
           <DefaultAvatar
             size={128}
-            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-white shadow-2xl"
+            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-lg sm:rounded-lg border-2 sm:border-4 border-card shadow-sm"
           />
         )}
       </div>
@@ -72,7 +72,7 @@ export function ProfileBannerSection({
             onClick={onShareToggle}
             variant="outline"
             size="sm"
-            className="bg-white/90 dark:bg-card/90 backdrop-blur-sm hover:bg-white dark:hover:bg-card shadow-lg text-xs sm:text-sm"
+            className="bg-card/90 dark:bg-card/90 backdrop-blur-sm hover:bg-muted dark:hover:bg-card shadow-sm text-xs sm:text-sm"
           >
             <Share2 className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
             <span className="hidden sm:inline">Share</span>
@@ -110,7 +110,7 @@ export function ProfileBannerSection({
           <Link href={ROUTES.DASHBOARD.INFO_EDIT}>
             <Button
               size="sm"
-              className="bg-tiffany-600 hover:bg-tiffany-700 text-white shadow-lg text-xs sm:text-sm"
+              className="bg-tiffany-600 hover:bg-tiffany-700 text-white shadow-sm text-xs sm:text-sm"
             >
               <Settings className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
               <span className="hidden sm:inline">Edit Profile</span>
@@ -122,7 +122,7 @@ export function ProfileBannerSection({
             disabled={isFollowLoading}
             size="sm"
             className={cn(
-              'shadow-lg text-xs sm:text-sm',
+              'shadow-sm text-xs sm:text-sm',
               isFollowing
                 ? 'bg-gray-600 dark:bg-muted hover:bg-gray-700 dark:hover:bg-muted/80 text-white dark:text-foreground'
                 : 'bg-tiffany-500 hover:bg-tiffany-600 text-white'

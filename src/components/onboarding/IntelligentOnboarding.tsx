@@ -4,7 +4,7 @@
  * Intelligent Onboarding
  *
  * Collects a brief description from the user, marks onboarding complete,
- * then redirects to My Cat with the description pre-loaded as the first
+ * then redirects to Cat with the description pre-loaded as the first
  * message. The Cat handles all intelligent analysis — no keyword heuristics.
  *
  * Created: 2026-01-22
@@ -15,7 +15,6 @@
 import { useState } from 'react';
 import { Cat, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/Textarea';
 import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
 import { useRouter } from 'next/navigation';
@@ -24,7 +23,6 @@ import { ProfileService } from '@/services/profile';
 import { logger } from '@/utils/logger';
 import { ROUTES } from '@/config/routes';
 import { ONBOARDING_METHOD } from './OnboardingFlow/constants';
-import { GRADIENTS } from '@/config/gradients';
 
 const EXAMPLE_PROMPTS = [
   "I'm a freelance graphic designer looking to find clients and sell design templates",
@@ -61,18 +59,18 @@ export default function IntelligentOnboarding() {
       });
     }
 
-    // Send the user to My Cat with their description as the first message
+    // Send the user to Cat with their description as the first message
     const params = new URLSearchParams({ q: description.trim() });
     router.push(`${ROUTES.DASHBOARD.CAT}?${params.toString()}`);
   };
 
   return (
-    <div className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center p-4')}>
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-lg">
         {/* Back navigation */}
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-gray-700 dark:hover:text-foreground mb-6 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back
@@ -80,20 +78,18 @@ export default function IntelligentOnboarding() {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <div
-            className={`w-16 h-16 ${GRADIENTS.brandOrangeBr} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}
-          >
-            <Cat className="w-9 h-9 text-white" />
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md border border-border-subtle bg-muted">
+            <Cat className="h-8 w-8 text-foreground" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Meet My Cat</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Tell Cat what you need</h1>
           <p className="text-muted-foreground">
-            Tell My Cat what you&apos;re trying to do — it will suggest the right tools and help you
-            get set up in minutes.
+            Describe what you are trying to do. Cat will suggest the right tools and help you get
+            set up.
           </p>
         </div>
 
         {/* Input */}
-        <div className="bg-card rounded-2xl shadow-sm border border-border p-6 space-y-4">
+        <div className="space-y-4 rounded-md border border-border-subtle bg-background p-6">
           <label className="block text-sm font-medium text-foreground">
             What are you here to do?
           </label>
@@ -129,7 +125,7 @@ export default function IntelligentOnboarding() {
                 <button
                   key={prompt}
                   onClick={() => setDescription(prompt)}
-                  className="text-xs px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:border-orange-300 hover:text-orange-700 hover:bg-orange-50 transition-colors text-left"
+                  className="rounded-sm border border-border-subtle px-3 py-1.5 text-left text-xs text-muted-foreground transition-colors hover:border-border-strong hover:bg-muted hover:text-foreground"
                 >
                   {prompt.length > 50 ? prompt.slice(0, 50) + '…' : prompt}
                 </button>
@@ -141,7 +137,7 @@ export default function IntelligentOnboarding() {
             data-testid="onboarding-start-chat"
             onClick={handleStartChat}
             disabled={!description.trim() || isRedirecting}
-            className={`w-full ${GRADIENTS.btnOrange}`}
+            className="w-full bg-foreground text-background hover:bg-foreground/90"
           >
             {isRedirecting ? (
               <>
@@ -151,13 +147,13 @@ export default function IntelligentOnboarding() {
             ) : (
               <>
                 <ArrowRight className="h-4 w-4 mr-2" />
-                Chat with My Cat
+                Chat with Cat
               </>
             )}
           </Button>
 
           <p className="text-xs text-center text-muted-dim">
-            My Cat will ask follow-up questions and suggest the right setup for your situation
+            Cat will ask follow-up questions and suggest the right setup for your situation
           </p>
         </div>
       </div>

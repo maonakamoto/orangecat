@@ -12,8 +12,13 @@ import { createApiKeyService } from '@/services/ai/api-key-service';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { z } from 'zod';
 import { logger } from '@/utils/logger';
-import { apiSuccess, apiBadRequest, apiInternalError, apiRateLimited } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import {
+  apiSuccess,
+  apiBadRequest,
+  apiInternalError,
+  apiRateLimited,
+} from '@/lib/api/standardResponse';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 
 interface RouteContext {
@@ -31,7 +36,9 @@ const updateKeySchema = z.object({
 export const DELETE = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { keyId } = await context.params;
   const idValidation = getValidationError(validateUUID(keyId, 'key ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { user, supabase } = request;
 
@@ -62,7 +69,9 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest, context: Ro
 export const PATCH = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { keyId } = await context.params;
   const idValidation = getValidationError(validateUUID(keyId, 'key ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { user, supabase } = request;
 

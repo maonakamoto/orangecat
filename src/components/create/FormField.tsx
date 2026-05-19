@@ -35,7 +35,9 @@ export function FormField({
   const userCurrency = useUserCurrency();
   const { name, label, type, placeholder, required, options, hint, min, max, rows = 4 } = config;
 
-  const baseInputClass = error ? 'border-red-500 focus:ring-red-500' : 'border-border-strong';
+  const baseInputClass = error
+    ? 'border-destructive focus:ring-destructive/20'
+    : 'border-border-strong';
 
   const renderInput = () => {
     switch (type) {
@@ -114,7 +116,7 @@ export function FormField({
             onFocus={onFocus}
             onBlur={onBlur}
             disabled={disabled}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:border-transparent transition-colors ${baseInputClass} ${
+            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:border-ring transition-colors ${baseInputClass} ${
               disabled ? 'bg-muted cursor-not-allowed' : ''
             }`}
           >
@@ -163,7 +165,7 @@ export function FormField({
               onChange={e => onChange(e.target.checked)}
               onFocus={onFocus}
               disabled={disabled}
-              className="w-4 h-4 rounded border-border-strong text-orange-600 focus:ring-orange-500"
+              className="w-4 h-4 rounded border-border-strong text-orange-600 focus:ring-ring"
             />
             <span className="text-sm text-foreground">{placeholder || label}</span>
           </label>
@@ -255,7 +257,7 @@ export function FormField({
     return (
       <div>
         {renderInput()}
-        {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
+        {error && <p className="text-destructive text-sm mt-1">{error}</p>}
       </div>
     );
   }
@@ -268,7 +270,7 @@ export function FormField({
       </label>
       {renderInput()}
       {hint && !error && <p className="text-xs text-muted-foreground mt-1">{hint}</p>}
-      {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
+      {error && <p className="text-destructive text-sm mt-1">{error}</p>}
     </div>
   );
 }

@@ -127,7 +127,7 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
         {templates.map(t => (
           <Card
             key={t.id}
-            className="cursor-pointer hover:shadow-md border-2 border-transparent hover:border-orange-200"
+            className="cursor-pointer hover:shadow-sm border-2 border-transparent hover:border-orange-200"
             onClick={() => onApply(t.data)}
           >
             <CardHeader className="pb-2">

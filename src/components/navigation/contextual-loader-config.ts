@@ -222,9 +222,9 @@ const ROUTE_CONFIGS: RouteConfig[] = [
       { icon: Target, text: 'Set collective goals' },
       { icon: CheckCircle, text: 'Vote on decisions' },
     ],
-    color: 'text-gray-600',
-    bgColor: 'bg-gray-50',
-    bgIconClass: 'bg-gray-100',
+    color: 'text-muted-foreground',
+    bgColor: 'bg-muted/40',
+    bgIconClass: 'bg-muted',
   },
   {
     matches: p => p.startsWith('/messages'),
@@ -252,9 +252,9 @@ const ROUTE_CONFIGS: RouteConfig[] = [
       { icon: Bell, text: 'Configure notifications' },
       { icon: Zap, text: 'Optimize performance' },
     ],
-    color: 'text-gray-600',
-    bgColor: 'bg-gray-50',
-    bgIconClass: 'bg-gray-100',
+    color: 'text-muted-foreground',
+    bgColor: 'bg-muted/40',
+    bgIconClass: 'bg-muted',
   },
   {
     matches: p => p.startsWith('/about'),
@@ -312,9 +312,9 @@ const DEFAULT_CONTENT: ContextContent = {
     { icon: CheckCircle, text: 'Loading personalized content' },
     { icon: Shield, text: 'Ensuring security and privacy' },
   ],
-  color: 'text-gray-600',
-  bgColor: 'bg-gray-50',
-  bgIconClass: 'bg-gray-100',
+  color: 'text-muted-foreground',
+  bgColor: 'bg-muted/40',
+  bgIconClass: 'bg-muted',
 };
 
 export function getContextualContent(pathname: string): ContextContent {

@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { ArrowLeft, Cat, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';
 import { useRequireAuth } from '@/hooks/useAuth';
@@ -20,7 +17,6 @@ import { PermissionInfo } from './PermissionInfo';
 
 export default function CatPermissionsPage() {
   const { user, isLoading: authLoading } = useRequireAuth();
-  const _router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
   const [data, setData] = useState<PermissionData | null>(null);
@@ -141,9 +137,9 @@ export default function CatPermissionsPage() {
 
   if (error || !data) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-background p-6">
+      <div className="min-h-screen bg-background p-6">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+          <div className="rounded-md border border-destructive/20 bg-destructive/10 p-4 text-destructive">
             {error || 'Failed to load permissions'}
           </div>
         </div>
@@ -155,24 +151,24 @@ export default function CatPermissionsPage() {
 
   return (
     <TooltipProvider>
-      <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 pb-20 sm:pb-6')}>
+      <div className="min-h-screen bg-background p-4 pb-20 sm:p-6 sm:pb-6">
         <div className="max-w-3xl mx-auto">
           <div className="mb-6">
             <Link
               href={ROUTES.DASHBOARD.CAT}
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to My Cat
+              Back to Cat
             </Link>
             <div className="flex items-center gap-4">
-              <div className={`p-3 ${GRADIENTS.iconTiffanyOrange} rounded-xl`}>
-                <Cat className="h-8 w-8 text-white" />
+              <div className="rounded-md border border-border-subtle bg-muted p-3">
+                <Cat className="h-8 w-8 text-foreground" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">My Cat Permissions</h1>
+                <h1 className="text-2xl font-bold text-foreground">Cat Permissions</h1>
                 <p className="text-muted-foreground">
-                  Control what actions My Cat can perform on your behalf
+                  Control what actions Cat can perform on your behalf
                 </p>
               </div>
             </div>
@@ -181,13 +177,15 @@ export default function CatPermissionsPage() {
           <PermissionStats summary={summary} />
 
           {summary.highRiskEnabled && (
-            <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="mb-6 flex items-start gap-3 rounded-md border border-amber-500/20 bg-amber-500/10 p-4">
+              <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-700 dark:text-amber-300" />
               <div>
-                <p className="font-medium text-amber-800">High-risk actions enabled</p>
-                <p className="text-base text-amber-700">
-                  You have enabled actions that can send Bitcoin or post public content. My Cat will
-                  always ask for confirmation before executing these.
+                <p className="font-medium text-amber-700 dark:text-amber-300">
+                  High-risk actions enabled
+                </p>
+                <p className="text-base text-muted-foreground">
+                  You have enabled actions that can send Bitcoin or post public content. Cat will
+                  always ask for confirmation before executing them.
                 </p>
               </div>
             </div>

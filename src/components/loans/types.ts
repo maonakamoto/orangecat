@@ -27,5 +27,3 @@ export interface AssetOption {
   currency: string;
   verification_status: string;
 }
-
-

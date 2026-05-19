@@ -5,7 +5,6 @@ import { formatRelativeTime } from '@/utils/dates';
 import { Users, MessageSquare, Trash2 } from 'lucide-react';
 import AvatarLink from '@/components/ui/AvatarLink';
 import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import type { Conversation } from '@/features/messaging/types';
 
 function buildProfileHref(participant?: Conversation['participants'][number]): string | null {
@@ -80,12 +79,7 @@ function getConversationAvatar(
 
   if (conversation.is_group) {
     return (
-      <div
-        className={cn(
-          GRADIENTS.brandTiffanyBr,
-          'w-10 h-10 rounded-full flex items-center justify-center text-white'
-        )}
-      >
+      <div className="flex h-10 w-10 items-center justify-center rounded-md border border-border-subtle bg-muted text-foreground">
         <Users className="w-5 h-5" />
       </div>
     );
@@ -106,7 +100,7 @@ function getConversationAvatar(
   }
 
   return (
-    <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-muted flex items-center justify-center">
+    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-muted">
       <MessageSquare className="w-5 h-5 text-muted-foreground" />
     </div>
   );
@@ -150,8 +144,8 @@ export function ConversationListItem({
       onPointerCancel={onPointerUp}
       onClick={onClick}
       className={cn(
-        'p-3 sm:p-4 hover:bg-muted/50 cursor-pointer transition-all duration-150 flex items-start gap-3 group',
-        isActiveConversation && 'bg-card shadow-sm border-l-4 border-tiffany-500',
+        'group flex cursor-pointer items-start gap-3 p-3 transition-colors duration-150 hover:bg-muted/50 sm:p-4',
+        isActiveConversation && 'border-l-2 border-foreground bg-muted',
         selectionMode && 'pr-3'
       )}
     >
@@ -181,7 +175,7 @@ export function ConversationListItem({
                 )}
               </h3>
               {conversation.unread_count > 0 && (
-                <span className="bg-tiffany-500 text-white text-[11px] leading-4 rounded-full px-2 py-0.5">
+                <span className="rounded-sm bg-foreground px-2 py-0.5 text-[11px] leading-4 text-background">
                   {conversation.unread_count > 99 ? '99+' : conversation.unread_count}
                 </span>
               )}
@@ -195,7 +189,7 @@ export function ConversationListItem({
                   ? formatRelativeTime(conversation.last_message_at)
                   : 'No messages'}
               </span>
-              <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-muted-foreground/40" />
+              <span className="h-1 w-1 rounded-sm bg-muted-foreground/40" />
               <span>
                 {conversation.is_group
                   ? `${conversation.participants.length} members`
@@ -207,7 +201,7 @@ export function ConversationListItem({
             <button
               type="button"
               aria-label="Delete conversation"
-              className="p-1 rounded-md text-muted-dim hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 self-start"
+              className="p-1 rounded-md text-muted-dim hover:text-destructive hover:bg-destructive/10 dark:hover:bg-red-950/20 self-start"
               onClick={e => {
                 e.stopPropagation();
                 onDeleteRequest();

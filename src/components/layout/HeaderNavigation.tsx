@@ -63,7 +63,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-3 py-2 min-h-11 rounded-lg text-base text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground"
+                className="block px-3 py-2 min-h-11 rounded-md text-base text-foreground hover:bg-muted"
                 onClick={onClose}
               >
                 {item.name}
@@ -89,7 +89,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
                     <Link
                       key={`${sectionKey}-${link.href}`}
                       href={link.href}
-                      className="px-3 py-2 min-h-11 rounded-lg text-sm text-muted-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground"
+                      className="px-3 py-2 min-h-11 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-muted"
                       onClick={onClose}
                     >
                       {link.name}
@@ -144,18 +144,16 @@ interface HeaderNavLinkProps {
  */
 function HeaderNavLink({ href, label, isActive }: HeaderNavLinkProps) {
   const linkClasses = cn(
-    'px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 relative',
+    'px-4 py-2.5 text-sm font-medium rounded-md transition-colors duration-150 relative',
     isActive
-      ? 'text-tiffany-600 bg-tiffany-50 dark:bg-accent dark:text-accent-foreground shadow-sm'
-      : 'text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
+      ? 'text-foreground bg-muted'
+      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
   );
 
   return (
     <Link href={href} className={linkClasses}>
       {label}
-      {isActive && (
-        <div className="absolute inset-x-0 bottom-0 h-0.5 bg-tiffany-500 rounded-full" />
-      )}
+      {isActive && <div className="absolute inset-x-3 bottom-0 h-px bg-foreground" />}
     </Link>
   );
 }
@@ -199,21 +197,19 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          'px-4 py-2.5 min-h-11 text-sm font-medium rounded-xl transition-all duration-150 relative flex items-center gap-1',
+          'px-4 py-2.5 min-h-11 text-sm font-medium rounded-md transition-colors duration-150 relative flex items-center gap-1',
           hasActiveChild
-            ? 'text-tiffany-600 bg-tiffany-50 dark:bg-accent dark:text-accent-foreground shadow-sm'
-            : 'text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
+            ? 'text-foreground bg-muted'
+            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
         )}
       >
         {item.name}
         <ChevronDown className={cn('w-4 h-4 transition-transform', isOpen && 'rotate-180')} />
-        {hasActiveChild && (
-          <div className="absolute inset-x-0 bottom-0 h-0.5 bg-tiffany-500 rounded-full" />
-        )}
+        {hasActiveChild && <div className="absolute inset-x-3 bottom-0 h-px bg-foreground" />}
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-56 bg-card rounded-xl shadow-lg border border-border py-2 z-50">
+        <div className="absolute top-full left-0 mt-2 w-56 bg-card rounded-lg shadow-sm border border-border py-2 z-50">
           {item.children?.map((child, _index) => {
             // Skip children without href
             if (!child.href) {
@@ -227,8 +223,8 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
                 className={cn(
                   'block px-4 py-2.5 min-h-11 text-sm transition-colors',
                   isActive(child.href)
-                    ? 'text-tiffany-600 bg-tiffany-50 dark:bg-accent dark:text-accent-foreground font-medium'
-                    : 'text-foreground hover:text-tiffany-600 hover:bg-tiffany-50 dark:hover:bg-accent dark:hover:text-accent-foreground'
+                    ? 'text-foreground bg-muted font-medium'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 )}
                 onClick={() => setIsOpen(false)}
               >

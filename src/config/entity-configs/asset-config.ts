@@ -6,6 +6,7 @@ import { assetSchema, type AssetFormData } from '@/lib/validation';
 import { ASSET_TEMPLATES, type AssetTemplate } from '@/components/create/templates';
 import { createEntityConfig } from './base-config-factory';
 import { ASSET_TYPES, RENTAL_PERIODS } from '@/config/assets';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 const fieldGroups: FieldGroup[] = [
   {
@@ -161,8 +162,8 @@ export const assetConfig = createEntityConfig<AssetFormData>({
   namePlural: 'Assets',
   icon: Briefcase,
   colorTheme: 'tiffany',
-  backUrl: '/assets',
-  successUrl: '/assets/[id]',
+  backUrl: ENTITY_REGISTRY['asset'].basePath,
+  successUrl: `${ENTITY_REGISTRY['asset'].basePath}/[id]`,
   pageTitle: 'Create Asset',
   pageDescription: 'List an asset you own. You can use it later as collateral for loans.',
   formTitle: 'Asset Details',

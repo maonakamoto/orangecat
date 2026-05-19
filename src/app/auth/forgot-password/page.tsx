@@ -65,7 +65,7 @@ export default function ForgotPasswordPage() {
       <div
         className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
       >
-        <Card className="max-w-md w-full p-8 shadow-xl">
+        <Card className="max-w-md w-full p-8 shadow-sm">
           <div className="text-center">
             {/* Success Icon */}
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-6">
@@ -75,7 +75,7 @@ export default function ForgotPasswordPage() {
             {/* Success Message */}
             <h1 className="text-2xl font-bold text-foreground mb-3">Check Your Email</h1>
             <p className="text-muted-foreground mb-2">We've sent password reset instructions to:</p>
-            <p className="text-sm font-medium text-orange-600 bg-orange-50 px-3 py-2 rounded-lg mb-6">
+            <p className="text-sm font-medium text-foreground bg-muted px-3 py-2 rounded-lg mb-6">
               {email}
             </p>
 
@@ -99,7 +99,7 @@ export default function ForgotPasswordPage() {
                 Didn't receive an email? Check your spam folder or{' '}
                 <button
                   onClick={handleRetry}
-                  className="text-orange-600 hover:text-orange-700 underline"
+                  className="text-foreground hover:text-muted-strong underline"
                 >
                   try again
                 </button>
@@ -116,7 +116,7 @@ export default function ForgotPasswordPage() {
       <div
         className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
       >
-        <Card className="max-w-md w-full p-8 shadow-xl">
+        <Card className="max-w-md w-full p-8 shadow-sm">
           <div className="text-center">
             {/* Error Icon */}
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 mb-6">
@@ -147,17 +147,12 @@ export default function ForgotPasswordPage() {
     <div
       className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
     >
-      <Card className="max-w-md w-full p-8 shadow-xl">
+      <Card className="max-w-md w-full p-8 shadow-sm">
         {/* Header */}
         <div className="text-center mb-8">
           {/* Icon */}
-          <div
-            className={cn(
-              GRADIENTS.iconOrangeTiffany,
-              'mx-auto flex h-16 w-16 items-center justify-center rounded-full mb-6'
-            )}
-          >
-            <Mail className="h-8 w-8 text-orange-600" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-lg bg-card border border-border mb-6">
+            <Mail className="h-8 w-8 text-foreground" />
           </div>
 
           <h1 className="text-2xl font-bold text-foreground mb-2">Reset Your Password</h1>
@@ -200,7 +195,7 @@ export default function ForgotPasswordPage() {
         <div className="mt-8 text-center">
           <Link
             href={`${ROUTES.AUTH}?mode=login`}
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-orange-600 transition-colors"
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             Back to Login
@@ -213,7 +208,7 @@ export default function ForgotPasswordPage() {
             Remember your password?{' '}
             <Link
               href={`${ROUTES.AUTH}?mode=login`}
-              className="text-orange-600 hover:text-orange-700 underline"
+              className="text-foreground hover:text-muted-strong underline"
             >
               Sign in instead
             </Link>

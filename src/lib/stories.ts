@@ -13,7 +13,6 @@ export interface Story {
   raised: string;
   supporters: number;
   timeline: string;
-  gradient: string;
   summary: string;
   published: boolean;
   featured: boolean;
@@ -70,7 +69,6 @@ function getStory(id: string): Story | null {
       raised: data.raised || '',
       supporters: data.supporters || 0,
       timeline: data.timeline || '',
-      gradient: data.gradient || 'from-gray-50 to-gray-100',
       summary: data.summary || '',
       published: data.published !== false,
       featured: data.featured || false,

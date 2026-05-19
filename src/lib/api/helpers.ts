@@ -28,9 +28,15 @@ export function getCacheControl(isUserSpecific: boolean): string {
  * @returns ISO string or null
  */
 export function normalizeDate(value: string | Date | null | undefined): string | null {
-  if (!value) {return null;}
-  if (typeof value === 'string') {return value;}
-  if (value instanceof Date) {return value.toISOString();}
+  if (!value) {
+    return null;
+  }
+  if (typeof value === 'string') {
+    return value;
+  }
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
   return null;
 }
 
@@ -64,4 +70,3 @@ export function normalizeDates<T extends Record<string, unknown>>(
 export function calculatePage(offset: number, limit: number): number {
   return Math.floor(offset / limit) + 1;
 }
-

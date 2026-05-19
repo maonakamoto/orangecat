@@ -30,17 +30,17 @@ function getStatusDisplay(status: ConnectionStatus) {
       return {
         icon: <Wifi className="w-4 h-4" />,
         text: 'Connected',
-        color: 'text-green-600',
-        bgColor: 'bg-green-50',
-        borderColor: 'border-green-200',
+        color: 'text-green-700 dark:text-green-300',
+        bgColor: 'bg-green-500/10',
+        borderColor: 'border-green-500/20',
       };
     case 'reconnecting':
       return {
         icon: <RefreshCw className="w-4 h-4 animate-spin" />,
         text: 'Reconnecting...',
-        color: 'text-yellow-600',
-        bgColor: 'bg-yellow-50',
-        borderColor: 'border-yellow-200',
+        color: 'text-yellow-700 dark:text-yellow-300',
+        bgColor: 'bg-yellow-500/10',
+        borderColor: 'border-yellow-500/20',
       };
     case 'disconnected':
       return {
@@ -54,9 +54,9 @@ function getStatusDisplay(status: ConnectionStatus) {
       return {
         icon: <AlertCircle className="w-4 h-4" />,
         text: 'Connection Error',
-        color: 'text-red-600',
-        bgColor: 'bg-red-50',
-        borderColor: 'border-red-200',
+        color: 'text-destructive',
+        bgColor: 'bg-destructive/10',
+        borderColor: 'border-destructive/20',
       };
     default:
       return {
@@ -85,7 +85,7 @@ export function ConnectionStatusIndicator({
   return (
     <div
       className={`
-        flex items-center gap-2 px-3 py-2 rounded-lg border
+        flex items-center gap-2 rounded-md border px-3 py-2
         ${display.bgColor} ${display.borderColor} ${display.color}
         ${className}
       `}

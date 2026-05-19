@@ -20,7 +20,7 @@ import {
   apiInternalError,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 
 export const GET = withAuth(async (request: AuthenticatedRequest) => {
   try {
@@ -31,9 +31,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     const category = searchParams.get('category');
     const page = parseInt(searchParams.get('page') || '1');
     // Accept both 'pageSize' and 'limit' for backward compatibility
-    const pageSize = parseInt(
-      searchParams.get('pageSize') || searchParams.get('limit') || '20'
-    );
+    const pageSize = parseInt(searchParams.get('pageSize') || searchParams.get('limit') || '20');
 
     // Build query filters
     const query = {

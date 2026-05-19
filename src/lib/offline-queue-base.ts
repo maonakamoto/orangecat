@@ -48,18 +48,18 @@ function getDB(): Promise<IDBDatabase> {
       resolve(db);
     };
 
-    request.onupgradeneeded = (event) => {
+    request.onupgradeneeded = event => {
       const tempDb = (event.target as IDBOpenDBRequest).result;
-      
+
       // Create all known stores during upgrade
-      KNOWN_STORES.forEach((storeName) => {
+      KNOWN_STORES.forEach(storeName => {
         if (!tempDb.objectStoreNames.contains(storeName)) {
           tempDb.createObjectStore(storeName, { keyPath: 'id' });
         }
       });
-      
+
       // Also create stores for any registered configs (for future extensibility)
-      storeConfigs.forEach((config) => {
+      storeConfigs.forEach(config => {
         if (!tempDb.objectStoreNames.contains(config.storeName)) {
           tempDb.createObjectStore(config.storeName, { keyPath: 'id' });
         }
@@ -178,7 +178,11 @@ export async function incrementAttemptCount(storeName: string, id: string): Prom
           resolve();
         };
         updateRequest.onerror = () => {
-          logger.error(`Failed to update attempt count in ${storeName}`, updateRequest.error, 'OfflineQueueBase');
+          logger.error(
+            `Failed to update attempt count in ${storeName}`,
+            updateRequest.error,
+            'OfflineQueueBase'
+          );
           reject(updateRequest.error);
         };
       } else {
@@ -223,6 +227,5 @@ export async function getQueueByUser<T>(
   userId: string
 ): Promise<QueuedItem<T>[]> {
   const all = await getQueueStore<T>(storeName);
-  return all.filter((item) => item.userId === userId);
+  return all.filter(item => item.userId === userId);
 }
-

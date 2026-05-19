@@ -4,7 +4,12 @@
  */
 
 // SSOT shared types from @/types/cat
-import type { SuggestedAction, SuggestedWalletAction, CatAction, ExecActionResult } from '@/types/cat';
+import type {
+  SuggestedAction,
+  SuggestedWalletAction,
+  CatAction,
+  ExecActionResult,
+} from '@/types/cat';
 export type { SuggestedAction, SuggestedWalletAction, CatAction, ExecActionResult };
 
 export interface Message {

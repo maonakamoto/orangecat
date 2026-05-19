@@ -3,7 +3,6 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
-import { GRADIENTS } from '@/config/gradients';
 
 interface EntityListShellProps {
   title: string;
@@ -21,28 +20,22 @@ export default function EntityListShell({
   className,
 }: EntityListShellProps) {
   return (
-    <div
-      className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8 pb-20 md:pb-8', className)}
-    >
-      <Breadcrumb items={[{ label: title }]} className="mb-4" />
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex-1 min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words">{title}</h1>
-          {description && (
-            <p className="text-muted-foreground mt-1 text-sm sm:text-base break-words">
-              {description}
-            </p>
+    <div className={cn('oc-page pb-20 md:pb-8', className)}>
+      <div className="oc-page-container oc-page-stack">
+        <Breadcrumb items={[{ label: title }]} />
+        <div className="oc-page-header">
+          <div className="flex-1 min-w-0">
+            <h1 className="oc-page-title break-words">{title}</h1>
+            {description && <p className="oc-page-subtitle break-words">{description}</p>}
+          </div>
+          {headerActions && (
+            <div className="w-full flex-shrink-0 sm:w-auto">
+              <div className="oc-page-actions">{headerActions}</div>
+            </div>
           )}
         </div>
-        {headerActions && (
-          <div className="flex-shrink-0 w-full sm:w-auto">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2">
-              {headerActions}
-            </div>
-          </div>
-        )}
+        {children}
       </div>
-      {children}
     </div>
   );
 }

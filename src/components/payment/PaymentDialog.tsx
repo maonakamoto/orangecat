@@ -203,7 +203,7 @@ export function PaymentDialog({
           {state.phase === 'error' && (
             <div className="flex flex-col items-center gap-4 py-8">
               <PaymentStatusIndicator status="failed" />
-              <p className="text-sm text-red-600">{state.message}</p>
+              <p className="text-sm text-destructive">{state.message}</p>
               <Button onClick={reset} variant="outline" className="min-h-11">
                 Try Again
               </Button>

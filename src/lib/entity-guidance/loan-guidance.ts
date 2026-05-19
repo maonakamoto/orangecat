@@ -10,15 +10,7 @@
  */
 
 import React from 'react';
-import {
-  DollarSign,
-  FileText,
-  Target,
-  Bitcoin,
-  Settings,
-  Tag,
-  CheckCircle2,
-} from 'lucide-react';
+import { DollarSign, FileText, Target, Bitcoin, Settings, Tag, CheckCircle2 } from 'lucide-react';
 import type { GuidanceContent, DefaultGuidance } from '@/components/create/types';
 
 export type LoanFieldType =
@@ -37,8 +29,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
   title: {
     icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-orange-600' }),
     title: 'Loan Title',
-    description:
-      'Choose a clear, descriptive title that explains what you need the loan for.',
+    description: 'Choose a clear, descriptive title that explains what you need the loan for.',
     tips: [
       'Be specific about the loan purpose',
       'Include the type of loan or project',
@@ -110,7 +101,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
     icon: React.createElement(Target, { className: 'w-5 h-5 text-orange-600' }),
     title: 'Interest Rate',
     description:
-      'The annual interest rate you\'re willing to pay. Competitive rates attract more lenders.',
+      "The annual interest rate you're willing to pay. Competitive rates attract more lenders.",
     tips: [
       'Research current market rates',
       'Consider your ability to pay interest',
@@ -118,17 +109,12 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
       'Higher rates may attract more lenders',
       'Lower rates mean easier repayment',
     ],
-    examples: [
-      '5-7% for business loans',
-      '8-12% for personal loans',
-      '3-5% for secured loans',
-    ],
+    examples: ['5-7% for business loans', '8-12% for personal loans', '3-5% for secured loans'],
   },
   bitcoin_address: {
     icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-orange-600' }),
     title: 'Bitcoin Address',
-    description:
-      'Your Bitcoin address where loan payments and repayments will be sent.',
+    description: 'Your Bitcoin address where loan payments and repayments will be sent.',
     tips: [
       'Use a fresh address for loan transactions',
       'Consider using a multi-signature wallet',
@@ -145,8 +131,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
   lightning_address: {
     icon: React.createElement(Target, { className: 'w-5 h-5 text-orange-600' }),
     title: 'Lightning Address',
-    description:
-      'Lightning Network address for instant, low-fee loan payments and repayments.',
+    description: 'Lightning Network address for instant, low-fee loan payments and repayments.',
     tips: [
       'Format: yourname@domain.com',
       'Enables instant loan disbursements',
@@ -154,17 +139,12 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
       'Great for international transactions',
       'Works alongside regular Bitcoin address',
     ],
-    examples: [
-      'loan@borrower.address',
-      'business@lightning.gifts',
-      'personal@zbd.gg',
-    ],
+    examples: ['loan@borrower.address', 'business@lightning.gifts', 'personal@zbd.gg'],
   },
   loan_category_id: {
     icon: React.createElement(Tag, { className: 'w-5 h-5 text-orange-600' }),
     title: 'Loan Category',
-    description:
-      'Categorize your loan to help lenders understand the purpose and risk level.',
+    description: 'Categorize your loan to help lenders understand the purpose and risk level.',
     tips: [
       'Choose the most accurate category',
       'Different categories have different risk profiles',

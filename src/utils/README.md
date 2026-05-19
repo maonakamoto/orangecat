@@ -34,6 +34,7 @@ utils/
 ## Utility Examples
 
 ### API Utilities
+
 ```typescript
 interface ApiResponse<T> {
   data: T;
@@ -41,10 +42,7 @@ interface ApiResponse<T> {
   status: number;
 }
 
-async function fetchApi<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<ApiResponse<T>> {
+async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
   try {
     const response = await fetch(endpoint, {
       ...options,
@@ -72,6 +70,7 @@ async function fetchApi<T>(
 ```
 
 ### Validation Utilities
+
 ```typescript
 interface ValidationResult {
   isValid: boolean;
@@ -115,6 +114,7 @@ function validatePassword(password: string): ValidationResult {
 ```
 
 ### Formatting Utilities
+
 ```typescript
 function formatCurrency(amount: number, currency: string = 'USD'): string {
   return new Intl.NumberFormat('en-US', {
@@ -174,11 +174,7 @@ function validateUserInput(input: UserInput): ValidationResult {
 
   return {
     isValid: emailResult.isValid && passwordResult.isValid && nameResult.isValid,
-    errors: [
-      ...emailResult.errors,
-      ...passwordResult.errors,
-      ...nameResult.errors,
-    ],
+    errors: [...emailResult.errors, ...passwordResult.errors, ...nameResult.errors],
   };
 }
 ```
@@ -190,11 +186,11 @@ Each utility should include:
 ```typescript
 /**
  * Formats a number as currency
- * 
+ *
  * @param amount - The amount to format
  * @param currency - The currency code (default: 'USD')
  * @returns Formatted currency string
- * 
+ *
  * @example
  * formatCurrency(1000) // '$1,000.00'
  * formatCurrency(1000, 'EUR') // '€1,000.00'
@@ -222,10 +218,7 @@ class ValidationError extends Error {
 
 function validateInput(input: unknown): asserts input is ValidInput {
   if (!isValidInput(input)) {
-    throw new ValidationError(
-      'INVALID_INPUT',
-      'Input does not match expected format',
-      'input'
-    );
+    throw new ValidationError('INVALID_INPUT', 'Input does not match expected format', 'input');
   }
-} 
+}
+```

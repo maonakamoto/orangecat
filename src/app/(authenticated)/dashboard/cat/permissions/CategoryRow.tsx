@@ -100,7 +100,7 @@ export function CategoryRow({
   onToggleAction,
 }: CategoryRowProps) {
   return (
-    <div className="bg-card rounded-xl border border-border overflow-hidden">
+    <div className="bg-card rounded-lg border border-border overflow-hidden">
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center gap-3 flex-1">
           <button

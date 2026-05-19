@@ -40,11 +40,11 @@ export default function HowItWorksSection() {
                 className="relative"
               >
                 {/* Card */}
-                <div className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-300 p-6 sm:p-8 h-full">
+                <div className="oc-surface oc-card-link h-full p-6 sm:p-8">
                   {/* Step Number Badge */}
                   <div className="mb-4 sm:mb-6">
                     <div
-                      className={`inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl ${step.iconGradient} text-white text-xl sm:text-2xl font-bold shadow-lg`}
+                      className={`inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-lg sm:rounded-lg ${step.iconGradient} text-white text-xl sm:text-2xl font-bold shadow-sm`}
                     >
                       {step.number}
                     </div>
@@ -52,7 +52,7 @@ export default function HowItWorksSection() {
 
                   {/* Icon */}
                   <div
-                    className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl ${step.bgColor} mb-3 sm:mb-4`}
+                    className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-lg ${step.bgColor} mb-3 sm:mb-4`}
                   >
                     <step.icon className="w-5 h-5 sm:w-6 sm:h-6 text-foreground" />
                   </div>
@@ -70,7 +70,7 @@ export default function HowItWorksSection() {
                 {index < HOW_IT_WORKS_STEPS.length - 1 && (
                   <div className="hidden lg:block absolute top-24 -right-4 transform translate-x-1/2 z-10">
                     <svg
-                      className="w-8 h-8 text-gray-300 dark:text-muted-foreground"
+                      className="w-8 h-8 text-muted-dim dark:text-muted-foreground"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -104,7 +104,7 @@ export default function HowItWorksSection() {
             href={ROUTES.AUTH}
             className={cn(
               GRADIENTS.btnBitcoin,
-              'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
+              'inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white transition-colors sm:px-8 sm:py-4 sm:text-lg'
             )}
           >
             {CTA_LABELS.createAccount}

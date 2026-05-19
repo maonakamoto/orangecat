@@ -52,13 +52,10 @@ export function TemplatePicker<T extends GenericTemplate>({
 
   return (
     <div
-      className={cn(
-        'bg-gradient-to-br from-orange-50/50 to-amber-50/30 border border-orange-100 rounded-2xl p-5 space-y-4',
-        className
-      )}
+      className={cn('space-y-4 rounded-md border border-border-subtle bg-muted/30 p-5', className)}
     >
       <div className="flex items-center gap-3">
-        <div className="h-8 w-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">
+        <div className="flex h-8 w-8 items-center justify-center rounded-md border border-border-subtle bg-background text-foreground">
           <Lightbulb className="w-4 h-4" />
         </div>
         <div className="flex-1">
@@ -67,18 +64,18 @@ export function TemplatePicker<T extends GenericTemplate>({
             Quick-start with a template and customize from there.
           </p>
         </div>
-        <span className="text-xs text-orange-600/70 font-medium">{label}</span>
+        <span className="text-xs font-medium text-muted-foreground">{label}</span>
       </div>
       <div className="space-y-3">
         {visibleTemplates.map(template => (
           <button
             key={template.id}
             onClick={() => onSelectTemplate(template)}
-            className="w-full text-left border border-border rounded-xl p-3 hover:border-orange-300 hover:shadow-md hover:bg-white dark:hover:bg-muted transition-all bg-white/80 dark:bg-muted/80"
+            className="w-full rounded-md border border-border-subtle bg-background p-3 text-left transition-colors hover:border-border-strong hover:bg-muted"
             type="button"
           >
             <div className="flex items-start gap-3">
-              <div className="h-9 w-9 rounded-full bg-orange-50 text-orange-700 flex items-center justify-center border border-orange-100 flex-shrink-0">
+              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle bg-muted text-foreground">
                 {template.icon}
               </div>
               <div className="flex-1 min-w-0">
@@ -91,7 +88,7 @@ export function TemplatePicker<T extends GenericTemplate>({
         {hasMore && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full flex items-center justify-center gap-2 text-sm text-orange-600 hover:text-orange-700 font-medium py-2 transition-colors"
+            className="flex w-full items-center justify-center gap-2 py-2 text-sm font-medium text-foreground transition-colors hover:text-muted-foreground"
             type="button"
           >
             {isExpanded ? (

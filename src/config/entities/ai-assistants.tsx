@@ -12,9 +12,9 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { formatCurrency } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { STATUS } from '@/config/database-constants';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { getStatusBadge } from '@/config/entity-status';
 import { GRADIENTS } from '@/config/gradients';
 import type { Currency } from '@/types/settings';
 
@@ -72,23 +72,12 @@ export const aiAssistantEntityConfig: EntityConfig<AIAssistant> = {
       metadataParts.push(`${assistant.average_rating.toFixed(1)} rating`);
     }
 
-    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
-      [STATUS.AI_ASSISTANTS.ACTIVE]: { label: 'Active', variant: 'success' },
-      [STATUS.AI_ASSISTANTS.PAUSED]: { label: 'Paused', variant: 'warning' },
-      [STATUS.AI_ASSISTANTS.DRAFT]: { label: 'Draft', variant: 'default' },
-      [STATUS.AI_ASSISTANTS.ARCHIVED]: { label: 'Archived', variant: 'default' },
-    };
-    const statusBadge = statusBadgeMap[assistant.status];
+    const statusBadge = getStatusBadge('ai_assistant', assistant.status);
 
     return {
       priceLabel: getPricingLabel(),
       badge: statusBadge?.label,
-      badgeVariant: statusBadge?.variant as
-        | 'success'
-        | 'default'
-        | 'warning'
-        | 'destructive'
-        | undefined,
+      badgeVariant: statusBadge?.variant,
       metadata:
         metadataParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">

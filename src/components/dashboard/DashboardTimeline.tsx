@@ -9,7 +9,6 @@ import TimelineComposer from '@/components/timeline/TimelineComposer';
 import { TimelineFeedResponse } from '@/types/timeline';
 import { BookOpen, MessageSquare, Compass, RefreshCw, AlertCircle } from 'lucide-react';
 import { TimelinePostSkeleton } from '@/components/ui/Skeleton';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 interface DashboardTimelineProps {
@@ -40,7 +39,7 @@ export function DashboardTimeline({
   return (
     <div className="space-y-3 sm:space-y-4">
       {/* Composer surface matches timeline UI */}
-      <div className="bg-card border border-border rounded-xl sm:rounded-2xl shadow-sm overflow-hidden">
+      <div className="oc-surface overflow-hidden">
         <TimelineComposer
           targetOwnerId={userId}
           targetOwnerType="profile"
@@ -52,11 +51,11 @@ export function DashboardTimeline({
       </div>
 
       {/* Timeline feed surface matches timeline UI */}
-      <div className="bg-card border border-border rounded-xl sm:rounded-2xl shadow-sm overflow-hidden">
+      <div className="oc-surface overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-5 py-3 sm:py-4 border-b border-border-subtle">
           <div>
             <CardTitle className="text-base sm:text-lg font-semibold text-foreground">
-              My Timeline
+              Timeline
             </CardTitle>
             <CardDescription className="text-xs sm:text-sm text-muted-foreground">
               Recent activities, posts, and updates
@@ -78,7 +77,7 @@ export function DashboardTimeline({
               ))}
             </div>
           ) : error ? (
-            <div className="text-center py-8 sm:py-10 text-red-600 px-4 sm:px-6">
+            <div className="px-4 py-8 text-center text-destructive sm:px-6 sm:py-10">
               <AlertCircle className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4" />
               <p className="text-sm sm:text-base font-medium mb-2">Failed to load timeline</p>
               <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">{error}</p>
@@ -98,20 +97,16 @@ export function DashboardTimeline({
             </div>
           ) : (
             <div className="text-center py-8 sm:py-12 px-4 text-muted-foreground">
-              <MessageSquare className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-300 dark:text-muted-foreground" />
+              <MessageSquare className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-muted-dim dark:text-muted-foreground" />
               <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
-                Start My Timeline
+                Start your timeline
               </h3>
               <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6 max-w-md mx-auto">
-                Share your first update! My timeline will show your posts, project updates, and
-                interactions with the community.
+                Share the first update. This feed will collect posts, project updates, and community
+                interactions.
               </p>
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
-                <Button
-                  onClick={() => router.push(`${ROUTES.TIMELINE}?compose=true`)}
-                  className={GRADIENTS.btnOrange}
-                  size="sm"
-                >
+                <Button onClick={() => router.push(`${ROUTES.TIMELINE}?compose=true`)} size="sm">
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Share Your First Post
                 </Button>

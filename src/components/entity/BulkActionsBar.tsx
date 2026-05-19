@@ -47,7 +47,7 @@ export default function BulkActionsBar({
   return (
     <div
       className={cn(
-        'fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-lg z-40',
+        'fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card shadow-none',
         'pb-safe', // Safe area for mobile
         className
       )}
@@ -64,7 +64,7 @@ export default function BulkActionsBar({
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 flex-wrap justify-end">
             <button
               onClick={onClearSelection}
-              className="text-sm text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors whitespace-nowrap"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
               disabled={isDisabled}
             >
               Clear
@@ -99,12 +99,7 @@ export default function BulkActionsBar({
               </>
             )}
             {/* Delete Action */}
-            <Button
-              onClick={onDelete}
-              variant="primary"
-              className="bg-red-600 hover:bg-red-700 text-white"
-              disabled={isDisabled}
-            >
+            <Button onClick={onDelete} variant="danger" disabled={isDisabled}>
               <Trash2 className="w-4 h-4 mr-2" />
               {isDeleting ? 'Deleting...' : 'Delete'}
             </Button>

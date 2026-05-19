@@ -83,7 +83,7 @@ export default function EnhancedSearchBar({
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleInputKeyDown}
           autoFocus={autoFocus}
-          className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 text-sm border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-muted hover:bg-white dark:hover:bg-card dark:text-foreground transition-all duration-200 placeholder:text-muted-dim"
+          className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-muted hover:bg-muted dark:hover:bg-card dark:text-foreground transition-all duration-200 placeholder:text-muted-dim"
           aria-label="Search"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
@@ -101,7 +101,7 @@ export default function EnhancedSearchBar({
       {/* Search Dropdown */}
       {isOpen && (
         <div
-          className="absolute top-full left-0 right-0 mt-2 bg-card rounded-xl border border-border shadow-lg z-50 max-h-96 overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-2 bg-card rounded-lg border border-border shadow-sm z-50 max-h-96 overflow-y-auto"
           role="listbox"
           aria-label="Search suggestions"
         >

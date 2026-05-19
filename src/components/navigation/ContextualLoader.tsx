@@ -17,14 +17,9 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
 
   return (
     <div className={cn('flex items-center justify-center min-h-[400px] p-8', className)}>
-      <div className={cn('max-w-md w-full rounded-2xl p-8 text-center', content.bgColor)}>
+      <div className="oc-surface max-w-md w-full p-8 text-center">
         <div className="flex justify-center mb-6">
-          <div
-            className={cn(
-              'w-16 h-16 rounded-full flex items-center justify-center',
-              content.bgIconClass
-            )}
-          >
+          <div className="oc-icon-tile h-16 w-16">
             <IconComponent className={cn('w-8 h-8', content.color)} />
           </div>
         </div>
@@ -36,10 +31,7 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
           {content.actions.map((action, index) => {
             const ActionIcon = action.icon;
             return (
-              <div
-                key={index}
-                className="flex items-start space-x-3 p-3 rounded-lg bg-white/50 dark:bg-card/50 backdrop-blur-sm"
-              >
+              <div key={index} className="oc-list-row flex items-start space-x-3">
                 <ActionIcon className={cn('w-5 h-5 mt-0.5 flex-shrink-0', content.color)} />
                 <span className="text-sm text-foreground leading-relaxed">{action.text}</span>
               </div>

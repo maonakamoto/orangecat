@@ -131,7 +131,7 @@ export default function AnalyticsPage() {
                   className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
                     timeRange === range
                       ? 'bg-card text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   {range === 'all' ? 'All Time' : range.toUpperCase()}
@@ -142,7 +142,7 @@ export default function AnalyticsPage() {
             <select
               value={selectedProject}
               onChange={e => setSelectedProject(e.target.value)}
-              className="border border-border-strong dark:bg-muted dark:text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              className="border border-border-strong dark:bg-muted dark:text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-ring"
             >
               <option value="all">All Projects</option>
               {projects.map(project => (

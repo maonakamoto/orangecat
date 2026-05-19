@@ -133,8 +133,8 @@ export function ProfileCompletionModal({
 
         {/* General error */}
         {errors.general && (
-          <div className="rounded-md bg-red-50 border border-red-200 p-3">
-            <p className="text-sm text-red-700">{errors.general}</p>
+          <div className="rounded-md oc-error-surface p-3">
+            <p className="text-sm text-destructive/80">{errors.general}</p>
           </div>
         )}
 

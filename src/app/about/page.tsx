@@ -31,10 +31,10 @@ export default function AboutPage() {
 
       {/* What OrangeCat Is */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-card rounded-2xl shadow-lg p-8 md:p-12 text-center max-w-3xl mx-auto">
+        <div className="bg-card rounded-lg shadow-sm p-8 md:p-12 text-center max-w-3xl mx-auto">
           <div className="flex justify-center mb-6">
             <div
-              className={`w-20 h-20 ${GRADIENTS.brandTiffanyBr} rounded-2xl flex items-center justify-center`}
+              className={`w-20 h-20 ${GRADIENTS.brandTiffanyBr} rounded-lg flex items-center justify-center`}
             >
               <Cat className="w-10 h-10 text-white" />
             </div>
@@ -62,7 +62,7 @@ export default function AboutPage() {
       </div>
 
       {/* Mission & Values */}
-      <div className="bg-white dark:bg-background">
+      <div className="bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold text-foreground mb-4">Our Mission</h2>

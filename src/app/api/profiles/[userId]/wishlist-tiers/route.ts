@@ -21,7 +21,9 @@ interface RouteContext {
 export const GET = withOptionalAuth(async (request, context: RouteContext) => {
   const { userId } = await context.params;
   const idValidation = getValidationError(validateUUID(userId, 'user ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { supabase } = request;
 

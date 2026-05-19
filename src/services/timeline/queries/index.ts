@@ -9,46 +9,21 @@
  */
 
 // User feeds
-export {
-  getUserFeed,
-  getFollowedUsersFeed,
-  getEnrichedUserFeed,
-} from './userFeeds';
+export { getUserFeed, getFollowedUsersFeed, getEnrichedUserFeed } from './userFeeds';
 
 // Project feeds
-export {
-  getProjectFeed,
-  getProjectTimeline,
-} from './projectFeeds';
+export { getProjectFeed, getProjectTimeline } from './projectFeeds';
 
 // Profile feeds
-export {
-  getProfileFeed,
-} from './profileFeeds';
+export { getProfileFeed } from './profileFeeds';
 
 // Community feeds
-export {
-  getCommunityFeed,
-} from './communityFeeds';
+export { getCommunityFeed } from './communityFeeds';
 
 // Event queries
-export {
-  getEventById,
-  getReplies,
-  searchPosts,
-  getThreadPosts,
-} from './eventQueries';
+export { getEventById, getReplies, searchPosts, getThreadPosts } from './eventQueries';
 
 // Constants and helpers
-export {
-  DEFAULT_PAGE_SIZE,
-  MAX_PAGE_SIZE,
-  TIMELINE_TABLES,
-} from './constants';
+export { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, TIMELINE_TABLES } from './constants';
 
-export {
-  getCurrentUserId,
-  transformEnrichedEventToDisplay,
-} from './helpers';
-
-
+export { getCurrentUserId, transformEnrichedEventToDisplay } from './helpers';

@@ -1,6 +1,7 @@
 import { InputHTMLAttributes, forwardRef, useId } from 'react';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { COMPONENT_STYLES } from '@/config/design-system';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -37,9 +38,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-foreground">
+          <label htmlFor={inputId} className={COMPONENT_STYLES.field.label}>
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
+            {required && <span className={COMPONENT_STYLES.field.required}>*</span>}
           </label>
         )}
         <div className="relative">
@@ -55,10 +56,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             required={required}
             className={cn(
-              'block w-full rounded-md shadow-sm text-sm text-foreground',
-              'bg-white dark:bg-muted border-border-strong focus:border-tiffany-500 focus:ring-tiffany-500',
-              'placeholder:text-muted-dim',
-              error && 'border-red-300 focus:border-red-500 focus:ring-red-500',
+              COMPONENT_STYLES.field.control,
+              'block h-10 px-3 text-sm',
+              error && COMPONENT_STYLES.field.errorControl,
               Icon && 'pl-10',
               className
             )}
@@ -69,12 +69,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
         </div>
         {description && !error && (
-          <p id={descriptionId} className="text-sm text-muted-foreground">
+          <p id={descriptionId} className={COMPONENT_STYLES.field.description}>
             {description}
           </p>
         )}
         {error && (
-          <p id={errorId} className="text-sm text-red-600" role="alert">
+          <p id={errorId} className={COMPONENT_STYLES.field.errorText} role="alert">
             {error}
           </p>
         )}

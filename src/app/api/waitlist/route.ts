@@ -1,9 +1,15 @@
 import { NextRequest } from 'next/server';
 import { withOptionalAuth } from '@/lib/api/withAuth';
-import { apiSuccess, apiValidationError, apiRateLimited, handleApiError, apiBadRequest } from '@/lib/api/standardResponse';
+import {
+  apiSuccess,
+  apiValidationError,
+  apiRateLimited,
+  handleApiError,
+  apiBadRequest,
+} from '@/lib/api/standardResponse';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
-import {  rateLimit , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimit, retryAfterSeconds } from '@/lib/rate-limit';
 import { z } from 'zod';
 
 const waitlistSchema = z.object({
@@ -12,16 +18,20 @@ const waitlistSchema = z.object({
   referrer: z.string().max(500).optional(),
 });
 
-export const POST = withOptionalAuth(async (request) => {
+export const POST = withOptionalAuth(async request => {
   try {
     const rl = await rateLimit(request as NextRequest);
-    if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
     const { user, supabase } = request;
     const body = await (request as NextRequest).json().catch(() => ({}));
 
     const parsed = waitlistSchema.safeParse(body);
-    if (!parsed.success) {return apiBadRequest(parsed.error.errors[0]?.message || 'Invalid request data');}
+    if (!parsed.success) {
+      return apiBadRequest(parsed.error.errors[0]?.message || 'Invalid request data');
+    }
     const { email, source, referrer } = parsed.data;
 
     const { error } = await supabase.from(DATABASE_TABLES.CHANNEL_WAITLIST).insert({

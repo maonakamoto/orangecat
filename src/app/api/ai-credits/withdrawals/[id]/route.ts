@@ -13,7 +13,7 @@ import {
   apiNotFound,
   handleApiError,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
@@ -29,7 +29,9 @@ interface RouteContext {
 export const GET = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id } = await context.params;
   const idValidation = getValidationError(validateUUID(id, 'withdrawal ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   const { user, supabase } = request;
   try {
     const { data: withdrawal, error } = await supabase
@@ -57,7 +59,9 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context: Route
 export const DELETE = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id } = await context.params;
   const idValidation = getValidationError(validateUUID(id, 'withdrawal ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
@@ -72,9 +76,15 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest, context: Ro
     });
 
     if (error) {
-      if (error.message.includes('not found')) {return apiNotFound('Withdrawal');}
-      if (error.message.includes('Unauthorized')) {return apiForbidden('Unauthorized');}
-      if (error.message.includes('Only pending')) {return apiBadRequest('Only pending withdrawals can be cancelled');}
+      if (error.message.includes('not found')) {
+        return apiNotFound('Withdrawal');
+      }
+      if (error.message.includes('Unauthorized')) {
+        return apiForbidden('Unauthorized');
+      }
+      if (error.message.includes('Only pending')) {
+        return apiBadRequest('Only pending withdrawals can be cancelled');
+      }
       throw error;
     }
 

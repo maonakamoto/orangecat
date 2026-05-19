@@ -23,10 +23,10 @@ export function DashboardQuickActions() {
           <Link href={ROUTES.DASHBOARD.CAT}>
             <Button
               variant="outline"
-              className="min-h-11 border-orange-200 text-orange-700 hover:bg-orange-50"
+              className="min-h-11 hover:border-border-strong hover:bg-muted"
             >
               <Cat className="w-4 h-4 mr-2" />
-              Ask My Cat
+              Ask Cat
             </Button>
           </Link>
           <Link href={ENTITY_REGISTRY.project.basePath}>

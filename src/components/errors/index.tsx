@@ -33,7 +33,7 @@ function ErrorFallback({ icon, title, message, onRetry }: ErrorFallbackProps) {
       <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
         {icon}
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{title}</h3>
+      <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
       <p className="text-sm text-muted-foreground mb-4 max-w-sm">{message}</p>
       {onRetry && (
         <Button onClick={onRetry} variant="secondary" size="sm">
@@ -51,7 +51,7 @@ function ErrorFallback({ icon, title, message, onRetry }: ErrorFallbackProps) {
 
 const TimelineFallback = (
   <ErrorFallback
-    icon={<Layout className="w-6 h-6 text-red-600" />}
+    icon={<Layout className="w-6 h-6 text-destructive" />}
     title="Timeline Error"
     message="Something went wrong loading your timeline. Please refresh the page to try again."
   />
@@ -81,7 +81,7 @@ export function TimelineErrorBoundary({ children, onError }: TimelineErrorBounda
 
 const MessagingFallback = (
   <ErrorFallback
-    icon={<MessageSquare className="w-6 h-6 text-red-600" />}
+    icon={<MessageSquare className="w-6 h-6 text-destructive" />}
     title="Messaging Error"
     message="We couldn't load your messages. Please check your connection and try again."
   />
@@ -111,7 +111,7 @@ export function MessagingErrorBoundary({ children, onError }: MessagingErrorBoun
 
 const CreateWorkflowFallback = (
   <ErrorFallback
-    icon={<PlusCircle className="w-6 h-6 text-red-600" />}
+    icon={<PlusCircle className="w-6 h-6 text-destructive" />}
     title="Form Error"
     message="Something went wrong with the form. Your data may have been saved - please refresh and check."
   />
@@ -157,7 +157,7 @@ export function ComponentErrorBoundary({
     <ErrorBoundary
       fallback={
         <ErrorFallback
-          icon={<AlertTriangle className="w-6 h-6 text-red-600" />}
+          icon={<AlertTriangle className="w-6 h-6 text-destructive" />}
           title={`${name} Error`}
           message={`The ${name.toLowerCase()} encountered an error. Please try again.`}
         />

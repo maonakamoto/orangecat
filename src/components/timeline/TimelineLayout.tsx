@@ -3,14 +3,12 @@ import { LucideIcon } from 'lucide-react';
 import { TimelineFeedResponse, TimelineDisplayEvent } from '@/types/timeline';
 import TimelineComponent from './TimelineComponent';
 import { cn } from '@/lib/utils';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 export interface TimelineLayoutProps {
   title: string;
   description: string;
   icon: LucideIcon;
-  gradientFrom: string;
-  gradientVia: string;
-  gradientTo: string;
   feed: TimelineFeedResponse;
   onEventUpdate: (eventId: string, updates: Partial<TimelineDisplayEvent>) => void;
   onLoadMore: () => void;
@@ -40,9 +38,6 @@ export default function TimelineLayout({
   title,
   description,
   icon: Icon,
-  gradientFrom: _gradientFrom,
-  gradientVia: _gradientVia,
-  gradientTo: _gradientTo,
   feed,
   onEventUpdate,
   onLoadMore,
@@ -57,16 +52,12 @@ export default function TimelineLayout({
   inlineComposer,
 }: TimelineLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-background">
-      <div className="max-w-6xl mx-auto flex justify-center px-0 sm:px-4 lg:px-8">
-        <div className="w-full max-w-2xl sm:border-x sm:border-border bg-card">
-          <div
-            className={cn(
-              'sticky top-0 z-20 flex items-center justify-between px-4 sm:px-5 py-3 border-b border-border bg-white/95 dark:bg-card/95 backdrop-blur'
-            )}
-          >
+    <div className={TIMELINE_SURFACE.page}>
+      <div className={TIMELINE_SURFACE.rail}>
+        <div className={TIMELINE_SURFACE.feed}>
+          <div className={cn(TIMELINE_SURFACE.header)}>
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-muted text-foreground">
+              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-muted text-foreground">
                 <Icon className="w-5 h-5" />
               </div>
               <div>

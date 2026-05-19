@@ -11,9 +11,9 @@ import { Loan } from '@/types/loans';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { STATUS } from '@/config/database-constants';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { getStatusBadge } from '@/config/entity-status';
 import { GRADIENTS } from '@/config/gradients';
 
 export const loanEntityConfig: EntityConfig<Loan> = {
@@ -55,24 +55,12 @@ export const loanEntityConfig: EntityConfig<Loan> = {
         ? Math.round(((loan.original_amount - loan.remaining_balance) / loan.original_amount) * 100)
         : 0;
 
-    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
-      [STATUS.LOANS.ACTIVE]: { label: 'Active', variant: 'success' },
-      [STATUS.LOANS.PAID_OFF]: { label: 'Paid Off', variant: 'success' },
-      [STATUS.LOANS.REFINANCED]: { label: 'Refinanced', variant: 'default' },
-      [STATUS.LOANS.DEFAULTED]: { label: 'Defaulted', variant: 'destructive' },
-      [STATUS.LOANS.CANCELLED]: { label: 'Cancelled', variant: 'warning' },
-    };
-    const statusBadge = statusBadgeMap[loan.status];
+    const statusBadge = getStatusBadge('loan', loan.status);
 
     return {
       priceLabel: balanceLabel,
       badge: statusBadge?.label,
-      badgeVariant: statusBadge?.variant as
-        | 'success'
-        | 'default'
-        | 'warning'
-        | 'destructive'
-        | undefined,
+      badgeVariant: statusBadge?.variant,
       metadata:
         metadataParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">

@@ -30,7 +30,7 @@ const TransparencySection = dynamic(
 );
 
 const TrustSection = dynamic(() => import('@/components/home/sections/TrustSection'), {
-  loading: () => <div className="h-96 bg-white dark:bg-background animate-pulse" />,
+  loading: () => <div className="h-96 bg-background animate-pulse" />,
 });
 
 /**
@@ -69,7 +69,7 @@ export default function HomePublicClient() {
         <TransparencySection />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-white dark:bg-background animate-pulse" />}>
+      <Suspense fallback={<div className="h-96 bg-background animate-pulse" />}>
         <TrustSection />
       </Suspense>
     </div>

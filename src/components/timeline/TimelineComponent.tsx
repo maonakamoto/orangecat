@@ -11,6 +11,7 @@ import { Trash2, CheckSquare, Loader2, Newspaper } from 'lucide-react';
 import { usePostSelection } from '@/hooks/usePostSelection';
 import EmptyState from '@/components/ui/EmptyState';
 import { BulkActionsToolbar } from './BulkActionsToolbar';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 interface TimelineComponentProps {
   feed: TimelineFeedResponse;
@@ -178,7 +179,7 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
         <>
           {!isSelectionMode ? (
             // Entry point to selection mode - small button
-            <div className="sticky top-16 z-10 bg-white/95 dark:bg-card/95 backdrop-blur-md border-b border-border px-4 py-2.5">
+            <div className="sticky top-16 z-10 border-b border-border-subtle bg-background/90 px-4 py-2.5 backdrop-blur-xl">
               <Button
                 variant="outline"
                 size="sm"
@@ -246,12 +247,12 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
 
       {/* Bulk Delete Confirmation Modal */}
       {showBulkDeleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <Card className="max-w-md w-full mx-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <Card className="mx-4 w-full max-w-md rounded-md border-border-subtle bg-background">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                  <Trash2 className="w-6 h-6 text-red-600" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-md border border-destructive/20 bg-destructive/10">
+                  <Trash2 className="w-6 h-6 text-destructive" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold">
@@ -271,6 +272,7 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
                   variant="outline"
                   onClick={() => setShowBulkDeleteConfirm(false)}
                   disabled={isProcessing}
+                  className={TIMELINE_SURFACE.chip}
                 >
                   Cancel
                 </Button>

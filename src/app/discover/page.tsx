@@ -115,16 +115,11 @@ export default function DiscoverPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Layout: left vertical sidebar (desktop), content on right */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0 }}
-          className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-6"
-        >
+        <div className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-6">
           {/* Left Sidebar - always visible on desktop, collapsible on mobile */}
           <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-20">
-              <div className="bg-white/70 dark:bg-card/70 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-border/60 p-5">
+              <div className="bg-card/70 dark:bg-card/70 backdrop-blur-sm rounded-lg border border-border dark:border-border/60 p-5">
                 <h3 className="text-lg font-semibold text-foreground mb-4">Filters</h3>
                 <DiscoverFilters variant="desktop" {...filterProps} />
               </div>
@@ -157,7 +152,7 @@ export default function DiscoverPage() {
               }
             />
 
-            <div className="bg-white/70 dark:bg-card/70 backdrop-blur-sm rounded-b-2xl border border-gray-200/60 dark:border-border/60 border-t-0 p-6">
+            <div className="bg-card/70 dark:bg-card/70 backdrop-blur-sm rounded-b-lg border border-border dark:border-border/60 border-t-0 p-6">
               {/* Mobile Filter Button */}
               <div className="lg:hidden mb-4">
                 <Button
@@ -180,7 +175,7 @@ export default function DiscoverPage() {
                     transition={{ duration: 0.3 }}
                     className="lg:hidden mb-6 overflow-hidden"
                   >
-                    <div className="bg-white/70 dark:bg-card/70 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-border/60 p-5">
+                    <div className="bg-card/70 dark:bg-card/70 backdrop-blur-sm rounded-lg border border-border dark:border-border/60 p-5">
                       <DiscoverFilters variant="mobile" {...filterProps} />
                     </div>
                   </motion.div>
@@ -190,9 +185,9 @@ export default function DiscoverPage() {
               {/* Error State */}
               {searchError && (
                 <div className="text-center py-16">
-                  <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md mx-auto">
-                    <p className="text-red-800 font-medium mb-2">Error loading projects</p>
-                    <p className="text-red-600 text-sm">{searchError}</p>
+                  <div className="oc-error-surface rounded-lg p-6 max-w-md mx-auto">
+                    <p className="text-destructive font-medium mb-2">Error loading projects</p>
+                    <p className="text-destructive text-sm">{searchError}</p>
                   </div>
                 </div>
               )}
@@ -265,7 +260,7 @@ export default function DiscoverPage() {
                 )}
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

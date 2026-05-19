@@ -110,7 +110,7 @@ export function AIOnboarding(props: AIOnboardingProps) {
   const currentStepData = steps[state.currentStep];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-tiffany-50 via-white to-tiffany-50">
+    <div className="min-h-screen bg-background">
       <OnboardingHeader
         currentStep={state.currentStep}
         totalSteps={state.totalSteps}

@@ -32,7 +32,7 @@ import { GRADIENTS } from '@/config/gradients';
 
 /**
  * Main categories shown on landing page
- * Reflects the full economic spectrum: exchange → funding → governance → AI agent
+ * Reflects the full economic spectrum: exchange, funding, coordination, AI agent
  */
 interface SuperAppCategory {
   id: string;
@@ -80,14 +80,14 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     ],
   },
   {
-    id: 'governance',
-    title: 'Govern Together',
-    description: 'Organize and decide as one',
+    id: 'coordination',
+    title: 'Coordinate Together',
+    description: 'Organize people, money, and decisions',
     icon: Scale,
     iconGradient: GRADIENTS.iconTiffany,
     bgColor: 'bg-muted',
     features: [
-      { title: 'Groups', description: 'Shared treasuries, collective decisions, governance rules' },
+      { title: 'Groups', description: 'Shared treasuries, roles, and collective decisions' },
       {
         title: 'Circles & Events',
         description: 'Lighter communities and time-bound coordination',
@@ -103,14 +103,14 @@ export const SUPER_APP_CATEGORIES: SuperAppCategory[] = [
     bgColor: 'bg-muted',
     features: [
       {
-        title: 'My Cat',
+        title: 'Cat',
         description:
           'Your personal AI economic agent — sets up entities, manages activity, and acts on your behalf.',
       },
       {
         title: 'AI Assistants',
         description:
-          'Deploy AI agents for your group or project. They can earn, spend, and govern autonomously.',
+          'Deploy AI agents for your group or project. They can earn, spend, and coordinate autonomously.',
       },
     ],
   },
@@ -144,7 +144,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     icon: Cat,
     title: 'Meet Your Cat',
     description:
-      'Your AI economic agent is ready. Tell it what you want to do — sell, fund, lend, invest, or govern.',
+      'Your AI economic agent is ready. Tell it what you want to do — sell, fund, lend, invest, or coordinate.',
     iconGradient: GRADIENTS.iconTiffany,
     bgColor: 'bg-muted',
   },
@@ -162,7 +162,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     icon: TrendingUp,
     title: 'Economic Activity Begins',
     description:
-      'Buy, sell, fund, lend, invest, or govern. Your Cat keeps track, surfaces insights, and acts on your behalf.',
+      'Buy, sell, fund, lend, invest, or coordinate. Your Cat keeps track, surfaces insights, and acts on your behalf.',
     iconGradient: GRADIENTS.iconGreen,
     bgColor: 'bg-muted',
   },
@@ -221,7 +221,7 @@ export const PLATFORM_BENEFITS: PlatformBenefit[] = [
     icon: Cat,
     title: 'Your AI Cat',
     description:
-      'My Cat is your personal economic agent. It sets up entities, manages activity, and acts on your behalf.',
+      'Cat is your personal economic agent. It sets up entities, manages activity, and acts on your behalf.',
   },
   {
     icon: Globe,
@@ -290,9 +290,9 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
   {
     emoji: '🏛️',
     category: 'Community',
-    title: 'Govern Together',
+    title: 'Coordinate Together',
     description:
-      'Organize shared treasuries, collective decisions, and community governance — with or without revealing identities.',
+      'Organize shared treasuries, collective decisions, and community activity — with or without revealing identities.',
     transparencyExample:
       'Groups have their own Cat. It manages the treasury and executes collective decisions.',
     gradient: 'bg-card',

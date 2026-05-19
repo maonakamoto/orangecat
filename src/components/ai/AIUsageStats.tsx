@@ -108,7 +108,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
           {stats.map(stat => (
             <div
               key={stat.label}
-              className="p-4 rounded-lg border border-border-subtle bg-gray-50/50 dark:bg-muted"
+              className="p-4 rounded-lg border border-border-subtle bg-muted/40/50 dark:bg-muted"
             >
               <div className="flex items-center gap-2 mb-2">
                 <div
@@ -133,7 +133,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
               <Info className="w-5 h-5 text-muted-dim mt-0.5" />
               <div>
                 <p className="text-sm text-muted-foreground">
-                  No usage recorded yet. Start a conversation with My Cat to see your statistics.
+                  No usage recorded yet. Start a conversation with Cat to see your statistics.
                 </p>
               </div>
             </div>

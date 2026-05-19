@@ -21,14 +21,20 @@ export async function fetchEntityOwner(
   if (entity.actor_id) {
     const { data: actorData } = await supabase
       .from(DATABASE_TABLES.ACTORS)
-      .select(`
+      .select(
+        `
         id, actor_type, user_id, group_id,
         profiles:user_id (username, name, avatar_url)
-      `)
+      `
+      )
       .eq('id', entity.actor_id)
       .maybeSingle();
     if (actorData) {
-      type ActorRow = { id: string; user_id: string | null; profiles?: { username: string | null; name: string | null; avatar_url: string | null } };
+      type ActorRow = {
+        id: string;
+        user_id: string | null;
+        profiles?: { username: string | null; name: string | null; avatar_url: string | null };
+      };
       const actor = actorData as unknown as ActorRow;
       const profile = actor.profiles;
       return {

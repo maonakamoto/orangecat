@@ -5,8 +5,7 @@ import { logger } from '@/utils/logger';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Home, RefreshCw, ArrowLeft } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
+import { AlertTriangle, Home, RefreshCw, ArrowLeft } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 
 export default function Error({
@@ -30,14 +29,12 @@ export default function Error({
     error.message?.toLowerCase().includes('unauthorized');
 
   return (
-    <div
-      className={`min-h-screen flex items-center justify-center ${GRADIENTS.pageBgOrangeDown} px-4`}
-    >
-      <div className="max-w-lg w-full space-y-8 p-6 bg-card rounded-xl shadow-xl border border-orange-100 dark:border-border">
+    <div className="oc-page flex items-center justify-center px-4">
+      <div className="oc-surface max-w-lg w-full space-y-8 p-6">
         {/* Icon */}
         <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-orange-100 rounded-full flex items-center justify-center">
-            <span className="text-4xl">⚠️</span>
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-md border border-destructive/20 bg-destructive/10 text-destructive">
+            <AlertTriangle className="h-8 w-8" />
           </div>
         </div>
 
@@ -57,8 +54,8 @@ export default function Error({
 
         {/* Error details (only in development) */}
         {process.env.NODE_ENV === 'development' && error.message && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-sm font-mono text-red-800 break-words">{error.message}</p>
+          <div className="oc-error-surface">
+            <p className="text-sm font-mono break-words">{error.message}</p>
           </div>
         )}
 
@@ -67,14 +64,14 @@ export default function Error({
           {isAuthError ? (
             <Link
               href={ROUTES.AUTH}
-              className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+              className="group relative flex w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 py-3 text-sm font-medium text-background transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
             >
               Sign In
             </Link>
           ) : (
             <button
               onClick={reset}
-              className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+              className="group relative flex w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 py-3 text-sm font-medium text-background transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
             >
               <RefreshCw className="h-4 w-4" />
               Try Again
@@ -83,7 +80,7 @@ export default function Error({
 
           <button
             onClick={() => router.back()}
-            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-border-strong text-sm font-medium rounded-md text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-border-strong bg-card px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <ArrowLeft className="h-4 w-4" />
             Go Back
@@ -91,7 +88,7 @@ export default function Error({
 
           <Link
             href={ROUTES.HOME}
-            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-border-strong text-sm font-medium rounded-md text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-border-strong bg-card px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <Home className="h-4 w-4" />
             Go to Homepage
@@ -102,7 +99,10 @@ export default function Error({
         <div className="text-center pt-4 border-t border-border">
           <p className="text-sm text-muted-foreground">
             Still having issues?{' '}
-            <Link href={ROUTES.FAQ} className="text-orange-600 hover:text-orange-700 font-medium">
+            <Link
+              href={ROUTES.FAQ}
+              className="font-medium text-tiffany-600 hover:text-tiffany-700 dark:text-tiffany-400"
+            >
               Visit our FAQ
             </Link>
           </p>

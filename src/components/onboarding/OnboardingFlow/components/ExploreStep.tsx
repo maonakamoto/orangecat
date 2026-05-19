@@ -36,11 +36,11 @@ export function ExploreStep() {
           return (
             <Card
               key={option.title}
-              className={`transition-all ${isLoading ? `${option.border.replace('hover:', '')} shadow-md` : loadingHref ? 'opacity-50 cursor-not-allowed' : `${option.border} hover:shadow-md cursor-pointer`}`}
+              className={`transition-all ${isLoading ? `${option.border.replace('hover:', '')} shadow-sm` : loadingHref ? 'opacity-50 cursor-not-allowed' : `${option.border} hover:shadow-sm cursor-pointer`}`}
               onClick={() => handleOptionClick(option.href)}
             >
               <CardContent className="p-4 flex items-center gap-4">
-                <div className={`p-3 ${option.bg} rounded-xl flex-shrink-0`}>
+                <div className={`p-3 ${option.bg} rounded-lg flex-shrink-0`}>
                   <Icon className={`h-5 w-5 ${option.text}`} />
                 </div>
                 <div className="flex-1">
@@ -59,7 +59,7 @@ export function ExploreStep() {
       </div>
 
       {/* Wallet setup note — gentle nudge, not a blocker */}
-      <Card className="bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
+      <Card className="bg-muted/30 border-border">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             <Bitcoin className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />

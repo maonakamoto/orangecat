@@ -3,7 +3,6 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { Breadcrumb, BreadcrumbItem } from '@/components/ui/Breadcrumb';
-import { GRADIENTS } from '@/config/gradients';
 
 interface EntityDetailLayoutProps {
   title: string;
@@ -25,18 +24,20 @@ export default function EntityDetailLayout({
   breadcrumbItems,
 }: EntityDetailLayoutProps) {
   return (
-    <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8', className)}>
-      {breadcrumbItems && <Breadcrumb items={breadcrumbItems} className="mb-4" />}
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{title}</h1>
-          {subtitle && <p className="text-muted-foreground mt-1">{subtitle}</p>}
+    <div className={cn('oc-page', className)}>
+      <div className="oc-page-container oc-page-stack">
+        {breadcrumbItems && <Breadcrumb items={breadcrumbItems} />}
+        <div className="oc-page-header">
+          <div>
+            <h1 className="oc-page-title">{title}</h1>
+            {subtitle && <p className="oc-page-subtitle">{subtitle}</p>}
+          </div>
+          {headerActions && <div className="oc-page-actions">{headerActions}</div>}
         </div>
-        {headerActions}
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">{left}</div>
-        <div>{right}</div>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">{left}</div>
+          <div>{right}</div>
+        </div>
       </div>
     </div>
   );

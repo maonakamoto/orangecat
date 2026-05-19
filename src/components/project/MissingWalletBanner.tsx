@@ -41,7 +41,7 @@ export default function MissingWalletBanner({
 
   return (
     <div
-      className={`${GRADIENTS.sectionOrangeWarm} border-2 border-orange-300 rounded-lg p-4 shadow-sm ${className}`}
+      className={`${GRADIENTS.sectionOrangeWarm} border-2 border-border-strong rounded-lg p-4 shadow-sm ${className}`}
     >
       <div className="flex items-start gap-4">
         {/* Icon */}
@@ -57,7 +57,7 @@ export default function MissingWalletBanner({
             </h3>
             <button
               onClick={() => setIsDismissed(true)}
-              className="text-gray-400 hover:text-muted-foreground dark:hover:text-foreground transition-colors flex-shrink-0"
+              className="text-muted-dim hover:text-muted-foreground dark:hover:text-foreground transition-colors flex-shrink-0"
               aria-label="Dismiss"
             >
               <X className="w-5 h-5" />
@@ -81,7 +81,7 @@ export default function MissingWalletBanner({
             <Link href={ROUTES.WALLETS} target="_blank">
               <Button
                 variant="outline"
-                className="border-orange-300 text-orange-700 hover:bg-orange-50"
+                className="border-border-strong text-orange-700 hover:bg-orange-50"
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
                 Get a Wallet First

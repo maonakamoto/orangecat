@@ -35,10 +35,7 @@ export interface ParticipantInfo {
 /**
  * Normalize participant IDs: deduplicate and always include the creator
  */
-export function normalizeParticipants(
-  participantIds: string[],
-  creatorId: string
-): string[] {
+export function normalizeParticipants(participantIds: string[], creatorId: string): string[] {
   const uniqueIds = new Set(participantIds.filter((id): id is string => typeof id === 'string'));
   uniqueIds.add(creatorId);
   return Array.from(uniqueIds);
@@ -61,7 +58,7 @@ export async function getUserConversationIds(
     return [];
   }
 
-  return data.map((p) => p.conversation_id).filter(Boolean);
+  return data.map(p => p.conversation_id).filter(Boolean);
 }
 
 /**
@@ -88,7 +85,7 @@ export async function getConversationParticipants(
     is_active: boolean;
   }
 
-  return (data as ParticipantRow[]).map((p) => ({
+  return (data as ParticipantRow[]).map(p => ({
     conversationId: p.conversation_id,
     userId: p.user_id,
     role: p.role,
@@ -150,7 +147,7 @@ export async function findExistingDirectConversation(
     const participants = await getConversationParticipants(admin, conv.id);
 
     if (participants.length === 2) {
-      const participantIds = participants.map((p) => p.userId);
+      const participantIds = participants.map(p => p.userId);
       if (participantIds.includes(userId1) && participantIds.includes(userId2)) {
         return conv.id;
       }
@@ -230,7 +227,7 @@ export async function createConversation(
   const conversationId = newConv.id;
 
   // Add participants
-  const participantRows = participantIds.map((userId) => ({
+  const participantRows = participantIds.map(userId => ({
     conversation_id: conversationId,
     user_id: userId,
     role: userId === creatorId ? PARTICIPANT_ROLES.ADMIN : PARTICIPANT_ROLES.MEMBER,
@@ -284,7 +281,7 @@ export async function openOrCreateConversation(
 
   // Direct conversation (2 participants)
   if (count === 2) {
-    const otherId = allParticipants.find((id) => id !== creatorId)!;
+    const otherId = allParticipants.find(id => id !== creatorId)!;
     const existingId = await findExistingDirectConversation(admin, creatorId, otherId);
     if (existingId) {
       return { conversationId: existingId, isExisting: true };

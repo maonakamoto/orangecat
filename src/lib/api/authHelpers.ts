@@ -22,7 +22,9 @@ export async function shouldIncludeDrafts(
   requestedUserId: string | null,
   authenticatedUserId?: string | null
 ): Promise<boolean> {
-  if (!requestedUserId || !authenticatedUserId) {return false;}
+  if (!requestedUserId || !authenticatedUserId) {
+    return false;
+  }
   return requestedUserId === authenticatedUserId;
 }
 
@@ -33,9 +35,8 @@ export async function shouldIncludeDrafts(
  */
 export async function getAuthenticatedUserId(): Promise<string | null> {
   const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   return user?.id ?? null;
 }
-
-
-

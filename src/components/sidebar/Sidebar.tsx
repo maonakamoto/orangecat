@@ -103,7 +103,7 @@ export function Sidebar({
             Mobile: w-64 drawer when open
             Using literal class names for Tailwind JIT compatibility */}
         <aside
-          className={`fixed bottom-0 left-0 ${SIDEBAR_Z_INDEX.SIDEBAR} flex flex-col ${SIDEBAR_COLORS.BACKGROUND} shadow-lg border-r ${SIDEBAR_COLORS.BORDER} ${sidebarTranslate} overflow-y-auto overflow-x-visible transition-all ${SIDEBAR_TRANSITIONS.DURATION} ${SIDEBAR_TRANSITIONS.EASING} ${sidebarWidth}`}
+          className={`fixed bottom-0 left-0 ${SIDEBAR_Z_INDEX.SIDEBAR} flex flex-col ${SIDEBAR_COLORS.BACKGROUND} border-r ${SIDEBAR_COLORS.BORDER} ${sidebarTranslate} overflow-hidden transition-all ${SIDEBAR_TRANSITIONS.DURATION} ${SIDEBAR_TRANSITIONS.EASING} ${sidebarWidth}`}
           style={{
             paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             paddingLeft: 'env(safe-area-inset-left, 0px)',
@@ -111,7 +111,7 @@ export function Sidebar({
           }}
         >
           {/* Wrapper to ensure tooltips can overflow */}
-          <div className="flex flex-col h-full min-w-0 overflow-visible">
+          <div className="flex h-full min-w-0 flex-col overflow-hidden">
             {/* Context Switcher (replaces static user profile) */}
             {user && profile && <ContextSwitcher profile={profile} isExpanded={isExpanded} />}
 
@@ -133,7 +133,7 @@ export function Sidebar({
               >
                 <button
                   onClick={toggleSidebarCollapse}
-                  className={`w-full flex items-center gap-3 p-2 text-muted-foreground hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-xl transition-colors duration-200 ${
+                  className={`flex w-full items-center gap-3 rounded-md p-2 text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground ${
                     !isExpanded ? 'justify-center' : ''
                   }`}
                   aria-label={
@@ -162,7 +162,7 @@ export function Sidebar({
               >
                 <button
                   onClick={toggleSidebar}
-                  className="w-full flex items-center gap-3 p-2 text-muted-foreground hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-xl transition-colors duration-200 min-h-11"
+                  className="flex min-h-11 w-full items-center gap-3 rounded-md p-2 text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
                   aria-label={navigationLabels.SIDEBAR_COLLAPSE}
                 >
                   <X className="h-5 w-5" />

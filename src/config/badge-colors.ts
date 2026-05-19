@@ -19,7 +19,7 @@ export const BADGE_COLORS = {
     'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-900',
   info: 'bg-tiffany-100 text-tiffany-700 border-tiffany-200 dark:bg-tiffany-900/20 dark:text-tiffany-400 dark:border-tiffany-800',
   neutral:
-    'bg-gray-100 text-gray-700 border-gray-200 dark:bg-muted dark:text-muted-foreground dark:border-border',
+    'bg-muted text-muted-strong border-border dark:bg-muted dark:text-muted-foreground dark:border-border',
   muted:
     'bg-slate-100 text-slate-600 border-slate-200 dark:bg-muted dark:text-muted-foreground dark:border-border',
   amber:
@@ -40,7 +40,7 @@ export type BadgeColorKey = keyof typeof BADGE_COLORS;
  */
 export const STAT_COLORS = {
   neutral:
-    'bg-gray-50 text-gray-600 border-gray-200 dark:bg-muted dark:text-muted-foreground dark:border-border',
+    'bg-muted/40 text-muted-foreground border-border dark:bg-muted dark:text-muted-foreground dark:border-border',
   info: 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-900',
   amber:
     'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-900',

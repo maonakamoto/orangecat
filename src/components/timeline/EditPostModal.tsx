@@ -6,6 +6,7 @@ import { TimelineDisplayEvent, TimelineVisibility } from '@/types/timeline';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
 import { cn } from '@/lib/utils';
+import { TIMELINE_CONTENT_LIMITS, TIMELINE_COPY, TIMELINE_SURFACE } from '@/config/timeline';
 
 interface EditPostModalProps {
   isOpen: boolean;
@@ -58,8 +59,8 @@ export function EditPostModal({
       return;
     }
 
-    if (trimmedContent.length > 5000) {
-      setError('Post content is too long (max 5000 characters)');
+    if (trimmedContent.length > TIMELINE_CONTENT_LIMITS.editPost) {
+      setError(`Post content is too long (max ${TIMELINE_CONTENT_LIMITS.editPost} characters)`);
       return;
     }
 
@@ -67,9 +68,9 @@ export function EditPostModal({
 
     try {
       const title =
-        trimmedContent.length <= 120
+        trimmedContent.length <= TIMELINE_CONTENT_LIMITS.title
           ? trimmedContent
-          : `${trimmedContent.slice(0, 117).trimEnd()}...`;
+          : `${trimmedContent.slice(0, TIMELINE_CONTENT_LIMITS.titleTruncateAt).trimEnd()}...`;
 
       await onSave({
         title,
@@ -104,26 +105,22 @@ export function EditPostModal({
     visibility !== (event.visibility || 'public');
 
   const charCount = content.length;
-  const maxChars = 5000;
+  const maxChars = TIMELINE_CONTENT_LIMITS.editPost;
   const isOverLimit = charCount > maxChars;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] px-4"
+      className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-[10vh]"
       onKeyDown={handleKeyDown}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-xl bg-card rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
+      <div className="relative w-full max-w-xl rounded-md border border-border-subtle bg-background shadow-sm animate-in fade-in-0 zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border-subtle">
-          <button
-            onClick={onClose}
-            className="text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:bg-muted rounded-full p-2 -ml-2 transition-colors min-h-11 min-w-11 flex items-center justify-center"
-            aria-label="Close"
-          >
+        <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
+          <button onClick={onClose} className={TIMELINE_SURFACE.iconButton} aria-label="Close">
             <X className="w-5 h-5" />
           </button>
 
@@ -133,12 +130,12 @@ export function EditPostModal({
             onClick={handleSave}
             disabled={isSaving || !hasChanges || isOverLimit || !content.trim()}
             size="sm"
-            className="rounded-full px-4 py-1.5 text-sm font-bold bg-tiffany-500 hover:bg-tiffany-600 disabled:bg-tiffany-300 text-white"
+            className={TIMELINE_SURFACE.buttonPrimary}
           >
             {isSaving ? (
               <>
                 <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                Saving...
+                {TIMELINE_COPY.savingButton}
               </>
             ) : (
               'Save'
@@ -150,7 +147,7 @@ export function EditPostModal({
         <div className="p-4">
           {/* Error message */}
           {error && (
-            <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+            <div className="mb-3 p-3 oc-error-surface rounded-lg text-sm text-destructive/80">
               {error}
             </div>
           )}
@@ -159,10 +156,10 @@ export function EditPostModal({
           <Textarea
             value={content}
             onChange={e => setContent(e.target.value)}
-            placeholder="What's happening?"
+            placeholder={TIMELINE_COPY.composePlaceholder}
             className={cn(
               'min-h-[150px] text-base leading-relaxed border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-muted-foreground',
-              isOverLimit && 'text-red-600'
+              isOverLimit && 'text-destructive'
             )}
             disabled={isSaving}
             autoFocus
@@ -175,10 +172,8 @@ export function EditPostModal({
               <button
                 onClick={() => setVisibility(visibility === 'public' ? 'private' : 'public')}
                 className={cn(
-                  'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
-                  visibility === 'public'
-                    ? 'text-tiffany-500 bg-tiffany-50 hover:bg-tiffany-100'
-                    : 'text-muted-foreground bg-muted hover:bg-gray-200 dark:hover:bg-muted/80'
+                  TIMELINE_SURFACE.chip,
+                  visibility === 'public' ? TIMELINE_SURFACE.chipActive : ''
                 )}
                 disabled={isSaving}
               >
@@ -198,7 +193,10 @@ export function EditPostModal({
 
             {/* Character count */}
             <div
-              className={cn('text-sm', isOverLimit ? 'text-red-600 font-medium' : 'text-muted-dim')}
+              className={cn(
+                'text-sm',
+                isOverLimit ? 'text-destructive font-medium' : 'text-muted-dim'
+              )}
             >
               {charCount.toLocaleString()} / {maxChars.toLocaleString()}
             </div>

@@ -52,7 +52,7 @@ export function CreateProjectStep() {
                 return (
                   <Card
                     key={entity.type}
-                    className={`transition-all ${loadingPath === entity.createPath ? 'border-orange-300 shadow-md opacity-100' : loadingPath ? 'opacity-50 cursor-not-allowed' : 'hover:border-orange-300 hover:shadow-md cursor-pointer'}`}
+                    className={`transition-all ${loadingPath === entity.createPath ? 'border-border-strong shadow-sm opacity-100' : loadingPath ? 'opacity-50 cursor-not-allowed' : 'hover:border-border-strong hover:shadow-sm cursor-pointer'}`}
                     onClick={() => handleEntityClick(entity)}
                   >
                     <CardContent className="p-4 flex items-center gap-3">

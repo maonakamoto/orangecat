@@ -58,8 +58,8 @@ export function ProjectDonationSection({
               variant={isFavorited ? 'primary' : 'outline'}
               className={`flex-1 flex items-center justify-center gap-2 ${
                 isFavorited
-                  ? 'bg-red-500 hover:bg-red-600 text-white border-red-500'
-                  : 'border-border-strong hover:border-red-300 hover:text-red-600'
+                  ? 'bg-red-500 hover:bg-red-600 text-white border-destructive'
+                  : 'border-border-strong hover:border-red-300 hover:text-destructive'
               }`}
               aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
             >
@@ -85,7 +85,7 @@ export function ProjectDonationSection({
             <Button
               href={`${ROUTES.AUTH}?from=favorite`}
               variant="outline"
-              className="flex-1 flex items-center justify-center gap-2 border-border-strong hover:border-red-300 hover:text-red-600"
+              className="flex-1 flex items-center justify-center gap-2 border-border-strong hover:border-red-300 hover:text-destructive"
               aria-label="Sign in to favorite this project"
             >
               <Heart className="w-4 h-4" aria-hidden="true" />
@@ -143,7 +143,7 @@ export function ProjectDonationSection({
 
           <div className="grid md:grid-cols-2 gap-4">
             <div className="flex flex-col items-center justify-center bg-card p-6 rounded-lg border border-border">
-              <div className="bg-white dark:bg-muted p-3 rounded-lg shadow-sm">
+              <div className="bg-card p-3 rounded-lg shadow-sm">
                 <QRCodeSVG
                   value={`bitcoin:${bitcoinAddress}`}
                   size={180}

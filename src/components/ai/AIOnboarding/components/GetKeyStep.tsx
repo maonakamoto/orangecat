@@ -121,9 +121,9 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
       {/* Security Warnings */}
       <div className="space-y-3">
         {aiOnboardingContent.getKey.warnings?.map((warning, index) => (
-          <div key={index} className="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
-            <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0" />
-            <span className="text-sm text-red-800">{warning}</span>
+          <div key={index} className="oc-error-surface flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm">{warning}</span>
           </div>
         ))}
       </div>

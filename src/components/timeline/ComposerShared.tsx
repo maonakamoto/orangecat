@@ -3,27 +3,28 @@
 import React from 'react';
 import { Bold, Italic, X, FolderPlus, WifiOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { TIMELINE_CONTENT_LIMITS, TIMELINE_COPY, TIMELINE_SURFACE } from '@/config/timeline';
 
 export interface TextFormatToolbarProps {
   onFormat: (format: 'bold' | 'italic') => void;
-  variant?: 'sky' | 'orange';
+  variant?: 'default' | 'accent';
   size?: 'sm' | 'md';
 }
 
 export function TextFormatToolbar({
   onFormat,
-  variant = 'sky',
+  variant = 'default',
   size = 'sm',
 }: TextFormatToolbarProps) {
   const baseClasses = cn(
-    'flex items-center justify-center rounded-full transition-colors',
-    size === 'sm' ? 'h-9 w-9' : 'p-2 min-h-11 min-w-11'
+    'flex items-center justify-center rounded-md transition-colors',
+    size === 'sm' ? 'h-9 w-9' : 'min-h-11 min-w-11 p-2'
   );
 
   const colorClasses =
-    variant === 'sky'
-      ? 'text-tiffany-600 hover:bg-tiffany-50 active:bg-tiffany-100'
-      : 'text-orange-500 hover:bg-orange-50';
+    variant === 'accent'
+      ? 'text-tiffany-600 hover:bg-tiffany-50 active:bg-tiffany-100 dark:text-tiffany-300 dark:hover:bg-tiffany-950/30'
+      : 'text-muted-foreground hover:bg-muted hover:text-foreground';
 
   return (
     <div className="flex items-center gap-1">
@@ -60,7 +61,7 @@ export interface ProjectSelectionPanelProps {
   onToggle: (id: string) => void;
   onClose: () => void;
   isPosting: boolean;
-  variant?: 'orange' | 'default';
+  variant?: 'accent' | 'default';
 }
 
 export function ProjectSelectionPanel({
@@ -69,21 +70,21 @@ export function ProjectSelectionPanel({
   onToggle,
   onClose,
   isPosting,
-  variant = 'orange',
+  variant = 'default',
 }: ProjectSelectionPanelProps) {
   if (projects.length === 0) {
     return null;
   }
 
   return (
-    <div className="mt-3 p-3 bg-orange-50/50 rounded-xl border border-orange-100">
+    <div className={cn('mt-3 p-3', TIMELINE_SURFACE.panel)}>
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-semibold text-orange-800 uppercase tracking-wide">
-          Cross-post to Projects
+        <span className="text-xs font-semibold uppercase text-muted-foreground">
+          {TIMELINE_COPY.crossPostLabel}
         </span>
         <button
           onClick={onClose}
-          className="text-orange-400 hover:text-orange-600 active:text-orange-700 transition-colors p-2 sm:p-1 min-h-11 min-w-11 sm:min-h-0 sm:min-w-0 rounded-full touch-manipulation"
+          className={cn(TIMELINE_SURFACE.iconButton, 'sm:min-h-8 sm:min-w-8')}
           aria-label="Close project selection"
         >
           <X className="w-4 h-4 sm:w-3 sm:h-3" />
@@ -97,12 +98,12 @@ export function ProjectSelectionPanel({
             onClick={() => onToggle(project.id)}
             disabled={isPosting}
             className={cn(
-              'px-3 py-1 text-xs font-medium rounded-full border transition-all',
+              TIMELINE_SURFACE.chip,
               selectedProjects.includes(project.id)
-                ? variant === 'orange'
-                  ? 'bg-tiffany-500 text-white border-tiffany-500 shadow-sm'
-                  : 'bg-tiffany-500 text-white border-tiffany-500 shadow-sm'
-                : 'bg-white dark:bg-muted text-muted-foreground border-border hover:border-orange-300 hover:bg-orange-50'
+                ? variant === 'accent'
+                  ? 'border-tiffany-500 bg-tiffany-500 text-white hover:text-white'
+                  : TIMELINE_SURFACE.chipActive
+                : ''
             )}
           >
             {project.title}
@@ -123,14 +124,14 @@ export interface ProjectToggleButtonProps {
   showProjects: boolean;
   selectedCount: number;
   onToggle: () => void;
-  variant?: 'sky' | 'orange';
+  variant?: 'default' | 'accent';
 }
 
 export function ProjectToggleButton({
   showProjects,
   selectedCount,
   onToggle,
-  variant = 'sky',
+  variant = 'default',
 }: ProjectToggleButtonProps) {
   const isActive = showProjects || selectedCount > 0;
 
@@ -139,14 +140,12 @@ export function ProjectToggleButton({
       type="button"
       onClick={onToggle}
       className={cn(
-        'h-9 w-9 flex items-center justify-center rounded-full transition-colors touch-manipulation',
+        'flex h-9 w-9 items-center justify-center rounded-md transition-colors touch-manipulation',
         isActive
-          ? variant === 'sky'
-            ? 'text-tiffany-700 bg-tiffany-50'
-            : 'text-orange-700 bg-orange-50'
-          : variant === 'sky'
-            ? 'text-tiffany-600 hover:bg-tiffany-50 active:bg-tiffany-100'
-            : 'text-orange-600 hover:bg-orange-50 active:bg-orange-100'
+          ? variant === 'accent'
+            ? 'bg-tiffany-50 text-tiffany-700 dark:bg-tiffany-950/30 dark:text-tiffany-300'
+            : 'bg-muted text-foreground'
+          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
       )}
       title="Cross-post to projects"
       aria-label="Toggle project selection"
@@ -175,13 +174,13 @@ export function ComposerMessages({
 }: ComposerMessagesProps) {
   if (error) {
     return (
-      <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+      <div className="mt-2 rounded-md oc-error-surface p-3 dark:border-red-900/50 dark:bg-red-950/20">
         <div className="flex items-start gap-2">
-          <div className="text-red-600 text-sm flex-1">{error}</div>
+          <div className="text-destructive text-sm flex-1">{error}</div>
           {onClearError && (
             <button
               onClick={onClearError}
-              className="text-red-400 hover:text-red-600 min-h-11 min-w-11 flex items-center justify-center"
+              className="text-red-400 hover:text-destructive min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Dismiss error"
             >
               <X className="w-4 h-4" />
@@ -192,7 +191,7 @@ export function ComposerMessages({
           <div className="mt-2">
             <button
               onClick={onRetry}
-              className="text-sm text-red-600 hover:text-red-800 underline rounded-md min-h-11 px-2 flex items-center"
+              className="text-sm text-destructive hover:text-destructive underline rounded-md min-h-11 px-2 flex items-center"
             >
               Try again
             </button>
@@ -204,8 +203,8 @@ export function ComposerMessages({
 
   if (success) {
     return (
-      <div className="mt-2 text-sm text-green-600 bg-green-50 px-3 py-2 rounded-lg">
-        ✓ Post shared successfully!
+      <div className="mt-2 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700 dark:border-green-900/50 dark:bg-green-950/20 dark:text-green-300">
+        {TIMELINE_COPY.savedPost}
       </div>
     );
   }
@@ -223,9 +222,9 @@ export interface CharacterCounterProps {
 
 export function CharacterCounter({
   count,
-  max = 500,
-  warningThreshold = 400,
-  dangerThreshold = 450,
+  max = TIMELINE_CONTENT_LIMITS.post,
+  warningThreshold = TIMELINE_CONTENT_LIMITS.warningAt,
+  dangerThreshold = TIMELINE_CONTENT_LIMITS.dangerAt,
   className,
 }: CharacterCounterProps) {
   if (count === 0) {
@@ -256,7 +255,7 @@ export function OfflineIndicator({ isOnline }: OfflineIndicatorProps) {
   }
 
   return (
-    <div className="flex items-center gap-1 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
+    <div className="flex items-center gap-1 rounded-md border border-orange-200 bg-orange-50 px-2 py-1 text-xs text-orange-700 dark:border-orange-900/50 dark:bg-orange-950/20 dark:text-orange-300">
       <WifiOff className="w-3 h-3" />
       <span>Offline</span>
     </div>
@@ -270,9 +269,7 @@ export interface ContextIndicatorProps {
 export function ContextIndicator({ targetName }: ContextIndicatorProps) {
   return (
     <div className="mb-1.5 flex items-center">
-      <span className="text-xs sm:text-xs text-muted-foreground font-medium bg-muted px-2 py-1 sm:py-0.5 rounded-full">
-        To {targetName}
-      </span>
+      <span className={cn(TIMELINE_SURFACE.chip, 'py-0.5')}>To {targetName}</span>
     </div>
   );
 }

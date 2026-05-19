@@ -10,8 +10,6 @@ import {
   SECTION_HEADERS,
   CTA_LABELS,
 } from '@/config/landing-page';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 export default function TrustSection() {
@@ -38,7 +36,7 @@ export default function TrustSection() {
           transition={{ duration: 0.5 }}
           className="mb-12 sm:mb-20 hidden md:block"
         >
-          <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
+          <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -49,12 +47,12 @@ export default function TrustSection() {
                     <th className="px-6 py-4 text-center text-sm font-semibold text-muted-foreground">
                       Traditional Platforms
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-tiffany-600 dark:text-primary bg-muted/50">
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-foreground bg-muted/50">
                       OrangeCat
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100 dark:divide-border">
+                <tbody className="divide-y divide-border">
                   {PLATFORM_COMPARISON.map((row, index) => (
                     <motion.tr
                       key={row.feature}
@@ -114,9 +112,7 @@ export default function TrustSection() {
                 <div className="text-center p-2 bg-muted/50 rounded">
                   <div className="flex items-center justify-center gap-1 mb-1">
                     <Check className="w-3 h-3 text-green-600" />
-                    <span className="text-xs font-medium text-tiffany-600 dark:text-primary">
-                      OrangeCat
-                    </span>
+                    <span className="text-xs font-medium text-foreground">OrangeCat</span>
                   </div>
                   <span
                     className={`text-xs font-semibold ${row.highlight ? 'text-green-700' : 'text-foreground'}`}
@@ -140,8 +136,8 @@ export default function TrustSection() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="text-center"
             >
-              <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-muted mb-3 sm:mb-4">
-                <benefit.icon className="w-6 h-6 sm:w-8 sm:h-8 text-tiffany-600 dark:text-primary" />
+              <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-muted mb-3 sm:mb-4">
+                <benefit.icon className="w-6 h-6 sm:w-8 sm:h-8 text-foreground" />
               </div>
               <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
                 {benefit.title}
@@ -159,7 +155,7 @@ export default function TrustSection() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-10 sm:mt-12 lg:mt-16 text-center"
         >
-          <div className="inline-flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-muted rounded-xl">
+          <div className="inline-flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-muted rounded-lg">
             {TRUST_SIGNALS.map((signal, index) => (
               <div key={signal} className="flex items-center gap-1.5 sm:gap-2">
                 {index > 0 && (
@@ -186,10 +182,7 @@ export default function TrustSection() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
               href={ROUTES.AUTH}
-              className={cn(
-                GRADIENTS.btnBitcoin,
-                'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
-              )}
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-background bg-foreground rounded-lg hover:bg-muted-strong transition-colors duration-150"
             >
               <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               {CTA_LABELS.startCreating}

@@ -153,7 +153,9 @@ export function VoiceInputButton({
       title={listening ? 'Stop voice input' : 'Start voice input'}
     >
       {listening ? (
-        <MicOff className={size === 'sm' ? 'h-4 w-4 text-red-600' : 'h-5 w-5 text-red-600'} />
+        <MicOff
+          className={size === 'sm' ? 'h-4 w-4 text-destructive' : 'h-5 w-5 text-destructive'}
+        />
       ) : (
         <Mic className={size === 'sm' ? 'h-4 w-4 text-foreground' : 'h-5 w-5 text-foreground'} />
       )}

@@ -120,7 +120,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
   return (
     <>
       <JsonLdScript data={jsonLd} />
-      <div className="min-h-screen bg-gradient-to-br from-rose-50/50 via-white to-orange-50/30">
+      <div className="min-h-screen bg-background">
         <div className="bg-card border-b border-border">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
@@ -139,10 +139,10 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                 <img
                   src={wishlist.cover_image_url}
                   alt={wishlist.title}
-                  className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+                  className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                 />
               ) : (
-                <div className="w-16 h-16 bg-rose-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-16 h-16 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Gift className="w-8 h-8 text-rose-600" />
                 </div>
               )}
@@ -262,7 +262,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
               ) : (
                 <Card>
                   <CardContent className="py-8 text-center text-muted-foreground">
-                    <Gift className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-muted-foreground/50" />
+                    <Gift className="w-8 h-8 mx-auto mb-2 text-muted-dim dark:text-muted-foreground/50" />
                     <p>No items in this wishlist yet.</p>
                   </CardContent>
                 </Card>

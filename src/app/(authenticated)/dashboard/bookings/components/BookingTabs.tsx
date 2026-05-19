@@ -38,7 +38,7 @@ export default function BookingTabs({
                 'py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap',
                 activeTab === tab.id
                   ? 'border-tiffany-500 text-tiffany-600'
-                  : 'border-transparent text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:border-gray-300 dark:hover:border-border'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border-strong dark:hover:border-border'
               )}
             >
               {tab.label}

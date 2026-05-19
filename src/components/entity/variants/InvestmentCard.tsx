@@ -27,10 +27,10 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
   if (viewMode === 'list') {
     return (
       <Link href={`${ENTITY_REGISTRY['investment'].publicBasePath}/${investment.id}`}>
-        <Card className="hover:shadow-md transition-shadow">
+        <Card className="oc-card-link">
           <div className="flex items-center p-4 gap-4">
-            <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-green-600" />
+            <div className="oc-icon-tile h-12 w-12">
+              <TrendingUp className="w-6 h-6 text-success" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-foreground truncate">{investment.title}</h3>
@@ -59,12 +59,12 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
 
   return (
     <Link href={`${ENTITY_REGISTRY['investment'].publicBasePath}/${investment.id}`}>
-      <Card className="hover:shadow-md transition-shadow h-full">
+      <Card className="oc-card-link h-full">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-green-600" />
+              <div className="oc-icon-tile h-8 w-8">
+                <TrendingUp className="w-4 h-4 text-success" />
               </div>
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-base truncate">{investment.title}</CardTitle>
@@ -87,7 +87,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Raised</span>
-              <span className="font-semibold text-green-600">
+              <span className="font-semibold text-success">
                 {formatAmount(investment.total_raised)}
               </span>
             </div>

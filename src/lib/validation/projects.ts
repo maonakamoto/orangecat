@@ -64,4 +64,3 @@ export const projectSchema = z.object({
 
 // Types
 export type ProjectData = z.infer<typeof projectSchema>;
-

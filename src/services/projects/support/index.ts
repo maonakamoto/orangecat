@@ -36,7 +36,7 @@ export * from './helpers';
 class ProjectSupportService {
   // Queries
   async getProjectSupportStats(projectId: string) {
-    return import('./queries').then((m) => m.getProjectSupportStats(projectId));
+    return import('./queries').then(m => m.getProjectSupportStats(projectId));
   }
 
   async getProjectSupport(
@@ -44,15 +44,11 @@ class ProjectSupportService {
     filters?: Parameters<typeof import('./queries').getProjectSupport>[1],
     pagination?: Parameters<typeof import('./queries').getProjectSupport>[2]
   ) {
-    return import('./queries').then((m) => m.getProjectSupport(projectId, filters, pagination));
+    return import('./queries').then(m => m.getProjectSupport(projectId, filters, pagination));
   }
 
-  async hasUserSupported(
-    projectId: string,
-    userId: string,
-    supportType?: string
-  ) {
-    return import('./queries').then((m) => m.hasUserSupported(projectId, userId, supportType));
+  async hasUserSupported(projectId: string, userId: string, supportType?: string) {
+    return import('./queries').then(m => m.hasUserSupported(projectId, userId, supportType));
   }
 
   // Mutations
@@ -60,16 +56,14 @@ class ProjectSupportService {
     projectId: string,
     request: Parameters<typeof import('./mutations').createProjectSupport>[1]
   ) {
-    return import('./mutations').then((m) => m.createProjectSupport(projectId, request));
+    return import('./mutations').then(m => m.createProjectSupport(projectId, request));
   }
 
   async deleteProjectSupport(supportId: string) {
-    return import('./mutations').then((m) => m.deleteProjectSupport(supportId));
+    return import('./mutations').then(m => m.deleteProjectSupport(supportId));
   }
 }
 
 // Export singleton instance
 const projectSupportService = new ProjectSupportService();
 export default projectSupportService;
-
-

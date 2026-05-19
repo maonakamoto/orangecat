@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 
 /**
  * useBulkSelection - Reusable hook for managing bulk selection state
- * 
+ *
  * Used across all entity list pages for consistent bulk selection behavior
  */
 export function useBulkSelection() {

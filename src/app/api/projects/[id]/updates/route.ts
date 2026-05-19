@@ -7,11 +7,7 @@
  */
 
 import { withOptionalAuth } from '@/lib/api/withAuth';
-import {
-  apiSuccess,
-  apiNotFound,
-  handleApiError,
-} from '@/lib/api/standardResponse';
+import { apiSuccess, apiNotFound, handleApiError } from '@/lib/api/standardResponse';
 import { logger } from '@/utils/logger';
 import { getTableName } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -34,13 +30,15 @@ export const GET = withOptionalAuth(async (req, { params }: RouteParams) => {
   try {
     const { id: projectId } = await params;
     const idValidation = getValidationError(validateUUID(projectId, 'project ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
 
     const { supabase } = req;
 
     // Fetch project to ensure it exists and is viewable
     const { data: project, error: projectError } = await supabase
-        .from(getTableName('project'))
+      .from(getTableName('project'))
       .select('id, status')
       .eq('id', projectId)
       .single();
@@ -56,10 +54,8 @@ export const GET = withOptionalAuth(async (req, { params }: RouteParams) => {
     }
 
     // Fetch recent updates (limit to 10 most recent)
-    const { data: updates, error: updatesError } = await (
-      supabase
-        .from(DATABASE_TABLES.PROJECT_UPDATES)
-    )
+    const { data: updates, error: updatesError } = await supabase
+      .from(DATABASE_TABLES.PROJECT_UPDATES)
       .select('id, project_id, type, title, content, amount_btc, created_at')
       .eq('project_id', projectId)
       .order('created_at', { ascending: false })

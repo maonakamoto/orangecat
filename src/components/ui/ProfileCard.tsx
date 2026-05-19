@@ -29,7 +29,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
 
   if (viewMode === 'list') {
     return (
-      <Card className="p-4 hover:shadow-lg transition-shadow">
+      <Card className="p-4 oc-card-link">
         <div className="flex items-center gap-4">
           <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
             <div
@@ -77,7 +77,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
 
   // Grid view
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow">
+    <Card className="p-6 oc-card-link">
       <div className="text-center">
         <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
           <div

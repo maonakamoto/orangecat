@@ -23,7 +23,7 @@ export function RouteError({ error, reset, context }: RouteErrorProps) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center">
-      <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+      <AlertCircle className="h-12 w-12 text-destructive mb-4" />
       <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
       <p className="text-muted-foreground mb-4 max-w-md">
         There was a problem loading this page. Please try again.
@@ -31,22 +31,22 @@ export function RouteError({ error, reset, context }: RouteErrorProps) {
 
       {/* Error details (development only) */}
       {process.env.NODE_ENV === 'development' && error.message && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 max-w-md w-full">
-          <p className="text-sm font-mono text-red-800 break-words">{error.message}</p>
+        <div className="oc-error-surface mb-6 max-w-md w-full">
+          <p className="text-sm font-mono break-words">{error.message}</p>
         </div>
       )}
 
       <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={reset}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-tiffany text-white hover:bg-tiffany-dark transition-colors"
+          className="inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-background transition-colors hover:bg-muted-strong"
         >
           <RefreshCw className="h-4 w-4" />
           Try again
         </button>
         <Link
           href={ROUTES.DASHBOARD.HOME}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border-strong text-foreground bg-card hover:bg-muted transition-colors"
+          className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-card px-4 py-2 text-foreground transition-colors hover:bg-muted"
         >
           <Home className="h-4 w-4" />
           Go to Dashboard

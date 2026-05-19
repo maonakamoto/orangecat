@@ -11,9 +11,9 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { convert, formatCurrency } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { STATUS } from '@/config/database-constants';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { getStatusBadge } from '@/config/entity-status';
 import type { Currency } from '@/types/settings';
 import { GRADIENTS } from '@/config/gradients';
 
@@ -120,25 +120,12 @@ export const eventEntityConfig: EntityConfig<Event> = {
       }
     }
 
-    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
-      [STATUS.EVENTS.PUBLISHED]: { label: 'Published', variant: 'success' },
-      [STATUS.EVENTS.OPEN]: { label: 'Open', variant: 'success' },
-      [STATUS.EVENTS.FULL]: { label: 'Full', variant: 'warning' },
-      [STATUS.EVENTS.ONGOING]: { label: 'Ongoing', variant: 'success' },
-      [STATUS.EVENTS.COMPLETED]: { label: 'Completed', variant: 'default' },
-      [STATUS.EVENTS.DRAFT]: { label: 'Draft', variant: 'default' },
-    };
-    const statusBadge = statusBadgeMap[event.status];
+    const statusBadge = getStatusBadge('event', event.status);
 
     return {
       priceLabel,
       badge: statusBadge?.label,
-      badgeVariant: statusBadge?.variant as
-        | 'success'
-        | 'default'
-        | 'warning'
-        | 'destructive'
-        | undefined,
+      badgeVariant: statusBadge?.variant,
       metadata:
         metadataParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">

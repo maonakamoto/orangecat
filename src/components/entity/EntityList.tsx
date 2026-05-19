@@ -125,7 +125,7 @@ export default function EntityList<T extends EntityItem>({
   // Empty state
   if (!items || items.length === 0) {
     return (
-      <div className={cn('rounded-xl border bg-card p-8 sm:p-12', className)}>
+      <div className={cn('oc-empty-surface', className)}>
         <EmptyState
           title={emptyState.title}
           description={emptyState.description || defaultEmptyState.description}
@@ -164,7 +164,7 @@ export default function EntityList<T extends EntityItem>({
               description={description}
               thumbnailUrl={item.thumbnail_url ?? undefined}
               href={makeHref(item)}
-              className={isSelected ? 'ring-2 ring-orange-500 border-orange-500' : undefined}
+              className={isSelected ? 'oc-selection-ring' : undefined}
               onDelete={onDeleteItem ? () => onDeleteItem(item.id) : undefined}
               isDeleting={isDeleting}
               showOnProfile={showOnProfile}
@@ -189,7 +189,7 @@ export default function EntityList<T extends EntityItem>({
                   checked={isSelected}
                   onChange={() => onToggleSelect(item.id)}
                   onClick={e => e.stopPropagation()}
-                  className="h-5 w-5 rounded border-border-strong bg-white dark:bg-muted shadow-lg text-orange-600 focus:ring-orange-500 cursor-pointer"
+                  className="h-5 w-5 rounded border-border-strong bg-card text-tiffany-600 focus:ring-ring cursor-pointer"
                   aria-label={`Select ${title}`}
                 />
               </div>
@@ -206,7 +206,7 @@ export default function EntityList<T extends EntityItem>({
  */
 function EntityCardSkeleton() {
   return (
-    <div className="flex flex-col overflow-hidden rounded-xl border border-border bg-card">
+    <div className="oc-surface flex flex-col overflow-hidden">
       {/* Image skeleton */}
       <Skeleton className="aspect-video w-full" />
 
@@ -229,7 +229,7 @@ function EntityCardSkeleton() {
 
         {/* Actions skeleton */}
         <div className="mt-auto pt-3 border-t border-border-subtle">
-          <Skeleton className="h-9 w-20 rounded-lg" />
+          <Skeleton className="h-9 w-20 rounded-md" />
         </div>
       </div>
     </div>

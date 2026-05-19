@@ -31,10 +31,7 @@ export default function HeroSectionStatic() {
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-foreground leading-tight mb-4 sm:mb-6">
-              Everyone Can{' '}
-              <span className="bg-gradient-to-r from-tiffany-500 to-tiffany-700 bg-clip-text text-transparent">
-                Make Things.
-              </span>
+              Everyone Can <span className="text-foreground">Make Things.</span>
             </h1>
 
             {/* Subheadline */}
@@ -75,7 +72,7 @@ export default function HeroSectionStatic() {
                 { icon: Zap, text: 'Zero fees' },
               ].map(benefit => (
                 <div key={benefit.text} className="flex items-center gap-2 text-muted-foreground">
-                  <benefit.icon className="w-4 h-4 text-tiffany-600 flex-shrink-0" />
+                  <benefit.icon className="w-4 h-4 text-foreground flex-shrink-0" />
                   <span className="text-sm font-medium">{benefit.text}</span>
                 </div>
               ))}
@@ -85,7 +82,7 @@ export default function HeroSectionStatic() {
           {/* Right Column - Visual Demo */}
           <div className="relative">
             {/* Demo Card */}
-            <div className="relative bg-card rounded-xl border border-border shadow-lg overflow-hidden">
+            <div className="relative bg-card rounded-lg border border-border shadow-sm">
               {/* Card Header */}
               <div className="p-4 sm:p-6 border-b border-border">
                 <div className="flex items-start gap-3 sm:gap-4">
@@ -95,10 +92,13 @@ export default function HeroSectionStatic() {
                     🐱
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground text-sm sm:text-base">My Cat</h3>
+                    <h3 className="font-semibold text-foreground text-sm sm:text-base">Cat</h3>
                     <p className="text-xs sm:text-sm text-muted-foreground">
                       Your AI economic agent
                     </p>
+                  </div>
+                  <div className="hidden sm:flex items-center rounded-full border border-border bg-muted/40 px-2.5 py-1 text-xs font-medium text-foreground">
+                    0% fees
                   </div>
                 </div>
               </div>
@@ -116,8 +116,8 @@ export default function HeroSectionStatic() {
                       key={feature}
                       className="flex items-center gap-2 text-sm text-muted-foreground"
                     >
-                      <div className="w-4 h-4 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-tiffany-500" />
+                      <div className="w-4 h-4 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                        <div className="w-1.5 h-1.5 rounded-full bg-foreground" />
                       </div>
                       {feature}
                     </div>
@@ -139,20 +139,20 @@ export default function HeroSectionStatic() {
                 {/* CTA Button in Demo */}
                 <Link
                   href={ROUTES.DISCOVER}
-                  className={`block w-full px-3 sm:px-4 py-2.5 sm:py-3 ${GRADIENTS.brandTiffany} text-white text-sm sm:text-base font-semibold rounded-lg hover:from-tiffany-600 hover:to-tiffany-700 transition-all duration-200 flex items-center justify-center gap-2`}
+                  className="block w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-foreground text-background text-sm sm:text-base font-semibold rounded-lg hover:bg-muted-strong transition-colors duration-150 flex items-center justify-center gap-2"
                 >
                   <Cat className="w-4 h-4 sm:w-5 sm:h-5" />
                   Explore Platform
                 </Link>
-              </div>
 
-              {/* Floating badges */}
-              <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 px-2 py-1 sm:px-3 sm:py-1.5 bg-green-500 text-white text-2xs sm:text-xs font-semibold rounded-full shadow-lg">
-                ✓ 0% Fees
-              </div>
-
-              <div className="absolute -bottom-2 -left-2 sm:-bottom-3 sm:-left-3 px-2 py-1 sm:px-3 sm:py-1.5 bg-tiffany-500 text-white text-2xs sm:text-xs font-semibold rounded-full shadow-lg">
-                🐱 AI-powered
+                <div className="flex flex-wrap gap-2 text-xs font-medium">
+                  <span className="rounded-full border border-border bg-muted/40 px-2.5 py-1 text-foreground">
+                    AI-powered
+                  </span>
+                  <span className="rounded-full border border-border bg-muted/40 px-2.5 py-1 text-foreground">
+                    Non-custodial
+                  </span>
+                </div>
               </div>
             </div>
           </div>

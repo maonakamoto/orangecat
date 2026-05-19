@@ -11,10 +11,7 @@ export function WalletsSkeleton() {
       <div className="h-6 w-48 bg-muted rounded animate-pulse" />
       <div className="grid gap-4 lg:grid-cols-2">
         {[1, 2].map(i => (
-          <div
-            key={i}
-            className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6"
-          >
+          <div key={i} className="oc-surface p-6">
             <div className="flex items-start gap-3 mb-4">
               <div className="w-12 h-12 bg-muted rounded animate-pulse" />
               <div className="flex-1 space-y-2">
@@ -41,7 +38,7 @@ export function WalletsSkeleton() {
  */
 export function ProfileStatsSkeleton() {
   return (
-    <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6">
+    <div className="oc-surface p-6">
       <div className="h-6 w-32 bg-muted rounded animate-pulse mb-4" />
       <div className="space-y-4">
         {[1, 2, 3, 4].map(i => (
@@ -60,11 +57,11 @@ export function ProfileStatsSkeleton() {
  */
 export function ProjectsSkeleton() {
   return (
-    <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6">
+    <div className="oc-surface p-6">
       <div className="h-6 w-32 bg-muted rounded animate-pulse mb-6" />
       <div className="space-y-4">
         {[1, 2, 3].map(i => (
-          <div key={i} className="rounded-xl border-2 border-border bg-card overflow-hidden">
+          <div key={i} className="rounded-lg border-2 border-border bg-card overflow-hidden">
             <div className="flex flex-col sm:flex-row">
               <div className="w-full sm:w-32 h-48 sm:h-auto flex-shrink-0 bg-muted animate-pulse" />
               <div className="flex-1 p-4 sm:p-5">
@@ -94,9 +91,9 @@ export function ProfilePageSkeleton() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header Banner Skeleton */}
         <div className="relative mb-8">
-          <div className="relative h-48 sm:h-64 lg:h-80 bg-muted rounded-2xl shadow-xl animate-pulse" />
+          <div className="relative h-48 sm:h-64 lg:h-80 bg-muted rounded-md shadow-none animate-pulse" />
           <div className="absolute -bottom-12 sm:-bottom-16 left-4 sm:left-8">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-gray-300 dark:bg-muted border-4 border-white dark:border-border shadow-2xl animate-pulse" />
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-lg bg-gray-300 dark:bg-muted border-4 border-card dark:border-border shadow-sm animate-pulse" />
           </div>
           <div className="absolute top-4 right-4 sm:top-6 sm:right-6 flex gap-2 sm:gap-3">
             <div className="h-10 w-24 bg-muted rounded-lg animate-pulse" />
@@ -108,7 +105,7 @@ export function ProfilePageSkeleton() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-16 sm:mt-20">
           <div className="lg:col-span-2 space-y-6">
             {/* Basic Info Card Skeleton */}
-            <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6">
+            <div className="oc-surface p-6">
               <div className="h-8 w-48 bg-muted rounded animate-pulse mb-3" />
               <div className="h-5 w-32 bg-muted rounded animate-pulse mb-4" />
               <div className="h-4 w-full bg-muted rounded animate-pulse mb-2" />

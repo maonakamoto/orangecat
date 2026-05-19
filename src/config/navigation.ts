@@ -111,8 +111,24 @@ export function getHeaderNavigationItems(user: SupabaseUser | null): NavigationI
  * 3. More (Settings, Profile, Help) - collapsed by default
  */
 
-// Generate entity-based navigation for the Create section only
-const entitySections = generateEntityNavigation();
+// Generate entity-based navigation as semantic groups instead of one long list.
+const entitySections = generateEntityNavigation().map(section =>
+  section.id === 'coordinate'
+    ? {
+        ...section,
+        items: [
+          ...section.items,
+          {
+            name: 'People',
+            href: ROUTES.DASHBOARD.PEOPLE,
+            icon: Users,
+            description: 'Find connections',
+            requiresAuth: true,
+          },
+        ],
+      }
+    : section
+);
 
 // Simplified main navigation - X/Twitter style
 const simplifiedSections: NavSection[] = [
@@ -125,7 +141,7 @@ const simplifiedSections: NavSection[] = [
     requiresAuth: false,
     items: [
       {
-        name: 'My Cat',
+        name: 'Cat',
         href: ROUTES.DASHBOARD.CAT,
         icon: Cat,
         description: 'Your AI agent',
@@ -161,30 +177,11 @@ const simplifiedSections: NavSection[] = [
       },
     ],
   },
-  {
-    id: 'create',
-    title: 'Create',
-    priority: 2,
-    defaultExpanded: false, // Collapsed - click to expand (progressive disclosure)
-    collapsible: true,
-    requiresAuth: true,
-    items: [
-      // Flatten all entity creation into one section
-      ...entitySections.flatMap(section => section.items),
-      // Add People to creation options
-      {
-        name: 'People',
-        href: ROUTES.DASHBOARD.PEOPLE,
-        icon: Users,
-        description: 'Find connections',
-        requiresAuth: true,
-      },
-    ],
-  },
+  ...entitySections,
   {
     id: 'operations',
-    title: 'Operations',
-    priority: 3,
+    title: 'Work',
+    priority: 6,
     defaultExpanded: false, // Collapsed by default
     collapsible: true,
     requiresAuth: true,
@@ -208,7 +205,7 @@ const simplifiedSections: NavSection[] = [
   {
     id: 'more',
     title: 'More',
-    priority: 4,
+    priority: 7,
     defaultExpanded: false, // Collapsed by default
     collapsible: true,
     requiresAuth: false,

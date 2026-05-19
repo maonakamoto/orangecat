@@ -7,18 +7,19 @@ import { BookOpen, Plus } from 'lucide-react';
 import { useRequireAuth } from '@/hooks/useAuth';
 import { useComposer } from '@/contexts/ComposerContext';
 import Loading from '@/components/Loading';
+import { TIMELINE_COPY } from '@/config/timeline';
 
 const SocialTimeline = dynamic(() => import('@/components/timeline/SocialTimeline'), {
   ssr: false,
   loading: () => (
-    <div className="h-[400px] rounded-xl border border-border-subtle bg-card shadow-sm animate-pulse" />
+    <div className="h-[400px] rounded-md border border-border-subtle bg-background animate-pulse" />
   ),
 });
 
 const PostComposerMobile = dynamic(() => import('@/components/timeline/PostComposerMobile'), {
   ssr: false,
   loading: () => (
-    <div className="h-[320px] rounded-xl border border-border-subtle bg-card shadow-sm animate-pulse" />
+    <div className="h-[320px] rounded-md border border-border-subtle bg-background animate-pulse" />
   ),
 });
 
@@ -83,12 +84,9 @@ function TimelineContent() {
         title="My Timeline"
         description="Your personal timeline and story"
         icon={BookOpen}
-        gradientFrom="from-orange-50/30"
-        gradientVia="via-white"
-        gradientTo="to-yellow-50/20"
         mode="timeline"
         showShareButton={true}
-        shareButtonText="Share Update"
+        shareButtonText={TIMELINE_COPY.shareUpdateButton}
         shareButtonIcon={Plus}
         defaultSort="recent"
         showSortingControls={false}
@@ -105,8 +103,8 @@ function TimelineContent() {
           onSuccess={handlePostCreated}
           autoFocus={true}
           showProjectSelection={true}
-          placeholder="What's happening?"
-          buttonText="Post"
+          placeholder={TIMELINE_COPY.composePlaceholder}
+          buttonText={TIMELINE_COPY.postButton}
         />
       )}
     </>

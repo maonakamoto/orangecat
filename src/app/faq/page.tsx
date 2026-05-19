@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { ChevronDown, Bot, Coins, Users, Shield, Zap, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 
 interface FaqItem {
   question: string;
@@ -21,12 +20,12 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'About OrangeCat',
     icon: HelpCircle,
-    color: 'text-tiffany-600',
+    color: 'text-foreground',
     items: [
       {
         question: 'What is OrangeCat?',
         answer:
-          'OrangeCat is your AI economic agent — a platform that lets any person, pseudonym, or organization participate in the full spectrum of economic activity: exchange goods and services, fund projects, lend money, invest, and govern together. Bitcoin and Lightning Network are the native payment rails, but any payment method is supported.',
+          'OrangeCat is your AI economic agent — a platform that lets any person, pseudonym, or organization participate in the full spectrum of economic activity: exchange goods and services, fund projects, lend money, invest, and coordinate together. Bitcoin and Lightning Network are the native payment rails, but any payment method is supported.',
       },
       {
         question: 'Who is OrangeCat for?',
@@ -48,7 +47,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Your Cat (AI Agent)',
     icon: Bot,
-    color: 'text-tiffany-600',
+    color: 'text-foreground',
     items: [
       {
         question: 'What is "My Cat"?',
@@ -89,7 +88,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Economic Activity',
     icon: Coins,
-    color: 'text-orange-600',
+    color: 'text-foreground',
     items: [
       {
         question: 'What kinds of economic activity can I do on OrangeCat?',
@@ -115,7 +114,7 @@ const FAQ_SECTIONS: FaqSection[] = [
                 <strong>Research</strong> — Decentralized science funding and collaboration
               </li>
               <li>
-                <strong>Govern</strong> — Form groups with shared treasuries and collective
+                <strong>Coordinate</strong> — Form groups with shared treasuries and collective
                 decision-making
               </li>
             </ul>
@@ -142,7 +141,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Payments & Bitcoin',
     icon: Zap,
-    color: 'text-yellow-600',
+    color: 'text-foreground',
     items: [
       {
         question: 'Do I need Bitcoin to use OrangeCat?',
@@ -169,7 +168,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Groups & Governance',
     icon: Users,
-    color: 'text-tiffany-600',
+    color: 'text-foreground',
     items: [
       {
         question: 'What are Groups?',
@@ -186,7 +185,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Privacy & Security',
     icon: Shield,
-    color: 'text-green-600',
+    color: 'text-foreground',
     items: [
       {
         question: 'Who can see my activity?',
@@ -251,7 +250,7 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen pt-20 pb-24">
       {/* Header */}
-      <div className={`${GRADIENTS.pageBgTiffanyDown} border-b border-tiffany-100 py-16 px-4`}>
+      <div className="border-b border-border bg-background py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-foreground mb-4">Frequently Asked Questions</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -290,7 +289,7 @@ export default function FAQPage() {
         })}
 
         {/* Still have questions */}
-        <div className="text-center bg-tiffany-50 border border-tiffany-100 rounded-xl p-8">
+        <div className="text-center bg-muted border border-border rounded-lg p-8">
           <h3 className="text-lg font-semibold text-foreground mb-2">Still have questions?</h3>
           <p className="text-muted-foreground mb-4">
             Ask your Cat — open the chat panel in your dashboard and type your question. Or reach
@@ -298,7 +297,7 @@ export default function FAQPage() {
           </p>
           <a
             href="mailto:hello@orangecat.ch"
-            className="inline-flex items-center gap-2 bg-tiffany-500 hover:bg-tiffany-600 text-white font-medium px-5 py-2.5 rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 bg-foreground hover:bg-muted-strong text-background font-medium px-5 py-2.5 rounded-lg transition-colors"
           >
             Contact Us
           </a>

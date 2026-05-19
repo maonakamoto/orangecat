@@ -28,7 +28,10 @@ export const communicationHandlers: Record<string, ActionHandler> = {
       return { success: false, error: error.message };
     }
     const snippet = text.length > 60 ? text.slice(0, 57) + '…' : text;
-    return { success: true, data: { ...data, displayMessage: `📢 Posted to timeline: "${snippet}"` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `📢 Posted to timeline: "${snippet}"` },
+    };
   },
 
   send_message: async (supabase, userId, _actorId, params) => {
@@ -101,7 +104,12 @@ export const communicationHandlers: Record<string, ActionHandler> = {
         .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
         .insert([
           { conversation_id: conversationId, user_id: userId, role: 'member', is_active: true },
-          { conversation_id: conversationId, user_id: recipientId, role: 'member', is_active: true },
+          {
+            conversation_id: conversationId,
+            user_id: recipientId,
+            role: 'member',
+            is_active: true,
+          },
         ])
         .select();
 

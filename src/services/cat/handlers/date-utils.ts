@@ -8,21 +8,31 @@
  *   - ISO/date strings: passed through as-is if parseable
  */
 export function parseReminderDate(when: string): string | null {
-  if (!when) { return null; }
+  if (!when) {
+    return null;
+  }
   const now = new Date();
   const lower = when.trim().toLowerCase();
 
   // "in N unit" pattern
-  const inMatch = lower.match(/^in\s+(\d+)\s+(minute|minutes|hour|hours|day|days|week|weeks|month|months)$/);
+  const inMatch = lower.match(
+    /^in\s+(\d+)\s+(minute|minutes|hour|hours|day|days|week|weeks|month|months)$/
+  );
   if (inMatch) {
     const n = parseInt(inMatch[1], 10);
     const unit = inMatch[2];
     const result = new Date(now);
-    if (unit.startsWith('minute')) { result.setMinutes(result.getMinutes() + n); }
-    else if (unit.startsWith('hour')) { result.setHours(result.getHours() + n); }
-    else if (unit.startsWith('day')) { result.setDate(result.getDate() + n); }
-    else if (unit.startsWith('week')) { result.setDate(result.getDate() + n * 7); }
-    else if (unit.startsWith('month')) { result.setMonth(result.getMonth() + n); }
+    if (unit.startsWith('minute')) {
+      result.setMinutes(result.getMinutes() + n);
+    } else if (unit.startsWith('hour')) {
+      result.setHours(result.getHours() + n);
+    } else if (unit.startsWith('day')) {
+      result.setDate(result.getDate() + n);
+    } else if (unit.startsWith('week')) {
+      result.setDate(result.getDate() + n * 7);
+    } else if (unit.startsWith('month')) {
+      result.setMonth(result.getMonth() + n);
+    }
     return result.toISOString();
   }
 

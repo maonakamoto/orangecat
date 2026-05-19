@@ -1,54 +1,52 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+import * as React from 'react';
+import { cn } from '@/lib/utils';
 
 interface TooltipProviderProps {
-  children: React.ReactNode
-  delayDuration?: number
+  children: React.ReactNode;
+  delayDuration?: number;
 }
 
 interface TooltipProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 interface TooltipTriggerProps {
-  children: React.ReactNode
-  asChild?: boolean
+  children: React.ReactNode;
+  asChild?: boolean;
 }
 
 interface TooltipContentProps {
-  children: React.ReactNode
-  className?: string
-  sideOffset?: number
+  children: React.ReactNode;
+  className?: string;
+  sideOffset?: number;
 }
 
 const TooltipContext = React.createContext<{
-  open: boolean
-  setOpen: (open: boolean) => void
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }>({
   open: false,
   setOpen: () => {},
-})
+});
 
 export function TooltipProvider({ children }: TooltipProviderProps) {
-  return <>{children}</>
+  return <>{children}</>;
 }
 
 export function Tooltip({ children }: TooltipProps) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
 
   return (
     <TooltipContext.Provider value={{ open, setOpen }}>
-      <div className="relative inline-block">
-        {children}
-      </div>
+      <div className="relative inline-block">{children}</div>
     </TooltipContext.Provider>
-  )
+  );
 }
 
 export function TooltipTrigger({ children }: TooltipTriggerProps) {
-  const { setOpen } = React.useContext(TooltipContext)
+  const { setOpen } = React.useContext(TooltipContext);
 
   return (
     <div
@@ -60,13 +58,15 @@ export function TooltipTrigger({ children }: TooltipTriggerProps) {
     >
       {children}
     </div>
-  )
+  );
 }
 
 export function TooltipContent({ children, className, sideOffset = 4 }: TooltipContentProps) {
-  const { open } = React.useContext(TooltipContext)
+  const { open } = React.useContext(TooltipContext);
 
-  if (!open) {return null}
+  if (!open) {
+    return null;
+  }
 
   return (
     <div
@@ -80,5 +80,5 @@ export function TooltipContent({ children, className, sideOffset = 4 }: TooltipC
     >
       {children}
     </div>
-  )
+  );
 }

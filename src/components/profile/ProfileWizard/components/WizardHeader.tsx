@@ -12,7 +12,7 @@ interface WizardHeaderProps {
 
 export function WizardHeader({ progress, onCancel }: WizardHeaderProps) {
   return (
-    <div className="flex items-center justify-between p-6 border-b bg-gradient-to-r from-orange-50 to-orange-100 dark:from-muted dark:to-muted/80">
+    <div className="flex items-center justify-between p-6 border-b bg-muted/30">
       <div className="flex items-center gap-4">
         <button
           onClick={onCancel}

@@ -93,12 +93,12 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
   };
 
   return (
-    <div className="rounded-xl border border-tiffany-200 bg-tiffany-50/40 p-4 mb-6 space-y-3">
+    <div className="mb-6 space-y-3 rounded-md border border-border-subtle bg-muted/30 p-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-tiffany-500" />
-          <span className="text-sm font-semibold text-tiffany-800">
+          <span className="text-sm font-semibold text-foreground">
             {hasFilled ? 'AI filled the form' : 'Fill with AI'}
           </span>
           {hasFilled && <CheckCircle2 className="h-4 w-4 text-green-500" />}
@@ -107,7 +107,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
           <button
             type="button"
             onClick={handleReset}
-            className="text-xs text-tiffany-500 hover:text-tiffany-700 flex items-center gap-1"
+            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
             <RefreshCw className="h-3 w-3" />
             Start over
@@ -133,7 +133,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
             placeholder={`Describe what you want to create — AI will fill the form for you.\n\nExample: "I'm an artist selling original watercolour prints of Swiss landscapes, priced around 80 CHF each, shipping worldwide."`}
             disabled={isGenerating || disabled}
             rows={3}
-            className="block w-full rounded-lg px-3 py-2 text-sm border border-tiffany-200 bg-white dark:bg-muted placeholder:text-muted-dim focus:outline-none focus:ring-2 focus:ring-tiffany-300 focus:border-tiffany-300 disabled:opacity-50 resize-none"
+            className="block w-full resize-none rounded-md border border-border-subtle bg-background px-3 py-2 text-sm placeholder:text-muted-dim focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
           />
 
           <div className="flex items-center justify-between gap-2">
@@ -153,7 +153,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
                       setError(null);
                     }}
                     disabled={isGenerating || disabled}
-                    className="text-xs px-2.5 py-1 bg-tiffany-100 hover:bg-tiffany-200 text-tiffany-600 rounded-full transition-colors"
+                    className="rounded-sm bg-background px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                   >
                     {example.length > 45 ? `${example.slice(0, 45)}…` : example}
                   </button>
@@ -164,7 +164,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
               type="button"
               onClick={handleGenerate}
               disabled={isGenerating || disabled || !description.trim()}
-              className="gap-2 bg-tiffany-600 hover:bg-tiffany-700 text-white shrink-0 ml-auto"
+              className="ml-auto shrink-0 gap-2 bg-foreground text-background hover:bg-foreground/90"
             >
               {isGenerating ? (
                 <>
@@ -200,13 +200,13 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
             }}
             placeholder='Tell AI what to change — e.g. "make the title shorter" or "increase the price"'
             disabled={isRefining || disabled}
-            className="flex-1 rounded-lg px-3 py-2 text-sm border border-tiffany-200 bg-white dark:bg-muted placeholder:text-muted-dim focus:outline-none focus:ring-2 focus:ring-tiffany-300 disabled:opacity-50"
+            className="flex-1 rounded-md border border-border-subtle bg-background px-3 py-2 text-sm placeholder:text-muted-dim focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
           />
           <Button
             type="button"
             onClick={handleRefine}
             disabled={isRefining || disabled || !refineInput.trim()}
-            className="gap-2 bg-tiffany-600 hover:bg-tiffany-700 text-white shrink-0"
+            className="shrink-0 gap-2 bg-foreground text-background hover:bg-foreground/90"
           >
             {isRefining ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -220,7 +220,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
 
       {/* Error */}
       {error && (
-        <div className="flex items-start gap-2 text-red-600 text-sm">
+        <div className="flex items-start gap-2 text-sm text-destructive">
           <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
           <span>{error}</span>
         </div>

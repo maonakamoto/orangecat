@@ -43,8 +43,8 @@ export function PageLayout({
   };
 
   return (
-    <div className={cn('min-h-screen pt-20', className)}>
-      <div className={cn('container mx-auto px-4 py-8', maxWidthClasses[maxWidth])}>
+    <div className={cn('oc-page pt-20', className)}>
+      <div className={cn('oc-page-container', maxWidthClasses[maxWidth])}>
         {header}
         {children}
         {footer}
@@ -55,14 +55,12 @@ export function PageLayout({
 
 export function PageHeader({ title, subtitle, description, className, children }: PageHeaderProps) {
   return (
-    <div className={cn('text-center mb-12', className)}>
-      <h1 className="text-4xl font-bold mb-4 text-foreground">{title}</h1>
-      {subtitle && (
-        <p className="text-xl text-tiffany-600 dark:text-primary font-medium mb-4">{subtitle}</p>
-      )}
-      {description && (
-        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">{description}</p>
-      )}
+    <div className={cn('oc-page-header mb-8', className)}>
+      <div>
+        <h1 className="oc-page-title">{title}</h1>
+        {subtitle && <p className="oc-page-subtitle font-medium">{subtitle}</p>}
+        {description && <p className="oc-page-subtitle">{description}</p>}
+      </div>
       {children}
     </div>
   );
@@ -71,9 +69,9 @@ export function PageHeader({ title, subtitle, description, className, children }
 export function PageSection({ children, className, background = 'default' }: PageSectionProps) {
   const backgroundClasses = {
     default: '',
-    gray: 'bg-muted -mx-4 px-4 py-8 md:-mx-6 md:px-6',
-    white: 'bg-card -mx-4 px-4 py-8 md:-mx-6 md:px-6 shadow-sm rounded-lg',
-    tiffany: 'bg-tiffany-50 dark:bg-accent -mx-4 px-4 py-8 md:-mx-6 md:px-6 rounded-lg',
+    gray: 'oc-surface-muted oc-surface-padding',
+    white: 'oc-surface oc-surface-padding',
+    tiffany: 'oc-surface-muted oc-surface-padding',
   };
 
   return (

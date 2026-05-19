@@ -29,8 +29,8 @@ export function SettingsEmailSection({ email, isSubmitting, onChange, onSubmit }
           icon={Mail}
           className="max-w-md"
         />
-        <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-4 max-w-md">
-          <p className="text-base text-tiffany-800">
+        <div className="max-w-md rounded-md border border-border-subtle bg-muted/30 p-4">
+          <p className="text-base text-muted-foreground">
             <strong>Note:</strong> When you update your email, we&apos;ll send a confirmation link
             to your new address.
           </p>

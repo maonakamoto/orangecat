@@ -75,7 +75,7 @@ export default function SecurityPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-background">
+    <div className="min-h-screen bg-muted/40 dark:bg-background">
       <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -152,7 +152,7 @@ export default function SecurityPage() {
         <div className="mt-12 bg-gray-900 text-white rounded-lg p-6">
           <div className="text-center">
             <h3 className="text-2xl font-semibold mb-4">Security Concerns?</h3>
-            <p className="mb-6 text-gray-300">
+            <p className="mb-6 text-muted-dim">
               If you have security concerns or believe you've discovered a vulnerability, please
               contact us immediately.
             </p>

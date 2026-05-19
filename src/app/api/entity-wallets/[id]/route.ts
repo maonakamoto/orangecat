@@ -1,6 +1,6 @@
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { apiSuccess, apiError, apiNotFound, apiRateLimited } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
@@ -10,7 +10,9 @@ export const DELETE = withAuth(
   async (request: AuthenticatedRequest, context: { params: Promise<{ id: string }> }) => {
     const { id } = await context.params;
     const idValidation = getValidationError(validateUUID(id, 'link ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     const { user, supabase } = request;
 
     const rl = await rateLimitWriteAsync(user.id);

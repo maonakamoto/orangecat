@@ -27,7 +27,7 @@ export function AuthSocialLogin({
         <button
           onClick={() => setMode('login')}
           disabled={loading}
-          className="mt-1 font-semibold text-orange-600 hover:text-orange-700"
+          className="mt-1 font-semibold text-foreground hover:text-muted-strong"
         >
           Sign in instead
         </button>
@@ -43,7 +43,7 @@ export function AuthSocialLogin({
             <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-gray-50 dark:bg-background px-3 text-muted-foreground">
+            <span className="bg-muted/40 dark:bg-background px-3 text-muted-foreground">
               or continue with
             </span>
           </div>
@@ -57,7 +57,7 @@ export function AuthSocialLogin({
               variant="outline"
               disabled={loading}
               onClick={() => onOAuthSignIn(id)}
-              className="h-11 w-full border-border-strong hover:border-gray-400 hover:bg-muted"
+              className="h-11 w-full border-border-strong hover:border-border-strong hover:bg-muted"
               aria-label={`Sign in with ${name}`}
             >
               <Icon className="h-5 w-5" />
@@ -73,7 +73,7 @@ export function AuthSocialLogin({
             <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-gray-50 dark:bg-background px-3 text-muted-foreground">or</span>
+            <span className="bg-muted/40 dark:bg-background px-3 text-muted-foreground">or</span>
           </div>
         </div>
         <div className="mt-4 text-center">
@@ -82,7 +82,7 @@ export function AuthSocialLogin({
             variant="ghost"
             disabled={loading}
             onClick={onAnonymousSignIn}
-            className="w-full h-11 text-muted-foreground hover:text-gray-800 dark:hover:text-foreground hover:bg-muted border border-border font-medium"
+            className="w-full h-11 text-muted-foreground hover:text-foreground hover:bg-muted border border-border font-medium"
           >
             {loading ? (
               <div className="flex items-center justify-center space-x-2">
@@ -106,7 +106,7 @@ export function AuthSocialLogin({
         <button
           onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
           disabled={loading}
-          className="mt-1 font-semibold text-orange-600 hover:text-orange-700"
+          className="mt-1 font-semibold text-foreground hover:text-muted-strong"
         >
           {mode === 'login' ? 'Create an account' : 'Sign in instead'}
         </button>

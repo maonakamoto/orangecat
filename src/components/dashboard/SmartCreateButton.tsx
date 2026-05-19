@@ -15,7 +15,6 @@ import {
   type EntityMetadata,
   type EntityCategory,
 } from '@/config/entity-registry';
-import { GRADIENTS } from '@/config/gradients';
 
 interface SmartCreateButtonProps {
   children?: React.ReactNode;
@@ -43,8 +42,8 @@ function generateCreateOptions(): CreateOption[] {
     description: 'Share an update on your timeline',
     href: '/timeline?compose=true',
     icon: MessageSquare,
-    color: 'text-tiffany-600',
-    bgColor: 'bg-tiffany-50',
+    color: 'text-foreground',
+    bgColor: 'bg-muted',
     category: 'content',
   };
 
@@ -128,10 +127,10 @@ export default function SmartCreateButton({
   const getButtonClassName = () => {
     if (shouldShowDraftPrompt) {
       return variant === 'outline'
-        ? 'border-tiffany-300 text-tiffany-700 hover:bg-tiffany-50 hover:border-tiffany-400'
+        ? 'border-border-strong text-foreground hover:bg-muted'
         : variant === 'ghost'
-          ? 'text-tiffany-700 hover:text-tiffany-800 hover:bg-tiffany-50'
-          : 'bg-tiffany-600 hover:bg-tiffany-700 text-white shadow-md hover:shadow-lg';
+          ? 'text-foreground hover:bg-muted'
+          : 'bg-foreground text-background hover:bg-foreground/90';
     }
     return '';
   };
@@ -165,10 +164,9 @@ export function MobileCreateButton() {
       <button
         onClick={() => setIsOpen(true)}
         className={cn(
-          'flex items-center justify-center w-12 h-12 rounded-full',
-          `${GRADIENTS.brandMixed} text-white shadow-lg`,
-          'hover:from-orange-600 hover:to-tiffany-600',
-          'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2'
+          'flex h-12 w-12 items-center justify-center rounded-md',
+          'bg-foreground text-background hover:bg-foreground/90',
+          'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
         )}
         aria-label="Create new"
       >
@@ -179,11 +177,11 @@ export function MobileCreateButton() {
         <div className="fixed inset-0 z-50" onClick={() => setIsOpen(false)}>
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
           <div
-            className="absolute bottom-0 left-0 right-0 bg-card rounded-t-2xl p-4 pb-8 animate-slide-up max-h-[85vh] overflow-y-auto"
+            className="absolute bottom-0 left-0 right-0 max-h-[85vh] overflow-y-auto rounded-t-md border-t border-border-subtle bg-background p-4 pb-8 animate-slide-up"
             onClick={e => e.stopPropagation()}
             style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
           >
-            <div className="w-12 h-1 bg-gray-300 dark:bg-muted rounded-full mx-auto mb-4" />
+            <div className="mx-auto mb-4 h-1 w-12 rounded-sm bg-muted-foreground/20" />
             <h3 className="text-lg font-semibold text-foreground mb-4 px-2">Create New</h3>
             <div className="grid grid-cols-3 gap-2">
               {CREATE_OPTIONS.map(option => (
@@ -191,9 +189,9 @@ export function MobileCreateButton() {
                   <Link
                     href={option.href}
                     onClick={() => setIsOpen(false)}
-                    className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-border-subtle hover:border-orange-200 hover:bg-orange-50/50 transition-colors"
+                    className="flex flex-col items-center gap-1.5 rounded-md border border-border-subtle p-3 transition-colors hover:border-border-strong hover:bg-muted"
                   >
-                    <div className={cn('p-2.5 rounded-xl', option.bgColor)}>
+                    <div className="oc-icon-tile h-10 w-10">
                       <option.icon className={cn('w-5 h-5', option.color)} />
                     </div>
                     <span className="text-xs font-medium text-foreground text-center">
@@ -216,7 +214,11 @@ export function DashboardCreateButton({ className = '' }: { className?: string }
 
   return (
     <SmartCreateButton
-      className={`${hasAnyDraft ? GRADIENTS.brandTiffanyDark : GRADIENTS.btnPrimary} min-h-11 ${className}`}
+      className={cn(
+        'min-h-11',
+        hasAnyDraft ? 'bg-tiffany-600 text-white hover:bg-tiffany-700' : '',
+        className
+      )}
       size="lg"
       fullWidth={true}
     />

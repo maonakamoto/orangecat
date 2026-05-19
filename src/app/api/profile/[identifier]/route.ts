@@ -33,8 +33,8 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
 
     if (isEmail) {
       // Try to find profile by email field first (if it exists in profiles table)
-      const { data: profileByEmail, error: emailError } = await (supabase
-        .from(DATABASE_TABLES.PROFILES))
+      const { data: profileByEmail, error: emailError } = await supabase
+        .from(DATABASE_TABLES.PROFILES)
         .select('*')
         .eq('email', trimmedIdentifier)
         .single();
@@ -75,8 +75,8 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
 
             // Now fetch the profile by user ID
             if (userId) {
-              const { data: profileById, error: profileError } = await (supabase
-                .from(DATABASE_TABLES.PROFILES))
+              const { data: profileById, error: profileError } = await supabase
+                .from(DATABASE_TABLES.PROFILES)
                 .select('*')
                 .eq('id', userId)
                 .single();
@@ -100,8 +100,8 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
       }
     } else {
       // Look up by username
-      const { data: profileByUsername, error: usernameError } = await (supabase
-        .from(DATABASE_TABLES.PROFILES))
+      const { data: profileByUsername, error: usernameError } = await supabase
+        .from(DATABASE_TABLES.PROFILES)
         .select('*')
         .eq('username', trimmedIdentifier)
         .single();

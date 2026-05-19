@@ -17,7 +17,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { taskSchema, type TaskFilter } from '@/lib/schemas/tasks';
 import { TASK_DEFAULTS } from '@/config/tasks';
 import { logger } from '@/utils/logger';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 
 export const GET = withAuth(async (request: AuthenticatedRequest) => {
   const { supabase } = request;
@@ -41,19 +41,34 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 
-    if (!filters.is_archived) {query = query.eq('is_archived', false);}
-    if (filters.category) {query = query.eq('category', filters.category);}
-    if (filters.status) {query = query.eq('current_status', filters.status);}
-    if (filters.task_type) {query = query.eq('task_type', filters.task_type);}
-    if (filters.priority) {query = query.eq('priority', filters.priority);}
-    if (filters.project_id) {query = query.eq('project_id', filters.project_id);}
+    if (!filters.is_archived) {
+      query = query.eq('is_archived', false);
+    }
+    if (filters.category) {
+      query = query.eq('category', filters.category);
+    }
+    if (filters.status) {
+      query = query.eq('current_status', filters.status);
+    }
+    if (filters.task_type) {
+      query = query.eq('task_type', filters.task_type);
+    }
+    if (filters.priority) {
+      query = query.eq('priority', filters.priority);
+    }
+    if (filters.project_id) {
+      query = query.eq('project_id', filters.project_id);
+    }
     if (filters.search) {
       const escaped = filters.search.replace(/[%_]/g, '\\$&');
       query = query.or(`title.ilike.%${escaped}%,description.ilike.%${escaped}%`);
     }
 
     const { data: tasks, error, count } = await query;
-    if (error) { logger.error('Failed to fetch tasks', { error }, 'TasksAPI'); return apiInternalError('Failed to fetch tasks'); }
+    if (error) {
+      logger.error('Failed to fetch tasks', { error }, 'TasksAPI');
+      return apiInternalError('Failed to fetch tasks');
+    }
 
     return apiSuccess({ tasks }, { total: count || 0, limit });
   } catch (err) {
@@ -66,26 +81,44 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) {return apiRateLimited('Too many task creation requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited(
+        'Too many task creation requests. Please slow down.',
+        retryAfterSeconds(rl)
+      );
+    }
 
     const body = await (request as NextRequest).json();
     const result = taskSchema.safeParse(body);
-    if (!result.success) {return apiValidationError('Validation failed', result.error.flatten());}
+    if (!result.success) {
+      return apiValidationError('Validation failed', result.error.flatten());
+    }
 
     const d = result.data;
     const { data: task, error } = await supabase
       .from(DATABASE_TABLES.TASKS)
       .insert({
-        title: d.title, description: d.description || null, instructions: d.instructions || null,
-        task_type: d.task_type, schedule_cron: d.schedule_cron || null, schedule_human: d.schedule_human || null,
-        category: d.category, tags: d.tags || [], priority: d.priority || TASK_DEFAULTS.priority,
-        estimated_minutes: d.estimated_minutes || null, project_id: d.project_id || null,
-        current_status: TASK_DEFAULTS.status, created_by: user.id,
+        title: d.title,
+        description: d.description || null,
+        instructions: d.instructions || null,
+        task_type: d.task_type,
+        schedule_cron: d.schedule_cron || null,
+        schedule_human: d.schedule_human || null,
+        category: d.category,
+        tags: d.tags || [],
+        priority: d.priority || TASK_DEFAULTS.priority,
+        estimated_minutes: d.estimated_minutes || null,
+        project_id: d.project_id || null,
+        current_status: TASK_DEFAULTS.status,
+        created_by: user.id,
       })
       .select('*, project:task_projects(id, title, status)')
       .single();
 
-    if (error) { logger.error('Failed to create task', { error }, 'TasksAPI'); return apiInternalError('Failed to create task'); }
+    if (error) {
+      logger.error('Failed to create task', { error }, 'TasksAPI');
+      return apiInternalError('Failed to create task');
+    }
 
     return apiSuccess({ task }, { status: 201 });
   } catch (err) {

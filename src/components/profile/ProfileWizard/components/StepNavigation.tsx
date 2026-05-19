@@ -27,9 +27,9 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
               <div
                 className={`relative flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
                   isCompleted
-                    ? 'bg-green-500 border-green-500 text-white shadow-lg'
+                    ? 'bg-green-500 border-green-500 text-white shadow-sm'
                     : isCurrent
-                      ? 'bg-orange-500 border-orange-500 text-white shadow-lg animate-pulse'
+                      ? 'bg-orange-500 border-orange-500 text-white shadow-sm animate-pulse'
                       : isUpcoming
                         ? 'bg-card border-border-strong text-muted-dim'
                         : 'bg-muted border-border-strong text-muted-foreground'
@@ -43,7 +43,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
 
                 {/* Priority indicator */}
                 {step.required && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border border-white" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border border-card" />
                 )}
               </div>
 
@@ -102,8 +102,8 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
           {steps[currentStep].description}
         </p>
         {steps[currentStep].required && (
-          <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 bg-red-50 text-red-600 text-xs rounded-full">
-            <span>⚠️</span>
+          <div className="mt-2 inline-flex items-center gap-1 rounded-md border border-destructive/20 bg-destructive/10 px-2 py-1 text-xs text-destructive">
+            <span aria-hidden="true">!</span>
             <span>This step is required to continue</span>
           </div>
         )}

@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { TimelineDisplayEvent } from '@/types/timeline';
 import { renderMarkdownToReact } from '@/utils/markdown';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 interface PostContentProps {
   event: TimelineDisplayEvent;
@@ -97,7 +98,7 @@ export function PostContent({ event }: PostContentProps) {
 
       {/* Quoted Original Post (for quote reposts) */}
       {isQuoteRepost && originalEventId && (
-        <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-card hover:bg-muted transition-colors">
+        <div className={`mt-3 overflow-hidden ${TIMELINE_SURFACE.panel}`}>
           <div className="p-3 sm:p-4 space-y-2">
             <div className="flex items-start gap-3">
               <Link href={`/profiles/${originalAuthor.username}`} className="flex-shrink-0">
@@ -145,7 +146,7 @@ export function PostContent({ event }: PostContentProps) {
 
       {/* Simple Repost: show original post inside a quoted card for consistency */}
       {isRepost && !isQuoteRepost && event.metadata?.original_event_id && (
-        <div className="mt-2 overflow-hidden rounded-2xl border border-border bg-card hover:bg-muted transition-colors">
+        <div className={`mt-2 overflow-hidden ${TIMELINE_SURFACE.panel}`}>
           <div className="p-3 sm:p-4 space-y-2">
             <div className="flex items-start gap-3">
               <Link href={`/profiles/${originalAuthor.username}`} className="flex-shrink-0">
@@ -188,7 +189,7 @@ export function PostContent({ event }: PostContentProps) {
         return attachments.length > 0 ? (
           <div className="mt-3 space-y-2">
             {attachments.map((attachment: { type: string; filename: string }, index: number) => (
-              <div key={index} className="bg-muted p-4 rounded-lg">
+              <div key={index} className="rounded-md bg-muted p-4">
                 <p className="text-sm text-muted-foreground">
                   Media attachment: {attachment.type} - {attachment.filename}
                 </p>

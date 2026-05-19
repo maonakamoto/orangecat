@@ -19,14 +19,14 @@ export function FormErrorDisplay({ errors }: FormErrorDisplayProps) {
   }
 
   return (
-    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+    <div className="oc-error-surface">
       <div className="flex items-start gap-2">
-        <div className="flex-shrink-0 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs font-bold mt-0.5">
+        <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md bg-destructive text-xs font-bold text-destructive-foreground">
           !
         </div>
         <div className="flex-1">
-          <h4 className="text-sm font-semibold text-red-900 mb-2">Please fix the following errors:</h4>
-          <ul className="text-sm text-red-700 space-y-1 list-disc list-inside">
+          <h4 className="text-sm font-semibold mb-2">Please fix the following errors:</h4>
+          <ul className="text-sm text-destructive/80 space-y-1 list-disc list-inside">
             {Object.entries(errors).map(([field, error]) => (
               <li key={field}>
                 <span className="font-medium">{field}:</span>{' '}
@@ -39,5 +39,3 @@ export function FormErrorDisplay({ errors }: FormErrorDisplayProps) {
     </div>
   );
 }
-
-

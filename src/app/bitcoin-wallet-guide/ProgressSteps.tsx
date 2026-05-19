@@ -27,12 +27,12 @@ export function ProgressSteps({ currentStep, onStepClick }: ProgressStepsProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`text-center p-6 rounded-xl border-2 transition-all cursor-pointer ${
+              className={`text-center p-6 rounded-lg border-2 transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20 border-bitcoinOrange shadow-lg'
+                  ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20 border-bitcoinOrange shadow-sm'
                   : isCompleted
                     ? 'bg-green-50 border-green-200 text-green-800'
-                    : 'bg-card border-border hover:border-gray-300 dark:hover:border-border'
+                    : 'bg-card border-border hover:border-border-strong dark:hover:border-border'
               }`}
               onClick={() => onStepClick(index)}
             >

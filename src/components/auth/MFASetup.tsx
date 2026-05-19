@@ -114,7 +114,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                 </code>
                 <button
                   onClick={handleCopySecret}
-                  className="p-1.5 text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:bg-muted rounded transition-colors"
+                  className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
                   title="Copy to clipboard"
                 >
                   {secretCopied ? (
@@ -155,14 +155,14 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                 value={verificationCode}
                 onChange={handleCodeChange}
                 placeholder="000000"
-                className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-border-strong rounded-lg focus:ring-2 focus:ring-tiffany focus:border-tiffany dark:bg-muted dark:text-foreground"
+                className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-border-strong rounded-lg focus:ring-2 focus:ring-ring focus:border-ring dark:bg-muted dark:text-foreground"
                 maxLength={6}
               />
             </div>
             {error && (
-              <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0" />
-                <p className="text-sm text-red-700">{error}</p>
+              <div className="flex items-center gap-2 p-3 oc-error-surface rounded-lg">
+                <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0" />
+                <p className="text-sm text-destructive/80">{error}</p>
               </div>
             )}
             <div className="flex gap-3">
@@ -226,9 +226,9 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
       </CardHeader>
       <CardContent>
         {error && step !== 'verify' && (
-          <div className="mb-4 flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0" />
-            <p className="text-sm text-red-700">{error}</p>
+          <div className="mb-4 flex items-center gap-2 p-3 oc-error-surface rounded-lg">
+            <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0" />
+            <p className="text-sm text-destructive/80">{error}</p>
           </div>
         )}
         {renderStepContent()}

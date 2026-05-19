@@ -205,7 +205,7 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
       {/* Floating CTA - Mobile Only */}
       {!isOwner && project.bitcoin_address && showFloatingCTA && (
         <div
-          className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border shadow-2xl transition-transform duration-300 ${
+          className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border shadow-sm transition-transform duration-300 ${
             showFloatingCTA ? 'translate-y-0' : 'translate-y-full'
           }`}
         >
@@ -227,7 +227,7 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
               </div>
               <Button
                 onClick={scrollToSupport}
-                className="flex-shrink-0 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 shadow-lg"
+                className="flex-shrink-0 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 shadow-sm"
               >
                 <Bitcoin className="w-4 h-4 mr-2" aria-hidden="true" />
                 Fund

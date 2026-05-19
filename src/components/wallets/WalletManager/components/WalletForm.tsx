@@ -85,11 +85,7 @@ export function WalletForm({
     <div className="border dark:border-border rounded-lg p-4 bg-muted">
       <h4 className="font-semibold dark:text-foreground mb-4">{submitLabel}</h4>
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded mb-4">
-          {error}
-        </div>
-      )}
+      {error && <div className="oc-error-surface mb-4 px-4 py-2">{error}</div>}
 
       {/* Category selection */}
       <div className="mb-4">
@@ -108,7 +104,7 @@ export function WalletForm({
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   formData.category === cat
                     ? 'border-orange-500 bg-orange-50'
-                    : 'border-border-strong hover:border-orange-300'
+                    : 'border-border-strong hover:border-border-strong'
                 }`}
               >
                 <div className="text-2xl mb-1">{catInfo.icon}</div>
@@ -223,7 +219,7 @@ export function WalletForm({
               type="checkbox"
               checked={formData.is_primary || false}
               onChange={e => setFormData({ ...formData, is_primary: e.target.checked })}
-              className="w-4 h-4 text-orange-600 border-border-strong rounded focus:ring-orange-500"
+              className="w-4 h-4 text-orange-600 border-border-strong rounded focus:ring-ring"
             />
             <span className="text-sm font-medium">Set as primary wallet</span>
           </label>

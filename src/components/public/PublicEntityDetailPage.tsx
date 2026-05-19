@@ -32,11 +32,11 @@ const THEME_CLASSES: Record<string, { bg: string; icon: string; text: string }> 
   green: { bg: 'bg-green-100', icon: 'text-green-600', text: 'text-green-600' },
 };
 
-const GRADIENT_CLASSES: Record<string, string> = {
-  tiffany: 'from-tiffany-50/50 via-white to-orange-50/30',
-  rose: 'from-rose-50/50 via-white to-tiffany-50/30',
-  orange: 'from-orange-50/50 via-white to-tiffany-50/30',
-  green: 'from-green-50/50 via-white to-tiffany-50/30',
+const PAGE_SURFACE_CLASSES: Record<string, string> = {
+  tiffany: 'bg-background',
+  rose: 'bg-background',
+  orange: 'bg-background',
+  green: 'bg-background',
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -105,7 +105,7 @@ export default async function PublicEntityDetailPage({
 }) {
   const meta = getEntityMetadata(config.entityType);
   const theme = THEME_CLASSES[meta.colorTheme] || THEME_CLASSES.tiffany;
-  const gradient = GRADIENT_CLASSES[meta.colorTheme] || GRADIENT_CLASSES.tiffany;
+  const pageSurface = PAGE_SURFACE_CLASSES[meta.colorTheme] || PAGE_SURFACE_CLASSES.tiffany;
   const Icon = meta.icon;
 
   const supabase = await createServerClient();
@@ -139,7 +139,7 @@ export default async function PublicEntityDetailPage({
   return (
     <>
       <JsonLdScript data={jsonLd} />
-      <div className={`min-h-screen bg-gradient-to-br ${gradient}`}>
+      <div className={`min-h-screen ${pageSurface}`}>
         <div className="bg-card border-b border-border">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
@@ -152,7 +152,7 @@ export default async function PublicEntityDetailPage({
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
                 <div
-                  className={`w-16 h-16 ${theme.bg} rounded-xl flex items-center justify-center`}
+                  className={`w-16 h-16 ${theme.bg} rounded-lg flex items-center justify-center`}
                 >
                   <Icon className={`w-8 h-8 ${theme.icon}`} />
                 </div>

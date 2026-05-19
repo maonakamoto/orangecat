@@ -119,7 +119,7 @@ export default function CareersPage() {
         {/* Values */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {values.map((value, index) => (
-            <div key={index} className="text-center p-6 bg-card rounded-xl shadow-sm">
+            <div key={index} className="text-center p-6 bg-card rounded-lg shadow-sm">
               <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-600">
                 {value.icon}
               </div>
@@ -138,7 +138,7 @@ export default function CareersPage() {
           {openPositions.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {openPositions.map((position, index) => (
-                <div key={index} className="bg-card rounded-xl shadow-sm p-6 border border-border">
+                <div key={index} className="bg-card rounded-lg shadow-sm p-6 border border-border">
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h3 className="text-lg font-semibold text-foreground mb-1">
@@ -182,7 +182,7 @@ export default function CareersPage() {
         </div>
 
         {/* Perks & Benefits */}
-        <div className="bg-card rounded-2xl shadow-lg p-8 mb-16">
+        <div className="bg-card rounded-lg shadow-sm p-8 mb-16">
           <h2 className="text-2xl font-semibold text-foreground text-center mb-8">
             Why Work With Us?
           </h2>

@@ -6,7 +6,6 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SUPER_APP_CATEGORIES, SECTION_HEADERS, CTA_LABELS } from '@/config/landing-page';
 import { ROUTES } from '@/config/routes';
-import { GRADIENTS } from '@/config/gradients';
 
 /**
  * WhatCanYouDoSection - Simplified Feature Overview
@@ -49,7 +48,7 @@ export default function WhatCanYouDoSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-10 sm:mb-12 lg:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted text-tiffany-600 dark:text-primary mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted text-foreground mb-4">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">For Makers</span>
           </div>
@@ -76,15 +75,13 @@ export default function WhatCanYouDoSection() {
               <motion.div
                 key={category.id}
                 variants={itemVariants}
-                className="bg-card rounded-xl border border-border shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300"
+                className="oc-surface oc-card-link overflow-hidden"
               >
                 {/* Category Header */}
                 <div className="p-4 sm:p-6 border-b border-border bg-muted/30">
                   <div className="flex items-center gap-3 mb-2">
-                    <div
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${category.iconGradient} flex items-center justify-center`}
-                    >
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-card border border-border flex items-center justify-center">
+                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-foreground" />
                     </div>
                     <div>
                       <h3 className="text-xl sm:text-2xl font-semibold text-foreground">
@@ -104,9 +101,7 @@ export default function WhatCanYouDoSection() {
                       key={feature.title}
                       className="flex items-start gap-3 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors duration-200"
                     >
-                      <div
-                        className={`w-2 h-2 rounded-full ${category.iconGradient} mt-2 flex-shrink-0`}
-                      />
+                      <div className="w-2 h-2 rounded-full bg-foreground mt-2 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-foreground text-sm sm:text-base mb-1">
                           {feature.title}
@@ -138,8 +133,7 @@ export default function WhatCanYouDoSection() {
             <Link
               href={ROUTES.AUTH}
               className={cn(
-                GRADIENTS.btnBitcoin,
-                'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
+                'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-background bg-foreground rounded-lg hover:bg-muted-strong transition-colors duration-150'
               )}
             >
               {CTA_LABELS.startCreating}

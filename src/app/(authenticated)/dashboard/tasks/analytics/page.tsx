@@ -33,7 +33,7 @@ export default function TaskAnalyticsPage() {
             items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: 'Analytics' }]}
             className="mb-4"
           />
-          <div className="bg-card rounded-xl border border-red-200 p-6 text-red-600">{error}</div>
+          <div className="bg-card rounded-lg border border-red-200 p-6 text-red-600">{error}</div>
         </div>
       </div>
     );
@@ -53,7 +53,7 @@ export default function TaskAnalyticsPage() {
           <select
             value={days}
             onChange={e => setDays(parseInt(e.target.value))}
-            className="rounded-lg border border-border-strong bg-card text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+            className="rounded-lg border border-border-strong bg-card text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           >
             <option value={7}>Last 7 days</option>
             <option value={30}>Last 30 days</option>
@@ -90,7 +90,7 @@ export default function TaskAnalyticsPage() {
           </div>
         )}
 
-        <div className="bg-card rounded-xl border border-border p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <Users className="h-5 w-5" />
             Contributions by Person
@@ -153,7 +153,7 @@ export default function TaskAnalyticsPage() {
           )}
         </div>
 
-        <div className="bg-card rounded-xl border border-border p-6">
+        <div className="bg-card rounded-lg border border-border p-6">
           <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <Award className="h-5 w-5" />
             Fairness Overview

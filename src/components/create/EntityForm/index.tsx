@@ -138,7 +138,7 @@ export function EntityForm<T extends Record<string, unknown>>({
       className={
         wizardMode || embedded
           ? ''
-          : `min-h-screen bg-gradient-to-br ${theme.bg} via-white to-tiffany-50/20 p-4 sm:p-6 lg:p-8 pb-24 md:pb-8`
+          : `min-h-screen ${theme.pageSurface} p-4 sm:p-6 lg:p-8 pb-24 md:pb-8`
       }
     >
       {!wizardMode && !embedded && (
@@ -189,8 +189,8 @@ export function EntityForm<T extends Record<string, unknown>>({
                 {config.infoBanner && <FormInfoBanner banner={config.infoBanner} />}
 
                 {formState.errors.general && (
-                  <div className="bg-red-50 border border-red-200 rounded-md p-4">
-                    <p className="text-red-600 text-sm">{formState.errors.general}</p>
+                  <div className="oc-error-surface">
+                    <p className="text-sm">{formState.errors.general}</p>
                   </div>
                 )}
 

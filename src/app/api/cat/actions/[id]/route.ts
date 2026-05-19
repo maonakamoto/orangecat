@@ -20,7 +20,7 @@ import {
   apiInternalError,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { apiNotFound } from '@/lib/api/standardResponse';
@@ -37,12 +37,16 @@ interface RouteParams {
 export const POST = withAuth(async (request: AuthenticatedRequest, context: RouteParams) => {
   const { id: pendingActionId } = await context.params;
   const idValidation = getValidationError(validateUUID(pendingActionId, 'action ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
 
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
     // Get user's actor ID
     const actorId = await getUserActorId(supabase, user.id);
@@ -71,12 +75,16 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
 export const DELETE = withAuth(async (request: AuthenticatedRequest, context: RouteParams) => {
   const { id: pendingActionId } = await context.params;
   const idValidation = getValidationError(validateUUID(pendingActionId, 'action ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
 
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
     // Get optional rejection reason from body (max 500 chars)
     let reason: string | undefined;

@@ -153,8 +153,7 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
   );
 
   return (
-    <div className="flex flex-col h-[calc(100vh-12rem)] sm:h-[calc(100vh-8rem)] bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
-      {/* Header */}
+    <div className="flex h-[calc(100vh-15.5rem)] min-h-[34rem] flex-col overflow-hidden rounded-md border border-border-subtle bg-background sm:h-[calc(100vh-13rem)]">
       <ChatHeader
         selectedModel={selectedModel}
         onModelSelect={setSelectedModel}
@@ -163,7 +162,6 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
         onClearChat={clearChat}
       />
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto py-4">
         {isLoadingHistory ? (
           <div className="flex items-center justify-center h-full">
@@ -188,7 +186,6 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
               />
             ))}
 
-            {/* Pending Actions */}
             {pendingActions.length > 0 && (
               <div className="max-w-3xl mx-auto px-4 space-y-3">
                 {pendingActions.map(action => (
@@ -207,10 +204,8 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
         )}
       </div>
 
-      {/* Error */}
       {error && <ErrorDisplay error={error} onRetry={handleRetry} onDismiss={handleDismissError} />}
 
-      {/* Input */}
       <ChatInput
         value={input}
         onChange={setInput}

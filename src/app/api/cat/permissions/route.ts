@@ -8,11 +8,21 @@
 
 import { NextRequest } from 'next/server';
 import { createPermissionService } from '@/services/cat';
-import { CAT_ACTIONS, ACTION_CATEGORIES, ACTION_CATEGORY_KEYS, type ActionCategory } from '@/config/cat-actions';
+import {
+  CAT_ACTIONS,
+  ACTION_CATEGORIES,
+  ACTION_CATEGORY_KEYS,
+  type ActionCategory,
+} from '@/config/cat-actions';
 import { z } from 'zod';
 import { logger } from '@/utils/logger';
-import { apiSuccess, apiBadRequest, apiInternalError, apiRateLimited } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import {
+  apiSuccess,
+  apiBadRequest,
+  apiInternalError,
+  apiRateLimited,
+} from '@/lib/api/standardResponse';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 
 const categorySchema = z.enum(ACTION_CATEGORY_KEYS);
@@ -37,8 +47,18 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     const summary = await permissionService.getPermissionSummary(user.id);
     const availableActions = Object.values(CAT_ACTIONS)
       .filter(a => a.enabled)
-      .map(a => ({ id: a.id, name: a.name, description: a.description, category: a.category, riskLevel: a.riskLevel, requiresConfirmation: a.requiresConfirmation }));
-    const categories = Object.entries(ACTION_CATEGORIES).map(([key, value]) => ({ id: key, ...value }));
+      .map(a => ({
+        id: a.id,
+        name: a.name,
+        description: a.description,
+        category: a.category,
+        riskLevel: a.riskLevel,
+        requiresConfirmation: a.requiresConfirmation,
+      }));
+    const categories = Object.entries(ACTION_CATEGORIES).map(([key, value]) => ({
+      id: key,
+      ...value,
+    }));
 
     return apiSuccess({ summary, availableActions, categories });
   } catch (error) {
@@ -51,25 +71,41 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
     const body = await (request as NextRequest).json();
     const parseResult = grantPermissionSchema.safeParse(body);
-    if (!parseResult.success) {return apiBadRequest('Invalid request', parseResult.error.errors);}
+    if (!parseResult.success) {
+      return apiBadRequest('Invalid request', parseResult.error.errors);
+    }
 
-    const { actionId, category, requiresConfirmation, dailyLimit, maxSatsPerAction } = parseResult.data;
+    const { actionId, category, requiresConfirmation, dailyLimit, maxSatsPerAction } =
+      parseResult.data;
 
     if (actionId !== '*') {
       const action = CAT_ACTIONS[actionId];
-      if (!action) {return apiBadRequest(`Unknown action: ${actionId}`);}
-      if (action.category !== category) {return apiBadRequest(`Action ${actionId} is not in category ${category}`);}
+      if (!action) {
+        return apiBadRequest(`Unknown action: ${actionId}`);
+      }
+      if (action.category !== category) {
+        return apiBadRequest(`Action ${actionId} is not in category ${category}`);
+      }
     }
 
     const permissionService = createPermissionService(supabase);
     if (actionId === '*') {
-      await permissionService.grantCategory(user.id, category as ActionCategory, { requiresConfirmation: requiresConfirmation ?? true, dailyLimit });
+      await permissionService.grantCategory(user.id, category as ActionCategory, {
+        requiresConfirmation: requiresConfirmation ?? true,
+        dailyLimit,
+      });
     } else {
-      await permissionService.grantPermission(user.id, actionId, category as ActionCategory, { requiresConfirmation: requiresConfirmation ?? true, dailyLimit, maxSatsPerAction });
+      await permissionService.grantPermission(user.id, actionId, category as ActionCategory, {
+        requiresConfirmation: requiresConfirmation ?? true,
+        dailyLimit,
+        maxSatsPerAction,
+      });
     }
 
     return apiSuccess({ summary: await permissionService.getPermissionSummary(user.id) });
@@ -83,11 +119,15 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest) => {
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
     const body = await (request as NextRequest).json();
     const parseResult = revokePermissionSchema.safeParse(body);
-    if (!parseResult.success) {return apiBadRequest('Invalid request', parseResult.error.errors);}
+    if (!parseResult.success) {
+      return apiBadRequest('Invalid request', parseResult.error.errors);
+    }
 
     const { actionId, category } = parseResult.data;
     const permissionService = createPermissionService(supabase);

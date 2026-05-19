@@ -8,7 +8,7 @@ import { GRADIENTS } from '@/config/gradients';
 export default function InvestmentNotFound() {
   return (
     <div className={`min-h-screen ${GRADIENTS.grayLight} flex items-center justify-center p-4`}>
-      <Card className="max-w-lg mx-auto shadow-xl">
+      <Card className="max-w-lg mx-auto shadow-sm">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <FileQuestion className="w-16 h-16 text-muted-dim" />

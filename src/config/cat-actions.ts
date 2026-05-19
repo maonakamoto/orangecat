@@ -870,7 +870,7 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
   add_context: {
     id: 'add_context',
     name: 'Add Context',
-    description: 'Add new context document for My Cat to know about',
+    description: 'Add new context document for your Cat to know about',
     category: 'context',
     icon: FileText,
     riskLevel: 'low',
@@ -1124,7 +1124,7 @@ export const ACTION_CATEGORIES: Record<
   },
   context: {
     name: 'Context',
-    description: 'Manage what My Cat knows about you',
+    description: 'Manage what your Cat knows about you',
     icon: FileText,
   },
 };

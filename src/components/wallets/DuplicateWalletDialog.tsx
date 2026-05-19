@@ -32,7 +32,7 @@ export function DuplicateWalletDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="relative w-full max-w-md bg-card rounded-lg shadow-xl">
+      <div className="relative w-full max-w-md bg-card rounded-lg shadow-sm">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
           <div className="flex items-center gap-3">
@@ -120,7 +120,7 @@ export function DuplicateWalletDialog({
                 type="checkbox"
                 checked={dontShowAgain}
                 onChange={e => setDontShowAgain(e.target.checked)}
-                className="rounded border-border-strong text-tiffany-600 focus:ring-tiffany-500"
+                className="rounded border-border-strong text-tiffany-600 focus:ring-ring"
               />
               <span>Don't show this warning again</span>
             </label>

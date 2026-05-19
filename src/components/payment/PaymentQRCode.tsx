@@ -77,7 +77,7 @@ export function PaymentQRCode({
     <div className="flex flex-col items-center gap-4">
       <p className="text-sm text-muted-foreground">{methodLabel}</p>
 
-      <div className="rounded-xl bg-card p-4 shadow-sm">
+      <div className="rounded-lg bg-card p-4 shadow-sm">
         <QRCodeSVG
           value={qrData}
           size={size}
@@ -98,7 +98,7 @@ export function PaymentQRCode({
         <p
           className={`flex items-center gap-1 text-xs ${
             secondsLeft <= 0
-              ? 'text-red-600 font-medium'
+              ? 'text-destructive font-medium'
               : secondsLeft < 60
                 ? 'text-red-500'
                 : 'text-muted-dim'

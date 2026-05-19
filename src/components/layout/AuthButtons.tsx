@@ -16,13 +16,17 @@ export default function AuthButtons({ className = '' }: AuthButtonsProps) {
   const authState = useAuth();
   const authStatus = getAuthStatus(authState);
   const isMobileNav = className.includes('flex-col');
+  const [signIn, getStarted] = authNavigationItems;
 
-  // Show minimal loading while hydrating
+  // Keep public navigation actionable during auth hydration.
   if (!authState.hydrated) {
     return (
-      <div className={`flex items-center justify-center ${className}`}>
-        <div className="w-3 h-3 bg-muted rounded-full animate-pulse"></div>
-      </div>
+      <UnauthenticatedButtons
+        signIn={signIn}
+        getStarted={getStarted}
+        isMobileNav={isMobileNav}
+        className={className}
+      />
     );
   }
 
@@ -30,7 +34,7 @@ export default function AuthButtons({ className = '' }: AuthButtonsProps) {
   if (authStatus.showLoading) {
     return (
       <div className={`flex items-center justify-center ${className}`}>
-        <Loader2 className="h-4 w-4 animate-spin text-tiffany-500" />
+        <Loader2 className="h-4 w-4 animate-spin text-foreground" />
       </div>
     );
   }
@@ -40,10 +44,30 @@ export default function AuthButtons({ className = '' }: AuthButtonsProps) {
     return <UserProfileDropdown variant="advanced" />;
   }
 
-  // Get auth button links from config (SSOT)
-  const [signIn, getStarted] = authNavigationItems;
-
   // Show auth buttons for unauthenticated users
+  return (
+    <UnauthenticatedButtons
+      signIn={signIn}
+      getStarted={getStarted}
+      isMobileNav={isMobileNav}
+      className={className}
+    />
+  );
+}
+
+interface UnauthenticatedButtonsProps {
+  signIn: (typeof authNavigationItems)[number];
+  getStarted: (typeof authNavigationItems)[number];
+  isMobileNav: boolean;
+  className: string;
+}
+
+function UnauthenticatedButtons({
+  signIn,
+  getStarted,
+  isMobileNav,
+  className,
+}: UnauthenticatedButtonsProps) {
   return (
     <div
       className={`flex items-center ${isMobileNav ? 'flex-col space-y-2 w-full' : 'space-x-2'} ${className}`}

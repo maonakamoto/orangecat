@@ -112,7 +112,7 @@ export function AIKeyManager({
               cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          {deleteError && <p className="text-sm text-red-600 px-6">{deleteError}</p>}
+          {deleteError && <p className="text-sm text-destructive px-6">{deleteError}</p>}
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">

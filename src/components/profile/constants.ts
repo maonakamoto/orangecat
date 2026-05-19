@@ -23,5 +23,3 @@ export const PROFILE_SECTION_DESCRIPTIONS = {
   CONTACT: 'How people can reach you directly.',
   PREFERENCES: 'Your display preferences – currency and other settings.',
 } as const;
-
-

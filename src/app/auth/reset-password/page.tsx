@@ -114,9 +114,9 @@ export default function ResetPasswordPage() {
       <div
         className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
       >
-        <Card className="max-w-md w-full p-8 shadow-xl">
+        <Card className="max-w-md w-full p-8 shadow-sm">
           <div className="text-center">
-            <Loader2 className="h-12 w-12 animate-spin mx-auto text-orange-600 mb-6" />
+            <Loader2 className="h-12 w-12 animate-spin mx-auto text-foreground mb-6" />
             <h2 className="text-xl font-semibold text-foreground mb-2">Verifying Reset Link</h2>
             <p className="text-muted-foreground">
               Please wait while we verify your password reset link...
@@ -132,7 +132,7 @@ export default function ResetPasswordPage() {
       <div
         className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
       >
-        <Card className="max-w-md w-full p-8 shadow-xl">
+        <Card className="max-w-md w-full p-8 shadow-sm">
           <div className="text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 mb-6">
               <AlertCircle className="h-8 w-8 text-red-600" />
@@ -158,7 +158,7 @@ export default function ResetPasswordPage() {
       <div
         className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
       >
-        <Card className="max-w-md w-full p-8 shadow-xl">
+        <Card className="max-w-md w-full p-8 shadow-sm">
           <div className="text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-6">
               <CheckCircle2 className="h-8 w-8 text-green-600" />
@@ -182,27 +182,22 @@ export default function ResetPasswordPage() {
     <div
       className={cn(GRADIENTS.pageBgSolid, 'min-h-screen flex items-center justify-center px-4')}
     >
-      <Card className="max-w-md w-full p-8 shadow-xl">
+      <Card className="max-w-md w-full p-8 shadow-sm">
         {/* Header */}
         <div className="text-center mb-8">
-          <div
-            className={cn(
-              GRADIENTS.iconOrangeTiffany,
-              'mx-auto flex h-16 w-16 items-center justify-center rounded-full mb-6'
-            )}
-          >
-            <Key className="h-8 w-8 text-orange-600" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-lg bg-card border border-border mb-6">
+            <Key className="h-8 w-8 text-foreground" />
           </div>
           <h1 className="text-2xl font-bold text-foreground mb-2">Create New Password</h1>
           <p className="text-muted-foreground">Enter a strong password to secure your account</p>
         </div>
 
         {error && (
-          <div className="rounded-lg bg-red-50 border border-red-200 p-4 mb-6">
+          <div className="oc-error-surface mb-6">
             <div className="flex">
-              <AlertCircle className="h-5 w-5 text-red-400 mt-0.5" />
+              <AlertCircle className="h-5 w-5 mt-0.5" />
               <div className="ml-3">
-                <p className="text-sm font-medium text-red-800">{error}</p>
+                <p className="text-sm font-medium">{error}</p>
               </div>
             </div>
           </div>
@@ -222,7 +217,7 @@ export default function ResetPasswordPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="min-h-11 min-w-11 inline-flex items-center justify-center text-gray-400 hover:text-muted-foreground dark:hover:text-foreground"
+              className="min-h-11 min-w-11 inline-flex items-center justify-center text-muted-dim hover:text-muted-foreground dark:hover:text-foreground"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -242,7 +237,7 @@ export default function ResetPasswordPage() {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="min-h-11 min-w-11 inline-flex items-center justify-center text-gray-400 hover:text-muted-foreground dark:hover:text-foreground"
+              className="min-h-11 min-w-11 inline-flex items-center justify-center text-muted-dim hover:text-muted-foreground dark:hover:text-foreground"
               aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
             >
               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -289,7 +284,7 @@ export default function ResetPasswordPage() {
         <div className="mt-8 text-center">
           <Link
             href={`${ROUTES.AUTH}?mode=login`}
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-orange-600 transition-colors"
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             Back to Login

@@ -5,6 +5,8 @@ import { Heart, MessageCircle, Share2, ThumbsDown, Repeat2 } from 'lucide-react'
 import { ShareModal } from '@/components/timeline/ShareModal';
 import { TimelineDisplayEvent } from '@/types/timeline';
 import { usePostInteractions } from '@/hooks/usePostInteractions';
+import { cn } from '@/lib/utils';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 /**
  * PostActions Component
@@ -20,6 +22,10 @@ interface PostActionsProps {
   onToggleComments?: () => void;
   onRepostClick?: () => void;
   isReposting?: boolean;
+}
+
+function actionClassName(active: boolean, activeClassName: string) {
+  return cn(TIMELINE_SURFACE.iconButton, 'gap-1 px-2 text-sm', active && activeClassName);
 }
 
 export function PostActions({
@@ -45,12 +51,12 @@ export function PostActions({
 
   return (
     <>
-      {/* Interaction Icons Row - X/Twitter style */}
-      <div className="flex items-center justify-between max-w-[425px] mt-3">
+      <div className="mt-3 flex max-w-[425px] items-center justify-between">
         {/* Reply */}
         <button
           onClick={onToggleComments}
-          className="group flex items-center gap-1 text-muted-foreground hover:text-tiffany-500 hover:bg-tiffany-50/50 rounded-full p-2 -ml-2 transition-colors min-h-11"
+          className={cn(TIMELINE_SURFACE.iconButton, '-ml-2 gap-1 px-2 text-sm')}
+          aria-label="Reply"
         >
           <MessageCircle className="w-5 h-5" />
           <span className="text-sm">
@@ -69,11 +75,8 @@ export function PostActions({
         <button
           onClick={onRepostClick}
           disabled={isReposting}
-          className={`group flex items-center gap-1 rounded-full p-2 transition-colors min-h-11 ${
-            event.userReposted
-              ? 'text-green-500 hover:bg-green-50/50'
-              : 'text-muted-foreground hover:text-green-500 hover:bg-green-50/50'
-          } disabled:opacity-50 disabled:cursor-not-allowed`}
+          className={actionClassName(event.userReposted || false, 'text-green-600')}
+          aria-label="Repost"
         >
           <Repeat2 className={`w-5 h-5 ${event.userReposted ? 'fill-current' : ''}`} />
           <span className="text-sm">{(event.repostsCount || 0) > 0 ? event.repostsCount : ''}</span>
@@ -83,11 +86,8 @@ export function PostActions({
         <button
           onClick={handleLike}
           disabled={isLiking}
-          className={`group flex items-center gap-1 rounded-full p-2 transition-colors min-h-11 ${
-            event.userLiked
-              ? 'text-red-500 hover:bg-red-50/50'
-              : 'text-muted-foreground hover:text-red-500 hover:bg-red-50/50'
-          } disabled:opacity-50 disabled:cursor-not-allowed`}
+          className={actionClassName(event.userLiked || false, 'text-destructive')}
+          aria-label="Like"
         >
           <Heart className={`w-5 h-5 ${event.userLiked ? 'fill-current' : ''}`} />
           <span className="text-sm">{(event.likesCount || 0) > 0 ? event.likesCount : ''}</span>
@@ -97,12 +97,9 @@ export function PostActions({
         <button
           onClick={handleDislike}
           disabled={isDisliking}
-          className={`group flex items-center gap-1 rounded-full p-2 transition-colors min-h-11 ${
-            event.userDisliked
-              ? 'text-orange-500 hover:bg-orange-50/50'
-              : 'text-muted-foreground hover:text-orange-500 hover:bg-orange-50/50'
-          } disabled:opacity-50 disabled:cursor-not-allowed`}
+          className={actionClassName(event.userDisliked || false, 'text-orange-600')}
           title="Dislike this post (wisdom of crowds - helps detect scams)"
+          aria-label="Dislike"
         >
           <ThumbsDown className={`w-5 h-5 ${event.userDisliked ? 'fill-current' : ''}`} />
           <span className="text-sm">
@@ -114,11 +111,8 @@ export function PostActions({
         <button
           onClick={handleShareOpen}
           disabled={isSharing}
-          className={`group flex items-center gap-1 rounded-full p-2 transition-colors min-h-11 ${
-            event.userShared
-              ? 'text-tiffany-500 hover:bg-tiffany-50/50'
-              : 'text-muted-foreground hover:text-tiffany-500 hover:bg-tiffany-50/50'
-          } disabled:opacity-50 disabled:cursor-not-allowed`}
+          className={actionClassName(event.userShared || false, 'text-tiffany-600')}
+          aria-label="Share"
         >
           <Share2 className="w-5 h-5" />
         </button>

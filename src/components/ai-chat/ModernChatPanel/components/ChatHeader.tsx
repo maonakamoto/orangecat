@@ -5,7 +5,6 @@
 
 import { useRouter } from 'next/navigation';
 import { Cat, Trash2, Settings2 } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 import { ModelSelector } from './ModelSelector';
 
@@ -29,13 +28,11 @@ export function ChatHeader({
   return (
     <div className="flex items-center justify-between px-4 py-3 border-b border-border-subtle">
       <div className="flex items-center gap-3">
-        <div
-          className={`w-10 h-10 rounded-full ${GRADIENTS.brandOrangeBr} flex items-center justify-center`}
-        >
-          <Cat className="h-5 w-5 text-white" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-md border border-border-subtle bg-muted">
+          <Cat className="h-5 w-5 text-foreground" />
         </div>
         <div>
-          <h1 className="font-semibold text-foreground">My Cat</h1>
+          <h1 className="font-semibold text-foreground">Cat</h1>
           <p className="text-xs text-muted-foreground">Private • Not saved</p>
         </div>
       </div>
@@ -50,7 +47,7 @@ export function ChatHeader({
         {hasMessages && (
           <button
             onClick={onClearChat}
-            className="p-2 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-muted-dim transition-colors hover:bg-muted hover:text-foreground"
             aria-label="Clear chat"
             title="Clear chat"
           >
@@ -60,7 +57,7 @@ export function ChatHeader({
 
         <button
           onClick={() => router.push(ROUTES.SETTINGS_AI)}
-          className="p-2 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-muted rounded-lg transition-colors min-h-11 min-w-11 flex items-center justify-center"
+          className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-muted-dim transition-colors hover:bg-muted hover:text-foreground"
           aria-label="AI settings"
           title="AI Settings"
         >

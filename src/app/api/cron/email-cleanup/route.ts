@@ -36,12 +36,14 @@ export async function GET(request: Request) {
     const cutoffDate = new Date(Date.now() - RETENTION_DAYS * 24 * 60 * 60 * 1000);
 
     // Count entries to be deleted (for reporting)
-    const { count } = await (admin.from(DATABASE_TABLES.NOTIFICATION_EMAIL_LOG))
+    const { count } = await admin
+      .from(DATABASE_TABLES.NOTIFICATION_EMAIL_LOG)
       .select('*', { count: 'exact', head: true })
       .lt('sent_at', cutoffDate.toISOString());
 
     // Delete old log entries
-    const { error } = await (admin.from(DATABASE_TABLES.NOTIFICATION_EMAIL_LOG))
+    const { error } = await admin
+      .from(DATABASE_TABLES.NOTIFICATION_EMAIL_LOG)
       .delete()
       .lt('sent_at', cutoffDate.toISOString());
 

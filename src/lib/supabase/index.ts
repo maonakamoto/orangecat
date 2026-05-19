@@ -7,11 +7,11 @@
  */
 
 // Browser client (for client components, hooks, etc.)
-export { supabase, createSupabaseClient } from './browser'
+export { supabase, createSupabaseClient } from './browser';
 
 // Server client (for API routes, Server Components, Server Actions)
-export { createServerClient } from './server'
+export { createServerClient } from './server';
 
 // Types
-export type { Database } from '@/types/database'
-export type { AnySupabaseClient } from './types'
+export type { Database } from '@/types/database';
+export type { AnySupabaseClient } from './types';

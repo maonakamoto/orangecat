@@ -47,25 +47,25 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
   const count = showMessagesBadge ? unreadCount : 0;
 
   const linkClasses = [
-    'group flex items-center py-2.5 text-sm font-medium rounded-xl transition-colors duration-150 relative',
+    'group relative flex items-center rounded-md py-2.5 text-sm font-medium transition-colors duration-150',
     SIDEBAR_SPACING.ITEM_HEIGHT,
     // When expanded (mobile): full width with padding
     // When collapsed (desktop): centered icon
-    isExpanded ? 'px-3' : 'justify-center mx-2',
+    isExpanded ? 'px-3' : 'mx-2 justify-center',
     isActive
-      ? `${SIDEBAR_COLORS.ACTIVE_BACKGROUND} ${SIDEBAR_COLORS.ACTIVE_TEXT} shadow-sm border ${SIDEBAR_COLORS.ACTIVE_BORDER}`
+      ? `${SIDEBAR_COLORS.ACTIVE_BACKGROUND} ${SIDEBAR_COLORS.ACTIVE_TEXT} border ${SIDEBAR_COLORS.ACTIVE_BORDER}`
       : item.comingSoon
-        ? `text-muted-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND} hover:text-gray-800 dark:hover:text-foreground`
+        ? `text-muted-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND} hover:text-foreground`
         : `text-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND}`,
   ].join(' ');
 
   const iconClasses = [
     'h-5 w-5 shrink-0 transition-colors',
     isActive
-      ? 'text-tiffany-600'
+      ? 'text-foreground'
       : item.comingSoon
-        ? 'text-muted-foreground group-hover:text-gray-600 dark:group-hover:text-muted-foreground'
-        : 'text-muted-foreground group-hover:text-gray-700 dark:group-hover:text-foreground',
+        ? 'text-muted-foreground group-hover:text-muted-foreground dark:group-hover:text-muted-foreground'
+        : 'text-muted-foreground group-hover:text-muted-strong dark:group-hover:text-foreground',
   ].join(' ');
 
   return (
@@ -85,7 +85,7 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
 
         {/* Collapsed (desktop): tiny unread dot for Messages */}
         {showMessagesBadge && count > 0 && !isExpanded && (
-          <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-tiffany-500 border-2 border-white"></span>
+          <span className="absolute right-1 top-1 h-2.5 w-2.5 rounded-sm border-2 border-background bg-foreground"></span>
         )}
 
         {/* Expanded (mobile): Show text labels inline */}
@@ -104,26 +104,26 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
 
         {/* Active indicator - only visible on mobile expanded */}
         {isActive && isExpanded && (
-          <div className="absolute right-3 w-2 h-2 bg-tiffany-500 rounded-full" />
+          <div className="absolute right-3 h-2 w-2 rounded-sm bg-foreground" />
         )}
 
         {/* Coming soon badge - mobile only */}
         {item.comingSoon && isExpanded && (
-          <span className="ml-auto text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+          <span className="ml-auto rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">
             Soon
           </span>
         )}
 
         {/* Static badge - mobile only */}
         {item.badge && !item.comingSoon && isExpanded && (
-          <span className="ml-auto text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">
+          <span className="ml-auto rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-foreground">
             {item.badge}
           </span>
         )}
 
         {/* Dynamic messages unread badge - mobile only */}
         {showMessagesBadge && count > 0 && isExpanded && (
-          <span className="ml-auto text-xs bg-tiffany-500 text-white px-2 py-0.5 rounded-full font-medium">
+          <span className="ml-auto rounded-md bg-foreground px-2 py-0.5 text-xs font-medium text-background">
             {count > 99 ? '99+' : count}
           </span>
         )}
@@ -137,17 +137,17 @@ export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: Sideb
 
             {/* Show badges in tooltip */}
             {item.comingSoon && (
-              <span className="text-xs bg-gray-700 dark:bg-muted text-gray-300 dark:text-muted-foreground px-1.5 py-0.5 rounded">
+              <span className="rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
                 Soon
               </span>
             )}
             {item.badge && !item.comingSoon && (
-              <span className="text-xs bg-orange-500 text-white px-1.5 py-0.5 rounded font-medium">
+              <span className="text-xs bg-foreground text-background px-1.5 py-0.5 rounded font-medium">
                 {item.badge}
               </span>
             )}
             {showMessagesBadge && count > 0 && (
-              <span className="text-xs bg-tiffany-500 text-white px-1.5 py-0.5 rounded font-medium">
+              <span className="text-xs bg-foreground text-background px-1.5 py-0.5 rounded font-medium">
                 {count > 99 ? '99+' : count}
               </span>
             )}

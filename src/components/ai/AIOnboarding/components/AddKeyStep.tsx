@@ -90,7 +90,7 @@ export function AddKeyStep({
               onChange={e => onApiKeyChange(e.target.value)}
               disabled={keyAdded}
               className={cn(
-                keyValidation && !keyValidation.valid && 'border-red-300 focus:border-red-500'
+                keyValidation && !keyValidation.valid && 'border-red-300 focus:border-destructive'
               )}
             />
             {keyValidation && !keyValidation.valid && (
@@ -106,8 +106,8 @@ export function AddKeyStep({
 
           {/* Submit Error */}
           {submitError && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-700">{submitError}</p>
+            <div className="oc-error-surface">
+              <p className="text-sm">{submitError}</p>
             </div>
           )}
 

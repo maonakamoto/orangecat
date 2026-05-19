@@ -99,7 +99,10 @@ export async function getProjectFeed(
 /**
  * Get project timeline (simplified version)
  */
-export async function getProjectTimeline(projectId: string, limit: number = 50): Promise<TimelineDisplayEvent[]> {
+export async function getProjectTimeline(
+  projectId: string,
+  limit: number = 50
+): Promise<TimelineDisplayEvent[]> {
   try {
     const feed = await getProjectFeed(projectId, {}, { limit });
     return feed.events;
@@ -108,4 +111,3 @@ export async function getProjectTimeline(projectId: string, limit: number = 50):
     return [];
   }
 }
-

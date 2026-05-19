@@ -31,7 +31,7 @@ export function ProfileSidebarPanel({
         <div className="mb-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-base font-semibold text-foreground">Profile Completion</h3>
-            <span className="text-sm font-semibold text-gray-700 bg-gray-100 dark:text-foreground dark:bg-muted px-2.5 py-1 rounded-full">
+            <span className="text-sm font-semibold text-muted-strong bg-muted dark:text-foreground dark:bg-muted px-2.5 py-1 rounded-full">
               {completionPercentage}%
             </span>
           </div>

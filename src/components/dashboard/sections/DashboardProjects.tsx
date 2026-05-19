@@ -6,7 +6,6 @@ import Button from '@/components/ui/Button';
 import { BarChart3 } from 'lucide-react';
 import { ProjectCard } from '@/components/entity/variants/ProjectCard';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
-import { GRADIENTS } from '@/config/gradients';
 import { ENTITY_STATUS } from '@/config/database-constants';
 
 // Use a generic interface compatible with the project store
@@ -39,11 +38,11 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>My Projects</CardTitle>
+              <CardTitle>Projects</CardTitle>
               <CardDescription>Your projects</CardDescription>
             </div>
             <Link href={ENTITY_REGISTRY.project.createPath}>
-              <Button size="sm" className={GRADIENTS.brandOrange}>
+              <Button size="sm">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Create Project
               </Button>
@@ -52,7 +51,7 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
         </CardHeader>
         <CardContent className="p-4 sm:p-6">
           <div className="text-center py-8 text-muted-foreground">
-            <BarChart3 className="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
+            <BarChart3 className="w-12 h-12 mx-auto mb-3 text-muted-dim dark:text-muted-foreground" />
             <p className="text-sm mb-2">No projects yet</p>
             <p className="text-xs text-muted-dim mb-4">
               Start your fundraising journey by creating your first project
@@ -73,7 +72,7 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>My Projects</CardTitle>
+            <CardTitle>Projects</CardTitle>
             <CardDescription>
               Your projects ({projects.length} {projects.length === 1 ? 'project' : 'projects'})
             </CardDescription>

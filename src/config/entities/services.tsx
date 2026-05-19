@@ -12,9 +12,9 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { convert, formatCurrency } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { STATUS } from '@/config/database-constants';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { getStatusBadge } from '@/config/entity-status';
 import type { Currency } from '@/types/settings';
 import { GRADIENTS } from '@/config/gradients';
 
@@ -70,23 +70,12 @@ export const serviceEntityConfig: EntityConfig<UserService> = {
       );
     }
 
-    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
-      [STATUS.SERVICES.ACTIVE]: { label: 'Active', variant: 'success' },
-      [STATUS.SERVICES.DRAFT]: { label: 'Draft', variant: 'default' },
-      [STATUS.SERVICES.PAUSED]: { label: 'Paused', variant: 'warning' },
-      [STATUS.SERVICES.UNAVAILABLE]: { label: 'Unavailable', variant: 'destructive' },
-    };
-    const statusBadge = statusBadgeMap[service.status];
+    const statusBadge = getStatusBadge('service', service.status);
 
     return {
       priceLabel,
       badge: statusBadge?.label,
-      badgeVariant: statusBadge?.variant as
-        | 'success'
-        | 'default'
-        | 'warning'
-        | 'destructive'
-        | undefined,
+      badgeVariant: statusBadge?.variant,
       metadata:
         metadataParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">

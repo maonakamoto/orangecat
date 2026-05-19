@@ -78,7 +78,7 @@ function CapabilityToggleCard({
         >
           <span
             className={cn(
-              'inline-block h-3 w-3 transform rounded-full bg-white dark:bg-foreground transition-transform',
+              'inline-block h-3 w-3 transform rounded-full bg-card dark:bg-foreground transition-transform',
               checked ? 'translate-x-5' : 'translate-x-1'
             )}
           />
@@ -135,7 +135,7 @@ export function AIModelPreferences({
           >
             <span
               className={cn(
-                'inline-block h-4 w-4 transform rounded-full bg-white dark:bg-foreground transition-transform',
+                'inline-block h-4 w-4 transform rounded-full bg-card dark:bg-foreground transition-transform',
                 preferences.autoRouterEnabled ? 'translate-x-6' : 'translate-x-1'
               )}
             />
@@ -183,7 +183,7 @@ export function AIModelPreferences({
                   'p-3 rounded-lg border-2 text-left transition-all',
                   isSelected
                     ? 'border-tiffany-500 bg-tiffany-50'
-                    : 'border-border hover:border-gray-300',
+                    : 'border-border hover:border-border-strong',
                   disabled && 'opacity-50 cursor-not-allowed'
                 )}
               >

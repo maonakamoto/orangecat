@@ -16,6 +16,7 @@ import AvatarLink from '@/components/ui/AvatarLink';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import { usePostCardActions } from './usePostCardActions';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 interface PostCardProps {
   event: TimelineDisplayEvent;
@@ -94,10 +95,11 @@ export function PostCard({
       <article
         onClick={handlePostClick}
         className={cn(
-          'px-4 py-3 border-b border-border hover:bg-gray-50/50 dark:hover:bg-muted/30 transition-colors cursor-pointer',
+          TIMELINE_SURFACE.post,
+          'cursor-pointer',
           compact && 'py-2',
           isSelectionMode && 'pl-2',
-          isSelected && 'bg-tiffany-50/70 hover:bg-tiffany-50'
+          isSelected && TIMELINE_SURFACE.selectedPost
         )}
         data-event-id={event.id}
       >
@@ -121,10 +123,10 @@ export function PostCard({
               <button
                 onClick={handleSelectionClick}
                 className={cn(
-                  'w-5 h-5 rounded border-2 flex items-center justify-center transition-all',
+                  'flex h-5 w-5 items-center justify-center rounded-sm border transition-colors',
                   isSelected
-                    ? 'bg-tiffany-500 border-tiffany-500 text-white'
-                    : 'border-border-strong hover:border-tiffany-400 bg-card'
+                    ? 'border-foreground bg-foreground text-background'
+                    : 'border-border-strong bg-background hover:border-foreground'
                 )}
                 aria-label={isSelected ? 'Deselect post' : 'Select post'}
                 aria-checked={isSelected}
@@ -208,7 +210,7 @@ export function PostCard({
                       onClick={handleReplySubmit}
                       disabled={!replyText.trim() || isReplying}
                       size="sm"
-                      className="rounded-full px-4 py-1.5 text-sm font-bold bg-tiffany-500 hover:bg-tiffany-600 text-white"
+                      className={TIMELINE_SURFACE.buttonPrimary}
                     >
                       {isReplying ? 'Replying...' : 'Reply'}
                     </Button>

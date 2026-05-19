@@ -119,11 +119,11 @@ export default function BookingCard({
 
           {/* Rejection/Cancellation Reason */}
           {booking.cancellation_reason && (
-            <div className="bg-red-50 rounded-md p-3 mb-4">
-              <p className="text-xs font-medium text-red-500 mb-1">
+            <div className="oc-error-surface mb-4 p-3">
+              <p className="text-xs font-medium mb-1">
                 {booking.status === STATUS.BOOKINGS.REJECTED ? 'Rejection' : 'Cancellation'} reason:
               </p>
-              <p className="text-base text-red-700">{booking.cancellation_reason}</p>
+              <p className="text-base text-destructive/80">{booking.cancellation_reason}</p>
             </div>
           )}
         </div>
@@ -240,7 +240,7 @@ export default function BookingCard({
             </DialogTitle>
           </DialogHeader>
           <textarea
-            className="w-full px-3 py-2 border border-border-strong rounded-lg resize-none text-sm bg-white dark:bg-background text-foreground focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500"
+            className="w-full px-3 py-2 border border-border-strong rounded-lg resize-none text-sm bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-ring"
             rows={3}
             placeholder="Reason (optional)"
             value={reasonDialog?.reason ?? ''}

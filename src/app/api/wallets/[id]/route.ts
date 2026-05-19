@@ -7,12 +7,17 @@
 
 import { logger } from '@/utils/logger';
 import { handleSupabaseError } from '@/lib/wallets/errorHandling';
-import { apiSuccess, apiInternalError, apiBadRequest, apiRateLimited } from '@/lib/api/standardResponse';
+import {
+  apiSuccess,
+  apiInternalError,
+  apiBadRequest,
+  apiRateLimited,
+} from '@/lib/api/standardResponse';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { auditSuccess, AUDIT_ACTIONS } from '@/lib/api/auditLog';
 import { DATABASE_TABLES } from '@/config/database-tables';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { walletUpdateSchema } from '@/lib/validation/finance';
 import {
   fetchWalletAndVerifyOwner,
@@ -29,23 +34,36 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
   try {
     const { id } = await context.params;
     const idValidation = getValidationError(validateUUID(id, 'wallet ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
 
     const { user, supabase } = request;
 
     const rlUpdate = await rateLimitWriteAsync(user.id);
-    if (!rlUpdate.success) { return apiRateLimited('Too many wallet update requests. Please slow down.', retryAfterSeconds(rlUpdate)); }
+    if (!rlUpdate.success) {
+      return apiRateLimited(
+        'Too many wallet update requests. Please slow down.',
+        retryAfterSeconds(rlUpdate)
+      );
+    }
 
     const rawBody = await request.json();
     const parseResult = walletUpdateSchema.safeParse(rawBody);
-    if (!parseResult.success) {return apiBadRequest('Invalid input', parseResult.error.errors);}
+    if (!parseResult.success) {
+      return apiBadRequest('Invalid input', parseResult.error.errors);
+    }
 
     const result = await fetchWalletAndVerifyOwner(supabase, id, user.id, 'update');
-    if (result.error) {return result.error;}
+    if (result.error) {
+      return result.error;
+    }
     const { wallet } = result;
 
     const updateResult = buildWalletUpdates(parseResult.data);
-    if (updateResult.error) {return updateResult.error;}
+    if (updateResult.error) {
+      return updateResult.error;
+    }
     const { updates } = updateResult;
 
     if (parseResult.data.is_primary === true) {
@@ -82,15 +100,21 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest, context: Ro
   try {
     const { id } = await context.params;
     const idValidation = getValidationError(validateUUID(id, 'wallet ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
 
     const { user, supabase } = request;
 
     const rlDelete = await rateLimitWriteAsync(user.id);
-    if (!rlDelete.success) { return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rlDelete)); }
+    if (!rlDelete.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rlDelete));
+    }
 
     const result = await fetchWalletAndVerifyOwner(supabase, id, user.id, 'delete');
-    if (result.error) {return result.error;}
+    if (result.error) {
+      return result.error;
+    }
     const { wallet } = result;
 
     const { error: deleteError } = await supabase

@@ -19,14 +19,24 @@ export const contextHandlers: Record<string, ActionHandler> = {
     if (error) {
       return { success: false, error: error.message };
     }
-    return { success: true, data: { ...data, displayMessage: `🧠 Saved to your Cat context: "${params.title}"` } };
+    return {
+      success: true,
+      data: { ...data, displayMessage: `🧠 Saved to your Cat context: "${params.title}"` },
+    };
   },
 
   update_profile: async (supabase, userId, _actorId, params) => {
     // Update the user's public profile. Only safe text fields — no username (affects URLs),
     // no email, no financial addresses. Profile.id = auth.users.id = userId.
-    const SAFE_FIELDS = ['name', 'bio', 'background', 'website', 'location_city', 'location_country'] as const;
-    type SafeField = typeof SAFE_FIELDS[number];
+    const SAFE_FIELDS = [
+      'name',
+      'bio',
+      'background',
+      'website',
+      'location_city',
+      'location_country',
+    ] as const;
+    type SafeField = (typeof SAFE_FIELDS)[number];
 
     const updates: Partial<Record<SafeField, string>> = {};
     for (const field of SAFE_FIELDS) {
@@ -36,7 +46,11 @@ export const contextHandlers: Record<string, ActionHandler> = {
     }
 
     if (Object.keys(updates).length === 0) {
-      return { success: false, error: 'No profile fields to update — provide at least one of: name, bio, background, website, location_city, location_country' };
+      return {
+        success: false,
+        error:
+          'No profile fields to update — provide at least one of: name, bio, background, website, location_city, location_country',
+      };
     }
 
     const { data, error } = await supabase

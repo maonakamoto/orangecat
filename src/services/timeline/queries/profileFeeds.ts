@@ -11,11 +11,7 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { TIMELINE_TABLES } from '@/config/database-tables';
-import type {
-  TimelineFeedResponse,
-  TimelineFilters,
-  TimelinePagination,
-} from '@/types/timeline';
+import type { TimelineFeedResponse, TimelineFilters, TimelinePagination } from '@/types/timeline';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from './constants';
 import { transformEnrichedEventToDisplay } from './helpers';
 import { buildDefaultFilters } from '@/services/timeline/formatters/filters';
@@ -89,4 +85,3 @@ export async function getProfileFeed(
     };
   }
 }
-

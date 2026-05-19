@@ -5,7 +5,6 @@ import { Plus } from 'lucide-react';
 import { useDropdown } from '@/hooks/useDropdown';
 import { cn } from '@/lib/utils';
 import { CREATE_OPTIONS, shouldShowDivider } from './SmartCreateButton';
-import { GRADIENTS } from '@/config/gradients';
 
 export function HeaderCreateButton() {
   const { isOpen, dropdownRef, buttonRef, toggle, close } = useDropdown({
@@ -20,12 +19,11 @@ export function HeaderCreateButton() {
         ref={buttonRef}
         onClick={toggle}
         className={cn(
-          'flex items-center justify-center w-10 h-10 sm:w-9 sm:h-9 rounded-xl transition-all duration-200',
-          `${GRADIENTS.brandMixed} text-white`,
-          'hover:from-orange-600 hover:to-tiffany-600 hover:shadow-md',
-          'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2',
+          'flex h-10 w-10 items-center justify-center rounded-md bg-foreground text-background transition-colors duration-150 sm:h-9 sm:w-9',
+          'hover:bg-muted-strong',
+          'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background',
           'touch-manipulation',
-          isOpen && 'shadow-md'
+          isOpen && 'bg-muted-strong'
         )}
         aria-label="Create new"
         aria-expanded={isOpen}
@@ -41,7 +39,7 @@ export function HeaderCreateButton() {
 
       {isOpen && (
         <div
-          className="fixed z-50 rounded-xl shadow-xl bg-card border border-border-subtle animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
+          className="fixed z-50 overflow-hidden rounded-md border border-border-subtle bg-card shadow-none animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right"
           style={{
             top: buttonRef.current ? buttonRef.current.getBoundingClientRect().bottom + 12 : 'auto',
             right: buttonRef.current
@@ -63,15 +61,15 @@ export function HeaderCreateButton() {
                   <Link
                     href={option.href}
                     onClick={close}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors group"
+                    className="group flex items-center gap-3 rounded-md px-3 py-2.5 transition-colors hover:bg-muted"
                     role="menuitem"
                     tabIndex={isOpen ? 0 : -1}
                   >
-                    <div className={cn('p-2 rounded-lg', option.bgColor)}>
+                    <div className="oc-icon-tile h-9 w-9">
                       <option.icon className={cn('w-4 h-4', option.color)} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-foreground group-hover:text-orange-600 transition-colors">
+                      <div className="font-medium text-foreground transition-colors group-hover:text-tiffany-600 dark:group-hover:text-tiffany-400">
                         {option.name}
                       </div>
                       <div className="text-xs text-muted-foreground truncate">

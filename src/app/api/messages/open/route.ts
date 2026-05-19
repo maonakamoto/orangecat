@@ -59,7 +59,9 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
 
     // Validate title length
     if (title && title.length > VALIDATION.TITLE_MAX_LENGTH) {
-      return apiValidationError(`Title must be less than ${VALIDATION.TITLE_MAX_LENGTH} characters`);
+      return apiValidationError(
+        `Title must be less than ${VALIDATION.TITLE_MAX_LENGTH} characters`
+      );
     }
 
     // Filter to valid string IDs
@@ -74,13 +76,13 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
       conversationId: result.conversationId,
       isExisting: result.isExisting,
     });
-    
+
     // Add rate limit headers
     const headers = getRateLimitHeaders(rateLimitResult);
     Object.entries(headers).forEach(([key, value]) => {
       response.headers.set(key, value);
     });
-    
+
     return response;
   } catch (error) {
     logger.error('Open conversation error', { error, userId: req.user.id }, 'Messages');

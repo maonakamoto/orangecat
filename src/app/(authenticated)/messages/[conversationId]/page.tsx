@@ -19,7 +19,9 @@ export default function ConversationPage({
         }
         router.replace(`/messages?id=${encodeURIComponent(conversationId)}`);
       })
-      .catch((err: unknown) => { logger.warn('Legacy conversationId redirect failed', { err }, 'messages/[conversationId]'); });
+      .catch((err: unknown) => {
+        logger.warn('Legacy conversationId redirect failed', { err }, 'messages/[conversationId]');
+      });
     return () => {
       active = false;
     };

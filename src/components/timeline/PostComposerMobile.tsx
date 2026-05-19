@@ -3,12 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useAuth } from '@/hooks/useAuth';
-import { Card, CardContent } from '@/components/ui/Card';
-import { GRADIENTS } from '@/config/gradients';
 import BottomSheet from '@/components/ui/BottomSheet';
 import AvatarLink from '@/components/ui/AvatarLink';
 import { Globe, ChevronDown, ImageIcon } from 'lucide-react';
-import { getInitial } from '@/utils/string';
 import { usePostComposer, type PostComposerOptions } from '@/hooks/usePostComposerNew';
 import { useContentEditableEditor } from '@/hooks/useContentEditableEditor';
 import { cn } from '@/lib/utils';
@@ -16,6 +13,12 @@ import { sanitizeHtml } from '@/lib/validation';
 import { TextFormatToolbar, ComposerMessages, CharacterCounter } from './ComposerShared';
 import { PostComposerFullScreenHeader } from './PostComposerFullScreenHeader';
 import { PostComposerInlineControls } from './PostComposerInlineControls';
+import {
+  getTimelineVisibilityOption,
+  TIMELINE_CONTENT_LIMITS,
+  TIMELINE_COPY,
+  TIMELINE_SURFACE,
+} from '@/config/timeline';
 
 const LazyProjectSelectionModal = dynamic(() => import('./ProjectSelectionModal'), {
   ssr: false,
@@ -36,8 +39,8 @@ export interface PostComposerMobileProps extends PostComposerOptions {
 }
 
 const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
-  placeholder = "What's on your mind?",
-  buttonText = 'Post',
+  placeholder = TIMELINE_COPY.composePlaceholder,
+  buttonText = TIMELINE_COPY.postButton,
   showVisibilityToggle = true,
   showProjectSelection = false,
   autoFocus = false,
@@ -104,27 +107,13 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
             />
           ) : (
             !compact && (
-              <div className="flex-shrink-0">
-                {profile?.avatar_url || user?.user_metadata?.avatar_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- Dynamic user avatar with onError fallback
-                  <img
-                    src={profile?.avatar_url || user?.user_metadata?.avatar_url || ''}
-                    alt={user?.user_metadata?.name || 'User avatar'}
-                    className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
-                    onError={e => {
-                      (e.currentTarget as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
-                ) : (
-                  <div
-                    className={`w-10 h-10 ${GRADIENTS.brandOrangeYellow} rounded-full flex items-center justify-center border-2 border-white shadow-sm`}
-                  >
-                    <span className="text-white font-semibold text-sm">
-                      {getInitial(user?.user_metadata?.name || user?.email)}
-                    </span>
-                  </div>
-                )}
-              </div>
+              <AvatarLink
+                username={profile?.username || null}
+                userId={user?.id || null}
+                avatarUrl={profile?.avatar_url || user?.user_metadata?.avatar_url || null}
+                name={profile?.name || user?.user_metadata?.name || 'User'}
+                size={40}
+              />
             )
           )}
         </div>
@@ -133,11 +122,11 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
           {fullScreen && showProjectSelection && (
             <button
               onClick={() => setIsOptionsSheetOpen(true)}
-              className="mb-3 px-3 py-1.5 bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 rounded-full text-sm font-medium text-muted-strong flex items-center gap-1 transition-colors min-h-8"
+              className={cn(TIMELINE_SURFACE.chip, 'mb-3 min-h-8')}
             >
               {composer.selectedProjects.length > 0
                 ? `${composer.selectedProjects.length} project${composer.selectedProjects.length > 1 ? 's' : ''}`
-                : 'Crosspost to projects'}
+                : TIMELINE_COPY.crossPostLabel}
               <ChevronDown className="w-4 h-4" />
             </button>
           )}
@@ -154,12 +143,12 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                 {showVisibilityToggle && (
                   <button
                     onClick={() => setIsOptionsSheetOpen(true)}
-                    className="flex items-center gap-1 text-xs text-foreground mt-1 min-h-11 px-2"
+                    className={cn(TIMELINE_SURFACE.chip, 'mt-1 min-h-9')}
                     aria-expanded={isOptionsSheetOpen}
                     aria-controls="post-options-sheet"
                   >
                     <Globe className="w-3 h-3" />
-                    {composer.visibility === 'public' ? 'Public' : 'Private'}
+                    {getTimelineVisibilityOption(composer.visibility).compactLabel}
                     <ChevronDown className="w-3 h-3 transition-transform" />
                   </button>
                 )}
@@ -174,14 +163,14 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
               onInput={handleInput}
               onPaste={handlePaste}
               onKeyDown={handleKeyDown}
-              data-placeholder={fullScreen ? "What's happening?" : placeholder}
+              data-placeholder={fullScreen ? TIMELINE_COPY.composePlaceholder : placeholder}
               className={cn(
                 'w-full border-0 bg-transparent',
                 'focus:outline-none focus:ring-0',
                 'leading-relaxed break-words',
                 'max-h-[60vh] overflow-y-auto',
                 'empty:before:content-[attr(data-placeholder)]',
-                'empty:before:text-gray-500 dark:empty:before:text-muted-foreground',
+                'empty:before:text-muted-foreground dark:empty:before:text-muted-foreground',
                 'empty:before:pointer-events-none',
                 fullScreen
                   ? 'text-xl min-h-[120px]'
@@ -196,7 +185,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
             />
             <CharacterCounter
               count={composer.characterCount}
-              max={composerOptions.maxLength || 500}
+              max={composerOptions.maxLength || TIMELINE_CONTENT_LIMITS.post}
               className="mt-4"
             />
           </div>
@@ -225,14 +214,14 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
       {fullScreen && (
         <div className="flex items-center gap-4 px-4 pt-4 border-t border-border mt-4">
           <button
-            className="p-2 min-h-11 min-w-11 flex items-center justify-center text-muted-dim cursor-not-allowed rounded-full transition-colors"
-            aria-label="Add image (coming soon)"
-            title="Image upload (coming soon)"
+            className="flex min-h-11 min-w-11 cursor-not-allowed items-center justify-center rounded-md p-2 text-muted-dim transition-colors"
+            aria-label={TIMELINE_COPY.addImageUnavailable}
+            title={TIMELINE_COPY.addImageUnavailable}
             disabled
           >
             <ImageIcon className="w-5 h-5" />
           </button>
-          <TextFormatToolbar onFormat={handleFormat} variant="orange" size="md" />
+          <TextFormatToolbar onFormat={handleFormat} variant="default" size="md" />
         </div>
       )}
 
@@ -268,15 +257,9 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
   }
 
   return (
-    <Card
-      className={cn(
-        'border-l-4 border-l-orange-500 bg-gradient-to-r from-orange-50/30 via-white to-yellow-50/20',
-        'shadow-sm hover:shadow-md transition-all duration-200',
-        compact ? 'rounded-lg' : 'rounded-xl'
-      )}
-    >
-      <CardContent className={cn('p-4', compact && 'p-3')}>{renderComposerContent()}</CardContent>
-    </Card>
+    <div className={cn('border-b border-border-subtle bg-background p-4', compact && 'p-3')}>
+      {renderComposerContent()}
+    </div>
   );
 };
 

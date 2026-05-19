@@ -1,10 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Grid3X3, Users } from 'lucide-react';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { EntityType } from '@/config/entity-registry';
-import { BADGE_COLORS } from '@/config/badge-colors';
 
 export type DiscoverTabType =
   | 'all'
@@ -84,7 +82,7 @@ export default function DiscoverTabs({
   const allCount = Object.values(counts).reduce((sum, n) => sum + (n || 0), 0);
 
   return (
-    <div className="border-b border-border bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-t-2xl sticky top-0 z-10 overflow-x-auto">
+    <div className="border-b border-border bg-card backdrop-blur-sm rounded-t-lg sticky top-0 z-10 overflow-x-auto">
       <nav className="-mb-px flex space-x-6 px-6 pt-4 min-w-max" aria-label="Tabs">
         {tabs.map(({ id, label, Icon }) => {
           const isActive = activeTab === id;
@@ -99,8 +97,8 @@ export default function DiscoverTabs({
                 transition-colors duration-200
                 ${
                   isActive
-                    ? 'text-orange-600'
-                    : 'text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:border-gray-300'
+                    ? 'text-foreground'
+                    : 'text-muted-foreground hover:text-foreground hover:border-border-strong'
                 }
               `}
               aria-current={isActive ? 'page' : undefined}
@@ -109,7 +107,7 @@ export default function DiscoverTabs({
               <span
                 className={`
                 transition-colors duration-200
-                ${isActive ? 'text-orange-600' : 'text-muted-dim group-hover:text-gray-600 dark:group-hover:text-foreground'}
+                ${isActive ? 'text-foreground' : 'text-muted-dim group-hover:text-muted-foreground dark:group-hover:text-foreground'}
               `}
               >
                 <Icon className="w-4 h-4" />
@@ -126,7 +124,7 @@ export default function DiscoverTabs({
                     transition-colors duration-200
                     ${
                       isActive
-                        ? `border ${BADGE_COLORS.orange}`
+                        ? 'border border-border-strong bg-muted text-foreground'
                         : 'bg-muted text-muted-foreground border border-border group-hover:bg-gray-200 dark:group-hover:bg-muted/80'
                     }
                   `}
@@ -136,14 +134,7 @@ export default function DiscoverTabs({
               )}
 
               {/* Active indicator line */}
-              {isActive && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-tiffany-500"
-                  initial={false}
-                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                />
-              )}
+              {isActive && <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground" />}
             </button>
           );
         })}

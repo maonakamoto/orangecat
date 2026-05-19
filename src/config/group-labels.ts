@@ -77,7 +77,7 @@ export const GROUP_LABELS = {
     name: 'Company',
     description: 'Business organization',
     icon: Building2,
-    iconClass: 'text-gray-500',
+    iconClass: 'text-muted-foreground',
     defaults: {
       is_public: false,
       visibility: 'members_only',

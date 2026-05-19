@@ -41,21 +41,31 @@ export const organizationHandlers: Record<string, ActionHandler> = {
     }
     const role = (params.role as string) || 'member';
     const recipientDisplay = params.username
-      ? (params.username as string).startsWith('@') ? params.username : `@${params.username}`
+      ? (params.username as string).startsWith('@')
+        ? params.username
+        : `@${params.username}`
       : `user ${inviteeId.slice(0, 8)}`;
-    return { success: true, data: { ...data, displayMessage: `📨 Invitation sent to ${recipientDisplay} (role: ${role})` } };
+    return {
+      success: true,
+      data: {
+        ...data,
+        displayMessage: `📨 Invitation sent to ${recipientDisplay} (role: ${role})`,
+      },
+    };
   },
 
   create_organization: async (supabase, userId, _actorId, params) => {
     // groups table has: name, slug (UNIQUE NOT NULL), label (not type), created_by
     // label enum: circle|family|dao|company|nonprofit|cooperative|guild|network_state
     const name = params.name as string;
-    const slug = name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '')
-      .slice(0, 60)
-      + '-' + Math.random().toString(36).slice(2, 7);
+    const slug =
+      name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 60) +
+      '-' +
+      Math.random().toString(36).slice(2, 7);
 
     // Create the group (organization)
     const { data: group, error: groupError } = await supabase
@@ -85,10 +95,14 @@ export const organizationHandlers: Record<string, ActionHandler> = {
       return { success: false, error: memberError.message };
     }
 
-    const groupLabel = (params.label as string | null) ?? (params.type as string | null) ?? 'circle';
+    const groupLabel =
+      (params.label as string | null) ?? (params.type as string | null) ?? 'circle';
     return {
       success: true,
-      data: { ...group, displayMessage: `👥 ${groupLabel.charAt(0).toUpperCase() + groupLabel.slice(1)} "${name}" created` },
+      data: {
+        ...group,
+        displayMessage: `👥 ${groupLabel.charAt(0).toUpperCase() + groupLabel.slice(1)} "${name}" created`,
+      },
     };
   },
 };

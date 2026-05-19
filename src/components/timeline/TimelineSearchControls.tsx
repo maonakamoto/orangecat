@@ -8,6 +8,7 @@
 
 import Button from '@/components/ui/Button';
 import { Search, Loader2, X } from 'lucide-react';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 interface TimelineSearchControlsProps {
   searchQuery: string;
@@ -33,7 +34,7 @@ export function TimelineSearchControls({
   searchTotal,
 }: TimelineSearchControlsProps) {
   return (
-    <div className="border-b border-border bg-card px-4 py-3">
+    <div className="border-b border-border-subtle bg-background px-4 py-3">
       <form onSubmit={onSearch} className="flex items-center gap-2">
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-muted-dim absolute left-3 top-1/2 -translate-y-1/2" />
@@ -41,11 +42,11 @@ export function TimelineSearchControls({
             type="text"
             value={searchQuery}
             onChange={e => onSearchQueryChange(e.target.value)}
-            placeholder="Search posts (title or description)..."
-            className="w-full rounded-full border border-border bg-muted py-2 pl-9 pr-3 text-sm dark:text-foreground dark:placeholder:text-muted-foreground focus:border-tiffany-400 focus:outline-none focus:ring-2 focus:ring-tiffany-100"
+            placeholder="Search posts"
+            className="w-full rounded-md border border-border-subtle bg-background py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
           />
         </div>
-        <Button type="submit" size="sm" disabled={searching} className="gap-2">
+        <Button type="submit" size="sm" disabled={searching} className={TIMELINE_SURFACE.chip}>
           {searching ? (
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
@@ -59,14 +60,14 @@ export function TimelineSearchControls({
             size="sm"
             variant="ghost"
             onClick={onClearSearch}
-            className="text-muted-foreground"
+            className={TIMELINE_SURFACE.chip}
           >
             <X className="w-4 h-4 mr-1" />
             Clear
           </Button>
         )}
       </form>
-      {searchError && <p className="text-sm text-red-600 mt-2">{searchError}</p>}
+      {searchError && <p className="text-sm text-destructive mt-2">{searchError}</p>}
       {isSearchActive && !searchError && (
         <p className="text-xs text-muted-foreground mt-2">
           Showing {searchResultsCount} of {searchTotal ?? searchResultsCount} results

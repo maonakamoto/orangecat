@@ -1,5 +1,6 @@
 import React, { HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
+import { COMPONENT_STYLES } from '@/config/design-system';
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -7,18 +8,11 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function Card({ children, className, variant = 'default', ...props }: CardProps) {
-  const variants = {
-    default:
-      'bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300',
-    elevated: 'bg-card rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-300',
-    minimal:
-      'bg-card rounded-xl border border-border hover:border-border/80 transition-all duration-300',
-    gradient:
-      'bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300',
-  };
-
   return (
-    <div className={cn(variants[variant], className)} {...props}>
+    <div
+      className={cn(COMPONENT_STYLES.card.base, COMPONENT_STYLES.card.variants[variant], className)}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -36,7 +30,7 @@ export const CardDescription = ({
   className,
   ...p
 }: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p {...p} className={cn('text-sm text-muted-foreground leading-relaxed mt-1', className)} />
+  <p {...p} className={cn('mt-1 text-sm leading-6 text-muted-foreground', className)} />
 );
 
 export const CardContent = ({ className, ...p }: React.HTMLAttributes<HTMLDivElement>) => (

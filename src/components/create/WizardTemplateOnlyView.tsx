@@ -20,7 +20,7 @@ export function WizardTemplateOnlyView<T extends Record<string, unknown>>({
       <div className="mb-8">
         <button
           onClick={onCancel}
-          className="inline-flex items-center text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4 transition-colors"
+          className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Cancel
@@ -40,7 +40,7 @@ export function WizardTemplateOnlyView<T extends Record<string, unknown>>({
         <button
           type="button"
           onClick={() => onSelectTemplate(null)}
-          className="text-sm text-muted-foreground hover:text-gray-900 dark:hover:text-foreground font-medium"
+          className="text-sm text-muted-foreground hover:text-foreground font-medium"
         >
           Or start from scratch →
         </button>

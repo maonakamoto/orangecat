@@ -37,7 +37,7 @@ export function ProjectsSearchFilter({
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-dim hover:text-gray-600 dark:hover:text-foreground"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-dim hover:text-foreground"
             aria-label="Clear search"
           >
             <X className="w-4 h-4" aria-hidden="true" />
@@ -49,7 +49,7 @@ export function ProjectsSearchFilter({
         <select
           value={statusFilter}
           onChange={e => setStatusFilter(e.target.value)}
-          className="px-3 py-2 border border-border-strong rounded-lg text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent w-full sm:w-auto min-w-[140px]"
+          className="px-3 py-2 border border-border-strong rounded-lg text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring w-full sm:w-auto min-w-[140px]"
           aria-label="Filter by status"
         >
           <option value="all">All Status</option>

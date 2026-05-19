@@ -80,7 +80,7 @@ export function MFAStatus({
             size="sm"
             onClick={() => handleDisable(factors[0].id)}
             disabled={disabling}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
           >
             {disabling ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Disable'}
           </Button>
@@ -92,9 +92,9 @@ export function MFAStatus({
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-          <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0" />
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="flex items-center gap-2 p-3 oc-error-surface rounded-lg">
+          <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0" />
+          <p className="text-sm text-destructive/80">{error}</p>
         </div>
       )}
 

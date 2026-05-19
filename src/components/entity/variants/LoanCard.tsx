@@ -35,11 +35,11 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
   if (viewMode === 'list') {
     return (
       <Link href={`${ENTITY_REGISTRY['loan'].publicBasePath}/${loan.id}`}>
-        <Card className="hover:shadow-md transition-shadow">
+        <Card className="oc-card-link">
           <div className="flex items-center p-4 gap-4">
             {/* Icon */}
-            <div className="flex-shrink-0 w-12 h-12 bg-tiffany-100 rounded-full flex items-center justify-center">
-              <DollarSign className="w-6 h-6 text-tiffany-600" />
+            <div className="oc-icon-tile h-12 w-12">
+              <DollarSign className="w-6 h-6 text-tiffany-600 dark:text-tiffany-400" />
             </div>
 
             {/* Content */}
@@ -68,12 +68,12 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
 
   return (
     <Link href={`${ENTITY_REGISTRY['loan'].publicBasePath}/${loan.id}`}>
-      <Card className="hover:shadow-md transition-shadow h-full">
+      <Card className="oc-card-link h-full">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-tiffany-100 rounded-full flex items-center justify-center">
-                <DollarSign className="w-4 h-4 text-tiffany-600" />
+              <div className="oc-icon-tile h-8 w-8">
+                <DollarSign className="w-4 h-4 text-tiffany-600 dark:text-tiffany-400" />
               </div>
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-base truncate">{loan.title}</CardTitle>

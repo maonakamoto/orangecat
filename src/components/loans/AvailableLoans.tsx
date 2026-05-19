@@ -48,7 +48,7 @@ export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
           const progress = calculateProgress(loan.original_amount, loan.remaining_balance);
 
           return (
-            <Card key={loan.id} className="hover:shadow-md transition-shadow">
+            <Card key={loan.id} className="oc-card-link">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
@@ -65,7 +65,7 @@ export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Remaining</span>
-                    <span className="font-semibold text-red-600">
+                    <span className="font-semibold text-destructive">
                       {formatLoanAmount(loan.remaining_balance, loan.currency)}
                     </span>
                   </div>

@@ -1,21 +1,8 @@
-import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { ENTITY_REGISTRY, isValidEntityType } from '@/config/entity-registry';
 import { STATUS, ENTITY_STATUS } from '@/config/database-constants';
+import { resolvePublishStatus } from '@/config/entity-status';
 import type { ActionHandler } from './types';
 import { bitcoinToSats } from '@/services/currency';
-
-// Each entity type has its own "published" status value.
-// Using 'active' for events or investments would violate the DB CHECK constraint.
-const ENTITY_PUBLISH_STATUS: Record<string, string> = {
-  product: STATUS.PRODUCTS.ACTIVE,
-  service: STATUS.SERVICES.ACTIVE,
-  project: STATUS.PROJECTS.ACTIVE,
-  cause: STATUS.CAUSES.ACTIVE,
-  event: STATUS.EVENTS.PUBLISHED,
-  asset: STATUS.ASSETS.ACTIVE,
-  investment: STATUS.INVESTMENTS.OPEN,
-  loan: STATUS.LOANS.ACTIVE,
-  research: ENTITY_STATUS.ACTIVE,
-};
 
 export const entityHandlers: Record<string, ActionHandler> = {
   create_product: async (supabase, _userId, actorId, params) => {
@@ -414,7 +401,9 @@ export const entityHandlers: Record<string, ActionHandler> = {
       return { success: false, error: `Unknown entity type: ${entityType}` };
     }
 
-    const publishStatus = ENTITY_PUBLISH_STATUS[entityType] ?? ENTITY_STATUS.ACTIVE;
+    const publishStatus = isValidEntityType(entityType)
+      ? resolvePublishStatus(entityType, ENTITY_STATUS.ACTIVE)
+      : ENTITY_STATUS.ACTIVE;
 
     const { data, error } = await supabase
       .from(meta.tableName)

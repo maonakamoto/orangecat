@@ -191,7 +191,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (rememberMe === 'false' && !sessionMarker) {
           // User chose not to be remembered and this is a new browser session
-          logger.info('Remember me disabled and new browser session detected - signing out', undefined, 'Auth');
+          logger.info(
+            'Remember me disabled and new browser session detected - signing out',
+            undefined,
+            'Auth'
+          );
           await supabase.auth.signOut();
           localStorage.removeItem('orangecat-remember-me');
           setInitialAuthState(null, null, null);
@@ -204,7 +208,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       } catch {
         // Storage may not be available (e.g., private browsing mode)
-        logger.debug('Could not check remember me preference - storage not available', undefined, 'Auth');
+        logger.debug(
+          'Could not check remember me preference - storage not available',
+          undefined,
+          'Auth'
+        );
       }
 
       const { data } = await supabase.auth.getSession();

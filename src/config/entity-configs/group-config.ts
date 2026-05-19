@@ -18,6 +18,7 @@ import { createEntityConfig } from './base-config-factory';
 import { getGroupLabelsArray } from '@/config/group-labels';
 import { GOVERNANCE_PRESETS } from '@/config/governance-presets';
 import { WalletSelectorField } from '@/components/create/wallet-selector';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 // ==================== FIELD GROUPS ====================
 
@@ -135,8 +136,8 @@ export const groupConfig = createEntityConfig<CreateGroupSchemaType>({
   namePlural: 'Groups',
   icon: Users,
   colorTheme: 'tiffany',
-  backUrl: '/groups',
-  successUrl: '/groups/[slug]',
+  backUrl: ENTITY_REGISTRY['group'].basePath,
+  successUrl: `${ENTITY_REGISTRY['group'].publicBasePath}/[slug]`,
   pageTitle: 'Create Group',
   pageDescription: 'Start a new group, circle, or organization',
   formTitle: 'Create New Group',

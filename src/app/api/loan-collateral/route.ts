@@ -9,8 +9,14 @@
 
 import { z } from 'zod';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import { apiSuccess, apiForbidden, apiValidationError, apiError, apiRateLimited } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import {
+  apiSuccess,
+  apiForbidden,
+  apiValidationError,
+  apiError,
+  apiRateLimited,
+} from '@/lib/api/standardResponse';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { getTableName } from '@/config/entity-registry';
@@ -57,7 +63,8 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
     const actor = await getOrCreateUserActor(user.id);
 
     // Verify ownership of loan
-    const { data: loan, error: loanErr } = await supabase.from(getTableName('loan'))
+    const { data: loan, error: loanErr } = await supabase
+      .from(getTableName('loan'))
       .select('id, actor_id')
       .eq('id', data.loan_id)
       .single();
@@ -67,7 +74,8 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
     }
 
     // Verify ownership of asset
-    const { data: asset, error: assetErr } = await supabase.from(getTableName('asset'))
+    const { data: asset, error: assetErr } = await supabase
+      .from(getTableName('asset'))
       .select('id, actor_id')
       .eq('id', data.asset_id)
       .single();
@@ -77,7 +85,8 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
     }
 
     // Insert collateral link
-    const { data: created, error } = await supabase.from(DATABASE_TABLES.LOAN_COLLATERAL)
+    const { data: created, error } = await supabase
+      .from(DATABASE_TABLES.LOAN_COLLATERAL)
       .insert({
         loan_id: data.loan_id,
         asset_id: data.asset_id,

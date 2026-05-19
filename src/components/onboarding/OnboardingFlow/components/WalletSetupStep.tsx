@@ -123,7 +123,7 @@ export function WalletSetupStep() {
               >
                 Muun <ExternalLink className="h-3 w-3" />
               </a>
-              <span className="text-gray-300 dark:text-muted-foreground">|</span>
+              <span className="text-muted-dim dark:text-muted-foreground">|</span>
               <a
                 href="https://bluewallet.io"
                 target="_blank"
@@ -132,7 +132,7 @@ export function WalletSetupStep() {
               >
                 BlueWallet <ExternalLink className="h-3 w-3" />
               </a>
-              <span className="text-gray-300 dark:text-muted-foreground">|</span>
+              <span className="text-muted-dim dark:text-muted-foreground">|</span>
               <a
                 href="https://phoenix.acinq.co"
                 target="_blank"

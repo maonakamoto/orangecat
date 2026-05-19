@@ -18,7 +18,7 @@ import { compose } from '@/lib/api/compose';
 import { withRateLimit } from '@/lib/api/withRateLimit';
 import { withRequestId } from '@/lib/api/withRequestId';
 import { getPagination, getString } from '@/lib/api/query';
-import {  applyRateLimitHeaders, rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { applyRateLimitHeaders, rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { getCacheControl, calculatePage } from '@/lib/api/helpers';
 import { getTableName } from '@/config/entity-registry';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
@@ -82,8 +82,12 @@ export const GET = compose(
       countQuery,
     ]);
 
-    if (itemsError) {throw itemsError;}
-    if (countError) {throw countError;}
+    if (itemsError) {
+      throw itemsError;
+    }
+    if (countError) {
+      throw countError;
+    }
 
     return apiSuccess(items || [], {
       page: calculatePage(offset, limit),
@@ -101,13 +105,17 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) { return apiRateLimited('Too many creation requests. Please slow down.', retryAfterSeconds(rl)); }
+    if (!rl.success) {
+      return apiRateLimited('Too many creation requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
     const body = await (request as NextRequest).json();
     const schema = researchConfig.schema as ZodType | undefined;
     if (schema) {
       const parsed = schema.safeParse(body);
-      if (!parsed.success) {return handleValidationError(parsed.error);}
+      if (!parsed.success) {
+        return handleValidationError(parsed.error);
+      }
     }
 
     const { response } = await createResearch(supabase, user.id, body as ResearchEntityCreate);

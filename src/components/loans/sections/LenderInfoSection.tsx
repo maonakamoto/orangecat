@@ -73,5 +73,3 @@ export function LenderInfoSection({ control }: LenderInfoSectionProps) {
     </Card>
   );
 }
-
-

@@ -14,7 +14,7 @@ import {
 } from '@/lib/api/standardResponse';
 import { initiatePayment } from '@/domain/payments';
 import { paymentCreateSchema } from '@/lib/validation/finance';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 
 export const POST = withAuth(async (request: AuthenticatedRequest) => {

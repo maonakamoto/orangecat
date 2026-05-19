@@ -118,10 +118,7 @@ export function SearchHistorySection({
           <History className="w-3 h-3" />
           Recent Searches
         </h4>
-        <button
-          onClick={onClear}
-          className="text-xs text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
-        >
+        <button onClick={onClear} className="text-xs text-muted-foreground hover:text-foreground">
           Clear
         </button>
       </div>
@@ -276,7 +273,7 @@ export function SuggestionsSection({
 export function EmptyState() {
   return (
     <div className="p-6 text-center">
-      <Search className="w-8 h-8 text-gray-300 dark:text-muted-foreground/40 mx-auto mb-2" />
+      <Search className="w-8 h-8 text-muted-dim dark:text-muted-foreground/40 mx-auto mb-2" />
       <p className="text-sm text-muted-foreground">Start typing to search</p>
       <p className="text-xs text-muted-dim/70 mt-1">Find projects, people, and organizations</p>
       <p className="text-xs text-muted-dim/70 mt-2">Use ↑↓ arrows to navigate, Enter to select</p>

@@ -1,19 +1,16 @@
 import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 import { Home, Search, ArrowLeft } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 export default function NotFound() {
   return (
-    <div
-      className={`min-h-screen flex items-center justify-center ${GRADIENTS.pageBgOrangeDown} px-4`}
-    >
-      <div className="max-w-lg w-full space-y-8 p-6 bg-card rounded-xl shadow-xl border border-border">
+    <div className="oc-page flex items-center justify-center px-4">
+      <div className="oc-surface max-w-lg w-full space-y-8 p-6">
         {/* Icon */}
         <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-orange-100 rounded-full flex items-center justify-center">
-            <span className="text-4xl">🔍</span>
+          <div className="oc-icon-tile mx-auto h-16 w-16">
+            <Search className="h-8 w-8" />
           </div>
         </div>
 
@@ -29,7 +26,7 @@ export default function NotFound() {
         <div className="space-y-3">
           <Link
             href={ROUTES.DASHBOARD.HOME}
-            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 py-3 text-sm font-medium text-background transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <Home className="h-4 w-4" />
             Go to Dashboard
@@ -37,7 +34,7 @@ export default function NotFound() {
 
           <Link
             href={ROUTES.DISCOVER}
-            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-border text-sm font-medium rounded-md text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <Search className="h-4 w-4" />
             Discover Projects
@@ -45,7 +42,7 @@ export default function NotFound() {
 
           <Link
             href={ROUTES.HOME}
-            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-border text-sm font-medium rounded-md text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <ArrowLeft className="h-4 w-4" />
             Go to Homepage
@@ -56,7 +53,10 @@ export default function NotFound() {
         <div className="text-center pt-4 border-t border-border">
           <p className="text-sm text-muted-foreground">
             Looking for something specific?{' '}
-            <Link href={ROUTES.FAQ} className="text-orange-600 hover:text-orange-700 font-medium">
+            <Link
+              href={ROUTES.FAQ}
+              className="font-medium text-tiffany-600 hover:text-tiffany-700 dark:text-tiffany-400"
+            >
               Visit our FAQ
             </Link>
           </p>

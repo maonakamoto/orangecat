@@ -10,7 +10,7 @@ import {
   clearDefaultConversation,
 } from '@/services/cat/conversation-history';
 import { apiSuccess, apiRateLimited, handleApiError } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 
 export const GET = withAuth(async (request: AuthenticatedRequest) => {

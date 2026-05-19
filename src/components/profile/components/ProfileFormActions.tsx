@@ -37,18 +37,18 @@ export function ProfileFormActions({
         variant="ghost"
         onClick={onCancel}
         disabled={isSaving}
-        className="px-4 text-muted-foreground hover:text-gray-900 dark:hover:text-foreground"
+        className="px-4 text-muted-foreground hover:text-foreground"
       >
         Cancel
       </Button>
       <Button
         type="submit"
         disabled={isSaving || !isValid}
-        className="px-8 py-3 text-base font-semibold bg-gradient-to-r from-bitcoinOrange to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-8 py-3 text-base font-semibold bg-bitcoinOrange hover:bg-orange-600 text-white shadow-sm oc-card-link duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSaving ? (
           <>
-            <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <div className="w-5 h-5 mr-2 border-2 border-card border-t-transparent rounded-full animate-spin" />
             Saving...
           </>
         ) : (

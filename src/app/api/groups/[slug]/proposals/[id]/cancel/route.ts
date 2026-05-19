@@ -7,7 +7,7 @@ import {
 import { logger } from '@/utils/logger';
 import { cancelProposal } from '@/services/groups/mutations/proposals';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 
 interface RouteContext {
   params: Promise<{ slug: string; id: string }>;

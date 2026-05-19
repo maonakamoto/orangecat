@@ -104,7 +104,7 @@ export function WishlistDonationTiers({
             <button
               key={item.id}
               onClick={() => handleTierClick(item)}
-              className="flex flex-col items-start p-4 border-2 border-border rounded-xl hover:border-orange-500 hover:bg-orange-50 transition-all text-left group"
+              className="flex flex-col items-start p-4 border-2 border-border rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-all text-left group"
             >
               <span className="text-sm font-bold text-foreground group-hover:text-orange-700">
                 {formattedAmount}

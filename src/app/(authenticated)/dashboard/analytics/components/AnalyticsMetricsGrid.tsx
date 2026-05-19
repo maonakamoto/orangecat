@@ -44,7 +44,7 @@ export default function AnalyticsMetricsGrid({ metrics }: AnalyticsMetricsGridPr
       {metrics.map((metric, index) => {
         const Icon = metric.icon;
         return (
-          <Card key={index} className="hover:shadow-md transition-shadow">
+          <Card key={index} className="oc-card-link">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">

@@ -78,13 +78,13 @@ export default function DraftContinueDialog({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="max-w-2xl p-0">
         <DialogTitle className="sr-only">You Have Unfinished Work</DialogTitle>
-        <Card className="w-full bg-card shadow-2xl border-0">
+        <Card className="w-full border-0 bg-background shadow-none">
           <CardContent className="p-0">
             {/* Header */}
-            <div className="bg-gradient-to-r from-tiffany-50 to-orange-50 p-6 border-b border-border">
+            <div className="border-b border-border-subtle bg-muted/30 p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-tiffany-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <FileText className="w-6 h-6 text-tiffany-600" />
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle bg-background">
+                  <FileText className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-foreground mb-1">
@@ -99,18 +99,18 @@ export default function DraftContinueDialog({
             </div>
 
             {/* Draft Summary */}
-            <div className="p-6 bg-muted border-b border-border">
+            <div className="border-b border-border-subtle bg-muted/40 p-6">
               <div className="flex items-center gap-3 mb-3">
                 {isLocalDraft && (
-                  <div className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium animate-pulse">
+                  <div className="animate-pulse rounded-sm border border-destructive/20 bg-destructive/10 px-2 py-1 text-xs font-medium text-destructive">
                     UNSAVED
                   </div>
                 )}
-                <div className="px-2 py-1 bg-tiffany-100 text-tiffany-700 text-xs rounded-full font-medium">
+                <div className="rounded-sm border border-border-subtle bg-background px-2 py-1 text-xs font-medium text-foreground">
                   {completionPercentage}% Complete
                 </div>
                 {totalDrafts > 1 && (
-                  <div className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full font-medium">
+                  <div className="rounded-sm border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-xs font-medium text-orange-700 dark:text-orange-300">
                     +{totalDrafts - 1} More {totalDrafts > 2 ? 'Drafts' : 'Draft'}
                   </div>
                 )}
@@ -139,9 +139,9 @@ export default function DraftContinueDialog({
                   <span>Project Progress</span>
                   <span>{completionPercentage}%</span>
                 </div>
-                <div className="w-full bg-muted/60 rounded-full h-2">
+                <div className="h-2 w-full overflow-hidden rounded-sm bg-background">
                   <div
-                    className="bg-tiffany-600 h-2 rounded-full transition-all duration-300"
+                    className="h-2 rounded-sm bg-foreground transition-all duration-300"
                     style={{ width: `${completionPercentage}%` }}
                   />
                 </div>
@@ -151,11 +151,11 @@ export default function DraftContinueDialog({
             {/* Action Options */}
             <div className="p-6 space-y-4">
               {/* Continue Draft - Primary Action */}
-              <div className="border-2 border-tiffany-200 rounded-xl p-4 bg-tiffany-50 hover:bg-tiffany-100 transition-colors">
+              <div className="rounded-md border border-border-strong bg-muted/40 p-4 transition-colors hover:bg-muted">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-tiffany-600 rounded-lg flex items-center justify-center">
-                      <Edit3 className="w-5 h-5 text-white" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-foreground">
+                      <Edit3 className="h-5 w-5 text-background" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground">Continue Where You Left Off</h4>
@@ -166,12 +166,12 @@ export default function DraftContinueDialog({
                       </p>
                     </div>
                   </div>
-                  <div className="text-tiffany-600 text-sm font-medium">Recommended</div>
+                  <div className="text-sm font-medium text-foreground">Recommended</div>
                 </div>
 
                 <Button
                   onClick={onContinueDraft}
-                  className="w-full bg-tiffany-600 hover:bg-tiffany-700 text-white"
+                  className="w-full bg-foreground text-background hover:bg-foreground/90"
                 >
                   <Edit3 className="w-4 h-4 mr-2" />
                   Continue Editing
@@ -180,10 +180,10 @@ export default function DraftContinueDialog({
               </div>
 
               {/* Start Fresh - Secondary Action */}
-              <div className="border border-border rounded-xl p-4 hover:bg-muted/50 transition-colors">
+              <div className="rounded-md border border-border-subtle p-4 transition-colors hover:bg-muted/50">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-muted">
                       <Plus className="w-5 h-5 text-muted-foreground" />
                     </div>
                     <div>
@@ -196,8 +196,8 @@ export default function DraftContinueDialog({
                 </div>
 
                 {isLocalDraft && (
-                  <div className="mb-3 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <div className="flex items-center gap-2 text-sm text-yellow-800">
+                  <div className="mb-3 rounded-md border border-yellow-500/20 bg-yellow-500/10 p-2">
+                    <div className="flex items-center gap-2 text-sm text-yellow-700 dark:text-yellow-300">
                       <AlertTriangle className="w-4 h-4" />
                       <span>Your unsaved progress will be kept for later</span>
                     </div>
@@ -220,7 +220,7 @@ export default function DraftContinueDialog({
                   <Link href={ROUTES.DASHBOARD.PROJECTS}>
                     <Button
                       variant="ghost"
-                      className="w-full text-muted-foreground hover:text-gray-800 dark:hover:text-foreground"
+                      className="w-full text-muted-foreground hover:text-foreground"
                     >
                       View All {totalDrafts} Draft Projects
                     </Button>

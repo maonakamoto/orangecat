@@ -16,26 +16,26 @@ interface FormInfoBannerProps {
 export function FormInfoBanner({ banner }: FormInfoBannerProps) {
   const variantStyles = {
     warning: {
-      bg: 'bg-yellow-50 border-yellow-200',
-      title: 'text-yellow-900',
-      content: 'text-yellow-700',
+      bg: 'border-yellow-500/20 bg-yellow-500/10',
+      title: 'text-yellow-700 dark:text-yellow-300',
+      content: 'text-muted-foreground',
     },
     success: {
-      bg: 'bg-green-50 border-green-200',
-      title: 'text-green-900',
-      content: 'text-green-700',
+      bg: 'border-green-500/20 bg-green-500/10',
+      title: 'text-green-700 dark:text-green-300',
+      content: 'text-muted-foreground',
     },
     info: {
-      bg: 'bg-tiffany-50 border-tiffany-200',
-      title: 'text-tiffany-900',
-      content: 'text-tiffany-700',
+      bg: 'border-border-subtle bg-muted/30',
+      title: 'text-foreground',
+      content: 'text-muted-foreground',
     },
   };
 
   const styles = variantStyles[banner.variant || 'info'];
 
   return (
-    <div className={`rounded-md p-4 border ${styles.bg}`}>
+    <div className={`rounded-md border p-4 ${styles.bg}`}>
       <h4 className={`text-sm font-semibold mb-2 ${styles.title}`}>{banner.title}</h4>
       <p className={`text-sm ${styles.content}`}>{banner.content}</p>
     </div>

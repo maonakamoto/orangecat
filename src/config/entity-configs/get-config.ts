@@ -22,6 +22,7 @@ import { eventConfig } from './event-config';
 import { groupConfig } from './group-config';
 import { wishlistConfig } from './wishlist-config';
 import { researchWizardConfig } from './research-wizard-config';
+import { documentFormConfig } from './document-form-config';
 
 /**
  * Map of entity types to their configurations
@@ -44,6 +45,7 @@ const ENTITY_CONFIGS: Partial<Record<EntityType, EntityConfig<any>>> = {
   group: groupConfig,
   wishlist: wishlistConfig,
   research: researchWizardConfig,
+  document: documentFormConfig,
 };
 
 /**

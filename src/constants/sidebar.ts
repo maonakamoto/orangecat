@@ -55,7 +55,7 @@ export const SIDEBAR_BREAKPOINTS = {
  * Sidebar spacing constants
  */
 export const SIDEBAR_SPACING = {
-  PADDING_X: 'px-3 sm:px-4',
+  PADDING_X: 'px-2',
   PADDING_Y: 'py-3 sm:py-4',
   ITEM_HEIGHT: 'min-h-11', // Touch-friendly minimum height
   SECTION_SPACING: 'space-y-4 sm:space-y-6',
@@ -65,12 +65,12 @@ export const SIDEBAR_SPACING = {
  * Sidebar colors
  */
 export const SIDEBAR_COLORS = {
-  BACKGROUND: 'bg-card dark:bg-card',
-  BORDER: 'border-border',
-  ACTIVE_BACKGROUND: 'bg-muted dark:bg-muted',
-  ACTIVE_TEXT: 'text-tiffany-600 dark:text-primary',
-  ACTIVE_BORDER: 'border-tiffany-300 dark:border-primary',
-  HOVER_BACKGROUND: 'hover:bg-muted/60 dark:hover:bg-muted/60',
+  BACKGROUND: 'bg-background',
+  BORDER: 'border-border-subtle',
+  ACTIVE_BACKGROUND: 'bg-muted',
+  ACTIVE_TEXT: 'text-foreground',
+  ACTIVE_BORDER: 'border-border-subtle',
+  HOVER_BACKGROUND: 'hover:bg-muted',
   TEXT_PRIMARY: 'text-foreground',
   TEXT_SECONDARY: 'text-muted-foreground',
 } as const;

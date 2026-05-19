@@ -36,19 +36,28 @@ export function SidebarNavigation({
   toggleSection,
   onNavigate,
 }: SidebarNavigationProps) {
+  const visibleSections = isExpanded
+    ? sections
+    : sections.filter(
+        (section, index) =>
+          section.id === 'main' ||
+          index === 0 ||
+          section.items.some(item => item.href && isItemActive(item.href))
+      );
+
   return (
     <>
       {/* Navigation Sections */}
       <nav
-        className="flex-1 py-3 space-y-4 overflow-y-auto overflow-x-visible relative"
+        className="relative flex-1 space-y-2 overflow-y-auto overflow-x-hidden py-3"
         aria-label={navigationLabels.MAIN_NAVIGATION}
       >
-        {sections.map(section => {
+        {visibleSections.map(section => {
           const isCollapsed = collapsedSections.has(section.id);
           const hasActiveItem = section.items.some(item => item.href && isItemActive(item.href));
 
           return (
-            <div key={section.id} className="space-y-1 overflow-visible">
+            <div key={section.id} className="space-y-1">
               {/* Section Divider - Only on desktop for visual separation between icon groups */}
               {!isExpanded && section.id !== sections[0].id && (
                 <div className="mx-2 my-2 border-t border-border" />
@@ -57,13 +66,13 @@ export function SidebarNavigation({
               {/* Section Header - Hidden on desktop (icons only), visible on mobile (expanded) */}
               {isExpanded && (
                 <div className="flex items-center justify-between px-3 mb-1">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <h3 className="text-xs font-semibold uppercase text-muted-foreground">
                     {section.title}
                   </h3>
                   {section.collapsible && (
                     <button
                       onClick={() => toggleSection(section.id)}
-                      className="p-2 hover:bg-muted active:bg-gray-200 dark:active:bg-muted rounded transition-colors min-w-11 min-h-11 flex items-center justify-center touch-manipulation"
+                      className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 transition-colors hover:bg-muted active:bg-muted touch-manipulation"
                       aria-label={`${navigationLabels.SECTION_TOGGLE} ${section.title}`}
                     >
                       {isCollapsed ? (
@@ -78,7 +87,7 @@ export function SidebarNavigation({
 
               {/* Section Items - always show on desktop, respect collapse on mobile */}
               {(!isExpanded || !section.collapsible || !isCollapsed || hasActiveItem) && (
-                <div className={`space-y-1 overflow-visible ${isExpanded ? 'px-2' : ''}`}>
+                <div className={`space-y-1 ${isExpanded ? 'px-2' : ''}`}>
                   {section.items.map(item => (
                     <SidebarNavItem
                       key={item.name}

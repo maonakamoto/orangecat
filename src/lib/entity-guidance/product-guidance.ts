@@ -217,6 +217,3 @@ export const productDefaultGuidance: DefaultGuidance = {
   ],
   hint: '💡 Click on any field to get specific guidance',
 };
-
-
-

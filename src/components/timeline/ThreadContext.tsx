@@ -8,6 +8,7 @@ import { timelineService } from '@/services/timeline';
 import { logger } from '@/utils/logger';
 import { MessageCircle, ChevronUp, ChevronDown, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 interface ThreadContextProps {
   threadId: string;
@@ -107,14 +108,14 @@ export function ThreadContext({
   if (loading) {
     return (
       <div className={cn('flex items-center justify-center py-8', className)}>
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-muted"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-border dark:border-muted"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className={cn('text-center py-8 text-red-600', className)}>
+      <div className={cn('text-center py-8 text-destructive', className)}>
         <p>{error}</p>
         <Button variant="outline" size="sm" onClick={loadThread} className="mt-2">
           Try Again
@@ -126,7 +127,7 @@ export function ThreadContext({
   if (!threadPosts.length) {
     return (
       <div className={cn('text-center py-8 text-muted-foreground', className)}>
-        <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
+        <MessageCircle className="w-12 h-12 mx-auto mb-4 text-muted-dim dark:text-muted-foreground" />
         <p>No posts in this thread.</p>
       </div>
     );
@@ -136,7 +137,7 @@ export function ThreadContext({
   const threadParticipants = Array.from(new Set(threadPosts.map(post => post.actor.id))).length;
 
   return (
-    <div className={cn('bg-card border border-border rounded-lg', className)}>
+    <div className={cn(TIMELINE_SURFACE.panel, className)}>
       {/* Thread Header */}
       <div className="flex items-center justify-between p-4 border-b border-border-subtle">
         <div className="flex items-center gap-3">
@@ -202,9 +203,9 @@ export function ThreadContext({
 
       {/* Current Post Highlight */}
       {currentPost && (
-        <div className="p-4 bg-tiffany-50 dark:bg-muted border-t border-border-subtle">
-          <div className="flex items-center gap-2 text-sm text-tiffany-700">
-            <div className="w-2 h-2 bg-tiffany-500 rounded-full"></div>
+        <div className="border-t border-border-subtle bg-muted p-4">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="h-2 w-2 rounded-sm bg-foreground"></div>
             Currently viewing: {currentPost.actor.name}'s post
           </div>
         </div>
@@ -242,7 +243,7 @@ export function ThreadIndicator({
           variant="ghost"
           size="sm"
           onClick={onShowThread}
-          className="text-xs text-tiffany-500 hover:text-tiffany-700 p-0 h-auto"
+          className="h-auto p-0 text-xs text-foreground hover:text-foreground/80"
         >
           Show thread
         </Button>

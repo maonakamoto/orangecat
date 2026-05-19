@@ -17,7 +17,7 @@ export function DocumentUploadMode({ onBack, onWrite, onContentExtracted, onErro
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to options

@@ -184,11 +184,7 @@ export default function ResearchDashboard() {
         </Select>
       </div>
 
-      {fetchError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 text-sm">
-          {fetchError}
-        </div>
-      )}
+      {fetchError && <div className="oc-error-surface text-sm">{fetchError}</div>}
 
       {/* Research Entities Grid */}
       {loading ? (
@@ -216,7 +212,7 @@ export default function ResearchDashboard() {
           {filteredEntities.map(entity => (
             <Card
               key={entity.id}
-              className="cursor-pointer hover:shadow-lg transition-shadow"
+              className="cursor-pointer oc-card-link"
               onClick={() => router.push(`${ENTITY_REGISTRY['research'].basePath}/${entity.id}`)}
             >
               <CardHeader>
@@ -230,7 +226,7 @@ export default function ResearchDashboard() {
                   <Badge
                     className={
                       RESEARCH_STATUS_DOT_COLORS[entity.status || 'draft'] ??
-                      'bg-gray-500 dark:bg-muted'
+                      'bg-muted/400 dark:bg-muted'
                     }
                   >
                     {entity.status || 'draft'}

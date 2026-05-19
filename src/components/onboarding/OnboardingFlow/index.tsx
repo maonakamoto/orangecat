@@ -38,7 +38,7 @@ export function OnboardingFlow() {
       {
         id: 'welcome',
         title: 'Welcome to OrangeCat! 🟠',
-        description: 'Your AI agent is ready — tell My Cat what you want to do',
+        description: 'Your AI agent is ready — tell Cat what you want to do',
         icon: Sparkles,
         content: <WelcomeStep />,
       },
@@ -82,7 +82,7 @@ export function OnboardingFlow() {
         <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
           <div className="animate-pulse space-y-6">
             <div className="h-8 bg-muted rounded w-1/3 mx-auto" />
-            <div className="h-64 bg-muted rounded-xl" />
+            <div className="h-64 bg-muted rounded-lg" />
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@
  */
 
 import { apiSuccess, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import {
   isValidEntityType,
@@ -68,10 +68,8 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
       userIdField === 'actor_id' ? (await getOrCreateUserActor(user.id)).id : user.id;
 
     // Update entities - RLS ensures user can only update their own
-    const { data, error } = await (
-      supabase
-        .from(tableName)
-    )
+    const { data, error } = await supabase
+      .from(tableName)
       .update({ show_on_profile, updated_at: new Date().toISOString() })
       .in('id', ids)
       .eq(userIdField, ownerValue)

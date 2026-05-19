@@ -10,15 +10,15 @@ import { SortViewControl, type ViewMode } from './SortViewControl';
 // Status styles mapping for Tailwind (dynamic classes don't work with string interpolation)
 const STATUS_STYLES = {
   active: {
-    selected: 'bg-green-100 border-green-300 text-green-700',
+    selected: 'bg-muted border-border-strong text-foreground',
     label: 'Active',
   },
   paused: {
-    selected: 'bg-yellow-100 border-yellow-300 text-yellow-700',
+    selected: 'bg-muted border-border-strong text-foreground',
     label: 'Paused',
   },
   completed: {
-    selected: 'bg-tiffany-100 border-tiffany-300 text-tiffany-700',
+    selected: 'bg-muted border-border-strong text-foreground',
     label: 'Completed',
   },
   cancelled: {
@@ -95,7 +95,7 @@ export default function DiscoverFilters({
             placeholder="Search projects..."
             value={searchTerm}
             onChange={e => onSearchChange(e.target.value)}
-            className="pl-10 pr-4 py-2 text-sm bg-white/80 dark:bg-muted border-gray-200/80 dark:border-border rounded-xl"
+            className="rounded-md border-border bg-card py-2 pl-10 pr-4 text-sm"
           />
           {loading && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -124,7 +124,7 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedStatuses.includes(statusKey)
                     ? STATUS_STYLES[statusKey].selected
-                    : 'bg-white/80 dark:bg-muted border-border text-foreground hover:bg-muted/80'
+                    : 'border-border bg-card text-foreground hover:bg-muted/80'
                 }`}
               >
                 {STATUS_STYLES[statusKey].label}
@@ -147,8 +147,8 @@ export default function DiscoverFilters({
                 onClick={() => onToggleCategory(cat.value)}
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedCategories.includes(cat.value)
-                    ? 'bg-orange-100 border-orange-300 text-orange-700'
-                    : 'bg-white/80 dark:bg-muted border-border text-foreground hover:bg-muted/80'
+                    ? 'bg-muted border-border-strong text-foreground'
+                    : 'border-border bg-card text-foreground hover:bg-muted/80'
                 }`}
               >
                 {cat.label}
@@ -164,24 +164,24 @@ export default function DiscoverFilters({
           value={country}
           onChange={e => onCountryChange(e.target.value)}
           placeholder="Country"
-          className="w-full px-3 py-2 bg-white/80 dark:bg-muted border border-gray-200/80 dark:border-border rounded-xl text-sm dark:text-foreground"
+          className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
         />
         <input
           value={city}
           onChange={e => onCityChange(e.target.value)}
           placeholder="City/Region"
-          className="w-full px-3 py-2 bg-white/80 dark:bg-muted border border-gray-200/80 dark:border-border rounded-xl text-sm dark:text-foreground"
+          className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
         />
         <input
           value={postal}
           onChange={e => onPostalChange(e.target.value)}
           placeholder="Postal code"
-          className="w-full px-3 py-2 bg-white/80 dark:bg-muted border border-gray-200/80 dark:border-border rounded-xl text-sm dark:text-foreground"
+          className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
         />
         <select
           value={radiusKm}
           onChange={e => onRadiusChange(Number(e.target.value))}
-          className="w-full px-3 py-2 bg-white/80 dark:bg-muted border border-gray-200/80 dark:border-border rounded-xl text-sm dark:text-foreground"
+          className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
         >
           <option value={0}>Anywhere</option>
           <option value={10}>Within 10 km</option>

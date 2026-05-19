@@ -8,7 +8,7 @@ export interface DefaultAvatarProps {
 export default function DefaultAvatar({ size = 32, className = '' }: DefaultAvatarProps) {
   return (
     <div
-      className={`rounded-full ${GRADIENTS.brandOrangeLightBr} flex items-center justify-center border-2 border-orange-300 ${className}`}
+      className={`rounded-full ${GRADIENTS.brandOrangeLightBr} flex items-center justify-center border-2 border-border-strong ${className}`}
       style={{ width: size, height: size }}
     >
       <svg

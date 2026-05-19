@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { MoreHorizontal, Lock, Users, Pencil, Trash2 } from 'lucide-react';
 import { TimelineDisplayEvent } from '@/types/timeline';
 import { formatRelativeTime } from '@/utils/dates';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 interface PostHeaderProps {
   event: TimelineDisplayEvent;
@@ -132,7 +133,7 @@ export function PostHeader({
               e.stopPropagation();
               onMenuToggle();
             }}
-            className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-muted rounded-full p-1.5 -mr-1.5 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+            className={`${TIMELINE_SURFACE.iconButton} -mr-1.5`}
             aria-label="Post options"
             aria-expanded={showMenu}
             aria-haspopup="menu"
@@ -143,7 +144,7 @@ export function PostHeader({
           {/* Dropdown Menu */}
           {showMenu && (
             <div
-              className="absolute right-0 top-full mt-1 w-48 bg-card border border-border rounded-xl shadow-lg z-50"
+              className={`absolute right-0 top-full z-50 mt-1 w-48 ${TIMELINE_SURFACE.menu}`}
               role="menu"
             >
               <div className="py-1">
@@ -163,7 +164,7 @@ export function PostHeader({
                     e.stopPropagation();
                     onDelete?.();
                   }}
-                  className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-3"
+                  className="w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 flex items-center gap-3"
                   role="menuitem"
                 >
                   <Trash2 className="w-4 h-4" />

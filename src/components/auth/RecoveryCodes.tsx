@@ -174,12 +174,12 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
         <CardDescription>Save these codes in a secure location</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="p-4 oc-error-surface rounded-lg">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+            <AlertTriangle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
             <div className="space-y-1">
-              <p className="text-sm font-medium text-red-800">Save these codes now!</p>
-              <p className="text-xs text-red-700">
+              <p className="text-sm font-medium text-destructive">Save these codes now!</p>
+              <p className="text-xs text-destructive/80">
                 You won't be able to see them again. Each code can only be used once.
               </p>
             </div>
@@ -222,7 +222,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           <button
             onClick={handleRegenerate}
             disabled={generating}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-gray-700 dark:hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             {generating ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -239,7 +239,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
             type="checkbox"
             checked={acknowledged}
             onChange={e => setAcknowledged(e.target.checked)}
-            className="mt-0.5 h-4 w-4 rounded border-border-strong text-tiffany focus:ring-tiffany"
+            className="mt-0.5 h-4 w-4 rounded border-border-strong text-tiffany focus:ring-ring"
           />
           <span className="text-sm text-foreground">
             I have saved my recovery codes in a secure location

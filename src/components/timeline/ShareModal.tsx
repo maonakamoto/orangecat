@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import BottomSheet from '@/components/ui/BottomSheet';
 import Button from '@/components/ui/Button';
+import { TIMELINE_CONTENT_LIMITS, TIMELINE_SURFACE } from '@/config/timeline';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -44,15 +45,20 @@ export function ShareModal({
             }
           }}
           rows={4}
-          className="w-full border border-border rounded-md p-3 text-sm bg-white dark:bg-muted text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
-          maxLength={500}
+          className="w-full rounded-md border border-border-subtle bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          maxLength={TIMELINE_CONTENT_LIMITS.quote}
           placeholder="Add context to your share..."
         />
         <div className="flex items-center justify-end gap-2">
           <Button variant="outline" size="sm" onClick={onClose} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button size="sm" onClick={() => onShare(text)} isLoading={isSubmitting}>
+          <Button
+            size="sm"
+            onClick={() => onShare(text)}
+            isLoading={isSubmitting}
+            className={TIMELINE_SURFACE.buttonPrimary}
+          >
             Share
           </Button>
         </div>

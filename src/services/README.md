@@ -40,6 +40,7 @@ services/
 ## Service Examples
 
 ### Authentication Service
+
 ```typescript
 interface AuthService {
   login(email: string, password: string): Promise<User>;
@@ -50,6 +51,7 @@ interface AuthService {
 ```
 
 ### Profile Service
+
 ```typescript
 interface ProfileService {
   getProfile(userId: string): Promise<Profile>;
@@ -59,6 +61,7 @@ interface ProfileService {
 ```
 
 ### Funding Service
+
 ```typescript
 interface FundingService {
   createProject(data: ProjectData): Promise<Project>;
@@ -109,11 +112,7 @@ class ServiceError extends Error {
 }
 
 // Example usage
-throw new ServiceError(
-  'INVALID_CREDENTIALS',
-  'Invalid email or password',
-  401
-);
+throw new ServiceError('INVALID_CREDENTIALS', 'Invalid email or password', 401);
 ```
 
 ## Logging
@@ -127,6 +126,6 @@ const logger = {
   },
   info: (message: string) => {
     console.info(`[INFO] ${message}`);
-  }
+  },
 };
-``` 
+```

@@ -9,10 +9,14 @@
 import { apiSuccess } from '@/lib/api/standardResponse';
 import { withOptionalAuth } from '@/lib/api/withAuth';
 import { fetchFullContextForCat } from '@/services/ai/document-context';
-import { generateSuggestionsFromContext, hasRichContext, DEFAULT_SUGGESTIONS } from '@/services/ai/suggestions';
+import {
+  generateSuggestionsFromContext,
+  hasRichContext,
+  DEFAULT_SUGGESTIONS,
+} from '@/services/ai/suggestions';
 import { logger } from '@/utils/logger';
 
-export const GET = withOptionalAuth(async (request) => {
+export const GET = withOptionalAuth(async request => {
   try {
     const { user, supabase } = request;
 

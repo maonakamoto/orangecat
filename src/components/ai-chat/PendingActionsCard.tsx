@@ -2,7 +2,7 @@
  * Pending Actions Card
  *
  * Displays pending actions that require user confirmation.
- * Shows in chat when My Cat proposes an action.
+ * Shows in chat when Cat proposes an action.
  *
  * Created: 2026-01-21
  * Last Modified: 2026-01-21
@@ -97,15 +97,17 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
   if (completed) {
     return (
       <div
-        className={`rounded-xl border p-4 ${
-          completed === 'confirmed' ? 'bg-green-50 border-green-200' : 'bg-muted border-border'
+        className={`rounded-md border p-4 ${
+          completed === 'confirmed'
+            ? 'border-green-500/20 bg-green-500/10'
+            : 'border-border-subtle bg-muted'
         }`}
       >
         <div className="flex items-center gap-3">
           {completed === 'confirmed' ? (
             <>
-              <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-              <span className="text-sm font-medium text-green-800">
+              <CheckCircle className="h-5 w-5 flex-shrink-0 text-green-700 dark:text-green-300" />
+              <span className="text-sm font-medium text-foreground">
                 {confirmMessage ?? 'Action confirmed and executed'}
               </span>
             </>
@@ -122,7 +124,7 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
 
   if (isExpired) {
     return (
-      <div className="rounded-xl border border-border bg-muted p-4">
+      <div className="rounded-md border border-border-subtle bg-muted p-4">
         <div className="flex items-center gap-3 text-muted-foreground">
           <Clock className="h-5 w-5" />
           <span className="text-sm">This action has expired</span>
@@ -132,20 +134,18 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
   }
 
   return (
-    <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 space-y-3">
-      {/* Header */}
+    <div className="space-y-3 rounded-md border border-amber-500/20 bg-amber-500/10 p-4">
       <div className="flex items-start gap-3">
-        <div className="p-2 bg-amber-100 rounded-lg">
-          <AlertTriangle className="h-5 w-5 text-amber-600" />
+        <div className="rounded-md bg-background p-2">
+          <AlertTriangle className="h-5 w-5 text-amber-700 dark:text-amber-300" />
         </div>
         <div className="flex-1">
-          <h4 className="font-medium text-amber-900">Action requires confirmation</h4>
-          <p className="text-base text-amber-700 mt-1">{action.description}</p>
+          <h4 className="font-medium text-foreground">Action requires confirmation</h4>
+          <p className="mt-1 text-base text-muted-foreground">{action.description}</p>
         </div>
       </div>
 
-      {/* Details */}
-      <div className="flex items-center gap-4 text-xs text-amber-600">
+      <div className="flex items-center gap-4 text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
           <Icon className="h-4 w-4" />
           <span className="capitalize">{action.actionId.replace(/_/g, ' ')}</span>
@@ -156,11 +156,10 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
         </div>
       </div>
 
-      {/* Parameters preview */}
       {Object.keys(action.parameters).length > 0 && (
-        <div className="bg-white/50 dark:bg-card/50 rounded-lg p-3 text-xs">
-          <div className="font-medium text-amber-800 mb-1">Details:</div>
-          <ul className="space-y-0.5 text-amber-700">
+        <div className="rounded-md bg-background/70 p-3 text-xs">
+          <div className="mb-1 font-medium text-foreground">Details:</div>
+          <ul className="space-y-0.5 text-muted-foreground">
             {Object.entries(action.parameters)
               .slice(0, 4)
               .map(([key, value]) => (
@@ -176,21 +175,19 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
         </div>
       )}
 
-      {/* Error feedback */}
       {actionError && (
-        <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 rounded-lg px-3 py-2">
+        <div className="flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-xs text-destructive">
           <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0" />
           <span>{actionError}</span>
         </div>
       )}
 
-      {/* Actions */}
       <div className="flex gap-2 pt-1">
         <Button
           onClick={handleConfirm}
           disabled={confirming || rejecting}
           size="sm"
-          className="flex-1 bg-amber-600 hover:bg-amber-700"
+          className="flex-1 bg-foreground text-background hover:bg-foreground/90"
         >
           {confirming ? (
             <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -204,7 +201,7 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
           disabled={confirming || rejecting}
           variant="outline"
           size="sm"
-          className="flex-1 border-amber-300 text-amber-700 hover:bg-amber-100"
+          className="flex-1 border-border-strong text-foreground hover:bg-muted"
         >
           {rejecting ? (
             <Loader2 className="h-4 w-4 animate-spin mr-2" />

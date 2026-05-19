@@ -77,19 +77,19 @@ export default function MessagePanel({
   const content = (
     <div
       className={cn(
-        'flex h-full bg-card shadow-lg relative flex-col md:flex-row overflow-hidden',
-        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-2xl border border-border'
+        'relative flex h-full flex-col overflow-hidden bg-background md:flex-row',
+        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-md border border-border-subtle'
       )}
     >
       {/* Conversations Sidebar */}
       <div
         className={cn(
-          'border-r border-border flex flex-col bg-gray-50/60 dark:bg-muted/40 transition-transform duration-300 ease-in-out',
+          'flex flex-col border-r border-border-subtle bg-muted/30 transition-transform duration-300 ease-in-out',
           selectedConversationId ? 'hidden md:flex md:w-80' : 'flex w-full md:w-80',
           fullPage && 'w-[23rem]'
         )}
       >
-        <div className="p-4 border-b border-border flex items-center justify-between bg-card">
+        <div className="flex items-center justify-between border-b border-border-subtle bg-background p-4">
           <div className="flex items-center gap-2">
             {!fullPage && (
               <Button variant="ghost" size="sm" onClick={onClose} className="-ml-2">
@@ -139,7 +139,7 @@ export default function MessagePanel({
             <Button
               size="sm"
               onClick={() => setShowNewModal(true)}
-              className="bg-tiffany-500 hover:bg-tiffany-600 text-white shadow-sm"
+              className="bg-foreground text-background hover:bg-foreground/90"
             >
               <Plus className="w-4 h-4 mr-1" />
               New
@@ -147,17 +147,17 @@ export default function MessagePanel({
           </div>
         </div>
 
-        <div className="p-4 border-b border-border-subtle space-y-3 bg-white/80 dark:bg-card/80">
+        <div className="space-y-3 border-b border-border-subtle bg-background p-4">
           <div className="flex items-center gap-2">
             {(['all', 'requests'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  'px-3 py-1.5 rounded-full text-sm font-medium transition-all border',
+                  'rounded-md border px-3 py-1.5 text-sm font-medium transition-colors',
                   activeTab === tab
-                    ? 'bg-tiffany-50 text-tiffany-700 border-tiffany-200 shadow-sm dark:bg-accent dark:text-accent-foreground dark:border-accent'
-                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 dark:bg-card dark:text-muted-foreground dark:border-border dark:hover:bg-muted'
+                    ? 'border-border-strong bg-muted text-foreground'
+                    : 'border-border-subtle bg-background text-muted-foreground hover:bg-muted'
                 )}
               >
                 {tab === 'all' ? 'All' : 'Requests'}
@@ -171,7 +171,7 @@ export default function MessagePanel({
               placeholder="Search conversations"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white dark:bg-background border border-border rounded-xl text-sm text-foreground placeholder:text-muted-dim focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-tiffany-500 transition-all shadow-sm"
+              className="w-full rounded-md border border-border-subtle bg-background py-3 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-dim transition-colors focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
         </div>
@@ -201,7 +201,7 @@ export default function MessagePanel({
       {/* Message View */}
       <div
         className={cn(
-          'flex-1 flex flex-col bg-card transition-opacity duration-200 ease-in-out min-h-0',
+          'flex min-h-0 flex-1 flex-col bg-background transition-opacity duration-200 ease-in-out',
           selectedConversationId ? 'flex w-full' : 'hidden md:flex'
         )}
       >
@@ -223,7 +223,7 @@ export default function MessagePanel({
             </div>
             <div className="flex-1 flex items-center justify-center text-muted-foreground bg-muted/30">
               <div className="text-center p-10 max-w-md">
-                <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-card border border-border shadow-sm flex items-center justify-center">
+                <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-md border border-border-subtle bg-background">
                   <MessageSquare className="w-8 h-8 text-muted-dim" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">Select a chat</h3>
@@ -232,7 +232,7 @@ export default function MessagePanel({
                 </p>
                 <Button
                   onClick={() => setShowNewModal(true)}
-                  className="bg-tiffany-500 hover:bg-tiffany-600 text-white shadow"
+                  className="bg-foreground text-background hover:bg-foreground/90"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   New chat

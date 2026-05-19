@@ -128,11 +128,11 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
       <div className="border-b border-border mb-4 sm:mb-6 relative">
         {/* Left fade indicator - only on mobile when scrolled */}
         {showLeftFade && (
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white dark:from-background to-transparent pointer-events-none z-10 sm:hidden" />
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-background/80 pointer-events-none z-10 sm:hidden" />
         )}
         {/* Right fade indicator - only on mobile when more tabs available */}
         {showRightFade && (
-          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-background to-transparent pointer-events-none z-10 sm:hidden" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-background/80 pointer-events-none z-10 sm:hidden" />
         )}
         <nav
           ref={navRef}
@@ -156,7 +156,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                   'group inline-flex items-center justify-center sm:justify-start py-2.5 sm:py-3 lg:py-4 px-3 sm:px-1 md:px-2 border-b-2 font-medium text-sm sm:text-sm transition-colors whitespace-nowrap touch-manipulation min-h-11 flex-shrink-0',
                   isActive
                     ? 'border-orange-500 text-orange-600'
-                    : 'border-transparent text-muted-foreground hover:text-gray-700 dark:hover:text-foreground hover:border-gray-300 dark:hover:border-border'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border-strong dark:hover:border-border'
                 )}
                 aria-current={isActive ? 'page' : undefined}
               >
@@ -166,7 +166,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                       'mr-1.5 sm:mr-2 transition-colors flex-shrink-0',
                       isActive
                         ? 'text-orange-500'
-                        : 'text-muted-dim group-hover:text-gray-500 dark:group-hover:text-foreground'
+                        : 'text-muted-dim group-hover:text-muted-foreground dark:group-hover:text-foreground'
                     )}
                   >
                     {tab.icon}

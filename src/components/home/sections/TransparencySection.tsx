@@ -33,10 +33,10 @@ export default function TransparencySection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="bg-card rounded-xl border border-border shadow-sm p-6 sm:p-8">
+            <div className="bg-card rounded-lg border border-border shadow-sm p-6 sm:p-8">
               <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-500 rounded-lg flex items-center justify-center">
-                  <Eye className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-card border border-border rounded-lg flex items-center justify-center">
+                  <Eye className="w-5 h-5 sm:w-6 sm:h-6 text-foreground" />
                 </div>
                 <h3 className="text-xl sm:text-2xl font-semibold text-foreground">
                   How Transparency Works
@@ -46,7 +46,7 @@ export default function TransparencySection() {
               <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-start gap-2 sm:gap-3">
                   <div className="w-5 h-5 sm:w-6 sm:h-6 bg-muted rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
-                    <span className="text-orange-500 font-semibold text-xs sm:text-sm">1</span>
+                    <span className="text-foreground font-semibold text-xs sm:text-sm">1</span>
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
@@ -60,7 +60,7 @@ export default function TransparencySection() {
 
                 <div className="flex items-start gap-2 sm:gap-3">
                   <div className="w-5 h-5 sm:w-6 sm:h-6 bg-muted rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
-                    <span className="text-orange-500 font-semibold text-xs sm:text-sm">2</span>
+                    <span className="text-foreground font-semibold text-xs sm:text-sm">2</span>
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
@@ -74,7 +74,7 @@ export default function TransparencySection() {
 
                 <div className="flex items-start gap-2 sm:gap-3">
                   <div className="w-5 h-5 sm:w-6 sm:h-6 bg-muted rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
-                    <span className="text-orange-500 font-semibold text-xs sm:text-sm">3</span>
+                    <span className="text-foreground font-semibold text-xs sm:text-sm">3</span>
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
@@ -110,7 +110,7 @@ export default function TransparencySection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="bg-card rounded-xl border border-border shadow-sm p-6 sm:p-8">
+            <div className="bg-card rounded-lg border border-border shadow-sm p-6 sm:p-8">
               {/* Example Label */}
               <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -151,10 +151,7 @@ export default function TransparencySection() {
                     <span className="text-xl sm:text-2xl font-bold text-green-600">High</span>
                   </div>
                   <div className="w-full h-2.5 sm:h-3 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full"
-                      style={{ width: '85%' }}
-                    />
+                    <div className="h-full bg-success rounded-full" style={{ width: '85%' }} />
                   </div>
                   <p className="text-xs text-muted-foreground mt-1.5 sm:mt-2">
                     <Shield className="w-2.5 h-2.5 sm:w-3 sm:h-3 inline mr-1" />
@@ -206,7 +203,7 @@ export default function TransparencySection() {
             href={ROUTES.AUTH}
             className={cn(
               GRADIENTS.btnBitcoin,
-              'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200'
+              'inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white transition-colors sm:px-8 sm:py-4 sm:text-lg'
             )}
           >
             Create Your Profile

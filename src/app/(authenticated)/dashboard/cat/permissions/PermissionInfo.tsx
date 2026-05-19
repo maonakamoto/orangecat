@@ -1,8 +1,8 @@
 export function PermissionInfo() {
   return (
-    <div className="mt-8 bg-tiffany-50 border border-tiffany-100 rounded-lg p-4">
-      <h4 className="font-medium text-tiffany-900 mb-2">How permissions work</h4>
-      <ul className="text-base text-tiffany-700 space-y-1">
+    <div className="mt-8 rounded-md border border-border-subtle bg-muted/30 p-4">
+      <h4 className="mb-2 font-medium text-foreground">How permissions work</h4>
+      <ul className="space-y-1 text-base text-muted-foreground">
         <li>
           <strong>Low risk</strong> actions (like adding context) can run without asking.
         </li>
@@ -12,9 +12,7 @@ export function PermissionInfo() {
         <li>
           <strong>High risk</strong> actions (like sending Bitcoin) always require confirmation.
         </li>
-        <li>
-          You can revoke permissions at any time and My Cat will stop performing those actions.
-        </li>
+        <li>You can revoke permissions at any time and Cat will stop performing those actions.</li>
       </ul>
     </div>
   );

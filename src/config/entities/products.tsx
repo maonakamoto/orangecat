@@ -12,9 +12,9 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { convert, formatCurrency } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { STATUS } from '@/config/database-constants';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { getStatusBadge } from '@/config/entity-status';
 import type { Currency } from '@/types/settings';
 
 export const productEntityConfig: EntityConfig<UserProduct> = {
@@ -50,23 +50,12 @@ export const productEntityConfig: EntityConfig<UserProduct> = {
           })()
         : undefined;
 
-    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
-      [STATUS.PRODUCTS.ACTIVE]: { label: 'Active', variant: 'success' },
-      [STATUS.PRODUCTS.DRAFT]: { label: 'Draft', variant: 'default' },
-      [STATUS.PRODUCTS.PAUSED]: { label: 'Paused', variant: 'warning' },
-      [STATUS.PRODUCTS.SOLD_OUT]: { label: 'Sold Out', variant: 'destructive' },
-    };
-    const statusBadge = statusBadgeMap[product.status];
+    const statusBadge = getStatusBadge('product', product.status);
 
     return {
       priceLabel,
       badge: statusBadge?.label,
-      badgeVariant: statusBadge?.variant as
-        | 'success'
-        | 'default'
-        | 'warning'
-        | 'destructive'
-        | undefined,
+      badgeVariant: statusBadge?.variant,
       showEditButton: true,
       editHref: `${ENTITY_REGISTRY['product'].createPath}?edit=${product.id}`,
       // Removed duplicate actions button - edit icon overlay is sufficient

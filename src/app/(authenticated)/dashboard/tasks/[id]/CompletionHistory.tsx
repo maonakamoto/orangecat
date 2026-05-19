@@ -25,7 +25,7 @@ interface CompletionHistoryProps {
 
 export default function CompletionHistory({ completions }: CompletionHistoryProps) {
   return (
-    <div className="bg-card rounded-xl border border-border p-6">
+    <div className="bg-card rounded-lg border border-border p-6">
       <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
         <History className="h-5 w-5" />
         Completions ({completions.length})

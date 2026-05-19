@@ -2,6 +2,7 @@ import { EntityConfig } from '@/types/entity';
 import { ResearchEntity } from '@/types/research';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { STATUS } from '@/config/database-constants';
+import { getStatusBadge } from '@/config/entity-status';
 import { z } from 'zod';
 import {
   RESEARCH_FIELDS,
@@ -120,22 +121,10 @@ export const researchConfig: EntityConfig<ResearchEntity> = {
   // Card rendering
   makeHref: entity => `${ENTITY_REGISTRY['research'].publicBasePath}/${entity.id}`,
   makeCardProps: entity => {
-    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
-      [STATUS.RESEARCH.ACTIVE]: { label: 'Active', variant: 'success' },
-      [STATUS.RESEARCH.DRAFT]: { label: 'Draft', variant: 'default' },
-      [STATUS.RESEARCH.PAUSED]: { label: 'Paused', variant: 'warning' },
-      [STATUS.RESEARCH.COMPLETED]: { label: 'Completed', variant: 'default' },
-      [STATUS.RESEARCH.CANCELLED]: { label: 'Cancelled', variant: 'destructive' },
-    };
-    const statusBadge = entity.status ? statusBadgeMap[entity.status] : undefined;
+    const statusBadge = getStatusBadge('research', entity.status);
     return {
       badge: statusBadge?.label,
-      badgeVariant: statusBadge?.variant as
-        | 'success'
-        | 'default'
-        | 'warning'
-        | 'destructive'
-        | undefined,
+      badgeVariant: statusBadge?.variant,
       showEditButton: true,
       editHref: `${ENTITY_REGISTRY['research'].createPath}?edit=${entity.id}`,
     };

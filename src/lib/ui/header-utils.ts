@@ -56,7 +56,7 @@ export function getMobileMenuBackdropClasses(isOpen: boolean): string {
  */
 export function getMobileMenuPanelClasses(isOpen: boolean): string {
   return cn(
-    'fixed top-16 bottom-0 left-0 w-80 max-w-[85vw] sm:max-w-sm bg-card shadow-2xl overflow-y-auto overscroll-contain transition-transform duration-300 ease-out',
+    'fixed top-16 bottom-0 left-0 w-80 max-w-[85vw] sm:max-w-sm bg-card shadow-sm overflow-y-auto overscroll-contain transition-transform duration-300 ease-out',
     Z_INDEX_CLASSES.MOBILE_MENU,
     isOpen ? 'translate-x-0' : '-translate-x-full'
   );

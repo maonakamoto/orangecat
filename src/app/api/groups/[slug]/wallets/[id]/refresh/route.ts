@@ -15,7 +15,7 @@ import {
   apiBadRequest,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { logger } from '@/utils/logger';
 import { refreshWalletBalance } from '@/services/groups/mutations/treasury';
@@ -30,7 +30,9 @@ interface RouteContext {
 export const POST = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { slug, id: walletId } = await context.params;
   const idValidation = getValidationError(validateUUID(walletId, 'wallet ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { user, supabase } = request;
 

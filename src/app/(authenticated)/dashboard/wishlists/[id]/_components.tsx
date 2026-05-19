@@ -54,9 +54,7 @@ export function WishlistItemCard({
 
   return (
     <Link key={item.id} href={`${wishlistBasePath}/items/${item.id}`} className="block">
-      <Card
-        className={`hover:shadow-md transition-shadow ${item.is_fulfilled ? 'opacity-60' : ''}`}
-      >
+      <Card className={`oc-card-link ${item.is_fulfilled ? 'opacity-60' : ''}`}>
         <CardContent className="p-4">
           <div className="flex gap-3">
             {item.image_url ? (
@@ -68,7 +66,7 @@ export function WishlistItemCard({
               />
             ) : (
               <div className="w-14 h-14 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
-                <Gift className="w-6 h-6 text-gray-300 dark:text-muted-foreground/50" />
+                <Gift className="w-6 h-6 text-muted-dim dark:text-muted-foreground/50" />
               </div>
             )}
             <div className="flex-1 min-w-0">
@@ -133,7 +131,7 @@ export function WishlistItemList({
 
       {items.length === 0 ? (
         <div className="text-center py-10 border-2 border-dashed border-border rounded-lg">
-          <Gift className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-muted-foreground/50" />
+          <Gift className="w-8 h-8 mx-auto mb-2 text-muted-dim dark:text-muted-foreground/50" />
           <p className="text-muted-foreground mb-3">No items yet</p>
           <Link href={`${wishlistBasePath}/items/new?wishlist_id=${id}`}>
             <Button size="sm">

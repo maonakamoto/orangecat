@@ -47,7 +47,7 @@ export function GroupDetail({ groupSlug }: GroupDetailProps) {
   if (error || !group) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600">{error || 'Group not found'}</p>
+        <p className="text-destructive">{error || 'Group not found'}</p>
         <Button onClick={() => router.push(ROUTES.GROUPS.LIST)} className="mt-4">
           Back to Groups
         </Button>

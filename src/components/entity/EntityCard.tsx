@@ -104,9 +104,8 @@ export function EntityCard({
   return (
     <div
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card',
-        'transition-all duration-200 ease-in-out',
-        'hover:shadow-lg hover:border-gray-300 dark:hover:border-border',
+        'oc-surface oc-card-link group relative flex flex-col overflow-hidden',
+        'transition-colors duration-150',
         onClick && 'cursor-pointer',
         className
       )}
@@ -138,7 +137,7 @@ export function EntityCard({
 
       {showOnProfile === false && (
         <div className="absolute top-2 left-2 z-10">
-          <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-800/80 text-white text-xs font-medium rounded-md">
+          <span className="inline-flex items-center gap-1 rounded-md border border-border-subtle bg-background/90 px-2 py-1 text-xs font-medium text-foreground backdrop-blur">
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
@@ -166,7 +165,7 @@ export function EntityCard({
         <Link href={detailHref}>
           <h3
             className={cn(
-              'font-semibold text-foreground group-hover:text-orange-600 group-hover:underline transition-colors line-clamp-1',
+              'font-semibold text-foreground transition-colors group-hover:text-tiffany-600 dark:group-hover:text-tiffany-400 line-clamp-1',
               compact ? 'text-sm' : 'text-lg'
             )}
           >
@@ -214,7 +213,7 @@ export function EntityCard({
             </div>
             <div className="mt-1 h-2 w-full rounded-full bg-muted">
               <div
-                className="h-2 rounded-full bg-tiffany-500 transition-all duration-300"
+                className="h-2 rounded-full bg-tiffany-600 transition-all duration-300 dark:bg-tiffany-500"
                 style={{ width: `${Math.min(100, fundingProgress)}%` }}
               />
             </div>

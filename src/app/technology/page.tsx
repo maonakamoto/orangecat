@@ -19,14 +19,17 @@ export default function TechnologyPage() {
   return (
     <div className={`min-h-screen ${GRADIENTS.pageBgOrangeDown}`}>
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-orange-600 text-white">
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-600 to-orange-800 opacity-90"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      <div className="relative overflow-hidden bg-background border-b border-border">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="text-center">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground mb-6">
+              <Bitcoin className="h-4 w-4 text-bitcoinOrange" />
+              Bitcoin-native
+            </div>
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground">
               Built on Bitcoin
             </h1>
-            <p className="mt-6 max-w-3xl mx-auto text-xl text-orange-100">
+            <p className="mt-6 max-w-3xl mx-auto text-xl text-muted-foreground">
               Direct, transparent, and unstoppable economic participation powered by the world's
               most secure network
             </p>
@@ -42,7 +45,7 @@ export default function TechnologyPage() {
             Core Principles
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-card p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+            <div className="bg-card p-6 rounded-lg shadow-sm border-t-4 border-orange-500">
               <Bitcoin className="h-12 w-12 text-orange-600 mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">Bitcoin-Native</h3>
               <p className="text-muted-foreground">
@@ -50,7 +53,7 @@ export default function TechnologyPage() {
               </p>
             </div>
 
-            <div className="bg-card p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+            <div className="bg-card p-6 rounded-lg shadow-sm border-t-4 border-orange-500">
               <Shield className="h-12 w-12 text-orange-600 mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">Transparent</h3>
               <p className="text-muted-foreground">
@@ -58,7 +61,7 @@ export default function TechnologyPage() {
               </p>
             </div>
 
-            <div className="bg-card p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+            <div className="bg-card p-6 rounded-lg shadow-sm border-t-4 border-orange-500">
               <Zap className="h-12 w-12 text-orange-600 mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">Zero Platform Fees</h3>
               <p className="text-muted-foreground">
@@ -74,7 +77,7 @@ export default function TechnologyPage() {
           <h2 className="text-2xl font-semibold text-foreground mb-8 text-center">
             Technology Stack
           </h2>
-          <div className="bg-card rounded-lg shadow-lg p-6">
+          <div className="bg-card rounded-lg shadow-sm p-6">
             <div className="grid md:grid-cols-2 gap-6">
               {/* Frontend */}
               <div>
@@ -214,8 +217,8 @@ export default function TechnologyPage() {
         </div>
 
         {/* Open Source */}
-        <div className="bg-gradient-to-r from-orange-100 to-orange-50 rounded-lg p-6 text-center">
-          <Code className="h-16 w-16 text-orange-600 mx-auto mb-4" />
+        <div className="bg-muted/40 rounded-lg p-6 text-center">
+          <Code className="h-16 w-16 text-foreground mx-auto mb-4" />
           <h2 className="text-2xl font-semibold text-foreground mb-4">Open Source Philosophy</h2>
           <p className="text-lg text-muted-strong mb-6 max-w-3xl mx-auto">
             We believe in transparency and community-driven development. Our code is open for
@@ -224,13 +227,13 @@ export default function TechnologyPage() {
           <div className="flex justify-center gap-4">
             <Link
               href={ROUTES.DISCOVER}
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-background bg-foreground hover:bg-muted-strong"
             >
               Discover Projects
             </Link>
             <Link
               href={ROUTES.FAQ}
-              className="inline-flex items-center px-6 py-3 border border-orange-600 text-base font-medium rounded-md text-orange-600 bg-card hover:bg-orange-50"
+              className="inline-flex items-center px-6 py-3 border border-border-strong text-base font-medium rounded-md text-foreground bg-card hover:bg-muted"
             >
               Learn More
             </Link>

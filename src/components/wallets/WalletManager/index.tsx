@@ -38,20 +38,12 @@ export function WalletManager({
   // Validate required props after hooks
   if (!entityType) {
     logger.error('WalletManager: entityType is required');
-    return (
-      <div className="p-4 text-red-600 bg-red-50 rounded-lg border border-red-200">
-        Error: Entity type not configured properly
-      </div>
-    );
+    return <div className="oc-error-surface">Error: Entity type not configured properly</div>;
   }
 
   if (!entityId) {
     logger.error('WalletManager: entityId is required');
-    return (
-      <div className="p-4 text-red-600 bg-red-50 rounded-lg border border-red-200">
-        Error: Entity ID not configured properly
-      </div>
-    );
+    return <div className="oc-error-surface">Error: Entity ID not configured properly</div>;
   }
 
   const activeWallets = wallets.filter(w => w.is_active);

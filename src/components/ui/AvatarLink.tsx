@@ -109,14 +109,14 @@ export default function AvatarLink({
           width={size}
           height={size}
           className={cn(
-            'rounded-full object-cover border-2 border-white shadow-sm',
+            'rounded-full object-cover border-2 border-card shadow-sm',
             'transition-all duration-200'
           )}
         />
       ) : (
         <div
           className={cn(
-            'rounded-full flex items-center justify-center border-2 border-white shadow-sm',
+            'rounded-full flex items-center justify-center border-2 border-card shadow-sm',
             GRADIENTS.brandOrangeYellow,
             'text-white font-semibold transition-all duration-200'
           )}
@@ -126,7 +126,7 @@ export default function AvatarLink({
         </div>
       )}
       {showOnlineStatus && (
-        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-card rounded-full" />
       )}
     </Link>
   );

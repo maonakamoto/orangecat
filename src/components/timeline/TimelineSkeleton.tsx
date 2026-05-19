@@ -11,12 +11,12 @@ export function TimelineSkeleton({ count = 3, compact = false }: TimelineSkeleto
   return (
     <div className="space-y-0">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-card border border-border rounded-lg animate-pulse">
+        <div key={i} className="animate-pulse border-b border-border-subtle bg-background">
           <div className={`p-4 ${compact ? 'p-3' : 'p-4'}`}>
             <div className="flex items-start space-x-3">
               {/* Avatar skeleton */}
               <div
-                className={`bg-muted rounded-full flex-shrink-0 ${compact ? 'w-8 h-8' : 'w-10 h-10'}`}
+                className={`flex-shrink-0 rounded-md bg-muted ${compact ? 'h-8 w-8' : 'h-10 w-10'}`}
               />
 
               <div className="flex-1 min-w-0">

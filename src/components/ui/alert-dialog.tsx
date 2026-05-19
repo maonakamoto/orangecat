@@ -36,18 +36,13 @@ const AlertDialog: React.FC<AlertDialogProps> = ({ open, onOpenChange, children 
   );
 };
 
-const AlertDialogContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, children, ...props }, ref) => (
-  <DialogContent
-    ref={ref}
-    className={cn('sm:max-w-[425px]', className)}
-    {...props}
-  >
-    {children}
-  </DialogContent>
-));
+const AlertDialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, children, ...props }, ref) => (
+    <DialogContent ref={ref} className={cn('sm:max-w-[425px]', className)} {...props}>
+      {children}
+    </DialogContent>
+  )
+);
 AlertDialogContent.displayName = 'AlertDialogContent';
 
 const AlertDialogHeader = DialogHeader;
@@ -81,12 +76,7 @@ AlertDialogAction.displayName = 'AlertDialogAction';
 
 const AlertDialogCancel = React.forwardRef<HTMLButtonElement, AlertDialogActionProps>(
   ({ className, children, ...props }, ref) => (
-    <Button
-      ref={ref}
-      variant="outline"
-      className={cn('', className)}
-      {...props}
-    >
+    <Button ref={ref} variant="outline" className={cn('', className)} {...props}>
       {children}
     </Button>
   )

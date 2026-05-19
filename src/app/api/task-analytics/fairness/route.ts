@@ -27,7 +27,9 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
       .eq('is_archived', false)
       .neq('task_type', TASK_TYPES.ONE_TIME);
 
-    if (categoryFilter) {tasksQuery = tasksQuery.eq('category', categoryFilter);}
+    if (categoryFilter) {
+      tasksQuery = tasksQuery.eq('category', categoryFilter);
+    }
 
     const { data: tasksData, error: tasksError } = await tasksQuery;
     if (tasksError) {
@@ -41,7 +43,12 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     if (recurringTasks.length === 0) {
       return apiSuccess({
         fairnessMetrics: [],
-        summary: { totalRecurringTasks: 0, averageUniqueCompleters: 0, tasksWithSingleCompleter: 0, period },
+        summary: {
+          totalRecurringTasks: 0,
+          averageUniqueCompleters: 0,
+          tasksWithSingleCompleter: 0,
+          period,
+        },
       });
     }
 
@@ -55,12 +62,18 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
       .order('completed_at', { ascending: false });
 
     if (completionsResult.error) {
-      logger.error('Failed to fetch completions', { error: completionsResult.error }, 'TaskAnalyticsAPI');
+      logger.error(
+        'Failed to fetch completions',
+        { error: completionsResult.error },
+        'TaskAnalyticsAPI'
+      );
       return apiInternalError('Failed to fetch completions');
     }
 
     const completions = completionsResult.data || [];
-    const uniqueUserIds = [...new Set(completions.map((c: { completed_by: string }) => c.completed_by))];
+    const uniqueUserIds = [
+      ...new Set(completions.map((c: { completed_by: string }) => c.completed_by)),
+    ];
     const profilesMap = new Map<string, any>();
 
     if (uniqueUserIds.length > 0) {
@@ -68,7 +81,9 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
         .from(DATABASE_TABLES.PROFILES)
         .select('id, username, display_name')
         .in('id', uniqueUserIds);
-        for (const p of profiles || []) {profilesMap.set(p.id, p);}
+      for (const p of profiles || []) {
+        profilesMap.set(p.id, p);
+      }
     }
 
     const taskMetrics = computeFairnessMetrics(recurringTasks, completions, profilesMap);
@@ -76,7 +91,8 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     const tasksWithCompletions = taskMetrics.filter(t => t.totalCompletions > 0);
     const avgUniqueCompleters =
       tasksWithCompletions.length > 0
-        ? tasksWithCompletions.reduce((sum, t) => sum + t.uniqueCompleterCount, 0) / tasksWithCompletions.length
+        ? tasksWithCompletions.reduce((sum, t) => sum + t.uniqueCompleterCount, 0) /
+          tasksWithCompletions.length
         : 0;
 
     return apiSuccess({
@@ -84,13 +100,20 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
       summary: {
         totalRecurringTasks: recurringTasks.length,
         averageUniqueCompleters: Math.round(avgUniqueCompleters * 10) / 10,
-        tasksWithSingleCompleter: taskMetrics.filter(t => t.uniqueCompleterCount === 1 && t.totalCompletions > 3).length,
-        tasksNeedingAttention: taskMetrics.filter(t => t.fairnessLevel === 'needs_attention').length,
+        tasksWithSingleCompleter: taskMetrics.filter(
+          t => t.uniqueCompleterCount === 1 && t.totalCompletions > 3
+        ).length,
+        tasksNeedingAttention: taskMetrics.filter(t => t.fairnessLevel === 'needs_attention')
+          .length,
         period,
       },
     });
   } catch (err) {
-    logger.error('Exception in GET /api/task-analytics/fairness', { error: err }, 'TaskAnalyticsAPI');
+    logger.error(
+      'Exception in GET /api/task-analytics/fairness',
+      { error: err },
+      'TaskAnalyticsAPI'
+    );
     return apiInternalError();
   }
 });

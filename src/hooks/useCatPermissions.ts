@@ -63,9 +63,13 @@ export function useCatPermissions(): UseCatPermissionsReturn {
       setIsSaving(categoryId);
       try {
         const res = await fetch(API_ROUTES.CAT.PERMISSIONS, {
-          method: 'PUT',
+          method: enabled ? 'POST' : 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category: categoryId, enabled }),
+          body: JSON.stringify({
+            actionId: '*',
+            category: categoryId,
+            requiresConfirmation: true,
+          }),
         });
         const data = await res.json();
         if (!res.ok) {

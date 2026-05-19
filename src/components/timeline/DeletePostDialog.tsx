@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 interface DeletePostDialogProps {
   isOpen: boolean;
@@ -59,16 +60,16 @@ export function DeletePostDialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-background/80 backdrop-blur-sm"
         onClick={isDeleting ? undefined : onClose}
       />
 
       {/* Dialog */}
-      <div className="relative w-full max-w-sm bg-card rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
+      <div className="relative w-full max-w-sm rounded-md border border-border-subtle bg-background shadow-sm animate-in fade-in-0 zoom-in-95 duration-200">
         <div className="p-6">
           {/* Icon */}
-          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <AlertTriangle className="w-6 h-6 text-red-600" />
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md border border-destructive/20 bg-destructive/10">
+            <AlertTriangle className="w-6 h-6 text-destructive" />
           </div>
 
           {/* Title */}
@@ -82,7 +83,7 @@ export function DeletePostDialog({
 
           {/* Post preview */}
           {postPreview && (
-            <div className="mt-4 p-3 bg-muted rounded-lg border border-border-subtle">
+            <div className="mt-4 rounded-md border border-border-subtle bg-muted p-3">
               <p className="text-foreground text-sm line-clamp-3">{postPreview}</p>
             </div>
           )}
@@ -92,7 +93,7 @@ export function DeletePostDialog({
             <Button
               onClick={handleConfirm}
               disabled={isDeleting}
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-full"
+              className="w-full rounded-md bg-red-600 py-3 font-semibold text-white hover:bg-red-700"
             >
               {isDeleting ? (
                 <>
@@ -108,7 +109,7 @@ export function DeletePostDialog({
               onClick={onClose}
               disabled={isDeleting}
               variant="outline"
-              className="w-full py-3 rounded-full font-bold"
+              className={`w-full py-3 font-semibold ${TIMELINE_SURFACE.chip}`}
             >
               Cancel
             </Button>

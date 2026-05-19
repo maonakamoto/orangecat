@@ -10,7 +10,7 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
-import { STATUS } from '@/config/database-constants';
+import { getStatusBadge } from '@/config/entity-status';
 import { ROUTES } from '@/config/routes';
 import { GRADIENTS } from '@/config/gradients';
 
@@ -54,21 +54,12 @@ export const investmentEntityConfig: EntityConfig<Investment> = {
         ? Math.round((investment.total_raised / investment.target_amount) * 100)
         : 0;
 
-    const statusBadgeMap: Record<string, { label: string; variant: string }> = {
-      [STATUS.INVESTMENTS.DRAFT]: { label: 'Draft', variant: 'default' },
-      [STATUS.INVESTMENTS.OPEN]: { label: 'Open', variant: 'success' },
-      [STATUS.INVESTMENTS.FUNDED]: { label: 'Funded', variant: 'success' },
-      [STATUS.INVESTMENTS.ACTIVE]: { label: 'Active', variant: 'success' },
-      [STATUS.INVESTMENTS.CLOSED]: { label: 'Closed', variant: 'default' },
-      [STATUS.INVESTMENTS.CANCELLED]: { label: 'Cancelled', variant: 'warning' },
-    };
-
-    const badge = statusBadgeMap[investment.status];
+    const badge = getStatusBadge('investment', investment.status);
 
     return {
       priceLabel: targetLabel,
       badge: badge?.label,
-      badgeVariant: badge?.variant as 'success' | 'default' | 'warning' | 'destructive' | undefined,
+      badgeVariant: badge?.variant,
       metadata:
         metadataParts.length > 0 ? (
           <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">

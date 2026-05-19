@@ -63,10 +63,10 @@ export function NotificationItem({
 }: NotificationItemProps) {
   return (
     <div
-      className={`group relative p-3 rounded-lg border transition-colors cursor-pointer ${
+      className={`group relative cursor-pointer rounded-md border p-3 transition-colors ${
         notification.read
-          ? 'bg-card border-border hover:bg-muted'
-          : 'bg-tiffany-50 border-tiffany-200 hover:bg-tiffany-100'
+          ? 'border-border-subtle bg-background hover:bg-muted'
+          : 'border-border-strong bg-muted hover:bg-muted/80'
       }`}
       onClick={() => onClick(notification)}
     >
@@ -96,7 +96,7 @@ export function NotificationItem({
                     e.stopPropagation();
                     onMarkAsRead(notification.id);
                   }}
-                  className="p-1 hover:bg-white dark:hover:bg-muted rounded min-h-11 min-w-11 flex items-center justify-center"
+                  className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 hover:bg-background"
                   title="Mark as read"
                 >
                   <Check className="w-3 h-3 text-green-500" />
@@ -107,7 +107,7 @@ export function NotificationItem({
                   e.stopPropagation();
                   onDelete(notification.id);
                 }}
-                className="p-1 hover:bg-white dark:hover:bg-muted rounded min-h-11 min-w-11 flex items-center justify-center"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 hover:bg-background"
                 title="Delete notification"
               >
                 <Trash2 className="w-3 h-3 text-red-500" />
@@ -118,7 +118,7 @@ export function NotificationItem({
       </div>
 
       {!notification.read && (
-        <div className="absolute top-3 right-3 w-2 h-2 bg-tiffany-500 rounded-full" />
+        <div className="absolute right-3 top-3 h-2 w-2 rounded-sm bg-foreground" />
       )}
     </div>
   );

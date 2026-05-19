@@ -14,23 +14,33 @@ import {
   apiRateLimited,
   handleApiError,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { auditSuccess, AUDIT_ACTIONS } from '@/lib/api/auditLog';
 import { logger } from '@/utils/logger';
 import { getTableName } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
-interface RouteContext { params: Promise<{ id: string }> }
+interface RouteContext {
+  params: Promise<{ id: string }>;
+}
 
 export const GET = withAuth(async (request: AuthenticatedRequest, { params }: RouteContext) => {
   const { id: projectId } = await params;
   const idValidation = getValidationError(validateUUID(projectId, 'project ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { supabase } = request;
-    const { data: favorite, error } = await supabase.from(DATABASE_TABLES.PROJECT_FAVORITES)
-      .select('id').eq('user_id', request.user.id).eq('project_id', projectId).maybeSingle();
-    if (error) {return apiInternalError('Failed to check favorite status');}
+    const { data: favorite, error } = await supabase
+      .from(DATABASE_TABLES.PROJECT_FAVORITES)
+      .select('id')
+      .eq('user_id', request.user.id)
+      .eq('project_id', projectId)
+      .maybeSingle();
+    if (error) {
+      return apiInternalError('Failed to check favorite status');
+    }
     return apiSuccess({ isFavorited: !!favorite });
   } catch (error) {
     return handleApiError(error);
@@ -40,25 +50,46 @@ export const GET = withAuth(async (request: AuthenticatedRequest, { params }: Ro
 export const POST = withAuth(async (request: AuthenticatedRequest, { params }: RouteContext) => {
   const { id: projectId } = await params;
   const idValidation = getValidationError(validateUUID(projectId, 'project ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { user, supabase } = request;
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
-    const { data: project } = await supabase.from(getTableName('project'))
-      .select('id, title').eq('id', projectId).single();
-    if (!project) {return apiNotFound('Project not found');}
+    const { data: project } = await supabase
+      .from(getTableName('project'))
+      .select('id, title')
+      .eq('id', projectId)
+      .single();
+    if (!project) {
+      return apiNotFound('Project not found');
+    }
 
-    const { data: existing } = await supabase.from(DATABASE_TABLES.PROJECT_FAVORITES)
-      .select('id').eq('user_id', user.id).eq('project_id', projectId).maybeSingle();
-    if (existing) {return apiSuccess({ isFavorited: true, message: 'Project already in favorites' });}
+    const { data: existing } = await supabase
+      .from(DATABASE_TABLES.PROJECT_FAVORITES)
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('project_id', projectId)
+      .maybeSingle();
+    if (existing) {
+      return apiSuccess({ isFavorited: true, message: 'Project already in favorites' });
+    }
 
-    const { error } = await supabase.from(DATABASE_TABLES.PROJECT_FAVORITES)
+    const { error } = await supabase
+      .from(DATABASE_TABLES.PROJECT_FAVORITES)
       .insert({ user_id: user.id, project_id: projectId });
-    if (error) {return apiInternalError('Failed to add favorite');}
+    if (error) {
+      return apiInternalError('Failed to add favorite');
+    }
 
-    await auditSuccess(AUDIT_ACTIONS.PROJECT_CREATED, user.id, 'project', projectId, { action: 'favorite', projectTitle: project.title });
+    await auditSuccess(AUDIT_ACTIONS.PROJECT_CREATED, user.id, 'project', projectId, {
+      action: 'favorite',
+      projectTitle: project.title,
+    });
     logger.info('Project added to favorites', { userId: user.id, projectId });
     return apiSuccess({ isFavorited: true, message: 'Project added to favorites' });
   } catch (error) {
@@ -69,25 +100,48 @@ export const POST = withAuth(async (request: AuthenticatedRequest, { params }: R
 export const DELETE = withAuth(async (request: AuthenticatedRequest, { params }: RouteContext) => {
   const { id: projectId } = await params;
   const idValidation = getValidationError(validateUUID(projectId, 'project ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { user, supabase } = request;
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
-    const { data: project } = await supabase.from(getTableName('project'))
-      .select('id, title').eq('id', projectId).single();
-    if (!project) {return apiNotFound('Project not found');}
+    const { data: project } = await supabase
+      .from(getTableName('project'))
+      .select('id, title')
+      .eq('id', projectId)
+      .single();
+    if (!project) {
+      return apiNotFound('Project not found');
+    }
 
-    const { data: existing } = await supabase.from(DATABASE_TABLES.PROJECT_FAVORITES)
-      .select('id').eq('user_id', user.id).eq('project_id', projectId).maybeSingle();
-    if (!existing) {return apiSuccess({ isFavorited: false, message: 'Project not in favorites' });}
+    const { data: existing } = await supabase
+      .from(DATABASE_TABLES.PROJECT_FAVORITES)
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('project_id', projectId)
+      .maybeSingle();
+    if (!existing) {
+      return apiSuccess({ isFavorited: false, message: 'Project not in favorites' });
+    }
 
-    const { error } = await supabase.from(DATABASE_TABLES.PROJECT_FAVORITES)
-      .delete().eq('user_id', user.id).eq('project_id', projectId);
-    if (error) {return apiInternalError('Failed to remove favorite');}
+    const { error } = await supabase
+      .from(DATABASE_TABLES.PROJECT_FAVORITES)
+      .delete()
+      .eq('user_id', user.id)
+      .eq('project_id', projectId);
+    if (error) {
+      return apiInternalError('Failed to remove favorite');
+    }
 
-    await auditSuccess(AUDIT_ACTIONS.PROJECT_CREATED, user.id, 'project', projectId, { action: 'unfavorite', projectTitle: project.title });
+    await auditSuccess(AUDIT_ACTIONS.PROJECT_CREATED, user.id, 'project', projectId, {
+      action: 'unfavorite',
+      projectTitle: project.title,
+    });
     logger.info('Project removed from favorites', { userId: user.id, projectId });
     return apiSuccess({ isFavorited: false, message: 'Project removed from favorites' });
   } catch (error) {

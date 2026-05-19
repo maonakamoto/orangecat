@@ -187,7 +187,7 @@ export default function UserProfileDropdown({
         </button>
 
         {isOpen && (
-          <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-card ring-1 ring-black ring-opacity-5 dark:ring-border dark:ring-opacity-100 z-50">
+          <div className="absolute right-0 mt-2 w-48 rounded-md shadow-sm bg-card ring-1 ring-black ring-opacity-5 dark:ring-border dark:ring-opacity-100 z-50">
             <div className="py-1" role="menu" aria-orientation="vertical">
               {menuItems.map(item => {
                 const Icon = item.icon;
@@ -227,7 +227,7 @@ export default function UserProfileDropdown({
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
         disabled={isProfileLoading}
-        className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3 text-foreground hover:bg-muted transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-1 rounded-xl px-1.5 sm:px-2 md:px-3 py-1.5 sm:py-2 md:py-2.5 min-h-9 sm:min-h-10 md:min-h-11 disabled:opacity-50"
+        className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3 text-foreground hover:bg-muted transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-lg px-1.5 sm:px-2 md:px-3 py-1.5 sm:py-2 md:py-2.5 min-h-9 sm:min-h-10 md:min-h-11 disabled:opacity-50"
         aria-haspopup="menu"
         aria-expanded={isOpen}
         aria-label="User menu"
@@ -249,7 +249,7 @@ export default function UserProfileDropdown({
                 className="rounded-full ring-2 ring-orange-200 hover:ring-orange-300 transition-all duration-200"
               />
             )}
-            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-400 border-2 border-white dark:border-card rounded-full shadow-sm"></div>
+            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-400 border-2 border-card dark:border-card rounded-full shadow-sm"></div>
           </span>
         )}
         <span className="font-medium text-sm sm:text-base max-w-[80px] sm:max-w-[100px] md:max-w-[140px] truncate flex items-center hidden sm:flex">

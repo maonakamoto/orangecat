@@ -21,7 +21,7 @@ export default function ProofSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted text-orange-600 dark:text-orange-400 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted text-foreground mb-4">
             <Lightbulb className="w-4 h-4" />
             <span className="text-sm font-medium">Makers</span>
           </div>
@@ -42,7 +42,7 @@ export default function ProofSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`${useCase.gradient} rounded-xl p-5 sm:p-6 lg:p-8 border border-border shadow-sm hover:shadow-md transition-shadow duration-300`}
+              className={`oc-surface oc-card-link p-5 sm:p-6 lg:p-8 ${useCase.gradient}`}
             >
               {/* Category Badge */}
               <div className="flex items-start justify-between mb-4">

@@ -22,7 +22,7 @@ import { generateFormPrefill } from '@/lib/ai/form-prefill-service';
 import { getEntityConfig } from '@/config/entity-configs/get-config';
 import { isValidEntityType, type EntityType } from '@/config/entity-registry';
 import { logger } from '@/utils/logger';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 
 /**
  * Request validation schema

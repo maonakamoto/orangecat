@@ -110,7 +110,7 @@ export default function StudyBitcoinPage() {
             const Icon = benefit.icon;
             return (
               <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Icon className="w-8 h-8 text-orange-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">{benefit.title}</h3>

@@ -10,13 +10,7 @@
 
 'use client';
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import {
   Select,
   SelectContent,
@@ -161,5 +155,3 @@ export function FinancialDetailsSection({ control }: FinancialDetailsSectionProp
     </Card>
   );
 }
-
-

@@ -24,7 +24,7 @@ import {
   apiCreated,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 
 interface RouteContext {
@@ -35,7 +35,9 @@ interface RouteContext {
 export async function GET(request: NextRequest, context: RouteContext) {
   const { id: projectId } = await context.params;
   const idValidation = getValidationError(validateUUID(projectId, 'project ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const searchParams = request.nextUrl.searchParams;
 
@@ -56,7 +58,9 @@ export async function GET(request: NextRequest, context: RouteContext) {
     const pagination = {
       page: searchParams.get('page') ? Math.max(1, parseInt(searchParams.get('page')!)) : undefined,
       limit: rawLimit !== undefined ? Math.min(100, Math.max(1, rawLimit)) : undefined,
-      offset: searchParams.get('offset') ? Math.max(0, parseInt(searchParams.get('offset')!)) : undefined,
+      offset: searchParams.get('offset')
+        ? Math.max(0, parseInt(searchParams.get('offset')!))
+        : undefined,
     };
 
     // Validate filters and pagination
@@ -85,7 +89,9 @@ export async function GET(request: NextRequest, context: RouteContext) {
 export const POST = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id: projectId } = await context.params;
   const idValidation = getValidationError(validateUUID(projectId, 'project ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { user } = request;
 

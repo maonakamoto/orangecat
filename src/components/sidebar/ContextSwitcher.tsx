@@ -83,16 +83,16 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
               alt={displayName}
               width={32}
               height={32}
-              className="rounded-full object-cover"
+              className="rounded-md object-cover"
               unoptimized={avatarUrl?.includes('supabase.co')}
             />
           ) : (
-            <DefaultAvatar size={32} className="rounded-full" />
+            <DefaultAvatar size={32} className="rounded-md" />
           )}
           {/* Context indicator dot */}
           <div
             className={cn(
-              'absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 border-2 border-white dark:border-card rounded-full',
+              'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-sm border-2 border-background',
               isGroupContext ? 'bg-tiffany-500' : 'bg-green-500'
             )}
           />
@@ -109,7 +109,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
       {/* Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-muted transition-colors"
+        className="flex w-full items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted"
       >
         <div className="relative flex-shrink-0">
           {avatarUrl ? (
@@ -118,19 +118,19 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
               alt={displayName}
               width={40}
               height={40}
-              className="rounded-full object-cover"
+              className="rounded-md object-cover"
               unoptimized={avatarUrl?.includes('supabase.co')}
             />
           ) : isGroupContext ? (
-            <div className="w-10 h-10 rounded-full bg-tiffany-100 flex items-center justify-center">
-              <Users className="w-5 h-5 text-tiffany-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-muted">
+              <Users className="w-5 h-5 text-foreground" />
             </div>
           ) : (
-            <DefaultAvatar size={40} className="rounded-full" />
+            <DefaultAvatar size={40} className="rounded-md" />
           )}
           <div
             className={cn(
-              'absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 border-2 border-white dark:border-card rounded-full',
+              'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-sm border-2 border-background',
               isGroupContext ? 'bg-tiffany-500' : 'bg-green-500'
             )}
           />
@@ -151,17 +151,17 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute left-2 right-2 top-full mt-1 bg-card rounded-lg border border-border shadow-lg z-50 py-1 max-h-80 overflow-y-auto">
+        <div className="absolute left-2 right-2 top-full z-50 mt-1 max-h-80 overflow-y-auto rounded-md border border-border-subtle bg-popover py-1 shadow-sm">
           {/* Individual context option */}
           <button
             onClick={handleSwitchToIndividual}
             className={cn(
               'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-muted transition-colors',
-              !isGroupContext && 'bg-tiffany-50 dark:bg-accent'
+              !isGroupContext && 'bg-muted'
             )}
           >
-            <div className="w-8 h-8 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
-              <User className="w-4 h-4 text-tiffany-600" />
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-muted">
+              <User className="w-4 h-4 text-foreground" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-foreground truncate">
@@ -169,7 +169,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
               </p>
               <p className="text-xs text-muted-foreground">Personal</p>
             </div>
-            {!isGroupContext && <div className="w-2 h-2 bg-tiffany rounded-full flex-shrink-0" />}
+            {!isGroupContext && <div className="h-2 w-2 flex-shrink-0 rounded-sm bg-foreground" />}
           </button>
 
           {/* Groups section */}
@@ -193,7 +193,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                 onClick={() => handleSwitchToGroup(group)}
                 className={cn(
                   'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-muted transition-colors',
-                  isGroupContext && context.group?.id === group.id && 'bg-tiffany-50 dark:bg-accent'
+                  isGroupContext && context.group?.id === group.id && 'bg-muted'
                 )}
               >
                 <div className="flex-shrink-0">
@@ -203,12 +203,12 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                       alt={group.name}
                       width={32}
                       height={32}
-                      className="rounded-full object-cover"
+                      className="rounded-md object-cover"
                       unoptimized={group.avatar_url?.includes('supabase.co')}
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-tiffany-100 flex items-center justify-center">
-                      <Users className="w-4 h-4 text-tiffany-600" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted">
+                      <Users className="w-4 h-4 text-foreground" />
                     </div>
                   )}
                 </div>
@@ -217,7 +217,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                   <p className="text-xs text-muted-foreground truncate">{group.slug}</p>
                 </div>
                 {isGroupContext && context.group?.id === group.id && (
-                  <div className="w-2 h-2 bg-tiffany-500 rounded-full flex-shrink-0" />
+                  <div className="h-2 w-2 flex-shrink-0 rounded-sm bg-foreground" />
                 )}
               </button>
             ))
@@ -232,7 +232,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
             }}
             className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-muted transition-colors"
           >
-            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-muted">
               <Plus className="w-4 h-4 text-muted-foreground" />
             </div>
             <p className="text-sm text-muted-foreground">Create a group</p>

@@ -1,97 +1,95 @@
 /**
  * PROFILE READER MODULE
- * 
+ *
  * Created: 2025-01-09
  * Last Modified: 2025-01-09
  * Last Modified Summary: Extracted from profileService.ts for modular architecture - handles read operations
  */
 
-import supabase from '@/lib/supabase/browser'
-import { logger } from '@/utils/logger'
-import { ProfileMapper } from './mapper'
-import type { ScalableProfile } from './types'
-import { DATABASE_TABLES } from '@/config/database-tables'
+import supabase from '@/lib/supabase/browser';
+import { logger } from '@/utils/logger';
+import { ProfileMapper } from './mapper';
+import type { ScalableProfile } from './types';
+import { DATABASE_TABLES } from '@/config/database-tables';
 
 // =====================================================================
 // 📖 PROFILE RETRIEVAL OPERATIONS
 // =====================================================================
 
 export class ProfileReader {
-  
   /**
    * Get a complete profile with all scalable fields
    */
   static async getProfile(userId: string): Promise<ScalableProfile | null> {
     if (!userId?.trim()) {
-      logger.warn('ProfileReader.getProfile: Empty user ID provided')
-      return null
+      logger.warn('ProfileReader.getProfile: Empty user ID provided');
+      return null;
     }
 
     try {
-      logger.info('[Profile] getProfile', { userId })
+      logger.info('[Profile] getProfile', { userId });
 
-      const { data, error } = await (supabase
-        .from(DATABASE_TABLES.PROFILES) as any)
+      const { data, error } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
         .select('*')
         .eq('id', userId)
-        .single()
+        .single();
 
       if (error) {
         if (error.code === 'PGRST116') {
-          logger.info(`Profile not found for user: ${userId}`)
-          return null
+          logger.info(`Profile not found for user: ${userId}`);
+          return null;
         }
-        logger.error('ProfileReader.getProfile error:', error)
-        return null
+        logger.error('ProfileReader.getProfile error:', error);
+        return null;
       }
 
       if (!data) {
-        return null
+        return null;
       }
 
       const profile = ProfileMapper.mapDatabaseToProfile(data);
-      logger.info('[Profile] getProfile success', { userId, hasProfile: true })
-      return profile
-
+      logger.info('[Profile] getProfile success', { userId, hasProfile: true });
+      return profile;
     } catch (err) {
-      logger.error('ProfileReader.getProfile unexpected error:', err)
-      return null
+      logger.error('ProfileReader.getProfile unexpected error:', err);
+      return null;
     }
   }
 
   /**
    * Get multiple profiles with pagination and filtering
    */
-  static async getProfiles(options: {
-    limit?: number
-    offset?: number
-    orderBy?: string
-    orderDirection?: 'asc' | 'desc'
-  } = {}): Promise<ScalableProfile[]> {
+  static async getProfiles(
+    options: {
+      limit?: number;
+      offset?: number;
+      orderBy?: string;
+      orderDirection?: 'asc' | 'desc';
+    } = {}
+  ): Promise<ScalableProfile[]> {
     try {
-      const {
-        limit = 20,
-        offset = 0,
-        orderBy = 'created_at',
-        orderDirection = 'desc'
-      } = options
+      const { limit = 20, offset = 0, orderBy = 'created_at', orderDirection = 'desc' } = options;
 
       const { data, error } = await supabase
         .from(DATABASE_TABLES.PROFILES)
         .select('*')
         .order(orderBy, { ascending: orderDirection === 'asc' })
-        .range(offset, offset + limit - 1)
+        .range(offset, offset + limit - 1);
 
       if (error) {
-        logger.error('ProfileReader.getProfiles error:', { message: error.message, code: error.code })
-        return []
+        logger.error('ProfileReader.getProfiles error:', {
+          message: error.message,
+          code: error.code,
+        });
+        return [];
       }
 
-      return (data?.map(profile => ProfileMapper.mapDatabaseToProfile(profile)) || []).filter((p): p is ScalableProfile => p !== null)
-
+      return (data?.map(profile => ProfileMapper.mapDatabaseToProfile(profile)) || []).filter(
+        (p): p is ScalableProfile => p !== null
+      );
     } catch (err) {
-      logger.error('ProfileReader.getProfiles unexpected error:', err)
-      return []
+      logger.error('ProfileReader.getProfiles unexpected error:', err);
+      return [];
     }
   }
 
@@ -104,7 +102,7 @@ export class ProfileReader {
     offset: number = 0
   ): Promise<ScalableProfile[]> {
     if (!searchTerm?.trim()) {
-      return []
+      return [];
     }
 
     try {
@@ -114,18 +112,19 @@ export class ProfileReader {
         .select('*')
         .or(`username.ilike.%${escapedTerm}%,name.ilike.%${escapedTerm}%`)
         .order('created_at', { ascending: false })
-        .range(offset, offset + limit - 1)
+        .range(offset, offset + limit - 1);
 
       if (error) {
-        logger.error('ProfileReader.searchProfiles error:', error)
-        return []
+        logger.error('ProfileReader.searchProfiles error:', error);
+        return [];
       }
 
-      return (data?.map(profile => ProfileMapper.mapDatabaseToProfile(profile)) || []).filter((p): p is ScalableProfile => p !== null)
-
+      return (data?.map(profile => ProfileMapper.mapDatabaseToProfile(profile)) || []).filter(
+        (p): p is ScalableProfile => p !== null
+      );
     } catch (err) {
-      logger.error('ProfileReader.searchProfiles unexpected error:', err)
-      return []
+      logger.error('ProfileReader.searchProfiles unexpected error:', err);
+      return [];
     }
   }
 
@@ -137,18 +136,19 @@ export class ProfileReader {
       const { data, error } = await supabase
         .from(DATABASE_TABLES.PROFILES)
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('created_at', { ascending: false });
 
       if (error) {
-        logger.error('ProfileReader.getAllProfiles error:', error)
-        return []
+        logger.error('ProfileReader.getAllProfiles error:', error);
+        return [];
       }
 
-      return (data?.map(profile => ProfileMapper.mapDatabaseToProfile(profile)) || []).filter((p): p is ScalableProfile => p !== null)
-
+      return (data?.map(profile => ProfileMapper.mapDatabaseToProfile(profile)) || []).filter(
+        (p): p is ScalableProfile => p !== null
+      );
     } catch (err) {
-      logger.error('ProfileReader.getAllProfiles unexpected error:', err)
-      return []
+      logger.error('ProfileReader.getAllProfiles unexpected error:', err);
+      return [];
     }
   }
 
@@ -156,27 +156,28 @@ export class ProfileReader {
    * Increment profile views (read-adjacent operation)
    */
   static async incrementProfileViews(userId: string): Promise<void> {
-    if (!userId?.trim()) {return}
+    if (!userId?.trim()) {
+      return;
+    }
 
     try {
       // Get current view count
-      const profile = await this.getProfile(userId)
-      if (!profile) {return}
+      const profile = await this.getProfile(userId);
+      if (!profile) {
+        return;
+      }
 
-      
       // Update view count
-      await (supabase
-        .from(DATABASE_TABLES.PROFILES) as any)
+      await (supabase.from(DATABASE_TABLES.PROFILES) as any)
         .update({
           website: JSON.stringify({
             ...JSON.parse(profile.website || '{}'),
-            last_viewed_at: new Date().toISOString()
-          })
+            last_viewed_at: new Date().toISOString(),
+          }),
         })
-        .eq('id', userId)
-
+        .eq('id', userId);
     } catch (err) {
-      logger.error('ProfileReader.incrementProfileViews error:', err)
+      logger.error('ProfileReader.incrementProfileViews error:', err);
     }
   }
-} 
+}

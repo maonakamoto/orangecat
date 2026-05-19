@@ -46,7 +46,7 @@ export default function ProfileEntityTab({
   if (entities.length === 0) {
     return (
       <div className="text-center py-12">
-        <Icon className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
+        <Icon className="w-16 h-16 mx-auto mb-4 text-muted-dim dark:text-muted-foreground" />
         <h3 className="text-lg font-semibold text-foreground mb-2">No {displayName} Yet</h3>
         <p className="text-muted-foreground text-base mb-6">
           {isOwnProfile
@@ -96,10 +96,10 @@ export default function ProfileEntityTab({
             <Link
               key={entity.id}
               href={getViewPath(entity.id)}
-              className="block overflow-hidden rounded-xl border-2 border-border hover:border-orange-300 dark:hover:border-orange-500 hover:shadow-lg bg-card transition-all duration-200 group"
+              className="block overflow-hidden rounded-lg border-2 border-border hover:border-border-strong dark:hover:border-orange-500 hover:shadow-sm bg-card transition-all duration-200 group"
             >
               <div className="flex flex-col sm:flex-row">
-                <div className="relative w-full sm:w-32 h-32 sm:h-auto flex-shrink-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-muted dark:to-muted">
+                <div className="relative w-full sm:w-32 h-32 sm:h-auto flex-shrink-0 bg-muted">
                   {thumbnail ? (
                     <Image
                       src={thumbnail}
@@ -114,7 +114,7 @@ export default function ProfileEntityTab({
                   )}
                   {entity.category && (
                     <div className="absolute top-2 left-2">
-                      <span className="px-2 py-1 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-md text-xs font-medium text-foreground">
+                      <span className="px-2 py-1 bg-card/90 dark:bg-card/90 backdrop-blur-sm rounded-md text-xs font-medium text-foreground">
                         {entity.category}
                       </span>
                     </div>

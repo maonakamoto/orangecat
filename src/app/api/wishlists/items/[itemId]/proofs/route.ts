@@ -10,7 +10,9 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { apiSuccess, apiNotFound, apiInternalError } from '@/lib/api/standardResponse';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 
-interface RouteParams { params: Promise<{ itemId: string }> }
+interface RouteParams {
+  params: Promise<{ itemId: string }>;
+}
 
 type Row = Record<string, any>;
 
@@ -23,7 +25,11 @@ function groupFeedbackByProof(feedback: Row[]): Record<string, Row[]> {
   }, {});
 }
 
-function enrichProof(proof: Row, feedbackMap: Record<string, Row[]>, userId: string | undefined): Row {
+function enrichProof(
+  proof: Row,
+  feedbackMap: Record<string, Row[]>,
+  userId: string | undefined
+): Row {
   const proofFeedback = feedbackMap[proof.id] || [];
   return {
     id: proof.id,
@@ -40,7 +46,10 @@ function enrichProof(proof: Row, feedbackMap: Record<string, Row[]>, userId: str
       dislikes: proofFeedback.filter((f: Row) => f.feedback_type === 'dislike').length,
       user_feedback: userId
         ? proofFeedback.find((f: Row) => f.user_id === userId)
-          ? { type: proofFeedback.find((f: Row) => f.user_id === userId)!.feedback_type, comment: proofFeedback.find((f: Row) => f.user_id === userId)!.comment }
+          ? {
+              type: proofFeedback.find((f: Row) => f.user_id === userId)!.feedback_type,
+              comment: proofFeedback.find((f: Row) => f.user_id === userId)!.comment,
+            }
           : null
         : null,
     },
@@ -50,20 +59,27 @@ function enrichProof(proof: Row, feedbackMap: Record<string, Row[]>, userId: str
 export const GET = withOptionalAuth(async (request, { params }: RouteParams) => {
   const { itemId } = await params;
   const idValidation = getValidationError(validateUUID(itemId, 'item ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     const { user, supabase } = request;
 
     const { data: wishlistItem, error: itemError } = await supabase
       .from(DATABASE_TABLES.WISHLIST_ITEMS)
       .select('id, wishlist_id, wishlists!inner(actor_id)')
-      .eq('id', itemId).single();
+      .eq('id', itemId)
+      .single();
 
-    if (itemError || !wishlistItem) {return apiNotFound('Wishlist item not found');}
+    if (itemError || !wishlistItem) {
+      return apiNotFound('Wishlist item not found');
+    }
 
     const { data: proofsData, error: proofsError } = await supabase
       .from(DATABASE_TABLES.WISHLIST_FULFILLMENT_PROOFS)
-      .select('id, wishlist_item_id, user_id, proof_type, description, image_url, transaction_id, created_at, profiles:user_id(id, username, display_name, avatar_url)')
+      .select(
+        'id, wishlist_item_id, user_id, proof_type, description, image_url, transaction_id, created_at, profiles:user_id(id, username, display_name, avatar_url)'
+      )
       .eq('wishlist_item_id', itemId)
       .order('created_at', { ascending: false });
 
@@ -78,9 +94,16 @@ export const GET = withOptionalAuth(async (request, { params }: RouteParams) => 
     if (proofs.length > 0) {
       const { data: feedbackData } = await supabase
         .from(DATABASE_TABLES.WISHLIST_FEEDBACK)
-        .select('id, fulfillment_proof_id, user_id, feedback_type, comment, created_at, profiles:user_id(id, username, display_name, avatar_url)')
-        .in('fulfillment_proof_id', proofs.map(p => p.id));
-      if (feedbackData) {feedbackMap = groupFeedbackByProof(feedbackData as Row[]);}
+        .select(
+          'id, fulfillment_proof_id, user_id, feedback_type, comment, created_at, profiles:user_id(id, username, display_name, avatar_url)'
+        )
+        .in(
+          'fulfillment_proof_id',
+          proofs.map(p => p.id)
+        );
+      if (feedbackData) {
+        feedbackMap = groupFeedbackByProof(feedbackData as Row[]);
+      }
     }
 
     const wishlists = wishlistItem.wishlists as Row | Row[];

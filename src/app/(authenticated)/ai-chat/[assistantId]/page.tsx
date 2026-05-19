@@ -169,7 +169,7 @@ export default function AIAssistantChatPage() {
               <Link
                 key={conv.id}
                 href={`/ai-chat/${assistantId}/${conv.id}`}
-                className="flex items-center justify-between p-4 bg-card rounded-lg border border-border hover:border-tiffany-300 hover:shadow-sm transition-all"
+                className="oc-surface oc-card-link flex items-center justify-between p-4"
               >
                 <div className="min-w-0">
                   <p className="font-medium text-foreground truncate">
@@ -189,7 +189,7 @@ export default function AIAssistantChatPage() {
 
       {conversations.length === 0 && !isLoading && (
         <div className="text-center text-muted-foreground py-8">
-          <MessageSquare className="h-12 w-12 mx-auto mb-4 text-gray-300 dark:text-muted-foreground/40" />
+          <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-dim dark:text-muted-foreground/40" />
           <p>No conversations yet. Start your first one!</p>
         </div>
       )}

@@ -45,7 +45,7 @@ export default function Loading({
       <div
         className={cn(
           'min-h-screen flex items-center justify-center',
-          overlay ? 'fixed inset-0 bg-white/95 dark:bg-card/95 backdrop-blur-sm z-loading' : '',
+          overlay ? 'fixed inset-0 bg-card/95 dark:bg-card/95 backdrop-blur-sm z-loading' : '',
           className
         )}
         suppressHydrationWarning
@@ -90,7 +90,7 @@ export function GlobalAuthErrorBanner() {
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-toast bg-red-600 text-white text-center py-3 shadow-lg animate-fade-in-up">
+    <div className="fixed top-0 left-0 right-0 z-toast bg-red-600 text-white text-center py-3 shadow-sm animate-fade-in-up">
       <span>{authError}</span>
       <button
         className="ml-4 px-3 py-1 bg-card text-red-600 rounded hover:bg-muted transition-colors duration-150"
@@ -116,7 +116,7 @@ export function GlobalAuthLoader() {
   }
 
   return (
-    <div className="fixed inset-0 bg-white/60 dark:bg-card/60 backdrop-blur-sm z-loading flex items-center justify-center pointer-events-none">
+    <div className="fixed inset-0 bg-muted/60 dark:bg-card/60 backdrop-blur-sm z-loading flex items-center justify-center pointer-events-none">
       <Loader2 className="h-10 w-10 animate-spin text-tiffany-500" />
     </div>
   );

@@ -57,8 +57,8 @@ export function CatSettingsTab() {
   return (
     <div className="space-y-6">
       {/* AI Model Selection */}
-      <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-muted border-b border-border-subtle flex items-center gap-2">
+      <div className="overflow-hidden rounded-md border border-border-subtle bg-background">
+        <div className="flex items-center gap-2 border-b border-border-subtle bg-muted/50 px-4 py-3">
           <Bot className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-semibold text-foreground">AI Model</span>
         </div>
@@ -71,15 +71,13 @@ export function CatSettingsTab() {
                 key={tierId}
                 onClick={() => handleTierChange(tierId)}
                 disabled={aiLoading}
-                className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
+                className={`flex w-full items-center gap-3 rounded-md border p-3 transition-colors ${
                   isSelected
-                    ? 'border-gray-700 bg-gray-50 dark:border-foreground dark:bg-muted'
-                    : 'border-gray-200 hover:border-gray-300 bg-white dark:border-border dark:hover:border-muted-foreground dark:bg-card'
+                    ? 'border-border-strong bg-muted'
+                    : 'border-border-subtle bg-background hover:border-border-strong hover:bg-muted/40'
                 }`}
               >
-                <div
-                  className={`p-2 rounded-lg ${isSelected ? 'bg-gray-200 dark:bg-accent' : 'bg-muted'}`}
-                >
+                <div className={`rounded-md p-2 ${isSelected ? 'bg-background' : 'bg-muted'}`}>
                   <Icon
                     className={`h-4 w-4 ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}
                   />
@@ -96,36 +94,36 @@ export function CatSettingsTab() {
       </div>
 
       {/* API Keys Status */}
-      <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-muted border-b border-border-subtle flex items-center gap-2">
-          <Key className="h-4 w-4 text-amber-600" />
+      <div className="overflow-hidden rounded-md border border-border-subtle bg-background">
+        <div className="flex items-center gap-2 border-b border-border-subtle bg-muted/50 px-4 py-3">
+          <Key className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-semibold text-foreground">API Keys</span>
         </div>
         <div className="p-4">
           {hasByok ? (
-            <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-              <div className="p-2 bg-green-100 rounded-full">
-                <Check className="h-4 w-4 text-green-600" />
+            <div className="flex items-center gap-3 rounded-md border border-green-500/20 bg-green-500/10 p-3">
+              <div className="rounded-md bg-background p-2">
+                <Check className="h-4 w-4 text-green-700 dark:text-green-300" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-green-900">Your own API key connected</p>
-                <p className="text-xs text-green-700">Unlimited usage with your key</p>
+                <p className="text-sm font-medium text-foreground">API key connected</p>
+                <p className="text-xs text-muted-foreground">Using your own provider key</p>
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-3 p-3 bg-amber-50 rounded-lg">
-              <div className="p-2 bg-amber-100 rounded-full">
-                <AlertTriangle className="h-4 w-4 text-amber-600" />
+            <div className="flex items-center gap-3 rounded-md border border-amber-500/20 bg-amber-500/10 p-3">
+              <div className="rounded-md bg-background p-2">
+                <AlertTriangle className="h-4 w-4 text-amber-700 dark:text-amber-300" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-amber-900">Using free tier</p>
-                <p className="text-xs text-amber-700">Limited daily messages</p>
+                <p className="text-sm font-medium text-foreground">Using platform key</p>
+                <p className="text-xs text-muted-foreground">Daily usage limits may apply</p>
               </div>
             </div>
           )}
           <Link
             href={ROUTES.SETTINGS_AI}
-            className="mt-3 flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors"
+            className="mt-3 flex items-center justify-between rounded-md p-3 transition-colors hover:bg-muted"
           >
             <span className="text-sm text-muted-strong">Manage API Keys</span>
             <ChevronRight className="h-4 w-4 text-muted-dim" />
@@ -134,8 +132,8 @@ export function CatSettingsTab() {
       </div>
 
       {/* Permissions */}
-      <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="px-4 py-3 bg-muted border-b border-border-subtle flex items-center justify-between">
+      <div className="overflow-hidden rounded-md border border-border-subtle bg-background">
+        <div className="flex items-center justify-between border-b border-border-subtle bg-muted/50 px-4 py-3">
           <div className="flex items-center gap-2">
             <Shield className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-semibold text-foreground">Permissions</span>
@@ -152,7 +150,7 @@ export function CatSettingsTab() {
             <Loader2 className="h-5 w-5 animate-spin text-muted-dim" />
           </div>
         ) : permissions ? (
-          <div className="divide-y divide-gray-100 dark:divide-border">
+          <div className="divide-y divide-border">
             {permissions.summary.categories.map(cat => {
               const isSaving = saving === cat.category;
               return (
@@ -180,9 +178,9 @@ export function CatSettingsTab() {
         )}
 
         {permissions?.summary.highRiskEnabled && (
-          <div className="px-4 py-3 bg-red-50 border-t border-red-100 flex items-center gap-2">
-            <ShieldAlert className="h-4 w-4 text-red-600" />
-            <span className="text-xs text-red-700">High-risk actions enabled</span>
+          <div className="flex items-center gap-2 border-t border-destructive/20 bg-destructive/10 px-4 py-3">
+            <ShieldAlert className="h-4 w-4 text-destructive" />
+            <span className="text-xs text-destructive">High-risk actions enabled</span>
           </div>
         )}
       </div>
@@ -190,7 +188,7 @@ export function CatSettingsTab() {
       {/* Link to full settings */}
       <Link
         href={ROUTES.SETTINGS_AI}
-        className="block text-center text-sm text-muted-foreground hover:text-gray-800 dark:hover:text-foreground py-2"
+        className="block py-2 text-center text-sm text-muted-foreground hover:text-foreground"
       >
         View all AI settings
       </Link>

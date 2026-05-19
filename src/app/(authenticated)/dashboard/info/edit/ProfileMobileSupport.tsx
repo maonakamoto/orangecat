@@ -29,7 +29,7 @@ export function ProfileMobileSupport({
     <>
       {/* Progress bar at top (mobile only) */}
       <div className="lg:hidden mb-6">
-        <div className="bg-card rounded-xl border border-border shadow-sm p-4">
+        <div className="bg-card rounded-lg border border-border shadow-sm p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-muted-strong">Profile Completion</span>
             <span className="text-sm font-bold text-foreground">{completionPercentage}%</span>
@@ -64,7 +64,7 @@ export function ProfileMobileSupport({
           onClick={() => setShowMobileGuidance(true)}
           className={cn(
             GRADIENTS.brandBitcoin,
-            'lg:hidden fixed bottom-6 right-6 z-50 p-4 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200'
+            'fixed bottom-6 right-6 z-50 rounded-full p-4 text-white transition-colors duration-200 lg:hidden'
           )}
           aria-label="Get help"
         >
@@ -79,7 +79,7 @@ export function ProfileMobileSupport({
           onClick={() => setShowMobileGuidance(false)}
         >
           <div
-            className="w-full bg-card rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto"
+            className="w-full bg-card rounded-t-lg shadow-sm max-h-[80vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
             <div className="sticky top-0 bg-card border-b border-border px-4 py-3 flex items-center justify-between">

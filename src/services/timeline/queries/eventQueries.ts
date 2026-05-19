@@ -15,11 +15,7 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { TIMELINE_TABLES } from '@/config/database-tables';
-import type {
-  TimelineDisplayEvent,
-  TimelineEventType,
-  TimelineActorType,
-} from '@/types/timeline';
+import type { TimelineDisplayEvent, TimelineEventType, TimelineActorType } from '@/types/timeline';
 import { transformEnrichedEventToDisplay } from './helpers';
 import { enrichEventsForDisplay } from '@/services/timeline/processors/enrichment';
 import { getTimeAgo, isEventRecent } from '@/services/timeline/formatters';
@@ -27,7 +23,9 @@ import { getTimeAgo, isEventRecent } from '@/services/timeline/formatters';
 /**
  * Get event by ID
  */
-export async function getEventById(eventId: string): Promise<{ success: boolean; event?: TimelineDisplayEvent; error?: string }> {
+export async function getEventById(
+  eventId: string
+): Promise<{ success: boolean; event?: TimelineDisplayEvent; error?: string }> {
   try {
     // Try enriched view first
     const { data: event, error } = await supabase
@@ -71,10 +69,7 @@ export async function getReplies(
   limit: number = 50
 ): Promise<{ success: boolean; replies?: TimelineDisplayEvent[]; error?: string }> {
   try {
-    const buildTree = async (
-      parentId: string,
-      depth: number
-    ): Promise<TimelineDisplayEvent[]> => {
+    const buildTree = async (parentId: string, depth: number): Promise<TimelineDisplayEvent[]> => {
       // Limit depth to avoid accidental cycles
       if (depth > 3) {
         return [];
@@ -145,7 +140,11 @@ export async function searchPosts(
     // Search in enriched_timeline_events view
     // Using ilike for case-insensitive search
     const escapedSearch = searchQuery.replace(/[%_]/g, '\\$&');
-    const { data: events, error, count } = await supabase
+    const {
+      data: events,
+      error,
+      count,
+    } = await supabase
       .from(TIMELINE_TABLES.ENRICHED_VIEW)
       .select('*', { count: 'exact' })
       .eq('visibility', 'public')
@@ -253,4 +252,3 @@ export async function getThreadPosts(threadId: string): Promise<{
     return { success: false, error: 'Failed to load thread. Please try again.' };
   }
 }
-

@@ -34,10 +34,10 @@ export function DesktopNavigation({ items }: DesktopNavigationProps) {
           key={item.name}
           href={item.href!}
           className={cn(
-            'px-3 py-2 text-sm font-medium rounded-xl transition-colors whitespace-nowrap',
+            'px-3 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap',
             isActive(item.href!)
-              ? 'text-tiffany-600 bg-tiffany-50'
-              : 'text-gray-600 hover:text-tiffany-600 hover:bg-tiffany-50 dark:text-muted-foreground dark:hover:text-foreground dark:hover:bg-muted'
+              ? 'text-foreground bg-muted'
+              : 'text-muted-foreground hover:text-foreground hover:bg-muted'
           )}
         >
           {item.name}

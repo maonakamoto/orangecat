@@ -39,7 +39,7 @@ export default function PostPage() {
   } = usePostThread(postId);
 
   const pageHeader = (
-    <header className="sticky top-0 z-10 bg-white/80 dark:bg-card/80 backdrop-blur-sm border-b border-border">
+    <header className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border">
       <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-4">
         <Button variant="ghost" size="sm" onClick={() => router.back()} className="-ml-2">
           <ArrowLeft className="w-5 h-5" />
@@ -73,7 +73,7 @@ export default function PostPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-background">
+      <div className="min-h-screen bg-background">
         {pageHeader}
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-8 h-8 animate-spin text-muted-dim" />
@@ -84,7 +84,7 @@ export default function PostPage() {
 
   if (error || !mainPost) {
     return (
-      <div className="min-h-screen bg-white dark:bg-background">
+      <div className="min-h-screen bg-background">
         {pageHeader}
         <div className="flex flex-col items-center justify-center py-20 text-center px-4">
           <p className="text-xl font-bold text-foreground mb-2">This post doesn&apos;t exist</p>
@@ -100,7 +100,7 @@ export default function PostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-background">
+    <div className="min-h-screen bg-background">
       {pageHeader}
 
       <div className="max-w-2xl mx-auto">

@@ -8,7 +8,7 @@ import {
   apiConflict,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  applyRateLimitHeaders, rateLimitSocialAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { applyRateLimitHeaders, rateLimitSocialAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { auditSuccess, AUDIT_ACTIONS } from '@/lib/api/auditLog';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -20,7 +20,12 @@ async function handleFollow(request: AuthenticatedRequest) {
 
     // Rate limiting check - 10 follows per minute
     const rateLimitResult = await rateLimitSocialAsync(user.id);
-    if (!rateLimitResult.success) { return apiRateLimited('Too many follow requests. Please slow down.', retryAfterSeconds(rateLimitResult)); }
+    if (!rateLimitResult.success) {
+      return apiRateLimited(
+        'Too many follow requests. Please slow down.',
+        retryAfterSeconds(rateLimitResult)
+      );
+    }
 
     const { following_id } = await request.json();
 
@@ -77,12 +82,12 @@ async function handleFollow(request: AuthenticatedRequest) {
     await auditSuccess(AUDIT_ACTIONS.USER_FOLLOWED, user.id, 'profile', following_id);
 
     // Notify the followed user (fire-and-forget)
-    const { data: followerProfile } = await supabase.from(DATABASE_TABLES.PROFILES)
+    const { data: followerProfile } = await supabase
+      .from(DATABASE_TABLES.PROFILES)
       .select('name, username')
       .eq('id', user.id)
       .maybeSingle();
-    const followerName: string =
-      followerProfile?.name || followerProfile?.username || 'Someone';
+    const followerName: string = followerProfile?.name || followerProfile?.username || 'Someone';
     const followerUsername: string | null = followerProfile?.username ?? null;
     void NotificationDispatcher.dispatch({
       userId: following_id,

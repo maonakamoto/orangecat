@@ -6,11 +6,7 @@
  */
 
 import type { GroupLabel, GroupVisibility } from '@/config/group-labels';
-import type {
-  GovernancePreset,
-  GroupRole,
-  ActionPermission,
-} from '@/config/governance-presets';
+import type { GovernancePreset, GroupRole, ActionPermission } from '@/config/governance-presets';
 import type { GroupFeature } from '@/config/group-features';
 
 /**
@@ -173,7 +169,7 @@ export function isFeatureEnabled(
   enabledFeatures: GroupFeatureRecord[],
   feature: GroupFeature
 ): boolean {
-  return enabledFeatures.some((f) => f.feature_key === feature && f.enabled);
+  return enabledFeatures.some(f => f.feature_key === feature && f.enabled);
 }
 
 /**
@@ -183,9 +179,7 @@ export function getFeatureConfig(
   enabledFeatures: GroupFeatureRecord[],
   feature: GroupFeature
 ): Record<string, unknown> | null {
-  const featureRecord = enabledFeatures.find(
-    (f) => f.feature_key === feature && f.enabled
-  );
+  const featureRecord = enabledFeatures.find(f => f.feature_key === feature && f.enabled);
   return featureRecord?.config ?? null;
 }
 

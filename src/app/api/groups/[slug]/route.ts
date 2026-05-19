@@ -23,7 +23,7 @@ import {
   apiInternalError,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 
 interface RouteContext {
   params: Promise<{ slug: string }>;

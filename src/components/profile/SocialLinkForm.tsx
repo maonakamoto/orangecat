@@ -87,7 +87,7 @@ export function SocialLinkForm({
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded text-sm">
+        <div className="oc-error-surface text-destructive/80 px-3 py-2 rounded text-sm">
           {error}
         </div>
       )}
@@ -109,7 +109,7 @@ export function SocialLinkForm({
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   isSelected
                     ? 'border-orange-500 bg-orange-50'
-                    : 'border-border-strong hover:border-orange-300'
+                    : 'border-border-strong hover:border-border-strong'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export function SocialLinkForm({
             className={`p-3 border rounded-lg text-left transition-colors ${
               platform === 'custom'
                 ? 'border-orange-500 bg-orange-50'
-                : 'border-border-strong hover:border-orange-300'
+                : 'border-border-strong hover:border-border-strong'
             }`}
           >
             <div className="flex items-center gap-2">

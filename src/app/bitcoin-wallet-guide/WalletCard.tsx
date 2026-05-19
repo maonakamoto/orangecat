@@ -23,11 +23,11 @@ function getTypeIcon(type: WalletOption['type']) {
 function getDifficultyColor(difficulty: WalletOption['difficulty']) {
   switch (difficulty) {
     case 'beginner':
-      return 'text-green-600 bg-green-50 border-green-200';
+      return 'border-success/25 bg-success/10 text-success';
     case 'intermediate':
-      return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      return 'border-warning/30 bg-warning/10 text-foreground';
     case 'advanced':
-      return 'text-red-600 bg-red-50 border-red-200';
+      return 'border-destructive/25 bg-destructive/10 text-destructive';
     default:
       return 'text-muted-foreground bg-muted border-border';
   }
@@ -47,9 +47,9 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
       <Card
         className={`cursor-pointer transition-all duration-200 ${
           isSelected
-            ? 'ring-2 ring-bitcoinOrange border-bitcoinOrange shadow-lg'
-            : 'hover:shadow-md border-border'
-        } ${wallet.recommended ? 'ring-1 ring-green-200 bg-green-50/30' : ''}`}
+            ? 'ring-2 ring-bitcoinOrange border-bitcoinOrange'
+            : 'oc-card-link border-border'
+        } ${wallet.recommended ? 'ring-1 ring-success/20 bg-success/5' : ''}`}
         onClick={() => onSelect(wallet.id)}
       >
         <CardHeader className="pb-3">
@@ -66,7 +66,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
                 <div className="flex items-center gap-2">
                   <CardTitle className="text-lg">{wallet.name}</CardTitle>
                   {wallet.recommended && (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                    <div className="flex items-center gap-1 rounded-md border border-success/20 bg-success/10 px-2 py-1 text-xs font-medium text-success">
                       <Star className="w-3 h-3" />
                       Recommended
                     </div>

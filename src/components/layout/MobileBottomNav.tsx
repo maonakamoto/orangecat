@@ -58,7 +58,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
     ? [
         {
           icon: Cat,
-          label: 'My Cat',
+          label: 'Cat',
           href: ROUTES.DASHBOARD.CAT,
           active: pathname?.startsWith(ROUTES.DASHBOARD.CAT),
         },
@@ -148,9 +148,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
           shouldBeTransparent
             ? 'bg-background/20 backdrop-blur-sm border-transparent'
             : 'bg-background/95 backdrop-blur-md',
-          isAuthenticated
-            ? 'border-orange-200/50 dark:border-orange-900/30 shadow-lg'
-            : 'border-border'
+          isAuthenticated ? 'border-border shadow-sm' : 'border-border'
         )}
         style={{
           zIndex: Z_INDEX.MOBILE_BOTTOM_NAV,
@@ -198,8 +196,8 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                   'transition-all duration-200',
                   'touch-manipulation select-none',
                   '-webkit-tap-highlight-color-transparent',
-                  'active:scale-95 active:bg-gray-100 dark:active:bg-muted',
-                  isActive && (isAuthenticated ? 'text-orange-600' : 'text-tiffany-600'),
+                  'active:scale-95 active:bg-muted dark:active:bg-muted',
+                  isActive && 'text-foreground',
                   !isActive && 'text-muted-foreground',
                   item.primary && 'relative',
                   shouldBeSmall ? 'min-h-12 gap-0.5' : 'min-h-14 gap-1'
@@ -211,7 +209,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                 {item.primary ? (
                   <div
                     className={cn(
-                      'absolute flex items-center justify-center rounded-full shadow-lg',
+                      'absolute flex items-center justify-center rounded-full shadow-sm',
                       'transition-all duration-300 hover:scale-105 active:scale-95',
                       isAuthenticated ? GRADIENTS.brandOrange : GRADIENTS.brandTiffany
                     )}

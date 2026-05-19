@@ -64,7 +64,7 @@ export function AICreditsPanel() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg p-4 border border-yellow-200">
+          <div className="bg-muted/30 rounded-lg p-4 border border-yellow-200">
             <div className="text-sm text-yellow-800 mb-1">Available Balance</div>
             <div className="text-3xl font-bold text-yellow-900">
               {formatAmountBtc(balance.balance_btc)}

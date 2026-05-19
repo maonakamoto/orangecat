@@ -9,7 +9,7 @@ import { withAuth, withOptionalAuth, type AuthenticatedRequest } from '@/lib/api
 import type { User } from '@supabase/supabase-js';
 import { logger } from '@/utils/logger';
 import { handleSupabaseError } from '@/lib/wallets/errorHandling';
-import {  applyRateLimitHeaders, rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { applyRateLimitHeaders, rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { apiSuccess, apiRateLimited } from '@/lib/api/standardResponse';
 import { validateOneOfIds, getValidationError } from '@/lib/api/validation';
 import { getTableName } from '@/config/entity-registry';
@@ -32,7 +32,9 @@ export const GET = withOptionalAuth(async request => {
       'profile_id or project_id is required'
     );
     const validationError = getValidationError(idValidation);
-    if (validationError) {return validationError;}
+    if (validationError) {
+      return validationError;
+    }
 
     const isOwner = user ? isProfileOwner(user, profileId) : false;
     const selectFields = isOwner ? '*' : PUBLIC_WALLET_FIELDS;
@@ -80,7 +82,12 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     const { user, supabase } = request;
 
     const rateLimitResult = await rateLimitWriteAsync(user.id);
-    if (!rateLimitResult.success) { return apiRateLimited('Too many wallet creation requests. Please slow down.', retryAfterSeconds(rateLimitResult)); }
+    if (!rateLimitResult.success) {
+      return apiRateLimited(
+        'Too many wallet creation requests. Please slow down.',
+        retryAfterSeconds(rateLimitResult)
+      );
+    }
 
     const rawBody = await request.json();
     const { response } = await createWallet(supabase, user, rawBody);

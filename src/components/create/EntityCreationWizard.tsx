@@ -15,27 +15,27 @@ import type { EntityConfig, EntityTemplate } from './types';
 
 const WIZARD_THEMES: Record<string, { gradient: string; ring: string; bg: string }> = {
   orange: {
-    gradient: 'from-orange-500 to-amber-500',
+    gradient: 'bg-orange-600',
     ring: 'ring-orange-100',
     bg: 'bg-orange-500',
   },
   tiffany: {
-    gradient: 'from-tiffany to-tiffany-dark',
+    gradient: 'bg-tiffany-600',
     ring: 'ring-tiffany-light',
     bg: 'bg-tiffany',
   },
   rose: {
-    gradient: 'from-rose-500 to-pink-500',
+    gradient: 'bg-rose-600',
     ring: 'ring-rose-100',
     bg: 'bg-rose-500',
   },
   blue: {
-    gradient: 'from-blue-500 to-cyan-500',
+    gradient: 'bg-foreground',
     ring: 'ring-blue-100',
     bg: 'bg-tiffany-500',
   },
   green: {
-    gradient: 'from-green-500 to-emerald-500',
+    gradient: 'bg-success',
     ring: 'ring-green-100',
     bg: 'bg-green-500',
   },
@@ -118,7 +118,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
         <div className="flex items-center gap-3 mb-1">
           <button
             onClick={handleCancel}
-            className="inline-flex items-center text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors shrink-0"
+            className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors shrink-0"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             Cancel

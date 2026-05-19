@@ -21,7 +21,6 @@ import { SmartQuestionsPanel } from './SmartQuestionsPanel';
 import { TASK_DEFINITIONS } from '@/services/recommendations/tasks';
 import type { RecommendedTask, TaskPriority } from '@/services/recommendations/types';
 import type { LucideIcon } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 
 const TASK_ICON_MAP: Record<string, LucideIcon> = Object.fromEntries(
   TASK_DEFINITIONS.map(task => [task.id, task.icon])
@@ -36,13 +35,13 @@ interface TasksSectionProps {
 function getPriorityColor(priority: TaskPriority): string {
   switch (priority) {
     case 'critical':
-      return 'text-red-700 bg-red-50 border-red-200';
+      return 'border-destructive/20 bg-destructive/10 text-destructive';
     case 'high':
-      return 'text-orange-600 bg-orange-50 border-orange-200';
+      return 'border-orange-500/20 bg-orange-500/10 text-orange-700 dark:text-orange-300';
     case 'medium':
-      return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      return 'border-yellow-500/20 bg-yellow-500/10 text-yellow-700 dark:text-yellow-300';
     case 'low':
-      return 'text-green-600 bg-green-50 border-green-200';
+      return 'border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-300';
   }
 }
 
@@ -117,16 +116,16 @@ export default function TasksSection({
   if (celebration && !celebrationDismissed) {
     return (
       <div className={className}>
-        <Card className={`border-green-200 ${GRADIENTS.sectionGreen}`}>
+        <Card className="border-border-subtle bg-background">
           <CardContent className="p-6 text-center relative">
             <button
               onClick={dismissCelebration}
-              className="absolute top-3 right-3 p-1.5 text-muted-dim hover:text-gray-600 dark:hover:text-foreground hover:bg-white/60 dark:hover:bg-muted/60 rounded-lg transition-colors"
+              className="absolute right-3 top-3 rounded-md p-1.5 text-muted-dim transition-colors hover:bg-muted hover:text-foreground"
               aria-label="Dismiss"
             >
               <X className="w-4 h-4" />
             </button>
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md border border-border-subtle bg-muted/40">
               <Sparkles className="w-8 h-8 text-green-600" />
             </div>
             <h3 className="text-lg font-semibold text-foreground mb-2">{celebration.title}</h3>
@@ -170,7 +169,7 @@ export default function TasksSection({
               </div>
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="p-2 hover:bg-muted rounded-lg transition-colors"
+                className="rounded-md p-2 transition-colors hover:bg-muted"
                 aria-label={isExpanded ? 'Collapse tasks' : 'Expand tasks'}
               >
                 {isExpanded ? (
@@ -182,9 +181,9 @@ export default function TasksSection({
             </div>
           </div>
 
-          <div className="w-full bg-muted rounded-full h-2 mt-3">
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-sm bg-muted">
             <div
-              className="bg-tiffany-600 h-2 rounded-full transition-all duration-500"
+              className="h-2 rounded-sm bg-foreground transition-all duration-500"
               style={{ width: `${taskCompletion}%` }}
             />
           </div>
@@ -235,13 +234,13 @@ function TaskCard({
   return (
     <div
       className={`
-        flex items-start gap-4 p-4 border rounded-lg transition-all
-        ${isCompleted ? 'border-green-200 bg-green-50 opacity-60' : 'border-border hover:border-tiffany-300 hover:shadow-sm'}
+        flex items-start gap-4 rounded-md border p-4 transition-colors
+        ${isCompleted ? 'border-border-subtle bg-muted/50 opacity-70' : 'border-border-subtle hover:border-border-strong hover:bg-muted/30'}
       `}
     >
       <button
         onClick={onComplete}
-        className="mt-0.5 text-muted-dim hover:text-tiffany-600 transition-colors flex-shrink-0"
+        className="mt-0.5 flex-shrink-0 text-muted-dim transition-colors hover:text-foreground"
         aria-label={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
       >
         {isCompleted ? (
@@ -262,7 +261,7 @@ function TaskCard({
                 {task.title}
               </h4>
               <span
-                className={`px-2 py-0.5 text-xs rounded-full border ${getPriorityColor(task.priority)}`}
+                className={`rounded-sm border px-2 py-0.5 text-xs ${getPriorityColor(task.priority)}`}
               >
                 {getPriorityLabel(task.priority)}
               </span>
@@ -275,7 +274,7 @@ function TaskCard({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="hover:bg-tiffany-50 hover:border-tiffany-300 hover:text-tiffany-700"
+                  className="hover:border-border-strong hover:bg-muted hover:text-foreground"
                 >
                   {task.action.label}
                   <ArrowRight className="w-3 h-3 ml-1" />

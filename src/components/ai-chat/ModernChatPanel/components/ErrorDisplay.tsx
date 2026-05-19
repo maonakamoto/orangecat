@@ -20,16 +20,16 @@ export function ErrorDisplay({ error, onRetry, onDismiss }: ErrorDisplayProps) {
     error.includes('API key') || error.includes('openrouter') || error.includes('not configured');
 
   return (
-    <div className="mx-4 mb-2 p-3 bg-red-50 border border-red-200 rounded-xl">
+    <div className="mx-4 mb-2 rounded-md border border-destructive/20 bg-destructive/10 p-3">
       <div className="flex items-start gap-2">
-        <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+        <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" />
         <div className="flex-1 min-w-0">
-          <p className="text-base text-red-700">{error}</p>
+          <p className="text-base text-destructive">{error}</p>
           <div className="flex items-center gap-3 mt-1">
             {showApiKeyLink && (
               <button
                 onClick={() => router.push(ROUTES.SETTINGS_AI)}
-                className="text-xs text-red-600 hover:text-red-800 flex items-center gap-1"
+                className="flex items-center gap-1 text-xs text-destructive hover:text-foreground"
               >
                 <Key className="h-3 w-3" />
                 Configure API Key
@@ -38,7 +38,7 @@ export function ErrorDisplay({ error, onRetry, onDismiss }: ErrorDisplayProps) {
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="text-xs text-orange-600 hover:text-orange-800 font-medium"
+                className="text-xs font-medium text-foreground hover:text-muted-foreground"
               >
                 Try again
               </button>
@@ -49,7 +49,7 @@ export function ErrorDisplay({ error, onRetry, onDismiss }: ErrorDisplayProps) {
           <button
             onClick={onDismiss}
             aria-label="Dismiss error"
-            className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground flex-shrink-0"
+            className="text-muted-dim hover:text-foreground flex-shrink-0"
           >
             <X className="h-3.5 w-3.5" />
           </button>

@@ -120,7 +120,7 @@ export function MessageContextMenu({
       <div
         ref={menuRef}
         className={cn(
-          'fixed z-50 bg-card rounded-lg shadow-xl border border-border',
+          'fixed z-50 bg-card rounded-lg shadow-sm border border-border',
           'min-w-40 py-1',
           'animate-in fade-in-0 zoom-in-95 duration-150'
         )}
@@ -140,7 +140,7 @@ export function MessageContextMenu({
             }}
             className={cn(
               'w-full px-4 py-2.5 text-left text-sm text-foreground',
-              'hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
+              'hover:bg-muted active:bg-muted dark:active:bg-muted',
               'flex items-center gap-3 transition-colors'
             )}
             role="menuitem"
@@ -158,13 +158,13 @@ export function MessageContextMenu({
               onClose();
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-left text-sm text-red-600',
-              'hover:bg-red-50 active:bg-red-100',
+              'w-full px-4 py-2.5 text-left text-sm text-destructive',
+              'hover:bg-destructive/10 active:bg-red-100',
               'flex items-center gap-3 transition-colors'
             )}
             role="menuitem"
           >
-            <Trash2 className="w-4 h-4 text-red-600" />
+            <Trash2 className="w-4 h-4 text-destructive" />
             <span>Delete</span>
           </button>
         )}
@@ -178,7 +178,7 @@ export function MessageContextMenu({
             }}
             className={cn(
               'w-full px-4 py-2.5 text-center text-sm text-muted-foreground',
-              'hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
+              'hover:bg-muted active:bg-muted dark:active:bg-muted',
               'flex items-center justify-center gap-2 transition-colors'
             )}
             role="menuitem"

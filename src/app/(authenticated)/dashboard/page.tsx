@@ -2,8 +2,6 @@
 
 import dynamic from 'next/dynamic';
 import Loading from '@/components/Loading';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import { ProfileCompletionModal } from '@/components/onboarding/ProfileCompletionModal';
 import {
   DashboardHeader,
@@ -21,7 +19,7 @@ const DashboardTimeline = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="rounded-xl border border-border-subtle bg-card p-4 shadow-sm">
+      <div className="oc-surface oc-surface-padding">
         <div className="animate-pulse space-y-4">
           <div className="h-4 bg-muted rounded w-1/4"></div>
           <div className="h-24 bg-muted rounded"></div>
@@ -68,8 +66,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 pb-20 sm:pb-8">
+    <div className="oc-page">
+      <div className="oc-page-container oc-page-stack pb-20 sm:pb-8">
         <DashboardHeader
           profile={profile}
           totalProjects={totalProjects}

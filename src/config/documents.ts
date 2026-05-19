@@ -27,13 +27,13 @@ export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = Object.fromEnt
 export const DOCUMENT_VISIBILITY_TYPES = [
   {
     value: 'cat_visible',
-    label: 'My Cat Only',
-    description: 'My Cat can use this for advice',
+    label: 'Cat Only',
+    description: 'Your Cat can use this for advice',
   },
   {
     value: 'private',
     label: 'Private',
-    description: 'Only you can see, My Cat cannot access',
+    description: 'Only you can see, Cat cannot access',
   },
   {
     value: 'public',

@@ -42,7 +42,7 @@ export function EventCard({ event, groupSlug, onUpdate: _onUpdate }: EventCardPr
     event.rsvps?.filter(r => r.status === STATUS.GROUP_EVENT_RSVPS.GOING).length || 0;
 
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="oc-card-link">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex-1">

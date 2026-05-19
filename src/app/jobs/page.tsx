@@ -69,7 +69,7 @@ export default function JobsPage() {
       <div className="container mx-auto px-4 py-8">
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-red-600 mb-4">{error}</p>
+            <p className="text-destructive mb-4">{error}</p>
             <Button onClick={loadJobs}>Try Again</Button>
           </CardContent>
         </Card>
@@ -102,7 +102,7 @@ export default function JobsPage() {
       ) : (
         <div className="space-y-4">
           {jobs.map(job => (
-            <Card key={job.id} className="hover:shadow-md transition-shadow">
+            <Card key={job.id} className="oc-card-link">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">

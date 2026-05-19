@@ -167,7 +167,7 @@ export default function ShareContent({
   // Modern share UI - Modal on mobile, dropdown on desktop
   const shareContent = (
     <div
-      className={`bg-card rounded-2xl shadow-2xl border border-gray-200/50 dark:border-border/50 backdrop-blur-xl p-5 sm:p-6 w-full max-w-md mx-auto ${className}`}
+      className={`bg-card rounded-lg shadow-sm border border-border dark:border-border/50 backdrop-blur-xl p-5 sm:p-6 w-full max-w-md mx-auto ${className}`}
       style={{
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       }}
@@ -186,7 +186,7 @@ export default function ShareContent({
           {onClose && (
             <button
               onClick={onClose}
-              className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground transition-colors p-2 hover:bg-muted rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
+              className="text-muted-dim hover:text-foreground transition-colors p-2 hover:bg-muted rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Close share menu"
             >
               <X className="w-5 h-5" />
@@ -199,7 +199,7 @@ export default function ShareContent({
       {hasNativeShare && (
         <button
           onClick={handleNativeShare}
-          className={`w-full mb-5 flex items-center justify-center gap-3 p-4 rounded-xl ${GRADIENTS.btnOrange} text-white font-semibold transition-all touch-manipulation active:scale-95 shadow-lg shadow-orange-500/30`}
+          className={`w-full mb-5 flex items-center justify-center gap-3 p-4 rounded-lg ${GRADIENTS.btnOrange} text-white font-semibold transition-all touch-manipulation active:scale-95 shadow-sm shadow-orange-500/30`}
         >
           <Share2 className="w-5 h-5" />
           <span>Share via...</span>
@@ -214,7 +214,7 @@ export default function ShareContent({
             <button
               key={platform.name}
               onClick={() => handlePlatformShare(platform)}
-              className={`group flex flex-col items-center gap-2 p-3 sm:p-4 rounded-xl transition-all touch-manipulation active:scale-95 ${platform.bgColor} hover:shadow-md`}
+              className={`group flex flex-col items-center gap-2 p-3 sm:p-4 rounded-lg transition-all touch-manipulation active:scale-95 ${platform.bgColor} hover:shadow-sm`}
               aria-label={`Share on ${platform.name}`}
             >
               <div
@@ -222,7 +222,7 @@ export default function ShareContent({
               >
                 <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${platform.color}`} />
               </div>
-              <span className="text-xs sm:text-sm font-medium text-muted-strong group-hover:text-gray-900 dark:group-hover:text-foreground">
+              <span className="text-xs sm:text-sm font-medium text-muted-strong group-hover:text-foreground dark:group-hover:text-foreground">
                 {platform.name}
               </span>
             </button>
@@ -233,7 +233,7 @@ export default function ShareContent({
       {/* Copy URL - Prominent action */}
       <button
         onClick={handleCopy}
-        className={`w-full flex items-center justify-center gap-3 p-4 rounded-xl transition-all touch-manipulation active:scale-95 font-semibold ${
+        className={`w-full flex items-center justify-center gap-3 p-4 rounded-lg transition-all touch-manipulation active:scale-95 font-semibold ${
           copySuccess
             ? 'bg-green-50 hover:bg-green-100 text-green-700 border-2 border-green-200'
             : 'bg-muted hover:bg-muted/80 text-foreground border-2 border-border'

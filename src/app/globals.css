@@ -2,22 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   html {
     @apply scroll-smooth;
-    /* Base font size — 17px instead of browser default 16px.
-       All Tailwind rem classes scale from this, so text-sm becomes ~15px,
-       text-base 17px, etc. Noticeably more readable on laptop screens. */
-    font-size: 17px;
+    font-size: 16px;
     /* Prevent zoom on iOS when focusing inputs */
     -webkit-text-size-adjust: 100%;
     /* Prevent horizontal scrolling on mobile */
     overflow-x: hidden;
     /* Support for iOS safe areas */
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
   }
-  
+
   body {
     @apply bg-background text-foreground antialiased;
     /* Improve touch experience on mobile */
@@ -45,12 +42,12 @@
   }
 
   /* Prevent zoom on mobile inputs */
-  input[type="text"],
-  input[type="email"], 
-  input[type="password"],
-  input[type="number"],
-  input[type="tel"],
-  input[type="url"],
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='number'],
+  input[type='tel'],
+  input[type='url'],
   textarea,
   select {
     font-size: 16px !important;
@@ -58,17 +55,21 @@
     -webkit-appearance: none;
     /* Better touch targets */
     min-height: 44px;
-    /* iOS-specific fixes */
-    border-radius: 0;
+    border-radius: var(--radius-control);
   }
 
   /* Improve focus visibility for better accessibility */
   *:focus-visible {
-    @apply outline-none ring-2 ring-tiffany-500 ring-offset-2;
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 
   /* Better typography scaling for mobile */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     /* Better text wrapping on mobile */
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -149,7 +150,7 @@
     --orange-700: 230 92 0;
     --orange-800: 204 82 0;
     --orange-900: 179 71 0;
-    --background: 0 0% 97%;
+    --background: 0 0% 98%;
     --foreground: 0 0% 4%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 4%;
@@ -157,9 +158,9 @@
     --popover-foreground: 0 0% 4%;
     --primary: 180 100% 27.5%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 94%;
+    --secondary: 0 0% 95%;
     --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 94%;
+    --muted: 0 0% 95%;
     --muted-foreground: 0 0% 40%;
     --accent: 180 52% 94%;
     --accent-foreground: 180 100% 14%;
@@ -169,10 +170,10 @@
     --success-foreground: 0 0% 98%;
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 9%;
-    --border: 0 0% 90%;
-    --border-subtle: 0 0% 96%;
-    --border-strong: 0 0% 83%;
-    --input: 0 0% 90%;
+    --border: 0 0% 88%;
+    --border-subtle: 0 0% 94%;
+    --border-strong: 0 0% 78%;
+    --input: 0 0% 84%;
     --ring: 180 100% 34.3%;
     --muted-dim: 0 0% 63%;
     --muted-strong: 0 0% 22%;
@@ -181,7 +182,10 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --radius: 0.375rem;
+    --radius-control: 0.375rem;
+    --radius-surface: 0.5rem;
+    --surface-hover: 0 0% 94%;
   }
   .dark {
     --background: 0 0% 4%;
@@ -204,10 +208,10 @@
     --success-foreground: 0 0% 98%;
     --warning: 38 92% 55%;
     --warning-foreground: 0 0% 9%;
-    --border: 0 0% 15%;
-    --border-subtle: 0 0% 15%;
-    --border-strong: 0 0% 15%;
-    --input: 0 0% 15%;
+    --border: 0 0% 16%;
+    --border-subtle: 0 0% 13%;
+    --border-strong: 0 0% 24%;
+    --input: 0 0% 22%;
     --ring: 180 58% 47.5%;
     --muted-dim: 0 0% 53%;
     --muted-strong: 0 0% 53%;
@@ -216,6 +220,7 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --surface-hover: 0 0% 13%;
   }
 }
 
@@ -224,10 +229,83 @@
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
+  /*
+   * x.ai-adjacent product surfaces.
+   * These classes are the visual SSOT for app pages: neutral surfaces, thin
+   * borders, tight spacing, and restrained OrangeCat accents.
+   */
+  .oc-page {
+    @apply min-h-screen bg-background text-foreground;
+  }
+
+  .oc-page-container {
+    @apply mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8;
+  }
+
+  .oc-page-stack {
+    @apply space-y-5 sm:space-y-6;
+  }
+
+  .oc-page-header {
+    @apply flex flex-col gap-3 border-b border-border-subtle pb-5 sm:flex-row sm:items-start sm:justify-between;
+  }
+
+  .oc-page-title {
+    @apply mb-0 text-xl font-semibold leading-tight text-foreground sm:text-2xl;
+  }
+
+  .oc-page-subtitle {
+    @apply mt-1.5 max-w-2xl text-sm leading-6 text-muted-foreground;
+  }
+
+  .oc-page-actions {
+    @apply flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-end;
+  }
+
+  .oc-surface {
+    @apply rounded-md border border-border-subtle bg-card text-card-foreground shadow-none;
+  }
+
+  .oc-surface-muted {
+    @apply rounded-md border border-border-subtle bg-muted/30 text-foreground shadow-none;
+  }
+
+  .oc-surface-padding {
+    @apply p-4 sm:p-5;
+  }
+
+  .oc-list-row {
+    @apply rounded-md border border-border-subtle bg-card px-3 py-2.5 text-sm text-foreground shadow-none;
+  }
+
+  .oc-empty-surface {
+    @apply rounded-md border border-dashed border-border-strong bg-muted/20 px-4 py-10 text-center text-muted-foreground sm:px-6 sm:py-12;
+  }
+
+  .oc-error-surface {
+    @apply rounded-md border border-destructive/25 bg-destructive/10 p-4 text-destructive sm:p-5;
+  }
+
+  .oc-icon-tile {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border-subtle bg-muted/40 text-foreground;
+  }
+
+  .oc-accent-tile {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-tiffany-600 text-white dark:bg-tiffany-500 dark:text-background;
+  }
+
+  .oc-card-link {
+    @apply transition-colors duration-150 hover:border-border-strong hover:bg-muted/20;
+  }
+
+  .oc-selection-ring {
+    @apply ring-2 ring-tiffany-500/70 border-tiffany-500;
+  }
+
   /* Professional Form Elements - fast, subtle transitions */
   .input {
-    @apply w-full px-3 sm:px-4 py-3 border border-gray-300 rounded-md;
-    @apply focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent;
+    @apply w-full px-3 sm:px-4 py-3 border border-input rounded-md bg-card text-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring;
     @apply text-base; /* Prevents zoom on iOS */
     @apply min-h-[44px];
     /* iOS-specific styling */
@@ -243,13 +321,13 @@
     @apply min-h-[48px] py-4;
     /* Fast, subtle visual feedback */
     @apply transition-all duration-150;
-    @apply focus:shadow-md focus:scale-[1.01];
+    @apply focus:shadow-sm;
   }
 
   /* Textarea styling */
   .textarea {
-    @apply w-full px-3 sm:px-4 py-3 border border-gray-300 rounded-md;
-    @apply focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent;
+    @apply w-full px-3 sm:px-4 py-3 border border-input rounded-md bg-card text-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring;
     @apply text-base resize-y min-h-[100px];
     /* Mobile-specific */
     -webkit-appearance: none;
@@ -257,8 +335,8 @@
 
   /* Select styling */
   .select {
-    @apply w-full px-3 sm:px-4 py-3 border border-gray-300 rounded-md;
-    @apply focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent;
+    @apply w-full px-3 sm:px-4 py-3 border border-input rounded-md bg-card text-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring;
     @apply text-base min-h-[44px] appearance-none;
     /* iOS-specific */
     -webkit-appearance: none;
@@ -266,20 +344,20 @@
 
   /* Progress Indicators */
   .progress-bar {
-    @apply h-2 rounded-full bg-gray-100 overflow-hidden;
+    @apply h-2 rounded-full bg-muted overflow-hidden;
   }
 
   .progress-bar-fill {
-    @apply h-full bg-gradient-to-r from-tiffany-400 to-tiffany-600 transition-all duration-300;
+    @apply h-full bg-tiffany-600 transition-all duration-300;
   }
 
   /* Professional Trust Score Styling - faster transitions */
   .trust-score {
-    @apply h-3 rounded-full bg-gray-100 overflow-hidden;
+    @apply h-3 rounded-full bg-muted overflow-hidden;
   }
 
   .trust-score-fill {
-    @apply h-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-300;
+    @apply h-full bg-success transition-all duration-300;
   }
 
   /* Bitcoin-themed elements */
@@ -288,34 +366,34 @@
   }
 
   .bitcoin-card {
-    @apply card border-orange-200 hover:border-orange-300 hover:shadow-orange-100;
+    @apply card border-orange-200 hover:border-border-strong hover:shadow-orange-100;
   }
 
   /* KPI Cards */
   .kpi-card {
-    @apply bg-white p-4 sm:p-6 rounded-lg shadow-md border border-gray-200 text-center;
+    @apply bg-card p-4 sm:p-6 rounded-lg border border-border text-center;
   }
 
   .kpi-progress {
-    @apply h-2 rounded-full bg-gray-100 overflow-hidden mt-2;
+    @apply h-2 rounded-full bg-muted overflow-hidden mt-2;
   }
 
   .kpi-progress-fill {
-    @apply h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-300;
+    @apply h-full bg-tiffany-600 transition-all duration-300;
   }
 
   /* Professional Transparency Score - faster transitions */
   .transparency-score {
-    @apply h-3 rounded-full bg-gray-100 overflow-hidden;
+    @apply h-3 rounded-full bg-muted overflow-hidden;
   }
 
   .transparency-score-fill {
-    @apply h-full bg-gradient-to-r from-purple-400 to-purple-600 transition-all duration-300;
+    @apply h-full bg-tiffany-600 transition-all duration-300;
   }
 
   /* Labels */
   .label {
-    @apply text-sm font-medium text-gray-700 mb-1 block;
+    @apply text-sm font-medium text-foreground mb-1 block;
   }
 
   /* Touch-friendly elements */
@@ -435,19 +513,19 @@
 
   /* Hide scrollbar but keep scrolling */
   .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 
   .scrollbar-hide::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari and Opera */
+    display: none; /* Chrome, Safari and Opera */
   }
 
   /* Professional PWA Install Banner - faster transitions */
   .pwa-install-banner {
     @apply fixed top-16 left-4 right-4 z-50;
-    @apply bg-gradient-to-r from-orange-500 to-orange-600;
-    @apply text-white rounded-lg shadow-lg p-4;
+    @apply bg-foreground;
+    @apply text-white rounded-lg shadow-sm p-4;
     @apply transform transition-all duration-200;
     /* Mobile-first positioning */
     @apply md:max-w-md md:left-auto md:right-4;
@@ -460,9 +538,9 @@
   }
 
   .modal-content-mobile {
-    @apply bg-white w-full max-h-[90vh] overflow-y-auto;
+    @apply bg-card w-full max-h-[90vh] overflow-y-auto;
     @apply rounded-t-xl rounded-b-none;
-    @apply sm:rounded-xl sm:max-w-md sm:max-h-[80vh];
+    @apply sm:rounded-lg sm:max-w-md sm:max-h-[80vh];
     /* Better scrolling on mobile */
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
@@ -470,11 +548,11 @@
 
   /* Touch-optimized lists */
   .touch-list {
-    @apply divide-y divide-gray-200;
+    @apply divide-y divide-border;
   }
 
   .touch-list-item {
-    @apply px-4 py-4 hover:bg-gray-50 active:bg-gray-100;
+    @apply px-4 py-4 hover:bg-muted active:bg-muted;
     @apply min-h-[60px] flex items-center;
     @apply transition-colors duration-100;
     /* Touch feedback */
@@ -507,7 +585,7 @@
   /* Professional mobile toasts - faster transitions */
   .toast-mobile {
     @apply fixed bottom-4 left-4 right-4 z-50;
-    @apply bg-white border border-gray-200 rounded-lg shadow-lg p-4;
+    @apply bg-card border border-border rounded-lg shadow-sm p-4;
     @apply transform transition-all duration-200;
     @apply sm:bottom-auto sm:top-20 sm:right-4 sm:left-auto sm:max-w-sm;
   }
@@ -543,9 +621,9 @@
   /* PWA status bar styling */
   .pwa-status-bar {
     height: env(safe-area-inset-top);
-    background: linear-gradient(135deg, var(--bitcoin-orange, #f7931a) 0%, var(--bitcoin-orange-dark, #e8830f) 100%);
+    background: hsl(var(--foreground));
   }
-  
+
   /* Ensure mobile menu is above everything */
   [data-mobile-menu] {
     z-index: 9999 !important;
@@ -557,7 +635,7 @@
   .container {
     @apply px-3;
   }
-  
+
   .mobile-hidden {
     display: none !important;
   }
@@ -565,14 +643,16 @@
 
 @media (hover: none) and (pointer: coarse) {
   /* Touch device specific styles */
-  .hover\:shadow-lg:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  .hover\:shadow-sm:hover {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
-  
+
   .touch-device-only {
     display: block;
   }
-  
+
   .no-touch-device {
     display: none;
   }
@@ -583,7 +663,7 @@
   .touch-device-only {
     display: none;
   }
-  
+
   .no-touch-device {
     display: block;
   }
@@ -595,7 +675,7 @@
     /* Fix for iOS Safari address bar height changes */
     min-height: -webkit-fill-available;
   }
-  
+
   .ios-input-fix {
     /* Prevent iOS zoom on input focus */
     transform: translateZ(0);

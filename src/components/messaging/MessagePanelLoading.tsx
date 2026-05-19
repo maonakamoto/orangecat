@@ -20,8 +20,8 @@ export function MessagePanelLoading({
   const inner = (
     <div
       className={cn(
-        'flex h-full bg-card shadow-lg items-center justify-center',
-        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-2xl border border-border'
+        'flex h-full bg-card shadow-sm items-center justify-center',
+        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-lg border border-border'
       )}
     >
       <div className="text-center p-10">

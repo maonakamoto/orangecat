@@ -17,7 +17,9 @@ interface RouteContext {
 export const GET = withOptionalAuth(async (request, context: RouteContext) => {
   const { id } = await context.params;
   const idValidation = getValidationError(validateUUID(id, 'proposal ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   try {
     // Optional auth - public proposals can be viewed by anyone
     // But votes are only visible to members (RLS handles access via request.supabase)

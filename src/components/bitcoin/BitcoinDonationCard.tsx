@@ -99,7 +99,7 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
           variant="outline"
           size="sm"
           onClick={copyToClipboard}
-          className={`w-full ${isBitcoin ? 'border-orange-300 hover:bg-orange-50' : 'border-yellow-300 hover:bg-yellow-50'}`}
+          className={`w-full ${isBitcoin ? 'border-border-strong hover:bg-orange-50' : 'border-yellow-300 hover:bg-yellow-50'}`}
         >
           <Copy className="w-3 h-3 mr-1" />
           Copy Address
@@ -136,7 +136,7 @@ export default function BitcoinDonationCard({
 
   return (
     <div
-      className={`${GRADIENTS.sectionOrangeAmber} rounded-xl border-2 border-orange-200 p-6 ${className}`}
+      className={`${GRADIENTS.sectionOrangeAmber} rounded-lg border-2 border-orange-200 p-6 ${className}`}
     >
       <div className="flex items-center justify-between mb-4">
         <div>

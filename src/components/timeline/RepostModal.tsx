@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { TimelineDisplayEvent } from '@/types/timeline';
 import AvatarLink from '@/components/ui/AvatarLink';
 import Link from 'next/link';
 import { formatRelativeTime } from '@/utils/dates';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { TIMELINE_CONTENT_LIMITS, TIMELINE_SURFACE } from '@/config/timeline';
 
-const QUOTE_MAX_LENGTH = 280;
+const QUOTE_MAX_LENGTH = TIMELINE_CONTENT_LIMITS.quote;
 
 // Type for repost metadata
 interface RepostMetadata {
@@ -141,122 +141,118 @@ export function RepostModal({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="max-w-xl p-0">
         <DialogTitle className="sr-only">Repost</DialogTitle>
-        <Card className="w-full bg-card rounded-2xl shadow-2xl">
-          <CardContent className="p-0">
-            {/* Header */}
-            <div className="flex items-center px-4 py-3 border-b border-border">
-              <div className="text-sm font-semibold text-foreground">Repost</div>
+        <div className="w-full rounded-md border border-border-subtle bg-background">
+          {/* Header */}
+          <div className="flex items-center border-b border-border-subtle px-4 py-3">
+            <div className="text-sm font-semibold text-foreground">Repost</div>
+          </div>
+
+          {/* Quote-first layout like X */}
+          <div className="p-4 space-y-3">
+            <div className="flex gap-3">
+              <AvatarLink
+                username={currentActor.username || null}
+                userId={currentActor.id}
+                avatarUrl={currentActor.avatar}
+                name={currentActor.name}
+                size={40}
+                className="flex-shrink-0"
+              />
+              <textarea
+                id="quote-text"
+                ref={textareaRef}
+                value={quoteText}
+                onChange={e => setQuoteText(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    handleQuoteRepost();
+                  }
+                }}
+                rows={4}
+                className="w-full resize-none rounded-md border border-border-subtle bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
+                placeholder="Add a comment"
+                maxLength={QUOTE_MAX_LENGTH}
+                aria-label="Add your comment before reposting"
+                autoFocus
+              />
+            </div>
+            <div className="flex items-center justify-between text-sm px-1">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <span
+                  className={
+                    remainingCharacters <= 20
+                      ? 'text-orange-600 font-semibold'
+                      : 'text-muted-foreground'
+                  }
+                >
+                  {remainingCharacters}
+                </span>
+                <span className="text-muted-dim">characters left</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  onClick={handleSimpleRepost}
+                  disabled={isReposting}
+                  className="h-9 px-3 text-sm"
+                >
+                  Repost
+                </Button>
+                <Button
+                  onClick={handleQuoteRepost}
+                  disabled={!canQuote}
+                  isLoading={isReposting}
+                  className={TIMELINE_SURFACE.buttonPrimary}
+                >
+                  Quote post
+                </Button>
+              </div>
             </div>
 
-            {/* Quote-first layout like X */}
-            <div className="p-4 space-y-3">
-              <div className="flex gap-3">
+            {/* Original Post Preview (X-style) */}
+            <div className="rounded-md border border-border-subtle bg-muted p-3 transition-colors hover:bg-muted/80">
+              <div className="flex items-start gap-3">
                 <AvatarLink
-                  username={currentActor.username || null}
-                  userId={currentActor.id}
-                  avatarUrl={currentActor.avatar}
-                  name={currentActor.name}
-                  size={40}
+                  username={originalAuthor.username || null}
+                  userId={originalAuthor.id}
+                  avatarUrl={originalAuthor.avatar}
+                  name={originalAuthor.name}
+                  size={36}
                   className="flex-shrink-0"
                 />
-                <textarea
-                  id="quote-text"
-                  ref={textareaRef}
-                  value={quoteText}
-                  onChange={e => setQuoteText(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-                      e.preventDefault();
-                      handleQuoteRepost();
-                    }
-                  }}
-                  rows={4}
-                  className="w-full border border-border rounded-2xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none bg-muted placeholder:text-muted-foreground dark:text-foreground"
-                  placeholder="Add a comment"
-                  maxLength={QUOTE_MAX_LENGTH}
-                  aria-label="Add your comment before reposting"
-                  autoFocus
-                />
-              </div>
-              <div className="flex items-center justify-between text-sm px-1">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <span
-                    className={
-                      remainingCharacters <= 20
-                        ? 'text-orange-600 font-semibold'
-                        : 'text-muted-foreground'
-                    }
-                  >
-                    {remainingCharacters}
-                  </span>
-                  <span className="text-muted-dim">characters left</span>
-                  <span className="hidden sm:inline text-muted-dim">·</span>
-                  <span className="hidden sm:inline text-muted-dim">Ctrl/Cmd + Enter to post</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    onClick={handleSimpleRepost}
-                    disabled={isReposting}
-                    className="h-9 px-3 text-sm"
-                  >
-                    Repost
-                  </Button>
-                  <Button
-                    onClick={handleQuoteRepost}
-                    disabled={!canQuote}
-                    isLoading={isReposting}
-                    className="h-9 px-4 text-sm bg-tiffany-500 hover:bg-tiffany-600 text-white rounded-full"
-                  >
-                    Quote post
-                  </Button>
-                </div>
-              </div>
-
-              {/* Original Post Preview (X-style) */}
-              <div className="border border-border rounded-2xl bg-muted p-3 hover:bg-muted/80 transition-colors">
-                <div className="flex items-start gap-3">
-                  <AvatarLink
-                    username={originalAuthor.username || null}
-                    userId={originalAuthor.id}
-                    avatarUrl={originalAuthor.avatar}
-                    name={originalAuthor.name}
-                    size={36}
-                    className="flex-shrink-0"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                      <Link
-                        href={
-                          originalAuthor.username
-                            ? `/profiles/${originalAuthor.username}`
-                            : `/profiles/${originalAuthor.id}`
-                        }
-                        className="font-semibold text-sm text-foreground hover:underline"
-                      >
-                        {originalAuthor.name}
-                      </Link>
-                      {originalAuthor.username && (
-                        <>
-                          <span className="text-muted-foreground text-sm">
-                            @{originalAuthor.username}
-                          </span>
-                          <span className="text-muted-dim text-sm">·</span>
-                        </>
-                      )}
-                      <span className="text-muted-foreground text-sm">{timeAgo}</span>
-                    </div>
-                    {originalBody && (
-                      <p className="text-sm text-foreground whitespace-pre-wrap break-words leading-relaxed">
-                        {originalBody}
-                      </p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                    <Link
+                      href={
+                        originalAuthor.username
+                          ? `/profiles/${originalAuthor.username}`
+                          : `/profiles/${originalAuthor.id}`
+                      }
+                      className="font-semibold text-sm text-foreground hover:underline"
+                    >
+                      {originalAuthor.name}
+                    </Link>
+                    {originalAuthor.username && (
+                      <>
+                        <span className="text-muted-foreground text-sm">
+                          @{originalAuthor.username}
+                        </span>
+                        <span className="text-muted-dim text-sm">·</span>
+                      </>
                     )}
+                    <span className="text-muted-foreground text-sm">{timeAgo}</span>
                   </div>
+                  {originalBody && (
+                    <p className="text-sm text-foreground whitespace-pre-wrap break-words leading-relaxed">
+                      {originalBody}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );

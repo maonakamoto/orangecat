@@ -18,7 +18,6 @@ import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import BTCAmountDisplay from '@/components/ui/BTCAmountDisplay';
 import type { SearchFundingPage } from '@/services/search';
 import type { CurrencyCode } from '@/config/currencies';
-import { GRADIENTS } from '@/config/gradients';
 
 interface ProjectCardProps extends Omit<
   EntityCardProps,
@@ -64,7 +63,7 @@ export function ProjectCard({
       <div className="w-full space-y-1">
         <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
           <div
-            className={`h-full ${GRADIENTS.brandOrangeAmber} transition-all duration-500`}
+            className="h-full bg-tiffany-600 transition-all duration-500 dark:bg-tiffany-500"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
@@ -84,7 +83,7 @@ export function ProjectCard({
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
           <div
-            className={`h-full ${GRADIENTS.brandOrangeAmber} transition-all duration-500`}
+            className="h-full bg-tiffany-600 transition-all duration-500 dark:bg-tiffany-500"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>

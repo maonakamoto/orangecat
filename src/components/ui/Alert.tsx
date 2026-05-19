@@ -10,11 +10,11 @@ interface AlertProps {
 
 export function Alert({ children, variant = 'info', className }: AlertProps) {
   const variants = {
-    success: 'bg-green-50 text-green-800 border-green-200',
-    error: 'bg-red-50 text-red-800 border-red-200',
-    warning: 'bg-yellow-50 text-yellow-800 border-yellow-200',
-    info: 'bg-tiffany-50 text-tiffany-800 border-tiffany-200',
-    destructive: 'bg-red-50 text-red-800 border-red-200',
+    success: 'border-success/25 bg-success/10 text-success',
+    error: 'border-destructive/25 bg-destructive/10 text-destructive',
+    warning: 'border-warning/30 bg-warning/10 text-foreground',
+    info: 'border-border-subtle bg-muted/30 text-foreground',
+    destructive: 'border-destructive/25 bg-destructive/10 text-destructive',
   };
 
   return (

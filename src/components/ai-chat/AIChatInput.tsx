@@ -79,8 +79,8 @@ export function AIChatInput({
             disabled={disabled || isSending}
             className={cn(
               'w-full px-4 py-3 pr-12 border border-border rounded-lg resize-none',
-              'bg-white dark:bg-background text-foreground',
-              'focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent',
+              'bg-background text-foreground',
+              'focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring',
               'max-h-48 min-h-12 text-sm',
               'placeholder:text-muted-dim',
               (disabled || isSending) && 'opacity-50 cursor-not-allowed'

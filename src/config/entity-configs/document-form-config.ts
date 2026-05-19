@@ -58,24 +58,24 @@ const fieldGroups: FieldGroup[] = [
         required: true,
         options: [...VISIBILITY_OPTIONS],
         colSpan: 1,
-        hint: 'Choose "My Cat Only" for documents you want My Cat to use for personalized advice.',
+        hint: 'Choose "Cat Only" for documents you want your Cat to use for personalized advice.',
       },
     ],
   },
   {
     id: 'content',
     title: 'Content',
-    description: 'Write the information you want My Cat to know',
+    description: 'Write the information you want your Cat to know',
     fields: [
       {
         name: 'content',
         label: 'Document Content',
         type: 'textarea',
         placeholder:
-          'Write about your goals, skills, finances, or any other context that will help My Cat give you better advice...',
+          'Write about your goals, skills, finances, or any other context that will help your Cat give you better advice...',
         rows: 12,
         colSpan: 2,
-        hint: 'Be detailed - the more context you provide, the better advice My Cat can give.',
+        hint: 'Be detailed - the more context you provide, the better advice your Cat can give.',
       },
     ],
   },
@@ -107,9 +107,9 @@ export const documentFormConfig = createEntityConfig<DocumentFormData>({
   backUrl: `${ROUTES.DASHBOARD.CAT}?tab=context`,
   successUrl: `${ROUTES.DASHBOARD.CAT}?tab=context`,
   pageTitle: 'Add Context',
-  pageDescription: 'Add a document to help My Cat understand your goals, skills, and situation.',
+  pageDescription: 'Add a document to help your Cat understand your goals, skills, and situation.',
   formTitle: 'Document Details',
-  formDescription: 'Provide context that My Cat can use to give you personalized advice',
+  formDescription: 'Provide context that your Cat can use to give you personalized advice',
   fieldGroups,
   validationSchema: documentSchema,
   defaultValues: {
@@ -122,11 +122,11 @@ export const documentFormConfig = createEntityConfig<DocumentFormData>({
   guidanceContent: documentGuidanceContent,
   defaultGuidance: documentDefaultGuidance,
   infoBanner: {
-    title: 'Help My Cat Help You',
+    title: 'Help Your Cat Help You',
     content:
-      'Documents you mark as "My Cat Only" or "Public" will be used by My Cat to give you personalized advice. The more context you provide, the better advice you will receive.',
+      'Documents you mark as "Cat Only" or "Public" will be used by your Cat to give you personalized advice.',
     variant: 'info',
   },
-  successMessage: 'Document saved! My Cat now has more context to help you.',
+  successMessage: 'Document saved. Your Cat now has more context to help you.',
   successRedirectDelay: 1500,
 });

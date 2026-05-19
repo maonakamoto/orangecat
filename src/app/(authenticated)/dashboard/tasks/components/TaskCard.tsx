@@ -56,10 +56,8 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
 
   return (
     <div
-      className={`bg-card rounded-xl border p-4 hover:shadow-md transition-shadow cursor-pointer ${
-        isOverdue
-          ? 'border-red-200 dark:border-red-900/30 bg-red-50/30 dark:bg-red-950/10'
-          : 'border-border'
+      className={`oc-surface oc-card-link cursor-pointer p-4 ${
+        isOverdue ? 'border-destructive/25 bg-destructive/10' : 'border-border'
       }`}
       onClick={onClick}
     >

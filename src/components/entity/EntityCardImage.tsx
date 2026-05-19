@@ -4,11 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 
 function ImagePlaceholder() {
   return (
-    <div className={cn('flex h-full w-full items-center justify-center', GRADIENTS.grayLight)}>
+    <div className="flex h-full w-full items-center justify-center bg-muted/40">
       <div className="text-center">
         <svg
           className="mx-auto h-12 w-12 text-muted-dim"
@@ -32,8 +31,8 @@ function ImagePlaceholder() {
 
 function ImageLoader() {
   return (
-    <div className={cn('absolute inset-0 flex items-center justify-center', GRADIENTS.grayLight)}>
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-border-strong border-t-orange-500" />
+    <div className="absolute inset-0 flex items-center justify-center bg-muted/40">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-border-strong border-t-tiffany-600" />
     </div>
   );
 }

@@ -87,7 +87,7 @@ export function ProfileUploadSection({
     <div className={cn('relative mb-8', className)}>
       {/* Banner */}
       <div
-        className={`relative h-60 ${GRADIENTS.heroOrangeTiffany} rounded-2xl shadow-xl overflow-hidden group`}
+        className={`relative h-60 ${GRADIENTS.heroOrangeTiffany} rounded-md shadow-none overflow-hidden group`}
       >
         {(previewBanner || bannerUrl) && (
           <Image
@@ -107,7 +107,7 @@ export function ProfileUploadSection({
             size="lg"
             onClick={() => bannerInputRef.current?.click()}
             disabled={bannerUpload.uploading}
-            className="shadow-lg"
+            className="shadow-sm"
           >
             {bannerUpload.uploading ? (
               <>
@@ -140,14 +140,14 @@ export function ProfileUploadSection({
               alt="Profile avatar"
               width={128}
               height={128}
-              className="rounded-2xl object-cover border-4 border-white shadow-2xl"
+              className="rounded-lg object-cover border-4 border-card shadow-sm"
             />
           ) : (
-            <DefaultAvatar size={128} className="rounded-2xl border-4 border-white shadow-2xl" />
+            <DefaultAvatar size={128} className="rounded-lg border-4 border-card shadow-sm" />
           )}
 
           {/* Avatar Upload Button */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 bg-black/40 rounded-2xl">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 bg-black/40 rounded-lg">
             <Button
               variant="secondary"
               size="sm"

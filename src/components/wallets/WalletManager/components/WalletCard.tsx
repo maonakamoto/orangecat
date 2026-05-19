@@ -65,7 +65,7 @@ export function WalletCard({
   };
 
   return (
-    <div className="border rounded-lg p-4 sm:p-6 hover:border-orange-300 hover:shadow-md transition-all bg-card dark:border-border">
+    <div className="oc-surface oc-card-link p-4 sm:p-6">
       {/* Header with icon, title, and action buttons */}
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -106,7 +106,7 @@ export function WalletCard({
             )}
             <button
               onClick={onEdit}
-              className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Edit wallet"
               aria-label="Edit wallet"
             >
@@ -114,7 +114,7 @@ export function WalletCard({
             </button>
             <button
               onClick={onDelete}
-              className="p-2 rounded-lg hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-2 rounded-lg hover:bg-destructive/10 text-red-600 hover:text-red-700 transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Delete wallet"
               aria-label="Delete wallet"
             >
@@ -131,7 +131,7 @@ export function WalletCard({
           {isOwner && wallet.balance_updated_at && (
             <button
               onClick={onRefresh}
-              className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-muted/50 text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-muted/50 text-muted-foreground hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Refresh balance"
               aria-label="Refresh balance"
             >

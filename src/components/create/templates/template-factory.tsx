@@ -31,10 +31,7 @@ import { WISHLIST_TEMPLATES } from './wishlist-templates';
  * Creates a template component for a given entity type
  * Extracts defaults from EntityTemplate to match CreateEntityWorkflow's expected Partial<T> type
  */
-function createTemplateComponent<T extends GenericTemplate>(
-  templates: T[],
-  label: string
-) {
+function createTemplateComponent<T extends GenericTemplate>(templates: T[], label: string) {
   return function EntityTemplates({
     onSelectTemplate,
     className = '',
@@ -65,7 +62,10 @@ export const ProductTemplates = createTemplateComponent(PRODUCT_TEMPLATES, 'Prod
 export const ServiceTemplates = createTemplateComponent(SERVICE_TEMPLATES, 'Services');
 export const CauseTemplates = createTemplateComponent(CAUSE_TEMPLATES, 'Causes');
 export const LoanTemplates = createTemplateComponent(LOAN_TEMPLATES, 'Loans');
-export const AIAssistantTemplates = createTemplateComponent(AI_ASSISTANT_TEMPLATES, 'AI Assistants');
+export const AIAssistantTemplates = createTemplateComponent(
+  AI_ASSISTANT_TEMPLATES,
+  'AI Assistants'
+);
 export const ProjectTemplates = createTemplateComponent(PROJECT_TEMPLATES, 'Projects');
 export const AssetTemplates = createTemplateComponent(ASSET_TEMPLATES, 'Assets');
 export const EventTemplates = createTemplateComponent(EVENT_TEMPLATES, 'Events');
@@ -74,15 +74,15 @@ export const WishlistTemplates = createTemplateComponent(WISHLIST_TEMPLATES, 'Wi
 
 // ==================== TYPE EXPORTS ====================
 
-export type ProductTemplate = typeof PRODUCT_TEMPLATES[number];
-export type ServiceTemplate = typeof SERVICE_TEMPLATES[number];
-export type CauseTemplate = typeof CAUSE_TEMPLATES[number];
-export type LoanTemplate = typeof LOAN_TEMPLATES[number];
-export type AIAssistantTemplate = typeof AI_ASSISTANT_TEMPLATES[number];
-export type ProjectTemplate = typeof PROJECT_TEMPLATES[number];
-export type AssetTemplate = typeof ASSET_TEMPLATES[number];
-export type EventTemplate = typeof EVENT_TEMPLATES[number];
-export type GroupTemplate = typeof GROUP_TEMPLATES[number];
+export type ProductTemplate = (typeof PRODUCT_TEMPLATES)[number];
+export type ServiceTemplate = (typeof SERVICE_TEMPLATES)[number];
+export type CauseTemplate = (typeof CAUSE_TEMPLATES)[number];
+export type LoanTemplate = (typeof LOAN_TEMPLATES)[number];
+export type AIAssistantTemplate = (typeof AI_ASSISTANT_TEMPLATES)[number];
+export type ProjectTemplate = (typeof PROJECT_TEMPLATES)[number];
+export type AssetTemplate = (typeof ASSET_TEMPLATES)[number];
+export type EventTemplate = (typeof EVENT_TEMPLATES)[number];
+export type GroupTemplate = (typeof GROUP_TEMPLATES)[number];
 
 // ==================== TEMPLATE ARRAY EXPORTS ====================
 
@@ -96,4 +96,3 @@ export {
   ASSET_TEMPLATES,
   EVENT_TEMPLATES,
 };
-

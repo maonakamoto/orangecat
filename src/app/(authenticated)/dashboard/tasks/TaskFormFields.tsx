@@ -36,12 +36,12 @@ function FieldError({ message }: { message?: string }) {
 }
 
 const fieldClass = (hasError: boolean) =>
-  `w-full rounded-lg border px-3 py-2 bg-white dark:bg-muted text-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 ${
-    hasError ? 'border-red-500' : 'border-border-strong'
+  `w-full rounded-lg border px-3 py-2 bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring ${
+    hasError ? 'border-destructive' : 'border-border-strong'
   }`;
 
 const selectClass =
-  'w-full rounded-lg border border-border-strong bg-white dark:bg-muted text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500';
+  'w-full rounded-lg border border-border-strong bg-card text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring';
 
 export function TaskFormFields({
   formData,
@@ -213,7 +213,7 @@ export function TaskFormFields({
               }
             }}
             placeholder="Add tag..."
-            className="flex-1 rounded-lg border border-border-strong bg-white dark:bg-muted text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+            className="flex-1 rounded-lg border border-border-strong bg-card text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
           />
           <Button type="button" variant="outline" onClick={onAddTag}>
             Add
@@ -230,7 +230,7 @@ export function TaskFormFields({
                 <button
                   type="button"
                   onClick={() => onRemoveTag(tag)}
-                  className="text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground"
                 >
                   &times;
                 </button>

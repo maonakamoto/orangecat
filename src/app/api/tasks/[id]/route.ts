@@ -15,7 +15,7 @@ import {
   apiSuccess,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { taskUpdateSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/utils/logger';
@@ -30,23 +30,29 @@ interface RouteContext {
 export const GET = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id } = await context.params;
   const idValidation = getValidationError(validateUUID(id, 'task ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   const { supabase } = request;
   try {
     const { data: task, error } = await supabase
       .from(DATABASE_TABLES.TASKS)
-      .select(`
+      .select(
+        `
         *,
         project:task_projects(id, title, status),
         completions:task_completions(id, completed_by, completed_at, notes, duration_minutes),
         attention_flags:task_attention_flags(id, flagged_by, message, is_resolved, created_at),
         requests:task_requests(id, requested_by, requested_user_id, message, status, is_broadcast, response_message, created_at)
-      `)
+      `
+      )
       .eq('id', id)
       .single();
 
     if (error) {
-      if (error.code === 'PGRST116') {return apiNotFound('Task not found');}
+      if (error.code === 'PGRST116') {
+        return apiNotFound('Task not found');
+      }
       logger.error('Failed to fetch task', { error, id }, 'TasksAPI');
       return apiInternalError('Failed to fetch task');
     }
@@ -62,7 +68,9 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context: Route
 export const PATCH = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id } = await context.params;
   const idValidation = getValidationError(validateUUID(id, 'task ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
@@ -73,7 +81,9 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
 
     const body = await (request as NextRequest).json();
     const result = taskUpdateSchema.safeParse(body);
-    if (!result.success) {return apiValidationError('Validation failed', result.error.flatten());}
+    if (!result.success) {
+      return apiValidationError('Validation failed', result.error.flatten());
+    }
 
     const updates = buildTaskUpdates(result.data);
     return await updateTask(supabase, id, updates);
@@ -87,7 +97,9 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
 export const DELETE = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id } = await context.params;
   const idValidation = getValidationError(validateUUID(id, 'task ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);

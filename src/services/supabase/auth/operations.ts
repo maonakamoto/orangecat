@@ -179,7 +179,11 @@ export async function signInAnonymously(): Promise<AuthResponse> {
     return { data, error: null };
   } catch (error) {
     const enhancedError = handleAuthError(error, 'anonymous sign-in');
-    logger.error('Unexpected error during anonymous sign-in', { error: enhancedError.message }, 'Auth');
+    logger.error(
+      'Unexpected error during anonymous sign-in',
+      { error: enhancedError.message },
+      'Auth'
+    );
     return { data: { user: null, session: null }, error: enhancedError };
   }
 }

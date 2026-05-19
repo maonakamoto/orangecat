@@ -25,21 +25,20 @@ const config: Config = {
       fontSize: {
         // Native mobile app typography scale
         '2xs': ['0.625rem', { lineHeight: '1rem' }], // 10px - Badges, micro labels
-        xs: ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.01em' }], // 12px - Labels, captions
-        sm: ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.01em' }], // 14px - Secondary text
+        xs: ['0.75rem', { lineHeight: '1rem', letterSpacing: '0' }], // 12px - Labels, captions
+        sm: ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0' }], // 14px - Secondary text
         base: ['1rem', { lineHeight: '1.5rem', letterSpacing: '0' }], // 16px - Body text (iOS standard)
-        lg: ['1.125rem', { lineHeight: '1.75rem', letterSpacing: '-0.01em' }], // 18px - Large body
-        xl: ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '-0.01em' }], // 20px - Subtitles
-        '2xl': ['1.5rem', { lineHeight: '2rem', letterSpacing: '-0.02em' }], // 24px - Headings
-        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '-0.02em' }], // 30px - Large headings
-        '4xl': ['2.25rem', { lineHeight: '2.5rem', letterSpacing: '-0.03em' }], // 36px - Hero text
-        // Fluid typography using clamp() for native app feel
-        'fluid-sm': 'clamp(0.875rem, 2vw, 1rem)',
-        'fluid-base': 'clamp(1rem, 2.5vw, 1.125rem)',
-        'fluid-lg': 'clamp(1.125rem, 3vw, 1.25rem)',
-        'fluid-xl': 'clamp(1.25rem, 3.5vw, 1.5rem)',
-        'fluid-2xl': 'clamp(1.5rem, 4vw, 2rem)',
-        'fluid-3xl': 'clamp(1.875rem, 5vw, 2.5rem)',
+        lg: ['1.125rem', { lineHeight: '1.75rem', letterSpacing: '0' }], // 18px - Large body
+        xl: ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '0' }], // 20px - Subtitles
+        '2xl': ['1.5rem', { lineHeight: '2rem', letterSpacing: '0' }], // 24px - Headings
+        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '0' }], // 30px - Large headings
+        '4xl': ['2.25rem', { lineHeight: '2.5rem', letterSpacing: '0' }], // 36px - Hero text
+        'fluid-sm': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0' }],
+        'fluid-base': ['1rem', { lineHeight: '1.5rem', letterSpacing: '0' }],
+        'fluid-lg': ['1.125rem', { lineHeight: '1.75rem', letterSpacing: '0' }],
+        'fluid-xl': ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '0' }],
+        'fluid-2xl': ['1.5rem', { lineHeight: '2rem', letterSpacing: '0' }],
+        'fluid-3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '0' }],
       },
       spacing: {
         // Native mobile spacing scale (iOS HIG inspired)
@@ -262,31 +261,29 @@ const config: Config = {
         },
       },
       borderRadius: {
-        // Native app border radius (iOS style)
+        // Sparse product radius scale. Keep cards at 8px or less.
         none: '0',
-        sm: '0.375rem', // 6px - Subtle rounding
-        DEFAULT: '0.5rem', // 8px - Default
-        md: '0.625rem', // 10px - Cards
-        lg: '0.75rem', // 12px - Large cards
-        xl: '1rem', // 16px - Modals
-        '2xl': '1.25rem', // 20px - Bottom sheets
-        '3xl': '1.5rem', // 24px - Special elements
-        '4xl': '2rem', // 32px - Hero elements
+        sm: '0.25rem',
+        DEFAULT: '0.375rem',
+        md: '0.375rem',
+        lg: '0.5rem',
+        xl: '0.5rem',
+        '2xl': '0.5rem',
+        '3xl': '0.5rem',
+        '4xl': '0.5rem',
         full: '9999px', // Full circle
       },
       boxShadow: {
-        // Native app shadows (iOS style - subtle and layered)
-        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-        // Card elevation (Material Design inspired, iOS refined)
-        card: '0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06)',
-        'card-hover': '0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08)',
-        button: '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08)',
-        'button-hover': '0 3px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1)',
+        sm: '0 1px 1px hsl(var(--foreground) / 0.04)',
+        DEFAULT: '0 1px 2px hsl(var(--foreground) / 0.06)',
+        md: '0 4px 12px hsl(var(--foreground) / 0.07)',
+        lg: '0 8px 24px hsl(var(--foreground) / 0.08)',
+        xl: '0 12px 32px hsl(var(--foreground) / 0.1)',
+        '2xl': '0 16px 48px hsl(var(--foreground) / 0.12)',
+        card: '0 1px 2px hsl(var(--foreground) / 0.05)',
+        'card-hover': '0 4px 12px hsl(var(--foreground) / 0.07)',
+        button: 'none',
+        'button-hover': 'none',
         inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
         none: 'none',
       },

@@ -224,9 +224,9 @@ export default async function DocumentDetailPage({ params }: PageProps) {
 
       {/* Help text */}
       {doc.visibility === 'cat_visible' && (
-        <div className="text-sm text-muted-foreground bg-tiffany/5 border border-tiffany/20 rounded-lg p-4">
+        <div className="rounded-md border border-border-subtle bg-muted/30 p-4 text-sm text-muted-foreground">
           <p>
-            <strong>My Cat can see this document.</strong> This context helps My Cat give you
+            <strong>Your Cat can see this document.</strong> This context helps your Cat give you
             personalized advice based on your{' '}
             {DOCUMENT_TYPE_LABELS[doc.document_type].toLowerCase()}.
           </p>
@@ -234,10 +234,10 @@ export default async function DocumentDetailPage({ params }: PageProps) {
       )}
 
       {doc.visibility === 'private' && (
-        <div className="text-sm text-muted-foreground bg-muted border dark:border-border rounded-lg p-4">
+        <div className="rounded-md border border-border-subtle bg-muted p-4 text-sm text-muted-foreground">
           <p>
             <strong>This document is private.</strong> Only you can see it. Change the visibility to
-            "My Cat Only" if you want My Cat to use this as context for advice.
+            "Cat Only" if you want your Cat to use this as context for advice.
           </p>
         </div>
       )}

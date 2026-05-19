@@ -28,7 +28,7 @@ export default function InviteBanner({
   return (
     <div className="mb-6">
       <div
-        className={`rounded-xl border border-orange-200 ${GRADIENTS.sectionOrangeTiffany} p-4 sm:p-5 shadow-sm`}
+        className={`rounded-lg border border-orange-200 ${GRADIENTS.sectionOrangeTiffany} p-4 sm:p-5 shadow-sm`}
       >
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div>

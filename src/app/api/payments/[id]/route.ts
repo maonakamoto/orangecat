@@ -14,7 +14,7 @@ import {
 } from '@/lib/api/standardResponse';
 import { checkPaymentStatus, buyerConfirmPayment } from '@/domain/payments';
 import { paymentActionSchema } from '@/lib/validation/finance';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 
@@ -23,7 +23,9 @@ export const GET = withAuth(
   async (request: AuthenticatedRequest, context: { params: Promise<{ id: string }> }) => {
     const { id } = await context.params;
     const idValidation = getValidationError(validateUUID(id, 'payment ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     try {
       const { user, supabase } = request;
 
@@ -50,7 +52,9 @@ export const POST = withAuth(
   async (request: AuthenticatedRequest, context: { params: Promise<{ id: string }> }) => {
     const { id } = await context.params;
     const idValidation = getValidationError(validateUUID(id, 'payment ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     try {
       const { user, supabase } = request;
 

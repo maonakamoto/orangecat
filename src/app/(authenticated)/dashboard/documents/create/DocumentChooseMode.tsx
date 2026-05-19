@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { ArrowLeft, Upload, PenLine, Cat, FileText, Sparkles } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
-import { GRADIENTS } from '@/config/gradients';
 
 interface Props {
   onUpload: () => void;
@@ -16,33 +15,31 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
       <div className="mb-8">
         <Link
           href={`${ROUTES.DASHBOARD.CAT}?tab=context`}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-gray-900 dark:hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to My Context
         </Link>
         <div className="flex items-center gap-3 mb-2">
-          <div className={`p-2 ${GRADIENTS.brandTiffanyBr} rounded-xl`}>
-            <Cat className="h-6 w-6 text-white" />
+          <div className="rounded-md border border-border-subtle bg-muted p-2">
+            <Cat className="h-6 w-6 text-foreground" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">Create Context for My Cat</h1>
+          <h1 className="text-3xl font-bold text-foreground">Create Cat Context</h1>
         </div>
         <p className="text-muted-foreground text-lg">
-          Help My Cat understand you better by adding context about your goals, skills, and
+          Help your Cat understand you better by adding context about your goals, skills, and
           situation.
         </p>
       </div>
 
-      <div
-        className={`${GRADIENTS.sectionTiffanyMuted} border border-tiffany-200 rounded-xl p-6 mb-8`}
-      >
+      <div className="mb-8 rounded-md border border-border-subtle bg-muted/30 p-6">
         <div className="flex items-start gap-3">
-          <Sparkles className="h-5 w-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
+          <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-foreground" />
           <div>
-            <h3 className="font-semibold text-tiffany-900">The more context, the better advice</h3>
-            <p className="text-sm text-tiffany-700 mt-1">
-              Share your goals, skills, financial situation, or business plans. My Cat uses this to
-              give you personalized advice tailored to your unique situation.
+            <h3 className="font-semibold text-foreground">The more context, the better advice</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Share your goals, skills, financial situation, or business plans. Cat uses this to
+              tailor advice to your situation.
             </p>
           </div>
         </div>
@@ -51,13 +48,13 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
       <div className="grid md:grid-cols-2 gap-6">
         <button
           onClick={onUpload}
-          className="group relative bg-card border-2 border-border rounded-2xl p-8 text-left hover:border-tiffany-400 dark:hover:border-tiffany-500 hover:shadow-lg transition-all duration-200"
+          className="group relative rounded-md border border-border-subtle bg-background p-8 text-left transition-colors hover:border-border-strong hover:bg-muted/30"
         >
-          <div className="absolute top-4 right-4 px-2 py-1 bg-tiffany-100 text-tiffany-700 text-xs font-medium rounded-full">
+          <div className="absolute right-4 top-4 rounded-sm border border-border-subtle bg-muted px-2 py-1 text-xs font-medium text-foreground">
             Easiest
           </div>
-          <div className="p-4 bg-tiffany-100 rounded-xl w-fit mb-4 group-hover:bg-tiffany-200 transition-colors">
-            <Upload className="h-8 w-8 text-tiffany-600" />
+          <div className="mb-4 w-fit rounded-md bg-muted p-4 transition-colors group-hover:bg-muted/80">
+            <Upload className="h-8 w-8 text-foreground" />
           </div>
           <h3 className="text-lg font-semibold text-foreground mb-2">Upload a file</h3>
           <p className="text-muted-foreground mb-4">
@@ -75,10 +72,10 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
 
         <button
           onClick={onWrite}
-          className="group bg-card border-2 border-border rounded-2xl p-8 text-left hover:border-tiffany-400 dark:hover:border-tiffany-500 hover:shadow-lg transition-all duration-200"
+          className="group rounded-md border border-border-subtle bg-background p-8 text-left transition-colors hover:border-border-strong hover:bg-muted/30"
         >
-          <div className="p-4 bg-orange-100 rounded-xl w-fit mb-4 group-hover:bg-orange-200 transition-colors">
-            <PenLine className="h-8 w-8 text-orange-600" />
+          <div className="mb-4 w-fit rounded-md bg-muted p-4 transition-colors group-hover:bg-muted/80">
+            <PenLine className="h-8 w-8 text-foreground" />
           </div>
           <h3 className="text-lg font-semibold text-foreground mb-2">Write from scratch</h3>
           <p className="text-muted-foreground mb-4">
@@ -97,7 +94,7 @@ export function DocumentChooseMode({ onUpload, onWrite }: Props) {
         </button>
       </div>
 
-      <div className="mt-8 p-4 bg-muted rounded-xl">
+      <div className="mt-8 p-4 bg-muted rounded-lg">
         <h4 className="font-medium text-foreground mb-3">Ideas for context to add:</h4>
         <div className="grid md:grid-cols-2 gap-3 text-sm text-muted-foreground">
           {[

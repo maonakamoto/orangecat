@@ -9,7 +9,7 @@ import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { apiSuccess, handleApiError } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { getPagination } from '@/lib/api/query';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -26,22 +26,35 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     const { limit, offset } = getPagination(request.url, { defaultLimit: 20, maxLimit: 100 });
 
     const { data: credits, error: creditsError } = await supabase
-      .from(DATABASE_TABLES.AI_USER_CREDITS).select('*').eq('user_id', user.id).single();
+      .from(DATABASE_TABLES.AI_USER_CREDITS)
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
 
-    if (creditsError && creditsError.code !== 'PGRST116') {throw creditsError;}
+    if (creditsError && creditsError.code !== 'PGRST116') {
+      throw creditsError;
+    }
 
     const balance = credits
-      ? { balance_btc: credits.balance_btc || 0, total_deposited_btc: credits.total_deposited_btc || 0, total_spent_btc: credits.total_spent_btc || 0 }
+      ? {
+          balance_btc: credits.balance_btc || 0,
+          total_deposited_btc: credits.total_deposited_btc || 0,
+          total_spent_btc: credits.total_spent_btc || 0,
+        }
       : { balance_btc: 0, total_deposited_btc: 0, total_spent_btc: 0 };
 
     const { data: transactions, error: txError } = await supabase
       .from(DATABASE_TABLES.AI_CREDIT_TRANSACTIONS)
-      .select('id, transaction_type, amount_btc, balance_before, balance_after, description, created_at, assistant:ai_assistants(id, name, avatar_url)')
+      .select(
+        'id, transaction_type, amount_btc, balance_before, balance_after, description, created_at, assistant:ai_assistants(id, name, avatar_url)'
+      )
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 
-    if (txError) {logger.warn('Failed to fetch transactions', { error: txError });}
+    if (txError) {
+      logger.warn('Failed to fetch transactions', { error: txError });
+    }
 
     const { count } = await supabase
       .from(DATABASE_TABLES.AI_CREDIT_TRANSACTIONS)
@@ -70,9 +83,16 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
 
     const body = await (request as NextRequest).json();
     const result = depositRequestSchema.safeParse(body);
-    if (!result.success) {return handleApiError({ message: 'Invalid request', details: result.error.flatten() });}
+    if (!result.success) {
+      return handleApiError({ message: 'Invalid request', details: result.error.flatten() });
+    }
 
-    const deposit = await createCreditDeposit(supabase, user.id, result.data.amount_btc, result.data.payment_method);
+    const deposit = await createCreditDeposit(
+      supabase,
+      user.id,
+      result.data.amount_btc,
+      result.data.payment_method
+    );
     return apiSuccess(deposit);
   } catch (error) {
     logger.error('Failed to create deposit request', { error });

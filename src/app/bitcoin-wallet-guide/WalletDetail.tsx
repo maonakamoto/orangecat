@@ -18,7 +18,7 @@ export function WalletDetail({ wallet }: WalletDetailProps) {
       animate={{ opacity: 1, x: 0 }}
       className="sticky top-8"
     >
-      <Card className="shadow-lg">
+      <Card className="shadow-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Bitcoin className="w-5 h-5 text-bitcoinOrange" />
@@ -67,12 +67,12 @@ export function WalletDetail({ wallet }: WalletDetailProps) {
             <ExternalLink className="w-4 h-4 ml-2" />
           </Button>
 
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+          <div className="oc-error-surface rounded-lg p-3">
             <div className="flex items-start gap-2">
-              <Shield className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+              <Shield className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
               <div className="text-sm">
-                <strong className="text-red-800">Security Tip:</strong>
-                <p className="text-red-700 mt-1">
+                <strong className="text-destructive">Security Tip:</strong>
+                <p className="text-destructive/80 mt-1">
                   Always download wallets from official websites. Save your recovery phrase in a
                   safe place - it&apos;s the only way to recover your Bitcoin if you lose access to
                   your wallet.

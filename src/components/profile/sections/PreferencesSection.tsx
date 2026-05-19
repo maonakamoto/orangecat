@@ -37,7 +37,7 @@ interface PreferencesSectionProps {
 
 export function PreferencesSection({ control, onFieldFocus }: PreferencesSectionProps) {
   return (
-    <div className="space-y-4 rounded-xl border border-border bg-white/80 dark:bg-card/80 px-4 py-5 sm:px-5 sm:py-6">
+    <div className="oc-surface space-y-4 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
         <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
           {PROFILE_SECTIONS.PREFERENCES}

@@ -56,7 +56,7 @@ function MessageStatusIcon({ message }: { message: Message }) {
   if (status === MESSAGE_STATUS.PENDING || isOptimisticMessage(message)) {
     return (
       <div
-        className="h-3 w-3 rounded-full border border-gray-400 dark:border-muted-foreground animate-pulse"
+        className="h-3 w-3 rounded-full border border-border-strong dark:border-muted-foreground animate-pulse"
         aria-label="Sending"
       />
     );
@@ -161,7 +161,7 @@ export default function MessageItem({
         >
           <div
             className={cn(
-              'rounded-2xl px-4 py-2',
+              'rounded-lg px-4 py-2',
               isCurrentUser ? 'bg-tiffany-500 text-white' : 'bg-muted text-foreground',
               isEditing && 'p-2'
             )}
@@ -172,7 +172,7 @@ export default function MessageItem({
                   value={editDraft}
                   onChange={e => setEditDraft(e.target.value)}
                   onKeyDown={handleEditKeyDown}
-                  className="w-full min-w-[200px] bg-card text-foreground text-sm rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+                  className="w-full min-w-[200px] bg-card text-foreground text-sm rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-ring"
                   rows={Math.min(6, editDraft.split('\n').length + 1)}
                   autoFocus
                 />
@@ -194,7 +194,7 @@ export default function MessageItem({
                         onEditCancel?.();
                       }
                     }}
-                    className="text-xs px-2 py-1 rounded bg-card text-tiffany-600 font-medium hover:bg-white/90 dark:hover:bg-card/90"
+                    className="text-xs px-2 py-1 rounded bg-card text-tiffany-600 font-medium hover:bg-card/90 dark:hover:bg-card/90"
                   >
                     Save
                   </button>

@@ -63,10 +63,7 @@ export default function ProfileWalletSection({
                 : 0;
 
               return (
-                <div
-                  key={wallet.id}
-                  className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6 hover:shadow-2xl transition-shadow"
-                >
+                <div key={wallet.id} className="oc-surface p-6 oc-card-link">
                   <div className="flex items-start gap-3 mb-4">
                     <span className="text-3xl">{wallet.category_icon || categoryInfo.icon}</span>
                     <div className="flex-1">
@@ -187,9 +184,9 @@ export default function ProfileWalletSection({
   // Show empty state for own profile
   if (wallets.length === 0 && isOwnProfile) {
     return (
-      <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6">
+      <div className="oc-surface p-6">
         <div className="text-center text-muted-foreground py-8">
-          <Bitcoin className="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
+          <Bitcoin className="w-12 h-12 mx-auto mb-3 text-muted-dim dark:text-muted-foreground" />
           <h3 className="text-lg font-semibold text-foreground mb-2">Accept Bitcoin Funding</h3>
           <p className="text-sm mb-4">
             Add Bitcoin wallets to start receiving funding from supporters
@@ -221,8 +218,8 @@ export default function ProfileWalletSection({
 
   // No wallets and not own profile - show nothing
   return (
-    <div className="bg-white/80 dark:bg-card/80 backdrop-blur-sm rounded-2xl shadow-xl border-0 p-6 text-center text-muted-foreground">
-      <Bitcoin className="w-10 h-10 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
+    <div className="oc-surface p-6 text-center text-muted-foreground">
+      <Bitcoin className="w-10 h-10 mx-auto mb-3 text-muted-dim dark:text-muted-foreground" />
       <h3 className="text-lg font-semibold text-foreground mb-1">No wallets shared yet</h3>
       <p className="text-sm text-muted-foreground">
         This profile has not added any wallets you can send to yet.

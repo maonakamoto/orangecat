@@ -179,14 +179,14 @@ export function DocumentFileUpload({
         onDrop={handleDrop}
         onClick={state === 'idle' || state === 'error' ? handleClick : undefined}
         className={cn(
-          'relative rounded-xl border-2 border-dashed transition-all duration-200',
+          'relative rounded-lg border-2 border-dashed transition-all duration-200',
           'flex flex-col items-center justify-center p-8 text-center',
           state === 'idle' &&
-            'border-border-strong bg-muted hover:border-tiffany-400 hover:bg-tiffany-50 cursor-pointer',
-          state === 'dragging' && 'border-tiffany-500 bg-tiffany-50 scale-[1.02]',
-          state === 'uploading' && 'border-tiffany-400 bg-tiffany-50 cursor-wait',
-          state === 'success' && 'border-green-400 bg-green-50',
-          state === 'error' && 'border-red-400 bg-red-50 cursor-pointer'
+            'border-border-strong bg-muted hover:border-tiffany-400 hover:bg-muted/80 cursor-pointer',
+          state === 'dragging' && 'border-tiffany-500 bg-tiffany-500/10 scale-[1.02]',
+          state === 'uploading' && 'border-tiffany-400 bg-tiffany-500/10 cursor-wait',
+          state === 'success' && 'border-success/40 bg-success/10',
+          state === 'error' && 'border-destructive/40 bg-destructive/10 cursor-pointer'
         )}
       >
         {state === 'idle' && (
@@ -250,10 +250,10 @@ export function DocumentFileUpload({
         {state === 'error' && (
           <>
             <div className="p-4 bg-red-100 rounded-full mb-4">
-              <AlertCircle className="h-8 w-8 text-red-600" />
+              <AlertCircle className="h-8 w-8 text-destructive" />
             </div>
             <h3 className="text-lg font-semibold text-red-900 mb-1">Upload failed</h3>
-            <p className="text-base text-red-600 mb-3">{errorMessage}</p>
+            <p className="text-base text-destructive mb-3">{errorMessage}</p>
             <p className="text-base text-muted-foreground">Click to try again</p>
           </>
         )}

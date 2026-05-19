@@ -27,7 +27,7 @@ export default function PersonCard({
   const displayName = profile.name || profile.username || 'Anonymous';
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="oc-card-link">
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
           {/* Avatar */}

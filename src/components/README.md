@@ -66,4 +66,4 @@ components/
 - Follow React hooks rules
 - Use memoization when necessary
 - Ensure proper TypeScript typing
-- Maintain consistent code style 
+- Maintain consistent code style

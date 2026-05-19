@@ -22,7 +22,7 @@ import {
   apiCreated,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 
 // POST /api/wishlists/proofs - Create proof of purchase/wishlist fulfillment
 export const POST = withAuth(async (request: AuthenticatedRequest) => {
@@ -44,10 +44,8 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     }
 
     // Verify the wishlist item exists and user has access
-    const { data: wishlistItem, error: itemError } = await (
-      supabase
-        .from(DATABASE_TABLES.WISHLIST_ITEMS)
-    )
+    const { data: wishlistItem, error: itemError } = await supabase
+      .from(DATABASE_TABLES.WISHLIST_ITEMS)
       .select('id, wishlist_id, wishlists!inner(actor_id)')
       .eq('id', validationResult.data.wishlist_item_id)
       .single();
@@ -65,10 +63,8 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     }
 
     // Create the proof
-    const { data: proof, error: proofError } = await (
-      supabase
-        .from(DATABASE_TABLES.WISHLIST_FULFILLMENT_PROOFS)
-    )
+    const { data: proof, error: proofError } = await supabase
+      .from(DATABASE_TABLES.WISHLIST_FULFILLMENT_PROOFS)
       .insert({
         wishlist_item_id: validationResult.data.wishlist_item_id,
         user_id: user.id,

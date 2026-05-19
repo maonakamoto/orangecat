@@ -1,6 +1,11 @@
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import { apiSuccess, handleApiError, apiRateLimited, apiBadRequest } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import {
+  apiSuccess,
+  handleApiError,
+  apiRateLimited,
+  apiBadRequest,
+} from '@/lib/api/standardResponse';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { z } from 'zod';
@@ -38,7 +43,9 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
     const body = await req.json();
 
     const parsed = markReadSchema.safeParse(body);
-    if (!parsed.success) {return apiBadRequest(parsed.error.errors[0]?.message || 'Invalid request body');}
+    if (!parsed.success) {
+      return apiBadRequest(parsed.error.errors[0]?.message || 'Invalid request body');
+    }
     const data = parsed.data;
 
     const now = new Date().toISOString();

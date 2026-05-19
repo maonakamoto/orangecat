@@ -25,12 +25,15 @@ interface RouteContext {
 export const POST = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id } = await context.params;
   const idValidation = getValidationError(validateUUID(id, 'wallet ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
 
   try {
     const { user, supabase } = request;
 
-    const { data: wallet, error: fetchError } = await supabase.from(DATABASE_TABLES.WALLETS)
+    const { data: wallet, error: fetchError } = await supabase
+      .from(DATABASE_TABLES.WALLETS)
       .select('*')
       .eq('id', id)
       .eq('user_id', user.id)
@@ -50,17 +53,28 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     if (!result.ok) {
       switch (result.code) {
         case 'COOLDOWN':
-          return apiRateLimited('Balance can only be refreshed every 5 minutes. Please wait.', result.remainingSeconds);
+          return apiRateLimited(
+            'Balance can only be refreshed every 5 minutes. Please wait.',
+            result.remainingSeconds
+          );
         case 'INVALID_TYPE':
           return apiBadRequest('Invalid wallet type');
         case 'TIMEOUT':
           return apiInternalError('Balance fetch timed out. Please try again.', { status: 504 });
         case 'RATE_LIMITED':
-          return apiRateLimited('Blockchain API rate limited. Please wait a few minutes and try again.', 300);
+          return apiRateLimited(
+            'Blockchain API rate limited. Please wait a few minutes and try again.',
+            300
+          );
         case 'API_ERROR':
-          return apiInternalError('Blockchain API error. Please check your address/xpub and try again.', { status: 502 });
+          return apiInternalError(
+            'Blockchain API error. Please check your address/xpub and try again.',
+            { status: 502 }
+          );
         case 'NETWORK_ERROR':
-          return apiInternalError('Network error while fetching balance. Please try again.', { status: 503 });
+          return apiInternalError('Network error while fetching balance. Please try again.', {
+            status: 503,
+          });
         case 'INVALID_BALANCE':
           return apiInternalError('Invalid balance received from blockchain');
         case 'UPDATE_FAILED':

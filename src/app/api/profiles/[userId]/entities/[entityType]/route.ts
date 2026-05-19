@@ -115,7 +115,11 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
     const { data, error } = await query;
 
     if (error) {
-      logger.error('Failed to fetch profile entities', { userId, entityType, error: error.message });
+      logger.error('Failed to fetch profile entities', {
+        userId,
+        entityType,
+        error: error.message,
+      });
       return apiInternalError(`Failed to fetch ${entityType}s`);
     }
 

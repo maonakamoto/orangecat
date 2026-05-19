@@ -24,7 +24,7 @@ export function ProviderStep({ selectedProvider, onSelectProvider }: ProviderSte
           <Card
             key={p.id}
             className={cn(
-              'cursor-pointer transition-all duration-200 hover:shadow-lg p-6',
+              'cursor-pointer transition-all duration-200 hover:shadow-sm p-6',
               selectedProvider === p.id
                 ? 'ring-2 ring-tiffany-500 border-tiffany-500 bg-tiffany-50/50'
                 : ''

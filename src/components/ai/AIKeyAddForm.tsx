@@ -76,7 +76,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
                   'p-3 rounded-lg border-2 text-left transition-all',
                   selectedProvider === p.id
                     ? 'border-tiffany-500 bg-tiffany-50'
-                    : 'border-border hover:border-gray-300 dark:hover:border-border'
+                    : 'border-border hover:border-border-strong dark:hover:border-border'
                 )}
               >
                 <div className="font-medium text-sm">{p.name}</div>
@@ -115,7 +115,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
             <button
               type="button"
               onClick={() => setShowKey(!showKey)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-muted-foreground hover:text-foreground"
             >
               {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -137,9 +137,9 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
         </div>
 
         {error && (
-          <div className="flex items-start gap-2 p-3 bg-red-50 rounded-lg border border-red-200">
-            <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
-            <p className="text-sm text-red-700">{error}</p>
+          <div className="oc-error-surface flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+            <p className="text-sm text-destructive/80">{error}</p>
           </div>
         )}
 

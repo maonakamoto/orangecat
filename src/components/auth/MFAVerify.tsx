@@ -148,16 +148,16 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
               onChange={handleCodeChange}
               placeholder="000000"
               disabled={verifying}
-              className="w-full px-4 py-4 text-center text-3xl font-mono tracking-[0.5em] border border-border-strong rounded-lg focus:ring-2 focus:ring-tiffany focus:border-tiffany disabled:opacity-50 disabled:cursor-not-allowed dark:bg-muted dark:text-foreground"
+              className="w-full px-4 py-4 text-center text-3xl font-mono tracking-[0.5em] border border-border-strong rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:opacity-50 disabled:cursor-not-allowed dark:bg-muted dark:text-foreground"
               maxLength={6}
             />
           </div>
 
           {/* Error message */}
           {error && (
-            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0" />
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="flex items-center gap-2 p-3 oc-error-surface rounded-lg">
+              <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0" />
+              <p className="text-sm text-destructive/80">{error}</p>
             </div>
           )}
 

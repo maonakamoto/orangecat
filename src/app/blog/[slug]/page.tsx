@@ -70,7 +70,7 @@ const mdxComponents = {
     </code>
   ),
   pre: ({ children, ...props }: ComponentProps<'pre'>) => (
-    <pre className="bg-gray-900 text-gray-100 p-6 rounded-xl overflow-x-auto mb-6" {...props}>
+    <pre className="bg-foreground text-background p-6 rounded-lg overflow-x-auto mb-6" {...props}>
       {children}
     </pre>
   ),
@@ -92,15 +92,15 @@ const mdxComponents = {
     children: React.ReactNode;
   }) => {
     const styles = {
-      info: 'bg-tiffany-50 border-tiffany-200 text-tiffany-800',
-      warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-      success: 'bg-green-50 border-green-200 text-green-800',
-      error: 'bg-red-50 border-red-200 text-red-800',
+      info: 'border-border-subtle bg-muted/30 text-foreground',
+      warning: 'border-warning/30 bg-warning/10 text-foreground',
+      success: 'border-success/25 bg-success/10 text-success',
+      error: 'border-destructive/25 bg-destructive/10 text-destructive',
     };
-    return <div className={`border rounded-xl p-6 mb-6 ${styles[type]}`}>{children}</div>;
+    return <div className={`mb-6 rounded-md border p-6 ${styles[type]}`}>{children}</div>;
   },
   SecurityFeature: ({ title, description }: { title: string; description: string }) => (
-    <div className="bg-card border border-green-200 dark:border-border rounded-xl p-6 mb-6">
+    <div className="bg-card border border-green-200 dark:border-border rounded-lg p-6 mb-6">
       <h4 className="text-lg font-semibold text-foreground mb-2 flex items-center">
         <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
         {title}
@@ -273,7 +273,7 @@ export default async function BlogPost({ params }: PageProps) {
             </div>
 
             {/* Related Posts CTA */}
-            <div className={`mt-12 ${GRADIENTS.sectionOrangeTiffany} rounded-2xl p-8 text-center`}>
+            <div className={`mt-12 ${GRADIENTS.sectionOrangeTiffany} rounded-lg p-8 text-center`}>
               <h3 className="text-2xl font-bold text-foreground mb-4">More from OrangeCat</h3>
               <p className="text-lg text-muted-strong mb-6">
                 Discover more insights about Bitcoin, security, and building in public.

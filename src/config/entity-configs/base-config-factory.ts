@@ -94,18 +94,18 @@ export function createBasicInfoGroup(entityName: string, fields: FieldConfig[] =
 export interface BaseConfigOptions<T extends Record<string, any>> {
   /** Entity type from registry (excluding wallet) */
   entityType: Exclude<EntityType, 'wallet'>;
-  /** Display name (singular) */
-  name: string;
-  /** Display name (plural) */
-  namePlural: string;
-  /** Entity icon */
-  icon: LucideIcon;
-  /** Primary color theme */
-  colorTheme: 'orange' | 'tiffany' | 'rose' | 'green';
-  /** Back link URL */
-  backUrl: string;
-  /** Success redirect URL */
-  successUrl: string;
+  /** Display name (singular). Defaults to entity registry metadata. */
+  name?: string;
+  /** Display name (plural). Defaults to entity registry metadata. */
+  namePlural?: string;
+  /** Entity icon. Defaults to entity registry metadata. */
+  icon?: LucideIcon;
+  /** Primary color theme. Defaults to entity registry metadata. */
+  colorTheme?: 'orange' | 'tiffany' | 'rose' | 'green';
+  /** Back link URL. Defaults to entity registry dashboard path. */
+  backUrl?: string;
+  /** Success redirect URL. Defaults to entity registry dashboard detail path. */
+  successUrl?: string;
   /** Page title */
   pageTitle: string;
   /** Page description */
@@ -178,13 +178,13 @@ export function createEntityConfig<T extends Record<string, any>>(
 
   return {
     type: options.entityType,
-    name: options.name,
-    namePlural: options.namePlural,
-    icon: options.icon,
-    colorTheme: options.colorTheme,
-    backUrl: options.backUrl,
+    name: options.name ?? meta.name,
+    namePlural: options.namePlural ?? meta.namePlural,
+    icon: options.icon ?? meta.icon,
+    colorTheme: options.colorTheme ?? meta.colorTheme,
+    backUrl: options.backUrl ?? meta.basePath,
     apiEndpoint: meta.apiEndpoint, // Use registry as SSOT
-    successUrl: options.successUrl,
+    successUrl: options.successUrl ?? `${meta.basePath}/[id]`,
     pageTitle: options.pageTitle,
     pageDescription: options.pageDescription,
     formTitle: options.formTitle,

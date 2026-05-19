@@ -22,7 +22,7 @@ export function WalletCard({ wallet, selected, onSelect, disabled }: WalletCardP
       className={`relative w-full text-left p-3 rounded-lg border-2 transition-all ${
         selected
           ? 'border-tiffany bg-tiffany/5 ring-1 ring-tiffany/20'
-          : 'border-border hover:border-gray-300 dark:hover:border-border'
+          : 'border-border hover:border-border-strong dark:hover:border-border'
       } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       {selected && (

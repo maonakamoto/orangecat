@@ -148,5 +148,3 @@ export function PreferencesSection({ control }: PreferencesSectionProps) {
     </Card>
   );
 }
-
-

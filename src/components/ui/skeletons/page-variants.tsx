@@ -12,7 +12,7 @@ export function EntityListPageSkeleton() {
         <PageHeaderSkeleton />
         <Skeleton className="h-10 w-32 rounded-lg" />
       </div>
-      <div className="rounded-xl border border-border overflow-hidden">
+      <div className="rounded-lg border border-border overflow-hidden">
         <ListItemSkeleton />
         <ListItemSkeleton />
         <ListItemSkeleton />
@@ -35,7 +35,7 @@ export function EntityDetailPageSkeleton() {
       <Skeleton className="h-8 w-2/3" />
       <Skeleton className="h-4 w-1/3" />
       <div className="space-y-4 mt-6">
-        <Skeleton className="h-48 w-full rounded-xl" />
+        <Skeleton className="h-48 w-full rounded-lg" />
         <div className="space-y-3">
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-5/6" />
@@ -43,9 +43,9 @@ export function EntityDetailPageSkeleton() {
         </div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-        <Skeleton className="h-20 rounded-xl" />
-        <Skeleton className="h-20 rounded-xl" />
-        <Skeleton className="h-20 rounded-xl" />
+        <Skeleton className="h-20 rounded-lg" />
+        <Skeleton className="h-20 rounded-lg" />
+        <Skeleton className="h-20 rounded-lg" />
       </div>
     </div>
   );
@@ -100,7 +100,7 @@ export function SettingsPageSkeleton() {
     <div className="space-y-6 p-4 md:p-6 max-w-3xl mx-auto">
       <PageHeaderSkeleton />
       {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="space-y-4 rounded-xl border border-border p-6">
+        <div key={i} className="space-y-4 rounded-lg border border-border p-6">
           <Skeleton className="h-5 w-40" />
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-3/4" />
@@ -131,19 +131,19 @@ export function ChatPageSkeleton() {
         <div className="flex-1 p-4 space-y-4">
           <div className="flex gap-3">
             <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
-            <Skeleton className="h-16 w-2/3 rounded-xl" />
+            <Skeleton className="h-16 w-2/3 rounded-lg" />
           </div>
           <div className="flex gap-3 justify-end">
-            <Skeleton className="h-12 w-1/2 rounded-xl" />
+            <Skeleton className="h-12 w-1/2 rounded-lg" />
             <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
           </div>
           <div className="flex gap-3">
             <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
-            <Skeleton className="h-24 w-2/3 rounded-xl" />
+            <Skeleton className="h-24 w-2/3 rounded-lg" />
           </div>
         </div>
         <div className="border-t border-border p-4">
-          <Skeleton className="h-12 w-full rounded-xl" />
+          <Skeleton className="h-12 w-full rounded-lg" />
         </div>
       </div>
     </div>

@@ -3,7 +3,6 @@
 import React, { useRef } from 'react';
 import { LucideIcon, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import { GRADIENTS } from '@/config/gradients';
 import TimelineLayout from './TimelineLayout';
 import { TimelineFeedResponse } from '@/types/timeline';
 import TimelineComposer from './TimelineComposer';
@@ -11,14 +10,12 @@ import { TimelineSkeleton } from './TimelineSkeleton';
 import { useSocialTimeline } from './useSocialTimeline';
 import { TimelineSortingControls } from './TimelineSortingControls';
 import { TimelineSearchControls } from './TimelineSearchControls';
+import { TIMELINE_COPY, TIMELINE_SURFACE } from '@/config/timeline';
 
 export interface SocialTimelineProps {
   title: string;
   description: string;
   icon: LucideIcon;
-  gradientFrom: string;
-  gradientVia: string;
-  gradientTo: string;
   mode: 'timeline' | 'community';
   timelineOwnerId?: string;
   timelineOwnerType?: 'profile' | 'project';
@@ -43,15 +40,12 @@ export default function SocialTimeline({
   title,
   description,
   icon: Icon,
-  gradientFrom,
-  gradientVia,
-  gradientTo,
   mode,
   timelineOwnerId,
   timelineOwnerType = 'profile',
   timelineOwnerName,
   showShareButton = false,
-  shareButtonText = 'Share Update',
+  shareButtonText = TIMELINE_COPY.shareUpdateButton,
   shareButtonIcon: ShareIcon = Plus,
   defaultSort = 'trending',
   showSortingControls = false,
@@ -92,7 +86,7 @@ export default function SocialTimeline({
 
   if (hydrated && authCheckComplete && !isLoading && !user) {
     return (
-      <div className={`min-h-screen ${GRADIENTS.pageBg} flex items-center justify-center`}>
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-foreground mb-4">Please sign in</h2>
           <p className="text-muted-foreground mb-6">You need to be signed in to view this page.</p>
@@ -104,7 +98,7 @@ export default function SocialTimeline({
 
   if (!authCheckComplete) {
     return (
-      <div className={`min-h-screen ${GRADIENTS.pageBg} p-4`}>
+      <div className="min-h-screen bg-background p-4">
         <TimelineSkeleton count={5} />
       </div>
     );
@@ -136,9 +130,13 @@ export default function SocialTimeline({
           targetOwnerName={timelineOwnerName}
           allowProjectSelection={allowProjectSelection}
           placeholder={
-            mode === 'timeline' ? "What's on your mind?" : 'Share something with the community...'
+            mode === 'timeline'
+              ? TIMELINE_COPY.composePlaceholder
+              : TIMELINE_COPY.communityPlaceholder
           }
-          buttonText={mode === 'timeline' ? 'Share Update' : 'Post'}
+          buttonText={
+            mode === 'timeline' ? TIMELINE_COPY.shareUpdateButton : TIMELINE_COPY.postButton
+          }
           onPostCreated={() => {
             loadTimelineFeed(sortBy);
             invalidateTimelineCache();
@@ -203,14 +201,14 @@ export default function SocialTimeline({
     ) : searchError ? (
       <div className="text-center py-10">
         <Icon className="w-14 h-14 text-red-300 mx-auto mb-3" />
-        <p className="text-red-600 text-lg mb-2">{searchError}</p>
+        <p className="text-destructive text-lg mb-2">{searchError}</p>
         <Button variant="outline" onClick={handleClearSearch}>
           Clear Search
         </Button>
       </div>
     ) : activeFeed.events.length === 0 ? (
       <div className="text-center py-10">
-        <Icon className="w-14 h-14 text-gray-300 dark:text-muted-foreground mx-auto mb-3" />
+        <Icon className="w-14 h-14 text-muted-dim dark:text-muted-foreground mx-auto mb-3" />
         <h3 className="text-lg font-semibold text-foreground mb-1">No posts found</h3>
         <p className="text-muted-foreground">Try another search term.</p>
         <div className="mt-4">
@@ -225,14 +223,14 @@ export default function SocialTimeline({
   ) : error ? (
     <div className="text-center py-16">
       <Icon className="w-16 h-16 text-red-300 mx-auto mb-4" />
-      <p className="text-red-600 text-lg mb-4">{error}</p>
+      <p className="text-destructive text-lg mb-4">{error}</p>
       <Button variant="outline" onClick={() => loadTimelineFeed(sortBy)}>
         Try Again
       </Button>
     </div>
   ) : timelineFeed?.events.length === 0 ? (
     <div className="text-center py-16">
-      <Icon className="w-20 h-20 text-gray-300 dark:text-muted-foreground mx-auto mb-4" />
+      <Icon className="w-20 h-20 text-muted-dim dark:text-muted-foreground mx-auto mb-4" />
       <h3 className="text-lg font-semibold text-foreground mb-2">No posts yet</h3>
       <p className="text-muted-foreground max-w-md mx-auto">
         {mode === 'timeline'
@@ -259,7 +257,7 @@ export default function SocialTimeline({
                 window.scrollTo({ top: elementPosition - 80, behavior: 'smooth' });
               }
             }}
-            className="inline-flex items-center gap-2"
+            className={TIMELINE_SURFACE.chip}
           >
             <ShareIcon className="w-4 h-4" />
             {shareButtonText}
@@ -273,9 +271,6 @@ export default function SocialTimeline({
       title={title}
       description={description}
       icon={Icon}
-      gradientFrom={gradientFrom}
-      gradientVia={gradientVia}
-      gradientTo={gradientTo}
       feed={activeFeed}
       onEventUpdate={handleEventUpdate}
       onLoadMore={handleLoadMore}

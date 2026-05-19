@@ -240,18 +240,18 @@ export default function TasksPage() {
 
       {/* Task List */}
       {error ? (
-        <div className="rounded-xl border bg-card p-6 text-red-600">{error}</div>
+        <div className="rounded-lg border bg-card p-6 text-red-600">{error}</div>
       ) : loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-card rounded-xl border border-border p-4 animate-pulse">
+            <div key={i} className="bg-card rounded-lg border border-border p-4 animate-pulse">
               <div className="h-5 bg-muted rounded w-1/3 mb-2" />
               <div className="h-4 bg-muted rounded w-2/3" />
             </div>
           ))}
         </div>
       ) : tasks.length === 0 ? (
-        <div className="bg-card rounded-xl border border-border p-12 text-center">
+        <div className="bg-card rounded-lg border border-border p-12 text-center">
           <ClipboardList className="h-12 w-12 text-muted-dim mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-foreground mb-2">No tasks found</h3>
           <p className="text-muted-foreground mb-6">

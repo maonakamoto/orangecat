@@ -6,7 +6,6 @@ import Button from '@/components/ui/Button';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { Target, BarChart3, TrendingUp, Plus } from 'lucide-react';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
-import { GRADIENTS } from '@/config/gradients';
 
 interface MobileDashboardSidebarProps {
   stats: {
@@ -34,26 +33,26 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
   return (
     <div className="space-y-4 lg:hidden">
       {/* Impact Overview - Enhanced mobile version */}
-      <Card className="border-l-4 border-l-orange-500">
+      <Card className="border-border-subtle bg-background">
         <CardContent className="p-4">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-5 h-5 text-orange-600" />
             <h3 className="text-base font-semibold text-foreground">Your Impact</h3>
           </div>
           <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="text-center p-3 bg-orange-50 rounded-lg">
-              <div className="text-2xl font-bold text-orange-600">{totalProjects}</div>
+            <div className="rounded-md border border-border-subtle bg-muted/30 p-3 text-center">
+              <div className="text-2xl font-bold text-foreground">{totalProjects}</div>
               <div className="text-xs text-muted-foreground">Projects</div>
             </div>
-            <div className="text-center p-3 bg-green-50 rounded-lg">
-              <div className="text-lg font-bold text-green-600">
+            <div className="rounded-md border border-border-subtle bg-muted/30 p-3 text-center">
+              <div className="text-lg font-bold text-foreground">
                 <CurrencyDisplay amount={totalRaised} currency={primaryCurrency} />
               </div>
               <div className="text-xs text-muted-foreground">Raised</div>
             </div>
           </div>
-          <div className="text-center p-2 bg-tiffany-50 rounded-lg">
-            <div className="text-lg font-bold text-tiffany-600">{totalSupporters}</div>
+          <div className="rounded-md border border-border-subtle bg-muted/30 p-2 text-center">
+            <div className="text-lg font-bold text-foreground">{totalSupporters}</div>
             <div className="text-xs text-muted-foreground">Supporters</div>
           </div>
         </CardContent>
@@ -61,17 +60,17 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
 
       {/* Getting Started / Analytics */}
       {totalProjects === 0 ? (
-        <Card className="border-l-4 border-l-tiffany-500 bg-gradient-to-r from-tiffany-50/50 to-orange-50/50">
+        <Card className="border-border-subtle bg-background">
           <CardContent className="p-5 text-center">
-            <div className="p-3 bg-tiffany-100 rounded-xl inline-flex mb-4">
-              <Target className="w-8 h-8 text-tiffany-600" />
+            <div className="mb-4 inline-flex rounded-md border border-border-subtle bg-muted/30 p-3">
+              <Target className="w-8 h-8 text-foreground" />
             </div>
             <h3 className="font-semibold text-foreground mb-3">Ready to Start Fundraising?</h3>
             <p className="text-sm text-muted-foreground mb-4">
               Create your first project and start receiving support in minutes.
             </p>
             <Button
-              className={GRADIENTS.brandTiffany}
+              className="bg-foreground text-background hover:bg-foreground/90"
               onClick={() => router.push(ENTITY_REGISTRY.project.createPath)}
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -80,7 +79,7 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
           </CardContent>
         </Card>
       ) : (
-        <Card className="border-l-4 border-l-green-400">
+        <Card className="border-border-subtle bg-background">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-4">
               <BarChart3 className="w-5 h-5 text-green-600" />
@@ -98,7 +97,7 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Supporters</span>
-                <span className="text-sm font-bold text-tiffany-600">{totalSupporters}</span>
+                <span className="text-sm font-bold text-foreground">{totalSupporters}</span>
               </div>
               <Button
                 size="sm"

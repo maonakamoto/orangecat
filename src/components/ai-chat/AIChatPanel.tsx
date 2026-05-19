@@ -157,7 +157,7 @@ export function AIChatPanel({
             )}
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-border">
             {messages.map(message => (
               <AIChatMessage
                 key={message.id}

@@ -133,11 +133,11 @@ export default function BitcoinWalletStatsCompact({
                   {tx.type === 'received' ? (
                     <TrendingDown className="w-3 h-3 text-green-600" />
                   ) : (
-                    <TrendingUp className="w-3 h-3 text-red-600" />
+                    <TrendingUp className="w-3 h-3 text-destructive" />
                   )}
                   <span
                     className={`font-medium text-xs ${
-                      tx.type === 'received' ? 'text-green-600' : 'text-red-600'
+                      tx.type === 'received' ? 'text-green-600' : 'text-destructive'
                     }`}
                   >
                     {tx.type === 'received' ? '+' : '-'}

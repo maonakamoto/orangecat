@@ -70,7 +70,7 @@ export function WizardFooter({
               variant="ghost"
               onClick={onNext}
               disabled={isSaving}
-              className="text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground"
             >
               Skip for now
             </Button>

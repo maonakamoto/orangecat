@@ -33,6 +33,7 @@ hooks/
 ## Hook Examples
 
 ### Authentication Hook
+
 ```typescript
 interface UseAuthReturn {
   user: User | null;
@@ -49,6 +50,7 @@ function useAuth(): UseAuthReturn {
 ```
 
 ### Profile Hook
+
 ```typescript
 interface UseProfileReturn {
   profile: Profile | null;
@@ -64,6 +66,7 @@ function useProfile(userId: string): UseProfileReturn {
 ```
 
 ### Funding Hook
+
 ```typescript
 interface UseFundingReturn {
   project: Project | null;
@@ -130,15 +133,15 @@ Each hook should include:
 ```typescript
 /**
  * Custom hook for managing user authentication
- * 
+ *
  * @returns {UseAuthReturn} Object containing user state and auth methods
- * 
+ *
  * @example
  * const { user, login, logout } = useAuth();
- * 
+ *
  * // Login
  * await login('user@example.com', 'password');
- * 
+ *
  * // Logout
  * await logout();
  */
@@ -188,4 +191,4 @@ function useData<T>(fetchFn: () => Promise<T>) {
 
   return { data, error, loading };
 }
-``` 
+```

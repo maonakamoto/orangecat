@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { User, Target, Building2, Users, Plus } from 'lucide-react';
 import { PROFILE_CATEGORIES } from '@/types/profile';
-import { GRADIENTS } from '@/config/gradients';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 /** Map profile types to Lucide icons (avoids emojis in UI) */
@@ -35,21 +34,20 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
       : PROFILE_CATEGORIES.individual;
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-orange-50/50 to-tiffany-50/50 dark:from-muted/30 dark:to-accent/20 rounded-xl border border-border-subtle p-5 sm:p-6">
+    <div className="oc-surface oc-surface-padding">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className={`p-3 ${GRADIENTS.brandMixedBr} rounded-xl`}>
-            <User className="h-6 w-6 text-white" />
+          <div className="oc-accent-tile">
+            <User className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="text-xl sm:text-2xl font-bold text-foreground leading-tight">
-              Welcome back,{' '}
+            <h1 className="mb-0 text-xl font-semibold leading-tight text-foreground sm:text-2xl">
+              Welcome back{' '}
               {profile === null ? (
                 <span className="inline-block h-5 w-28 animate-pulse rounded bg-muted align-text-bottom" />
               ) : (
                 profile.name || profile.username || 'there'
               )}
-              !
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
               {totalProjects > 0
@@ -61,14 +59,14 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
         <div className="flex items-center gap-2 shrink-0">
           {totalProjects === 0 && (
             <Link href={ENTITY_REGISTRY.project.createPath}>
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-tiffany-600 text-white hover:bg-tiffany-700 transition-colors cursor-pointer">
+              <div className="hidden sm:flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-sm font-medium text-background transition-colors hover:bg-muted-strong">
                 <Plus className="h-4 w-4" />
                 Start Creating
               </div>
             </Link>
           )}
           {profileCategory && (
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border border-orange-200 text-orange-700">
+            <div className="hidden sm:flex items-center gap-1.5 rounded-md border border-border-subtle px-3 py-1.5 text-sm font-medium text-muted-foreground">
               {(() => {
                 const profileType = (profile?.profile_type ||
                   'individual') as keyof typeof PROFILE_TYPE_ICONS;

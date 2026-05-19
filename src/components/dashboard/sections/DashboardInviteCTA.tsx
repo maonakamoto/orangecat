@@ -7,7 +7,6 @@ import ProfileShare from '@/components/sharing/ProfileShare';
 import { Users, Share2, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import { ROUTES } from '@/config/routes';
-import { GRADIENTS } from '@/config/gradients';
 
 interface DashboardInviteCTAProps {
   profile: {
@@ -33,9 +32,7 @@ export function DashboardInviteCTA({ profile, userId }: DashboardInviteCTAProps)
   };
 
   return (
-    <div
-      className={`relative rounded-xl border border-orange-200 ${GRADIENTS.sectionOrangeTiffany} p-4 sm:p-5 shadow-sm`}
-    >
+    <div className="relative rounded-md border border-border-subtle bg-muted/30 p-4 sm:p-5">
       <div className="space-y-3">
         <div>
           <h3 className="text-base sm:text-lg font-semibold text-foreground">
@@ -55,7 +52,7 @@ export function DashboardInviteCTA({ profile, userId }: DashboardInviteCTAProps)
           <Button
             onClick={() => setShowShare(!showShare)}
             size="sm"
-            className="bg-tiffany-500 hover:bg-tiffany-600 text-white min-h-11"
+            className="min-h-11 bg-foreground text-background hover:bg-foreground/90"
           >
             <Share2 className="w-4 h-4 mr-2" />
             Share

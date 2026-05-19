@@ -89,7 +89,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
   if (publicProjects.length === 0) {
     return (
       <div className="text-center py-12">
-        <Target className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-muted-foreground" />
+        <Target className="w-16 h-16 mx-auto mb-4 text-muted-dim dark:text-muted-foreground" />
         <h3 className="text-lg font-semibold text-foreground mb-2">No Projects Yet</h3>
         <p className="text-muted-foreground mb-6">
           {isOwnProfile ? "You haven't published any projects yet" : 'No projects to display'}
@@ -146,11 +146,11 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
             <Link
               key={project.id}
               href={ROUTES.PROJECTS.VIEW(project.id)}
-              className="block overflow-hidden rounded-xl border-2 border-border hover:border-orange-300 hover:shadow-lg bg-card transition-all duration-200 group"
+              className="block overflow-hidden rounded-lg border-2 border-border hover:border-border-strong hover:shadow-sm bg-card transition-all duration-200 group"
             >
               <div className="flex flex-col sm:flex-row">
                 {/* Thumbnail */}
-                <div className="relative w-full sm:w-32 h-48 sm:h-auto flex-shrink-0 bg-gradient-to-br from-orange-100 to-amber-100">
+                <div className="relative w-full sm:w-32 h-48 sm:h-auto flex-shrink-0 bg-muted">
                   {project.thumbnail_url ? (
                     <Image
                       src={project.thumbnail_url}
@@ -165,7 +165,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                   )}
                   {project.category && (
                     <div className="absolute top-2 left-2">
-                      <span className="px-2 py-1 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-md text-xs font-medium text-foreground">
+                      <span className="px-2 py-1 bg-card/90 dark:bg-card/90 backdrop-blur-sm rounded-md text-xs font-medium text-foreground">
                         {project.category}
                       </span>
                     </div>

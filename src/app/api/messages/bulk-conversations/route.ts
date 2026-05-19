@@ -1,32 +1,32 @@
-import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth'
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import {
   apiSuccess,
   apiValidationError,
   apiRateLimited,
   handleApiError,
-} from '@/lib/api/standardResponse'
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit'
-import { logger } from '@/utils/logger'
-import { z } from 'zod'
-import { DATABASE_TABLES } from '@/config/database-tables'
+} from '@/lib/api/standardResponse';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
+import { logger } from '@/utils/logger';
+import { z } from 'zod';
+import { DATABASE_TABLES } from '@/config/database-tables';
 
 const bulkConversationsSchema = z.object({
   ids: z.array(z.string().min(1)).min(1),
   action: z.enum(['leave', 'delete']).optional().default('leave'),
-})
+});
 
 export const POST = withAuth(async (req: AuthenticatedRequest) => {
   try {
-    const { user, supabase } = req
+    const { user, supabase } = req;
 
-    const rl = await rateLimitWriteAsync(user.id)
+    const rl = await rateLimitWriteAsync(user.id);
     if (!rl.success) {
-      const retryAfter = retryAfterSeconds(rl)
-      return apiRateLimited('Too many requests. Please slow down.', retryAfter)
+      const retryAfter = retryAfterSeconds(rl);
+      return apiRateLimited('Too many requests. Please slow down.', retryAfter);
     }
 
-    const body = await req.json().catch(() => ({}))
-    const validation = bulkConversationsSchema.safeParse(body)
+    const body = await req.json().catch(() => ({}));
+    const validation = bulkConversationsSchema.safeParse(body);
 
     if (!validation.success) {
       return apiValidationError('Invalid request', {
@@ -34,28 +34,32 @@ export const POST = withAuth(async (req: AuthenticatedRequest) => {
           field: issue.path.join('.'),
           message: issue.message,
         })),
-      })
+      });
     }
 
-    const { ids } = validation.data
+    const { ids } = validation.data;
 
     // Default behavior: leave conversations (soft remove for this user)
     // PURE RLS: relies on 'Users can update their own participation' policy
-    const { error: updErr, data } = await (supabase
-      .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS))
+    const { error: updErr, data } = await supabase
+      .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
       .update({ is_active: false })
       .in('conversation_id', ids)
       .eq('user_id', user.id)
-      .select('conversation_id')
+      .select('conversation_id');
 
     if (updErr) {
-      logger.error('Failed to update conversations', { error: updErr, userId: user.id, conversationIds: ids }, 'Messages')
-      return handleApiError(updErr)
+      logger.error(
+        'Failed to update conversations',
+        { error: updErr, userId: user.id, conversationIds: ids },
+        'Messages'
+      );
+      return handleApiError(updErr);
     }
 
-    return apiSuccess({ updated: data?.length || 0 })
+    return apiSuccess({ updated: data?.length || 0 });
   } catch (error) {
-    logger.error('Bulk conversations error', { error, userId: req.user.id }, 'Messages')
-    return handleApiError(error)
+    logger.error('Bulk conversations error', { error, userId: req.user.id }, 'Messages');
+    return handleApiError(error);
   }
-})
+});

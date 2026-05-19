@@ -111,7 +111,7 @@ export function BlogFilters({
           </div>
           <button
             onClick={clearFilters}
-            className="ml-auto text-xs text-muted-foreground hover:text-gray-700 dark:hover:text-foreground underline"
+            className="ml-auto text-xs text-muted-foreground hover:text-foreground underline"
           >
             Clear all filters
           </button>

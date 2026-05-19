@@ -75,7 +75,7 @@ export default function BlogClientWrapper({
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-2 border border-border-strong bg-white dark:bg-muted text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-tiffany-500"
+                className="flex-1 px-4 py-2 border border-border-strong bg-card text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
               />
               <Button variant="primary" size="sm">
                 Subscribe

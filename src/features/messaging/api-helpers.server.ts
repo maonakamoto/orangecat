@@ -46,14 +46,21 @@ export async function fetchConversationContext(
 ): Promise<ConversationContext | null> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [convResult, participantsResult] = await Promise.all([
-    (admin.from(DATABASE_TABLES.CONVERSATIONS) as any).select('*').eq('id', conversationId).single(),
+    (admin.from(DATABASE_TABLES.CONVERSATIONS) as any)
+      .select('*')
+      .eq('id', conversationId)
+      .single(),
     admin
       .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
-      .select('user_id, role, joined_at, last_read_at, is_active, profiles:user_id (id, username, name, avatar_url)')
+      .select(
+        'user_id, role, joined_at, last_read_at, is_active, profiles:user_id (id, username, name, avatar_url)'
+      )
       .eq('conversation_id', conversationId),
   ]);
 
-  if (convResult.error || !convResult.data) {return null;}
+  if (convResult.error || !convResult.data) {
+    return null;
+  }
 
   const formattedParticipants = ((participantsResult.data || []) as ParticipantRow[]).map(p => ({
     user_id: p.user_id,
@@ -79,7 +86,11 @@ export async function fetchConversationContext(
     unreadCount = count || 0;
   }
 
-  return { conversation: convResult.data as Record<string, unknown>, formattedParticipants, unreadCount };
+  return {
+    conversation: convResult.data as Record<string, unknown>,
+    formattedParticipants,
+    unreadCount,
+  };
 }
 
 /**
@@ -98,7 +109,9 @@ export async function verifyParticipantAndReactivate(
     .eq('user_id', userId)
     .maybeSingle();
 
-  if (error || !data) {return 'not_found';}
+  if (error || !data) {
+    return 'not_found';
+  }
 
   const participant = data as { is_active?: boolean };
   if (participant.is_active === false) {

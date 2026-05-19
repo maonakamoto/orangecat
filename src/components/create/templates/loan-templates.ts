@@ -110,5 +110,3 @@ export const LOAN_TEMPLATES: EntityTemplate<LoanFormData>[] = [
     },
   },
 ];
-
-

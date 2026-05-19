@@ -50,7 +50,9 @@ export async function createWallet(
 
   // Verify ownership
   const ownershipError = await verifyOwnership(supabase, user, body);
-  if (ownershipError) {return { response: ownershipError };}
+  if (ownershipError) {
+    return { response: ownershipError };
+  }
 
   // Sanitize and validate address
   const sanitized = sanitizeWalletInput(body);
@@ -62,9 +64,14 @@ export async function createWallet(
     const addressValidation = validateAddressOrXpub(sanitized.address_or_xpub);
     if (!addressValidation.valid) {
       return {
-        response: apiError(addressValidation.error || 'Invalid address/xpub', 'INVALID_ADDRESS', 400, {
-          field: 'address_or_xpub',
-        }),
+        response: apiError(
+          addressValidation.error || 'Invalid address/xpub',
+          'INVALID_ADDRESS',
+          400,
+          {
+            field: 'address_or_xpub',
+          }
+        ),
       };
     }
   }
@@ -82,7 +89,7 @@ export async function createWallet(
 
   // Insert wallet
   try {
-    const { data: wallet, error } = await supabase
+    const { data: wallet, error } = (await supabase
       .from(getTableName('wallet'))
       .insert({
         profile_id: body.profile_id || null,
@@ -104,11 +111,17 @@ export async function createWallet(
         balance_btc: 0,
       })
       .select()
-      .single() as { data: Wallet | null; error: { message: string; code?: string } | null };
+      .single()) as { data: Wallet | null; error: { message: string; code?: string } | null };
 
     if (error) {
       if (error.message.includes(`Maximum ${MAX_WALLETS_PER_ENTITY}`)) {
-        return { response: apiError(`Maximum ${MAX_WALLETS_PER_ENTITY} wallets allowed`, 'WALLET_LIMIT', 400) };
+        return {
+          response: apiError(
+            `Maximum ${MAX_WALLETS_PER_ENTITY} wallets allowed`,
+            'WALLET_LIMIT',
+            400
+          ),
+        };
       }
       if (isTableNotFoundError(error)) {
         return { response: apiError('Wallets table not available', 'TABLE_NOT_FOUND', 503) };
@@ -155,11 +168,11 @@ async function verifyOwnership(
     return null;
   }
   if (body.project_id) {
-    const { data: project } = await supabase
+    const { data: project } = (await supabase
       .from(getTableName('project'))
       .select('user_id')
       .eq('id', body.project_id)
-      .single() as { data: { user_id: string } | null };
+      .single()) as { data: { user_id: string } | null };
 
     if (!project || project.user_id !== user.id) {
       return apiForbidden();
@@ -213,12 +226,16 @@ async function runPreInsertChecks(
           .eq('address_or_xpub', addressToCheck)
           .eq('is_active', true);
 
-        logger.warn('Duplicate wallet address detected', {
-          address: sanitized.address_or_xpub,
-          entityId,
-          entityType,
-          existingCount: existingWallets?.length,
-        }, 'WalletManagement');
+        logger.warn(
+          'Duplicate wallet address detected',
+          {
+            address: sanitized.address_or_xpub,
+            entityId,
+            entityType,
+            existingCount: existingWallets?.length,
+          },
+          'WalletManagement'
+        );
 
         duplicateInfo = {
           existingWallets: existingWallets || [],
@@ -248,7 +265,9 @@ async function runPreInsertChecks(
     return { isFirstWallet: walletCount === 0, duplicateInfo, response: null };
   } catch (dupCheckError: unknown) {
     if (!isTableNotFoundError(dupCheckError)) {
-      return { response: handleSupabaseError('check existing wallets', dupCheckError, { entityId }) };
+      return {
+        response: handleSupabaseError('check existing wallets', dupCheckError, { entityId }),
+      };
     }
     // Wallets table missing — let the insert attempt handle it
     return { isFirstWallet: true, duplicateInfo: null, response: null };

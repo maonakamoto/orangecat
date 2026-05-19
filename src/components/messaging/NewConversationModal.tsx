@@ -162,14 +162,14 @@ export default function NewConversationModal({
         }
       }}
     >
-      <div className="w-full max-w-md bg-card rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-md overflow-hidden rounded-md border border-border-subtle bg-background animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="p-4 border-b border-border-subtle flex items-center justify-between">
           <h3 className="text-lg font-semibold text-foreground">New Message</h3>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="p-2 hover:bg-muted hover:text-gray-700 dark:hover:text-foreground rounded-full transition-all duration-200 min-h-11 min-w-11 flex items-center justify-center"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 transition-colors hover:bg-muted hover:text-foreground"
           >
             <X className="w-5 h-5 text-muted-foreground" />
           </button>
@@ -184,15 +184,15 @@ export default function NewConversationModal({
               value={search}
               onChange={e => handleChange(e.target.value)}
               placeholder="Search by name or @username"
-              className="w-full pl-11 pr-4 py-3 bg-muted border-0 rounded-xl text-sm dark:text-foreground dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:bg-white dark:focus:bg-card transition-all"
+              className="w-full rounded-md border border-border-subtle bg-muted py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
         </div>
 
         {/* Error message */}
         {error && (
-          <div className="px-4 py-3 bg-red-50 border-b border-red-100">
-            <p className="text-sm text-red-600">{error}</p>
+          <div className="border-b border-destructive/20 bg-destructive/10 px-4 py-3">
+            <p className="text-sm text-destructive">{error}</p>
           </div>
         )}
 
@@ -204,7 +204,7 @@ export default function NewConversationModal({
             </div>
           ) : profiles.length === 0 ? (
             <div className="py-12 text-center">
-              <MessageSquare className="w-10 h-10 mx-auto mb-3 text-gray-300 dark:text-muted-foreground" />
+              <MessageSquare className="w-10 h-10 mx-auto mb-3 text-muted-dim dark:text-muted-foreground" />
               <p className="text-muted-foreground font-medium">
                 {search ? 'No people found' : 'Search for someone to message'}
               </p>
@@ -221,7 +221,7 @@ export default function NewConversationModal({
                   tabIndex={0}
                   aria-disabled={!!creatingId}
                   className={cn(
-                    'w-full flex items-center gap-3 px-4 py-3 hover:bg-tiffany-50 text-left transition-all duration-200 rounded-lg',
+                    'flex w-full items-center gap-3 rounded-md px-4 py-3 text-left transition-colors hover:bg-muted',
                     creatingId === p.id && 'opacity-60'
                   )}
                   onClick={() => {
@@ -243,7 +243,7 @@ export default function NewConversationModal({
                   <img
                     src={p.avatar_url || '/default-avatar.svg'}
                     alt={p.name || p.username || 'User'}
-                    className="w-11 h-11 rounded-full object-cover bg-muted"
+                    className="h-11 w-11 rounded-md bg-muted object-cover"
                   />
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-foreground truncate">
@@ -256,7 +256,7 @@ export default function NewConversationModal({
                   <Button
                     size="sm"
                     disabled={!!creatingId && creatingId !== p.id}
-                    className="bg-tiffany-500 hover:bg-tiffany-600 text-white flex-shrink-0"
+                    className="flex-shrink-0 bg-foreground text-background hover:bg-foreground/90"
                     onClick={e => {
                       e.stopPropagation();
                       if (!creatingId) {

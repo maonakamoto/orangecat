@@ -6,6 +6,7 @@ import TimelineComposer from './TimelineComposer';
 import Button from '@/components/ui/Button';
 import { useTimelineView } from './useTimelineView';
 import type { TimelineDisplayEvent } from '@/types/timeline';
+import { TIMELINE_COPY, TIMELINE_SURFACE } from '@/config/timeline';
 
 export interface TimelineViewProps {
   feedType: 'journey' | 'community' | 'profile' | 'project';
@@ -62,9 +63,12 @@ export default function TimelineView({
     return (
       <div className="space-y-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="bg-card border border-border rounded-lg p-4 animate-pulse">
+          <div
+            key={i}
+            className="animate-pulse rounded-md border border-border-subtle bg-background p-4"
+          >
             <div className="flex items-start space-x-3">
-              <div className="w-12 h-12 bg-muted rounded-full" />
+              <div className="h-12 w-12 rounded-md bg-muted" />
               <div className="flex-1 space-y-2">
                 <div className="h-4 bg-muted rounded w-1/4" />
                 <div className="h-4 bg-muted rounded w-3/4" />
@@ -80,7 +84,7 @@ export default function TimelineView({
   if (error) {
     return (
       <div className="text-center py-16">
-        <p className="text-red-600 text-lg mb-4">{error}</p>
+        <p className="text-destructive text-lg mb-4">{error}</p>
         <Button variant="outline" onClick={() => loadFeed()}>
           Try Again
         </Button>
@@ -130,13 +134,13 @@ export default function TimelineView({
                 ? 'Write on this timeline...'
                 : feedType === 'project'
                   ? 'Share an update about this project...'
-                  : "What's on your mind?"
+                  : TIMELINE_COPY.composePlaceholder
             }
-            buttonText="Post"
+            buttonText={TIMELINE_COPY.postButton}
             showBanner={Boolean(ownerId && ownerId !== user.id)}
           />
         ) : (
-          <div className="rounded-xl border border-dashed border-border bg-white/80 dark:bg-card/80 px-4 py-5 shadow-sm">
+          <div className="rounded-md border border-dashed border-border-subtle bg-background px-4 py-5">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="font-medium text-foreground">Sign in to post</p>
@@ -152,7 +156,7 @@ export default function TimelineView({
                       : '/profiles/me';
                   window.location.href = `/auth?redirect=${encodeURIComponent(redirect)}`;
                 }}
-                className="bg-tiffany-500 hover:bg-tiffany-600 text-white"
+                className={TIMELINE_SURFACE.buttonPrimary}
               >
                 Sign in
               </Button>

@@ -14,7 +14,7 @@ import {
   apiSuccess,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { attentionFlagSchema } from '@/lib/schemas/tasks';
@@ -29,15 +29,21 @@ interface RouteContext {
 export const POST = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id: taskId } = await context.params;
   const idValidation = getValidationError(validateUUID(taskId, 'task ID'));
-  if (idValidation) {return idValidation;}
+  if (idValidation) {
+    return idValidation;
+  }
   const { user, supabase } = request;
   try {
     const rl = await rateLimitWriteAsync(user.id);
-    if (!rl.success) {return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));}
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
 
     const body = await request.json().catch(() => ({}));
     const result = attentionFlagSchema.safeParse(body);
-    if (!result.success) {return apiValidationError('Validation failed', result.error.flatten());}
+    if (!result.success) {
+      return apiValidationError('Validation failed', result.error.flatten());
+    }
 
     const flagData = result.data;
 
@@ -48,7 +54,9 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
       .single();
 
     if (taskError) {
-      if (taskError.code === 'PGRST116') {return apiNotFound('Task not found');}
+      if (taskError.code === 'PGRST116') {
+        return apiNotFound('Task not found');
+      }
       logger.error('Failed to fetch task', { error: taskError, taskId }, 'TasksAPI');
       return apiInternalError();
     }
@@ -64,7 +72,10 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
       return apiInternalError('Failed to flag task');
     }
 
-    await supabase.from(DATABASE_TABLES.TASKS).update({ current_status: TASK_STATUSES.NEEDS_ATTENTION }).eq('id', taskId);
+    await supabase
+      .from(DATABASE_TABLES.TASKS)
+      .update({ current_status: TASK_STATUSES.NEEDS_ATTENTION })
+      .eq('id', taskId);
 
     const { data: profile } = await supabase
       .from(DATABASE_TABLES.PROFILES)

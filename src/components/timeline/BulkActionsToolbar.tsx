@@ -5,6 +5,7 @@ import { X, Trash2, Globe, Lock, CheckSquare, Square, Loader2 } from 'lucide-rea
 import { Button } from '@/components/ui/Button';
 import { TimelineVisibility } from '@/types/timeline';
 import { cn } from '@/lib/utils';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 interface BulkActionsToolbarProps {
   selectedCount: number;
@@ -47,7 +48,7 @@ export function BulkActionsToolbar({
   return (
     <div
       className={cn(
-        'sticky top-0 z-30 bg-white/95 dark:bg-card/95 backdrop-blur-md border-b border-border',
+        'sticky top-0 z-30 border-b border-border-subtle bg-background/90 backdrop-blur-xl',
         'px-4 py-2.5 transition-all duration-200',
         className
       )}
@@ -60,9 +61,9 @@ export function BulkActionsToolbar({
             onClick={onSelectAll}
             disabled={isProcessing}
             className={cn(
-              'flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-colors',
-              'hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
-              allSelected ? 'text-tiffany-600' : 'text-muted-foreground'
+              TIMELINE_SURFACE.chip,
+              'disabled:cursor-not-allowed disabled:opacity-50',
+              allSelected && TIMELINE_SURFACE.chipActive
             )}
             aria-label={allSelected ? 'Deselect all' : 'Select all'}
           >
@@ -98,7 +99,9 @@ export function BulkActionsToolbar({
               <>
                 {/* Backdrop to close menu */}
                 <div className="fixed inset-0 z-40" onClick={() => setShowVisibilityMenu(false)} />
-                <div className="absolute right-0 top-full mt-1 w-44 bg-card border border-border rounded-xl shadow-lg z-50 py-1">
+                <div
+                  className={`absolute right-0 top-full z-50 mt-1 w-44 py-1 ${TIMELINE_SURFACE.menu}`}
+                >
                   <button
                     onClick={() => {
                       onBulkVisibilityChange('public');
@@ -149,7 +152,7 @@ export function BulkActionsToolbar({
             size="sm"
             onClick={onExitSelectionMode}
             disabled={isProcessing}
-            className="text-muted-foreground hover:text-gray-700 dark:hover:text-foreground p-2 min-h-11 min-w-11 flex items-center justify-center"
+            className={TIMELINE_SURFACE.iconButton}
             aria-label="Exit selection mode"
           >
             <X className="w-4 h-4" />

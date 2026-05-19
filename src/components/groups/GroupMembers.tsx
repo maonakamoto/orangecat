@@ -115,13 +115,13 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
               {members.map(member => (
                 <div
                   key={member.id}
-                  className="flex items-center justify-between p-3 rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/40 dark:hover:bg-gray-800 transition-colors"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div
                       className={cn(
                         GRADIENTS.brandOrangeLightBr,
-                        'h-10 w-10 rounded-full flex items-center justify-center border-2 border-orange-300'
+                        'h-10 w-10 rounded-full flex items-center justify-center border-2 border-border-strong'
                       )}
                     >
                       {getInitial(member.display_name || member.username)}

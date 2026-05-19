@@ -134,21 +134,21 @@ export default class ErrorBoundary extends Component<Props, State> {
 
     if (level === 'component') {
       return (
-        <div className="border border-red-200 bg-red-50 rounded-lg p-4 my-4">
+        <div className="oc-error-surface my-4">
           <div className="flex items-start">
-            <AlertTriangle className="h-5 w-5 text-red-400 mt-0.5 mr-3 flex-shrink-0" />
+            <AlertTriangle className="h-5 w-5 mt-0.5 mr-3 flex-shrink-0" />
             <div className="flex-1">
-              <h3 className="text-sm font-medium text-red-800">Component Error</h3>
-              <p className="text-sm text-red-700 mt-1">
+              <h3 className="text-sm font-medium">Component Error</h3>
+              <p className="mt-1 text-sm text-destructive/80">
                 This component encountered an error and could not render properly.
               </p>
 
               {showDetails && error && (
                 <details className="mt-3">
-                  <summary className="text-xs text-red-600 cursor-pointer hover:text-red-800">
+                  <summary className="cursor-pointer text-xs text-destructive hover:text-destructive/80">
                     Show details
                   </summary>
-                  <div className="mt-2 p-2 bg-red-100 rounded text-xs text-red-800 font-mono break-all">
+                  <div className="mt-2 rounded-md border border-destructive/20 bg-background/60 p-2 font-mono text-xs text-destructive break-all">
                     {error.message}
                     {eventId && <div className="mt-1">Event ID: {eventId}</div>}
                   </div>
@@ -162,7 +162,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                     Retry ({retryCount}/{maxRetries})
                   </Button>
                 ) : (
-                  <p className="text-xs text-red-600">
+                  <p className="text-xs text-destructive">
                     Maximum retry attempts reached. Please refresh the page.
                   </p>
                 )}
@@ -174,10 +174,10 @@ export default class ErrorBoundary extends Component<Props, State> {
     }
 
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-card rounded-lg shadow-lg p-6 text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-            <AlertTriangle className="h-6 w-6 text-red-600" />
+      <div className="oc-page flex items-center justify-center px-4">
+        <div className="oc-surface max-w-md w-full p-6 text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md border border-destructive/20 bg-destructive/10 text-destructive">
+            <AlertTriangle className="h-6 w-6" />
           </div>
 
           <h2 className="text-xl font-semibold text-foreground mb-2">Something went wrong</h2>
@@ -187,7 +187,7 @@ export default class ErrorBoundary extends Component<Props, State> {
           </p>
 
           {showDetails && error && (
-            <div className="mb-6 p-4 bg-muted rounded-lg text-left">
+            <div className="oc-surface-muted mb-6 p-4 text-left">
               <h3 className="text-sm font-medium text-foreground mb-2">Error Details:</h3>
               <p className="text-xs text-muted-foreground font-mono break-all">{error.message}</p>
               {eventId && <p className="text-xs text-muted-foreground mt-2">Event ID: {eventId}</p>}

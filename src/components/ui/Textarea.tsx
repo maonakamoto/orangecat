@@ -1,5 +1,6 @@
 import { TextareaHTMLAttributes, forwardRef, useId } from 'react';
 import { cn } from '@/lib/utils';
+import { COMPONENT_STYLES } from '@/config/design-system';
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -18,19 +19,17 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <label htmlFor={textareaId} className="block text-sm font-medium text-foreground">
+          <label htmlFor={textareaId} className={COMPONENT_STYLES.field.label}>
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
+            {required && <span className={COMPONENT_STYLES.field.required}>*</span>}
           </label>
         )}
         <textarea
           id={textareaId}
           className={cn(
-            'flex min-h-20 w-full rounded-md border px-3 py-2 text-sm text-foreground shadow-sm',
-            'border-border-strong bg-white dark:bg-muted placeholder:text-muted-dim',
-            'focus:border-tiffany-500 focus:ring-tiffany-500 focus:outline-none focus:ring-2',
-            'disabled:cursor-not-allowed disabled:opacity-50',
-            error && 'border-red-300 focus:border-red-500 focus:ring-red-500',
+            COMPONENT_STYLES.field.control,
+            'flex min-h-20 px-3 py-2 text-sm',
+            error && COMPONENT_STYLES.field.errorControl,
             className
           )}
           aria-describedby={cn(error && errorId, description && descriptionId)}
@@ -39,12 +38,12 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           {...props}
         />
         {description && !error && (
-          <p id={descriptionId} className="text-sm text-muted-foreground">
+          <p id={descriptionId} className={COMPONENT_STYLES.field.description}>
             {description}
           </p>
         )}
         {error && (
-          <p id={errorId} className="text-sm text-red-600" role="alert">
+          <p id={errorId} className={COMPONENT_STYLES.field.errorText} role="alert">
             {error}
           </p>
         )}

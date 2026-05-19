@@ -57,7 +57,7 @@ export function UserProfileDropdownPanel({
 }: UserProfileDropdownPanelProps) {
   return (
     <div
-      className="fixed z-50 rounded-2xl shadow-2xl bg-card border border-border-subtle animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
+      className="fixed z-50 rounded-lg shadow-sm bg-card border border-border-subtle animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right overflow-hidden"
       style={{
         top: buttonRef.current ? buttonRef.current.getBoundingClientRect().bottom + 12 : 'auto',
         right: buttonRef.current
@@ -70,7 +70,7 @@ export function UserProfileDropdownPanel({
       aria-label="User menu"
     >
       {showUserInfo && (
-        <div className="p-6 bg-gradient-to-br from-gray-50 to-white dark:from-muted dark:to-card border-b border-border-subtle">
+        <div className="p-6 bg-muted/30 border-b border-border-subtle">
           <div className="flex items-center space-x-4">
             <Link
               href={ROUTES.PROFILES.ME}
@@ -95,12 +95,12 @@ export function UserProfileDropdownPanel({
                   className="rounded-full ring-4 ring-tiffany-100 cursor-pointer"
                 />
               )}
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-3 border-white rounded-full shadow-sm" />
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-3 border-card rounded-full shadow-sm" />
             </Link>
             <div className="flex-1 min-w-0">
               <button
                 onClick={handlePublicProfileClick}
-                className="group flex items-center space-x-2 hover:text-tiffany-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-tiffany-400 focus:ring-offset-1 rounded-lg p-1 -m-1"
+                className="group flex items-center space-x-2 hover:text-tiffany-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-lg p-1 -m-1"
               >
                 <h3 className="font-semibold text-lg text-foreground group-hover:text-tiffany-600 transition-colors duration-200 truncate">
                   {displayName}
@@ -129,19 +129,19 @@ export function UserProfileDropdownPanel({
               tabIndex={isOpen ? 0 : -1}
               className={`
                 w-full flex items-center px-4 py-3 text-sm transition-all duration-200 group outline-none
-                hover:bg-muted focus:bg-gray-50 dark:focus:bg-muted focus:ring-2 focus:ring-tiffany-400 focus:ring-inset
+                hover:bg-muted focus:bg-muted/40 dark:focus:bg-muted focus:ring-2 focus:ring-ring focus:ring-inset
                 ${focusedIndex === index ? 'bg-muted' : ''}
               `}
             >
-              <div className="p-2.5 rounded-xl bg-tiffany-50 group-hover:bg-tiffany-100 group-hover:shadow-sm transition-all duration-200 mr-4">
-                <Icon className="w-5 h-5 text-tiffany-600 group-hover:text-tiffany-700 transition-colors duration-200" />
+              <div className="oc-icon-tile mr-4 h-10 w-10">
+                <Icon className="w-5 h-5 text-tiffany-600 transition-colors duration-200 group-hover:text-tiffany-700 dark:text-tiffany-400" />
               </div>
               <div className="flex-1 text-left">
                 <div className="font-semibold text-foreground group-hover:text-tiffany-600 transition-colors duration-200">
                   {item.label}
                 </div>
                 {showDescriptions && (
-                  <div className="text-sm text-muted-foreground group-hover:text-gray-600 transition-colors duration-200">
+                  <div className="text-sm text-muted-foreground group-hover:text-muted-foreground transition-colors duration-200">
                     {item.description}
                   </div>
                 )}
@@ -164,19 +164,19 @@ export function UserProfileDropdownPanel({
           tabIndex={isOpen ? 0 : -1}
           className={`
             w-full flex items-center px-4 py-3 text-sm transition-all duration-200 group outline-none
-            hover:bg-red-50 focus:bg-red-50 focus:ring-2 focus:ring-red-400 focus:ring-inset
-            ${focusedIndex === menuItems.length ? 'bg-red-50' : ''}
+            hover:bg-destructive/10 focus:bg-destructive/10 focus:ring-2 focus:ring-destructive/20 focus:ring-inset
+            ${focusedIndex === menuItems.length ? 'bg-destructive/10' : ''}
           `}
         >
-          <div className="p-2.5 rounded-xl bg-red-50 group-hover:bg-red-100 group-hover:shadow-sm transition-all duration-200 mr-4">
-            <LogOut className="w-5 h-5 text-red-600 transition-transform duration-200 group-hover:scale-110" />
+          <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-md border border-destructive/20 bg-destructive/10">
+            <LogOut className="w-5 h-5 text-destructive transition-transform duration-200 group-hover:scale-110" />
           </div>
           <div className="flex-1 text-left">
-            <div className="font-semibold text-red-600 group-hover:text-red-700 transition-colors duration-200">
+            <div className="font-semibold text-destructive group-hover:text-destructive/80 transition-colors duration-200">
               Sign Out
             </div>
             {showDescriptions && (
-              <div className="text-sm text-red-500 group-hover:text-red-600 transition-colors duration-200">
+              <div className="text-sm text-destructive/70 transition-colors duration-200 group-hover:text-destructive">
                 End your session
               </div>
             )}

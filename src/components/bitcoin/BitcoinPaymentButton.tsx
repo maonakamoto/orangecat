@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Bitcoin } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
-import BitcoinPaymentModal from './BitcoinPaymentModal'
+import { useState } from 'react';
+import { Bitcoin } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import BitcoinPaymentModal from './BitcoinPaymentModal';
 
 interface BitcoinPaymentButtonProps {
-  projectId: string
-  projectTitle: string
-  suggestedAmount?: number
-  recipientAddress?: string
+  projectId: string;
+  projectTitle: string;
+  suggestedAmount?: number;
+  recipientAddress?: string;
 }
 
 export default function BitcoinPaymentButton({
   projectId,
   projectTitle,
   suggestedAmount = 10000,
-  recipientAddress
+  recipientAddress,
 }: BitcoinPaymentButtonProps) {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
@@ -40,5 +40,5 @@ export default function BitcoinPaymentButton({
         recipientAddress={recipientAddress}
       />
     </>
-  )
+  );
 }

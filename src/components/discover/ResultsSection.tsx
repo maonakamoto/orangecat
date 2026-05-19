@@ -39,7 +39,7 @@ export default function ResultsSection({
             onClick={onViewAll}
             variant="ghost"
             size="sm"
-            className="text-orange-600 hover:text-orange-700"
+            className="text-foreground hover:text-muted-strong"
           >
             {viewAllLabel}
             <ArrowRight className="w-4 h-4 ml-1" />

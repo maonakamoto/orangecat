@@ -8,6 +8,7 @@
 
 import { ReactNode } from 'react';
 import { EntityCardProps } from '@/components/entity/EntityCard';
+import type { EntityType } from '@/config/entity-registry';
 
 /**
  * Base entity interface - all entities must have these fields
@@ -27,7 +28,7 @@ export interface BaseEntity {
  */
 export interface EntityConfig<T extends BaseEntity = BaseEntity> {
   // Identity
-  entityType?: string;
+  entityType?: EntityType;
   displayName?: string;
   displayNamePlural?: string;
 

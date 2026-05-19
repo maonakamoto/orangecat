@@ -48,7 +48,7 @@ export default function BitBaumAboutPage() {
         </div>
 
         {/* Brand Relationship */}
-        <div className="bg-card rounded-2xl shadow-lg p-8 mb-16">
+        <div className="bg-card rounded-lg shadow-sm p-8 mb-16">
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-foreground mb-4">Our Brand Structure</h3>
             <p className="text-muted-foreground">
@@ -59,7 +59,7 @@ export default function BitBaumAboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* BitBaum */}
-            <div className="text-center p-6 border border-border rounded-xl">
+            <div className="text-center p-6 border border-border rounded-lg">
               <div className="flex justify-center mb-4">
                 <BitBaumLogo />
               </div>
@@ -82,10 +82,10 @@ export default function BitBaumAboutPage() {
             </div>
 
             {/* OrangeCat */}
-            <div className="text-center p-6 border border-border rounded-xl">
+            <div className="text-center p-6 border border-border rounded-lg">
               <div className="flex justify-center mb-4">
                 <div
-                  className={`w-12 h-12 ${GRADIENTS.brandOrangeCircle} rounded-xl flex items-center justify-center`}
+                  className={`w-12 h-12 ${GRADIENTS.brandOrangeCircle} rounded-lg flex items-center justify-center`}
                 >
                   <span className="text-xl">🐱</span>
                 </div>
@@ -160,7 +160,7 @@ export default function BitBaumAboutPage() {
         {/* History & Future */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* History */}
-          <div className="bg-card rounded-2xl shadow-lg p-8">
+          <div className="bg-card rounded-lg shadow-sm p-8">
             <h3 className="text-2xl font-bold text-foreground mb-6">Our Story</h3>
             <div className="space-y-4">
               <div className="flex items-start">
@@ -202,7 +202,7 @@ export default function BitBaumAboutPage() {
           </div>
 
           {/* Future Vision */}
-          <div className="bg-card rounded-2xl shadow-lg p-8">
+          <div className="bg-card rounded-lg shadow-sm p-8">
             <h3 className="text-2xl font-bold text-foreground mb-6">Our Vision</h3>
             <div className="space-y-4">
               <div className="p-4 bg-orange-50 rounded-lg">
@@ -232,7 +232,7 @@ export default function BitBaumAboutPage() {
         </div>
 
         {/* Team Section Placeholder */}
-        <div className="bg-card rounded-2xl shadow-lg p-8 text-center">
+        <div className="bg-card rounded-lg shadow-sm p-8 text-center">
           <Users className="w-12 h-12 text-muted-dim/50 mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-foreground mb-4">Our Team</h3>
           <p className="text-muted-foreground mb-6">

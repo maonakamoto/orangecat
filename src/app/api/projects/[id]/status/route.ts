@@ -17,20 +17,12 @@ import {
   handleSupabaseError,
 } from '@/lib/api/standardResponse';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { getTableName } from '@/config/entity-registry';
 import { VALID_PROJECT_STATUSES, type ProjectStatus } from '@/config/project-statuses';
+import { getAllowedStatusTransitions } from '@/config/entity-status';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
-
-// Valid status transitions
-const VALID_TRANSITIONS: Record<ProjectStatus, ProjectStatus[]> = {
-  draft: ['active'], // Can only publish from draft
-  active: ['paused', 'completed', 'cancelled', 'draft'], // Can pause, complete, cancel, or unpublish
-  paused: ['active', 'draft'], // Can resume or unpublish
-  completed: ['draft'], // Can only unpublish (archive)
-  cancelled: ['draft'], // Can only unpublish (archive)
-};
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -50,7 +42,9 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
 
     const { id } = await context.params;
     const idValidation = getValidationError(validateUUID(id, 'project ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     const body = await request.json();
     const { status } = body;
 
@@ -68,7 +62,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
 
     // Fetch current project
     const { data: existingProject, error: fetchError } = await supabase
-        .from(getTableName('project'))
+      .from(getTableName('project'))
       .select('id, user_id, status')
       .eq('id', id)
       .single();
@@ -84,7 +78,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
 
     // Check if transition is valid
     const currentStatus = existingProject.status?.toLowerCase() as ProjectStatus;
-    const allowedTransitions = VALID_TRANSITIONS[currentStatus] || [];
+    const allowedTransitions = getAllowedStatusTransitions(currentStatus) as ProjectStatus[];
 
     if (!allowedTransitions.includes(normalizedStatus)) {
       return apiValidationError(
@@ -95,7 +89,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
 
     // Update status
     const { data: project, error: updateError } = await supabase
-        .from(getTableName('project'))
+      .from(getTableName('project'))
       .update({
         status: normalizedStatus,
         updated_at: new Date().toISOString(),

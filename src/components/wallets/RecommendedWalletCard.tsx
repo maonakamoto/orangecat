@@ -29,7 +29,7 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
     <Card
       className={cn(
         'p-6 relative overflow-hidden transition-all duration-300',
-        wallet.recommended && 'ring-2 ring-orange-200 border-orange-300'
+        wallet.recommended && 'ring-2 ring-orange-200 border-border-strong'
       )}
     >
       {wallet.recommended && (

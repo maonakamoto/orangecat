@@ -1,48 +1,51 @@
 /**
  * Cat Hub Page - Unified AI Assistant Interface
  *
- * Single page with tabs for:
- * - Chat: Conversation with My Cat
- * - Context: Documents that inform the AI
- * - Settings: Model selection and permissions
- *
- * Created: 2026-01-22
- * Last Modified: 2026-01-22
+ * Single workspace for chat, context, and controls.
  */
 
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
+import { useAISettings } from '@/hooks/useAISettings';
+import { useCatContext } from '@/hooks/useCatContext';
+import { useCatPermissions } from '@/hooks/useCatPermissions';
 import Loading from '@/components/Loading';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import { ModernChatPanel } from '@/components/ai-chat/ModernChatPanel';
 import { CatContextTab } from '@/components/ai-chat/CatContextTab';
 import { CatSettingsTab } from '@/components/ai-chat/CatSettingsTab';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { MessageSquare, FolderOpen, Settings, Cat } from 'lucide-react';
-
-type TabValue = 'chat' | 'context' | 'settings';
+import { Cat, CheckCircle2, AlertTriangle } from 'lucide-react';
+import {
+  CAT_HUB_COPY,
+  CAT_HUB_STATUS_ITEMS,
+  CAT_HUB_TABS,
+  isCatHubTab,
+  type CatHubTab,
+} from '@/config/cat-hub';
 
 export default function CatHubPage() {
   const { user, isLoading, hydrated: _hydrated } = useRequireAuth();
-  const _router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<TabValue>('chat');
+  const { hasByok, primaryKey, platformUsage, isLoading: aiLoading } = useAISettings();
+  const { summary, isLoading: contextLoading } = useCatContext();
+  const { permissions, isLoading: permissionsLoading } = useCatPermissions();
+  const [activeTab, setActiveTab] = useState<CatHubTab>('chat');
 
-  // Get initial tab from URL params
   useEffect(() => {
-    const tab = searchParams?.get('tab') as TabValue | null;
-    if (tab && ['chat', 'context', 'settings'].includes(tab)) {
+    const tab = searchParams?.get('tab');
+    if (isCatHubTab(tab)) {
       setActiveTab(tab);
     }
   }, [searchParams]);
 
-  // Update URL when tab changes
   const handleTabChange = (value: string) => {
-    setActiveTab(value as TabValue);
+    if (!isCatHubTab(value)) {
+      return;
+    }
+    setActiveTab(value);
     const url = new URL(window.location.href);
     if (value === 'chat') {
       url.searchParams.delete('tab');
@@ -64,94 +67,141 @@ export default function CatHubPage() {
   const initialMessage = searchParams?.get('q') || undefined;
   const isNewUser = searchParams?.get('welcome') === 'true';
 
+  const contextValue = contextLoading
+    ? 'Checking'
+    : summary
+      ? `${summary.completeness}%`
+      : 'No data';
+  const keyValue = aiLoading ? 'Checking' : hasByok ? primaryKey?.provider || 'BYOK' : 'Platform';
+  const permissionValue = permissionsLoading
+    ? 'Checking'
+    : permissions
+      ? `${permissions.summary.enabledActions}/${permissions.summary.totalActions}`
+      : 'Unavailable';
+
+  const statusValues = {
+    context: contextValue,
+    keys: keyValue,
+    permissions: permissionValue,
+  };
+
+  const hasRisk = !!permissions?.summary.highRiskEnabled;
+  const remainingRequests = platformUsage?.requests_remaining;
+
   return (
-    <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
-      {/* Header */}
-      {/* eslint-disable-next-line no-restricted-syntax -- frosted-glass overlay uses /80 opacity; no semantic token supports opacity modifiers */}
-      <div className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm border-b border-border sticky top-0 z-30">
-        <div className="max-w-4xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={cn(GRADIENTS.brandOrangeBr, 'p-2 rounded-xl shadow-sm')}>
-                <Cat className="h-6 w-6 text-white" />
+    <main className="min-h-screen bg-background">
+      <div className="mx-auto flex w-full max-w-6xl flex-col px-3 py-4 sm:px-5 sm:py-6">
+        <header className="mb-4 border-b border-border-subtle pb-4">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex min-w-0 items-start gap-3">
+              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle bg-muted">
+                <Cat className="h-6 w-6 text-foreground" />
               </div>
-              <div>
-                <h1 className="text-lg font-bold text-foreground">My Cat</h1>
-                <p className="text-xs text-muted-foreground">Your AI economic agent</p>
+              <div className="min-w-0">
+                <p className="text-xs font-medium uppercase text-muted-foreground">
+                  {CAT_HUB_COPY.eyebrow}
+                </p>
+                <h1 className="text-3xl font-semibold text-foreground">{CAT_HUB_COPY.title}</h1>
+                <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+                  {CAT_HUB_COPY.description}
+                </p>
               </div>
             </div>
+            <div className="grid grid-cols-3 gap-2 lg:min-w-[25rem]">
+              {CAT_HUB_STATUS_ITEMS.map(item => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.id}
+                    className="min-w-0 rounded-md border border-border-subtle bg-muted/30 px-3 py-2"
+                  >
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Icon className="h-3.5 w-3.5" />
+                      <span className="truncate">{item.label}</span>
+                    </div>
+                    <p className="mt-1 truncate text-sm font-medium text-foreground">
+                      {statusValues[item.id as keyof typeof statusValues]}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </div>
+          {(hasRisk || typeof remainingRequests === 'number') && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {typeof remainingRequests === 'number' && !hasByok && (
+                <div className="inline-flex items-center gap-1.5 rounded-sm border border-border-subtle bg-muted/30 px-2 py-1 text-xs text-muted-foreground">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  {remainingRequests} platform messages left today
+                </div>
+              )}
+              {hasRisk && (
+                <div className="inline-flex items-center gap-1.5 rounded-sm border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-xs text-amber-700 dark:text-amber-300">
+                  <AlertTriangle className="h-3.5 w-3.5" />
+                  High-risk actions require confirmation
+                </div>
+              )}
+            </div>
+          )}
+        </header>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto">
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          {/* Tab Navigation - Fixed at top on mobile, inline on desktop */}
-          <div
-            className={`sticky top-[73px] z-20 ${GRADIENTS.pageBgFrost} backdrop-blur-sm px-4 py-2`}
-          >
-            {/* eslint-disable-next-line no-restricted-syntax -- frosted-glass tabs use /80 opacity; no semantic token supports opacity modifiers */}
-            <TabsList className="w-full grid grid-cols-3 h-12 bg-white/80 dark:bg-gray-950/80 border border-border shadow-sm">
-              <TabsTrigger
-                value="chat"
-                className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white"
-              >
-                <MessageSquare className="h-4 w-4" />
-                <span className="hidden sm:inline">Chat</span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="context"
-                className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-tiffany-500 data-[state=active]:to-tiffany-600 data-[state=active]:text-white"
-              >
-                <FolderOpen className="h-4 w-4" />
-                <span className="hidden sm:inline">Context</span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="settings"
-                className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-gray-600 data-[state=active]:to-gray-700 data-[state=active]:text-white"
-              >
-                <Settings className="h-4 w-4" />
-                <span className="hidden sm:inline">Settings</span>
-              </TabsTrigger>
-            </TabsList>
-          </div>
+          <TabsList className="sticky top-0 z-20 mb-4 grid h-auto w-full grid-cols-3 gap-1 rounded-md border border-border-subtle bg-background p-1">
+            {CAT_HUB_TABS.map(tab => {
+              const Icon = tab.icon;
+              return (
+                <TabsTrigger
+                  key={tab.id}
+                  value={tab.id}
+                  className="flex min-w-0 flex-col items-start gap-1 rounded-sm px-3 py-2 text-left data-[state=active]:bg-foreground data-[state=active]:text-background"
+                >
+                  <span className="flex w-full items-center gap-2">
+                    <Icon className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate text-sm font-medium">{tab.label}</span>
+                  </span>
+                  <span className="hidden max-w-full truncate text-xs opacity-70 sm:block">
+                    {tab.description}
+                  </span>
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
 
-          {/* Tab Content */}
-          <div className="px-4 pb-24 sm:pb-8">
-            {/* Chat Tab */}
-            <TabsContent value="chat" className="mt-4 focus:outline-none">
+          <div className="pb-20 sm:pb-6">
+            <TabsContent value="chat" className="mt-0 focus:outline-none">
               <ModernChatPanel initialMessage={initialMessage} isNewUser={isNewUser} />
             </TabsContent>
 
-            {/* Context Tab */}
-            <TabsContent value="context" className="mt-4 focus:outline-none">
-              <div className="max-w-xl mx-auto">
-                <div className="mb-6">
-                  <h2 className="text-xl font-bold text-foreground">My Context</h2>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Add documents to help My Cat understand your goals, skills, and situation
+            <TabsContent value="context" className="mt-0 focus:outline-none">
+              <section className="mx-auto max-w-3xl">
+                <div className="mb-4 border-b border-border-subtle pb-4">
+                  <h2 className="text-xl font-semibold text-foreground">
+                    {CAT_HUB_COPY.contextTitle}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {CAT_HUB_COPY.contextDescription}
                   </p>
                 </div>
                 <CatContextTab />
-              </div>
+              </section>
             </TabsContent>
 
-            {/* Settings Tab */}
-            <TabsContent value="settings" className="mt-4 focus:outline-none">
-              <div className="max-w-xl mx-auto">
-                <div className="mb-6">
-                  <h2 className="text-xl font-bold text-foreground">My AI</h2>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Configure how your AI agent works
+            <TabsContent value="settings" className="mt-0 focus:outline-none">
+              <section className="mx-auto max-w-3xl">
+                <div className="mb-4 border-b border-border-subtle pb-4">
+                  <h2 className="text-xl font-semibold text-foreground">
+                    {CAT_HUB_COPY.settingsTitle}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {CAT_HUB_COPY.settingsDescription}
                   </p>
                 </div>
                 <CatSettingsTab />
-              </div>
+              </section>
             </TabsContent>
           </div>
         </Tabs>
       </div>
-    </div>
+    </main>
   );
 }

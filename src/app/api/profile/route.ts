@@ -9,7 +9,7 @@ import {
 import { logger } from '@/utils/logger';
 import { ProfileServerService } from '@/services/profile/server';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import type { User } from '@supabase/supabase-js';
 import type { Database } from '@/types/database';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
@@ -19,14 +19,34 @@ type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 
 // Fields safe to persist — guards against schema/validation drift
 const PROFILE_ALLOWED_FIELDS = [
-  'username', 'name', 'bio', 'email', 'contact_email',
-  'location_country', 'location_city', 'location_zip', 'location_search',
-  'location_context', 'latitude', 'longitude', 'location',
-  'avatar_url', 'banner_url', 'website', 'social_links',
-  'phone', 'bitcoin_address', 'lightning_address',
+  'username',
+  'name',
+  'bio',
+  'email',
+  'contact_email',
+  'location_country',
+  'location_city',
+  'location_zip',
+  'location_search',
+  'location_context',
+  'latitude',
+  'longitude',
+  'location',
+  'avatar_url',
+  'banner_url',
+  'website',
+  'social_links',
+  'phone',
+  'bitcoin_address',
+  'lightning_address',
 ];
 
-async function respondWithProfile(supabase: AnySupabaseClient, user: User, profile: ProfileRow, request: AuthenticatedRequest) {
+async function respondWithProfile(
+  supabase: AnySupabaseClient,
+  user: User,
+  profile: ProfileRow,
+  request: AuthenticatedRequest
+) {
   const includeStats = request.nextUrl.searchParams.get('include_stats') === 'true';
   if (includeStats) {
     const projectCount = await ProfileServerService.getProjectCount(supabase, user.id);
@@ -38,11 +58,21 @@ async function respondWithProfile(supabase: AnySupabaseClient, user: User, profi
 export const GET = withAuth(async (request: AuthenticatedRequest) => {
   try {
     const { user, supabase } = request;
-    const { data: profile, error: profileError } = await ProfileServerService.getProfile(supabase, user.id);
+    const { data: profile, error: profileError } = await ProfileServerService.getProfile(
+      supabase,
+      user.id
+    );
 
     if (profileError || !profile) {
-      const { data: bootstrapped, error: ensureError } = await ProfileServerService.ensureProfile(supabase, user.id, user.email, user.user_metadata);
-      if (ensureError || !bootstrapped) {return apiNotFound('Profile not found');}
+      const { data: bootstrapped, error: ensureError } = await ProfileServerService.ensureProfile(
+        supabase,
+        user.id,
+        user.email,
+        user.user_metadata
+      );
+      if (ensureError || !bootstrapped) {
+        return apiNotFound('Profile not found');
+      }
       return respondWithProfile(supabase, user, bootstrapped, request);
     }
 
@@ -58,14 +88,21 @@ export const PUT = withAuth(async (request: AuthenticatedRequest) => {
 
     const rl = await rateLimitWriteAsync(user.id);
     if (!rl.success) {
-      return apiRateLimited('Too many profile update requests. Please slow down.', retryAfterSeconds(rl));
+      return apiRateLimited(
+        'Too many profile update requests. Please slow down.',
+        retryAfterSeconds(rl)
+      );
     }
 
     const body = await request.json();
     logger.info('Profile update request', { userId: user.id, fields: Object.keys(body) });
 
     if (body.username) {
-      const isAvailable = await ProfileServerService.checkUsernameAvailability(supabase, body.username, user.id);
+      const isAvailable = await ProfileServerService.checkUsernameAvailability(
+        supabase,
+        body.username,
+        user.id
+      );
       if (!isAvailable) {
         logger.warn('Username already taken', { username: body.username, userId: user.id });
         return apiValidationError('Username is already taken', { field: 'username' });
@@ -75,15 +112,24 @@ export const PUT = withAuth(async (request: AuthenticatedRequest) => {
     const validatedData = profileSchema.parse(normalizeProfileData(body));
 
     const dataToSave = Object.fromEntries(
-      Object.entries(validatedData as Record<string, unknown>).filter(([key]) => PROFILE_ALLOWED_FIELDS.includes(key))
+      Object.entries(validatedData as Record<string, unknown>).filter(([key]) =>
+        PROFILE_ALLOWED_FIELDS.includes(key)
+      )
     );
 
-    const { data: profile, error } = await supabase.from(DATABASE_TABLES.PROFILES)
+    const { data: profile, error } = await supabase
+      .from(DATABASE_TABLES.PROFILES)
       .update({ ...dataToSave, updated_at: new Date().toISOString() })
-      .eq('id', user.id).select().single();
+      .eq('id', user.id)
+      .select()
+      .single();
 
     if (error) {
-      logger.error('Profile update failed', { userId: user.id, error: error.message, code: error.code });
+      logger.error('Profile update failed', {
+        userId: user.id,
+        error: error.message,
+        code: error.code,
+      });
       return apiValidationError('Failed to update profile');
     }
 
@@ -91,9 +137,14 @@ export const PUT = withAuth(async (request: AuthenticatedRequest) => {
     return apiSuccess(profile);
   } catch (error) {
     if (error instanceof Error && error.name === 'ZodError') {
-      interface ZodIssue { path?: (string | number)[]; message?: string }
+      interface ZodIssue {
+        path?: (string | number)[];
+        message?: string;
+      }
       const firstIssue = (error as Error & { errors?: ZodIssue[] }).errors?.[0];
-      return apiValidationError(`${firstIssue?.path?.join('.') || 'field'}: ${firstIssue?.message || 'Invalid profile data'}`);
+      return apiValidationError(
+        `${firstIssue?.path?.join('.') || 'field'}: ${firstIssue?.message || 'Invalid profile data'}`
+      );
     }
     logger.error('Profile update error', { error });
     return handleApiError(error);

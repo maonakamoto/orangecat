@@ -41,9 +41,8 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
         className={cn(
-          'flex items-center gap-2 px-3 py-1.5 rounded-full text-sm',
-          'bg-muted hover:bg-gray-200 dark:hover:bg-muted/70 transition-colors',
-          'border border-border',
+          'flex items-center gap-2 rounded-md px-3 py-1.5 text-sm',
+          'border border-border-subtle bg-muted transition-colors hover:bg-muted/80',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
@@ -55,22 +54,21 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-72 bg-card rounded-xl shadow-lg border border-border py-2 z-50 max-h-80 overflow-y-auto">
-          {/* Auto option */}
+        <div className="absolute left-0 top-full z-50 mt-2 max-h-80 w-72 overflow-y-auto rounded-md border border-border-subtle bg-popover py-2 shadow-sm">
           <button
             onClick={() => {
               onSelect('auto');
               setIsOpen(false);
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-left hover:bg-muted flex items-center gap-3',
-              selectedModel === 'auto' && 'bg-tiffany-50'
+              'flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-muted',
+              selectedModel === 'auto' && 'bg-muted'
             )}
           >
             <div className="flex-1">
               <div className="font-medium text-foreground flex items-center gap-2">
                 Auto (Best Free)
-                {selectedModel === 'auto' && <Check className="h-4 w-4 text-tiffany-500" />}
+                {selectedModel === 'auto' && <Check className="h-4 w-4 text-foreground" />}
               </div>
               <div className="text-xs text-muted-foreground">
                 Automatically selects the best model
@@ -80,7 +78,6 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
 
           <div className="h-px bg-border-subtle my-1" />
 
-          {/* Free models */}
           <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground uppercase">
             Free Models
           </div>
@@ -92,15 +89,15 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
                 setIsOpen(false);
               }}
               className={cn(
-                'w-full px-4 py-2.5 text-left hover:bg-muted flex items-center gap-3',
-                selectedModel === model.id && 'bg-tiffany-50'
+                'flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-muted',
+                selectedModel === model.id && 'bg-muted'
               )}
             >
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-foreground flex items-center gap-2 truncate">
                   {model.name}
                   {selectedModel === model.id && (
-                    <Check className="h-4 w-4 text-tiffany-500 flex-shrink-0" />
+                    <Check className="h-4 w-4 flex-shrink-0 text-foreground" />
                   )}
                 </div>
                 <div className="text-xs text-muted-foreground truncate">

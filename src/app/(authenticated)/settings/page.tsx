@@ -71,8 +71,8 @@ export default function SettingsPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-card rounded-2xl shadow-lg border border-border-subtle overflow-hidden">
-          <div className="bg-gradient-to-r from-tiffany-500 to-orange-500 px-6 py-6">
+        <div className="bg-card rounded-lg shadow-sm border border-border-subtle overflow-hidden">
+          <div className="bg-foreground px-6 py-6">
             <div className="flex items-center text-white">
               <Lock className="w-8 h-8 mr-4" />
               <div>

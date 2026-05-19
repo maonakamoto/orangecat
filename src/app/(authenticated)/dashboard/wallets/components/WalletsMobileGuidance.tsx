@@ -41,7 +41,7 @@ export function WalletsMobileGuidance({
         onClick={() => onShowMobileGuidance(true)}
         className={cn(
           GRADIENTS.brandBitcoin,
-          'lg:hidden fixed bottom-6 right-6 z-50 p-4 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200'
+          'fixed bottom-6 right-6 z-50 rounded-full p-4 text-white transition-colors duration-200 lg:hidden'
         )}
         aria-label="Get help with this field"
       >
@@ -55,7 +55,7 @@ export function WalletsMobileGuidance({
           onClick={() => onShowMobileGuidance(false)}
         >
           <div
-            className="w-full bg-card rounded-t-2xl shadow-2xl max-h-[80vh] overflow-y-auto"
+            className="w-full bg-card rounded-t-lg shadow-sm max-h-[80vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
             <div className="sticky top-0 bg-card border-b border-border px-4 py-3 flex items-center justify-between">

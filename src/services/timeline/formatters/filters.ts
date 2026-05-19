@@ -1,8 +1,8 @@
 /**
  * Timeline Filter Utilities
- * 
+ *
  * Helper functions for building and applying timeline filters.
- * 
+ *
  * Created: 2025-01-28
  * Last Modified: 2025-01-28
  * Last Modified Summary: Extracted filter logic from monolithic timeline service
@@ -55,6 +55,3 @@ export function buildDefaultFilters(partialFilters?: Partial<TimelineFilters>): 
     ...partialFilters,
   };
 }
-
-
-

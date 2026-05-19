@@ -3,14 +3,12 @@
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { Shield, Zap, Eye, Sparkles, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
 import {
   HOW_IT_WORKS_STEPS,
   SECTION_HEADERS,
   CTA_LABELS,
   SUPER_APP_CATEGORIES,
 } from '@/config/landing-page';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 /**
@@ -47,59 +45,39 @@ const whyBitcoin = [
   },
 ];
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 },
-};
-
 export default function HowItWorksPage() {
   const { howItWorks, whatCanYouDo } = SECTION_HEADERS;
 
   return (
-    <div className="min-h-screen pt-20 pb-16">
+    <div className="min-h-screen bg-background pb-16">
       <div className="container mx-auto px-4">
         {/* Hero Section */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="inline-flex items-center gap-2 bg-tiffany-50 text-tiffany-700 px-4 py-2 rounded-full mb-6">
+        <div className="text-center py-12 sm:py-16 mb-8">
+          <div className="inline-flex items-center gap-2 bg-card text-foreground border border-border px-4 py-2 rounded-full mb-6">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">Simple, Universal, Powerful</span>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-tiffany-600 to-bitcoinOrange bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground">
             {howItWorks.title}
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             One platform. Endless possibilities. Here's how to get started with anything on
             OrangeCat.
           </p>
-        </motion.div>
+        </div>
 
         {/* Steps Section - Matches home page (4 steps) */}
         <div className="max-w-5xl mx-auto mb-20">
-          <motion.h2
-            className="text-3xl font-bold text-center mb-12"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
+          <h2 className="text-3xl font-bold text-center mb-12">
             Get Started in {HOW_IT_WORKS_STEPS.length} Simple Steps
-          </motion.h2>
+          </h2>
 
           <div className="space-y-8">
-            {HOW_IT_WORKS_STEPS.map((step, index) => {
+            {HOW_IT_WORKS_STEPS.map(step => {
               const Icon = step.icon;
               return (
-                <motion.div
-                  key={step.number}
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                >
-                  <Card className="p-6 md:p-8 hover:shadow-xl transition-shadow">
+                <div key={step.number}>
+                  <Card className="p-6 md:p-8 oc-card-link">
                     <div className="flex flex-col md:flex-row gap-6">
                       {/* Step Number & Icon */}
                       <div className="flex-shrink-0">
@@ -128,14 +106,14 @@ export default function HowItWorksPage() {
                       </div>
                     </div>
                   </Card>
-                </motion.div>
+                </div>
               );
             })}
           </div>
         </div>
 
         {/* What You Can Do Section */}
-        <motion.div className="mb-20" {...fadeInUp}>
+        <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold mb-4">{whatCanYouDo.title}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -144,16 +122,11 @@ export default function HowItWorksPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {SUPER_APP_CATEGORIES.map((category, index) => {
+            {SUPER_APP_CATEGORIES.map(category => {
               const Icon = category.icon;
               return (
-                <motion.div
-                  key={category.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 + 0.3, duration: 0.5 }}
-                >
-                  <Card className="p-6 h-full hover:shadow-lg transition-shadow">
+                <div key={category.id}>
+                  <Card className="p-6 h-full oc-card-link">
                     <div className="flex items-start gap-4">
                       <div className={`${category.bgColor} p-3 rounded-lg flex-shrink-0`}>
                         <Icon className="w-6 h-6 text-foreground" />
@@ -177,14 +150,14 @@ export default function HowItWorksPage() {
                       </div>
                     </div>
                   </Card>
-                </motion.div>
+                </div>
               );
             })}
           </div>
-        </motion.div>
+        </div>
 
         {/* Why Bitcoin Section */}
-        <motion.div className="mb-20" {...fadeInUp}>
+        <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold mb-4">Why Bitcoin Powers Everything</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -194,19 +167,14 @@ export default function HowItWorksPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {whyBitcoin.map((item, index) => {
+            {whyBitcoin.map(item => {
               const Icon = item.icon;
               return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 + 0.3, duration: 0.5 }}
-                >
-                  <Card className="p-6 h-full hover:shadow-lg transition-shadow">
+                <div key={item.title}>
+                  <Card className="p-6 h-full oc-card-link">
                     <div className="flex items-start gap-4">
-                      <div className="bg-tiffany-100 p-3 rounded-lg flex-shrink-0">
-                        <Icon className="w-6 h-6 text-tiffany-600" />
+                      <div className="bg-muted p-3 rounded-lg flex-shrink-0">
+                        <Icon className="w-6 h-6 text-foreground" />
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
@@ -214,15 +182,15 @@ export default function HowItWorksPage() {
                       </div>
                     </div>
                   </Card>
-                </motion.div>
+                </div>
               );
             })}
           </div>
-        </motion.div>
+        </div>
 
         {/* CTA Section */}
-        <motion.div className="text-center" {...fadeInUp}>
-          <Card className="p-12 bg-gradient-to-br from-tiffany-50 via-white to-orange-50 border-2 border-tiffany-100">
+        <div className="text-center">
+          <Card className="p-12 bg-muted/30 border-border">
             <h2 className="text-2xl font-semibold mb-4">Ready to Get Started?</h2>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Exchange, fund, lend, invest, and govern — with your AI agent, under any identity, in
@@ -232,7 +200,8 @@ export default function HowItWorksPage() {
               <Button
                 href={`${ROUTES.AUTH}?mode=register`}
                 size="lg"
-                className={`${GRADIENTS.brandTiffany} hover:from-tiffany-600 hover:to-tiffany-700 text-white group`}
+                variant="gradient"
+                className="group"
               >
                 {CTA_LABELS.createAccount}
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -245,7 +214,7 @@ export default function HowItWorksPage() {
               No credit card required • Free forever • Set up in minutes
             </p>
           </Card>
-        </motion.div>
+        </div>
 
         {/* Additional Help */}
         <div className="mt-12 text-center">

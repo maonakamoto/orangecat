@@ -8,8 +8,8 @@ export const contentType = 'image/png';
 // satori (next/og) does not support Tailwind — inline styles are required here.
 // Color values are sourced from the design system defined in tailwind.config.ts and CLAUDE.md.
 const BRAND = {
-  tiffanyGradient: 'linear-gradient(135deg, #0ABAB5 0%, #089B96 50%, #067A76 100%)',
-  accentGradient: 'linear-gradient(135deg, #F97316, #EA580C)',
+  background: '#0A0A0A',
+  accent: '#FF6B00',
   white: 'white',
   whiteSubtle: 'rgba(255,255,255,0.9)',
   whiteGlass: 'rgba(255,255,255,0.15)',
@@ -26,7 +26,7 @@ export default function Image() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: BRAND.tiffanyGradient,
+        background: BRAND.background,
         fontFamily: 'system-ui, sans-serif',
       }}
     >
@@ -39,7 +39,7 @@ export default function Image() {
           width: 120,
           height: 120,
           borderRadius: 28,
-          background: BRAND.accentGradient,
+          background: BRAND.accent,
           marginBottom: 32,
           fontSize: 64,
           boxShadow: BRAND.shadow,
@@ -55,7 +55,7 @@ export default function Image() {
           fontWeight: 800,
           color: BRAND.white,
           marginBottom: 16,
-          letterSpacing: '-0.02em',
+          letterSpacing: '0',
         }}
       >
         OrangeCat
@@ -78,7 +78,7 @@ export default function Image() {
           gap: 24,
         }}
       >
-        {['Fund', 'Invest', 'Lend', 'Govern'].map(feature => (
+        {['Fund', 'Invest', 'Lend', 'Coordinate'].map(feature => (
           <div
             key={feature}
             style={{

@@ -1,6 +1,5 @@
 import React from 'react';
 import { type LucideIcon, Inbox } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 
 interface EmptyStateProps {
   icon?: LucideIcon;
@@ -27,7 +26,7 @@ export default function EmptyState({
     <div
       className={`flex flex-col items-center justify-center py-12 text-center ${className ?? ''}`}
     >
-      <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-4">
+      <div className="oc-icon-tile mb-4 h-12 w-12">
         <Icon className="w-6 h-6 text-muted-dim" />
       </div>
       <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
@@ -51,15 +50,8 @@ export function ProjectsEmptyState({
 
   return (
     <div className={`flex flex-col items-center justify-center ${sizeClasses[size]} text-center`}>
-      <div
-        className={`w-16 h-16 ${GRADIENTS.iconTiffanyLight} rounded-full flex items-center justify-center mb-6`}
-      >
-        <svg
-          className="w-8 h-8 text-tiffany-600"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+      <div className="oc-accent-tile mb-6 h-16 w-16">
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -78,7 +70,7 @@ export function ProjectsEmptyState({
         {onCreateProject && (
           <button
             onClick={onCreateProject}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-tiffany hover:bg-tiffany-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tiffany"
+            className="inline-flex items-center rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -94,7 +86,7 @@ export function ProjectsEmptyState({
         {onDiscoverProjects && (
           <button
             onClick={onDiscoverProjects}
-            className="inline-flex items-center px-4 py-2 border border-border-strong text-sm font-medium rounded-md text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tiffany"
+            className="inline-flex items-center rounded-md border border-border-strong bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

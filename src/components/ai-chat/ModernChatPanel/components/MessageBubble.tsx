@@ -4,7 +4,6 @@
  */
 
 import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { Cat, User, Copy, Check, Clock, X } from 'lucide-react';
 import { AI_MODEL_REGISTRY } from '@/config/ai-models';
@@ -54,7 +53,7 @@ function ExecResultChip({ result }: { result: ExecActionResult }) {
     // Prefer the handler's displayMessage; fall back to generic "noun done"
     const label = result.displayMessage ?? `${noun} done`;
     return (
-      <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-lg bg-green-50 text-green-700 border border-green-100">
+      <span className="inline-flex items-center gap-1 rounded-sm border border-green-500/20 bg-green-500/10 px-2 py-1 text-xs text-green-700 dark:text-green-300">
         <Check className="h-3 w-3 flex-shrink-0" />
         {label}
       </span>
@@ -63,7 +62,7 @@ function ExecResultChip({ result }: { result: ExecActionResult }) {
 
   if (result.status === 'pending_confirmation') {
     return (
-      <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-100">
+      <span className="inline-flex items-center gap-1 rounded-sm border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-xs text-amber-700 dark:text-amber-300">
         <Clock className="h-3 w-3 flex-shrink-0" />
         {noun} — confirm below
       </span>
@@ -73,7 +72,7 @@ function ExecResultChip({ result }: { result: ExecActionResult }) {
   // failed
   return (
     <span
-      className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-lg bg-red-50 text-red-700 border border-red-100"
+      className="inline-flex items-center gap-1 rounded-sm border border-destructive/20 bg-destructive/10 px-2 py-1 text-xs text-destructive"
       title={result.error}
     >
       <X className="h-3 w-3 flex-shrink-0" />
@@ -106,14 +105,14 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
       {/* Avatar */}
       <div
         className={cn(
-          'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center',
-          isUser ? 'bg-muted' : GRADIENTS.brandOrangeBr
+          'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle',
+          isUser ? 'bg-muted' : 'bg-background'
         )}
       >
         {isUser ? (
           <User className="h-4 w-4 text-muted-foreground" />
         ) : (
-          <Cat className="h-4 w-4 text-white" />
+          <Cat className="h-4 w-4 text-foreground" />
         )}
       </div>
 
@@ -121,10 +120,10 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
       <div className={cn('flex-1 min-w-0', isUser ? 'text-right' : 'text-left')}>
         <div
           className={cn(
-            'inline-block rounded-2xl px-4 py-2.5 max-w-full',
+            'inline-block max-w-full rounded-md px-4 py-2.5',
             isUser
-              ? 'bg-tiffany-500 text-white rounded-tr-sm'
-              : 'bg-muted text-foreground rounded-tl-sm'
+              ? 'rounded-tr-sm bg-foreground text-background'
+              : 'rounded-tl-sm bg-muted text-foreground'
           )}
         >
           <div
@@ -134,15 +133,15 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
             {isLast && !isUser && !displayContent && (
               <span className="inline-flex items-center gap-1">
                 <span
-                  className="w-2 h-2 bg-gray-400 dark:bg-muted-foreground rounded-full animate-bounce"
+                  className="h-2 w-2 animate-bounce rounded-sm bg-muted-foreground"
                   style={{ animationDelay: '0ms' }}
                 />
                 <span
-                  className="w-2 h-2 bg-gray-400 dark:bg-muted-foreground rounded-full animate-bounce"
+                  className="h-2 w-2 animate-bounce rounded-sm bg-muted-foreground"
                   style={{ animationDelay: '150ms' }}
                 />
                 <span
-                  className="w-2 h-2 bg-gray-400 dark:bg-muted-foreground rounded-full animate-bounce"
+                  className="h-2 w-2 animate-bounce rounded-sm bg-muted-foreground"
                   style={{ animationDelay: '300ms' }}
                 />
               </span>
@@ -174,7 +173,7 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
             <span>{AI_MODEL_REGISTRY[message.modelUsed]?.name || message.modelUsed}</span>
             <button
               onClick={handleCopy}
-              className="text-muted-dim hover:text-gray-600 dark:hover:text-foreground transition-colors p-0.5"
+              className="text-muted-dim hover:text-foreground transition-colors p-0.5"
               title="Copy response"
             >
               {copied ? (

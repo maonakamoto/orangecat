@@ -121,12 +121,12 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
   // ==================== HIGH: Cat Consult (before first entity) ====================
   {
     id: 'chat-with-cat',
-    title: 'Ask My Cat what to create first',
+    title: 'Ask Cat what to create first',
     description:
-      'My Cat is your AI economic agent — describe your goals and it will suggest the right first step',
+      'Cat is your AI economic agent — describe your goals and it will suggest the right first step',
     priority: 'high',
     category: 'setup',
-    action: { label: 'Open My Cat', href: '/dashboard/cat' },
+    action: { label: 'Open Cat', href: '/dashboard/cat' },
     icon: MessageSquare,
     // Show when the user has no entities at all — Cat is the best guide here
     condition: ctx => Object.values(ctx.entityCounts).reduce((sum, c) => sum + (c ?? 0), 0) === 0,

@@ -84,7 +84,7 @@ export function FlyoutTooltip({ isVisible, children, targetElement }: FlyoutTool
 
   return (
     <div
-      className="hidden lg:block fixed px-3 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg whitespace-nowrap pointer-events-none shadow-xl"
+      className="fixed hidden whitespace-nowrap rounded-md border border-border-subtle bg-popover px-3 py-2 text-sm font-medium text-popover-foreground shadow-sm pointer-events-none lg:block"
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
@@ -93,9 +93,7 @@ export function FlyoutTooltip({ isVisible, children, targetElement }: FlyoutTool
       }}
     >
       {/* Tooltip arrow pointing left */}
-      <div
-        className="absolute right-full top-1/2 -translate-y-1/2 border-[6px] border-solid border-transparent border-r-gray-900"
-      />
+      <div className="absolute right-full top-1/2 -translate-y-1/2 border-[6px] border-solid border-transparent border-r-border-subtle" />
       {children}
     </div>
   );

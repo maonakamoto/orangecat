@@ -46,7 +46,7 @@ export function AIModelSelector({
         disabled={disabled}
         className={cn(
           'w-full p-3 rounded-lg border-2 text-left transition-all flex items-center justify-between',
-          isOpen ? 'border-tiffany-500 bg-tiffany-50' : 'border-border hover:border-gray-300',
+          isOpen ? 'border-tiffany-500 bg-tiffany-50' : 'border-border hover:border-border-strong',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
@@ -69,7 +69,7 @@ export function AIModelSelector({
       </button>
 
       {isOpen && (
-        <div className="mt-2 p-2 border border-border rounded-lg bg-card shadow-lg max-h-64 overflow-y-auto">
+        <div className="mt-2 p-2 border border-border rounded-lg bg-card shadow-sm max-h-64 overflow-y-auto">
           {getModelsByTier(defaultTier).map(model => (
             <button
               key={model.id}

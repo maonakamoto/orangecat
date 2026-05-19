@@ -29,10 +29,9 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
 
     // Try optimized RPC function first
     try {
-      const { data: totalCount, error: rpcError } = await admin.rpc(
-        'get_total_unread_count',
-        { p_user_id: user.id }
-      );
+      const { data: totalCount, error: rpcError } = await admin.rpc('get_total_unread_count', {
+        p_user_id: user.id,
+      });
 
       if (!rpcError && typeof totalCount === 'number') {
         totalUnread = totalCount;

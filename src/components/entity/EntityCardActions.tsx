@@ -2,18 +2,8 @@
 
 import { useState } from 'react';
 import { MoreHorizontal, Edit2, Trash2, Eye, EyeOff, Rocket, Pause } from 'lucide-react';
-import { ENTITY_STATUS } from '@/config/status-config';
-
-// Statuses that represent a "live" entity — covers both generic and entity-specific live states
-// (events: published/open/full/ongoing; investments: open/funded; generic: active)
-const LIVE_STATUSES = new Set([
-  ENTITY_STATUS.ACTIVE,
-  'published',
-  'open',
-  'funded',
-  'ongoing',
-  'full',
-]);
+import { ENTITY_STATUS } from '@/config/database-constants';
+import { isLiveEntityStatus } from '@/config/entity-status';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -143,7 +133,7 @@ export function EntityCardActions({
               {isChangingStatus ? 'Publishing...' : 'Publish'}
             </DropdownMenuItem>
           )}
-          {onStatusChange && entityStatus && LIVE_STATUSES.has(entityStatus) && (
+          {onStatusChange && isLiveEntityStatus(entityStatus) && (
             <DropdownMenuItem
               onClick={e => handleStatusClick(e, ENTITY_STATUS.PAUSED)}
               disabled={isChangingStatus}
@@ -188,7 +178,7 @@ export function EntityCardActions({
                 e.stopPropagation();
                 setShowDeleteDialog(true);
               }}
-              className="text-red-600 focus:text-red-600 focus:bg-red-50"
+              className="text-destructive focus:text-destructive focus:bg-destructive/10"
             >
               <Trash2 className="mr-2 h-4 w-4" />
               Delete

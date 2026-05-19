@@ -37,5 +37,3 @@ export const loanSchema = z
   });
 
 export type LoanDialogFormData = z.infer<typeof loanSchema>;
-
-

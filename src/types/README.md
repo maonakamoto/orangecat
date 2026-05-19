@@ -34,6 +34,7 @@ types/
 ## Type Examples
 
 ### Authentication Types
+
 ```typescript
 interface User {
   id: string;
@@ -57,6 +58,7 @@ type AuthState = 'authenticated' | 'unauthenticated' | 'loading';
 ```
 
 ### Profile Types
+
 ```typescript
 interface Profile {
   id: string;
@@ -82,6 +84,7 @@ interface ProfileUpdate {
 ```
 
 ### Funding Types
+
 ```typescript
 interface Project {
   id: string;
@@ -201,4 +204,4 @@ function isProject(obj: any): obj is Project {
     obj.updatedAt instanceof Date
   );
 }
-``` 
+```

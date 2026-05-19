@@ -130,7 +130,7 @@ export default function InvestmentsPage() {
 
           <TabsContent value="my-investments" className="space-y-6">
             {error ? (
-              <div className="rounded-xl border bg-card p-6 text-red-600">{error}</div>
+              <div className="rounded-lg border bg-card p-6 text-red-600">{error}</div>
             ) : (
               <>
                 {showSelection && myInvestments.length > 0 && (
@@ -142,7 +142,7 @@ export default function InvestmentsPage() {
                           selectedIds.size === myInvestments.length && myInvestments.length > 0
                         }
                         onChange={() => toggleSelectAll(myInvestments.map(i => i.id))}
-                        className="h-4 w-4 rounded border-border-strong text-green-600 focus:ring-green-500"
+                        className="h-4 w-4 rounded border-border-strong text-green-600 focus:ring-ring"
                       />
                       <span>Select All</span>
                     </label>

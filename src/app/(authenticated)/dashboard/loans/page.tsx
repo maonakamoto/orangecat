@@ -115,7 +115,7 @@ export default function LoansPage() {
 
           <TabsContent value="my-loans" className="space-y-6">
             {error ? (
-              <div className="rounded-xl border bg-card p-6 text-red-600">{error}</div>
+              <div className="rounded-lg border bg-card p-6 text-red-600">{error}</div>
             ) : (
               <>
                 {showSelection && myLoans.length > 0 && (
@@ -125,7 +125,7 @@ export default function LoansPage() {
                         type="checkbox"
                         checked={selectedIds.size === myLoans.length && myLoans.length > 0}
                         onChange={() => toggleSelectAll(myLoans.map(l => l.id))}
-                        className="h-4 w-4 rounded border-border-strong text-tiffany-600 focus:ring-tiffany-500"
+                        className="h-4 w-4 rounded border-border-strong text-tiffany-600 focus:ring-ring"
                       />
                       <span>Select All</span>
                     </label>

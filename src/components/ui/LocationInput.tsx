@@ -67,14 +67,14 @@ export function LocationInput({
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto"
+          className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-sm max-h-60 overflow-y-auto"
         >
           {suggestions.map(suggestion => (
             <button
               key={suggestion.id}
               type="button"
               onClick={() => handleSuggestionSelect(suggestion)}
-              className="w-full px-4 py-3 min-h-11 text-left hover:bg-muted border-b border-border-subtle last:border-b-0 focus:outline-none focus:bg-gray-50 dark:focus:bg-muted"
+              className="w-full px-4 py-3 min-h-11 text-left hover:bg-muted border-b border-border-subtle last:border-b-0 focus:outline-none focus:bg-muted/40 dark:focus:bg-muted"
             >
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-muted-dim mt-0.5 flex-shrink-0" />
@@ -93,7 +93,7 @@ export function LocationInput({
       )}
 
       {showSuggestions && inputValue.length >= 2 && suggestions.length === 0 && !isLoading && (
-        <div className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-lg p-4">
+        <div className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-sm p-4">
           <div className="text-sm text-muted-foreground text-center">
             No locations found. Try typing a city name or address.
           </div>

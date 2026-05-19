@@ -68,7 +68,7 @@ export default function ModernProfileEditor({
   if (inline) {
     // Inline mode: clean form layout without modal wrapper (page provides header/layout)
     return (
-      <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
+      <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-6">
             {/* Form Errors */}

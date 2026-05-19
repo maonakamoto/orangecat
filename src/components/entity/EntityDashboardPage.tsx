@@ -17,7 +17,6 @@ import { useBulkDelete } from '@/hooks/useBulkDelete';
 import { EntityConfig, BaseEntity } from '@/types/entity';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
-import { GRADIENTS } from '@/config/gradients';
 import { API_ROUTES } from '@/config/api-routes';
 
 /**
@@ -172,18 +171,6 @@ export default function EntityDashboardPage<T extends BaseEntity>({
     return null;
   }
 
-  // Determine color class based on theme
-  const colorClass =
-    (
-      {
-        orange: GRADIENTS.brandOrangeDark,
-        blue: GRADIENTS.brandBlue,
-        green: GRADIENTS.brandGreen,
-        rose: GRADIENTS.brandRose,
-        tiffany: GRADIENTS.brandTiffany,
-      } as Record<string, string>
-    )[config.colorTheme || 'tiffany'] ?? GRADIENTS.brandTiffany;
-
   const headerActions = (
     <div className="flex items-center gap-2">
       {memoizedItems.length > 0 && (
@@ -191,7 +178,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
           {showSelection ? 'Cancel' : 'Select'}
         </Button>
       )}
-      <Button href={config.createPath} className={`${colorClass} w-full sm:w-auto`}>
+      <Button href={config.createPath} className="w-full sm:w-auto">
         {createButtonLabel || `Create ${config.name}`}
       </Button>
     </div>
@@ -200,17 +187,17 @@ export default function EntityDashboardPage<T extends BaseEntity>({
   return (
     <>
       <EntityListShell
-        title={title || `My ${config.namePlural}`}
+        title={title || config.namePlural}
         description={description}
         headerActions={headerActions}
       >
         {headerContent}
         {error ? (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+          <div className="oc-error-surface flex items-start gap-3">
+            <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-red-800">Failed to load</p>
-              <p className="text-sm text-red-600 mt-1">{error}</p>
+              <p className="text-sm font-medium">Failed to load</p>
+              <p className="mt-1 text-sm text-destructive/80">{error}</p>
               <Button variant="outline" size="sm" onClick={() => refresh()} className="mt-3">
                 Try again
               </Button>
@@ -219,13 +206,13 @@ export default function EntityDashboardPage<T extends BaseEntity>({
         ) : (
           <>
             {showSelection && memoizedItems.length > 0 && (
-              <div className="mb-4 flex items-center justify-between">
+              <div className="oc-list-row mb-4 flex items-center justify-between">
                 <label className="flex items-center gap-2 text-sm text-foreground">
                   <input
                     type="checkbox"
                     checked={selectedIds.size === memoizedItems.length && memoizedItems.length > 0}
                     onChange={() => toggleSelectAll(memoizedItems.map(item => item.id))}
-                    className="h-4 w-4 rounded border-border-strong text-orange-600 focus:ring-orange-500"
+                    className="h-4 w-4 rounded border-border-strong bg-card text-tiffany-600 focus:ring-ring"
                   />
                   <span>Select All</span>
                 </label>

@@ -18,9 +18,6 @@ export default function CommunityPage() {
       title="Community"
       description="Public posts and updates from the OrangeCat community"
       icon={Globe}
-      gradientFrom="from-blue-50/30"
-      gradientVia="via-white"
-      gradientTo="to-tiffany-50/20"
       mode="community"
       showShareButton={false}
       defaultSort="trending"

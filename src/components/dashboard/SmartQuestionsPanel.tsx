@@ -79,16 +79,12 @@ export function SmartQuestionsPanel({
  */
 function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDismiss: () => void }) {
   return (
-    <div className="flex items-center justify-between gap-3 p-3 bg-amber-50 border border-amber-100 rounded-lg hover:bg-amber-100 transition-colors group">
+    <div className="oc-list-row group flex items-center justify-between gap-3 oc-card-link">
       <p className="text-sm text-foreground flex-1">{question.question}</p>
 
       <div className="flex items-center gap-2 flex-shrink-0">
         <Link href={question.action.href}>
-          <Button
-            size="sm"
-            variant="outline"
-            className="bg-card hover:bg-amber-100 border-amber-200 text-amber-700 hover:border-amber-300"
-          >
+          <Button size="sm" variant="outline" className="bg-card">
             {question.action.label}
             <ArrowRight className="w-3 h-3 ml-1" />
           </Button>
@@ -96,7 +92,7 @@ function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDism
 
         <button
           onClick={onDismiss}
-          className="p-1 text-muted-dim hover:text-gray-600 dark:hover:text-foreground rounded opacity-0 group-hover:opacity-100 transition-opacity min-h-11 min-w-11 flex items-center justify-center"
+          className="p-1 text-muted-dim hover:text-foreground rounded opacity-0 group-hover:opacity-100 transition-opacity min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Dismiss question"
         >
           <X className="w-4 h-4" />
@@ -133,7 +129,7 @@ export function SmartQuestionInline({
       {onDismiss && (
         <button
           onClick={onDismiss}
-          className="p-1 text-muted-dim hover:text-gray-600 dark:hover:text-foreground rounded min-h-11 min-w-11 flex items-center justify-center"
+          className="p-1 text-muted-dim hover:text-foreground rounded min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Dismiss"
         >
           <X className="w-3 h-3" />

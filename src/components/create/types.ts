@@ -19,6 +19,7 @@
 import { ReactNode, ComponentType } from 'react';
 import { LucideIcon } from 'lucide-react';
 import { ZodType, ZodTypeDef } from 'zod';
+import type { EntityType } from '@/config/entity-registry';
 
 // ==================== FIELD TYPES ====================
 
@@ -175,22 +176,7 @@ export interface DefaultGuidance {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface EntityConfig<T extends Record<string, any> = Record<string, any>> {
   /** Entity type identifier */
-  type:
-    | 'product'
-    | 'service'
-    | 'cause'
-    | 'loan'
-    | 'investment'
-    | 'project'
-    | 'asset'
-    | 'ai_assistant'
-    | 'event'
-    | 'group'
-    | 'wishlist'
-    | 'research'
-    | 'wallet'
-    | 'document'
-    | 'organization';
+  type: EntityType | 'organization';
   /** Display name (singular) */
   name: string;
   /** Display name (plural) */

@@ -8,6 +8,8 @@
 
 import Button from '@/components/ui/Button';
 import { TrendingUp, Clock, Flame } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { TIMELINE_SURFACE } from '@/config/timeline';
 
 interface TimelineSortingControlsProps {
   sortBy: 'recent' | 'trending' | 'popular';
@@ -16,12 +18,12 @@ interface TimelineSortingControlsProps {
 
 export function TimelineSortingControls({ sortBy, onSortChange }: TimelineSortingControlsProps) {
   return (
-    <div className="flex bg-white/50 dark:bg-muted/30 rounded-xl p-1">
+    <div className="flex gap-1">
       <Button
         variant={sortBy === 'trending' ? 'secondary' : 'ghost'}
         size="sm"
         onClick={() => onSortChange('trending')}
-        className={`px-3 py-2 text-sm ${sortBy === 'trending' ? 'bg-card shadow-sm' : 'hover:bg-white/50 dark:hover:bg-muted/30'}`}
+        className={cn(TIMELINE_SURFACE.chip, sortBy === 'trending' && TIMELINE_SURFACE.chipActive)}
       >
         <TrendingUp className="w-4 h-4 mr-1" />
         Trending
@@ -30,7 +32,7 @@ export function TimelineSortingControls({ sortBy, onSortChange }: TimelineSortin
         variant={sortBy === 'recent' ? 'secondary' : 'ghost'}
         size="sm"
         onClick={() => onSortChange('recent')}
-        className={`px-3 py-2 text-sm ${sortBy === 'recent' ? 'bg-card shadow-sm' : 'hover:bg-white/50 dark:hover:bg-muted/30'}`}
+        className={cn(TIMELINE_SURFACE.chip, sortBy === 'recent' && TIMELINE_SURFACE.chipActive)}
       >
         <Clock className="w-4 h-4 mr-1" />
         Recent
@@ -39,7 +41,7 @@ export function TimelineSortingControls({ sortBy, onSortChange }: TimelineSortin
         variant={sortBy === 'popular' ? 'secondary' : 'ghost'}
         size="sm"
         onClick={() => onSortChange('popular')}
-        className={`px-3 py-2 text-sm ${sortBy === 'popular' ? 'bg-card shadow-sm' : 'hover:bg-white/50 dark:hover:bg-muted/30'}`}
+        className={cn(TIMELINE_SURFACE.chip, sortBy === 'popular' && TIMELINE_SURFACE.chipActive)}
       >
         <Flame className="w-4 h-4 mr-1" />
         Popular

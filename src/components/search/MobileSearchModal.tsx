@@ -116,13 +116,13 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-white dark:bg-background">
+    <div className="fixed inset-0 z-50 bg-background">
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-border">
         <button
           onClick={onClose}
           aria-label="Close search"
-          className="p-2 -ml-2 text-muted-foreground hover:text-gray-700 dark:hover:text-foreground min-h-11 min-w-11 flex items-center justify-center"
+          className="p-2 -ml-2 text-muted-foreground hover:text-foreground min-h-11 min-w-11 flex items-center justify-center"
         >
           <X className="w-5 h-5" />
         </button>
@@ -135,7 +135,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
             value={query}
             onChange={e => setQuery(e.target.value)}
             autoFocus
-            className="w-full pl-10 pr-4 py-3 text-base border border-border-strong rounded-xl focus:outline-none focus:ring-2 focus:ring-tiffany-500 focus:border-transparent bg-muted dark:text-foreground dark:placeholder:text-muted-foreground"
+            className="w-full pl-10 pr-4 py-3 text-base border border-border-strong rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-muted dark:text-foreground dark:placeholder:text-muted-foreground"
           />
         </form>
       </div>
@@ -174,7 +174,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
               </h4>
               <button
                 onClick={clearHistory}
-                className="text-sm text-muted-foreground hover:text-gray-700 dark:hover:text-foreground"
+                className="text-sm text-muted-foreground hover:text-foreground"
               >
                 Clear
               </button>
@@ -265,7 +265,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
         {/* Empty State */}
         {query.length === 0 && searchHistory.length === 0 && (
           <div className="p-8 text-center">
-            <Search className="w-12 h-12 text-gray-300 dark:text-muted mx-auto mb-4" />
+            <Search className="w-12 h-12 text-muted-dim dark:text-muted mx-auto mb-4" />
             <p className="text-muted-foreground text-lg">Start typing to search</p>
             <p className="text-muted-dim mt-2">Find projects, people, and organizations</p>
           </div>

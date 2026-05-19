@@ -5,7 +5,7 @@ import BottomSheet from '@/components/ui/BottomSheet';
 import { Check, ArrowLeft, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { GRADIENTS } from '@/config/gradients';
+import { TIMELINE_COPY, TIMELINE_SURFACE } from '@/config/timeline';
 
 interface Project {
   id: string;
@@ -47,12 +47,8 @@ export default function ProjectSelectionModal({
       closeOnOverlayClick={true}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-        <button
-          onClick={onClose}
-          className="p-2 -ml-2 min-h-11 min-w-11 flex items-center justify-center"
-          aria-label="Close"
-        >
+      <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
+        <button onClick={onClose} className={TIMELINE_SURFACE.iconButton} aria-label="Close">
           <ArrowLeft className="w-5 h-5 text-foreground" />
         </button>
         <h2 className="text-lg font-semibold text-foreground">Crosspost to projects</h2>
@@ -69,9 +65,7 @@ export default function ProjectSelectionModal({
             aria-label="Everyone (default)"
           >
             <div className="flex items-center gap-3">
-              <div
-                className={`w-10 h-10 rounded-full ${GRADIENTS.brandOrangeYellow} flex items-center justify-center`}
-              >
+              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-foreground">
                 <Users className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
@@ -79,8 +73,8 @@ export default function ProjectSelectionModal({
                 <div className="text-sm text-muted-foreground">Post to your timeline</div>
               </div>
             </div>
-            <div className="w-6 h-6 rounded-full bg-tiffany-500 flex items-center justify-center">
-              <Check className="w-4 h-4 text-white" />
+            <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-foreground">
+              <Check className="w-4 h-4 text-background" />
             </div>
           </button>
         </div>
@@ -97,16 +91,16 @@ export default function ProjectSelectionModal({
                     key={project.id}
                     onClick={() => onToggleProject(project.id)}
                     className={cn(
-                      'flex items-center justify-between w-full px-3 py-3 rounded-lg transition-colors min-h-[60px]',
-                      'hover:bg-muted active:bg-gray-100 dark:active:bg-muted',
-                      isSelected && 'bg-orange-50'
+                      'flex min-h-[60px] w-full items-center justify-between rounded-md px-3 py-3 transition-colors',
+                      'hover:bg-muted active:bg-muted dark:active:bg-muted',
+                      isSelected && 'bg-muted'
                     )}
                     aria-label={`${isSelected ? 'Deselect' : 'Select'} ${project.title}`}
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       {/* Project icon/thumbnail */}
                       {project.thumbnail_url ? (
-                        <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+                        <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md">
                           <Image
                             src={project.thumbnail_url}
                             alt={project.title}
@@ -116,10 +110,8 @@ export default function ProjectSelectionModal({
                           />
                         </div>
                       ) : (
-                        <div
-                          className={`w-10 h-10 rounded-lg ${GRADIENTS.brandOrangeYellow} flex items-center justify-center flex-shrink-0`}
-                        >
-                          <span className="text-white font-semibold text-sm">
+                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-muted">
+                          <span className="text-sm font-semibold text-foreground">
                             {project.title[0]?.toUpperCase() || 'P'}
                           </span>
                         </div>
@@ -142,11 +134,13 @@ export default function ProjectSelectionModal({
                     {/* Checkmark */}
                     <div
                       className={cn(
-                        'w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ml-3',
-                        isSelected ? 'bg-tiffany-500 border-tiffany-500' : 'border-border-strong'
+                        'ml-3 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-sm border',
+                        isSelected
+                          ? 'border-foreground bg-foreground'
+                          : 'border-border-strong bg-background'
                       )}
                     >
-                      {isSelected && <Check className="w-4 h-4 text-white" />}
+                      {isSelected && <Check className="w-4 h-4 text-background" />}
                     </div>
                   </button>
                 );
@@ -168,7 +162,7 @@ export default function ProjectSelectionModal({
         {/* Loading state */}
         {loading && (
           <div className="px-4 py-12 text-center">
-            <div className="text-muted-foreground text-sm">Loading projects...</div>
+            <div className="text-muted-foreground text-sm">{TIMELINE_COPY.loadingProjects}</div>
           </div>
         )}
       </div>

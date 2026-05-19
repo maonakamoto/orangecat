@@ -68,21 +68,21 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
             type="button"
             onClick={() => handleSelect(null)}
             className={cn(
-              'relative flex flex-col items-start p-4 sm:p-5 rounded-xl border-2 transition-all text-left min-h-[120px]',
-              'hover:border-gray-300 hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2',
+              'relative flex min-h-[120px] flex-col items-start rounded-md border p-4 text-left transition-colors sm:p-5',
+              'hover:border-border-strong hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
               selected === null
-                ? 'border-orange-500 bg-orange-50/50 ring-2 ring-orange-200'
-                : 'border-border bg-card'
+                ? 'border-border-strong bg-muted ring-2 ring-ring/20'
+                : 'border-border-subtle bg-background'
             )}
           >
             {selected === null && (
               <div className="absolute top-3 right-3">
-                <div className="h-6 w-6 rounded-full bg-orange-500 flex items-center justify-center">
-                  <Check className="h-4 w-4 text-white" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground">
+                  <Check className="h-4 w-4 text-background" />
                 </div>
               </div>
             )}
-            <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-muted text-muted-foreground flex items-center justify-center mb-3 sm:mb-4">
+            <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-md bg-muted text-muted-foreground sm:mb-4 sm:h-12 sm:w-12">
               <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
             <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1">
@@ -105,21 +105,21 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
               type="button"
               onClick={() => handleSelect(template.id)}
               className={cn(
-                'relative flex flex-col items-start p-4 sm:p-5 rounded-xl border-2 transition-all text-left min-h-[120px]',
-                'hover:border-orange-300 hover:bg-orange-50/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2',
+                'relative flex min-h-[120px] flex-col items-start rounded-md border p-4 text-left transition-colors sm:p-5',
+                'hover:border-border-strong hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                 isSelected
-                  ? 'border-orange-500 bg-orange-50/50 ring-2 ring-orange-200'
-                  : 'border-border bg-card'
+                  ? 'border-border-strong bg-muted ring-2 ring-ring/20'
+                  : 'border-border-subtle bg-background'
               )}
             >
               {isSelected && (
                 <div className="absolute top-3 right-3">
-                  <div className="h-6 w-6 rounded-full bg-orange-500 flex items-center justify-center">
-                    <Check className="h-4 w-4 text-white" />
+                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground">
+                    <Check className="h-4 w-4 text-background" />
                   </div>
                 </div>
               )}
-              <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-3 sm:mb-4 border border-orange-200">
+              <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-md border border-border-subtle bg-muted text-foreground sm:mb-4 sm:h-12 sm:w-12">
                 {template.icon}
               </div>
               <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1 pr-8">

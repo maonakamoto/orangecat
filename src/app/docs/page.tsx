@@ -45,7 +45,7 @@ export default function DocsPage() {
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Your Cat — AI Economic Agent</h2>
           </div>
-          <div className="bg-card rounded-xl border border-border p-6 space-y-4">
+          <div className="bg-card rounded-lg border border-border p-6 space-y-4">
             <p className="text-muted-foreground leading-relaxed">
               Every user and group has a <strong>Cat</strong> — a personal AI agent that understands
               your context and acts on your behalf. The Cat can create entities, draft content,
@@ -79,7 +79,7 @@ export default function DocsPage() {
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Entity System</h2>
           </div>
-          <div className="bg-card rounded-xl border border-border p-6">
+          <div className="bg-card rounded-lg border border-border p-6">
             <p className="text-muted-foreground leading-relaxed mb-5">
               Everything on OrangeCat is an <strong>entity</strong> — a structured unit of economic
               or governance activity. Entities give the Cat a rich world model to read and operate
@@ -107,7 +107,7 @@ export default function DocsPage() {
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Payments</h2>
           </div>
-          <div className="bg-card rounded-xl border border-border p-6 space-y-4">
+          <div className="bg-card rounded-lg border border-border p-6 space-y-4">
             <p className="text-muted-foreground leading-relaxed">
               Bitcoin and Lightning Network are the native and preferred payment rails. OrangeCat
               supports Lightning addresses (e.g.{' '}
@@ -144,7 +144,7 @@ export default function DocsPage() {
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Identity & Privacy</h2>
           </div>
-          <div className="bg-card rounded-xl border border-border p-6 space-y-4">
+          <div className="bg-card rounded-lg border border-border p-6 space-y-4">
             <p className="text-muted-foreground leading-relaxed">
               OrangeCat is <strong>pseudonymous by default</strong>. You can participate fully —
               sell, fund, lend, invest, govern — under any identity you choose. Real-name
@@ -193,7 +193,7 @@ export default function DocsPage() {
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Groups & Governance</h2>
           </div>
-          <div className="bg-card rounded-xl border border-border p-6 space-y-4">
+          <div className="bg-card rounded-lg border border-border p-6 space-y-4">
             <p className="text-muted-foreground leading-relaxed">
               <strong>Groups</strong> are organizations on OrangeCat with a shared identity,
               treasury, and governance. Members can have different roles, propose and vote on
@@ -215,7 +215,7 @@ export default function DocsPage() {
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Technology Stack</h2>
           </div>
-          <div className="bg-card rounded-xl border border-border p-6">
+          <div className="bg-card rounded-lg border border-border p-6">
             <div className="grid sm:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-medium text-foreground mb-3">Frontend</h3>
@@ -257,7 +257,7 @@ export default function DocsPage() {
 
         {/* Getting Started */}
         <section className="mb-10">
-          <div className="bg-tiffany-50 border border-tiffany-100 rounded-xl p-8 text-center">
+          <div className="bg-tiffany-50 border border-tiffany-100 rounded-lg p-8 text-center">
             <h2 className="text-xl font-semibold text-foreground mb-3">Ready to get started?</h2>
             <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
               Create an account, set up your profile and payment methods, then ask your Cat to help

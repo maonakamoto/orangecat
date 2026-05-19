@@ -31,7 +31,7 @@ export function AICreditsPricing() {
               <div
                 key={key}
                 className={`rounded-lg border p-4 ${
-                  key === 'pro' ? 'border-orange-300 bg-orange-50/50' : 'border-border'
+                  key === 'pro' ? 'border-border-strong bg-orange-50/50' : 'border-border'
                 }`}
               >
                 <div className="font-semibold text-sm">{tier.label}</div>

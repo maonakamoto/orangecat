@@ -38,9 +38,9 @@ export function GenericPublicCard({
   if (viewMode === 'list') {
     return (
       <Link href={href}>
-        <Card className="hover:shadow-md transition-shadow">
+        <Card className="oc-card-link">
           <div className="flex items-center p-4 gap-4">
-            <div className="flex-shrink-0 w-12 h-12 bg-muted rounded-full flex items-center justify-center">
+            <div className="oc-icon-tile h-12 w-12">
               {Icon && <Icon className="w-6 h-6 text-muted-foreground" />}
             </div>
             <div className="flex-1 min-w-0">
@@ -67,11 +67,11 @@ export function GenericPublicCard({
 
   return (
     <Link href={href}>
-      <Card className="hover:shadow-md transition-shadow h-full">
+      <Card className="oc-card-link h-full">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="oc-icon-tile h-8 w-8 flex-shrink-0">
                 {Icon && <Icon className="w-4 h-4 text-muted-foreground" />}
               </div>
               <div className="flex-1 min-w-0">

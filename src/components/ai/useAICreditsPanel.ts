@@ -46,7 +46,7 @@ const TX_COLOR: Record<string, string> = {
   charge: 'text-orange-600',
 };
 
-export const getTransactionColor = (type: string) => TX_COLOR[type] ?? 'text-gray-600';
+export const getTransactionColor = (type: string) => TX_COLOR[type] ?? 'text-muted-foreground';
 
 export const getTransactionIcon = (type: string): React.ReactNode => {
   if (type === 'charge') {
@@ -55,7 +55,7 @@ export const getTransactionIcon = (type: string): React.ReactNode => {
   if (['deposit', 'bonus', 'refund'].includes(type)) {
     return React.createElement(ArrowDownLeft, { className: 'h-4 w-4 text-green-500' });
   }
-  return React.createElement(Coins, { className: 'h-4 w-4 text-gray-500' });
+  return React.createElement(Coins, { className: 'h-4 w-4 text-muted-foreground' });
 };
 
 export function useAICreditsPanel() {

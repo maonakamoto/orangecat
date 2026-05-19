@@ -31,7 +31,7 @@ export function PermissionPresets({
         <button
           onClick={() => applyPreset(id => id === 'context')}
           disabled={saving !== null}
-          className="p-4 border border-border rounded-xl text-left hover:border-green-300 hover:bg-green-50 dark:hover:bg-muted transition-colors disabled:opacity-50"
+          className="rounded-md border border-border-subtle p-4 text-left transition-colors hover:border-border-strong hover:bg-muted disabled:opacity-50"
         >
           <div className="flex items-center gap-2 mb-1">
             <ShieldCheck className="h-5 w-5 text-green-600" />
@@ -45,7 +45,7 @@ export function PermissionPresets({
         <button
           onClick={() => applyPreset(id => ['entities', 'context', 'communication'].includes(id))}
           disabled={saving !== null}
-          className="p-4 border border-border rounded-xl text-left hover:border-tiffany hover:bg-tiffany-50 dark:hover:bg-muted transition-colors disabled:opacity-50"
+          className="rounded-md border border-border-subtle p-4 text-left transition-colors hover:border-border-strong hover:bg-muted disabled:opacity-50"
         >
           <div className="flex items-center gap-2 mb-1">
             <Zap className="h-5 w-5 text-tiffany" />
@@ -59,7 +59,7 @@ export function PermissionPresets({
         <button
           onClick={() => applyPreset(id => id !== 'payments')}
           disabled={saving !== null}
-          className="p-4 border border-border rounded-xl text-left hover:border-amber-300 hover:bg-amber-50 dark:hover:bg-muted transition-colors disabled:opacity-50"
+          className="rounded-md border border-border-subtle p-4 text-left transition-colors hover:border-border-strong hover:bg-muted disabled:opacity-50"
         >
           <div className="flex items-center gap-2 mb-1">
             <Shield className="h-5 w-5 text-amber-600" />

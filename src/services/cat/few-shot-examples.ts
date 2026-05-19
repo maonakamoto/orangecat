@@ -77,7 +77,8 @@ Once you've done a few shoots, come back and we'll set up your product catalog.`
     // Example 3: Care/meaning — person doesn't want income, wants connection
     {
       role: 'user',
-      content: 'I used to work at the cash register and people came to me every day. Now I just watch the self-checkout. I miss the people.',
+      content:
+        'I used to work at the cash register and people came to me every day. Now I just watch the self-checkout. I miss the people.',
     },
     {
       role: 'assistant',
@@ -94,7 +95,7 @@ Would you be open to exploring what that could look like?`,
     // Shows: when to use exec_action (explicit user intent), concise response, correct format
     {
       role: 'user',
-      content: "Remind me to follow up with Maria about the invoice on Friday",
+      content: 'Remind me to follow up with Maria about the invoice on Friday',
     },
     {
       role: 'assistant',

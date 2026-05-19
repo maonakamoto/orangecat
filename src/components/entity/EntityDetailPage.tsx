@@ -4,7 +4,7 @@ import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import EntityDetailLayout from '@/components/entity/EntityDetailLayout';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { getTableName } from '@/config/entity-registry';
+import { getTableName, type EntityType } from '@/config/entity-registry';
 import type { EntityConfig, BaseEntity } from '@/types/entity';
 import { PLATFORM_DEFAULT_CURRENCY, isSupportedCurrency } from '@/config/currencies';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -178,20 +178,11 @@ export default async function EntityDetailPage<T extends BaseEntity>({
     }
   }
 
-  const entityTypeMap: Record<string, string> = {
-    product: 'product',
-    service: 'service',
-    cause: 'cause',
-    'ai assistant': 'ai_assistant',
-    'ai assistants': 'ai_assistant',
-    project: 'project',
-    event: 'event',
-    loan: 'loan',
-    asset: 'asset',
-  };
-
-  const entityType = entityTypeMap[config.name.toLowerCase()] || config.name.toLowerCase();
-  const tableName = getTableName(entityType as Parameters<typeof getTableName>[0]);
+  if (!config.entityType) {
+    throw new Error(`EntityDetailPage requires config.entityType for ${config.name}`);
+  }
+  const entityType = config.entityType as EntityType;
+  const tableName = getTableName(entityType);
 
   let actorId: string | null = null;
   if (user) {

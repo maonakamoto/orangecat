@@ -20,14 +20,12 @@ export function LearningPathCard({ path }: LearningPathCardProps) {
   const Icon = path.icon;
 
   return (
-    <Card className="group hover:shadow-lg transition-all duration-200 relative overflow-hidden">
-      <div
-        className={`absolute top-0 left-0 right-0 h-1 ${path.bgColor.replace('bg-', 'bg-gradient-to-r from-').replace('-50', '-400 to-').replace('bg-gradient-to-r from-', 'bg-gradient-to-r from-').concat('-600')}`}
-      />
+    <Card className="group oc-card-link duration-200 relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-px bg-border-strong" />
 
       <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
-          <div className={`w-12 h-12 ${path.bgColor} rounded-xl flex items-center justify-center`}>
+          <div className={`w-12 h-12 ${path.bgColor} rounded-lg flex items-center justify-center`}>
             <Icon className={`w-6 h-6 ${path.color}`} />
           </div>
           <div className="flex flex-col items-end gap-2">

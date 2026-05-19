@@ -47,17 +47,23 @@ const sendMessageSchema = z.object({
 
 /** GET - Fetch messages for a conversation with cursor-based pagination */
 export const GET = withAuth(
-  async (req: AuthenticatedRequest, { params }: { params: Promise<{ conversationId: string }> }) => {
+  async (
+    req: AuthenticatedRequest,
+    { params }: { params: Promise<{ conversationId: string }> }
+  ) => {
     const { conversationId } = await params;
     const idValidation = getValidationError(validateUUID(conversationId, 'conversation ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     try {
       const { user } = req;
       const { searchParams } = new URL(req.url);
       const cursor = searchParams.get('cursor');
       const limitParam = searchParams.get('limit');
       const limit = Math.min(
-        parseInt(limitParam || String(PAGINATION.MESSAGES_DEFAULT), 10) || PAGINATION.MESSAGES_DEFAULT,
+        parseInt(limitParam || String(PAGINATION.MESSAGES_DEFAULT), 10) ||
+          PAGINATION.MESSAGES_DEFAULT,
         PAGINATION.MESSAGES_MAX
       );
 
@@ -86,15 +92,25 @@ export const GET = withAuth(
         fetchConversationContext(admin, conversationId, user.id),
       ]);
 
-      if (!ctx) {return apiNotFound('Conversation not found');}
+      if (!ctx) {
+        return apiNotFound('Conversation not found');
+      }
 
       return apiSuccess({
-        conversation: { ...ctx.conversation, participants: ctx.formattedParticipants, unread_count: ctx.unreadCount },
+        conversation: {
+          ...ctx.conversation,
+          participants: ctx.formattedParticipants,
+          unread_count: ctx.unreadCount,
+        },
         messages,
         pagination,
       });
     } catch (error) {
-      logger.error('Messages GET error', { error, conversationId, userId: req.user.id }, 'Messages');
+      logger.error(
+        'Messages GET error',
+        { error, conversationId, userId: req.user.id },
+        'Messages'
+      );
       return handleApiError(error);
     }
   }
@@ -102,10 +118,15 @@ export const GET = withAuth(
 
 /** POST - Send a new message to the conversation */
 export const POST = withAuth(
-  async (req: AuthenticatedRequest, { params }: { params: Promise<{ conversationId: string }> }) => {
+  async (
+    req: AuthenticatedRequest,
+    { params }: { params: Promise<{ conversationId: string }> }
+  ) => {
     const { conversationId } = await params;
     const idValidation = getValidationError(validateUUID(conversationId, 'conversation ID'));
-    if (idValidation) {return idValidation;}
+    if (idValidation) {
+      return idValidation;
+    }
     try {
       const { user } = req;
 
@@ -115,7 +136,9 @@ export const POST = withAuth(
           ? Math.ceil(rateLimitResult.retryAfterMs / 1000)
           : undefined;
         const response = apiRateLimited('Rate limit exceeded. Please slow down.', retryAfter);
-        Object.entries(getRateLimitHeaders(rateLimitResult)).forEach(([k, v]) => response.headers.set(k, v));
+        Object.entries(getRateLimitHeaders(rateLimitResult)).forEach(([k, v]) =>
+          response.headers.set(k, v)
+        );
         return response;
       }
 
@@ -123,7 +146,10 @@ export const POST = withAuth(
       const validation = sendMessageSchema.safeParse(body);
       if (!validation.success) {
         return apiValidationError('Invalid request data', {
-          fields: validation.error.issues.map(i => ({ field: i.path.join('.'), message: i.message })),
+          fields: validation.error.issues.map(i => ({
+            field: i.path.join('.'),
+            message: i.message,
+          })),
         });
       }
 
@@ -131,12 +157,25 @@ export const POST = withAuth(
       const admin = createAdminClient();
 
       const membership = await verifyParticipantAndReactivate(admin, conversationId, user.id);
-      if (membership === 'not_found') {return apiForbidden('Not a participant in this conversation');}
+      if (membership === 'not_found') {
+        return apiForbidden('Not a participant in this conversation');
+      }
 
-      const newId = await svcSendMessage(conversationId, user.id, content, messageType, metadata || null, senderActorId || null);
+      const newId = await svcSendMessage(
+        conversationId,
+        user.id,
+        content,
+        messageType,
+        metadata || null,
+        senderActorId || null
+      );
       return apiCreated({ id: newId }, { headers: getRateLimitHeaders(rateLimitResult) });
     } catch (error) {
-      logger.error('Messages POST error', { error, conversationId, userId: req.user.id }, 'Messages');
+      logger.error(
+        'Messages POST error',
+        { error, conversationId, userId: req.user.id },
+        'Messages'
+      );
       return handleApiError(error);
     }
   }

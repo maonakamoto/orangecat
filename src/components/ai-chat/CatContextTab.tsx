@@ -65,10 +65,10 @@ export function CatContextTab() {
 
   const getCompletenessColor = (score: number) => {
     if (score >= 70) {
-      return 'text-green-600';
+      return 'text-green-700 dark:text-green-300';
     }
     if (score >= 40) {
-      return 'text-amber-600';
+      return 'text-amber-700 dark:text-amber-300';
     }
     return 'text-muted-foreground';
   };
@@ -90,7 +90,7 @@ export function CatContextTab() {
     <div className="space-y-6">
       {/* Completeness meter */}
       {!summaryLoading && summary && (
-        <div className="bg-card rounded-xl border border-border p-6">
+        <div className="rounded-md border border-border-subtle bg-background p-5">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-foreground">Context Completeness</h3>
             <span className={`text-sm font-medium ${getCompletenessColor(summary.completeness)}`}>
@@ -120,13 +120,21 @@ export function CatContextTab() {
       )}
 
       {/* Add context button */}
-      <Link
-        href={ROUTES.DASHBOARD.DOCUMENTS_CREATE}
-        className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-tiffany-500 to-tiffany-600 text-white rounded-xl hover:from-tiffany-600 hover:to-tiffany-700 transition-all shadow-sm"
-      >
-        <Plus className="h-5 w-5" />
-        <span className="font-medium">Add Context</span>
-      </Link>
+      <div className="flex items-center justify-between gap-3 rounded-md border border-border-subtle bg-muted/30 p-4">
+        <div>
+          <h3 className="text-sm font-medium text-foreground">Improve Cat’s answers</h3>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Add goals, constraints, finances, skills, and plans as private context.
+          </p>
+        </div>
+        <Link
+          href={ROUTES.DASHBOARD.DOCUMENTS_CREATE}
+          className="inline-flex min-h-11 flex-shrink-0 items-center justify-center gap-2 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+        >
+          <Plus className="h-4 w-4" />
+          Add
+        </Link>
+      </div>
 
       {/* Documents list */}
       {documentsLoading ? (
@@ -135,7 +143,7 @@ export function CatContextTab() {
         </div>
       ) : documents.length === 0 ? (
         <div className="text-center py-12 px-4">
-          <div className="mx-auto w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-4">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-muted">
             <FileText className="h-6 w-6 text-muted-dim" />
           </div>
           <h3 className="font-semibold text-foreground mb-2">No context yet</h3>
@@ -149,18 +157,21 @@ export function CatContextTab() {
             const Icon = TYPE_ICONS[type] || FileText;
             const label = (DOCUMENT_TYPE_LABELS as Record<string, string>)[type] || type;
             return (
-              <div key={type} className="bg-card rounded-xl border border-border overflow-hidden">
-                <div className="px-4 py-3 bg-muted border-b border-border-subtle flex items-center gap-2">
+              <div
+                key={type}
+                className="overflow-hidden rounded-md border border-border-subtle bg-background"
+              >
+                <div className="flex items-center gap-2 border-b border-border-subtle bg-muted/50 px-4 py-3">
                   <Icon className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium text-foreground">{label}</span>
                   <span className="text-xs text-muted-dim ml-auto">{docs.length}</span>
                 </div>
-                <div className="divide-y divide-gray-100 dark:divide-border">
+                <div className="divide-y divide-border">
                   {docs.map(doc => (
                     <Link
                       key={doc.id}
                       href={`${ENTITY_REGISTRY['document'].basePath}/${doc.id}`}
-                      className="flex items-center justify-between px-4 py-3 hover:bg-muted transition-colors"
+                      className="flex items-center justify-between px-4 py-3 transition-colors hover:bg-muted"
                     >
                       <div className="min-w-0 flex-1">
                         <p className="text-base font-medium text-foreground truncate">

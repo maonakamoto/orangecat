@@ -56,7 +56,7 @@ export default function NotificationCenter({
               <Bell className="w-5 h-5" />
               Notifications
               {unreadCount > 0 && (
-                <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="flex h-5 w-5 items-center justify-center rounded-sm bg-destructive text-xs text-destructive-foreground">
                   {unreadCount}
                 </span>
               )}
@@ -65,7 +65,7 @@ export default function NotificationCenter({
 
           <CardContent className="flex flex-col flex-1 overflow-hidden">
             {error && (
-              <div className="flex items-center gap-2 p-3 mb-4 bg-red-50 text-red-600 rounded-lg">
+              <div className="mb-4 flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-destructive">
                 <AlertCircle className="w-4 h-4" />
                 <span className="text-sm">{error.message}</span>
                 <Button variant="ghost" size="sm" onClick={refresh} className="ml-auto">
@@ -74,15 +74,15 @@ export default function NotificationCenter({
               </div>
             )}
 
-            <div className="flex gap-1 mb-4 bg-muted rounded-lg p-1">
+            <div className="mb-4 flex gap-1 rounded-md bg-muted p-1">
               {FILTER_TABS.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setUIFilter(tab.key)}
                   className={`flex-1 px-3 py-1.5 text-sm rounded-md transition-colors ${
                     uiFilter === tab.key
-                      ? 'bg-card text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
+                      ? 'bg-background text-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   {tab.label}
@@ -107,11 +107,11 @@ export default function NotificationCenter({
                 <div className="space-y-3">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="animate-pulse">
-                      <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                        <div className="w-8 h-8 bg-gray-300 dark:bg-muted-foreground/30 rounded-full" />
+                      <div className="flex items-start gap-3 rounded-md bg-muted p-3">
+                        <div className="h-8 w-8 rounded-md bg-muted-foreground/20" />
                         <div className="flex-1">
-                          <div className="h-4 bg-gray-300 dark:bg-muted-foreground/30 rounded mb-2" />
-                          <div className="h-3 bg-gray-300 dark:bg-muted-foreground/30 rounded w-3/4" />
+                          <div className="mb-2 h-4 rounded bg-muted-foreground/20" />
+                          <div className="h-3 w-3/4 rounded bg-muted-foreground/20" />
                         </div>
                       </div>
                     </div>

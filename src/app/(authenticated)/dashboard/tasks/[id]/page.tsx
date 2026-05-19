@@ -110,7 +110,7 @@ export default function TaskDetailPage() {
       <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
         <div className="max-w-3xl mx-auto">
           <Breadcrumb items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }]} className="mb-4" />
-          <div className="bg-card rounded-xl border border-red-200 p-6 text-red-600">
+          <div className="bg-card rounded-lg border border-red-200 p-6 text-red-600">
             {error || 'Task not found'}
           </div>
         </div>
@@ -137,14 +137,14 @@ export default function TaskDetailPage() {
               onClick={requestArchiveConfirm}
               variant="ghost"
               size="sm"
-              className="text-red-600 hover:bg-red-50"
+              className="text-red-600 hover:bg-destructive/10"
             >
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
           <div className="p-6">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>

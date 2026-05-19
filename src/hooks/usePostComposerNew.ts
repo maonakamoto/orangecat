@@ -5,6 +5,7 @@ import type { TimelineVisibility, TimelineDisplayEvent } from '@/types/timeline'
 import { usePostDraft } from '@/hooks/usePostDraft';
 import { fetchUserProjects, type UserProject } from '@/services/timeline/utils/post-composer';
 import { usePostSubmission } from './usePostSubmission';
+import { TIMELINE_CONTENT_LIMITS } from '@/config/timeline';
 
 export interface PostComposerOptions {
   subjectType?: 'profile' | 'project';
@@ -56,7 +57,7 @@ export function usePostComposer(options: PostComposerOptions = {}): PostComposer
     debounceMs = 300,
     enableDrafts = true,
     enableRetry = true,
-    maxLength = 500,
+    maxLength = TIMELINE_CONTENT_LIMITS.post,
     parentEventId,
   } = options;
 

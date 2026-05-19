@@ -38,7 +38,7 @@ export function GuidancePanel({
   if (!activeField) {
     return (
       <div className="sticky top-4">
-        <div className="p-4 rounded-xl border border-orange-200 bg-orange-50/60">
+        <div className="p-4 rounded-lg border border-orange-200 bg-orange-50/60">
           <h2 className="font-semibold text-foreground mb-2">{defaultGuidance.title}</h2>
           <p className="text-sm text-foreground mb-3">{defaultGuidance.description}</p>
           <ul className="text-sm text-foreground space-y-2">

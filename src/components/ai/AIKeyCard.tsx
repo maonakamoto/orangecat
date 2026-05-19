@@ -29,7 +29,7 @@ export function AIKeyCard({ apiKey: key, isLoading, onSetPrimary, onDelete }: AI
               key.is_valid ? 'bg-green-100' : 'bg-red-100'
             )}
           >
-            <Key className={cn('w-5 h-5', key.is_valid ? 'text-green-600' : 'text-red-600')} />
+            <Key className={cn('w-5 h-5', key.is_valid ? 'text-green-600' : 'text-destructive')} />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -81,7 +81,7 @@ export function AIKeyCard({ apiKey: key, isLoading, onSetPrimary, onDelete }: AI
             variant="ghost"
             size="sm"
             onClick={() => onDelete(key)}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
             title="Delete key"
           >
             <Trash2 className="w-4 h-4" />

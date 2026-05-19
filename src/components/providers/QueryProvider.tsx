@@ -39,7 +39,7 @@ export function QueryProvider({ children }: QueryProviderProps) {
 
             // Retry failed requests twice with exponential backoff
             retry: 2,
-            retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+            retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
           },
           mutations: {
             // Retry mutations once

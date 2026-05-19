@@ -3,7 +3,6 @@
 import EntityDashboardPage from '@/components/entity/EntityDashboardPage';
 import { documentEntityConfig, type DocumentListItem } from '@/config/entities/documents';
 import { Cat } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 
 /**
  * Documents Dashboard Page
@@ -15,22 +14,19 @@ import { GRADIENTS } from '@/config/gradients';
  * Last Modified Summary: Migrated to EntityDashboardPage for consistent UX (adds delete, error handling, bulk selection)
  */
 
-function MyCatInfoBanner() {
+function CatInfoBanner() {
   return (
-    <div
-      className={`${GRADIENTS.sectionTiffanyMuted} border border-tiffany-200 rounded-lg p-4 mb-4`}
-    >
+    <div className="mb-4 rounded-md border border-border-subtle bg-muted/30 p-4">
       <div className="flex items-start gap-3">
-        <div className="p-2 bg-tiffany-100 rounded-full">
-          <Cat className="h-5 w-5 text-tiffany-600" />
+        <div className="rounded-md border border-border-subtle bg-background p-2">
+          <Cat className="h-5 w-5 text-foreground" />
         </div>
         <div>
-          <h3 className="font-medium text-tiffany-900">Help My Cat help you</h3>
-          <p className="text-sm text-tiffany-700 mt-1">
-            The more context you provide, the better advice My Cat can give. Add documents about
-            your goals, skills, financial situation, or business plans. Only documents marked{' '}
-            <span className="font-medium">&ldquo;My Cat Only&rdquo;</span> or{' '}
-            <span className="font-medium">&ldquo;Public&rdquo;</span> will be visible to My Cat.
+          <h3 className="font-medium text-foreground">Help your Cat understand you</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Add documents about your goals, skills, financial situation, or business plans. Only
+            documents marked <span className="font-medium">&ldquo;Cat Only&rdquo;</span> or{' '}
+            <span className="font-medium">&ldquo;Public&rdquo;</span> are visible to your Cat.
           </p>
         </div>
       </div>
@@ -42,10 +38,10 @@ export default function DocumentsPage() {
   return (
     <EntityDashboardPage<DocumentListItem>
       config={documentEntityConfig}
-      title="My Cat Context"
-      description="Add documents to help My Cat understand your goals, skills, and situation"
+      title="Cat Context"
+      description="Add documents to help your Cat understand your goals, skills, and situation"
       createButtonLabel="Add Context"
-      headerContent={<MyCatInfoBanner />}
+      headerContent={<CatInfoBanner />}
     />
   );
 }

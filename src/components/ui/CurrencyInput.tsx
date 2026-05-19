@@ -89,7 +89,7 @@ export function CurrencyInput({
             onBlur={() => handleBlur(onBlur)}
             placeholder={placeholder || (inputCurrency === 'SATS' ? '0' : '0.00')}
             disabled={disabled}
-            className={`rounded-r-none ${error ? 'border-red-500' : ''}`}
+            className={`rounded-r-none ${error ? 'border-destructive' : ''}`}
           />
 
           {allowCurrencySwitch ? (
@@ -97,7 +97,7 @@ export function CurrencyInput({
               value={inputCurrency}
               onChange={e => handleCurrencyChange(e.target.value as Currency)}
               disabled={disabled}
-              className="px-3 py-2 border border-l-0 border-border-strong rounded-r-md bg-muted text-sm font-medium text-foreground focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer"
+              className="px-3 py-2 border border-l-0 border-border-strong rounded-r-md bg-muted text-sm font-medium text-foreground focus:ring-2 focus:ring-ring focus:border-ring cursor-pointer"
             >
               {ALL_CURRENCIES.map(curr => (
                 <option key={curr} value={curr}>
@@ -113,7 +113,7 @@ export function CurrencyInput({
         </div>
       </div>
 
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && <p className="text-destructive text-sm">{error}</p>}
       {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
 
       {!error && !hint && value && value > 0 && (

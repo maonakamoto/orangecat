@@ -38,12 +38,12 @@ function DocumentPageContent() {
   if (loadError) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <h2 className="text-lg font-semibold text-red-800 mb-2">Error</h2>
-          <p className="text-red-600 mb-4">{loadError}</p>
+        <div className="oc-error-surface p-6 text-center">
+          <h2 className="text-lg font-semibold mb-2">Error</h2>
+          <p className="mb-4 text-destructive/80">{loadError}</p>
           <button
             onClick={() => router.push(`${ROUTES.DASHBOARD.CAT}?tab=context`)}
-            className="text-sm text-red-700 hover:text-red-800 underline"
+            className="text-sm text-destructive underline hover:text-destructive/80"
           >
             Back to My Context
           </button>

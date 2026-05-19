@@ -28,7 +28,7 @@ export default function BitcoinWalletGuidePage() {
           <div className="flex items-center justify-between h-16">
             <Link
               href="/"
-              className="flex items-center gap-2 text-muted-foreground hover:text-gray-900 dark:hover:text-foreground transition-colors"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               Back to OrangeCat
@@ -45,7 +45,7 @@ export default function BitcoinWalletGuidePage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-3 p-4 rounded-2xl mb-6 bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20">
+          <div className="inline-flex items-center gap-3 p-4 rounded-lg mb-6 bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20">
             <Bitcoin className="w-12 h-12" />
             <div className="text-left">
               <h1 className="text-3xl md:text-4xl font-bold text-foreground">

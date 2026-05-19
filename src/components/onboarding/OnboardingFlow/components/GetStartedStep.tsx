@@ -51,13 +51,13 @@ export function GetStartedStep({ hasWallet = false, hasProjects = false }: GetSt
 
       {/* Primary CTA - Create Project */}
       <Card
-        className="border-2 border-orange-300 bg-gradient-to-r from-orange-50 to-orange-100 hover:border-orange-400 hover:shadow-lg transition-all cursor-pointer"
+        className="oc-card-link cursor-pointer border-2 border-border-strong bg-muted/30"
         onClick={() => router.push(ROUTES.PROJECTS.CREATE)}
       >
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-start gap-3 sm:gap-4">
-              <div className="p-2 sm:p-3 bg-orange-500 rounded-xl flex-shrink-0">
+              <div className="p-2 sm:p-3 bg-orange-500 rounded-lg flex-shrink-0">
                 <Target className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
               <div>

@@ -9,7 +9,7 @@ import {
   handleApiError,
 } from '@/lib/api/standardResponse';
 import { logger } from '@/utils/logger';
-import {  rateLimitWriteAsync , retryAfterSeconds } from '@/lib/rate-limit';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 
 // Schema for creating a conversation
 const createConversationSchema = z.object({

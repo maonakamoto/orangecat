@@ -88,9 +88,7 @@ async function handleGetFavorites(request: AuthenticatedRequest) {
     // Fetch profiles separately for each project creator
     const userIds = [
       ...new Set(
-        (projects || [])
-          .map((p: ProjectRow) => p.user_id)
-          .filter((id): id is string => Boolean(id))
+        (projects || []).map((p: ProjectRow) => p.user_id).filter((id): id is string => Boolean(id))
       ),
     ];
     const profilesMap = new Map<string, ProfileRow>();
@@ -111,8 +109,7 @@ async function handleGetFavorites(request: AuthenticatedRequest) {
     // Map projects with favorite metadata and profiles
     const projectsWithFavorite = (projects || []).map((project: ProjectRow) => ({
       ...project,
-      favorited_at: (favorites as FavoriteRow[]).find(f => f.project_id === project.id)
-        ?.created_at,
+      favorited_at: (favorites as FavoriteRow[]).find(f => f.project_id === project.id)?.created_at,
       profiles: project.user_id ? profilesMap.get(project.user_id) : null,
     }));
 

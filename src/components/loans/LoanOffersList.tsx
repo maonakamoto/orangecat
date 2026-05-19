@@ -42,7 +42,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
   return (
     <div className="space-y-4">
       {offers.map(offer => (
-        <Card key={offer.id} className="hover:shadow-md transition-shadow">
+        <Card key={offer.id} className="oc-card-link">
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between">
               <div className="flex-1">
@@ -128,7 +128,11 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
                       <MessageSquare className="h-3 w-3" />
                       Message
                     </Button>
-                    <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-destructive hover:text-destructive/80"
+                    >
                       Cancel Offer
                     </Button>
                   </>
