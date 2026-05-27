@@ -18,6 +18,7 @@ import {
   getEntityMetadata,
 } from '@/config/entity-registry';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
+import { ENTITY_STATUS } from '@/config/database-constants';
 
 // Entity-specific column selections for optimal queries
 const ENTITY_COLUMNS: Record<EntityType, string> = {
@@ -106,7 +107,7 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
       .from(tableName)
       .select(columns)
       .eq(userIdField, filterValue)
-      .neq('status', 'draft') // Exclude drafts from public profile
+      .neq('status', ENTITY_STATUS.DRAFT) // Exclude drafts from public profile
       .order('created_at', { ascending: false });
 
     // Add show_on_profile filter (exclude false, keep true and null)

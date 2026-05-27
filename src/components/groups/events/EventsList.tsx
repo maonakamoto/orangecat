@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import {
@@ -43,8 +43,10 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<EventStatusFilter>('upcoming');
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const loadIdRef = useRef(0);
 
   const loadEvents = useCallback(async () => {
+    const myLoadId = ++loadIdRef.current;
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -54,26 +56,40 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
       params.append('limit', '50');
 
       const response = await fetch(`${API_ROUTES.GROUPS.EVENTS(groupSlug)}?${params.toString()}`);
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       if (!response.ok) {
         throw new Error('Failed to load events');
       }
 
       const data = await response.json();
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       if (data.success) {
         setEvents(data.data?.events || []);
       } else {
         throw new Error(data.error || 'Failed to load events');
       }
     } catch (error) {
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       logger.error('Failed to load events:', error);
       toast.error('Failed to load events');
     } finally {
-      setLoading(false);
+      if (myLoadId === loadIdRef.current) {
+        setLoading(false);
+      }
     }
   }, [groupSlug, statusFilter]);
 
   useEffect(() => {
     loadEvents();
+    return () => {
+      loadIdRef.current++;
+    };
   }, [groupId, statusFilter, loadEvents]);
 
   const handleEventCreated = () => {

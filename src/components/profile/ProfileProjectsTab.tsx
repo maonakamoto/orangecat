@@ -50,25 +50,41 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!profile.id) {
+      return;
+    }
+    const controller = new AbortController();
     const fetchProjects = async () => {
       try {
         setLoading(true);
-        const response = await fetch(API_ROUTES.PROFILES.PROJECTS(profile.id));
+        const response = await fetch(API_ROUTES.PROFILES.PROJECTS(profile.id), {
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) {
+          return;
+        }
         const result = await response.json();
+        if (controller.signal.aborted) {
+          return;
+        }
 
         if (result.success && result.data && Array.isArray(result.data.data)) {
           setProjects(result.data.data);
         }
       } catch (error) {
+        if ((error as { name?: string }).name === 'AbortError') {
+          return;
+        }
         logger.error('Failed to fetch projects:', error);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
-    if (profile.id) {
-      fetchProjects();
-    }
+    fetchProjects();
+    return () => controller.abort();
   }, [profile.id]);
 
   if (loading) {

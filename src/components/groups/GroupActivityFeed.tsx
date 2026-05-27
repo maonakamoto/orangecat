@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -92,31 +92,45 @@ export function GroupActivityFeed({ groupSlug }: Props) {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState(false);
 
-  const fetchActivities = useCallback(async () => {
-    try {
-      const res = await fetch(API_ROUTES.GROUPS.ACTIVITIES(groupSlug));
-      if (res.ok) {
-        const data = await res.json();
-        setActivities(data.data?.activities ?? []);
-      } else {
-        logger.error(
-          'Failed to fetch group activities',
-          { status: res.status },
-          'GroupActivityFeed'
-        );
-        setFetchError(true);
-      }
-    } catch (e) {
-      logger.error('Failed to fetch group activities', { error: e }, 'GroupActivityFeed');
-      setFetchError(true);
-    } finally {
-      setLoading(false);
-    }
-  }, [groupSlug]);
-
   useEffect(() => {
+    const controller = new AbortController();
+    const fetchActivities = async () => {
+      try {
+        const res = await fetch(API_ROUTES.GROUPS.ACTIVITIES(groupSlug), {
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) {
+          return;
+        }
+        if (res.ok) {
+          const data = await res.json();
+          if (controller.signal.aborted) {
+            return;
+          }
+          setActivities(data.data?.activities ?? []);
+        } else {
+          logger.error(
+            'Failed to fetch group activities',
+            { status: res.status },
+            'GroupActivityFeed'
+          );
+          setFetchError(true);
+        }
+      } catch (e) {
+        if ((e as { name?: string }).name === 'AbortError') {
+          return;
+        }
+        logger.error('Failed to fetch group activities', { error: e }, 'GroupActivityFeed');
+        setFetchError(true);
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    };
     void fetchActivities();
-  }, [fetchActivities]);
+    return () => controller.abort();
+  }, [groupSlug]);
 
   if (loading) {
     return (

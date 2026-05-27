@@ -79,22 +79,6 @@ export function DashboardStatSkeleton() {
   );
 }
 
-export function CommentSkeleton() {
-  return (
-    <div className="flex gap-3 p-3">
-      <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
-      <div className="flex-1 space-y-2">
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-3 w-16" />
-        </div>
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-3/4" />
-      </div>
-    </div>
-  );
-}
-
 export function ListItemSkeleton() {
   return (
     <div className="flex items-center gap-4 p-4 border-b border-border">
@@ -124,31 +108,6 @@ export function GridSkeleton({ count = 6, children, className }: GridSkeletonPro
   );
 }
 
-export function TableRowSkeleton({ columns = 4 }: { columns?: number }) {
-  return (
-    <div className="flex items-center gap-4 p-4 border-b border-border">
-      {Array.from({ length: columns }).map((_, index) => (
-        <Skeleton
-          key={index}
-          className={cn('h-4', index === 0 ? 'w-32' : index === columns - 1 ? 'w-20' : 'flex-1')}
-        />
-      ))}
-    </div>
-  );
-}
-
-export function AvatarNameSkeleton() {
-  return (
-    <div className="flex items-center gap-3">
-      <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="h-3 w-24" />
-      </div>
-    </div>
-  );
-}
-
 export function PageHeaderSkeleton() {
   return (
     <div className="space-y-4">
@@ -156,11 +115,6 @@ export function PageHeaderSkeleton() {
       <Skeleton className="h-4 w-96" />
     </div>
   );
-}
-
-export function ButtonSkeleton({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
-  const heights = { sm: 'h-9', md: 'h-11', lg: 'h-12' };
-  return <Skeleton className={cn(heights[size], 'w-24 rounded-lg')} />;
 }
 
 export function LoanCardSkeleton({ viewMode = 'grid' }: { viewMode?: 'grid' | 'list' }) {

@@ -84,19 +84,3 @@ export const Z_INDEX_CLASSES = {
   // Debug layers
   DEBUG: 'z-[1000]',
 } as const;
-
-/**
- * Get the appropriate z-index for a component type
- * Useful for dynamic z-index assignment
- */
-export function getZIndex(layer: keyof typeof Z_INDEX): number {
-  return Z_INDEX[layer];
-}
-
-/**
- * Get the appropriate z-index class for a component type
- * Useful for Tailwind class assignment
- */
-export function getZIndexClass(layer: keyof typeof Z_INDEX_CLASSES): string {
-  return Z_INDEX_CLASSES[layer];
-}

@@ -1,9 +1,4 @@
-import {
-  formatDate,
-  formatTime,
-  formatDateTime,
-  formatRelativeTime,
-} from '@/utils/dates';
+import { formatDate, formatTime, formatRelativeTime } from '@/utils/dates';
 
 describe('formatDate', () => {
   it('formats a Date object to "MMM d, yyyy"', () => {
@@ -35,16 +30,6 @@ describe('formatTime', () => {
 
   it('formats a time string', () => {
     expect(formatTime('2025-06-01T18:45:00')).toBe('6:45 PM');
-  });
-});
-
-describe('formatDateTime', () => {
-  it('formats a Date object to "MMM d, yyyy h:mm a"', () => {
-    expect(formatDateTime(new Date('2025-01-15T09:05:00'))).toBe('Jan 15, 2025 9:05 AM');
-  });
-
-  it('formats a date string', () => {
-    expect(formatDateTime('2024-07-04T14:30:00')).toBe('Jul 4, 2024 2:30 PM');
   });
 });
 

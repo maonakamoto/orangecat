@@ -39,19 +39,34 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
   const [fetchFailed, setFetchFailed] = useState(false);
 
   useEffect(() => {
+    if (!projectId) {
+      return;
+    }
+    const controller = new AbortController();
     const fetchUpdates = async () => {
       try {
         setLoading(true);
-        const response = await fetch(API_ROUTES.PROJECTS.UPDATES(projectId));
+        const response = await fetch(API_ROUTES.PROJECTS.UPDATES(projectId), {
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) {
+          return;
+        }
 
         if (response.ok) {
           const data = await response.json();
+          if (controller.signal.aborted) {
+            return;
+          }
           setUpdates(data.data?.updates || []);
         } else {
           logger.warn('Failed to fetch project updates', { projectId }, 'ProjectUpdatesTimeline');
           setFetchFailed(true);
         }
       } catch (error) {
+        if ((error as { name?: string }).name === 'AbortError') {
+          return;
+        }
         logger.error(
           'Error fetching project updates',
           { projectId, error },
@@ -59,13 +74,14 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
         );
         setFetchFailed(true);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
-    if (projectId) {
-      fetchUpdates();
-    }
+    fetchUpdates();
+    return () => controller.abort();
   }, [projectId]);
 
   // Get icon based on update type

@@ -43,30 +43,51 @@ export default function AIAssistantChatPage() {
     if (!assistantId) {
       return;
     }
+    const controller = new AbortController();
 
     const loadData = async () => {
       try {
-        // Load assistant details
-        const assistantRes = await fetch(API_ROUTES.AI_ASSISTANTS.BY_ID(assistantId));
+        const assistantRes = await fetch(API_ROUTES.AI_ASSISTANTS.BY_ID(assistantId), {
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) {
+          return;
+        }
         if (assistantRes.ok) {
           const data = await assistantRes.json();
+          if (controller.signal.aborted) {
+            return;
+          }
           setAssistant(data.data || data);
         }
 
-        // Load existing conversations
-        const convsRes = await fetch(API_ROUTES.AI_ASSISTANTS.CONVERSATIONS(assistantId));
+        const convsRes = await fetch(API_ROUTES.AI_ASSISTANTS.CONVERSATIONS(assistantId), {
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) {
+          return;
+        }
         if (convsRes.ok) {
           const data = await convsRes.json();
+          if (controller.signal.aborted) {
+            return;
+          }
           setConversations(data.data || []);
         }
       } catch (err) {
+        if ((err as { name?: string }).name === 'AbortError') {
+          return;
+        }
         logger.error('Error loading data', err, 'AI');
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     };
 
     loadData();
+    return () => controller.abort();
   }, [assistantId]);
 
   const handleNewConversation = async () => {

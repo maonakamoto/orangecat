@@ -2,7 +2,6 @@ import {
   isBitcoinNativeCurrency,
   isFiatCurrency,
   getGoalExplanation,
-  getCurrencyHint,
 } from '@/utils/currency-helpers';
 import type { Currency } from '@/types/settings';
 
@@ -94,29 +93,5 @@ describe('getGoalExplanation', () => {
 
   it('returns different strings for isGoal=true vs isGoal=false (CHF)', () => {
     expect(getGoalExplanation('CHF', true)).not.toBe(getGoalExplanation('CHF', false));
-  });
-});
-
-describe('getCurrencyHint', () => {
-  const currencies: Currency[] = ['BTC', 'SATS', 'CHF', 'USD', 'EUR', 'GBP'];
-
-  for (const currency of currencies) {
-    it(`returns a non-empty string for ${currency}`, () => {
-      const result = getCurrencyHint(currency);
-      expect(typeof result).toBe('string');
-      expect(result.length).toBeGreaterThan(0);
-    });
-  }
-
-  it('returns a BTC-specific hint for BTC', () => {
-    expect(getCurrencyHint('BTC')).toMatch(/bitcoin/i);
-  });
-
-  it('returns a SATS-specific hint for SATS', () => {
-    expect(getCurrencyHint('SATS')).toMatch(/bitcoin/i);
-  });
-
-  it('returns a fiat hint for CHF', () => {
-    expect(getCurrencyHint('CHF')).toMatch(/fiat/i);
   });
 });

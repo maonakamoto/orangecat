@@ -29,6 +29,7 @@ import {
 } from '@/config/entity-registry';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { checkOwnership } from '@/services/actors';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import { z } from 'zod';
 import {
   CLIENT_STATUS_INTENTS,
@@ -96,7 +97,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
       return apiNotFound(`${entityType} not found`);
     }
 
-    const currentStatus = (existing.status || 'draft').toLowerCase();
+    const currentStatus = (existing.status || ENTITY_STATUS.DRAFT).toLowerCase();
     const allowedTransitions = getAllowedStatusTransitions(currentStatus);
     if (!allowedTransitions.includes(newStatus)) {
       return apiValidationError(

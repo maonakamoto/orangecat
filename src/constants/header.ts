@@ -63,18 +63,6 @@ export const HEADER_BUTTON_BASE = {
 } as const;
 
 /**
- * Animation durations
- */
-export const HEADER_ANIMATIONS = {
-  /** Header scroll animation */
-  SCROLL_DURATION: 'duration-200',
-  /** Mobile menu animation */
-  MENU_DURATION: 'duration-300',
-  /** Mobile menu animation in ms (for JS) */
-  MENU_DURATION_MS: 300,
-} as const;
-
-/**
  * Mobile menu constants
  */
 export const MOBILE_MENU = {

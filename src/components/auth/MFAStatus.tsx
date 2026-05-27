@@ -19,19 +19,30 @@ export function MFAStatus({
   const [error, setError] = useState<string | null>(null);
 
   React.useEffect(() => {
+    let cancelled = false;
     const loadFactors = async () => {
       try {
         const { verifiedFactors, error: factorsError } = await getMFAFactors();
+        if (cancelled) {
+          return;
+        }
         if (!factorsError && verifiedFactors) {
           setFactors(verifiedFactors);
         }
       } catch {
-        setError('Failed to load MFA status');
+        if (!cancelled) {
+          setError('Failed to load MFA status');
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
     loadFactors();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleDisable = async (factorId: string) => {

@@ -405,27 +405,6 @@ export function getProvidersByType(type: AIProvider['type']): AIProvider[] {
 }
 
 /**
- * Get providers by difficulty
- */
-export function getProvidersByDifficulty(difficulty: AIProvider['difficulty']): AIProvider[] {
-  return aiProviders.filter(p => p.difficulty === difficulty);
-}
-
-/**
- * Get aggregator providers (easier for beginners)
- */
-export function getAggregatorProviders(): AIProvider[] {
-  return getProvidersByType('aggregator');
-}
-
-/**
- * Get direct providers
- */
-export function getDirectProviders(): AIProvider[] {
-  return getProvidersByType('direct');
-}
-
-/**
  * Validate API key format for a provider
  */
 export function validateApiKeyFormat(

@@ -5,6 +5,7 @@ import { withOptionalAuth } from '@/lib/api/withAuth';
 import { getTableName } from '@/config/entity-registry';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import { STORAGE_BUCKETS } from '@/config/database-tables';
+import { ENTITY_STATUS } from '@/config/database-constants';
 
 interface RouteContext {
   params: Promise<{ userId: string }>;
@@ -48,7 +49,7 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
       `
       )
       .eq('actor_id', actor.id)
-      .neq('status', 'draft') // Exclude drafts from public profile view
+      .neq('status', ENTITY_STATUS.DRAFT) // Exclude drafts from public profile view
       .order('created_at', { ascending: false });
 
     if (projectsError) {

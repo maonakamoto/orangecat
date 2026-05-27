@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import {
@@ -50,8 +50,11 @@ export function ProposalsList({
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<ProposalStatusFilter>('all');
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  // Monotonic load id — only the most recent load writes state.
+  const loadIdRef = useRef(0);
 
   const loadProposals = useCallback(async () => {
+    const myLoadId = ++loadIdRef.current;
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -63,11 +66,17 @@ export function ProposalsList({
       const response = await fetch(
         `${API_ROUTES.GROUPS.PROPOSALS(groupSlug)}?${params.toString()}`
       );
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       if (!response.ok) {
         throw new Error('Failed to load proposals');
       }
 
       const data = await response.json();
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       if (data.success) {
         setProposals(
           (data.data?.proposals || []).map(
@@ -81,15 +90,23 @@ export function ProposalsList({
         throw new Error(data.error || 'Failed to load proposals');
       }
     } catch (error) {
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       logger.error('Failed to load proposals:', error);
       toast.error('Failed to load proposals');
     } finally {
-      setLoading(false);
+      if (myLoadId === loadIdRef.current) {
+        setLoading(false);
+      }
     }
   }, [groupSlug, statusFilter]);
 
   useEffect(() => {
     loadProposals();
+    return () => {
+      loadIdRef.current++;
+    };
   }, [groupId, statusFilter, loadProposals]);
 
   const handleProposalCreated = () => {

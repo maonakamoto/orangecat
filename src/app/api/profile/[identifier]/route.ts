@@ -3,6 +3,7 @@ import { withOptionalAuth } from '@/lib/api/withAuth';
 import { apiSuccess, apiNotFound, handleApiError } from '@/lib/api/standardResponse';
 import { getTableName } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 
 /**
@@ -126,7 +127,7 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
         .from(getTableName('project'))
         .select('*', { count: 'exact', head: true })
         .eq('actor_id', actor.id)
-        .neq('status', 'draft'); // Exclude drafts from public view
+        .neq('status', ENTITY_STATUS.DRAFT); // Exclude drafts from public view
       projectCount = count || 0;
     } catch {
       // Non-fatal: profile still returned without count

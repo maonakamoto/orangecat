@@ -9,18 +9,6 @@
  */
 
 /**
- * Sidebar width constants
- */
-export const SIDEBAR_WIDTHS = {
-  EXPANDED: 'w-64', // 256px - Full expanded (when manually opened)
-  HOVER_EXPANDED: 'w-52', // 208px - Expanded on hover to show text labels (icons + words)
-  COLLAPSED: 'w-16', // 64px - Narrow with icons only (default) - just enough for icons with minimal padding
-  EXPANDED_PX: 256,
-  HOVER_EXPANDED_PX: 208,
-  COLLAPSED_PX: 64,
-} as const;
-
-/**
  * Z-index constants for sidebar and related elements
  */
 export const SIDEBAR_Z_INDEX = {
@@ -40,15 +28,6 @@ export const SIDEBAR_TRANSITIONS = {
   DURATION: 'duration-300',
   EASING: 'ease-in-out',
   DURATION_MS: 300,
-} as const;
-
-/**
- * Sidebar breakpoints
- */
-export const SIDEBAR_BREAKPOINTS = {
-  MOBILE: 'lg:hidden',
-  DESKTOP: 'hidden lg:block',
-  DESKTOP_BREAKPOINT: 1024, // lg breakpoint in Tailwind
 } as const;
 
 /**

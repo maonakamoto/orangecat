@@ -66,26 +66,42 @@ export function useProfileEntityTab(profile: ScalableProfile, entityType: Entity
   const displayName = metadata?.namePlural || entityType;
 
   useEffect(() => {
+    if (!profile.id) {
+      return;
+    }
+    const controller = new AbortController();
     const fetchEntities = async () => {
       try {
         setLoading(true);
-        const response = await fetch(API_ROUTES.PROFILES.ENTITIES(profile.id, entityType));
+        const response = await fetch(API_ROUTES.PROFILES.ENTITIES(profile.id, entityType), {
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) {
+          return;
+        }
         const result = await response.json();
+        if (controller.signal.aborted) {
+          return;
+        }
 
         if (result.success && result.data) {
           setEntities(result.data.data || []);
           setMetadata(result.data.metadata || null);
         }
       } catch (error) {
+        if ((error as { name?: string }).name === 'AbortError') {
+          return;
+        }
         logger.error('Failed to fetch entities:', error);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
-    if (profile.id) {
-      fetchEntities();
-    }
+    fetchEntities();
+    return () => controller.abort();
   }, [profile.id, entityType]);
 
   const getTitle = (entity: EntityData) => entity.title || entity.name || 'Untitled';

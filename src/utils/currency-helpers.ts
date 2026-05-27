@@ -49,16 +49,3 @@ export function getGoalExplanation(currency: Currency, isGoal: boolean = true): 
       : 'Fiat amount: Will be converted to Bitcoin when sending transactions';
   }
 }
-
-/**
- * Get a short hint for currency selection
- */
-export function getCurrencyHint(currency: Currency): string {
-  if (currency === 'BTC') {
-    return 'Bitcoin-native: No fractions, direct BTC amounts';
-  } else if (currency === 'SATS') {
-    return 'Bitcoin: All amounts stored in BTC';
-  } else {
-    return 'Fiat: Can benefit from Bitcoin price appreciation';
-  }
-}
