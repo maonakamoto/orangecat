@@ -50,24 +50,41 @@ export function WishlistDonationTiers({
   const userCurrency = useUserCurrency();
 
   useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
+    const controller = new AbortController();
     const fetchTiers = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(API_ROUTES.PROFILES.WISHLIST_TIERS(userId));
+        const response = await fetch(API_ROUTES.PROFILES.WISHLIST_TIERS(userId), {
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) {
+          return;
+        }
         if (response.ok) {
           const data = await response.json();
+          if (controller.signal.aborted) {
+            return;
+          }
           setItems(data.data?.items || []);
         }
       } catch (error) {
+        if ((error as { name?: string }).name === 'AbortError') {
+          return;
+        }
         logger.error('Failed to fetch wishlist tiers', error, 'Wishlist');
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     };
 
-    if (userId) {
-      fetchTiers();
-    }
+    fetchTiers();
+    return () => controller.abort();
   }, [userId]);
 
   const handleTierClick = (item: WishlistItem) => {

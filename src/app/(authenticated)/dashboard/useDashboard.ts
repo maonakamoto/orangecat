@@ -42,11 +42,24 @@ export function useDashboard() {
   }, [hydrated]);
 
   useEffect(() => {
-    if (user?.id && hydrated) {
-      getPendingActions()
-        .then(actions => setPendingActions(actions))
-        .catch(error => logger.error('Failed to load pending actions', { error }, 'Dashboard'));
+    if (!user?.id || !hydrated) {
+      return;
     }
+    let cancelled = false;
+    getPendingActions()
+      .then(actions => {
+        if (!cancelled) {
+          setPendingActions(actions);
+        }
+      })
+      .catch(error => {
+        if (!cancelled) {
+          logger.error('Failed to load pending actions', { error }, 'Dashboard');
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [user?.id, hydrated, getPendingActions]);
 
   useEffect(() => {

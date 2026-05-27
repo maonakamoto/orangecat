@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/Button';
@@ -48,6 +48,8 @@ export function ProposalDetail({
   const [loading, setLoading] = useState(true);
   const [userVote, setUserVote] = useState<'yes' | 'no' | 'abstain' | null>(null);
   const [activating, setActivating] = useState(false);
+  // Monotonic load id — only the most recent load may write state.
+  const loadIdRef = useRef(0);
 
   const loadUserVote = useCallback(async () => {
     if (!user) {
@@ -72,14 +74,21 @@ export function ProposalDetail({
   }, [user, groupSlug, proposalId]);
 
   const loadProposal = useCallback(async () => {
+    const myLoadId = ++loadIdRef.current;
     try {
       setLoading(true);
       const response = await fetch(API_ROUTES.GROUPS.PROPOSAL(groupSlug, proposalId));
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       if (!response.ok) {
         throw new Error('Failed to load proposal');
       }
 
       const data = await response.json();
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       if (data.success || data.data) {
         setProposal(data.data?.proposal || data.proposal || data.data);
         // Load user's vote if exists
@@ -90,15 +99,24 @@ export function ProposalDetail({
         throw new Error(data.error || 'Failed to load proposal');
       }
     } catch (error) {
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       logger.error('Failed to load proposal:', error);
       toast.error('Failed to load proposal');
     } finally {
-      setLoading(false);
+      if (myLoadId === loadIdRef.current) {
+        setLoading(false);
+      }
     }
   }, [groupSlug, proposalId, user, loadUserVote]);
 
   useEffect(() => {
     loadProposal();
+    return () => {
+      // Bump id so any in-flight loads are ignored.
+      loadIdRef.current++;
+    };
   }, [proposalId, loadProposal]);
 
   const handleActivate = async () => {

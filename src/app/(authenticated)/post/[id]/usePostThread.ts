@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { logger } from '@/utils/logger';
 import { timelineService } from '@/services/timeline';
 import { TimelineDisplayEvent } from '@/types/timeline';
@@ -22,6 +22,8 @@ export function usePostThread(postId: string): UsePostThreadResult {
   const [replies, setReplies] = useState<TimelineDisplayEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Monotonic load id — only the most recent post fetch may write state.
+  const loadIdRef = useRef(0);
 
   const updateReplyTree = useCallback(
     (
@@ -66,10 +68,14 @@ export function usePostThread(postId: string): UsePostThreadResult {
     if (!postId) {
       return;
     }
+    const myLoadId = ++loadIdRef.current;
     setIsLoading(true);
     setError(null);
     try {
       const result = await timelineService.getEventById(postId);
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       if (!result.success || !result.event) {
         setError('Post not found');
         return;
@@ -81,6 +87,9 @@ export function usePostThread(postId: string): UsePostThreadResult {
         let currentParentId: string | undefined = result.event.parentEventId;
         for (let i = 0; i < 10 && currentParentId; i++) {
           const parentResult = await timelineService.getEventById(currentParentId);
+          if (myLoadId !== loadIdRef.current) {
+            return;
+          }
           if (parentResult.success && parentResult.event) {
             parents.unshift(parentResult.event);
             currentParentId = parentResult.event.parentEventId;
@@ -92,19 +101,31 @@ export function usePostThread(postId: string): UsePostThreadResult {
       }
 
       const repliesResult = await timelineService.getReplies(postId);
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       if (repliesResult.success && repliesResult.replies) {
         setReplies(repliesResult.replies);
       }
     } catch (err) {
+      if (myLoadId !== loadIdRef.current) {
+        return;
+      }
       logger.error('Error fetching post', err, 'Timeline');
       setError('Failed to load post');
     } finally {
-      setIsLoading(false);
+      if (myLoadId === loadIdRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [postId]);
 
   useEffect(() => {
     fetchPost();
+    return () => {
+      // Bump id so any in-flight load cannot setState after unmount or postId change.
+      loadIdRef.current++;
+    };
   }, [fetchPost]);
 
   const handlePostUpdate = useCallback(

@@ -38,19 +38,21 @@ export function useProfileEdit() {
   }, [profile]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash) {
-      const hash = window.location.hash.substring(1);
-      setTimeout(() => {
-        const element = document.getElementById(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          const input = element.querySelector('input, textarea');
-          if (input) {
-            (input as HTMLElement).focus();
-          }
-        }
-      }, 300);
+    if (typeof window === 'undefined' || !window.location.hash) {
+      return;
     }
+    const hash = window.location.hash.substring(1);
+    const id = setTimeout(() => {
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const input = element.querySelector('input, textarea');
+        if (input) {
+          (input as HTMLElement).focus();
+        }
+      }
+    }, 300);
+    return () => clearTimeout(id);
   }, []);
 
   const handleSave = async (data: ProfileFormData) => {

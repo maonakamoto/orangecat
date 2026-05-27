@@ -114,6 +114,10 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
           }
         });
 
+        if (abortController.signal.aborted) {
+          return;
+        }
+
         if (execResults?.some(r => r.status === 'pending_confirmation')) {
           onPendingResultRef.current?.();
         }

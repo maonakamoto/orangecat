@@ -22,6 +22,23 @@ export function useMessageView(conversationId: string, currentUserId: string | u
     message: Message | null;
   }>({ open: false, position: { x: 0, y: 0 }, message: null });
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  // Track read-receipt + mark-as-read delays so they don't fire after unmount or convo switch.
+  const pendingTimeoutsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+  const scheduleTimeout = useCallback((fn: () => void, ms: number) => {
+    const id = setTimeout(() => {
+      pendingTimeoutsRef.current.delete(id);
+      fn();
+    }, ms);
+    pendingTimeoutsRef.current.add(id);
+    return id;
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      pendingTimeoutsRef.current.forEach(id => clearTimeout(id));
+      pendingTimeoutsRef.current.clear();
+    };
+  }, [conversationId]);
 
   const {
     messages,
@@ -59,7 +76,7 @@ export function useMessageView(conversationId: string, currentUserId: string | u
             confirmMessage(tempMessages[tempMessages.length - 1].id, newMessage as Message);
           }
           setShouldAutoScroll(true);
-          setTimeout(() => refreshReadReceipts(), TIMING.READ_RECEIPT_RECALC_DELAY_MS);
+          scheduleTimeout(() => refreshReadReceipts(), TIMING.READ_RECEIPT_RECALC_DELAY_MS);
         }
       } catch {
         // Realtime will handle it
@@ -76,7 +93,7 @@ export function useMessageView(conversationId: string, currentUserId: string | u
       setShouldAutoScroll(true);
 
       if (message.sender_id !== currentUserId) {
-        setTimeout(() => markAsRead(), TIMING.MARK_READ_DEBOUNCE_MS);
+        scheduleTimeout(() => markAsRead(), TIMING.MARK_READ_DEBOUNCE_MS);
       }
     },
   });
@@ -110,7 +127,7 @@ export function useMessageView(conversationId: string, currentUserId: string | u
     (tempId: string, realMessage: Message) => {
       confirmMessage(tempId, realMessage);
       setShouldAutoScroll(true);
-      setTimeout(() => refreshReadReceipts(), TIMING.READ_RECEIPT_RECALC_DELAY_MS);
+      scheduleTimeout(() => refreshReadReceipts(), TIMING.READ_RECEIPT_RECALC_DELAY_MS);
     },
     [confirmMessage, refreshReadReceipts]
   );

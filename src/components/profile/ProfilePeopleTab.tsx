@@ -49,6 +49,11 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
   const [activeView, setActiveView] = useState<'following' | 'followers'>('followers');
 
   useEffect(() => {
+    if (!profile.id) {
+      return;
+    }
+
+    let cancelled = false;
     const fetchConnections = async () => {
       try {
         setLoading(true);
@@ -76,6 +81,9 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
             )
             .eq('follower_id', profile.id);
 
+          if (cancelled) {
+            return;
+          }
           if (!followingError && followingData) {
             const followingProfiles = (followingData as FollowWithProfile[])
               .map(item => item.profiles)
@@ -100,6 +108,9 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
             )
             .eq('following_id', profile.id);
 
+          if (cancelled) {
+            return;
+          }
           if (!followersError && followersData) {
             const followerProfiles = (followersData as FollowWithProfile[])
               .map(item => item.profiles)
@@ -110,8 +121,14 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
           // For other profiles, use API (will work if public data)
           // Fetch following
           const followingResponse = await fetch(API_ROUTES.SOCIAL.FOLLOWING(profile.id));
+          if (cancelled) {
+            return;
+          }
           if (followingResponse.ok) {
             const followingData = await followingResponse.json();
+            if (cancelled) {
+              return;
+            }
             if (followingData.success && followingData.data && followingData.data.data) {
               // Extract profiles from nested structure
               const followingProfiles = (followingData.data.data as FollowWithProfile[])
@@ -123,8 +140,14 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
 
           // Fetch followers
           const followersResponse = await fetch(API_ROUTES.SOCIAL.FOLLOWERS(profile.id));
+          if (cancelled) {
+            return;
+          }
           if (followersResponse.ok) {
             const followersData = await followersResponse.json();
+            if (cancelled) {
+              return;
+            }
             if (followersData.success && followersData.data && followersData.data.data) {
               // Extract profiles from nested structure
               const followerProfiles = (followersData.data.data as FollowWithProfile[])
@@ -135,15 +158,20 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
           }
         }
       } catch (error) {
-        logger.error('Failed to fetch connections:', error);
+        if (!cancelled) {
+          logger.error('Failed to fetch connections:', error);
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
-    if (profile.id) {
-      fetchConnections();
-    }
+    fetchConnections();
+    return () => {
+      cancelled = true;
+    };
   }, [profile.id, isOwnProfile, user?.id]);
 
   if (loading) {

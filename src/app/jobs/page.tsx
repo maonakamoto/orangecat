@@ -28,29 +28,39 @@ export default function JobsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadJobs();
+    const controller = new AbortController();
+    loadJobs(controller.signal);
+    return () => controller.abort();
   }, []);
 
-  const loadJobs = async () => {
+  const loadJobs = async (signal?: AbortSignal) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`${API_ROUTES.JOBS}?limit=50`);
+      const response = await fetch(`${API_ROUTES.JOBS}?limit=50`, { signal });
       if (!response.ok) {
         throw new Error('Failed to load job postings');
       }
 
       const data = await response.json();
+      if (signal?.aborted) {
+        return;
+      }
       if (data.success) {
         setJobs(data.data?.jobs || []);
       } else {
         throw new Error(data.error || 'Failed to load job postings');
       }
     } catch (err) {
+      if (signal?.aborted || (err as { name?: string }).name === 'AbortError') {
+        return;
+      }
       setError(err instanceof Error ? err.message : 'Failed to load job postings');
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
     }
   };
 
@@ -70,7 +80,7 @@ export default function JobsPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p className="text-destructive mb-4">{error}</p>
-            <Button onClick={loadJobs}>Try Again</Button>
+            <Button onClick={() => loadJobs()}>Try Again</Button>
           </CardContent>
         </Card>
       </div>

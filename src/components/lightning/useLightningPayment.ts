@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { useNostr } from '@/hooks/useNostr';
@@ -32,6 +32,7 @@ export function useLightningPayment({
   const { copied, copy } = useCopyToClipboard();
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [pollInterval, setPollInterval] = useState<ReturnType<typeof setInterval> | null>(null);
+  const pollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!invoice) {
@@ -55,6 +56,10 @@ export function useLightningPayment({
     return () => {
       if (pollInterval) {
         clearInterval(pollInterval);
+      }
+      if (pollTimeoutRef.current) {
+        clearTimeout(pollTimeoutRef.current);
+        pollTimeoutRef.current = null;
       }
     };
   }, [pollInterval]);
@@ -81,10 +86,14 @@ export function useLightningPayment({
         }
       }, 3000);
       setPollInterval(interval);
-      setTimeout(
+      if (pollTimeoutRef.current) {
+        clearTimeout(pollTimeoutRef.current);
+      }
+      pollTimeoutRef.current = setTimeout(
         () => {
           clearInterval(interval);
           client.disconnect();
+          pollTimeoutRef.current = null;
         },
         60 * 60 * 1000
       );

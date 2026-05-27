@@ -27,6 +27,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const clear = useAuthStore(state => state.clear);
   const listenerRef = useRef<{ data: { subscription: { unsubscribe: () => void } } } | null>(null);
   const hasSyncedInitialSession = useRef(false);
+  // Track fallback timers so they don't fire setState after unmount (HMR, route change).
+  const pendingTimersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
 
   useEffect(() => {
     // Prevent duplicate listeners
@@ -118,11 +120,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setInitialAuthState(session.user, session, null);
             // Fetch profile in background (only once - AuthStore signIn no longer fetches)
             // Use a small delay to ensure state is set before fetching
-            setTimeout(() => {
+            const t = setTimeout(() => {
+              pendingTimersRef.current.delete(t);
               fetchProfile().catch(err => {
                 logger.warn('Failed to fetch profile after sign in', { error: err }, 'Auth');
               });
             }, 100);
+            pendingTimersRef.current.add(t);
           }
           break;
 
@@ -244,7 +248,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     primeSession().catch(error => {
       logger.warn('Failed to prime auth session on mount', { error }, 'Auth');
       // Fallback: Force hydrated state after 3 seconds to prevent infinite loading
-      setTimeout(() => {
+      const fallback = setTimeout(() => {
+        pendingTimersRef.current.delete(fallback);
         const currentState = useAuthStore.getState();
         if (!currentState.hydrated) {
           logger.warn(
@@ -255,6 +260,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setInitialAuthState(null, null, null);
         }
       }, 3000);
+      pendingTimersRef.current.add(fallback);
     });
 
     // Cleanup on unmount
@@ -264,6 +270,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         listenerRef.current.data.subscription.unsubscribe();
         listenerRef.current = null;
       }
+      pendingTimersRef.current.forEach(id => clearTimeout(id));
+      pendingTimersRef.current.clear();
     };
   }, [setInitialAuthState, fetchProfile, clear]);
 
