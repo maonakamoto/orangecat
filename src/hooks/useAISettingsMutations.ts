@@ -1,14 +1,13 @@
 'use client';
 
 import { useCallback } from 'react';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { API_ROUTES } from '@/config/api-routes';
 import type { AISettingsState, UserAIPreferences } from './useAISettings';
 import type { Dispatch, SetStateAction } from 'react';
 
 interface MutationsProps {
-  supabase: SupabaseClient;
   preferences: UserAIPreferences | null;
   setState: Dispatch<SetStateAction<AISettingsState>>;
   fetchData: () => Promise<void>;
@@ -24,7 +23,6 @@ interface UseAISettingsMutationsReturn {
 }
 
 export function useAISettingsMutations({
-  supabase,
   preferences,
   setState,
   fetchData,
@@ -39,8 +37,8 @@ export function useAISettingsMutations({
       }
 
       if (!preferences) {
-        const { data, error } = await supabase
-          .from(DATABASE_TABLES.USER_AI_PREFERENCES)
+        const { data, error } = await // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (supabase.from(DATABASE_TABLES.USER_AI_PREFERENCES) as any)
           .insert({ user_id: user.id, ...updates })
           .select()
           .single();
@@ -53,8 +51,8 @@ export function useAISettingsMutations({
         return data;
       }
 
-      const { data, error } = await supabase
-        .from(DATABASE_TABLES.USER_AI_PREFERENCES)
+      const { data, error } = await // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (supabase.from(DATABASE_TABLES.USER_AI_PREFERENCES) as any)
         .update(updates)
         .eq('user_id', user.id)
         .select()
@@ -67,7 +65,7 @@ export function useAISettingsMutations({
       setState(prev => ({ ...prev, preferences: data }));
       return data;
     },
-    [supabase, preferences, setState]
+    [preferences, setState]
   );
 
   const addKey = useCallback(

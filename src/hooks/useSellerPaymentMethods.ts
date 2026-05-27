@@ -8,7 +8,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createBrowserClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 
 interface SellerPaymentInfo {
@@ -34,7 +34,8 @@ export function useSellerPaymentMethods(sellerProfileId: string | null): SellerP
       return;
     }
 
-    const supabase = createBrowserClient();
+    let cancelled = false;
+    const profileId = sellerProfileId;
 
     async function check() {
       type WalletRow = {
@@ -46,8 +47,11 @@ export function useSellerPaymentMethods(sellerProfileId: string | null): SellerP
       const { data: rawWallets } = await supabase
         .from(DATABASE_TABLES.WALLETS)
         .select('id, wallet_type, lightning_address, address_or_xpub')
-        .eq('profile_id', sellerProfileId)
+        .eq('profile_id', profileId!)
         .eq('is_active', true);
+      if (cancelled) {
+        return;
+      }
       const wallets = (rawWallets || []) as WalletRow[];
 
       if (wallets.length === 0) {
@@ -71,6 +75,9 @@ export function useSellerPaymentMethods(sellerProfileId: string | null): SellerP
     }
 
     check();
+    return () => {
+      cancelled = true;
+    };
   }, [sellerProfileId]);
 
   return info;

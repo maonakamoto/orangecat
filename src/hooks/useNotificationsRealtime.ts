@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { createBrowserClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/browser';
 import type { User } from '@supabase/supabase-js';
 import type { Notification } from './useNotifications';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -20,9 +20,8 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
       return;
     }
 
-    const supabase = createBrowserClient();
-
-    const channel = supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const channel = (supabase as any)
       .channel('notifications')
       .on(
         'postgres_changes',

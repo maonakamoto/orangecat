@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
-import { createBrowserClient } from '@supabase/ssr';
+import { supabase } from '@/lib/supabase/browser';
 import { toast } from 'sonner';
 import { API_ROUTES } from '@/config/api-routes';
 import { ROUTES } from '@/config/routes';
@@ -19,11 +19,6 @@ export interface SettingsFormData {
 export function useSettingsForm(user: User | null) {
   const signOut = useAuthStore(state => state.signOut);
   const router = useRouter();
-
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
 
   const [formData, setFormData] = useState<SettingsFormData>({
     email: '',

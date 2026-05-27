@@ -3,7 +3,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/hooks/useAuth';
-import { createBrowserClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/browser';
 
 // Syncs dark/light preference to profiles.preferences.theme so it persists
 // across devices. Applied once per login session; saved fire-and-forget on toggle.
@@ -43,10 +43,9 @@ export function useProfileTheme() {
       if (!user?.id) {
         return;
       }
-      const supabase = createBrowserClient();
       const currentPrefs = (profileRef.current?.preferences as Record<string, unknown>) ?? {};
-      const { error } = await supabase
-        .from('profiles')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('profiles') as any)
         .update({ preferences: { ...currentPrefs, theme: newTheme } })
         .eq('id', user.id);
       if (error && process.env.NODE_ENV === 'development') {

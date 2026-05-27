@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { createBrowserClient } from '@/lib/supabase/client';
+import { useState, useEffect, useCallback } from 'react';
+import { supabase } from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import type { ModelTier } from '@/config/ai-models';
@@ -49,7 +49,6 @@ interface PlatformUsage {
 // ==================== HOOK ====================
 
 export function useAISettings() {
-  const supabase = useMemo(() => createBrowserClient(), []);
   const [state, setState] = useState<AISettingsState>({
     preferences: null,
     keys: [],
@@ -110,7 +109,7 @@ export function useAISettings() {
         error: err instanceof Error ? err.message : 'Failed to fetch settings',
       }));
     }
-  }, [supabase]);
+  }, []);
 
   // Fetch platform usage
   const fetchPlatformUsage = useCallback(async () => {
@@ -139,7 +138,6 @@ export function useAISettings() {
     completeOnboarding,
     updateOnboardingStep,
   } = useAISettingsMutations({
-    supabase,
     preferences: state.preferences,
     setState,
     fetchData,

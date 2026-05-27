@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createBrowserClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/browser';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
@@ -34,7 +34,6 @@ export function useUnreadNotifications() {
 
     fetchCount();
 
-    const supabase = createBrowserClient();
     const channel = supabase
       .channel('notification-count')
       .on(
