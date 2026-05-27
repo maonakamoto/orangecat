@@ -10,6 +10,7 @@ import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
+import { formatBitcoinDisplay } from '@/services/currency/formatting';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { formatRelativeTimeCompact } from '@/utils/dates';
 import { getStatusInfo } from '@/config/status-config';
@@ -69,11 +70,6 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
       fetchProjects();
     }
   }, [profile.id]);
-
-  // Format bitcoin display
-  const formatBitcoinDisplay = (btc: number, unit: string) => {
-    return `${btc.toFixed(8)} ${unit}`;
-  };
 
   if (loading) {
     return (
@@ -233,7 +229,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                         <Bitcoin className="w-4 h-4 text-orange-500" />
                         <span className="text-sm font-semibold text-foreground">
                           {balanceBTC > 0 ? (
-                            formatBitcoinDisplay(balanceBTC, 'BTC')
+                            formatBitcoinDisplay(balanceBTC)
                           ) : raisedAmount > 0 ? (
                             <CurrencyDisplay
                               amount={raisedAmount}

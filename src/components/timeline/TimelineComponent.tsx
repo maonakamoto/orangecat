@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { TimelineDisplayEvent, TimelineFeedResponse, TimelineVisibility } from '@/types/timeline';
 import { logger } from '@/utils/logger';
-import { useToast } from '@/hooks/useToast';
+import { toast } from 'sonner';
 import { PostCard } from './PostCard';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -34,7 +34,8 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
 }) => {
   const [events, setEvents] = useState(feed.events);
   const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
-  const { success: showSuccess, error: showError } = useToast();
+  const showSuccess = useCallback((message: string) => toast.success(message), []);
+  const showError = useCallback((message: string) => toast.error(message), []);
 
   // Ref for the infinite scroll sentinel element
   const sentinelRef = useRef<HTMLDivElement>(null);

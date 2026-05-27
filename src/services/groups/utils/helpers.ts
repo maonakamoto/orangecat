@@ -11,6 +11,7 @@
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { slugify } from '@/utils/string';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 /**
@@ -29,17 +30,7 @@ export async function getCurrentUserId(client?: AnySupabaseClient): Promise<stri
   }
 }
 
-/**
- * Generate slug from name
- */
-export function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '') // Remove special characters
-    .replace(/[\s_-]+/g, '-') // Replace spaces/underscores with hyphens
-    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
-}
+export const generateSlug = (name: string) => slugify(name);
 
 /**
  * Ensure slug is unique by appending number if needed

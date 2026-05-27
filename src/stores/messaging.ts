@@ -178,16 +178,9 @@ export const useMessagingStore = create<MessagingState>()(
   }))
 );
 
-// Selectors for performance
-export const useConversations = () => useMessagingStore(state => state.conversations);
-export const useCurrentConversationId = () =>
-  useMessagingStore(state => state.currentConversationId);
-export const useMessages = (conversationId: string) =>
-  useMessagingStore(state => state.messages.get(conversationId) || []);
+// Selectors for performance — only those actually consumed
 export const useUnreadCount = () => useMessagingStore(state => state.unreadCount);
 export const useConnectionStatus = () => useMessagingStore(state => state.connectionStatus);
-export const useMessagingLoading = () => useMessagingStore(state => state.isLoading);
-export const useMessagingError = () => useMessagingStore(state => state.lastError);
 
 // Actions
 export const messagingActions = {

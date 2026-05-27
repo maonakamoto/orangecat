@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { FormState, AIGeneratedFields, FieldConfidence, EntityConfig } from '../../types';
 import { useEntityFormDraft } from './useEntityFormDraft';
+import { slugify } from '@/utils/string';
 
 interface UseEntityFormStateOptions<T extends Record<string, unknown>> {
   config: EntityConfig<T>;
@@ -64,13 +65,7 @@ export function useEntityFormState<T extends Record<string, unknown>>({
       const updatedData = { ...formState.data, [field]: value };
 
       if (field === 'name' && config.type === 'group') {
-        const slug = (value as string)
-          .toLowerCase()
-          .replace(/[^a-z0-9\s-]/g, '')
-          .replace(/\s+/g, '-')
-          .replace(/-+/g, '-')
-          .replace(/^-|-$/g, '');
-        (updatedData as Record<string, unknown>).slug = slug;
+        (updatedData as Record<string, unknown>).slug = slugify(value as string);
       }
 
       setFormState(prev => ({

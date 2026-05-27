@@ -1,5 +1,6 @@
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { slugify } from '@/utils/string';
 import type { ActionHandler } from './types';
 
 export const organizationHandlers: Record<string, ActionHandler> = {
@@ -58,14 +59,7 @@ export const organizationHandlers: Record<string, ActionHandler> = {
     // groups table has: name, slug (UNIQUE NOT NULL), label (not type), created_by
     // label enum: circle|family|dao|company|nonprofit|cooperative|guild|network_state
     const name = params.name as string;
-    const slug =
-      name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '')
-        .slice(0, 60) +
-      '-' +
-      Math.random().toString(36).slice(2, 7);
+    const slug = slugify(name, { maxLength: 60, randomSuffix: true });
 
     // Create the group (organization)
     const { data: group, error: groupError } = await supabase

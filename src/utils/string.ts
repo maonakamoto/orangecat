@@ -26,3 +26,23 @@ export function truncateAddress(address: string, startChars = 8, endChars = star
   }
   return `${address.slice(0, startChars)}...${address.slice(-endChars)}`;
 }
+
+// SSOT slug generator. `maxLength` truncates before random suffix is appended.
+// Set `randomSuffix: true` to append a 5-char base36 suffix for ad-hoc uniqueness.
+export function slugify(
+  input: string,
+  options: { maxLength?: number; randomSuffix?: boolean } = {}
+): string {
+  const base = input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s_-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const truncated = options.maxLength ? base.slice(0, options.maxLength) : base;
+  if (!options.randomSuffix) {
+    return truncated;
+  }
+  return `${truncated}-${Math.random().toString(36).slice(2, 7)}`;
+}
