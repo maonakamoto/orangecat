@@ -102,41 +102,4 @@ function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDism
   );
 }
 
-/**
- * Compact inline version for tighter spaces
- */
-export function SmartQuestionInline({
-  question,
-  onDismiss,
-}: {
-  question: SmartQuestion;
-  onDismiss?: () => void;
-}) {
-  return (
-    <div className="flex items-center gap-2 text-sm">
-      <Lightbulb className="w-4 h-4 text-amber-500 flex-shrink-0" />
-      <span className="text-muted-foreground">{question.question}</span>
-      <Link href={question.action.href}>
-        <Button
-          size="sm"
-          variant="ghost"
-          className="text-tiffany-600 hover:text-tiffany-700 p-1 h-auto"
-        >
-          {question.action.label}
-          <ArrowRight className="w-3 h-3 ml-0.5" />
-        </Button>
-      </Link>
-      {onDismiss && (
-        <button
-          onClick={onDismiss}
-          className="p-1 text-muted-dim hover:text-foreground rounded min-h-11 min-w-11 flex items-center justify-center"
-          aria-label="Dismiss"
-        >
-          <X className="w-3 h-3" />
-        </button>
-      )}
-    </div>
-  );
-}
-
 export default SmartQuestionsPanel;

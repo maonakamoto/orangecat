@@ -117,43 +117,4 @@ export function TurnstileCaptcha({
   );
 }
 
-/**
- * Invisible Turnstile CAPTCHA for seamless verification
- * Use this when you want verification without visible widget
- */
-export function InvisibleTurnstile({
-  siteKey,
-  onSuccess,
-  onError,
-  onExpire,
-}: Omit<TurnstileCaptchaProps, 'theme' | 'size' | 'className'>) {
-  const handleSuccess = useCallback(
-    (token: string) => {
-      onSuccess(token);
-    },
-    [onSuccess]
-  );
-
-  const handleError = useCallback(
-    (error?: string) => {
-      onError?.(error || 'CAPTCHA verification failed');
-    },
-    [onError]
-  );
-
-  return (
-    <div className="hidden">
-      <Turnstile
-        siteKey={siteKey}
-        onSuccess={handleSuccess}
-        onError={() => handleError('Verification failed')}
-        onExpire={onExpire}
-        options={{
-          size: 'invisible',
-        }}
-      />
-    </div>
-  );
-}
-
 export default TurnstileCaptcha;

@@ -66,16 +66,6 @@ export const LOAN_CATEGORY_LABELS: Record<string, string> = Object.fromEntries(
 import { BADGE_COLORS } from '@/config/badge-colors';
 import { STATUS } from '@/config/database-constants';
 
-export const LOAN_STATUS_COLORS: Record<string, string> = {
-  [STATUS.LOANS.ACTIVE]: BADGE_COLORS.success,
-  [STATUS.LOANS.PAID_OFF]: BADGE_COLORS.info,
-  [STATUS.LOANS.REFINANCED]: BADGE_COLORS.tiffany,
-  [STATUS.LOANS.DEFAULTED]: BADGE_COLORS.error,
-};
-
-export const getLoanStatusColor = (status: string): string =>
-  LOAN_STATUS_COLORS[status] ?? BADGE_COLORS.neutral;
-
 export const LOAN_OFFER_STATUS_COLORS: Record<string, string> = {
   [STATUS.LOAN_OFFERS.PENDING]: BADGE_COLORS.warning,
   [STATUS.LOAN_OFFERS.ACCEPTED]: BADGE_COLORS.success,

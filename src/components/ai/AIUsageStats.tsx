@@ -144,24 +144,4 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
   );
 }
 
-/**
- * AIUsageStatsCompact - Compact inline version
- */
-export function AIUsageStatsCompact({ usage }: { usage: UsageData }) {
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
-
-  return (
-    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-      <div className="flex items-center gap-1">
-        <MessageSquare className="w-4 h-4" />
-        <span>{usage.totalRequests.toLocaleString()} requests</span>
-      </div>
-      <div className="flex items-center gap-1">
-        <Coins className="w-4 h-4" />
-        <span>{formatAmount(usage.totalCostBtc)}</span>
-      </div>
-    </div>
-  );
-}
-
 export default AIUsageStats;

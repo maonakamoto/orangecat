@@ -144,18 +144,6 @@ export const TASK_CATEGORY_LABELS: Record<TaskCategory, string> = {
   other: 'Other',
 };
 
-const TASK_CATEGORY_ICONS: Record<TaskCategory, string> = {
-  cleaning: '🧹',
-  maintenance: '🔧',
-  admin: '📋',
-  inventory: '📦',
-  it: '💻',
-  kitchen: '🍳',
-  workshop: '🛠️',
-  logistics: '🚚',
-  other: '📌',
-};
-
 // ==================== PRIORITIES ====================
 
 /**
@@ -264,16 +252,6 @@ export function getPriorityInfo(priority: string | null | undefined): PriorityIn
 
   const normalized = priority.toLowerCase() as Priority;
   return PRIORITY_CONFIG[normalized] || PRIORITY_CONFIG.normal;
-}
-
-/**
- * Get category icon (emoji)
- */
-export function getCategoryIcon(category: string | null | undefined): string {
-  if (!category) {
-    return '📌';
-  }
-  return TASK_CATEGORY_ICONS[category as TaskCategory] || '📌';
 }
 
 // ==================== DEFAULT VALUES ====================

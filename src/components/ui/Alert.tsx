@@ -22,10 +22,6 @@ export function Alert({ children, variant = 'info', className }: AlertProps) {
   );
 }
 
-export function AlertTitle({ children, className }: { children: ReactNode; className?: string }) {
-  return <h5 className={cn('font-medium leading-none tracking-tight', className)}>{children}</h5>;
-}
-
 export function AlertDescription({
   children,
   className,

@@ -73,22 +73,6 @@ export const commonFields = {
 };
 
 /**
- * Create a basic field group with title and description
- */
-export function createBasicInfoGroup(entityName: string, fields: FieldConfig[] = []): FieldGroup {
-  return {
-    id: 'basic',
-    title: 'Basic Information',
-    description: `Essential details about your ${entityName.toLowerCase()}`,
-    fields: [
-      commonFields.title({ label: `${entityName} Title` }),
-      commonFields.description({ label: 'Description' }),
-      ...fields,
-    ],
-  };
-}
-
-/**
  * Base config factory options
  */
 export interface BaseConfigOptions<T extends Record<string, any>> {

@@ -51,13 +51,3 @@ export function TimelineSkeleton({ count = 3, compact = false }: TimelineSkeleto
     </div>
   );
 }
-
-// Compact version for mobile
-export function TimelineSkeletonCompact({ count = 3 }: { count?: number }) {
-  return <TimelineSkeleton count={count} compact={true} />;
-}
-
-// Full-width version for larger screens
-export function TimelineSkeletonFull({ count = 3 }: { count?: number }) {
-  return <TimelineSkeleton count={count} compact={false} />;
-}

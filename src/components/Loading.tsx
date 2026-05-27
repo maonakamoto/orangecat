@@ -1,7 +1,6 @@
 'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Loader2 } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
 import { ContextualLoader } from '@/components/navigation/ContextualLoader';
 import { cn } from '@/lib/utils';
 
@@ -73,51 +72,6 @@ export default function Loading({
   return (
     <div className={containerClasses} suppressHydrationWarning>
       {content}
-    </div>
-  );
-}
-
-export function GlobalAuthErrorBanner() {
-  const { authError, setAuthError } = useAuth();
-
-  useEffect(() => {
-    if (authError) {
-    }
-  }, [authError]);
-
-  if (!authError) {
-    return null;
-  }
-
-  return (
-    <div className="fixed top-0 left-0 right-0 z-toast bg-red-600 text-white text-center py-3 shadow-sm animate-fade-in-up">
-      <span>{authError}</span>
-      <button
-        className="ml-4 px-3 py-1 bg-card text-red-600 rounded hover:bg-muted transition-colors duration-150"
-        onClick={() => {
-          setAuthError(null);
-          // Error dismissed by user
-        }}
-      >
-        Dismiss
-      </button>
-    </div>
-  );
-}
-
-// Global loading overlay tied to auth store – shows a semi-transparent overlay
-// with spinner whenever the auth store is in a loading state *after* hydration.
-// This keeps the header / layout visible while conveying progress.
-export function GlobalAuthLoader() {
-  const { isLoading, hydrated } = useAuth();
-
-  if (!hydrated || !isLoading) {
-    return null;
-  }
-
-  return (
-    <div className="fixed inset-0 bg-muted/60 dark:bg-card/60 backdrop-blur-sm z-loading flex items-center justify-center pointer-events-none">
-      <Loader2 className="h-10 w-10 animate-spin text-tiffany-500" />
     </div>
   );
 }
