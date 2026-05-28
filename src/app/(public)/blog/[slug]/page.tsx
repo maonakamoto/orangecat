@@ -161,7 +161,7 @@ export default async function BlogPost({ params }: PageProps) {
   }
 
   // Dynamically import the MDX content as a React component
-  const MDXContent = (await import(`../../../../content/blog/${slug}.mdx`)).default;
+  const MDXContent = (await import(`../../../../../content/blog/${slug}.mdx`)).default;
 
   const articleJsonLd = {
     '@context': 'https://schema.org',

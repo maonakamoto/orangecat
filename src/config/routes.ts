@@ -99,16 +99,19 @@ export type RouteContext = 'authenticated' | 'public' | 'universal' | 'auth' | '
 // visibility, header variant, footer visibility) MUST derive from
 // `getRouteSurface(pathname)`. Do not maintain side-tables in component files.
 //
-// Three surfaces:
-//   - 'app'    — in-app pages. Show sidebar (if user is signed in) + mobile
-//                bottom nav. No marketing chrome, no footer.
-//   - 'auth'   — sign-in / sign-up flow. Minimal chrome — no sidebar, no
-//                bottom nav, no footer, no marketing top nav.
-//   - 'public' — marketing / legal / informational. Marketing top nav +
-//                footer. No sidebar.
+// Three surfaces, mirrored in the app/ folder structure:
+//   - 'app'    — `src/app/(authenticated)/` (auth-gated) plus entity routes
+//                still at top level (discover, products, services, ...) that
+//                are accessible signed-out but render in-app shell when
+//                signed in. Show sidebar (when user) + mobile bottom nav.
+//   - 'auth'   — `src/app/auth/`. Minimal chrome — no sidebar, no bottom
+//                nav, no footer, no marketing top nav.
+//   - 'public' — `src/app/(public)/`. Marketing / legal / informational.
+//                Marketing top nav + footer. No sidebar.
 //
-// To add or move a route: change ONE list. Don't add a new exception in
-// MobileBottomNav, Header, or anywhere else.
+// To add or move a route: drop the folder in the right place AND update
+// the matching list below. Both layers exist so source-tree organisation
+// and runtime classification can never silently drift.
 
 export type RouteSurface = 'app' | 'public' | 'auth';
 
