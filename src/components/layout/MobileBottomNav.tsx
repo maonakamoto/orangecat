@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useBottomNavScroll } from '@/hooks/useHeaderScroll';
 import { useComposer } from '@/contexts/ComposerContext';
 import { cn } from '@/lib/utils';
-import { getRouteContext, ROUTE_CONTEXTS, ROUTES } from '@/config/routes';
+import { getRouteSurface, ROUTES } from '@/config/routes';
 import { getContextualCreateAction } from '@/lib/navigation/contextual-create';
 import { MobileCreateSheet } from '@/components/create/MobileCreateSheet';
 import { Z_INDEX } from '@/constants/z-index';
@@ -31,18 +31,9 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
     return null;
   }
 
-  // Don't show on auth pages or specific routes that shouldn't have bottom nav
-  const _routeContext = getRouteContext(pathname);
-  const hiddenRoutes = [
-    ...ROUTE_CONTEXTS.auth,
-    '/settings',
-    '/assets',
-    '/events',
-    '/organizations',
-    '/funding',
-  ];
-
-  if (hiddenRoutes.some(route => pathname === route || pathname.startsWith(`${route}/`))) {
+  // SSOT: bottom nav appears wherever the desktop sidebar would (every
+  // in-app surface). Mirrors AppShell's `isAppSurface` rule.
+  if (getRouteSurface(pathname) !== 'app') {
     return null;
   }
 

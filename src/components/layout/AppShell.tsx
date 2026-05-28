@@ -3,7 +3,7 @@
 import { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { getRouteContext } from '@/config/routes';
+import { getRouteSurface } from '@/config/routes';
 import { Header } from './Header';
 import { Sidebar } from '@/components/sidebar/Sidebar';
 import Footer from './Footer';
@@ -33,13 +33,14 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const { user, profile, hydrated, isLoading } = useAuth();
-  const routeContext = getRouteContext(pathname ?? '/');
-  const isAuthenticatedRoute = routeContext === 'authenticated' || routeContext === 'contextual';
+  // SSOT: every shell-related visibility decision derives from
+  // getRouteSurface (src/config/routes.ts). Do not branch on pathname here.
+  const isAppSurface = getRouteSurface(pathname ?? '/') === 'app';
 
   // Wait for auth hydration to prevent sidebar flash
   // During hydration, user is null even if authenticated - this prevents the sidebar from flickering
   const isAuthReady = hydrated && !isLoading;
-  const shouldShowSidebar = isAuthenticatedRoute && isAuthReady && user;
+  const shouldShowSidebar = isAppSurface && isAuthReady && user;
 
   // Get navigation state and functions
   const {

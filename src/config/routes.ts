@@ -91,90 +91,138 @@ export const ROUTE_CONTEXTS = {
  */
 export type RouteContext = 'authenticated' | 'public' | 'universal' | 'auth' | 'contextual';
 
-/**
- * Routes that should hide the footer (typically authenticated routes)
- */
-const FOOTER_HIDDEN_ROUTES = [...ROUTE_CONTEXTS.authenticated] as const;
+// =============================================================================
+// SSOT — route surface classification
+// =============================================================================
+//
+// Every shell-related decision (sidebar visibility, mobile bottom-nav
+// visibility, header variant, footer visibility) MUST derive from
+// `getRouteSurface(pathname)`. Do not maintain side-tables in component files.
+//
+// Three surfaces:
+//   - 'app'    — in-app pages. Show sidebar (if user is signed in) + mobile
+//                bottom nav. No marketing chrome, no footer.
+//   - 'auth'   — sign-in / sign-up flow. Minimal chrome — no sidebar, no
+//                bottom nav, no footer, no marketing top nav.
+//   - 'public' — marketing / legal / informational. Marketing top nav +
+//                footer. No sidebar.
+//
+// To add or move a route: change ONE list. Don't add a new exception in
+// MobileBottomNav, Header, or anywhere else.
 
-/**
- * Routes that should show the sidebar (authenticated routes)
- */
-const SIDEBAR_VISIBLE_ROUTES = [...ROUTE_CONTEXTS.authenticated] as const;
+export type RouteSurface = 'app' | 'public' | 'auth';
 
-/**
- * Get the context of a route based on its pathname
+const APP_SURFACES = [
+  '/dashboard',
+  '/discover',
+  '/profile',
+  '/profiles',
+  '/settings',
+  '/messages',
+  '/timeline',
+  '/post',
+  '/project',
+  '/projects',
+  '/products',
+  '/services',
+  '/causes',
+  '/events',
+  '/loans',
+  '/investments',
+  '/ai-assistants',
+  '/ai-chat',
+  '/wishlists',
+  '/research',
+  '/assets',
+  '/groups',
+  '/wallets',
+  '/onboarding',
+  '/jobs',
+  '/community',
+  '/create',
+  '/organizations',
+] as const;
+
+const AUTH_SURFACES = ['/auth'] as const;
+
+/** O(n) prefix-match against a sorted list. Pathname like `/discover/123`
+ *  matches `'/discover'`. Exact `/` matches only `'/'`.
  */
-export function getRouteContext(pathname: string): RouteContext {
-  // Check authenticated routes first (most specific)
-  if (
-    ROUTE_CONTEXTS.authenticated.some(
-      route => pathname === route || pathname.startsWith(`${route}/`)
-    )
-  ) {
-    return 'authenticated';
+function matchesPrefix(pathname: string, routes: readonly string[]): boolean {
+  for (const route of routes) {
+    if (pathname === route || pathname.startsWith(`${route}/`)) {
+      return true;
+    }
   }
+  return false;
+}
 
-  // Check auth routes
-  if (ROUTE_CONTEXTS.auth.some(route => pathname === route || pathname.startsWith(`${route}/`))) {
+/**
+ * Single SSOT for shell-related route classification. Sidebar, mobile nav,
+ * header variant, and footer must all derive from this.
+ */
+export function getRouteSurface(pathname: string): RouteSurface {
+  if (matchesPrefix(pathname, AUTH_SURFACES)) {
     return 'auth';
   }
+  if (matchesPrefix(pathname, APP_SURFACES)) {
+    return 'app';
+  }
+  return 'public';
+}
 
-  // Check universal routes
-  if (
-    ROUTE_CONTEXTS.universal.some(route => pathname === route || pathname.startsWith(`${route}/`))
-  ) {
+// =============================================================================
+// Back-compat wrappers — prefer getRouteSurface in new code.
+// These exist so we don't have to rename every caller in one PR.
+// =============================================================================
+
+/**
+ * Returns the legacy five-bucket classifier. Prefer `getRouteSurface`.
+ */
+export function getRouteContext(pathname: string): RouteContext {
+  const surface = getRouteSurface(pathname);
+  if (surface === 'auth') {
+    return 'auth';
+  }
+  if (surface === 'app') {
+    return 'authenticated';
+  }
+  if (matchesPrefix(pathname, ROUTE_CONTEXTS.universal)) {
     return 'universal';
   }
-
-  // Check contextual routes
-  if (
-    ROUTE_CONTEXTS.contextual.some(route => pathname === route || pathname.startsWith(`${route}/`))
-  ) {
+  if (matchesPrefix(pathname, ROUTE_CONTEXTS.contextual)) {
     return 'contextual';
   }
-
-  // Check public routes
-  if (ROUTE_CONTEXTS.public.some(route => pathname === route || pathname.startsWith(`${route}/`))) {
-    return 'public';
-  }
-
-  // Default to public for unknown routes
   return 'public';
 }
 
 /**
- * Check if a route requires authentication
- * Legacy function for backward compatibility
+ * True for in-app surfaces. Prefer `getRouteSurface(p) === 'app'`.
  */
 export function isAuthenticatedRoute(pathname: string): boolean {
-  const context = getRouteContext(pathname);
-  return context === 'authenticated' || context === 'contextual';
+  return getRouteSurface(pathname) === 'app';
 }
 
 /**
- * Check if a route should show the footer
+ * Footer is shown only on public/marketing routes — not in-app, not auth.
+ * Derives from the surface SSOT.
  */
 export function shouldShowFooter(pathname: string): boolean {
-  return !FOOTER_HIDDEN_ROUTES.some(
-    route => pathname === route || pathname.startsWith(`${route}/`)
-  );
+  return getRouteSurface(pathname) === 'public';
 }
 
 /**
- * Check if a route should show the sidebar
+ * Sidebar shows on in-app surfaces. Prefer `getRouteSurface(p) === 'app'`.
  */
 export function shouldShowSidebar(pathname: string): boolean {
-  return SIDEBAR_VISIBLE_ROUTES.some(
-    route => pathname === route || pathname.startsWith(`${route}/`)
-  );
+  return getRouteSurface(pathname) === 'app';
 }
 
 /**
- * Check if a route is considered "public" (accessible without auth)
+ * True for marketing/auth routes. Prefer `getRouteSurface(p) !== 'app'`.
  */
 export function isPublicRoute(pathname: string): boolean {
-  const context = getRouteContext(pathname);
-  return context === 'public' || context === 'universal' || context === 'auth';
+  return getRouteSurface(pathname) !== 'app';
 }
 
 /**
