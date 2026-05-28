@@ -5,13 +5,16 @@ import type { ProjectData } from '@/lib/validation';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 
 export async function listProjectsPage(limit: number, offset: number, userId?: string) {
+  // Plain '*' — no profile join. The `projects` table has no FK on user_id
+  // (only actor_id → actors), so the embedded `profiles:user_id(...)` syntax
+  // produced a 500. Detail-view (GET /api/projects/[id]) fetches the profile
+  // in a separate query; list-view cards don't read profile fields.
   const result = await listEntityPage('project', {
     limit,
     offset,
     userId,
     includeOwnDrafts: !!userId,
     publicStatuses: [PROJECT_STATUS.ACTIVE],
-    select: '*, profiles:user_id(id, username, name, avatar_url, email)',
   });
 
   // Ensure raised_amount defaults to 0
