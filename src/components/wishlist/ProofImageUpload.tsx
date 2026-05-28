@@ -45,7 +45,13 @@ export function ProofImageUpload({
       <Label>{selectedType === 'receipt' ? 'Receipt Image' : 'Screenshot'}</Label>
       {imageUrl ? (
         <div className="relative h-48 w-full">
-          <Image src={imageUrl} alt="Proof" fill className="rounded-lg object-cover" />
+          <Image
+            src={imageUrl}
+            alt="Proof"
+            fill
+            sizes="(max-width: 640px) 100vw, 640px"
+            className="rounded-lg object-cover"
+          />
           <Button
             type="button"
             variant="danger"

@@ -32,7 +32,7 @@ export function MessagePanelLoading({
   );
 
   if (fullPage) {
-    return <div className={cn('h-[calc(100vh-4rem)]', className)}>{inner}</div>;
+    return <div className={cn('h-[calc(100dvh-4rem)]', className)}>{inner}</div>;
   }
 
   return (

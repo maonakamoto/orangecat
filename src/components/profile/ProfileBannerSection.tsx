@@ -41,7 +41,14 @@ export function ProfileBannerSection({
         className={`relative h-32 sm:h-48 md:h-64 lg:h-80 ${GRADIENTS.heroOrangeTiffany} rounded-lg sm:rounded-md shadow-none overflow-hidden`}
       >
         {profile.banner_url && (
-          <Image src={profile.banner_url} alt="Profile banner" fill className="object-cover" />
+          <Image
+            src={profile.banner_url}
+            alt="Profile banner"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1024px"
+            priority
+            className="object-cover"
+          />
         )}
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
         <div className={`absolute inset-0 ${GRADIENTS.overlayDarkBottom}`}></div>

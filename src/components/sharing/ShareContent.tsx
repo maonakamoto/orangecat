@@ -5,6 +5,7 @@ import { Share2, X as XIcon, Globe, MessageCircle, Mail, Copy, Check, X } from '
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { GRADIENTS } from '@/config/gradients';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 // Brand icons removed in lucide-react 0.400+
 const Facebook = Globe;
@@ -114,6 +115,7 @@ export default function ShareContent({
   titleText = 'Share',
 }: ShareContentProps) {
   const [copySuccess, setCopySuccess] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 639px)');
 
   // Handle native share (mobile)
   const handleNativeShare = async () => {
@@ -256,8 +258,6 @@ export default function ShareContent({
   );
 
   // On mobile, show as modal overlay; on desktop, show as dropdown
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-
   if (isMobile && onClose) {
     // Mobile: Dialog modal
     return (

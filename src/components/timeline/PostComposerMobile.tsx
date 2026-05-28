@@ -247,7 +247,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
       <BottomSheet
         isOpen={isOpen !== undefined ? isOpen : true}
         onClose={onClose || onCancel || (() => {})}
-        maxHeight="100vh"
+        maxHeight="100dvh"
         showCloseButton={false}
         closeOnOverlayClick={true}
       >

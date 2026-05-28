@@ -180,7 +180,7 @@ export default function MessageItem({
                   <button
                     type="button"
                     onClick={onEditCancel}
-                    className="text-xs px-2 py-1 rounded text-white/80 hover:text-white"
+                    className="text-sm px-3 py-1.5 min-h-9 rounded text-white/80 hover:text-white"
                   >
                     Cancel
                   </button>
@@ -194,7 +194,7 @@ export default function MessageItem({
                         onEditCancel?.();
                       }
                     }}
-                    className="text-xs px-2 py-1 rounded bg-card text-tiffany-600 font-medium hover:bg-card/90 dark:hover:bg-card/90"
+                    className="text-sm px-3 py-1.5 min-h-9 rounded bg-card text-tiffany-600 font-medium hover:bg-card/90 dark:hover:bg-card/90"
                   >
                     Save
                   </button>

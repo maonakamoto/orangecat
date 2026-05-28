@@ -84,10 +84,14 @@ export function AppShell({ children }: AppShellProps) {
           />
         )}
 
-        {/* Main Content Area */}
+        {/* Main Content Area
+            min-w-0 lets the flex item shrink below its content's intrinsic
+            width (default `min-width: auto` would expand to match a child's
+            min-content, e.g. an overflow-x-auto rail using `min-w-max`,
+            blowing layout out wider than the viewport on mobile). */}
         <main
           id="main-content"
-          className={`flex-1 transition-[margin-left] duration-300 ease-in-out ${
+          className={`flex-1 min-w-0 transition-[margin-left] duration-300 ease-in-out ${
             shouldShowSidebar
               ? navigationState.isSidebarCollapsed
                 ? 'lg:ml-16'

@@ -36,7 +36,13 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
               className={`relative w-12 h-12 rounded-full overflow-hidden ${GRADIENTS.tiffanyMuted} flex-shrink-0`}
             >
               {profile.avatar_url ? (
-                <Image src={profile.avatar_url} alt={displayName} fill className="object-cover" />
+                <Image
+                  src={profile.avatar_url}
+                  alt={displayName}
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-tiffany-600 font-semibold">
                   {getInitial(displayName)}
@@ -84,7 +90,13 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
             className={`relative w-20 h-20 rounded-full overflow-hidden ${GRADIENTS.tiffanyMuted} mx-auto mb-4`}
           >
             {profile.avatar_url ? (
-              <Image src={profile.avatar_url} alt={displayName} fill className="object-cover" />
+              <Image
+                src={profile.avatar_url}
+                alt={displayName}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
             ) : (
               <DefaultAvatar size={80} className="rounded-full" />
             )}

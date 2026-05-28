@@ -24,9 +24,21 @@ import { AppShell } from '@/components/layout/AppShell';
 import { Toaster } from '@/components/ui/sonner';
 import { Suspense } from 'react';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://orangecat.ch';
+
+// Required for env(safe-area-inset-*) to take effect on iOS (notch + home indicator).
+// Without `viewportFit: 'cover'` the inset values resolve to 0.
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FAF8F5' },
+    { media: '(prefers-color-scheme: dark)', color: '#0A0A0A' },
+  ],
+};
 
 export const metadata: Metadata = {
   title: {
@@ -51,6 +63,16 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'OrangeCat - Your AI Economic Agent',
     description: 'Fund, lend, invest, trade, and govern with any identity, any currency.',
+  },
+  manifest: '/manifest.json',
+  icons: {
+    icon: [{ url: '/favicon.ico' }, { url: '/images/orange-cat-logo.svg', type: 'image/svg+xml' }],
+    apple: '/icons/icon-144x144.png',
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'OrangeCat',
+    statusBarStyle: 'black-translucent',
   },
 };
 

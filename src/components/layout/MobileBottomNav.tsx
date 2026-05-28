@@ -152,6 +152,8 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
         )}
         style={{
           zIndex: Z_INDEX.MOBILE_BOTTOM_NAV,
+          // SSOT for nav-vs-home-indicator clearance lives on this outer container.
+          // Inner <nav> uses a fixed interior padding so we don't double up.
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
           transform: shouldBeSmall ? 'scale(0.85) translateY(4px)' : 'scale(1) translateY(0)',
           opacity: shouldBeTransparent ? 0.7 : 1,
@@ -165,12 +167,11 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
 
         <nav
           className={cn(
-            'flex items-center justify-around transition-all duration-300',
+            'flex items-center justify-around transition-all duration-300 pb-2',
             shouldBeSmall ? 'px-1 py-1' : 'px-2 py-2'
           )}
           style={{
             minHeight: shouldBeSmall ? '48px' : '64px',
-            paddingBottom: 'max(8px, env(safe-area-inset-bottom, 0px))',
           }}
           role="navigation"
           aria-label="Mobile navigation"
