@@ -142,8 +142,9 @@ export function Header({
         </div>
       </header>
 
-      {/* Email Confirmation Banner - Modular component */}
-      {authStatus.authenticated && authState.user && (
+      {/* Email Confirmation Banner — only on in-app surfaces. Hiding it on
+          marketing/auth pages avoids pushing the sign-in form down. */}
+      {isAuthRoute && authStatus.authenticated && authState.user && (
         <EmailConfirmationBanner
           emailConfirmedAt={authState.user.email_confirmed_at}
           userId={authState.user.id}
