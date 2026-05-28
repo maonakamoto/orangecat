@@ -1,211 +1,32 @@
 'use client';
 
-import { useState } from 'react';
-import { useRequireAuth } from '@/hooks/useAuth';
-import Button from '@/components/ui/Button';
-import Loading from '@/components/Loading';
-import EntityListShell from '@/components/entity/EntityListShell';
-import EntityList from '@/components/entity/EntityList';
-import CommercePagination from '@/components/commerce/CommercePagination';
-import BulkActionsBar from '@/components/entity/BulkActionsBar';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { useEntityList } from '@/hooks/useEntityList';
-import { useBulkSelection } from '@/hooks/useBulkSelection';
-import { useBulkDelete } from '@/hooks/useBulkDelete';
+import EntityDashboardPage from '@/components/entity/EntityDashboardPage';
 import { investmentEntityConfig } from '@/config/entities/investments';
-import { Investment } from '@/types/investments';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { type Investment } from '@/types/investments';
 import { TrendingUp, Search } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
-/**
- * Investments Dashboard Page
- */
 export default function InvestmentsPage() {
-  const { user, isLoading, hydrated } = useRequireAuth();
-  const { selectedIds, toggleSelect, toggleSelectAll, clearSelection } = useBulkSelection();
-  const [showSelection, setShowSelection] = useState(false);
-  const [activeTab, setActiveTab] = useState<'my-investments' | 'open'>('my-investments');
-
-  const {
-    items: myInvestments,
-    loading,
-    error,
-    page,
-    total,
-    setPage,
-    refresh,
-  } = useEntityList<Investment>({
-    apiEndpoint: ENTITY_REGISTRY['investment'].apiEndpoint,
-    userId: user?.id,
-    limit: 12,
-    enabled: !!user?.id && hydrated && !isLoading && activeTab === 'my-investments',
-  });
-
-  const {
-    items: openInvestments,
-    loading: openLoading,
-    page: openPage,
-    total: openTotal,
-    setPage: setOpenPage,
-  } = useEntityList<Investment>({
-    apiEndpoint: `${ENTITY_REGISTRY['investment'].apiEndpoint}?public=true`,
-    limit: 12,
-    enabled: hydrated && !isLoading && activeTab === 'open',
-  });
-
-  const {
-    isDeleting,
-    bulkDeleteConfirm,
-    setBulkDeleteConfirm,
-    handleBulkDelete,
-    executeBulkDelete,
-  } = useBulkDelete({
-    selectedIds,
-    apiEndpoint: investmentEntityConfig.apiEndpoint,
-    entityName: 'Investment',
-    entityNamePlural: 'Investments',
-    clearSelection,
-    refresh,
-  });
-
-  if (!hydrated || isLoading) {
-    return <Loading fullScreen message="Loading your investments..." />;
-  }
-
-  if (!user) {
-    return null;
-  }
-
-  const headerActions = (
-    <div className="flex items-center gap-2">
-      {activeTab === 'my-investments' && myInvestments.length > 0 && (
-        <Button onClick={() => setShowSelection(!showSelection)} variant="outline" size="sm">
-          {showSelection ? 'Cancel' : 'Select'}
-        </Button>
-      )}
-      <Button
-        href={investmentEntityConfig.createPath}
-        className={`${GRADIENTS.brandGreen} w-full sm:w-auto`}
-      >
-        Create Investment
-      </Button>
-    </div>
-  );
-
   return (
-    <>
-      <EntityListShell
-        title="Investments"
-        description="Create investment opportunities and manage structured deals"
-        headerActions={headerActions}
-      >
-        <Tabs
-          value={activeTab}
-          onValueChange={v => {
-            setActiveTab(v as typeof activeTab);
-            if (v !== 'my-investments') {
-              clearSelection();
-              setShowSelection(false);
-            }
-          }}
-          className="space-y-6"
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="my-investments" className="gap-2">
-              <TrendingUp className="h-4 w-4" />
-              <span className="hidden sm:inline">My Investments</span>
-              <span className="sm:hidden">Mine</span>
-              {myInvestments.length > 0 && (
-                <span className="ml-1 text-xs">({myInvestments.length})</span>
-              )}
-            </TabsTrigger>
-            <TabsTrigger value="open" className="gap-2">
-              <Search className="h-4 w-4" />
-              <span className="hidden sm:inline">Open Opportunities</span>
-              <span className="sm:hidden">Browse</span>
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="my-investments" className="space-y-6">
-            {error ? (
-              <div className="rounded-lg border bg-card p-6 text-red-600">{error}</div>
-            ) : (
-              <>
-                {showSelection && myInvestments.length > 0 && (
-                  <div className="mb-4 flex items-center justify-between">
-                    <label className="flex items-center gap-2 text-sm text-foreground">
-                      <input
-                        type="checkbox"
-                        checked={
-                          selectedIds.size === myInvestments.length && myInvestments.length > 0
-                        }
-                        onChange={() => toggleSelectAll(myInvestments.map(i => i.id))}
-                        className="h-4 w-4 rounded border-border-strong text-green-600 focus:ring-ring"
-                      />
-                      <span>Select All</span>
-                    </label>
-                  </div>
-                )}
-                <EntityList
-                  items={myInvestments}
-                  isLoading={loading}
-                  makeHref={investmentEntityConfig.makeHref}
-                  makeCardProps={investmentEntityConfig.makeCardProps}
-                  emptyState={investmentEntityConfig.emptyState}
-                  gridCols={investmentEntityConfig.gridCols}
-                  selectedIds={showSelection ? selectedIds : undefined}
-                  onToggleSelect={showSelection ? toggleSelect : undefined}
-                  showSelection={showSelection}
-                />
-                <CommercePagination page={page} limit={12} total={total} onPageChange={setPage} />
-              </>
-            )}
-          </TabsContent>
-
-          <TabsContent value="open" className="space-y-6">
-            <EntityList
-              items={openInvestments}
-              isLoading={openLoading}
-              makeHref={investmentEntityConfig.makeHref}
-              makeCardProps={investmentEntityConfig.makeCardProps}
-              emptyState={{
-                title: 'No open opportunities',
-                description: 'Check back later for investment opportunities from the community',
-              }}
-              gridCols={investmentEntityConfig.gridCols}
-            />
-            <CommercePagination
-              page={openPage}
-              limit={12}
-              total={openTotal}
-              onPageChange={setOpenPage}
-            />
-          </TabsContent>
-        </Tabs>
-      </EntityListShell>
-
-      {activeTab === 'my-investments' && (
-        <BulkActionsBar
-          selectedCount={selectedIds.size}
-          onClearSelection={() => {
-            clearSelection();
-            setShowSelection(false);
-          }}
-          onDelete={handleBulkDelete}
-          isDeleting={isDeleting}
-          entityNamePlural="investments"
-        />
-      )}
-      <ConfirmDialog
-        isOpen={bulkDeleteConfirm}
-        onClose={() => setBulkDeleteConfirm(false)}
-        onConfirm={executeBulkDelete}
-        title={`Delete ${selectedIds.size} investment${selectedIds.size === 1 ? '' : 's'}?`}
-        description="This action cannot be undone."
-        confirmLabel="Delete"
-      />
-    </>
+    <EntityDashboardPage<Investment>
+      config={investmentEntityConfig}
+      title="Investments"
+      description="Create investment opportunities and manage structured deals"
+      createButtonLabel="Create Investment"
+      tabs={[
+        { id: 'my-investments', label: 'My Investments', icon: TrendingUp },
+        {
+          id: 'open',
+          label: 'Open Opportunities',
+          icon: Search,
+          apiEndpoint: `${ENTITY_REGISTRY['investment'].apiEndpoint}?public=true`,
+          allowBulkSelect: false,
+          emptyState: {
+            title: 'No open opportunities',
+            description: 'Check back later for investment opportunities from the community',
+          },
+        },
+      ]}
+    />
   );
 }
