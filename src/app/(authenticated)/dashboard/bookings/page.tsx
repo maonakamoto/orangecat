@@ -3,9 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, Loader2 } from 'lucide-react';
-import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { toast } from 'sonner';
 import EmptyState from '@/components/ui/EmptyState';
+import EntityListShell from '@/components/entity/EntityListShell';
 import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { STATUS } from '@/config/database-constants';
@@ -116,15 +116,10 @@ export default function BookingsDashboardPage() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <Breadcrumb items={[{ label: 'Bookings' }]} className="mb-4" />
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-foreground">Manage Bookings</h1>
-        <p className="text-muted-foreground mt-1">
-          Review and manage booking requests for your services
-        </p>
-      </div>
-
+    <EntityListShell
+      title="Manage Bookings"
+      description="Review and manage booking requests for your services"
+    >
       <BookingTabs
         tabs={tabs}
         activeTab={activeTab}
@@ -164,6 +159,6 @@ export default function BookingsDashboardPage() {
           ))}
         </div>
       )}
-    </div>
+    </EntityListShell>
   );
 }

@@ -1,13 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
-import Button from '@/components/ui/Button';
-import { ArrowLeft, Lock } from 'lucide-react';
-import { ROUTES } from '@/config/routes';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
+import { Lock } from 'lucide-react';
+import EntityListShell from '@/components/entity/EntityListShell';
 import { useSettingsForm } from './useSettingsForm';
 import { SettingsEmailSection } from './SettingsEmailSection';
 import { SettingsPasswordSection } from './SettingsPasswordSection';
@@ -17,7 +13,6 @@ import { SettingsModals } from './SettingsModals';
 
 export default function SettingsPage() {
   const { user, isLoading } = useRequireAuth();
-  const router = useRouter();
   const {
     formData,
     isSubmittingEmail,
@@ -49,28 +44,11 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className={cn(GRADIENTS.pageBgSolid, 'min-h-screen')}>
-      <div className="bg-card border-b border-border-subtle shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center">
-            <Button
-              variant="ghost"
-              onClick={() => router.push(ROUTES.DASHBOARD.HOME)}
-              className="mr-4 p-2"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">Account Settings</h1>
-              <p className="text-muted-foreground mt-1">
-                Manage your email, password, and security
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <>
+      <EntityListShell
+        title="Account Settings"
+        description="Manage your email, password, and security"
+      >
         <div className="bg-card rounded-lg shadow-sm border border-border-subtle overflow-hidden">
           <div className="bg-foreground px-6 py-6">
             <div className="flex items-center text-white">
@@ -109,7 +87,7 @@ export default function SettingsPage() {
             <SettingsDangerSection isDeleting={isDeleting} onDelete={handleDeleteAccount} />
           </div>
         </div>
-      </div>
+      </EntityListShell>
 
       <SettingsModals
         showMFASetup={showMFASetup}
@@ -125,6 +103,6 @@ export default function SettingsPage() {
         }}
         onDeleteConfirm={executeDeleteAccount}
       />
-    </div>
+    </>
   );
 }

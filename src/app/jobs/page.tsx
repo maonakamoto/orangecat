@@ -20,6 +20,7 @@ import Link from 'next/link';
 import { formatRelativeTime } from '@/utils/dates';
 import { API_ROUTES } from '@/config/api-routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import EntityListShell from '@/components/entity/EntityListShell';
 
 export default function JobsPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,17 +89,10 @@ export default function JobsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <Briefcase className="h-8 w-8" />
-          Job Postings
-        </h1>
-        <p className="text-muted-foreground">
-          Browse employment opportunities from network states and groups
-        </p>
-      </div>
-
+    <EntityListShell
+      title="Job Postings"
+      description="Browse employment opportunities from network states and groups"
+    >
       {jobs.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
@@ -164,6 +158,6 @@ export default function JobsPage() {
           ))}
         </div>
       )}
-    </div>
+    </EntityListShell>
   );
 }
