@@ -9,6 +9,7 @@ import { useComposer } from '@/contexts/ComposerContext';
 import { cn } from '@/lib/utils';
 import { getRouteSurface, ROUTES } from '@/config/routes';
 import { getContextualCreateAction } from '@/lib/navigation/contextual-create';
+import { isNavHrefActive } from '@/lib/navigation/isActive';
 import { MobileCreateSheet } from '@/components/create/MobileCreateSheet';
 import { Z_INDEX } from '@/constants/z-index';
 import { GRADIENTS } from '@/config/gradients';
@@ -44,6 +45,13 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
   // Non-authenticated users see simplified nav
   const isAuthenticated = !!user;
 
+  // Active state uses isNavHrefActive — the same SSOT as sidebar +
+  // desktop header nav, so a route is considered "active" identically
+  // across all three chrome surfaces. Profile match is the one exception
+  // (collapses /profile + /profiles into the same nav item).
+  const isActive = (href: string) => isNavHrefActive(pathname, href);
+  const isProfileActive = !!(pathname?.startsWith('/profile') || pathname?.startsWith('/profiles'));
+
   // Navigation items - consistent for authenticated users regardless of route
   const navItems = isAuthenticated
     ? [
@@ -51,14 +59,15 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
           icon: Cat,
           label: 'Cat',
           href: ROUTES.DASHBOARD.CAT,
-          active: pathname?.startsWith(ROUTES.DASHBOARD.CAT),
+          active: isActive(ROUTES.DASHBOARD.CAT),
         },
         {
           icon: Home,
           label: 'Dashboard',
           href: ROUTES.DASHBOARD.HOME,
           active:
-            pathname === ROUTES.DASHBOARD.HOME || pathname.startsWith(`${ROUTES.DASHBOARD.HOME}/`),
+            pathname === ROUTES.DASHBOARD.HOME ||
+            (pathname?.startsWith(`${ROUTES.DASHBOARD.HOME}/`) ?? false),
         },
         {
           icon: Plus,
@@ -72,41 +81,31 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
           icon: BookOpen,
           label: 'Timeline',
           href: ROUTES.TIMELINE,
-          active: pathname?.startsWith(ROUTES.TIMELINE),
+          active: isActive(ROUTES.TIMELINE),
         },
         {
           icon: User,
           label: 'Profile',
           href: ROUTES.PROFILE.EDIT,
-          active: pathname?.startsWith('/profile') || pathname?.startsWith('/profiles'),
+          active: isProfileActive,
         },
       ]
     : [
-        {
-          icon: Home,
-          label: 'Home',
-          href: ROUTES.HOME,
-          active: pathname === ROUTES.HOME,
-        },
+        { icon: Home, label: 'Home', href: ROUTES.HOME, active: pathname === ROUTES.HOME },
         {
           icon: Compass,
           label: 'Discover',
           href: ROUTES.DISCOVER,
-          active: pathname === ROUTES.DISCOVER,
+          active: isActive(ROUTES.DISCOVER),
         },
         {
           icon: Plus,
           label: 'Create',
           href: ROUTES.PROJECTS.CREATE,
-          active: pathname?.startsWith(ROUTES.PROJECTS.CREATE),
+          active: isActive(ROUTES.PROJECTS.CREATE),
           primary: true,
         },
-        {
-          icon: User,
-          label: 'Login',
-          href: ROUTES.AUTH,
-          active: pathname?.startsWith('/auth'),
-        },
+        { icon: User, label: 'Login', href: ROUTES.AUTH, active: isActive(ROUTES.AUTH) },
       ];
 
   // Handle click on primary "+" button

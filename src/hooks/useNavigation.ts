@@ -9,12 +9,21 @@ import {
   clearNavigationStorage,
 } from './useNavigationStorage';
 
+/**
+ * Counter source identifier for nav items that show a live numeric
+ * badge (e.g., unread messages). Reads from a dedicated hook in the
+ * renderer so the nav config stays config (no hook calls here).
+ */
+export type NavCounterSource = 'messages';
+
 export interface NavItem {
   name: string;
   href?: string;
   icon?: React.ComponentType<{ className?: string }>;
   comingSoon?: boolean;
   badge?: string;
+  /** Live numeric counter rendered as an unread dot/number on this item. */
+  counter?: NavCounterSource;
   description?: string;
   requiresAuth?: boolean;
   requiresProfile?: boolean;

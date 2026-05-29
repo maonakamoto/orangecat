@@ -10,9 +10,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useActiveRoute } from '@/hooks/useActiveRoute';
+import { usePathname } from 'next/navigation';
 import type { NavigationItem } from '@/config/navigation';
 import { cn } from '@/lib/utils';
+import { isNavHrefActive } from '@/lib/navigation/isActive';
 
 interface DesktopNavigationProps {
   /** Navigation items to display */
@@ -22,10 +23,13 @@ interface DesktopNavigationProps {
 /**
  * Desktop navigation links
  *
- * Displays navigation items with active state highlighting
+ * Displays navigation items with active state highlighting. Active-state
+ * matching uses the same SSOT (`isNavHrefActive`) as the sidebar and
+ * mobile bottom nav — adding a new chrome surface should never grow a
+ * fourth implementation.
  */
 export function DesktopNavigation({ items }: DesktopNavigationProps) {
-  const { isActive } = useActiveRoute();
+  const pathname = usePathname();
 
   return (
     <div className="hidden md:flex items-center gap-1 xl:gap-2 ml-2">
@@ -35,7 +39,7 @@ export function DesktopNavigation({ items }: DesktopNavigationProps) {
           href={item.href!}
           className={cn(
             'px-3 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap',
-            isActive(item.href!)
+            isNavHrefActive(pathname, item.href!)
               ? 'text-foreground bg-muted'
               : 'text-muted-foreground hover:text-foreground hover:bg-muted'
           )}

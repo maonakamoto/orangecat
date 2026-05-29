@@ -34,6 +34,15 @@ import {
   BarChart3,
 } from 'lucide-react';
 
+/**
+ * Counter source identifier for nav items showing a live numeric badge.
+ * Mirrors the same union in src/hooks/useNavigation.ts NavItem.counter
+ * — kept duplicate-named because NavigationItem (this file) is used by
+ * the public/header nav and NavItem (useNavigation) by the sidebar; both
+ * agreed surfaces should accept the same set of sources.
+ */
+export type NavCounterSource = 'messages';
+
 export interface NavigationItem {
   name: string;
   href?: string;
@@ -43,6 +52,7 @@ export interface NavigationItem {
   children?: NavigationItem[]; // For dropdown menus
   external?: boolean; // For external links that open in new tab
   comingSoon?: boolean; // For features not yet available
+  counter?: NavCounterSource; // Optional live counter source for badges
 }
 
 export interface NavSection {
@@ -167,6 +177,7 @@ const simplifiedSections: NavSection[] = [
         icon: MessageSquare,
         description: 'Private messages',
         requiresAuth: true,
+        counter: 'messages',
       },
       {
         name: 'Explore',
@@ -294,6 +305,15 @@ export const footerNavigation = {
       icon: Globe,
     },
   ],
+  // Compact bottom-bar links (rendered next to the copyright line in
+  // <Footer>). Kept in config so adding/removing one is a config-only
+  // change. External URLs are marked with `external: true`.
+  bottomBar: [
+    { name: 'Documentation', href: ROUTES.DOCS },
+    { name: 'Source Code', href: 'https://github.com/g-but/orangecat', external: true },
+    { name: 'Technology', href: ROUTES.TECHNOLOGY },
+    { name: 'FAQ', href: ROUTES.FAQ },
+  ] as { name: string; href: string; external?: boolean }[],
 };
 
 /**

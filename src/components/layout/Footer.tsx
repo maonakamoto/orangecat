@@ -149,34 +149,26 @@ const Footer = React.memo(function Footer() {
               <p>&copy; 2026 OrangeCat. All rights reserved.</p>
             </div>
 
-            {/* Additional Links */}
+            {/* Additional Links — sourced from config.footerNavigation.bottomBar
+                so adding/removing a link is a config-only change. */}
             <div className="flex items-center space-x-6 text-sm">
-              <Link
-                href={ROUTES.DOCS}
-                className="text-muted-foreground hover:text-foreground transition-colors hover:underline"
-              >
-                Documentation
-              </Link>
-              <a
-                href="https://github.com/g-but/orangecat"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors hover:underline"
-              >
-                Source Code
-              </a>
-              <Link
-                href={ROUTES.TECHNOLOGY}
-                className="text-muted-foreground hover:text-foreground transition-colors hover:underline"
-              >
-                Technology
-              </Link>
-              <Link
-                href={ROUTES.FAQ}
-                className="text-muted-foreground hover:text-foreground transition-colors hover:underline"
-              >
-                FAQ
-              </Link>
+              {footerNavigation.bottomBar.map(link =>
+                link.external ? (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={footerLinkClass}
+                  >
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link key={link.name} href={link.href} className={footerLinkClass}>
+                    {link.name}
+                  </Link>
+                )
+              )}
             </div>
           </div>
         </div>

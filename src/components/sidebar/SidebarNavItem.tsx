@@ -41,19 +41,25 @@ interface SidebarNavItemProps {
 export function SidebarNavItem({ item, isActive, isExpanded, onNavigate }: SidebarNavItemProps) {
   const [isHovered, setIsHovered] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
-  const showMessagesBadge = item.href === '/messages';
-  // Always call hooks unconditionally to follow Rules of Hooks
+  // Counter source is config-driven (item.counter='messages') instead
+  // of comparing href. Adding a new counter (e.g. notifications dot) is
+  // a NavItem-config change, not a SidebarNavItem change. useUnreadCount
+  // is called unconditionally to respect Rules of Hooks; when
+  // item.counter is unset the value is simply ignored.
   const unreadCount = useUnreadCount();
-  const count = showMessagesBadge ? unreadCount : 0;
+  const count = item.counter === 'messages' ? unreadCount : 0;
+  const showMessagesBadge = item.counter === 'messages';
 
+  // Active style follows the cockpit/x.ai pattern: subtle background +
+  // a 2px inset accent bar on the left edge, instead of a full bordered
+  // pill. Two visual axes change (text color + accent bar) — restraint
+  // rather than a chunky shape shift between inactive/active.
   const linkClasses = [
     'group relative flex items-center rounded-md py-2.5 text-sm font-medium transition-colors duration-150',
     SIDEBAR_SPACING.ITEM_HEIGHT,
-    // When expanded (mobile): full width with padding
-    // When collapsed (desktop): centered icon
     isExpanded ? 'px-3' : 'mx-2 justify-center',
     isActive
-      ? `${SIDEBAR_COLORS.ACTIVE_BACKGROUND} ${SIDEBAR_COLORS.ACTIVE_TEXT} border ${SIDEBAR_COLORS.ACTIVE_BORDER}`
+      ? `${SIDEBAR_COLORS.ACTIVE_BACKGROUND} ${SIDEBAR_COLORS.ACTIVE_TEXT} shadow-[inset_2px_0_0_var(--color-tiffany-500,_#0ABAB5)]`
       : item.comingSoon
         ? `text-muted-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND} hover:text-foreground`
         : `text-foreground ${SIDEBAR_COLORS.HOVER_BACKGROUND}`,
