@@ -102,12 +102,14 @@ export function useLightningPayment({
   );
 
   const generateInvoice = async () => {
-    if (!amount || parseInt(amount) <= 0) {
+    // Always pass radix 10 and check for NaN — Bitcoin amounts can't
+    // tolerate a silently-NaN value propagating into invoice generation.
+    const amountSats = parseInt(amount, 10);
+    if (!amount || !Number.isFinite(amountSats) || amountSats <= 0) {
       toast.error('Please enter a valid amount');
       return;
     }
     setIsGenerating(true);
-    const amountSats = parseInt(amount);
     const description = `${projectTitle} - ${message || 'Lightning payment'}`;
     try {
       if (nwcConnected) {

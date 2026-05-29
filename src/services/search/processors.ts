@@ -65,10 +65,13 @@ export function calculateRelevanceScore(result: SearchResult, query: string): nu
   } else if (result.type === 'loan') {
     const loan = result.data as SearchLoan;
 
-    // Title matches get high score
-    if (loan.title.toLowerCase() === lowerQuery) {
+    // Title matches get high score. Title can be null in the DB — fall
+    // back to empty string so search scoring never throws on a malformed
+    // row.
+    const loanTitle = (loan.title ?? '').toLowerCase();
+    if (loanTitle === lowerQuery) {
       score += 100;
-    } else if (loan.title.toLowerCase().includes(lowerQuery)) {
+    } else if (loanTitle && loanTitle.includes(lowerQuery)) {
       score += 60;
     }
 
@@ -89,10 +92,10 @@ export function calculateRelevanceScore(result: SearchResult, query: string): nu
   } else {
     const project = result.data as SearchFundingPage;
 
-    // Title matches get high score
-    if (project.title.toLowerCase() === lowerQuery) {
+    const projectTitle = (project.title ?? '').toLowerCase();
+    if (projectTitle === lowerQuery) {
       score += 100;
-    } else if (project.title.toLowerCase().includes(lowerQuery)) {
+    } else if (projectTitle && projectTitle.includes(lowerQuery)) {
       score += 60;
     }
 

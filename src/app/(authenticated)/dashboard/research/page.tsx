@@ -74,9 +74,10 @@ export default function ResearchDashboard() {
   };
 
   const filteredEntities = entities.filter(entity => {
+    const lowerQuery = searchTerm.toLowerCase();
     const matchesSearch =
-      entity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entity.description.toLowerCase().includes(searchTerm.toLowerCase());
+      (entity.title ?? '').toLowerCase().includes(lowerQuery) ||
+      (entity.description ?? '').toLowerCase().includes(lowerQuery);
     const matchesField = fieldFilter === 'all' || entity.field === fieldFilter;
     const matchesStatus = statusFilter === 'all' || entity.status === statusFilter;
     return matchesSearch && matchesField && matchesStatus;

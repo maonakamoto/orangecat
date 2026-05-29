@@ -14,10 +14,22 @@
 export function getDemoTimelineEvents(userId: string): Record<string, unknown>[] {
   const now = new Date();
 
-  // Get user-created posts from localStorage
-  const storedPosts = (
-    JSON.parse(localStorage.getItem('mock_timeline_posts') || '[]') as Record<string, unknown>[]
-  ).filter(post => (post as { actor_id?: string }).actor_id === userId); // Only show user's own posts
+  // Get user-created posts from localStorage. Wrap parse: a corrupted
+  // entry shouldn't permanently break the demo feed for that browser.
+  let storedPosts: Record<string, unknown>[] = [];
+  try {
+    const raw = localStorage.getItem('mock_timeline_posts');
+    if (raw) {
+      const parsed = JSON.parse(raw) as unknown;
+      if (Array.isArray(parsed)) {
+        storedPosts = (parsed as Record<string, unknown>[]).filter(
+          post => (post as { actor_id?: string }).actor_id === userId
+        );
+      }
+    }
+  } catch {
+    storedPosts = [];
+  }
 
   // Demo posts (only show if no user posts exist)
   const demoPosts: Record<string, unknown>[] =
