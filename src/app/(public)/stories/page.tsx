@@ -3,9 +3,11 @@ import nextDynamic from 'next/dynamic';
 import { getAllStories, getAllCategories } from '@/lib/stories';
 
 export const runtime = 'nodejs';
-// Stories are filesystem-sourced MDX. Revalidate hourly instead of
-// forcing dynamic — gives CDN caching back on a marketing surface.
-export const revalidate = 3600;
+// Stories renders MDX through `nextDynamic` of a client component that
+// receives React-element props; that combination can't be prerendered
+// (build fails with "Objects are not valid as a React child"). Keep
+// dynamic until the renderer is refactored to be SSG-safe.
+export const dynamic = 'force-dynamic';
 
 const StoriesPageClient = nextDynamic(() => import('@/components/stories/StoriesPageClient'), {
   loading: () => (
