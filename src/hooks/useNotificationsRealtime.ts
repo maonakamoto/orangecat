@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase/browser';
 import type { User } from '@supabase/supabase-js';
 import type { Notification } from './useNotifications';
@@ -15,24 +15,40 @@ interface Props {
 }
 
 export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, onDelete }: Props) {
+  // Keep the handlers in refs so subscribing only depends on identity
+  // (userId + enabled). Otherwise Supabase auth-refresh emits a new
+  // User object hourly → channel tear-down + resubscribe; and any
+  // parent re-render that doesn't memoize the handler props would
+  // also tear down the channel.
+  const onInsertRef = useRef(onInsert);
+  const onUpdateRef = useRef(onUpdate);
+  const onDeleteRef = useRef(onDelete);
+  onInsertRef.current = onInsert;
+  onUpdateRef.current = onUpdate;
+  onDeleteRef.current = onDelete;
+
+  const userId = user?.id;
+
   useEffect(() => {
-    if (!user || !enabled) {
+    if (!userId || !enabled) {
       return;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const channel = (supabase as any)
-      .channel('notifications')
+      // Channel name includes userId so simultaneous mounts in different
+      // components don't collide.
+      .channel(`notifications:${userId}`)
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
           table: DATABASE_TABLES.NOTIFICATIONS,
-          filter: `recipient_user_id=eq.${user.id}`,
+          filter: `recipient_user_id=eq.${userId}`,
         },
         (payload: { new: Record<string, unknown> }) => {
-          onInsert(payload.new as unknown as Notification);
+          onInsertRef.current(payload.new as unknown as Notification);
         }
       )
       .on(
@@ -41,10 +57,10 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
           event: 'UPDATE',
           schema: 'public',
           table: DATABASE_TABLES.NOTIFICATIONS,
-          filter: `recipient_user_id=eq.${user.id}`,
+          filter: `recipient_user_id=eq.${userId}`,
         },
         (payload: { new: Record<string, unknown> }) => {
-          onUpdate(payload.new);
+          onUpdateRef.current(payload.new);
         }
       )
       .on(
@@ -53,10 +69,10 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
           event: 'DELETE',
           schema: 'public',
           table: DATABASE_TABLES.NOTIFICATIONS,
-          filter: `recipient_user_id=eq.${user.id}`,
+          filter: `recipient_user_id=eq.${userId}`,
         },
         (payload: { old: { id: string } }) => {
-          onDelete(payload.old.id);
+          onDeleteRef.current(payload.old.id);
         }
       )
       .subscribe();
@@ -64,5 +80,5 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, enabled, onInsert, onUpdate, onDelete]);
+  }, [userId, enabled]);
 }

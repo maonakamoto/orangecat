@@ -57,16 +57,22 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
       return apiBadRequest(result.error);
     }
 
-    void resolveGroupBySlug(supabase, slug).then(group => {
+    // Await activity write before responding — Vercel kills the
+    // function the moment the response is sent, so the void/.then
+    // pattern silently dropped vote-activity rows in prod.
+    try {
+      const group = await resolveGroupBySlug(supabase, slug);
       if (group) {
-        void recordGroupActivity(supabase, {
+        await recordGroupActivity(supabase, {
           group_id: group.id,
           user_id: user.id,
           activity_type: 'voted',
           metadata: { proposal_id: id, vote: parsed.data.vote },
         });
       }
-    });
+    } catch (activityError) {
+      logger.error('Failed to record vote activity', activityError, 'API');
+    }
 
     return apiSuccess(result.vote);
   } catch (error) {

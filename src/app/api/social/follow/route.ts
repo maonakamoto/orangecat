@@ -89,15 +89,27 @@ async function handleFollow(request: AuthenticatedRequest) {
       .maybeSingle();
     const followerName: string = followerProfile?.name || followerProfile?.username || 'Someone';
     const followerUsername: string | null = followerProfile?.username ?? null;
-    void NotificationDispatcher.dispatch({
-      userId: following_id,
-      type: 'follow',
-      title: `${followerName} followed you`,
-      message: `${followerName} started following you on OrangeCat.`,
-      sourceEntityType: 'profile',
-      sourceEntityId: user.id,
-      actionUrl: followerUsername ? `/profiles/${followerUsername}` : undefined,
-    });
+    // Await before returning — on Vercel, fire-and-forget (`void
+    // dispatch(...)`) is killed the instant the response is sent, so
+    // follow notifications were silently lost in production. Adds
+    // ~50ms to the response but guarantees delivery.
+    try {
+      await NotificationDispatcher.dispatch({
+        userId: following_id,
+        type: 'follow',
+        title: `${followerName} followed you`,
+        message: `${followerName} started following you on OrangeCat.`,
+        sourceEntityType: 'profile',
+        sourceEntityId: user.id,
+        actionUrl: followerUsername ? `/profiles/${followerUsername}` : undefined,
+      });
+    } catch (notificationError) {
+      logger.error('Failed to dispatch follow notification', {
+        error: notificationError,
+        following_id,
+      });
+      // Non-fatal: the follow itself succeeded.
+    }
 
     logger.info('User followed successfully', {
       userId: user.id,

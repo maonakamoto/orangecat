@@ -158,6 +158,7 @@ export function ConversationListItem({
             onToggleSelect();
           }}
           className="mt-2"
+          aria-label={`Select conversation with ${displayName}`}
         />
       )}
       {getConversationAvatar(conversation, currentUserId)}

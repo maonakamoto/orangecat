@@ -147,7 +147,10 @@ export function EditPostModal({
         <div className="p-4">
           {/* Error message */}
           {error && (
-            <div className="mb-3 p-3 oc-error-surface rounded-lg text-sm text-destructive/80">
+            <div
+              role="alert"
+              className="mb-3 p-3 oc-error-surface rounded-lg text-sm text-destructive/80"
+            >
               {error}
             </div>
           )}

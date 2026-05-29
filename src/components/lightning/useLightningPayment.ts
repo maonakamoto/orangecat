@@ -33,6 +33,12 @@ export function useLightningPayment({
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [pollInterval, setPollInterval] = useState<ReturnType<typeof setInterval> | null>(null);
   const pollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Hold the active NWC client in a ref so unmount cleanup can
+  // disconnect its Nostr relay socket. Previously the client was
+  // closed-over inside startPaymentPolling and never closed if the
+  // user navigated away mid-payment — leaking a relay connection
+  // for the full hour-long polling window.
+  const nwcClientRef = useRef<NWCClient | null>(null);
 
   useEffect(() => {
     if (!invoice) {
@@ -61,6 +67,10 @@ export function useLightningPayment({
         clearTimeout(pollTimeoutRef.current);
         pollTimeoutRef.current = null;
       }
+      if (nwcClientRef.current) {
+        nwcClientRef.current.disconnect();
+        nwcClientRef.current = null;
+      }
     };
   }, [pollInterval]);
 
@@ -70,7 +80,13 @@ export function useLightningPayment({
       if (!nwcUri) {
         return;
       }
+      // Close any prior NWC client before opening a new one — guards
+      // against a leaked socket if startPaymentPolling is called twice.
+      if (nwcClientRef.current) {
+        nwcClientRef.current.disconnect();
+      }
       const client = new NWCClient(nwcUri);
+      nwcClientRef.current = client;
       const interval = setInterval(async () => {
         try {
           const result = await client.lookupInvoice(paymentHash);
@@ -78,6 +94,9 @@ export function useLightningPayment({
             setPaymentStatus('paid');
             clearInterval(interval);
             client.disconnect();
+            if (nwcClientRef.current === client) {
+              nwcClientRef.current = null;
+            }
             onPaymentComplete?.(paymentHash);
             toast.success('Payment received!');
           }
@@ -93,6 +112,9 @@ export function useLightningPayment({
         () => {
           clearInterval(interval);
           client.disconnect();
+          if (nwcClientRef.current === client) {
+            nwcClientRef.current = null;
+          }
           pollTimeoutRef.current = null;
         },
         60 * 60 * 1000

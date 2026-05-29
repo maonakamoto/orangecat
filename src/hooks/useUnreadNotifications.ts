@@ -9,10 +9,16 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 
 export function useUnreadNotifications() {
   const { user } = useAuth();
+  const userId = user?.id;
   const [count, setCount] = useState(0);
 
+  // Depend on userId rather than the full user object — Supabase auth
+  // refresh emits a fresh User reference (~hourly) even when the id is
+  // unchanged. Subscribing to `user` causes the channel to tear down +
+  // resubscribe on every token refresh; using `userId` makes the effect
+  // re-run only when the actual logged-in identity changes.
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       setCount(0);
       return;
     }
@@ -34,15 +40,18 @@ export function useUnreadNotifications() {
 
     fetchCount();
 
+    // Channel name includes userId so two simultaneous mounts (e.g.,
+    // bell badge + notification center) get separate channels and
+    // don't tear each other down on unmount.
     const channel = supabase
-      .channel('notification-count')
+      .channel(`notification-count:${userId}`)
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
           table: DATABASE_TABLES.NOTIFICATIONS,
-          filter: `recipient_user_id=eq.${user.id}`,
+          filter: `recipient_user_id=eq.${userId}`,
         },
         () => fetchCount()
       )
@@ -51,7 +60,7 @@ export function useUnreadNotifications() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user]);
+  }, [userId]);
 
   return { count };
 }

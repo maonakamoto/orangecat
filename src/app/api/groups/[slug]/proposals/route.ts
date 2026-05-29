@@ -105,12 +105,18 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
       return apiBadRequest(result.error);
     }
 
-    void recordGroupActivity(request.supabase, {
-      group_id: groupResult.group.id,
-      user_id: user.id,
-      activity_type: 'created_proposal',
-      metadata: { title: parsed.data.title, proposal_id: result.proposal?.id },
-    });
+    // Await so the activity row is persisted before Vercel kills the
+    // function. Fire-and-forget was silently dropping the row.
+    try {
+      await recordGroupActivity(request.supabase, {
+        group_id: groupResult.group.id,
+        user_id: user.id,
+        activity_type: 'created_proposal',
+        metadata: { title: parsed.data.title, proposal_id: result.proposal?.id },
+      });
+    } catch (activityError) {
+      logger.error('Failed to record proposal activity', activityError, 'API');
+    }
 
     return apiCreated(result.proposal);
   } catch (error) {

@@ -257,7 +257,11 @@ export function FormField({
     return (
       <div>
         {renderInput()}
-        {error && <p className="text-destructive text-sm mt-1">{error}</p>}
+        {error && (
+          <p role="alert" className="text-destructive text-sm mt-1">
+            {error}
+          </p>
+        )}
       </div>
     );
   }
@@ -270,7 +274,11 @@ export function FormField({
       </label>
       {renderInput()}
       {hint && !error && <p className="text-xs text-muted-foreground mt-1">{hint}</p>}
-      {error && <p className="text-destructive text-sm mt-1">{error}</p>}
+      {error && (
+        <p role="alert" className="text-destructive text-sm mt-1">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

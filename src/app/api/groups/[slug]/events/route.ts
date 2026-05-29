@@ -165,12 +165,18 @@ export const POST = withAuth(
         .eq('id', user.id)
         .single();
 
-      void recordGroupActivity(req.supabase, {
-        group_id: group.id,
-        user_id: user.id,
-        activity_type: 'created_event',
-        metadata: { title: eventData.title, event_id: event.id },
-      });
+      // Await — Vercel terminates the function on response, so the
+      // void pattern silently dropped activity rows.
+      try {
+        await recordGroupActivity(req.supabase, {
+          group_id: group.id,
+          user_id: user.id,
+          activity_type: 'created_event',
+          metadata: { title: eventData.title, event_id: event.id },
+        });
+      } catch (activityError) {
+        logger.error('Failed to record event activity', activityError, 'API');
+      }
 
       return apiCreated({
         event: {
