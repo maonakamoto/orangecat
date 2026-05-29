@@ -193,26 +193,34 @@ async function fetchUserEntities(
 ): Promise<Array<{ title: string; type: string; status: string; id: string }>> {
   const entities: Array<{ title: string; type: string; status: string; id: string }> = [];
 
-  // Query entity tables that use actor_id
+  // Query entity tables that use actor_id. Fetched in parallel — each
+  // type is a different table so they can't be unioned in one SQL call,
+  // but Promise.all keeps total wall-clock to one round-trip equivalent.
+  // Previously this was a sequential `for…await` per type — ~10 serial
+  // round-trips for every digest recipient, every cron tick.
   const entityTypesToCheck: EntityType[] = ENTITY_TYPES.filter(
     t => t !== 'wallet' && ENTITY_REGISTRY[t].userIdField === 'actor_id'
   ) as EntityType[];
 
-  for (const entityType of entityTypesToCheck) {
-    const meta = ENTITY_REGISTRY[entityType];
-    const { data } = await (admin.from(meta.tableName) as any)
-      .select('id, title, status')
-      .eq('actor_id', actorId);
+  const results = await Promise.all(
+    entityTypesToCheck.map(async entityType => {
+      const meta = ENTITY_REGISTRY[entityType];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data } = await (admin.from(meta.tableName) as any)
+        .select('id, title, status')
+        .eq('actor_id', actorId);
+      return { entityType, rows: (data as { id: string; title: string; status: string }[]) ?? [] };
+    })
+  );
 
-    if (data) {
-      for (const row of data) {
-        entities.push({
-          id: row.id,
-          title: row.title || 'Untitled',
-          type: entityType,
-          status: row.status || 'draft',
-        });
-      }
+  for (const { entityType, rows } of results) {
+    for (const row of rows) {
+      entities.push({
+        id: row.id,
+        title: row.title || 'Untitled',
+        type: entityType,
+        status: row.status || 'draft',
+      });
     }
   }
 

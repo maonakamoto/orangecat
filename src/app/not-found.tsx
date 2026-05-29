@@ -1,5 +1,4 @@
 import Link from 'next/link';
-export const dynamic = 'force-dynamic';
 import { Home, Search, ArrowLeft } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 

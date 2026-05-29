@@ -75,8 +75,12 @@ export interface TransactionSummary {
  */
 async function getAddressStats(address: string): Promise<AddressStats | null> {
   try {
+    // Bitcoin balances only change on new blocks (~10min). A 60s cache
+    // is well within freshness budget and saves a hop on every wallet
+    // tile render. Call sites that need realtime can call mempool API
+    // directly with `cache: 'no-store'`.
     const response = await fetch(`${MEMPOOL_API}/address/${address}`, {
-      cache: 'no-store', // Always get fresh data
+      next: { revalidate: 60 },
     });
 
     if (!response.ok) {
@@ -115,7 +119,7 @@ export async function getAddressTransactions(
 ): Promise<MempoolTransaction[]> {
   try {
     const response = await fetch(`${MEMPOOL_API}/address/${address}/txs`, {
-      cache: 'no-store',
+      next: { revalidate: 60 },
     });
 
     if (!response.ok) {

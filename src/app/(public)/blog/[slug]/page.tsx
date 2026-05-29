@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
+// Filesystem-sourced MDX. Static generation with hourly revalidation
+// gives the CDN cache back; force-dynamic was wasteful here.
+export const revalidate = 3600;
 import { Calendar, Clock, ArrowLeft, Users, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { getBlogPost, getBlogPostSlugs } from '@/lib/blog';
