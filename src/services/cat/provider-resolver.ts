@@ -108,7 +108,7 @@ export async function resolveProvider(
         message:
           'To use My Cat AI chat, you need to add your own API key in Settings → API Keys. Get a free Groq key at console.groq.com/keys',
         hasByok: false,
-        helpUrl: `${ROUTES.DASHBOARD.SETTINGS}?tab=api-keys`,
+        helpUrl: ROUTES.SETTINGS_AI,
       },
       { status: 503 }
     );

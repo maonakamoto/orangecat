@@ -347,15 +347,17 @@ export const ROUTES = {
     CAT_PERMISSIONS: '/dashboard/cat',
     DOCUMENTS: ENTITY_REGISTRY['document'].basePath,
     DOCUMENTS_CREATE: ENTITY_REGISTRY['document'].createPath,
-    SETTINGS: '/dashboard/settings',
+    // Note: there is no /dashboard/settings page. Account settings live at
+    // ROUTES.SETTINGS; AI settings at ROUTES.SETTINGS_AI.
   },
 
   // Profile routes (authenticated - own profile)
   PROFILE: {
     SELF: '/profile',
     VIEW: (username: string) => `/profile/${username}`,
-    SETTINGS: '/profile/settings',
     EDIT: '/dashboard/info',
+    // Note: there is no /profile/settings page; account settings live at
+    // ROUTES.SETTINGS.
   },
 
   // Public profile routes (shareable)

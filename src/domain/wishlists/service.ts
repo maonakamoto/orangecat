@@ -15,7 +15,18 @@ import { createEntity } from '@/domain/base/entityService';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import type { WishlistFormData } from '@/lib/validation';
 
-export async function listWishlistsPage(limit: number, offset: number, userId?: string) {
+export async function listWishlistsPage(
+  limit: number,
+  offset: number,
+  userId?: string,
+  /**
+   * When false, hides non-public wishlists. Must be derived from
+   * `shouldIncludeDrafts(requestedUserId, authenticatedUserId)` at the
+   * API-route layer — never trust the raw `?user_id=` query param.
+   * Default false: private wishlists never leak to unauthenticated callers.
+   */
+  includeOwnDrafts = false
+) {
   const supabase = await createServerClient();
 
   let query = supabase.from(DATABASE_TABLES.WISHLIST_WITH_STATS).select('*', { count: 'exact' });
@@ -23,6 +34,12 @@ export async function listWishlistsPage(limit: number, offset: number, userId?: 
   if (userId) {
     const actor = await getOrCreateUserActor(userId);
     query = query.eq('actor_id', actor.id);
+  }
+
+  // Only the owner can see private/inactive wishlists. Anonymous or
+  // cross-user requesters get the public, active set only.
+  if (!includeOwnDrafts) {
+    query = query.eq('visibility', 'public').eq('is_active', true);
   }
 
   const { data, count, error } = await query

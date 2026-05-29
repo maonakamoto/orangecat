@@ -18,8 +18,13 @@ import { getPagination } from '@/lib/api/query';
 import { listWishlistsPage, createWishlist } from '@/domain/wishlists/service';
 import { calculatePage, getCacheControl } from '@/lib/api/helpers';
 import { createEntityPostHandler } from '@/lib/api/entityPostHandler';
+import { getAuthenticatedUserId, shouldIncludeDrafts } from '@/lib/api/authHelpers';
 
 // GET /api/wishlists - Get all wishlists
+//
+// Security: when `?user_id=X` is passed, private/inactive wishlists are
+// only returned if the authenticated user IS X. Without this guard,
+// anonymous callers could enumerate any user's private gift wishlists.
 export const GET = compose(
   withRequestId(),
   withRateLimit('read')
@@ -27,8 +32,15 @@ export const GET = compose(
   try {
     const { limit, offset } = getPagination(request.url, { defaultLimit: 20, maxLimit: 100 });
     const url = new URL(request.url);
-    const userId = url.searchParams.get('user_id');
-    const { items, total } = await listWishlistsPage(limit, offset, userId || undefined);
+    const requestedUserId = url.searchParams.get('user_id');
+    const authenticatedUserId = await getAuthenticatedUserId();
+    const includeOwnDrafts = await shouldIncludeDrafts(requestedUserId, authenticatedUserId);
+    const { items, total } = await listWishlistsPage(
+      limit,
+      offset,
+      requestedUserId || undefined,
+      includeOwnDrafts
+    );
     return apiSuccess(items, {
       page: calculatePage(offset, limit),
       limit,

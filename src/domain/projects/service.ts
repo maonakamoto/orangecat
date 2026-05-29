@@ -4,7 +4,18 @@ import { STATUS } from '@/config/database-constants';
 import type { ProjectData } from '@/lib/validation';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 
-export async function listProjectsPage(limit: number, offset: number, userId?: string) {
+export async function listProjectsPage(
+  limit: number,
+  offset: number,
+  userId?: string,
+  /**
+   * Whether to include the requester's drafts. Must be derived from
+   * `shouldIncludeDrafts(requestedUserId, authenticatedUserId)` at the
+   * API-route layer — never trust the raw `?user_id=` query param.
+   * Default false so callers that forget the check don't leak drafts.
+   */
+  includeOwnDrafts = false
+) {
   // Plain '*' — no profile join. The `projects` table has no FK on user_id
   // (only actor_id → actors), so the embedded `profiles:user_id(...)` syntax
   // produced a 500. Detail-view (GET /api/projects/[id]) fetches the profile
@@ -13,7 +24,7 @@ export async function listProjectsPage(limit: number, offset: number, userId?: s
     limit,
     offset,
     userId,
-    includeOwnDrafts: !!userId,
+    includeOwnDrafts,
     publicStatuses: [PROJECT_STATUS.ACTIVE],
   });
 

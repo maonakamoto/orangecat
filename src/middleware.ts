@@ -1,40 +1,26 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { getRouteSurface } from '@/config/routes';
 
-// List of public routes that don't require auth
-const publicRoutes = [
-  '/',
-  '/auth',
-  '/auth/reset-password',
-  '/auth/forgot-password',
-  '/login',
-  '/register',
-  '/privacy',
-  '/terms',
-  '/about',
-  '/blog',
-  '/profiles', // Public profile pages (shareable)
-  '/projects', // Public project listing (redirects to discover)
-  '/products', // Public product pages (shareable)
-  '/services', // Public service pages (shareable)
-  '/causes', // Public cause pages (shareable)
-  '/events', // Public event pages (shareable)
-  '/loans', // Public loan pages (shareable)
-  '/groups', // Public group pages (shareable)
-  '/ai-assistants', // Public AI assistant pages (shareable)
-  '/investments', // Public investment pages (shareable)
-  '/assets', // Public asset pages (shareable)
-  '/wishlists', // Public wishlist pages (shareable)
-  '/research', // Public research pages (shareable)
-  '/funding', // Public funding information
-  '/onboarding', // Public onboarding flow
+// Edge middleware route classification reads from the SAME SSOT used by
+// AppShell / MobileBottomNav / Footer / Header (src/config/routes.ts).
+// Never keep a parallel list here — they will drift.
+//
+// Routes whose surface is 'app' AND which are not also accessible
+// signed-out (i.e. require a logged-in user to make any sense) get the
+// token validation pass below. Hybrid in-app surfaces like /discover,
+// /products, /services, /events stay open to anonymous users and the
+// per-page auth gate handles redirect when needed.
+const REQUIRES_AUTH_PREFIXES = [
+  '/dashboard',
+  '/settings',
+  '/timeline',
+  '/messages',
+  '/post',
+  '/ai-chat',
+  '/profile/', // own profile (note trailing slash — public is at /profiles)
 ];
-
-// Routes that should redirect to /auth if user is not logged in
-// Note: /profiles/ is public, /profile/ is protected (own profile)
-// Note: entity create paths are under /dashboard (protected via /dashboard prefix)
-const protectedRoutes = ['/dashboard', '/profile/', '/settings', '/timeline', '/messages'];
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -91,13 +77,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(resetUrl);
   }
 
-  // Optimized auth check - only check cookies if accessing protected route
-  // Exclude public routes first
-  const isPublicRoute = publicRoutes.some(
-    route => pathname === route || pathname.startsWith(route + '/')
-  );
+  // Skip token validation on 'public' and 'auth' surfaces — those are
+  // intentionally open. Hybrid in-app surfaces (discover, products, …)
+  // resolve as 'app' but aren't in REQUIRES_AUTH_PREFIXES, so they also
+  // pass through. Only routes that require a logged-in user to make any
+  // sense get the cookie-token validation pass.
+  const isAppSurface = getRouteSurface(pathname) === 'app';
   const isProtectedRoute =
-    !isPublicRoute && protectedRoutes.some(route => pathname.startsWith(route));
+    isAppSurface && REQUIRES_AUTH_PREFIXES.some(route => pathname.startsWith(route));
 
   if (isProtectedRoute) {
     // Validate token with Supabase to avoid stale/forged cookies passing through

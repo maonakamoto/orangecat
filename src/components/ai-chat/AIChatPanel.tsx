@@ -124,10 +124,7 @@ export function AIChatPanel({
               Only {userStatus.freeMessagesRemaining} free message
               {userStatus.freeMessagesRemaining !== 1 ? 's' : ''} remaining today.
             </span>
-            <Link
-              href={ROUTES.DASHBOARD.SETTINGS}
-              className="text-amber-800 underline hover:no-underline"
-            >
+            <Link href={ROUTES.SETTINGS_AI} className="text-amber-800 underline hover:no-underline">
               Add API key
             </Link>
           </div>

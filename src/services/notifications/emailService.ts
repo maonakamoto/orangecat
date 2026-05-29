@@ -347,7 +347,10 @@ export class NotificationEmailService {
     data: Record<string, unknown>
   ): { subject: string; html: string; text: string } | null {
     const displayName = (data.displayName as string) || 'there';
-    const unsubscribeUrl = `${APP_URL}/dashboard/settings/notifications`;
+    // TODO(notifications): build a dedicated /settings/notifications page.
+    // For now, link to /settings so unsubscribe doesn't 404 — users can
+    // adjust preferences there once the section ships.
+    const unsubscribeUrl = `${APP_URL}/settings`;
 
     // --- Welcome ---
     if (type === 'welcome') {
