@@ -11,7 +11,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CheckCircle, XCircle, Clock, AlertTriangle, FileText, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { API_ROUTES } from '@/config/api-routes';
@@ -216,10 +216,18 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
 }
 
 /**
- * Hook to manage pending actions state
+ * Hook to manage pending actions state.
+ *
+ * NB: every function returned here is wrapped in useCallback with an empty
+ * dependency array. They are pure thin wrappers around fetch — they need no
+ * deps and they MUST be stable across renders. Otherwise consumers that wire
+ * them through useEffect(deps) get a fresh reference on every render, the
+ * effect re-runs, an immediate fetch fires, setState triggers a re-render,
+ * and the whole thing infinite-loops. This loop was visible in production as
+ * hundreds of polls per second against /api/cat/actions.
  */
 export function usePendingActions() {
-  const confirmAction = async (actionId: string): Promise<string | undefined> => {
+  const confirmAction = useCallback(async (actionId: string): Promise<string | undefined> => {
     const res = await fetch(`${API_ROUTES.CAT.ACTIONS}/${actionId}`, {
       method: 'POST',
     });
@@ -229,29 +237,32 @@ export function usePendingActions() {
     }
     const data = json?.data as Record<string, unknown> | undefined;
     return typeof data?.displayMessage === 'string' ? data.displayMessage : undefined;
-  };
+  }, []);
 
-  const rejectAction = async (actionId: string, reason?: string): Promise<{ success: boolean }> => {
-    const res = await fetch(`${API_ROUTES.CAT.ACTIONS}/${actionId}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reason }),
-    });
-    const json = await res.json();
-    if (!res.ok) {
-      throw new Error(json?.error ?? `Failed to reject action (${res.status})`);
-    }
-    return json;
-  };
+  const rejectAction = useCallback(
+    async (actionId: string, reason?: string): Promise<{ success: boolean }> => {
+      const res = await fetch(`${API_ROUTES.CAT.ACTIONS}/${actionId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json?.error ?? `Failed to reject action (${res.status})`);
+      }
+      return json;
+    },
+    []
+  );
 
-  const getPendingActions = async (): Promise<PendingAction[]> => {
+  const getPendingActions = useCallback(async (): Promise<PendingAction[]> => {
     const res = await fetch(API_ROUTES.CAT.ACTIONS);
     if (!res.ok) {
       return [];
     }
     const json = await res.json();
     return json.success ? json.data.pendingActions : [];
-  };
+  }, []);
 
   return {
     confirmAction,
