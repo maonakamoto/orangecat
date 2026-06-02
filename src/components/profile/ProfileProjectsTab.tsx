@@ -102,9 +102,6 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
     project => project.status?.toLowerCase() !== PROJECT_STATUS.DRAFT
   );
 
-  // Show integration note for customer projects (FleetCrown of OrangeCat)
-  const integrationNote = IntegrationNote; // defined above
-
   if (publicProjects.length === 0) {
     return (
       <div className="text-center py-12">
