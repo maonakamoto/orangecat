@@ -10,6 +10,8 @@ import { createContext, useContext } from 'react';
 export interface OnboardingContextValue {
   /** Mark onboarding complete and navigate to the given href */
   onNavigateAway: (href: string) => void;
+  /** Advance to the next step within the onboarding flow */
+  onContinueStep: () => void;
 }
 
 export const OnboardingContext = createContext<OnboardingContextValue | null>(null);

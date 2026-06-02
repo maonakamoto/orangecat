@@ -90,7 +90,9 @@ export function OnboardingFlow() {
   }
 
   return (
-    <OnboardingContext.Provider value={{ onNavigateAway: handleAction }}>
+    <OnboardingContext.Provider
+      value={{ onNavigateAway: handleAction, onContinueStep: handleNext }}
+    >
       <div className={cn(GRADIENTS.pageBgBlue, 'min-h-screen')}>
         <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
           <OnboardingHeader

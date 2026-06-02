@@ -10,9 +10,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Cat, ArrowRight, Loader2 } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
+import { useOnboardingContext } from '../context';
 
 export function WelcomeStep() {
   const router = useRouter();
+  const { onContinueStep } = useOnboardingContext();
   const [navigating, setNavigating] = useState(false);
 
   const handleCatClick = () => {
@@ -49,8 +51,14 @@ export function WelcomeStep() {
       </button>
 
       <p className="px-1 text-center text-xs text-muted-foreground">
-        Prefer manual setup? Continue to choose a project, service, product, group, or finance
-        option yourself.
+        Prefer manual setup?{' '}
+        <button
+          type="button"
+          onClick={onContinueStep}
+          className="rounded-sm underline-offset-2 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
+        >
+          Continue to choose a project, service, product, group, or finance option yourself.
+        </button>
       </p>
     </div>
   );
