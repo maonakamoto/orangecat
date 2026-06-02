@@ -68,8 +68,14 @@ export function getUniqueCategories(
       continue;
     }
 
-    // Create comparison key (lowercase for case-insensitive comparison)
-    const key = caseSensitive ? trimmed : trimmed.toLowerCase();
+    // Create comparison key. When case-insensitive, also normalize separator
+    // variants (hyphen/underscore vs space) and collapse runs of whitespace so
+    // slug-style + display-style variants of the same concept collapse:
+    //   "Open Source" + "open-source" → both key to "open source"
+    //   "AI Vision" + "ai-vision" → both key to "ai vision"
+    const key = caseSensitive
+      ? trimmed
+      : trimmed.toLowerCase().replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
 
     // Check if we've seen this category (case-insensitively)
     if (!seen.has(key)) {

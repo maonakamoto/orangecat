@@ -13,6 +13,16 @@ const PROFILE_TYPE_ICONS = {
   collective: Users,
 } as const;
 
+// Usernames are stored lowercase; display names from `profile.name` may already
+// be properly cased. Capitalize the first character so the greeting reads
+// "Welcome back, Mao" rather than "Welcome back, mao".
+function capitalizeName(name: string): string {
+  if (!name) {
+    return name;
+  }
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
 interface DashboardHeaderProps {
   profile: {
     name?: string | null;
@@ -42,11 +52,13 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="mb-0 text-xl font-semibold leading-tight text-foreground sm:text-2xl">
-              Welcome back{' '}
               {profile === null ? (
-                <span className="inline-block h-5 w-28 animate-pulse rounded bg-muted align-text-bottom" />
+                <>
+                  Welcome back
+                  <span className="inline-block h-5 w-28 animate-pulse rounded bg-muted align-text-bottom" />
+                </>
               ) : (
-                profile.name || profile.username || 'there'
+                <>Welcome back, {capitalizeName(profile.name || profile.username || 'there')}</>
               )}
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
