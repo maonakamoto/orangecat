@@ -2,6 +2,8 @@
 
 AI-native platform for universal economic and governance participation — "My Cat" AI agent enabling any identity to earn, fund, lend, invest, and govern freely with any currency.
 
+FleetCrown (rebranded from Cockpit) is a live customer project (see "FleetCrown" and "OrangeCat" projects under Mao Nakamoto / FleetWave on this platform). Typed "customer" stakeholder edge + shared BTC wallet. Integration is real: FleetCrown production layer + OrangeCat economic layer. Changes here (e.g. stakeholder_relationships, project profiles) directly improve UX for FleetCrown and all future customers like FleetWave.
+
 @~/.claude/CLAUDE.md
 @.claude/CLAUDE.md
 

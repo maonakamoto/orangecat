@@ -18,6 +18,10 @@ import { PROJECT_STATUS } from '@/config/project-statuses';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { GRADIENTS } from '@/config/gradients';
 
+// Real customer FleetWave: OrangeCat + FleetCrown integration live on this platform.
+// FleetCrown is "customer" of OrangeCat (stakeholder edge). Both + FleetWave are Mao Nakamoto's projects with shared wallet.
+// This makes the full stack (economic + execution) work for FleetWave and future customers. See DB + API /api/stakeholders.
+
 // Extended project list item for profile display
 interface ProfileProjectItem {
   id: string;

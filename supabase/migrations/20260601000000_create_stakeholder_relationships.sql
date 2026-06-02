@@ -8,9 +8,8 @@
 --
 -- This is the foundational substrate for the cross-product
 -- stakeholder graph documented in the Thoughts essay "Where
--- Stakeholders Live" on cockpitapp.vercel.app — OrangeCat stores the
--- graph, Cockpit reads it through the identity bridge and drives
--- actions against it.
+-- Stakeholders Live". OrangeCat stores the graph, FleetCrown (and other
+-- surfaces) read it through the identity bridge.
 --
 -- All eight categories are edges between entities OrangeCat already
 -- has (projects + actors). The "to" side can also point at an
@@ -164,7 +163,7 @@ CREATE POLICY stakeholder_relationships_owner_delete
 
 -- Comments for future readers / supabase schema viewer.
 COMMENT ON TABLE stakeholder_relationships IS
-  'Typed edges between a project and its stakeholders (competitors, collaborators, investors, customers, employees, acquirers, acquisition targets, in-house dev projects). Read from Cockpit via the identity bridge.';
+  'Typed edges between a project and its stakeholders (competitors, collaborators, investors, customers, employees, acquirers, acquisition targets, in-house dev projects). Read from FleetCrown via the identity bridge.';
 COMMENT ON COLUMN stakeholder_relationships.kind IS
   'One of eight stakeholder categories. Extend this CHECK constraint to add new categories.';
 COMMENT ON COLUMN stakeholder_relationships.metadata IS

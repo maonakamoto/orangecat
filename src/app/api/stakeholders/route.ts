@@ -5,7 +5,7 @@
  * (competitor / collaborator / investor / customer / employee /
  * acquirer / acquisition_target / in_house_dev) — the cross-product
  * stakeholder graph documented in the Thoughts essay "Where
- * Stakeholders Live" on cockpitapp.vercel.app.
+ * Stakeholders Live". OrangeCat stores the graph, FleetCrown reads it.
  *
  * GET    /api/stakeholders?fromProjectId=<uuid>&kind=<kind>
  *        — list relationships for a project (and optionally filter by kind).
@@ -18,6 +18,10 @@
  * 20260601000000_create_stakeholder_relationships.sql. RLS in the
  * database is the authoritative ownership check; the validation here
  * is defence in depth.
+ *
+ * Note: FleetCrown (formerly Cockpit) and OrangeCat share this graph.
+ * FleetCrown projects (e.g. "FleetCrown") are customers of OrangeCat
+ * projects via this typed edge system.
  */
 
 import { z } from 'zod';

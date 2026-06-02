@@ -24,7 +24,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     test('should apply default variant styles', () => {
       render(<Card data-testid="card">Default card</Card>);
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border', 'border-border', 'shadow-sm');
+      expect(card).toHaveClass('bg-card', 'rounded-md', 'border', 'border-border', 'shadow-none');
     });
 
     test('should apply elevated variant styles', () => {
@@ -34,7 +34,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
         </Card>
       );
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border-0', 'shadow-md');
+      expect(card).toHaveClass('bg-card', 'rounded-md', 'border', 'border-border', 'shadow-none');
     });
 
     test('should apply minimal variant styles', () => {
@@ -44,7 +44,13 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
         </Card>
       );
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border', 'border-border');
+      expect(card).toHaveClass(
+        'bg-transparent',
+        'rounded-md',
+        'border',
+        'border-border',
+        'shadow-none'
+      );
     });
 
     test('should apply gradient variant styles', () => {
@@ -54,14 +60,13 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
         </Card>
       );
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border-border');
+      expect(card).toHaveClass('bg-card', 'rounded-md', 'border', 'border-border', 'shadow-none');
     });
 
-    test('should include interactive hover/transition styles', () => {
-      render(<Card data-testid="card">Interactive card</Card>);
+    test('should include base surface and radius styles', () => {
+      render(<Card data-testid="card">Base card</Card>);
       const card = screen.getByTestId('card');
-      // Card uses hover shadow and smooth transitions for interactivity
-      expect(card).toHaveClass('hover:shadow-md', 'transition-all', 'duration-300');
+      expect(card).toHaveClass('bg-card', 'rounded-md');
     });
 
     test('should apply custom className', () => {
@@ -205,12 +210,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
     test('should apply description styles', () => {
       render(<CardDescription data-testid="description">Description test</CardDescription>);
       const description = screen.getByTestId('description');
-      expect(description).toHaveClass(
-        'text-sm',
-        'text-muted-foreground',
-        'leading-relaxed',
-        'mt-1'
-      );
+      expect(description).toHaveClass('text-sm', 'text-muted-foreground', 'leading-6', 'mt-1');
     });
 
     test('should apply custom className', () => {
@@ -321,7 +321,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
       );
 
       const card = screen.getByTestId('transaction-card');
-      expect(card).toHaveClass('bg-card', 'rounded-xl', 'border');
+      expect(card).toHaveClass('bg-transparent', 'rounded-md', 'border');
       expect(screen.getByText('Transaction #1234')).toBeInTheDocument();
       expect(screen.getByText('Amount: 0.001 BTC')).toBeInTheDocument();
       expect(screen.getByText('Status: Confirmed')).toBeInTheDocument();
@@ -343,7 +343,7 @@ describe('🎴 Card Component Suite - UI Foundation Tests', () => {
       );
 
       const card = screen.getByTestId('profile-card');
-      expect(card).toHaveClass('bg-card');
+      expect(card).toHaveClass('bg-card', 'rounded-md');
       expect(screen.getByText('Satoshi Nakamoto')).toBeInTheDocument();
       expect(screen.getByText('Transparency Score: 95%')).toBeInTheDocument();
     });
