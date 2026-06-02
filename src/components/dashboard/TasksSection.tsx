@@ -146,6 +146,14 @@ export default function TasksSection({
   const visibleTasks = tasks.slice(0, maxTasks);
   const hiddenCount = tasks.length - maxTasks;
 
+  // "Tasks remaining" must measure the same scope as the "% Setup" number, which
+  // only counts critical + high priority tasks. Counting all tasks here caused
+  // "100% Setup" to appear next to "3 tasks remaining" when the only remaining
+  // items were optional/suggested polish.
+  const setupTasksRemaining = tasks.filter(
+    t => t.priority === 'critical' || t.priority === 'high'
+  ).length;
+
   return (
     <div className={className}>
       <Card>
@@ -164,7 +172,9 @@ export default function TasksSection({
               <div className="text-right">
                 <div className="text-sm font-medium text-foreground">{taskCompletion}% Setup</div>
                 <div className="text-xs text-muted-foreground">
-                  {tasks.length} task{tasks.length !== 1 ? 's' : ''} remaining
+                  {setupTasksRemaining === 0
+                    ? 'Setup complete'
+                    : `${setupTasksRemaining} task${setupTasksRemaining !== 1 ? 's' : ''} remaining`}
                 </div>
               </div>
               <button
