@@ -17,6 +17,7 @@ import { getStatusInfo } from '@/config/status-config';
 import { PROJECT_STATUS } from '@/config/project-statuses';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { GRADIENTS } from '@/config/gradients';
+import { FLEETWAVE_INTEGRATION } from '@/config/entity-registry';
 
 // Real customer FleetWave: OrangeCat + FleetCrown integration live on this platform.
 // FleetCrown is "customer" of OrangeCat (stakeholder edge). Both + FleetWave are Mao Nakamoto's projects with shared wallet.
@@ -52,6 +53,22 @@ interface ProfileProjectsTabProps {
 export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfileProjectsTabProps) {
   const [projects, setProjects] = useState<ProfileProjectItem[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Surface the FleetWave integration for good UX (real customer using OrangeCat + FleetCrown)
+  const hasFleetWaveIntegration = projects.some((p: any) =>
+    [
+      FLEETWAVE_INTEGRATION.orangeCat.id,
+      FLEETWAVE_INTEGRATION.fleetCrown.id,
+      FLEETWAVE_INTEGRATION.fleetWave.id,
+    ].includes(p.id)
+  );
+  const IntegrationNote = hasFleetWaveIntegration && (
+    <div className="mb-4 p-2 bg-orange-50 border border-orange-200 rounded text-xs">
+      Includes <strong>{FLEETWAVE_INTEGRATION.customer}</strong> (real customer) +{' '}
+      {FLEETWAVE_INTEGRATION.fleetCrown.title} (customer of {FLEETWAVE_INTEGRATION.orangeCat.title}
+      ). Shared wallet. See stakeholder graph.
+    </div>
+  );
 
   useEffect(() => {
     if (!profile.id) {
@@ -102,6 +119,9 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
     project => project.status?.toLowerCase() !== PROJECT_STATUS.DRAFT
   );
 
+  // Show integration note for FleetWave customer projects
+  const integrationNote = IntegrationNote; // defined above
+
   if (publicProjects.length === 0) {
     return (
       <div className="text-center py-12">
@@ -124,6 +144,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
 
   return (
     <div className="space-y-4">
+      {IntegrationNote}
       {/* Header with count */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">

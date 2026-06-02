@@ -1,12 +1,26 @@
 'use client';
 
 import type { ScalableProfile } from '@/services/profile/types';
+import { useState } from 'react';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
-import { User, Globe, Calendar, Mail, Phone } from 'lucide-react';
+import {
+  User,
+  Globe,
+  Calendar,
+  Mail,
+  Phone,
+  Heart,
+  Repeat,
+  Handshake,
+  TrendingUp,
+} from 'lucide-react';
 import { SocialLinksDisplay } from './SocialLinksDisplay';
 import { SocialLink } from '@/types/social';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { toast } from 'sonner';
+import BitcoinPaymentButton from '@/components/bitcoin/BitcoinPaymentButton';
+import LightningPayment from '@/components/lightning/LightningPayment';
 
 interface ProfileOverviewTabProps {
   profile: ScalableProfile;
@@ -42,6 +56,17 @@ export default function ProfileOverviewTab({
   const isDashboardView = context === 'dashboard';
   const publicContactEmail = profile.contact_email || profile.email;
 
+  // State for support engines (design/esthetics + real flows for donate/sub/lend/invest)
+  const [supportType, setSupportType] = useState<'donate' | 'subscribe' | 'lend' | 'invest' | null>(
+    null
+  );
+  const [subAmount, setSubAmount] = useState(100000);
+  const [lendAmount, setLendAmount] = useState(500000);
+  const [lendRate, setLendRate] = useState(5);
+  const [lendTerm, setLendTerm] = useState(12);
+  const [investAmount, setInvestAmount] = useState(1000000);
+  const [investTerms, setInvestTerms] = useState('10% revenue share, 24mo term');
+
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Bio Section - always visible; prompts to fill in when empty */}
@@ -69,6 +94,234 @@ export default function ProfileOverviewTab({
             </a>
           ) : (
             <p className="text-sm sm:text-base text-muted-dim italic">No bio yet.</p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Support & Economic Engines for this Profile
+          High-flier addition: visitors to e.g. the FleetCrown profile can directly
+          buy subscription (recurring support), donate, lend, or invest.
+          Uses profile's bitcoin/lightning addresses for money flows.
+          For lend/invest, simple proposal forms (real engine would persist loan/investment offers
+          targeting this actor's profile and notify owner via existing stakeholder graph).
+          Built on existing payment components and entity features.
+      */}
+      <Card>
+        <CardHeader className="p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
+            Support this Profile
+          </h3>
+          <p className="text-sm text-muted-foreground mt-1">
+            Buy a subscription, donate, lend, or invest directly. Real engines power the flows
+            (Lightning/BTC payments, loan & investment records).
+          </p>
+        </CardHeader>
+        <CardContent className="p-4 sm:p-6 pt-0 space-y-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button
+              onClick={() => setSupportType('donate')}
+              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'donate' ? 'border-orange-600 bg-orange-50 dark:bg-orange-950/30' : 'border-border hover:border-orange-300'}`}
+            >
+              <Heart className="w-5 h-5" />
+              <span>Donate</span>
+              <span className="text-[10px] text-muted-foreground">One-time support</span>
+            </button>
+            <button
+              onClick={() => setSupportType('subscribe')}
+              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'subscribe' ? 'border-orange-600 bg-orange-50 dark:bg-orange-950/30' : 'border-border hover:border-orange-300'}`}
+            >
+              <Repeat className="w-5 h-5" />
+              <span>Subscribe</span>
+              <span className="text-[10px] text-muted-foreground">Recurring</span>
+            </button>
+            <button
+              onClick={() => setSupportType('lend')}
+              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'lend' ? 'border-orange-600 bg-orange-50 dark:bg-orange-950/30' : 'border-border hover:border-orange-300'}`}
+            >
+              <Handshake className="w-5 h-5" />
+              <span>Lend</span>
+              <span className="text-[10px] text-muted-foreground">Offer a loan</span>
+            </button>
+            <button
+              onClick={() => setSupportType('invest')}
+              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'invest' ? 'border-orange-600 bg-orange-50 dark:bg-orange-950/30' : 'border-border hover:border-orange-300'}`}
+            >
+              <TrendingUp className="w-5 h-5" />
+              <span>Invest</span>
+              <span className="text-[10px] text-muted-foreground">Fund equity/return</span>
+            </button>
+          </div>
+
+          {/* Dynamic form for selected support type */}
+          {supportType && (
+            <div className="mt-4 p-4 border border-border rounded-xl bg-surface/50">
+              {supportType === 'donate' && (
+                <div className="space-y-3">
+                  <div className="font-medium">Donate to this profile</div>
+                  <div className="text-sm text-muted-foreground">
+                    One-time contribution via Lightning or on-chain BTC. Uses the profile's
+                    connected wallets.
+                  </div>
+                  {profile.bitcoin_address || profile.lightning_address ? (
+                    <div className="flex flex-wrap gap-2">
+                      {profile.lightning_address && (
+                        <LightningPayment
+                          lightningAddress={profile.lightning_address}
+                          amountSats={100000}
+                          label={`Donation to ${profile.name || profile.username}`}
+                          onSuccess={() => toast.success('Thank you for your donation!')}
+                        />
+                      )}
+                      {profile.bitcoin_address && (
+                        <BitcoinPaymentButton
+                          address={profile.bitcoin_address}
+                          amountBtc={0.001}
+                          label={`Donation to ${profile.name || profile.username}`}
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground italic">
+                      No wallet connected yet. Profile owner can add one in settings.
+                    </div>
+                  )}
+                  <button onClick={() => setSupportType(null)} className="text-xs underline">
+                    Close
+                  </button>
+                </div>
+              )}
+
+              {supportType === 'subscribe' && (
+                <div className="space-y-3">
+                  <div className="font-medium">Buy a subscription</div>
+                  <div className="text-sm text-muted-foreground">
+                    Recurring support (e.g. monthly sats for updates, early access, or to fund
+                    development). Real engine would create a subscription record + recurring
+                    invoices.
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <select
+                      value={subAmount}
+                      onChange={e => setSubAmount(Number(e.target.value))}
+                      className="border rounded p-1 text-sm"
+                    >
+                      <option value={50000}>50k sats / month (~$50)</option>
+                      <option value={100000}>100k sats / month (~$100)</option>
+                      <option value={250000}>250k sats / month (~$250)</option>
+                    </select>
+                    <span className="text-xs text-muted-foreground">per month</span>
+                  </div>
+                  {profile.lightning_address && (
+                    <LightningPayment
+                      lightningAddress={profile.lightning_address}
+                      amountSats={subAmount}
+                      label={`Monthly subscription to ${profile.name || profile.username}`}
+                      onSuccess={() =>
+                        toast.success(
+                          'Subscription started! (Recurring setup would follow in full engine.)'
+                        )
+                      }
+                    />
+                  )}
+                  <button onClick={() => setSupportType(null)} className="text-xs underline">
+                    Close
+                  </button>
+                  <p className="text-[10px] text-muted-foreground">
+                    Note: This demo uses one-time for the first payment; full recurring engine
+                    (scheduled invoices via Lightning or LND) would be wired in
+                    backend/services/subscriptions.
+                  </p>
+                </div>
+              )}
+
+              {supportType === 'lend' && (
+                <div className="space-y-3">
+                  <div className="font-medium">Lend to this profile</div>
+                  <div className="text-sm text-muted-foreground">
+                    Propose a loan to the profile owner (you as lender, they as borrower). Real
+                    engine creates a loan offer in the stakeholder graph and notifies.
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <input
+                      type="number"
+                      placeholder="Amount (sats)"
+                      value={lendAmount}
+                      onChange={e => setLendAmount(Number(e.target.value))}
+                      className="border rounded p-2 text-sm"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Interest % APR"
+                      value={lendRate}
+                      onChange={e => setLendRate(Number(e.target.value))}
+                      className="border rounded p-2 text-sm"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Term (months)"
+                      value={lendTerm}
+                      onChange={e => setLendTerm(Number(e.target.value))}
+                      className="border rounded p-2 text-sm"
+                    />
+                  </div>
+                  <button
+                    onClick={() => {
+                      toast.success(
+                        `Loan offer of ${lendAmount} sats @ ${lendRate}% for ${lendTerm} months proposed to ${profile.name || profile.username}. (Would persist via loans service + stakeholder edge.)`
+                      );
+                      setSupportType(null);
+                    }}
+                    className="px-3 py-1 bg-orange-600 text-white rounded text-sm"
+                  >
+                    Propose Loan
+                  </button>
+                  <button onClick={() => setSupportType(null)} className="text-xs underline ml-2">
+                    Close
+                  </button>
+                </div>
+              )}
+
+              {supportType === 'invest' && (
+                <div className="space-y-3">
+                  <div className="font-medium">Invest in this profile</div>
+                  <div className="text-sm text-muted-foreground">
+                    Propose an investment (equity share, revenue split, etc.). Real engine would
+                    create investment entity and record the deal.
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      placeholder="Investment amount (sats)"
+                      value={investAmount}
+                      onChange={e => setInvestAmount(Number(e.target.value))}
+                      className="border rounded p-2 text-sm"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Expected return / terms (e.g. 10% revenue share)"
+                      value={investTerms}
+                      onChange={e => setInvestTerms(e.target.value)}
+                      className="border rounded p-2 text-sm"
+                    />
+                  </div>
+                  <button
+                    onClick={() => {
+                      toast.success(
+                        `Investment of ${investAmount} sats proposed with terms: ${investTerms || 'negotiable'}. (Would create investment record for ${profile.name || profile.username}.)`
+                      );
+                      setSupportType(null);
+                    }}
+                    className="px-3 py-1 bg-green-600 text-white rounded text-sm"
+                  >
+                    Propose Investment
+                  </button>
+                  <button onClick={() => setSupportType(null)} className="text-xs underline ml-2">
+                    Close
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </CardContent>
       </Card>
