@@ -33,10 +33,18 @@ jobs:
         run: npm ci
 
       - name: Docs hygiene checks
-        run: npm run ci:docs || echo "Docs checks reported issues. Review output above."
+        # Don't swallow failures with `|| echo` — that turned this into a no-op
+        # gate. If docs checks legitimately need to be advisory, mark the step
+        # `continue-on-error: true` so the noise is explicit in the UI.
+        run: npm run ci:docs
 
       - name: Type check
         run: npm run type-check
+
+      - name: Lint
+        # Catches the bug class that landed on main as `IntegrationNote` —
+        # eslint would have flagged the undefined identifier before merge.
+        run: npm run lint
 
       - name: Unit tests
         run: npm run test:unit -- --watchAll=false
