@@ -2,7 +2,6 @@
 
 Your AI economic agent — and the platform where it operates.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black.svg)](https://nextjs.org/)
 [![Live](https://img.shields.io/badge/Live-orangecat.ch-orange.svg)](https://orangecat.ch)
@@ -124,10 +123,10 @@ src/
 
 17 test suites, 74 tests. Pre-push hooks run type-check, lint, and the full test suite before any code reaches the remote.
 
-## Contributing
+## Security
 
-See [SECURITY.md](SECURITY.md) for reporting vulnerabilities. Pull requests welcome.
+See [SECURITY.md](SECURITY.md) for reporting vulnerabilities.
 
 ## License
 
-MIT
+Proprietary. All Rights Reserved. See [LICENSE](LICENSE).
