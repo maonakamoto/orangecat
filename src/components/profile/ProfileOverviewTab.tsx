@@ -13,14 +13,13 @@ import {
   Repeat,
   Handshake,
   TrendingUp,
+  Copy,
 } from 'lucide-react';
 import { SocialLinksDisplay } from './SocialLinksDisplay';
 import { SocialLink } from '@/types/social';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { toast } from 'sonner';
-import BitcoinPaymentButton from '@/components/bitcoin/BitcoinPaymentButton';
-import LightningPayment from '@/components/lightning/LightningPayment';
 
 interface ProfileOverviewTabProps {
   profile: ScalableProfile;
@@ -160,26 +159,48 @@ export default function ProfileOverviewTab({
                 <div className="space-y-3">
                   <div className="font-medium">Donate to this profile</div>
                   <div className="text-sm text-muted-foreground">
-                    One-time contribution via Lightning or on-chain BTC. Uses the profile's
-                    connected wallets.
+                    One-time contribution. Send to the profile's Bitcoin or Lightning address (real
+                    engine integrates the full PublicEntityPaymentSection / LightningPayment flow
+                    for invoicing + confirmation).
                   </div>
                   {profile.bitcoin_address || profile.lightning_address ? (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="space-y-2 text-sm">
                       {profile.lightning_address && (
-                        <LightningPayment
-                          lightningAddress={profile.lightning_address}
-                          amountSats={100000}
-                          label={`Donation to ${profile.name || profile.username}`}
-                          onSuccess={() => toast.success('Thank you for your donation!')}
-                        />
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
+                            {profile.lightning_address}
+                          </span>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(profile.lightning_address!);
+                              toast.success('Lightning address copied');
+                            }}
+                            className="p-1"
+                          >
+                            <Copy className="w-4 h-4" />
+                          </button>
+                        </div>
                       )}
                       {profile.bitcoin_address && (
-                        <BitcoinPaymentButton
-                          address={profile.bitcoin_address}
-                          amountBtc={0.001}
-                          label={`Donation to ${profile.name || profile.username}`}
-                        />
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
+                            {profile.bitcoin_address}
+                          </span>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(profile.bitcoin_address!);
+                              toast.success('BTC address copied');
+                            }}
+                            className="p-1"
+                          >
+                            <Copy className="w-4 h-4" />
+                          </button>
+                        </div>
                       )}
+                      <div className="text-[10px] text-muted-foreground">
+                        Send any amount. For integrated checkout with amount selection and status,
+                        see project support pages.
+                      </div>
                     </div>
                   ) : (
                     <div className="text-sm text-muted-foreground italic">
@@ -212,26 +233,35 @@ export default function ProfileOverviewTab({
                     </select>
                     <span className="text-xs text-muted-foreground">per month</span>
                   </div>
-                  {profile.lightning_address && (
-                    <LightningPayment
-                      lightningAddress={profile.lightning_address}
-                      amountSats={subAmount}
-                      label={`Monthly subscription to ${profile.name || profile.username}`}
-                      onSuccess={() =>
-                        toast.success(
-                          'Subscription started! (Recurring setup would follow in full engine.)'
-                        )
-                      }
-                    />
+                  {profile.lightning_address ? (
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
+                          {profile.lightning_address}
+                        </span>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(profile.lightning_address!);
+                            toast.success('Address copied for recurring payments');
+                          }}
+                          className="p-1"
+                        >
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="text-[10px] text-muted-foreground">
+                        Set up recurring sends manually or via wallet. Full engine would create
+                        subscription row + auto-invoice scheduler tied to this profile.
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground italic">
+                      No Lightning address for subscriptions.
+                    </div>
                   )}
                   <button onClick={() => setSupportType(null)} className="text-xs underline">
                     Close
                   </button>
-                  <p className="text-[10px] text-muted-foreground">
-                    Note: This demo uses one-time for the first payment; full recurring engine
-                    (scheduled invoices via Lightning or LND) would be wired in
-                    backend/services/subscriptions.
-                  </p>
                 </div>
               )}
 

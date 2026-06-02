@@ -30,9 +30,9 @@ OrangeCat is an AI-native platform for universal economic participation. Every u
 - **AI Assistants**: Autonomous economic actors as first-class entities
 - **Events**: Time-bound coordination with ticketing
 - **Documents**: Structured context for the AI agent
-- **Cross-product customers**: Live example of FleetCrown (production) as customer of OrangeCat (economic) for real customer FleetWave, using typed stakeholder edges + shared wallets + profiles as projects.
+- **Cross-product customers**: Live example of FleetCrown (production) as customer of OrangeCat (economic), using typed stakeholder edges + shared wallets + profiles as projects.
 
-Live at [orangecat.ch](https://orangecat.ch). Real customer example: FleetWave uses OrangeCat (economic) + FleetCrown (AI fleet OS / local runner from sibling repo). FleetCrown is a "customer" via the stakeholder graph (see projects "OrangeCat", "FleetCrown", "FleetWave" under Mao Nakamoto). Shared BTC wallet. The stakeholder_relationships feature (8 kinds incl. customer) was made production-ready here for this use case — works for all.
+Live at [orangecat.ch](https://orangecat.ch). FleetCrown is a live "customer" of OrangeCat (see projects "OrangeCat" and "FleetCrown" under Mao Nakamoto). Shared BTC wallet. The stakeholder_relationships feature (8 kinds incl. customer) was made production-ready here for this use case — works for all.
 
 ## Architecture
 

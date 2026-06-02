@@ -503,12 +503,12 @@ export function getEntitiesByCategory(): Record<EntityCategory, EntityMetadata[]
 
 export default ENTITY_REGISTRY;
 
-// FleetWave real customer integration (SSOT for the OrangeCat + FleetCrown customer story in this platform)
-// See live: projects "OrangeCat", "FleetCrown", "FleetWave" under Mao Nakamoto.
-// FleetCrown (from sibling) is "customer" of OrangeCat via stakeholder_relationships (table created via 20260601 migration).
-// Shared wallet. This setup proves the stakeholder graph + profiles-as-projects works for real customers like FleetWave.
-export const FLEETWAVE_INTEGRATION = {
-  customer: 'FleetWave',
+// OrangeCat + FleetCrown integration (SSOT for the customer story).
+// FleetCrown is "customer" of OrangeCat via stakeholder_relationships (table created via 20260601 migration).
+// Both are projects/profiles on this platform for Mao Nakamoto. Shared wallet.
+// See live data, /api/stakeholders, and the sibling FleetCrown repo.
+export const ORANGECAT_FLEETCROWN_INTEGRATION = {
+  customer: 'FleetCrown',
   owner: 'Mao Nakamoto',
   orangeCat: { title: 'OrangeCat', id: 'cb093f00-8745-4579-98df-050ebfb37181' },
   fleetCrown: {
@@ -516,12 +516,7 @@ export const FLEETWAVE_INTEGRATION = {
     id: '8130c927-114a-45b7-8cc2-99efd5224025',
     site: 'https://fleetcrown.vercel.app',
   },
-  fleetWave: { title: 'FleetWave', id: '8502031c-1e71-4fea-a011-ffae17c74e25' },
   wallet: { btc: 'bc1q3hh4yklcmwtpnqmxyksw36yedg7zyfy6tzzqwz', lightning: 'orangecat@getalby.com' },
-  relations: [
-    { from: 'OrangeCat', to: 'FleetCrown', kind: 'customer', status: 'paying' },
-    { from: 'OrangeCat', to: 'FleetWave', kind: 'customer', status: 'active' },
-    { from: 'FleetCrown', to: 'FleetWave', kind: 'in_house_dev', status: 'active' },
-  ],
-  note: 'One is customer of the other. Built for real customers like FleetWave. See /api/stakeholders and stakeholder_relationships.',
+  relation: 'FleetCrown is customer of OrangeCat.',
+  note: 'One is customer of the other. See /api/stakeholders and stakeholder_relationships.',
 };
