@@ -46,6 +46,11 @@ whether the matching `/api/v1/<entity>/route.ts` is still a valid v1
 contract**. If not, replace the re-export with an adapter before
 landing the internal change.
 
+## Machine-readable contract
+
+- **OpenAPI 3.1 spec**: `GET /api/v1/openapi.json` (live, generated from the Zod schemas the server actually validates against — no drift possible).
+- **Conventions** (versioning, error codes, idempotency, rate limits): [`docs/api/CONVENTIONS.md`](../../../docs/api/CONVENTIONS.md).
+
 ## What's exposed today
 
 Only `POST` on the entity routes — entity _creation_ is the only

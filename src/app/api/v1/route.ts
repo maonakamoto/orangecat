@@ -35,6 +35,8 @@ export async function GET() {
     })),
     docs: {
       contract: '/api/v1/README.md (in repo)',
+      conventions: '/docs/api/CONVENTIONS.md (in repo)',
+      openapi: '/api/v1/openapi.json',
       changelog: '(not yet published)',
     },
   });

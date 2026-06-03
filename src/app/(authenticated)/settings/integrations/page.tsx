@@ -189,6 +189,26 @@ export default function IntegrationKeysPage() {
           Let external services (FleetCrown, hirn.li, your own scripts) authenticate to OrangeCat as
           a specific actor. Each key acts as one actor and can be revoked individually.
         </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          API contract:{' '}
+          <a
+            href="/api/v1/openapi.json"
+            className="underline hover:text-foreground"
+            target="_blank"
+            rel="noreferrer"
+          >
+            openapi.json
+          </a>{' '}
+          ·{' '}
+          <a
+            href="/api/v1"
+            className="underline hover:text-foreground"
+            target="_blank"
+            rel="noreferrer"
+          >
+            discovery
+          </a>
+        </p>
       </div>
 
       {error && (
