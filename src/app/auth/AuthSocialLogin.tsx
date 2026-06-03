@@ -37,14 +37,18 @@ export function AuthSocialLogin({
 
   return (
     <>
+      {/* Single divider — was two stacked dividers ("or continue with" then
+          "or") which looked broken. One divider, OAuth grid below, an
+          anonymous-sign-in TEXT LINK below that (no second full-width
+          button competing for attention with the OAuth options). */}
       <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-border" />
           </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-muted/40 dark:bg-background px-3 text-muted-foreground">
-              or continue with
+          <div className="relative flex justify-center text-xs uppercase tracking-wider">
+            <span className="bg-muted/40 dark:bg-background px-3 text-muted-dim">
+              Or continue with
             </span>
           </div>
         </div>
@@ -57,7 +61,7 @@ export function AuthSocialLogin({
               variant="outline"
               disabled={loading}
               onClick={() => onOAuthSignIn(id)}
-              className="h-11 w-full border-border-strong hover:border-border-strong hover:bg-muted"
+              className="h-11 w-full border-border-subtle hover:border-border hover:bg-muted/60"
               aria-label={`Sign in with ${name}`}
             >
               <Icon className="h-5 w-5" />
@@ -65,37 +69,29 @@ export function AuthSocialLogin({
             </Button>
           ))}
         </div>
-      </div>
 
-      <div className="mt-6">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-border" />
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-muted/40 dark:bg-background px-3 text-muted-foreground">or</span>
-          </div>
-        </div>
-        <div className="mt-4 text-center">
-          <Button
+        {/* Anonymous sign-in — secondary text link, not a heavyweight button.
+            Privacy-conscious users will find it; default users won't be
+            distracted by it. */}
+        <div className="mt-5 text-center">
+          <button
             type="button"
-            variant="ghost"
             disabled={loading}
             onClick={onAnonymousSignIn}
-            className="w-full h-11 text-muted-foreground hover:text-foreground hover:bg-muted border border-border font-medium"
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground disabled:opacity-60"
           >
             {loading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Continuing...</span>
-              </div>
+              <>
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                <span>Continuing…</span>
+              </>
             ) : (
-              'Continue without account'
+              <>
+                Try it anonymously
+                <span className="text-muted-dim">— upgrade anytime</span>
+              </>
             )}
-          </Button>
-          <p className="mt-2 text-xs text-muted-dim">
-            Anonymous accounts can be upgraded to full accounts anytime.
-          </p>
+          </button>
         </div>
       </div>
 
