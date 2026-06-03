@@ -34,11 +34,18 @@ import { rateLimitWriteAsync, applyRateLimitHeaders, type RateLimitResult } from
 import { logger } from '@/utils/logger';
 import { type EntityType, getEntityMetadata } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { NextResponse } from 'next/server';
 import {
   resolveCreationActor,
   ActorNotPermittedError,
 } from '@/services/actors/resolveCreationActor';
 import { resolveRequestAuth } from '@/lib/api/resolveRequestAuth';
+import {
+  lookupIdempotencyResult,
+  storeIdempotencyResult,
+  hashRequestBody,
+  shouldCacheStatus,
+} from '@/services/idempotency/idempotencyResults';
 
 // Type for the awaited Supabase client
 type SupabaseClient = Awaited<ReturnType<typeof createServerClient>>;
@@ -126,6 +133,63 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       const userId = auth.userId;
       const supabase = await createServerClient();
 
+      // Idempotency-Key dedup. Runs BEFORE rate limiting so a retry of a
+      // successful request doesn't consume quota a second time.
+      const idempotencyKey = request.headers.get('idempotency-key');
+      const requestPath = new URL(request.url).pathname;
+      const bodyHash = idempotencyKey ? hashRequestBody(ctx.body) : undefined;
+
+      if (idempotencyKey && bodyHash) {
+        const cached = await lookupIdempotencyResult({
+          userId,
+          key: idempotencyKey,
+          path: requestPath,
+          bodyHash,
+        });
+        if (cached.kind === 'hit') {
+          logger.info(`${meta.name} idempotency hit`, {
+            userId,
+            path: requestPath,
+            cachedStatus: cached.hit.responseStatus,
+          });
+          return NextResponse.json(cached.hit.responseBody, {
+            status: cached.hit.responseStatus,
+            headers: { 'Idempotency-Replay': 'true' },
+          });
+        }
+        if (cached.kind === 'body_mismatch') {
+          return apiForbidden(
+            'Idempotency-Key was reused with a different request body. Generate a new key for each distinct request.'
+          );
+        }
+      }
+
+      /** Cache the response when an Idempotency-Key was supplied AND the
+       * outcome is something we want to replay (2xx and 4xx; never 5xx). */
+      const cacheResult = async (response: NextResponse): Promise<NextResponse> => {
+        if (!idempotencyKey || !bodyHash) {
+          return response;
+        }
+        if (!shouldCacheStatus(response.status)) {
+          return response;
+        }
+        try {
+          const body = await response.clone().json();
+          await storeIdempotencyResult({
+            userId,
+            key: idempotencyKey,
+            method: 'POST',
+            path: requestPath,
+            bodyHash,
+            responseStatus: response.status,
+            responseBody: body,
+          });
+        } catch (cacheErr) {
+          logger.warn('idempotency cache write failed (non-fatal)', { cacheErr });
+        }
+        return response;
+      };
+
       // Rate limiting
       const rateLimit = await rateLimitWriteAsync(userId);
       if (!rateLimit.success) {
@@ -169,9 +233,8 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         const bodyForCreate = { ...bodyForHandler, _resolved_actor_id: resolvedActor.id };
         const entity = await createEntity(userId, bodyForCreate, supabase);
         logger.info(`${meta.name} created successfully`, { [`${entityType}Id`]: entity.id });
-        return applyRateLimitHeaders(
-          apiSuccess(entity, { status: 201 }),
-          rateLimit as RateLimitResult
+        return cacheResult(
+          applyRateLimitHeaders(apiSuccess(entity, { status: 201 }), rateLimit as RateLimitResult)
         );
       }
 
@@ -268,9 +331,11 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         }
       }
 
-      return applyRateLimitHeaders(
-        apiSuccess(createdEntity, { status: 201 }),
-        rateLimit as RateLimitResult
+      return cacheResult(
+        applyRateLimitHeaders(
+          apiSuccess(createdEntity, { status: 201 }),
+          rateLimit as RateLimitResult
+        )
       );
     } catch (error) {
       return handleApiError(error);

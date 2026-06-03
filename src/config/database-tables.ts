@@ -96,6 +96,7 @@ export const DATABASE_TABLES = {
 
   // Platform integration (outbound API keys for FleetCrown, hirn.li, ...)
   INTEGRATION_KEYS: 'integration_keys',
+  IDEMPOTENCY_RESULTS: 'idempotency_results',
 
   // Bookings
   BOOKINGS: 'bookings',
