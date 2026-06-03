@@ -17,12 +17,13 @@
  */
 
 import { NextRequest } from 'next/server';
-import { ZodSchema } from 'zod';
+import { z, ZodObject, ZodSchema } from 'zod';
 import { createServerClient } from '@/lib/supabase/server';
 import {
   apiSuccess,
   apiUnauthorized,
   apiInternalError,
+  apiForbidden,
   handleApiError,
   apiRateLimited,
 } from '@/lib/api/standardResponse';
@@ -33,7 +34,10 @@ import { rateLimitWriteAsync, applyRateLimitHeaders, type RateLimitResult } from
 import { logger } from '@/utils/logger';
 import { type EntityType, getEntityMetadata } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
-import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
+import {
+  resolveCreationActor,
+  ActorNotPermittedError,
+} from '@/services/actors/resolveCreationActor';
 
 // Type for the awaited Supabase client
 type SupabaseClient = Awaited<ReturnType<typeof createServerClient>>;
@@ -98,9 +102,20 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
   const meta = getEntityMetadata(entityType);
   const table = tableName ?? meta.tableName;
 
+  // Allow callers to send `actor_id` to create on behalf of a group they
+  // belong to (validated server-side). Object schemas are extended so Zod
+  // doesn't strip the field during validation; non-object schemas pass
+  // through untouched and silently ignore the field.
+  const schemaWithActor: ZodSchema =
+    schema instanceof ZodObject
+      ? (schema as ZodObject<z.ZodRawShape>).extend({
+          actor_id: z.string().uuid().optional(),
+        })
+      : schema;
+
   return compose(
     withRequestId(),
-    withZodBody(schema)
+    withZodBody(schemaWithActor)
   )(async (request: NextRequest, ctx) => {
     try {
       const supabase = await createServerClient();
@@ -124,9 +139,32 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         );
       }
 
-      // Use custom creation function if provided (for domain services)
+      // Extract the optional requested actor before further processing so
+      // every code path below sees a body without `actor_id`. The resolver
+      // either confirms the user has rights to act as that actor (group
+      // founder/admin/moderator) or falls back to their personal actor.
+      const bodyForHandler = { ...(ctx.body as Record<string, unknown>) };
+      const requestedActorId = bodyForHandler.actor_id as string | undefined;
+      delete bodyForHandler.actor_id;
+
+      let resolvedActor: { id: string };
+      try {
+        resolvedActor = await resolveCreationActor(user.id, requestedActorId);
+      } catch (actorError) {
+        if (actorError instanceof ActorNotPermittedError) {
+          return apiForbidden(
+            `You are not permitted to create a ${meta.name.toLowerCase()} as the requested actor.`
+          );
+        }
+        throw actorError;
+      }
+
+      // Use custom creation function if provided (for domain services).
+      // Pass the resolved actor on the body's `_resolved_actor_id` side
+      // channel — domain/base/entityService.ts unwraps it.
       if (createEntity) {
-        const entity = await createEntity(user.id, ctx.body, supabase);
+        const bodyForCreate = { ...bodyForHandler, _resolved_actor_id: resolvedActor.id };
+        const entity = await createEntity(user.id, bodyForCreate, supabase);
         logger.info(`${meta.name} created successfully`, { [`${entityType}Id`]: entity.id });
         return applyRateLimitHeaders(
           apiSuccess(entity, { status: 201 }),
@@ -138,14 +176,15 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       let transformedData;
       try {
         if (transformData) {
-          transformedData = await Promise.resolve(transformData(ctx.body, user.id, supabase));
+          transformedData = await Promise.resolve(transformData(bodyForHandler, user.id, supabase));
+          // Honour the resolved actor whether the transform set actor_id or not.
+          if (useActorOwnership !== false) {
+            (transformedData as Record<string, unknown>).actor_id = resolvedActor.id;
+          }
         } else if (useActorOwnership !== false) {
-          // Default: resolve user ID to actor ID for actor-based ownership
-          // Only use user_id if explicitly set to useActorOwnership: false
-          const actor = await getOrCreateUserActor(user.id);
-          transformedData = { ...ctx.body, actor_id: actor.id };
+          transformedData = { ...bodyForHandler, actor_id: resolvedActor.id };
         } else {
-          transformedData = { ...ctx.body, user_id: user.id };
+          transformedData = { ...bodyForHandler, user_id: user.id };
         }
       } catch (transformError) {
         logger.error(`Error transforming data for ${entityType}`, {
@@ -172,8 +211,10 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         entityDataSample: JSON.stringify(entityData, null, 2).substring(0, 500),
       });
 
-      const { data: entity, error } = await supabase
-        .from(table)
+      // `table` is a runtime string so the row type can't be inferred from
+      // Supabase's generated unions; `entityData` is the validated payload.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: entity, error } = await (supabase.from(table) as any)
         .insert(entityData)
         .select()
         .single();

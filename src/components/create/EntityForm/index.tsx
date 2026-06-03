@@ -42,6 +42,12 @@ interface EntityFormProps<T extends Record<string, unknown>> {
   wizardMode?: WizardMode;
   /** When true, removes page-level wrapper (min-h-screen, FormHeader) for embedding in dialogs */
   embedded?: boolean;
+  /**
+   * Actor that will own the created entity. `null` = personal actor. Group
+   * actor IDs are validated server-side (resolveCreationActor) — invalid
+   * IDs return 403.
+   */
+  actorId?: string | null;
 }
 
 export function EntityForm<T extends Record<string, unknown>>({
@@ -53,6 +59,7 @@ export function EntityForm<T extends Record<string, unknown>>({
   entityId,
   wizardMode,
   embedded,
+  actorId,
 }: EntityFormProps<T>) {
   const { user, isLoading: authLoading, hydrated } = useAuth();
   const userCurrency = useUserCurrency();
@@ -98,6 +105,7 @@ export function EntityForm<T extends Record<string, unknown>>({
     onEntityCreated: setCreatedEntity,
     handleFieldChange,
     wizardMode,
+    actorId,
   });
 
   const handleTemplateSelect = useCallback(

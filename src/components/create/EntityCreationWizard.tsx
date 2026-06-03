@@ -1,11 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
+import { ActorSelector } from './ActorSelector';
 import { EntityForm } from './EntityForm';
 import { WizardTemplatePicker } from './templates/WizardTemplatePicker';
 import { WizardProgressBar } from './WizardProgressBar';
@@ -92,6 +94,10 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
 
   const theme = WIZARD_THEMES[config.colorTheme] || WIZARD_THEMES.orange;
 
+  // null = personal actor (default); UUID = group actor the user has rights to.
+  // Server (entityPostHandler → resolveCreationActor) validates the choice.
+  const [actorId, setActorId] = useState<string | null>(null);
+
   if (showTemplateSelection && isTemplateOnlyMode) {
     return (
       <WizardTemplateOnlyView
@@ -108,6 +114,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
         config={config}
         initialValues={formInitialValues || initialData}
         onSuccess={onSuccess}
+        actorId={actorId}
       />
     );
   }
@@ -115,7 +122,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
   return (
     <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
       <div className="max-w-4xl mx-auto mb-3">
-        <div className="flex items-center gap-3 mb-1">
+        <div className="flex flex-wrap items-center gap-3 mb-1">
           <button
             onClick={handleCancel}
             className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors shrink-0"
@@ -124,6 +131,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
             Cancel
           </button>
           <h1 className="text-xl sm:text-2xl font-bold text-foreground">{config.pageTitle}</h1>
+          <ActorSelector value={actorId} onChange={setActorId} className="ml-auto" />
         </div>
         <p className="text-sm text-muted-foreground ml-12">{config.pageDescription}</p>
       </div>
@@ -177,6 +185,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
                     config={config}
                     initialValues={formInitialValues}
                     onSuccess={onSuccess}
+                    actorId={actorId}
                     wizardMode={{
                       currentStep,
                       totalSteps: wizardSteps.length,

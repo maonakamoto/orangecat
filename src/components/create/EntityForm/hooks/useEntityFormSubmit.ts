@@ -31,6 +31,8 @@ interface UseEntityFormSubmitParams<T extends Record<string, unknown>> {
   onEntityCreated: (entity: { id: string; title: string }) => void;
   handleFieldChange: (name: keyof T, value: unknown) => void;
   wizardMode?: WizardMode;
+  /** Selected actor (null = personal). Sent as `actor_id` in the create body. */
+  actorId?: string | null;
 }
 
 export function useEntityFormSubmit<T extends Record<string, unknown>>({
@@ -47,6 +49,7 @@ export function useEntityFormSubmit<T extends Record<string, unknown>>({
   onEntityCreated,
   handleFieldChange,
   wizardMode,
+  actorId,
 }: UseEntityFormSubmitParams<T>) {
   const router = useRouter();
   const existingWalletLinkIdRef = useRef<string | undefined>(undefined);
@@ -91,6 +94,7 @@ export function useEntityFormSubmit<T extends Record<string, unknown>>({
         router,
         existingWalletLinkIdRef,
         wizardMode,
+        actorId,
       });
     },
     [
@@ -107,6 +111,7 @@ export function useEntityFormSubmit<T extends Record<string, unknown>>({
       user,
       onEntityCreated,
       wizardMode,
+      actorId,
     ]
   );
 

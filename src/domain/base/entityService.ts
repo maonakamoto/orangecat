@@ -196,14 +196,24 @@ export async function createEntity<T = Record<string, unknown>>(
     select?: string;
   }
 ): Promise<T> {
-  const actor = await getOrCreateUserActor(userId);
+  // A pre-resolved actor (e.g. a group actor approved by the API layer) can be
+  // piggybacked on `data` so domain-service signatures don't have to change.
+  // Same pattern as `_wallet_id` in the entity POST handler.
+  const preResolvedActorId = (data as Record<string, unknown>)._resolved_actor_id as
+    | string
+    | undefined;
+  const actorId = preResolvedActorId ?? (await getOrCreateUserActor(userId)).id;
+
   const client = options?.client ?? ((await createServerClient()) as unknown as AnySupabaseClient);
   const tableName = getTableName(entityType);
   const selectColumns = options?.select ?? '*';
 
+  const sanitizedData = { ...data };
+  delete (sanitizedData as Record<string, unknown>)._resolved_actor_id;
+
   const payload = {
-    actor_id: actor.id,
-    ...data,
+    actor_id: actorId,
+    ...sanitizedData,
   };
 
   const { data: created, error } = await client

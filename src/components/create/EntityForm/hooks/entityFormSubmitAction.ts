@@ -25,6 +25,8 @@ interface EntityFormSubmitParams<T extends Record<string, unknown>> {
   router: { push: (url: string) => void };
   existingWalletLinkIdRef: { current: string | undefined };
   wizardMode?: WizardMode;
+  /** Selected actor (null/undefined = personal). Merged into the create POST body. */
+  actorId?: string | null;
 }
 
 export async function executeEntityFormSubmit<T extends Record<string, unknown>>({
@@ -42,6 +44,7 @@ export async function executeEntityFormSubmit<T extends Record<string, unknown>>
   router,
   existingWalletLinkIdRef,
   wizardMode,
+  actorId,
 }: EntityFormSubmitParams<T>): Promise<void> {
   // Wizard intermediate step: validate only visible fields, then advance without submitting.
   if (wizardMode?.onNext) {
@@ -81,11 +84,17 @@ export async function executeEntityFormSubmit<T extends Record<string, unknown>>
     const url =
       mode === 'edit' && entityId ? `${config.apiEndpoint}/${entityId}` : config.apiEndpoint;
 
+    // Merge actor_id only on create; edit mode never reassigns ownership.
+    const requestBody =
+      mode === 'create' && actorId
+        ? { ...(validatedData as Record<string, unknown>), actor_id: actorId }
+        : validatedData;
+
     const response = await fetch(url, {
       method: mode === 'edit' ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify(validatedData),
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {
