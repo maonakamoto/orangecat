@@ -1,5 +1,9 @@
 # My Cat – Conversational Entry for Orangecat
 
+created_date: 2026-01-18  
+last_modified_date: 2026-06-03  
+last_modified_summary: Chat-first Cat hub — full-height composer, minimal toolbar, context/controls as secondary panels; shell chrome via `getRouteChrome`.
+
 Status: Draft (MVP shipped), Iterating
 
 ## 1) Vision
@@ -16,9 +20,12 @@ Make creation on Orangecat conversational. Users describe what they want (voice 
 
 ## 3) UX Flows
 
-- My Cat (Private):
-  - Select Local or Remote model (BYOK/free). Clear badges: “Private — not saved”, BYOK or daily free count.
-  - Mic captures speech (Web Speech API) and inserts transcript into composer.
+- My Cat (Private) — `/dashboard/cat`:
+  - **Default = chat only** (ChatGPT-style): full viewport height, composer pinned to the bottom, no hub tabs or status cards on the main screen.
+  - **Toolbar**: model selector, links to Context (`?tab=context`) and Controls (`?tab=settings`); sidebar auto-collapses and mobile bottom nav hides on this route (`getRouteChrome` in `src/config/routes.ts`).
+  - **Secondary panels**: context and settings are separate full-page views with “Back to chat”, not competing tab chrome.
+  - Select Local or Remote model (BYOK/free). Badge: “Private · not saved”.
+  - Mic captures speech (Web Speech API) and inserts transcript into composer (planned).
   - “Create Service from chat” CTA performs prefill and opens create wizard.
 
 - Assistants (Public/Monetized):

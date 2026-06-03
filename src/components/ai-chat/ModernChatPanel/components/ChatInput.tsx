@@ -1,11 +1,12 @@
 /**
- * CHAT INPUT COMPONENT
- * Textarea with send button
+ * CHAT INPUT — composer pinned to the bottom of the panel
  */
 
 import { useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Send, Square } from 'lucide-react';
+import { Send, Square, Trash2 } from 'lucide-react';
+import { CAT_HUB_COPY } from '@/config/cat-hub';
+import { CHAT_CONTENT_MAX_WIDTH_CLASS } from '@/config/layout-chrome';
 
 interface ChatInputProps {
   value: string;
@@ -13,17 +14,28 @@ interface ChatInputProps {
   onSend: () => void;
   isLoading: boolean;
   onStop?: () => void;
+  variant?: 'default' | 'focus';
+  hasMessages?: boolean;
+  onClearChat?: () => void;
 }
 
-export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatInputProps) {
+export function ChatInput({
+  value,
+  onChange,
+  onSend,
+  isLoading,
+  onStop,
+  variant = 'focus',
+  hasMessages,
+  onClearChat,
+}: ChatInputProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const isFocus = variant === 'focus';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value);
-    // Reset height to auto to get the correct scrollHeight
     e.target.style.height = 'auto';
-    // Set height to scrollHeight, max 200px
-    e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
+    e.target.style.height = `${Math.min(e.target.scrollHeight, 200)}px`;
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -34,48 +46,56 @@ export function ChatInput({ value, onChange, onSend, isLoading, onStop }: ChatIn
   };
 
   return (
-    <div className="border-t border-border-subtle bg-background p-4">
-      <div className="mx-auto flex max-w-3xl items-end gap-2">
-        <div className="relative flex-1">
+    <div className={cn(isFocus ? 'oc-chat-composer-wrap' : 'border-t border-border-subtle p-4')}>
+      <div className={cn('mx-auto flex w-full items-end gap-2', CHAT_CONTENT_MAX_WIDTH_CLASS)}>
+        {isFocus && hasMessages && onClearChat && (
+          <button
+            type="button"
+            onClick={onClearChat}
+            className="mb-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            aria-label="Clear chat"
+            title="Clear chat"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        )}
+        <div className={cn('oc-chat-composer', !isFocus && 'rounded-md')}>
           <textarea
             ref={inputRef}
             value={value}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder="Message your Cat..."
+            placeholder={CAT_HUB_COPY.composerPlaceholder}
             rows={1}
-            className={cn(
-              'max-h-[200px] w-full resize-none rounded-md border border-border-subtle bg-background px-4 py-3 pr-12 text-foreground',
-              'focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring',
-              'text-sm leading-relaxed placeholder:text-muted-dim'
-            )}
+            className="oc-chat-composer-input"
           />
+          {isLoading && onStop ? (
+            <button
+              type="button"
+              onClick={onStop}
+              className="mb-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-foreground text-background transition-opacity hover:opacity-90"
+              aria-label="Stop generating"
+            >
+              <Square className="h-3.5 w-3.5 fill-current" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onSend}
+              disabled={!value.trim() || isLoading}
+              className={cn(
+                'mb-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg transition-colors',
+                value.trim() && !isLoading
+                  ? 'bg-foreground text-background hover:opacity-90'
+                  : 'cursor-not-allowed text-muted-foreground'
+              )}
+              aria-label="Send message"
+            >
+              <Send className="h-4 w-4" />
+            </button>
+          )}
         </div>
-        {isLoading && onStop ? (
-          <button
-            onClick={onStop}
-            className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md bg-destructive text-destructive-foreground transition-colors hover:bg-destructive/90"
-          >
-            <Square className="h-4 w-4 fill-current" />
-          </button>
-        ) : (
-          <button
-            onClick={onSend}
-            disabled={!value.trim() || isLoading}
-            className={cn(
-              'flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md transition-colors',
-              value.trim() && !isLoading
-                ? 'bg-foreground text-background hover:bg-foreground/90'
-                : 'bg-muted text-muted-dim cursor-not-allowed'
-            )}
-          >
-            <Send className="h-5 w-5" />
-          </button>
-        )}
       </div>
-      <p className="mt-2 text-center text-xs text-muted-dim">
-        Private workspace. Cat can use context and approved actions.
-      </p>
     </div>
   );
 }

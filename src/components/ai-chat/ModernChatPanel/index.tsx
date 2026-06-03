@@ -1,14 +1,15 @@
 'use client';
 
 /**
- * MODERN CHAT PANEL (REFACTORED)
+ * MODERN CHAT PANEL
  *
- * Modular chat component for AI conversations.
- * Split into smaller subcomponents and hooks for maintainability.
+ * Modular chat component for Cat conversations.
+ * `focus` variant is the default Cat hub experience (full-height, minimal chrome).
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 import { useChatMessages, useSuggestions, usePendingActionsManager } from './hooks';
@@ -20,25 +21,37 @@ interface ModernChatPanelProps {
   /**
    * If provided, this message is automatically sent as the user's first message
    * once chat history finishes loading and the conversation is empty.
-   * Used by onboarding to pre-seed the Cat with the user's description.
    */
   initialMessage?: string;
   /** When true, shows an onboarding welcome in the empty state for first-time users. */
   isNewUser?: boolean;
+  /** `focus` = full-height Cat hub (toolbar lives in parent). */
+  variant?: 'default' | 'focus';
+  selectedModel?: string;
+  onModelSelect?: (model: string) => void;
+  onLoadingChange?: (loading: boolean) => void;
+  className?: string;
 }
 
-export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelProps = {}) {
+export function ModernChatPanel({
+  initialMessage,
+  isNewUser,
+  variant = 'focus',
+  selectedModel: selectedModelProp,
+  onModelSelect,
+  onLoadingChange,
+  className,
+}: ModernChatPanelProps = {}) {
   const router = useRouter();
   const [input, setInput] = useState('');
-  const [selectedModel, setSelectedModel] = useState('auto');
+  const [internalModel, setInternalModel] = useState('auto');
+  const selectedModel = selectedModelProp ?? internalModel;
+  const setSelectedModel = onModelSelect ?? setInternalModel;
   const lastUserMessageRef = useRef<string>('');
-  // Ensures the initial message is only auto-sent once per mount
   const initialMessageSentRef = useRef(false);
-
-  // Callback ref for refreshing pending actions — avoids circular hook dependency
   const refreshPendingActionsRef = useRef<(() => Promise<void>) | undefined>(undefined);
+  const isFocus = variant === 'focus';
 
-  // Chat messages hook
   const {
     messages,
     isLoading,
@@ -55,10 +68,8 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
     onPendingResult: () => refreshPendingActionsRef.current?.(),
   });
 
-  // Suggestions hook
   const { suggestions, hasContext, isLoadingSuggestions } = useSuggestions();
 
-  // Pending actions hook
   const { pendingActions, handleConfirmAction, handleRejectAction, refreshPendingActions } =
     usePendingActionsManager({
       onActionConfirmed: action => {
@@ -66,10 +77,12 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
       },
     });
 
-  // Keep ref in sync so sendMessage always calls the latest refresh function
   refreshPendingActionsRef.current = refreshPendingActions;
 
-  // Auto-send initialMessage once history has loaded and the conversation is empty
+  useEffect(() => {
+    onLoadingChange?.(isLoading);
+  }, [isLoading, onLoadingChange]);
+
   useEffect(() => {
     if (
       initialMessage &&
@@ -83,7 +96,6 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
     }
   }, [initialMessage, isLoadingHistory, messages.length, isLoading, sendMessage]);
 
-  // Handle send
   const handleSend = useCallback(() => {
     const content = input.trim();
     if (content) {
@@ -93,7 +105,6 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
     }
   }, [input, sendMessage]);
 
-  // Handle retry last message
   const handleRetry = useCallback(() => {
     if (lastUserMessageRef.current) {
       setError(null);
@@ -101,12 +112,10 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
     }
   }, [sendMessage, setError]);
 
-  // Handle dismiss error
   const handleDismissError = useCallback(() => {
     setError(null);
   }, [setError]);
 
-  // Handle suggestion click - directly send the message
   const handleSuggestionClick = useCallback(
     (suggestion: string) => {
       void sendMessage(suggestion);
@@ -114,22 +123,18 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
     [sendMessage]
   );
 
-  // Handle action button clicks - navigate to prefilled entity or wallet creation
   const handleActionClick = useCallback(
     (action: CatAction) => {
       if (action.type === 'create_entity') {
         const entityMeta = ENTITY_REGISTRY[action.entityType];
         if (entityMeta?.createPath) {
           const prefillParams = new URLSearchParams();
-          // Forward all prefill fields as URL params
           Object.entries(action.prefill).forEach(([key, value]) => {
             if (value !== null && value !== undefined && value !== '') {
               prefillParams.set(key, String(value));
             }
           });
-
-          const url = `${entityMeta.createPath}?${prefillParams.toString()}`;
-          router.push(url);
+          router.push(`${entityMeta.createPath}?${prefillParams.toString()}`);
         }
       } else if (action.type === 'update_entity' || action.type === 'publish_entity') {
         const entityMeta = ENTITY_REGISTRY[action.entityType];
@@ -144,75 +149,91 @@ export function ModernChatPanel({ initialMessage, isNewUser }: ModernChatPanelPr
             prefillParams.set(key, String(value));
           }
         });
-
-        const url = `${walletMeta.basePath}?${prefillParams.toString()}`;
-        router.push(url);
+        router.push(`${walletMeta.basePath}?${prefillParams.toString()}`);
       }
     },
     [router]
   );
 
   return (
-    <div className="flex h-[calc(100dvh-15.5rem)] min-h-[34rem] flex-col overflow-hidden rounded-md border border-border-subtle bg-background sm:h-[calc(100dvh-13rem)]">
-      <ChatHeader
-        selectedModel={selectedModel}
-        onModelSelect={setSelectedModel}
-        isLoading={isLoading}
-        hasMessages={messages.length > 0}
-        onClearChat={clearChat}
-      />
+    <div
+      className={cn(
+        'oc-chat-layout',
+        !isFocus && 'min-h-[34rem] rounded-md border border-border-subtle',
+        !isFocus && 'h-[calc(100dvh-15.5rem)] sm:h-[calc(100dvh-13rem)]',
+        className
+      )}
+    >
+      {!isFocus && (
+        <ChatHeader
+          selectedModel={selectedModel}
+          onModelSelect={setSelectedModel}
+          isLoading={isLoading}
+          hasMessages={messages.length > 0}
+          onClearChat={clearChat}
+        />
+      )}
 
-      <div className="flex-1 overflow-y-auto py-4">
-        {isLoadingHistory ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-sm text-muted-dim">Loading conversation...</div>
-          </div>
-        ) : messages.length === 0 ? (
-          <EmptyState
-            suggestions={suggestions}
-            hasContext={hasContext}
-            isLoadingSuggestions={isLoadingSuggestions}
-            onSuggestionClick={handleSuggestionClick}
-            isNewUser={isNewUser}
-          />
-        ) : (
-          <div className="space-y-4">
-            {messages.map((msg, i) => (
-              <MessageBubble
-                key={msg.id}
-                message={msg}
-                isLast={i === messages.length - 1 && pendingActions.length === 0}
-                onActionClick={handleActionClick}
-              />
-            ))}
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="oc-chat-scroll">
+          {isLoadingHistory ? (
+            <div className="flex h-full items-center justify-center">
+              <p className="text-sm text-muted-foreground">Loading conversation…</p>
+            </div>
+          ) : messages.length === 0 ? (
+            <EmptyState
+              suggestions={suggestions}
+              hasContext={hasContext}
+              isLoadingSuggestions={isLoadingSuggestions}
+              onSuggestionClick={handleSuggestionClick}
+              isNewUser={isNewUser}
+              variant={variant}
+            />
+          ) : (
+            <div className="oc-chat-thread">
+              {messages.map((msg, i) => (
+                <MessageBubble
+                  key={msg.id}
+                  message={msg}
+                  isLast={i === messages.length - 1 && pendingActions.length === 0}
+                  onActionClick={handleActionClick}
+                  variant={variant}
+                />
+              ))}
 
-            {pendingActions.length > 0 && (
-              <div className="max-w-3xl mx-auto px-4 space-y-3">
-                {pendingActions.map(action => (
-                  <PendingActionsCard
-                    key={action.id}
-                    action={action}
-                    onConfirm={handleConfirmAction}
-                    onReject={handleRejectAction}
-                  />
-                ))}
-              </div>
-            )}
+              {pendingActions.length > 0 && (
+                <div className="space-y-3">
+                  {pendingActions.map(action => (
+                    <PendingActionsCard
+                      key={action.id}
+                      action={action}
+                      onConfirm={handleConfirmAction}
+                      onReject={handleRejectAction}
+                    />
+                  ))}
+                </div>
+              )}
 
-            <div ref={messagesEndRef} />
-          </div>
+              <div ref={messagesEndRef} />
+            </div>
+          )}
+        </div>
+
+        {error && (
+          <ErrorDisplay error={error} onRetry={handleRetry} onDismiss={handleDismissError} />
         )}
+
+        <ChatInput
+          value={input}
+          onChange={setInput}
+          onSend={handleSend}
+          isLoading={isLoading}
+          onStop={stopGeneration}
+          variant={variant}
+          hasMessages={messages.length > 0}
+          onClearChat={clearChat}
+        />
       </div>
-
-      {error && <ErrorDisplay error={error} onRetry={handleRetry} onDismiss={handleDismissError} />}
-
-      <ChatInput
-        value={input}
-        onChange={setInput}
-        onSend={handleSend}
-        isLoading={isLoading}
-        onStop={stopGeneration}
-      />
     </div>
   );
 }

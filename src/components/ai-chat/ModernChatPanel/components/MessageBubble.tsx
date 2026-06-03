@@ -85,10 +85,17 @@ interface MessageBubbleProps {
   message: Message;
   isLast: boolean;
   onActionClick?: (action: CatAction) => void;
+  variant?: 'default' | 'focus';
 }
 
-export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleProps) {
+export function MessageBubble({
+  message,
+  isLast,
+  onActionClick,
+  variant = 'focus',
+}: MessageBubbleProps) {
   const isUser = message.role === 'user';
+  const isFocus = variant === 'focus';
   const { copied, copy } = useCopyToClipboard();
 
   // Clean the message content by removing action and exec_action blocks for display
@@ -100,35 +107,41 @@ export function MessageBubble({ message, isLast, onActionClick }: MessageBubbleP
 
   return (
     <div
-      className={cn('flex gap-3 max-w-3xl mx-auto px-4', isUser ? 'flex-row-reverse' : 'flex-row')}
+      className={cn(
+        'flex w-full gap-3',
+        isUser ? 'flex-row-reverse' : 'flex-row',
+        !isFocus && 'mx-auto max-w-3xl px-4'
+      )}
     >
-      {/* Avatar */}
-      <div
-        className={cn(
-          'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle',
-          isUser ? 'bg-muted' : 'bg-background'
-        )}
-      >
-        {isUser ? (
-          <User className="h-4 w-4 text-muted-foreground" />
-        ) : (
-          <Cat className="h-4 w-4 text-foreground" />
-        )}
-      </div>
-
-      {/* Content */}
-      <div className={cn('flex-1 min-w-0', isUser ? 'text-right' : 'text-left')}>
+      {!isFocus && (
         <div
           className={cn(
-            'inline-block max-w-full rounded-md px-4 py-2.5',
-            isUser
-              ? 'rounded-tr-sm bg-foreground text-background'
-              : 'rounded-tl-sm bg-muted text-foreground'
+            'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle',
+            isUser ? 'bg-muted' : 'bg-background'
           )}
         >
-          <div
-            className={cn('break-words text-sm leading-relaxed', isUser && 'whitespace-pre-wrap')}
-          >
+          {isUser ? (
+            <User className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <Cat className="h-4 w-4 text-foreground" />
+          )}
+        </div>
+      )}
+
+      <div className={cn('min-w-0 flex-1', isUser ? 'text-right' : 'text-left')}>
+        <div
+          className={cn(
+            'inline-block max-w-full px-1 py-0.5 text-sm leading-relaxed sm:max-w-[92%]',
+            isUser
+              ? isFocus
+                ? 'rounded-2xl bg-muted px-4 py-2.5 text-foreground'
+                : 'rounded-md rounded-tr-sm bg-foreground px-4 py-2.5 text-background'
+              : isFocus
+                ? 'text-foreground'
+                : 'rounded-md rounded-tl-sm bg-muted px-4 py-2.5 text-foreground'
+          )}
+        >
+          <div className={cn('break-words', isUser && 'whitespace-pre-wrap')}>
             {isUser ? displayContent : renderChatMarkdown(displayContent)}
             {isLast && !isUser && !displayContent && (
               <span className="inline-flex items-center gap-1">

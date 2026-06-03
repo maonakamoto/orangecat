@@ -174,6 +174,28 @@ export function getRouteSurface(pathname: string): RouteSurface {
   return 'public';
 }
 
+/** Shell chrome overrides for routes that need a focused, low-distraction layout. */
+export interface RouteChrome {
+  hideMobileBottomNav: boolean;
+  preferCollapsedSidebar: boolean;
+}
+
+function isCatHubPath(pathname: string): boolean {
+  return pathname === '/dashboard/cat' || pathname.startsWith('/dashboard/cat/');
+}
+
+/**
+ * Per-route shell chrome. Sidebar collapse, mobile nav, and similar decisions
+ * must derive from this — do not branch on pathname in layout components.
+ */
+export function getRouteChrome(pathname: string): RouteChrome {
+  const catFocus = isCatHubPath(pathname);
+  return {
+    hideMobileBottomNav: catFocus,
+    preferCollapsedSidebar: catFocus,
+  };
+}
+
 // =============================================================================
 // Back-compat wrappers — prefer getRouteSurface in new code.
 // These exist so we don't have to rename every caller in one PR.

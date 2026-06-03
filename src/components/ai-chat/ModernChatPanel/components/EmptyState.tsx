@@ -1,9 +1,9 @@
 /**
- * EMPTY STATE COMPONENT
- * Displays when no messages, with suggestions
+ * EMPTY STATE — shown before the first message
  */
 
-import { Cat, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { CAT_HUB_COPY } from '@/config/cat-hub';
 
 interface EmptyStateProps {
   suggestions: string[];
@@ -11,69 +11,51 @@ interface EmptyStateProps {
   isLoadingSuggestions: boolean;
   onSuggestionClick: (suggestion: string) => void;
   isNewUser?: boolean;
+  variant?: 'default' | 'focus';
 }
 
 export function EmptyState({
   suggestions,
-  hasContext,
+  hasContext: _hasContext,
   isLoadingSuggestions,
   onSuggestionClick,
   isNewUser,
+  variant = 'focus',
 }: EmptyStateProps) {
+  const isFocus = variant === 'focus';
+  const title = isNewUser ? CAT_HUB_COPY.greetingNewUser : CAT_HUB_COPY.greeting;
+
   return (
-    <div className="flex h-full flex-col items-center justify-center px-4 py-12 text-center">
-      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-md border border-border-subtle bg-muted">
-        <Cat className="h-8 w-8 text-foreground" />
-      </div>
-      <h2 className="text-2xl font-semibold text-foreground mb-2">
-        {isNewUser ? 'Start with Cat' : 'Ask Cat'}
+    <div className={cn('oc-chat-empty', !isFocus && 'py-12')}>
+      <h2
+        className={
+          isFocus
+            ? 'max-w-lg text-2xl font-semibold tracking-tight text-foreground sm:text-3xl'
+            : 'mb-2 text-2xl font-semibold text-foreground'
+        }
+      >
+        {title}
       </h2>
-      <p className="text-muted-foreground mb-8 max-w-md">
-        {isNewUser ? (
-          <>
-            Describe what you want to create, fund, sell, coordinate, or improve. Cat will turn it
-            into practical next steps.
-          </>
-        ) : hasContext ? (
-          <>
-            Cat can use your profile, activity, and context documents to give more specific advice.
-          </>
-        ) : (
-          <>
-            Ask about projects, products, wallets, tasks, groups, or strategy. Add context later for
-            more precise answers.
-          </>
-        )}
-      </p>
-      {!isNewUser && hasContext && (
-        <p className="mb-4 flex items-center gap-1 text-xs text-muted-foreground">
-          <Sparkles className="h-3 w-3" />
-          Personalized by your context
-        </p>
+      <p className="mt-2 max-w-md text-sm text-muted-foreground">{CAT_HUB_COPY.greetingHint}</p>
+
+      {(isLoadingSuggestions || suggestions.length > 0) && (
+        <div className="mt-8 flex w-full max-w-2xl flex-col gap-2 sm:grid sm:grid-cols-2">
+          {isLoadingSuggestions
+            ? [1, 2, 3, 4].map(i => (
+                <div key={i} className="h-11 animate-pulse rounded-lg bg-muted" />
+              ))
+            : suggestions.map((suggestion, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => onSuggestionClick(suggestion)}
+                  className="oc-chat-suggestion"
+                >
+                  {suggestion}
+                </button>
+              ))}
+        </div>
       )}
-      <div className="flex flex-wrap justify-center gap-2 max-w-lg">
-        {isLoadingSuggestions ? (
-          <>
-            {[1, 2, 3, 4].map(i => (
-              <div
-                key={i}
-                className="h-9 animate-pulse rounded-sm bg-muted"
-                style={{ width: `${110 + i * 18}px` }}
-              />
-            ))}
-          </>
-        ) : (
-          suggestions.map((suggestion, i) => (
-            <button
-              key={i}
-              onClick={() => onSuggestionClick(suggestion)}
-              className="rounded-sm border border-border-subtle bg-muted px-4 py-2 text-left text-sm text-foreground transition-colors hover:border-border-strong hover:bg-muted/80"
-            >
-              {suggestion}
-            </button>
-          ))
-        )}
-      </div>
     </div>
   );
 }

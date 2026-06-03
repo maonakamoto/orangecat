@@ -1,69 +1,43 @@
-import { MessageSquare, FolderOpen, Settings, Brain, ShieldCheck, KeyRound } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+/**
+ * Cat hub — copy and tab SSOT
+ *
+ * UI strings and tab ids for /dashboard/cat live here only.
+ * Do not duplicate "Cat", privacy badges, or tab labels in components.
+ *
+ * created_date: 2026-01-22
+ * last_modified_date: 2026-06-03
+ * last_modified_summary: Consolidated Cat UI copy; layout tokens moved to layout-chrome.ts
+ */
+
+import { APP_NAME } from '@/config/brand';
+import { ROUTES } from '@/config/routes';
 
 export type CatHubTab = 'chat' | 'context' | 'settings';
 
-interface CatHubTabConfig {
-  id: CatHubTab;
-  label: string;
-  description: string;
-  icon: LucideIcon;
-}
-
-interface CatHubStatusItem {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-}
+/** In-product AI persona label (short form of APP_NAME agent) */
+export const CAT_AGENT = {
+  name: 'Cat',
+  productName: APP_NAME,
+  privacyBadge: 'Private · not saved',
+} as const;
 
 export const CAT_HUB_COPY = {
-  title: 'Cat',
-  eyebrow: 'AI economic agent',
-  description: 'Plan, create, manage context, and approve actions from one focused workspace.',
+  title: CAT_AGENT.name,
+  greeting: 'What can Cat help you with?',
+  greetingNewUser: 'Tell Cat what you want to do',
+  greetingHint: 'Projects, products, funding, coordination, strategy — ask in plain language.',
+  composerPlaceholder: 'Message Cat…',
   contextTitle: 'Context',
   contextDescription: 'Documents and facts your Cat can use for better answers.',
   settingsTitle: 'Controls',
   settingsDescription: 'Model, keys, and permissions for autonomous actions.',
+  backToChat: 'Back to chat',
 } as const;
 
-export const CAT_HUB_TABS: CatHubTabConfig[] = [
-  {
-    id: 'chat',
-    label: 'Chat',
-    description: 'Ask, plan, and create',
-    icon: MessageSquare,
-  },
-  {
-    id: 'context',
-    label: 'Context',
-    description: 'What Cat knows',
-    icon: FolderOpen,
-  },
-  {
-    id: 'settings',
-    label: 'Controls',
-    description: 'Keys and permissions',
-    icon: Settings,
-  },
-];
-
-export const CAT_HUB_STATUS_ITEMS: CatHubStatusItem[] = [
-  {
-    id: 'context',
-    label: 'Context',
-    icon: Brain,
-  },
-  {
-    id: 'keys',
-    label: 'Keys',
-    icon: KeyRound,
-  },
-  {
-    id: 'permissions',
-    label: 'Permissions',
-    icon: ShieldCheck,
-  },
-];
+export const CAT_HUB_TAB_HREFS: Record<Exclude<CatHubTab, 'chat'>, string> = {
+  context: `${ROUTES.DASHBOARD.CAT}?tab=context`,
+  settings: `${ROUTES.DASHBOARD.CAT}?tab=settings`,
+};
 
 export function isCatHubTab(value: string | null): value is CatHubTab {
   return value === 'chat' || value === 'context' || value === 'settings';
