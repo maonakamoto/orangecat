@@ -25,8 +25,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { Suspense } from 'react';
 
 import type { Metadata, Viewport } from 'next';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://orangecat.ch';
+import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE, SITE_URL } from '@/config/brand';
 
 // Required for env(safe-area-inset-*) to take effect on iOS (notch + home indicator).
 // Without `viewportFit: 'cover'` the inset values resolve to 0.
@@ -35,18 +34,17 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: 'cover',
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FAF8F5' },
-    { media: '(prefers-color-scheme: dark)', color: '#0A0A0A' },
+    { media: '(prefers-color-scheme: light)', color: '#fafafa' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
   ],
 };
 
 export const metadata: Metadata = {
   title: {
-    default: 'OrangeCat - Your AI Economic Agent',
-    template: '%s | OrangeCat',
+    default: `${APP_NAME} — ${APP_TAGLINE}`,
+    template: `%s | ${APP_NAME}`,
   },
-  description:
-    'Fund, lend, invest, trade, and govern with any identity, any currency. OrangeCat is your AI economic agent — the platform where economic participation is open to everyone.',
+  description: APP_DESCRIPTION,
   keywords:
     'AI economic agent, bitcoin, finance, community, fund, invest, lend, products, services, lightning network, peer-to-peer, pseudonymous, any currency',
   metadataBase: new URL(SITE_URL),
@@ -54,10 +52,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: SITE_URL,
-    siteName: 'OrangeCat',
-    title: 'OrangeCat - Your AI Economic Agent',
-    description:
-      'Fund, lend, invest, trade, and govern with any identity, any currency. OrangeCat is your AI economic agent — the platform where economic participation is open to everyone.',
+    siteName: APP_NAME,
+    title: `${APP_NAME} — ${APP_TAGLINE}`,
+    description: APP_DESCRIPTION,
   },
   twitter: {
     card: 'summary_large_image',

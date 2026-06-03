@@ -1,17 +1,26 @@
 # OrangeCat Design System
 
-**Created**: June 5, 2025
-**Last Modified**: June 5, 2025
-**Last Modified Summary**: Created unified design system document combining previous design documentation
-**Version**: 1.0.0
+**Created**: June 5, 2025  
+**Last Modified**: June 3, 2026  
+**Last Modified Summary**: Clarified SSOT hierarchy — runtime tokens live in `globals.css` + `tailwind.config.ts`; TS helpers in `design-system.ts`; Cat chat uses `.oc-chat-*` classes. See `docs/architecture/CAT_AND_DESIGN_SSOT.md`.  
+**Version**: 1.1.0
 
 ## Overview
 
-This document serves as the single source of truth for OrangeCat's design system, including colors, typography, components, and implementation guidelines.
+This document describes OrangeCat brand and component guidelines. **For implementation SSOT, prefer code over this file when they disagree:**
+
+| Layer                           | File                                                   |
+| ------------------------------- | ------------------------------------------------------ |
+| CSS variables & `.oc-*` classes | `src/app/globals.css`                                  |
+| Tailwind theme                  | `tailwind.config.ts`                                   |
+| Button/Input/Card class strings | `src/config/design-system.ts`                          |
+| Cat chat layout & copy          | `src/config/layout-chrome.ts`, `src/config/cat-hub.ts` |
+| Architecture audit              | `docs/architecture/CAT_AND_DESIGN_SSOT.md`             |
 
 ## Brand Colors
 
 ### Primary Colors
+
 - **Tiffany Blue** (`#0ABAB5`)
   - Primary brand color
   - Used for main CTAs, important elements, and brand identity
@@ -19,6 +28,7 @@ This document serves as the single source of truth for OrangeCat's design system
   - Dark variant: `#089B96` (for hover states)
 
 ### Secondary Colors
+
 - **Orange** (`#FF6B35`)
   - Accent color for Bitcoin-related elements
   - Used sparingly for emphasis and Bitcoin-specific features
@@ -26,6 +36,7 @@ This document serves as the single source of truth for OrangeCat's design system
   - Dark variant: `#E65A2F` (for hover states)
 
 ### Neutral Colors
+
 - **Gray Scale**
   - `#1A1A1A` (Text)
   - `#4A4A4A` (Secondary Text)
@@ -37,11 +48,13 @@ This document serves as the single source of truth for OrangeCat's design system
 ## Typography
 
 ### Font Family
+
 - **Primary**: Inter
   - Clean, modern, and highly readable
   - Used for all body text and UI elements
 
 ### Font Sizes
+
 - **Headings**
   - H1: 48px (3rem)
   - H2: 36px (2.25rem)
@@ -59,9 +72,11 @@ This document serves as the single source of truth for OrangeCat's design system
 ## Spacing
 
 ### Base Unit
+
 - 4px (0.25rem)
 
 ### Spacing Scale
+
 - 4px (0.25rem)
 - 8px (0.5rem)
 - 12px (0.75rem)
@@ -75,6 +90,7 @@ This document serves as the single source of truth for OrangeCat's design system
 ## Components
 
 ### Buttons
+
 - **Primary Button**
   - Background: Tiffany Blue
   - Text: White
@@ -91,6 +107,7 @@ This document serves as the single source of truth for OrangeCat's design system
   - Hover: Light Tiffany Blue background
 
 ### Cards
+
 - Background: White
 - Border Radius: 12px
 - Shadow: 0 4px 6px rgba(0, 0, 0, 0.05)
@@ -98,6 +115,7 @@ This document serves as the single source of truth for OrangeCat's design system
 - Border: 1px solid #E5E5E5
 
 ### Inputs
+
 - Height: 40px
 - Border Radius: 8px
 - Border: 1px solid #E5E5E5
@@ -107,6 +125,7 @@ This document serves as the single source of truth for OrangeCat's design system
 ## Layout
 
 ### Grid System
+
 - 12-column grid
 - Max width: 1280px
 - Gutter width: 24px
@@ -116,6 +135,7 @@ This document serves as the single source of truth for OrangeCat's design system
   - Desktop: 1025px+
 
 ### Container
+
 - Max width: 1280px
 - Padding: 0 24px
 - Margin: 0 auto
@@ -123,10 +143,12 @@ This document serves as the single source of truth for OrangeCat's design system
 ## Motion
 
 ### Transitions
+
 - Default duration: 0.3s
 - Easing: cubic-bezier(0.4, 0, 0.2, 1)
 
 ### Animations
+
 - Fade in: 0.3s
 - Slide in: 0.3s
 - Scale: 0.2s
@@ -134,17 +156,20 @@ This document serves as the single source of truth for OrangeCat's design system
 ## Accessibility
 
 ### Color Contrast
+
 - Text on background: Minimum 4.5:1
 - Large text: Minimum 3:1
 - Interactive elements: Minimum 3:1
 
 ### Focus States
+
 - Visible outline: 2px solid Tiffany Blue
 - Offset: 2px from element
 
 ## Content Guidelines
 
 ### Voice and Tone
+
 - Professional yet approachable
 - Clear and concise
 - Focus on funding and transparency
@@ -152,6 +177,7 @@ This document serves as the single source of truth for OrangeCat's design system
 - Use simple, non-technical language
 
 ### Terminology
+
 - Use "funding" instead of "donations"
 - Use "projects" instead of "creators"
 - Use "supporters" instead of "donors"
@@ -161,18 +187,21 @@ This document serves as the single source of truth for OrangeCat's design system
 ## Best Practices
 
 ### User Flow
+
 - Guide users gently through the experience
 - One primary CTA per section
 - Progressive disclosure of information
 - Clear hierarchy of actions
 
 ### Visual Hierarchy
+
 - Use size, color, and spacing to establish importance
 - Maintain consistent spacing between sections
 - Use white space effectively
 - Limit use of accent colors
 
 ### Responsive Design
+
 - Mobile-first approach
 - Fluid typography
 - Flexible layouts
@@ -181,17 +210,18 @@ This document serves as the single source of truth for OrangeCat's design system
 ## Implementation
 
 ### Tailwind Configuration
+
 ```javascript
 module.exports = {
   theme: {
     extend: {
       colors: {
-        'tiffany': {
+        tiffany: {
           DEFAULT: '#0ABAB5',
           light: '#E6F7F7',
           dark: '#089B96',
         },
-        'orange': {
+        orange: {
           DEFAULT: '#FF6B35',
           light: '#FFF0EB',
           dark: '#E65A2F',
@@ -202,16 +232,18 @@ module.exports = {
       },
     },
   },
-}
+};
 ```
 
 ### Component Structure
+
 - Atomic design principles
 - Reusable components
 - Consistent naming conventions
 - TypeScript interfaces for props
 
 ## Icons
+
 - Style: Rounded
 - Size: 24x24px (default)
 - Color: Matches text color
@@ -219,6 +251,7 @@ module.exports = {
 - Use Lucide icons consistently
 
 ## Dark Mode Colors
+
 - Background: #1A1A1A
 - Text: #FFFFFF
 - Primary: #0ABAB5
@@ -228,6 +261,7 @@ module.exports = {
 ## Component States
 
 ### Error States
+
 - **Form Validation**
   - Error text color: `#DC2626`
   - Error border color: `#DC2626`
@@ -243,6 +277,7 @@ module.exports = {
   - Error banner padding: 16px
 
 ### Loading States
+
 - **Spinner**
   - Color: Tiffany Blue
   - Size: 24px
@@ -256,6 +291,7 @@ module.exports = {
   - Easing: ease-in-out
 
 ### Empty States
+
 - **Empty List**
   - Icon: Inbox
   - Icon size: 48px
@@ -273,6 +309,7 @@ module.exports = {
   - Suggestion text: 14px
 
 ### Success States
+
 - **Success Message**
   - Background: `#ECFDF5`
   - Border: `#059669`
@@ -284,35 +321,39 @@ module.exports = {
 ## Version Control
 
 ### Version 1.0.0 (June 5, 2025)
+
 - Initial design system release
 - Core components and guidelines
 - Basic documentation structure
 
 ### Breaking Changes
+
 - None (initial release)
 
 ### Migration Guide
+
 - N/A (initial release)
 
 ## Design Tokens
 
 ### CSS Variables
+
 ```css
 :root {
   /* Colors */
-  --color-tiffany: #0ABAB5;
-  --color-tiffany-light: #E6F7F7;
-  --color-tiffany-dark: #089B96;
-  --color-orange: #FF6B35;
-  --color-orange-light: #FFF0EB;
-  --color-orange-dark: #E65A2F;
-  --color-bitcoin-orange: #F7931A;
-  
+  --color-tiffany: #0abab5;
+  --color-tiffany-light: #e6f7f7;
+  --color-tiffany-dark: #089b96;
+  --color-orange: #ff6b35;
+  --color-orange-light: #fff0eb;
+  --color-orange-dark: #e65a2f;
+  --color-bitcoin-orange: #f7931a;
+
   /* Typography */
   --font-family-sans: 'Inter', sans-serif;
   --font-size-base: 16px;
   --line-height-base: 1.5;
-  
+
   /* Spacing */
   --spacing-unit: 4px;
   --spacing-xs: calc(var(--spacing-unit) * 1);
@@ -320,12 +361,12 @@ module.exports = {
   --spacing-md: calc(var(--spacing-unit) * 4);
   --spacing-lg: calc(var(--spacing-unit) * 6);
   --spacing-xl: calc(var(--spacing-unit) * 8);
-  
+
   /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -334,17 +375,18 @@ module.exports = {
 ```
 
 ### Tailwind Configuration
+
 ```javascript
 module.exports = {
   theme: {
     extend: {
       colors: {
-        'tiffany': {
+        tiffany: {
           DEFAULT: 'var(--color-tiffany)',
           light: 'var(--color-tiffany-light)',
           dark: 'var(--color-tiffany-dark)',
         },
-        'orange': {
+        orange: {
           DEFAULT: 'var(--color-orange)',
           light: 'var(--color-orange-light)',
           dark: 'var(--color-orange-dark)',
@@ -354,26 +396,26 @@ module.exports = {
         sans: ['var(--font-family-sans)'],
       },
       spacing: {
-        'xs': 'var(--spacing-xs)',
-        'sm': 'var(--spacing-sm)',
-        'md': 'var(--spacing-md)',
-        'lg': 'var(--spacing-lg)',
-        'xl': 'var(--spacing-xl)',
+        xs: 'var(--spacing-xs)',
+        sm: 'var(--spacing-sm)',
+        md: 'var(--spacing-md)',
+        lg: 'var(--spacing-lg)',
+        xl: 'var(--spacing-xl)',
       },
       borderRadius: {
-        'sm': 'var(--radius-sm)',
-        'md': 'var(--radius-md)',
-        'lg': 'var(--radius-lg)',
+        sm: 'var(--radius-sm)',
+        md: 'var(--radius-md)',
+        lg: 'var(--radius-lg)',
       },
       boxShadow: {
-        'sm': 'var(--shadow-sm)',
-        'md': 'var(--shadow-md)',
-        'lg': 'var(--shadow-lg)',
+        sm: 'var(--shadow-sm)',
+        md: 'var(--shadow-md)',
+        lg: 'var(--shadow-lg)',
       },
     },
   },
-}
-``` 
+};
+```
 
 ## Bitcoin Orange
 
@@ -384,8 +426,9 @@ module.exports = {
   - Design Token: `--color-bitcoin-orange: #F7931A;`
 
 ## Usage Guidelines for Bitcoin Orange
+
 - Use exclusively for Bitcoin-related elements (logos, icons, highlights, CTAs)
 - Do not use for unrelated UI elements
 - Ensure sufficient contrast with backgrounds
 - Use HEX #F7931A for all digital assets
-- For print, use RGB (247, 147, 26) 
+- For print, use RGB (247, 147, 26)
