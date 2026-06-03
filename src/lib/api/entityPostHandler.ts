@@ -41,10 +41,12 @@ import {
 } from '@/services/actors/resolveCreationActor';
 import { resolveRequestAuth } from '@/lib/api/resolveRequestAuth';
 import {
-  lookupIdempotencyResult,
-  storeIdempotencyResult,
+  claimIdempotencyKey,
+  completeIdempotencyResult,
   hashRequestBody,
+  releaseIdempotencyClaim,
   shouldCacheStatus,
+  waitForIdempotencyResult,
 } from '@/services/idempotency/idempotencyResults';
 
 // Type for the awaited Supabase client
@@ -125,69 +127,130 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
     withRequestId(),
     withZodBody(schemaWithActor)
   )(async (request: NextRequest, ctx) => {
+    // Hoisted so the outer catch can release a pending claim if the
+    // request throws mid-flight.
+    let userId: string | null = null;
+    let idempotencyKey: string | null = null;
+    let requestPath = '';
+    const ownsIdempotencyClaim = false;
+
     try {
       const auth = await resolveRequestAuth(request);
       if (!auth) {
         return apiUnauthorized();
       }
-      const userId = auth.userId;
+      userId = auth.userId;
       const supabase = await createServerClient();
 
       // Idempotency-Key dedup. Runs BEFORE rate limiting so a retry of a
       // successful request doesn't consume quota a second time.
-      const idempotencyKey = request.headers.get('idempotency-key');
+      idempotencyKey = request.headers.get('idempotency-key');
       const bodyHash = idempotencyKey ? hashRequestBody(ctx.body) : undefined;
       // URL parsing only when we'll actually use it — `request.url` may be
       // undefined in unit-test mocks of NextRequest.
-      const requestPath = idempotencyKey && request.url ? new URL(request.url).pathname : '';
+      requestPath = idempotencyKey && request.url ? new URL(request.url).pathname : '';
+
+      // Track whether THIS request owns the idempotency row so cacheResult
+      // knows whether to write the completion. False for non-owners (they
+      // already returned the winner's response) and for any request that
+      // didn't supply an Idempotency-Key.
+      let ownsIdempotencyClaim = false;
 
       if (idempotencyKey && bodyHash && requestPath) {
-        const cached = await lookupIdempotencyResult({
+        const claim = await claimIdempotencyKey({
           userId,
           key: idempotencyKey,
+          method: 'POST',
           path: requestPath,
           bodyHash,
         });
-        if (cached.kind === 'hit') {
-          logger.info(`${meta.name} idempotency hit`, {
+
+        if (claim.kind === 'replay') {
+          logger.info(`${meta.name} idempotency replay`, {
             userId,
             path: requestPath,
-            cachedStatus: cached.hit.responseStatus,
+            cachedStatus: claim.hit.responseStatus,
           });
-          return NextResponse.json(cached.hit.responseBody, {
-            status: cached.hit.responseStatus,
+          return NextResponse.json(claim.hit.responseBody, {
+            status: claim.hit.responseStatus,
             headers: { 'Idempotency-Replay': 'true' },
           });
         }
-        if (cached.kind === 'body_mismatch') {
+
+        if (claim.kind === 'body_mismatch') {
           return apiForbidden(
             'Idempotency-Key was reused with a different request body. Generate a new key for each distinct request.'
           );
         }
+
+        if (claim.kind === 'wait') {
+          // Another request is in flight for the same key. Poll until it
+          // finishes; never duplicate the work.
+          const winner = await waitForIdempotencyResult({
+            userId,
+            key: idempotencyKey,
+            path: requestPath,
+          });
+          if (winner) {
+            logger.info(`${meta.name} idempotency wait-and-replay`, {
+              userId,
+              path: requestPath,
+              cachedStatus: winner.responseStatus,
+            });
+            return NextResponse.json(winner.responseBody, {
+              status: winner.responseStatus,
+              headers: { 'Idempotency-Replay': 'true' },
+            });
+          }
+          // Owner timed out without completing. Tell the client to retry
+          // with the same key — a future attempt either sees the
+          // completion or wins fresh.
+          return apiRateLimited(
+            'Another request with this Idempotency-Key is still in flight. Retry shortly.',
+            5
+          );
+        }
+
+        // claim.kind === 'won' — we own the row, must complete it on the way out.
+        ownsIdempotencyClaim = true;
       }
 
-      /** Cache the response when an Idempotency-Key was supplied AND the
-       * outcome is something we want to replay (2xx and 4xx; never 5xx). */
+      /** Publish the response to the idempotency cache when WE claimed
+       * the row at the top. Skipped for non-owners (already returned),
+       * for requests without a key, and for 5xx (server may recover on
+       * retry — caching a transient failure would lock the client out). */
+      // Capture userId in a closure-friendly const — the outer let is
+      // string | null because the catch handler also reads it after a
+      // possible early return.
+      const claimUserId = userId;
       const cacheResult = async (response: NextResponse): Promise<NextResponse> => {
-        if (!idempotencyKey || !bodyHash) {
+        if (!ownsIdempotencyClaim || !idempotencyKey || !bodyHash) {
           return response;
         }
         if (!shouldCacheStatus(response.status)) {
+          // 5xx — don't cache, but DO release the pending row so a
+          // future retry can win fresh instead of polling a permanently
+          // stuck row for 24h.
+          await releaseIdempotencyClaim({
+            userId: claimUserId,
+            key: idempotencyKey,
+            path: requestPath,
+          });
+          ownsIdempotencyClaim = false;
           return response;
         }
         try {
           const body = await response.clone().json();
-          await storeIdempotencyResult({
-            userId,
+          await completeIdempotencyResult({
+            userId: claimUserId,
             key: idempotencyKey,
-            method: 'POST',
             path: requestPath,
-            bodyHash,
             responseStatus: response.status,
             responseBody: body,
           });
+          ownsIdempotencyClaim = false;
         } catch (cacheErr) {
-          logger.warn('idempotency cache write failed (non-fatal)', { cacheErr });
+          logger.warn('idempotency complete failed (non-fatal)', { cacheErr });
         }
         return response;
       };
@@ -340,6 +403,12 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         )
       );
     } catch (error) {
+      // If we claimed an idempotency row at the top and the request
+      // threw before completing, release the row so a future retry can
+      // win fresh instead of polling a stuck pending row for 24h.
+      if (ownsIdempotencyClaim && userId && idempotencyKey && requestPath) {
+        await releaseIdempotencyClaim({ userId, key: idempotencyKey, path: requestPath });
+      }
       return handleApiError(error);
     }
   });
