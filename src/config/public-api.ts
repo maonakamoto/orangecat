@@ -42,3 +42,13 @@ export function publicApiEndpoint(type: PublicApiEntityType, basePath?: string):
   const base = basePath?.replace(/\/$/, '') ?? '';
   return `${base}${PUBLIC_API_BASE}/${segment}`;
 }
+
+/**
+ * All scope tokens minting UIs can offer. Format mirrors hasScope:
+ * `<entity>.<read|write>`. Wildcard `'*'` is the everything-token and
+ * is never enumerated here — it's a separate user choice.
+ */
+export const PUBLIC_API_SCOPE_TOKENS: readonly string[] = PUBLIC_API_ENTITY_TYPES.flatMap(t => [
+  `${t}.read`,
+  `${t}.write`,
+]);

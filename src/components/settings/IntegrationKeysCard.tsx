@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { Copy, Plus, RotateCcw, Trash2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { logger } from '@/utils/logger';
+import { PUBLIC_API_ENTITY_TYPES, PUBLIC_API_SCOPE_TOKENS } from '@/config/public-api';
 
 export interface IntegrationKey {
   id: string;
@@ -52,9 +53,25 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [selectedActorId, setSelectedActorId] = useState<string | null>(defaultActorId);
+  // Default to wildcard (current behaviour). When restrictPermissions is
+  // true the user opts into picking a per-entity allowlist instead.
+  const [restrictPermissions, setRestrictPermissions] = useState(false);
+  const [selectedScopes, setSelectedScopes] = useState<Set<string>>(new Set());
   const [minting, setMinting] = useState(false);
   const [mintedPlaintext, setMintedPlaintext] = useState<string | null>(null);
   const [mintedPrefix, setMintedPrefix] = useState<string | null>(null);
+
+  function toggleScope(token: string) {
+    setSelectedScopes(prev => {
+      const next = new Set(prev);
+      if (next.has(token)) {
+        next.delete(token);
+      } else {
+        next.add(token);
+      }
+      return next;
+    });
+  }
 
   useEffect(() => {
     if (!selectedActorId && defaultActorId) {
@@ -93,24 +110,37 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
     if (!selectedActorId || !name.trim()) {
       return;
     }
+    if (restrictPermissions && selectedScopes.size === 0) {
+      setError('Pick at least one scope, or switch back to full access.');
+      return;
+    }
     setMinting(true);
     setError(null);
     try {
+      const body: { name: string; actor_id: string; scopes?: string[] } = {
+        name: name.trim(),
+        actor_id: selectedActorId,
+      };
+      if (restrictPermissions) {
+        body.scopes = Array.from(selectedScopes);
+      }
       const res = await fetch('/api/integration-keys', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ name: name.trim(), actor_id: selectedActorId }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(body?.error || `Failed to mint key (${res.status})`);
+        const errBody = (await res.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(errBody?.error || `Failed to mint key (${res.status})`);
       }
       const json = (await res.json()) as MintResponse;
       setMintedPlaintext(json.data.plaintext);
       setMintedPrefix(json.data.key.key_prefix);
       setKeys(prev => [json.data.key, ...prev]);
       setName('');
+      setSelectedScopes(new Set());
+      setRestrictPermissions(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to mint key');
     } finally {
@@ -221,6 +251,58 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
             </select>
           </label>
         </div>
+        <fieldset className="space-y-2 rounded-md border border-border-subtle bg-background/40 p-3">
+          <legend className="px-1 text-xs text-muted-foreground">Permissions</legend>
+          <label className="flex items-center gap-2 text-xs text-foreground">
+            <input
+              type="radio"
+              name="permissions"
+              checked={!restrictPermissions}
+              onChange={() => {
+                setRestrictPermissions(false);
+                setSelectedScopes(new Set());
+              }}
+            />
+            Full access (wildcard) — the key can call every public endpoint on its actor.
+          </label>
+          <label className="flex items-center gap-2 text-xs text-foreground">
+            <input
+              type="radio"
+              name="permissions"
+              checked={restrictPermissions}
+              onChange={() => setRestrictPermissions(true)}
+            />
+            Restrict to specific scopes (least privilege).
+          </label>
+          {restrictPermissions && (
+            <div className="mt-2 rounded-md border border-border-subtle bg-muted/20 p-3">
+              <div className="grid grid-cols-[auto,1fr,1fr] items-center gap-x-3 gap-y-1.5 text-xs">
+                <span className="text-muted-foreground" />
+                <span className="text-muted-foreground">Read</span>
+                <span className="text-muted-foreground">Write</span>
+                {PUBLIC_API_ENTITY_TYPES.map(entity => {
+                  const readToken = `${entity}.read`;
+                  const writeToken = `${entity}.write`;
+                  return (
+                    <ScopeRow
+                      key={entity}
+                      label={entity}
+                      readToken={readToken}
+                      writeToken={writeToken}
+                      selectedScopes={selectedScopes}
+                      onToggle={toggleScope}
+                    />
+                  );
+                })}
+              </div>
+              <p className="mt-2 text-[10px] text-muted-foreground">
+                {selectedScopes.size === 0
+                  ? 'No scopes picked — the key will be unable to do anything.'
+                  : `Selected: ${selectedScopes.size} of ${PUBLIC_API_SCOPE_TOKENS.length}.`}
+              </p>
+            </div>
+          )}
+        </fieldset>
         <Button type="submit" disabled={minting || !selectedActorId || !name.trim()}>
           <Plus className="mr-1 h-4 w-4" />
           {minting ? 'Creating…' : 'Create key'}
@@ -334,5 +416,37 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
         )}
       </div>
     </section>
+  );
+}
+
+interface ScopeRowProps {
+  label: string;
+  readToken: string;
+  writeToken: string;
+  selectedScopes: Set<string>;
+  onToggle: (token: string) => void;
+}
+
+function ScopeRow({ label, readToken, writeToken, selectedScopes, onToggle }: ScopeRowProps) {
+  return (
+    <>
+      <span className="capitalize text-foreground">{label}</span>
+      <label className="flex items-center gap-1.5 text-foreground">
+        <input
+          type="checkbox"
+          checked={selectedScopes.has(readToken)}
+          onChange={() => onToggle(readToken)}
+        />
+        <code className="rounded bg-muted px-1 text-[10px]">{readToken}</code>
+      </label>
+      <label className="flex items-center gap-1.5 text-foreground">
+        <input
+          type="checkbox"
+          checked={selectedScopes.has(writeToken)}
+          onChange={() => onToggle(writeToken)}
+        />
+        <code className="rounded bg-muted px-1 text-[10px]">{writeToken}</code>
+      </label>
+    </>
   );
 }
