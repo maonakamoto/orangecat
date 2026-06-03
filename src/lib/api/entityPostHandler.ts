@@ -48,6 +48,7 @@ import {
   shouldCacheStatus,
   waitForIdempotencyResult,
 } from '@/services/idempotency/idempotencyResults';
+import { enqueueWebhookEvent } from '@/services/webhooks/deliveryService';
 
 // Type for the awaited Supabase client
 type SupabaseClient = Awaited<ReturnType<typeof createServerClient>>;
@@ -294,6 +295,13 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         const bodyForCreate = { ...bodyForHandler, _resolved_actor_id: resolvedActor.id };
         const entity = await createEntity(userId, bodyForCreate, supabase);
         logger.info(`${meta.name} created successfully`, { [`${entityType}Id`]: entity.id });
+        // Fire-and-forget: never block the user response on webhook
+        // enqueue. enqueueWebhookEvent swallows its own errors.
+        void enqueueWebhookEvent({
+          actorId: resolvedActor.id,
+          eventType: `${entityType}.created`,
+          payload: entity,
+        });
         return cacheResult(
           applyRateLimitHeaders(apiSuccess(entity, { status: 201 }), rateLimit as RateLimitResult)
         );
@@ -392,6 +400,11 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         }
       }
 
+      void enqueueWebhookEvent({
+        actorId: resolvedActor.id,
+        eventType: `${entityType}.created`,
+        payload: createdEntity,
+      });
       return cacheResult(
         applyRateLimitHeaders(
           apiSuccess(createdEntity, { status: 201 }),

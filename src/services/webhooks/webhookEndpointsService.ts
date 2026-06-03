@@ -23,7 +23,7 @@
  * Created: 2026-06-03
  */
 
-import { createHash, randomBytes } from 'crypto';
+import { randomBytes } from 'crypto';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -60,10 +60,6 @@ function generateSecret(): string {
   return `${SECRET_PREFIX}${randomBytes(SECRET_RANDOM_BYTES).toString('hex')}`;
 }
 
-function hashSecret(plaintext: string): string {
-  return createHash('sha256').update(plaintext).digest('hex');
-}
-
 const ENDPOINT_SELECT =
   'id, user_id, actor_id, name, url, secret_prefix, event_types, created_at, last_delivery_at, revoked_at';
 
@@ -86,7 +82,6 @@ export async function createWebhookEndpoint(params: {
   await resolveCreationActor(userId, actorId);
 
   const secret = generateSecret();
-  const secretHash = hashSecret(secret);
   const secretPrefix = secret.slice(0, DISPLAY_PREFIX_LENGTH);
 
   const admin = createAdminClient();
@@ -101,7 +96,7 @@ export async function createWebhookEndpoint(params: {
       actor_id: actorId,
       name: name.trim(),
       url: url.trim(),
-      secret_hash: secretHash,
+      secret_plaintext: secret,
       secret_prefix: secretPrefix,
       event_types: eventTypes && eventTypes.length > 0 ? eventTypes : null,
     })
@@ -152,6 +147,59 @@ export async function listActiveEndpointsForActor(actorId: string): Promise<Webh
   }
 
   return (data ?? []) as WebhookEndpoint[];
+}
+
+/**
+ * Fetch the signing secret + url for a single endpoint — the firing
+ * worker needs both to actually POST a delivery. Returns null if the
+ * endpoint was revoked or deleted between enqueue and fire.
+ *
+ * INTERNAL ONLY. Never expose the secret via the user-facing API.
+ */
+export async function getEndpointSigningContext(
+  endpointId: string
+): Promise<{ url: string; secret: string; actorId: string } | null> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from(DATABASE_TABLES.WEBHOOK_ENDPOINTS)
+    .select('url, secret_plaintext, actor_id, revoked_at')
+    .eq('id', endpointId)
+    .maybeSingle();
+
+  if (error) {
+    logger.error('getEndpointSigningContext: query failed', { error, endpointId });
+    return null;
+  }
+  if (!data) {
+    return null;
+  }
+
+  const row = data as {
+    url: string;
+    secret_plaintext: string;
+    actor_id: string;
+    revoked_at: string | null;
+  };
+  if (row.revoked_at) {
+    return null;
+  }
+
+  return { url: row.url, secret: row.secret_plaintext, actorId: row.actor_id };
+}
+
+/**
+ * Bump last_delivery_at on the endpoint — fire-and-forget from the worker
+ * after a successful POST so the /settings/integrations UI shows freshness.
+ */
+export async function touchEndpointLastDelivery(endpointId: string): Promise<void> {
+  const admin = createAdminClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (admin.from(DATABASE_TABLES.WEBHOOK_ENDPOINTS) as any)
+    .update({ last_delivery_at: new Date().toISOString() })
+    .eq('id', endpointId);
+  if (error) {
+    logger.warn('touchEndpointLastDelivery failed (non-fatal)', { error, endpointId });
+  }
 }
 
 /**
