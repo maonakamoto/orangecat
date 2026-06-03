@@ -1,5 +1,6 @@
 import { Skeleton } from '../Skeleton';
 import { ListItemSkeleton, PageHeaderSkeleton, TimelinePostSkeleton } from './component-variants';
+import { APP_CONTENT_HEIGHT_CLASS } from '@/config/layout-chrome';
 
 /**
  * Entity List Page Skeleton
@@ -117,7 +118,7 @@ export function SettingsPageSkeleton() {
  */
 export function ChatPageSkeleton() {
   return (
-    <div className="flex h-[calc(100vh-4rem)]">
+    <div className={`flex ${APP_CONTENT_HEIGHT_CLASS}`}>
       <div className="hidden md:block w-64 border-r border-border p-4 space-y-3">
         <Skeleton className="h-10 w-full rounded-lg" />
         {Array.from({ length: 5 }).map((_, i) => (

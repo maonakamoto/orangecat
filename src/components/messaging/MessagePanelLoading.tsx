@@ -3,6 +3,7 @@
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { APP_CONTENT_HEIGHT_CLASS } from '@/config/layout-chrome';
 
 interface MessagePanelLoadingProps {
   fullPage: boolean;
@@ -32,7 +33,7 @@ export function MessagePanelLoading({
   );
 
   if (fullPage) {
-    return <div className={cn('h-[calc(100dvh-4rem)]', className)}>{inner}</div>;
+    return <div className={cn(APP_CONTENT_HEIGHT_CLASS, className)}>{inner}</div>;
   }
 
   return (

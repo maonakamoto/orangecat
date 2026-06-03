@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import { AIChatPanel } from '@/components/ai-chat';
 import { useAuth } from '@/hooks/useAuth';
+import { APP_CONTENT_HEIGHT_CLASS } from '@/config/layout-chrome';
 
 export default function AIConversationPage() {
   const params = useParams();
@@ -20,7 +21,7 @@ export default function AIConversationPage() {
   }
 
   return (
-    <div className="h-[calc(100vh-4rem)]">
+    <div className={APP_CONTENT_HEIGHT_CLASS}>
       <AIChatPanel
         assistantId={assistantId}
         conversationId={conversationId}

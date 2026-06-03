@@ -12,6 +12,7 @@ import NewConversationModal from './NewConversationModal';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/config/routes';
 import { APP_NAME } from '@/config/brand';
+import { APP_CONTENT_HEIGHT_CLASS } from '@/config/layout-chrome';
 import { useRealtimeManager } from '@/hooks/useRealtimeManager';
 import { ConnectionStatusIndicator } from './ConnectionStatusIndicator';
 import { useMessagePanelState } from './useMessagePanelState';
@@ -267,7 +268,7 @@ export default function MessagePanel({
   );
 
   if (fullPage) {
-    return <div className={cn('h-[calc(100dvh-4rem)]', className)}>{content}</div>;
+    return <div className={cn(APP_CONTENT_HEIGHT_CLASS, className)}>{content}</div>;
   }
 
   return (
