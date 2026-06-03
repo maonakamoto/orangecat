@@ -2,6 +2,7 @@ import EntityDetailPage from '@/components/entity/EntityDetailPage';
 import { aiAssistantEntityConfig } from '@/config/entities/ai-assistants';
 import type { AIAssistant } from '@/types/database';
 import { capitalize, capitalizeWords } from '@/utils/string';
+import { displayBTC } from '@/services/currency/formatting';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -42,7 +43,7 @@ export default async function AIAssistantDetailPage({ params }: PageProps) {
         if (assistant.price_per_message) {
           left.push({
             label: 'Price per Message',
-            value: `${assistant.price_per_message?.toFixed(8) || '0'} BTC`,
+            value: displayBTC(assistant.price_per_message),
           });
         }
         if (assistant.free_messages_per_day) {

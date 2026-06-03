@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Bot, User } from 'lucide-react';
 import { formatShortTime } from '@/utils/dates';
+import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
 interface AIMessage {
   id: string;
@@ -31,6 +32,7 @@ export function AIChatMessage({
 }: AIChatMessageProps) {
   const isUser = message.role === 'user';
   const isSystem = message.role === 'system';
+  const { formatAmountBtc } = useDisplayCurrency();
 
   // Don't render system messages (they're context for the AI)
   if (isSystem) {
@@ -71,7 +73,9 @@ export function AIChatMessage({
           {message.content}
         </div>
         {!isUser && message.cost_btc && message.cost_btc > 0 && (
-          <div className="mt-2 text-xs text-muted-dim">Cost: {message.cost_btc.toFixed(8)} BTC</div>
+          <div className="mt-2 text-xs text-muted-dim">
+            Cost: {formatAmountBtc(message.cost_btc)}
+          </div>
         )}
       </div>
     </div>

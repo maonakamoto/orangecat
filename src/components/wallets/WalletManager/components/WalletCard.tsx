@@ -9,6 +9,7 @@ import { WALLET_CATEGORIES } from '@/types/wallet';
 import { WalletForm } from './WalletForm';
 import type { WalletCardProps } from '../types';
 import { truncateAddress } from '@/utils/string';
+import { displayBTC } from '@/services/currency/formatting';
 
 export function WalletCard({
   wallet,
@@ -140,7 +141,7 @@ export function WalletCard({
           )}
         </div>
         <div className="text-2xl sm:text-3xl font-bold text-orange-600">
-          {wallet.balance_btc.toFixed(8)} BTC
+          {displayBTC(wallet.balance_btc)}
         </div>
         {wallet.balance_updated_at && (
           <div className="text-xs text-muted-foreground mt-2">
@@ -155,7 +156,7 @@ export function WalletCard({
           <div className="flex justify-between text-sm mb-2">
             <span className="text-muted-foreground font-medium">Goal</span>
             <span className="font-semibold text-foreground">
-              {wallet.balance_btc.toFixed(4)} / {wallet.goal_amount} {wallet.goal_currency}
+              {displayBTC(wallet.balance_btc)} / {wallet.goal_amount} {wallet.goal_currency}
             </span>
           </div>
           <div className="w-full bg-muted rounded-full h-2.5 mb-1">

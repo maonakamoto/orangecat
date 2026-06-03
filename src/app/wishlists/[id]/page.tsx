@@ -8,6 +8,7 @@ import { fetchEntityOwner } from '@/lib/entities/fetchEntityOwner';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
+import { displayBTC } from '@/services/currency/formatting';
 import { Progress } from '@/components/ui/progress';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import PublicEntityOwnerCard from '@/components/public/PublicEntityOwnerCard';
@@ -188,8 +189,8 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>{totalFunded.toFixed(8)} BTC funded</span>
-                      <span>{totalTarget.toFixed(8)} BTC total</span>
+                      <span>{displayBTC(totalFunded)} funded</span>
+                      <span>{displayBTC(totalTarget)} total</span>
                     </div>
                     <Progress value={overallProgress} className="h-2" />
                     <p className="text-sm text-muted-foreground">
@@ -246,8 +247,8 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                               {item.target_amount_btc > 0 && (
                                 <div className="mt-3 space-y-1">
                                   <div className="flex justify-between text-xs text-muted-foreground">
-                                    <span>{item.funded_amount_btc.toFixed(8)} BTC</span>
-                                    <span>{item.target_amount_btc.toFixed(8)} BTC goal</span>
+                                    <span>{displayBTC(item.funded_amount_btc)}</span>
+                                    <span>{displayBTC(item.target_amount_btc)} goal</span>
                                   </div>
                                   <Progress value={itemProgress} className="h-1.5" />
                                 </div>

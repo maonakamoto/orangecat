@@ -6,6 +6,7 @@ import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import EntityDetailLayout from '@/components/entity/EntityDetailLayout';
+import { displayBTC } from '@/services/currency/formatting';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Progress } from '@/components/ui/progress';
@@ -97,8 +98,8 @@ export default async function WishlistDetailPage({ params }: PageProps) {
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="flex justify-between text-sm text-muted-foreground">
-              <span>{Number(wishlist.total_funded_btc).toFixed(8)} BTC funded</span>
-              <span>{Number(wishlist.total_target_btc).toFixed(8)} BTC total</span>
+              <span>{displayBTC(Number(wishlist.total_funded_btc))} funded</span>
+              <span>{displayBTC(Number(wishlist.total_target_btc))} total</span>
             </div>
             <Progress value={overallProgress} className="h-2" />
             <div className="flex justify-between text-xs text-muted-foreground">

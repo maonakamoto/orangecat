@@ -2,6 +2,7 @@ import EntityDetailPage from '@/components/entity/EntityDetailPage';
 import { researchEntityConfig } from '@/config/entities/research';
 import { ResearchEntity } from '@/types/research';
 import { capitalize } from '@/utils/string';
+import { displayBTC } from '@/services/currency/formatting';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -45,9 +46,7 @@ export default async function ResearchDetailPage({ params }: PageProps) {
 
         right.push({
           label: 'Funding Raised',
-          value: entity.funding_raised_btc
-            ? `${Number(entity.funding_raised_btc).toFixed(8)} BTC`
-            : '0 BTC',
+          value: displayBTC(entity.funding_raised_btc ? Number(entity.funding_raised_btc) : 0),
         });
 
         right.push({

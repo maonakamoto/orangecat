@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/Button';
 import { WISHLIST_TYPE_LABELS } from '@/config/wishlists';
+import { displayBTC } from '@/services/currency/formatting';
 
 export interface WishlistWithStats {
   id: string;
@@ -95,8 +96,8 @@ export function WishlistItemCard({
                 <div className="mt-2 space-y-1">
                   <Progress value={itemProgress} className="h-1" />
                   <p className="text-xs text-muted-foreground">
-                    {Number(item.funded_amount_btc).toFixed(8)} /{' '}
-                    {Number(item.target_amount_btc).toFixed(8)} BTC
+                    {displayBTC(Number(item.funded_amount_btc))} /{' '}
+                    {displayBTC(Number(item.target_amount_btc))}
                   </p>
                 </div>
               )}

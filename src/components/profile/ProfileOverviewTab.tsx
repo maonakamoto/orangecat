@@ -20,6 +20,7 @@ import { SocialLink } from '@/types/social';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { toast } from 'sonner';
+import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
 interface ProfileOverviewTabProps {
   profile: ScalableProfile;
@@ -54,6 +55,7 @@ export default function ProfileOverviewTab({
 }: ProfileOverviewTabProps) {
   const isDashboardView = context === 'dashboard';
   const publicContactEmail = profile.contact_email || profile.email;
+  const { formatAmountBtc } = useDisplayCurrency();
 
   // State for support engines (design/esthetics + real flows for donate/sub/lend/invest)
   const [supportType, setSupportType] = useState<'donate' | 'subscribe' | 'lend' | 'invest' | null>(
@@ -378,7 +380,7 @@ export default function ProfileOverviewTab({
             <CardContent className="pt-4 sm:pt-6">
               <div className="text-center">
                 <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-green-600">
-                  ₿{stats.totalRaised.toFixed(8)}
+                  {formatAmountBtc(stats.totalRaised)}
                 </div>
                 <div className="text-xs sm:text-sm text-muted-foreground mt-1">Total Raised</div>
               </div>
