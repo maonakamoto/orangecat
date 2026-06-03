@@ -13,11 +13,10 @@ import { HEADER_DIMENSIONS, HEADER_SPACING } from '@/constants/header';
 import Logo from './Logo';
 import AuthButtons from './AuthButtons';
 import { HeaderCreateButton } from '@/components/dashboard/HeaderCreateButton';
-import EnhancedSearchBar from '@/components/search/EnhancedSearchBar';
-import MobileSearchModal from '@/components/search/MobileSearchModal';
+import { SearchTrigger } from '@/components/search/SearchTrigger';
 import NotificationCenter from '@/components/notifications/NotificationCenter';
 import { EmailConfirmationBanner } from './EmailConfirmationBanner';
-import { MobileSearchButton, MessagesButton, NotificationsButton } from './HeaderActions';
+import { MessagesButton, NotificationsButton } from './HeaderActions';
 import { MenuToggleButton } from './MenuToggleButton';
 import { DesktopNavigation } from './DesktopNavigation';
 import { MobileMenu } from './MobileMenu';
@@ -50,7 +49,6 @@ export function Header({
   variant: _variant = 'default',
   className = '',
 }: HeaderProps) {
-  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
   const authState = useAuth();
@@ -104,17 +102,22 @@ export function Header({
             <DesktopNavigation items={navigation} />
           </div>
 
-          {/* Center Section: Search (Desktop only) */}
+          {/* Center Section: Search trigger (Desktop only). Opens the
+              CommandPalette — see src/components/search/CommandPalette.tsx. */}
           {showSearch && (
             <div className="hidden md:flex flex-1 min-w-0 max-w-sm lg:max-w-md mx-4 lg:mx-8">
-              <EnhancedSearchBar />
+              <SearchTrigger />
             </div>
           )}
 
           {/* Right Section: Actions (Mobile-Optimized) */}
           <div className={`flex items-center ${HEADER_SPACING.ACTION_GAP} flex-shrink-0`}>
-            {/* Mobile Search Button - Hidden on desktop, more prominent */}
-            {showSearch && <MobileSearchButton onClick={() => setShowMobileSearch(true)} />}
+            {/* Mobile search — icon-only trigger that opens the same palette. */}
+            {showSearch && (
+              <div className="md:hidden">
+                <SearchTrigger compact />
+              </div>
+            )}
 
             {/* Create Button (authenticated only) - Icon only on mobile */}
             {isAuthRoute && (
@@ -152,10 +155,7 @@ export function Header({
         />
       )}
 
-      {/* Mobile Search Modal */}
-      {showMobileSearch && (
-        <MobileSearchModal isOpen={showMobileSearch} onClose={() => setShowMobileSearch(false)} />
-      )}
+      {/* Mobile search now uses the CommandPalette — no separate modal. */}
 
       {/* Notification Center */}
       {showNotifications && (

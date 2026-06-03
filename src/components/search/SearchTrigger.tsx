@@ -1,0 +1,89 @@
+'use client';
+
+/**
+ * SearchTrigger — replaces the inline EnhancedSearchBar in the header.
+ *
+ * Shows as a search-icon button with a placeholder and ⌘K kbd hint
+ * (matches Linear / Vercel / Stripe). Click OR press ⌘K anywhere in
+ * the app opens the CommandPalette. The "/" hotkey also opens it when
+ * focus isn't already in an input (Slack/GitHub-style).
+ *
+ * Two states:
+ *   - Inline (default header use) — full-width pill with placeholder
+ *   - Icon-only (compact prop) — single button for tight header rails
+ *
+ * Created: 2026-06-03
+ */
+
+import { useEffect, useState } from 'react';
+import { Search } from 'lucide-react';
+import { CommandPalette } from './CommandPalette';
+import { cn } from '@/lib/utils';
+
+interface SearchTriggerProps {
+  compact?: boolean;
+  className?: string;
+}
+
+const PLACEHOLDER = 'Search or jump to…';
+
+export function SearchTrigger({ compact = false, className }: SearchTriggerProps) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      // ⌘K / Ctrl+K from anywhere.
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setOpen(prev => !prev);
+        return;
+      }
+      // "/" hotkey when focus isn't already in an input.
+      if (e.key === '/' && !isTypingTarget(e.target)) {
+        e.preventDefault();
+        setOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label="Open search"
+        className={cn(
+          'flex items-center rounded-md border border-border-subtle bg-muted/40 text-muted-foreground',
+          'transition-colors hover:bg-muted/60 hover:text-foreground',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40',
+          compact ? 'h-9 w-9 justify-center' : 'h-9 w-full justify-between gap-2 px-3 text-sm',
+          className
+        )}
+      >
+        <span className="flex items-center gap-2">
+          <Search className="h-4 w-4 flex-shrink-0" aria-hidden />
+          {!compact && <span className="truncate">{PLACEHOLDER}</span>}
+        </span>
+        {!compact && (
+          <kbd className="hidden flex-shrink-0 items-center rounded border border-border-subtle bg-background px-1.5 py-0.5 text-[10px] font-medium text-muted-dim sm:inline-flex">
+            ⌘K
+          </kbd>
+        )}
+      </button>
+      <CommandPalette open={open} onOpenChange={setOpen} />
+    </>
+  );
+}
+
+function isTypingTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+  if (target.isContentEditable) {
+    return true;
+  }
+  const tag = target.tagName;
+  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+}
