@@ -11,7 +11,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
-import { ModernChatPanel } from '@/components/ai-chat/ModernChatPanel';
+import { ModernChatPanel } from '@/components/ai-chat/ModernChatPanel/index';
 import { CatChatToolbar } from '@/components/ai-chat/CatChatToolbar';
 import { CatSecondaryPanel } from '@/components/ai-chat/CatSecondaryPanel';
 import { isCatHubTab, type CatHubTab } from '@/config/cat-hub';

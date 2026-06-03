@@ -126,7 +126,7 @@ entity-registry.ts   → Entity create/nav SSOT (Cat action buttons)
 
 ### P2 — Hygiene
 
-7. **`ModernChatPanel.tsx` re-export shim** — fine for compat; document canonical import path in `components/ai-chat/index.ts`.
+7. ~~**`ModernChatPanel.tsx` re-export shim**~~ — **DONE 2026-06-03** — shim deleted, importer in `dashboard/cat/page.tsx` updated to import from `ModernChatPanel/index`.
 
 8. **Cat permissions** at `/dashboard/cat/permissions` vs `?tab=settings` — two entry points; ensure `ROUTES.DASHBOARD.CAT_PERMISSIONS` docs clarify.
 

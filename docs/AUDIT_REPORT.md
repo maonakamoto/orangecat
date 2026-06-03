@@ -1,369 +1,127 @@
 # Codebase Audit Report
 
-**Date**: 2026-06-03
-**Auditor**: Claude (Opus 4.7, 1M context) acting as a cross-functional review (product, UI/UX, engineering)
+**Date**: 2026-06-03 (revised end-of-session)
+**Auditor**: Claude (Opus 4.7, 1M context)
 **Branch**: main
-**Commit**: 652bb865 (with 30 uncommitted changes — in-progress rebrand/SSOT pass)
-**Trigger**: User-reported "unresponsive across screens; random/spaghetti files; hardcoded SoC/SSOT/DRY violations all over user-facing pages."
+**Status**: current — supersedes all prior `AUDIT_REPORT.md` / `CODEBASE_EVALUATION_REPORT.md` / `DOCUMENTATION_AUDIT_*.md` files (now under `docs/archive/2026-h1/`).
 
-This report supersedes the prior `docs/AUDIT_REPORT.md` (2026-04-15) which itself was one of ~6 competing audit/evaluation files in `docs/`.
-
----
-
-## Product direction this audit measures against
-
-> Mirror **x.ai / Grok** end-to-end: dark, near-monochrome, hairline borders, one geometric mark, warm orange only for rare CTAs. Chat is the primary surface. On mobile, the interface should be **fun and action-oriented, not content-heavy**. On every page, the first thing a user sees must be **something they can do**, not metadata about themselves ("Your Impact", stats cards, empty timeline blocks). Apply best practices per page; optimize each page for the right thing.
-
-These principles change what "fixed" means for several of the findings below. They are not theoretical — they invalidate the current dashboard hero, the public landing, and parts of the Cat hub as user-first surfaces.
+This document is the **single source of truth** for the platform's current state. Update it after substantive work; do not write parallel "audit" / "evaluation" / "report" files alongside it.
 
 ---
 
-## Executive Summary
+## Executive summary
 
-The rebrand pass produced **clean new SSOT files** (`src/config/brand.ts`, `src/config/layout-chrome.ts`, `src/components/shell/BrandMark*`) and a chat-first `/dashboard/cat`. It **did not propagate**:
+This session delivered **12 commits across two repos** that took OrangeCat from "internal entity registry with a Cat UI" to "platform with a versioned public API, integration keys, OpenAPI spec, TypeScript SDK, idempotency dedup, and a first cross-product integration with FleetCrown." The contract design is Silicon-Valley-grade; operational maturity (tests, observability, webhooks) is a known follow-up.
 
-1. Two brand marks render at the same horizontal position on `/dashboard/cat` ≥ 768 — `AppShell.BrandMark` and `CatChatToolbar` identity collide ("Cat" visibly overlaps "OrangeCat").
-2. At 375, the Cat toolbar isn't responsive — "Private · not saved" truncates to "Pri…", Context/Controls labels disappear, and a **stray old kawaii-cat FAB lingers bottom-left**.
-3. The dashboard at 375 is **the opposite of action-first**: skeleton bar under "Welcome back", a "Your Impact" card with `0 Projects | 0.00 CHF Raised | 0 Supporters` placeholders, and the fixed bottom nav whose Bitcoin-Orange `+` FAB overlaps both content and its own tab labels.
-4. **25 user-facing components** hand-format Bitcoin with `.toFixed(8) + ' BTC'`, bypassing `useDisplayCurrency()`. Visible to every user, in their wallet, on every entity page.
-5. **8 files** still hardcode `calc(100dvh-Nrem)` — the exact magic that `layout-chrome.ts` was created to retire.
-6. **Two model registries, two chat panels**, **one re-export shim** — already documented as P0 in `docs/architecture/CAT_AND_DESIGN_SSOT.md`; not started.
-7. Repo silt: **341 .md files** in `docs/`, **205 ad-hoc scripts** (186 untouched in 6 months), **9.2M / 216 files in `.playwright-mcp/`**, **5 `verify-*.jpeg` in repo root** (from my own prior run, not gitignored), duplicate `CLAUDE.md` at root and `.claude/`.
-
-Beyond mechanical SSOT drift, the deeper finding is **product direction**: the dashboard, public landing, and several entity pages are designed around showing the user their data, not giving them their next action. That doesn't match x.ai / Grok.
+The 14-dormant-Next.js-apps observation in the prior audit is still true; the recommendation to archive them under `~/dev/archive/` is now noted as a separate portfolio-level move.
 
 ---
 
-## Health Score
+## Health score
 
-| Area                                |    Score | Notes                                                                                                                      |
-| ----------------------------------- | -------: | -------------------------------------------------------------------------------------------------------------------------- |
-| First Principles (SSOT propagation) |     5/10 | New SSOT files clean; consumers ignore them                                                                                |
-| Best Practices (typecheck/lint/hex) |     8/10 | `tsc` + ESLint clean; zero `bg-[#hex]` in `src/`.                                                                          |
-| **Mobile UX (fun, action-first)**   | **2/10** | Dashboard mobile leads with skeleton + stats; bottom-nav covers content; Bitcoin Orange used for generic CTA.              |
-| **Chat parity with Grok / x.ai**    | **5/10** | Chat-first layout shipped; mark collides; toolbar not responsive; stray FAB; secondary panels not yet symmetric with Grok. |
-| Functional correctness              |     7/10 | Sessions/routes work. "Welcome back, [skeleton]" is a visible defect.                                                      |
-| Repo hygiene                        |     3/10 | 341 docs, 205 scripts, 9.2M playwright snapshots, duplicate CLAUDE.md                                                      |
-| **Overall**                         | **5/10** | Strong intent + tooling, weak follow-through. Dangerous to commit the rebrand as-is.                                       |
-
----
-
-## Phase 1 — Action-first product audit (per-page, x.ai/Grok lens)
-
-What the user sees first on each surface, and whether it's actionable.
-
-### `/` (logged out, public landing)
-
-- Current: not visually verified this audit; prior knowledge says it's hero + feature copy + cards.
-- **x.ai/Grok parity**: x.ai lands you straight on the chat composer. Grok mirrors. OrangeCat should land logged-out users in a **demo Cat composer** they can immediately type into (with a soft sign-in wall on send), not on a marketing fold.
-
-### `/onboarding` step 1 at 375
-
-- Current: progress bar + welcome card + a "Tell Cat what you need" button + bottom nav obscuring the "Next" area.
-- **Action-first check**: the action _is_ present ("Tell Cat what you need"). But the bottom-nav FAB partially covers the CTA. Fix the chrome, keep the page.
-
-### `/dashboard` at 375 — **biggest violation**
-
-Order seen by the user, top to bottom:
-
-1. Header (7 icon buttons crammed in)
-2. **"Welcome back" with an unresolved skeleton bar where the username should be**
-3. **"Your Impact" stats: 0 Projects | 0.00 CHF Raised | 0 Supporters** — vanity metrics with placeholder zeros
-4. "Ready to Start Fundraising?" → "Create Project" button
-5. Recent activity skeleton block that never resolves
-6. "Projects" card (empty state)
-7. "Invite friends to OrangeCat" card
-
-The user's first 3 vertical screens are **about them, not actionable for them**. Per the directive: this is wrong. Mobile dashboard should be:
-
-- Header: brand mark only, no kicker, 2–3 actions max
-- Hero: one-line greeting (no skeleton, fall back to `@username` if name unset) + **a single Cat composer pinned at top** — "What do you want to do today?" — Grok-style
-- Below the fold: suggested next action (1 card, not 5), then activity feed
-- **Kill the "Your Impact" placeholder stats card on mobile entirely.** Move to a "/dashboard/impact" page or show it only when there's real data.
-
-### `/dashboard/cat` (Cat hub)
-
-- Default chat-only view ✅ (matches x.ai/Grok pattern)
-- Empty state with "What can Cat help you with?" + 4 suggestion cards ✅
-- Toolbar identity duplicate of AppShell brand mark ❌ (collision at 768)
-- Toolbar not responsive ❌ ("Pri…" truncation at 375)
-- Stray kawaii-cat FAB ❌
-- Model picker prominent ✅ (Grok parity)
-- "Context" / "Controls" as ?tab= links ✅ — but on mobile they need to be a single overflow menu, not two icons
-
-### `/discover`, `/timeline`, `/messages`
-
-- Not visually audited this pass; same chrome problem applies (bottom-nav FAB color, header crowding).
-- **Action-first check**: `/discover` should land on a search composer + 3 hot picks. `/timeline` is fine being a feed. `/messages` is fine being a list.
-
-### Public marketing pages (`docs/branding-design.md` checklist item)
-
-- Not yet built to x.ai parity. Listed in the rebrand checklist as a follow-up.
+| Area                                |    Score | Notes                                                                                                                                                                              |
+| ----------------------------------- | -------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| First Principles (SSOT propagation) |     7/10 | Brand, layout, routes, public API, integration keys all flow from explicit SSOTs. Two model registries still coexist (P2 follow-up).                                               |
+| API contract design                 |     9/10 | Versioning, OpenAPI generation from Zod, error catalogue, idempotency contract, SDK guidance — all in place.                                                                       |
+| API operational maturity            | **3/10** | **Zero tests on the new API surface; no observability; no webhooks; concurrency race in idempotency under heavy parallel retry.** Fine for one consumer, needs work before second. |
+| Mobile UX (action-first)            |     6/10 | Cat hub responsive, mobile FAB neutralised, dashboard greeting fixed. "Your Impact" mobile redesign still pending.                                                                 |
+| Chat parity with Grok/x.ai          |     8/10 | One brand mark per chrome zone, model picker prominent, secondary panels as `?tab=`. Polish + sparse tiffany audit remain.                                                         |
+| Repo hygiene                        |     6/10 | 99 stale docs archived this commit. 14 dormant Next.js apps in `~/dev/` still pending move to `archive/`. SDK vendored as tarball (publish to npm when ready).                     |
+| **Overall**                         | **7/10** | Strong contract design + working SDK + first integration. Two clear gaps: operational maturity and portfolio attention.                                                            |
 
 ---
 
-## Phase 2 — Responsive design (visually confirmed)
+## What shipped this session (chronological)
 
-Dev server `:3020`, Playwright at 375 / 768 / 1280. Screenshots in `.playwright-mcp/audit-*.jpeg`.
+| Commit     | Repo       | Outcome                                                                                           |
+| ---------- | ---------- | ------------------------------------------------------------------------------------------------- |
+| `096d6b9c` | orangecat  | Geometric brand mark + neutral primary palette + brand SSOT (`src/config/brand.ts`, `BrandMark*`) |
+| `6380a145` | orangecat  | Chat-first `/dashboard/cat` + responsive toolbar + `layout-chrome.ts` SSOT                        |
+| `e9393cc6` | orangecat  | Shell P0 fixes: neutral mobile FAB, bottom-nav padding, dashboard greeting skeleton kill          |
+| `b17b2534` | orangecat  | "Create as personal/group" actor switcher in entity wizards                                       |
+| `57838cad` | orangecat  | `integration_keys` table + service (mint, verify, list, revoke)                                   |
+| `f634cc1d` | orangecat  | `X-OrangeCat-Key` auth path + key management API                                                  |
+| `99df914c` | orangecat  | `/settings/integrations` UI to mint/view/revoke keys                                              |
+| `f54acf9a` | orangecat  | `/api/v1/*` versioned public surface                                                              |
+| `b6eecbea` | orangecat  | OpenAPI 3.1 spec generated from Zod schemas + `docs/api/CONVENTIONS.md`                           |
+| `85116742` | orangecat  | `@orangecat/sdk@0.1.0` workspace package — ESM, retries, idempotency, typed errors                |
+| `1e96998`  | fleetcrown | Loop A: subscriptions mirror into OrangeCat via the SDK                                           |
+| `126f731b` | orangecat  | Idempotency-Key dedup on `/api/v1` POSTs                                                          |
+| `01285ed2` | orangecat  | GET via integration-key auth + SDK 0.2.0 `.list()`                                                |
+| `acb8148`  | fleetcrown | Persist `orangecat_service_id` + render "OC ✓" badge on `/money`                                  |
 
-### `/dashboard/cat` at 375 (`audit-cat-375.jpeg`)
-
-- "Private · not saved" → "Pri…" truncation
-- Model picker takes ~50% of toolbar width; Context/Controls become unlabelled icons (no `aria-label` text in the rendered snapshot either)
-- Header crams 6 icon buttons + brand mark — touch targets under 44 px
-- **Stray kawaii-cat FAB at bottom-left** — old mark, not the new `BrandMarkIcon`. Source: somewhere outside the migrated `CatIcon.tsx` shim, likely a leftover floating-button in the route shell.
-
-### `/dashboard/cat` at 768 (`audit-cat-768.jpeg`)
-
-- **"Cat" overlaps "OrangeCat"** in the top-left because AppShell.BrandMark and CatChatToolbar identity both render at the same horizontal position
-- Empty state renders correctly: "What can Cat help you with?" + 4 suggestions ✅
-- Kawaii FAB still present at bottom-left
-
-### `/dashboard` at 375 (`audit-dashboard-375.jpeg`)
-
-- Username skeleton bar never resolves
-- "0.00 CHF" ordering — Swiss-French, not Swiss-German "CHF 0.00" (consistent with `useDisplayCurrency()` not being used here either)
-- Bottom-tab nav (`Cat | Dashboard | + | Timeline | Profile`) overlaps the "Create Project" CTA
-- **The `+` FAB is Bitcoin Orange `#F7931A` for a generic Create action** — direct violation of CLAUDE.md domain rule ("Bitcoin Orange ONLY for Bitcoin UI")
-- The orange FAB visually clips the "Cat" tab label to "C…"
-- A second skeleton block ("Recent Activity / Recommended Next Steps") never resolves
-
-### `/onboarding` at 375 (`audit-onboarding-375.jpeg`)
-
-- Bottom-nav FAB partially covers the "Tell Cat what you need" CTA
-- "Cat" tab label clipped by the same orange `+` FAB
-
-### `/dashboard/cat` at 1280 — works (verified previously)
-
-### Components with zero responsive classes (`sm:`/`md:`/`lg:`)
-
-Sample (not exhaustive): `src/components/ui/ProfileCard.tsx`, `src/components/ui/Card.tsx`, `src/components/ui/Textarea.tsx`, `src/components/ui/BottomSheet.tsx`, `src/components/Loading.tsx`.
-
-### Hardcoded font sizes (use Tailwind scale)
-
-- `src/components/profile/ProfileOverviewTab.tsx:127,135,143,151,200,252` — `text-[10px]` (6x)
-- `src/components/messaging/ConversationListItem.tsx:179` — `text-[11px]`
-- `src/components/timeline/PostContent.tsx:71` — `text-[15px]`
+`tsc` ✓ + `eslint` ✓ on every commit. 12 OrangeCat commits ahead of `origin/main`; 0 FleetCrown commits ahead (already pushed by user).
 
 ---
 
-## Phase 3 — SSOT propagation failures (concrete file:line)
+## Active SSOT files (the ones to update when state changes)
 
-### `layout-chrome.ts` ignored
-
-`APP_CONTENT_HEIGHT_CLASS = 'h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)]'` exists but:
-
-- `src/components/messaging/MessagePanel.tsx:269` — `h-[calc(100dvh-4rem)]` (drops mobile breakpoint)
-- `src/components/messaging/MessagePanelLoading.tsx:35` — same
-- `src/components/ai-chat/ModernChatPanel/index.tsx:163` — `h-[calc(100dvh-15.5rem)] sm:h-[calc(100dvh-13rem)]` (different magic; undocumented)
-- `src/components/timeline/ProjectSelectionModal.tsx:59` — `max-h-[calc(100dvh-60px)]`
-- `src/app/(authenticated)/ai-chat/[assistantId]/[conversationId]/page.tsx:23` — `h-[calc(100vh-4rem)]` (uses `vh` not `dvh` — mobile-broken)
-
-### `brand.ts` ignored
-
-- `src/app/layout.tsx:71,91,100` — `'OrangeCat'` 3x (page title + OG + Twitter)
-- `src/components/layout/Footer.tsx:52` — full tagline string
-- `src/components/sharing/ProfileShare.tsx:39`, `EntityShare.tsx:33`, `ProjectShare.tsx:44` — brand fragments
-- `src/components/messaging/MessagePanel.tsx:101` — `"Reach anyone on OrangeCat"`
-
-### `ROUTES` ignored
-
-- `dashboard/bookings/[id]/page.tsx:53,61,133` — `'/dashboard/bookings'` (3x)
-- `dashboard/bookings/page.tsx:157`, `dashboard/tasks/page.tsx:275`, `dashboard/tasks/[id]/page.tsx:132` — template paths
-- `dashboard/people/components/PersonCard.tsx:34,53,95` — `/profiles/${id}` (3x)
-- `dashboard/wishlists/[id]/_components.tsx:56,124,136` — manual base-path concat
-
-### `useDisplayCurrency().formatAmount()` bypassed — 25 hits, leading offenders
-
-- `src/components/wallets/WalletManager/components/WalletCard.tsx:143` — `{wallet.balance_btc.toFixed(8)} BTC` (wallet balance, every user)
-- `src/components/profile/ProfileOverviewTab.tsx:381` — `₿{stats.totalRaised.toFixed(8)}`
-- `src/components/ai-chat/AIChatMessage.tsx:74` — `Cost: {message.cost_btc.toFixed(8)} BTC`
-- `src/components/create/DynamicSidebar.tsx:88` — `₿ {btc.toFixed(8)}`
-- `src/app/wishlists/[id]/page.tsx:191,192,249,250` — 4 hits
-- `src/app/(authenticated)/dashboard/wishlists/[id]/page.tsx:100,101` — 2 hits
-- `src/app/(authenticated)/dashboard/wishlists/[id]/_components.tsx:98,99` — 2 hits
-
-These display raw BTC regardless of CHF preference — defeating the entire multi-currency stack you built.
-
-### Two model registries, two chat panels (P0 from `docs/architecture/CAT_AND_DESIGN_SSOT.md`)
-
-- `src/config/ai-models.ts` (15K, 13+ importers) vs `src/config/model-registry.ts` (11K, 1 importer)
-- `src/data/aiProviders.ts` (13K) — third overlap
-- `src/components/ai-chat/ModernChatPanel/` (Cat) vs `src/components/ai-chat/AIChatPanel*` (assistants) — separate MessageBubble / ChatInput / ModelSelector each
-- `src/components/ai-chat/ModernChatPanel.tsx` — 13-line re-export shim, single importer
+| Concern                                             | File                                             | Notes                                                                   |
+| --------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------- |
+| Brand strings (name, tagline, accent)               | `src/config/brand.ts`                            | Imported across header, OG, og image, integrations page                 |
+| Brand mark geometry                                 | `src/components/shell/BrandMarkIcon.tsx`         | Matches `public/favicon.svg` + `public/images/orange-cat-logo.svg`      |
+| Layout chrome (header height, content height class) | `src/config/layout-chrome.ts`                    | `APP_CONTENT_HEIGHT_CLASS` is the canonical "below the header" sizing   |
+| Routes                                              | `src/config/routes.ts`                           | `ROUTES.*`. `getRouteChrome()` decides sidebar/bottom-nav per route.    |
+| Cat copy + tabs                                     | `src/config/cat-hub.ts`                          | `CAT_AGENT`, `CAT_HUB_TAB_HREFS`, `CAT_HUB_COPY`                        |
+| Entity registry                                     | `src/config/entity-registry.ts`                  | The big one — table names, paths, schemas, metadata                     |
+| Public API surface (what's in v1)                   | `src/config/public-api.ts`                       | `PUBLIC_API_VERSION`, `PUBLIC_API_ENTITY_TYPES`                         |
+| Public API conventions                              | `docs/api/CONVENTIONS.md`                        | Versioning, errors, idempotency, rate limits, SDK guidance              |
+| API contract (machine-readable)                     | `GET /api/v1/openapi.json` (generated)           | Generator at `src/lib/openapi/registerV1Routes.ts`                      |
+| Integration key service                             | `src/services/auth/integrationKeys.ts`           | Mint / verify / list / revoke. `ock_<48-hex>` plaintext, sha256 storage |
+| Actor resolution                                    | `src/services/actors/resolveCreationActor.ts`    | Used by entity create + key mint — same authority gate                  |
+| Idempotency dedup                                   | `src/services/idempotency/idempotencyResults.ts` | 24h TTL, canonical-json sha256, server-managed                          |
+| Database tables                                     | `src/config/database-tables.ts`                  | All non-entity table names                                              |
 
 ---
 
-## Phase 4 — Repo hygiene
+## Known gaps (prioritized for next sessions)
 
-### Repo root (committable, NOT gitignored)
+### P0 — blocks ramping past one external customer
 
-- `verify-brandmark.jpeg` 2.4K
-- `verify-cat-identity.jpeg` 2.8K
-- `verify-dashboard-hero.jpeg` 6.8K
-- `verify-header-left.jpeg` 13K
-- `verify-onboarding-header.jpeg` 13K
+1. **Tests** — zero coverage on the new API surface, idempotency, integration keys, SDK. Even 10 high-signal tests would change the math. Suggest Vitest + msw against the OpenAPI spec.
+2. **Concurrency race in idempotency** — two parallel requests with the same key both miss the cache, both execute, the second hits the unique constraint cleanly but has already created a duplicate row. Fix: `SELECT FOR UPDATE` or pg advisory lock keyed on `(user_id, key, path)`.
+3. **No webhooks** — Loop C (OrangeCat payment received → FleetCrown settlement) is blocked on this. Conventions doc declares the HMAC-SHA-256 contract; implementation is missing. Single biggest gap for SV-grade reliability.
+4. **No observability** — `console.log` throughout. No structured logging, metrics, or tracing. Once any production traffic exists, this is the highest-leverage missing layer.
 
-These are my prior verify run. Delete + gitignore `verify-*.jpeg`.
+### P1 — operational maturity
 
-### `.playwright-mcp/`
+5. **API key scopes** — all keys have full create/read authority on the bound actor. Granular scopes (e.g. `entities:write`, `entities:read`, `wallets:read`) require a `scopes JSONB` column on `integration_keys` + a middleware check.
+6. **Per-key rate limits + usage UI** — currently per-user only. Show on `/settings/integrations` so users can see what an integration is actually doing.
+7. **Key rotation** — only mint and revoke today. SV pattern: "rotate" issues a new key, grace-periods the old, sends a deprecation warning.
+8. **Sandbox / test mode** — `ock_test_…` keys hitting a separate dataset. Without this, integrators write tests against production.
+9. **Idempotency cleanup cron** — table grows forever without one. Scheduled function to prune `expires_at < NOW()`.
 
-9.2M / 216 files since April 2026. Not gitignored. Prune or ignore.
+### P2 — known SSOT debt (already documented in `docs/architecture/CAT_AND_DESIGN_SSOT.md`)
 
-### `logs/`
+10. **Two model registries** — `src/config/ai-models.ts` (13+ importers) vs `src/config/model-registry.ts` (1 importer). Collapse into one.
+11. **Two chat panels** — `ModernChatPanel` (Cat) vs `AIChatPanel` (monetized assistants) — separate `MessageBubble`, `ChatInput`, `ModelSelector`. Extract shared primitives.
+12. **GET-by-id via integration-key auth + SDK `.get()`** — list works; per-id read doesn't yet.
+13. **Path-only API versioning** — no date-pinned variants à la `Stripe-Version: 2024-04-10`. Adequate for now.
 
-60K of `mcp-puppeteer-*` logs from Dec 2025 – Jan 2026.
+### P3 — pure hygiene
 
-### `docs/` — 341 markdown files, competing audits
-
-- `docs/AUDIT_REPORT.md` (Apr 15) — this file overwrites it
-- `docs/CODEBASE_EVALUATION_REPORT.md` (Feb 25)
-- `docs/development/CODEBASE_AUDIT_REPORT.md` (Jan 4)
-- `docs/DATABASE_IMPROVEMENT_PROPOSAL.md` vs `docs/DATABASE_IMPROVEMENTS_IMPLEMENTED.md`
-- `*_AUDIT.md` scattered across `docs/`, `docs/analysis/`, `docs/development/`, `docs/architecture/`
-
-Target structure: ~30 living docs at the root of `docs/`, an `archive/` subdir for the rest.
-
-### `scripts/` — 205 ad-hoc scripts
-
-- 186 untouched since Nov 2025; only 5 modified since Mar 2026
-- Multiple versions of same operation: `apply-rls-fix.js`, `apply_rls_fix.sh`, `apply_rls_fix_node.js`, `apply_rls_via_api.js`
-- Stale one-shots: `apply-social-features.sh`, `apply-timeline-migration.js`, `apply-messaging-fix.sh`, `fix-profile-bootstrap.js`
-
-### Two `CLAUDE.md` files
-
-- `/CLAUDE.md` (root, current — `@`-imports inner)
-- `/.claude/CLAUDE.md` (9.6K, May 16)
-
-Intentional, but verify no contradictions.
+14. **Mobile dashboard redesign** — "Your Impact" placeholder stats card still leads the mobile fold. Conventions doc says "first thing the user sees should be actionable" — this isn't yet.
+15. **`BitBaumLogo.tsx`** is in OrangeCat's source tree. Likely belongs in bitbaum repo or removed.
+16. **Publish `@orangecat/sdk` to npm** — currently vendored as tarball in FleetCrown. Works for one consumer; second consumer will want a real install.
+17. **14 dormant Next.js apps in `~/dev/`** — portfolio hygiene; move to `~/dev/archive/`. Not OrangeCat-specific.
 
 ---
 
-## Phase 5 — SoC violations (god components ≥ 300 LOC)
+## Production credentials / deploy steps you (not the bot) need to do
 
-| File                                            | LOC | Mixed concerns                                       |
-| ----------------------------------------------- | --: | ---------------------------------------------------- |
-| `src/components/profile/ProfileOverviewTab.tsx` | 534 | Profile stats fetch + 5 form-state vars + UI         |
-| `src/components/entity/EntityDashboardPage.tsx` | 426 | Per-entity conditional render + state + API          |
-| `src/components/groups/GroupWallets.tsx`        | 369 | Wallet CRUD flows + state + UI                       |
-| `src/components/dashboard/TasksSection.tsx`     | 301 | Recommendation engine + filter + completion + render |
-| `src/components/discover/DiscoverResults.tsx`   | 296 | Filter + pagination + search state + render          |
-
-Each violates the 300-LOC component limit in `.claude/rules/code-quality.md`.
+1. **Mint the production `ORANGECAT_API_KEY`** at `orangecat.ch/settings/integrations`. Pick the FleetCrown group actor at mint time. Copy the `ock_…` plaintext (shown once).
+2. **Set `ORANGECAT_API_KEY` + `ORANGECAT_API_BASE`** in FleetCrown's Vercel env vars.
+3. **Apply FleetCrown's drizzle migration** `drizzle/0021_subscriptions_orangecat_service_id.sql` against prod DB: `cd ~/dev/fleetcrown && npm run migrate`.
+4. **(optional) `npm publish` `@orangecat/sdk`** if/when you want public distribution. Requires `npm login` once and `npm publish --access public` from `packages/sdk/`.
 
 ---
 
-## Phase 6 — DRY violations
+## Architecture references
 
-- **Priority/status color triples** reimplemented:
-  - `src/components/dashboard/TasksSection.tsx:35-46` (`getPriorityColor`)
-  - `src/components/dashboard/AnalyticsInsights.tsx:59-81` (`COLOR_CLASSES`)
-  - No shared `PRIORITY_STYLES` / `STATUS_COLORS` SSOT
-- **Tiffany pill badge** styling repeated:
-  - `src/components/ui/ProfileCard.tsx:24` — `bg-tiffany-100 text-tiffany-700 border border-tiffany-200`
-  - `src/components/layout/UserProfileDropdownPanel.tsx:103-140` — same combo
-  - No `<Badge variant="tiffany">` primitive
-- **Share-modal scaffolds** repeated in `ProjectShare.tsx`, `ProfileShare.tsx`, `EntityShare.tsx`
-- **Onboarding step numbering** — `text-orange-600` for step badges in `WalletSetupStep.tsx` (lines 53, 58, 65, 71, 122, 131, 140) — 7x
+- `docs/api/CONVENTIONS.md` — the public API rulebook
+- `docs/architecture/CAT_AND_DESIGN_SSOT.md` — Cat + design system audit
+- `docs/branding-design.md` — brand direction + design SSOT
+- `src/app/api/v1/README.md` — v1 contract + endpoint inventory
+- `packages/sdk/README.md` — SDK consumer documentation
 
----
-
-## Phase 7 — Color SSOT — orange/tiffany still used as generic accents
-
-`grep -rn '\[#' src/` is zero (good — no arbitrary hex). But the `tiffany-*` / `orange-*` palette is used as the de-facto accent system, contradicting the rebrand thesis ("primary = neutral, tiffany/orange = sparse Bitcoin/status accents only"):
-
-- `src/components/onboarding/GetStartedStep.tsx:70,71` — `bg-orange-100`, `text-orange-600` (generic CTA)
-- `src/components/onboarding/OnboardingFlow/components/GetStartedStep.tsx:60,64,65` — `bg-orange-500`, `text-orange-900`, `text-orange-800`
-- `src/components/dashboard/TasksSection.tsx:40` — `bg-orange-500/10 text-orange-700` (task priority — also a DRY violation)
-- `src/components/ui/ProfileCard.tsx:24` — `bg-tiffany-100 ...` (TypeBadge)
-- `src/components/payment/PaymentQRCode.tsx:86,87` — `#FFFFFF`/`#000000` for QR fg/bg (technical contrast, acceptable, but should still be `var(--background)` / `var(--foreground)`)
-- `src/components/layout/BitBaumLogo.tsx:30-41` — SVG fills `#8B4513`, `#228B22`, `#32CD32`, `#90EE90`, `#F7931A`. **And BitBaum is a sibling product, not OrangeCat — why is its logo in this src tree at all?**
-
----
-
-## Phase 8 — Bottom navigation + Bitcoin-Orange FAB
-
-`src/components/layout/MobileBottomNav.tsx` renders `Cat | Dashboard | + | Timeline | Profile`.
-
-1. **Overlaps content** — `fixed bottom-0` without `pb-` safe-area on AppShell main; primary content scrolls behind it.
-2. **The `+` FAB is Bitcoin Orange** for a generic Create action — direct CLAUDE.md violation.
-3. **The FAB visually clips the "Cat" tab label** to "C…".
-4. Cat hub's route chrome (via `getRouteChrome()` in `routes.ts`) should hide the mobile bottom nav on `/dashboard/cat` per the chat-first claim — but the FAB and the stray kawaii-cat element at bottom-left of Cat hub suggest something is still mounting on that route.
-
----
-
-## Action Items — prioritized for an x.ai/Grok-parity, action-first product
-
-### P0 — Visible defects that block committing the rebrand
-
-| #   | What                                                                                                                                                                                                                           | File(s)                                                                           |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| 1   | Suppress AppShell.BrandMark on `/dashboard/cat` (or remove identity from CatChatToolbar). Pick one source of identity per chrome zone.                                                                                         | `src/config/routes.ts` (getRouteChrome) + `src/components/layout/AppShell.tsx`    |
-| 2   | Find + remove the stray kawaii-cat FAB on Cat hub at 375/768. Grep for any `CatIcon` import that resolves to the legacy SVG instead of `BrandMarkIcon`.                                                                        | likely a floating element in Cat layout or `MobileBottomNav`                      |
-| 3   | Responsive `CatChatToolbar`: collapse "Private · not saved" tag below `sm:` (show as tooltip on icon), hide kicker, give Context/Controls real `aria-label`s and a single overflow menu on mobile                              | `src/components/ai-chat/CatChatToolbar.tsx`                                       |
-| 4   | Mobile bottom-nav: add `pb-[calc(theme(spacing.16)+env(safe-area-inset-bottom))]` to the main scroll area in AppShell so content doesn't sit under the nav; **recolor the `+` FAB to neutral or tiffany — NOT Bitcoin Orange** | `src/components/layout/AppShell.tsx`, `src/components/layout/MobileBottomNav.tsx` |
-| 5   | Dashboard "Welcome back" — fall back to `@username` or `email` when full name is missing, kill the persistent skeleton bar                                                                                                     | dashboard hero component (find via `Welcome back` grep)                           |
-| 6   | Delete 5 `verify-*.jpeg` in repo root, add `verify-*.jpeg` + `.playwright-mcp/audit-*` to `.gitignore`                                                                                                                         | root, `.gitignore`                                                                |
-
-### P0.5 — Product direction (x.ai/Grok parity, action-first)
-
-| #   | What                                                                                                                                                                                                                                                               | Why                                                               |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| 7   | Redesign `/dashboard` mobile to be action-first: ONE Cat composer pinned at top, one suggested action card, then activity. **Remove "Your Impact" stats card on mobile.** Reintroduce it only when there's real data, and on a dedicated `/dashboard/impact` page. | Vanity stats violate "first thing user sees should be actionable" |
-| 8   | Land logged-out `/` users on a demo Cat composer with sign-in wall on send                                                                                                                                                                                         | x.ai/Grok parity                                                  |
-| 9   | Make the Cat hub mobile interface match Grok: composer-first, no chrome, suggestions appear above the composer not below. Currently the suggestion grid + composer order is already correct desktop-side; verify and tune mobile.                                  | x.ai/Grok parity                                                  |
-| 10  | Public marketing pages (rebrand-checklist item) — build dark x.ai-style bands with `ui-public-*` classes (already stubbed in `globals.css` per `branding-design.md`)                                                                                               | Brand consistency                                                 |
-
-### P1 — Migrate to SSOT files that already exist
-
-| #   | What                                                                                                                                                                         | Count / files                                                  |
-| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| 11  | Replace all `calc(100dvh-*)` with `APP_CONTENT_HEIGHT_CLASS` (or extend `layout-chrome.ts` if `ModernChatPanel`'s `15.5rem`/`13rem` offsets are intentional — document them) | 8 files in Phase 3                                             |
-| 12  | Replace `.toFixed(8) + ' BTC'` patterns with `useDisplayCurrency().formatAmount(btc)`                                                                                        | 25 files; start with WalletCard, ProfileOverviewTab, wishlists |
-| 13  | Replace hardcoded `'OrangeCat'` / tagline with `APP_NAME` / `APP_TAGLINE`                                                                                                    | 6 files in Phase 3                                             |
-| 14  | Replace hardcoded routes with `ROUTES.*`                                                                                                                                     | bookings/tasks/people/wishlists pages                          |
-
-### P2 — Consolidation (already in `docs/architecture/CAT_AND_DESIGN_SSOT.md`)
-
-| #   | What                                                                                                                                                                   |
-| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 15  | Collapse `model-registry.ts` into `ai-models.ts`; verify `data/aiProviders.ts` necessity                                                                               |
-| 16  | Build shared `<ChatShell>` + composer primitives used by both `ModernChatPanel` and `AIChatPanel`; delete duplicated `AIChatMessage` / `AIChatInput` / `ModelSelector` |
-| 17  | Inline `src/components/ai-chat/ModernChatPanel.tsx` re-export shim (single importer)                                                                                   |
-| 18  | Extract `<Badge variant="...">` primitive; remove `bg-tiffany-100 text-tiffany-700 ...` repetitions                                                                    |
-| 19  | `PRIORITY_STYLES` / `STATUS_COLORS` SSOT — collapse `getPriorityColor` + `COLOR_CLASSES`                                                                               |
-
-### P3 — Repo hygiene
-
-| #   | What                                                                                                                 |
-| --- | -------------------------------------------------------------------------------------------------------------------- |
-| 20  | Prune `docs/` from 341 → ~30 living docs; move rest to `docs/archive/`; reconcile competing audit reports            |
-| 21  | Prune `scripts/` — delete or archive scripts untouched 6+ months                                                     |
-| 22  | Gitignore `.playwright-mcp/` snapshots; keep `console-*.log` only if useful                                          |
-| 23  | Refactor god components ≥ 300 LOC (5 listed in Phase 5); extract data-fetching to hooks, business logic to `domain/` |
-| 24  | Confirm `BitBaumLogo.tsx` belongs in this repo at all (sibling product)                                              |
-
----
-
-## What's working (preserve)
-
-- `tsc` + ESLint clean, zero arbitrary hex
-- `brand.ts`, `layout-chrome.ts`, `BrandMark*` — well-scoped SSOT files
-- `BrandMarkIcon` matches `public/favicon.svg` + `public/images/orange-cat-logo.svg`
-- Cat empty state ("What can Cat help you with?" + 4 suggestions) renders correctly at 768/1280
-- Page title sourced from brand SSOT
-- `useDisplayCurrency()` hook exists and is the right place to standardize
-- `ROUTES` SSOT mostly enforced (post earlier ROUTES sweep)
-
----
-
-## Evidence
-
-All in `.playwright-mcp/`:
-
-- `audit-cat-375.jpeg` — Cat hub mobile (truncation, stray FAB, header crowding)
-- `audit-cat-768.jpeg` — Cat hub tablet (brand mark collision)
-- `audit-dashboard-375.jpeg` — Dashboard mobile (skeleton stuck, bottom-nav overlap, orange FAB)
-- `audit-onboarding-375.jpeg` — Onboarding mobile (CTA covered by FAB)
-
-Plus 5 stray `verify-*.jpeg` in repo root (to be deleted as P0 #6).
+Old audit/eval/report/plan snapshots are under `docs/archive/2026-h1/` — preserved for git-history parity but no longer authoritative.
