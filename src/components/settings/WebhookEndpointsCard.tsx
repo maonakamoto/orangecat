@@ -14,6 +14,7 @@ import { ChevronDown, ChevronRight, Copy, Plus, Trash2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { logger } from '@/utils/logger';
 import WebhookDeliveriesDrawer from '@/components/settings/WebhookDeliveriesDrawer';
+import { PUBLIC_API_WEBHOOK_EVENTS } from '@/config/public-api';
 
 interface WebhookEndpoint {
   id: string;
@@ -59,6 +60,21 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
   const [mintedSecret, setMintedSecret] = useState<string | null>(null);
   const [mintedPrefix, setMintedPrefix] = useState<string | null>(null);
   const [expandedEndpointId, setExpandedEndpointId] = useState<string | null>(null);
+  // Empty set === "all events" (server stores null in event_types). When
+  // the user ticks any boxes we send the allowlist explicitly.
+  const [selectedEvents, setSelectedEvents] = useState<Set<string>>(new Set());
+
+  function toggleEvent(eventName: string) {
+    setSelectedEvents(prev => {
+      const next = new Set(prev);
+      if (next.has(eventName)) {
+        next.delete(eventName);
+      } else {
+        next.add(eventName);
+      }
+      return next;
+    });
+  }
 
   useEffect(() => {
     if (!selectedActorId && defaultActorId) {
@@ -100,19 +116,28 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
     setMinting(true);
     setError(null);
     try {
+      const body: {
+        name: string;
+        url: string;
+        actor_id: string;
+        event_types?: string[];
+      } = {
+        name: name.trim(),
+        url: url.trim(),
+        actor_id: selectedActorId,
+      };
+      if (selectedEvents.size > 0) {
+        body.event_types = Array.from(selectedEvents);
+      }
       const res = await fetch('/api/webhook-endpoints', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({
-          name: name.trim(),
-          url: url.trim(),
-          actor_id: selectedActorId,
-        }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(body?.error || `Failed to create endpoint (${res.status})`);
+        const errBody = (await res.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(errBody?.error || `Failed to create endpoint (${res.status})`);
       }
       const json = (await res.json()) as MintResponse;
       setMintedSecret(json.data.secret);
@@ -120,6 +145,7 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
       setEndpoints(prev => [json.data.endpoint, ...prev]);
       setName('');
       setUrl('');
+      setSelectedEvents(new Set());
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create endpoint');
     } finally {
@@ -211,6 +237,29 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
             />
           </label>
         </div>
+        <fieldset className="space-y-2 rounded-md border border-border-subtle bg-background/40 p-3">
+          <legend className="px-1 text-xs text-muted-foreground">Events</legend>
+          <p className="text-[11px] text-muted-foreground">
+            {selectedEvents.size === 0
+              ? 'Receive every event for this actor. Tick boxes to restrict.'
+              : `Receive only the ${selectedEvents.size} ticked event${selectedEvents.size === 1 ? '' : 's'}.`}
+          </p>
+          <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+            {PUBLIC_API_WEBHOOK_EVENTS.map(eventName => (
+              <label
+                key={eventName}
+                className="flex items-center gap-1.5 text-[11px] text-foreground"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedEvents.has(eventName)}
+                  onChange={() => toggleEvent(eventName)}
+                />
+                <code className="rounded bg-muted px-1 text-[10px]">{eventName}</code>
+              </label>
+            ))}
+          </div>
+        </fieldset>
         <Button type="submit" disabled={minting || !selectedActorId || !name.trim() || !url.trim()}>
           <Plus className="mr-1 h-4 w-4" />
           {minting ? 'Creating…' : 'Create endpoint'}
@@ -291,6 +340,14 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
                           <code className="rounded bg-muted px-1">{endpoint.url}</code>
                         </span>
                         <span>Acts as {actorLabel}</span>
+                        <span>
+                          Events:{' '}
+                          <code className="rounded bg-muted px-1">
+                            {endpoint.event_types && endpoint.event_types.length > 0
+                              ? endpoint.event_types.join(', ')
+                              : 'all'}
+                          </code>
+                        </span>
                         <span>Created {formatTimestamp(endpoint.created_at)}</span>
                         <span>Last delivery {formatTimestamp(endpoint.last_delivery_at)}</span>
                       </div>

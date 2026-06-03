@@ -52,3 +52,14 @@ export const PUBLIC_API_SCOPE_TOKENS: readonly string[] = PUBLIC_API_ENTITY_TYPE
   `${t}.read`,
   `${t}.write`,
 ]);
+
+/**
+ * Webhook event types that endpoints can subscribe to. Format mirrors
+ * how entityPostHandler emits: `<entity>.created`. Future events
+ * (`<entity>.updated`, `<entity>.deleted`) will append here. An endpoint
+ * with `event_types=null` receives every event for its bound actor —
+ * the explicit allowlist only gates the firing fan-out.
+ */
+export const PUBLIC_API_WEBHOOK_EVENTS: readonly string[] = PUBLIC_API_ENTITY_TYPES.map(
+  t => `${t}.created`
+);
