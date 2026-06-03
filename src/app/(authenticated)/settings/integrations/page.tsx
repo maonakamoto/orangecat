@@ -26,15 +26,6 @@ import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
 import { logger } from '@/utils/logger';
 
-/**
- * Hydration ceiling — if the auth store hasn't resolved after this long
- * we treat it as a stuck client and show the sign-in CTA instead of a
- * forever spinner. Real auth resolves in <300ms; anything past 2-3s is
- * a sign of a broken hydration path (cookie domain mismatch, blocked
- * storage, third-party script blocking the supabase client init, …).
- */
-const HYDRATION_TIMEOUT_MS = 4_000;
-
 interface IntegrationKey {
   id: string;
   actor_id: string;
@@ -58,20 +49,10 @@ function formatTimestamp(value: string | null): string {
 }
 
 export default function IntegrationKeysPage() {
-  const { user, hydrated, isLoading: authLoading } = useRequireAuth();
+  // Hydration ceiling lives inside useRequireAuth now (2026-06-03) —
+  // every auth-gated page benefits, not just this one.
+  const { user, isLoading: authLoading } = useRequireAuth();
   const { personalActor, groupActors } = useMessagingActors();
-  // Forces past a stuck auth-store hydration so the page renders a real
-  // sign-in CTA after a few seconds instead of pinning the user on the
-  // loading spinner.
-  const [hydrationTimedOut, setHydrationTimedOut] = useState(false);
-
-  useEffect(() => {
-    if (hydrated && !authLoading) {
-      return;
-    }
-    const timer = setTimeout(() => setHydrationTimedOut(true), HYDRATION_TIMEOUT_MS);
-    return () => clearTimeout(timer);
-  }, [hydrated, authLoading]);
 
   const [keys, setKeys] = useState<IntegrationKey[]>([]);
   const [loading, setLoading] = useState(true);
@@ -185,9 +166,10 @@ export default function IntegrationKeysPage() {
     }
   }
 
-  // Still hydrating, AND we haven't given up waiting yet. Once timed out,
-  // fall through to the !user branch which renders a real sign-in CTA.
-  if ((!hydrated || authLoading) && !hydrationTimedOut) {
+  // authLoading already folds in the hydration ceiling — once the
+  // useRequireAuth timeout fires (default 4s), this is false and we
+  // fall through to the !user branch with a real sign-in CTA.
+  if (authLoading) {
     return <Loading fullScreen message="Loading integrations..." />;
   }
 
