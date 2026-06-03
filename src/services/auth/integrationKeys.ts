@@ -213,6 +213,74 @@ export async function revokeIntegrationKey(keyId: string, userId: string): Promi
   return !!data;
 }
 
+/**
+ * Rotate a key in place: mint a fresh plaintext bound to the same actor
+ * and name, then revoke the old key. The two operations are wrapped in a
+ * single user-facing action, but on the DB they happen as two writes —
+ * no grace period. The customer must atomically swap the env var.
+ *
+ * Why no grace period in v1: it's simpler, matches the leak-response
+ * mental model ("the old key is compromised, kill it now"), and matches
+ * the typical Vercel env-var swap flow.
+ *
+ * @throws Error when the old key doesn't belong to the user or is
+ *         already revoked — exposed as a generic 404 by the route to
+ *         avoid leaking key existence to probers.
+ */
+export async function rotateIntegrationKey(
+  keyId: string,
+  userId: string
+): Promise<MintedIntegrationKey> {
+  const admin = createAdminClient();
+
+  // Lock the source row: must exist, belong to the caller, and still be live.
+  const { data: existing, error: fetchError } = await admin
+    .from(DATABASE_TABLES.INTEGRATION_KEYS)
+    .select('id, actor_id, name, expires_at')
+    .eq('id', keyId)
+    .eq('user_id', userId)
+    .is('revoked_at', null)
+    .maybeSingle();
+
+  if (fetchError) {
+    logger.error('rotateIntegrationKey: fetch failed', { error: fetchError, userId, keyId });
+    throw fetchError;
+  }
+  if (!existing) {
+    throw new Error('Key not found');
+  }
+  const source = existing as {
+    id: string;
+    actor_id: string;
+    name: string;
+    expires_at: string | null;
+  };
+
+  // Mint the replacement. Re-uses createIntegrationKey's permission gate,
+  // so if the user lost the right to act as the actor since mint time,
+  // rotation is blocked here.
+  const minted = await createIntegrationKey({
+    userId,
+    actorId: source.actor_id,
+    name: source.name,
+    expiresAt: source.expires_at ? new Date(source.expires_at) : null,
+  });
+
+  // Revoke the old. Best-effort: if this fails we still return the new
+  // plaintext — both keys briefly work, but the user can manually
+  // revoke the old one from the UI. The audit trail still shows both.
+  const revoked = await revokeIntegrationKey(source.id, userId);
+  if (!revoked) {
+    logger.warn('rotateIntegrationKey: new key minted but old key revoke returned false', {
+      userId,
+      newKeyId: minted.key.id,
+      oldKeyId: source.id,
+    });
+  }
+
+  return minted;
+}
+
 // Re-export so API handlers can catch the actor-permission error without
 // reaching into the actor resolver.
 export { ActorNotPermittedError };

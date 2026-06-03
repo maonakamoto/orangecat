@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Copy, Plus, Trash2 } from 'lucide-react';
+import { Copy, Plus, RotateCcw, Trash2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { logger } from '@/utils/logger';
 
@@ -134,6 +134,37 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
       );
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to revoke key');
+    }
+  }
+
+  async function handleRotate(key: IntegrationKey) {
+    if (
+      !confirm(
+        `Rotate "${key.name}"? You'll get a fresh secret; the current one stops working immediately. There is no grace period — swap your env var at the same time.`
+      )
+    ) {
+      return;
+    }
+    setError(null);
+    try {
+      const res = await fetch(`/api/integration-keys/${key.id}/rotate`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const body = (await res.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(body?.error || `Failed to rotate (${res.status})`);
+      }
+      const json = (await res.json()) as MintResponse;
+      setMintedPlaintext(json.data.plaintext);
+      setMintedPrefix(json.data.key.key_prefix);
+      // The old row is now revoked; the new row should appear at the top.
+      setKeys(prev => [
+        json.data.key,
+        ...prev.map(k => (k.id === key.id ? { ...k, revoked_at: new Date().toISOString() } : k)),
+      ]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to rotate key');
     }
   }
 
@@ -270,14 +301,24 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
                     </div>
                   </div>
                   {!isRevoked && (
-                    <button
-                      type="button"
-                      onClick={() => handleRevoke(key)}
-                      className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-destructive"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                      Revoke
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleRotate(key)}
+                        className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                      >
+                        <RotateCcw className="h-3.5 w-3.5" />
+                        Rotate
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRevoke(key)}
+                        className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-destructive"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Revoke
+                      </button>
+                    </div>
                   )}
                 </li>
               );
