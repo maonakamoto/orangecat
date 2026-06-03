@@ -7,12 +7,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { useBottomNavScroll } from '@/hooks/useHeaderScroll';
 import { useComposer } from '@/contexts/ComposerContext';
 import { cn } from '@/lib/utils';
-import { getRouteSurface, ROUTES } from '@/config/routes';
+import { getRouteChrome, getRouteSurface, ROUTES } from '@/config/routes';
 import { getContextualCreateAction } from '@/lib/navigation/contextual-create';
 import { isNavHrefActive } from '@/lib/navigation/isActive';
 import { MobileCreateSheet } from '@/components/create/MobileCreateSheet';
 import { Z_INDEX } from '@/constants/z-index';
-import { GRADIENTS } from '@/config/gradients';
 
 const MobileBottomNav = React.memo(function MobileBottomNav() {
   const pathname = usePathname();
@@ -35,6 +34,10 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
   // SSOT: bottom nav appears wherever the desktop sidebar would (every
   // in-app surface). Mirrors AppShell's `isAppSurface` rule.
   if (getRouteSurface(pathname) !== 'app') {
+    return null;
+  }
+
+  if (getRouteChrome(pathname).hideMobileBottomNav) {
     return null;
   }
 
@@ -202,7 +205,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                     className={cn(
                       'absolute flex items-center justify-center rounded-full shadow-sm',
                       'transition-all duration-300 hover:scale-105 active:scale-95',
-                      isAuthenticated ? GRADIENTS.brandOrange : GRADIENTS.brandTiffany
+                      'bg-foreground'
                     )}
                     style={{
                       width: shouldBeSmall ? '48px' : '56px',
@@ -212,7 +215,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                   >
                     <Icon
                       className={cn(
-                        'text-white transition-all duration-300',
+                        'text-background transition-all duration-300',
                         shouldBeSmall ? 'w-5 h-5' : 'w-6 h-6'
                       )}
                       strokeWidth={2}

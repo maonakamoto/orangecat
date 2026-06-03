@@ -52,14 +52,10 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="mb-0 text-xl font-semibold leading-tight text-foreground sm:text-2xl">
-              {profile === null ? (
-                <>
-                  Welcome back
-                  <span className="inline-block h-5 w-28 animate-pulse rounded bg-muted align-text-bottom" />
-                </>
-              ) : (
-                <>Welcome back, {capitalizeName(profile.name || profile.username || 'there')}</>
-              )}
+              Welcome back
+              {profile && (profile.name || profile.username) ? (
+                <>, {capitalizeName(profile.name || profile.username || '')}</>
+              ) : null}
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
               {totalProjects > 0

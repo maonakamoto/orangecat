@@ -1,9 +1,9 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { getRouteSurface } from '@/config/routes';
+import { getRouteChrome, getRouteSurface } from '@/config/routes';
 import { Header } from './Header';
 import { Sidebar } from '@/components/sidebar/Sidebar';
 import Footer from './Footer';
@@ -48,9 +48,21 @@ export function AppShell({ children }: AppShellProps) {
     toggleSidebar,
     toggleSidebarCollapse,
     toggleSection,
+    setSidebarCollapsed,
     isItemActive,
     getFilteredSections,
   } = useNavigation(sidebarSections);
+
+  const routeChrome = getRouteChrome(pathname ?? '/');
+  // Mirrors MobileBottomNav visibility — when the bottom nav renders, reserve
+  // space below the main scroll area so its content isn't covered.
+  const showsMobileBottomNav = isAppSurface && !routeChrome.hideMobileBottomNav;
+
+  useEffect(() => {
+    if (routeChrome.preferCollapsedSidebar) {
+      setSidebarCollapsed(true);
+    }
+  }, [pathname, routeChrome.preferCollapsedSidebar, setSidebarCollapsed]);
 
   // Get filtered sections based on auth state
   const filteredSections = getFilteredSections();
@@ -98,7 +110,7 @@ export function AppShell({ children }: AppShellProps) {
                 ? 'lg:ml-16'
                 : 'lg:ml-64'
               : 'ml-0'
-          }`}
+          } ${showsMobileBottomNav ? 'pb-20 md:pb-0' : ''}`}
         >
           {children}
         </main>
