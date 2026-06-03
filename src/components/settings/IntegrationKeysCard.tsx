@@ -20,6 +20,7 @@ export interface IntegrationKey {
   name: string;
   key_prefix: string;
   scopes: string[];
+  is_test: boolean;
   created_at: string;
   last_used_at: string | null;
   expires_at: string | null;
@@ -57,6 +58,7 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
   // true the user opts into picking a per-entity allowlist instead.
   const [restrictPermissions, setRestrictPermissions] = useState(false);
   const [selectedScopes, setSelectedScopes] = useState<Set<string>>(new Set());
+  const [isTest, setIsTest] = useState(false);
   const [minting, setMinting] = useState(false);
   const [mintedPlaintext, setMintedPlaintext] = useState<string | null>(null);
   const [mintedPrefix, setMintedPrefix] = useState<string | null>(null);
@@ -117,12 +119,20 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
     setMinting(true);
     setError(null);
     try {
-      const body: { name: string; actor_id: string; scopes?: string[] } = {
+      const body: {
+        name: string;
+        actor_id: string;
+        scopes?: string[];
+        is_test?: boolean;
+      } = {
         name: name.trim(),
         actor_id: selectedActorId,
       };
       if (restrictPermissions) {
         body.scopes = Array.from(selectedScopes);
+      }
+      if (isTest) {
+        body.is_test = true;
       }
       const res = await fetch('/api/integration-keys', {
         method: 'POST',
@@ -141,6 +151,7 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
       setName('');
       setSelectedScopes(new Set());
       setRestrictPermissions(false);
+      setIsTest(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to mint key');
     } finally {
@@ -251,6 +262,15 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
             </select>
           </label>
         </div>
+        <fieldset className="space-y-2 rounded-md border border-border-subtle bg-background/40 p-3">
+          <legend className="px-1 text-xs text-muted-foreground">Environment</legend>
+          <label className="flex items-center gap-2 text-xs text-foreground">
+            <input type="checkbox" checked={isTest} onChange={e => setIsTest(e.target.checked)} />
+            Sandbox key (prefix <code className="rounded bg-muted px-1">ock_test_</code>) — only
+            reads and writes test entities. Use for integration testing without touching production
+            data.
+          </label>
+        </fieldset>
         <fieldset className="space-y-2 rounded-md border border-border-subtle bg-background/40 p-3">
           <legend className="px-1 text-xs text-muted-foreground">Permissions</legend>
           <label className="flex items-center gap-2 text-xs text-foreground">
@@ -368,6 +388,11 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-foreground">{key.name}</span>
+                      {key.is_test && (
+                        <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800">
+                          Sandbox
+                        </span>
+                      )}
                       {isRevoked && (
                         <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
                           Revoked
