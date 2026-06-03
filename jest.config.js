@@ -32,17 +32,6 @@ module.exports = {
     '<rootDir>/test-results/',
     '<rootDir>/.claude/worktrees/',
     '\\.spec\\.(ts|tsx)$', // Exclude Playwright spec files
-    // ── Stale UI assertions pending rebrand-era refresh (2026-06-03) ─────────
-    // These suites assert against specific class strings (`tiffany-*`,
-    // `bitcoin-orange-*`, gradient combos) that no longer exist after the
-    // neutral-primary brand sweep. The components work; the tests test
-    // implementation rather than behaviour. Refresh in a focused commit
-    // with the design-system owner reviewing — until then ignored so they
-    // don't lie about passing.
-    '<rootDir>/tests/unit/Button\\.test\\.tsx$',
-    '<rootDir>/tests/unit/Input\\.test\\.tsx$',
-    '<rootDir>/tests/unit/components/ui/Card\\.test\\.tsx$',
-    '<rootDir>/tests/unit/components/layout/AuthButtons\\.test\\.tsx$',
   ],
   // Mock Next.js modules that cause issues in Jest
   moduleNameMapper: {
