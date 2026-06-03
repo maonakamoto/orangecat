@@ -38,6 +38,7 @@ import {
   resolveCreationActor,
   ActorNotPermittedError,
 } from '@/services/actors/resolveCreationActor';
+import { resolveRequestAuth } from '@/lib/api/resolveRequestAuth';
 
 // Type for the awaited Supabase client
 type SupabaseClient = Awaited<ReturnType<typeof createServerClient>>;
@@ -118,45 +119,47 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
     withZodBody(schemaWithActor)
   )(async (request: NextRequest, ctx) => {
     try {
-      const supabase = await createServerClient();
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
-
-      if (authError || !user) {
+      const auth = await resolveRequestAuth(request);
+      if (!auth) {
         return apiUnauthorized();
       }
+      const userId = auth.userId;
+      const supabase = await createServerClient();
 
       // Rate limiting
-      const rateLimit = await rateLimitWriteAsync(user.id);
+      const rateLimit = await rateLimitWriteAsync(userId);
       if (!rateLimit.success) {
         const retryAfter = Math.ceil((rateLimit.resetTime - Date.now()) / 1000);
-        logger.warn(`${meta.name} creation rate limit exceeded`, { userId: user.id });
+        logger.warn(`${meta.name} creation rate limit exceeded`, { userId });
         return apiRateLimited(
           `Too many ${meta.name.toLowerCase()} creation requests. Please slow down.`,
           retryAfter
         );
       }
 
-      // Extract the optional requested actor before further processing so
-      // every code path below sees a body without `actor_id`. The resolver
-      // either confirms the user has rights to act as that actor (group
-      // founder/admin/moderator) or falls back to their personal actor.
+      // Strip body.actor_id so every downstream code path sees a body
+      // without it. Integration-key auth has a fixed bound actor; session
+      // auth uses the body field as the requested actor.
       const bodyForHandler = { ...(ctx.body as Record<string, unknown>) };
       const requestedActorId = bodyForHandler.actor_id as string | undefined;
       delete bodyForHandler.actor_id;
 
       let resolvedActor: { id: string };
-      try {
-        resolvedActor = await resolveCreationActor(user.id, requestedActorId);
-      } catch (actorError) {
-        if (actorError instanceof ActorNotPermittedError) {
-          return apiForbidden(
-            `You are not permitted to create a ${meta.name.toLowerCase()} as the requested actor.`
-          );
+      if (auth.boundActorId) {
+        // Integration key — the key itself proves authority. Body
+        // actor_id (if any) is ignored to avoid confusing the audit trail.
+        resolvedActor = { id: auth.boundActorId };
+      } else {
+        try {
+          resolvedActor = await resolveCreationActor(userId, requestedActorId);
+        } catch (actorError) {
+          if (actorError instanceof ActorNotPermittedError) {
+            return apiForbidden(
+              `You are not permitted to create a ${meta.name.toLowerCase()} as the requested actor.`
+            );
+          }
+          throw actorError;
         }
-        throw actorError;
       }
 
       // Use custom creation function if provided (for domain services).
@@ -164,7 +167,7 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       // channel — domain/base/entityService.ts unwraps it.
       if (createEntity) {
         const bodyForCreate = { ...bodyForHandler, _resolved_actor_id: resolvedActor.id };
-        const entity = await createEntity(user.id, bodyForCreate, supabase);
+        const entity = await createEntity(userId, bodyForCreate, supabase);
         logger.info(`${meta.name} created successfully`, { [`${entityType}Id`]: entity.id });
         return applyRateLimitHeaders(
           apiSuccess(entity, { status: 201 }),
@@ -176,7 +179,7 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       let transformedData;
       try {
         if (transformData) {
-          transformedData = await Promise.resolve(transformData(bodyForHandler, user.id, supabase));
+          transformedData = await Promise.resolve(transformData(bodyForHandler, userId, supabase));
           // Honour the resolved actor whether the transform set actor_id or not.
           if (useActorOwnership !== false) {
             (transformedData as Record<string, unknown>).actor_id = resolvedActor.id;
@@ -184,13 +187,13 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         } else if (useActorOwnership !== false) {
           transformedData = { ...bodyForHandler, actor_id: resolvedActor.id };
         } else {
-          transformedData = { ...bodyForHandler, user_id: user.id };
+          transformedData = { ...bodyForHandler, user_id: userId };
         }
       } catch (transformError) {
         logger.error(`Error transforming data for ${entityType}`, {
           error: transformError,
           bodyKeys: Object.keys(ctx.body || {}),
-          userId: user.id,
+          userId: userId,
         });
         const errorMessage =
           transformError instanceof Error ? transformError.message : String(transformError);
@@ -206,7 +209,7 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       // Log the data being inserted for debugging
       logger.info(`Inserting ${entityType}`, {
         table,
-        userId: user.id,
+        userId: userId,
         dataKeys: Object.keys(entityData),
         entityDataSample: JSON.stringify(entityData, null, 2).substring(0, 500),
       });
@@ -222,7 +225,7 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       if (error) {
         const errorDetails = {
           error,
-          userId: user.id,
+          userId: userId,
           table,
           code: error?.code,
           message: error?.message,
@@ -250,7 +253,7 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
             entity_type: entityType,
             entity_id: createdEntity.id,
             is_primary: true,
-            created_by: user.id,
+            created_by: userId,
           });
           logger.info(`Wallet linked to ${entityType}`, {
             walletId: walletIdForLink,
