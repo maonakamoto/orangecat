@@ -256,6 +256,67 @@ export async function pruneDeliveredWebhookDeliveries(
   return count ?? 0;
 }
 
+/**
+ * Confirm a delivery row belongs to the given endpoint. Used by the
+ * replay route to avoid leaking deliveries across endpoint boundaries.
+ * Returns false on mismatch + on any DB error (fail-closed).
+ */
+export async function deliveryBelongsToEndpoint(
+  deliveryId: string,
+  endpointId: string
+): Promise<boolean> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from(DATABASE_TABLES.WEBHOOK_DELIVERIES)
+    .select('id')
+    .eq('id', deliveryId)
+    .eq('endpoint_id', endpointId)
+    .maybeSingle();
+  if (error) {
+    logger.warn('deliveryBelongsToEndpoint: query failed', { error, deliveryId, endpointId });
+    return false;
+  }
+  return !!data;
+}
+
+/**
+ * Manually re-enqueue a delivery. Wipes response_status + response_body
+ * so the next worker run starts clean, resets attempt_count to 0 (the
+ * exp-backoff schedule starts fresh), flips status back to 'pending',
+ * and schedules next_attempt_at=now so the next /api/cron/webhook-worker
+ * tick (every minute) picks it up.
+ *
+ * The user-facing semantics are "treat this as a brand-new delivery
+ * for retry-budget purposes." That keeps the contract obvious in the
+ * UI ("Replay" button) and matches how Stripe + similar platforms
+ * surface manual retries.
+ *
+ * The caller MUST have already verified the delivery belongs to an
+ * endpoint the requesting user owns — this function trusts ownership.
+ */
+export async function enqueueDeliveryReplay(deliveryId: string): Promise<boolean> {
+  const admin = createAdminClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (admin.from(DATABASE_TABLES.WEBHOOK_DELIVERIES) as any)
+    .update({
+      status: 'pending',
+      attempt_count: 0,
+      response_status: null,
+      response_body: null,
+      last_attempt_at: null,
+      next_attempt_at: new Date().toISOString(),
+    })
+    .eq('id', deliveryId)
+    .select('id')
+    .maybeSingle();
+
+  if (error) {
+    logger.error('enqueueDeliveryReplay failed', { error, deliveryId });
+    return false;
+  }
+  return !!data;
+}
+
 export async function markFailedOrRetry(
   delivery: DeliveryRow,
   responseStatus: number | null,

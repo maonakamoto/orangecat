@@ -13,7 +13,15 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { CheckCircle2, ChevronDown, ChevronRight, Clock, RefreshCw, XCircle } from 'lucide-react';
+import {
+  CheckCircle2,
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  RefreshCw,
+  RotateCcw,
+  XCircle,
+} from 'lucide-react';
 import { logger } from '@/utils/logger';
 
 interface DeliveryRow {
@@ -80,6 +88,7 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [replayingId, setReplayingId] = useState<string | null>(null);
   const cancelRef = useRef(false);
 
   const load = useCallback(async () => {
@@ -108,6 +117,31 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
       }
     }
   }, [endpointId]);
+
+  const handleReplay = useCallback(
+    async (deliveryId: string) => {
+      setReplayingId(deliveryId);
+      setError(null);
+      try {
+        const res = await fetch(
+          `/api/webhook-endpoints/${endpointId}/deliveries/${deliveryId}/replay`,
+          { method: 'POST', credentials: 'include' }
+        );
+        if (!res.ok) {
+          const body = (await res.json().catch(() => null)) as { error?: string } | null;
+          throw new Error(body?.error || `Failed to replay (${res.status})`);
+        }
+        // Reload — the row's status, attempt_count, next_attempt_at all
+        // changed and the worker may already have moved it.
+        await load();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to replay');
+      } finally {
+        setReplayingId(null);
+      }
+    },
+    [endpointId, load]
+  );
 
   useEffect(() => {
     load();
@@ -183,6 +217,19 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
                 </button>
                 {isExpanded && (
                   <div className="mt-2 ml-5 space-y-2">
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={() => handleReplay(d.id)}
+                        disabled={replayingId === d.id}
+                        className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2 py-1 text-[11px] text-muted-foreground hover:bg-muted/60 hover:text-foreground disabled:opacity-50"
+                      >
+                        <RotateCcw
+                          className={`h-3 w-3 ${replayingId === d.id ? 'animate-spin' : ''}`}
+                        />
+                        {replayingId === d.id ? 'Replaying…' : 'Replay'}
+                      </button>
+                    </div>
                     <div>
                       <div className="mb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
                         Sent payload
