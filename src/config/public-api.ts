@@ -1,0 +1,44 @@
+/**
+ * Public API surface SSOT.
+ *
+ * Anything that depends on the public API contract (SDKs, integration
+ * docs, the discovery endpoint) reads from here. Internal callers should
+ * keep using `ENTITY_REGISTRY[type].apiEndpoint` — those are the
+ * non-versioned internal handlers that the OrangeCat web app talks to.
+ *
+ * Created: 2026-06-03
+ * Last Modified: 2026-06-03
+ * Last Modified Summary: Initial — names v1, lists the endpoints that are part of the contract.
+ */
+
+import type { EntityType } from '@/config/entity-registry';
+
+export const PUBLIC_API_VERSION = 'v1' as const;
+export const PUBLIC_API_BASE = `/api/${PUBLIC_API_VERSION}` as const;
+
+/**
+ * Entity types whose POST is part of the v1 contract.
+ *
+ * Order matters: the order here is the order shown in discovery output
+ * and any docs generation downstream.
+ */
+export const PUBLIC_API_ENTITY_TYPES = [
+  'product',
+  'service',
+  'project',
+  'cause',
+  'event',
+  'loan',
+  'investment',
+  'asset',
+  'wishlist',
+] as const satisfies readonly EntityType[];
+
+export type PublicApiEntityType = (typeof PUBLIC_API_ENTITY_TYPES)[number];
+
+/** Returns the v1 endpoint URL for an entity. */
+export function publicApiEndpoint(type: PublicApiEntityType, basePath?: string): string {
+  const segment = type === 'wishlist' ? 'wishlists' : `${type}s`;
+  const base = basePath?.replace(/\/$/, '') ?? '';
+  return `${base}${PUBLIC_API_BASE}/${segment}`;
+}
