@@ -136,10 +136,12 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       // Idempotency-Key dedup. Runs BEFORE rate limiting so a retry of a
       // successful request doesn't consume quota a second time.
       const idempotencyKey = request.headers.get('idempotency-key');
-      const requestPath = new URL(request.url).pathname;
       const bodyHash = idempotencyKey ? hashRequestBody(ctx.body) : undefined;
+      // URL parsing only when we'll actually use it — `request.url` may be
+      // undefined in unit-test mocks of NextRequest.
+      const requestPath = idempotencyKey && request.url ? new URL(request.url).pathname : '';
 
-      if (idempotencyKey && bodyHash) {
+      if (idempotencyKey && bodyHash && requestPath) {
         const cached = await lookupIdempotencyResult({
           userId,
           key: idempotencyKey,

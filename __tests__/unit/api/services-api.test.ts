@@ -32,6 +32,14 @@ jest.mock('@/lib/rate-limit', () => ({
   applyRateLimitHeaders: jest.fn(response => response),
 }));
 
+// Handler now routes through resolveCreationActor (added in the actor-switcher
+// commit b17b2534). Mock it so the entity create path proceeds without needing
+// a real actors table.
+jest.mock('@/services/actors/resolveCreationActor', () => ({
+  resolveCreationActor: jest.fn().mockResolvedValue({ id: 'actor-123' }),
+  ActorNotPermittedError: class ActorNotPermittedError extends Error {},
+}));
+
 import { createServerClient } from '@/lib/supabase/server';
 import {
   apiSuccess,

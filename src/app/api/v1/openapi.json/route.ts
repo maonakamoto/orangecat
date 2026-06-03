@@ -10,7 +10,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { getOpenApiSpec } from '@/lib/openapi/spec';
+import { getOpenApiSpec } from '@/lib/openapi/generator';
 
 export async function GET() {
   return NextResponse.json(getOpenApiSpec(), {
