@@ -10,9 +10,10 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Copy, Plus, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronRight, Copy, Plus, Trash2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { logger } from '@/utils/logger';
+import WebhookDeliveriesDrawer from '@/components/settings/WebhookDeliveriesDrawer';
 
 interface WebhookEndpoint {
   id: string;
@@ -57,6 +58,7 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
   const [minting, setMinting] = useState(false);
   const [mintedSecret, setMintedSecret] = useState<string | null>(null);
   const [mintedPrefix, setMintedPrefix] = useState<string | null>(null);
+  const [expandedEndpointId, setExpandedEndpointId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!selectedActorId && defaultActorId) {
@@ -269,41 +271,58 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
           <ul className="divide-y divide-border-subtle">
             {endpoints.map(endpoint => {
               const isRevoked = !!endpoint.revoked_at;
+              const isExpanded = expandedEndpointId === endpoint.id;
               const actorLabel =
                 actors.find(a => a.actor_id === endpoint.actor_id)?.label ?? endpoint.actor_id;
               return (
-                <li
-                  key={endpoint.id}
-                  className="flex flex-wrap items-start justify-between gap-3 p-4"
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-foreground">{endpoint.name}</span>
-                      {isRevoked && (
-                        <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
-                          Revoked
+                <li key={endpoint.id} className="p-4">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-foreground">{endpoint.name}</span>
+                        {isRevoked && (
+                          <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+                            Revoked
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
+                        <span className="truncate max-w-full sm:max-w-xs">
+                          <code className="rounded bg-muted px-1">{endpoint.url}</code>
                         </span>
+                        <span>Acts as {actorLabel}</span>
+                        <span>Created {formatTimestamp(endpoint.created_at)}</span>
+                        <span>Last delivery {formatTimestamp(endpoint.last_delivery_at)}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedEndpointId(prev => (prev === endpoint.id ? null : endpoint.id))
+                        }
+                        className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                      >
+                        {isExpanded ? (
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        ) : (
+                          <ChevronRight className="h-3.5 w-3.5" />
+                        )}
+                        Deliveries
+                      </button>
+                      {!isRevoked && (
+                        <button
+                          type="button"
+                          onClick={() => handleRevoke(endpoint)}
+                          className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-destructive"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                          Revoke
+                        </button>
                       )}
                     </div>
-                    <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
-                      <span className="truncate max-w-full sm:max-w-xs">
-                        <code className="rounded bg-muted px-1">{endpoint.url}</code>
-                      </span>
-                      <span>Acts as {actorLabel}</span>
-                      <span>Created {formatTimestamp(endpoint.created_at)}</span>
-                      <span>Last delivery {formatTimestamp(endpoint.last_delivery_at)}</span>
-                    </div>
                   </div>
-                  {!isRevoked && (
-                    <button
-                      type="button"
-                      onClick={() => handleRevoke(endpoint)}
-                      className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-destructive"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                      Revoke
-                    </button>
-                  )}
+                  {isExpanded && <WebhookDeliveriesDrawer endpointId={endpoint.id} />}
                 </li>
               );
             })}

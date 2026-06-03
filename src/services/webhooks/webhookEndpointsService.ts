@@ -188,6 +188,28 @@ export async function getEndpointSigningContext(
 }
 
 /**
+ * Authorisation check for endpoint-scoped routes (deliveries drawer
+ * etc.): does this endpoint exist AND belong to the caller? Returns
+ * true even when the endpoint is revoked — the user can still review
+ * past deliveries for an endpoint they once owned.
+ */
+export async function userOwnsEndpoint(endpointId: string, userId: string): Promise<boolean> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from(DATABASE_TABLES.WEBHOOK_ENDPOINTS)
+    .select('id')
+    .eq('id', endpointId)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) {
+    logger.warn('userOwnsEndpoint: query failed', { error, endpointId, userId });
+    return false;
+  }
+  return !!data;
+}
+
+/**
  * Bump last_delivery_at on the endpoint — fire-and-forget from the worker
  * after a successful POST so the /settings/integrations UI shows freshness.
  */

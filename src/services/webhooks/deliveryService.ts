@@ -129,6 +129,31 @@ export async function enqueueWebhookEvent(params: {
 }
 
 /**
+ * List the most recent deliveries for a single endpoint. Powers the
+ * /settings/integrations deliveries drawer. Caller MUST have already
+ * verified the endpoint belongs to the requesting user (route does this
+ * with a join through webhook_endpoints.user_id).
+ */
+export async function listRecentDeliveriesForEndpoint(
+  endpointId: string,
+  limit: number = 50
+): Promise<DeliveryRow[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from(DATABASE_TABLES.WEBHOOK_DELIVERIES)
+    .select('*')
+    .eq('endpoint_id', endpointId)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    logger.error('listRecentDeliveriesForEndpoint: query failed', { error, endpointId });
+    return [];
+  }
+  return (data ?? []) as DeliveryRow[];
+}
+
+/**
  * Pick up to `limit` deliveries that are due now. The worker calls this
  * once per cron invocation; rows are returned newest-first so a slow
  * receiver can't starve fresher events.
