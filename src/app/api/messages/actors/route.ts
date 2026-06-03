@@ -30,7 +30,8 @@ interface ActorRow {
   profiles: { name: string | null; avatar_url: string | null } | null;
 }
 
-// Group membership row with nested group
+// Group membership row with nested group (no actor_id on groups — actors
+// table has the inverse FK via actors.group_id).
 interface GroupMembershipRow {
   group_id: string;
   role: string;
@@ -38,8 +39,15 @@ interface GroupMembershipRow {
     id: string;
     name: string | null;
     avatar_url: string | null;
-    actor_id: string | null;
   } | null;
+}
+
+// Actor row joined back from the actors table by group_id.
+interface GroupActorRow {
+  id: string;
+  group_id: string;
+  display_name: string | null;
+  avatar_url: string | null;
 }
 
 export const GET = withAuth(async (req: AuthenticatedRequest) => {
@@ -76,7 +84,10 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
       });
     }
 
-    // 2. Get group actors where user is admin/moderator
+    // 2. Get group actors where user is a privileged member.
+    //    Schema reality: actors.group_id points at groups (not the
+    //    inverse). So we (a) find the groups the user runs, then (b)
+    //    fetch actor rows whose group_id matches one of them.
     const { data: groupMemberships, error: groupError } = await admin
       .from(DATABASE_TABLES.GROUP_MEMBERS)
       .select(
@@ -86,8 +97,7 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
         groups:group_id (
           id,
           name,
-          avatar_url,
-          actor_id
+          avatar_url
         )
       `
       )
@@ -104,22 +114,40 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
 
     const memberships = (groupMemberships || []) as GroupMembershipRow[];
     if (memberships.length > 0) {
-      // Batch query: collect all actor IDs, fetch in one query
-      const actorIds = memberships.map(m => m.groups?.actor_id).filter((id): id is string => !!id);
+      const groupIds = memberships.map(m => m.group_id).filter((id): id is string => !!id);
 
-      if (actorIds.length > 0) {
-        // For group actors, name/avatar come from groups table (already fetched above)
-        for (const membership of memberships) {
-          const group = membership.groups;
-          if (group?.actor_id && actorIds.includes(group.actor_id)) {
-            actors.push({
-              actor_id: group.actor_id,
-              actor_type: 'group',
-              name: group.name || 'Group',
-              avatar_url: group.avatar_url,
-              is_personal: false,
-            });
+      if (groupIds.length > 0) {
+        const { data: groupActorRows, error: groupActorError } = await admin
+          .from(DATABASE_TABLES.ACTORS)
+          .select('id, group_id, display_name, avatar_url')
+          .eq('actor_type', 'group')
+          .in('group_id', groupIds);
+
+        if (groupActorError) {
+          logger.error(
+            'Error fetching group actors',
+            { error: groupActorError, userId: user.id, groupIds },
+            'MessagingActors'
+          );
+        }
+
+        const groupActors = (groupActorRows || []) as GroupActorRow[];
+        const groupById = new Map<string, GroupMembershipRow['groups']>();
+        for (const m of memberships) {
+          if (m.groups) {
+            groupById.set(m.group_id, m.groups);
           }
+        }
+
+        for (const a of groupActors) {
+          const linkedGroup = groupById.get(a.group_id);
+          actors.push({
+            actor_id: a.id,
+            actor_type: 'group',
+            name: a.display_name || linkedGroup?.name || 'Group',
+            avatar_url: a.avatar_url || linkedGroup?.avatar_url || null,
+            is_personal: false,
+          });
         }
       }
     }

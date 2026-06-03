@@ -41,31 +41,29 @@ export async function resolveCreationActor(
 
   const admin = createAdminClient();
 
-  // Personal actor of the requesting user → trivially allowed.
+  // One query against actors. Schema: actors has user_id (for personal
+  // actors) AND group_id (for group actors); groups has NO inverse
+  // pointer back to actors. Personal actor of the requesting user is
+  // trivially allowed; group actor case continues to the membership check.
   const { data: actorRow } = await admin
     .from(DATABASE_TABLES.ACTORS)
-    .select('id, actor_type, user_id')
+    .select('id, actor_type, user_id, group_id')
     .eq('id', requestedActorId)
     .maybeSingle();
 
-  if (
-    actorRow &&
-    (actorRow as { actor_type: string; user_id: string | null }).actor_type === 'user' &&
-    (actorRow as { actor_type: string; user_id: string | null }).user_id === userId
-  ) {
+  const actor = actorRow as {
+    actor_type: string;
+    user_id: string | null;
+    group_id: string | null;
+  } | null;
+
+  if (actor && actor.actor_type === 'user' && actor.user_id === userId) {
     return { id: requestedActorId };
   }
 
-  // Group actor → user must be a privileged member of the linked group.
-  const { data: groupRow } = await admin
-    .from(DATABASE_TABLES.GROUPS)
-    .select('id, actor_id')
-    .eq('actor_id', requestedActorId)
-    .maybeSingle();
-
-  const groupId = (groupRow as { id: string; actor_id: string } | null)?.id;
+  const groupId = actor?.actor_type === 'group' ? actor.group_id : null;
   if (!groupId) {
-    logger.warn('resolveCreationActor: actor is not the actor of any group', {
+    logger.warn('resolveCreationActor: actor is neither own personal actor nor a group actor', {
       requestedActorId,
       userId,
     });
