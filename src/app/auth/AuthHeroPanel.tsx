@@ -1,48 +1,75 @@
-import { TrendingUp, Shield, Globe } from 'lucide-react';
+/**
+ * Auth hero panel — the marketing column on the left of the sign-in
+ * screen. Used to be a 🐾 emoji + hardcoded "Your AI Economic Agent"
+ * strings; now derives identity from the brand SSOT and shows the
+ * geometric BrandMarkIcon so the auth page rebrands automatically when
+ * brand.ts changes.
+ *
+ * Also surfaces a "← Back to home" link because AppShell suppresses
+ * the global header on auth routes — without this the user has no
+ * non-browser escape from the form.
+ *
+ * Last updated: 2026-06-03
+ */
+
+import Link from 'next/link';
+import { ArrowLeft, Globe, Shield, TrendingUp } from 'lucide-react';
+import { BrandMarkIcon } from '@/components/shell/BrandMarkIcon';
+import { APP_NAME, APP_KICKER, APP_TAGLINE } from '@/config/brand';
+import { ROUTES } from '@/config/routes';
+
+const HIGHLIGHTS = [
+  { icon: TrendingUp, label: 'Full economic spectrum — exchange, fund, lend, invest, govern' },
+  { icon: Globe, label: 'Any currency, any identity — Bitcoin native, fiat where it makes sense' },
+  { icon: Shield, label: 'Pseudonymous by default — real identity opt-in, never required' },
+] as const;
 
 export function AuthHeroPanel() {
   return (
-    <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-12 bg-card border-r border-border">
-      <div className="max-w-lg text-center lg:text-left">
-        {/* Logo */}
-        <div className="mb-8 flex justify-center lg:justify-start">
-          <div className="w-20 h-20 rounded-lg flex items-center justify-center text-4xl bg-card border border-border">
-            🐾
+    <div className="relative hidden flex-1 flex-col justify-between border-r border-border bg-card p-10 lg:flex lg:p-12">
+      <Link
+        href={ROUTES.HOME}
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to home
+      </Link>
+
+      <div className="max-w-lg">
+        <div className="mb-8 flex items-center gap-3">
+          <div className="ui-brand-mark ui-brand-mark-default text-foreground">
+            <BrandMarkIcon size={24} />
+          </div>
+          <div>
+            <p className="ui-kicker">{APP_KICKER}</p>
+            <span className="block text-lg font-medium tracking-tight text-foreground">
+              {APP_NAME}
+            </span>
           </div>
         </div>
 
-        <h1 className="text-4xl lg:text-5xl font-bold mb-6 text-foreground leading-tight">
-          Your AI
-          <span className="block text-foreground">Economic Agent</span>
+        <h1 className="mb-5 text-4xl font-bold leading-tight tracking-tight text-foreground lg:text-5xl">
+          {APP_TAGLINE}
         </h1>
 
-        <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+        <p className="mb-10 text-lg leading-relaxed text-muted-foreground">
           Fund, lend, invest, trade, and govern — with any identity, any currency, any counterparty.
           No gatekeepers.
         </p>
 
-        {/* Feature highlights */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-center lg:justify-start space-x-4">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-foreground" />
-            </div>
-            <span className="text-lg text-foreground font-medium">Full Economic Spectrum</span>
-          </div>
-          <div className="flex items-center justify-center lg:justify-start space-x-4">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <Globe className="w-5 h-5 text-foreground" />
-            </div>
-            <span className="text-lg text-foreground font-medium">Any Currency, Any Identity</span>
-          </div>
-          <div className="flex items-center justify-center lg:justify-start space-x-4">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <Shield className="w-5 h-5 text-muted-foreground" />
-            </div>
-            <span className="text-lg text-foreground font-medium">Pseudonymous by Default</span>
-          </div>
-        </div>
+        <ul className="space-y-3">
+          {HIGHLIGHTS.map(({ icon: Icon, label }) => (
+            <li key={label} className="flex items-start gap-3">
+              <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle bg-muted/40">
+                <Icon className="h-4 w-4 text-foreground" />
+              </div>
+              <span className="pt-1 text-sm text-muted-foreground">{label}</span>
+            </li>
+          ))}
+        </ul>
       </div>
+
+      <div />
     </div>
   );
 }

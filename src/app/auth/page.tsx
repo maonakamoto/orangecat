@@ -1,6 +1,8 @@
 'use client';
 
-import { AlertCircle, CheckCircle2, RefreshCw } from 'lucide-react';
+import Link from 'next/link';
+import { AlertCircle, ArrowLeft, CheckCircle2, RefreshCw } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 import Button from '@/components/ui/Button';
 import Loading from '@/components/Loading';
 import { MFAVerify } from '@/components/auth/MFAVerify';
@@ -8,6 +10,7 @@ import { AuthHeroPanel } from './AuthHeroPanel';
 import { AuthFormBody } from './AuthFormBody';
 import { AuthSocialLogin } from './AuthSocialLogin';
 import { useAuthForm } from './useAuthForm';
+import { APP_NAME } from '@/config/brand';
 
 export default function AuthPage() {
   const {
@@ -64,6 +67,16 @@ export default function AuthPage() {
       <AuthHeroPanel />
 
       <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-12 bg-muted/40 dark:bg-background">
+        {/* Mobile-only back link — the desktop hero panel hosts the same
+            link but is hidden below lg. Without this, mobile users have
+            no non-browser escape from the form. */}
+        <Link
+          href={ROUTES.HOME}
+          className="mb-6 inline-flex items-center gap-1.5 self-start text-sm text-muted-foreground transition-colors hover:text-foreground lg:hidden"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to home
+        </Link>
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-semibold mb-2 text-foreground">
@@ -75,9 +88,9 @@ export default function AuthPage() {
             </h2>
             <p className="text-muted-foreground">
               {mode === 'login'
-                ? 'Sign in to your OrangeCat account'
+                ? `Sign in to your ${APP_NAME} account`
                 : mode === 'register'
-                  ? 'Create your OrangeCat account'
+                  ? `Create your ${APP_NAME} account`
                   : 'Enter your email to receive reset instructions'}
             </p>
           </div>

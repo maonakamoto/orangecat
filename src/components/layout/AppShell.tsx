@@ -35,7 +35,12 @@ export function AppShell({ children }: AppShellProps) {
   const { user, profile, hydrated, isLoading } = useAuth();
   // SSOT: every shell-related visibility decision derives from
   // getRouteSurface (src/config/routes.ts). Do not branch on pathname here.
-  const isAppSurface = getRouteSurface(pathname ?? '/') === 'app';
+  const surface = getRouteSurface(pathname ?? '/');
+  const isAppSurface = surface === 'app';
+  // Auth pages render their own minimal chrome — global header + nav +
+  // search are noise on a sign-in screen and dilute the focus from the
+  // form. Stripe/Linear/Notion/Vercel all do this.
+  const isAuthSurface = surface === 'auth';
 
   // Wait for auth hydration to prevent sidebar flash
   // During hydration, user is null even if authenticated - this prevents the sidebar from flickering
@@ -67,12 +72,25 @@ export function AppShell({ children }: AppShellProps) {
   // Get filtered sections based on auth state
   const filteredSections = getFilteredSections();
 
+  // Auth surface: no global chrome at all. The /auth page is its own
+  // self-contained universe with its own minimal back-link.
+  if (isAuthSurface) {
+    return (
+      <div className="min-h-screen bg-background">
+        <MessageSyncManagerInitializer />
+        <main id="main-content" className="min-h-screen">
+          {children}
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Initialize message sync manager */}
       <MessageSyncManagerInitializer />
 
-      {/* Header - Always visible */}
+      {/* Header - Always visible on non-auth surfaces */}
       <Header
         showSidebarToggle={!!shouldShowSidebar}
         onToggleSidebar={toggleSidebar}
