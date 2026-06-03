@@ -27,8 +27,9 @@ import { logger } from '@/utils/logger';
 import { type EntityType, getEntityMetadata, ENTITY_REGISTRY } from '@/config/entity-registry';
 import { listEntitiesPage } from '@/domain/commerce/service';
 import { getCacheControl, calculatePage } from './helpers';
-import { getAuthenticatedUserId, shouldIncludeDrafts } from './authHelpers';
+import { shouldIncludeDrafts } from './authHelpers';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
+import { resolveRequestAuth } from '@/lib/api/resolveRequestAuth';
 
 // ==================== TYPES ====================
 
@@ -99,10 +100,16 @@ export function createEntityListHandler(config: EntityListHandlerConfig) {
       const supabase = await createServerClient();
       const { limit, offset } = getPagination(request.url, { defaultLimit: 20, maxLimit: 100 });
       const category = getString(request.url, 'category');
-      const userId = getString(request.url, 'user_id');
+      const queryUserId = getString(request.url, 'user_id');
 
-      // Check draft visibility
-      const authenticatedUserId = await getAuthenticatedUserId();
+      // Accept both session cookies AND integration keys (`X-OrangeCat-Key`).
+      // Session: caller may pass `?user_id=` to scope to another profile;
+      // integration key: the key is bound to one actor, so the bound actor
+      // is the implicit (and only) scope — the query param is ignored.
+      const auth = await resolveRequestAuth(request);
+      const authenticatedUserId = auth?.userId ?? null;
+      const boundActorId = auth?.boundActorId ?? null;
+      const userId = boundActorId ? null : queryUserId;
 
       // If auth is required, check it first
       if (requireAuth && !authenticatedUserId) {
@@ -123,7 +130,9 @@ export function createEntityListHandler(config: EntityListHandlerConfig) {
         type => ENTITY_REGISTRY[type].tableName
       ) as readonly string[];
 
-      if (useListHelper && commerceTables.includes(table)) {
+      // Integration-key auth bypasses the public-list commerce helper —
+      // we want only the bound actor's rows, drafts included.
+      if (!boundActorId && useListHelper && commerceTables.includes(table)) {
         const { items, total } = await listEntitiesPage(
           table as 'user_products' | 'user_services' | 'user_causes',
           {
@@ -148,9 +157,11 @@ export function createEntityListHandler(config: EntityListHandlerConfig) {
       // Build custom query for entities that don't use listEntitiesPage
       let query = supabase.from(table).select(selectColumns, { count: 'exact' });
 
-      // Apply filters in correct order for RLS compatibility
-      // When filtering by user_id (or custom userIdField), apply it first
-      if (userId) {
+      // Integration-key auth: the key is bound to one actor, and that
+      // actor is the implicit scope. Skip session-style resolution.
+      if (boundActorId && userIdField === 'actor_id') {
+        query = query.eq(userIdField, boundActorId);
+      } else if (userId) {
         // When userIdField is 'actor_id', the query param is a user UUID
         // that needs to be resolved to an actor UUID first
         let filterValue = userId;

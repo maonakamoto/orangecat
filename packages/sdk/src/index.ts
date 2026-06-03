@@ -6,6 +6,7 @@
  */
 
 export { OrangeCatClient } from './client.js';
+export type { ListParams } from './client.js';
 export { OrangeCatError } from './errors.js';
 export type { OrangeCatErrorCode } from './errors.js';
 export type { ClientOptions, RequestOptions } from './http.js';

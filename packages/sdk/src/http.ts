@@ -94,7 +94,7 @@ function normalizeServerCode(raw?: string): OrangeCatErrorCode | undefined {
 }
 
 const PKG_NAME = '@orangecat/sdk';
-const PKG_VERSION = '0.1.0';
+const PKG_VERSION = '0.2.0';
 const DEFAULT_BASE = 'https://orangecat.ch';
 const DEFAULT_TIMEOUT = 20_000;
 const DEFAULT_MAX_RETRIES = 3;

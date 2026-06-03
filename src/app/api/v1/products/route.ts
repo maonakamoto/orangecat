@@ -1,9 +1,12 @@
 /**
- * Public API — POST /api/v1/products
+ * Public API — POST + GET /api/v1/products
  *
  * See /api/v1/README.md for the v1 contract. This file currently
- * re-exports the internal handler; replace with an adapter when the
+ * re-exports the internal handlers; replace with an adapter when an
  * internal handler needs a breaking change.
+ *
+ * - POST: create an entity (auth: integration key OR session)
+ * - GET:  list entities, scoped to the bound actor for integration keys
  */
 
-export { POST } from '@/app/api/products/route';
+export { POST, GET } from '@/app/api/products/route';

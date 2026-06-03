@@ -47,6 +47,12 @@ import type {
 
 const V1 = '/api/v1';
 
+export interface ListParams {
+  limit?: number;
+  offset?: number;
+  category?: string;
+}
+
 class EntityResource<Input, Response> {
   constructor(
     private readonly http: HttpClient,
@@ -55,6 +61,27 @@ class EntityResource<Input, Response> {
 
   create(input: Input, options?: RequestOptions): Promise<Response> {
     return this.http.post<Response>(this.path, input, options);
+  }
+
+  /**
+   * List entities. With an integration key, results are scoped to the
+   * actor the key is bound to (the only set of rows the key is allowed
+   * to see). With session auth, returns the caller's rows.
+   */
+  list(params?: ListParams, options?: RequestOptions): Promise<Response[]> {
+    const query = new URLSearchParams();
+    if (params?.limit !== undefined) {
+      query.set('limit', String(params.limit));
+    }
+    if (params?.offset !== undefined) {
+      query.set('offset', String(params.offset));
+    }
+    if (params?.category) {
+      query.set('category', params.category);
+    }
+    const suffix = query.toString();
+    const path = suffix ? `${this.path}?${suffix}` : this.path;
+    return this.http.get<Response[]>(path, options);
   }
 }
 

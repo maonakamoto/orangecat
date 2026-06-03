@@ -30,7 +30,7 @@ export async function GET() {
     },
     entities: PUBLIC_API_ENTITY_TYPES.map(type => ({
       type,
-      methods: ['POST'],
+      methods: ['POST', 'GET'],
       endpoint: publicApiEndpoint(type),
     })),
     docs: {

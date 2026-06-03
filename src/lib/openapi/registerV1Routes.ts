@@ -136,7 +136,7 @@ export function registerV1Routes(): void {
     },
   });
 
-  // Entity create endpoints.
+  // Entity create + list endpoints.
   for (const entityType of PUBLIC_API_ENTITY_TYPES) {
     const schema = ENTITY_SCHEMAS[entityType];
     const meta = getEntityMetadata(entityType);
@@ -172,6 +172,48 @@ export function registerV1Routes(): void {
           },
         },
         ...COMMON_ERROR_RESPONSES,
+      },
+    });
+
+    openApiRegistry.registerPath({
+      method: 'get',
+      path: publicApiEndpoint(entityType),
+      summary: `List ${meta.namePlural.toLowerCase()}`,
+      description: `${meta.description} — integration-key auth returns rows owned by the key's bound actor; session auth returns the caller's rows.`,
+      tags: [meta.name],
+      security: [{ IntegrationKey: [] }],
+      request: {
+        query: z
+          .object({
+            limit: z.coerce
+              .number()
+              .int()
+              .min(1)
+              .max(100)
+              .optional()
+              .openapi({ description: 'Max rows to return. Default 20, max 100.' }),
+            offset: z.coerce
+              .number()
+              .int()
+              .min(0)
+              .optional()
+              .openapi({ description: 'Number of rows to skip.' }),
+            category: z.string().optional().openapi({ description: 'Optional category filter.' }),
+          })
+          .openapi(`${label}ListQuery`),
+      },
+      responses: {
+        200: {
+          description: `Paginated list of ${meta.namePlural.toLowerCase()}.`,
+          content: {
+            'application/json': {
+              schema: apiSuccessSchema(z.array(responseSchema), `${label}ListResponse`),
+            },
+          },
+        },
+        401: COMMON_ERROR_RESPONSES[401],
+        429: COMMON_ERROR_RESPONSES[429],
+        500: COMMON_ERROR_RESPONSES[500],
       },
     });
   }
