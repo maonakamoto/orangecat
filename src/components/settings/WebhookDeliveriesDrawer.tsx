@@ -13,7 +13,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { CheckCircle2, Clock, RefreshCw, XCircle } from 'lucide-react';
+import { CheckCircle2, ChevronDown, ChevronRight, Clock, RefreshCw, XCircle } from 'lucide-react';
 import { logger } from '@/utils/logger';
 
 interface DeliveryRow {
@@ -67,10 +67,19 @@ function StatusBadge({ status }: { status: DeliveryRow['status'] }) {
   );
 }
 
+function prettyPrintPayload(payload: unknown): string {
+  try {
+    return JSON.stringify(payload, null, 2);
+  } catch {
+    return String(payload);
+  }
+}
+
 export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
   const [deliveries, setDeliveries] = useState<DeliveryRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const cancelRef = useRef(false);
 
   const load = useCallback(async () => {
@@ -136,32 +145,67 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
         </p>
       ) : (
         <ul className="divide-y divide-border-subtle">
-          {deliveries.map(d => (
-            <li
-              key={d.id}
-              className="flex flex-wrap items-start justify-between gap-2 py-2 text-xs"
-            >
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <StatusBadge status={d.status} />
-                  <code className="rounded bg-muted px-1 text-[10px]">{d.event_type}</code>
-                  {d.response_status !== null && (
-                    <span className="text-muted-foreground">HTTP {d.response_status}</span>
-                  )}
-                  {d.attempt_count > 1 && (
-                    <span className="text-muted-foreground">attempt {d.attempt_count}</span>
-                  )}
-                </div>
-                <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-muted-foreground">
-                  <span>Enqueued {formatTimestamp(d.created_at)}</span>
-                  <span>Last attempt {formatTimestamp(d.last_attempt_at)}</span>
-                  {d.status === 'pending' && d.next_attempt_at && (
-                    <span>Next retry {formatTimestamp(d.next_attempt_at)}</span>
-                  )}
-                </div>
-              </div>
-            </li>
-          ))}
+          {deliveries.map(d => {
+            const isExpanded = expandedId === d.id;
+            return (
+              <li key={d.id} className="py-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setExpandedId(prev => (prev === d.id ? null : d.id))}
+                  className="flex w-full items-start gap-2 text-left hover:bg-muted/30 rounded-sm px-1 -mx-1 py-0.5"
+                >
+                  <span className="mt-0.5 text-muted-foreground">
+                    {isExpanded ? (
+                      <ChevronDown className="h-3 w-3" />
+                    ) : (
+                      <ChevronRight className="h-3 w-3" />
+                    )}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <StatusBadge status={d.status} />
+                      <code className="rounded bg-muted px-1 text-[10px]">{d.event_type}</code>
+                      {d.response_status !== null && (
+                        <span className="text-muted-foreground">HTTP {d.response_status}</span>
+                      )}
+                      {d.attempt_count > 1 && (
+                        <span className="text-muted-foreground">attempt {d.attempt_count}</span>
+                      )}
+                    </div>
+                    <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-muted-foreground">
+                      <span>Enqueued {formatTimestamp(d.created_at)}</span>
+                      <span>Last attempt {formatTimestamp(d.last_attempt_at)}</span>
+                      {d.status === 'pending' && d.next_attempt_at && (
+                        <span>Next retry {formatTimestamp(d.next_attempt_at)}</span>
+                      )}
+                    </div>
+                  </div>
+                </button>
+                {isExpanded && (
+                  <div className="mt-2 ml-5 space-y-2">
+                    <div>
+                      <div className="mb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+                        Sent payload
+                      </div>
+                      <pre className="max-h-64 overflow-auto rounded border border-border-subtle bg-background p-2 text-[10px] leading-snug text-foreground">
+                        {prettyPrintPayload(d.payload)}
+                      </pre>
+                    </div>
+                    {d.response_body && (
+                      <div>
+                        <div className="mb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+                          Receiver response
+                        </div>
+                        <pre className="max-h-32 overflow-auto rounded border border-border-subtle bg-background p-2 text-[10px] leading-snug text-foreground">
+                          {d.response_body}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
