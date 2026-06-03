@@ -18,7 +18,13 @@
 
 import { NextRequest } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
-import { apiSuccess, apiForbidden, handleApiError } from '@/lib/api/standardResponse';
+import {
+  apiSuccess,
+  apiForbidden,
+  apiRateLimited,
+  handleApiError,
+} from '@/lib/api/standardResponse';
+import { rateLimitIntegrationKeyRead } from '@/lib/rate-limit';
 import { compose } from '@/lib/api/compose';
 import { withRateLimit } from '@/lib/api/withRateLimit';
 import { withRequestId } from '@/lib/api/withRequestId';
@@ -119,6 +125,23 @@ export function createEntityListHandler(config: EntityListHandlerConfig) {
         return apiForbidden(
           `This key is not allowed to read ${ENTITY_REGISTRY[entityType].namePlural.toLowerCase()}.`
         );
+      }
+
+      // Per-key read quota — stacks on top of the IP-based middleware so
+      // one buggy integration can't starve siblings sharing an IP. The
+      // 429 envelope matches the SDK's existing retry path.
+      if (auth?.source === 'integration_key' && auth.integrationKeyId) {
+        const rateLimit = await rateLimitIntegrationKeyRead(auth.integrationKeyId);
+        if (!rateLimit.success) {
+          const retryAfter = Math.ceil((rateLimit.resetTime - Date.now()) / 1000);
+          logger.warn(`${entityType} read rate limit exceeded`, {
+            integrationKeyId: auth.integrationKeyId,
+          });
+          return apiRateLimited(
+            `Too many ${ENTITY_REGISTRY[entityType].namePlural.toLowerCase()} read requests. Please slow down.`,
+            retryAfter
+          );
+        }
       }
 
       // If auth is required, check it first

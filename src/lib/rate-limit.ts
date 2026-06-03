@@ -229,29 +229,67 @@ export async function rateLimitWriteAsync(userId: string): Promise<RateLimitResu
  * the limit in practice.
  */
 const DEFAULT_INTEGRATION_KEY_WRITES_PER_MINUTE = 60;
-const fallbackIntegrationKeyLimiter = new InMemoryRateLimiter({
+const DEFAULT_INTEGRATION_KEY_READS_PER_MINUTE = 300;
+
+const fallbackIntegrationKeyWriteLimiter = new InMemoryRateLimiter({
   windowMs: 60 * 1000,
   maxRequests: DEFAULT_INTEGRATION_KEY_WRITES_PER_MINUTE,
+});
+const fallbackIntegrationKeyReadLimiter = new InMemoryRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: DEFAULT_INTEGRATION_KEY_READS_PER_MINUTE,
 });
 
 export async function rateLimitIntegrationKeyWrite(
   keyId: string,
   requestsPerMinute: number = DEFAULT_INTEGRATION_KEY_WRITES_PER_MINUTE
 ): Promise<RateLimitResult> {
-  const key = `int_key:${keyId}`;
+  const key = `int_key_write:${keyId}`;
 
   if (redis) {
     const limiter = new Ratelimit({
       redis,
       limiter: Ratelimit.slidingWindow(requestsPerMinute, '1 m'),
-      prefix: 'ratelimit:int_key',
+      prefix: 'ratelimit:int_key_write',
       analytics: true,
     });
     const result = await limiter.limit(key);
     return toRateLimitResult(result);
   }
 
-  return fallbackIntegrationKeyLimiter.check(key);
+  return fallbackIntegrationKeyWriteLimiter.check(key);
+}
+
+/**
+ * Per-integration-key READ quota. Mirror of rateLimitIntegrationKeyWrite
+ * for the read path so a buggy integration's reads can't starve siblings
+ * sharing an IP via the middleware's IP-based limit.
+ *
+ * Default 300/min — 5× the write quota since reads are cheaper. Same
+ * tuning hook (requestsPerMinute) for a future settings UI.
+ *
+ * Stacks ON TOP of the IP-based withRateLimit('read') middleware:
+ * the floor still applies (anonymous abuse protection), the per-key
+ * isolation is an additional gate on top.
+ */
+export async function rateLimitIntegrationKeyRead(
+  keyId: string,
+  requestsPerMinute: number = DEFAULT_INTEGRATION_KEY_READS_PER_MINUTE
+): Promise<RateLimitResult> {
+  const key = `int_key_read:${keyId}`;
+
+  if (redis) {
+    const limiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(requestsPerMinute, '1 m'),
+      prefix: 'ratelimit:int_key_read',
+      analytics: true,
+    });
+    const result = await limiter.limit(key);
+    return toRateLimitResult(result);
+  }
+
+  return fallbackIntegrationKeyReadLimiter.check(key);
 }
 
 // ==================== RESPONSE HELPER ====================
