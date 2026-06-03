@@ -1,0 +1,183 @@
+/**
+ * Webhook endpoints — outbound delivery configuration service.
+ *
+ * docs/api/CONVENTIONS.md §6 advertises HMAC-SHA-256 signed webhooks
+ * so integrations can react to entity-create / status-change events
+ * without polling. This file is the persistence layer only: mint /
+ * list / revoke. The signing util, event firing, and retry worker are
+ * separate commits.
+ *
+ * Shape mirrors integration_keys (same actor-bound model, same
+ * soft-revocation pattern, same admin-only RLS posture). The minting
+ * user must already be authorised to act as the bound actor — once
+ * minted, every event for that actor flows through this endpoint with
+ * no per-event membership recheck.
+ *
+ * - createWebhookEndpoint: mints a new endpoint, returns the secret
+ *   ONCE. The secret is the signing key the integration uses to verify
+ *   delivery authenticity.
+ * - listWebhookEndpoints: lists a user's endpoints (no secret, ever).
+ * - revokeWebhookEndpoint: marks revoked. The active-target index
+ *   excludes revoked rows so the firing loop skips them immediately.
+ *
+ * Created: 2026-06-03
+ */
+
+import { createHash, randomBytes } from 'crypto';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { logger } from '@/utils/logger';
+import { DATABASE_TABLES } from '@/config/database-tables';
+import {
+  resolveCreationActor,
+  ActorNotPermittedError,
+} from '@/services/actors/resolveCreationActor';
+
+const SECRET_PREFIX = 'ock_whk_' as const;
+const SECRET_RANDOM_BYTES = 24; // 48 hex chars → ~192 bits of entropy
+const DISPLAY_PREFIX_LENGTH = 15; // "ock_whk_a1b2c3d"
+
+export interface WebhookEndpoint {
+  id: string;
+  user_id: string;
+  actor_id: string;
+  name: string;
+  url: string;
+  secret_prefix: string;
+  event_types: string[] | null;
+  created_at: string;
+  last_delivery_at: string | null;
+  revoked_at: string | null;
+}
+
+export interface MintedWebhookEndpoint {
+  /** Stored record (no secret). */
+  endpoint: WebhookEndpoint;
+  /** Plaintext signing secret — show to user ONCE and never again. */
+  secret: string;
+}
+
+function generateSecret(): string {
+  return `${SECRET_PREFIX}${randomBytes(SECRET_RANDOM_BYTES).toString('hex')}`;
+}
+
+function hashSecret(plaintext: string): string {
+  return createHash('sha256').update(plaintext).digest('hex');
+}
+
+const ENDPOINT_SELECT =
+  'id, user_id, actor_id, name, url, secret_prefix, event_types, created_at, last_delivery_at, revoked_at';
+
+/**
+ * Mint a new webhook endpoint. The caller must already be authorised
+ * to act as the requested actor (same gate as integration-key mint
+ * and entity creation).
+ *
+ * @throws ActorNotPermittedError when the user can't act as `actorId`.
+ */
+export async function createWebhookEndpoint(params: {
+  userId: string;
+  actorId: string;
+  name: string;
+  url: string;
+  eventTypes?: string[] | null;
+}): Promise<MintedWebhookEndpoint> {
+  const { userId, actorId, name, url, eventTypes } = params;
+
+  await resolveCreationActor(userId, actorId);
+
+  const secret = generateSecret();
+  const secretHash = hashSecret(secret);
+  const secretPrefix = secret.slice(0, DISPLAY_PREFIX_LENGTH);
+
+  const admin = createAdminClient();
+  const { data, error } = await (
+    admin.from(DATABASE_TABLES.WEBHOOK_ENDPOINTS) as ReturnType<
+      typeof admin.from
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    > as any
+  )
+    .insert({
+      user_id: userId,
+      actor_id: actorId,
+      name: name.trim(),
+      url: url.trim(),
+      secret_hash: secretHash,
+      secret_prefix: secretPrefix,
+      event_types: eventTypes && eventTypes.length > 0 ? eventTypes : null,
+    })
+    .select(ENDPOINT_SELECT)
+    .single();
+
+  if (error || !data) {
+    logger.error('createWebhookEndpoint: insert failed', { error, userId, actorId });
+    throw error ?? new Error('Failed to create webhook endpoint');
+  }
+
+  return { endpoint: data as WebhookEndpoint, secret };
+}
+
+/** List the user's endpoints — never returns the secret or its hash. */
+export async function listWebhookEndpoints(userId: string): Promise<WebhookEndpoint[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from(DATABASE_TABLES.WEBHOOK_ENDPOINTS)
+    .select(ENDPOINT_SELECT)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    logger.error('listWebhookEndpoints: query failed', { error, userId });
+    throw error;
+  }
+
+  return (data ?? []) as WebhookEndpoint[];
+}
+
+/**
+ * List the LIVE endpoints bound to a given actor — used by the firing
+ * loop to fan an event out to every active subscriber. Excludes
+ * revoked endpoints via the partial index.
+ */
+export async function listActiveEndpointsForActor(actorId: string): Promise<WebhookEndpoint[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from(DATABASE_TABLES.WEBHOOK_ENDPOINTS)
+    .select(ENDPOINT_SELECT)
+    .eq('actor_id', actorId)
+    .is('revoked_at', null);
+
+  if (error) {
+    logger.error('listActiveEndpointsForActor: query failed', { error, actorId });
+    throw error;
+  }
+
+  return (data ?? []) as WebhookEndpoint[];
+}
+
+/**
+ * Soft-revoke (sets revoked_at). The partial index excludes revoked
+ * rows so the firing loop skips them on the next query.
+ *
+ * @returns true when the endpoint was found and revoked; false if it
+ *          didn't belong to the user (or was already revoked).
+ */
+export async function revokeWebhookEndpoint(endpointId: string, userId: string): Promise<boolean> {
+  const admin = createAdminClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (admin.from(DATABASE_TABLES.WEBHOOK_ENDPOINTS) as any)
+    .update({ revoked_at: new Date().toISOString() })
+    .eq('id', endpointId)
+    .eq('user_id', userId)
+    .is('revoked_at', null)
+    .select('id')
+    .maybeSingle();
+
+  if (error) {
+    logger.error('revokeWebhookEndpoint: update failed', { error, userId, endpointId });
+    throw error;
+  }
+
+  return !!data;
+}
+
+export { ActorNotPermittedError };
