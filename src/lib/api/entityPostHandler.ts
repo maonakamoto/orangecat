@@ -317,7 +317,11 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       // Pass the resolved actor on the body's `_resolved_actor_id` side
       // channel — domain/base/entityService.ts unwraps it.
       if (createEntity) {
-        const bodyForCreate = { ...bodyForHandler, _resolved_actor_id: resolvedActor.id };
+        const bodyForCreate = {
+          ...bodyForHandler,
+          _resolved_actor_id: resolvedActor.id,
+          _resolved_is_test: auth.isTest,
+        };
         const entity = await createEntity(userId, bodyForCreate, supabase);
         logger.info(`${meta.name} created successfully`, { [`${entityType}Id`]: entity.id });
         // Fire-and-forget: never block the user response on webhook
@@ -357,7 +361,16 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         return apiInternalError(`Failed to process ${meta.name.toLowerCase()}: ${errorMessage}`);
       }
 
-      const entityData = { ...transformedData, ...defaultFields };
+      // Stamp sandbox flag onto the default-insert path too. The
+      // createEntity custom path threads via _resolved_is_test side
+      // channel; this branch goes directly to supabase.insert. Place
+      // is_test LAST so neither the body nor defaultFields can override
+      // it — the sandbox flag must come from auth, never from the caller.
+      const entityData: Record<string, unknown> = {
+        ...transformedData,
+        ...defaultFields,
+        is_test: auth.isTest,
+      };
 
       // Extract _wallet_id before DB insert (not a real column)
       const walletIdForLink = entityData._wallet_id as string | undefined;

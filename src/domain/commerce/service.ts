@@ -35,6 +35,13 @@ export async function listEntitiesPage(
   // base query for count (head=true) - dynamic table access
   let countQuery = supabase.from(table).select('*', { count: 'exact', head: true });
 
+  // Sandbox isolation: this helper is the anonymous + session-auth read
+  // path. Test entities (is_test=true) are only visible via sandbox
+  // integration keys, which take a different code path in
+  // entityListHandler. Anonymous + session reads always show live data.
+  itemsQuery = itemsQuery.eq('is_test', false);
+  countQuery = countQuery.eq('is_test', false);
+
   // Circles table doesn't have a 'status' column like commerce tables
   const isCirclesTable = table === 'circles';
 

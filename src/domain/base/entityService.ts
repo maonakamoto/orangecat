@@ -204,15 +204,23 @@ export async function createEntity<T = Record<string, unknown>>(
     | undefined;
   const actorId = preResolvedActorId ?? (await getOrCreateUserActor(userId)).id;
 
+  // Sandbox flag side-channel — same pattern as _resolved_actor_id.
+  // Session auth and live integration keys leave this undefined; only
+  // sandbox-key requests set it true via entityPostHandler.
+  const isTest =
+    ((data as Record<string, unknown>)._resolved_is_test as boolean | undefined) ?? false;
+
   const client = options?.client ?? ((await createServerClient()) as unknown as AnySupabaseClient);
   const tableName = getTableName(entityType);
   const selectColumns = options?.select ?? '*';
 
   const sanitizedData = { ...data };
   delete (sanitizedData as Record<string, unknown>)._resolved_actor_id;
+  delete (sanitizedData as Record<string, unknown>)._resolved_is_test;
 
   const payload = {
     actor_id: actorId,
+    is_test: isTest,
     ...sanitizedData,
   };
 

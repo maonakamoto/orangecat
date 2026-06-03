@@ -26,11 +26,12 @@ import {
   ActorNotPermittedError,
 } from '@/services/actors/resolveCreationActor';
 
-const KEY_PREFIX = 'ock_' as const;
+const KEY_LIVE_PREFIX = 'ock_' as const;
+const KEY_TEST_PREFIX = 'ock_test_' as const;
 const KEY_RANDOM_BYTES = 24; // 48 hex chars → ~192 bits of entropy
-const DISPLAY_PREFIX_LENGTH = 11; // "ock_a1b2c3d"
+const DISPLAY_PREFIX_LENGTH = 11; // "ock_a1b2c3d" / "ock_test_a"
 const KEY_PUBLIC_COLUMNS =
-  'id, user_id, actor_id, name, key_prefix, scopes, created_at, last_used_at, expires_at, revoked_at';
+  'id, user_id, actor_id, name, key_prefix, scopes, is_test, created_at, last_used_at, expires_at, revoked_at';
 
 export interface IntegrationKey {
   id: string;
@@ -40,6 +41,8 @@ export interface IntegrationKey {
   key_prefix: string;
   /** Allowed operations. ['*'] = wildcard. Otherwise '<entity>.<read|write>' tokens. */
   scopes: string[];
+  /** Sandbox key. Plaintext prefix is `ock_test_` instead of `ock_`. */
+  is_test: boolean;
   created_at: string;
   last_used_at: string | null;
   expires_at: string | null;
@@ -53,8 +56,9 @@ export interface MintedIntegrationKey {
   plaintext: string;
 }
 
-function generatePlaintext(): string {
-  return `${KEY_PREFIX}${randomBytes(KEY_RANDOM_BYTES).toString('hex')}`;
+function generatePlaintext(isTest: boolean): string {
+  const prefix = isTest ? KEY_TEST_PREFIX : KEY_LIVE_PREFIX;
+  return `${prefix}${randomBytes(KEY_RANDOM_BYTES).toString('hex')}`;
 }
 
 function hashKey(plaintext: string): string {
@@ -77,13 +81,17 @@ export async function createIntegrationKey(params: {
    *  behaviour. Pass narrower tokens like ['products.write'] for least
    *  privilege. Caller must normalise — we store the array verbatim. */
   scopes?: string[];
+  /** Sandbox key. Plaintext gets the `ock_test_` prefix instead of
+   *  `ock_`, and entities created via this key are stamped is_test=true
+   *  in the entity handlers. Default false (live key). */
+  isTest?: boolean;
 }): Promise<MintedIntegrationKey> {
-  const { userId, actorId, name, expiresAt, scopes } = params;
+  const { userId, actorId, name, expiresAt, scopes, isTest = false } = params;
 
   // Reuse the actor-resolution gate so mint authority matches create authority.
   await resolveCreationActor(userId, actorId);
 
-  const plaintext = generatePlaintext();
+  const plaintext = generatePlaintext(isTest);
   const keyHash = hashKey(plaintext);
   const keyPrefix = plaintext.slice(0, DISPLAY_PREFIX_LENGTH);
   const scopesToStore = scopes && scopes.length > 0 ? scopes : ['*'];
@@ -102,6 +110,7 @@ export async function createIntegrationKey(params: {
       key_hash: keyHash,
       key_prefix: keyPrefix,
       scopes: scopesToStore,
+      is_test: isTest,
       expires_at: expiresAt ? expiresAt.toISOString() : null,
     })
     .select(KEY_PUBLIC_COLUMNS)
@@ -127,8 +136,15 @@ export async function verifyIntegrationKey(plaintext: string): Promise<{
   actorId: string;
   keyId: string;
   scopes: string[];
+  isTest: boolean;
 } | null> {
-  if (!plaintext || !plaintext.startsWith(KEY_PREFIX)) {
+  // Accept both live and sandbox prefixes; the hash lookup is the real
+  // gate. Cheap startsWith short-circuit avoids hashing obviously bad
+  // tokens (e.g. a Supabase access token mis-routed here).
+  if (
+    !plaintext ||
+    !(plaintext.startsWith(KEY_LIVE_PREFIX) || plaintext.startsWith(KEY_TEST_PREFIX))
+  ) {
     return null;
   }
 
@@ -137,7 +153,7 @@ export async function verifyIntegrationKey(plaintext: string): Promise<{
 
   const { data, error } = await admin
     .from(DATABASE_TABLES.INTEGRATION_KEYS)
-    .select('id, user_id, actor_id, scopes, expires_at, revoked_at')
+    .select('id, user_id, actor_id, scopes, is_test, expires_at, revoked_at')
     .eq('key_hash', keyHash)
     .is('revoked_at', null)
     .maybeSingle();
@@ -156,6 +172,7 @@ export async function verifyIntegrationKey(plaintext: string): Promise<{
     user_id: string;
     actor_id: string;
     scopes: string[] | null;
+    is_test: boolean | null;
     expires_at: string | null;
     revoked_at: string | null;
   };
@@ -180,6 +197,7 @@ export async function verifyIntegrationKey(plaintext: string): Promise<{
     actorId: row.actor_id,
     keyId: row.id,
     scopes: row.scopes ?? ['*'],
+    isTest: row.is_test ?? false,
   };
 }
 
@@ -249,7 +267,7 @@ export async function rotateIntegrationKey(
   // Lock the source row: must exist, belong to the caller, and still be live.
   const { data: existing, error: fetchError } = await admin
     .from(DATABASE_TABLES.INTEGRATION_KEYS)
-    .select('id, actor_id, name, scopes, expires_at')
+    .select('id, actor_id, name, scopes, is_test, expires_at')
     .eq('id', keyId)
     .eq('user_id', userId)
     .is('revoked_at', null)
@@ -267,19 +285,21 @@ export async function rotateIntegrationKey(
     actor_id: string;
     name: string;
     scopes: string[] | null;
+    is_test: boolean | null;
     expires_at: string | null;
   };
 
   // Mint the replacement. Re-uses createIntegrationKey's permission gate,
   // so if the user lost the right to act as the actor since mint time,
-  // rotation is blocked here. Preserve the source scopes so rotation is a
-  // pure "new secret, same authority" operation.
+  // rotation is blocked here. Preserve the source scopes + sandbox flag
+  // so rotation is a pure "new secret, same authority" operation.
   const minted = await createIntegrationKey({
     userId,
     actorId: source.actor_id,
     name: source.name,
     expiresAt: source.expires_at ? new Date(source.expires_at) : null,
     scopes: source.scopes ?? undefined,
+    isTest: source.is_test ?? false,
   });
 
   // Revoke the old. Best-effort: if this fails we still return the new

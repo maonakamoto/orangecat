@@ -33,6 +33,10 @@ const createKeySchema = z.object({
   /** Optional scopes allowlist. Omit (or pass ['*']) for full authority.
    *  Token format `<entity>.<read|write>` (e.g. 'products.write'). */
   scopes: z.array(z.string().min(1).max(80)).max(40).optional(),
+  /** Sandbox key. Plaintext is `ock_test_<hex>` instead of `ock_<hex>`;
+   *  entities created via this key are stamped is_test=true and only
+   *  visible via sandbox keys. Default false. */
+  is_test: z.boolean().optional(),
 });
 
 async function requireSessionUser(): Promise<{ id: string } | null> {
@@ -65,10 +69,11 @@ export const POST = compose(
     if (!user) {
       return apiUnauthorized();
     }
-    const { name, actor_id, scopes } = ctx.body as {
+    const { name, actor_id, scopes, is_test } = ctx.body as {
       name: string;
       actor_id: string;
       scopes?: string[];
+      is_test?: boolean;
     };
     try {
       const minted = await createIntegrationKey({
@@ -76,6 +81,7 @@ export const POST = compose(
         actorId: actor_id,
         name,
         scopes,
+        isTest: is_test,
       });
       return apiSuccess({ key: minted.key, plaintext: minted.plaintext }, { status: 201 });
     } catch (error) {

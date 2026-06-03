@@ -30,6 +30,7 @@ import { getCacheControl, calculatePage } from './helpers';
 import { shouldIncludeDrafts } from './authHelpers';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import { resolveRequestAuth, hasScope } from '@/lib/api/resolveRequestAuth';
+import { PUBLIC_API_ENTITY_TYPES } from '@/config/public-api';
 
 // ==================== TYPES ====================
 
@@ -165,6 +166,18 @@ export function createEntityListHandler(config: EntityListHandlerConfig) {
 
       // Build custom query for entities that don't use listEntitiesPage
       let query = supabase.from(table).select(selectColumns, { count: 'exact' });
+
+      // Sandbox isolation, scoped to entity types that got the is_test
+      // column in migration 20260604000002 (the PUBLIC_API_ENTITY_TYPES
+      // list). Sandbox integration keys see is_test=true rows; everyone
+      // else (session, live integration key, anonymous) sees is_test=false.
+      // Internal entity types (wallets, groups, ai_assistants, ...) don't
+      // have the column so we skip the filter entirely for them.
+      const hasIsTestColumn = (PUBLIC_API_ENTITY_TYPES as readonly string[]).includes(entityType);
+      if (hasIsTestColumn) {
+        const wantsTestData = auth?.source === 'integration_key' && auth.isTest;
+        query = query.eq('is_test', wantsTestData);
+      }
 
       // Integration-key auth: the key is bound to one actor, and that
       // actor is the implicit scope. Skip session-style resolution.

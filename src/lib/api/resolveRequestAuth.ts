@@ -32,6 +32,12 @@ export interface ResolvedRequestAuth {
    * stored scopes, defaulting to ['*'] for back-compat.
    */
   scopes: string[];
+  /**
+   * Sandbox flag. Session auth is always live (false). Integration-key
+   * auth inherits the key's is_test column. Entity handlers stamp this
+   * onto created rows and filter list/read by it.
+   */
+  isTest: boolean;
 }
 
 const BEARER_PREFIX = 'Bearer ';
@@ -66,6 +72,7 @@ export async function resolveRequestAuth(req: NextRequest): Promise<ResolvedRequ
         source: 'integration_key',
         integrationKeyId: resolved.keyId,
         scopes: resolved.scopes,
+        isTest: resolved.isTest,
       };
     }
     // Bad / revoked / expired integration key: fail closed. Don't silently
@@ -87,6 +94,7 @@ export async function resolveRequestAuth(req: NextRequest): Promise<ResolvedRequ
     source: 'session',
     integrationKeyId: null,
     scopes: ['*'],
+    isTest: false,
   };
 }
 
