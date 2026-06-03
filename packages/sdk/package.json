@@ -1,0 +1,45 @@
+{
+  "name": "@orangecat/sdk",
+  "version": "0.1.0",
+  "description": "Official TypeScript SDK for the OrangeCat platform API (v1).",
+  "license": "UNLICENSED",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
+  "keywords": [
+    "orangecat",
+    "api",
+    "sdk",
+    "bitcoin",
+    "lightning"
+  ],
+  "homepage": "https://orangecat.ch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orangecat-ai/orangecat",
+    "directory": "packages/sdk"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0"
+  }
+}

@@ -47,28 +47,34 @@ Every error response:
 ```jsonc
 {
   "success": false,
-  "error": "Human-readable message",
-  "code": "validation_error", // stable machine-readable code (optional today, required for new endpoints)
-  "details": {
-    /* endpoint-specific */
+  "error": {
+    "code": "UNAUTHORIZED", // UPPERCASE on the wire — see codes table below
+    "message": "Unauthorized", // human-readable, may be translated
+    "details": {
+      /* endpoint-specific */
+    },
   },
+  "metadata": { "timestamp": "2026-06-03T10:00:00.000Z" },
 }
 ```
 
-- **`code` is stable.** Once a code is in the catalogue, never reuse it for a different condition.
-- **`error` is human prose.** Translatable. Clients should branch on `code`, never on `error`.
+- **`error.code` is stable** (case-insensitive). Once a code is in the catalogue, never reuse it for a different condition.
+- **`error.message` is human prose.** Translatable. Clients should branch on `error.code`, never on `error.message`.
+- **`@orangecat/sdk` normalizes** server codes to lowercase before matching against the catalogue, so SDK consumers branch on the lowercase forms (`'unauthorized'`, not `'UNAUTHORIZED'`).
 
 ### Canonical error codes (initial set — extend as endpoints grow)
 
-| code               | HTTP | When                                                        |
-| ------------------ | ---- | ----------------------------------------------------------- |
-| `unauthorized`     | 401  | No or invalid auth                                          |
-| `forbidden`        | 403  | Authenticated but not permitted (e.g. actor not authorised) |
-| `validation_error` | 400  | Request body failed Zod validation                          |
-| `not_found`        | 404  | Resource doesn't exist or is hidden by RLS                  |
-| `conflict`         | 409  | Duplicate / idempotency violation                           |
-| `rate_limited`     | 429  | Per-user/per-key quota exceeded                             |
-| `internal_error`   | 500  | Unhandled server failure                                    |
+The wire shape is uppercase; the catalogue is documented in lowercase to match what SDKs branch on.
+
+| code (SDK form)    | wire form          | HTTP | When                                                        |
+| ------------------ | ------------------ | ---- | ----------------------------------------------------------- |
+| `unauthorized`     | `UNAUTHORIZED`     | 401  | No or invalid auth                                          |
+| `forbidden`        | `FORBIDDEN`        | 403  | Authenticated but not permitted (e.g. actor not authorised) |
+| `validation_error` | `VALIDATION_ERROR` | 400  | Request body failed Zod validation                          |
+| `not_found`        | `NOT_FOUND`        | 404  | Resource doesn't exist or is hidden by RLS                  |
+| `conflict`         | `CONFLICT`         | 409  | Duplicate / idempotency violation                           |
+| `rate_limited`     | `RATE_LIMITED`     | 429  | Per-user/per-key quota exceeded                             |
+| `internal_error`   | `INTERNAL_ERROR`   | 500  | Unhandled server failure                                    |
 
 ## 4. Idempotency (planned — not yet enforced)
 

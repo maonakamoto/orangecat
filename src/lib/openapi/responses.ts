@@ -30,15 +30,26 @@ export function apiSuccessSchema<T extends ZodTypeAny>(dataSchema: T, refId?: st
 }
 
 /**
- * Standard error envelope. `code` is a stable machine-readable string,
- * `error` is the human message, `details` is endpoint-specific extra data
- * (e.g. Zod issues on validation failure).
+ * Standard error envelope — matches src/lib/api/standardResponse.ts
+ * exactly. `error.code` is UPPERCASE on the wire (e.g. `UNAUTHORIZED`);
+ * SDKs are expected to lowercase before matching against documented
+ * codes. `error.details` is endpoint-specific extra context (e.g. Zod
+ * issues on validation failure).
  */
 export const apiErrorSchema = z
   .object({
     success: z.literal(false),
-    error: z.string().openapi({ example: 'Validation failed' }),
-    code: z.string().optional().openapi({ example: 'validation_error' }),
-    details: z.unknown().optional(),
+    error: z
+      .object({
+        code: z.string().openapi({ example: 'UNAUTHORIZED' }),
+        message: z.string().openapi({ example: 'Unauthorized' }),
+        details: z.unknown().optional(),
+      })
+      .openapi('ApiErrorDetail'),
+    metadata: z
+      .object({
+        timestamp: z.string().datetime(),
+      })
+      .optional(),
   })
   .openapi('ApiError');

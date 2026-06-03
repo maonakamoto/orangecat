@@ -2,6 +2,9 @@
   "name": "orangecat",
   "version": "0.1.2",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "engines": {
     "node": ">=20"
   },
