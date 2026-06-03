@@ -128,11 +128,13 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
     withZodBody(schemaWithActor)
   )(async (request: NextRequest, ctx) => {
     // Hoisted so the outer catch can release a pending claim if the
-    // request throws mid-flight.
+    // request throws mid-flight. ownsIdempotencyClaim flips to true
+    // inside the try when we win the claim race and back to false when
+    // cacheResult publishes the completion.
     let userId: string | null = null;
     let idempotencyKey: string | null = null;
     let requestPath = '';
-    const ownsIdempotencyClaim = false;
+    let ownsIdempotencyClaim = false;
 
     try {
       const auth = await resolveRequestAuth(request);
@@ -149,12 +151,6 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       // URL parsing only when we'll actually use it — `request.url` may be
       // undefined in unit-test mocks of NextRequest.
       requestPath = idempotencyKey && request.url ? new URL(request.url).pathname : '';
-
-      // Track whether THIS request owns the idempotency row so cacheResult
-      // knows whether to write the completion. False for non-owners (they
-      // already returned the winner's response) and for any request that
-      // didn't supply an Idempotency-Key.
-      let ownsIdempotencyClaim = false;
 
       if (idempotencyKey && bodyHash && requestPath) {
         const claim = await claimIdempotencyKey({
