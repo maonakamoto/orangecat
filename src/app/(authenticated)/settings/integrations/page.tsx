@@ -18,13 +18,22 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Copy, KeyRound, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Copy, KeyRound, LogIn, Plus, Trash2 } from 'lucide-react';
 import { useRequireAuth } from '@/hooks/useAuth';
 import { useMessagingActors } from '@/features/messaging/hooks/useMessagingActors';
 import { ROUTES } from '@/config/routes';
 import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
 import { logger } from '@/utils/logger';
+
+/**
+ * Hydration ceiling — if the auth store hasn't resolved after this long
+ * we treat it as a stuck client and show the sign-in CTA instead of a
+ * forever spinner. Real auth resolves in <300ms; anything past 2-3s is
+ * a sign of a broken hydration path (cookie domain mismatch, blocked
+ * storage, third-party script blocking the supabase client init, …).
+ */
+const HYDRATION_TIMEOUT_MS = 4_000;
 
 interface IntegrationKey {
   id: string;
@@ -50,7 +59,19 @@ function formatTimestamp(value: string | null): string {
 
 export default function IntegrationKeysPage() {
   const { user, hydrated, isLoading: authLoading } = useRequireAuth();
-  const { personalActor, groupActors, isLoading: actorsLoading } = useMessagingActors();
+  const { personalActor, groupActors } = useMessagingActors();
+  // Forces past a stuck auth-store hydration so the page renders a real
+  // sign-in CTA after a few seconds instead of pinning the user on the
+  // loading spinner.
+  const [hydrationTimedOut, setHydrationTimedOut] = useState(false);
+
+  useEffect(() => {
+    if (hydrated && !authLoading) {
+      return;
+    }
+    const timer = setTimeout(() => setHydrationTimedOut(true), HYDRATION_TIMEOUT_MS);
+    return () => clearTimeout(timer);
+  }, [hydrated, authLoading]);
 
   const [keys, setKeys] = useState<IntegrationKey[]>([]);
   const [loading, setLoading] = useState(true);
@@ -164,11 +185,42 @@ export default function IntegrationKeysPage() {
     }
   }
 
-  if (!hydrated || authLoading || actorsLoading) {
+  // Still hydrating, AND we haven't given up waiting yet. Once timed out,
+  // fall through to the !user branch which renders a real sign-in CTA.
+  if ((!hydrated || authLoading) && !hydrationTimedOut) {
     return <Loading fullScreen message="Loading integrations..." />;
   }
+
+  // No user (either definitively unauth'd or the auth store is stuck).
+  // Render an actionable sign-in surface instead of a perpetual spinner
+  // or `return null` blank flash. The `from` param brings them back here
+  // after login.
   if (!user) {
-    return null;
+    const returnTo = `${ROUTES.AUTH}?mode=login&from=${encodeURIComponent(ROUTES.SETTINGS_INTEGRATIONS)}`;
+    return (
+      <div className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center p-6 text-center">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-border-subtle bg-muted/30">
+          <KeyRound className="h-5 w-5 text-muted-foreground" />
+        </div>
+        <h1 className="text-xl font-semibold text-foreground">Sign in to manage integrations</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Integration keys let external services authenticate to OrangeCat as a specific actor. Sign
+          in to mint, view, or revoke them.
+        </p>
+        <Link href={returnTo} className="mt-6 inline-block">
+          <Button>
+            <LogIn className="mr-1.5 h-4 w-4" />
+            Sign in
+          </Button>
+        </Link>
+        <Link
+          href={ROUTES.HOME}
+          className="mt-3 text-xs text-muted-foreground hover:text-foreground"
+        >
+          ← Back to home
+        </Link>
+      </div>
+    );
   }
 
   return (
