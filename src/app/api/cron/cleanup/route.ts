@@ -14,6 +14,9 @@
  *     the original migration). Without this, every API write
  *     accumulates a row forever; the cleanup keeps the table bounded
  *     to roughly one day of recent writes.
+ *   - webhook_deliveries (delivered only): prune rows older than 30
+ *     days. Failed + pending rows are kept — failed is the operator
+ *     audit trail, pending is in-flight work the worker still owns.
  *
  * When you add another expirable plumbing table, add a new task to the
  * `tasks` array and the response will widen automatically.
@@ -25,6 +28,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/standardResponse';
+import { pruneDeliveredWebhookDeliveries } from '@/services/webhooks/deliveryService';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -40,6 +44,19 @@ interface CleanupResult {
   task: string;
   deleted: number;
   error?: string;
+}
+
+async function pruneOldDeliveredWebhooks(): Promise<CleanupResult> {
+  try {
+    const deleted = await pruneDeliveredWebhookDeliveries();
+    return { task: 'webhook_deliveries_delivered', deleted };
+  } catch (error) {
+    return {
+      task: 'webhook_deliveries_delivered',
+      deleted: 0,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
 }
 
 async function pruneExpiredIdempotencyResults(): Promise<CleanupResult> {
@@ -68,7 +85,10 @@ export async function GET(request: Request) {
   }
 
   try {
-    const tasks: Array<() => Promise<CleanupResult>> = [pruneExpiredIdempotencyResults];
+    const tasks: Array<() => Promise<CleanupResult>> = [
+      pruneExpiredIdempotencyResults,
+      pruneOldDeliveredWebhooks,
+    ];
 
     const results = await Promise.all(tasks.map(task => task()));
 

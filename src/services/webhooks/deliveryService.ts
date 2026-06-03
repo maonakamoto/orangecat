@@ -221,6 +221,41 @@ export async function markDelivered(
   }
 }
 
+/**
+ * Prune old DELIVERED rows. Without this the table grows unbounded —
+ * every successful webhook fire accumulates a row forever, and the
+ * deliveries drawer would eventually take ages to render.
+ *
+ * Failed + pending rows are intentionally NOT pruned: failed is the
+ * audit trail operators reach for during incidents; pending is in-flight
+ * work the worker needs to see.
+ *
+ * Default retention: 30 days. That's well past any reasonable retry
+ * window (24h cap on the exp-backoff schedule) and gives operators a
+ * month of context for delivered events without unbounded growth.
+ *
+ * Returns the number of rows deleted. Errors are logged + swallowed so
+ * the cleanup cron's other tasks still run.
+ */
+export async function pruneDeliveredWebhookDeliveries(
+  retentionDays: number = 30,
+  now: Date = new Date()
+): Promise<number> {
+  const cutoff = new Date(now.getTime() - retentionDays * 24 * 60 * 60 * 1000);
+  const admin = createAdminClient();
+  const { count, error } = await admin
+    .from(DATABASE_TABLES.WEBHOOK_DELIVERIES)
+    .delete({ count: 'exact' })
+    .eq('status', 'delivered')
+    .lt('created_at', cutoff.toISOString());
+
+  if (error) {
+    logger.warn('pruneDeliveredWebhookDeliveries failed (non-fatal)', { error });
+    return 0;
+  }
+  return count ?? 0;
+}
+
 export async function markFailedOrRetry(
   delivery: DeliveryRow,
   responseStatus: number | null,
