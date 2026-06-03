@@ -30,7 +30,12 @@ import {
 import { compose } from '@/lib/api/compose';
 import { withZodBody } from '@/lib/api/withZod';
 import { withRequestId } from '@/lib/api/withRequestId';
-import { rateLimitWriteAsync, applyRateLimitHeaders, type RateLimitResult } from '@/lib/rate-limit';
+import {
+  rateLimitWriteAsync,
+  rateLimitIntegrationKeyWrite,
+  applyRateLimitHeaders,
+  type RateLimitResult,
+} from '@/lib/rate-limit';
 import { logger } from '@/utils/logger';
 import { type EntityType, getEntityMetadata } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -252,11 +257,20 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         return response;
       };
 
-      // Rate limiting
-      const rateLimit = await rateLimitWriteAsync(userId);
+      // Rate limiting. Integration-key requests get a per-key bucket so
+      // one buggy key can't starve the user's other keys; session
+      // requests use the per-user bucket as before.
+      const rateLimit =
+        auth.source === 'integration_key' && auth.integrationKeyId
+          ? await rateLimitIntegrationKeyWrite(auth.integrationKeyId)
+          : await rateLimitWriteAsync(userId);
       if (!rateLimit.success) {
         const retryAfter = Math.ceil((rateLimit.resetTime - Date.now()) / 1000);
-        logger.warn(`${meta.name} creation rate limit exceeded`, { userId });
+        logger.warn(`${meta.name} creation rate limit exceeded`, {
+          userId,
+          authSource: auth.source,
+          integrationKeyId: auth.integrationKeyId,
+        });
         return apiRateLimited(
           `Too many ${meta.name.toLowerCase()} creation requests. Please slow down.`,
           retryAfter

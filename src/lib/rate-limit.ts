@@ -211,6 +211,49 @@ export async function rateLimitWriteAsync(userId: string): Promise<RateLimitResu
   return fallbackWriteLimiter.check(key);
 }
 
+/**
+ * Per-integration-key write quota.
+ *
+ * Per-user quotas (rateLimitWriteAsync) lump every key minted by the same
+ * user into one bucket, so one buggy FleetCrown instance can DOS hirn.li
+ * even though they're different keys. This function gives each integration
+ * key its own bucket, keyed on integration_key_id — a leak/bug on one key
+ * stays scoped to that key.
+ *
+ * Default: 60/min (twice the session-write limit since integrations are
+ * machine-paced). Configurable per call so a future settings UI can let
+ * users tune.
+ *
+ * In dev (no Upstash creds) the in-memory fallback is fixed at the
+ * module-level 30/min — accept slight over-restriction; dev shouldn't hit
+ * the limit in practice.
+ */
+const DEFAULT_INTEGRATION_KEY_WRITES_PER_MINUTE = 60;
+const fallbackIntegrationKeyLimiter = new InMemoryRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: DEFAULT_INTEGRATION_KEY_WRITES_PER_MINUTE,
+});
+
+export async function rateLimitIntegrationKeyWrite(
+  keyId: string,
+  requestsPerMinute: number = DEFAULT_INTEGRATION_KEY_WRITES_PER_MINUTE
+): Promise<RateLimitResult> {
+  const key = `int_key:${keyId}`;
+
+  if (redis) {
+    const limiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(requestsPerMinute, '1 m'),
+      prefix: 'ratelimit:int_key',
+      analytics: true,
+    });
+    const result = await limiter.limit(key);
+    return toRateLimitResult(result);
+  }
+
+  return fallbackIntegrationKeyLimiter.check(key);
+}
+
 // ==================== RESPONSE HELPER ====================
 
 export function createRateLimitResponse(result: RateLimitResult): Response {
