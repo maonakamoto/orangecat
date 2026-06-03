@@ -1,20 +1,20 @@
+/**
+ * Static homepage OG image — what link-previewers render when someone
+ * shares `orangecat.ch` itself. Per-profile and per-group share cards
+ * live at /api/og/{profile,group}/[id].
+ *
+ * Last updated 2026-06-03 — switched from 🐾 emoji + hardcoded strings
+ * to the geometric BrandMarkIcon + brand SSOT (APP_NAME / APP_TAGLINE).
+ */
+
 import { ImageResponse } from 'next/og';
+import { APP_NAME, APP_TAGLINE } from '@/config/brand';
+import { OG_SIZE, OG_RUNTIME, OG_COLOR, BrandMarkSvg } from '@/lib/og/branding';
 
-export const runtime = 'edge';
-export const alt = 'OrangeCat - Your AI Economic Agent';
-export const size = { width: 1200, height: 630 };
+export const runtime = OG_RUNTIME;
+export const alt = `${APP_NAME} — ${APP_TAGLINE}`;
+export const size = OG_SIZE;
 export const contentType = 'image/png';
-
-// satori (next/og) does not support Tailwind — inline styles are required here.
-// Color values are sourced from the design system defined in tailwind.config.ts and CLAUDE.md.
-const BRAND = {
-  background: '#0A0A0A',
-  accent: '#FF6B00',
-  white: 'white',
-  whiteSubtle: 'rgba(255,255,255,0.9)',
-  whiteGlass: 'rgba(255,255,255,0.15)',
-  shadow: '0 8px 32px rgba(0,0,0,0.2)',
-} as const;
 
 export default function Image() {
   return new ImageResponse(
@@ -26,58 +26,48 @@ export default function Image() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: BRAND.background,
+        background: OG_COLOR.surface,
         fontFamily: 'system-ui, sans-serif',
       }}
     >
-      {/* Logo */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: 120,
-          height: 120,
+          width: 140,
+          height: 140,
           borderRadius: 28,
-          background: BRAND.accent,
-          marginBottom: 32,
-          fontSize: 64,
-          boxShadow: BRAND.shadow,
+          background: OG_COLOR.glass,
+          border: `1px solid ${OG_COLOR.border}`,
+          marginBottom: 40,
         }}
       >
-        🐾
+        <BrandMarkSvg size={88} />
       </div>
-      {/* Title */}
       <div
         style={{
           display: 'flex',
-          fontSize: 64,
-          fontWeight: 800,
-          color: BRAND.white,
+          fontSize: 72,
+          fontWeight: 700,
+          color: OG_COLOR.text,
+          letterSpacing: '-0.02em',
           marginBottom: 16,
-          letterSpacing: '0',
         }}
       >
-        OrangeCat
+        {APP_NAME}
       </div>
-      {/* Subtitle */}
       <div
         style={{
           display: 'flex',
           fontSize: 28,
-          color: BRAND.whiteSubtle,
+          color: OG_COLOR.textMuted,
           marginBottom: 48,
         }}
       >
-        Your AI Economic Agent
+        {APP_TAGLINE}
       </div>
-      {/* Features */}
-      <div
-        style={{
-          display: 'flex',
-          gap: 24,
-        }}
-      >
+      <div style={{ display: 'flex', gap: 16 }}>
         {['Fund', 'Invest', 'Lend', 'Coordinate'].map(feature => (
           <div
             key={feature}
@@ -85,8 +75,9 @@ export default function Image() {
               display: 'flex',
               padding: '10px 24px',
               borderRadius: 100,
-              background: BRAND.whiteGlass,
-              color: BRAND.white,
+              background: OG_COLOR.glass,
+              border: `1px solid ${OG_COLOR.border}`,
+              color: OG_COLOR.text,
               fontSize: 20,
               fontWeight: 600,
             }}

@@ -4,6 +4,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';
 import { safeJsonLdString } from '@/lib/seo/structured-data';
+import { APP_NAME, APP_KICKER, SITE_URL } from '@/config/brand';
 
 const GroupDetailClient = dynamic(
   () => import('@/components/groups/GroupDetail').then(mod => ({ default: mod.GroupDetail })),
@@ -47,24 +48,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const title = g.name;
-  const description = g.description || `Join ${g.name} on OrangeCat. Bitcoin community group.`;
-  const url = `https://orangecat.ch/groups/${slug}`;
+  const description = g.description || `Join ${g.name} on ${APP_NAME}. Bitcoin community group.`;
+  const url = `${SITE_URL}/groups/${slug}`;
+  // Dynamic share card — fills the gap audited 2026-06-03 (group OG
+  // previously had no image; every WhatsApp/Slack share rendered text-only).
+  const ogImage = `${SITE_URL}/api/og/group/${slug}`;
 
   return {
     title,
     description,
     alternates: { canonical: url },
     openGraph: {
-      title: g.name,
+      title: `${g.name} — ${APP_NAME}`,
       description,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${g.name} on ${APP_NAME}` }],
       url,
       type: 'website',
-      siteName: 'OrangeCat',
+      siteName: APP_NAME,
     },
     twitter: {
       card: 'summary_large_image',
-      title: g.name,
+      title: `${g.name} — ${APP_KICKER}`,
       description,
+      images: [ogImage],
     },
   };
 }
@@ -89,8 +95,8 @@ export default async function GroupDetailPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: g.name,
-    description: g.description || `Community group on OrangeCat`,
-    url: `https://orangecat.ch/groups/${slug}`,
+    description: g.description || `Community group on ${APP_NAME}`,
+    url: `${SITE_URL}/groups/${slug}`,
   };
 
   return (

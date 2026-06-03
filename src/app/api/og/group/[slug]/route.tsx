@@ -1,0 +1,114 @@
+/**
+ * GET /api/og/group/[slug] — share card for a group profile.
+ *
+ * Fills the gap audited in 2026-06-03: group OG metadata had NO image,
+ * so every group share rendered as text-only on WhatsApp/Slack/Telegram.
+ *
+ * Public, unauthenticated. Cached 1h at the edge.
+ *
+ * Created: 2026-06-03
+ */
+
+import { ImageResponse } from 'next/og';
+import { createServerClient } from '@/lib/supabase/server';
+import { DATABASE_TABLES } from '@/config/database-tables';
+import { APP_NAME, APP_KICKER } from '@/config/brand';
+import { OG_SIZE, OG_RUNTIME, OG_COLOR, Avatar, BrandFooter, StatPill } from '@/lib/og/branding';
+
+export const runtime = OG_RUNTIME;
+export const contentType = 'image/png';
+
+interface RouteContext {
+  params: Promise<{ slug: string }>;
+}
+
+interface GroupRow {
+  name: string;
+  description: string | null;
+  avatar_url: string | null;
+  slug: string;
+}
+
+export async function GET(_req: Request, { params }: RouteContext) {
+  const { slug } = await params;
+  const supabase = await createServerClient();
+
+  const { data } = await supabase
+    .from(DATABASE_TABLES.GROUPS)
+    .select('name, description, avatar_url, slug')
+    .eq('slug', slug)
+    .maybeSingle();
+
+  const group = (data as GroupRow | null) ?? {
+    name: slug,
+    description: null,
+    avatar_url: null,
+    slug,
+  };
+
+  const description = (group.description ?? '').trim().slice(0, 180);
+
+  return new ImageResponse(
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+        padding: 64,
+        background: OG_COLOR.surface,
+        fontFamily: 'system-ui, sans-serif',
+        color: OG_COLOR.text,
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 40, flex: 1 }}>
+        <Avatar src={group.avatar_url} fallback={group.name} />
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: 12 }}>
+          <span
+            style={{
+              display: 'flex',
+              fontSize: 22,
+              fontWeight: 600,
+              letterSpacing: 3,
+              color: OG_COLOR.accent,
+              textTransform: 'uppercase',
+            }}
+          >
+            Group
+          </span>
+          <span
+            style={{
+              display: 'flex',
+              fontSize: 56,
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              lineHeight: 1.1,
+            }}
+          >
+            {group.name}
+          </span>
+          {description && (
+            <span
+              style={{
+                display: 'flex',
+                fontSize: 24,
+                color: OG_COLOR.textMuted,
+                lineHeight: 1.4,
+                marginTop: 8,
+              }}
+            >
+              {description}
+            </span>
+          )}
+        </div>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: 16 }}>
+          <StatPill label="@" value={`/${group.slug}`} />
+        </div>
+        <BrandFooter wordmark={APP_NAME} tagline={APP_KICKER} />
+      </div>
+    </div>,
+    { ...OG_SIZE, headers: { 'cache-control': 'public, max-age=3600, s-maxage=3600' } }
+  );
+}

@@ -9,6 +9,7 @@ import { safeJsonLdString } from '@/lib/seo/structured-data';
 import type { ScalableProfile } from '@/services/profile/types';
 import { mapProjectRow } from '@/types/project';
 import { ROUTES } from '@/config/routes';
+import { APP_NAME, APP_KICKER, SITE_URL } from '@/config/brand';
 
 interface PageProps {
   params: Promise<{ username: string }>;
@@ -45,8 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       // Not authenticated - return generic metadata
       return {
         title: 'My Profile',
-        description:
-          'View your profile on OrangeCat. Exchange, fund, lend, invest, and connect with others.',
+        description: `View your profile on ${APP_NAME}. Exchange, fund, lend, invest, and connect with others.`,
       };
     }
   }
@@ -73,10 +73,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const displayName = profile.name || profile.username || targetUsername;
   const description =
     profile.bio ||
-    `View ${displayName}'s profile on OrangeCat. Explore their projects, services, and economic activity.`;
-  const image = profile.avatar_url || '/images/og-default.png';
+    `View ${displayName}'s profile on ${APP_NAME}. Explore their projects, services, and economic activity.`;
+  // Dynamic share card with avatar + name + bio. See
+  // src/app/api/og/profile/[username]/route.tsx.
+  const ogImage = `${SITE_URL}/api/og/profile/${profile.username || targetUsername}`;
   // Use actual username in URL, not "me" for better SEO
-  const url = `https://orangecat.ch/profiles/${profile.username || targetUsername}`;
+  const url = `${SITE_URL}/profiles/${profile.username || targetUsername}`;
 
   return {
     title: displayName,
@@ -85,18 +87,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: url,
     },
     openGraph: {
-      title: `${displayName} on OrangeCat`,
+      title: `${displayName} on ${APP_NAME}`,
       description,
-      images: [image],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${displayName} on ${APP_NAME}` }],
       url,
       type: 'profile',
-      siteName: 'OrangeCat',
+      siteName: APP_NAME,
     },
     twitter: {
-      card: 'summary',
-      title: displayName,
+      card: 'summary_large_image',
+      title: `${displayName} — ${APP_KICKER}`,
       description,
-      images: [image],
+      images: [ogImage],
     },
   };
 }
@@ -259,7 +261,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
     alternateName: profile.username || undefined,
     description: profile.bio || undefined,
     image: profile.avatar_url || undefined,
-    url: `https://orangecat.ch/profiles/${canonicalUsername}`,
+    url: `${SITE_URL}/profiles/${canonicalUsername}`,
     sameAs: profile.website ? [profile.website] : undefined,
     ...(profile.bitcoin_address && {
       paymentAccepted: 'Bitcoin',
