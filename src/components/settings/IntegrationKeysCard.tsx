@@ -18,6 +18,7 @@ export interface IntegrationKey {
   actor_id: string;
   name: string;
   key_prefix: string;
+  scopes: string[];
   created_at: string;
   last_used_at: string | null;
   expires_at: string | null;
@@ -296,6 +297,12 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
                         <code className="rounded bg-muted px-1">{key.key_prefix}…</code>
                       </span>
                       <span>Acts as {actorLabel}</span>
+                      <span>
+                        Scopes:{' '}
+                        <code className="rounded bg-muted px-1">
+                          {(key.scopes ?? ['*']).join(', ')}
+                        </code>
+                      </span>
                       <span>Created {formatTimestamp(key.created_at)}</span>
                       <span>Last used {formatTimestamp(key.last_used_at)}</span>
                     </div>

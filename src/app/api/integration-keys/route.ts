@@ -30,6 +30,9 @@ import {
 const createKeySchema = z.object({
   name: z.string().min(1).max(120),
   actor_id: z.string().uuid(),
+  /** Optional scopes allowlist. Omit (or pass ['*']) for full authority.
+   *  Token format `<entity>.<read|write>` (e.g. 'products.write'). */
+  scopes: z.array(z.string().min(1).max(80)).max(40).optional(),
 });
 
 async function requireSessionUser(): Promise<{ id: string } | null> {
@@ -62,12 +65,17 @@ export const POST = compose(
     if (!user) {
       return apiUnauthorized();
     }
-    const { name, actor_id } = ctx.body as { name: string; actor_id: string };
+    const { name, actor_id, scopes } = ctx.body as {
+      name: string;
+      actor_id: string;
+      scopes?: string[];
+    };
     try {
       const minted = await createIntegrationKey({
         userId: user.id,
         actorId: actor_id,
         name,
+        scopes,
       });
       return apiSuccess({ key: minted.key, plaintext: minted.plaintext }, { status: 201 });
     } catch (error) {

@@ -18,7 +18,7 @@
 
 import { NextRequest } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
-import { apiSuccess, handleApiError } from '@/lib/api/standardResponse';
+import { apiSuccess, apiForbidden, handleApiError } from '@/lib/api/standardResponse';
 import { compose } from '@/lib/api/compose';
 import { withRateLimit } from '@/lib/api/withRateLimit';
 import { withRequestId } from '@/lib/api/withRequestId';
@@ -29,7 +29,7 @@ import { listEntitiesPage } from '@/domain/commerce/service';
 import { getCacheControl, calculatePage } from './helpers';
 import { shouldIncludeDrafts } from './authHelpers';
 import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
-import { resolveRequestAuth } from '@/lib/api/resolveRequestAuth';
+import { resolveRequestAuth, hasScope } from '@/lib/api/resolveRequestAuth';
 
 // ==================== TYPES ====================
 
@@ -110,6 +110,15 @@ export function createEntityListHandler(config: EntityListHandlerConfig) {
       const authenticatedUserId = auth?.userId ?? null;
       const boundActorId = auth?.boundActorId ?? null;
       const userId = boundActorId ? null : queryUserId;
+
+      // Integration-key scope check. Sessions always pass (scopes=['*']).
+      // Anonymous reads also pass — public listings aren't gated. Only
+      // an authenticated key with a narrowed scope can be denied here.
+      if (auth?.source === 'integration_key' && !hasScope(auth.scopes, `${entityType}.read`)) {
+        return apiForbidden(
+          `This key is not allowed to read ${ENTITY_REGISTRY[entityType].namePlural.toLowerCase()}.`
+        );
+      }
 
       // If auth is required, check it first
       if (requireAuth && !authenticatedUserId) {

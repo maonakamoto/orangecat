@@ -26,6 +26,12 @@ export interface ResolvedRequestAuth {
   source: 'session' | 'integration_key';
   /** Set for integration-key auth so we can log which key was used. */
   integrationKeyId: string | null;
+  /**
+   * Allowed operations. Session auth always has ['*'] (full authority via
+   * the user's own credentials). Integration-key auth inherits the key's
+   * stored scopes, defaulting to ['*'] for back-compat.
+   */
+  scopes: string[];
 }
 
 const BEARER_PREFIX = 'Bearer ';
@@ -59,6 +65,7 @@ export async function resolveRequestAuth(req: NextRequest): Promise<ResolvedRequ
         boundActorId: resolved.actorId,
         source: 'integration_key',
         integrationKeyId: resolved.keyId,
+        scopes: resolved.scopes,
       };
     }
     // Bad / revoked / expired integration key: fail closed. Don't silently
@@ -79,5 +86,21 @@ export async function resolveRequestAuth(req: NextRequest): Promise<ResolvedRequ
     boundActorId: null,
     source: 'session',
     integrationKeyId: null,
+    scopes: ['*'],
   };
+}
+
+/**
+ * Scope check.
+ *   - `['*']` always passes.
+ *   - Otherwise the required token (e.g. `products.write`) must appear
+ *     literally in the allowed list. We deliberately don't support
+ *     prefix wildcards like `products.*` yet — keep the rule trivially
+ *     auditable.
+ */
+export function hasScope(authScopes: string[], required: string): boolean {
+  if (authScopes.includes('*')) {
+    return true;
+  }
+  return authScopes.includes(required);
 }

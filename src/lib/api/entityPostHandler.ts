@@ -44,7 +44,7 @@ import {
   resolveCreationActor,
   ActorNotPermittedError,
 } from '@/services/actors/resolveCreationActor';
-import { resolveRequestAuth } from '@/lib/api/resolveRequestAuth';
+import { resolveRequestAuth, hasScope } from '@/lib/api/resolveRequestAuth';
 import {
   claimIdempotencyKey,
   completeIdempotencyResult,
@@ -146,6 +146,17 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       const auth = await resolveRequestAuth(request);
       if (!auth) {
         return apiUnauthorized();
+      }
+      // Scope check applies BEFORE idempotency + rate limit so a
+      // forbidden request can't burn a claim slot or quota.
+      if (!hasScope(auth.scopes, `${entityType}.write`)) {
+        logger.warn(`Scope denied for ${entityType}.write`, {
+          userId: auth.userId,
+          source: auth.source,
+          integrationKeyId: auth.integrationKeyId,
+          scopes: auth.scopes,
+        });
+        return apiForbidden(`This key is not allowed to write ${meta.namePlural.toLowerCase()}.`);
       }
       userId = auth.userId;
       const supabase = await createServerClient();
