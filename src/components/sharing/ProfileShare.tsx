@@ -2,6 +2,7 @@
 
 import { ROUTES } from '@/config/routes';
 import ShareContent from './ShareContent';
+import { APP_NAME, APP_TAGLINE, SITE_URL } from '@/config/brand';
 
 interface ProfileShareProps {
   username: string;
@@ -31,12 +32,13 @@ export default function ProfileShare({
   // Construct the profile URL
   const profileUrl =
     currentUrl ||
-    `${typeof window !== 'undefined' ? window.location.origin : 'https://orangecat.ch'}${ROUTES.PROFILES.VIEW(username)}`;
+    `${typeof window !== 'undefined' ? window.location.origin : SITE_URL}${ROUTES.PROFILES.VIEW(username)}`;
 
   // Create optimized share text
-  const shareTitle = `${profileName} on OrangeCat`;
+  const shareTitle = `${profileName} on ${APP_NAME}`;
   const shareDescription =
-    profileBio || `Check out ${profileName}'s profile on OrangeCat — your AI economic agent`;
+    profileBio ||
+    `Check out ${profileName}'s profile on ${APP_NAME} — ${APP_TAGLINE.toLowerCase()}`;
 
   return (
     <ShareContent

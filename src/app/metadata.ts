@@ -1,14 +1,14 @@
 import { Metadata } from 'next';
+import { APP_NAME, SITE_URL } from '@/config/brand';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://orangecat.ch';
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'OrangeCat';
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || APP_NAME;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: 'OrangeCat - Bitcoin Funding Made Simple',
+  metadataBase: new URL(SITE_URL),
+  title: `${APP_NAME} - Bitcoin Funding Made Simple`,
   description: 'Your AI economic agent — exchange, fund, lend, invest, and govern with Bitcoin.',
   keywords: ['bitcoin', 'ai', 'economic agent', 'funding', 'lightning', 'blockchain'],
-  authors: [{ name: 'OrangeCat' }],
+  authors: [{ name: APP_NAME }],
   icons: {
     icon: [
       {
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: siteName,
-    url: siteUrl,
+    url: SITE_URL,
   },
   twitter: {
     card: 'summary_large_image',

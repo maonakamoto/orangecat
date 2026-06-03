@@ -7,6 +7,7 @@ import { Key, ExternalLink, Copy, Check, AlertTriangle, CheckCircle, Shield } fr
 import Button from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { aiOnboardingContent } from '@/lib/ai-guidance';
+import { APP_NAME } from '@/config/brand';
 
 interface GetKeyStepProps {
   provider:
@@ -75,7 +76,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
             <div>
               <p className="text-sm font-medium">Create a new API key</p>
               <p className="text-xs text-muted-foreground">
-                Name it "OrangeCat" for easy identification
+                Name it &ldquo;{APP_NAME}&rdquo; for easy identification
               </p>
             </div>
           </div>

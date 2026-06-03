@@ -68,7 +68,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    title: 'OrangeCat',
+    title: APP_NAME,
     statusBarStyle: 'black-translucent',
   },
 };
@@ -88,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               '@graph': [
                 {
                   '@type': 'Organization',
-                  name: 'OrangeCat',
+                  name: APP_NAME,
                   url: SITE_URL,
                   logo: `${SITE_URL}/images/orange-cat-logo.svg`,
                   description:
@@ -97,7 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 },
                 {
                   '@type': 'WebSite',
-                  name: 'OrangeCat',
+                  name: APP_NAME,
                   url: SITE_URL,
                   potentialAction: {
                     '@type': 'SearchAction',

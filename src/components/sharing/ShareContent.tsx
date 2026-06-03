@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { GRADIENTS } from '@/config/gradients';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { APP_NAME } from '@/config/brand';
 
 // Brand icons removed in lucide-react 0.400+
 const Facebook = Globe;
@@ -26,7 +27,7 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
     color: 'text-foreground',
     bgColor: 'bg-muted hover:bg-muted/80',
     action: (shareUrl, shareTitle, shareDescription) => {
-      const text = `${shareTitle}\n\n${shareDescription}\n\n#Bitcoin #OrangeCat`;
+      const text = `${shareTitle}\n\n${shareDescription}\n\n#Bitcoin #${APP_NAME}`;
       window.open(
         `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`,
         '_blank',

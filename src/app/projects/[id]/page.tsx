@@ -6,6 +6,7 @@ import { ROUTES } from '@/config/routes';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getTableName } from '@/config/entity-registry';
 import { safeJsonLdString } from '@/lib/seo/structured-data';
+import { APP_NAME, SITE_URL } from '@/config/brand';
 
 const ProjectPageClient = dynamic(() => import('@/components/project/ProjectPageClient'), {
   loading: () => (
@@ -110,9 +111,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = project.title;
   const description =
     project.description ||
-    `Support ${project.title} on OrangeCat. ${progress > 0 ? `${progress}% funded. ` : ''}Community-funded project by ${creatorName}.`;
+    `Support ${project.title} on ${APP_NAME}. ${progress > 0 ? `${progress}% funded. ` : ''}Community-funded project by ${creatorName}.`;
   const image = creatorProfile?.avatar_url || '/images/og-default.png';
-  const url = `https://orangecat.ch${ROUTES.PROJECTS.VIEW(id)}`;
+  const url = `${SITE_URL}${ROUTES.PROJECTS.VIEW(id)}`;
 
   return {
     title,
@@ -126,7 +127,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [image],
       url,
       type: 'website',
-      siteName: 'OrangeCat',
+      siteName: APP_NAME,
     },
     twitter: {
       card: 'summary_large_image',
@@ -195,12 +196,12 @@ export default async function PublicProjectPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: project.title,
-    description: project.description || `Support ${project.title} on OrangeCat`,
-    url: `https://orangecat.ch/projects/${id}`,
+    description: project.description || `Support ${project.title} on ${APP_NAME}`,
+    url: `${SITE_URL}/projects/${id}`,
     creator: {
       '@type': 'Person',
       name: creatorName,
-      ...(profile?.username && { url: `https://orangecat.ch/profiles/${profile.username}` }),
+      ...(profile?.username && { url: `${SITE_URL}/profiles/${profile.username}` }),
     },
     ...(project.goal_amount && {
       funding: {

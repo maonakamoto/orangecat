@@ -5,6 +5,7 @@ import { CardContent } from '@/components/ui/Card';
 import { trackEvent } from '@/utils/monitoring';
 import ShareContent from './ShareContent';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { APP_NAME, SITE_URL } from '@/config/brand';
 
 interface ProjectShareProps {
   projectId: string;
@@ -36,12 +37,12 @@ export default function ProjectShare({
   // Construct the project URL
   const projectUrl =
     currentUrl ||
-    `${typeof window !== 'undefined' ? window.location.origin : 'https://orangecat.ch'}/projects/${projectId}`;
+    `${typeof window !== 'undefined' ? window.location.origin : SITE_URL}/projects/${projectId}`;
 
   // Create optimized share text
   const shareTitle = `Support: ${projectTitle}`;
   const shareDescription =
-    projectDescription || `Check out this community-funded project on OrangeCat: ${projectTitle}`;
+    projectDescription || `Check out this community-funded project on ${APP_NAME}: ${projectTitle}`;
 
   // Track share events for analytics
   const _trackShareEvent = (platform: string) => {

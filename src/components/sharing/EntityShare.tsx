@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Share2 } from 'lucide-react';
 import { ENTITY_REGISTRY, type EntityType } from '@/config/entity-registry';
 import ShareContent from './ShareContent';
+import { APP_NAME, SITE_URL } from '@/config/brand';
 
 interface EntityShareProps {
   entityType: EntityType;
@@ -27,10 +28,10 @@ export default function EntityShare({
   const [isOpen, setIsOpen] = useState(false);
 
   const entityMeta = ENTITY_REGISTRY[entityType];
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://orangecat.ch';
+  const origin = typeof window !== 'undefined' ? window.location.origin : SITE_URL;
   const shareUrl = `${origin}${entityMeta.publicBasePath}/${entityId}`;
   const shareTitle = title;
-  const shareDescription = description || `Check out ${title} on OrangeCat`;
+  const shareDescription = description || `Check out ${title} on ${APP_NAME}`;
 
   if (!isOpen) {
     return (

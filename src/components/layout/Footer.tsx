@@ -7,6 +7,7 @@ import { shouldShowFooter, ROUTES } from '@/config/routes';
 import Logo from './Logo';
 import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
+import { APP_NAME } from '@/config/brand';
 
 const footerLinkClass =
   'group flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5 rounded-md min-h-9';
@@ -130,7 +131,7 @@ const Footer = React.memo(function Footer() {
             <h3 className={footerHeadingClass}>[ Stay Updated ]</h3>
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Get the latest updates on economic freedom, Bitcoin, and building on OrangeCat.
+                Get the latest updates on economic freedom, Bitcoin, and building on {APP_NAME}.
               </p>
               <Link
                 href={`${ROUTES.AUTH}?mode=register`}
@@ -146,7 +147,7 @@ const Footer = React.memo(function Footer() {
         <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
             <div className="text-sm text-muted-foreground text-center sm:text-left">
-              <p>&copy; 2026 OrangeCat. All rights reserved.</p>
+              <p>&copy; 2026 {APP_NAME}. All rights reserved.</p>
             </div>
 
             {/* Additional Links — sourced from config.footerNavigation.bottomBar

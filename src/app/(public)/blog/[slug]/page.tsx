@@ -10,6 +10,7 @@ import { getBlogPost, getBlogPostSlugs } from '@/lib/blog';
 import Button from '@/components/ui/Button';
 import { ComponentProps } from 'react';
 import { JsonLdScript } from '@/lib/seo/structured-data';
+import { APP_NAME, SITE_URL } from '@/config/brand';
 import BlogShareButton from './BlogShareButton';
 import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
@@ -143,7 +144,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: post.excerpt,
       type: 'article',
       publishedTime: post.date,
-      authors: [post.author || 'OrangeCat Team'],
+      authors: [post.author || `${APP_NAME} Team`],
       tags: post.tags,
     },
     twitter: {
@@ -173,14 +174,14 @@ export default async function BlogPost({ params }: PageProps) {
     datePublished: post.date,
     author: {
       '@type': 'Person',
-      name: post.author || 'OrangeCat Team',
+      name: post.author || `${APP_NAME} Team`,
     },
     publisher: {
       '@type': 'Organization',
-      name: 'OrangeCat',
-      url: 'https://orangecat.ch',
+      name: APP_NAME,
+      url: SITE_URL,
     },
-    url: `https://orangecat.ch/blog/${slug}`,
+    url: `${SITE_URL}/blog/${slug}`,
     ...(post.tags?.length && { keywords: post.tags.join(', ') }),
   };
 
@@ -265,7 +266,7 @@ export default async function BlogPost({ params }: PageProps) {
                   <BlogShareButton
                     title={post.title}
                     description={post.excerpt}
-                    url={`https://orangecat.ch/blog/${slug}`}
+                    url={`${SITE_URL}/blog/${slug}`}
                   />
                   <p className="text-muted-foreground text-xs">
                     Part of our commitment to building in public
@@ -276,7 +277,7 @@ export default async function BlogPost({ params }: PageProps) {
 
             {/* Related Posts CTA */}
             <div className={`mt-12 ${GRADIENTS.sectionOrangeTiffany} rounded-lg p-8 text-center`}>
-              <h3 className="text-2xl font-bold text-foreground mb-4">More from OrangeCat</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-4">More from {APP_NAME}</h3>
               <p className="text-lg text-muted-strong mb-6">
                 Discover more insights about Bitcoin, security, and building in public.
               </p>
@@ -288,7 +289,7 @@ export default async function BlogPost({ params }: PageProps) {
                 </Link>
                 <Link href={ROUTES.AUTH_REGISTER}>
                   <Button variant="outline" size="lg">
-                    Join OrangeCat
+                    Join {APP_NAME}
                   </Button>
                 </Link>
               </div>

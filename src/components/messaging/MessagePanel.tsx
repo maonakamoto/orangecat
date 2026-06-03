@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import NewConversationModal from './NewConversationModal';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/config/routes';
+import { APP_NAME } from '@/config/brand';
 import { useRealtimeManager } from '@/hooks/useRealtimeManager';
 import { ConnectionStatusIndicator } from './ConnectionStatusIndicator';
 import { useMessagePanelState } from './useMessagePanelState';
@@ -98,7 +99,7 @@ export default function MessagePanel({
             )}
             <div>
               <h1 className="text-xl font-semibold text-foreground">Messages</h1>
-              <p className="text-xs text-muted-foreground">Reach anyone on OrangeCat</p>
+              <p className="text-xs text-muted-foreground">Reach anyone on {APP_NAME}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
