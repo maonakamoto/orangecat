@@ -259,50 +259,80 @@ export default function FAQPage() {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-3xl mx-auto px-4 py-12 space-y-12">
-        {FAQ_SECTIONS.map(section => {
-          const Icon = section.icon;
-          return (
-            <section key={section.title}>
-              <div className="flex items-center gap-3 mb-5">
-                <div className={cn('p-2 rounded-lg bg-muted', section.color)}>
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h2 className="text-xl font-semibold text-foreground">{section.title}</h2>
-              </div>
-              <div className="space-y-2">
-                {section.items.map((item, i) => {
-                  const key = `${section.title}-${i}`;
-                  return (
-                    <FaqAccordionItem
-                      key={key}
-                      item={item}
-                      isOpen={!!openItems[key]}
-                      onToggle={() => toggle(key)}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-          );
-        })}
+      {/* Content — two-column at lg+ (sticky section list left, content right) */}
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[200px_minmax(0,1fr)] gap-8 lg:gap-12">
+          {/* Sticky section nav — desktop only */}
+          <aside className="hidden lg:block">
+            <nav className="sticky top-24 space-y-1" aria-label="FAQ sections">
+              {FAQ_SECTIONS.map(section => (
+                <a
+                  key={section.title}
+                  href={`#${slugifyFaqSection(section.title)}`}
+                  className="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
+                  {section.title}
+                </a>
+              ))}
+            </nav>
+          </aside>
 
-        {/* Still have questions */}
-        <div className="text-center bg-muted border border-border rounded-lg p-8">
-          <h3 className="text-lg font-semibold text-foreground mb-2">Still have questions?</h3>
-          <p className="text-muted-foreground mb-4">
-            Ask your Cat — open the chat panel in your dashboard and type your question. Or reach
-            out directly.
-          </p>
-          <a
-            href="mailto:hello@orangecat.ch"
-            className="inline-flex items-center gap-2 bg-foreground hover:bg-muted-strong text-background font-medium px-5 py-2.5 rounded-lg transition-colors"
-          >
-            Contact Us
-          </a>
+          <div className="space-y-12">
+            {FAQ_SECTIONS.map(section => {
+              const Icon = section.icon;
+              return (
+                <section
+                  key={section.title}
+                  id={slugifyFaqSection(section.title)}
+                  className="scroll-mt-24"
+                >
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className={cn('p-2 rounded-lg bg-muted', section.color)}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h2 className="text-xl font-semibold text-foreground">{section.title}</h2>
+                  </div>
+                  <div className="space-y-2">
+                    {section.items.map((item, i) => {
+                      const key = `${section.title}-${i}`;
+                      return (
+                        <FaqAccordionItem
+                          key={key}
+                          item={item}
+                          isOpen={!!openItems[key]}
+                          onToggle={() => toggle(key)}
+                        />
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            })}
+
+            {/* Still have questions */}
+            <div className="text-center bg-muted border border-border rounded-lg p-8">
+              <h3 className="text-lg font-semibold text-foreground mb-2">Still have questions?</h3>
+              <p className="text-muted-foreground mb-4">
+                Ask your Cat — open the chat panel in your dashboard and type your question. Or
+                reach out directly.
+              </p>
+              <a
+                href="mailto:hello@orangecat.ch"
+                className="inline-flex items-center gap-2 bg-foreground hover:bg-muted-strong text-background font-medium px-5 py-2.5 rounded-lg transition-colors"
+              >
+                Contact Us
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
+}
+
+function slugifyFaqSection(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 }
