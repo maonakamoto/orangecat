@@ -41,8 +41,8 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
         return (
           <div className="space-y-6">
             <div className="flex justify-center">
-              <div className="p-4 bg-tiffany-light rounded-full">
-                <Shield className="h-12 w-12 text-tiffany" />
+              <div className="p-4 bg-muted rounded-full">
+                <Shield className="h-12 w-12 text-foreground" />
               </div>
             </div>
             <div className="text-center space-y-2">
@@ -219,7 +219,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-tiffany" />
+          <Shield className="h-5 w-5 text-foreground" />
           Two-Factor Authentication
         </CardTitle>
         <CardDescription>Protect your account with an authenticator app</CardDescription>

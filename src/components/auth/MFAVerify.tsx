@@ -117,7 +117,7 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardContent className="flex flex-col items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-tiffany mb-4" />
+          <Loader2 className="h-8 w-8 animate-spin text-foreground mb-4" />
           <p className="text-sm text-muted-foreground">Loading authentication...</p>
         </CardContent>
       </Card>
@@ -128,8 +128,8 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
         <div className="flex justify-center mb-4">
-          <div className="p-3 bg-tiffany-light rounded-full">
-            <Shield className="h-8 w-8 text-tiffany" />
+          <div className="p-3 bg-muted rounded-full">
+            <Shield className="h-8 w-8 text-foreground" />
           </div>
         </div>
         <CardTitle>Two-Factor Authentication</CardTitle>

@@ -239,7 +239,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
             type="checkbox"
             checked={acknowledged}
             onChange={e => setAcknowledged(e.target.checked)}
-            className="mt-0.5 h-4 w-4 rounded border-border-strong text-tiffany focus:ring-ring"
+            className="mt-0.5 h-4 w-4 rounded border-border-strong text-foreground focus:ring-ring"
           />
           <span className="text-sm text-foreground">
             I have saved my recovery codes in a secure location
