@@ -17,7 +17,7 @@ export function WizardHeader({ progress, onCancel }: WizardHeaderProps) {
         <button
           onClick={onCancel}
           aria-label="Cancel"
-          className="p-2 hover:bg-orange-100 dark:hover:bg-muted rounded-full transition-colors min-h-11 min-w-11 flex items-center justify-center"
+          className="p-2 hover:bg-muted rounded-full transition-colors min-h-11 min-w-11 flex items-center justify-center"
         >
           <X className="w-5 h-5 text-muted-foreground" />
         </button>
@@ -27,7 +27,7 @@ export function WizardHeader({ progress, onCancel }: WizardHeaderProps) {
           <div className="flex items-center gap-2 mt-1">
             <div className="flex-1 bg-muted rounded-full h-2">
               <div
-                className="bg-orange-500 h-2 rounded-full transition-all duration-300"
+                className="bg-foreground h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>

@@ -5,7 +5,6 @@
 
 import { ArrowLeft, ArrowRight, Save, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { GRADIENTS } from '@/config/gradients';
 import type { WizardStep } from '../types';
 
 interface WizardFooterProps {
@@ -31,7 +30,7 @@ export function WizardFooter({
   const currentStepData = steps[currentStep];
 
   return (
-    <div className={`px-6 py-6 ${GRADIENTS.sectionGrayOrange} border-t`}>
+    <div className="px-6 py-6 bg-muted/30 border-t">
       {/* Progress encouragement */}
       <div className="text-center mb-4">
         <div className="text-sm text-muted-foreground mb-2">
@@ -80,7 +79,8 @@ export function WizardFooter({
             type="button"
             onClick={onNext}
             disabled={!canProceed || isSaving}
-            className="px-8 py-2 min-w-[140px] bg-orange-500 hover:bg-orange-600 text-white"
+            variant="accent"
+            className="px-8 py-2 min-w-[140px]"
           >
             {isSaving ? (
               <>
