@@ -35,7 +35,7 @@ export function AIKeyCard({ apiKey: key, isLoading, onSetPrimary, onDelete }: AI
             <div className="flex items-center gap-2">
               <span className="font-medium">{key.key_name}</span>
               {key.is_primary && (
-                <Badge className="bg-tiffany-100 text-tiffany-800 border-tiffany-200">
+                <Badge className="bg-muted text-foreground border-border-subtle">
                   <Star className="w-3 h-3 mr-1 fill-current" />
                   Primary
                 </Badge>

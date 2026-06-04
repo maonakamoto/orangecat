@@ -31,7 +31,7 @@ export function AICreditsPricing() {
               <div
                 key={key}
                 className={`rounded-lg border p-4 ${
-                  key === 'pro' ? 'border-border-strong bg-orange-50/50' : 'border-border'
+                  key === 'pro' ? 'border-border-strong bg-muted/40' : 'border-border'
                 }`}
               >
                 <div className="font-semibold text-sm">{tier.label}</div>
@@ -66,7 +66,7 @@ export function AICreditsPricing() {
                 className="flex items-center justify-between py-2 px-3 rounded-lg bg-muted text-sm"
               >
                 <span>{op.label}</span>
-                <span className="font-medium text-orange-700">{formatAmount(op.cost_btc)}</span>
+                <span className="font-medium text-foreground">{formatAmount(op.cost_btc)}</span>
               </div>
             ))}
           </div>

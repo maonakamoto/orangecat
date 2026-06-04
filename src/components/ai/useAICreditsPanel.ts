@@ -43,14 +43,14 @@ const TX_COLOR: Record<string, string> = {
   deposit: 'text-green-600',
   bonus: 'text-green-600',
   refund: 'text-green-600',
-  charge: 'text-orange-600',
+  charge: 'text-foreground',
 };
 
 export const getTransactionColor = (type: string) => TX_COLOR[type] ?? 'text-muted-foreground';
 
 export const getTransactionIcon = (type: string): React.ReactNode => {
   if (type === 'charge') {
-    return React.createElement(ArrowUpRight, { className: 'h-4 w-4 text-orange-500' });
+    return React.createElement(ArrowUpRight, { className: 'h-4 w-4 text-foreground' });
   }
   if (['deposit', 'bonus', 'refund'].includes(type)) {
     return React.createElement(ArrowDownLeft, { className: 'h-4 w-4 text-green-500' });

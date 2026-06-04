@@ -46,7 +46,7 @@ export function AIModelSelector({
         disabled={disabled}
         className={cn(
           'w-full p-3 rounded-lg border-2 text-left transition-all flex items-center justify-between',
-          isOpen ? 'border-tiffany-500 bg-tiffany-50' : 'border-border hover:border-border-strong',
+          isOpen ? 'border-foreground bg-muted/40' : 'border-border hover:border-border-strong',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
@@ -77,7 +77,7 @@ export function AIModelSelector({
               onClick={() => handleModelSelect(model)}
               className={cn(
                 'w-full p-2 rounded-lg text-left hover:bg-muted flex items-center justify-between',
-                selectedModel?.id === model.id && 'bg-tiffany-50'
+                selectedModel?.id === model.id && 'bg-muted/40'
               )}
             >
               <div>

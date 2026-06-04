@@ -54,7 +54,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
   };
 
   return (
-    <Card className="border-tiffany-200 bg-tiffany-50/30">
+    <Card className="border-border-subtle bg-muted/40/30">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg">Add API Key</CardTitle>
         <CardDescription>Add your API key from your chosen provider</CardDescription>
@@ -75,7 +75,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
                 className={cn(
                   'p-3 rounded-lg border-2 text-left transition-all',
                   selectedProvider === p.id
-                    ? 'border-tiffany-500 bg-tiffany-50'
+                    ? 'border-foreground bg-muted/40'
                     : 'border-border hover:border-border-strong dark:hover:border-border'
                 )}
               >
@@ -127,7 +127,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
                 href={provider.apiKeyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-tiffany-600 hover:underline inline-flex items-center gap-1"
+                className="text-foreground hover:underline inline-flex items-center gap-1"
               >
                 {provider.name}
                 <ExternalLink className="w-3 h-3" />

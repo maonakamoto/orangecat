@@ -72,7 +72,7 @@ function CapabilityToggleCard({
           disabled={disabled}
           className={cn(
             'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
-            checked ? 'bg-tiffany-600' : 'bg-muted',
+            checked ? 'bg-foreground' : 'bg-muted',
             disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -109,8 +109,8 @@ export function AIModelPreferences({
       <Card variant="minimal" className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-lg bg-tiffany-100 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-tiffany-600" />
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+              <Zap className="w-5 h-5 text-foreground" />
             </div>
             <div>
               <h3 className="font-medium">Auto Router</h3>
@@ -129,7 +129,7 @@ export function AIModelPreferences({
             disabled={disabled}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              preferences.autoRouterEnabled ? 'bg-tiffany-600' : 'bg-muted',
+              preferences.autoRouterEnabled ? 'bg-foreground' : 'bg-muted',
               disabled && 'opacity-50 cursor-not-allowed'
             )}
           >
@@ -142,10 +142,10 @@ export function AIModelPreferences({
           </button>
         </div>
         {preferences.autoRouterEnabled && (
-          <div className="mt-3 p-3 bg-tiffany-50 rounded-lg">
+          <div className="mt-3 p-3 bg-muted/40 rounded-lg">
             <div className="flex items-start gap-2">
-              <Info className="w-4 h-4 text-tiffany-600 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-tiffany-700">
+              <Info className="w-4 h-4 text-foreground mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-foreground">
                 Simple messages → Economy models. Complex tasks → Standard/Premium models. Saves
                 money without sacrificing quality.
               </p>
@@ -182,7 +182,7 @@ export function AIModelPreferences({
                 className={cn(
                   'p-3 rounded-lg border-2 text-left transition-all',
                   isSelected
-                    ? 'border-tiffany-500 bg-tiffany-50'
+                    ? 'border-foreground bg-muted/40'
                     : 'border-border hover:border-border-strong',
                   disabled && 'opacity-50 cursor-not-allowed'
                 )}
