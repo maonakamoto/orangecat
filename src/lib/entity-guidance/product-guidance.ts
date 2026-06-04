@@ -38,7 +38,7 @@ export type ProductFieldType =
 
 export const productGuidanceContent: Record<NonNullable<ProductFieldType>, GuidanceContent> = {
   title: {
-    icon: React.createElement(Package, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Package, { className: 'w-5 h-5 text-foreground' }),
     title: 'Product Title',
     description:
       'The title is the first thing buyers see. Make it clear, descriptive, and searchable.',
@@ -56,7 +56,7 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     ],
   },
   description: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
     title: 'Product Description',
     description:
       "Tell the story of your product. Help buyers understand exactly what they're getting.",
@@ -73,7 +73,7 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     ],
   },
   category: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
     title: 'Category',
     description: 'Categories help buyers find your product. Choose the most accurate category.',
     tips: [
@@ -85,7 +85,7 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     examples: ['Handmade', 'Digital Products', 'Food & Drinks', 'Electronics'],
   },
   product_type: {
-    icon: React.createElement(Layers, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Layers, { className: 'w-5 h-5 text-foreground' }),
     title: 'Product Type',
     description: 'This determines how your product is delivered and what information buyers need.',
     tips: [
@@ -101,7 +101,7 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     ],
   },
   price: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
     title: 'Price',
     description: 'Set your price in satoshis (sats). 1 Bitcoin = 100,000,000 sats.',
     tips: [
@@ -118,7 +118,7 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     ],
   },
   currency: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
     title: 'Display Currency',
     description:
       'Choose how to display your price. All payments are in Bitcoin, but you can show equivalent fiat.',
@@ -130,7 +130,7 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     examples: ['50,000 SATS', '0.0005 BTC'],
   },
   inventory_count: {
-    icon: React.createElement(BarChart3, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(BarChart3, { className: 'w-5 h-5 text-foreground' }),
     title: 'Inventory Count',
     description: 'Track how many items you have available. Set to -1 for unlimited stock.',
     tips: [
@@ -146,7 +146,7 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     ],
   },
   fulfillment_type: {
-    icon: React.createElement(Truck, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Truck, { className: 'w-5 h-5 text-foreground' }),
     title: 'Fulfillment Type',
     description: 'How orders will be fulfilled after payment.',
     tips: [
@@ -162,7 +162,7 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     ],
   },
   images: {
-    icon: React.createElement(Image, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Image, { className: 'w-5 h-5 text-foreground' }),
     title: 'Product Images',
     description:
       'High-quality images significantly increase sales. Show your product from multiple angles.',
@@ -180,7 +180,7 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     ],
   },
   tags: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
     title: 'Tags',
     description: 'Tags help buyers discover your product through search.',
     tips: [
@@ -203,15 +203,15 @@ export const productDefaultGuidance: DefaultGuidance = {
     'Products are items you sell on your personal marketplace. Physical goods, digital downloads, or services - all paid in Bitcoin.',
   features: [
     {
-      icon: React.createElement(Package, { className: 'w-4 h-4 text-orange-600' }),
+      icon: React.createElement(Package, { className: 'w-4 h-4 text-foreground' }),
       text: 'Sell physical or digital products',
     },
     {
-      icon: React.createElement(DollarSign, { className: 'w-4 h-4 text-orange-600' }),
+      icon: React.createElement(DollarSign, { className: 'w-4 h-4 text-foreground' }),
       text: 'Get paid instantly in Bitcoin',
     },
     {
-      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-orange-600' }),
+      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-foreground' }),
       text: 'Manage inventory and fulfillment',
     },
   ],

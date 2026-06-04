@@ -27,7 +27,7 @@ export type LoanFieldType =
 
 export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceContent> = {
   title: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
     title: 'Loan Title',
     description: 'Choose a clear, descriptive title that explains what you need the loan for.',
     tips: [
@@ -45,7 +45,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
     ],
   },
   description: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
     title: 'Loan Description',
     description:
       'Provide detailed information about your loan needs, repayment plan, and how funds will be used.',
@@ -62,7 +62,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
     ],
   },
   original_amount: {
-    icon: React.createElement(Target, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Target, { className: 'w-5 h-5 text-foreground' }),
     title: 'Loan Amount',
     description:
       'The total amount you want to borrow. Be realistic about what you can afford to repay.',
@@ -80,7 +80,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
     ],
   },
   remaining_balance: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
     title: 'Remaining Balance',
     description:
       'The outstanding amount still owed. For new loans, this equals the original amount.',
@@ -98,7 +98,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
     ],
   },
   interest_rate: {
-    icon: React.createElement(Target, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Target, { className: 'w-5 h-5 text-foreground' }),
     title: 'Interest Rate',
     description:
       "The annual interest rate you're willing to pay. Competitive rates attract more lenders.",
@@ -112,7 +112,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
     examples: ['5-7% for business loans', '8-12% for personal loans', '3-5% for secured loans'],
   },
   bitcoin_address: {
-    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-foreground' }),
     title: 'Bitcoin Address',
     description: 'Your Bitcoin address where loan payments and repayments will be sent.',
     tips: [
@@ -129,7 +129,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
     ],
   },
   lightning_address: {
-    icon: React.createElement(Target, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Target, { className: 'w-5 h-5 text-foreground' }),
     title: 'Lightning Address',
     description: 'Lightning Network address for instant, low-fee loan payments and repayments.',
     tips: [
@@ -142,7 +142,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
     examples: ['loan@borrower.address', 'business@lightning.gifts', 'personal@zbd.gg'],
   },
   loan_category_id: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
     title: 'Loan Category',
     description: 'Categorize your loan to help lenders understand the purpose and risk level.',
     tips: [
@@ -159,7 +159,7 @@ export const loanGuidanceContent: Record<NonNullable<LoanFieldType>, GuidanceCon
     ],
   },
   fulfillment_type: {
-    icon: React.createElement(Settings, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Settings, { className: 'w-5 h-5 text-foreground' }),
     title: 'Fulfillment Type',
     description:
       'How you prefer to make loan repayments - manually or through automatic deductions.',

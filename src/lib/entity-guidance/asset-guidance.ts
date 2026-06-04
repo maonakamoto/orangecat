@@ -15,7 +15,7 @@ import type { DefaultGuidance, GuidanceContent } from '@/components/create/types
 
 const assetIcon = (size: 'sm' | 'md' = 'md') =>
   React.createElement(Briefcase, {
-    className: size === 'sm' ? 'w-4 h-4 text-tiffany-600' : 'w-5 h-5 text-tiffany-600',
+    className: size === 'sm' ? 'w-4 h-4 text-foreground' : 'w-5 h-5 text-foreground',
   });
 
 export const assetDefaultGuidance: DefaultGuidance = {

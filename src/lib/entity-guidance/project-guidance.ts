@@ -45,7 +45,7 @@ export type ProjectFieldType =
 
 export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, GuidanceContent> = {
   title: {
-    icon: React.createElement(Rocket, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Rocket, { className: 'w-5 h-5 text-foreground' }),
     title: 'Project Title',
     description:
       "Choose a compelling title that clearly communicates what you're building and why it matters.",
@@ -64,7 +64,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   description: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
     title: 'Project Description',
     description:
       'Tell the complete story of your project. Explain the problem, your solution, and the impact.',
@@ -81,7 +81,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   goal_amount: {
-    icon: React.createElement(Target, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Target, { className: 'w-5 h-5 text-foreground' }),
     title: 'Funding Goal',
     description:
       'Set a realistic funding target that covers your project costs and gives backers confidence.',
@@ -99,7 +99,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   currency: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
     title: 'Currency Selection',
     description: 'Choose the currency that best fits your project and target audience.',
     tips: [
@@ -116,7 +116,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   funding_purpose: {
-    icon: React.createElement(Coins, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Coins, { className: 'w-5 h-5 text-foreground' }),
     title: 'Funding Purpose',
     description: 'Clearly explain how funding will be used and what specific outcomes it enables.',
     tips: [
@@ -133,7 +133,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   bitcoin_address: {
-    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-foreground' }),
     title: 'Bitcoin Address',
     description: 'Your secure Bitcoin address where funding will be received.',
     tips: [
@@ -150,7 +150,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   lightning_address: {
-    icon: React.createElement(Target, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Target, { className: 'w-5 h-5 text-foreground' }),
     title: 'Lightning Address',
     description: 'Lightning Network address for instant, low-fee Bitcoin payments.',
     tips: [
@@ -167,7 +167,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   website_url: {
-    icon: React.createElement(ExternalLink, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(ExternalLink, { className: 'w-5 h-5 text-foreground' }),
     title: 'Project Website',
     description: 'Link to additional information about your project.',
     tips: [
@@ -184,7 +184,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   category: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
     title: 'Project Category',
     description: "Choose the category that best describes your project's focus area.",
     tips: [
@@ -202,7 +202,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   tags: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
     title: 'Project Tags',
     description: 'Add relevant tags to help people discover your project through search.',
     tips: [
@@ -219,7 +219,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   start_date: {
-    icon: React.createElement(Calendar, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Calendar, { className: 'w-5 h-5 text-foreground' }),
     title: 'Start Date',
     description: 'When do you plan to begin active work on this project?',
     tips: [
@@ -236,7 +236,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   target_completion: {
-    icon: React.createElement(CheckCircle2, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(CheckCircle2, { className: 'w-5 h-5 text-foreground' }),
     title: 'Target Completion',
     description: 'When do you expect to complete the main deliverables of your project?',
     tips: [
@@ -254,7 +254,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
   },
   // CamelCase aliases for backward compatibility
   goalAmount: {
-    icon: React.createElement(Target, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Target, { className: 'w-5 h-5 text-foreground' }),
     title: 'Funding Goal',
     description:
       'Set a realistic funding target that covers your project costs and gives backers confidence.',
@@ -272,7 +272,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   fundingPurpose: {
-    icon: React.createElement(Coins, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Coins, { className: 'w-5 h-5 text-foreground' }),
     title: 'Funding Purpose',
     description: 'Clearly explain how funding will be used and what specific outcomes it enables.',
     tips: [
@@ -289,7 +289,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   bitcoinAddress: {
-    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-foreground' }),
     title: 'Bitcoin Address',
     description: 'Your secure Bitcoin address where funding will be received.',
     tips: [
@@ -306,7 +306,7 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     ],
   },
   categories: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-orange-600' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
     title: 'Project Categories',
     description: "Choose the categories that best describe your project's focus areas.",
     tips: [
@@ -331,23 +331,23 @@ export const projectDefaultGuidance: DefaultGuidance = {
     'Transform your idea into a funded reality. Projects on OrangeCat combine transparent funding with Bitcoin payments for community-driven development.',
   features: [
     {
-      icon: React.createElement(Target, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(Target, { className: 'w-4 h-4 text-foreground' }),
       text: 'Set clear funding goals with Bitcoin payments',
     },
     {
-      icon: React.createElement(ExternalLink, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(ExternalLink, { className: 'w-4 h-4 text-foreground' }),
       text: 'Reach global supporters through our network',
     },
     {
-      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-foreground' }),
       text: 'Maintain full control and transparency',
     },
     {
-      icon: React.createElement(Rocket, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(Rocket, { className: 'w-4 h-4 text-foreground' }),
       text: 'Build community around your vision',
     },
     {
-      icon: React.createElement(DollarSign, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(DollarSign, { className: 'w-4 h-4 text-foreground' }),
       text: 'Access ongoing funding and support',
     },
   ],

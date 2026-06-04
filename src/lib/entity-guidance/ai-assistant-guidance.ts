@@ -37,7 +37,7 @@ export const aiAssistantGuidanceContent: Record<
   GuidanceContent
 > = {
   title: {
-    icon: React.createElement(Bot, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Bot, { className: 'w-5 h-5 text-foreground' }),
     title: 'Assistant Name',
     description:
       'Choose a descriptive name that tells users what your AI does. Good names are specific and memorable.',
@@ -55,7 +55,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   description: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
     title: 'Description',
     description: "Tell potential users what your AI assistant can do and who it's for.",
     tips: [
@@ -70,7 +70,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   category: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
     title: 'Category',
     description: 'Categories help users discover your AI. Choose the most accurate one.',
     tips: [
@@ -81,7 +81,7 @@ export const aiAssistantGuidanceContent: Record<
     examples: ['Business & Consulting', 'Code & Development', 'Education & Tutoring'],
   },
   system_prompt: {
-    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-foreground' }),
     title: 'System Prompt',
     description:
       'This is the most important part! Your system prompt defines your AI\'s personality, knowledge, and behavior. Think of it as the "software" that makes your AI unique.',
@@ -98,7 +98,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   welcome_message: {
-    icon: React.createElement(MessageSquare, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(MessageSquare, { className: 'w-5 h-5 text-foreground' }),
     title: 'Welcome Message',
     description:
       'The first message users see when starting a conversation. Make a good first impression!',
@@ -113,7 +113,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   model_preference: {
-    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-foreground' }),
     title: 'Model Preference',
     description: 'Choose which AI model powers your assistant.',
     tips: [
@@ -124,7 +124,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   temperature: {
-    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-foreground' }),
     title: 'Temperature',
     description:
       'Controls randomness in responses. Lower = more deterministic, higher = more creative.',
@@ -136,7 +136,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   max_tokens_per_response: {
-    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-foreground' }),
     title: 'Max Tokens per Response',
     description: 'Limits how long each response can be. Helps control costs.',
     tips: [
@@ -147,7 +147,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   compute_provider_type: {
-    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-foreground' }),
     title: 'Compute Provider',
     description: 'Where your AI runs. Most users should select API Provider.',
     tips: [
@@ -157,7 +157,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   pricing_model: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
     title: 'Pricing Model',
     description: 'Choose how users pay for your AI assistant.',
     tips: [
@@ -173,7 +173,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   price_per_message: {
-    icon: React.createElement(Zap, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Zap, { className: 'w-5 h-5 text-foreground' }),
     title: 'Price per Message',
     description: 'How much to charge for each message sent. Enter in your preferred currency.',
     tips: [
@@ -184,7 +184,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   price_per_1k_tokens: {
-    icon: React.createElement(Zap, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Zap, { className: 'w-5 h-5 text-foreground' }),
     title: 'Price per 1K Tokens',
     description: 'Token-based pricing for pay-as-you-go usage. Enter in your preferred currency.',
     tips: [
@@ -194,7 +194,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   subscription_price: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
     title: 'Subscription Price',
     description:
       'Monthly subscription price for unlimited access. Enter in your preferred currency.',
@@ -206,7 +206,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   free_messages_per_day: {
-    icon: React.createElement(MessageSquare, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(MessageSquare, { className: 'w-5 h-5 text-foreground' }),
     title: 'Free Messages per Day',
     description: 'Let users try your AI for free before paying.',
     tips: [
@@ -217,7 +217,7 @@ export const aiAssistantGuidanceContent: Record<
     ],
   },
   lightning_address: {
-    icon: React.createElement(Zap, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Zap, { className: 'w-5 h-5 text-foreground' }),
     title: 'Lightning Address',
     description: 'Your Lightning address for receiving instant micropayments.',
     tips: [
@@ -229,7 +229,7 @@ export const aiAssistantGuidanceContent: Record<
     examples: ['you@getalby.com', 'you@stacker.news'],
   },
   bitcoin_address: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
     title: 'Bitcoin Address',
     description: 'On-chain Bitcoin address for larger payments or fallback.',
     tips: [
@@ -247,15 +247,15 @@ export const aiAssistantDefaultGuidance: DefaultGuidance = {
     'AI Assistants are autonomous services that earn you Bitcoin. The key is a well-crafted system prompt that defines exactly how your AI should behave and what value it provides.',
   features: [
     {
-      icon: React.createElement(Bot, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(Bot, { className: 'w-4 h-4 text-foreground' }),
       text: 'Build autonomous AI services',
     },
     {
-      icon: React.createElement(Zap, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(Zap, { className: 'w-4 h-4 text-foreground' }),
       text: 'Earn Bitcoin via Lightning',
     },
     {
-      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-foreground' }),
       text: 'Portable - works with any AI provider',
     },
   ],

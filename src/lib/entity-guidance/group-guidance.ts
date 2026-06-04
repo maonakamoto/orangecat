@@ -38,7 +38,7 @@ type GroupFieldType =
 
 export const groupGuidanceContent: Record<NonNullable<GroupFieldType>, GuidanceContent> = {
   name: {
-    icon: React.createElement(Users, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Users, { className: 'w-5 h-5 text-foreground' }),
     title: 'Group Name',
     description: "Choose a clear, memorable name that represents your group's purpose and values.",
     tips: [
@@ -57,7 +57,7 @@ export const groupGuidanceContent: Record<NonNullable<GroupFieldType>, GuidanceC
     ],
   },
   description: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
     title: 'Group Description',
     description: 'Clearly explain what your group does, who it serves, and why it exists.',
     tips: [
@@ -75,7 +75,7 @@ export const groupGuidanceContent: Record<NonNullable<GroupFieldType>, GuidanceC
     ],
   },
   label: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
     title: 'Group Label',
     description:
       "Labels help categorize your group and set smart defaults. They don't restrict capabilities - you can enable any features regardless of label.",
@@ -98,7 +98,7 @@ export const groupGuidanceContent: Record<NonNullable<GroupFieldType>, GuidanceC
     ],
   },
   governance_preset: {
-    icon: React.createElement(Shield, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Shield, { className: 'w-5 h-5 text-foreground' }),
     title: 'Governance Model',
     description: 'Define how decisions are made and how power is distributed in your group.',
     tips: [
@@ -115,7 +115,7 @@ export const groupGuidanceContent: Record<NonNullable<GroupFieldType>, GuidanceC
     ],
   },
   visibility: {
-    icon: React.createElement(Globe, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Globe, { className: 'w-5 h-5 text-foreground' }),
     title: 'Visibility',
     description: "Control who can see your group's content and activities.",
     tips: [
@@ -132,7 +132,7 @@ export const groupGuidanceContent: Record<NonNullable<GroupFieldType>, GuidanceC
     ],
   },
   is_public: {
-    icon: React.createElement(Eye, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Eye, { className: 'w-5 h-5 text-foreground' }),
     title: 'Listed in Directory',
     description: 'Show this group in public group listings and search results.',
     tips: [
@@ -148,7 +148,7 @@ export const groupGuidanceContent: Record<NonNullable<GroupFieldType>, GuidanceC
     ],
   },
   bitcoin_address: {
-    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-foreground' }),
     title: 'Bitcoin Treasury Address',
     description: "Primary Bitcoin address for your group's treasury and financial operations.",
     tips: [
@@ -166,7 +166,7 @@ export const groupGuidanceContent: Record<NonNullable<GroupFieldType>, GuidanceC
     ],
   },
   lightning_address: {
-    icon: React.createElement(Zap, { className: 'w-5 h-5 text-tiffany-600' }),
+    icon: React.createElement(Zap, { className: 'w-5 h-5 text-foreground' }),
     title: 'Lightning Address',
     description: 'Lightning Network address for instant, low-fee Bitcoin payments.',
     tips: [
@@ -187,23 +187,23 @@ export const groupDefaultGuidance: DefaultGuidance = {
     'Groups enable collective action, shared governance, and community building around common goals. From family circles to network states, groups help you coordinate and collaborate.',
   features: [
     {
-      icon: React.createElement(Users, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(Users, { className: 'w-4 h-4 text-foreground' }),
       text: 'Collective treasury with multi-signature Bitcoin wallets',
     },
     {
-      icon: React.createElement(Shield, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(Shield, { className: 'w-4 h-4 text-foreground' }),
       text: 'Democratic governance with voting and proposals',
     },
     {
-      icon: React.createElement(Building2, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(Building2, { className: 'w-4 h-4 text-foreground' }),
       text: 'Member management and role assignments',
     },
     {
-      icon: React.createElement(Target, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(Target, { className: 'w-4 h-4 text-foreground' }),
       text: 'Project affiliation and collective fundraising',
     },
     {
-      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-tiffany-600' }),
+      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-foreground' }),
       text: 'Transparent operations and community accountability',
     },
   ],
