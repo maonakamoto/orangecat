@@ -1,6 +1,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
 import { ProfileCompletionModal } from '@/components/onboarding/ProfileCompletionModal';
 import {
@@ -31,6 +33,7 @@ const DashboardTimeline = dynamic(
 );
 
 export default function DashboardPage() {
+  const router = useRouter();
   const {
     user,
     profile,
@@ -53,6 +56,25 @@ export default function DashboardPage() {
     handleRejectAction,
   } = useDashboard();
 
+  // Cat-first: a truly empty account (no projects, no pending actions, no
+  // timeline events once loading settles) gets routed to the Cat hub instead
+  // of the generic dashboard. That matches the platform thesis — Cat is the
+  // interface — and avoids the sparse "four CTAs shouting at once" experience
+  // that the dashboard shows for brand-new accounts.
+  const isTrulyEmpty =
+    hydrated &&
+    !localLoading &&
+    !timelineLoading &&
+    !hasProjects &&
+    pendingActions.length === 0 &&
+    (timelineFeed?.events?.length ?? 0) === 0;
+
+  useEffect(() => {
+    if (isTrulyEmpty) {
+      router.replace('/dashboard/cat?welcome=true');
+    }
+  }, [isTrulyEmpty, router]);
+
   if (!hydrated || localLoading) {
     return <Loading fullScreen message="Loading your account..." />;
   }
@@ -63,6 +85,10 @@ export default function DashboardPage() {
 
   if (!user) {
     return null;
+  }
+
+  if (isTrulyEmpty) {
+    return <Loading fullScreen message="Taking you to Cat..." />;
   }
 
   return (
