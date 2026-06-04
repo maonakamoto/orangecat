@@ -109,7 +109,7 @@ export default function AISettingsPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div className="flex items-center gap-2">
-                <Bot className="w-6 h-6 text-tiffany-600" />
+                <Bot className="w-6 h-6 text-fg-secondary" />
                 <h1 className="text-xl font-semibold text-foreground">AI Settings</h1>
               </div>
             </div>

@@ -22,7 +22,7 @@ export function SettingsSecuritySection({
     <>
       <div className="border-t border-border-subtle pt-10">
         <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-          <Shield className="w-6 h-6 mr-2 text-tiffany-600" />
+          <Shield className="w-6 h-6 mr-2 text-fg-secondary" />
           Two-Factor Authentication
         </h3>
         <p className="text-muted-foreground mb-6">
@@ -42,7 +42,7 @@ export function SettingsSecuritySection({
             <button
               type="button"
               onClick={onViewRecoveryCodes}
-              className="text-sm text-tiffany-600 hover:text-tiffany-700 font-medium"
+              className="text-sm text-foreground hover:text-muted-strong font-medium underline-offset-4 hover:underline"
             >
               View Recovery Codes
             </button>
@@ -55,7 +55,7 @@ export function SettingsSecuritySection({
 
       <div className="border-t border-border-subtle pt-10">
         <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
-          <Link2 className="w-6 h-6 mr-2 text-tiffany-600" />
+          <Link2 className="w-6 h-6 mr-2 text-fg-secondary" />
           Connected Accounts
         </h3>
         <p className="text-muted-foreground mb-6">
