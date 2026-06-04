@@ -26,4 +26,4 @@ export const APP_EMAIL_FROM = `${APP_NAME} <notifications@${APP_DOMAIN}>`;
 export const BRAND_ACCENT_HEX = '#ff5c00';
 
 export const BRAND_MARK_DESCRIPTION =
-  'Agent window (rounded rect + economic rails + core node) with minimal ear strokes — geometric, not mascot.';
+  'Minimal cat — round head, triangular ears, dot eyes, soft smile. Geometric but warm; recognizable as a cat at 16px favicon and 24px chrome.';

@@ -2,6 +2,9 @@
  * Canonical OrangeCat mark geometry (24×24 viewBox).
  * Used by BrandMark, CatIcon, favicon.svg, and orange-cat-logo.svg.
  * Keep paths in sync — do not fork a third variant.
+ *
+ * Geometry: round head, prominent triangular ears, dot eyes, soft smile.
+ * Reads as a cat at 16px favicon and 24px chrome — not a TV with antennae.
  */
 
 export interface BrandMarkIconProps {
@@ -19,44 +22,37 @@ export function BrandMarkIcon({ size = 24, className }: BrandMarkIconProps) {
       className={className}
       aria-hidden
     >
-      <rect
-        x="4"
-        y="7"
-        width="16"
-        height="13"
-        rx="3.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        opacity="0.95"
-      />
+      {/* Left ear */}
       <path
-        d="M8 7 L7 4 L10 7"
+        d="M4.5 9 L7 3 L10 8"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+      {/* Right ear */}
       <path
-        d="M16 7 L17 4 L14 7"
+        d="M19.5 9 L17 3 L14 8"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx="12" cy="10.5" r="1.25" fill="currentColor" opacity="0.9" />
+      {/* Round head */}
+      <circle cx="12" cy="14" r="6.8" stroke="currentColor" strokeWidth="1.7" />
+      {/* Left eye */}
+      <circle cx="9.6" cy="13.2" r="1" fill="currentColor" />
+      {/* Right eye */}
+      <circle cx="14.4" cy="13.2" r="1" fill="currentColor" />
+      {/* Tiny nose */}
+      <circle cx="12" cy="15.6" r="0.55" fill="currentColor" opacity="0.85" />
+      {/* Soft smile */}
       <path
-        d="M8 13 H16"
+        d="M10.5 17.1 Q12 18.1 13.5 17.1"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.4"
         strokeLinecap="round"
-        opacity="0.85"
-      />
-      <path
-        d="M9 16 H15"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinecap="round"
-        opacity="0.6"
+        fill="none"
       />
     </svg>
   );

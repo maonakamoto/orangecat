@@ -2,11 +2,12 @@
   <!-- OrangeCat brand mark — must stay visually identical to BrandMarkIcon.tsx (24×24) -->
   <rect width="512" height="512" rx="96" fill="#0a0a0a"/>
   <g transform="translate(116 116) scale(11.6667)" fill="none" stroke="#ededed" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="4" y="7" width="16" height="13" rx="3.5" stroke="#ededed" stroke-width="1.6" opacity="0.95"/>
-    <path d="M8 7 L7 4 L10 7" stroke="#ededed" stroke-width="1.6"/>
-    <path d="M16 7 L17 4 L14 7" stroke="#ededed" stroke-width="1.6"/>
-    <circle cx="12" cy="10.5" r="1.25" fill="#ededed" opacity="0.9"/>
-    <path d="M8 13 H16" stroke="#ededed" stroke-width="1.6" opacity="0.85"/>
-    <path d="M9 16 H15" stroke="#ededed" stroke-width="1.4" opacity="0.6"/>
+    <path d="M4.5 9 L7 3 L10 8" stroke="#ededed" stroke-width="1.7"/>
+    <path d="M19.5 9 L17 3 L14 8" stroke="#ededed" stroke-width="1.7"/>
+    <circle cx="12" cy="14" r="6.8" stroke="#ededed" stroke-width="1.7"/>
+    <circle cx="9.6" cy="13.2" r="1" fill="#ededed" stroke="none"/>
+    <circle cx="14.4" cy="13.2" r="1" fill="#ededed" stroke="none"/>
+    <circle cx="12" cy="15.6" r="0.55" fill="#ededed" opacity="0.85" stroke="none"/>
+    <path d="M10.5 17.1 Q12 18.1 13.5 17.1" stroke="#ededed" stroke-width="1.4" fill="none"/>
   </g>
 </svg>
