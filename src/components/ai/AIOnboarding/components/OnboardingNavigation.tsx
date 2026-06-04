@@ -32,11 +32,7 @@ export function OnboardingNavigation({
         Previous
       </Button>
 
-      <Button
-        onClick={onNext}
-        disabled={!canProceed || isSubmitting}
-        className="bg-tiffany-600 hover:bg-tiffany-700 text-white"
-      >
+      <Button onClick={onNext} disabled={!canProceed || isSubmitting} variant="accent">
         {isLastStep ? (
           <>
             Complete Setup

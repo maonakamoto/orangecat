@@ -35,8 +35,8 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
       {/* Provider Info */}
       <Card className="p-6 bg-card">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 bg-tiffany-100 rounded-lg flex items-center justify-center">
-            <Key className="w-6 h-6 text-tiffany-600" />
+          <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
+            <Key className="w-6 h-6 text-foreground" />
           </div>
           <div>
             <h3 className="font-semibold">{provider.name}</h3>
@@ -50,7 +50,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
         {/* Steps */}
         <div className="space-y-3 mb-6">
           <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-            <div className="w-6 h-6 rounded-full bg-tiffany-600 text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
+            <div className="w-6 h-6 rounded-full bg-foreground text-card flex items-center justify-center text-sm font-medium flex-shrink-0">
               1
             </div>
             <div>
@@ -61,7 +61,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
             </div>
           </div>
           <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-            <div className="w-6 h-6 rounded-full bg-tiffany-600 text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
+            <div className="w-6 h-6 rounded-full bg-foreground text-card flex items-center justify-center text-sm font-medium flex-shrink-0">
               2
             </div>
             <div>
@@ -70,7 +70,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
             </div>
           </div>
           <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-            <div className="w-6 h-6 rounded-full bg-tiffany-600 text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
+            <div className="w-6 h-6 rounded-full bg-foreground text-card flex items-center justify-center text-sm font-medium flex-shrink-0">
               3
             </div>
             <div>
@@ -81,7 +81,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
             </div>
           </div>
           <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-            <div className="w-6 h-6 rounded-full bg-tiffany-600 text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
+            <div className="w-6 h-6 rounded-full bg-foreground text-card flex items-center justify-center text-sm font-medium flex-shrink-0">
               4
             </div>
             <div>
@@ -96,10 +96,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
 
         {/* Action Button */}
         <div className="flex items-center gap-3">
-          <Button
-            onClick={() => window.open(provider.apiKeyUrl, '_blank')}
-            className="bg-tiffany-600 hover:bg-tiffany-700 text-white"
-          >
+          <Button onClick={() => window.open(provider.apiKeyUrl, '_blank')} variant="accent">
             Open {provider.name}
             <ExternalLink className="w-4 h-4 ml-2" />
           </Button>
@@ -130,14 +127,14 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
       </div>
 
       {/* Tips */}
-      <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-4">
-        <h4 className="font-semibold text-tiffany-900 mb-2 flex items-center gap-2">
+      <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
+        <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
           <Shield className="w-4 h-4" />
           Security Tips
         </h4>
         <ul className="space-y-1">
           {aiOnboardingContent.getKey.tips?.map((tip, index) => (
-            <li key={index} className="text-sm text-tiffany-800 flex items-start gap-2">
+            <li key={index} className="text-sm text-foreground flex items-start gap-2">
               <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
               {tip}
             </li>

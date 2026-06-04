@@ -48,8 +48,8 @@ export function AddKeyStep({
           {/* Provider Display */}
           {provider && (
             <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-              <div className="w-10 h-10 bg-tiffany-100 rounded-lg flex items-center justify-center">
-                <Layers className="w-5 h-5 text-tiffany-600" />
+              <div className="w-10 h-10 bg-card rounded-lg flex items-center justify-center border border-border-subtle">
+                <Layers className="w-5 h-5 text-foreground" />
               </div>
               <div>
                 <p className="font-medium">{provider.name}</p>
@@ -129,7 +129,8 @@ export function AddKeyStep({
             <Button
               onClick={onAddKey}
               disabled={!apiKey || !keyValidation?.valid || isSubmitting}
-              className="w-full bg-tiffany-600 hover:bg-tiffany-700 text-white"
+              variant="accent"
+              className="w-full"
             >
               {isSubmitting ? 'Adding Key...' : 'Add API Key'}
             </Button>
@@ -138,14 +139,14 @@ export function AddKeyStep({
       </Card>
 
       {/* Security Info */}
-      <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-4">
+      <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Shield className="w-5 h-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
+          <Shield className="w-5 h-5 text-foreground mt-0.5 flex-shrink-0" />
           <div>
-            <h4 className="font-semibold text-tiffany-900 mb-1">
+            <h4 className="font-semibold text-foreground mb-1">
               {aiOnboardingContent.addKey.whyTitle}
             </h4>
-            <p className="text-sm text-tiffany-800">{aiOnboardingContent.addKey.whyContent}</p>
+            <p className="text-sm text-foreground">{aiOnboardingContent.addKey.whyContent}</p>
           </div>
         </div>
       </div>

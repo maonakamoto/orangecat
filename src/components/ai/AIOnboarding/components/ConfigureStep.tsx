@@ -29,8 +29,8 @@ export function ConfigureStep({
       <Card className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-lg bg-tiffany-100 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-tiffany-600" />
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+              <Zap className="w-5 h-5 text-foreground" />
             </div>
             <div>
               <h3 className="font-medium">Auto Router</h3>
@@ -46,7 +46,7 @@ export function ConfigureStep({
             onClick={() => onAutoRouterChange(!autoRouterEnabled)}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              autoRouterEnabled ? 'bg-tiffany-600' : 'bg-muted'
+              autoRouterEnabled ? 'bg-foreground' : 'bg-muted'
             )}
           >
             <span
@@ -58,10 +58,10 @@ export function ConfigureStep({
           </button>
         </div>
         {autoRouterEnabled && (
-          <div className="mt-3 p-3 bg-tiffany-50 rounded-lg">
+          <div className="mt-3 p-3 bg-muted/40 rounded-lg">
             <div className="flex items-start gap-2">
-              <Lightbulb className="w-4 h-4 text-tiffany-600 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-tiffany-700">
+              <Lightbulb className="w-4 h-4 text-foreground mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-foreground">
                 Simple messages use cheaper models. Complex tasks use more powerful ones. Saves
                 money without sacrificing quality.
               </p>
@@ -94,7 +94,7 @@ export function ConfigureStep({
                 className={cn(
                   'p-4 rounded-lg border-2 text-left transition-all',
                   isSelected
-                    ? 'border-tiffany-500 bg-tiffany-50'
+                    ? 'border-foreground bg-muted/40'
                     : 'border-border hover:border-border-strong dark:hover:border-border'
                 )}
               >
@@ -131,14 +131,14 @@ export function ConfigureStep({
       )}
 
       {/* Tips */}
-      <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-4">
-        <h4 className="font-semibold text-tiffany-900 mb-2 flex items-center gap-2">
+      <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
+        <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
           <Lightbulb className="w-4 h-4" />
           Tips
         </h4>
         <ul className="space-y-1">
           {aiOnboardingContent.configure.tips?.map((tip, index) => (
-            <li key={index} className="text-sm text-tiffany-800 flex items-start gap-2">
+            <li key={index} className="text-sm text-foreground flex items-start gap-2">
               <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
               {tip}
             </li>

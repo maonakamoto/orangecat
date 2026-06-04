@@ -131,8 +131,8 @@ export function AIOnboarding(props: AIOnboardingProps) {
           >
             {/* Step Header */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <currentStepData.icon className="w-8 h-8 text-tiffany-600" />
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <currentStepData.icon className="w-8 h-8 text-foreground" />
               </div>
               <h2 className="text-2xl font-semibold text-foreground mb-2">
                 {currentStepData.title}

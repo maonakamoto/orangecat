@@ -26,7 +26,7 @@ export function ProviderStep({ selectedProvider, onSelectProvider }: ProviderSte
             className={cn(
               'cursor-pointer transition-all duration-200 hover:shadow-sm p-6',
               selectedProvider === p.id
-                ? 'ring-2 ring-tiffany-500 border-tiffany-500 bg-tiffany-50/50'
+                ? 'ring-2 ring-foreground border-foreground bg-muted/40'
                 : ''
             )}
             onClick={() => onSelectProvider(p.id)}
@@ -36,7 +36,9 @@ export function ProviderStep({ selectedProvider, onSelectProvider }: ProviderSte
                 <h3 className="font-semibold flex items-center gap-2">
                   {p.name}
                   {p.recommended && (
-                    <Badge className="bg-tiffany-100 text-tiffany-700 text-xs">Recommended</Badge>
+                    <Badge className="bg-muted text-foreground border border-border-subtle text-xs">
+                      Recommended
+                    </Badge>
                   )}
                 </h3>
                 <p className="text-xs text-muted-foreground capitalize">
@@ -77,14 +79,14 @@ export function ProviderStep({ selectedProvider, onSelectProvider }: ProviderSte
       </div>
 
       {/* Info Box */}
-      <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-4">
+      <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Lightbulb className="w-5 h-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
+          <Lightbulb className="w-5 h-5 text-foreground mt-0.5 flex-shrink-0" />
           <div className="text-left">
-            <h4 className="font-semibold text-tiffany-900 mb-1">
+            <h4 className="font-semibold text-foreground mb-1">
               {aiOnboardingContent.provider.whyTitle}
             </h4>
-            <p className="text-tiffany-800 text-sm">{aiOnboardingContent.provider.whyContent}</p>
+            <p className="text-foreground text-sm">{aiOnboardingContent.provider.whyContent}</p>
           </div>
         </div>
       </div>
