@@ -97,7 +97,7 @@ export function PostActions({
         <button
           onClick={handleDislike}
           disabled={isDisliking}
-          className={actionClassName(event.userDisliked || false, 'text-orange-600')}
+          className={actionClassName(event.userDisliked || false, 'text-status-warning')}
           title="Dislike this post (wisdom of crowds - helps detect scams)"
           aria-label="Dislike"
         >
@@ -111,7 +111,7 @@ export function PostActions({
         <button
           onClick={handleShareOpen}
           disabled={isSharing}
-          className={actionClassName(event.userShared || false, 'text-tiffany-600')}
+          className={actionClassName(event.userShared || false, 'text-foreground')}
           aria-label="Share"
         >
           <Share2 className="w-5 h-5" />

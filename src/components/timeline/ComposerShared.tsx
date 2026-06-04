@@ -23,7 +23,7 @@ export function TextFormatToolbar({
 
   const colorClasses =
     variant === 'accent'
-      ? 'text-tiffany-600 hover:bg-tiffany-50 active:bg-tiffany-100 dark:text-tiffany-300 dark:hover:bg-tiffany-950/30'
+      ? 'text-foreground hover:bg-muted active:bg-muted/80'
       : 'text-muted-foreground hover:bg-muted hover:text-foreground';
 
   return (
@@ -101,7 +101,7 @@ export function ProjectSelectionPanel({
               TIMELINE_SURFACE.chip,
               selectedProjects.includes(project.id)
                 ? variant === 'accent'
-                  ? 'border-tiffany-500 bg-tiffany-500 text-white hover:text-white'
+                  ? 'border-foreground bg-foreground text-card hover:text-card'
                   : TIMELINE_SURFACE.chipActive
                 : ''
             )}
@@ -143,7 +143,7 @@ export function ProjectToggleButton({
         'flex h-9 w-9 items-center justify-center rounded-md transition-colors touch-manipulation',
         isActive
           ? variant === 'accent'
-            ? 'bg-tiffany-50 text-tiffany-700 dark:bg-tiffany-950/30 dark:text-tiffany-300'
+            ? 'bg-muted text-foreground ring-1 ring-border-strong'
             : 'bg-muted text-foreground'
           : 'text-muted-foreground hover:bg-muted hover:text-foreground'
       )}
@@ -235,7 +235,7 @@ export function CharacterCounter({
     count > dangerThreshold
       ? 'text-red-500'
       : count > warningThreshold
-        ? 'text-orange-500'
+        ? 'text-status-warning'
         : 'text-muted-dim';
 
   return (
@@ -255,7 +255,7 @@ export function OfflineIndicator({ isOnline }: OfflineIndicatorProps) {
   }
 
   return (
-    <div className="flex items-center gap-1 rounded-md border border-orange-200 bg-orange-50 px-2 py-1 text-xs text-orange-700 dark:border-orange-900/50 dark:bg-orange-950/20 dark:text-orange-300">
+    <div className="flex items-center gap-1 rounded-md border border-status-warning/30 bg-status-warning-subtle px-2 py-1 text-xs text-status-warning">
       <WifiOff className="w-3 h-3" />
       <span>Offline</span>
     </div>

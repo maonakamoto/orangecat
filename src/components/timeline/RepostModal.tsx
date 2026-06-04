@@ -182,7 +182,7 @@ export function RepostModal({
                 <span
                   className={
                     remainingCharacters <= 20
-                      ? 'text-orange-600 font-semibold'
+                      ? 'text-status-warning font-semibold'
                       : 'text-muted-foreground'
                   }
                 >
