@@ -12,13 +12,13 @@
 
 export const GRADIENTS = {
   // ── Right-direction gradients ─────────────────────────────────────────────
-  brandOrange: 'bg-orange-600',
-  brandOrangeDark: 'bg-orange-600',
-  brandMixed: 'bg-tiffany-600',
-  brandTiffany: 'bg-tiffany-600',
-  brandTiffanyDark: 'bg-tiffany-600',
+  brandOrange: 'bg-foreground',
+  brandOrangeDark: 'bg-foreground',
+  brandMixed: 'bg-foreground',
+  brandTiffany: 'bg-foreground',
+  brandTiffanyDark: 'bg-foreground',
   brandPrimary: 'bg-foreground',
-  brandOrangeAmber: 'bg-orange-600',
+  brandOrangeAmber: 'bg-foreground',
   brandGreen: 'bg-success',
   brandBlue: 'bg-foreground',
   brandRose: 'bg-rose-600',
@@ -37,8 +37,8 @@ export const GRADIENTS = {
 
   // ── Icon circle/badge gradients (diagonal, for icon backgrounds) ──────────
   iconBlue: 'bg-foreground',
-  iconOrange: 'bg-orange-600',
-  iconTiffany: 'bg-tiffany-600',
+  iconOrange: 'bg-foreground',
+  iconTiffany: 'bg-foreground',
   iconGreen: 'bg-success',
   iconTiffanyLight: 'bg-muted',
 
@@ -49,17 +49,17 @@ export const GRADIENTS = {
   sectionGreenEmerald: 'bg-muted/30',
 
   // ── Diagonal (br) gradients ───────────────────────────────────────────────
-  brandOrangeBr: 'bg-orange-600',
-  brandOrangeCircle: 'bg-orange-600',
-  brandOrangeLightBr: 'bg-orange-50',
-  brandTiffanyBr: 'bg-tiffany-600',
+  brandOrangeBr: 'bg-foreground',
+  brandOrangeCircle: 'bg-foreground',
+  brandOrangeLightBr: 'bg-muted',
+  brandTiffanyBr: 'bg-foreground',
   grayLight: 'bg-muted/30',
   graySubtle: 'bg-muted/20',
   heroSection: 'bg-background',
   heroOrangeTiffany: 'bg-foreground',
-  brandOrangeYellow: 'bg-orange-600',
-  brandMixedBr: 'bg-tiffany-600',
-  iconTiffanyOrange: 'bg-tiffany-600',
+  brandOrangeYellow: 'bg-foreground',
+  brandMixedBr: 'bg-foreground',
+  iconTiffanyOrange: 'bg-foreground',
   tiffanyMuted: 'bg-muted',
   sectionOrangeAmber: 'bg-muted/30',
   sectionTiffanyOrange: 'bg-muted/20',
@@ -80,11 +80,11 @@ export const GRADIENTS = {
   // ── Bitcoin gradients (only for Bitcoin-related UI) ──────────────────────
   brandBitcoin: 'bg-bitcoinOrange',
   progressBitcoin: 'bg-bitcoinOrange',
-  btnBitcoin: 'bg-bitcoinOrange hover:bg-orange-600',
+  btnBitcoin: 'bg-bitcoinOrange hover:bg-bitcoinOrange/90',
 
   // ── Button combos (base + hover, always used together) ───────────────────
-  btnOrange: 'bg-orange-600 hover:bg-orange-700',
-  btnOrangeDark: 'bg-orange-600 hover:bg-orange-700',
+  btnOrange: 'bg-foreground hover:bg-muted-strong',
+  btnOrangeDark: 'bg-foreground hover:bg-muted-strong',
   btnPrimary: 'bg-foreground hover:bg-muted-strong',
   btnGreen: 'bg-success hover:bg-success/90',
 } as const;
