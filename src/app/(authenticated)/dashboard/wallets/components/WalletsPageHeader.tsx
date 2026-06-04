@@ -21,7 +21,7 @@ export function WalletsPageHeader({ isDesktop }: WalletsPageHeaderProps) {
     <div className="mb-6 lg:mb-8">
       <Breadcrumb items={[{ label: 'Wallets' }]} className="mb-4" />
       <div className="flex items-center gap-3 mb-2">
-        <WalletIcon className="w-8 h-8 text-orange-600" />
+        <WalletIcon className="w-8 h-8 text-bitcoinOrange" />
         <h1 className="text-2xl lg:text-3xl font-bold text-foreground">Manage Wallets</h1>
       </div>
       {/* Desktop: Full description, Mobile: Shortened */}
@@ -35,19 +35,19 @@ export function WalletsPageHeader({ isDesktop }: WalletsPageHeaderProps) {
 
       {/* Info Banner - Collapsible on Mobile, Open on Desktop */}
       <details
-        className="bg-tiffany-50 border border-tiffany-200 rounded-lg overflow-hidden"
+        className="bg-muted/40 border border-border-subtle rounded-lg overflow-hidden"
         open={isDesktop}
       >
         <summary className="p-3 lg:p-4 flex items-start gap-3 cursor-pointer list-none">
-          <Info className="w-5 h-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
-          <div className="text-sm text-tiffany-900 flex-1">
+          <Info className="w-5 h-5 text-foreground mt-0.5 flex-shrink-0" />
+          <div className="text-sm text-foreground flex-1">
             <p className="font-medium">About Bitcoin Wallets</p>
             <p className="lg:hidden mt-1 text-xs">
               Connect your Bitcoin address or xpub to receive support
             </p>
           </div>
           <svg
-            className="w-5 h-5 text-tiffany-600 flex-shrink-0 lg:hidden transition-transform"
+            className="w-5 h-5 text-foreground flex-shrink-0 lg:hidden transition-transform"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -55,7 +55,7 @@ export function WalletsPageHeader({ isDesktop }: WalletsPageHeaderProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </summary>
-        <div className="px-3 pb-3 lg:px-4 lg:pb-4 pt-0 lg:pt-0 text-sm text-tiffany-900 border-t border-tiffany-200 lg:border-t-0">
+        <div className="px-3 pb-3 lg:px-4 lg:pb-4 pt-0 lg:pt-0 text-sm text-foreground border-t border-border-subtle lg:border-t-0">
           <p className="mt-2">
             Connect a Bitcoin address or extended public key (xpub/ypub/zpub) from a wallet you
             control. Active wallets appear on your profile so supporters know exactly what they are

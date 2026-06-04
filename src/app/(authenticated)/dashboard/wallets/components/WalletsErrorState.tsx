@@ -14,8 +14,6 @@ import { AlertCircle } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 
 interface WalletsErrorStateProps {
   error: string;
@@ -26,7 +24,7 @@ export function WalletsErrorState({ error, onRetry }: WalletsErrorStateProps) {
   const router = useRouter();
 
   return (
-    <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
+    <div className="bg-surface-page min-h-screen">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
         <Card className="border-red-200 bg-card">
           <div className="p-6">

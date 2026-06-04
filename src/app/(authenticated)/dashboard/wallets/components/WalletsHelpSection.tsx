@@ -50,7 +50,7 @@ export function WalletsHelpSection({ isDesktop }: WalletsHelpSectionProps) {
             <li>Mark wallets as active to display them on your public profile</li>
           </ul>
           <details className="mt-3">
-            <summary className="cursor-pointer text-orange-600 hover:text-orange-700 text-xs font-medium">
+            <summary className="cursor-pointer text-bitcoinOrange hover:underline underline-offset-4 text-xs font-medium">
               Why use extended public keys?
             </summary>
             <p className="mt-2 text-xs text-muted-foreground pl-4">
