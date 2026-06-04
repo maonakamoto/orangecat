@@ -16,7 +16,6 @@ import { formatRelativeTimeCompact } from '@/utils/dates';
 import { getStatusInfo } from '@/config/status-config';
 import { PROJECT_STATUS } from '@/config/project-statuses';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
-import { GRADIENTS } from '@/config/gradients';
 
 // OrangeCat + FleetCrown: FleetCrown is the "customer" of OrangeCat via stakeholder graph.
 // Both are projects on this platform for Mao Nakamoto, with shared wallet.
@@ -127,7 +126,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
       {/* Header with count */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-          <Target className="w-5 h-5 text-orange-500" />
+          <Target className="w-5 h-5 text-fg-secondary" />
           {publicProjects.length}{' '}
           {publicProjects.length === 1
             ? ENTITY_REGISTRY.project.name
@@ -176,7 +175,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Target className="w-12 h-12 text-orange-400" />
+                      <Target className="w-12 h-12 text-muted-foreground" />
                     </div>
                   )}
                   {project.category && (
@@ -200,7 +199,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                 {/* Content */}
                 <div className="flex-1 p-4 sm:p-5 flex flex-col">
                   <div className="flex-1">
-                    <h4 className="font-bold text-foreground text-lg mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-1">
+                    <h4 className="font-bold text-foreground text-lg mb-1.5 line-clamp-1">
                       {project.title}
                     </h4>
                     {project.description && (
@@ -221,7 +220,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                       </div>
                       <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                         <div
-                          className={`${GRADIENTS.brandOrangeAmber} h-2 rounded-full transition-all duration-300`}
+                          className="bg-foreground h-2 rounded-full transition-all duration-300"
                           style={{ width: `${progress}%` }}
                         />
                       </div>
@@ -246,7 +245,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                   ) : (
                     <div className="mb-3">
                       <div className="flex items-center gap-2">
-                        <Bitcoin className="w-4 h-4 text-orange-500" />
+                        <Bitcoin className="w-4 h-4 text-bitcoinOrange" />
                         <span className="text-sm font-semibold text-foreground">
                           {balanceBTC > 0 ? (
                             formatBitcoinDisplay(balanceBTC)
@@ -268,7 +267,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
                   <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border-subtle">
                     <span>{formatRelativeTimeCompact(project.created_at)}</span>
                     {project.bitcoin_address && (
-                      <span className="flex items-center gap-1 text-orange-600">
+                      <span className="flex items-center gap-1 text-bitcoinOrange">
                         <Bitcoin className="w-3 h-3" />
                         Wallet
                       </span>
