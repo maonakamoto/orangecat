@@ -7,12 +7,12 @@ deployment guide). This file covers the _additional_ steps to exercise an
 integration-key + webhook customer (FleetCrown, hirn.li, third-party).
 
 This checklist is what an operator pulls up when running through the
-8-step deploy that shipped across the 211188a3 → 5f051a83 thread. Each
+9-step deploy that shipped across the 211188a3 → 6da6b8cd thread. Each
 step has the exact command, a verification, and a rollback if it fails.
 
 ---
 
-## TL;DR — the 8 steps
+## TL;DR — the 9 steps
 
 ```
 [ ] 1. Mint a customer integration key at orangecat.ch/settings/integrations
@@ -27,7 +27,7 @@ step has the exact command, a verification, and a rollback if it fails.
 [ ] 8. Set UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN
        in OrangeCat Vercel env
 [ ] 9. Set WEBHOOK_SECRET_KEY in OrangeCat Vercel env
-       (master key encrypting webhook_endpoints.secret_plaintext at rest)
+       (master key encrypting webhook_endpoints.secret_encrypted at rest)
 
 [ ] Smoke test: trigger an entity-create on the customer side,
                 watch the webhook fire end-to-end.
