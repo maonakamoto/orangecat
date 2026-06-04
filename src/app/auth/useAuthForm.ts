@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
 import { useAuth, useRedirectIfAuthenticated } from '@/hooks/useAuth';
 import { signInAnonymously } from '@/services/supabase/auth';
 import { getReadableError } from '@/utils/getReadableError';
@@ -131,7 +132,12 @@ export function useAuthForm() {
       const redirectUrl = searchParams?.get('from') || '/dashboard';
       router.replace(redirectUrl);
     } catch (err) {
-      getReadableError(err, 'Anonymous sign-in failed');
+      // Surface the failure: anonymous sign-in can fail for environment
+      // reasons (provider disabled in Supabase, captcha required, rate
+      // limit). The previous handler swallowed the error to the console
+      // only, leaving the user staring at a spinner that silently reset.
+      const message = getReadableError(err, 'Anonymous sign-in failed');
+      toast.error(message);
     }
   };
 
