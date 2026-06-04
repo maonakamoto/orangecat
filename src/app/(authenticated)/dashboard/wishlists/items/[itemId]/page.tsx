@@ -119,7 +119,7 @@ export default async function WishlistItemDetailPage({ params }: PageProps) {
           </div>
           <div className="w-full bg-muted rounded-full h-2 mt-4">
             <div
-              className="bg-orange-600 h-2 rounded-full"
+              className="bg-foreground h-2 rounded-full"
               style={{
                 width: `${Math.min(100, (item.funded_amount_btc / item.target_amount_btc) * 100)}%`,
               }}

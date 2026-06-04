@@ -141,7 +141,7 @@ export default function AIAssistantChatPage() {
       <div className="flex items-start gap-4 mb-8">
         <Avatar className="h-16 w-16">
           <AvatarImage src={assistant?.avatar_url || undefined} />
-          <AvatarFallback className="bg-tiffany-100 text-tiffany-600">
+          <AvatarFallback className="bg-muted text-foreground">
             <Bot className="h-8 w-8" />
           </AvatarFallback>
         </Avatar>

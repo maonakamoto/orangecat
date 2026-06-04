@@ -32,9 +32,9 @@ function getNotificationIcon(notification: Notification) {
     case 'project_funded':
       return <Bitcoin className="w-5 h-5 text-bitcoin-orange" />;
     case 'follow':
-      return <Users className="w-5 h-5 text-tiffany-500" />;
+      return <Users className="w-5 h-5 text-foreground" />;
     case 'message':
-      return <MessageSquare className="w-5 h-5 text-tiffany-500" />;
+      return <MessageSquare className="w-5 h-5 text-foreground" />;
     case 'comment':
       return <MessageSquare className="w-5 h-5 text-green-500" />;
     case 'like':

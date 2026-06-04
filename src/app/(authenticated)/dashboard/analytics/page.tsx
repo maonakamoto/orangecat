@@ -69,15 +69,15 @@ export default function AnalyticsPage() {
         label: 'Active Projects',
         value: activeProjects.length,
         icon: Target,
-        color: 'text-tiffany-600',
+        color: 'text-foreground',
       },
-      { label: 'Total Supporters', value: totalSupporters, icon: Users, color: 'text-tiffany-600' },
+      { label: 'Total Supporters', value: totalSupporters, icon: Users, color: 'text-foreground' },
       {
         label: 'Avg Contribution',
         value: avgContribution,
         format: 'currency',
         icon: TrendingUp,
-        color: 'text-orange-600',
+        color: 'text-foreground',
       },
       {
         label: 'Success Rate',

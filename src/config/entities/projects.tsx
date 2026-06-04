@@ -122,7 +122,7 @@ export const projectEntityConfig: EntityConfig<ProjectListItem> = {
               </span>
             ))}
             {progress > 0 && (
-              <span className="text-orange-600 font-medium">{progress}% funded</span>
+              <span className="text-bitcoinOrange font-medium">{progress}% funded</span>
             )}
           </div>
         ) : undefined,

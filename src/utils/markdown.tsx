@@ -67,7 +67,7 @@ function tokenToReact(token: Token, index: number): React.ReactNode {
         <Link
           key={key}
           href={`/profiles/${token.username}`}
-          className="text-tiffany-600 hover:text-tiffany-700 hover:underline font-medium"
+          className="text-foreground hover:text-foreground hover:underline font-medium"
           onClick={e => e.stopPropagation()}
         >
           {token.value}
@@ -80,7 +80,7 @@ function tokenToReact(token: Token, index: number): React.ReactNode {
           href={token.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-tiffany-600 hover:text-tiffany-700 hover:underline font-medium"
+          className="text-foreground hover:text-foreground hover:underline font-medium"
           onClick={e => e.stopPropagation()}
         >
           {token.linkText}
@@ -95,7 +95,7 @@ function tokenToReact(token: Token, index: number): React.ReactNode {
           href={token.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-tiffany-600 hover:text-tiffany-700 hover:underline"
+          className="text-foreground hover:text-foreground hover:underline"
           onClick={e => e.stopPropagation()}
         >
           {displayUrl}

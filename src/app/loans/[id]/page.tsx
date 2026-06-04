@@ -72,7 +72,7 @@ const loanConfig: EntityDetailConfig = {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Remaining Balance</span>
-                <span className="font-bold text-xl text-tiffany-600">
+                <span className="font-bold text-xl text-foreground">
                   {formatCurrency(entity.remaining_balance, entity.currency ?? 'USD')}
                 </span>
               </div>

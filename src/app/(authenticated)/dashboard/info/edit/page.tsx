@@ -58,8 +58,8 @@ export default function DashboardInfoEditPage() {
                 Back to View
               </Button>
             </Link>
-            <div className="p-2 bg-orange-100 rounded-lg">
-              <Edit className="w-5 h-5 text-orange-600" />
+            <div className="p-2 bg-muted rounded-lg">
+              <Edit className="w-5 h-5 text-foreground" />
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-foreground">Edit Profile</h1>
           </div>

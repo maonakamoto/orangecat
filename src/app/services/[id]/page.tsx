@@ -33,7 +33,7 @@ const config: EntityDetailConfig = {
         {entity.price_btc && (
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Price</span>
-            <span className="text-xl font-bold text-tiffany-600">
+            <span className="text-xl font-bold text-foreground">
               {displayBTC(entity.price_btc)}
             </span>
           </div>

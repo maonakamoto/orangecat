@@ -53,7 +53,7 @@ const config: EntityDetailConfig = {
                 <span className="text-sm text-muted-foreground">
                   {displayBTC(fundingRaised)} raised
                 </span>
-                <span className="font-bold text-lg text-tiffany-600">
+                <span className="font-bold text-lg text-foreground">
                   {displayBTC(fundingGoal)} goal
                 </span>
               </div>

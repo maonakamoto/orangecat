@@ -54,7 +54,7 @@ export default function NotFound() {
             Looking for something specific?{' '}
             <Link
               href={ROUTES.FAQ}
-              className="font-medium text-tiffany-600 hover:text-tiffany-700 dark:text-tiffany-400"
+              className="font-medium text-foreground hover:text-foreground dark:text-foreground"
             >
               Visit our FAQ
             </Link>

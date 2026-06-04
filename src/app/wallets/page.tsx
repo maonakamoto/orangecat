@@ -25,7 +25,7 @@ export default function WalletsPage() {
       <WalletRecommendationCards />
 
       {/* Educational Section */}
-      <div className="mt-10 p-6 rounded-lg bg-orange-50 border border-orange-200">
+      <div className="mt-10 p-6 rounded-lg bg-bitcoinOrange/5 border border-bitcoinOrange/20">
         <h4 className="font-semibold text-foreground mb-2">What is a wallet?</h4>
         <p className="text-sm text-muted-strong mb-3">
           A Bitcoin wallet lets you receive payments. It gives you a Bitcoin address (looks like

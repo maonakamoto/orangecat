@@ -56,7 +56,7 @@ export default function Loading({
 
   const content = (
     <div className="flex flex-col items-center space-y-3" suppressHydrationWarning>
-      <Loader2 className={`${sizeClasses[size]} animate-spin text-tiffany-500`} />
+      <Loader2 className={`${sizeClasses[size]} animate-spin text-foreground`} />
       {message && <p className="text-sm text-muted-foreground font-sans">{message}</p>}
     </div>
   );

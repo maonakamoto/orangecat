@@ -55,13 +55,13 @@ const mdxComponents = {
   ),
   li: ({ children, ...props }: ComponentProps<'li'>) => (
     <li className="flex items-start" {...props}>
-      <span className="w-2 h-2 bg-tiffany-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+      <span className="w-2 h-2 bg-muted/400 rounded-full mt-2 mr-4 flex-shrink-0"></span>
       <span>{children}</span>
     </li>
   ),
   blockquote: ({ children, ...props }: ComponentProps<'blockquote'>) => (
     <blockquote
-      className="border-l-4 border-tiffany-500 pl-6 my-8 bg-tiffany-50 dark:bg-accent py-4 rounded-r-lg"
+      className="border-l-4 border-foreground pl-6 my-8 bg-muted/40 dark:bg-accent py-4 rounded-r-lg"
       {...props}
     >
       <div className="text-lg text-muted-strong italic">{children}</div>
@@ -80,7 +80,7 @@ const mdxComponents = {
   a: ({ href, children, ...props }: ComponentProps<'a'>) => (
     <Link
       href={href || '#'}
-      className="text-tiffany-600 hover:text-tiffany-700 font-medium underline"
+      className="text-foreground hover:text-foreground font-medium underline"
       {...props}
     >
       {children}
@@ -204,8 +204,8 @@ export default async function BlogPost({ params }: PageProps) {
             {/* Article Header */}
             <header className="mb-12">
               {post.featured && (
-                <div className="flex items-center text-sm text-orange-600 mb-4 font-medium">
-                  <span className="bg-orange-100 px-3 py-1 rounded-full">Featured Article</span>
+                <div className="flex items-center text-sm text-foreground mb-4 font-medium">
+                  <span className="bg-muted px-3 py-1 rounded-full">Featured Article</span>
                 </div>
               )}
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">

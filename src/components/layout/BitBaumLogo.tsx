@@ -45,7 +45,7 @@ export default function BitBaumLogo({
       </span>
 
       {showText && (
-        <span className="text-lg font-bold text-foreground group-hover:text-orange-600 transition-colors">
+        <span className="text-lg font-bold text-foreground group-hover:underline underline-offset-4">
           BitBaum
         </span>
       )}

@@ -365,7 +365,7 @@
   }
 
   .oc-accent-tile {
-    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-tiffany-600 text-white dark:bg-tiffany-500 dark:text-background;
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-foreground text-card;
   }
 
   .oc-card-link {
@@ -373,7 +373,7 @@
   }
 
   .oc-selection-ring {
-    @apply ring-2 ring-tiffany-500/70 border-tiffany-500;
+    @apply ring-2 ring-foreground/70 border-foreground;
   }
 
   /*
@@ -479,7 +479,7 @@
   }
 
   .progress-bar-fill {
-    @apply h-full bg-tiffany-600 transition-all duration-300;
+    @apply h-full bg-foreground transition-all duration-300;
   }
 
   /* Professional Trust Score Styling - faster transitions */
@@ -493,11 +493,11 @@
 
   /* Bitcoin-themed elements */
   .bitcoin-text {
-    @apply text-orange-500 font-semibold;
+    @apply text-bitcoinOrange font-semibold;
   }
 
   .bitcoin-card {
-    @apply card border-orange-200 hover:border-border-strong hover:shadow-orange-100;
+    @apply card border-bitcoinOrange/30 hover:border-border-strong hover:shadow-sm;
   }
 
   /* KPI Cards */
@@ -510,7 +510,7 @@
   }
 
   .kpi-progress-fill {
-    @apply h-full bg-tiffany-600 transition-all duration-300;
+    @apply h-full bg-foreground transition-all duration-300;
   }
 
   /* Professional Transparency Score - faster transitions */
@@ -519,7 +519,7 @@
   }
 
   .transparency-score-fill {
-    @apply h-full bg-tiffany-600 transition-all duration-300;
+    @apply h-full bg-foreground transition-all duration-300;
   }
 
   /* Labels */
@@ -709,7 +709,7 @@
   .pull-refresh-indicator {
     @apply fixed top-0 left-0 right-0 z-40;
     @apply flex items-center justify-center;
-    @apply bg-orange-50 text-orange-600;
+    @apply bg-muted text-foreground;
     @apply transition-all duration-300;
   }
 

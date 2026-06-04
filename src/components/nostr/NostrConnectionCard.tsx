@@ -44,7 +44,7 @@ export function NostrConnectionCard() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Key className="h-5 w-5 text-tiffany-500" />
+          <Key className="h-5 w-5 text-foreground" />
           Nostr
         </CardTitle>
         <CardDescription>
@@ -61,7 +61,7 @@ export function NostrConnectionCard() {
 
         {connected && npub ? (
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 rounded-lg bg-tiffany-50 border border-tiffany-200">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/40 border border-border-subtle">
               <div className="flex items-center gap-3 min-w-0">
                 {profile?.picture ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -71,8 +71,8 @@ export function NostrConnectionCard() {
                     className="h-8 w-8 rounded-full"
                   />
                 ) : (
-                  <div className="h-8 w-8 rounded-full bg-tiffany-200 flex items-center justify-center">
-                    <Key className="h-4 w-4 text-tiffany-600" />
+                  <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                    <Key className="h-4 w-4 text-foreground" />
                   </div>
                 )}
                 <div className="min-w-0">
@@ -190,7 +190,7 @@ export function NostrConnectionCard() {
               <Button
                 onClick={connectWithExtension}
                 disabled={loading}
-                className="w-full bg-tiffany-600 hover:bg-tiffany-700"
+                className="w-full bg-foreground hover:bg-foreground"
               >
                 <Key className="h-4 w-4 mr-2" />
                 {loading ? 'Connecting...' : 'Connect with Extension'}
@@ -207,7 +207,7 @@ export function NostrConnectionCard() {
                     href="https://getalby.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-tiffany-600 hover:underline inline-flex items-center gap-0.5"
+                    className="text-foreground hover:underline inline-flex items-center gap-0.5"
                   >
                     Alby <ExternalLink className="h-3 w-3" />
                   </a>{' '}
@@ -216,7 +216,7 @@ export function NostrConnectionCard() {
                     href="https://github.com/niccokunzmann/nos2x"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-tiffany-600 hover:underline inline-flex items-center gap-0.5"
+                    className="text-foreground hover:underline inline-flex items-center gap-0.5"
                   >
                     nos2x <ExternalLink className="h-3 w-3" />
                   </a>{' '}

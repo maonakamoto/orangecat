@@ -105,14 +105,14 @@ const config: EntityDetailConfig = {
               </div>
             )}
             {entity.is_for_rent && (
-              <div className="p-3 bg-tiffany-50 rounded-lg space-y-2">
+              <div className="p-3 bg-muted/40 rounded-lg space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-tiffany-800">For Rent</span>
+                  <span className="text-sm font-medium text-foreground">For Rent</span>
                 </div>
                 {entity.rental_price_btc !== null && entity.rental_price_btc !== undefined && (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Rental Price</span>
-                    <span className="font-bold text-tiffany-700">
+                    <span className="font-bold text-foreground">
                       {displayBTC(Number(entity.rental_price_btc))} /{' '}
                       {ASSET_RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
                     </span>

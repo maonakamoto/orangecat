@@ -56,7 +56,7 @@ const templates: LoanTemplate[] = [
   {
     id: 'working-capital',
     name: 'Working Capital (SMB)',
-    icon: <Briefcase className="w-5 h-5 text-tiffany-600" />,
+    icon: <Briefcase className="w-5 h-5 text-foreground" />,
     data: {
       title: 'Working Capital for Q1 Inventory',
       description:
@@ -74,7 +74,7 @@ const templates: LoanTemplate[] = [
   {
     id: 'equipment',
     name: 'Equipment Financing',
-    icon: <Wrench className="w-5 h-5 text-orange-600" />,
+    icon: <Wrench className="w-5 h-5 text-bitcoinOrange" />,
     data: {
       title: 'CNC Machine Lease-Buyout',
       description:
@@ -92,7 +92,7 @@ const templates: LoanTemplate[] = [
   {
     id: 'btc-collateralized',
     name: 'BTC-Collateralized',
-    icon: <Banknote className="w-5 h-5 text-tiffany-600" />,
+    icon: <Banknote className="w-5 h-5 text-foreground" />,
     data: {
       title: 'BTC-Collateralized Personal Loan',
       description:
@@ -118,7 +118,7 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
     <div className="space-y-3 mb-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Banknote className="w-5 h-5 text-orange-600" />
+          <Banknote className="w-5 h-5 text-bitcoinOrange" />
           <p className="text-sm font-semibold text-foreground">Loan examples</p>
         </div>
         <p className="text-xs text-muted-foreground">Click to prefill the form</p>
@@ -127,12 +127,12 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
         {templates.map(t => (
           <Card
             key={t.id}
-            className="cursor-pointer hover:shadow-sm border-2 border-transparent hover:border-orange-200"
+            className="cursor-pointer hover:shadow-sm border-2 border-transparent hover:border-bitcoinOrange/30"
             onClick={() => onApply(t.data)}
           >
             <CardHeader className="pb-2">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600">
+                <div className="w-9 h-9 rounded-lg bg-bitcoinOrange/15 flex items-center justify-center text-bitcoinOrange">
                   {t.icon}
                 </div>
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
@@ -164,7 +164,7 @@ export function LoanTemplates({ onApply }: LoanTemplatesProps) {
           </Card>
         ))}
       </div>
-      <div className="text-xs text-tiffany-800 bg-tiffany-50 border border-tiffany-200 rounded-lg p-3">
+      <div className="text-xs text-foreground bg-muted/40 border border-border-subtle rounded-lg p-3">
         💡 Templates are starting points. Adjust amounts, rates, and collateral to match the actual
         deal.
       </div>

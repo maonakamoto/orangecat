@@ -155,7 +155,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                   onClick={action.action}
                   className="w-full flex items-center gap-4 px-4 py-3 text-left text-muted-strong hover:bg-muted rounded-lg transition-colors"
                 >
-                  <div className="text-orange-500">{action.icon}</div>
+                  <div className="text-foreground">{action.icon}</div>
                   <span className="text-base">{action.label}</span>
                   <ArrowUpRight className="w-4 h-4 ml-auto text-muted-dim" />
                 </button>
@@ -208,7 +208,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
                   onClick={() => handleSearch(trending)}
                   className="w-full flex items-center gap-4 px-4 py-3 text-left text-muted-strong hover:bg-muted rounded-lg transition-colors"
                 >
-                  <TrendingUp className="w-4 h-4 text-orange-500" />
+                  <TrendingUp className="w-4 h-4 text-foreground" />
                   <span className="text-base">{trending}</span>
                 </button>
               ))}
@@ -225,7 +225,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
               </h4>
 
               {loading && (
-                <div className="w-4 h-4 border border-tiffany-200 border-t-tiffany-500 rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border border-border-subtle border-t-foreground rounded-full animate-spin"></div>
               )}
             </div>
 
@@ -252,7 +252,7 @@ export default function MobileSearchModal({ isOpen, onClose }: MobileSearchModal
             <div className="mt-4 pt-4 border-t border-border-subtle">
               <button
                 onClick={() => handleSearch(query)}
-                className="w-full flex items-center gap-4 px-4 py-3 text-tiffany-600 hover:bg-tiffany-50 rounded-lg transition-colors font-medium"
+                className="w-full flex items-center gap-4 px-4 py-3 text-foreground hover:bg-muted/40 rounded-lg transition-colors font-medium"
               >
                 <Search className="w-4 h-4" />
                 <span className="text-base">Search for "{query}"</span>

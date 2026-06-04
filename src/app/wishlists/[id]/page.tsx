@@ -239,7 +239,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                                   href={item.external_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-xs text-tiffany-600 hover:underline mt-1 inline-block"
+                                  className="text-xs text-foreground hover:underline mt-1 inline-block"
                                 >
                                   View item →
                                 </a>

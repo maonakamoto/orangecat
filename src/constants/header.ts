@@ -59,7 +59,7 @@ export const HEADER_BUTTON_BASE = {
   BASE: 'flex-shrink-0 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors touch-manipulation relative',
   /** Mobile search button specific */
   MOBILE_SEARCH:
-    'md:hidden text-muted-strong hover:bg-orange-50 active:bg-orange-100 border border-border hover:border-border-strong shadow-sm',
+    'md:hidden text-muted-strong hover:bg-muted/40 active:bg-muted border border-border hover:border-border-strong shadow-sm',
 } as const;
 
 /**

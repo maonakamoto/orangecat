@@ -19,7 +19,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         {post.readTime}
       </div>
       <Link href={`/blog/${post.slug}`}>
-        <h2 className="text-xl font-semibold mb-2 hover:text-orange-600 transition-colors cursor-pointer">
+        <h2 className="text-xl font-semibold mb-2 hover:text-foreground transition-colors cursor-pointer">
           {post.title}
         </h2>
       </Link>

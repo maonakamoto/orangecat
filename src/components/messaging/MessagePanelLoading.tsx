@@ -26,7 +26,7 @@ export function MessagePanelLoading({
       )}
     >
       <div className="text-center p-10">
-        <Loader2 className="w-8 h-8 animate-spin text-tiffany-500 mx-auto mb-4" />
+        <Loader2 className="w-8 h-8 animate-spin text-foreground mx-auto mb-4" />
         <p className="text-muted-foreground">Loading messages...</p>
       </div>
     </div>

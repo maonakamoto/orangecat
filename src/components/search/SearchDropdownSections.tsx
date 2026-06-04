@@ -31,7 +31,7 @@ function DropdownItem({ onClick, isFocused, children, itemRef }: DropdownItemPro
       ref={itemRef}
       onClick={onClick}
       className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors text-left ${
-        isFocused ? 'bg-tiffany-50 border border-tiffany-200 text-tiffany-900' : ''
+        isFocused ? 'bg-muted/40 border border-border-subtle text-foreground' : ''
       }`}
       role="option"
       aria-selected={isFocused}
@@ -79,7 +79,7 @@ export function QuickActionsSection({
                 itemRefs.current[currentIndex] = el;
               }}
             >
-              <div className="text-orange-500">{icons[index]}</div>
+              <div className="text-foreground">{icons[index]}</div>
               <span>{action.label}</span>
               <ArrowUpRight className="w-3 h-3 ml-auto text-muted-dim" />
             </DropdownItem>
@@ -179,7 +179,7 @@ export function TrendingSearchesSection({
                 itemRefs.current[currentIndex] = el;
               }}
             >
-              <TrendingUp className="w-3 h-3 text-orange-500" />
+              <TrendingUp className="w-3 h-3 text-foreground" />
               <span>{item}</span>
             </DropdownItem>
           );
@@ -217,7 +217,7 @@ export function SuggestionsSection({
           Suggestions
         </h4>
         {loading && (
-          <div className="w-3 h-3 border border-orange-200 border-t-orange-500 rounded-full animate-spin" />
+          <div className="w-3 h-3 border border-border-subtle border-t-orange-500 rounded-full animate-spin" />
         )}
       </div>
 
@@ -253,9 +253,9 @@ export function SuggestionsSection({
             itemRefs.current[searchQueryIndex] = el;
           }}
           onClick={() => onSearch(query)}
-          className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-tiffany-600 hover:bg-tiffany-50 rounded-lg transition-colors font-medium ${
+          className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-muted/40 rounded-lg transition-colors font-medium ${
             focusedIndex === searchQueryIndex
-              ? 'bg-tiffany-100 border border-tiffany-300 text-tiffany-800'
+              ? 'bg-muted border border-border-strong text-foreground'
               : ''
           }`}
           role="option"

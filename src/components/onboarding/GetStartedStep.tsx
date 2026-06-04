@@ -36,12 +36,12 @@ export function GetStartedStep({
     <div className="space-y-6">
       {/* Profile summary */}
       {summaryItems.length > 0 && (
-        <div className="rounded-lg border border-tiffany-200 bg-tiffany-50/50 p-4">
-          <p className="text-sm font-medium text-tiffany-800 mb-3">Your profile so far:</p>
+        <div className="rounded-lg border border-border-subtle bg-muted/40/50 p-4">
+          <p className="text-sm font-medium text-foreground mb-3">Your profile so far:</p>
           <div className="space-y-1.5">
             {summaryItems.map(item => (
               <div key={item.label} className="flex items-center gap-2 text-sm">
-                <Check className="h-3.5 w-3.5 text-tiffany-600 flex-shrink-0" />
+                <Check className="h-3.5 w-3.5 text-foreground flex-shrink-0" />
                 <span className="text-muted-foreground">{item.label}:</span>
                 <span className="text-foreground font-medium truncate">{item.value}</span>
               </div>
@@ -58,8 +58,8 @@ export function GetStartedStep({
 
         <QuickActionButton
           onClick={() => onQuickAction(ENTITY_REGISTRY.wallet.basePath)}
-          iconBg="bg-tiffany-100"
-          iconColor="text-tiffany-600"
+          iconBg="bg-muted"
+          iconColor="text-foreground"
           icon={Wallet}
           title="Add a wallet"
           description="Connect your Bitcoin wallet to receive funding"
@@ -67,8 +67,8 @@ export function GetStartedStep({
 
         <QuickActionButton
           onClick={() => onQuickAction(ENTITY_REGISTRY.project.createPath)}
-          iconBg="bg-orange-100"
-          iconColor="text-orange-600"
+          iconBg="bg-muted"
+          iconColor="text-foreground"
           icon={Sparkles}
           title="Create your first offering"
           description="Launch a project, product, or service"
@@ -76,8 +76,8 @@ export function GetStartedStep({
 
         <QuickActionButton
           onClick={() => onQuickAction(ROUTES.DASHBOARD.CAT)}
-          iconBg="bg-tiffany-100"
-          iconColor="text-tiffany-600"
+          iconBg="bg-muted"
+          iconColor="text-foreground"
           icon={MessageCircle}
           title="Chat with your Cat"
           description="Ask anything about the platform"
@@ -109,7 +109,7 @@ function QuickActionButton({
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-tiffany-300 hover:bg-tiffany-50/30 dark:hover:bg-muted transition-all text-left group"
+      className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-border-strong hover:bg-muted/40/30 dark:hover:bg-muted transition-all text-left group"
     >
       <div className={`p-2 ${iconBg} rounded-lg flex-shrink-0`}>
         <Icon className={`h-4 w-4 ${iconColor}`} />
@@ -118,7 +118,7 @@ function QuickActionButton({
         <p className="text-sm font-medium text-foreground">{title}</p>
         <p className="text-xs text-muted-foreground">{description}</p>
       </div>
-      <ArrowRight className="h-4 w-4 text-muted-dim group-hover:text-tiffany-600 transition-colors" />
+      <ArrowRight className="h-4 w-4 text-muted-dim group-hover:text-foreground transition-colors" />
     </button>
   );
 }

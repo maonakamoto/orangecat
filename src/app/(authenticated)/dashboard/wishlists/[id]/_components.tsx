@@ -90,7 +90,7 @@ export function WishlistItemCard({
                 </p>
               )}
               {item.external_url && (
-                <span className="text-xs text-tiffany-600">External link →</span>
+                <span className="text-xs text-foreground">External link →</span>
               )}
               {item.target_amount_btc > 0 && (
                 <div className="mt-2 space-y-1">

@@ -38,8 +38,8 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'Facebook',
     icon: Facebook,
-    color: 'text-tiffany-600',
-    bgColor: 'bg-tiffany-50 hover:bg-tiffany-100',
+    color: 'text-foreground',
+    bgColor: 'bg-muted/40 hover:bg-muted',
     action: (shareUrl, shareTitle) => {
       window.open(
         `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareTitle)}`,
@@ -51,8 +51,8 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'LinkedIn',
     icon: Linkedin,
-    color: 'text-tiffany-700',
-    bgColor: 'bg-tiffany-50 hover:bg-tiffany-100',
+    color: 'text-foreground',
+    bgColor: 'bg-muted/40 hover:bg-muted',
     action: (shareUrl, shareTitle, shareDescription) => {
       window.open(
         `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}&summary=${encodeURIComponent(shareDescription || '')}`,

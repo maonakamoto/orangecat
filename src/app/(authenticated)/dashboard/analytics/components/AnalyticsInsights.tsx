@@ -61,11 +61,11 @@ const COLOR_CLASSES: Record<
   { bg: string; border: string; title: string; body: string; icon: string }
 > = {
   tiffany: {
-    bg: 'bg-tiffany-50',
-    border: 'border-tiffany-200',
-    title: 'text-tiffany-900',
-    body: 'text-tiffany-700',
-    icon: 'text-tiffany-600',
+    bg: 'bg-muted/40',
+    border: 'border-border-subtle',
+    title: 'text-foreground',
+    body: 'text-foreground',
+    icon: 'text-foreground',
   },
   green: {
     bg: 'bg-green-50',
@@ -75,11 +75,11 @@ const COLOR_CLASSES: Record<
     icon: 'text-green-600',
   },
   orange: {
-    bg: 'bg-orange-50',
-    border: 'border-orange-200',
-    title: 'text-orange-900',
-    body: 'text-orange-700',
-    icon: 'text-orange-600',
+    bg: 'bg-muted/40',
+    border: 'border-border-subtle',
+    title: 'text-foreground',
+    body: 'text-foreground',
+    icon: 'text-foreground',
   },
 };
 

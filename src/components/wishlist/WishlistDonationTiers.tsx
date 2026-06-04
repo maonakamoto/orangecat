@@ -95,7 +95,7 @@ export function WishlistDonationTiers({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+        <Loader2 className="h-6 w-6 animate-spin text-bitcoinOrange" />
       </div>
     );
   }
@@ -121,16 +121,16 @@ export function WishlistDonationTiers({
             <button
               key={item.id}
               onClick={() => handleTierClick(item)}
-              className="flex flex-col items-start p-4 border-2 border-border rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-all text-left group"
+              className="flex flex-col items-start p-4 border-2 border-border rounded-lg hover:border-bitcoinOrange hover:bg-bitcoinOrange/5 transition-all text-left group"
             >
-              <span className="text-sm font-bold text-foreground group-hover:text-orange-700">
+              <span className="text-sm font-bold text-foreground group-hover:text-bitcoinOrange">
                 {formattedAmount}
               </span>
               <span className="text-xs text-muted-dim mt-0.5">≈ {satsDisplay}</span>
               <span className="text-xs text-muted-foreground mt-1 line-clamp-1">{item.title}</span>
               <div className="w-full bg-muted rounded-full h-1 mt-3">
                 <div
-                  className="bg-orange-500 h-1 rounded-full"
+                  className="bg-bitcoinOrange h-1 rounded-full"
                   style={{
                     width: `${Math.min(100, (item.funded_amount_btc / item.target_amount_btc) * 100)}%`,
                   }}
