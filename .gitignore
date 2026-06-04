@@ -27,6 +27,8 @@ jscpd-report.json
 # Manual verify-run screenshots (Playwright / browser MCP exports)
 verify-*.jpeg
 verify-*.png
+tab-*.png
+final-*.png
 
 # Next.js
 /.next/
