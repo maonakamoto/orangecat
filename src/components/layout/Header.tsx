@@ -95,7 +95,7 @@ export function Header({
             {/* Logo - Icon only on mobile, text on larger screens */}
             <div className="flex-shrink-0 min-w-0">
               <Logo showText={false} size="sm" className="sm:hidden" />
-              <Logo showText={true} size="md" className="hidden sm:block" />
+              <Logo showText={true} size="md" className="hidden sm:flex" />
             </div>
 
             {/* Desktop Navigation Links */}

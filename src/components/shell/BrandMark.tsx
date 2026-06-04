@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { APP_KICKER, APP_NAME } from '@/config/brand';
+import { APP_NAME } from '@/config/brand';
 import { ROUTES } from '@/config/routes';
 import { cn } from '@/lib/utils';
 import { BrandMarkIcon } from './BrandMarkIcon';
@@ -33,12 +33,9 @@ export function BrandMark({
         <BrandMarkIcon size={iconSize} />
       </div>
       {showWordmark && !compact && (
-        <div className="min-w-0">
-          <p className="ui-kicker truncate">{APP_KICKER}</p>
-          <span className="mt-0.5 block truncate text-base font-medium tracking-tight text-foreground sm:text-lg">
-            {APP_NAME}
-          </span>
-        </div>
+        <span className="min-w-0 truncate text-base font-semibold tracking-tight text-foreground sm:text-lg">
+          {APP_NAME}
+        </span>
       )}
     </div>
   );
