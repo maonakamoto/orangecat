@@ -49,7 +49,7 @@ export default function ProfileWalletSection({
     return (
       <div className="space-y-4" data-wallet-section>
         <h3 className="text-lg font-semibold flex items-center gap-2">
-          <Bitcoin className="w-5 h-5 text-orange-500" />
+          <Bitcoin className="w-5 h-5 text-bitcoinOrange" />
           Support This Profile
         </h3>
 
@@ -70,7 +70,7 @@ export default function ProfileWalletSection({
                       <h4 className="font-semibold flex items-center gap-2">
                         {wallet.label}
                         {wallet.is_primary && (
-                          <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">
+                          <span className="text-xs bg-bitcoinOrange/10 text-bitcoinOrange border border-bitcoinOrange/30 px-2 py-0.5 rounded">
                             Primary
                           </span>
                         )}
@@ -85,7 +85,7 @@ export default function ProfileWalletSection({
                   {/* Balance */}
                   <div className="bg-muted rounded-lg p-3 mb-3">
                     <div className="text-sm text-muted-foreground mb-1">Current Balance</div>
-                    <div className="text-xl font-bold text-orange-600">
+                    <div className="text-xl font-bold text-bitcoinOrange">
                       {formatAmount(wallet.balance_btc)}
                     </div>
                   </div>
@@ -102,7 +102,7 @@ export default function ProfileWalletSection({
                       </div>
                       <div className="w-full bg-muted rounded-full h-2">
                         <div
-                          className="bg-orange-500 h-2 rounded-full transition-all"
+                          className="bg-bitcoinOrange h-2 rounded-full transition-all"
                           style={{ width: `${Math.min(progressPercent, 100)}%` }}
                         />
                       </div>
@@ -135,7 +135,7 @@ export default function ProfileWalletSection({
                           navigator.clipboard.writeText(wallet.address_or_xpub);
                           toast.success('Address copied to clipboard');
                         }}
-                        className="text-xs text-orange-600 hover:text-orange-700 font-medium"
+                        className="text-xs text-foreground hover:text-muted-strong font-medium"
                         aria-label="Copy wallet address"
                       >
                         <Copy className="w-3 h-3 inline mr-1" />
@@ -167,7 +167,7 @@ export default function ProfileWalletSection({
                           );
                         }, 500);
                       }}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+                      className="w-full bg-bitcoinOrange hover:bg-bitcoinOrange/90 text-white"
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Send with Wallet
