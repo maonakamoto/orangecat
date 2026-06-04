@@ -49,6 +49,11 @@ export const COMPONENT_STYLES = {
       danger: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
       outline: 'border border-border-strong bg-transparent text-foreground hover:bg-muted',
       gradient: 'bg-foreground text-background hover:bg-muted-strong',
+      // Migration commit 3/N: warm-accent CTA per FleetCrown — the single
+      // chromatic color reserved for top-of-funnel conversion ("Start
+      // Creating", "Get Started", "Sign Up"). Everything else stays
+      // monochromatic.
+      accent: 'bg-accent-warm text-white hover:bg-accent-warm-hover',
     },
     sizes: {
       sm: 'h-9 min-h-9 px-3 text-sm min-w-16',

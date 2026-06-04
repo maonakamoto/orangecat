@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { COMPONENT_STYLES } from '@/config/design-system';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'gradient';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'gradient' | 'accent';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   isLoading?: boolean;
   href?: string;

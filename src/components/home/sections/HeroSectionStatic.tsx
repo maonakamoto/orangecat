@@ -51,7 +51,7 @@ export default function HeroSectionStatic() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Link href={ROUTES.AUTH} className="w-full sm:w-auto">
-                <Button variant="gradient" size="lg" className="w-full sm:w-auto">
+                <Button variant="accent" size="lg" className="w-full sm:w-auto">
                   <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Start Creating
                   <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
