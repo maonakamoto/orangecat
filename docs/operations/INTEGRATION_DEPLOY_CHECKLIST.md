@@ -242,15 +242,32 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 Set it in Vercel for the OrangeCat project (Production) as
 `WEBHOOK_SECRET_KEY`. The value must be exactly 64 hex characters.
 
-**Verify**: mint a webhook endpoint (step 2). If the env var is
-missing or malformed, the mint returns 500 — the env is missing.
-After setting, mint succeeds again.
+**Verify**:
+
+1. Mint a webhook endpoint (step 2). If `WEBHOOK_SECRET_KEY` is
+   missing or malformed, the mint returns 500 (server logs show
+   "WEBHOOK_SECRET_KEY is not set" or "must be 64 hex characters").
+2. After setting, mint succeeds; check the DB row has
+   `secret_encrypted IS NOT NULL` and `secret_plaintext` does not
+   exist (it was dropped in migration 20260604000004).
+3. Trigger a delivery (smoke test below). The worker decrypts
+   `secret_encrypted` at fire time; logs show the delivery POSTing
+   with `X-OrangeCat-Signature`.
 
 **Rollback**: do not rotate this key without coordinating a
-re-encryption pass — any encrypted `secret_encrypted` blobs in the DB
-become unrecoverable. If the key is leaked, the safe rotation is:
-mint replacement keys for every endpoint with the new key, revoke the
-old, document the incident.
+re-encryption pass. Every webhook_endpoints row's `secret_encrypted`
+was encrypted with the current key — rotating in place leaves them
+all unreadable. If the key is leaked, the safe response is:
+
+1. Set the new key alongside the old one (out of scope for this
+   deploy; would need a service change to try both keys on
+   decrypt).
+2. Mint replacement endpoints for every customer, communicate the
+   migration, revoke the old endpoints.
+3. Once all old endpoints are revoked, drop the old key.
+
+There is no "undo" for `WEBHOOK_SECRET_KEY` going stale — treat it
+as a high-value secret with restricted Vercel team access.
 
 ---
 

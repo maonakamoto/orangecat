@@ -25,7 +25,7 @@
 
 import { randomBytes } from 'crypto';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { encryptWebhookSecret } from '@/lib/crypto/webhookSecretCipher';
+import { encryptWebhookSecret, decryptWebhookSecret } from '@/lib/crypto/webhookSecretCipher';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import {
@@ -84,10 +84,9 @@ export async function createWebhookEndpoint(params: {
 
   const secret = generateSecret();
   const secretPrefix = secret.slice(0, DISPLAY_PREFIX_LENGTH);
-  // Phase 1: dual-write. Encrypted blob is the source of truth in phase
-  // 2 (commit 2 of this thread); plaintext column drops then. If
-  // encryption fails — env var missing/bad — fail the mint so we never
-  // store a row that phase 2 can't decrypt.
+  // Phase 2: encrypt-only. If encryption fails (env var missing/bad),
+  // the mint fails — we never persist a row the worker can't decrypt
+  // at fire time.
   const secretEncrypted = encryptWebhookSecret(secret);
 
   const admin = createAdminClient();
@@ -102,7 +101,6 @@ export async function createWebhookEndpoint(params: {
       actor_id: actorId,
       name: name.trim(),
       url: url.trim(),
-      secret_plaintext: secret,
       secret_encrypted: secretEncrypted,
       secret_prefix: secretPrefix,
       event_types: eventTypes && eventTypes.length > 0 ? eventTypes : null,
@@ -169,7 +167,7 @@ export async function getEndpointSigningContext(
   const admin = createAdminClient();
   const { data, error } = await admin
     .from(DATABASE_TABLES.WEBHOOK_ENDPOINTS)
-    .select('url, secret_plaintext, actor_id, revoked_at')
+    .select('url, secret_encrypted, actor_id, revoked_at')
     .eq('id', endpointId)
     .maybeSingle();
 
@@ -181,17 +179,57 @@ export async function getEndpointSigningContext(
     return null;
   }
 
+  // Supabase returns bytea as a base64 string in the JSON envelope.
   const row = data as {
     url: string;
-    secret_plaintext: string;
+    secret_encrypted: string | Buffer | null;
     actor_id: string;
     revoked_at: string | null;
   };
   if (row.revoked_at) {
     return null;
   }
+  if (!row.secret_encrypted) {
+    logger.error('getEndpointSigningContext: secret_encrypted is null on a live row', {
+      endpointId,
+    });
+    return null;
+  }
 
-  return { url: row.url, secret: row.secret_plaintext, actorId: row.actor_id };
+  let secret: string;
+  try {
+    const blob = Buffer.isBuffer(row.secret_encrypted)
+      ? row.secret_encrypted
+      : decodeSupabaseBytea(row.secret_encrypted);
+    secret = decryptWebhookSecret(blob);
+  } catch (err) {
+    // Decrypt failure means the WEBHOOK_SECRET_KEY drifted from what
+    // encrypted this row, OR the blob was tampered with. Either way the
+    // delivery cannot be signed — fail by returning null so the worker
+    // records a "[endpoint revoked]" outcome rather than a forged signature.
+    logger.error('getEndpointSigningContext: decrypt failed', {
+      endpointId,
+      error: err instanceof Error ? err.message : err,
+    });
+    return null;
+  }
+
+  return { url: row.url, secret, actorId: row.actor_id };
+}
+
+/**
+ * Supabase returns BYTEA columns through PostgREST as the canonical
+ * `\x...hex...` text. Strip the prefix and parse hex.
+ */
+function decodeSupabaseBytea(value: string): Buffer {
+  if (value.startsWith('\\x')) {
+    return Buffer.from(value.slice(2), 'hex');
+  }
+  // Fallback: assume base64 for environments where postgrest serialises
+  // bytea differently (e.g. when row-level RLS bypass returns a JSON
+  // base64 string). Never happens on the admin client today but cheap
+  // to support.
+  return Buffer.from(value, 'base64');
 }
 
 /**
