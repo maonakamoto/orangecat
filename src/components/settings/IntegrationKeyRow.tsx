@@ -1,0 +1,83 @@
+'use client';
+
+/**
+ * Single integration-key list row. Lifted out of IntegrationKeysCard
+ * 2026-06-04 to keep the parent under the 300-line component cap.
+ *
+ * Pure presentation; rotate + revoke handlers come from the parent so
+ * post-action state updates (revoked_at flip, list prepend on rotate)
+ * stay in one place.
+ */
+
+import { RotateCcw, Trash2 } from 'lucide-react';
+import type { IntegrationKey } from '@/components/settings/IntegrationKeysCard';
+
+interface Props {
+  integrationKey: IntegrationKey;
+  actorLabel: string;
+  formatTimestamp: (value: string | null) => string;
+  onRotate: (key: IntegrationKey) => void;
+  onRevoke: (key: IntegrationKey) => void;
+}
+
+export default function IntegrationKeyRow({
+  integrationKey: key,
+  actorLabel,
+  formatTimestamp,
+  onRotate,
+  onRevoke,
+}: Props) {
+  const isRevoked = !!key.revoked_at;
+
+  return (
+    <li className="flex flex-wrap items-start justify-between gap-3 p-4">
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-foreground">{key.name}</span>
+          {key.is_test && (
+            <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800">
+              Sandbox
+            </span>
+          )}
+          {isRevoked && (
+            <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+              Revoked
+            </span>
+          )}
+        </div>
+        <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
+          <span>
+            <code className="rounded bg-muted px-1">{key.key_prefix}…</code>
+          </span>
+          <span>Acts as {actorLabel}</span>
+          <span>
+            Scopes:{' '}
+            <code className="rounded bg-muted px-1">{(key.scopes ?? ['*']).join(', ')}</code>
+          </span>
+          <span>Created {formatTimestamp(key.created_at)}</span>
+          <span>Last used {formatTimestamp(key.last_used_at)}</span>
+        </div>
+      </div>
+      {!isRevoked && (
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => onRotate(key)}
+            className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            Rotate
+          </button>
+          <button
+            type="button"
+            onClick={() => onRevoke(key)}
+            className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-destructive"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+            Revoke
+          </button>
+        </div>
+      )}
+    </li>
+  );
+}
