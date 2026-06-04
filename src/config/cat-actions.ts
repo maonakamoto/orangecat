@@ -829,7 +829,7 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
       'Set up a group for collaborators',
       'Start a company on OrangeCat',
     ],
-    apiEndpoint: '/api/organizations',
+    apiEndpoint: '/api/groups',
     enabled: true,
   },
 

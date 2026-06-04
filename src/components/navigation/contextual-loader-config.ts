@@ -212,9 +212,9 @@ const ROUTE_CONFIGS: RouteConfig[] = [
     bgIconClass: 'bg-amber-100',
   },
   {
-    matches: p => p.startsWith('/organizations'),
+    matches: p => p.startsWith('/groups') || p.startsWith(ENTITY_REGISTRY['group'].basePath),
     icon: Building,
-    title: 'Organizations',
+    title: 'Groups',
     subtitle: 'Build communities and governance',
     actions: [
       { icon: Plus, text: 'Create new organizations' },

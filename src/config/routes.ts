@@ -22,7 +22,6 @@ export const ROUTE_CONTEXTS = {
     '/dashboard',
     '/profile',
     '/settings',
-    '/organizations',
     '/messages',
     '/timeline',
     '/post',
@@ -143,7 +142,6 @@ const APP_SURFACES = [
   '/jobs',
   '/community',
   '/create',
-  '/organizations',
 ] as const;
 
 const AUTH_SURFACES = ['/auth'] as const;
@@ -348,7 +346,6 @@ export const ROUTES = {
     LOANS_CREATE: ENTITY_REGISTRY['loan'].createPath,
     INVESTMENTS: ENTITY_REGISTRY['investment'].basePath,
     INVESTMENTS_CREATE: ENTITY_REGISTRY['investment'].createPath,
-    ORGANIZATIONS: '/dashboard/organizations',
     EVENTS: ENTITY_REGISTRY['event'].basePath,
     EVENTS_CREATE: ENTITY_REGISTRY['event'].createPath,
     STORE: ENTITY_REGISTRY['product'].basePath,
