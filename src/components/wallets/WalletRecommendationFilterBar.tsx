@@ -18,7 +18,7 @@ interface WalletRecommendationFilterBarProps {
   onReset: () => void;
 }
 
-const ACTIVE_CLASS = 'bg-orange-100 text-orange-700 border-2 border-border-strong';
+const ACTIVE_CLASS = 'bg-bitcoinOrange/10 text-bitcoinOrange border-2 border-border-strong';
 const INACTIVE_CLASS = 'bg-muted text-foreground border-2 border-transparent hover:bg-muted/80';
 const BTN_BASE =
   'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all';

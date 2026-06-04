@@ -103,7 +103,7 @@ export function WalletForm({
                 }}
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   formData.category === cat
-                    ? 'border-orange-500 bg-orange-50'
+                    ? 'border-bitcoinOrange bg-bitcoinOrange/5'
                     : 'border-border-strong hover:border-border-strong'
                 }`}
               >
@@ -219,7 +219,7 @@ export function WalletForm({
               type="checkbox"
               checked={formData.is_primary || false}
               onChange={e => setFormData({ ...formData, is_primary: e.target.checked })}
-              className="w-4 h-4 text-orange-600 border-border-strong rounded focus:ring-ring"
+              className="w-4 h-4 text-bitcoinOrange border-border-strong rounded focus:ring-ring"
             />
             <span className="text-sm font-medium">Set as primary wallet</span>
           </label>

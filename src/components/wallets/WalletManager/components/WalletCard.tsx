@@ -77,7 +77,7 @@ export function WalletCard({
             <div className="flex items-center gap-2 flex-wrap">
               <h4 className="font-semibold text-base sm:text-lg truncate">{wallet.label}</h4>
               {wallet.is_primary && (
-                <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full flex items-center gap-1 flex-shrink-0">
+                <span className="text-xs bg-bitcoinOrange/10 text-bitcoinOrange px-2 py-0.5 rounded-full flex items-center gap-1 flex-shrink-0">
                   <Star className="w-3 h-3 fill-orange-700" />
                   Primary
                 </span>
@@ -98,7 +98,7 @@ export function WalletCard({
             {!wallet.is_primary && (
               <button
                 onClick={handleSetPrimary}
-                className="p-2 rounded-lg hover:bg-orange-50 text-orange-600 hover:text-orange-700 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+                className="p-2 rounded-lg hover:bg-bitcoinOrange/10 text-bitcoinOrange transition-colors min-h-11 min-w-11 flex items-center justify-center"
                 title="Set as primary wallet"
                 aria-label="Set as primary wallet"
               >
@@ -140,7 +140,7 @@ export function WalletCard({
             </button>
           )}
         </div>
-        <div className="text-2xl sm:text-3xl font-bold text-orange-600">
+        <div className="text-2xl sm:text-3xl font-bold text-bitcoinOrange">
           {displayBTC(wallet.balance_btc)}
         </div>
         {wallet.balance_updated_at && (
@@ -161,7 +161,7 @@ export function WalletCard({
           </div>
           <div className="w-full bg-muted rounded-full h-2.5 mb-1">
             <div
-              className="bg-orange-500 h-2.5 rounded-full transition-all"
+              className="bg-bitcoinOrange h-2.5 rounded-full transition-all"
               style={{ width: `${Math.min(progressPercent, 100)}%` }}
             />
           </div>
@@ -177,7 +177,7 @@ export function WalletCard({
           </span>
           <button
             onClick={handleCopy}
-            className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-orange-600 transition-colors flex items-center gap-1 min-h-11"
+            className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-bitcoinOrange transition-colors flex items-center gap-1 min-h-11"
             title="Copy address"
             aria-label="Copy address"
           >

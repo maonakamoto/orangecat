@@ -29,11 +29,11 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
     <Card
       className={cn(
         'p-6 relative overflow-hidden transition-all duration-300',
-        wallet.recommended && 'ring-2 ring-orange-200 border-border-strong'
+        wallet.recommended && 'ring-2 ring-bitcoinOrange/40 border-border-strong'
       )}
     >
       {wallet.recommended && (
-        <div className="absolute top-0 right-0 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-bl-lg">
+        <div className="absolute top-0 right-0 bg-bitcoinOrange text-white text-xs font-semibold px-3 py-1 rounded-bl-lg">
           Recommended
         </div>
       )}
@@ -50,8 +50,8 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
             className={cn(
               'text-xs',
               wallet.platform === 'mobile'
-                ? 'bg-tiffany-50 text-tiffany-700 border-tiffany-200'
-                : 'bg-tiffany-50 text-tiffany-700 border-tiffany-200'
+                ? 'bg-muted text-foreground border-border-subtle'
+                : 'bg-muted text-foreground border-border-subtle'
             )}
           >
             {wallet.platform === 'mobile' ? (
@@ -123,7 +123,7 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
           href={wallet.website}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-orange-600 hover:text-orange-700 font-medium transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-bitcoinOrange hover:text-bitcoinOrange font-medium transition-colors"
         >
           Visit website
           <ExternalLink className="w-4 h-4" />
