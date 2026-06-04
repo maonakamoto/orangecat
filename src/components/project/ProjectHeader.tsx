@@ -12,8 +12,6 @@ import { formatRelativeTime } from '@/utils/dates';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Edit, Share2, MessageCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';
@@ -101,7 +99,7 @@ export default function ProjectHeader({
                 (category, idx) => (
                   <span
                     key={`${category}-${idx}`}
-                    className="px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 border border-orange-200"
+                    className="px-3 py-1 rounded-full text-xs font-medium bg-muted text-fg-secondary border border-border-subtle"
                     role="listitem"
                   >
                     {category}
@@ -129,12 +127,7 @@ export default function ProjectHeader({
                       className="rounded-full cursor-pointer"
                     />
                   ) : (
-                    <div
-                      className={cn(
-                        GRADIENTS.brandOrangeLightBr,
-                        'w-8 h-8 rounded-full flex items-center justify-center text-orange-600 font-semibold text-sm cursor-pointer hover:opacity-80 transition-opacity'
-                      )}
-                    >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-muted text-fg-secondary font-semibold text-sm cursor-pointer hover:opacity-80 transition-opacity">
                       {getInitial(project.profiles.name || project.profiles.username, 'A')}
                     </div>
                   )}
@@ -143,7 +136,7 @@ export default function ProjectHeader({
                   <p className="text-sm text-muted-foreground">Created by</p>
                   <Link
                     href={creatorProfileUrl}
-                    className="text-sm font-semibold text-foreground hover:text-orange-600 transition-colors"
+                    className="text-sm font-semibold text-foreground hover:underline underline-offset-4"
                   >
                     {project.profiles.name ||
                       project.profiles.username ||
@@ -155,19 +148,14 @@ export default function ProjectHeader({
           ) : project.user_id ? (
             // Profile exists but wasn't loaded - show user ID as fallback
             <div className="flex items-center gap-3 mb-3">
-              <div
-                className={cn(
-                  GRADIENTS.brandOrangeLightBr,
-                  'w-8 h-8 rounded-full flex items-center justify-center text-orange-600 font-semibold text-sm'
-                )}
-              >
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-muted text-fg-secondary font-semibold text-sm">
                 ?
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Created by</p>
                 <Link
                   href={`/profiles/${project.user_id}`}
-                  className="text-sm font-semibold text-foreground hover:text-orange-600 transition-colors"
+                  className="text-sm font-semibold text-foreground hover:underline underline-offset-4"
                 >
                   User {project.user_id.substring(0, 8)}
                 </Link>
@@ -175,12 +163,7 @@ export default function ProjectHeader({
             </div>
           ) : (
             <div className="flex items-center gap-3 mb-3">
-              <div
-                className={cn(
-                  GRADIENTS.brandOrangeLightBr,
-                  'w-8 h-8 rounded-full flex items-center justify-center text-orange-600 font-semibold text-sm'
-                )}
-              >
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-muted text-fg-secondary font-semibold text-sm">
                 ?
               </div>
               <div>
