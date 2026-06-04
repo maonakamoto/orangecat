@@ -63,7 +63,8 @@ export function OnboardingNavigation({
           <Button
             onClick={onComplete}
             disabled={completingOnboarding}
-            className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700"
+            variant="accent"
+            className="w-full sm:w-auto"
           >
             {completingOnboarding ? 'Setting up...' : 'Get Started'}
             <ArrowRight className="h-4 w-4 ml-2" />

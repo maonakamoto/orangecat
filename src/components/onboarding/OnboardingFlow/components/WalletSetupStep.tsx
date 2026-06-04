@@ -5,15 +5,12 @@
 
 import { Card, CardContent } from '@/components/ui/Card';
 import { Bitcoin, Sparkles, CheckCircle, AlertTriangle, ExternalLink } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 
 export function WalletSetupStep() {
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <div
-          className={`w-16 h-16 ${GRADIENTS.brandOrangeCircle} rounded-full flex items-center justify-center mx-auto mb-4`}
-        >
+        <div className="w-16 h-16 bg-bitcoinOrange rounded-full flex items-center justify-center mx-auto mb-4">
           <Bitcoin className="h-8 w-8 text-white" />
         </div>
         <h3 className="text-2xl font-semibold mb-2">Add Your Bitcoin Address</h3>
@@ -47,28 +44,28 @@ export function WalletSetupStep() {
         </div>
       </div>
 
-      <Card className={`${GRADIENTS.sectionOrangeWarm} border-orange-200`}>
+      <Card className="bg-bitcoinOrange/5 border-bitcoinOrange/20">
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
-            <Sparkles className="h-6 w-6 text-orange-600 mt-1 flex-shrink-0" />
+            <Sparkles className="h-6 w-6 text-bitcoinOrange mt-1 flex-shrink-0" />
             <div>
               <h4 className="font-semibold mb-2">How It Works</h4>
               <ul className="text-sm space-y-2 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-600 font-bold">1.</span>
+                  <span className="text-bitcoinOrange font-bold">1.</span>
                   <span>
                     <strong>Get your address</strong> from your Bitcoin wallet (Muun, BlueWallet,
                     Ledger, etc.)
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-600 font-bold">2.</span>
+                  <span className="text-bitcoinOrange font-bold">2.</span>
                   <span>
                     <strong>Paste it</strong> in your OrangeCat wallet settings
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-600 font-bold">3.</span>
+                  <span className="text-bitcoinOrange font-bold">3.</span>
                   <span>
                     <strong>Receive Bitcoin</strong> directly when your projects get funded
                   </span>
@@ -92,10 +89,10 @@ export function WalletSetupStep() {
           </CardContent>
         </Card>
 
-        <Card className="border-tiffany-200 bg-tiffany-50">
+        <Card className="bg-status-positive-subtle border-status-positive/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-2">
-              <CheckCircle className="h-5 w-5 text-tiffany-600" />
+              <CheckCircle className="h-5 w-5 text-status-positive" />
               <span className="font-medium">No Fees</span>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -119,7 +116,7 @@ export function WalletSetupStep() {
                 href="https://muun.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-orange-600 hover:text-orange-700"
+                className="inline-flex items-center gap-1 text-xs text-bitcoinOrange hover:underline underline-offset-4"
               >
                 Muun <ExternalLink className="h-3 w-3" />
               </a>
@@ -128,7 +125,7 @@ export function WalletSetupStep() {
                 href="https://bluewallet.io"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-orange-600 hover:text-orange-700"
+                className="inline-flex items-center gap-1 text-xs text-bitcoinOrange hover:underline underline-offset-4"
               >
                 BlueWallet <ExternalLink className="h-3 w-3" />
               </a>
@@ -137,7 +134,7 @@ export function WalletSetupStep() {
                 href="https://phoenix.acinq.co"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-orange-600 hover:text-orange-700"
+                className="inline-flex items-center gap-1 text-xs text-bitcoinOrange hover:underline underline-offset-4"
               >
                 Phoenix <ExternalLink className="h-3 w-3" />
               </a>

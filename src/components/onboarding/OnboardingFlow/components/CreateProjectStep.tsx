@@ -56,8 +56,8 @@ export function CreateProjectStep() {
                     onClick={() => handleEntityClick(entity)}
                   >
                     <CardContent className="p-4 flex items-center gap-3">
-                      <div className="p-2 bg-orange-50 rounded-lg flex-shrink-0">
-                        <Icon className="h-5 w-5 text-orange-600" />
+                      <div className="p-2 bg-muted rounded-lg flex-shrink-0">
+                        <Icon className="h-5 w-5 text-foreground" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm">{entity.name}</p>
@@ -66,7 +66,7 @@ export function CreateProjectStep() {
                         </p>
                       </div>
                       {loadingPath === entity.createPath ? (
-                        <Loader2 className="h-4 w-4 text-orange-500 animate-spin flex-shrink-0" />
+                        <Loader2 className="h-4 w-4 text-foreground animate-spin flex-shrink-0" />
                       ) : (
                         <ArrowRight className="h-4 w-4 text-muted-dim flex-shrink-0" />
                       )}
