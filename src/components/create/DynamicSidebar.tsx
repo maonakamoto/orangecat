@@ -79,7 +79,7 @@ function CurrencyBreakdown({ amount, currency }: { amount: number; currency: str
   return (
     <div className="mt-4 pt-4 border-t border-border-subtle">
       <div className="flex items-center gap-2 mb-3">
-        <ArrowLeftRight className="w-4 h-4 text-orange-600" />
+        <ArrowLeftRight className="w-4 h-4 text-bitcoinOrange" />
         <h4 className="text-sm font-semibold text-foreground">Amount Breakdown</h4>
       </div>
       <div className="space-y-2 text-sm">
@@ -132,7 +132,7 @@ export function DynamicSidebar<T extends string = string>({
   if (!activeField) {
     return (
       <div className={`sticky top-4 ${className}`}>
-        <div className="p-4 rounded-lg border border-orange-200 bg-orange-50/60">
+        <div className="p-4 rounded-lg border border-border-subtle bg-muted/40">
           <h2 className="font-semibold text-foreground mb-2">{defaultContent.title}</h2>
           <p className="text-sm text-foreground mb-3">{defaultContent.description}</p>
           <ul className="text-sm text-foreground space-y-2">
@@ -170,7 +170,7 @@ export function DynamicSidebar<T extends string = string>({
       <Card className="p-4">
         {/* Header */}
         <div className="flex items-center gap-3 mb-3 pb-3 border-b border-border-subtle">
-          <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
             {content.icon}
           </div>
           <div>

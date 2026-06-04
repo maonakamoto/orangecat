@@ -165,7 +165,7 @@ export function FormField({
               onChange={e => onChange(e.target.checked)}
               onFocus={onFocus}
               disabled={disabled}
-              className="w-4 h-4 rounded border-border-strong text-orange-600 focus:ring-ring"
+              className="w-4 h-4 rounded border-border-strong text-foreground focus:ring-ring"
             />
             <span className="text-sm text-foreground">{placeholder || label}</span>
           </label>

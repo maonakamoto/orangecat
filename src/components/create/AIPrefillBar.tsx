@@ -97,7 +97,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-tiffany-500" />
+          <Sparkles className="h-4 w-4 text-foreground" />
           <span className="text-sm font-semibold text-foreground">
             {hasFilled ? 'AI filled the form' : 'Fill with AI'}
           </span>

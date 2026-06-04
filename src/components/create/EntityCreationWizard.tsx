@@ -5,8 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import { ActorSelector } from './ActorSelector';
 import { EntityForm } from './EntityForm';
 import { WizardTemplatePicker } from './templates/WizardTemplatePicker';
@@ -17,14 +15,14 @@ import type { EntityConfig, EntityTemplate } from './types';
 
 const WIZARD_THEMES: Record<string, { gradient: string; ring: string; bg: string }> = {
   orange: {
-    gradient: 'bg-orange-600',
-    ring: 'ring-orange-100',
-    bg: 'bg-orange-500',
+    gradient: 'bg-amber-600',
+    ring: 'ring-amber-100',
+    bg: 'bg-amber-500',
   },
   tiffany: {
-    gradient: 'bg-tiffany-600',
-    ring: 'ring-tiffany-light',
-    bg: 'bg-tiffany',
+    gradient: 'bg-emerald-600',
+    ring: 'ring-emerald-100',
+    bg: 'bg-emerald-500',
   },
   rose: {
     gradient: 'bg-rose-600',
@@ -32,9 +30,9 @@ const WIZARD_THEMES: Record<string, { gradient: string; ring: string; bg: string
     bg: 'bg-rose-500',
   },
   blue: {
-    gradient: 'bg-foreground',
-    ring: 'ring-blue-100',
-    bg: 'bg-tiffany-500',
+    gradient: 'bg-sky-600',
+    ring: 'ring-sky-100',
+    bg: 'bg-sky-500',
   },
   green: {
     gradient: 'bg-success',
@@ -120,7 +118,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
   }
 
   return (
-    <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
+    <div className="bg-surface-page min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto mb-3">
         <div className="flex flex-wrap items-center gap-3 mb-1">
           <button
@@ -162,7 +160,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
             <Card className="mb-6">
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  {isTemplateStep && <Sparkles className="h-6 w-6 text-orange-500" />}
+                  {isTemplateStep && <Sparkles className="h-6 w-6 text-foreground" />}
                   <div>
                     <CardTitle>{currentStepConfig.title}</CardTitle>
                     <CardDescription>{currentStepConfig.description}</CardDescription>

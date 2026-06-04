@@ -38,7 +38,7 @@ export function GuidancePanel({
   if (!activeField) {
     return (
       <div className="sticky top-4">
-        <div className="p-4 rounded-lg border border-orange-200 bg-orange-50/60">
+        <div className="p-4 rounded-lg border border-border-subtle bg-muted/40">
           <h2 className="font-semibold text-foreground mb-2">{defaultGuidance.title}</h2>
           <p className="text-sm text-foreground mb-3">{defaultGuidance.description}</p>
           <ul className="text-sm text-foreground space-y-2">
@@ -76,7 +76,7 @@ export function GuidancePanel({
       <Card className="p-4">
         {/* Header */}
         <div className="flex items-center gap-3 mb-3 pb-3 border-b border-border-subtle">
-          <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
             {content.icon}
           </div>
           <div>
