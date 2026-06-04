@@ -9,9 +9,11 @@
 
 import { ImageResponse } from 'next/og';
 import { APP_NAME, APP_TAGLINE } from '@/config/brand';
-import { OG_SIZE, OG_RUNTIME, OG_COLOR, BrandMarkSvg } from '@/lib/og/branding';
+import { OG_SIZE, OG_COLOR, BrandMarkSvg } from '@/lib/og/branding';
 
-export const runtime = OG_RUNTIME;
+// Must be a string literal — Next.js static-analyzes `runtime` at build
+// time and cannot resolve imported identifiers.
+export const runtime = 'edge';
 export const alt = `${APP_NAME} — ${APP_TAGLINE}`;
 export const size = OG_SIZE;
 export const contentType = 'image/png';

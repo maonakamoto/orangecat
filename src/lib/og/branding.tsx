@@ -13,6 +13,14 @@
 
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 export const OG_CONTENT_TYPE = 'image/png' as const;
+
+// NOTE: Next.js static-analyzes route-level `export const runtime = '...'`
+// at build time and CANNOT resolve imported identifiers — using
+// `export const runtime = OG_RUNTIME` produces "Unknown identifier
+// 'OG_RUNTIME' at 'runtime'" and breaks `next build`. Each OG route
+// declares `export const runtime = 'edge'` directly. This constant is
+// kept as documentation of the chosen runtime; do not re-import it as
+// a route config value.
 export const OG_RUNTIME = 'edge' as const;
 
 export const OG_COLOR = {

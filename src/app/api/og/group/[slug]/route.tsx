@@ -13,9 +13,12 @@ import { ImageResponse } from 'next/og';
 import { createServerClient } from '@/lib/supabase/server';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { APP_NAME, APP_KICKER } from '@/config/brand';
-import { OG_SIZE, OG_RUNTIME, OG_COLOR, Avatar, BrandFooter, StatPill } from '@/lib/og/branding';
+import { OG_SIZE, OG_COLOR, Avatar, BrandFooter, StatPill } from '@/lib/og/branding';
 
-export const runtime = OG_RUNTIME;
+// Must be a string literal — Next.js static-analyzes `runtime` at build
+// time and cannot resolve imported identifiers (see OG_RUNTIME in
+// src/lib/og/branding.tsx for documentation).
+export const runtime = 'edge';
 export const contentType = 'image/png';
 
 interface RouteContext {
