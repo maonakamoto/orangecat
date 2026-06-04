@@ -37,7 +37,7 @@ export function OnboardingFlow() {
     () => [
       {
         id: 'welcome',
-        title: 'Welcome to OrangeCat! 🟠',
+        title: 'Welcome to OrangeCat',
         description: 'Your AI agent is ready — tell Cat what you want to do',
         icon: Sparkles,
         content: <WelcomeStep />,

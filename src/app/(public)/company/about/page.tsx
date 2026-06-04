@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { Users, Heart, Zap, TreePine, Target, Award } from 'lucide-react';
 import BitBaumLogo from '@/components/layout/BitBaumLogo';
+import { BrandMarkIcon } from '@/components/shell/BrandMarkIcon';
 import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
 
@@ -85,9 +86,9 @@ export default function BitBaumAboutPage() {
             <div className="text-center p-6 border border-border rounded-lg">
               <div className="flex justify-center mb-4">
                 <div
-                  className={`w-12 h-12 ${GRADIENTS.brandOrangeCircle} rounded-lg flex items-center justify-center`}
+                  className={`w-12 h-12 ${GRADIENTS.brandOrangeCircle} rounded-lg flex items-center justify-center text-background`}
                 >
-                  <span className="text-xl">🐱</span>
+                  <BrandMarkIcon size={24} />
                 </div>
               </div>
               <h4 className="text-xl font-semibold text-foreground mb-3">OrangeCat</h4>

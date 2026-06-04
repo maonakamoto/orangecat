@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ArrowRight, Globe, Zap, Cat, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { BrandMarkIcon } from '@/components/shell/BrandMarkIcon';
 import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
@@ -87,9 +88,9 @@ export default function HeroSectionStatic() {
               <div className="p-4 sm:p-6 border-b border-border">
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${GRADIENTS.brandTiffanyBr} flex items-center justify-center text-xl sm:text-2xl flex-shrink-0`}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${GRADIENTS.brandTiffanyBr} flex items-center justify-center text-background flex-shrink-0`}
                   >
-                    🐱
+                    <BrandMarkIcon size={24} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-foreground text-sm sm:text-base">Cat</h3>
