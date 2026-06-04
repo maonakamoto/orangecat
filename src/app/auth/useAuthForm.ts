@@ -119,7 +119,11 @@ export function useAuthForm() {
         throw error;
       }
     } catch (err) {
-      getReadableError(err, `Failed to sign in with ${provider}`);
+      // OAuth can fail when the provider is misconfigured, the user
+      // cancels the popup, or the redirect URL is wrong. Same silent
+      // swallow pattern as anonymous sign-in — surface to the user.
+      const message = getReadableError(err, `Failed to sign in with ${provider}`);
+      toast.error(message);
     }
   };
 
