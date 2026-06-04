@@ -159,8 +159,8 @@ export function AICreditsPanel() {
               </p>
             </div>
 
-            <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-3">
-              <p className="text-base text-tiffany-800">
+            <div className="bg-muted/40 border border-border-subtle rounded-lg p-3">
+              <p className="text-base text-foreground">
                 <strong>Development Mode:</strong> Credits are added instantly for testing. In
                 production, this will generate a Lightning invoice for payment.
               </p>

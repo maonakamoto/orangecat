@@ -35,7 +35,7 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
             >
               {/* Header */}
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-tiffany-100 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
                   {content.icon}
                 </div>
                 <h3 className="font-semibold text-foreground">{content.title}</h3>
@@ -56,7 +56,7 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
                         key={index}
                         className="flex items-start gap-2 text-sm text-muted-foreground"
                       >
-                        <CheckCircle className="w-4 h-4 text-tiffany-600 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-foreground mt-0.5 flex-shrink-0" />
                         <span>{tip}</span>
                       </li>
                     ))}
@@ -113,9 +113,9 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
 
               {/* Hint */}
               {aiDefaultContent.hint && (
-                <div className="flex items-start gap-2 p-3 bg-tiffany-50 rounded-lg">
-                  <Lightbulb className="w-4 h-4 text-tiffany-600 mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-tiffany-700">{aiDefaultContent.hint}</p>
+                <div className="flex items-start gap-2 p-3 bg-muted/40 rounded-lg">
+                  <Lightbulb className="w-4 h-4 text-foreground mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-foreground">{aiDefaultContent.hint}</p>
                 </div>
               )}
             </motion.div>

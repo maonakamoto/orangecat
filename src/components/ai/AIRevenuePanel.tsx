@@ -11,7 +11,6 @@ import { MIN_WITHDRAWAL_SATS } from './types';
 import { useAIRevenue } from './useAIRevenue';
 import { WithdrawDialog } from './WithdrawDialog';
 import { RecentWithdrawals } from './RecentWithdrawals';
-import { GRADIENTS } from '@/config/gradients';
 
 export function AIRevenuePanel() {
   const { formatAmount, formatAmountBtc } = useDisplayCurrency();
@@ -58,7 +57,7 @@ export function AIRevenuePanel() {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Revenue Summary */}
-        <div className={`${GRADIENTS.sectionGreenEmerald} rounded-lg p-4 border border-green-200`}>
+        <div className="bg-status-positive-subtle rounded-lg p-4 border border-status-positive/30">
           <div className="text-sm text-green-800 mb-1">Total Earnings</div>
           <div className="text-3xl font-bold text-green-900">
             {formatAmountBtc(earnings?.total_earned_btc || summary.total_revenue_btc)}
@@ -120,7 +119,7 @@ export function AIRevenuePanel() {
                   className="flex items-center justify-between py-2 px-3 bg-muted rounded-lg text-sm"
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="h-8 w-8 rounded-full bg-tiffany-100 flex items-center justify-center flex-shrink-0">
+                    <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
                       {assistant.avatar_url ? (
                         <Image
                           src={assistant.avatar_url}
@@ -131,7 +130,7 @@ export function AIRevenuePanel() {
                           unoptimized
                         />
                       ) : (
-                        <Bot className="h-4 w-4 text-tiffany-600" />
+                        <Bot className="h-4 w-4 text-foreground" />
                       )}
                     </div>
                     <div className="min-w-0">

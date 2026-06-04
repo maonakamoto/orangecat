@@ -146,8 +146,8 @@ export function WithdrawDialog({
             </p>
           </div>
 
-          <div className="bg-tiffany-50 border border-tiffany-200 rounded-lg p-3">
-            <p className="text-base text-tiffany-800">
+          <div className="bg-muted/40 border border-border-subtle rounded-lg p-3">
+            <p className="text-base text-foreground">
               <strong>Note:</strong> Withdrawals are typically processed within a few minutes. You
               will receive the funds at your Lightning address.
             </p>

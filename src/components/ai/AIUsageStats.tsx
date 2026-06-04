@@ -65,15 +65,15 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       label: 'Requests',
       value: formatNumber(usage.totalRequests),
       icon: MessageSquare,
-      color: 'text-tiffany-600',
-      bgColor: 'bg-tiffany-100',
+      color: 'text-foreground',
+      bgColor: 'bg-muted',
     },
     {
       label: 'Tokens',
       value: formatNumber(usage.totalTokens),
       icon: BarChart2,
-      color: 'text-tiffany-600',
-      bgColor: 'bg-tiffany-100',
+      color: 'text-foreground',
+      bgColor: 'bg-muted',
     },
     {
       label: 'Cost',
@@ -96,7 +96,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-tiffany-600" />
+            <TrendingUp className="w-5 h-5 text-foreground" />
             Usage Statistics
           </CardTitle>
           {periodSelector}
