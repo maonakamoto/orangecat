@@ -68,8 +68,8 @@ export default function StudyBitcoinPage() {
                 onClick={() => setSelectedLevel(level)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedLevel === level
-                    ? 'bg-orange-600 text-white'
-                    : 'bg-muted text-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                    ? 'bg-foreground text-background'
+                    : 'bg-muted text-foreground hover:bg-muted/80 dark:hover:bg-muted/80'
                 }`}
               >
                 {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -110,8 +110,8 @@ export default function StudyBitcoinPage() {
             const Icon = benefit.icon;
             return (
               <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Icon className="w-8 h-8 text-orange-600" />
+                <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Icon className="w-8 h-8 text-fg-secondary" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">{benefit.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{benefit.description}</p>
@@ -121,7 +121,7 @@ export default function StudyBitcoinPage() {
         </div>
       </PageSection>
 
-      <PageSection background="tiffany">
+      <PageSection background="gray">
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-foreground mb-4">
             Ready to Start Your Bitcoin Journey?
