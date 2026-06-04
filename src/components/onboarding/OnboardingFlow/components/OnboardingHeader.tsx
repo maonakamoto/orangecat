@@ -1,10 +1,13 @@
 /**
  * ONBOARDING HEADER COMPONENT
- * Header with title and progress bar
+ * Header with title and progress bar.
+ *
+ * Skip-setup is intentionally demoted to a quiet text link below the progress
+ * bar rather than a button next to the step counter. The button-at-equal-weight
+ * placement was tempting new users to bail before understanding the offer.
  */
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
 
 interface OnboardingHeaderProps {
@@ -39,15 +42,22 @@ export function OnboardingHeader({
 
       {/* Progress */}
       <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
+        <div className="mb-3">
           <span className="text-sm font-medium">
             Step {currentStep + 1} of {totalSteps}
           </span>
-          <Button variant="ghost" size="sm" onClick={handleSkip} disabled={skipping}>
-            {skipping ? 'Redirecting…' : 'Skip setup'}
-          </Button>
         </div>
         <Progress value={progress} className="h-2" />
+        <div className="mt-3 text-right">
+          <button
+            type="button"
+            onClick={handleSkip}
+            disabled={skipping}
+            className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline disabled:opacity-50"
+          >
+            {skipping ? 'Redirecting…' : 'Skip setup'}
+          </button>
+        </div>
       </div>
     </>
   );
