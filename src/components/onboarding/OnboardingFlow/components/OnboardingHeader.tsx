@@ -9,6 +9,7 @@
 
 import { useState } from 'react';
 import { Progress } from '@/components/ui/progress';
+import { BrandMarkIcon } from '@/components/shell/BrandMarkIcon';
 
 interface OnboardingHeaderProps {
   currentStep: number;
@@ -34,6 +35,11 @@ export function OnboardingHeader({
     <>
       {/* Header */}
       <div className="text-center mb-6 sm:mb-8">
+        <div className="mb-3 flex justify-center">
+          <div className="ui-brand-mark ui-brand-mark-default text-foreground">
+            <BrandMarkIcon size={26} />
+          </div>
+        </div>
         <h1 className="text-2xl sm:text-3xl font-bold mb-2">Welcome to OrangeCat</h1>
         <p className="text-sm sm:text-base text-muted-foreground px-2">
           Let&apos;s get you set up to receive Bitcoin funding for your projects.
