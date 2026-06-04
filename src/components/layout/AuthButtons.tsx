@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import UserProfileDropdown from '@/components/ui/UserProfileDropdown';
 import { useAuth } from '@/hooks/useAuth';
+import { useIsAuthRoute } from '@/hooks/useRouteContext';
 import { authNavigationItems } from '@/config/navigation';
 import { getAuthStatus } from '@/lib/auth/utils';
 import { Loader2 } from 'lucide-react';
@@ -15,11 +16,18 @@ interface AuthButtonsProps {
 export default function AuthButtons({ className = '' }: AuthButtonsProps) {
   const authState = useAuth();
   const authStatus = getAuthStatus(authState);
+  const isAuthRoute = useIsAuthRoute();
   const isMobileNav = className.includes('flex-col');
   const [signIn, getStarted] = authNavigationItems;
 
-  // Keep public navigation actionable during auth hydration.
+  // During auth hydration: on a public surface keep Sign In / Get Started
+  // actionable; on an authed surface render a neutral avatar skeleton so a
+  // signed-in user landing on /settings/notifications etc. doesn't flash
+  // 'Sign In / Get Started' for a frame before their user menu appears.
   if (!authState.hydrated) {
+    if (isAuthRoute) {
+      return <div className="h-9 w-9 rounded-full bg-muted animate-pulse" aria-hidden />;
+    }
     return (
       <UnauthenticatedButtons
         signIn={signIn}
