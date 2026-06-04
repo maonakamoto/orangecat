@@ -88,6 +88,9 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
   useEffect(() => {
     loadEvents();
     return () => {
+      // Bump id so any in-flight load cannot setState after unmount or dep change.
+      // Deliberate write to the live ref — not stale-read.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       loadIdRef.current++;
     };
   }, [groupId, statusFilter, loadEvents]);

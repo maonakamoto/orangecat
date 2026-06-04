@@ -263,6 +263,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       pendingTimersRef.current.add(fallback);
     });
 
+    // Capture the Set instance on entry so the cleanup runs against the
+    // same instance the body's scheduling closures were adding to.
+    const timers = pendingTimersRef.current;
+
     // Cleanup on unmount
     return () => {
       if (listenerRef.current) {
@@ -270,8 +274,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         listenerRef.current.data.subscription.unsubscribe();
         listenerRef.current = null;
       }
-      pendingTimersRef.current.forEach(id => clearTimeout(id));
-      pendingTimersRef.current.clear();
+      timers.forEach(id => clearTimeout(id));
+      timers.clear();
     };
   }, [setInitialAuthState, fetchProfile, clear]);
 

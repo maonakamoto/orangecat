@@ -115,6 +115,8 @@ export function ProposalDetail({
     loadProposal();
     return () => {
       // Bump id so any in-flight loads are ignored.
+      // Deliberate write to the live ref — not stale-read.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       loadIdRef.current++;
     };
   }, [proposalId, loadProposal]);

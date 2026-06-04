@@ -34,9 +34,14 @@ export function useMessageView(conversationId: string, currentUserId: string | u
   }, []);
 
   useEffect(() => {
+    // Capture the Set instance on entry so the cleanup runs against the
+    // same instance scheduleTimeout was adding to — even if a re-render
+    // points pendingTimeoutsRef at something else (it shouldn't, but the
+    // exhaustive-deps rule can't see that and the capture is correct anyway).
+    const timers = pendingTimeoutsRef.current;
     return () => {
-      pendingTimeoutsRef.current.forEach(id => clearTimeout(id));
-      pendingTimeoutsRef.current.clear();
+      timers.forEach(id => clearTimeout(id));
+      timers.clear();
     };
   }, [conversationId]);
 
@@ -129,7 +134,7 @@ export function useMessageView(conversationId: string, currentUserId: string | u
       setShouldAutoScroll(true);
       scheduleTimeout(() => refreshReadReceipts(), TIMING.READ_RECEIPT_RECALC_DELAY_MS);
     },
-    [confirmMessage, refreshReadReceipts]
+    [confirmMessage, refreshReadReceipts, scheduleTimeout]
   );
 
   const handleMessageFailed = useCallback(

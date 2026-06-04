@@ -124,6 +124,9 @@ export function usePostThread(postId: string): UsePostThreadResult {
     fetchPost();
     return () => {
       // Bump id so any in-flight load cannot setState after unmount or postId change.
+      // Deliberate write to the live ref — not a stale-read of a node, which is what
+      // the exhaustive-deps warning is meant to catch.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       loadIdRef.current++;
     };
   }, [fetchPost]);

@@ -105,6 +105,9 @@ export function ProposalsList({
   useEffect(() => {
     loadProposals();
     return () => {
+      // Bump id so any in-flight loads can't setState after unmount/dep change.
+      // Deliberate write to the live ref — not stale-read.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       loadIdRef.current++;
     };
   }, [groupId, statusFilter, loadProposals]);
