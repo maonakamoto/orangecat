@@ -61,10 +61,15 @@ export default function DashboardPage() {
   // of the generic dashboard. That matches the platform thesis — Cat is the
   // interface — and avoids the sparse "four CTAs shouting at once" experience
   // that the dashboard shows for brand-new accounts.
+  //
+  // Bail if the timeline fetch errored — timelineFeed stays null in that case
+  // which would look identical to "no events", so redirecting would hide the
+  // error from the user and lose their retry path.
   const isTrulyEmpty =
     hydrated &&
     !localLoading &&
     !timelineLoading &&
+    !timelineError &&
     !hasProjects &&
     pendingActions.length === 0 &&
     (timelineFeed?.events?.length ?? 0) === 0;
