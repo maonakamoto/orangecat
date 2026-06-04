@@ -4,8 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import Button from '@/components/ui/Button';
 import { ArrowLeft, Bitcoin } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import dynamic from 'next/dynamic';
 import { ROUTES } from '@/config/routes';
 import { useState, useEffect } from 'react';
@@ -93,7 +91,7 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
     : 0;
 
   return (
-    <div className={cn(GRADIENTS.pageBg, 'min-h-screen')}>
+    <div className="bg-surface-page min-h-screen">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header with Back Button */}
         <div className="mb-6">
@@ -220,14 +218,15 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
                 </div>
                 <div className="h-1.5 bg-muted rounded-full mt-1">
                   <div
-                    className="h-1.5 bg-orange-500 rounded-full transition-all duration-300"
+                    className="h-1.5 bg-bitcoinOrange rounded-full transition-all duration-300"
                     style={{ width: `${progressPercentage}%` }}
                   />
                 </div>
               </div>
               <Button
                 onClick={scrollToSupport}
-                className="flex-shrink-0 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 shadow-sm"
+                variant="accent"
+                className="flex-shrink-0 px-6 py-3 shadow-sm"
               >
                 <Bitcoin className="w-4 h-4 mr-2" aria-hidden="true" />
                 Fund
