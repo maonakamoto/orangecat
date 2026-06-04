@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import { GRADIENTS } from '@/config/gradients';
 import HeroSectionStatic from '@/components/home/sections/HeroSectionStatic';
 
 // Lazy load non-critical sections
@@ -10,27 +9,27 @@ import HeroSectionStatic from '@/components/home/sections/HeroSectionStatic';
 const WhatCanYouDoSection = dynamic(
   () => import('@/components/home/sections/WhatCanYouDoSection'),
   {
-    loading: () => <div className={`h-96 ${GRADIENTS.sectionGrayWhite} animate-pulse`} />,
+    loading: () => <div className="h-96 bg-surface-raised animate-pulse" />,
   }
 );
 
 const ProofSection = dynamic(() => import('@/components/home/sections/ProofSection'), {
-  loading: () => <div className="h-96 bg-muted animate-pulse" />,
+  loading: () => <div className="h-96 bg-surface-raised animate-pulse" />,
 });
 
 const HowItWorksSection = dynamic(() => import('@/components/home/sections/HowItWorksSection'), {
-  loading: () => <div className={`h-96 ${GRADIENTS.grayLight} animate-pulse`} />,
+  loading: () => <div className="h-96 bg-surface-raised animate-pulse" />,
 });
 
 const TransparencySection = dynamic(
   () => import('@/components/home/sections/TransparencySection'),
   {
-    loading: () => <div className={`h-96 ${GRADIENTS.sectionTiffanyOrange} animate-pulse`} />,
+    loading: () => <div className="h-96 bg-surface-raised animate-pulse" />,
   }
 );
 
 const TrustSection = dynamic(() => import('@/components/home/sections/TrustSection'), {
-  loading: () => <div className="h-96 bg-background animate-pulse" />,
+  loading: () => <div className="h-96 bg-surface-raised animate-pulse" />,
 });
 
 /**
@@ -50,26 +49,24 @@ export default function HomePublicClient() {
       {/* Hero Section - Above the fold, loads immediately */}
       <HeroSectionStatic />
 
-      {/* Below-fold sections - lazy loaded */}
-      <Suspense fallback={<div className={`h-96 ${GRADIENTS.sectionGrayWhite} animate-pulse`} />}>
+      {/* Below-fold sections - lazy loaded; uniform monochrome skeleton per migration 6/N */}
+      <Suspense fallback={<div className="h-96 bg-surface-raised animate-pulse" />}>
         <WhatCanYouDoSection />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-muted animate-pulse" />}>
+      <Suspense fallback={<div className="h-96 bg-surface-raised animate-pulse" />}>
         <ProofSection />
       </Suspense>
 
-      <Suspense fallback={<div className={`h-96 ${GRADIENTS.grayLight} animate-pulse`} />}>
+      <Suspense fallback={<div className="h-96 bg-surface-raised animate-pulse" />}>
         <HowItWorksSection />
       </Suspense>
 
-      <Suspense
-        fallback={<div className={`h-96 ${GRADIENTS.sectionTiffanyOrange} animate-pulse`} />}
-      >
+      <Suspense fallback={<div className="h-96 bg-surface-raised animate-pulse" />}>
         <TransparencySection />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 bg-background animate-pulse" />}>
+      <Suspense fallback={<div className="h-96 bg-surface-raised animate-pulse" />}>
         <TrustSection />
       </Suspense>
     </div>

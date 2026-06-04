@@ -2,16 +2,15 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import Button from '@/components/ui/Button';
 import { HOW_IT_WORKS_STEPS, SECTION_HEADERS, CTA_LABELS } from '@/config/landing-page';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 export default function HowItWorksSection() {
   const { howItWorks } = SECTION_HEADERS;
 
   return (
-    <section className={`py-12 sm:py-16 lg:py-24 ${GRADIENTS.sectionSubtle}`}>
+    <section className="py-12 sm:py-16 lg:py-24 bg-surface-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
@@ -100,14 +99,10 @@ export default function HowItWorksSection() {
           <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
             Ready to get started?
           </p>
-          <Link
-            href={ROUTES.AUTH}
-            className={cn(
-              GRADIENTS.btnBitcoin,
-              'inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white transition-colors sm:px-8 sm:py-4 sm:text-lg'
-            )}
-          >
-            {CTA_LABELS.createAccount}
+          <Link href={ROUTES.AUTH}>
+            <Button variant="accent" size="lg">
+              {CTA_LABELS.createAccount}
+            </Button>
           </Link>
         </motion.div>
       </div>

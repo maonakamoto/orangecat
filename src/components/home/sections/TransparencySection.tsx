@@ -3,9 +3,8 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Shield, Eye, TrendingUp, CheckCircle2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import Button from '@/components/ui/Button';
 import { SECTION_HEADERS } from '@/config/landing-page';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 export default function TransparencySection() {
@@ -199,14 +198,10 @@ export default function TransparencySection() {
           <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-4 sm:mb-6">
             Transparency builds trust. Trust attracts support. Start building yours today.
           </p>
-          <Link
-            href={ROUTES.AUTH}
-            className={cn(
-              GRADIENTS.btnBitcoin,
-              'inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white transition-colors sm:px-8 sm:py-4 sm:text-lg'
-            )}
-          >
-            Create Your Profile
+          <Link href={ROUTES.AUTH}>
+            <Button variant="accent" size="lg">
+              Create Your Profile
+            </Button>
           </Link>
         </div>
       </div>
