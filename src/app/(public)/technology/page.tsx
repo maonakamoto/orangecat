@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Bitcoin, Shield, Zap, Lock, Globe, Code, Server, CheckCircle } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
@@ -15,9 +14,15 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * /technology — monochrome surfaces, single Bitcoin Orange accent for
+ * actual Bitcoin elements (the chip icon + the Bitcoin tech-stack card).
+ * Every other icon flows through fg-secondary; check marks through
+ * status-positive. Migration 6/N.
+ */
 export default function TechnologyPage() {
   return (
-    <div className={`min-h-screen ${GRADIENTS.pageBgOrangeDown}`}>
+    <div className="min-h-screen bg-surface-page">
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-background border-b border-border">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -26,12 +31,12 @@ export default function TechnologyPage() {
               <Bitcoin className="h-4 w-4 text-bitcoinOrange" />
               Bitcoin-native
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground">
+            <h1 className="font-heading tracking-display text-4xl font-bold sm:text-5xl lg:text-6xl text-foreground">
               Built on Bitcoin
             </h1>
             <p className="mt-6 max-w-3xl mx-auto text-xl text-muted-foreground">
-              Direct, transparent, and unstoppable economic participation powered by the world's
-              most secure network
+              Direct, transparent, and unstoppable economic participation powered by the
+              world&apos;s most secure network
             </p>
           </div>
         </div>
@@ -45,27 +50,27 @@ export default function TechnologyPage() {
             Core Principles
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-card p-6 rounded-lg shadow-sm border-t-4 border-orange-500">
-              <Bitcoin className="h-12 w-12 text-orange-600 mb-4" />
+            <div className="bg-card p-6 rounded-lg shadow-sm border border-border-subtle">
+              <Bitcoin className="h-12 w-12 text-bitcoinOrange mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">Bitcoin-Native</h3>
               <p className="text-muted-foreground">
                 True peer-to-peer payments with no intermediaries. Your Bitcoin, your control.
               </p>
             </div>
 
-            <div className="bg-card p-6 rounded-lg shadow-sm border-t-4 border-orange-500">
-              <Shield className="h-12 w-12 text-orange-600 mb-4" />
+            <div className="bg-card p-6 rounded-lg shadow-sm border border-border-subtle">
+              <Shield className="h-12 w-12 text-fg-secondary mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">Transparent</h3>
               <p className="text-muted-foreground">
                 All transactions are publicly verifiable on the Bitcoin blockchain. No hidden fees.
               </p>
             </div>
 
-            <div className="bg-card p-6 rounded-lg shadow-sm border-t-4 border-orange-500">
-              <Zap className="h-12 w-12 text-orange-600 mb-4" />
+            <div className="bg-card p-6 rounded-lg shadow-sm border border-border-subtle">
+              <Zap className="h-12 w-12 text-fg-secondary mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">Zero Platform Fees</h3>
               <p className="text-muted-foreground">
-                We don't take a cut. Payments go directly between parties — 100% reaches the
+                We don&apos;t take a cut. Payments go directly between parties — 100% reaches the
                 recipient.
               </p>
             </div>
@@ -82,12 +87,12 @@ export default function TechnologyPage() {
               {/* Frontend */}
               <div>
                 <div className="flex items-center mb-4">
-                  <Globe className="h-6 w-6 text-orange-600 mr-2" />
+                  <Globe className="h-6 w-6 text-fg-secondary mr-2" />
                   <h3 className="text-lg font-semibold text-foreground">Frontend</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Next.js 15</span>
                       <p className="text-sm text-muted-foreground">
@@ -96,14 +101,14 @@ export default function TechnologyPage() {
                     </div>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">TypeScript</span>
                       <p className="text-sm text-muted-foreground">Type-safe development</p>
                     </div>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Tailwind CSS</span>
                       <p className="text-sm text-muted-foreground">
@@ -117,12 +122,12 @@ export default function TechnologyPage() {
               {/* Backend */}
               <div>
                 <div className="flex items-center mb-4">
-                  <Server className="h-6 w-6 text-orange-600 mr-2" />
+                  <Server className="h-6 w-6 text-fg-secondary mr-2" />
                   <h3 className="text-lg font-semibold text-foreground">Backend</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Supabase</span>
                       <p className="text-sm text-muted-foreground">
@@ -131,14 +136,14 @@ export default function TechnologyPage() {
                     </div>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Row Level Security</span>
                       <p className="text-sm text-muted-foreground">Database-level authorization</p>
                     </div>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Edge Functions</span>
                       <p className="text-sm text-muted-foreground">Serverless API endpoints</p>
@@ -150,12 +155,12 @@ export default function TechnologyPage() {
               {/* Bitcoin */}
               <div>
                 <div className="flex items-center mb-4">
-                  <Bitcoin className="h-6 w-6 text-orange-600 mr-2" />
+                  <Bitcoin className="h-6 w-6 text-bitcoinOrange mr-2" />
                   <h3 className="text-lg font-semibold text-foreground">Bitcoin Integration</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Native Bitcoin Addresses</span>
                       <p className="text-sm text-muted-foreground">
@@ -164,14 +169,14 @@ export default function TechnologyPage() {
                     </div>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Lightning Network Ready</span>
                       <p className="text-sm text-muted-foreground">Fast, low-cost micropayments</p>
                     </div>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Non-Custodial</span>
                       <p className="text-sm text-muted-foreground">You control your private keys</p>
@@ -183,12 +188,12 @@ export default function TechnologyPage() {
               {/* Security */}
               <div>
                 <div className="flex items-center mb-4">
-                  <Lock className="h-6 w-6 text-orange-600 mr-2" />
+                  <Lock className="h-6 w-6 text-fg-secondary mr-2" />
                   <h3 className="text-lg font-semibold text-foreground">Security</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Transport Encryption (TLS 1.3)</span>
                       <p className="text-sm text-muted-foreground">
@@ -197,14 +202,14 @@ export default function TechnologyPage() {
                     </div>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">OAuth 2.0</span>
                       <p className="text-sm text-muted-foreground">Secure authentication</p>
                     </div>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-status-positive mr-2 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">HTTPS Only</span>
                       <p className="text-sm text-muted-foreground">Encrypted connections</p>
