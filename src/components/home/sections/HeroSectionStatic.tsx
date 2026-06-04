@@ -30,8 +30,8 @@ export default function HeroSectionStatic() {
               <span className="text-sm font-medium text-foreground">Zero fees</span>
             </div>
 
-            {/* Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-foreground leading-tight mb-4 sm:mb-6">
+            {/* Main Headline — display typography (Space Grotesk) per migration 7/N */}
+            <h1 className="font-heading tracking-display text-3xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] mb-4 sm:mb-6">
               Everyone Can <span className="text-foreground">Make Things.</span>
             </h1>
 

@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google';
+import { Inter, Space_Grotesk, IBM_Plex_Mono } from 'next/font/google';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -14,6 +14,27 @@ const inter = Inter({
   ],
   preload: true,
   adjustFontFallback: true,
+});
+
+// FleetCrown-aligned display typography (migration commit 7/N).
+// Space Grotesk for display/heading; IBM Plex Mono for code. Body
+// stays Inter for now — applying Space Grotesk as the body face is
+// a separate decision worth its own user-visible commit.
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-heading',
+  display: 'swap',
+  weight: ['500', '600', '700'],
+  preload: true,
+  adjustFontFallback: true,
+});
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+  weight: ['400', '500', '600'],
+  preload: false,
+  fallback: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
 });
 import './globals.css';
 import Script from 'next/script';
@@ -77,7 +98,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable}`}
+      suppressHydrationWarning
+    >
       <body className="antialiased">
         {/* Structured data: Organization + WebSite */}
         <script

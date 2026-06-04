@@ -197,6 +197,20 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-inter)'],
+        // FleetCrown-aligned display stack (migration 7/N)
+        heading: [
+          'var(--font-heading)',
+          'var(--font-inter)',
+          'system-ui',
+          'sans-serif',
+        ] as string[],
+        mono: [
+          'var(--font-mono)',
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'monospace',
+        ] as string[],
       },
       scale: {
         '98': '0.98',
