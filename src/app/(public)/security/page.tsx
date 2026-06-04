@@ -1,5 +1,7 @@
 import React from 'react';
+import Link from 'next/link';
 import { Shield, Lock, Eye, Server, Key, AlertTriangle } from 'lucide-react';
+import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 
 export const metadata = {
@@ -8,6 +10,10 @@ export const metadata = {
     "Learn about OrangeCat's security practices, data protection, and commitment to user privacy",
 };
 
+/**
+ * /security — monochrome surfaces, neutral feature cards, single
+ * warm-accent CTA on 'Report Security Issue'. Migration 6/N.
+ */
 export default function SecurityPage() {
   const securityFeatures = [
     {
@@ -75,14 +81,16 @@ export default function SecurityPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/40 dark:bg-background">
+    <div className="min-h-screen bg-surface-page">
       <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">
-            <Shield className="w-16 h-16 text-tiffany-600" />
+            <Shield className="w-16 h-16 text-fg-secondary" />
           </div>
-          <h1 className="text-4xl font-bold text-foreground mb-4">Security & Privacy</h1>
+          <h1 className="font-heading tracking-display text-4xl font-bold text-foreground mb-4">
+            Security &amp; Privacy
+          </h1>
           <p className="text-xl text-muted-foreground">
             Your security and privacy are our top priorities at OrangeCat
           </p>
@@ -97,16 +105,16 @@ export default function SecurityPage() {
             design our systems to minimize the data we collect while maximizing security.
           </p>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-tiffany-50 p-6 rounded-lg">
-              <h3 className="font-semibold text-tiffany-900 mb-2">Bitcoin Security</h3>
-              <p className="text-tiffany-700 text-sm">
+            <div className="bg-muted/40 border border-border-subtle p-6 rounded-lg">
+              <h3 className="font-semibold text-foreground mb-2">Bitcoin Security</h3>
+              <p className="text-muted-foreground text-sm">
                 Your Bitcoin remains under your control. We facilitate payments but never custody
                 funds.
               </p>
             </div>
-            <div className="bg-green-50 p-6 rounded-lg">
-              <h3 className="font-semibold text-green-900 mb-2">Data Minimization</h3>
-              <p className="text-green-700 text-sm">
+            <div className="bg-muted/40 border border-border-subtle p-6 rounded-lg">
+              <h3 className="font-semibold text-foreground mb-2">Data Minimization</h3>
+              <p className="text-muted-foreground text-sm">
                 We collect only the minimum data necessary to provide our services.
               </p>
             </div>
@@ -122,7 +130,7 @@ export default function SecurityPage() {
             {securityFeatures.map((feature, index) => (
               <div key={index} className="bg-card rounded-lg shadow-sm border border-border p-6">
                 <div className="flex items-center mb-4">
-                  <feature.icon className="w-8 h-8 text-tiffany-600 mr-3" />
+                  <feature.icon className="w-8 h-8 text-fg-secondary mr-3" />
                   <h3 className="font-semibold text-foreground">{feature.title}</h3>
                 </div>
                 <p className="text-muted-foreground text-sm">{feature.description}</p>
@@ -139,7 +147,7 @@ export default function SecurityPage() {
               <ul className="space-y-3">
                 {practice.items.map((item, itemIndex) => (
                   <li key={itemIndex} className="flex items-start">
-                    <div className="w-2 h-2 bg-tiffany-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-foreground rounded-full mt-2 mr-3 flex-shrink-0"></div>
                     <span className="text-muted-strong">{item}</span>
                   </li>
                 ))}
@@ -148,27 +156,27 @@ export default function SecurityPage() {
           ))}
         </div>
 
-        {/* Contact Section */}
-        <div className="mt-12 bg-gray-900 text-white rounded-lg p-6">
+        {/* Contact Section — public-surface band per FleetCrown pattern */}
+        <div className="mt-12 bg-surface-public text-fg-inverted rounded-lg p-6">
           <div className="text-center">
-            <h3 className="text-2xl font-semibold mb-4">Security Concerns?</h3>
-            <p className="mb-6 text-muted-dim">
-              If you have security concerns or believe you've discovered a vulnerability, please
-              contact us immediately.
+            <h3 className="font-heading tracking-display text-2xl font-bold mb-4">
+              Security Concerns?
+            </h3>
+            <p className="mb-6 text-fg-inverted/70">
+              If you have security concerns or believe you&apos;ve discovered a vulnerability,
+              please contact us immediately.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="mailto:security@orangecat.ch"
-                className="inline-flex items-center px-6 py-3 bg-tiffany-600 text-white font-medium rounded-lg hover:bg-tiffany-700 transition-colors"
-              >
-                Report Security Issue
+              <a href="mailto:security@orangecat.ch">
+                <Button variant="accent" size="lg">
+                  Report Security Issue
+                </Button>
               </a>
-              <a
-                href={ROUTES.DOCS}
-                className="inline-flex items-center px-6 py-3 bg-gray-700 text-white font-medium rounded-lg hover:bg-gray-600 transition-colors"
-              >
-                View Documentation
-              </a>
+              <Link href={ROUTES.DOCS}>
+                <Button variant="outline" size="lg">
+                  View Documentation
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
