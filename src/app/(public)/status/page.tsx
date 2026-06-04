@@ -15,20 +15,20 @@ export const revalidate = 30;
 function StatusBadge({ status }: { status: ServiceStatus }) {
   if (status === 'operational') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-green-700 bg-green-100">
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-status-positive bg-status-positive-subtle">
         Operational
       </span>
     );
   }
   if (status === 'degraded') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-yellow-700 bg-yellow-100">
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-status-warning bg-status-warning-subtle">
         Degraded
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-destructive/80 bg-red-100">
+    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-status-negative bg-status-negative-subtle">
       Outage
     </span>
   );
@@ -37,12 +37,12 @@ function StatusBadge({ status }: { status: ServiceStatus }) {
 function StatusIcon({ status, size = 'sm' }: { status: ServiceStatus; size?: 'sm' | 'lg' }) {
   const cls = size === 'lg' ? 'w-8 h-8' : 'w-5 h-5';
   if (status === 'operational') {
-    return <CheckCircle className={`${cls} text-green-500`} />;
+    return <CheckCircle className={`${cls} text-status-positive`} />;
   }
   if (status === 'degraded') {
-    return <AlertTriangle className={`${cls} text-yellow-500`} />;
+    return <AlertTriangle className={`${cls} text-status-warning`} />;
   }
-  return <XCircle className={`${cls} text-red-500`} />;
+  return <XCircle className={`${cls} text-status-negative`} />;
 }
 
 function overallMessage(status: ServiceStatus) {
@@ -64,6 +64,10 @@ function overallMessage(status: ServiceStatus) {
   };
 }
 
+/**
+ * /status — uses the semantic status tokens (status-positive / -warning /
+ * -negative) for state colors; everything else monochrome. Migration 6/N.
+ */
 export default async function StatusPage() {
   const report = await checkHealth();
   const { title, body } = overallMessage(report.overall);
@@ -74,11 +78,13 @@ export default async function StatusPage() {
   });
 
   return (
-    <div className="min-h-screen bg-muted/40 dark:bg-background">
+    <div className="min-h-screen bg-surface-page">
       <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">System Status</h1>
+          <h1 className="font-heading tracking-display text-4xl font-bold text-foreground mb-4">
+            System Status
+          </h1>
           <p className="text-xl text-muted-foreground">
             Current status of OrangeCat platform services
           </p>
@@ -125,25 +131,25 @@ export default async function StatusPage() {
           </div>
         </div>
 
-        {/* Contact */}
-        <div className="bg-tiffany-50 rounded-lg p-6">
+        {/* Contact — neutral panel per migration 6/N */}
+        <div className="bg-muted/40 border border-border-subtle rounded-lg p-6">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-tiffany-600 mt-0.5 flex-shrink-0" />
+            <AlertTriangle className="w-5 h-5 text-fg-secondary mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="text-lg font-semibold text-tiffany-900 mb-1">Experiencing Issues?</h3>
-              <p className="text-tiffany-700 mb-4">
+              <h3 className="text-lg font-semibold text-foreground mb-1">Experiencing Issues?</h3>
+              <p className="text-muted-foreground mb-4">
                 If you&apos;re experiencing problems, check our FAQ or reach out to support.
               </p>
               <div className="flex gap-4">
                 <Link
                   href={ROUTES.FAQ}
-                  className="text-tiffany-600 hover:text-tiffany-800 font-medium"
+                  className="text-foreground hover:text-muted-strong font-medium underline-offset-4 hover:underline"
                 >
                   Visit FAQ →
                 </Link>
                 <a
                   href="mailto:support@orangecat.ch"
-                  className="text-tiffany-600 hover:text-tiffany-800 font-medium"
+                  className="text-foreground hover:text-muted-strong font-medium underline-offset-4 hover:underline"
                 >
                   Contact Support →
                 </a>
