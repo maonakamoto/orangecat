@@ -8,7 +8,6 @@ import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { PlayCircle, Radio, Video, Mic2, Share2, Users, Clock } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 import ProfileShare from '@/components/sharing/ProfileShare';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -36,16 +35,14 @@ export default function ChannelComingSoonPage() {
   });
 
   return (
-    <div className={`min-h-screen ${GRADIENTS.pageBg}`}>
+    <div className="min-h-screen bg-surface-page">
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div
-            className={`inline-flex items-center justify-center w-14 h-14 rounded-lg ${GRADIENTS.brandOrangeCircle} text-white shadow-sm`}
-          >
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-lg bg-surface-raised border border-border-subtle text-foreground shadow-sm">
             <PlayCircle className="w-8 h-8" />
           </div>
-          <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+          <h1 className="mt-4 font-heading tracking-display text-3xl sm:text-4xl font-bold text-foreground">
             Stream anything. Get paid directly.
           </h1>
           <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
@@ -59,7 +56,7 @@ export default function ChannelComingSoonPage() {
           <Card>
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
-                <Video className="w-5 h-5 text-tiffany-600" />
+                <Video className="w-5 h-5 text-fg-secondary" />
                 <div>
                   <div className="font-semibold">Video uploads</div>
                   <div className="text-base text-muted-foreground">Share long-form and shorts</div>
@@ -70,7 +67,7 @@ export default function ChannelComingSoonPage() {
           <Card>
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
-                <Mic2 className="w-5 h-5 text-tiffany-600" />
+                <Mic2 className="w-5 h-5 text-fg-secondary" />
                 <div>
                   <div className="font-semibold">Audio & podcasts</div>
                   <div className="text-base text-muted-foreground">Episodes, clips, and more</div>
@@ -81,7 +78,7 @@ export default function ChannelComingSoonPage() {
           <Card>
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
-                <Radio className="w-5 h-5 text-tiffany-600" />
+                <Radio className="w-5 h-5 text-fg-secondary" />
                 <div>
                   <div className="font-semibold">Live streaming</div>
                   <div className="text-base text-muted-foreground">Connect with your audience</div>
@@ -105,7 +102,7 @@ export default function ChannelComingSoonPage() {
         </Card>
 
         {/* CTA Card */}
-        <Card className="border-orange-200 bg-card/90 dark:bg-card/90 dark:border-border">
+        <Card className="border-border bg-card/90 dark:bg-card/90">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-center md:text-left">
@@ -164,10 +161,7 @@ export default function ChannelComingSoonPage() {
                   </Button>
                 </Link>
                 <div className="relative">
-                  <Button
-                    onClick={() => setShowShare(!showShare)}
-                    className="bg-orange-600 hover:bg-orange-700 text-white"
-                  >
+                  <Button variant="accent" onClick={() => setShowShare(!showShare)}>
                     <Share2 className="w-4 h-4 mr-2" /> Share My Profile
                   </Button>
                   {showShare && (
@@ -205,7 +199,7 @@ export default function ChannelComingSoonPage() {
             <Card key={item.title}>
               <CardContent className="p-5">
                 <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-orange-600 mt-0.5" />
+                  <Clock className="w-5 h-5 text-fg-secondary mt-0.5" />
                   <div>
                     <div className="font-semibold">{item.title}</div>
                     <div className="text-base text-muted-foreground">{item.desc}</div>
