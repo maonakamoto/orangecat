@@ -102,10 +102,10 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
           </div>
         )}
         {project.bitcoin_address && (
-          <div className="mt-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
+          <div className="mt-3 p-3 bg-bitcoinOrange/5 rounded-lg border border-bitcoinOrange/20">
             <div className="flex items-center gap-2 mb-1">
-              <Bitcoin className="w-4 h-4 text-orange-600" />
-              <span className="text-xs font-medium text-orange-700 uppercase tracking-wide">
+              <Bitcoin className="w-4 h-4 text-bitcoinOrange" />
+              <span className="text-xs font-medium text-bitcoinOrange uppercase tracking-wide">
                 Bitcoin Balance
               </span>
             </div>
@@ -121,7 +121,7 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
         )}
       </div>
       <div className="w-full bg-muted rounded-full h-3">
-        <div className="bg-orange-500 h-3 rounded-full" style={{ width: `${progress}%` }} />
+        <div className="bg-foreground h-3 rounded-full" style={{ width: `${progress}%` }} />
       </div>
 
       {/* Social Proof - Supporters Count */}
