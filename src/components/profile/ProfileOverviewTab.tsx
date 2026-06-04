@@ -86,9 +86,9 @@ export default function ProfileOverviewTab({
           ) : isOwnProfile && isDashboardView ? (
             <a
               href={`${ROUTES.DASHBOARD.INFO_EDIT}#bio`}
-              className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline group text-sm sm:text-base"
+              className="inline-flex items-center gap-2 text-foreground hover:text-muted-strong underline-offset-4 hover:underline group text-sm sm:text-base"
             >
-              <span className="text-muted-dim italic group-hover:text-orange-600">
+              <span className="text-muted-dim italic group-hover:text-foreground">
                 Tell people more about yourself
               </span>
               <span className="text-xs uppercase tracking-wide">Add bio</span>
@@ -110,7 +110,7 @@ export default function ProfileOverviewTab({
       <Card>
         <CardHeader className="p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
-            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-fg-secondary" />
             Support this Profile
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
@@ -122,7 +122,7 @@ export default function ProfileOverviewTab({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button
               onClick={() => setSupportType('donate')}
-              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'donate' ? 'border-orange-600 bg-orange-50 dark:bg-orange-950/30' : 'border-border hover:border-orange-300'}`}
+              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'donate' ? 'border-foreground bg-muted' : 'border-border hover:border-border-strong'}`}
             >
               <Heart className="w-5 h-5" />
               <span>Donate</span>
@@ -130,7 +130,7 @@ export default function ProfileOverviewTab({
             </button>
             <button
               onClick={() => setSupportType('subscribe')}
-              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'subscribe' ? 'border-orange-600 bg-orange-50 dark:bg-orange-950/30' : 'border-border hover:border-orange-300'}`}
+              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'subscribe' ? 'border-foreground bg-muted' : 'border-border hover:border-border-strong'}`}
             >
               <Repeat className="w-5 h-5" />
               <span>Subscribe</span>
@@ -138,7 +138,7 @@ export default function ProfileOverviewTab({
             </button>
             <button
               onClick={() => setSupportType('lend')}
-              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'lend' ? 'border-orange-600 bg-orange-50 dark:bg-orange-950/30' : 'border-border hover:border-orange-300'}`}
+              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'lend' ? 'border-foreground bg-muted' : 'border-border hover:border-border-strong'}`}
             >
               <Handshake className="w-5 h-5" />
               <span>Lend</span>
@@ -146,7 +146,7 @@ export default function ProfileOverviewTab({
             </button>
             <button
               onClick={() => setSupportType('invest')}
-              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'invest' ? 'border-orange-600 bg-orange-50 dark:bg-orange-950/30' : 'border-border hover:border-orange-300'}`}
+              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'invest' ? 'border-foreground bg-muted' : 'border-border hover:border-border-strong'}`}
             >
               <TrendingUp className="w-5 h-5" />
               <span>Invest</span>
@@ -304,7 +304,7 @@ export default function ProfileOverviewTab({
                       );
                       setSupportType(null);
                     }}
-                    className="px-3 py-1 bg-orange-600 text-white rounded text-sm"
+                    className="px-3 py-1 bg-foreground text-background rounded text-sm hover:bg-muted-strong transition-colors"
                   >
                     Propose Loan
                   </button>
@@ -344,7 +344,7 @@ export default function ProfileOverviewTab({
                       );
                       setSupportType(null);
                     }}
-                    className="px-3 py-1 bg-green-600 text-white rounded text-sm"
+                    className="px-3 py-1 bg-status-positive text-white rounded text-sm hover:bg-status-positive/90 transition-colors"
                   >
                     Propose Investment
                   </button>
@@ -364,7 +364,7 @@ export default function ProfileOverviewTab({
           <Card>
             <CardContent className="pt-4 sm:pt-6">
               <div className="text-center">
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-orange-600">
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
                   {stats.projectCount}
                 </div>
                 <div className="text-xs sm:text-sm text-muted-foreground mt-1">
@@ -405,14 +405,14 @@ export default function ProfileOverviewTab({
                   href={profile.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-tiffany-600 hover:underline break-all text-sm sm:text-base"
+                  className="text-foreground hover:text-muted-strong underline-offset-4 hover:underline break-all text-sm sm:text-base"
                 >
                   {profile.website.replace(/^https?:\/\//, '')}
                 </a>
               ) : isOwnProfile && isDashboardView ? (
                 <a
                   href={`${ROUTES.DASHBOARD.INFO_EDIT}#website`}
-                  className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
+                  className="inline-flex items-center gap-2 text-foreground hover:text-muted-strong underline-offset-4 hover:underline text-sm sm:text-base"
                 >
                   <span className="text-muted-dim italic">Add a website</span>
                   <span className="text-xs uppercase tracking-wide">Edit</span>
@@ -440,7 +440,7 @@ export default function ProfileOverviewTab({
             ) : isOwnProfile && isDashboardView ? (
               <a
                 href={`${ROUTES.DASHBOARD.INFO_EDIT}#socialLinks`}
-                className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
+                className="inline-flex items-center gap-2 text-foreground hover:text-muted-strong underline-offset-4 hover:underline text-sm sm:text-base"
               >
                 <span className="text-muted-dim italic">Add social links or profiles</span>
                 <span className="text-xs uppercase tracking-wide">Edit</span>
@@ -468,14 +468,14 @@ export default function ProfileOverviewTab({
               {publicContactEmail ? (
                 <a
                   href={`mailto:${publicContactEmail}`}
-                  className="text-tiffany-600 hover:underline break-all text-sm sm:text-base"
+                  className="text-foreground hover:text-muted-strong underline-offset-4 hover:underline break-all text-sm sm:text-base"
                 >
                   {publicContactEmail}
                 </a>
               ) : isOwnProfile && isDashboardView ? (
                 <a
                   href={`${ROUTES.DASHBOARD.INFO_EDIT}#contactEmail`}
-                  className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
+                  className="inline-flex items-center gap-2 text-foreground hover:text-muted-strong underline-offset-4 hover:underline text-sm sm:text-base"
                 >
                   <span className="text-muted-dim italic">Add a public contact email</span>
                   <span className="text-xs uppercase tracking-wide">Edit</span>
@@ -496,14 +496,14 @@ export default function ProfileOverviewTab({
               {profile.phone ? (
                 <a
                   href={`tel:${profile.phone}`}
-                  className="text-tiffany-600 hover:underline text-sm sm:text-base"
+                  className="text-foreground hover:text-muted-strong underline-offset-4 hover:underline text-sm sm:text-base"
                 >
                   {profile.phone}
                 </a>
               ) : isOwnProfile && isDashboardView ? (
                 <a
                   href={`${ROUTES.DASHBOARD.INFO_EDIT}#phone`}
-                  className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline text-sm sm:text-base"
+                  className="inline-flex items-center gap-2 text-foreground hover:text-muted-strong underline-offset-4 hover:underline text-sm sm:text-base"
                 >
                   <span className="text-muted-dim italic">Add a phone number</span>
                   <span className="text-xs uppercase tracking-wide">Edit</span>
