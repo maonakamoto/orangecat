@@ -1,8 +1,8 @@
 import React from 'react';
+import Link from 'next/link';
 import { Metadata } from 'next';
 import { Briefcase, Users, Zap, Heart, Globe, Coffee } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
+import Button from '@/components/ui/Button';
 
 export const metadata: Metadata = {
   title: 'Careers — Join Our Mission',
@@ -10,6 +10,11 @@ export const metadata: Metadata = {
     'Work with us to build universal economic participation. Join OrangeCat and help anyone — any identity, any currency — earn, fund, invest, and govern freely.',
 };
 
+/**
+ * /company/careers — monochrome surfaces, single warm-accent CTA on the
+ * Apply / View Open Positions buttons per FleetCrown contract. Value
+ * cards, position tiles, and perk pills all unified neutral. Migration 6/N.
+ */
 export default function CareersPage() {
   const openPositions = [
     {
@@ -85,16 +90,16 @@ export default function CareersPage() {
   ];
 
   return (
-    <div className={cn(GRADIENTS.pageBgSolid, 'min-h-screen')}>
+    <div className="min-h-screen bg-surface-page">
       {/* Hero Section */}
       <div className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-8">
-              <Briefcase className="w-8 h-8 text-orange-600" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-surface-raised border border-border-subtle rounded-full mb-8">
+              <Briefcase className="w-8 h-8 text-fg-secondary" />
             </div>
-            <h1 className="text-4xl font-bold text-foreground sm:text-5xl mb-4">
-              Join <span className="text-orange-600">OrangeCat</span>
+            <h1 className="font-heading tracking-display text-4xl font-bold text-foreground sm:text-5xl mb-4">
+              Join OrangeCat
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Help us build universal economic participation. Work on a platform that lets anyone —
@@ -120,7 +125,7 @@ export default function CareersPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {values.map((value, index) => (
             <div key={index} className="text-center p-6 bg-card rounded-lg shadow-sm">
-              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-600">
+              <div className="w-12 h-12 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4 text-fg-secondary">
                 {value.icon}
               </div>
               <h3 className="text-lg font-semibold text-foreground mb-2">{value.title}</h3>
@@ -144,9 +149,9 @@ export default function CareersPage() {
                       <h3 className="text-lg font-semibold text-foreground mb-1">
                         {position.title}
                       </h3>
-                      <p className="text-orange-600 font-medium text-sm">{position.department}</p>
+                      <p className="text-fg-secondary font-medium text-sm">{position.department}</p>
                     </div>
-                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                    <span className="px-3 py-1 bg-muted text-foreground rounded-full text-sm font-medium">
                       {position.type}
                     </span>
                   </div>
@@ -155,9 +160,9 @@ export default function CareersPage() {
 
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">{position.location}</span>
-                    <button className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium">
+                    <Button variant="accent" size="sm">
                       Apply Now
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -174,9 +179,9 @@ export default function CareersPage() {
                 We&apos;re always growing! Send us your resume and we&apos;ll keep you in mind for
                 future opportunities.
               </p>
-              <button className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+              <Button variant="accent" size="lg">
                 Send Your Resume
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -189,9 +194,12 @@ export default function CareersPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {perks.map((perk, index) => (
-              <div key={index} className="flex items-center p-4 bg-orange-50 rounded-lg">
-                <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-orange-600 text-sm font-bold">✓</span>
+              <div
+                key={index}
+                className="flex items-center p-4 bg-muted/40 border border-border-subtle rounded-lg"
+              >
+                <div className="w-8 h-8 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mr-3">
+                  <span className="text-fg-secondary text-sm font-bold">✓</span>
                 </div>
                 <span className="text-foreground font-medium text-sm">{perk}</span>
               </div>
@@ -217,12 +225,14 @@ export default function CareersPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium">
-              View Open Positions
-            </button>
-            <button className="px-8 py-4 border border-orange-600 text-orange-600 rounded-lg hover:bg-orange-50 transition-colors font-medium">
+            <Link href="#open-positions">
+              <Button variant="accent" size="lg">
+                View Open Positions
+              </Button>
+            </Link>
+            <Button variant="outline" size="lg">
               Send Your Resume
-            </button>
+            </Button>
           </div>
 
           <p className="text-sm text-muted-foreground mt-6">
