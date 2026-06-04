@@ -124,7 +124,7 @@ export default function NotificationCenter({
                   {uiFilter !== 'all' && (
                     <button
                       onClick={() => setUIFilter('all')}
-                      className="text-tiffany text-sm mt-2 hover:underline"
+                      className="text-foreground text-sm mt-2 hover:underline"
                     >
                       View all notifications
                     </button>

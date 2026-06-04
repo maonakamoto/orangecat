@@ -69,7 +69,7 @@ export const loanEntityConfig: EntityConfig<Loan> = {
                 {part}
               </span>
             ))}
-            {progress > 0 && <span className="text-tiffany-600 font-medium">{progress}% paid</span>}
+            {progress > 0 && <span className="text-foreground font-medium">{progress}% paid</span>}
           </div>
         ) : undefined,
       showEditButton: true,

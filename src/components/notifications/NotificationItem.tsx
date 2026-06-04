@@ -40,7 +40,7 @@ function getNotificationIcon(notification: Notification) {
     case 'like':
       return <Heart className="w-5 h-5 text-red-500" />;
     case 'mention':
-      return <AtSign className="w-5 h-5 text-tiffany" />;
+      return <AtSign className="w-5 h-5 text-foreground" />;
     case 'system':
       return <Settings className="w-5 h-5 text-muted-foreground" />;
     default:
