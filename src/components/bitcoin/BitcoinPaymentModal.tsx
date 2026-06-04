@@ -129,7 +129,7 @@ export default function BitcoinPaymentModal({
               <Button
                 onClick={handleCreatePayment}
                 disabled={loading}
-                className="w-full bg-orange-500 hover:bg-orange-600"
+                className="w-full bg-bitcoinOrange hover:bg-bitcoinOrange/90"
               >
                 {loading ? 'Creating...' : 'Create Payment'}
               </Button>

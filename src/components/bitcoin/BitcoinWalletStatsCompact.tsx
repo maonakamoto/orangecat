@@ -64,7 +64,7 @@ export default function BitcoinWalletStatsCompact({
     return (
       <div className={`bg-card rounded-lg p-4 border border-border ${className}`}>
         <div className="flex items-center justify-center py-4">
-          <RefreshCw className="w-5 h-5 animate-spin text-orange-500" />
+          <RefreshCw className="w-5 h-5 animate-spin text-bitcoinOrange" />
         </div>
       </div>
     );

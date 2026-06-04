@@ -47,13 +47,13 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
 
   return (
     <div
-      className={`bg-card rounded-lg border-2 p-6 ${isBitcoin ? 'border-orange-200' : 'border-yellow-200'}`}
+      className={`bg-card rounded-lg border-2 p-6 ${isBitcoin ? 'border-bitcoinOrange/30' : 'border-yellow-200'}`}
       data-bitcoin-card={isBitcoin ? 'true' : undefined}
       data-lightning-card={!isBitcoin ? 'true' : undefined}
     >
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
-        <Icon className={`w-5 h-5 ${isBitcoin ? 'text-orange-600' : 'text-yellow-600'}`} />
+        <Icon className={`w-5 h-5 ${isBitcoin ? 'text-bitcoinOrange' : 'text-yellow-600'}`} />
         <div>
           <h4 className="font-semibold text-foreground text-sm">{label}</h4>
           <p className="text-xs text-muted-foreground">{description}</p>
@@ -87,7 +87,7 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
         {isBitcoin && (
           <Button
             onClick={openInWallet}
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+            className="w-full bg-bitcoinOrange hover:bg-bitcoinOrange/90 text-white"
           >
             <ExternalLink className="w-4 h-4 mr-2" />
             Send with Wallet
@@ -99,7 +99,7 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
           variant="outline"
           size="sm"
           onClick={copyToClipboard}
-          className={`w-full ${isBitcoin ? 'border-border-strong hover:bg-orange-50' : 'border-yellow-300 hover:bg-yellow-50'}`}
+          className={`w-full ${isBitcoin ? 'border-border-strong hover:bg-bitcoinOrange/10' : 'border-yellow-300 hover:bg-yellow-50'}`}
         >
           <Copy className="w-3 h-3 mr-1" />
           Copy Address
@@ -136,12 +136,12 @@ export default function BitcoinDonationCard({
 
   return (
     <div
-      className={`${GRADIENTS.sectionOrangeAmber} rounded-lg border-2 border-orange-200 p-6 ${className}`}
+      className={`${GRADIENTS.sectionOrangeAmber} rounded-lg border-2 border-bitcoinOrange/30 p-6 ${className}`}
     >
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-            <Bitcoin className="w-5 h-5 text-orange-500" />
+            <Bitcoin className="w-5 h-5 text-bitcoinOrange" />
             Accept Bitcoin Funding
           </h3>
           <p className="text-xs text-muted-foreground mt-0.5">
