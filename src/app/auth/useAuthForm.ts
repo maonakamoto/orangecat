@@ -41,6 +41,26 @@ export function useAuthForm() {
     }
   }, [hydrated, session, profile, clear]);
 
+  // The OAuth callback at /auth/callback/route.ts redirects back to
+  // /auth?error=... when exchangeCodeForSession fails. Without consuming
+  // the param here, the user lands on a clean-looking sign-in form with
+  // no explanation of why their Google/GitHub/X attempt didn't work.
+  // Surface the URL error into the on-page error pin (same surface that
+  // displays submission errors) and strip it from the URL so a manual
+  // refresh doesn't keep replaying it.
+  const [urlError, setUrlError] = useState<string | null>(null);
+  useEffect(() => {
+    const errParam = searchParams?.get('error');
+    if (errParam) {
+      setUrlError(errParam);
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('error');
+        window.history.replaceState({}, '', url.toString());
+      }
+    }
+  }, [searchParams]);
+
   const [formData, setFormData] = useState<AuthFormData>({
     email: '',
     password: '',
@@ -75,8 +95,8 @@ export function useAuthForm() {
     retryCount,
     handleSubmit,
     handleForgotPassword,
-    handleRetry,
-    handleClearError,
+    handleRetry: submissionRetry,
+    handleClearError: submissionClearError,
   } = useAuthSubmission({
     formData,
     mode,
@@ -92,6 +112,18 @@ export function useAuthForm() {
 
   const loading = localLoading || authLoading;
   const _isCurrentlyLoading = loading || redirectLoading;
+
+  // Wrap submission's retry/clear so the URL-error layer clears too —
+  // otherwise hitting Retry on a callback-surfaced error leaves it
+  // pinned even after the next attempt succeeds.
+  const handleRetry = useCallback(() => {
+    setUrlError(null);
+    submissionRetry();
+  }, [submissionRetry]);
+  const handleClearError = useCallback(() => {
+    setUrlError(null);
+    submissionClearError();
+  }, [submissionClearError]);
 
   useEffect(() => {
     if (session?.user && hydrated) {
@@ -155,7 +187,7 @@ export function useAuthForm() {
     showConfirmPassword,
     setShowConfirmPassword,
     loading,
-    error,
+    error: error || urlError,
     success,
     rememberMe,
     setRememberMe,
