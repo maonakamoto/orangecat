@@ -11,6 +11,8 @@ import {
   Sparkles,
   Loader2,
   X,
+  AlertCircle,
+  RefreshCw,
 } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
@@ -92,6 +94,7 @@ export default function TasksSection({
     celebration,
     markTaskCompleted,
     completedTaskIds,
+    refresh,
   } = useRecommendations({ limit: maxTasks + 2 });
 
   if (!user || !profile) {
@@ -110,7 +113,25 @@ export default function TasksSection({
   }
 
   if (error) {
-    return null;
+    return (
+      <div className={className}>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
+            <AlertCircle className="w-6 h-6 text-muted-foreground" />
+            <div>
+              <p className="text-sm font-medium text-foreground">
+                Couldn&apos;t load recommendations
+              </p>
+              <p className="text-xs text-muted-foreground">{error.message}</p>
+            </div>
+            <Button size="sm" variant="outline" onClick={() => refresh()}>
+              <RefreshCw className="w-3 h-3 mr-1.5" />
+              Try again
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   if (celebration && !celebrationDismissed) {
@@ -140,7 +161,33 @@ export default function TasksSection({
   }
 
   if (tasks.length === 0) {
-    return null;
+    return (
+      <div className={className}>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-md border border-border-subtle bg-muted/40">
+              <CheckCircle2 className="w-6 h-6 text-green-600" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-foreground">You&apos;re all caught up</p>
+              <p className="text-xs text-muted-foreground">
+                Nothing pending. Ask Cat what to do next or explore the platform.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Link href="/dashboard/cat">
+                <Button size="sm">Ask Cat</Button>
+              </Link>
+              <Link href="/discover">
+                <Button size="sm" variant="outline">
+                  Discover
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   const visibleTasks = tasks.slice(0, maxTasks);
