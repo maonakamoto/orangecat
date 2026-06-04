@@ -23,6 +23,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 import {
   ArrowRight,
   Bookmark,
@@ -266,6 +268,13 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       )}
       overlayClassName="fixed inset-0 z-[99] bg-black/60 backdrop-blur-sm"
     >
+      {/* Radix Dialog (underneath cmdk's Command.Dialog) requires a Title
+          for screen readers — the `label` prop alone isn't enough and
+          logs a runtime error in dev. Visually hide it; cmdk renders the
+          Search input below as the user-facing focus. */}
+      <VisuallyHidden.Root>
+        <DialogPrimitive.Title>Command palette</DialogPrimitive.Title>
+      </VisuallyHidden.Root>
       <div className="flex items-center border-b border-border-subtle px-3.5">
         <Search className="h-4 w-4 flex-shrink-0 text-muted-dim" aria-hidden />
         <Command.Input
