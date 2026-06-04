@@ -49,7 +49,7 @@ export function AIChatPanel({
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-        <p className="text-red-500 mb-4">{error}</p>
+        <p className="text-status-negative mb-4">{error}</p>
         <Button onClick={() => window.location.reload()} variant="outline">
           Retry
         </Button>
@@ -71,7 +71,7 @@ export function AIChatPanel({
 
         <Avatar className="h-10 w-10">
           <AvatarImage src={assistant?.avatar_url || undefined} />
-          <AvatarFallback className="bg-tiffany-100 text-tiffany-600">
+          <AvatarFallback className="bg-muted text-fg-secondary">
             <Bot className="h-5 w-5" />
           </AvatarFallback>
         </Avatar>
@@ -90,13 +90,19 @@ export function AIChatPanel({
 
         <div className="flex items-center gap-2">
           {userStatus?.hasByok ? (
-            <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200">
+            <Badge
+              variant="secondary"
+              className="bg-status-positive-subtle text-status-positive border-status-positive/30"
+            >
               <Key className="h-3 w-3 mr-1" />
               BYOK
             </Badge>
           ) : (
             userStatus && (
-              <Badge variant="secondary" className="bg-amber-50 text-amber-700 border-amber-200">
+              <Badge
+                variant="secondary"
+                className="bg-status-warning-subtle text-status-warning border-status-warning/30"
+              >
                 <Gift className="h-3 w-3 mr-1" />
                 {userStatus.freeMessagesRemaining}/{userStatus.freeMessagesPerDay} free
               </Badge>
@@ -118,13 +124,16 @@ export function AIChatPanel({
         !userStatus.hasByok &&
         userStatus.freeMessagesRemaining <= 2 &&
         userStatus.freeMessagesRemaining > 0 && (
-          <div className="px-4 py-2 bg-amber-50 border-b border-amber-100 flex items-center gap-2 text-sm text-amber-700">
+          <div className="px-4 py-2 bg-status-warning-subtle border-b border-status-warning/30 flex items-center gap-2 text-sm text-status-warning">
             <AlertCircle className="h-4 w-4" />
             <span>
               Only {userStatus.freeMessagesRemaining} free message
               {userStatus.freeMessagesRemaining !== 1 ? 's' : ''} remaining today.
             </span>
-            <Link href={ROUTES.SETTINGS_AI} className="text-amber-800 underline hover:no-underline">
+            <Link
+              href={ROUTES.SETTINGS_AI}
+              className="text-status-warning underline hover:no-underline font-medium"
+            >
               Add API key
             </Link>
           </div>
@@ -135,7 +144,7 @@ export function AIChatPanel({
           <div className="flex flex-col items-center justify-center h-full p-8 text-center">
             <Avatar className="h-16 w-16 mb-4">
               <AvatarImage src={assistant?.avatar_url || undefined} />
-              <AvatarFallback className="bg-tiffany-100 text-tiffany-600">
+              <AvatarFallback className="bg-muted text-fg-secondary">
                 <Bot className="h-8 w-8" />
               </AvatarFallback>
             </Avatar>

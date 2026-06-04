@@ -59,7 +59,7 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
       className={cn(
         'flex items-center gap-2 rounded-md px-4 py-2.5',
         action.type === 'publish_entity'
-          ? 'bg-green-700 hover:bg-green-700/90 dark:bg-green-600 dark:hover:bg-green-600/90'
+          ? 'bg-status-positive hover:bg-status-positive/90'
           : action.type === 'update_entity'
             ? 'bg-muted-strong hover:bg-muted-strong/90'
             : 'bg-foreground hover:bg-foreground/90',

@@ -48,8 +48,8 @@ export function ModelSelector({
         {models.map(model => (
           <SelectItem key={model.id} value={model.id}>
             <div className="flex items-center gap-2">
-              {model.tier === 'free' && <Zap className="h-3 w-3 text-emerald-600" />}
-              {model.tier === 'paid' && <Crown className="h-3 w-3 text-orange-600" />}
+              {model.tier === 'free' && <Zap className="h-3 w-3 text-status-positive" />}
+              {model.tier === 'paid' && <Crown className="h-3 w-3 text-fg-secondary" />}
               <span>{model.name}</span>
               {showPricing && model.costPerMessage && (
                 <span className="text-xs text-muted-foreground">

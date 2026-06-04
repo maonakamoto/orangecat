@@ -94,7 +94,7 @@ export function AIChatInput({
           onClick={handleSubmit}
           disabled={!content.trim() || isSending || disabled}
           className={cn(
-            'px-4 py-3 bg-tiffany-500 hover:bg-tiffany-600 text-white rounded-lg',
+            'px-4 py-3 bg-foreground hover:bg-muted-strong text-background rounded-lg',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             'transition-colors duration-200 flex-shrink-0',
             'min-w-12 min-h-12'

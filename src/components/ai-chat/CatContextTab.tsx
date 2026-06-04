@@ -65,10 +65,10 @@ export function CatContextTab() {
 
   const getCompletenessColor = (score: number) => {
     if (score >= 70) {
-      return 'text-green-700 dark:text-green-300';
+      return 'text-status-positive';
     }
     if (score >= 40) {
-      return 'text-amber-700 dark:text-amber-300';
+      return 'text-status-warning';
     }
     return 'text-muted-foreground';
   };

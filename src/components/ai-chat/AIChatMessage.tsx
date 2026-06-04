@@ -45,14 +45,14 @@ export function AIChatMessage({
         {isUser ? (
           <>
             <AvatarImage src={userAvatar || undefined} alt={userName} />
-            <AvatarFallback className="bg-tiffany-100 text-tiffany-600">
+            <AvatarFallback className="bg-muted text-fg-secondary">
               <User className="h-4 w-4" />
             </AvatarFallback>
           </>
         ) : (
           <>
             <AvatarImage src={assistantAvatar || undefined} alt={assistantName} />
-            <AvatarFallback className="bg-tiffany-100 text-tiffany-600">
+            <AvatarFallback className="bg-muted text-fg-secondary">
               <Bot className="h-4 w-4" />
             </AvatarFallback>
           </>
