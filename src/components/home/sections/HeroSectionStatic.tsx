@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Globe, Zap, Cat, Plus } from 'lucide-react';
+import { ArrowRight, Globe, Cat, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { BrandMarkIcon } from '@/components/shell/BrandMarkIcon';
 import { GRADIENTS } from '@/config/gradients';
@@ -49,7 +49,7 @@ export default function HeroSectionStatic() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Link href={ROUTES.AUTH} className="w-full sm:w-auto">
                 <Button variant="gradient" size="lg" className="w-full sm:w-auto">
                   <Plus className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
@@ -63,20 +63,6 @@ export default function HeroSectionStatic() {
                   Discover
                 </Button>
               </Link>
-            </div>
-
-            {/* Key Benefits */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {[
-                { icon: Plus, text: 'Create anything' },
-                { icon: Globe, text: 'Any currency' },
-                { icon: Zap, text: 'Zero fees' },
-              ].map(benefit => (
-                <div key={benefit.text} className="flex items-center gap-2 text-muted-foreground">
-                  <benefit.icon className="w-4 h-4 text-foreground flex-shrink-0" />
-                  <span className="text-sm font-medium">{benefit.text}</span>
-                </div>
-              ))}
             </div>
           </div>
 
