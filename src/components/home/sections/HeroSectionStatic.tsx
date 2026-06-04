@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { ArrowRight, Globe, Cat, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { BrandMarkIcon } from '@/components/shell/BrandMarkIcon';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 /**
@@ -21,7 +20,7 @@ export default function HeroSectionStatic() {
             {/* Trust Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-card border border-border mb-6">
               <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 bg-green-500 rounded-full" />
+                <div className="w-2 h-2 bg-status-positive rounded-full" />
                 <span className="text-sm font-medium text-foreground">Create anything</span>
               </div>
               <span className="text-muted-dim">•</span>
@@ -73,9 +72,9 @@ export default function HeroSectionStatic() {
               {/* Card Header */}
               <div className="p-4 sm:p-6 border-b border-border">
                 <div className="flex items-start gap-3 sm:gap-4">
-                  <div
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${GRADIENTS.brandTiffanyBr} flex items-center justify-center text-background flex-shrink-0`}
-                  >
+                  {/* Cat avatar — monochrome neutral per migration 6/N; the
+                      warm accent is reserved for CTAs, not the brand mark */}
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-surface-raised border border-border-subtle flex items-center justify-center text-foreground flex-shrink-0">
                     <BrandMarkIcon size={24} />
                   </div>
                   <div className="flex-1 min-w-0">
