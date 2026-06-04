@@ -222,7 +222,7 @@ export function ProposalDetail({
             </div>
             {proposal.voting_ends_at && proposal.status === PROPOSAL_STATUSES.ACTIVE && (
               <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-tiffany-500" />
+                <Clock className="h-4 w-4 text-foreground" />
                 <span>Voting ends {formatRelativeTime(proposal.voting_ends_at)}</span>
               </div>
             )}

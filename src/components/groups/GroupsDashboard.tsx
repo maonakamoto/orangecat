@@ -27,7 +27,6 @@ import Link from 'next/link';
 import EntityListShell from '@/components/entity/EntityListShell';
 import Loading from '@/components/Loading';
 import { ROUTES } from '@/config/routes';
-import { GRADIENTS } from '@/config/gradients';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 export function GroupsDashboard() {
@@ -88,7 +87,7 @@ export function GroupsDashboard() {
 
   const headerActions = (
     <Link href={ROUTES.DASHBOARD.GROUPS_CREATE}>
-      <Button className={`gap-2 ${GRADIENTS.brandTiffany}`}>
+      <Button variant="accent" className="gap-2">
         <Plus className="h-4 w-4" />
         Create Group
       </Button>

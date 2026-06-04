@@ -96,7 +96,7 @@ export function GroupDetailSidebar({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Bitcoin className="h-5 w-5 text-orange-500" />
+              <Bitcoin className="h-5 w-5 text-bitcoinOrange" />
               Bitcoin
             </CardTitle>
           </CardHeader>
@@ -131,7 +131,7 @@ export function GroupDetailSidebar({
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-tiffany-600">{members.length}</div>
+              <div className="text-2xl font-bold text-foreground">{members.length}</div>
               <div className="text-sm text-muted-foreground">Members</div>
             </div>
             <div className="text-center">

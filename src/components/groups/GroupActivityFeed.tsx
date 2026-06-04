@@ -32,7 +32,7 @@ const ACTIVITY_CONFIG: Record<
   joined_group: {
     icon: UserPlus,
     label: () => 'joined the group',
-    color: 'text-tiffany-600',
+    color: 'text-emerald-600',
   },
   created_proposal: {
     icon: FileText,
@@ -47,7 +47,7 @@ const ACTIVITY_CONFIG: Record<
   created_event: {
     icon: CalendarPlus,
     label: meta => (meta.title ? `created event "${meta.title}"` : 'created an event'),
-    color: 'text-orange-600',
+    color: 'text-amber-600',
   },
 };
 

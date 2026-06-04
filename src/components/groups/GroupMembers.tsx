@@ -15,8 +15,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/badge';
 import { Users, UserPlus, Crown, Shield, User } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import { STATUS } from '@/config/database-constants';
 import type { GroupMember, GroupRole } from '@/types/group';
 import { getInitial } from '@/utils/string';
@@ -67,7 +65,7 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
       case STATUS.GROUP_MEMBERS.FOUNDER:
         return <Crown className="h-4 w-4 text-yellow-600" />;
       case STATUS.GROUP_MEMBERS.ADMIN:
-        return <Shield className="h-4 w-4 text-tiffany-600" />;
+        return <Shield className="h-4 w-4 text-foreground" />;
       default:
         return <User className="h-4 w-4 text-muted-foreground" />;
     }
@@ -118,12 +116,7 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
                   className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/40 dark:hover:bg-gray-800 transition-colors"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div
-                      className={cn(
-                        GRADIENTS.brandOrangeLightBr,
-                        'h-10 w-10 rounded-full flex items-center justify-center border-2 border-border-strong'
-                      )}
-                    >
+                    <div className="h-10 w-10 rounded-full flex items-center justify-center bg-muted text-fg-secondary border-2 border-border-strong">
                       {getInitial(member.display_name || member.username)}
                     </div>
                     <div className="flex-1 min-w-0">
