@@ -414,8 +414,8 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
  * Tailwind purges dynamic classes, so we need literal strings
  */
 export const COLOR_CLASSES: Record<EntityMetadata['colorTheme'], { text: string; bg: string }> = {
-  orange: { text: 'text-orange-600', bg: 'bg-orange-50' },
-  tiffany: { text: 'text-tiffany-600', bg: 'bg-tiffany-50' },
+  orange: { text: 'text-amber-700', bg: 'bg-amber-50' },
+  tiffany: { text: 'text-emerald-700', bg: 'bg-emerald-50' },
   rose: { text: 'text-rose-600', bg: 'bg-rose-50' },
   green: { text: 'text-green-600', bg: 'bg-green-50' },
 };

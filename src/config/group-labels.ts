@@ -35,7 +35,7 @@ export const GROUP_LABELS = {
     name: 'Circle',
     description: 'Informal group of trusted people',
     icon: Users,
-    iconClass: 'text-tiffany-500',
+    iconClass: 'text-foreground',
     defaults: {
       is_public: false,
       visibility: 'members_only',
@@ -63,7 +63,7 @@ export const GROUP_LABELS = {
     name: 'DAO',
     description: 'Decentralized organization with voting',
     icon: Globe,
-    iconClass: 'text-tiffany-500',
+    iconClass: 'text-foreground',
     defaults: {
       is_public: true,
       visibility: 'public',
@@ -119,7 +119,7 @@ export const GROUP_LABELS = {
     name: 'Guild',
     description: 'Professional association',
     icon: Briefcase,
-    iconClass: 'text-tiffany-500',
+    iconClass: 'text-foreground',
     defaults: {
       is_public: true,
       visibility: 'public',
@@ -133,7 +133,7 @@ export const GROUP_LABELS = {
     name: 'Network State',
     description: 'Digital-first nation or community with shared values',
     icon: Globe,
-    iconClass: 'text-tiffany-500',
+    iconClass: 'text-foreground',
     defaults: {
       is_public: true,
       visibility: 'public',

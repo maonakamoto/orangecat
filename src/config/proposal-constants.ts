@@ -58,7 +58,7 @@ export const PROPOSAL_STATUS_CONFIG: Record<
   [PROPOSAL_STATUSES.ACTIVE]: {
     label: 'Active',
     badgeVariant: 'default',
-    className: 'bg-tiffany-500',
+    className: 'bg-foreground',
   },
   [PROPOSAL_STATUSES.PASSED]: {
     label: 'Passed',
@@ -73,7 +73,7 @@ export const PROPOSAL_STATUS_CONFIG: Record<
   [PROPOSAL_STATUSES.EXECUTED]: {
     label: 'Executed',
     badgeVariant: 'default',
-    className: 'bg-tiffany-500',
+    className: 'bg-foreground',
   },
   [PROPOSAL_STATUSES.CANCELLED]: {
     label: 'Cancelled',

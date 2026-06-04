@@ -114,8 +114,8 @@ export const COMPONENT_STYLES = {
     ].join(' '),
   },
   accent: {
-    text: 'text-tiffany-600 dark:text-tiffany-400',
-    surface: 'bg-tiffany-600 text-white dark:bg-tiffany-500 dark:text-background',
-    hairline: 'bg-tiffany-500',
+    text: 'text-foreground',
+    surface: 'bg-foreground text-card',
+    hairline: 'bg-foreground/60',
   },
 } as const;

@@ -73,7 +73,7 @@ export const TIMELINE_SURFACE = {
     'sticky top-0 z-20 flex items-center justify-between border-b border-border-subtle bg-background/90 px-4 py-3 backdrop-blur-xl sm:px-5',
   composer: 'border-b border-border-subtle bg-background px-4 py-4 sm:px-5',
   post: 'border-b border-border-subtle bg-background px-4 py-3 transition-colors hover:bg-muted/35',
-  selectedPost: 'bg-tiffany-50/60 hover:bg-tiffany-50/70 dark:bg-tiffany-950/20',
+  selectedPost: 'bg-muted/60 hover:bg-muted/70',
   buttonPrimary:
     'rounded-md bg-foreground px-5 py-2 text-sm font-semibold text-background transition-colors hover:bg-foreground/90 disabled:bg-muted disabled:text-muted-foreground',
   iconButton:

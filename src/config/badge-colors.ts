@@ -17,7 +17,7 @@ export const BADGE_COLORS = {
     'bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-900',
   error:
     'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-900',
-  info: 'bg-tiffany-100 text-tiffany-700 border-tiffany-200 dark:bg-tiffany-900/20 dark:text-tiffany-400 dark:border-tiffany-800',
+  info: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-900',
   neutral:
     'bg-muted text-muted-strong border-border dark:bg-muted dark:text-muted-foreground dark:border-border',
   muted:
@@ -25,9 +25,9 @@ export const BADGE_COLORS = {
   amber:
     'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-900',
   orange:
-    'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-900',
+    'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-900',
   tiffany:
-    'bg-tiffany-100 text-tiffany-700 border-tiffany-200 dark:bg-tiffany-900/20 dark:text-tiffany-400 dark:border-tiffany-800',
+    'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-900',
   pink: 'bg-pink-100 text-pink-700 border-pink-200 dark:bg-pink-950 dark:text-pink-400 dark:border-pink-900',
 } as const;
 
@@ -47,7 +47,7 @@ export const STAT_COLORS = {
   success:
     'bg-green-50 text-green-600 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-900',
   tiffany:
-    'bg-tiffany-50 text-tiffany-600 border-tiffany-200 dark:bg-tiffany-900/20 dark:text-tiffany-400 dark:border-tiffany-800',
+    'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-900',
 } as const;
 
 export type StatColorKey = keyof typeof STAT_COLORS;

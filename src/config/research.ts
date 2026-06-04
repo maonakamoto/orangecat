@@ -95,19 +95,19 @@ export type TransparencyLevel = (typeof TRANSPARENCY_LEVELS)[number]['value'];
 // ==================== DISPLAY COLORS ====================
 
 export const RESEARCH_FIELD_COLORS: Record<ResearchField, string> = {
-  fundamental_physics: 'bg-tiffany-100 text-tiffany-800',
-  mathematics: 'bg-orange-100 text-orange-800',
-  computer_science: 'bg-tiffany-100 text-tiffany-800',
+  fundamental_physics: 'bg-sky-100 text-sky-800',
+  mathematics: 'bg-amber-100 text-amber-800',
+  computer_science: 'bg-indigo-100 text-indigo-800',
   biology: 'bg-green-100 text-green-800',
   chemistry: 'bg-teal-100 text-teal-800',
   neuroscience: 'bg-green-100 text-green-800',
   psychology: 'bg-rose-100 text-rose-800',
   economics: 'bg-amber-100 text-amber-800',
   philosophy: 'bg-slate-100 text-slate-800',
-  engineering: 'bg-tiffany-100 text-tiffany-800',
+  engineering: 'bg-cyan-100 text-cyan-800',
   medicine: 'bg-red-100 text-red-800',
   environmental_science: 'bg-emerald-100 text-emerald-800',
-  social_science: 'bg-tiffany-100 text-tiffany-800',
+  social_science: 'bg-violet-100 text-violet-800',
   artificial_intelligence: 'bg-pink-100 text-pink-800',
   blockchain_cryptography: 'bg-yellow-100 text-yellow-800',
   other: 'bg-muted text-foreground',
@@ -121,7 +121,7 @@ export type ResearchStatus = (typeof RESEARCH_STATUSES)[number];
 export const RESEARCH_STATUS_DOT_COLORS: Record<string, string> = {
   active: 'bg-green-500',
   draft: 'bg-yellow-500',
-  completed: 'bg-tiffany-500',
-  paused: 'bg-orange-500',
+  completed: 'bg-sky-500',
+  paused: 'bg-yellow-500',
   cancelled: 'bg-red-500',
 };
