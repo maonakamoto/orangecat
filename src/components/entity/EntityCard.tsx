@@ -165,7 +165,7 @@ export function EntityCard({
         <Link href={detailHref}>
           <h3
             className={cn(
-              'font-semibold text-foreground transition-colors group-hover:text-tiffany-600 dark:group-hover:text-tiffany-400 line-clamp-1',
+              'font-semibold text-foreground transition-colors group-hover:underline underline-offset-4 line-clamp-1',
               compact ? 'text-sm' : 'text-lg'
             )}
           >
@@ -213,7 +213,7 @@ export function EntityCard({
             </div>
             <div className="mt-1 h-2 w-full rounded-full bg-muted">
               <div
-                className="h-2 rounded-full bg-tiffany-600 transition-all duration-300 dark:bg-tiffany-500"
+                className="h-2 rounded-full bg-foreground transition-all duration-300"
                 style={{ width: `${Math.min(100, fundingProgress)}%` }}
               />
             </div>

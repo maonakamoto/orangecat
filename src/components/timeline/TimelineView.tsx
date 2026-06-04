@@ -186,9 +186,9 @@ function FocusScroller() {
         const el = document.querySelector(`[data-event-id="${focusId}"]`);
         if (el) {
           (el as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
-          (el as HTMLElement).classList.add('ring-2', 'ring-orange-400', 'ring-offset-2');
+          (el as HTMLElement).classList.add('ring-2', 'ring-foreground', 'ring-offset-2');
           setTimeout(() => {
-            (el as HTMLElement).classList.remove('ring-2', 'ring-orange-400', 'ring-offset-2');
+            (el as HTMLElement).classList.remove('ring-2', 'ring-foreground', 'ring-offset-2');
           }, 1800);
         }
       }

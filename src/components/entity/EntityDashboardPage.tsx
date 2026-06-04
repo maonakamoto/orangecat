@@ -379,7 +379,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
                     type="checkbox"
                     checked={selectedIds.size === filteredItems.length && filteredItems.length > 0}
                     onChange={() => toggleSelectAll(filteredItems.map(item => item.id))}
-                    className="h-4 w-4 rounded border-border-strong bg-card text-tiffany-600 focus:ring-ring"
+                    className="h-4 w-4 rounded border-border-strong bg-card text-foreground focus:ring-ring"
                   />
                   <span>Select All</span>
                 </label>

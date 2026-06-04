@@ -39,7 +39,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
           <div className="flex items-center p-4 gap-4">
             {/* Icon */}
             <div className="oc-icon-tile h-12 w-12">
-              <DollarSign className="w-6 h-6 text-tiffany-600 dark:text-tiffany-400" />
+              <DollarSign className="w-6 h-6 text-foreground" />
             </div>
 
             {/* Content */}
@@ -73,7 +73,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
               <div className="oc-icon-tile h-8 w-8">
-                <DollarSign className="w-4 h-4 text-tiffany-600 dark:text-tiffany-400" />
+                <DollarSign className="w-4 h-4 text-foreground" />
               </div>
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-base truncate">{loan.title}</CardTitle>
@@ -101,7 +101,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Remaining</span>
-              <span className="font-semibold text-tiffany-600">
+              <span className="font-semibold text-foreground">
                 {formatAmount(loan.remaining_balance, loan.currency)}
               </span>
             </div>
