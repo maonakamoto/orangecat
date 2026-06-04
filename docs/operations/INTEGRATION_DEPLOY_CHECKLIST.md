@@ -26,6 +26,8 @@ step has the exact command, a verification, and a rollback if it fails.
 [ ] 7. Set CRON_SECRET in OrangeCat Vercel env
 [ ] 8. Set UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN
        in OrangeCat Vercel env
+[ ] 9. Set WEBHOOK_SECRET_KEY in OrangeCat Vercel env
+       (master key encrypting webhook_endpoints.secret_plaintext at rest)
 
 [ ] Smoke test: trigger an entity-create on the customer side,
                 watch the webhook fire end-to-end.
@@ -225,9 +227,36 @@ in-memory. Not data-harmful, just less correct under load.
 
 ---
 
+## Step 9 — Set WEBHOOK_SECRET_KEY in OrangeCat Vercel env
+
+Without this, every `POST /api/webhook-endpoints` mint **throws** —
+the service encrypts the signing secret at rest with this key, and
+will not silently fall back to plaintext storage.
+
+Generate a high-entropy 32-byte hex key:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Set it in Vercel for the OrangeCat project (Production) as
+`WEBHOOK_SECRET_KEY`. The value must be exactly 64 hex characters.
+
+**Verify**: mint a webhook endpoint (step 2). If the env var is
+missing or malformed, the mint returns 500 — the env is missing.
+After setting, mint succeeds again.
+
+**Rollback**: do not rotate this key without coordinating a
+re-encryption pass — any encrypted `secret_encrypted` blobs in the DB
+become unrecoverable. If the key is leaked, the safe rotation is:
+mint replacement keys for every endpoint with the new key, revoke the
+old, document the incident.
+
+---
+
 ## Smoke test — exercise the full path
 
-After all 8 steps land:
+After all 9 steps land:
 
 1. **From customer side**, trigger whatever flow creates an OrangeCat
    entity (for FleetCrown: create a subscription).

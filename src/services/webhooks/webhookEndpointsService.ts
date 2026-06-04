@@ -25,6 +25,7 @@
 
 import { randomBytes } from 'crypto';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { encryptWebhookSecret } from '@/lib/crypto/webhookSecretCipher';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import {
@@ -83,6 +84,11 @@ export async function createWebhookEndpoint(params: {
 
   const secret = generateSecret();
   const secretPrefix = secret.slice(0, DISPLAY_PREFIX_LENGTH);
+  // Phase 1: dual-write. Encrypted blob is the source of truth in phase
+  // 2 (commit 2 of this thread); plaintext column drops then. If
+  // encryption fails — env var missing/bad — fail the mint so we never
+  // store a row that phase 2 can't decrypt.
+  const secretEncrypted = encryptWebhookSecret(secret);
 
   const admin = createAdminClient();
   const { data, error } = await (
@@ -97,6 +103,7 @@ export async function createWebhookEndpoint(params: {
       name: name.trim(),
       url: url.trim(),
       secret_plaintext: secret,
+      secret_encrypted: secretEncrypted,
       secret_prefix: secretPrefix,
       event_types: eventTypes && eventTypes.length > 0 ? eventTypes : null,
     })
