@@ -4,8 +4,7 @@ import { Metadata } from 'next';
 import { Users, Heart, Zap, TreePine, Target, Award } from 'lucide-react';
 import BitBaumLogo from '@/components/layout/BitBaumLogo';
 import { BrandMarkIcon } from '@/components/shell/BrandMarkIcon';
-import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
+import Button from '@/components/ui/Button';
 
 export const metadata: Metadata = {
   title: 'About BitBaum',
@@ -13,9 +12,15 @@ export const metadata: Metadata = {
     'Learn about BitBaum AG, the Swiss company behind OrangeCat — building open economic infrastructure for the Bitcoin era.',
 };
 
+/**
+ * /company/about — corporate parent page. Migrated to FleetCrown
+ * semantic tier in migration 6/N: monochrome surfaces, neutral
+ * value-card tiles, single warm accent on the 'Join Our Team' CTA.
+ * Timeline number badges and vision boxes all unified neutral.
+ */
 export default function BitBaumAboutPage() {
   return (
-    <div className={cn(GRADIENTS.pageBgSolid, 'min-h-screen')}>
+    <div className="min-h-screen bg-surface-page">
       {/* Hero Section */}
       <div className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -23,8 +28,8 @@ export default function BitBaumAboutPage() {
             <div className="flex justify-center mb-8">
               <BitBaumLogo className="scale-150" />
             </div>
-            <h1 className="text-4xl font-bold text-foreground sm:text-5xl mb-4">
-              About <span className="text-orange-600">BitBaum</span>
+            <h1 className="font-heading tracking-display text-4xl font-bold text-foreground sm:text-5xl mb-4">
+              About BitBaum
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Building open economic infrastructure for the Bitcoin era. The corporate parent of
@@ -37,8 +42,8 @@ export default function BitBaumAboutPage() {
       {/* Mission Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-6">
-            <Target className="w-8 h-8 text-orange-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-surface-raised border border-border-subtle rounded-full mb-6">
+            <Target className="w-8 h-8 text-fg-secondary" />
           </div>
           <h2 className="text-2xl font-semibold text-foreground mb-6">Our Mission</h2>
           <p className="text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed">
@@ -70,13 +75,13 @@ export default function BitBaumAboutPage() {
                 creating platforms that empower creators and communities worldwide.
               </p>
               <div className="flex flex-wrap justify-center gap-2">
-                <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm">
+                <span className="px-3 py-1 bg-muted text-foreground rounded-full text-sm">
                   Corporate
                 </span>
-                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
+                <span className="px-3 py-1 bg-muted text-foreground rounded-full text-sm">
                   Swiss-Based
                 </span>
-                <span className="px-3 py-1 bg-tiffany-100 text-tiffany-700 rounded-full text-sm">
+                <span className="px-3 py-1 bg-muted text-foreground rounded-full text-sm">
                   Innovation
                 </span>
               </div>
@@ -85,9 +90,7 @@ export default function BitBaumAboutPage() {
             {/* OrangeCat */}
             <div className="text-center p-6 border border-border rounded-lg">
               <div className="flex justify-center mb-4">
-                <div
-                  className={`w-12 h-12 ${GRADIENTS.brandOrangeCircle} rounded-lg flex items-center justify-center text-background`}
-                >
+                <div className="w-12 h-12 bg-surface-raised border border-border-subtle rounded-lg flex items-center justify-center text-foreground">
                   <BrandMarkIcon size={24} />
                 </div>
               </div>
@@ -97,13 +100,13 @@ export default function BitBaumAboutPage() {
                 invest, lend, and transact with any identity, any currency.
               </p>
               <div className="flex flex-wrap justify-center gap-2">
-                <span className="px-3 py-1 bg-tiffany-100 text-tiffany-700 rounded-full text-sm">
+                <span className="px-3 py-1 bg-muted text-foreground rounded-full text-sm">
                   Consumer Product
                 </span>
-                <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">
+                <span className="px-3 py-1 bg-muted text-foreground rounded-full text-sm">
                   Bitcoin Native
                 </span>
-                <span className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-sm">
+                <span className="px-3 py-1 bg-muted text-foreground rounded-full text-sm">
                   Community
                 </span>
               </div>
@@ -116,8 +119,8 @@ export default function BitBaumAboutPage() {
           <h3 className="text-3xl font-bold text-foreground text-center mb-12">BitBaum Values</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TreePine className="w-8 h-8 text-orange-600" />
+              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <TreePine className="w-8 h-8 text-fg-secondary" />
               </div>
               <h4 className="text-lg font-semibold text-foreground mb-2">Grow Together</h4>
               <p className="text-muted-foreground text-sm">
@@ -127,8 +130,8 @@ export default function BitBaumAboutPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-tiffany-600" />
+              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-fg-secondary" />
               </div>
               <h4 className="text-lg font-semibold text-foreground mb-2">Bitcoin First</h4>
               <p className="text-muted-foreground text-sm">
@@ -137,8 +140,8 @@ export default function BitBaumAboutPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-8 h-8 text-green-600" />
+              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <Heart className="w-8 h-8 text-fg-secondary" />
               </div>
               <h4 className="text-lg font-semibold text-foreground mb-2">Community First</h4>
               <p className="text-muted-foreground text-sm">
@@ -147,8 +150,8 @@ export default function BitBaumAboutPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-tiffany-600" />
+              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="w-8 h-8 text-fg-secondary" />
               </div>
               <h4 className="text-lg font-semibold text-foreground mb-2">Always Day 1</h4>
               <p className="text-muted-foreground text-sm">
@@ -165,8 +168,8 @@ export default function BitBaumAboutPage() {
             <h3 className="text-2xl font-bold text-foreground mb-6">Our Story</h3>
             <div className="space-y-4">
               <div className="flex items-start">
-                <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-4 mt-1">
-                  <span className="text-white text-sm font-bold">1</span>
+                <div className="w-8 h-8 bg-foreground rounded-full flex items-center justify-center mr-4 mt-1">
+                  <span className="text-background text-sm font-bold">1</span>
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground">Founded in Switzerland</h4>
@@ -177,8 +180,8 @@ export default function BitBaumAboutPage() {
               </div>
 
               <div className="flex items-start">
-                <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-4 mt-1">
-                  <span className="text-white text-sm font-bold">2</span>
+                <div className="w-8 h-8 bg-foreground rounded-full flex items-center justify-center mr-4 mt-1">
+                  <span className="text-background text-sm font-bold">2</span>
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground">OrangeCat Launch</h4>
@@ -189,8 +192,8 @@ export default function BitBaumAboutPage() {
               </div>
 
               <div className="flex items-start">
-                <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-4 mt-1">
-                  <span className="text-white text-sm font-bold">3</span>
+                <div className="w-8 h-8 bg-foreground rounded-full flex items-center justify-center mr-4 mt-1">
+                  <span className="text-background text-sm font-bold">3</span>
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground">Community Growth</h4>
@@ -206,25 +209,25 @@ export default function BitBaumAboutPage() {
           <div className="bg-card rounded-lg shadow-sm p-8">
             <h3 className="text-2xl font-bold text-foreground mb-6">Our Vision</h3>
             <div className="space-y-4">
-              <div className="p-4 bg-orange-50 rounded-lg">
-                <h4 className="font-semibold text-orange-900 mb-2">Open Economic Infrastructure</h4>
-                <p className="text-orange-700 text-sm">
+              <div className="p-4 bg-muted/40 border border-border-subtle rounded-lg">
+                <h4 className="font-semibold text-foreground mb-2">Open Economic Infrastructure</h4>
+                <p className="text-muted-foreground text-sm">
                   Build Bitcoin-native platforms for every form of economic activity — exchange,
                   funding, lending, investing, and collective governance.
                 </p>
               </div>
 
-              <div className="p-4 bg-tiffany-50 rounded-lg">
-                <h4 className="font-semibold text-tiffany-900 mb-2">AI-Native Economics</h4>
-                <p className="text-tiffany-700 text-sm">
+              <div className="p-4 bg-muted/40 border border-border-subtle rounded-lg">
+                <h4 className="font-semibold text-foreground mb-2">AI-Native Economics</h4>
+                <p className="text-muted-foreground text-sm">
                   Build AI agents that act as economic participants — creating entities, finding
                   opportunities, and coordinating on behalf of users.
                 </p>
               </div>
 
-              <div className="p-4 bg-green-50 rounded-lg">
-                <h4 className="font-semibold text-green-900 mb-2">Global Communities</h4>
-                <p className="text-green-700 text-sm">
+              <div className="p-4 bg-muted/40 border border-border-subtle rounded-lg">
+                <h4 className="font-semibold text-foreground mb-2">Global Communities</h4>
+                <p className="text-muted-foreground text-sm">
                   Empower communities worldwide to organize, fund, and govern collectively.
                 </p>
               </div>
@@ -240,11 +243,10 @@ export default function BitBaumAboutPage() {
             A passionate team of Bitcoin enthusiasts, developers, and community builders working
             from Switzerland and around the world.
           </p>
-          <Link
-            href="/company/careers"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 transition-colors"
-          >
-            Join Our Team
+          <Link href="/company/careers">
+            <Button variant="accent" size="lg">
+              Join Our Team
+            </Button>
           </Link>
         </div>
       </div>
