@@ -32,7 +32,7 @@ export function DesktopNavigation({ items }: DesktopNavigationProps) {
   const pathname = usePathname();
 
   return (
-    <div className="hidden md:flex items-center gap-1 xl:gap-2 ml-2">
+    <div className="hidden lg:flex items-center gap-1 xl:gap-2 ml-2">
       {items.map(item => (
         <Link
           key={item.name}
