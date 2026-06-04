@@ -38,7 +38,7 @@ export default function PeopleTabBar({
             onClick={() => onTabChange(tab.id)}
             className={`px-4 py-2 font-medium transition-colors ${
               activeTab === tab.id
-                ? 'text-orange-600 border-b-2 border-orange-600'
+                ? 'text-foreground border-b-2 border-foreground'
                 : 'text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground'
             }`}
           >

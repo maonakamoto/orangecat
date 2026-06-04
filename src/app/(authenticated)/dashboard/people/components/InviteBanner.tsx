@@ -28,7 +28,7 @@ export default function InviteBanner({
   return (
     <div className="mb-6">
       <div
-        className={`rounded-lg border border-orange-200 ${GRADIENTS.sectionOrangeTiffany} p-4 sm:p-5 shadow-sm`}
+        className={`rounded-lg border border-border-subtle ${GRADIENTS.sectionOrangeTiffany} p-4 sm:p-5 shadow-sm`}
       >
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div>
@@ -46,7 +46,7 @@ export default function InviteBanner({
             <div className="flex items-center gap-2 relative">
               <Button
                 onClick={onToggleShare}
-                className="bg-orange-600 hover:bg-orange-700 text-white"
+                className="bg-foreground hover:bg-muted-strong text-card"
               >
                 <Share2 className="w-4 h-4 mr-2" /> Share My Profile
               </Button>
