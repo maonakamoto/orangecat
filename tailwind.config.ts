@@ -68,6 +68,8 @@ const config: Config = {
         'app-sm': '375px', // iPhone SE width
         'app-lg': '430px', // iPhone 15 Pro Max
         tablet: '768px', // iPad Mini
+        // FleetCrown-aligned layout primitive
+        shell: 'var(--shell-max)',
       },
       colors: {
         orange: {
@@ -153,6 +155,45 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        // ── FleetCrown-aligned semantic tier (commit 2/N of migration) ────
+        // Utility-class surface for the --text-/--surface-/--accent-/--status-
+        // CSS vars introduced in eff99bad. Components migrate to these from
+        // bg-card / text-foreground / bg-primary as they're refactored.
+        // Namespace: `fg-*` for text (avoids `text-text-*` clash).
+        fg: {
+          primary: 'hsl(var(--text-primary))',
+          secondary: 'hsl(var(--text-secondary))',
+          tertiary: 'hsl(var(--text-tertiary))',
+          muted: 'hsl(var(--text-muted))',
+          inverted: 'hsl(var(--text-inverted))',
+        },
+        surface: {
+          page: 'hsl(var(--surface-page))',
+          base: 'hsl(var(--surface-base))',
+          raised: 'hsl(var(--surface-raised))',
+          overlay: 'hsl(var(--surface-overlay))',
+          modal: 'hsl(var(--surface-modal))',
+          drawer: 'hsl(var(--surface-drawer))',
+          public: 'hsl(var(--surface-public))',
+        },
+        'accent-warm': {
+          DEFAULT: 'var(--accent-primary)',
+          hover: 'var(--accent-hover)',
+        },
+        status: {
+          positive: 'hsl(var(--status-positive))',
+          'positive-subtle': 'hsl(var(--status-positive-subtle))',
+          warning: 'hsl(var(--status-warning))',
+          'warning-subtle': 'hsl(var(--status-warning-subtle))',
+          negative: 'hsl(var(--status-negative))',
+          'negative-subtle': 'hsl(var(--status-negative-subtle))',
+          neutral: 'hsl(var(--status-neutral))',
+        },
+      },
+      letterSpacing: {
+        display: 'var(--tracking-display)',
+        label: 'var(--tracking-label)',
+        caps: 'var(--tracking-caps)',
       },
       fontFamily: {
         sans: ['var(--font-inter)'],
