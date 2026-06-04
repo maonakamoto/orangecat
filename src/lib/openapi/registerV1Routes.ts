@@ -96,6 +96,11 @@ const COMMON_ERROR_RESPONSES = {
       'Authenticated, but not permitted to act as the requested actor (session auth only).',
     content: { 'application/json': { schema: apiErrorSchema } },
   },
+  404: {
+    description:
+      'Resource does not exist OR exists but is not visible to the caller (same envelope so probers cannot distinguish).',
+    content: { 'application/json': { schema: apiErrorSchema } },
+  },
   429: {
     description: 'Rate limit exceeded for this user / key.',
     content: { 'application/json': { schema: apiErrorSchema } },
@@ -212,6 +217,40 @@ export function registerV1Routes(): void {
           },
         },
         401: COMMON_ERROR_RESPONSES[401],
+        429: COMMON_ERROR_RESPONSES[429],
+        500: COMMON_ERROR_RESPONSES[500],
+      },
+    });
+
+    openApiRegistry.registerPath({
+      method: 'get',
+      path: `${publicApiEndpoint(entityType)}/{id}`,
+      summary: `Get ${meta.name.toLowerCase()} by id`,
+      description: `Single ${meta.name.toLowerCase()} read. Integration-key auth scopes to the key's bound actor + is_test flag; session auth returns the caller's rows + public ones; anonymous returns public rows only. Returns 404 — never 403 — when the row exists but isn't visible to the caller.`,
+      tags: [meta.name],
+      security: [{ IntegrationKey: [] }],
+      request: {
+        params: z
+          .object({
+            id: z
+              .string()
+              .uuid()
+              .openapi({ description: `${meta.name} id (uuid).` }),
+          })
+          .openapi(`${label}GetParams`),
+      },
+      responses: {
+        200: {
+          description: `The ${meta.name.toLowerCase()}.`,
+          content: {
+            'application/json': {
+              schema: apiSuccessSchema(responseSchema, `${label}GetResponse`),
+            },
+          },
+        },
+        401: COMMON_ERROR_RESPONSES[401],
+        403: COMMON_ERROR_RESPONSES[403],
+        404: COMMON_ERROR_RESPONSES[404],
         429: COMMON_ERROR_RESPONSES[429],
         500: COMMON_ERROR_RESPONSES[500],
       },
