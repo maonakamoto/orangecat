@@ -13,7 +13,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { ENTITY_REGISTRY, ENTITY_TYPES as ENTITY_TYPE_KEYS } from '@/config/entity-registry';
-import { GRADIENTS } from '@/config/gradients';
+import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
@@ -25,13 +25,21 @@ export const metadata: Metadata = {
 const ENTITY_TYPES = ENTITY_TYPE_KEYS.filter(t => t !== 'wallet') // wallet is infrastructure, not a user-listable entity type
   .map(t => ({ name: ENTITY_REGISTRY[t].name, description: ENTITY_REGISTRY[t].description }));
 
+/**
+ * /docs — monochrome surfaces, single Bitcoin Orange accent on the
+ * Lightning Network entry where it semantically marks Bitcoin. Every
+ * other section icon tile flows through bg-surface-raised + fg-secondary;
+ * info boxes use bg-muted/40. Migration 6/N.
+ */
 export default function DocsPage() {
   return (
-    <div className={`min-h-screen ${GRADIENTS.pageBgTiffanyDown} py-12`}>
+    <div className="min-h-screen bg-surface-page py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-14">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Platform Documentation</h1>
+          <h1 className="font-heading tracking-display text-4xl font-bold text-foreground mb-4">
+            Platform Documentation
+          </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             How OrangeCat works — the AI agent, entity system, payments, and security.
           </p>
@@ -40,8 +48,8 @@ export default function DocsPage() {
         {/* The Cat */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-tiffany-100">
-              <Bot className="h-5 w-5 text-tiffany-600" />
+            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+              <Bot className="h-5 w-5 text-fg-secondary" />
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Your Cat — AI Economic Agent</h2>
           </div>
@@ -57,9 +65,9 @@ export default function DocsPage() {
               with, and conversations you start. It proposes actions and waits for your confirmation
               before executing them. You stay in control; the Cat handles complexity.
             </p>
-            <div className="bg-tiffany-50 rounded-lg p-4">
-              <p className="text-sm text-tiffany-800 font-medium mb-2">Example Cat commands:</p>
-              <ul className="text-sm text-tiffany-700 space-y-1">
+            <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
+              <p className="text-sm text-foreground font-medium mb-2">Example Cat commands:</p>
+              <ul className="text-sm text-muted-foreground space-y-1">
                 <li>
                   &ldquo;Create a project for my open-source library with a 0.1 BTC goal&rdquo;
                 </li>
@@ -74,8 +82,8 @@ export default function DocsPage() {
         {/* Entity System */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-orange-100">
-              <Coins className="h-5 w-5 text-orange-600" />
+            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+              <Coins className="h-5 w-5 text-fg-secondary" />
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Entity System</h2>
           </div>
@@ -88,7 +96,7 @@ export default function DocsPage() {
             <div className="grid sm:grid-cols-2 gap-3">
               {ENTITY_TYPES.map(entity => (
                 <div key={entity.name} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                  <div className="w-2 h-2 rounded-full bg-tiffany-500 mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-foreground mt-2 flex-shrink-0" />
                   <div>
                     <span className="font-medium text-foreground text-sm">{entity.name}</span>
                     <p className="text-muted-foreground text-xs mt-0.5">{entity.description}</p>
@@ -102,8 +110,8 @@ export default function DocsPage() {
         {/* Payments */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-yellow-100">
-              <Zap className="h-5 w-5 text-yellow-600" />
+            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+              <Zap className="h-5 w-5 text-fg-secondary" />
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Payments</h2>
           </div>
@@ -111,8 +119,10 @@ export default function DocsPage() {
             <p className="text-muted-foreground leading-relaxed">
               Bitcoin and Lightning Network are the native and preferred payment rails. OrangeCat
               supports Lightning addresses (e.g.{' '}
-              <code className="bg-muted px-1 py-0.5 rounded text-sm">yourname@orangecat.ch</code>)
-              for instant, near-zero-fee payments. On-chain Bitcoin is also supported.
+              <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono">
+                yourname@orangecat.ch
+              </code>
+              ) for instant, near-zero-fee payments. On-chain Bitcoin is also supported.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               OrangeCat is not Bitcoin-only. Any payment method — Twint, PayPal, Venmo, bank
@@ -120,17 +130,24 @@ export default function DocsPage() {
               for them. Meet counterparties where they are.
             </p>
             <div className="grid sm:grid-cols-3 gap-4">
-              <div className="p-4 bg-orange-50 rounded-lg text-center">
-                <p className="font-medium text-orange-900 text-sm">No platform fees</p>
-                <p className="text-orange-700 text-xs mt-1">Payments go directly between parties</p>
+              {/* Highlight cards — uniform neutral tiles per migration 6/N */}
+              <div className="p-4 bg-muted/40 border border-border-subtle rounded-lg text-center">
+                <p className="font-medium text-foreground text-sm">No platform fees</p>
+                <p className="text-muted-foreground text-xs mt-1">
+                  Payments go directly between parties
+                </p>
               </div>
-              <div className="p-4 bg-tiffany-50 rounded-lg text-center">
-                <p className="font-medium text-tiffany-900 text-sm">Non-custodial</p>
-                <p className="text-tiffany-700 text-xs mt-1">OrangeCat never holds your funds</p>
+              <div className="p-4 bg-muted/40 border border-border-subtle rounded-lg text-center">
+                <p className="font-medium text-foreground text-sm">Non-custodial</p>
+                <p className="text-muted-foreground text-xs mt-1">
+                  OrangeCat never holds your funds
+                </p>
               </div>
-              <div className="p-4 bg-green-50 rounded-lg text-center">
-                <p className="font-medium text-green-900 text-sm">Any currency</p>
-                <p className="text-green-700 text-xs mt-1">Bitcoin, Lightning, fiat, and more</p>
+              <div className="p-4 bg-muted/40 border border-border-subtle rounded-lg text-center">
+                <p className="font-medium text-foreground text-sm">Any currency</p>
+                <p className="text-muted-foreground text-xs mt-1">
+                  Bitcoin, Lightning, fiat, and more
+                </p>
               </div>
             </div>
           </div>
@@ -139,10 +156,10 @@ export default function DocsPage() {
         {/* Identity & Privacy */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-green-100">
-              <Shield className="h-5 w-5 text-green-600" />
+            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+              <Shield className="h-5 w-5 text-fg-secondary" />
             </div>
-            <h2 className="text-2xl font-semibold text-foreground">Identity & Privacy</h2>
+            <h2 className="text-2xl font-semibold text-foreground">Identity &amp; Privacy</h2>
           </div>
           <div className="bg-card rounded-lg border border-border p-6 space-y-4">
             <p className="text-muted-foreground leading-relaxed">
@@ -152,7 +169,7 @@ export default function DocsPage() {
             </p>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <Lock className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <Lock className="h-5 w-5 text-fg-secondary mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-foreground text-sm">Row-Level Security</p>
                   <p className="text-muted-foreground text-sm">
@@ -162,7 +179,7 @@ export default function DocsPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Globe className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <Globe className="h-5 w-5 text-fg-secondary mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-foreground text-sm">Visibility control</p>
                   <p className="text-muted-foreground text-sm">
@@ -172,7 +189,7 @@ export default function DocsPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Users className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <Users className="h-5 w-5 text-fg-secondary mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-foreground text-sm">Authentication</p>
                   <p className="text-muted-foreground text-sm">
@@ -188,10 +205,10 @@ export default function DocsPage() {
         {/* Groups & Governance */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-tiffany-100">
-              <Users className="h-5 w-5 text-tiffany-600" />
+            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+              <Users className="h-5 w-5 text-fg-secondary" />
             </div>
-            <h2 className="text-2xl font-semibold text-foreground">Groups & Governance</h2>
+            <h2 className="text-2xl font-semibold text-foreground">Groups &amp; Governance</h2>
           </div>
           <div className="bg-card rounded-lg border border-border p-6 space-y-4">
             <p className="text-muted-foreground leading-relaxed">
@@ -221,15 +238,15 @@ export default function DocsPage() {
                 <h3 className="font-medium text-foreground mb-3">Frontend</h3>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <Code2 className="h-4 w-4 text-tiffany-500" />
+                    <Code2 className="h-4 w-4 text-fg-tertiary" />
                     Next.js 15 (App Router)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Code2 className="h-4 w-4 text-tiffany-500" />
+                    <Code2 className="h-4 w-4 text-fg-tertiary" />
                     TypeScript 5.8
                   </li>
                   <li className="flex items-center gap-2">
-                    <Code2 className="h-4 w-4 text-tiffany-500" />
+                    <Code2 className="h-4 w-4 text-fg-tertiary" />
                     Tailwind CSS 3
                   </li>
                 </ul>
@@ -238,15 +255,15 @@ export default function DocsPage() {
                 <h3 className="font-medium text-foreground mb-3">Backend</h3>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <Database className="h-4 w-4 text-tiffany-500" />
+                    <Database className="h-4 w-4 text-fg-tertiary" />
                     Supabase (PostgreSQL + Auth + RLS)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-tiffany-500" />
+                    <Shield className="h-4 w-4 text-fg-tertiary" />
                     Row-Level Security on all tables
                   </li>
                   <li className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-orange-500" />
+                    <Zap className="h-4 w-4 text-bitcoinOrange" />
                     Lightning Network + BTCPay
                   </li>
                 </ul>
@@ -255,27 +272,27 @@ export default function DocsPage() {
           </div>
         </section>
 
-        {/* Getting Started */}
+        {/* Getting Started — public-surface near-black band per FleetCrown pattern */}
         <section className="mb-10">
-          <div className="bg-tiffany-50 border border-tiffany-100 rounded-lg p-8 text-center">
-            <h2 className="text-xl font-semibold text-foreground mb-3">Ready to get started?</h2>
-            <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+          <div className="bg-surface-public border border-border-subtle rounded-lg p-8 text-center">
+            <h2 className="font-heading tracking-display text-2xl font-bold text-fg-inverted mb-3">
+              Ready to get started?
+            </h2>
+            <p className="text-fg-inverted/70 mb-6 max-w-xl mx-auto">
               Create an account, set up your profile and payment methods, then ask your Cat to help
               you launch your first entity.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                href={`${ROUTES.AUTH}?mode=register`}
-                className="inline-flex items-center gap-2 bg-tiffany-500 hover:bg-tiffany-600 text-white font-medium px-5 py-2.5 rounded-lg transition-colors"
-              >
-                Create Account
-                <ArrowRight className="h-4 w-4" />
+              <Link href={`${ROUTES.AUTH}?mode=register`}>
+                <Button variant="accent" size="lg">
+                  Create Account
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
               </Link>
-              <Link
-                href={ROUTES.FAQ}
-                className="inline-flex items-center gap-2 border border-border bg-card hover:bg-muted text-foreground font-medium px-5 py-2.5 rounded-lg transition-colors"
-              >
-                View FAQ
+              <Link href={ROUTES.FAQ}>
+                <Button variant="outline" size="lg">
+                  View FAQ
+                </Button>
               </Link>
             </div>
           </div>
