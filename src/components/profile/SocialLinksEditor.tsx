@@ -58,7 +58,7 @@ export function SocialLinksEditor({ links, onChange, maxLinks = 15 }: SocialLink
         {canAddMore && !isAdding && editingIndex === null && (
           <button
             onClick={() => setIsAdding(true)}
-            className="text-xs font-medium text-orange-600 hover:text-orange-700"
+            className="text-xs font-medium text-foreground hover:underline underline-offset-4"
           >
             + Add Link
           </button>

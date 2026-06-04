@@ -69,7 +69,7 @@ export default function ProfileEntityTab({
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-          <Icon className="w-5 h-5 text-orange-500" />
+          <Icon className="w-5 h-5 text-fg-secondary" />
           {entities.length} {entities.length === 1 ? metadata?.name : metadata?.namePlural}
         </h3>
         {isOwnProfile && (
@@ -96,7 +96,7 @@ export default function ProfileEntityTab({
             <Link
               key={entity.id}
               href={getViewPath(entity.id)}
-              className="block overflow-hidden rounded-lg border-2 border-border hover:border-border-strong dark:hover:border-orange-500 hover:shadow-sm bg-card transition-all duration-200 group"
+              className="block overflow-hidden rounded-lg border-2 border-border hover:border-border-strong hover:shadow-sm bg-card transition-all duration-200 group"
             >
               <div className="flex flex-col sm:flex-row">
                 <div className="relative w-full sm:w-32 h-32 sm:h-auto flex-shrink-0 bg-muted">
@@ -132,7 +132,7 @@ export default function ProfileEntityTab({
 
                 <div className="flex-1 p-4 sm:p-5 flex flex-col">
                   <div className="flex-1">
-                    <h4 className="font-bold text-foreground text-lg mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-1">
+                    <h4 className="font-bold text-foreground text-lg mb-1.5 line-clamp-1">
                       {getTitle(entity)}
                     </h4>
                     {entity.description && (

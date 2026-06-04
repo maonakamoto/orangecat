@@ -37,9 +37,9 @@ export function ProfileField({
         ) : isOwnProfile && editHref ? (
           <Link
             href={editHref}
-            className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:underline group"
+            className="inline-flex items-center gap-2 text-foreground hover:underline underline-offset-4 group"
           >
-            <span className="text-muted-dim italic group-hover:text-orange-600">{emptyText}</span>
+            <span className="text-muted-dim italic group-hover:text-foreground">{emptyText}</span>
             <EditIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
             <span className="text-xs">Click to add</span>
           </Link>

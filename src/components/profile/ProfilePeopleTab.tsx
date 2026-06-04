@@ -191,7 +191,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
           onClick={() => setActiveView('followers')}
           className={`pb-2 sm:pb-3 px-2 sm:px-4 text-sm sm:text-base font-medium transition-colors ${
             activeView === 'followers'
-              ? 'text-orange-600 border-b-2 border-orange-600'
+              ? 'text-foreground border-b-2 border-foreground'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
@@ -201,7 +201,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
           onClick={() => setActiveView('following')}
           className={`pb-2 sm:pb-3 px-2 sm:px-4 text-sm sm:text-base font-medium transition-colors ${
             activeView === 'following'
-              ? 'text-orange-600 border-b-2 border-orange-600'
+              ? 'text-foreground border-b-2 border-foreground'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
@@ -242,7 +242,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
               <Link
                 key={person.id}
                 href={`/profiles/${person.username}`}
-                className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-border hover:border-border-strong dark:hover:border-orange-500 oc-card-link"
+                className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-border hover:border-border-strong oc-card-link"
               >
                 {person.avatar_url ? (
                   <Image

@@ -108,7 +108,7 @@ export function SocialLinkForm({
                 }}
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   isSelected
-                    ? 'border-orange-500 bg-orange-50'
+                    ? 'border-foreground bg-muted/40'
                     : 'border-border-strong hover:border-border-strong'
                 }`}
               >
@@ -127,7 +127,7 @@ export function SocialLinkForm({
             }}
             className={`p-3 border rounded-lg text-left transition-colors ${
               platform === 'custom'
-                ? 'border-orange-500 bg-orange-50'
+                ? 'border-foreground bg-muted/40'
                 : 'border-border-strong hover:border-border-strong'
             }`}
           >

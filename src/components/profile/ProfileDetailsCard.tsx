@@ -137,7 +137,7 @@ export function ProfileDetailsCard({
                     href={profile.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium text-tiffany-600 hover:underline break-all"
+                    className="font-medium text-foreground hover:underline underline-offset-4 break-all"
                   >
                     {profile.website}
                   </a>
@@ -192,7 +192,7 @@ export function ProfileDetailsCard({
                 publicContactEmail ? (
                   <a
                     href={`mailto:${publicContactEmail}`}
-                    className="font-medium text-tiffany-600 hover:underline break-all"
+                    className="font-medium text-foreground hover:underline underline-offset-4 break-all"
                   >
                     {publicContactEmail}
                   </a>
@@ -208,7 +208,7 @@ export function ProfileDetailsCard({
                 profile.phone ? (
                   <a
                     href={`tel:${profile.phone}`}
-                    className="font-medium text-tiffany-600 hover:underline"
+                    className="font-medium text-foreground hover:underline underline-offset-4"
                   >
                     {profile.phone}
                   </a>

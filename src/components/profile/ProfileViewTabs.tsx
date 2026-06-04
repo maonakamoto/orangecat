@@ -155,7 +155,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                 className={cn(
                   'group inline-flex items-center justify-center sm:justify-start py-2.5 sm:py-3 lg:py-4 px-3 sm:px-1 md:px-2 border-b-2 font-medium text-sm sm:text-sm transition-colors whitespace-nowrap touch-manipulation min-h-11 flex-shrink-0',
                   isActive
-                    ? 'border-orange-500 text-orange-600'
+                    ? 'border-foreground text-foreground'
                     : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border-strong dark:hover:border-border'
                 )}
                 aria-current={isActive ? 'page' : undefined}
@@ -165,7 +165,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                     className={cn(
                       'mr-1.5 sm:mr-2 transition-colors flex-shrink-0',
                       isActive
-                        ? 'text-orange-500'
+                        ? 'text-foreground'
                         : 'text-muted-dim group-hover:text-muted-foreground dark:group-hover:text-foreground'
                     )}
                   >
@@ -177,7 +177,7 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                   <span
                     className={cn(
                       'ml-1.5 sm:ml-2 py-0.5 px-1.5 sm:px-2 rounded-full text-2xs sm:text-xs font-medium flex-shrink-0',
-                      isActive ? 'bg-orange-100 text-orange-600' : 'bg-muted text-muted-foreground'
+                      isActive ? 'bg-foreground text-card' : 'bg-muted text-muted-foreground'
                     )}
                   >
                     {tab.badge}

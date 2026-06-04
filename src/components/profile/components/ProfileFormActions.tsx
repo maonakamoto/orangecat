@@ -44,7 +44,7 @@ export function ProfileFormActions({
       <Button
         type="submit"
         disabled={isSaving || !isValid}
-        className="px-8 py-3 text-base font-semibold bg-bitcoinOrange hover:bg-orange-600 text-white shadow-sm oc-card-link duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-8 py-3 text-base font-semibold bg-bitcoinOrange hover:bg-bitcoinOrange/90 text-white shadow-sm oc-card-link duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSaving ? (
           <>
