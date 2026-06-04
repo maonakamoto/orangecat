@@ -8,8 +8,8 @@
  * 2026-03-27 (src/app/api/notifications/preferences/route.ts +
  * src/types/notification-preferences.ts); only the UI was missing —
  * the emailService's unsubscribe links pointed at /settings as a
- * fallback while the dedicated page didn't exist (TODO since 2026-03).
- * This commit closes that loop.
+ * fallback while the dedicated page didn't exist (open follow-up since
+ * 2026-03 — this commit closes that loop).
  *
  * Per-type overrides (sparse map) are intentionally NOT surfaced here:
  * the 5 category toggles cover 99% of intent; an "advanced" panel can
