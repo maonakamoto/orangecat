@@ -277,7 +277,6 @@ export const bottomNavItems: NavItem[] = [];
  */
 export const footerNavigation = {
   product: [
-    { name: 'Features', href: ROUTES.DOCS },
     { name: 'Documentation', href: ROUTES.DOCS },
     { name: 'How It Works', href: ROUTES.HOW_IT_WORKS },
     { name: 'Status', href: ROUTES.STATUS },

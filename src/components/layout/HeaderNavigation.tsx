@@ -87,7 +87,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
                 <div className="grid grid-cols-1 gap-1">
                   {section.map(link => (
                     <Link
-                      key={`${sectionKey}-${link.href}`}
+                      key={`${sectionKey}-${link.name}-${link.href}`}
                       href={link.href}
                       className="px-3 py-2 min-h-11 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-muted"
                       onClick={onClose}
