@@ -37,7 +37,7 @@ export default function BookingTabs({
               className={cn(
                 'py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap',
                 activeTab === tab.id
-                  ? 'border-tiffany-500 text-tiffany-600'
+                  ? 'border-foreground text-foreground'
                   : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border-strong dark:hover:border-border'
               )}
             >
@@ -47,7 +47,7 @@ export default function BookingTabs({
                   className={cn(
                     'ml-2 py-0.5 px-2 rounded-full text-xs',
                     activeTab === tab.id
-                      ? 'bg-tiffany-100 text-tiffany-600'
+                      ? 'bg-muted text-foreground'
                       : 'bg-muted text-muted-foreground'
                   )}
                 >

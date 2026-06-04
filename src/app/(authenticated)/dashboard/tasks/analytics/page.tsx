@@ -103,7 +103,7 @@ export default function TaskAnalyticsPage() {
             <div className="space-y-4">
               {contributions.map((contribution, index) => (
                 <div key={contribution.user.id} className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-tiffany-100 text-tiffany-700 font-semibold text-sm">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-foreground font-semibold text-sm">
                     {index + 1}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -122,7 +122,7 @@ export default function TaskAnalyticsPage() {
                     </div>
                     <div className="h-2 bg-muted rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-tiffany-500 rounded-full transition-all duration-500"
+                        className="h-full bg-muted/400 rounded-full transition-all duration-500"
                         style={{
                           width: `${(contribution.totalCompletions / maxCompletions) * 100}%`,
                         }}

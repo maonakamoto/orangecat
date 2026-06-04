@@ -227,7 +227,7 @@ export default function BookingCard({
         </span>
         <button
           onClick={() => onViewDetails(booking.id)}
-          className="text-tiffany-600 hover:text-tiffany-700"
+          className="text-foreground hover:text-foreground"
         >
           View details &rarr;
         </button>

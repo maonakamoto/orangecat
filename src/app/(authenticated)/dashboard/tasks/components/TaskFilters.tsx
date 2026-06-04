@@ -87,7 +87,7 @@ export default function TaskFilters({
             type="checkbox"
             checked={showArchived}
             onChange={e => onShowArchivedChange(e.target.checked)}
-            className="h-4 w-4 rounded border-border-strong text-tiffany-600 focus:ring-ring"
+            className="h-4 w-4 rounded border-border-strong text-foreground focus:ring-ring"
           />
           <span>Show archived</span>
         </label>

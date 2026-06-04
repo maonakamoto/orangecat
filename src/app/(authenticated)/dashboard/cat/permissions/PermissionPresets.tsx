@@ -48,7 +48,7 @@ export function PermissionPresets({
           className="rounded-md border border-border-subtle p-4 text-left transition-colors hover:border-border-strong hover:bg-muted disabled:opacity-50"
         >
           <div className="flex items-center gap-2 mb-1">
-            <Zap className="h-5 w-5 text-tiffany" />
+            <Zap className="h-5 w-5 text-foreground" />
             <span className="font-medium text-foreground">Creator</span>
           </div>
           <p className="text-sm text-muted-foreground">

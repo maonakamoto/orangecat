@@ -65,7 +65,7 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
             {task.is_reminder && (
-              <Bell className="h-3.5 w-3.5 text-tiffany flex-shrink-0" aria-label="Reminder" />
+              <Bell className="h-3.5 w-3.5 text-foreground flex-shrink-0" aria-label="Reminder" />
             )}
             <h3 className="text-base font-semibold text-foreground truncate">{task.title}</h3>
             <span

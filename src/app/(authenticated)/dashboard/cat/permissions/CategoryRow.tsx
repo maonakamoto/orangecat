@@ -57,7 +57,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
                   checked={true}
                   onCheckedChange={checked => onToggle(action.id, action.category, checked)}
                   disabled={isSaving || isAnySaving}
-                  className="data-[state=checked]:bg-tiffany"
+                  className="data-[state=checked]:bg-foreground"
                 />
               </div>
             </TooltipTrigger>
