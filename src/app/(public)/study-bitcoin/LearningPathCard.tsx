@@ -42,7 +42,7 @@ export function LearningPathCard({ path }: LearningPathCardProps) {
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-orange-600 transition-colors">
+        <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:underline underline-offset-4">
           {path.title}
         </h3>
         <p className="text-muted-foreground mb-4 leading-relaxed">{path.description}</p>
@@ -62,7 +62,7 @@ export function LearningPathCard({ path }: LearningPathCardProps) {
           href={path.status === 'available' ? path.href : '#'}
           className={`inline-flex items-center justify-center w-full px-4 py-2 rounded-lg font-medium transition-colors ${
             path.status === 'available'
-              ? 'bg-orange-600 text-white hover:bg-orange-700'
+              ? 'bg-bitcoinOrange hover:bg-bitcoinOrange/90 text-white'
               : 'bg-muted text-muted-foreground cursor-not-allowed'
           }`}
           {...(path.status === 'coming-soon' ? { 'aria-disabled': true } : {})}
