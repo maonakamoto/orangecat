@@ -400,4 +400,5 @@ export const ROUTES = {
   SETTINGS_AI: '/settings/ai',
   SETTINGS_AI_ONBOARDING: '/settings/ai/onboarding',
   SETTINGS_INTEGRATIONS: '/settings/integrations',
+  SETTINGS_NOTIFICATIONS: '/settings/notifications',
 } as const;
