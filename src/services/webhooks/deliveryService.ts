@@ -55,7 +55,12 @@ export function computeNextAttempt(
   attemptCount: number,
   now: Date = new Date()
 ): { nextAttemptAt: Date | null; shouldFail: boolean } {
-  if (attemptCount >= MAX_ATTEMPTS) {
+  // Pre-2026-06-04 this was `>= MAX_ATTEMPTS`, which made the 24h
+  // BACKOFF slot unreachable: attempt 6 failed straight to status=failed
+  // instead of scheduling the final 24h retry the docstring promises.
+  // Correct semantics: after the MAX_ATTEMPTS-th retry we stop, so an
+  // attemptCount strictly above MAX_ATTEMPTS is the failure boundary.
+  if (attemptCount > MAX_ATTEMPTS) {
     return { nextAttemptAt: null, shouldFail: true };
   }
   const minutes = BACKOFF_MINUTES[attemptCount - 1] ?? BACKOFF_MINUTES[BACKOFF_MINUTES.length - 1];

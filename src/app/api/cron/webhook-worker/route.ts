@@ -102,13 +102,17 @@ async function processDelivery(delivery: DeliveryRow): Promise<DeliveryOutcome> 
     }
 
     await markFailedOrRetry(claimedDelivery, res.status, responseText);
-    const outcome = claimedDelivery.attempt_count >= 6 ? ('failed' as const) : ('retry' as const);
+    // Match the boundary used by computeNextAttempt — failure happens
+    // when attempt_count is STRICTLY above MAX_ATTEMPTS.
+    const outcome = claimedDelivery.attempt_count > 6 ? ('failed' as const) : ('retry' as const);
     return { deliveryId: delivery.id, outcome, responseStatus: res.status };
   } catch (err) {
     // Network error / timeout.
     const reason = err instanceof Error ? err.message : 'unknown';
     await markFailedOrRetry(claimedDelivery, null, `[network] ${reason}`);
-    const outcome = claimedDelivery.attempt_count >= 6 ? ('failed' as const) : ('retry' as const);
+    // Match the boundary used by computeNextAttempt — failure happens
+    // when attempt_count is STRICTLY above MAX_ATTEMPTS.
+    const outcome = claimedDelivery.attempt_count > 6 ? ('failed' as const) : ('retry' as const);
     return { deliveryId: delivery.id, outcome, responseStatus: null };
   } finally {
     clearTimeout(timeout);
