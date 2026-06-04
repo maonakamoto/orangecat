@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { Zap, TreePine, Cat } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Button from '@/components/ui/Button';
 import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
@@ -91,11 +92,10 @@ export default function AboutPage() {
               Exchange, fund, lend, invest, and govern — with your AI agent, under any identity, in
               any currency.
             </p>
-            <Link
-              href={`${ROUTES.AUTH}?mode=register`}
-              className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-orange-600 bg-card hover:bg-muted transition-colors"
-            >
-              Get Started Free
+            <Link href={`${ROUTES.AUTH}?mode=register`}>
+              <Button variant="accent" size="lg">
+                Get Started Free
+              </Button>
             </Link>
           </div>
         </div>

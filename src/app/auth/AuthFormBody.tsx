@@ -181,7 +181,7 @@ export function AuthFormBody({
       <Button
         type="submit"
         disabled={loading}
-        variant="gradient"
+        variant="accent"
         className="w-full h-12 font-semibold"
       >
         {loading ? (

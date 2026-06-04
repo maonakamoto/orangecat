@@ -80,9 +80,9 @@ function UnauthenticatedButtons({
     <div
       className={`flex items-center ${isMobileNav ? 'flex-col space-y-2 w-full' : 'space-x-2'} ${className}`}
     >
-      {/* Mobile: Single prominent login button */}
+      {/* Mobile: Single prominent login button — warm accent (top-of-funnel) */}
       <Link href={getStarted.href} className="sm:hidden">
-        <Button size="sm" className="min-h-9 min-w-18 text-sm font-medium">
+        <Button variant="accent" size="sm" className="min-h-9 min-w-18 text-sm font-medium">
           Login
         </Button>
       </Link>
@@ -98,6 +98,7 @@ function UnauthenticatedButtons({
       </Link>
       <Link href={getStarted.href} className={`hidden sm:block ${isMobileNav ? 'w-full' : ''}`}>
         <Button
+          variant="accent"
           size="sm"
           className={`${isMobileNav ? 'w-full justify-center' : ''} min-h-9 text-sm`}
         >
