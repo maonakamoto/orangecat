@@ -2,9 +2,11 @@
  * OrangeCatClient — main entry point for @orangecat/sdk.
  *
  * Pattern: resource namespaces. Each entity gets its own object exposing
- * the methods supported in the current API version. v0.1 supports
- * `.create()` only — `.list()` / `.get()` / `.update()` arrive when the
- * server exposes GET/PUT under /v1.
+ * the methods supported in the current API version.
+ *   v0.1: `.create()`
+ *   v0.2: `.list()`
+ *   v0.4: `.get(id)` — added here, matches the server's GET-by-id
+ *         shipped in 94e99909.
  *
  * Usage (FleetCrown, hirn.li, third parties):
  *
@@ -82,6 +84,17 @@ class EntityResource<Input, Response> {
     const suffix = query.toString();
     const path = suffix ? `${this.path}?${suffix}` : this.path;
     return this.http.get<Response[]>(path, options);
+  }
+
+  /**
+   * Get one entity by id. Returns the entity row; throws an
+   * OrangeCatError with code `not_found` if the id doesn't exist OR
+   * isn't visible to the caller — both surface as the same envelope
+   * server-side so probers can't distinguish (see docs §6 in
+   * docs/api/CONVENTIONS.md).
+   */
+  get(id: string, options?: RequestOptions): Promise<Response> {
+    return this.http.get<Response>(`${this.path}/${encodeURIComponent(id)}`, options);
   }
 }
 

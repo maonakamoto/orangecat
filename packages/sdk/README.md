@@ -57,23 +57,26 @@ ORANGECAT_API_KEY=ock_…
 
 ## Resources
 
-`v0.1` exposes `.create()` on the nine entity types that are part of the
-v1 public contract:
+Each of the nine v1 entity types (`products`, `services`, `projects`,
+`causes`, `events`, `loans`, `investments`, `assets`, `wishlists`)
+exposes the same three methods:
 
 ```ts
-orangecat.products.create({ … });
-orangecat.services.create({ … });
-orangecat.projects.create({ … });
-orangecat.causes.create({ … });
-orangecat.events.create({ … });
-orangecat.loans.create({ … });
-orangecat.investments.create({ … });
-orangecat.assets.create({ … });
-orangecat.wishlists.create({ … });
+// Create one entity. Integration-key auth attributes ownership to the
+// key's bound actor; the body actor_id field is ignored.
+const product = await orangecat.products.create({ title: 'My product', price: 0.0001 });
+
+// List entities. Integration-key auth scopes to the bound actor.
+// Sessions return the caller's rows. Anonymous returns public rows.
+const products = await orangecat.products.list({ limit: 20, offset: 0 });
+
+// Get one entity by id. Throws OrangeCatError code='not_found' when
+// the id doesn't exist OR isn't visible to the caller (same envelope
+// either way so probers cannot distinguish — see docs §6).
+const one = await orangecat.products.get(product.id);
 ```
 
-Read endpoints (`list`, `get`) land when the server exposes GET via
-integration-key auth — tracked in the OrangeCat roadmap.
+Update + delete arrive when the server exposes PUT/DELETE under v1.
 
 ## Error handling
 
