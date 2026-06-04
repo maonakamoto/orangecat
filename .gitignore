@@ -29,6 +29,7 @@ verify-*.jpeg
 verify-*.png
 tab-*.png
 final-*.png
+audit-*.png
 
 # Next.js
 /.next/
