@@ -110,7 +110,7 @@ export default function DraftContinueDialog({
                   {completionPercentage}% Complete
                 </div>
                 {totalDrafts > 1 && (
-                  <div className="rounded-sm border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-xs font-medium text-orange-700 dark:text-orange-300">
+                  <div className="rounded-sm border border-border-subtle bg-muted px-2 py-1 text-xs font-medium text-fg-secondary">
                     +{totalDrafts - 1} More {totalDrafts > 2 ? 'Drafts' : 'Draft'}
                   </div>
                 )}
@@ -196,8 +196,8 @@ export default function DraftContinueDialog({
                 </div>
 
                 {isLocalDraft && (
-                  <div className="mb-3 rounded-md border border-yellow-500/20 bg-yellow-500/10 p-2">
-                    <div className="flex items-center gap-2 text-sm text-yellow-700 dark:text-yellow-300">
+                  <div className="mb-3 rounded-md border border-status-warning/30 bg-status-warning-subtle p-2">
+                    <div className="flex items-center gap-2 text-sm text-status-warning">
                       <AlertTriangle className="w-4 h-4" />
                       <span>Your unsaved progress will be kept for later</span>
                     </div>

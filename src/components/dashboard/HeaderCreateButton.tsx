@@ -69,7 +69,7 @@ export function HeaderCreateButton() {
                       <option.icon className={cn('w-4 h-4', option.color)} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-foreground transition-colors group-hover:text-tiffany-600 dark:group-hover:text-tiffany-400">
+                      <div className="font-medium text-foreground transition-colors group-hover:text-muted-strong">
                         {option.name}
                       </div>
                       <div className="text-xs text-muted-foreground truncate">
