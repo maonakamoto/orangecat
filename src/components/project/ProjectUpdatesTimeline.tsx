@@ -88,12 +88,12 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
   const getUpdateIcon = (type: string) => {
     switch (type) {
       case 'donation':
-        return <Bitcoin className="w-4 h-4 text-orange-600" />;
+        return <Bitcoin className="w-4 h-4 text-bitcoinOrange" />;
       case 'milestone':
         return <Trophy className="w-4 h-4 text-yellow-600" />;
       case 'update':
       default:
-        return <MessageSquare className="w-4 h-4 text-tiffany-600" />;
+        return <MessageSquare className="w-4 h-4 text-foreground" />;
     }
   };
 
@@ -101,12 +101,12 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
   const getBackgroundColor = (type: string) => {
     switch (type) {
       case 'donation':
-        return 'bg-orange-100';
+        return 'bg-bitcoinOrange/10';
       case 'milestone':
         return 'bg-yellow-100';
       case 'update':
       default:
-        return 'bg-tiffany-100';
+        return 'bg-muted';
     }
   };
 
@@ -138,7 +138,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
     <Card className={className}>
       <CardContent className="pt-6">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <Activity className="w-5 h-5 text-orange-600" />
+          <Activity className="w-5 h-5 text-foreground" />
           Recent Activity
         </h3>
 
@@ -161,7 +161,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
                   <div className="flex items-start justify-between gap-2">
                     <p className="font-medium text-foreground">{update.title}</p>
                     {update.amount_btc && (
-                      <span className="text-sm font-semibold text-orange-600 flex-shrink-0">
+                      <span className="text-sm font-semibold text-bitcoinOrange flex-shrink-0">
                         {formatAmount(update.amount_btc)}
                       </span>
                     )}

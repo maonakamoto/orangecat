@@ -11,9 +11,7 @@
 import { Card, CardContent } from '@/components/ui/Card';
 import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { ExternalLink } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { getUniqueCategories } from '@/utils/project';
-import { GRADIENTS } from '@/config/gradients';
 import { ProjectDonationSection } from './ProjectDonationSection';
 import { ProjectUpdatesTimeline } from './ProjectUpdatesTimeline';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
@@ -74,7 +72,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 href={project.website_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 transition-colors"
+                className="inline-flex items-center gap-2 text-foreground hover:underline underline-offset-4"
                 aria-label={`Visit project website: ${project.website_url}`}
               >
                 <ExternalLink className="w-4 h-4" aria-hidden="true" />
@@ -149,10 +147,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 aria-label={`Funding progress: ${progressPercentage.toFixed(1)}%`}
               >
                 <div
-                  className={cn(
-                    GRADIENTS.brandBitcoin,
-                    'h-4 rounded-full transition-all duration-500'
-                  )}
+                  className="h-4 rounded-full bg-bitcoinOrange transition-all duration-500"
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>

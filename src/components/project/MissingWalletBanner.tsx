@@ -16,7 +16,6 @@ import Link from 'next/link';
 import { Wallet, AlertCircle, X, ExternalLink } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
-import { GRADIENTS } from '@/config/gradients';
 
 interface MissingWalletBannerProps {
   projectId: string;
@@ -41,12 +40,12 @@ export default function MissingWalletBanner({
 
   return (
     <div
-      className={`${GRADIENTS.sectionOrangeWarm} border-2 border-border-strong rounded-lg p-4 shadow-sm ${className}`}
+      className={`bg-bitcoinOrange/5 border-2 border-bitcoinOrange/30 rounded-lg p-4 shadow-sm ${className}`}
     >
       <div className="flex items-start gap-4">
         {/* Icon */}
-        <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
-          <Wallet className="w-5 h-5 text-orange-600" />
+        <div className="w-10 h-10 rounded-lg bg-bitcoinOrange/15 flex items-center justify-center flex-shrink-0">
+          <Wallet className="w-5 h-5 text-bitcoinOrange" />
         </div>
 
         {/* Content */}
@@ -72,7 +71,7 @@ export default function MissingWalletBanner({
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-3">
             <Link href={ROUTES.PROJECTS.EDIT(projectId)}>
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+              <Button className="bg-bitcoinOrange hover:bg-bitcoinOrange/90 text-white">
                 <Wallet className="w-4 h-4 mr-2" />
                 Add Wallet Address
               </Button>
@@ -81,7 +80,7 @@ export default function MissingWalletBanner({
             <Link href={ROUTES.WALLETS} target="_blank">
               <Button
                 variant="outline"
-                className="border-border-strong text-orange-700 hover:bg-orange-50"
+                className="border-bitcoinOrange/40 text-bitcoinOrange hover:bg-bitcoinOrange/5"
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
                 Get a Wallet First
@@ -91,7 +90,7 @@ export default function MissingWalletBanner({
 
           {/* Info */}
           <div className="mt-4 flex items-start gap-2 text-xs text-muted-foreground">
-            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-orange-500" />
+            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-bitcoinOrange" />
             <p>
               <strong>Self-custodial:</strong> Funding goes directly to your wallet. No KYC, no
               middleman.

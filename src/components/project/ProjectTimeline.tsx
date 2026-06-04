@@ -36,7 +36,7 @@ export default function ProjectTimeline({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Activity className="w-6 h-6 text-orange-600" />
+          <Activity className="w-6 h-6 text-foreground" />
           <div>
             <h2 className="text-2xl font-semibold text-foreground">Project Updates</h2>
             <p className="text-sm text-muted-foreground">
@@ -70,9 +70,9 @@ export default function ProjectTimeline({
       )}
 
       {!user && (
-        <Card className="bg-tiffany-50 border-tiffany-200">
+        <Card className="bg-muted/40 border-border-subtle">
           <CardContent className="p-4">
-            <p className="text-sm text-tiffany-700">
+            <p className="text-sm text-foreground">
               <strong>Want to post updates?</strong> Sign in to share progress about this project.
             </p>
           </CardContent>

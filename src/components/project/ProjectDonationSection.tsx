@@ -111,7 +111,7 @@ export function ProjectDonationSection({
                       supportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                   }}
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+                  className="w-full bg-bitcoinOrange hover:bg-bitcoinOrange/90 text-white"
                   aria-label="Scroll to Bitcoin funding section"
                 >
                   <Bitcoin className="w-4 h-4 mr-2" aria-hidden="true" />
@@ -216,9 +216,9 @@ export function ProjectDonationSection({
                         description: `Suggested ${label.toLowerCase()} support (≈ ${formattedAmount})`,
                       });
                     }}
-                    className="px-4 py-3 border-2 border-border-strong rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-all text-center group"
+                    className="px-4 py-3 border-2 border-border-strong rounded-lg hover:border-bitcoinOrange hover:bg-bitcoinOrange/5 transition-all text-center group"
                   >
-                    <div className="font-semibold text-foreground group-hover:text-orange-700">
+                    <div className="font-semibold text-foreground group-hover:text-bitcoinOrange">
                       {formattedAmount}
                     </div>
                     <div className="text-xs text-muted-dim mt-0.5">≈ {satsDisplay}</div>
