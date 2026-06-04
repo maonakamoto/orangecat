@@ -1,0 +1,104 @@
+'use client';
+
+/**
+ * Single webhook-endpoint list row with inline deliveries drawer toggle.
+ * Lifted out of WebhookEndpointsCard 2026-06-04 to keep the parent
+ * under the 300-line component cap.
+ *
+ * Pure presentation; expansion state + revoke handler come from the
+ * parent so single-expanded-at-a-time and the post-revoke list update
+ * stay in one place.
+ */
+
+import { ChevronDown, ChevronRight, Trash2 } from 'lucide-react';
+import WebhookDeliveriesDrawer from '@/components/settings/WebhookDeliveriesDrawer';
+
+export interface WebhookEndpoint {
+  id: string;
+  actor_id: string;
+  name: string;
+  url: string;
+  secret_prefix: string;
+  event_types: string[] | null;
+  created_at: string;
+  last_delivery_at: string | null;
+  revoked_at: string | null;
+}
+
+interface Props {
+  endpoint: WebhookEndpoint;
+  actorLabel: string;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+  onRevoke: (endpoint: WebhookEndpoint) => void;
+  formatTimestamp: (value: string | null) => string;
+}
+
+export default function WebhookEndpointRow({
+  endpoint,
+  actorLabel,
+  isExpanded,
+  onToggleExpand,
+  onRevoke,
+  formatTimestamp,
+}: Props) {
+  const isRevoked = !!endpoint.revoked_at;
+
+  return (
+    <li className="p-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-foreground">{endpoint.name}</span>
+            {isRevoked && (
+              <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+                Revoked
+              </span>
+            )}
+          </div>
+          <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
+            <span className="truncate max-w-full sm:max-w-xs">
+              <code className="rounded bg-muted px-1">{endpoint.url}</code>
+            </span>
+            <span>Acts as {actorLabel}</span>
+            <span>
+              Events:{' '}
+              <code className="rounded bg-muted px-1">
+                {endpoint.event_types && endpoint.event_types.length > 0
+                  ? endpoint.event_types.join(', ')
+                  : 'all'}
+              </code>
+            </span>
+            <span>Created {formatTimestamp(endpoint.created_at)}</span>
+            <span>Last delivery {formatTimestamp(endpoint.last_delivery_at)}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onToggleExpand}
+            className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+          >
+            {isExpanded ? (
+              <ChevronDown className="h-3.5 w-3.5" />
+            ) : (
+              <ChevronRight className="h-3.5 w-3.5" />
+            )}
+            Deliveries
+          </button>
+          {!isRevoked && (
+            <button
+              type="button"
+              onClick={() => onRevoke(endpoint)}
+              className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-destructive"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              Revoke
+            </button>
+          )}
+        </div>
+      </div>
+      {isExpanded && <WebhookDeliveriesDrawer endpointId={endpoint.id} />}
+    </li>
+  );
+}
