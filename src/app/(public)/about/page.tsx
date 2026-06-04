@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { Heart, Zap, TreePine, Cat } from 'lucide-react';
+import { Zap, TreePine, Cat } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
@@ -25,38 +25,6 @@ export default function AboutPage() {
             <p className="mt-3 max-w-md mx-auto text-base text-muted-foreground sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Your AI economic agent — and the platform where it operates.
             </p>
-          </div>
-        </div>
-      </div>
-
-      {/* What OrangeCat Is */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-card rounded-lg shadow-sm p-8 md:p-12 text-center max-w-3xl mx-auto">
-          <div className="flex justify-center mb-6">
-            <div
-              className={`w-20 h-20 ${GRADIENTS.brandTiffanyBr} rounded-lg flex items-center justify-center`}
-            >
-              <Cat className="w-10 h-10 text-white" />
-            </div>
-          </div>
-          <h2 className="text-2xl font-bold text-foreground mb-4">OrangeCat</h2>
-          <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
-            Your AI economic agent — and the platform where it operates. Buy, sell, fund, lend,
-            invest, and govern with any identity, in any currency, without gatekeepers.
-          </p>
-          <div className="flex justify-center space-x-6">
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Cat className="w-4 h-4 mr-2" />
-              AI-Native
-            </div>
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Heart className="w-4 h-4 mr-2" />
-              Open Source
-            </div>
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Zap className="w-4 h-4 mr-2" />
-              Universal Payments
-            </div>
           </div>
         </div>
       </div>
