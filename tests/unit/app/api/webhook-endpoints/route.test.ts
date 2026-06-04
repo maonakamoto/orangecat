@@ -265,6 +265,22 @@ describe('POST /api/webhook-endpoints', () => {
       expect.objectContaining({ eventTypes: ['product.created'] })
     );
   });
+
+  it('rejects event_types containing unknown events with 400 (no silent no-deliveries)', async () => {
+    // Pre-2026-06-04 this passed validation and then silently never
+    // fired — enqueueWebhookEvent's exact-match filter excludes
+    // unknown events. The Zod schema now validates against the
+    // PUBLIC_API_WEBHOOK_EVENTS SSOT.
+    setSession(mockUser);
+
+    const res = (await POST(makeRequest({ ...validBody, event_types: ['totally.fake'] }), {})) as {
+      status: number;
+    };
+
+    expect(res.status).toBe(400);
+    expect(apiValidationError).toHaveBeenCalled();
+    expect(createWebhookEndpoint).not.toHaveBeenCalled();
+  });
 });
 
 // =============================================================================

@@ -29,12 +29,19 @@ import {
   listWebhookEndpoints,
   ActorNotPermittedError,
 } from '@/services/webhooks/webhookEndpointsService';
+import { PUBLIC_API_WEBHOOK_EVENTS } from '@/config/public-api';
 
+// Validate against the SSOT allowlist instead of accepting any string.
+// A curl-mint with event_types=['totally.fake'] would otherwise pass
+// validation and then silently never fire — enqueueWebhookEvent's
+// `.includes(eventType)` filter excludes everything. Users would see
+// no deliveries and have no signal why.
+const KNOWN_EVENT_TYPES = PUBLIC_API_WEBHOOK_EVENTS as readonly [string, ...string[]];
 const createEndpointSchema = z.object({
   name: z.string().min(1).max(120),
   url: z.string().url().max(2048),
   actor_id: z.string().uuid(),
-  event_types: z.array(z.string().min(1).max(80)).max(20).optional(),
+  event_types: z.array(z.enum(KNOWN_EVENT_TYPES)).max(20).optional(),
 });
 
 async function requireSessionUser(): Promise<{ id: string } | null> {
