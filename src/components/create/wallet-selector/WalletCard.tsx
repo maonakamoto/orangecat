@@ -21,12 +21,12 @@ export function WalletCard({ wallet, selected, onSelect, disabled }: WalletCardP
       disabled={disabled}
       className={`relative w-full text-left p-3 rounded-lg border-2 transition-all ${
         selected
-          ? 'border-tiffany bg-tiffany/5 ring-1 ring-tiffany/20'
+          ? 'border-foreground bg-muted/40 ring-1 ring-foreground/20'
           : 'border-border hover:border-border-strong dark:hover:border-border'
       } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       {selected && (
-        <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-tiffany flex items-center justify-center">
+        <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-foreground flex items-center justify-center">
           <Check className="w-3 h-3 text-white" />
         </div>
       )}

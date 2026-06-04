@@ -71,7 +71,9 @@ export function FormFieldGroups<T extends Record<string, unknown>>({
                     >
                       {isAIGenerated && <AIGeneratedIndicator confidence={aiConfidence} />}
                       <div
-                        className={isAIGenerated ? 'ring-1 ring-tiffany-200 rounded-md p-0.5' : ''}
+                        className={
+                          isAIGenerated ? 'ring-1 ring-border-strong rounded-md p-0.5' : ''
+                        }
                       >
                         <FormField
                           config={field}

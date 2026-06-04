@@ -115,7 +115,7 @@ export function WalletSelectorField({
             disabled={disabled}
             className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors ${
               mode === 'select'
-                ? 'border-tiffany bg-tiffany/5 text-tiffany-dark font-medium'
+                ? 'border-foreground bg-muted/40 text-foreground font-medium'
                 : 'border-border text-muted-foreground hover:border-border-strong dark:hover:border-border'
             }`}
           >
@@ -128,7 +128,7 @@ export function WalletSelectorField({
             disabled={disabled}
             className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors ${
               mode === 'manual'
-                ? 'border-tiffany bg-tiffany/5 text-tiffany-dark font-medium'
+                ? 'border-foreground bg-muted/40 text-foreground font-medium'
                 : 'border-border text-muted-foreground hover:border-border-strong dark:hover:border-border'
             }`}
           >

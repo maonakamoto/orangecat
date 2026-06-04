@@ -35,7 +35,7 @@ export function CollateralItemPicker({
           <p className="text-base text-muted-foreground mb-2">{emptyMessage}</p>
           <a
             href={emptyLinkHref}
-            className="text-sm text-tiffany-600 hover:text-tiffany-700 font-medium"
+            className="text-sm text-foreground hover:underline underline-offset-4 font-medium"
           >
             {emptyLinkText}
           </a>

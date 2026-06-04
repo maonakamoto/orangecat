@@ -12,7 +12,6 @@ import { ROUTES } from '@/config/routes';
 import { useCollateralSelector } from './useCollateralSelector';
 import { CollateralItemPicker } from './CollateralItemPicker';
 import { BADGE_COLORS } from '@/config/badge-colors';
-import { GRADIENTS } from '@/config/gradients';
 
 export interface CollateralItem {
   id: string;
@@ -96,7 +95,7 @@ export function CollateralSelector({
       </CardHeader>
       <CardContent className="space-y-4">
         {selectedCollateral.length > 0 && (
-          <div className={`${GRADIENTS.iconTiffanyLight} border border-tiffany-200 rounded-lg p-4`}>
+          <div className="bg-muted border border-border-subtle rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-muted-strong">Total Collateral Value</span>
               <span className="text-lg font-bold text-foreground">
@@ -118,7 +117,7 @@ export function CollateralSelector({
                           ? 'bg-green-500'
                           : coveragePercentage >= 50
                             ? 'bg-yellow-500'
-                            : 'bg-orange-500'
+                            : 'bg-status-warning'
                       )}
                       style={{ width: `${Math.min(100, coveragePercentage)}%` }}
                     />
@@ -140,8 +139,8 @@ export function CollateralSelector({
                     </>
                   ) : (
                     <>
-                      <AlertCircle className="w-3 h-3 text-orange-600" />
-                      <span className="text-orange-700">Low collateral coverage</span>
+                      <AlertCircle className="w-3 h-3 text-status-warning" />
+                      <span className="text-status-warning">Low collateral coverage</span>
                     </>
                   )}
                 </div>
