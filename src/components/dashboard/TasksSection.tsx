@@ -35,15 +35,18 @@ interface TasksSectionProps {
 }
 
 function getPriorityColor(priority: TaskPriority): string {
+  // FleetCrown semantic tier (migration 6/N): critical + high get
+  // chromatic status tokens; medium + low fade into neutral so the eye
+  // is drawn to actual urgency.
   switch (priority) {
     case 'critical':
-      return 'border-destructive/20 bg-destructive/10 text-destructive';
+      return 'border-status-negative/30 bg-status-negative-subtle text-status-negative';
     case 'high':
-      return 'border-orange-500/20 bg-orange-500/10 text-orange-700 dark:text-orange-300';
+      return 'border-status-warning/30 bg-status-warning-subtle text-status-warning';
     case 'medium':
-      return 'border-yellow-500/20 bg-yellow-500/10 text-yellow-700 dark:text-yellow-300';
+      return 'border-border-subtle bg-muted text-fg-secondary';
     case 'low':
-      return 'border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-300';
+      return 'border-border-subtle bg-muted/60 text-fg-tertiary';
   }
 }
 
@@ -147,7 +150,7 @@ export default function TasksSection({
               <X className="w-4 h-4" />
             </button>
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md border border-border-subtle bg-muted/40">
-              <Sparkles className="w-8 h-8 text-green-600" />
+              <Sparkles className="w-8 h-8 text-status-positive" />
             </div>
             <h3 className="text-lg font-semibold text-foreground mb-2">{celebration.title}</h3>
             <p className="text-muted-foreground mb-4">{celebration.description}</p>
@@ -166,7 +169,7 @@ export default function TasksSection({
         <Card>
           <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-md border border-border-subtle bg-muted/40">
-              <CheckCircle2 className="w-6 h-6 text-green-600" />
+              <CheckCircle2 className="w-6 h-6 text-status-positive" />
             </div>
             <div>
               <p className="text-sm font-medium text-foreground">You&apos;re all caught up</p>
@@ -208,7 +211,7 @@ export default function TasksSection({
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-tiffany-600" />
+                <Target className="w-5 h-5 text-fg-secondary" />
                 Recommended Next Steps
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
@@ -301,7 +304,7 @@ function TaskCard({
         aria-label={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
       >
         {isCompleted ? (
-          <CheckCircle2 className="w-5 h-5 text-green-600" />
+          <CheckCircle2 className="w-5 h-5 text-status-positive" />
         ) : (
           <Circle className="w-5 h-5" />
         )}
