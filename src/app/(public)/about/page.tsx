@@ -2,9 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { Zap, TreePine, Cat } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import Button from '@/components/ui/Button';
-import { GRADIENTS } from '@/config/gradients';
 import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
@@ -15,15 +13,15 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className={cn(GRADIENTS.pageBgSolid, 'min-h-screen')}>
-      {/* Hero Section */}
-      <div className="bg-card shadow-sm">
+    <div className="min-h-screen bg-surface-page">
+      {/* Hero Section — monochrome per migration 6/N */}
+      <div className="bg-surface-base border-b border-border-subtle">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-foreground sm:text-5xl md:text-6xl">
-              About <span className="text-tiffany-600">OrangeCat</span>
+            <h1 className="font-heading tracking-display text-4xl font-bold text-fg-primary sm:text-5xl md:text-6xl">
+              About OrangeCat
             </h1>
-            <p className="mt-3 max-w-md mx-auto text-base text-muted-foreground sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+            <p className="mt-3 max-w-md mx-auto text-base text-fg-secondary sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Your AI economic agent — and the platform where it operates.
             </p>
           </div>
@@ -43,38 +41,39 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Mission cards — monochrome neutral tiles per migration 6/N */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-tiffany-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TreePine className="w-8 h-8 text-tiffany-600" />
+              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <TreePine className="w-8 h-8 text-fg-secondary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">
+              <h3 className="text-lg font-semibold text-fg-primary mb-2">
                 Pseudonymous by Default
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-fg-secondary">
                 Any identity — human, pseudonymous, or AI — is a full economic participant. Real
                 name is always optional.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-orange-600" />
+              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-fg-secondary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Any Currency</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-lg font-semibold text-fg-primary mb-2">Any Currency</h3>
+              <p className="text-fg-secondary">
                 Bitcoin and Lightning are native, but any payment method — local or global — is
                 first-class. Meet users where they are.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Cat className="w-8 h-8 text-orange-600" />
+              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+                <Cat className="w-8 h-8 text-fg-secondary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">
+              <h3 className="text-lg font-semibold text-fg-primary mb-2">
                 The Cat is the Interface
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-fg-secondary">
                 My Cat is the primary AI agent for every user and group — it manages economic
                 activity so you don't have to.
               </p>
@@ -83,12 +82,14 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* CTA Section */}
-      <div className={GRADIENTS.brandMixed}>
+      {/* CTA Section — public-surface (near-black) per FleetCrown pattern */}
+      <div className="bg-surface-public">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <h2 className="text-2xl font-semibold text-white mb-4">Join the Open Economy</h2>
-            <p className="text-xl text-orange-100 mb-8">
+            <h2 className="font-heading tracking-display text-3xl sm:text-4xl font-bold text-fg-inverted mb-4">
+              Join the Open Economy
+            </h2>
+            <p className="text-xl text-fg-inverted/70 mb-8">
               Exchange, fund, lend, invest, and govern — with your AI agent, under any identity, in
               any currency.
             </p>
