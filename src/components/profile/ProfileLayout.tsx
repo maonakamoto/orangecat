@@ -15,7 +15,6 @@ import { Users, User, MessageSquare, Globe, ExternalLink, Info, Wallet } from 'l
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { EntityType } from '@/config/entity-registry';
 import { cn } from '@/lib/utils';
-import { GRADIENTS } from '@/config/gradients';
 import { useProfileActions } from './useProfileActions';
 import { ProfileBannerSection } from './ProfileBannerSection';
 
@@ -174,7 +173,7 @@ export default function ProfileLayout({
   });
 
   return (
-    <div className={cn('min-h-screen', GRADIENTS.graySubtle, className)}>
+    <div className={cn('min-h-screen bg-surface-page', className)}>
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8">
         <ProfileBannerSection
           profile={profile}
@@ -193,7 +192,7 @@ export default function ProfileLayout({
             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-1 sm:mb-2">
               {profile.name || profile.username || 'User'}
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-orange-600 font-medium mb-3 sm:mb-4">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground font-medium mb-3 sm:mb-4">
               @{profile.username}
             </p>
             {profile.website && (
@@ -201,7 +200,7 @@ export default function ProfileLayout({
                 href={profile.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center text-orange-600 hover:text-orange-700 font-medium"
+                className="inline-flex items-center text-foreground hover:text-muted-strong font-medium underline-offset-4 hover:underline"
               >
                 <Globe className="w-4 h-4 mr-2" />
                 Visit Website
