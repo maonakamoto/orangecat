@@ -86,13 +86,13 @@ export function UserProfileDropdownPanel({
                   alt={displayName}
                   width={56}
                   height={56}
-                  className="rounded-full object-cover ring-4 ring-tiffany-100 cursor-pointer"
+                  className="rounded-full object-cover ring-4 ring-border-subtle cursor-pointer"
                   onError={() => setAvatarError(true)}
                 />
               ) : (
                 <DefaultAvatar
                   size={56}
-                  className="rounded-full ring-4 ring-tiffany-100 cursor-pointer"
+                  className="rounded-full ring-4 ring-border-subtle cursor-pointer"
                 />
               )}
               <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-3 border-card rounded-full shadow-sm" />
@@ -100,12 +100,12 @@ export function UserProfileDropdownPanel({
             <div className="flex-1 min-w-0">
               <button
                 onClick={handlePublicProfileClick}
-                className="group flex items-center space-x-2 hover:text-tiffany-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-lg p-1 -m-1"
+                className="group flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-lg p-1 -m-1"
               >
-                <h3 className="font-semibold text-lg text-foreground group-hover:text-tiffany-600 transition-colors duration-200 truncate">
+                <h3 className="font-semibold text-lg text-foreground group-hover:underline underline-offset-4 truncate">
                   {displayName}
                 </h3>
-                <ExternalLink className="w-4 h-4 text-muted-dim group-hover:text-tiffany-500 transition-all duration-200 opacity-0 group-hover:opacity-100 transform group-hover:scale-110" />
+                <ExternalLink className="w-4 h-4 text-muted-dim group-hover:text-foreground transition-all duration-200 opacity-0 group-hover:opacity-100 transform group-hover:scale-110" />
               </button>
               {username && <p className="text-sm font-medium text-muted-foreground">@{username}</p>}
               {email && <p className="text-xs text-muted-foreground truncate mt-1">{email}</p>}
@@ -134,10 +134,10 @@ export function UserProfileDropdownPanel({
               `}
             >
               <div className="oc-icon-tile mr-4 h-10 w-10">
-                <Icon className="w-5 h-5 text-tiffany-600 transition-colors duration-200 group-hover:text-tiffany-700 dark:text-tiffany-400" />
+                <Icon className="w-5 h-5 text-fg-secondary transition-colors duration-200 group-hover:text-foreground" />
               </div>
               <div className="flex-1 text-left">
-                <div className="font-semibold text-foreground group-hover:text-tiffany-600 transition-colors duration-200">
+                <div className="font-semibold text-foreground transition-colors duration-200">
                   {item.label}
                 </div>
                 {showDescriptions && (

@@ -58,7 +58,7 @@ export function LocationInput({
         />
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
           {isLoading && (
-            <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
           )}
           <MapPin className="w-4 h-4 text-muted-dim" />
         </div>

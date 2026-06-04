@@ -1,5 +1,3 @@
-import { GRADIENTS } from '@/config/gradients';
-
 export interface DefaultAvatarProps {
   size?: number;
   className?: string;
@@ -8,7 +6,7 @@ export interface DefaultAvatarProps {
 export default function DefaultAvatar({ size = 32, className = '' }: DefaultAvatarProps) {
   return (
     <div
-      className={`rounded-full ${GRADIENTS.brandOrangeLightBr} flex items-center justify-center border-2 border-border-strong ${className}`}
+      className={`rounded-full bg-muted flex items-center justify-center border-2 border-border-strong ${className}`}
       style={{ width: size, height: size }}
     >
       <svg
@@ -16,7 +14,7 @@ export default function DefaultAvatar({ size = 32, className = '' }: DefaultAvat
         height={size * 0.6}
         viewBox="0 0 24 24"
         fill="none"
-        className="text-orange-600"
+        className="text-fg-secondary"
       >
         {/* Cat face */}
         <circle cx="12" cy="13" r="8" fill="currentColor" opacity="0.1" />

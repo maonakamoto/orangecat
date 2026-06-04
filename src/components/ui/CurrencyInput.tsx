@@ -1,7 +1,6 @@
 'use client';
 
 import { ArrowLeftRight, Bitcoin, Info } from 'lucide-react';
-import { GRADIENTS } from '@/config/gradients';
 import { Input } from '@/components/ui/Input';
 import { Currency, ALL_CURRENCIES } from '@/types/settings';
 import { formatCurrency, bitcoinToSats } from '@/services/currency';
@@ -126,11 +125,9 @@ export function CurrencyInput({
       )}
 
       {showBreakdown && breakdown && value && value > 0 && (
-        <div
-          className={`mt-3 p-3 rounded-lg ${GRADIENTS.sectionOrangeAmber} border border-orange-100 dark:border-orange-900/30`}
-        >
+        <div className="mt-3 p-3 rounded-lg bg-bitcoinOrange/5 border border-bitcoinOrange/20">
           <div className="flex items-center gap-2 mb-2">
-            <ArrowLeftRight className="w-4 h-4 text-orange-600" />
+            <ArrowLeftRight className="w-4 h-4 text-bitcoinOrange" />
             <span className="text-xs font-semibold text-foreground">
               Equivalent in other currencies
             </span>
@@ -170,8 +167,8 @@ export function CurrencyInput({
               ))}
           </div>
 
-          <div className="mt-2 pt-2 border-t border-orange-100 dark:border-orange-900/30 flex items-start gap-1">
-            <Info className="w-3 h-3 text-orange-500 mt-0.5 flex-shrink-0" />
+          <div className="mt-2 pt-2 border-t border-bitcoinOrange/20 flex items-start gap-1">
+            <Info className="w-3 h-3 text-bitcoinOrange mt-0.5 flex-shrink-0" />
             <p className="text-xs text-muted-foreground">
               All transactions settle in Bitcoin. Amounts shown are estimates based on current
               exchange rates.

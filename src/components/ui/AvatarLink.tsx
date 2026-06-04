@@ -15,7 +15,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { getInitial } from '@/utils/string';
-import { GRADIENTS } from '@/config/gradients';
 
 interface AvatarLinkProps {
   /**
@@ -97,7 +96,7 @@ export default function AvatarLink({
       href={safeHref}
       className={cn(
         'relative flex-shrink-0 inline-block transition-all duration-200',
-        'hover:ring-2 hover:ring-orange-200 rounded-full',
+        'hover:ring-2 hover:ring-border-strong rounded-full',
         className
       )}
       title={`View ${displayName}'s profile`}
@@ -117,8 +116,7 @@ export default function AvatarLink({
         <div
           className={cn(
             'rounded-full flex items-center justify-center border-2 border-card shadow-sm',
-            GRADIENTS.brandOrangeYellow,
-            'text-white font-semibold transition-all duration-200'
+            'bg-muted text-fg-secondary font-semibold transition-all duration-200'
           )}
           style={{ width: size, height: size, fontSize: `${size * 0.4}px` }}
         >

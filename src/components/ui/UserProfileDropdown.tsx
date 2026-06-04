@@ -240,13 +240,13 @@ export default function UserProfileDropdown({
                 alt={displayName}
                 width={32}
                 height={32}
-                className="rounded-full object-cover ring-2 ring-orange-200 hover:ring-orange-300 transition-all duration-200 sm:w-9 sm:h-9 md:w-9 md:h-9"
+                className="rounded-full object-cover ring-2 ring-border-subtle hover:ring-border-strong transition-all duration-200 sm:w-9 sm:h-9 md:w-9 md:h-9"
                 onError={() => setAvatarError(true)}
               />
             ) : (
               <DefaultAvatar
                 size={36}
-                className="rounded-full ring-2 ring-orange-200 hover:ring-orange-300 transition-all duration-200"
+                className="rounded-full ring-2 ring-border-subtle hover:ring-border-strong transition-all duration-200"
               />
             )}
             <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-400 border-2 border-card dark:border-card rounded-full shadow-sm"></div>

@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Users } from 'lucide-react';
 import { getInitial } from '@/utils/string';
-import { GRADIENTS } from '@/config/gradients';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import DefaultAvatar from '@/components/ui/DefaultAvatar';
@@ -21,7 +20,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
   const displayName = profile.name || profile.username || 'Anonymous';
 
   const TypeBadge = () => (
-    <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-tiffany-100 text-tiffany-700 border border-tiffany-200">
+    <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-fg-secondary border border-border-subtle">
       <Users className="w-3 h-3 mr-1" />
       Person
     </div>
@@ -32,9 +31,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
       <Card className="p-4 oc-card-link">
         <div className="flex items-center gap-4">
           <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-            <div
-              className={`relative w-12 h-12 rounded-full overflow-hidden ${GRADIENTS.tiffanyMuted} flex-shrink-0`}
-            >
+            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-muted flex-shrink-0">
               {profile.avatar_url ? (
                 <Image
                   src={profile.avatar_url}
@@ -44,7 +41,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-tiffany-600 font-semibold">
+                <div className="w-full h-full flex items-center justify-center text-fg-secondary font-semibold">
                   {getInitial(displayName)}
                 </div>
               )}
@@ -54,7 +51,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-                <h3 className="font-semibold text-foreground hover:text-tiffany-600 transition-colors truncate">
+                <h3 className="font-semibold text-foreground hover:underline underline-offset-4 truncate">
                   {displayName}
                 </h3>
               </Link>
@@ -86,9 +83,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
     <Card className="p-6 oc-card-link">
       <div className="text-center">
         <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-          <div
-            className={`relative w-20 h-20 rounded-full overflow-hidden ${GRADIENTS.tiffanyMuted} mx-auto mb-4`}
-          >
+          <div className="relative w-20 h-20 rounded-full overflow-hidden bg-muted mx-auto mb-4">
             {profile.avatar_url ? (
               <Image
                 src={profile.avatar_url}
@@ -105,7 +100,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
 
         <div className="flex items-center justify-center gap-2 mb-2">
           <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-            <h3 className="font-semibold text-foreground hover:text-tiffany-600 transition-colors">
+            <h3 className="font-semibold text-foreground hover:underline underline-offset-4">
               {displayName}
             </h3>
           </Link>
