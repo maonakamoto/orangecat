@@ -3,18 +3,7 @@
 import type { ScalableProfile } from '@/services/profile/types';
 import { useState } from 'react';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
-import {
-  User,
-  Globe,
-  Calendar,
-  Mail,
-  Phone,
-  Heart,
-  Repeat,
-  Handshake,
-  TrendingUp,
-  Copy,
-} from 'lucide-react';
+import { User, Globe, Calendar, Mail, Phone, Heart, Repeat, Copy } from 'lucide-react';
 import { SocialLinksDisplay } from './SocialLinksDisplay';
 import { SocialLink } from '@/types/social';
 import { ROUTES } from '@/config/routes';
@@ -57,16 +46,11 @@ export default function ProfileOverviewTab({
   const publicContactEmail = profile.contact_email || profile.email;
   const { formatAmountBtc } = useDisplayCurrency();
 
-  // State for support engines (design/esthetics + real flows for donate/sub/lend/invest)
-  const [supportType, setSupportType] = useState<'donate' | 'subscribe' | 'lend' | 'invest' | null>(
-    null
-  );
+  // Donate + Subscribe both use the profile's real Bitcoin/Lightning
+  // addresses. The Lend + Invest sub-flows were removed (they only
+  // toast.success("Would persist via...") with no backend behind them).
+  const [supportType, setSupportType] = useState<'donate' | 'subscribe' | null>(null);
   const [subAmount, setSubAmount] = useState(0.001);
-  const [lendAmount, setLendAmount] = useState(500000);
-  const [lendRate, setLendRate] = useState(5);
-  const [lendTerm, setLendTerm] = useState(12);
-  const [investAmount, setInvestAmount] = useState(1000000);
-  const [investTerms, setInvestTerms] = useState('10% revenue share, 24mo term');
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -99,14 +83,6 @@ export default function ProfileOverviewTab({
         </CardContent>
       </Card>
 
-      {/* Support & Economic Engines for this Profile
-          High-flier addition: visitors to e.g. the FleetCrown profile can directly
-          buy subscription (recurring support), donate, lend, or invest.
-          Uses profile's bitcoin/lightning addresses for money flows.
-          For lend/invest, simple proposal forms (real engine would persist loan/investment offers
-          targeting this actor's profile and notify owner via existing stakeholder graph).
-          Built on existing payment components and entity features.
-      */}
       <Card>
         <CardHeader className="p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
@@ -114,12 +90,12 @@ export default function ProfileOverviewTab({
             Support this Profile
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
-            Buy a subscription, donate, lend, or invest directly. Real engines power the flows
-            (Lightning/BTC payments, loan & investment records).
+            Donate one-time or subscribe to recurring support — payments go directly to the
+            profile's Lightning or Bitcoin address.
           </p>
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0 space-y-4">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => setSupportType('donate')}
               className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'donate' ? 'border-foreground bg-muted' : 'border-border hover:border-border-strong'}`}
@@ -135,22 +111,6 @@ export default function ProfileOverviewTab({
               <Repeat className="w-5 h-5" />
               <span>Subscribe</span>
               <span className="text-[10px] text-muted-foreground">Recurring</span>
-            </button>
-            <button
-              onClick={() => setSupportType('lend')}
-              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'lend' ? 'border-foreground bg-muted' : 'border-border hover:border-border-strong'}`}
-            >
-              <Handshake className="w-5 h-5" />
-              <span>Lend</span>
-              <span className="text-[10px] text-muted-foreground">Offer a loan</span>
-            </button>
-            <button
-              onClick={() => setSupportType('invest')}
-              className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'invest' ? 'border-foreground bg-muted' : 'border-border hover:border-border-strong'}`}
-            >
-              <TrendingUp className="w-5 h-5" />
-              <span>Invest</span>
-              <span className="text-[10px] text-muted-foreground">Fund equity/return</span>
             </button>
           </div>
 
@@ -262,93 +222,6 @@ export default function ProfileOverviewTab({
                     </div>
                   )}
                   <button onClick={() => setSupportType(null)} className="text-xs underline">
-                    Close
-                  </button>
-                </div>
-              )}
-
-              {supportType === 'lend' && (
-                <div className="space-y-3">
-                  <div className="font-medium">Lend to this profile</div>
-                  <div className="text-sm text-muted-foreground">
-                    Propose a loan to the profile owner (you as lender, they as borrower). Real
-                    engine creates a loan offer in the stakeholder graph and notifies.
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <input
-                      type="number"
-                      placeholder="Amount (sats)"
-                      value={lendAmount}
-                      onChange={e => setLendAmount(Number(e.target.value))}
-                      className="border rounded p-2 text-sm"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Interest % APR"
-                      value={lendRate}
-                      onChange={e => setLendRate(Number(e.target.value))}
-                      className="border rounded p-2 text-sm"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Term (months)"
-                      value={lendTerm}
-                      onChange={e => setLendTerm(Number(e.target.value))}
-                      className="border rounded p-2 text-sm"
-                    />
-                  </div>
-                  <button
-                    onClick={() => {
-                      toast.success(
-                        `Loan offer of ${lendAmount} sats @ ${lendRate}% for ${lendTerm} months proposed to ${profile.name || profile.username}. (Would persist via loans service + stakeholder edge.)`
-                      );
-                      setSupportType(null);
-                    }}
-                    className="px-3 py-1 bg-foreground text-background rounded text-sm hover:bg-muted-strong transition-colors"
-                  >
-                    Propose Loan
-                  </button>
-                  <button onClick={() => setSupportType(null)} className="text-xs underline ml-2">
-                    Close
-                  </button>
-                </div>
-              )}
-
-              {supportType === 'invest' && (
-                <div className="space-y-3">
-                  <div className="font-medium">Invest in this profile</div>
-                  <div className="text-sm text-muted-foreground">
-                    Propose an investment (equity share, revenue split, etc.). Real engine would
-                    create investment entity and record the deal.
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <input
-                      type="number"
-                      placeholder="Investment amount (sats)"
-                      value={investAmount}
-                      onChange={e => setInvestAmount(Number(e.target.value))}
-                      className="border rounded p-2 text-sm"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Expected return / terms (e.g. 10% revenue share)"
-                      value={investTerms}
-                      onChange={e => setInvestTerms(e.target.value)}
-                      className="border rounded p-2 text-sm"
-                    />
-                  </div>
-                  <button
-                    onClick={() => {
-                      toast.success(
-                        `Investment of ${investAmount} sats proposed with terms: ${investTerms || 'negotiable'}. (Would create investment record for ${profile.name || profile.username}.)`
-                      );
-                      setSupportType(null);
-                    }}
-                    className="px-3 py-1 bg-status-positive text-white rounded text-sm hover:bg-status-positive/90 transition-colors"
-                  >
-                    Propose Investment
-                  </button>
-                  <button onClick={() => setSupportType(null)} className="text-xs underline ml-2">
                     Close
                   </button>
                 </div>
