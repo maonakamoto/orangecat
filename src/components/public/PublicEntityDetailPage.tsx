@@ -56,6 +56,8 @@ export interface EntityDetailConfig {
   backHref?: string;
   /** Extra JSON-LD properties derived from entity data */
   getJsonLdExtra?: (entity: EntityData) => Record<string, unknown>;
+  /** Override the themed icon box in the header (e.g., a cover image) */
+  renderHeaderIcon?: (entity: EntityData) => ReactNode;
   /** Header badges/extra info (e.g., date for events, category for products) */
   renderHeaderExtra?: (entity: EntityData) => ReactNode;
   /** Entity-specific detail cards below description */
@@ -151,17 +153,21 @@ export default async function PublicEntityDetailPage({
             />
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
-                <div
-                  className={`w-16 h-16 ${theme.bg} rounded-lg flex items-center justify-center`}
-                >
-                  <Icon className={`w-8 h-8 ${theme.icon}`} />
-                </div>
+                {config.renderHeaderIcon?.(entity) ?? (
+                  <div
+                    className={`w-16 h-16 ${theme.bg} rounded-lg flex items-center justify-center`}
+                  >
+                    <Icon className={`w-8 h-8 ${theme.icon}`} />
+                  </div>
+                )}
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{entity.title}</h1>
                   <div className="flex items-center gap-3 mt-2">
-                    <Badge variant="default" className="capitalize">
-                      {entity.status}
-                    </Badge>
+                    {entity.status && (
+                      <Badge variant="default" className="capitalize">
+                        {entity.status}
+                      </Badge>
+                    )}
                     {entity.category && (
                       <Badge variant="secondary">
                         <Tag className="w-3 h-3 mr-1" />
