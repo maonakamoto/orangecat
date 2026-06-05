@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { logger } from '@/utils/logger';
-import { DEFAULT_CURRENCY } from '@/config/currencies';
+import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { convertBtcTo } from '@/services/currency';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { API_ROUTES } from '@/config/api-routes';
@@ -88,7 +88,7 @@ export function useCollateralSelector({
         type: 'asset' as const,
         name: asset.title,
         value: asset.estimated_value || 0,
-        currency: asset.currency || DEFAULT_CURRENCY,
+        currency: asset.currency || PLATFORM_DEFAULT_CURRENCY,
         metadata: { verification_status: asset.verification_status },
       },
     ]);
@@ -103,8 +103,8 @@ export function useCollateralSelector({
         id: wallet.id,
         type: 'wallet' as const,
         name: wallet.label,
-        value: convertBtcTo(btcValue, DEFAULT_CURRENCY),
-        currency: DEFAULT_CURRENCY,
+        value: convertBtcTo(btcValue, PLATFORM_DEFAULT_CURRENCY),
+        currency: PLATFORM_DEFAULT_CURRENCY,
         metadata: { balance_btc: btcValue },
       },
     ]);

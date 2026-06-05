@@ -1,7 +1,7 @@
 import { Briefcase } from 'lucide-react';
 import type { FieldGroup } from '@/components/create/types';
 import { assetGuidanceContent, assetDefaultGuidance } from '@/lib/entity-guidance/asset-guidance';
-import { currencySelectOptions, DEFAULT_CURRENCY } from '@/config/currencies';
+import { currencySelectOptions, PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { assetSchema, type AssetFormData } from '@/lib/validation';
 import { ASSET_TEMPLATES, type AssetTemplate } from '@/components/create/templates';
 import { createEntityConfig } from './base-config-factory';
@@ -142,7 +142,7 @@ const defaultValues: AssetFormData = {
   description: '',
   location: '',
   estimated_value: undefined,
-  currency: DEFAULT_CURRENCY,
+  currency: PLATFORM_DEFAULT_CURRENCY,
   documents: [],
   is_for_sale: false,
   sale_price_btc: undefined,

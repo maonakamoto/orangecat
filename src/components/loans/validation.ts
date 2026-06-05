@@ -9,7 +9,7 @@
  */
 
 import * as z from 'zod';
-import { CURRENCY_CODES, DEFAULT_CURRENCY } from '@/config/currencies';
+import { CURRENCY_CODES, PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 
 export const loanSchema = z
   .object({
@@ -20,7 +20,7 @@ export const loanSchema = z
     remaining_balance: z.number().min(0.01, 'Balance must be greater than 0'),
     interest_rate: z.number().min(0).max(100).optional(),
     monthly_payment: z.number().min(0).optional(),
-    currency: z.enum(CURRENCY_CODES).default(DEFAULT_CURRENCY),
+    currency: z.enum(CURRENCY_CODES).default(PLATFORM_DEFAULT_CURRENCY),
     lender_name: z.string().optional(),
     loan_number: z.string().optional(),
     origination_date: z.string().optional(),

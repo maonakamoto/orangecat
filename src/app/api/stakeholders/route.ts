@@ -36,6 +36,7 @@ import {
   apiUnauthorized,
 } from '@/lib/api/standardResponse';
 import { logger } from '@/utils/logger';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
 // =====================================================================
 // SHAPES
@@ -159,7 +160,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     // projects would already enforce this on read, but we verify the
     // relationship explicitly so the error message is meaningful.
     const { data: projectRow, error: projectErr } = await supabase
-      .from('projects')
+      .from(ENTITY_REGISTRY.project.tableName)
       .select('id, actor_id')
       .eq('id', input.fromProjectId)
       .maybeSingle();

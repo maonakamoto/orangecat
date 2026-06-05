@@ -78,7 +78,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                 placeholder="Search stories..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-border-strong rounded-lg focus:ring-2 focus:ring-bitcoinOrange focus:border-ring bg-card text-foreground"
+                className="w-full px-4 py-2 border border-border-strong rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-card text-foreground"
               />
             </div>
 
@@ -91,7 +91,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     selectedCategory === category
-                      ? 'bg-bitcoinOrange text-white'
+                      ? 'bg-foreground text-background'
                       : 'bg-muted text-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
                   }`}
                 >

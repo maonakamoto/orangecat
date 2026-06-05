@@ -26,7 +26,7 @@ import {
 import { Loader2 } from 'lucide-react';
 import { assetSchema } from '@/lib/validation';
 import { AssetTemplates } from '@/components/create/templates';
-import { currencySelectOptions, DEFAULT_CURRENCY } from '@/config/currencies';
+import { currencySelectOptions, PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { ASSET_TYPES } from '@/config/assets';
 
@@ -60,7 +60,7 @@ export function CreateAssetDialog({
       type: 'other',
       description: '',
       estimated_value: undefined,
-      currency: DEFAULT_CURRENCY as QuickAssetFormData['currency'],
+      currency: PLATFORM_DEFAULT_CURRENCY as QuickAssetFormData['currency'],
     },
   });
 
@@ -71,7 +71,7 @@ export function CreateAssetDialog({
       description: (template.description as string) || '',
       estimated_value: (template.estimated_value as number) || undefined,
       currency: ((template.currency as string) ||
-        DEFAULT_CURRENCY) as QuickAssetFormData['currency'],
+        PLATFORM_DEFAULT_CURRENCY) as QuickAssetFormData['currency'],
     });
   };
 

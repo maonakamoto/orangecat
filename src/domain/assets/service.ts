@@ -1,6 +1,6 @@
 import { createEntity } from '@/domain/base/entityService';
 import type { AssetFormData } from './schema';
-import { DEFAULT_CURRENCY } from '@/config/currencies';
+import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { STATUS } from '@/config/database-constants';
 
 const ASSET_SELECT =
@@ -16,7 +16,7 @@ export async function createAsset(userId: string, input: AssetFormData) {
       description: input.description || null,
       location: input.location || null,
       estimated_value: input.estimated_value ?? null,
-      currency: input.currency ?? DEFAULT_CURRENCY,
+      currency: input.currency ?? PLATFORM_DEFAULT_CURRENCY,
       documents: input.documents ?? null,
       verification_status: 'unverified' as const,
       status: STATUS.ASSETS.DRAFT,

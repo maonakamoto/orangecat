@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { DEFAULT_CURRENCY } from '@/config/currencies';
+import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/config/routes';
 import { useCollateralSelector } from './useCollateralSelector';
@@ -37,7 +37,7 @@ export function CollateralSelector({
   selectedCollateral,
   onCollateralChange,
   loanAmount,
-  loanCurrency = DEFAULT_CURRENCY,
+  loanCurrency = PLATFORM_DEFAULT_CURRENCY,
   disabled = false,
 }: CollateralSelectorProps) {
   const { profile } = useAuth();
@@ -69,7 +69,7 @@ export function CollateralSelector({
       id: a.id,
       label: a.title,
       sublabel: a.estimated_value
-        ? `${a.estimated_value.toLocaleString()} ${a.currency || DEFAULT_CURRENCY}`
+        ? `${a.estimated_value.toLocaleString()} ${a.currency || PLATFORM_DEFAULT_CURRENCY}`
         : undefined,
     }));
 

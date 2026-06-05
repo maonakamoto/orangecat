@@ -8,7 +8,7 @@
  * Last Modified Summary: Created loan dialog constants
  */
 
-import { DEFAULT_CURRENCY } from '@/config/currencies';
+import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import type { LoanDialogFormData } from './validation';
 
 export const DEFAULT_LOAN_FORM_VALUES: LoanDialogFormData = {
@@ -16,7 +16,7 @@ export const DEFAULT_LOAN_FORM_VALUES: LoanDialogFormData = {
   description: '',
   original_amount: 0,
   remaining_balance: 0,
-  currency: DEFAULT_CURRENCY,
+  currency: PLATFORM_DEFAULT_CURRENCY,
   is_public: true,
   is_negotiable: true,
   contact_method: 'platform',

@@ -8,7 +8,7 @@
 
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
-import { isSupportedCurrency, DEFAULT_CURRENCY } from '@/config/currencies';
+import { isSupportedCurrency, PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { getTableName } from '@/config/entity-registry';
 import type { CreateLoanRequest, UpdateLoanRequest, LoanResponse, Loan } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
@@ -61,7 +61,9 @@ export async function createLoan(request: CreateLoanRequest): Promise<LoanRespon
     )
       .insert({
         ...request,
-        currency: isSupportedCurrency(request.currency) ? request.currency : DEFAULT_CURRENCY,
+        currency: isSupportedCurrency(request.currency)
+          ? request.currency
+          : PLATFORM_DEFAULT_CURRENCY,
         user_id: user.id,
         actor_id: actorId,
       })
@@ -184,7 +186,7 @@ export async function createObligationLoan(params: {
       remaining_balance: offer.offer_amount,
       interest_rate: offer.interest_rate,
       monthly_payment: undefined,
-      currency: isSupportedCurrency(offer.currency) ? offer.currency : DEFAULT_CURRENCY,
+      currency: isSupportedCurrency(offer.currency) ? offer.currency : PLATFORM_DEFAULT_CURRENCY,
       lender_name: lenderProfileName,
       loan_number: undefined,
       origination_date: new Date().toISOString(),

@@ -19,7 +19,7 @@ import { CreateLoanRequest } from '@/types/loans';
 import { toast } from 'sonner';
 import { LoanTemplates, type LoanTemplateData } from './LoanTemplates';
 import { CreateAssetDialog } from '../assets/CreateAssetDialog';
-import { DEFAULT_CURRENCY } from '@/config/currencies';
+import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { loanSchema, type LoanDialogFormData } from './validation';
 import { DEFAULT_LOAN_FORM_VALUES } from './constants';
 import { useLoanCategories } from './hooks/useLoanCategories';
@@ -44,7 +44,7 @@ export function CreateLoanDialog({
   const [loading, setLoading] = useState(false);
   const [selectedAssetId, setSelectedAssetId] = useState<string>('');
   const [pledgedValue, setPledgedValue] = useState<string>('');
-  const [pledgedCurrency, setPledgedCurrency] = useState<string>(DEFAULT_CURRENCY);
+  const [pledgedCurrency, setPledgedCurrency] = useState<string>(PLATFORM_DEFAULT_CURRENCY);
   const [showCreateAsset, setShowCreateAsset] = useState(false);
 
   // Use custom hooks for data loading
@@ -71,7 +71,7 @@ export function CreateLoanDialog({
         remaining_balance: initialValues.remaining_balance || 0,
         interest_rate: initialValues.interest_rate,
         monthly_payment: initialValues.monthly_payment,
-        currency: initialValues.currency || DEFAULT_CURRENCY,
+        currency: initialValues.currency || PLATFORM_DEFAULT_CURRENCY,
         lender_name: initialValues.lender_name || '',
         loan_number: initialValues.loan_number || '',
         origination_date: initialValues.origination_date || '',
@@ -94,7 +94,7 @@ export function CreateLoanDialog({
     setSelectedAssetId(assetId);
     const found = assets.find(a => a.id === assetId);
     if (found) {
-      setPledgedCurrency(found.currency || DEFAULT_CURRENCY);
+      setPledgedCurrency(found.currency || PLATFORM_DEFAULT_CURRENCY);
     }
   };
 
@@ -178,7 +178,7 @@ export function CreateLoanDialog({
     });
     setSelectedAssetId('');
     setPledgedValue('');
-    setPledgedCurrency(template.currency || DEFAULT_CURRENCY);
+    setPledgedCurrency(template.currency || PLATFORM_DEFAULT_CURRENCY);
   };
 
   const handleOpenChange = (newOpen: boolean) => {

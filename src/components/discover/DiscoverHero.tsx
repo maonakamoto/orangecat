@@ -44,7 +44,7 @@ export default function DiscoverHero({
               </Card>
             </Link>
             <Card className="p-4">
-              <div className="text-fluid-xl font-bold text-bitcoinOrange">{totalFinancial}</div>
+              <div className="text-fluid-xl font-bold text-foreground">{totalFinancial}</div>
               <div className="text-sm text-muted-foreground mt-1">Finance</div>
             </Card>
           </div>

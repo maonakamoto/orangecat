@@ -28,9 +28,6 @@ export type CurrencyCode = (typeof CURRENCY_CODES)[number];
  */
 export const PLATFORM_DEFAULT_CURRENCY: CurrencyCode = 'CHF';
 
-/** Legacy default - kept for backward compatibility, prefer PLATFORM_DEFAULT_CURRENCY */
-export const DEFAULT_CURRENCY: CurrencyCode = PLATFORM_DEFAULT_CURRENCY;
-
 export const CURRENCY_METADATA: Record<
   CurrencyCode,
   { label: string; symbol: string; precision: number }
