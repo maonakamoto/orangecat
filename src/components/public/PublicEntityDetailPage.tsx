@@ -160,7 +160,7 @@ export default async function PublicEntityDetailPage({
   return (
     <>
       <JsonLdScript data={jsonLd} />
-      <div className={`min-h-screen ${pageSurface}`}>
+      <div className={`min-h-screen pb-20 md:pb-0 ${pageSurface}`}>
         <div className="bg-card border-b border-border">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
