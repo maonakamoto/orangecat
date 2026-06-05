@@ -30,6 +30,10 @@ verify-*.png
 tab-*.png
 final-*.png
 audit-*.png
+brandmark-*.png
+rebrand-*.png
+landing-*.png
+prod-*.png
 
 # Next.js
 /.next/
