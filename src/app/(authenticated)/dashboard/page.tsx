@@ -123,7 +123,10 @@ export default function DashboardPage() {
           <div className="block lg:hidden">
             <MobileDashboardSidebar stats={sidebarStats} />
           </div>
+          {/* Your stuff (Projects) above the social feed (Timeline) —
+              founders' work belongs above news. */}
           <div className="space-y-6">
+            <DashboardProjects projects={safeProjects} />
             <DashboardTimeline
               timelineFeed={timelineFeed}
               isLoading={timelineLoading}
@@ -132,7 +135,6 @@ export default function DashboardPage() {
               onPostSuccess={reloadTimeline}
               userId={user?.id}
             />
-            <DashboardProjects projects={safeProjects} />
           </div>
         </div>
 

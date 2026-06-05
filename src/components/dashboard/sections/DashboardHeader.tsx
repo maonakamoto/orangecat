@@ -67,17 +67,18 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
         <div className="flex items-center gap-2 shrink-0">
           {totalProjects === 0 && (
             // Cat-first: instead of hardcoding project creation as the
-            // canonical first step, route to Cat. The user describes intent;
-            // Cat suggests the right entity type. Matches the platform thesis.
+            // canonical first step, route to Cat. Always visible on mobile
+            // — header used to have no action affordance on <sm because of
+            // a `hidden sm:flex` that wasted the founder's primary viewport.
             <Link href={ROUTES.DASHBOARD.CAT}>
-              <div className="hidden sm:flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-sm font-medium text-background transition-colors hover:bg-muted-strong">
+              <div className="flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-sm font-medium text-background transition-colors hover:bg-muted-strong">
                 <Sparkles className="h-4 w-4" />
                 Ask Cat
               </div>
             </Link>
           )}
           {profileCategory && (
-            <div className="hidden sm:flex items-center gap-1.5 rounded-md border border-border-subtle px-3 py-1.5 text-sm font-medium text-muted-foreground">
+            <div className="hidden md:flex items-center gap-1.5 rounded-md border border-border-subtle px-3 py-1.5 text-sm font-medium text-muted-foreground">
               {(() => {
                 const profileType = (profile?.profile_type ||
                   'individual') as keyof typeof PROFILE_TYPE_ICONS;

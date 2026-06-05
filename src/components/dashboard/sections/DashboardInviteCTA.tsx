@@ -1,12 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import ProfileShare from '@/components/sharing/ProfileShare';
-import { Users, Share2, Copy } from 'lucide-react';
-import { toast } from 'sonner';
-import { ROUTES } from '@/config/routes';
+import { Share2 } from 'lucide-react';
 
 interface DashboardInviteCTAProps {
   profile: {
@@ -23,45 +20,27 @@ interface DashboardInviteCTAProps {
 export function DashboardInviteCTA({ profile, userId }: DashboardInviteCTAProps) {
   const [showShare, setShowShare] = useState(false);
 
-  const handleCopyLink = () => {
-    const url = `${window.location.origin}/profiles/${profile?.username || userId}`;
-    navigator.clipboard
-      .writeText(url)
-      .then(() => toast.success('Invite link copied'))
-      .catch(() => toast.error('Failed to copy link'));
-  };
-
+  // Single CTA per card: Share. Copy-link lives inside ProfileShare;
+  // Discover lives in the main nav. Three competing buttons were dilution.
   return (
     <div className="relative rounded-md border border-border-subtle bg-muted/30 p-4 sm:p-5">
-      <div className="space-y-3">
-        <div>
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0 flex-1">
           <h3 className="text-base sm:text-lg font-semibold text-foreground">
             Invite friends to OrangeCat
           </h3>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Share your profile link and start building your network
+            Share your profile and start building your network
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Link href={ROUTES.DASHBOARD.PEOPLE}>
-            <Button variant="outline" size="sm" className="min-h-11">
-              <Users className="w-4 h-4 mr-2" />
-              Discover
-            </Button>
-          </Link>
-          <Button
-            onClick={() => setShowShare(!showShare)}
-            size="sm"
-            className="min-h-11 bg-foreground text-background hover:bg-foreground/90"
-          >
-            <Share2 className="w-4 h-4 mr-2" />
-            Share
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleCopyLink} className="min-h-11">
-            <Copy className="w-4 h-4 mr-2" />
-            Copy
-          </Button>
-        </div>
+        <Button
+          onClick={() => setShowShare(!showShare)}
+          size="sm"
+          className="min-h-11 bg-foreground text-background hover:bg-foreground/90 shrink-0"
+        >
+          <Share2 className="w-4 h-4 mr-2" />
+          Share
+        </Button>
       </div>
       {showShare && (
         <div className="absolute right-4 top-full mt-2 z-50">

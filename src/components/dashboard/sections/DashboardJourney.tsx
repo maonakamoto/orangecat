@@ -15,7 +15,10 @@ import TasksSection from '@/components/dashboard/TasksSection';
  * - Loading/error states
  */
 export function DashboardJourney() {
-  return <TasksSection showQuestions={true} maxTasks={5} />;
+  // maxTasks=2 above the fold; "Show N more" is already wired inside
+  // TasksSection. Five tasks on a mobile viewport train the eye to
+  // skim past — two is the readable limit.
+  return <TasksSection showQuestions={true} maxTasks={2} />;
 }
 
 export default DashboardJourney;
