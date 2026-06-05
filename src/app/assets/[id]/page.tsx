@@ -14,6 +14,7 @@ import {
   ASSET_VERIFICATION_LABELS,
   ASSET_RENTAL_PERIOD_LABELS,
 } from '@/config/assets';
+import { BookEntityButton } from '@/components/bookings/BookEntityButton';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -148,6 +149,20 @@ const config: EntityDetailConfig = {
                   </span>
                 </div>
               )}
+            {entity.is_for_rent && (
+              <BookEntityButton
+                className="w-full"
+                label="Book this rental"
+                bookableType="asset"
+                bookableId={entity.id as string}
+                bookableTitle={(entity.title as string) || 'this asset'}
+                priceBtc={
+                  entity.rental_price_btc !== null && entity.rental_price_btc !== undefined
+                    ? Number(entity.rental_price_btc)
+                    : undefined
+                }
+              />
+            )}
           </CardContent>
         </Card>
       )}
