@@ -193,16 +193,20 @@ export default function TasksSection({
     );
   }
 
-  const visibleTasks = tasks.slice(0, maxTasks);
-  const hiddenCount = tasks.length - maxTasks;
-
   // "Tasks remaining" must measure the same scope as the "% Setup" number, which
   // only counts critical + high priority tasks. Counting all tasks here caused
   // "100% Setup" to appear next to "3 tasks remaining" when the only remaining
   // items were optional/suggested polish.
-  const setupTasksRemaining = tasks.filter(
-    t => t.priority === 'critical' || t.priority === 'high'
-  ).length;
+  const setupTasks = tasks.filter(t => t.priority === 'critical' || t.priority === 'high');
+  const setupTasksRemaining = setupTasks.length;
+
+  // When setup is fully done, the dropdown should match the header's
+  // "Setup complete" claim. Hide medium/low polish tasks instead of
+  // promoting them next to a 100% bar — they get their own surface
+  // elsewhere (smart questions panel + entity-create CTAs).
+  const taskPool = setupTasksRemaining === 0 ? setupTasks : tasks;
+  const visibleTasks = taskPool.slice(0, maxTasks);
+  const hiddenCount = Math.max(0, taskPool.length - maxTasks);
 
   return (
     <div className={className}>
