@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
-import { ProfileCompletionModal } from '@/components/onboarding/ProfileCompletionModal';
 import {
   DashboardHeader,
   DashboardInviteCTA,
@@ -43,7 +42,6 @@ export default function DashboardPage() {
     timelineFeed,
     timelineLoading,
     timelineError,
-    showProfileCompletion,
     pendingActions,
     safeProjects,
     totalProjects,
@@ -51,7 +49,6 @@ export default function DashboardPage() {
     hasProjects,
     sidebarStats,
     reloadTimeline,
-    handleProfileCompletionDone,
     handleConfirmAction,
     handleRejectAction,
   } = useDashboard();
@@ -142,15 +139,6 @@ export default function DashboardPage() {
           {hasProjects && <DashboardQuickActions />}
         </div>
       </div>
-
-      {profile && showProfileCompletion && (
-        <ProfileCompletionModal
-          open={showProfileCompletion}
-          onComplete={handleProfileCompletionDone}
-          profile={profile}
-          userId={user.id}
-        />
-      )}
     </div>
   );
 }

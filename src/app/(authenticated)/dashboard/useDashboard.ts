@@ -9,7 +9,6 @@ import { toast } from 'sonner';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { usePendingActions } from '@/components/ai-chat/PendingActionsCard';
 import { useDashboardTimeline } from './useDashboardTimeline';
-import { useDashboardModals } from './useDashboardModals';
 
 export function useDashboard() {
   const { user, profile, isLoading, hydrated } = useRequireAuth();
@@ -25,14 +24,6 @@ export function useDashboard() {
   const { timelineFeed, timelineLoading, timelineError, reloadTimeline } = useDashboardTimeline({
     userId: user?.id,
     hydrated,
-  });
-
-  const { showProfileCompletion, handleProfileCompletionDone } = useDashboardModals({
-    profile,
-    hydrated,
-    localLoading,
-    userId: user?.id,
-    userEmail: user?.email,
   });
 
   useEffect(() => {
@@ -156,7 +147,6 @@ export function useDashboard() {
     timelineFeed,
     timelineLoading,
     timelineError,
-    showProfileCompletion,
     pendingActions,
     safeProjects,
     totalProjects: stats.totalProjects,
@@ -169,7 +159,6 @@ export function useDashboard() {
       primaryCurrency,
     },
     reloadTimeline,
-    handleProfileCompletionDone,
     handleConfirmAction,
     handleRejectAction,
   };
