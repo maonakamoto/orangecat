@@ -16,36 +16,19 @@ import EntityShare from '@/components/sharing/EntityShare';
 import { PublicEntityPaymentSection } from '@/components/payment';
 import { WISHLIST_TYPE_LABELS } from '@/config/wishlists';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import type { Database } from '@/types/database';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-interface WishlistItem {
-  id: string;
-  title: string;
-  description: string | null;
-  image_url: string | null;
-  target_amount_btc: number;
-  funded_amount_btc: number;
-  is_fully_funded: boolean;
-  external_url: string | null;
-  priority: number;
-}
-
-interface Wishlist {
-  id: string;
-  actor_id: string;
-  title: string;
-  description: string | null;
-  type: string;
-  visibility: string;
-  is_active: boolean;
-  cover_image_url: string | null;
-  event_date: string | null;
-  created_at: string;
-  updated_at: string;
-}
+// Derive types from the canonical DB schema instead of hand-rolling them.
+// The previous inline `Wishlist` interface even mis-typed the ownership
+// column as `actor_id` when the wishlists table actually stores `user_id`
+// — fetchEntityOwner falls back to user_id at runtime so it wasn't broken,
+// but the lie hid the schema from anyone reading this file.
+type Wishlist = Database['public']['Tables']['wishlists']['Row'];
+type WishlistItem = Database['public']['Tables']['wishlist_items']['Row'];
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
@@ -204,9 +187,10 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                 <div className="space-y-4">
                   <h2 className="text-xl font-semibold text-foreground">Items ({items.length})</h2>
                   {items.map(item => {
+                    const funded = item.funded_amount_btc ?? 0;
                     const itemProgress =
                       item.target_amount_btc > 0
-                        ? Math.round((item.funded_amount_btc / item.target_amount_btc) * 100)
+                        ? Math.round((funded / item.target_amount_btc) * 100)
                         : 0;
                     return (
                       <Card key={item.id} className={item.is_fully_funded ? 'opacity-60' : ''}>
@@ -247,7 +231,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                               {item.target_amount_btc > 0 && (
                                 <div className="mt-3 space-y-1">
                                   <div className="flex justify-between text-xs text-muted-foreground">
-                                    <span>{displayBTC(item.funded_amount_btc)}</span>
+                                    <span>{displayBTC(item.funded_amount_btc ?? 0)}</span>
                                     <span>{displayBTC(item.target_amount_btc)} goal</span>
                                   </div>
                                   <Progress value={itemProgress} className="h-1.5" />
