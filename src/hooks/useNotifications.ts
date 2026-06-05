@@ -77,10 +77,12 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
         const response = await fetch(`${API_ROUTES.NOTIFICATIONS.BASE}?${params}`);
         const data = await response.json();
         if (!response.ok) {
-          throw new Error(data?.error ?? `Failed to fetch notifications (${response.status})`);
+          throw new Error(
+            data?.error?.message ?? `Failed to fetch notifications (${response.status})`
+          );
         }
         if (!data.success) {
-          throw new Error(data.error || 'Failed to fetch notifications');
+          throw new Error(data.error?.message || 'Failed to fetch notifications');
         }
 
         if (reset) {

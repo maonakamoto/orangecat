@@ -35,10 +35,10 @@ export function useNotificationsMutations({
 
         const data = await response.json();
         if (!response.ok) {
-          throw new Error(data?.error ?? `Request failed (${response.status})`);
+          throw new Error(data?.error?.message ?? `Request failed (${response.status})`);
         }
         if (!data.success) {
-          throw new Error(data.error);
+          throw new Error(data.error?.message || 'Failed to mark notifications as read');
         }
 
         if (id === 'all') {
@@ -72,10 +72,10 @@ export function useNotificationsMutations({
 
         const data = await response.json();
         if (!response.ok) {
-          throw new Error(data?.error ?? `Request failed (${response.status})`);
+          throw new Error(data?.error?.message ?? `Request failed (${response.status})`);
         }
         if (!data.success) {
-          throw new Error(data.error);
+          throw new Error(data.error?.message || 'Failed to delete notification');
         }
 
         setNotifications(prev => {
@@ -102,10 +102,10 @@ export function useNotificationsMutations({
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data?.error ?? `Request failed (${response.status})`);
+        throw new Error(data?.error?.message ?? `Request failed (${response.status})`);
       }
       if (!data.success) {
-        throw new Error(data.error);
+        throw new Error(data.error?.message || 'Failed to clear read notifications');
       }
 
       setNotifications(prev => prev.filter(n => !n.read));
