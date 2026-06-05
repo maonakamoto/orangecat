@@ -121,6 +121,13 @@ const nextConfig = {
         destination: '/auth?mode=register',
         permanent: true,
       },
+      // Legacy per-assistant chat routes — superseded by /dashboard/cat.
+      // No inbound links from the app; preserved here in case bookmarks exist.
+      {
+        source: '/ai-chat/:path*',
+        destination: '/dashboard/cat',
+        permanent: true,
+      },
     ];
   },
 
