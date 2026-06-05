@@ -79,7 +79,7 @@ export default function CatPermissionsPage() {
         setData(prev => (prev ? { ...prev, summary: json.data.summary } : null));
       } else {
         setData(previousData);
-        toast.error(json.error || 'Failed to update permission');
+        toast.error(json.error?.message || 'Failed to update permission');
       }
     } catch {
       setData(previousData);
@@ -103,7 +103,7 @@ export default function CatPermissionsPage() {
         setData(prev => (prev ? { ...prev, summary: json.data.summary } : null));
       } else {
         setData(previousData);
-        toast.error(json.error || 'Failed to update permission');
+        toast.error(json.error?.message || 'Failed to update permission');
       }
     } catch {
       setData(previousData);
