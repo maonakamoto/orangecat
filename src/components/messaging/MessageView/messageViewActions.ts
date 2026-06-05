@@ -18,7 +18,8 @@ export async function editMessageAction(
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({}) as Record<string, unknown>);
-      toast.error(data.error || 'Failed to edit message');
+      const errMsg = (data.error as { message?: string } | undefined)?.message;
+      toast.error(errMsg || 'Failed to edit message');
     } else {
       const { data: full } = await supabase
         .from(DATABASE_TABLES.MESSAGE_DETAILS)
@@ -52,7 +53,8 @@ export async function deleteMessageAction(
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({}) as Record<string, unknown>);
-      toast.error(data.error || 'Failed to delete message');
+      const errMsg = (data.error as { message?: string } | undefined)?.message;
+      toast.error(errMsg || 'Failed to delete message');
     } else {
       removeMessage(msg.id);
     }

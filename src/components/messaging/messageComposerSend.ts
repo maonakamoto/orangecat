@@ -122,11 +122,13 @@ export async function sendMessage({
       }
       const errorData = await response.json().catch(() => ({}) as Record<string, unknown>);
       logger.error('[MessageComposer] API error:', errorData);
-      const desc = errorData.details || '';
-      toast.error(errorData.error || 'Failed to send message', {
+      const errEnvelope = errorData.error as { message?: string; details?: unknown } | undefined;
+      const errMessage = errEnvelope?.message;
+      const desc = errEnvelope?.details ?? errorData.details ?? '';
+      toast.error(errMessage || 'Failed to send message', {
         description: typeof desc === 'string' ? desc : undefined,
       });
-      onMessageFailed?.(tempId, errorData.error || desc);
+      onMessageFailed?.(tempId, errMessage || (typeof desc === 'string' ? desc : ''));
     } else {
       const data = (await response.json().catch(() => null)) as MessageResponse | null;
       debugLog('[MessageComposer] success id', data?.id);
