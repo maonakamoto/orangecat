@@ -96,12 +96,7 @@ export function ProjectDonationSection({
           {(bitcoinAddress || lightningAddress) && (
             <div className="flex-1">
               <div className="hidden sm:block">
-                <BitcoinPaymentButton
-                  projectId={projectId}
-                  projectTitle={projectTitle}
-                  suggestedAmount={10000}
-                  recipientAddress={bitcoinAddress || undefined}
-                />
+                <BitcoinPaymentButton projectId={projectId} projectTitle={projectTitle} />
               </div>
               <div className="sm:hidden">
                 <Button
