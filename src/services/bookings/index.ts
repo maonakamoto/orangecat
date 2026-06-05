@@ -11,6 +11,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { NotificationDispatcher } from '@/services/notifications/dispatcher';
 
 // Types
 type BookableType = 'service' | 'asset';
@@ -178,7 +179,44 @@ class BookingService {
       logger.error('Insert booking failed', { error: insertErr }, 'BookingService');
       return { success: false, error: insertErr?.message ?? 'Failed to create booking' };
     }
+
+    // Notify the provider that a new booking is awaiting their decision.
+    // Fire-and-forget: dispatcher swallows its own errors so booking creation
+    // is never blocked by a notification failure.
+    void this.notifyProviderOfBooking(providerActorId, booking, input.bookable_type);
+
     return { success: true, booking };
+  }
+
+  private async notifyProviderOfBooking(
+    providerActorId: string,
+    booking: Booking,
+    bookableType: BookableType
+  ): Promise<void> {
+    const { data: providerActor } = await this.supabase
+      .from(DATABASE_TABLES.ACTORS)
+      .select('user_id')
+      .eq('id', providerActorId)
+      .single<{ user_id: string | null }>();
+    const providerUserId = providerActor?.user_id;
+    if (!providerUserId) {
+      return;
+    }
+
+    const startLocal = new Date(booking.starts_at).toLocaleString('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+    void NotificationDispatcher.dispatch({
+      userId: providerUserId,
+      type: 'booking_request',
+      title: 'New booking request',
+      message: `A customer requested to book your ${bookableType} starting ${startLocal}.`,
+      data: { bookingId: booking.id, bookableType, startsAt: booking.starts_at },
+      sourceEntityType: bookableType,
+      sourceEntityId: booking.bookable_id,
+      actionUrl: '/dashboard/bookings',
+    });
   }
 
   async confirmBooking(bookingId: string, providerActorId: string): Promise<BookingResult> {
