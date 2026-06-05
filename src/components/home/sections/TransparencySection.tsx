@@ -29,7 +29,7 @@ export default function TransparencySection() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6 }}
           >
             <div className="bg-card rounded-lg border border-border shadow-sm p-6 sm:p-8">
@@ -106,7 +106,7 @@ export default function TransparencySection() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="bg-card rounded-lg border border-border shadow-sm p-6 sm:p-8">

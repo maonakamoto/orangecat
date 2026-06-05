@@ -40,7 +40,7 @@ export default function ProofSection() {
               key={useCase.category}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className={`oc-surface oc-card-link p-5 sm:p-6 lg:p-8 ${useCase.gradient}`}
             >
@@ -75,7 +75,7 @@ export default function ProofSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           className="text-center"
         >

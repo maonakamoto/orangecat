@@ -32,7 +32,7 @@ export default function TrustSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.5 }}
           className="mb-12 sm:mb-20 hidden md:block"
         >
@@ -58,7 +58,7 @@ export default function TrustSection() {
                       key={row.feature}
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
+                      viewport={{ once: true, amount: 0.15 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                       className={row.highlight ? 'bg-green-50' : ''}
                     >
@@ -96,7 +96,7 @@ export default function TrustSection() {
               key={row.feature}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
               className={`bg-card rounded-lg shadow-sm border border-border p-4 ${row.highlight ? 'ring-2 ring-green-500 dark:ring-green-600' : ''}`}
             >
@@ -132,7 +132,7 @@ export default function TrustSection() {
               key={benefit.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="text-center"
             >
@@ -151,7 +151,7 @@ export default function TrustSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-10 sm:mt-12 lg:mt-16 text-center"
         >
@@ -172,7 +172,7 @@ export default function TrustSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.5, delay: 0.6 }}
           className="mt-12 sm:mt-16 lg:mt-20 text-center"
         >
