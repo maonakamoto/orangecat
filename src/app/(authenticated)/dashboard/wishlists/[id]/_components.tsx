@@ -80,7 +80,7 @@ export function WishlistItemCard({
                     </Badge>
                   )}
                   {item.is_fully_funded && !item.is_fulfilled && (
-                    <Badge className="bg-green-500 text-xs">Funded</Badge>
+                    <Badge className="bg-status-positive text-xs">Funded</Badge>
                   )}
                 </div>
               </div>

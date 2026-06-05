@@ -86,8 +86,8 @@ export default async function PublicWishlistPage({ params }: PageProps) {
           unoptimized
         />
       ) : (
-        <div className="w-16 h-16 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <Gift className="w-8 h-8 text-rose-600" />
+        <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
+          <Gift className="w-8 h-8 text-foreground" />
         </div>
       ),
     renderHeaderExtra: entity => (
@@ -151,7 +151,7 @@ export default async function PublicWishlistPage({ params }: PageProps) {
                         <div className="flex items-start justify-between gap-2">
                           <h3 className="font-semibold text-foreground">{item.title}</h3>
                           {item.is_fully_funded && (
-                            <Badge variant="default" className="bg-green-500 flex-shrink-0">
+                            <Badge variant="default" className="bg-status-positive flex-shrink-0">
                               Funded
                             </Badge>
                           )}
