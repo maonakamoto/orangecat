@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { User, Target, Building2, Users, Plus } from 'lucide-react';
+import { User, Target, Building2, Users, Sparkles } from 'lucide-react';
 import { PROFILE_CATEGORIES } from '@/types/profile';
-import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { ROUTES } from '@/config/routes';
 
 /** Map profile types to Lucide icons (avoids emojis in UI) */
 const PROFILE_TYPE_ICONS = {
@@ -66,10 +66,13 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {totalProjects === 0 && (
-            <Link href={ENTITY_REGISTRY.project.createPath}>
+            // Cat-first: instead of hardcoding project creation as the
+            // canonical first step, route to Cat. The user describes intent;
+            // Cat suggests the right entity type. Matches the platform thesis.
+            <Link href={ROUTES.DASHBOARD.CAT}>
               <div className="hidden sm:flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-sm font-medium text-background transition-colors hover:bg-muted-strong">
-                <Plus className="h-4 w-4" />
-                Start Creating
+                <Sparkles className="h-4 w-4" />
+                Ask Cat
               </div>
             </Link>
           )}
