@@ -18,7 +18,7 @@ import { Gift, Loader2 } from 'lucide-react';
 import { logger } from '@/utils/logger';
 import BitcoinPaymentModal from '@/components/bitcoin/BitcoinPaymentModal';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
-import { convert, formatCurrency } from '@/services/currency';
+import { convert, formatCurrency, displayBTC } from '@/services/currency';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { API_ROUTES } from '@/config/api-routes';
 
@@ -113,9 +113,12 @@ export function WishlistDonationTiers({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {items.map(item => {
-          const displayAmount = convert(item.target_amount_btc, 'SATS', userCurrency);
+          // target_amount_btc is BTC. Convert from BTC (not from SATS — the
+          // previous code passed BTC values to convert() with fromCurrency='SATS',
+          // which interpreted 0.001 BTC as 0.001 sats ≈ zero fiat).
+          const displayAmount = convert(item.target_amount_btc, 'BTC', userCurrency);
           const formattedAmount = formatCurrency(displayAmount, userCurrency, { compact: true });
-          const satsDisplay = formatCurrency(item.target_amount_btc, 'SATS', { compact: true });
+          const btcDisplay = displayBTC(item.target_amount_btc);
 
           return (
             <button
@@ -126,7 +129,7 @@ export function WishlistDonationTiers({
               <span className="text-sm font-bold text-foreground group-hover:text-bitcoinOrange">
                 {formattedAmount}
               </span>
-              <span className="text-xs text-muted-dim mt-0.5">≈ {satsDisplay}</span>
+              <span className="text-xs text-muted-dim mt-0.5">≈ {btcDisplay}</span>
               <span className="text-xs text-muted-foreground mt-1 line-clamp-1">{item.title}</span>
               <div className="w-full bg-muted rounded-full h-1 mt-3">
                 <div

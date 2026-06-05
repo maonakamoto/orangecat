@@ -7,7 +7,7 @@ import Button from '@/components/ui/Button';
 import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
 import { WishlistDonationTiers } from '@/components/wishlist/WishlistDonationTiers';
-import { convert, formatCurrency } from '@/services/currency';
+import { convert, formatCurrency, displayBTC } from '@/services/currency';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { useProjectDonation } from './useProjectDonation';
 import { ROUTES } from '@/config/routes';
@@ -21,10 +21,10 @@ interface ProjectDonationSectionProps {
   isOwner?: boolean;
 }
 
-const SUGGESTED_AMOUNTS_SATS = [
-  { sats: 100_000, label: 'Small' },
-  { sats: 500_000, label: 'Medium' },
-  { sats: 1_000_000, label: 'Large' },
+const SUGGESTED_AMOUNTS_BTC = [
+  { btc: 0.001, label: 'Small' },
+  { btc: 0.005, label: 'Medium' },
+  { btc: 0.01, label: 'Large' },
 ];
 
 export function ProjectDonationSection({
@@ -200,19 +200,19 @@ export function ProjectDonationSection({
               {ownerId && !isOwner ? 'Other amounts:' : 'Suggested support amounts:'}
             </p>
             <div className="grid grid-cols-3 gap-3">
-              {SUGGESTED_AMOUNTS_SATS.map(({ sats, label }) => {
-                const displayAmount = convert(sats, 'SATS', userCurrency);
+              {SUGGESTED_AMOUNTS_BTC.map(({ btc, label }) => {
+                const displayAmount = convert(btc, 'BTC', userCurrency);
                 const formattedAmount = formatCurrency(displayAmount, userCurrency, {
                   compact: true,
                 });
-                const satsDisplay = formatCurrency(sats, 'SATS', { compact: true });
+                const btcDisplay = displayBTC(btc);
 
                 return (
                   <button
-                    key={sats}
+                    key={btc}
                     onClick={() => {
                       copyToClipboard(bitcoinAddress, 'Bitcoin address');
-                      toast.success(`Address copied! Send ${satsDisplay}`, {
+                      toast.success(`Address copied! Send ${btcDisplay}`, {
                         description: `Suggested ${label.toLowerCase()} support (≈ ${formattedAmount})`,
                       });
                     }}
@@ -221,7 +221,7 @@ export function ProjectDonationSection({
                     <div className="font-semibold text-foreground group-hover:text-bitcoinOrange">
                       {formattedAmount}
                     </div>
-                    <div className="text-xs text-muted-dim mt-0.5">≈ {satsDisplay}</div>
+                    <div className="text-xs text-muted-dim mt-0.5">≈ {btcDisplay}</div>
                     <div className="text-xs text-muted-foreground mt-1">{label}</div>
                   </button>
                 );

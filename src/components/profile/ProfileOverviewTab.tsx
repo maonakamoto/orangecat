@@ -61,7 +61,7 @@ export default function ProfileOverviewTab({
   const [supportType, setSupportType] = useState<'donate' | 'subscribe' | 'lend' | 'invest' | null>(
     null
   );
-  const [subAmount, setSubAmount] = useState(100000);
+  const [subAmount, setSubAmount] = useState(0.001);
   const [lendAmount, setLendAmount] = useState(500000);
   const [lendRate, setLendRate] = useState(5);
   const [lendTerm, setLendTerm] = useState(12);
@@ -229,9 +229,9 @@ export default function ProfileOverviewTab({
                       onChange={e => setSubAmount(Number(e.target.value))}
                       className="border rounded p-1 text-sm"
                     >
-                      <option value={50000}>50k sats / month (~$50)</option>
-                      <option value={100000}>100k sats / month (~$100)</option>
-                      <option value={250000}>250k sats / month (~$250)</option>
+                      <option value={0.0005}>{formatAmountBtc(0.0005)} / month</option>
+                      <option value={0.001}>{formatAmountBtc(0.001)} / month</option>
+                      <option value={0.0025}>{formatAmountBtc(0.0025)} / month</option>
                     </select>
                     <span className="text-xs text-muted-foreground">per month</span>
                   </div>
