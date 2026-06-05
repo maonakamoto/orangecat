@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { API_ROUTES } from '@/config/api-routes';
+import { satsToBitcoin } from '@/services/currency';
 
 interface CreditBalance {
   balance_btc: number;
@@ -98,15 +99,22 @@ export function useAICreditsPanel() {
 
     setDepositing(true);
     try {
+      // The deposit input is in sats (validated against minimum 100 sats and
+      // labeled via formatSats above), but the API contract expects BTC.
+      // Convert at the boundary so the same number doesn't get persisted as
+      // 1e8× too big into the balance_btc column.
       const response = await fetch(API_ROUTES.AI_CREDITS.ADD, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount_btc: amount, description: 'Manual deposit' }),
+        body: JSON.stringify({
+          amount_btc: satsToBitcoin(amount),
+          description: 'Manual deposit',
+        }),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Failed to add credits');
+        throw new Error(error.error?.message || 'Failed to add credits');
       }
 
       await response.json();
