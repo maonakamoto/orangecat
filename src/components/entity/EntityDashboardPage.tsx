@@ -264,11 +264,17 @@ export default function EntityDashboardPage<T extends BaseEntity>({
   }
 
   const allowBulkSelect = activeTab?.allowBulkSelect !== false;
-  const showStatusFilter = !!statusFilter && !activeTab?.hideStatusFilter;
-  const showSearch = !!searchableFields && searchableFields.length > 0 && !activeTab?.hideSearch;
+  // When the user has zero items of this entity type, the empty state
+  // owns the CTA — header Create button + search + status filter would
+  // be ~150px of clutter above an empty list. Show them only once
+  // there's something to filter / select / contrast against.
+  const isEmpty = !loading && total === 0;
+  const showStatusFilter = !!statusFilter && !activeTab?.hideStatusFilter && !isEmpty;
+  const showSearch =
+    !!searchableFields && searchableFields.length > 0 && !activeTab?.hideSearch && !isEmpty;
   const emptyState = activeTab?.emptyState ?? config.emptyState;
 
-  const headerActions = (
+  const headerActions = isEmpty ? null : (
     <div className="flex items-center gap-2">
       {allowBulkSelect && filteredItems.length > 0 && (
         <Button onClick={() => setShowSelection(!showSelection)} variant="outline" size="sm">
