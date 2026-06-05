@@ -14,18 +14,6 @@
 
 import { BADGE_COLORS } from '@/config/badge-colors';
 
-// Raw hex values for status/priority indicators — needed for inline style opacity
-// tricks (e.g. `${color}20`).
-const TASK_COLORS = {
-  gray: '#6B7280', // gray-500   — idle, unknown, normal-priority
-  slate: '#64748b', // slate-500 — low priority
-  amber: '#d97706', // amber-600 — needs attention
-  blue: '#2563eb', // blue-600  — requested
-  violet: '#7c3aed', // violet-600 — in progress
-  orange: '#ea580c', // orange-600 — high priority
-  red: '#DC2626', // red-600   — urgent
-} as const;
-
 // ==================== TASK TYPES ====================
 
 /**
@@ -80,7 +68,6 @@ export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
 export interface TaskStatusInfo {
   label: string;
   className: string;
-  color: string;
   description?: string;
 }
 
@@ -88,25 +75,21 @@ const TASK_STATUS_CONFIG: Record<TaskStatus, TaskStatusInfo> = {
   idle: {
     label: 'Ready',
     className: BADGE_COLORS.neutral,
-    color: TASK_COLORS.gray,
     description: 'Task is ready and waiting',
   },
   needs_attention: {
     label: 'Needs Attention',
     className: BADGE_COLORS.amber,
-    color: TASK_COLORS.amber,
     description: 'Someone flagged this task as urgent',
   },
   requested: {
     label: 'Requested',
     className: BADGE_COLORS.info,
-    color: TASK_COLORS.blue,
     description: 'Someone has been asked to complete this task',
   },
   in_progress: {
     label: 'In Progress',
     className: BADGE_COLORS.tiffany,
-    color: TASK_COLORS.violet,
     description: 'Someone is currently working on this',
   },
 };
@@ -170,7 +153,6 @@ export const PRIORITY_LABELS: Record<Priority, string> = {
 export interface PriorityInfo {
   label: string;
   className: string;
-  color: string;
   order: number;
 }
 
@@ -178,25 +160,21 @@ const PRIORITY_CONFIG: Record<Priority, PriorityInfo> = {
   low: {
     label: 'Low',
     className: BADGE_COLORS.muted,
-    color: TASK_COLORS.slate,
     order: 1,
   },
   normal: {
     label: 'Normal',
     className: BADGE_COLORS.neutral,
-    color: TASK_COLORS.gray,
     order: 2,
   },
   high: {
     label: 'High',
     className: BADGE_COLORS.orange,
-    color: TASK_COLORS.orange,
     order: 3,
   },
   urgent: {
     label: 'Urgent',
     className: BADGE_COLORS.error,
-    color: TASK_COLORS.red,
     order: 4,
   },
 };
@@ -228,7 +206,6 @@ export function getTaskStatusInfo(status: string | null | undefined): TaskStatus
     return {
       label: 'Unknown',
       className: BADGE_COLORS.neutral,
-      color: TASK_COLORS.gray,
     };
   }
 
@@ -237,7 +214,6 @@ export function getTaskStatusInfo(status: string | null | undefined): TaskStatus
     TASK_STATUS_CONFIG[normalized] || {
       label: status.charAt(0).toUpperCase() + status.slice(1),
       className: BADGE_COLORS.neutral,
-      color: TASK_COLORS.gray,
     }
   );
 }

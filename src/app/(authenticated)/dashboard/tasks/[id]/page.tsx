@@ -151,20 +151,12 @@ export default function TaskDetailPage() {
                 <h1 className="text-2xl font-bold text-foreground mb-2">{task.title}</h1>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-                    style={{
-                      backgroundColor: `${statusInfo.color}20`,
-                      color: statusInfo.color,
-                    }}
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusInfo.className}`}
                   >
                     {statusInfo.label}
                   </span>
                   <span
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-                    style={{
-                      backgroundColor: `${priorityInfo.color}20`,
-                      color: priorityInfo.color,
-                    }}
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${priorityInfo.className}`}
                   >
                     {priorityInfo.label}
                   </span>

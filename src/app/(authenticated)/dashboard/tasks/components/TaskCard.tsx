@@ -69,21 +69,13 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
             )}
             <h3 className="text-base font-semibold text-foreground truncate">{task.title}</h3>
             <span
-              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
-              style={{
-                backgroundColor: `${statusInfo.color}20`,
-                color: statusInfo.color,
-              }}
+              className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusInfo.className}`}
             >
               {statusInfo.label}
             </span>
             {task.priority !== 'normal' && (
               <span
-                className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
-                style={{
-                  backgroundColor: `${priorityInfo.color}20`,
-                  color: priorityInfo.color,
-                }}
+                className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${priorityInfo.className}`}
               >
                 {priorityInfo.label}
               </span>
