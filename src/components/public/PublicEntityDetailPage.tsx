@@ -78,6 +78,19 @@ export interface EntityDetailConfig {
   visibilityFilter?: { column: string; value: string | boolean };
   /** Whether to show the payment section in the sidebar (default: true) */
   showPaymentSection?: boolean;
+  /**
+   * Mobile-only sticky bottom CTA. On <md the page renders a fixed
+   * bottom bar so the primary visitor action is one tap from any scroll
+   * position. When omitted: defaults to a "Support" button anchored to
+   * the payment section (suppressed when showPaymentSection is false).
+   * Pass an entity-aware getter for actions that depend on entity data
+   * (e.g. loans → /auth?from=/loans/:id). Returning null suppresses
+   * the bar entirely.
+   */
+  mobileStickyCTA?:
+    | { label: string; href: string }
+    | ((entity: EntityData) => { label: string; href: string } | null)
+    | null;
 }
 
 /**
@@ -222,15 +235,17 @@ export default async function PublicEntityDetailPage({
               {config.renderSidebarExtra?.(entity)}
 
               {config.showPaymentSection !== false && (
-                <PublicEntityPaymentSection
-                  entityType={config.entityType}
-                  entityId={id}
-                  entityTitle={entity.title}
-                  priceBtc={entity.price_btc ? Number(entity.price_btc) : undefined}
-                  sellerProfileId={owner?.id ?? null}
-                  sellerUserId={owner?.user_id ?? null}
-                  signInRedirect={viewRoute}
-                />
+                <div id="pay">
+                  <PublicEntityPaymentSection
+                    entityType={config.entityType}
+                    entityId={id}
+                    entityTitle={entity.title}
+                    priceBtc={entity.price_btc ? Number(entity.price_btc) : undefined}
+                    sellerProfileId={owner?.id ?? null}
+                    sellerUserId={owner?.user_id ?? null}
+                    signInRedirect={viewRoute}
+                  />
+                </div>
               )}
 
               <PublicEntityTimestamps
@@ -241,7 +256,48 @@ export default async function PublicEntityDetailPage({
             </div>
           </div>
         </div>
+
+        {/* Mobile sticky bottom CTA — keeps the primary action one tap
+            away from any scroll position. Hidden on >=md where the
+            sidebar payment section is naturally visible. */}
+        <MobileStickyCTA config={config} entity={entity} />
       </div>
     </>
+  );
+}
+
+function MobileStickyCTA({ config, entity }: { config: EntityDetailConfig; entity: EntityData }) {
+  // Explicit override: entity opted out (null) → no bar.
+  if (config.mobileStickyCTA === null) {
+    return null;
+  }
+  if (typeof config.mobileStickyCTA === 'function') {
+    const resolved = config.mobileStickyCTA(entity);
+    if (!resolved) {
+      return null;
+    }
+    return <StickyBar href={resolved.href} label={resolved.label} />;
+  }
+  if (config.mobileStickyCTA) {
+    return <StickyBar href={config.mobileStickyCTA.href} label={config.mobileStickyCTA.label} />;
+  }
+  // Default: anchor to the payment section. Suppressed when there
+  // isn't one and the entity hasn't provided its own.
+  if (config.showPaymentSection === false) {
+    return null;
+  }
+  return <StickyBar href="#pay" label="Support" />;
+}
+
+function StickyBar({ href, label }: { href: string; label: string }) {
+  return (
+    <div className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border-subtle bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 px-4 py-3 shadow-lg">
+      <a
+        href={href}
+        className="flex w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 py-3 text-sm font-semibold text-background hover:bg-foreground/90 transition-colors min-h-12"
+      >
+        {label}
+      </a>
+    </div>
   );
 }

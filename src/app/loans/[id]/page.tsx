@@ -47,6 +47,10 @@ const loanConfig: EntityDetailConfig = {
   visibilityFilter: { column: 'is_public', value: true },
   getViewRoute: id => ROUTES.LOANS.VIEW(id),
   showPaymentSection: false,
+  mobileStickyCTA: (entity: EntityData) => ({
+    label: 'Contact lister',
+    href: `${ROUTES.AUTH}?mode=login&from=${ROUTES.LOANS.VIEW(entity.id)}`,
+  }),
   getJsonLdExtra: (entity: EntityData) => ({
     amount: {
       '@type': 'MonetaryAmount',
