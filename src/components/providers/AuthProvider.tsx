@@ -29,6 +29,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const hasSyncedInitialSession = useRef(false);
   // Track fallback timers so they don't fire setState after unmount (HMR, route change).
   const pendingTimersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+  // Cross-tab broadcast channel for instant auth-state propagation. Supabase's
+  // storage-event sync eventually catches up, but there's a 100-500ms lag during
+  // which other tabs show stale signed-in chrome after a sign-out. The channel
+  // makes the propagation synchronous within the browser.
+  const broadcastRef = useRef<BroadcastChannel | null>(null);
 
   useEffect(() => {
     // Prevent duplicate listeners
@@ -140,6 +145,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             logger.warn('Failed to clear offline queue on sign out', { error: e }, 'Auth');
           }
           clear();
+          // Tell every other tab in this browser to sign out immediately
+          // instead of waiting for their storage-event listener to catch up.
+          // The receiving side calls clear() too (see channel listener below).
+          broadcastRef.current?.postMessage({ type: 'SIGNED_OUT' });
           break;
 
         case 'TOKEN_REFRESHED':
@@ -224,6 +233,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       logger.warn('Remember-me handler failed on mount', { error }, 'Auth');
     });
 
+    // Subscribe to other tabs' sign-out broadcasts. When the user signs
+    // out in any tab, every tab that's open in this browser clears
+    // immediately (no need to wait for Supabase's storage-event sync to
+    // catch up — that already happens, this is the instant path). The
+    // typeof guard handles older browsers / SSR safely.
+    if (typeof window !== 'undefined' && typeof BroadcastChannel !== 'undefined') {
+      try {
+        const channel = new BroadcastChannel('orangecat-auth');
+        channel.onmessage = event => {
+          if (event.data?.type === 'SIGNED_OUT') {
+            logger.info('Cross-tab SIGNED_OUT received — clearing local auth', undefined, 'Auth');
+            clear();
+          }
+        };
+        broadcastRef.current = channel;
+      } catch (error) {
+        logger.warn('Could not open auth BroadcastChannel', { error }, 'Auth');
+      }
+    }
+
     // Safety net: if INITIAL_SESSION somehow never fires (Supabase bug,
     // network blip), force hydrated=true after 3s so unauthenticated
     // pages don't hang in a loading state forever.
@@ -251,6 +280,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         logger.debug('Cleaning up auth state change listener', undefined, 'Auth');
         listenerRef.current.data.subscription.unsubscribe();
         listenerRef.current = null;
+      }
+      if (broadcastRef.current) {
+        broadcastRef.current.close();
+        broadcastRef.current = null;
       }
       timers.forEach(id => clearTimeout(id));
       timers.clear();
