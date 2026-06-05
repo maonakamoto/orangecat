@@ -62,12 +62,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
-      url: `${BASE_URL}/groups`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
       url: `${BASE_URL}/study-bitcoin`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -116,7 +110,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       dynamicPages = [...dynamicPages, ...profilePages];
     }
 
-    // Public entity pages (active projects, products, services, etc.)
+    // Public entity pages (active projects, products, services, etc.).
+    // Wishlist is excluded — its visibility model is is_active + visibility,
+    // not a `status` enum like the others; needs a custom filter to land
+    // in the sitemap. Tracked as T2.
     const SITEMAP_ENTITY_TYPES: EntityType[] = [
       'project',
       'product',
@@ -125,6 +122,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       'loan',
       'event',
       'asset',
+      'ai_assistant',
+      'research',
+      'investment',
     ];
     const entityTables = SITEMAP_ENTITY_TYPES.map(type => ({
       table: ENTITY_REGISTRY[type].tableName,
