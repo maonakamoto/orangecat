@@ -108,7 +108,7 @@ export async function fetchEntityForMetadata(
   const filterVal = visibilityFilter?.value ?? STATUS.PRODUCTS.ACTIVE;
   const { data } = await supabase
     .from(getTableName(entityType))
-    .select(select || 'title, description, price_btc')
+    .select(select || 'title, description')
     .eq('id', id)
     .eq(filterCol, filterVal)
     .single();
