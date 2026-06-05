@@ -7,23 +7,43 @@ const nextHeaders = () => {
   };
 };
 
-jest.mock('next/server', () => {
-  const buildHeaders = nextHeaders;
-  return {
-    NextResponse: {
-      next: () => ({ headers: buildHeaders() }),
-      redirect: (url: URL) => ({
-        status: 307,
-        headers: {
-          get: (key: string) => (key === 'location' ? url.toString() : null),
-          set: () => {},
-        },
-      }),
-    },
-    NextRequest: class {},
-    NextFetchEvent: class {},
-  };
+const nextResponseNext = () => ({
+  headers: nextHeaders(),
+  cookies: {
+    set: () => {},
+    get: () => undefined,
+  },
 });
+
+jest.mock('next/server', () => ({
+  NextResponse: {
+    next: () => nextResponseNext(),
+    redirect: (url: URL) => ({
+      status: 307,
+      headers: {
+        get: (key: string) => (key === 'location' ? url.toString() : null),
+        set: () => {},
+      },
+    }),
+  },
+  NextRequest: class {},
+  NextFetchEvent: class {},
+}));
+
+// Mock @supabase/ssr so middleware doesn't try to hit the real Supabase
+// instance during tests. The mocked client's getUser() is configurable
+// per-test via setMockUser().
+let mockUser: { id: string } | null = null;
+const setMockUser = (user: { id: string } | null) => {
+  mockUser = user;
+};
+jest.mock('@supabase/ssr', () => ({
+  createServerClient: () => ({
+    auth: {
+      getUser: async () => ({ data: { user: mockUser }, error: null }),
+    },
+  }),
+}));
 
 import { middleware } from '@/middleware';
 
@@ -54,6 +74,7 @@ describe('middleware auth protection', () => {
   beforeEach(() => {
     jest.resetModules();
     process.env = { ...realEnv };
+    setMockUser(null);
   });
 
   afterEach(() => {
@@ -66,15 +87,27 @@ describe('middleware auth protection', () => {
     expect(res?.status).toBeUndefined(); // NextResponse.next()
   });
 
-  it('allows protected route through when no token cookie (client-side auth handles it)', async () => {
-    // With localStorage-based auth, middleware cannot check auth state server-side
-    // It allows through and lets client-side auth redirect if needed
-    // Must set env vars or middleware redirects due to missing config
+  it('redirects to /auth when accessing a protected route signed out', async () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
+    setMockUser(null);
 
     const req = buildRequest('/dashboard');
     const res = await middleware(req as any);
-    expect(res?.status).toBeUndefined(); // NextResponse.next() - allows through
+
+    expect(res?.status).toBe(307);
+    expect(res?.headers.get('location')).toContain('/auth');
+    expect(res?.headers.get('location')).toContain('from=%2Fdashboard');
+  });
+
+  it('allows a protected route through when @supabase/ssr returns a user', async () => {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
+    setMockUser({ id: 'user-123' });
+
+    const req = buildRequest('/dashboard');
+    const res = await middleware(req as any);
+
+    expect(res?.status).toBeUndefined(); // NextResponse.next()
   });
 });

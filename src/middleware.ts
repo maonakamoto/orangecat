@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr';
 import { getRouteSurface } from '@/config/routes';
 
 // Edge middleware route classification reads from the SAME SSOT used by
@@ -87,46 +87,52 @@ export async function middleware(request: NextRequest) {
     isAppSurface && REQUIRES_AUTH_PREFIXES.some(route => pathname.startsWith(route));
 
   if (isProtectedRoute) {
-    // Validate token with Supabase to avoid stale/forged cookies passing through
+    // Validate session with @supabase/ssr — same pattern as
+    // src/lib/supabase/server.ts. The old code grepped for cookie
+    // names ('sb-access-token', 'supabase-auth-token',
+    // 'supabase.auth.token') that @supabase/ssr has never written —
+    // its actual cookie key is 'sb-<project-ref>-auth-token' (often
+    // chunked '.0', '.1'). Result: the protected-route guard never
+    // found a token and always fell through, leaving page-level
+    // useRequireAuth as the only real gate.
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey =
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey) {
+      // Misconfigured deployment — bounce to auth rather than crash.
       const redirectUrl = new URL('/auth', request.url);
       redirectUrl.searchParams.set('mode', 'login');
       redirectUrl.searchParams.set('from', pathname);
       return NextResponse.redirect(redirectUrl);
     }
 
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: false,
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
+          });
+        },
       },
     });
 
-    // Check for auth tokens in cookies
-    // Note: Our Supabase browser client uses localStorage (not cookies) for session storage.
-    // This means the middleware cannot reliably check auth state server-side.
-    // We rely on client-side auth checks in protected pages instead.
-    // The middleware only validates if a cookie token IS present (e.g., from SSR auth flows).
-    const tokenFromCookies =
-      request.cookies.get('sb-access-token')?.value ||
-      request.cookies.get('supabase-auth-token')?.value ||
-      request.cookies.get('supabase.auth.token')?.value;
+    // getUser() validates the token AND refreshes it if needed. The
+    // setAll cookies callback above writes any refreshed token onto
+    // the response cookies, so the browser sees the new value on the
+    // next request.
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    // If no cookie token, allow through and let client-side auth handle it
-    // This prevents infinite redirect loops when auth is stored in localStorage
-    if (!tokenFromCookies) {
-      return response;
-    }
-
-    // If cookie token exists, validate it
-    const { data, error } = await supabase.auth.getUser(tokenFromCookies);
-    if (error || !data.user) {
-      // Token is invalid/expired, clear it by allowing through
-      // Client-side will handle the redirect to auth
-      return response;
+    if (!user) {
+      const redirectUrl = new URL('/auth', request.url);
+      redirectUrl.searchParams.set('mode', 'login');
+      redirectUrl.searchParams.set('from', pathname);
+      return NextResponse.redirect(redirectUrl);
     }
   }
 
