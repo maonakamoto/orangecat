@@ -45,11 +45,14 @@ export default function IntelligentOnboarding() {
     }
     setIsRedirecting(true);
 
-    // Mark onboarding complete in the background — don't block the redirect
+    // Mark onboarding complete + persist the description as profile.bio
+    // so Cat has context next session (previously discarded after the
+    // ?q= redirect — Cat started cold on session 2).
     if (user?.id) {
       ProfileService.fallbackProfileUpdate(user.id, {
         onboarding_completed: true,
         onboarding_method: ONBOARDING_METHOD.INTELLIGENT,
+        bio: description.trim(),
       }).catch(err => {
         logger.error(
           'Failed to mark intelligent onboarding complete',

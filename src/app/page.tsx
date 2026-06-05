@@ -41,7 +41,10 @@ export default async function Home() {
           projectCount,
         });
       } else {
-        redirect(ROUTES.ONBOARDING.STANDARD);
+        // Land directly in the Cat-first flow. The previous /onboarding
+        // route's first step was a tile-button to /onboarding/intelligent
+        // anyway — collapse the indirection.
+        redirect(ROUTES.ONBOARDING.INTELLIGENT);
       }
     }
     redirect(ROUTES.DASHBOARD.HOME);
