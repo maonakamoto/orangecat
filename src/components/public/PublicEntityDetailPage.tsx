@@ -24,12 +24,18 @@ import { ROUTES } from '@/config/routes';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import type { ReactNode } from 'react';
 
-// Color theme → Tailwind class mapping
+// Color theme → semantic class mapping. The four colorTheme values in
+// ENTITY_REGISTRY now all resolve to the same neutral chrome — the
+// rebrand commits to monochromatic surfaces, status colors only for
+// actual status. Anything that wants a chromatic accent should opt in
+// via renderHeaderIcon, not the global icon-box theme.
+const NEUTRAL_THEME = { bg: 'bg-muted', icon: 'text-foreground', text: 'text-foreground' };
+
 const THEME_CLASSES: Record<string, { bg: string; icon: string; text: string }> = {
-  tiffany: { bg: 'bg-muted', icon: 'text-foreground', text: 'text-foreground' },
-  rose: { bg: 'bg-rose-100', icon: 'text-rose-600', text: 'text-rose-600' },
-  orange: { bg: 'bg-muted', icon: 'text-foreground', text: 'text-foreground' },
-  green: { bg: 'bg-green-100', icon: 'text-green-600', text: 'text-green-600' },
+  tiffany: NEUTRAL_THEME,
+  rose: NEUTRAL_THEME,
+  orange: NEUTRAL_THEME,
+  green: NEUTRAL_THEME,
 };
 
 const PAGE_SURFACE_CLASSES: Record<string, string> = {
