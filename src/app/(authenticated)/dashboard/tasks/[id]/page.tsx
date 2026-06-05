@@ -110,7 +110,7 @@ export default function TaskDetailPage() {
       <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
         <div className="max-w-3xl mx-auto">
           <Breadcrumb items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }]} className="mb-4" />
-          <div className="bg-card rounded-lg border border-red-200 p-6 text-red-600">
+          <div className="bg-card rounded-lg border border-border-subtle p-6 text-status-negative">
             {error || 'Task not found'}
           </div>
         </div>
@@ -137,7 +137,7 @@ export default function TaskDetailPage() {
               onClick={requestArchiveConfirm}
               variant="ghost"
               size="sm"
-              className="text-red-600 hover:bg-destructive/10"
+              className="text-status-negative hover:bg-destructive/10"
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -249,7 +249,7 @@ export default function TaskDetailPage() {
             <Button
               onClick={() => setActiveModal('attention')}
               variant="outline"
-              className="flex items-center gap-2 text-amber-600 border-amber-300 hover:bg-amber-50"
+              className="flex items-center gap-2 text-status-warning border-border-subtle hover:bg-status-warning-subtle"
             >
               <AlertTriangle className="h-4 w-4" />
               Flag

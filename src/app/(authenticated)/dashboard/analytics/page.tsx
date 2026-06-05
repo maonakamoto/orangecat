@@ -63,7 +63,7 @@ export default function AnalyticsPage() {
         value: totalRaised,
         format: 'currency',
         icon: DollarSign,
-        color: 'text-green-600',
+        color: 'text-status-positive',
       },
       {
         label: 'Active Projects',

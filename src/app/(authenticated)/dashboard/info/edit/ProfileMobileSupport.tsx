@@ -41,7 +41,7 @@ export function ProfileMobileSupport({
             />
           </div>
           {completionPercentage === 100 ? (
-            <div className="flex items-center gap-2 text-xs text-green-700 mt-2">
+            <div className="flex items-center gap-2 text-xs text-status-positive mt-2">
               <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
               <span className="font-medium">Profile complete!</span>
             </div>

@@ -32,7 +32,7 @@ function FieldError({ message }: { message?: string }) {
   if (!message) {
     return null;
   }
-  return <p className="text-red-500 text-sm mt-1">{message}</p>;
+  return <p className="text-status-negative text-sm mt-1">{message}</p>;
 }
 
 const fieldClass = (hasError: boolean) =>
@@ -62,7 +62,7 @@ export function TaskFormFields({
     <form onSubmit={onSubmit} className="p-6 space-y-4">
       <div>
         <label className="block text-sm font-medium text-foreground mb-1">
-          Title <span className="text-red-500">*</span>
+          Title <span className="text-status-negative">*</span>
         </label>
         <input
           type="text"
@@ -77,7 +77,7 @@ export function TaskFormFields({
 
       <div>
         <label className="block text-sm font-medium text-foreground mb-1">
-          Task Type <span className="text-red-500">*</span>
+          Task Type <span className="text-status-negative">*</span>
         </label>
         <select
           name="task_type"
@@ -124,7 +124,7 @@ export function TaskFormFields({
 
       <div>
         <label className="block text-sm font-medium text-foreground mb-1">
-          Category <span className="text-red-500">*</span>
+          Category <span className="text-status-negative">*</span>
         </label>
         <select
           name="category"

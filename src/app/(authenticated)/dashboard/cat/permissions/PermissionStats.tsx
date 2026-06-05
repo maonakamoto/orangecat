@@ -21,7 +21,7 @@ export function PermissionStats({ summary }: PermissionStatsProps) {
       </div>
       <div className="col-span-2 sm:col-span-1 bg-card rounded-lg border border-border p-3 sm:p-4">
         <div
-          className={`text-xl sm:text-2xl font-bold ${summary.highRiskEnabled ? 'text-amber-600' : 'text-green-600'}`}
+          className={`text-xl sm:text-2xl font-bold ${summary.highRiskEnabled ? 'text-status-warning' : 'text-status-positive'}`}
         >
           {summary.highRiskEnabled ? 'Yes' : 'No'}
         </div>

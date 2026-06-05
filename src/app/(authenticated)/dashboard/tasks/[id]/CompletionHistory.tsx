@@ -36,8 +36,8 @@ export default function CompletionHistory({ completions }: CompletionHistoryProp
         <div className="space-y-3">
           {completions.map(completion => (
             <div key={completion.id} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-              <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                <CheckCircle className="h-4 w-4 text-green-600" />
+              <div className="h-8 w-8 rounded-full bg-status-positive-subtle flex items-center justify-center flex-shrink-0">
+                <CheckCircle className="h-4 w-4 text-status-positive" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 text-sm">

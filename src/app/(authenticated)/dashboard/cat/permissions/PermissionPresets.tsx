@@ -34,7 +34,7 @@ export function PermissionPresets({
           className="rounded-md border border-border-subtle p-4 text-left transition-colors hover:border-border-strong hover:bg-muted disabled:opacity-50"
         >
           <div className="flex items-center gap-2 mb-1">
-            <ShieldCheck className="h-5 w-5 text-green-600" />
+            <ShieldCheck className="h-5 w-5 text-status-positive" />
             <span className="font-medium text-foreground">Minimal</span>
           </div>
           <p className="text-sm text-muted-foreground">
@@ -62,7 +62,7 @@ export function PermissionPresets({
           className="rounded-md border border-border-subtle p-4 text-left transition-colors hover:border-border-strong hover:bg-muted disabled:opacity-50"
         >
           <div className="flex items-center gap-2 mb-1">
-            <Shield className="h-5 w-5 text-amber-600" />
+            <Shield className="h-5 w-5 text-status-warning" />
             <span className="font-medium text-foreground">Power User</span>
           </div>
           <p className="text-sm text-muted-foreground">
@@ -77,7 +77,7 @@ export function PermissionPresets({
           size="sm"
           onClick={() => applyPreset(() => false)}
           disabled={saving !== null}
-          className="text-muted-foreground hover:text-red-600"
+          className="text-muted-foreground hover:text-status-negative"
         >
           Disable All Permissions
         </Button>

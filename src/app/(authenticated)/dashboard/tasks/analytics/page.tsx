@@ -33,7 +33,9 @@ export default function TaskAnalyticsPage() {
             items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: 'Analytics' }]}
             className="mb-4"
           />
-          <div className="bg-card rounded-lg border border-red-200 p-6 text-red-600">{error}</div>
+          <div className="bg-card rounded-lg border border-border-subtle p-6 text-status-negative">
+            {error}
+          </div>
         </div>
       </div>
     );

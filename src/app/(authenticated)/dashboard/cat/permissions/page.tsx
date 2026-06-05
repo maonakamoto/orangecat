@@ -177,10 +177,10 @@ export default function CatPermissionsPage() {
           <PermissionStats summary={summary} />
 
           {summary.highRiskEnabled && (
-            <div className="mb-6 flex items-start gap-3 rounded-md border border-amber-500/20 bg-amber-500/10 p-4">
-              <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-700 dark:text-amber-300" />
+            <div className="mb-6 flex items-start gap-3 rounded-md border border-border-subtle bg-status-warning-subtle p-4">
+              <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-status-warning dark:text-status-warning" />
               <div>
-                <p className="font-medium text-amber-700 dark:text-amber-300">
+                <p className="font-medium text-status-warning dark:text-status-warning">
                   High-risk actions enabled
                 </p>
                 <p className="text-base text-muted-foreground">

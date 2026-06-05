@@ -83,9 +83,9 @@ function DocumentPageContent() {
   return (
     <div className="container max-w-4xl py-8">
       {uploadedFileName && (
-        <div className="mb-4 px-4 py-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
-          <FileText className="h-4 w-4 text-green-600" />
-          <span className="text-sm text-green-800">
+        <div className="mb-4 px-4 py-3 bg-status-positive-subtle border border-border-subtle rounded-lg flex items-center gap-2">
+          <FileText className="h-4 w-4 text-status-positive" />
+          <span className="text-sm text-status-positive">
             Content extracted from <strong>{uploadedFileName}</strong>. Review and save below.
           </span>
         </div>

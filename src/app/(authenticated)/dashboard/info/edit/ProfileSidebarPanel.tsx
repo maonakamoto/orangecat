@@ -53,7 +53,7 @@ export function ProfileSidebarPanel({
           </div>
         )}
         {completionPercentage === 100 && (
-          <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 px-3 py-2 rounded-lg border border-green-200 mt-4">
+          <div className="flex items-center gap-2 text-sm text-status-positive bg-status-positive-subtle px-3 py-2 rounded-lg border border-border-subtle mt-4">
             <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
             <span className="font-medium">Profile complete!</span>
           </div>
