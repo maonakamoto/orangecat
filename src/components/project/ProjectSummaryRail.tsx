@@ -65,18 +65,20 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
     setRefreshing(true);
     try {
       const res = await fetch(API_ROUTES.PROJECTS.REFRESH_BALANCE(project.id), { method: 'POST' });
-      const data = await res.json();
+      const body = await res.json();
       if (res.ok) {
-        if (data.balance_btc !== undefined) {
-          setBitcoinBalanceBtc(data.balance_btc);
-          setBitcoinBalanceUpdatedAt(data.updated_at || new Date().toISOString());
+        const payload = body?.data;
+        if (payload?.balance_btc !== undefined) {
+          setBitcoinBalanceBtc(payload.balance_btc);
+          setBitcoinBalanceUpdatedAt(payload.updated_at || new Date().toISOString());
           toast.success('Balance refreshed successfully');
         }
       } else {
-        toast.error(data.error || 'Failed to refresh balance');
+        const message = body?.error?.message || 'Failed to refresh balance';
+        toast.error(message);
         logger.error(
           'Failed to refresh balance',
-          { projectId: project.id, error: data.error },
+          { projectId: project.id, error: body?.error },
           'ProjectSummaryRail'
         );
       }
