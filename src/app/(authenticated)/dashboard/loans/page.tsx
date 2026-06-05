@@ -15,7 +15,6 @@ import { AvailableLoans } from '@/components/loans/AvailableLoans';
 import { LoanOffersList } from '@/components/loans/LoanOffersList';
 import { CreateLoanDialog } from '@/components/loans/CreateLoanDialog';
 import { useLoanList } from './useLoanList';
-import { GRADIENTS } from '@/config/gradients';
 
 export default function LoansPage() {
   const {
@@ -69,10 +68,7 @@ export default function LoansPage() {
           {showSelection ? 'Cancel' : 'Select'}
         </Button>
       )}
-      <Button
-        href={loanEntityConfig.createPath}
-        className={`${GRADIENTS.brandTiffanyDark} w-full sm:w-auto`}
-      >
+      <Button href={loanEntityConfig.createPath} className="w-full sm:w-auto">
         Create Loan
       </Button>
     </div>
@@ -115,7 +111,7 @@ export default function LoansPage() {
 
           <TabsContent value="my-loans" className="space-y-6">
             {error ? (
-              <div className="rounded-lg border bg-card p-6 text-red-600">{error}</div>
+              <div className="oc-error-surface p-6">{error}</div>
             ) : (
               <>
                 {showSelection && myLoans.length > 0 && (

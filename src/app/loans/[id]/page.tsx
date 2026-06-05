@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { formatRelativeTime } from '@/utils/dates';
 import { formatCurrency } from '@/services/currency';
+import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 import { generateEntityMetadata } from '@/lib/seo/metadata';
 import PublicEntityCTA from '@/components/public/PublicEntityCTA';
 import { ROUTES } from '@/config/routes';
@@ -73,14 +74,21 @@ const loanConfig: EntityDetailConfig = {
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Remaining Balance</span>
                 <span className="font-bold text-xl text-foreground">
-                  {formatCurrency(entity.remaining_balance, entity.currency ?? 'USD')}
+                  {formatCurrency(
+                    entity.remaining_balance,
+                    entity.currency ?? PLATFORM_DEFAULT_CURRENCY
+                  )}
                 </span>
               </div>
               <Progress value={progress} className="h-2" />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>{progress.toFixed(1)}% funded</span>
                 <span>
-                  Original: {formatCurrency(entity.original_amount, entity.currency ?? 'USD')}
+                  Original:{' '}
+                  {formatCurrency(
+                    entity.original_amount,
+                    entity.currency ?? PLATFORM_DEFAULT_CURRENCY
+                  )}
                 </span>
               </div>
             </div>
@@ -102,7 +110,10 @@ const loanConfig: EntityDetailConfig = {
                     Monthly Payment
                   </div>
                   <div className="font-semibold text-lg">
-                    {formatCurrency(entity.monthly_payment, entity.currency ?? 'USD')}
+                    {formatCurrency(
+                      entity.monthly_payment,
+                      entity.currency ?? PLATFORM_DEFAULT_CURRENCY
+                    )}
                   </div>
                 </div>
               )}
@@ -151,7 +162,10 @@ const loanConfig: EntityDetailConfig = {
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Min Offer</span>
               <span className="font-medium">
-                {formatCurrency(entity.minimum_offer_amount, entity.currency ?? 'USD')}
+                {formatCurrency(
+                  entity.minimum_offer_amount,
+                  entity.currency ?? PLATFORM_DEFAULT_CURRENCY
+                )}
               </span>
             </div>
           )}
