@@ -106,7 +106,7 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
               <>
                 <span>&bull;</span>
                 <span
-                  className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 font-medium' : 'text-muted-foreground'}`}
+                  className={`flex items-center gap-1 ${isOverdue ? 'text-status-negative font-medium' : 'text-muted-foreground'}`}
                 >
                   <Clock className="h-3 w-3" />
                   {formatDueDate(task.due_date)}
@@ -119,7 +119,7 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
           {task.current_status !== TASK_STATUSES.NEEDS_ATTENTION && (
             <button
               onClick={onFlagAttention}
-              className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+              className="p-2 text-status-warning hover:bg-status-warning-subtle rounded-lg transition-colors"
               title="Flag as needs attention"
             >
               <AlertTriangle className="h-5 w-5" />
@@ -127,7 +127,7 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
           )}
           <button
             onClick={onComplete}
-            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+            className="p-2 text-status-positive hover:bg-status-positive-subtle rounded-lg transition-colors"
             title="Mark as complete"
           >
             <CheckCircle className="h-5 w-5" />

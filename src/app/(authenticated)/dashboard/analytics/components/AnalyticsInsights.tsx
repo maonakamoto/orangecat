@@ -68,11 +68,11 @@ const COLOR_CLASSES: Record<
     icon: 'text-foreground',
   },
   green: {
-    bg: 'bg-green-50',
-    border: 'border-green-200',
-    title: 'text-green-900',
-    body: 'text-green-700',
-    icon: 'text-green-600',
+    bg: 'bg-status-positive-subtle',
+    border: 'border-border-subtle',
+    title: 'text-status-positive',
+    body: 'text-status-positive',
+    icon: 'text-status-positive',
   },
   orange: {
     bg: 'bg-muted/40',

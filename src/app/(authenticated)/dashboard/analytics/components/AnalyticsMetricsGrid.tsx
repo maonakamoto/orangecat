@@ -19,9 +19,9 @@ interface AnalyticsMetricsGridProps {
 function getChangeIcon(changeType?: string) {
   switch (changeType) {
     case 'increase':
-      return <ArrowUpRight className="w-4 h-4 text-green-500" />;
+      return <ArrowUpRight className="w-4 h-4 text-status-positive" />;
     case 'decrease':
-      return <ArrowDownRight className="w-4 h-4 text-red-500" />;
+      return <ArrowDownRight className="w-4 h-4 text-status-negative" />;
     default:
       return null;
   }
@@ -30,9 +30,9 @@ function getChangeIcon(changeType?: string) {
 function getChangeColor(changeType?: string) {
   switch (changeType) {
     case 'increase':
-      return 'text-green-600';
+      return 'text-status-positive';
     case 'decrease':
-      return 'text-red-600';
+      return 'text-status-negative';
     default:
       return 'text-muted-foreground';
   }
