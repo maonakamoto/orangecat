@@ -24,8 +24,14 @@ export function generateEntityMetadata({
 }: EntityMetadataInput): Metadata {
   const entityMeta = ENTITY_REGISTRY[type];
   const url = `${BASE_URL}${entityMeta.publicBasePath}/${id}`;
-  const image = imageUrl || '/images/og-default.png';
   const desc = description || `${title} on OrangeCat - Bitcoin-native marketplace.`;
+
+  // Fallback to the branded root OG card (src/app/opengraph-image.tsx)
+  // when an entity has no avatar/cover image. The previous hardcoded
+  // `/images/og-default.png` pointed at a file that doesn't exist; every
+  // share of a service/product/project/cause/loan/event/asset/investment/
+  // research detail page emitted a 404 to social previewers.
+  const image = imageUrl || `${BASE_URL}/opengraph-image`;
 
   return {
     title,
