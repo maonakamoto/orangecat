@@ -20,6 +20,10 @@ export function useDashboard() {
   const [pendingActions, setPendingActions] = useState<
     Awaited<ReturnType<typeof getPendingActions>>
   >([]);
+  // Gates the truly-empty redirect — without this, isTrulyEmpty trips
+  // before getPendingActions() resolves and a user with pending actions
+  // can momentarily be sent to /dashboard/cat?welcome=true.
+  const [pendingActionsLoaded, setPendingActionsLoaded] = useState(false);
 
   const { timelineFeed, timelineLoading, timelineError, reloadTimeline } = useDashboardTimeline({
     userId: user?.id,
@@ -46,6 +50,11 @@ export function useDashboard() {
       .catch(error => {
         if (!cancelled) {
           logger.error('Failed to load pending actions', { error }, 'Dashboard');
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setPendingActionsLoaded(true);
         }
       });
     return () => {
@@ -148,6 +157,7 @@ export function useDashboard() {
     timelineLoading,
     timelineError,
     pendingActions,
+    pendingActionsLoaded,
     safeProjects,
     totalProjects: stats.totalProjects,
     totalDrafts,

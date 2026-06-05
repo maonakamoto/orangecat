@@ -43,6 +43,7 @@ export default function DashboardPage() {
     timelineLoading,
     timelineError,
     pendingActions,
+    pendingActionsLoaded,
     safeProjects,
     totalProjects,
     totalDrafts,
@@ -67,6 +68,7 @@ export default function DashboardPage() {
     !localLoading &&
     !timelineLoading &&
     !timelineError &&
+    pendingActionsLoaded &&
     !hasProjects &&
     pendingActions.length === 0 &&
     (timelineFeed?.events?.length ?? 0) === 0;
