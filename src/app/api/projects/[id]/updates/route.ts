@@ -62,6 +62,14 @@ export const GET = withOptionalAuth(async (req, { params }: RouteParams) => {
       .limit(10);
 
     if (updatesError) {
+      // 42P01 = relation does not exist. The project_updates table has not
+      // been migrated yet. Returning an empty list lets the ProjectUpdatesTimeline
+      // component render its "No recent activity yet" empty state instead of the
+      // misleading "Could not load activity. Please refresh the page." fail
+      // branch. Same handling as createCreditDeposit (depositService.ts:49).
+      if ((updatesError as { code?: string }).code === '42P01') {
+        return apiSuccess({ updates: [], count: 0 });
+      }
       logger.error(
         'Failed to fetch project updates',
         { projectId, error: updatesError },
