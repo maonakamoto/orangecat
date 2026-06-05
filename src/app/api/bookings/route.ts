@@ -1,18 +1,37 @@
 /**
- * Bookings API - List user's bookings
+ * Bookings API
  *
- * GET /api/bookings - List bookings for current user
+ * GET  /api/bookings — list bookings for the current user (as customer or
+ *                     provider, filterable by status).
+ * POST /api/bookings — create a pending booking for a service or asset.
+ *                     Provider gets to confirm/reject via PUT /api/bookings/[id].
  *
- * Last Modified: 2026-01-28
- * Last Modified Summary: Refactored to use withAuth middleware
+ * Last Modified: 2026-06-05
+ * Last Modified Summary: Added POST for customer-side booking creation.
  */
 
+import { z } from 'zod';
 import { createBookingService } from '@/services/bookings';
 import { BookingStatus } from '@/services/bookings';
 import { logger } from '@/utils/logger';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import { apiSuccess, apiInternalError } from '@/lib/api/standardResponse';
+import {
+  apiSuccess,
+  apiBadRequest,
+  apiInternalError,
+  apiRateLimited,
+} from '@/lib/api/standardResponse';
+import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
+
+const createBookingSchema = z.object({
+  bookable_type: z.enum(['service', 'asset']),
+  bookable_id: z.string().uuid(),
+  starts_at: z.string().datetime(),
+  ends_at: z.string().datetime(),
+  timezone: z.string().max(64).optional(),
+  customer_notes: z.string().max(1000).optional(),
+});
 
 export const GET = withAuth(async (request: AuthenticatedRequest) => {
   try {
@@ -40,6 +59,32 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     return apiSuccess(bookings);
   } catch (error) {
     logger.error('Fetch bookings error', error, 'BookingsAPI');
+    return apiInternalError();
+  }
+});
+
+export const POST = withAuth(async (request: AuthenticatedRequest) => {
+  try {
+    const { user, supabase } = request;
+
+    const rl = await rateLimitWriteAsync(user.id);
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
+
+    const body = await request.json();
+    const parsed = createBookingSchema.safeParse(body);
+    if (!parsed.success) {
+      return apiBadRequest('Validation failed', parsed.error.flatten());
+    }
+
+    const result = await createBookingService(supabase).createBooking(parsed.data, user.id);
+    if (!result.success) {
+      return apiBadRequest(result.error || 'Failed to create booking');
+    }
+    return apiSuccess(result.booking, { status: 201 });
+  } catch (error) {
+    logger.error('Create booking error', error, 'BookingsAPI');
     return apiInternalError();
   }
 });

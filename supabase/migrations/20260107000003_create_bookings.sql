@@ -1,5 +1,14 @@
 -- Booking System
 -- Unified bookings for services and asset rentals
+--
+-- NOTE: This migration was originally written 2026-01-07 with sats columns
+-- but was never actually applied to production (the schema_migrations row
+-- was recorded but no tables were created — root cause unknown). On
+-- 2026-06-05 the tables were re-created in prod via a new migration name
+-- (create_bookings_btc_columns) using NUMERIC(18,8) BTC columns per the
+-- SATS→CHF SSOT decision. This file is updated to match what's in prod
+-- so future fresh-DB setups (e.g. Hetzner cutover) get the correct schema
+-- in one pass.
 
 -- Bookings table (polymorphic: works for services and assets)
 CREATE TABLE IF NOT EXISTS bookings (
@@ -20,12 +29,12 @@ CREATE TABLE IF NOT EXISTS bookings (
   timezone TEXT DEFAULT 'UTC',
   duration_minutes INT,
 
-  -- Pricing
-  price_sats BIGINT NOT NULL DEFAULT 0,
-  currency TEXT DEFAULT 'SATS',
-  deposit_sats BIGINT DEFAULT 0,
+  -- Pricing (BTC canonical per CLAUDE.md rule)
+  price_btc NUMERIC(18, 8) NOT NULL DEFAULT 0,
+  currency TEXT DEFAULT 'BTC',
+  deposit_btc NUMERIC(18, 8) DEFAULT 0,
   deposit_paid BOOLEAN DEFAULT false,
-  total_paid_sats BIGINT DEFAULT 0,
+  total_paid_btc NUMERIC(18, 8) DEFAULT 0,
 
   -- Status workflow: pending -> confirmed -> in_progress -> completed
   -- Or: pending -> cancelled / rejected
@@ -90,18 +99,18 @@ CREATE TABLE IF NOT EXISTS availability_slots (
 CREATE TABLE IF NOT EXISTS asset_availability (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
-  asset_id UUID NOT NULL REFERENCES user_assets(id) ON DELETE CASCADE,
+  asset_id UUID NOT NULL REFERENCES assets(id) ON DELETE CASCADE,
   provider_actor_id UUID NOT NULL REFERENCES actors(id) ON DELETE CASCADE,
 
   -- Availability period
   available_from DATE NOT NULL,
   available_to DATE,  -- NULL means indefinitely available
 
-  -- Rental terms
+  -- Rental terms (BTC canonical)
   min_rental_hours INT DEFAULT 1,
   max_rental_hours INT,
-  rental_price_per_hour BIGINT,
-  rental_price_per_day BIGINT,
+  rental_price_per_hour_btc NUMERIC(18, 8),
+  rental_price_per_day_btc NUMERIC(18, 8),
 
   -- Blocked periods (JSON array of date ranges)
   blocked_dates JSONB DEFAULT '[]',
