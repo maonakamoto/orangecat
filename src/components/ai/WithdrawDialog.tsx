@@ -15,7 +15,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { API_ROUTES } from '@/config/api-routes';
 import { QUICK_AMOUNT_PRESETS_SATS } from '@/config/ai-credits';
-import { bitcoinToSats } from '@/services/currency';
+import { bitcoinToSats, satsToBitcoin } from '@/services/currency';
 import type { EarningsData } from './types';
 import { MIN_WITHDRAWAL_SATS } from './types';
 
@@ -65,13 +65,13 @@ export function WithdrawDialog({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount_btc: amount / 100_000_000,
+          amount_btc: satsToBitcoin(amount),
           lightning_address: lightningAddress,
         }),
       });
       const result = await response.json();
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to request withdrawal');
+        throw new Error(result.error?.message || 'Failed to request withdrawal');
       }
       toast.success('Withdrawal request submitted!');
       setWithdrawAmount('');
