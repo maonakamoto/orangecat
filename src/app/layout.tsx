@@ -85,7 +85,7 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   icons: {
     icon: [{ url: '/favicon.ico' }, { url: '/images/orange-cat-logo.svg', type: 'image/svg+xml' }],
-    apple: '/icons/icon-144x144.png',
+    apple: '/favicon.svg',
   },
   appleWebApp: {
     capable: true,
