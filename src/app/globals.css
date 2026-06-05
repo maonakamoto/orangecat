@@ -232,6 +232,12 @@
     /* Layout primitives */
     --shell-max: 90rem;
     --public-nav-height: 76px;
+    /* Mobile chrome heights — SSOT for components that need to live
+     * above the mobile bottom nav (sticky action bars, bulk-select
+     * toolbars, etc.). Use the .oc-above-mobile-nav utility instead
+     * of hand-positioning bottom-14 / bottom-16. */
+    --mobile-nav-height: 56px;
+    --mobile-nav-clearance: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom, 0px));
   }
   .dark {
     --background: 0 0% 4%;
@@ -577,6 +583,27 @@
 
   .safe-area-margin-top {
     margin-top: env(safe-area-inset-top, 0px);
+  }
+
+  /* Place an element flush against the top of the mobile bottom nav,
+   * accounting for nav height + iOS home-indicator safe-area-inset.
+   * Use on `fixed inset-x-0` elements (sticky CTAs, bulk action bars).
+   * On md+ viewports the mobile nav is hidden so this is harmless. */
+  .oc-above-mobile-nav {
+    bottom: var(--mobile-nav-clearance);
+  }
+
+  /* Reserve room at the bottom of a scroll surface so the last bit of
+   * content isn't covered by mobile nav + sticky action bar. Pair with
+   * .oc-above-mobile-nav. Adds nav clearance + ~64px for the typical
+   * sticky CTA height (configurable later if needed). */
+  .oc-mobile-action-stack-padding {
+    padding-bottom: calc(var(--mobile-nav-clearance) + 4.5rem);
+  }
+  @media (min-width: 768px) {
+    .oc-mobile-action-stack-padding {
+      padding-bottom: 0;
+    }
   }
 
   /* PWA-specific layouts */

@@ -25,6 +25,9 @@ export const Z_INDEX = {
   SIDEBAR: 30,
   HEADER: 40,
   MOBILE_BOTTOM_NAV: 45,
+  /** Sticky action bars that need to sit above the mobile bottom nav
+   *  (entity sticky CTA, BulkActionsBar, page-specific action drawers). */
+  MOBILE_ACTION_BAR: 46,
 
   // Overlay layers (modals, dropdowns, tooltips)
   DROPDOWN: 50,
@@ -63,6 +66,8 @@ export const Z_INDEX_CLASSES = {
   SIDEBAR: 'z-30',
   HEADER: 'z-40',
   MOBILE_BOTTOM_NAV: 'z-[45]',
+  /** Sticky action bars above the mobile bottom nav. */
+  MOBILE_ACTION_BAR: 'z-[46]',
 
   // Overlay layers
   DROPDOWN: 'z-50',

@@ -3,6 +3,7 @@
 import { Trash2, Eye, EyeOff } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
+import { Z_INDEX_CLASSES } from '@/constants/z-index';
 
 interface BulkActionsBarProps {
   selectedCount: number;
@@ -47,8 +48,12 @@ export default function BulkActionsBar({
   return (
     <div
       className={cn(
-        'fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card shadow-none',
-        'pb-safe', // Safe area for mobile
+        // Above the mobile bottom nav on mobile; on >=md the mobile nav
+        // is hidden so positioning is irrelevant. Z + clearance pulled
+        // from the design SSOT (.oc-above-mobile-nav + MOBILE_ACTION_BAR).
+        'fixed inset-x-0 md:bottom-0 border-t border-border bg-card shadow-none oc-above-mobile-nav',
+        Z_INDEX_CLASSES.MOBILE_ACTION_BAR,
+        'pb-safe', // Safe area on hardware notch
         className
       )}
       style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}

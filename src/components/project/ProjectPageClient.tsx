@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { formatCurrency } from '@/services/currency';
 import { getStatusInfo } from '@/config/status-config';
 import { PublicEntityPaymentSection } from '@/components/payment';
+import { Z_INDEX_CLASSES } from '@/constants/z-index';
 
 const MissingWalletBanner = dynamic(() => import('@/components/project/MissingWalletBanner'));
 const ProjectShare = dynamic(() => import('@/components/sharing/ProjectShare'));
@@ -200,10 +201,11 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
         </div>
       )}
 
-      {/* Floating CTA - Mobile Only */}
+      {/* Floating CTA - Mobile Only. Position + z sourced from SSOT
+          so this bar consistently sits above MobileBottomNav. */}
       {!isOwner && project.bitcoin_address && showFloatingCTA && (
         <div
-          className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border shadow-sm transition-transform duration-300 ${
+          className={`lg:hidden fixed inset-x-0 oc-above-mobile-nav ${Z_INDEX_CLASSES.MOBILE_ACTION_BAR} bg-card border-t border-border shadow-sm transition-transform duration-300 ${
             showFloatingCTA ? 'translate-y-0' : 'translate-y-full'
           }`}
         >

@@ -22,6 +22,7 @@ import { PublicEntityPaymentSection } from '@/components/payment';
 import { fetchEntityOwner } from '@/lib/entities/fetchEntityOwner';
 import { ROUTES } from '@/config/routes';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { Z_INDEX_CLASSES } from '@/constants/z-index';
 import type { ReactNode } from 'react';
 
 // Color theme → semantic class mapping. The four colorTheme values in
@@ -160,7 +161,7 @@ export default async function PublicEntityDetailPage({
   return (
     <>
       <JsonLdScript data={jsonLd} />
-      <div className={`min-h-screen pb-36 md:pb-0 ${pageSurface}`}>
+      <div className={`min-h-screen oc-mobile-action-stack-padding ${pageSurface}`}>
         <div className="bg-card border-b border-border">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
@@ -290,12 +291,15 @@ function MobileStickyCTA({ config, entity }: { config: EntityDetailConfig; entit
 }
 
 function StickyBar({ href, label }: { href: string; label: string }) {
-  // Sits above MobileBottomNav (z-45 + ~56-64px tall). z-46 keeps the
-  // CTA in front of the nav; bottom-14 (56px) clears it. The nav itself
-  // adds safe-area-inset-bottom, so this bar inherits matching safe-area
-  // via the wrapper container we render in.
+  // Position + z-index sourced from SSOT:
+  //   .oc-above-mobile-nav  → globals.css (--mobile-nav-clearance)
+  //   Z_INDEX_CLASSES.MOBILE_ACTION_BAR → src/constants/z-index.ts
+  // Pair on the parent: .oc-mobile-action-stack-padding (already added
+  // to the page wrapper) reserves matching scroll-bottom room.
   return (
-    <div className="md:hidden fixed bottom-14 inset-x-0 z-[46] border-t border-border-subtle bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 px-4 py-3 shadow-lg">
+    <div
+      className={`md:hidden fixed inset-x-0 oc-above-mobile-nav ${Z_INDEX_CLASSES.MOBILE_ACTION_BAR} border-t border-border-subtle bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 px-4 py-3 shadow-lg`}
+    >
       <a
         href={href}
         className="flex w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 py-3 text-sm font-semibold text-background hover:bg-foreground/90 transition-colors min-h-12"

@@ -6,6 +6,11 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    // Pull in constant files that ship literal Tailwind class strings
+    // (e.g. src/constants/z-index.ts exports 'z-[46]' for MOBILE_ACTION_BAR).
+    // Without this Tailwind's scanner skips the constants dir and the
+    // class string is on the DOM but the rule is never generated.
+    './src/constants/**/*.{ts,tsx}',
   ],
   safelist: [
     {
