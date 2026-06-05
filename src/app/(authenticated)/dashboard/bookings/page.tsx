@@ -152,7 +152,7 @@ export default function BookingsDashboardPage() {
               key={booking.id}
               booking={booking}
               processingId={processingId}
-              formatAmount={formatAmountBtc}
+              formatBtc={formatAmountBtc}
               onAction={handleAction}
               onViewDetails={id => router.push(`/dashboard/bookings/${id}`)}
             />

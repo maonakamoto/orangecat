@@ -194,9 +194,9 @@ export default function BookingDetailPage() {
               <span>
                 {formatAmountBtc(booking.deposit_btc)}{' '}
                 {booking.deposit_paid ? (
-                  <span className="text-green-600 text-xs">(paid)</span>
+                  <span className="text-status-positive text-xs">(paid)</span>
                 ) : (
-                  <span className="text-yellow-600 text-xs">(unpaid)</span>
+                  <span className="text-status-warning text-xs">(unpaid)</span>
                 )}
               </span>
             </div>
@@ -204,7 +204,7 @@ export default function BookingDetailPage() {
           {booking.total_paid_btc > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Paid</span>
-              <span className="text-green-600 font-medium">
+              <span className="text-status-positive font-medium">
                 {formatAmountBtc(booking.total_paid_btc)}
               </span>
             </div>
@@ -236,7 +236,7 @@ export default function BookingDetailPage() {
                   {booking.status === STATUS.BOOKINGS.REJECTED ? 'Rejection' : 'Cancellation'}{' '}
                   reason
                 </p>
-                <p className="text-sm text-red-600">{booking.cancellation_reason}</p>
+                <p className="text-sm text-status-negative">{booking.cancellation_reason}</p>
               </div>
             )}
           </CardContent>

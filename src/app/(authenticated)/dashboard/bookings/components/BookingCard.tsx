@@ -28,7 +28,8 @@ type Booking = BookingBase & {
 interface BookingCardProps {
   booking: Booking;
   processingId: string | null;
-  formatAmount: (amount: number) => string;
+  /** BTC-typed display formatter (formatAmountBtc from useDisplayCurrency) */
+  formatBtc: (btc: number) => string;
   onAction: (
     bookingId: string,
     action: 'confirm' | 'reject' | 'complete' | 'cancel',
@@ -62,7 +63,7 @@ function StatusBadge({ status }: { status: string }) {
 export default function BookingCard({
   booking,
   processingId,
-  formatAmount,
+  formatBtc,
   onAction,
   onViewDetails,
 }: BookingCardProps) {
@@ -105,7 +106,7 @@ export default function BookingCard({
               </span>
             </div>
             <div className="text-sm font-medium text-foreground">
-              {formatAmount(booking.price_btc)}
+              {formatBtc(booking.price_btc)}
             </div>
           </div>
 
@@ -192,7 +193,7 @@ export default function BookingCard({
             booking.status === STATUS.BOOKINGS.REJECTED) && (
             <span className="text-sm text-muted-foreground">
               {booking.status === STATUS.BOOKINGS.COMPLETED && (
-                <span className="flex items-center gap-1 text-green-600">
+                <span className="flex items-center gap-1 text-status-positive">
                   <CheckCircle className="h-4 w-4" />
                   Completed
                 </span>
@@ -204,7 +205,7 @@ export default function BookingCard({
                 </span>
               )}
               {booking.status === STATUS.BOOKINGS.REJECTED && (
-                <span className="flex items-center gap-1 text-red-500">
+                <span className="flex items-center gap-1 text-status-negative">
                   <XCircle className="h-4 w-4" />
                   Rejected
                 </span>
@@ -259,7 +260,7 @@ export default function BookingCard({
                   setReasonDialog(null);
                 }
               }}
-              className="bg-red-600 hover:bg-red-700 text-white"
+              variant="danger"
             >
               {reasonDialog?.action === 'reject' ? 'Reject' : 'Cancel booking'}
             </Button>
