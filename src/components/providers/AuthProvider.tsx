@@ -178,90 +178,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     listenerRef.current = { data: { subscription } };
 
-    // Immediately sync any existing session once on mount to avoid early 401s
-    // Also set local state to ensure hydrated becomes true even if onAuthStateChange is delayed
-    const primeSession = async () => {
+    // Handle the Remember-Me preference: if the user opted out and this is
+    // a new browser session, sign them out before INITIAL_SESSION fires.
+    // The session-priming itself (getSession + setInitialAuthState +
+    // syncSessionToServer + fetchProfile) is intentionally NOT done here —
+    // onAuthStateChange fires INITIAL_SESSION automatically with the current
+    // session and the listener above handles it. The previous code did both,
+    // resulting in two cookie POSTs to /api/auth/callback and two profile
+    // fetches per cold load.
+    const handleRememberMePreference = async () => {
       if (hasSyncedInitialSession.current) {
         return;
       }
       hasSyncedInitialSession.current = true;
-      logger.info('Starting prime session check', undefined, 'Auth');
 
-      // Check "Remember Me" preference - if user chose not to be remembered and this is
-      // a new browser session (no session marker), clear the Supabase session
       try {
         const rememberMe = localStorage.getItem('orangecat-remember-me');
         const sessionMarker = sessionStorage.getItem('orangecat-session-marker');
 
         if (rememberMe === 'false' && !sessionMarker) {
-          // User chose not to be remembered and this is a new browser session
           logger.info(
-            'Remember me disabled and new browser session detected - signing out',
+            'Remember-me disabled and new browser session detected — signing out',
             undefined,
             'Auth'
           );
           await supabase.auth.signOut();
           localStorage.removeItem('orangecat-remember-me');
-          setInitialAuthState(null, null, null);
+          // SIGNED_OUT event fires from the signOut() above and clears state
+          // via the listener. No setInitialAuthState here.
           return;
         }
 
-        // Set session marker if we have a valid session or if remember me is true
         if (rememberMe === 'true' || sessionMarker) {
           sessionStorage.setItem('orangecat-session-marker', 'active');
         }
       } catch {
-        // Storage may not be available (e.g., private browsing mode)
         logger.debug(
-          'Could not check remember me preference - storage not available',
+          'Could not check remember-me preference — storage not available',
           undefined,
           'Auth'
         );
       }
+    };
+    handleRememberMePreference().catch(error => {
+      logger.warn('Remember-me handler failed on mount', { error }, 'Auth');
+    });
 
-      const { data } = await supabase.auth.getSession();
-      logger.info(
-        'Prime session result',
-        { hasSession: !!data?.session, hasUser: !!data?.session?.user },
-        'Auth'
-      );
-
-      if (data?.session?.user) {
-        await syncSessionToServer('INITIAL_SESSION', data.session);
-        // Set local state immediately to prevent loading state hang
-        setInitialAuthState(data.session.user, data.session, null);
-        logger.info(
-          'Prime session: set auth state with user',
-          { userId: data.session.user.id },
+    // Safety net: if INITIAL_SESSION somehow never fires (Supabase bug,
+    // network blip), force hydrated=true after 3s so unauthenticated
+    // pages don't hang in a loading state forever.
+    const fallback = setTimeout(() => {
+      pendingTimersRef.current.delete(fallback);
+      const currentState = useAuthStore.getState();
+      if (!currentState.hydrated) {
+        logger.warn(
+          'Force-setting hydrated state — INITIAL_SESSION never arrived',
+          undefined,
           'Auth'
         );
-        fetchProfile().catch(err => {
-          logger.warn('Failed to fetch profile during prime session', { error: err }, 'Auth');
-        });
-      } else {
-        // Critical: Set hydrated to true even when no session
-        // This prevents infinite loading state on unauthenticated pages
-        logger.info('Prime session: no user found, setting null auth state', undefined, 'Auth');
         setInitialAuthState(null, null, null);
       }
-    };
-    primeSession().catch(error => {
-      logger.warn('Failed to prime auth session on mount', { error }, 'Auth');
-      // Fallback: Force hydrated state after 3 seconds to prevent infinite loading
-      const fallback = setTimeout(() => {
-        pendingTimersRef.current.delete(fallback);
-        const currentState = useAuthStore.getState();
-        if (!currentState.hydrated) {
-          logger.warn(
-            'Force setting hydrated state after prime session failure',
-            undefined,
-            'Auth'
-          );
-          setInitialAuthState(null, null, null);
-        }
-      }, 3000);
-      pendingTimersRef.current.add(fallback);
-    });
+    }, 3000);
+    pendingTimersRef.current.add(fallback);
 
     // Capture the Set instance on entry so the cleanup runs against the
     // same instance the body's scheduling closures were adding to.
