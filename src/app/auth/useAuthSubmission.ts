@@ -86,7 +86,7 @@ export function useAuthSubmission({
           const captchaResult = await captchaResponse.json();
           if (!captchaResponse.ok || !captchaResult.success) {
             setCaptchaToken(null);
-            throw new Error(captchaResult?.error || 'CAPTCHA verification failed');
+            throw new Error(captchaResult?.error?.message || 'CAPTCHA verification failed');
           }
         }
       }
