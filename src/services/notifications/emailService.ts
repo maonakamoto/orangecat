@@ -35,7 +35,6 @@ import {
   type WeeklyDigestStats,
   type EntityPerformance,
 } from '@/lib/email/templates/weekly-digest';
-import { onboardingTemplate, type OnboardingDay } from '@/lib/email/templates/onboarding';
 import {
   groupActivityTemplate,
   type GroupActivityType,
@@ -388,30 +387,6 @@ export class NotificationEmailService {
         suggestions: data.suggestions as string[] | undefined,
         dashboardUrl: `${APP_URL}/dashboard`,
         chatUrl: `${APP_URL}/dashboard/cat`,
-        unsubscribeUrl,
-      });
-    }
-
-    // --- Onboarding drip ---
-    const onboardingMap: Record<string, OnboardingDay> = {
-      onboarding_day1_profile: 1,
-      onboarding_day2_wallet: 2,
-      onboarding_day3_entity: 3,
-      onboarding_day5_inspiration: 5,
-      onboarding_day7_summary: 7,
-    };
-    if (type in onboardingMap) {
-      return onboardingTemplate({
-        displayName,
-        day: onboardingMap[type],
-        weekStats: data.weekStats as
-          | { entitiesCreated: number; profileComplete: boolean; walletAdded: boolean }
-          | undefined,
-        profileUrl: `${APP_URL}/dashboard/info/edit`,
-        walletUrl: `${APP_URL}${ENTITY_REGISTRY['wallet'].basePath}`,
-        createUrl: `${APP_URL}/dashboard`,
-        exploreUrl: `${APP_URL}/discover`,
-        dashboardUrl: `${APP_URL}/dashboard`,
         unsubscribeUrl,
       });
     }
