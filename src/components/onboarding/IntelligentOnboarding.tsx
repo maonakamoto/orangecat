@@ -23,7 +23,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ProfileService } from '@/services/profile';
 import { logger } from '@/utils/logger';
 import { ROUTES } from '@/config/routes';
-import { ONBOARDING_METHOD } from './OnboardingFlow/constants';
+import { ONBOARDING_METHOD } from '@/config/onboarding';
 
 const EXAMPLE_PROMPTS = [
   "I'm a freelance graphic designer looking to find clients and sell design templates",

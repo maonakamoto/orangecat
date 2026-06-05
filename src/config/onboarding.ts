@@ -1,56 +1,24 @@
 /**
- * ONBOARDING CONFIGURATION
- * Single Source of Truth for onboarding UI content and options.
+ * ONBOARDING CONFIGURATION — SSOT for onboarding-shared constants.
  *
- * Labels, options, and color mappings live here so they can be
- * changed in one place without touching component code.
+ * After the 2026-06-05 onboarding cleanup, the system has a single
+ * surface (IntelligentOnboarding). The legacy ONBOARDING_CATEGORIES /
+ * CATEGORY_LABELS / EXPLORE_OPTIONS only fed the deleted OnboardingFlow
+ * steps and are gone with them.
+ *
+ * `onboarding_method` is still a column on profiles; if it stays
+ * write-only-with-one-value (all rows = 'intelligent'), the column +
+ * this constant should both go in a followup migration.
  */
 
-import { Compass, MessageCircle, Users } from 'lucide-react';
-import { ROUTES } from '@/config/routes';
+/**
+ * Onboarding completion methods. Persisted to profiles.onboarding_method
+ * via a CHECK constraint in supabase/migrations/20260128000000_*.
+ */
+export const ONBOARDING_METHOD = {
+  STANDARD: 'standard',
+  INTELLIGENT: 'intelligent',
+  SKIPPED: 'skipped',
+} as const;
 
-// ---------------------------------------------------------------------------
-// CreateProjectStep — which entity categories to surface during onboarding
-// ---------------------------------------------------------------------------
-
-export const ONBOARDING_CATEGORIES = ['business', 'community', 'finance'] as const;
-
-export const CATEGORY_LABELS: Record<string, string> = {
-  business: 'Commerce',
-  community: 'Community',
-  finance: 'Finance',
-};
-
-// ---------------------------------------------------------------------------
-// ExploreStep — discovery options shown in Step 3
-// ---------------------------------------------------------------------------
-
-export const EXPLORE_OPTIONS = [
-  {
-    icon: Compass,
-    title: 'Discover Projects',
-    description: 'Browse what others are building and find inspiration',
-    href: ROUTES.DISCOVER,
-    bg: 'bg-muted',
-    text: 'text-foreground',
-    border: 'hover:border-border-strong',
-  },
-  {
-    icon: MessageCircle,
-    title: 'Cat',
-    description: 'Your AI economic agent — ask it anything about OrangeCat',
-    href: ROUTES.DASHBOARD.CAT,
-    bg: 'bg-muted',
-    text: 'text-foreground',
-    border: 'hover:border-border-strong',
-  },
-  {
-    icon: Users,
-    title: 'Community',
-    description: 'Connect with creators and supporters',
-    href: ROUTES.COMMUNITY,
-    bg: 'bg-muted',
-    text: 'text-foreground',
-    border: 'hover:border-border-strong',
-  },
-] as const;
+export type OnboardingMethod = (typeof ONBOARDING_METHOD)[keyof typeof ONBOARDING_METHOD];

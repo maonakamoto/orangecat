@@ -266,7 +266,9 @@ export const ROUTES = {
   CREATE: '/create',
   STUDY_BITCOIN: '/study-bitcoin',
   ONBOARDING: {
-    STANDARD: '/onboarding',
+    // /onboarding is a redirect-only entry point (legacy bookmarks).
+    // The live surface is INTELLIGENT — the standard multi-step wizard
+    // was removed on 2026-06-05.
     INTELLIGENT: '/onboarding/intelligent',
   },
   COMMUNITY: '/community',
