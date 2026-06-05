@@ -16,7 +16,7 @@
 import React, { useEffect, useState } from 'react';
 import { Gift, Loader2 } from 'lucide-react';
 import { logger } from '@/utils/logger';
-import BitcoinPaymentModal from '@/components/bitcoin/BitcoinPaymentModal';
+import { PaymentDialog } from '@/components/payment';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
 import { convert, formatCurrency, displayBTC } from '@/services/currency';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
@@ -32,16 +32,14 @@ interface WishlistItem {
 
 interface WishlistDonationTiersProps {
   userId: string;
-  projectId?: string;
+  projectId: string;
   projectTitle?: string;
-  recipientAddress?: string;
 }
 
 export function WishlistDonationTiers({
   userId,
   projectId,
   projectTitle = ENTITY_REGISTRY.project.name,
-  recipientAddress,
 }: WishlistDonationTiersProps) {
   const [items, setItems] = useState<WishlistItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -145,13 +143,13 @@ export function WishlistDonationTiers({
       </div>
 
       {selectedItem && (
-        <BitcoinPaymentModal
-          isOpen={isPaymentModalOpen}
-          onClose={() => setIsPaymentModalOpen(false)}
-          projectId={projectId || ''}
-          projectTitle={`${projectTitle} - ${selectedItem.title}`}
-          suggestedAmount={selectedItem.target_amount_btc}
-          recipientAddress={recipientAddress}
+        <PaymentDialog
+          open={isPaymentModalOpen}
+          onOpenChange={setIsPaymentModalOpen}
+          entityType="project"
+          entityId={projectId}
+          entityTitle={`${projectTitle} - ${selectedItem.title}`}
+          defaultAmount={selectedItem.target_amount_btc}
         />
       )}
     </div>

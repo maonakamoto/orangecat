@@ -185,7 +185,6 @@ export function ProjectDonationSection({
                 userId={ownerId}
                 projectId={projectId}
                 projectTitle={projectTitle}
-                recipientAddress={bitcoinAddress || lightningAddress || undefined}
               />
             </div>
           )}

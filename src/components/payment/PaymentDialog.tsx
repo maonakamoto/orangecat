@@ -7,7 +7,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -36,7 +36,11 @@ interface PaymentDialogProps {
   priceBtc?: number;
   /** Seller's profile ID (for checking wallet availability) */
   sellerProfileId?: string;
+  /** Seed the contribution amount picker (e.g. wishlist tier target) */
+  defaultAmount?: number;
 }
+
+const DEFAULT_CONTRIBUTION_BTC = 0.0001; // ~$10 at $100k/BTC
 
 export function PaymentDialog({
   open,
@@ -45,6 +49,7 @@ export function PaymentDialog({
   entityId,
   entityTitle,
   priceBtc,
+  defaultAmount,
 }: PaymentDialogProps) {
   const meta = getEntityMetadata(entityType);
   const isContribution = meta.paymentPattern === 'contribution';
@@ -53,14 +58,24 @@ export function PaymentDialog({
   const { state, initiate, confirmPaid, reset, isLoading } = usePaymentFlow();
 
   // Contribution-specific state
-  const [contributionAmount, setContributionAmount] = useState(0.0001); // ~$10 at $100k/BTC
+  const [contributionAmount, setContributionAmount] = useState(
+    defaultAmount ?? DEFAULT_CONTRIBUTION_BTC
+  );
+  // Sync the picker when a new defaultAmount arrives (e.g. user clicked a
+  // different wishlist tier on the parent). Initial-state seeding only
+  // catches the first mount.
+  useEffect(() => {
+    if (defaultAmount !== undefined) {
+      setContributionAmount(defaultAmount);
+    }
+  }, [defaultAmount]);
   const [message, setMessage] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   const handleClose = () => {
     reset();
     setMessage('');
-    setContributionAmount(0.0001);
+    setContributionAmount(defaultAmount ?? DEFAULT_CONTRIBUTION_BTC);
     onOpenChange(false);
   };
 
