@@ -15,6 +15,7 @@
 import { useState } from 'react';
 import { Cat, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
 import { useRouter } from 'next/navigation';
@@ -36,22 +37,26 @@ const EXAMPLE_PROMPTS = [
 export default function IntelligentOnboarding() {
   const router = useRouter();
   const { user } = useAuth();
+  const [displayName, setDisplayName] = useState('');
   const [description, setDescription] = useState('');
   const [isRedirecting, setIsRedirecting] = useState(false);
 
+  const canSubmit = description.trim().length > 0 && displayName.trim().length > 0;
+
   const handleStartChat = async () => {
-    if (!description.trim()) {
+    if (!canSubmit) {
       return;
     }
     setIsRedirecting(true);
 
-    // Mark onboarding complete + persist the description as profile.bio
-    // so Cat has context next session (previously discarded after the
-    // ?q= redirect — Cat started cold on session 2).
+    // Persist what we collected so Cat has context next session and the
+    // dashboard greeting can stop saying "User". Username auto-slugifies
+    // from displayName at first save — no pseudonymity blocker.
     if (user?.id) {
       ProfileService.fallbackProfileUpdate(user.id, {
         onboarding_completed: true,
         onboarding_method: ONBOARDING_METHOD.INTELLIGENT,
+        name: displayName.trim(),
         bio: description.trim(),
       }).catch(err => {
         logger.error(
@@ -93,6 +98,17 @@ export default function IntelligentOnboarding() {
 
         {/* Input */}
         <div className="space-y-4 rounded-md border border-border-subtle bg-background p-6">
+          <Input
+            data-testid="onboarding-display-name"
+            label="What should Cat call you?"
+            description="A name or alias — pseudonyms are fine."
+            value={displayName}
+            onChange={e => setDisplayName(e.target.value)}
+            placeholder="Satoshi"
+            maxLength={100}
+            required
+          />
+
           <label className="block text-sm font-medium text-foreground">
             What are you here to do?
           </label>
@@ -139,7 +155,7 @@ export default function IntelligentOnboarding() {
           <Button
             data-testid="onboarding-start-chat"
             onClick={handleStartChat}
-            disabled={!description.trim() || isRedirecting}
+            disabled={!canSubmit || isRedirecting}
             className="w-full bg-foreground text-background hover:bg-foreground/90"
           >
             {isRedirecting ? (
