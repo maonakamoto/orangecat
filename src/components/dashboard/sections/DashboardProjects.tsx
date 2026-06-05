@@ -54,13 +54,21 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
             <BarChart3 className="w-12 h-12 mx-auto mb-3 text-muted-dim dark:text-muted-foreground" />
             <p className="text-sm mb-2">No projects yet</p>
             <p className="text-xs text-muted-dim mb-4">
-              Start your fundraising journey by creating your first project
+              Not sure what to create? Ask Cat — it can suggest the right shape (project, wishlist,
+              cause, service…) based on what you want to do.
             </p>
-            <Link href={ENTITY_REGISTRY.project.createPath}>
-              <Button variant="outline" size="sm">
-                Create Your First Project
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <Link href="/dashboard/cat">
+                <Button variant="outline" size="sm">
+                  Ask Cat
+                </Button>
+              </Link>
+              <Link href={ENTITY_REGISTRY.project.createPath}>
+                <Button variant="ghost" size="sm">
+                  Create a project
+                </Button>
+              </Link>
+            </div>
           </div>
         </CardContent>
       </Card>

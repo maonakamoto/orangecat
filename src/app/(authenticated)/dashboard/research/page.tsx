@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Plus, Search, TrendingUp, Users, DollarSign, Target } from 'lucide-react';
+import { Plus, Search, TrendingUp, Users, DollarSign, Target, Microscope } from 'lucide-react';
 import EntityListShell from '@/components/entity/EntityListShell';
 import Loading from '@/components/Loading';
 import { ResearchEntity } from '@/types/research';
@@ -198,7 +198,7 @@ export default function ResearchDashboard() {
         </div>
       ) : filteredEntities.length === 0 ? (
         <div className="text-center py-12">
-          <div className="text-6xl mb-4">🔬</div>
+          <Microscope className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
           <h3 className="text-lg font-semibold mb-2">No research entities found</h3>
           <p className="text-muted-foreground mb-4">
             {searchTerm || fieldFilter !== 'all' || statusFilter !== 'all'
