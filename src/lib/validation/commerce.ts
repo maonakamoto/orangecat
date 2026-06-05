@@ -67,10 +67,12 @@ const beneficiarySchema = z
 export const userProductSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100, 'Title must be at most 100 characters'),
   description: optionalText(1000),
-  // Price interpretation depends on currency:
-  // - SATS: Integer value in satoshis (e.g., 100000 = 100,000 sats)
-  // - Fiat: Decimal value in currency units (e.g., 9.99 = $9.99)
-  // For best precision with fiat, consider storing in cents and converting for display
+  // Price interpretation:
+  // - BTC (default per CLAUDE.md SSOT): decimal value, e.g. 0.001 = 0.001 BTC.
+  //   Stored as NUMERIC(18,8) in the DB to avoid floating-point drift.
+  // - Fiat: decimal value in currency units, e.g. 9.99 = $9.99.
+  // (SATS is supported only as a *display* currency at the UI layer, not
+  // as a storage unit for new prices.)
   price: z.number().positive('Price must be positive'),
   currency: z.enum(CURRENCY_CODES).optional(),
   product_type: z

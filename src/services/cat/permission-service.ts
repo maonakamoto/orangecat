@@ -23,7 +23,7 @@ interface CatPermission {
   granted: boolean;
   requires_confirmation: boolean; // Override: always confirm even if action doesn't require it
   daily_limit?: number; // Max executions per day (null = unlimited)
-  max_btc_per_action?: number; // Max sats for payment actions
+  max_btc_per_action?: number; // Max BTC per payment action (decimal, e.g. 0.001)
   created_at: string;
   updated_at: string;
 }

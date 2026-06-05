@@ -52,7 +52,9 @@ function buildMockSupabase() {
     });
 
     // Terminal resolvers — single returns a row, maybeSingle returns null for participant lookup
-    chain.single = jest.fn().mockResolvedValue({ data: { id: 'mock-id', title: 'mock' }, error: null });
+    chain.single = jest
+      .fn()
+      .mockResolvedValue({ data: { id: 'mock-id', title: 'mock' }, error: null });
     chain.maybeSingle = jest.fn().mockResolvedValue({ data: null, error: null }); // no shared conv → create new
 
     // Chainable filters / modifiers
@@ -422,9 +424,9 @@ describe('Cat action-executor — correct DB column names', () => {
       expect((insert as Record<string, unknown>).status).toBeUndefined();
 
       // Valid enum values only
-      expect(insert!.task_type).toBe('one_time');       // not 'personal'
-      expect(insert!.category).toBe('other');            // not 'general'
-      expect(insert!.priority).toBe('normal');           // not 'medium'
+      expect(insert!.task_type).toBe('one_time'); // not 'personal'
+      expect(insert!.category).toBe('other'); // not 'general'
+      expect(insert!.priority).toBe('normal'); // not 'medium'
       expect(insert!.created_by).toBe(USER_ID);
     });
 
@@ -468,7 +470,7 @@ describe('Cat action-executor — correct DB column names', () => {
       // Slug must be generated (non-empty, derived from name)
       expect(typeof insert!.slug).toBe('string');
       expect((insert!.slug as string).length).toBeGreaterThan(0);
-      expect((insert!.slug as string)).toMatch(/^bitcoin-builders-/);
+      expect(insert!.slug as string).toMatch(/^bitcoin-builders-/);
 
       expect(insert!.name).toBe('Bitcoin Builders');
       expect(insert!.created_by).toBe(USER_ID);
@@ -578,13 +580,12 @@ describe('Cat action-executor — correct DB column names', () => {
       const insert = getEntityInsert(supabase, ENTITY_REGISTRY.loan.tableName);
       expect(insert).toBeDefined();
 
-      // BTC decimal columns (not amount_btc)
+      // BTC decimal columns (not amount_btc, not amount_sats — the prod
+      // loans table only has original_amount + remaining_balance, both NUMERIC).
       expect(insert!.original_amount).toBe(0.05);
       expect(insert!.remaining_balance).toBe(0.05);
       expect((insert as Record<string, unknown>).amount_btc).toBeUndefined();
-
-      // amount_sats is computed (0.05 BTC = 5_000_000 sats)
-      expect(insert!.amount_sats).toBe(5_000_000);
+      expect((insert as Record<string, unknown>).amount_sats).toBeUndefined();
 
       // Ownership: both actor_id and user_id
       expect(insert!.actor_id).toBe(ACTOR_ID);
@@ -871,7 +872,9 @@ describe('Cat action-executor — correct DB column names', () => {
       // Must write to timeline_events, never to timeline_posts (which does not exist)
       const insert = getEntityInsert(supabase, DATABASE_TABLES.TIMELINE_EVENTS);
       expect(insert).toBeDefined();
-      expect((supabase._insertsByTable as Record<string, unknown>)['timeline_posts']).toBeUndefined();
+      expect(
+        (supabase._insertsByTable as Record<string, unknown>)['timeline_posts']
+      ).toBeUndefined();
 
       // Required fields
       expect(insert!.event_type).toBe('post');
@@ -964,11 +967,11 @@ describe('Cat action-executor — correct DB column names', () => {
       const supabase = buildMockSupabase();
       await run(supabase, 'set_reminder', {
         title: 'Water plants',
-        notes: 'Don\'t forget the balcony ones',
+        notes: "Don't forget the balcony ones",
       });
 
       const insert = getEntityInsert(supabase, DATABASE_TABLES.TASKS);
-      expect(insert!.description).toContain('Don\'t forget the balcony ones');
+      expect(insert!.description).toContain("Don't forget the balcony ones");
     });
 
     it('still works with legacy `message`/`when` params for backward compatibility', async () => {
@@ -1072,11 +1075,13 @@ describe('Cat action-executor — correct DB column names', () => {
           chain.order = jest.fn().mockReturnThis();
           chain.limit = jest.fn().mockReturnThis();
           // Tasks select returns real task data; everything else returns a generic insert success
-          chain.single = jest.fn().mockResolvedValue(
-            table === DATABASE_TABLES.TASKS
-              ? { data: taskRow, error: null }
-              : { data: { id: 'new-id' }, error: null }
-          );
+          chain.single = jest
+            .fn()
+            .mockResolvedValue(
+              table === DATABASE_TABLES.TASKS
+                ? { data: taskRow, error: null }
+                : { data: { id: 'new-id' }, error: null }
+            );
           chain.maybeSingle = jest.fn().mockResolvedValue({ data: null, error: null });
           return chain;
         }),
@@ -1092,7 +1097,10 @@ describe('Cat action-executor — correct DB column names', () => {
       });
 
       expect(result.status).toBe('completed');
-      const insert = supabase._insertsByTable[DATABASE_TABLES.TASK_COMPLETIONS]?.[0] as Record<string, unknown>;
+      const insert = supabase._insertsByTable[DATABASE_TABLES.TASK_COMPLETIONS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(insert).toBeDefined();
       expect(insert.task_id).toBe('task-abc');
       expect(insert.completed_by).toBe(USER_ID);
@@ -1106,7 +1114,10 @@ describe('Cat action-executor — correct DB column names', () => {
         notes: 'Done after rescheduling twice',
       });
 
-      const insert = supabase._insertsByTable[DATABASE_TABLES.TASK_COMPLETIONS]?.[0] as Record<string, unknown>;
+      const insert = supabase._insertsByTable[DATABASE_TABLES.TASK_COMPLETIONS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(insert.notes).toBe('Done after rescheduling twice');
     });
 
@@ -1119,7 +1130,10 @@ describe('Cat action-executor — correct DB column names', () => {
     });
 
     it('returns error when one-time task is already completed', async () => {
-      const supabase = buildMockSupabaseForCompleteTask({ is_completed: true, task_type: 'one_time' });
+      const supabase = buildMockSupabaseForCompleteTask({
+        is_completed: true,
+        task_type: 'one_time',
+      });
       const result = await run(supabase as never, 'complete_task', { task_id: 'task-abc' });
 
       expect(result.status).toBe('failed');
@@ -1162,11 +1176,13 @@ describe('Cat action-executor — correct DB column names', () => {
           chain.order = jest.fn().mockReturnThis();
           chain.limit = jest.fn().mockReturnThis();
           // Tasks select returns real task data; update single returns updated row
-          chain.single = jest.fn().mockResolvedValue(
-            table === DATABASE_TABLES.TASKS
-              ? { data: { ...taskRow, due_date: null, priority: 'normal' }, error: null }
-              : { data: { id: 'new-id' }, error: null }
-          );
+          chain.single = jest
+            .fn()
+            .mockResolvedValue(
+              table === DATABASE_TABLES.TASKS
+                ? { data: { ...taskRow, due_date: null, priority: 'normal' }, error: null }
+                : { data: { id: 'new-id' }, error: null }
+            );
           chain.maybeSingle = jest.fn().mockResolvedValue({ data: null, error: null });
           return chain;
         }),
@@ -1183,7 +1199,10 @@ describe('Cat action-executor — correct DB column names', () => {
       });
 
       expect(result.status).toBe('completed');
-      const update = supabase._updatesByTable[DATABASE_TABLES.TASKS]?.[0] as Record<string, unknown>;
+      const update = supabase._updatesByTable[DATABASE_TABLES.TASKS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(update).toBeDefined();
       // due_date should be a valid ISO string (next week)
       expect(typeof update.due_date).toBe('string');
@@ -1199,7 +1218,10 @@ describe('Cat action-executor — correct DB column names', () => {
       });
 
       expect(result.status).toBe('completed');
-      const update = supabase._updatesByTable[DATABASE_TABLES.TASKS]?.[0] as Record<string, unknown>;
+      const update = supabase._updatesByTable[DATABASE_TABLES.TASKS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(update.title).toBe('Water ALL the plants');
     });
 
@@ -1210,7 +1232,10 @@ describe('Cat action-executor — correct DB column names', () => {
         notes: 'Also the ones on the balcony',
       });
 
-      const update = supabase._updatesByTable[DATABASE_TABLES.TASKS]?.[0] as Record<string, unknown>;
+      const update = supabase._updatesByTable[DATABASE_TABLES.TASKS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(update.description).toBe('Also the ones on the balcony');
       // `notes` must NOT be sent as a DB column
       expect(update.notes).toBeUndefined();
@@ -1223,7 +1248,10 @@ describe('Cat action-executor — correct DB column names', () => {
         priority: 'medium',
       });
 
-      const update = supabase._updatesByTable[DATABASE_TABLES.TASKS]?.[0] as Record<string, unknown>;
+      const update = supabase._updatesByTable[DATABASE_TABLES.TASKS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(update.priority).toBe('normal');
     });
 
@@ -1308,9 +1336,9 @@ describe('Cat action-executor — correct DB column names', () => {
       const supabase = buildMockSupabase();
       await run(supabase, 'update_profile', {
         bio: 'Safe bio',
-        username: 'hacked_username',   // must be silently dropped
-        email: 'hacker@evil.com',       // must be silently dropped
-        id: 'injected-id',              // must be silently dropped
+        username: 'hacked_username', // must be silently dropped
+        email: 'hacker@evil.com', // must be silently dropped
+        id: 'injected-id', // must be silently dropped
       });
 
       const update = getEntityUpdate(supabase, DATABASE_TABLES.PROFILES);
@@ -1406,7 +1434,10 @@ describe('Cat action-executor — correct DB column names', () => {
         insertsByTable[tableName].push(payload);
         return chain;
       });
-      chain.update = jest.fn(() => { _operation = 'update'; return chain; });
+      chain.update = jest.fn(() => {
+        _operation = 'update';
+        return chain;
+      });
       chain.eq = jest.fn().mockReturnThis();
       chain.not = jest.fn().mockReturnThis();
       chain.order = jest.fn().mockReturnThis();
@@ -1421,9 +1452,7 @@ describe('Cat action-executor — correct DB column names', () => {
       chain.then = jest.fn().mockImplementation((resolve: (v: unknown) => void) => {
         if (tableName === DATABASE_TABLES.WALLETS && _operation === 'select') {
           resolve({
-            data: existingLightningAddress
-              ? [{ lightning_address: existingLightningAddress }]
-              : [],
+            data: existingLightningAddress ? [{ lightning_address: existingLightningAddress }] : [],
             error: null,
           });
         } else {
@@ -1435,7 +1464,12 @@ describe('Cat action-executor — correct DB column names', () => {
       chain.single = jest.fn().mockImplementation(() => {
         if (tableName === DATABASE_TABLES.WALLETS && _operation === 'insert') {
           return Promise.resolve({
-            data: { id: 'new-wallet-id', label: 'Test Wallet', behavior_type: 'one_time_goal', category: 'general' },
+            data: {
+              id: 'new-wallet-id',
+              label: 'Test Wallet',
+              behavior_type: 'one_time_goal',
+              category: 'general',
+            },
             error: null,
           });
         }
@@ -1470,7 +1504,10 @@ describe('Cat action-executor — correct DB column names', () => {
       });
 
       expect(result.status).toBe('completed');
-      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<string, unknown>;
+      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(insert).toBeDefined();
       expect(insert.label).toBe('Vacation Fund');
       expect(insert.behavior_type).toBe('one_time_goal');
@@ -1487,7 +1524,10 @@ describe('Cat action-executor — correct DB column names', () => {
         behavior_type: 'one_time_goal',
       });
 
-      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<string, unknown>;
+      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(insert).toBeDefined();
       expect(insert.lightning_address).toBe('alice@getalby.com');
     });
@@ -1500,7 +1540,10 @@ describe('Cat action-executor — correct DB column names', () => {
         lightning_address: 'custom@wallet.io',
       });
 
-      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<string, unknown>;
+      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<
+        string,
+        unknown
+      >;
       // Provided address takes priority
       expect(insert.lightning_address).toBe('custom@wallet.io');
     });
@@ -1515,7 +1558,10 @@ describe('Cat action-executor — correct DB column names', () => {
         budget_period: 'monthly',
       });
 
-      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<string, unknown>;
+      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(insert.behavior_type).toBe('recurring_budget');
       expect(insert.budget_amount).toBe(0.002);
       expect(insert.budget_period).toBe('monthly');
@@ -1529,7 +1575,10 @@ describe('Cat action-executor — correct DB column names', () => {
         behavior_type: 'general',
       });
 
-      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<string, unknown>;
+      const insert = supabase._insertsByTable[DATABASE_TABLES.WALLETS]?.[0] as Record<
+        string,
+        unknown
+      >;
       expect(insert.profile_id).toBe(USER_ID);
       expect(insert.is_primary).toBe(false);
       expect(insert.is_active).toBe(true);

@@ -2,7 +2,6 @@ import { ENTITY_REGISTRY, isValidEntityType } from '@/config/entity-registry';
 import { STATUS, ENTITY_STATUS } from '@/config/database-constants';
 import { resolvePublishStatus } from '@/config/entity-status';
 import type { ActionHandler } from './types';
-import { bitcoinToSats } from '@/services/currency';
 
 export const entityHandlers: Record<string, ActionHandler> = {
   create_product: async (supabase, _userId, actorId, params) => {
@@ -229,11 +228,9 @@ export const entityHandlers: Record<string, ActionHandler> = {
   },
 
   create_loan: async (supabase, userId, actorId, params) => {
-    // Loans table has both actor_id (added by migration) and user_id (original).
-    // amount_btc → original_amount + remaining_balance (BTC decimal columns).
-    // amount_sats is the legacy satoshi column; kept in sync via conversion.
+    // Loans table has actor_id + user_id; amount_btc maps to original_amount
+    // and remaining_balance (both NUMERIC BTC).
     const amountBtc = (params.amount_btc as number) ?? 0;
-    const amountSats = bitcoinToSats(amountBtc);
 
     const { data, error } = await supabase
       .from(ENTITY_REGISTRY.loan.tableName)
@@ -245,7 +242,6 @@ export const entityHandlers: Record<string, ActionHandler> = {
         loan_type: (params.loan_type as string) || 'new_request',
         original_amount: amountBtc,
         remaining_balance: amountBtc,
-        amount_sats: amountSats,
         currency: 'BTC',
         interest_rate: (params.interest_rate as number | undefined) ?? null,
         fulfillment_type: 'manual',

@@ -128,10 +128,11 @@ export function parseAIResponse(
       }
     }
 
-    // Coerce numeric fields — LLMs sometimes return numbers as strings
+    // Coerce numeric fields — LLMs sometimes return numbers as strings.
+    // No fields end in _sats anymore (BTC is canonical per CLAUDE.md);
+    // pattern dropped in 2026-06-05 SATS sweep.
     const numericFieldPatterns = [
       /_btc$/,
-      /_sats$/,
       /_usd$/,
       /^price/,
       /^amount/,
