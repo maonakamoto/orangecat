@@ -14,6 +14,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getEmailClient } from '@/lib/email/client';
 import { EMAIL_COLORS } from '@/lib/email/templates/layout';
+import { SITE_URL } from '@/config/brand';
 import { logger } from '@/utils/logger';
 
 const LOG_SOURCE = 'NotificationDispatcher';
@@ -30,6 +31,7 @@ const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'notifications@orangecat.ch'
 const EMAIL_ENABLED_TYPES: Record<string, boolean> = {
   payment: true,
   project_funded: true,
+  booking_request: true,
   // Onboarding drip emails are dispatched directly by the scheduler,
   // not through this config, since they use custom templates.
 };
@@ -173,12 +175,20 @@ export class NotificationDispatcher {
     const subject = params.title;
     const userName = profile?.display_name || 'there';
 
+    // actionUrl is typically a relative path (e.g. /dashboard/bookings).
+    // Email clients can't resolve relative hrefs — absolutize against SITE_URL.
+    const absoluteActionUrl = params.actionUrl
+      ? params.actionUrl.startsWith('http')
+        ? params.actionUrl
+        : `${SITE_URL}${params.actionUrl.startsWith('/') ? '' : '/'}${params.actionUrl}`
+      : null;
+
     const text = [
       `Hi ${userName},`,
       '',
       params.message,
       '',
-      params.actionUrl ? `View details: ${params.actionUrl}` : '',
+      absoluteActionUrl ? `View details: ${absoluteActionUrl}` : '',
       '',
       '-- OrangeCat',
     ]
@@ -200,8 +210,8 @@ export class NotificationDispatcher {
         <h1 style="font-size:22px;font-weight:600;margin:0 0 16px;">${params.title}</h1>
         <p style="font-size:15px;color:${EMAIL_COLORS.TEXT_SECONDARY};margin:0 0 32px;">${params.message}</p>
         ${
-          params.actionUrl
-            ? `<a href="${params.actionUrl}"
+          absoluteActionUrl
+            ? `<a href="${absoluteActionUrl}"
                 style="display:inline-block;background:${EMAIL_COLORS.TIFFANY};color:#ffffff;text-decoration:none;
                        padding:12px 24px;border-radius:6px;font-size:14px;font-weight:500;">
                 View Details
