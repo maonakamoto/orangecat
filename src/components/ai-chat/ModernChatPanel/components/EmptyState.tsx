@@ -36,7 +36,11 @@ export function EmptyState({
       >
         {title}
       </h2>
-      <p className="mt-2 max-w-md text-sm text-muted-foreground">{CAT_HUB_COPY.greetingHint}</p>
+      {/* Hint is verbose on mobile and competes with the suggestion
+          buttons, which already act as the hint. Show on >=sm only. */}
+      <p className="mt-2 hidden max-w-md text-sm text-muted-foreground sm:block">
+        {CAT_HUB_COPY.greetingHint}
+      </p>
 
       {(isLoadingSuggestions || suggestions.length > 0) && (
         <div className="mt-8 flex w-full max-w-2xl flex-col gap-2 sm:grid sm:grid-cols-2">

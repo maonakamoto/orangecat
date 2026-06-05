@@ -51,7 +51,11 @@ export function CatChatToolbar({
 
   return (
     <div className={cn('oc-chat-toolbar', className)}>
-      <div className="flex min-w-0 items-center gap-2" title={CAT_AGENT.privacyBadge}>
+      {/* "Cat · Private" label is informational chrome; on mobile the
+          bottom-nav highlight already tells the user where they are.
+          Show only on >=sm so mobile reclaims this row width for the
+          ModelSelector + Context/Controls. */}
+      <div className="hidden min-w-0 items-center gap-2 sm:flex" title={CAT_AGENT.privacyBadge}>
         <p className="truncate text-sm font-medium text-foreground">{CAT_AGENT.name}</p>
         <p className="hidden truncate text-xs text-muted-foreground sm:inline">
           · {CAT_AGENT.privacyBadge}
