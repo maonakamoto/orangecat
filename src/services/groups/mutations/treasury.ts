@@ -14,6 +14,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import supabase from '@/lib/supabase/browser';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import type { ServiceResult } from '@/types/common';
+import { satsToBitcoin } from '@/services/currency';
 
 /**
  * Fetch Bitcoin balance from mempool.space API
@@ -40,7 +41,6 @@ export async function fetchBitcoinBalance(bitcoinAddress: string): Promise<numbe
     const data = await response.json();
 
     // mempool.space returns balance in sats
-    const _balanceSats = data.chain_stats?.funded_txo_sum || 0;
     const unspentSats = data.chain_stats?.tx_count
       ? data.chain_stats.funded_txo_sum - (data.chain_stats.spent_txo_sum || 0)
       : 0;
@@ -75,7 +75,6 @@ async function updateWalletBalance(
     )
       .update({
         current_balance_btc: balanceBtc,
-        last_balance_update: new Date().toISOString(),
       })
       .eq('id', walletId);
 
@@ -122,12 +121,17 @@ export async function refreshWalletBalance(
       return { success: false, error: 'Wallet has no Bitcoin address' };
     }
 
-    // Fetch balance from mempool.space
-    const balanceBtc = await fetchBitcoinBalance(wallet.bitcoin_address);
+    // Fetch balance from mempool.space (returns sats)
+    const balanceSats = await fetchBitcoinBalance(wallet.bitcoin_address);
 
-    if (balanceBtc === null) {
+    if (balanceSats === null) {
       return { success: false, error: 'Failed to fetch balance from blockchain' };
     }
+
+    // Convert to BTC for storage in the *_btc column (BTC is the canonical
+    // unit per CLAUDE.md). fetchBitcoinBalance returns sats; the column is
+    // current_balance_btc.
+    const balanceBtc = satsToBitcoin(balanceSats);
 
     // Update wallet balance
     const updateResult = await updateWalletBalance(walletId, balanceBtc, sb);

@@ -50,7 +50,7 @@ export function GroupWallets({
   wallets,
   onUpdate,
 }: GroupWalletsProps) {
-  const { formatSats, formatAmountBtc } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
   const [creating, setCreating] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState<CreateWalletForm>(EMPTY_FORM);
@@ -69,7 +69,7 @@ export function GroupWallets({
       }
 
       const data = await response.json();
-      toast.success(`Balance updated: ${formatSats(data.data?.balance || 0)}`);
+      toast.success(`Balance updated: ${formatAmountBtc(data.data?.balance || 0)}`);
       onUpdate?.();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to refresh balance');
