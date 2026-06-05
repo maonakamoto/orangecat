@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { getRouteChrome, getRouteSurface } from '@/config/routes';
@@ -69,6 +69,21 @@ export function AppShell({ children }: AppShellProps) {
     }
   }, [pathname, routeChrome.preferCollapsedSidebar, setSidebarCollapsed]);
 
+  // Sidebar margin-left animates from 0 → 16rem/64rem when auth hydrates,
+  // which produces a 300ms content slide on every page load — the
+  // "page is dancing" feeling. Suppress the transition until after the
+  // initial render so the sidebar appears in its final position
+  // instantly. User-initiated sidebar toggles (after this delay)
+  // still animate normally.
+  const [allowMarginTransition, setAllowMarginTransition] = useState(false);
+  useEffect(() => {
+    if (!isAuthReady) {
+      return;
+    }
+    const frame = requestAnimationFrame(() => setAllowMarginTransition(true));
+    return () => cancelAnimationFrame(frame);
+  }, [isAuthReady]);
+
   // Get filtered sections based on auth state
   const filteredSections = getFilteredSections();
 
@@ -122,7 +137,9 @@ export function AppShell({ children }: AppShellProps) {
             blowing layout out wider than the viewport on mobile). */}
         <main
           id="main-content"
-          className={`flex-1 min-w-0 transition-[margin-left] duration-300 ease-in-out ${
+          className={`flex-1 min-w-0 ${
+            allowMarginTransition ? 'transition-[margin-left] duration-300 ease-in-out' : ''
+          } ${
             shouldShowSidebar
               ? navigationState.isSidebarCollapsed
                 ? 'lg:ml-16'
