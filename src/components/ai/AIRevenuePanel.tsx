@@ -13,7 +13,7 @@ import { WithdrawDialog } from './WithdrawDialog';
 import { RecentWithdrawals } from './RecentWithdrawals';
 
 export function AIRevenuePanel() {
-  const { formatAmount, formatAmountBtc } = useDisplayCurrency();
+  const { formatSats, formatAmountBtc } = useDisplayCurrency();
   const { data, earnings, recentWithdrawals, loading, refresh, fetchRevenue } = useAIRevenue();
   const [showWithdrawDialog, setShowWithdrawDialog] = useState(false);
 
@@ -162,7 +162,7 @@ export function AIRevenuePanel() {
         open={showWithdrawDialog}
         onClose={() => setShowWithdrawDialog(false)}
         earnings={earnings}
-        formatAmount={formatAmount}
+        formatSats={formatSats}
         formatAmountBtc={formatAmountBtc}
         onWithdrawSuccess={() => {
           setShowWithdrawDialog(false);

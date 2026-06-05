@@ -48,7 +48,7 @@ export function PaymentDialog({
 }: PaymentDialogProps) {
   const meta = getEntityMetadata(entityType);
   const isContribution = meta.paymentPattern === 'contribution';
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
 
   const { state, initiate, confirmPaid, reset, isLoading } = usePaymentFlow();
 
@@ -93,7 +93,7 @@ export function PaymentDialog({
           <DialogDescription>
             {isContribution
               ? `Choose an amount to support this ${meta.name.toLowerCase()}`
-              : `Pay ${formatAmount(amountBtc)}`}
+              : `Pay ${formatAmountBtc(amountBtc)}`}
           </DialogDescription>
         </DialogHeader>
 
@@ -137,8 +137,8 @@ export function PaymentDialog({
                 className="w-full min-h-11"
               >
                 {isContribution
-                  ? `Support with ${formatAmount(amountBtc)}`
-                  : `Pay ${formatAmount(amountBtc)}`}
+                  ? `Support with ${formatAmountBtc(amountBtc)}`
+                  : `Pay ${formatAmountBtc(amountBtc)}`}
               </Button>
             </>
           )}

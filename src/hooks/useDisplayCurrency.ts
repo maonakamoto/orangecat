@@ -18,7 +18,12 @@ import { useCallback } from 'react';
 import { useUserCurrency } from './useUserCurrency';
 import { isFiatCurrency } from '@/utils/currency-helpers';
 import { useCurrencyConversion } from './useCurrencyConversion';
-import { formatCurrency, formatSats, satsToBitcoin, bitcoinToSats } from '@/services/currency';
+import {
+  formatCurrency,
+  formatSats as formatRawSats,
+  satsToBitcoin,
+  bitcoinToSats,
+} from '@/services/currency';
 import type { CurrencyCode } from '@/config/currencies';
 
 interface DisplayCurrencyOptions {
@@ -33,9 +38,9 @@ interface DisplayCurrencyOptions {
 }
 
 interface UseDisplayCurrencyReturn {
-  /** Format sats amount in user's preferred display currency */
-  formatAmount: (sats: number, options?: DisplayCurrencyOptions) => string;
-  /** Format BTC amount (database canonical unit) in user's preferred display currency */
+  /** Format a sats amount in user's preferred display currency. Caller must pass sats. */
+  formatSats: (sats: number, options?: DisplayCurrencyOptions) => string;
+  /** Format a BTC amount (database canonical unit) in user's preferred display currency. Caller must pass BTC. */
   formatAmountBtc: (btc: number, options?: DisplayCurrencyOptions) => string;
   /** User's preferred display currency code */
   displayCurrency: CurrencyCode;
@@ -48,16 +53,16 @@ interface UseDisplayCurrencyReturn {
 /**
  * Hook for displaying amounts in the user's preferred currency.
  *
+ * BTC is the canonical unit on this platform — prefer `formatAmountBtc`.
+ * Use `formatSats` only when the amount is already in sats (Lightning
+ * protocol contexts). Picking the wrong one used to silently render ~0;
+ * the explicit names compile-prevent that mistake.
+ *
  * @example
  * ```tsx
- * const { formatAmount } = useDisplayCurrency();
- *
- * // Shows "CHF 86.00" or "100,000 sats" based on user preference
- * <span>{formatAmount(100000)}</span>
- *
- * // Show both fiat and sats
- * <span>{formatAmount(100000, { showBoth: true })}</span>
- * // → "CHF 86.00 (100,000 sats)"
+ * const { formatSats, formatAmountBtc } = useDisplayCurrency();
+ * <span>{formatAmountBtc(0.001)}</span>   // "CHF 86.00"
+ * <span>{formatSats(100_000)}</span>      // "CHF 86.00" (same amount, different unit)
  * ```
  */
 export function useDisplayCurrency(): UseDisplayCurrencyReturn {
@@ -65,7 +70,7 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
   const { convertFromBTC, isLoading } = useCurrencyConversion();
   const prefersFiat = isFiatCurrency(displayCurrency);
 
-  const formatAmount = useCallback(
+  const formatSats = useCallback(
     (sats: number, options: DisplayCurrencyOptions = {}): string => {
       const { showSymbol = true, compact = false, forceSats = false, showBoth = false } = options;
 
@@ -82,8 +87,7 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
 
       // If user prefers sats or forceSats is true
       if (forceSats || displayCurrency === 'SATS') {
-        const satsFormatted = formatSats(sats);
-        return satsFormatted;
+        return formatRawSats(sats);
       }
 
       // If user prefers BTC
@@ -98,14 +102,14 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
 
       // If rates not loaded yet, fall back to sats
       if (isLoading || fiatAmount === 0) {
-        return formatSats(sats);
+        return formatRawSats(sats);
       }
 
       const fiatFormatted = formatCurrency(fiatAmount, displayCurrency, { showSymbol, compact });
 
       // Show both fiat and sats if requested
       if (showBoth) {
-        return `${fiatFormatted} (${formatSats(sats)})`;
+        return `${fiatFormatted} (${formatRawSats(sats)})`;
       }
 
       return fiatFormatted;
@@ -115,12 +119,12 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
 
   const formatAmountBtc = useCallback(
     (btc: number, options?: DisplayCurrencyOptions): string =>
-      formatAmount(Math.round(bitcoinToSats(btc)), options),
-    [formatAmount]
+      formatSats(Math.round(bitcoinToSats(btc)), options),
+    [formatSats]
   );
 
   return {
-    formatAmount,
+    formatSats,
     formatAmountBtc,
     displayCurrency,
     prefersFiat,

@@ -39,7 +39,7 @@ export function PaymentButton({
 }: PaymentButtonProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const meta = getEntityMetadata(entityType);
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
 
   // Don't render for entities that aren't purchasable
   if (meta.paymentPattern === 'none') {
@@ -61,7 +61,7 @@ export function PaymentButton({
         <Wallet className="mr-2 h-4 w-4" />
         {disabled ? 'No wallet connected' : buttonText}
         {!isContribution && priceBtc && !disabled && (
-          <span className="ml-1 opacity-75">({formatAmount(priceBtc)})</span>
+          <span className="ml-1 opacity-75">({formatAmountBtc(priceBtc)})</span>
         )}
       </Button>
 

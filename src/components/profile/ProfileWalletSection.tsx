@@ -37,7 +37,7 @@ export default function ProfileWalletSection({
   legacyBalance,
   onEditClick,
 }: ProfileWalletSectionProps) {
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
 
   // Show loading skeleton
   if (loading) {
@@ -86,7 +86,7 @@ export default function ProfileWalletSection({
                   <div className="bg-muted rounded-lg p-3 mb-3">
                     <div className="text-sm text-muted-foreground mb-1">Current Balance</div>
                     <div className="text-xl font-bold text-bitcoinOrange">
-                      {formatAmount(wallet.balance_btc)}
+                      {formatAmountBtc(wallet.balance_btc)}
                     </div>
                   </div>
 
@@ -96,7 +96,7 @@ export default function ProfileWalletSection({
                       <div className="flex justify-between text-sm mb-1">
                         <span className="text-muted-foreground">Goal</span>
                         <span className="font-medium">
-                          {formatAmount(wallet.balance_btc)} / {wallet.goal_amount}{' '}
+                          {formatAmountBtc(wallet.balance_btc)} / {wallet.goal_amount}{' '}
                           {wallet.goal_currency}
                         </span>
                       </div>

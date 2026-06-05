@@ -23,7 +23,7 @@ export default function BitcoinWalletStatsCompact({
   address,
   className = '',
 }: BitcoinWalletStatsCompactProps) {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatSats } = useDisplayCurrency();
   const [balance, setBalance] = useState<number | null>(null);
   const [transactions, setTransactions] = useState<TransactionSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -107,10 +107,10 @@ export default function BitcoinWalletStatsCompact({
             <RefreshCw className="w-3 h-3" />
           </button>
         </div>
-        <div className="text-xl font-bold">{formatAmount(balance)}</div>
+        <div className="text-xl font-bold">{formatSats(balance)}</div>
         {totalReceived > 0 && (
           <div className="text-xs opacity-80 mt-0.5">
-            Total received: {formatAmount(totalReceived)}
+            Total received: {formatSats(totalReceived)}
           </div>
         )}
       </div>
@@ -141,7 +141,7 @@ export default function BitcoinWalletStatsCompact({
                     }`}
                   >
                     {tx.type === 'received' ? '+' : '-'}
-                    {formatAmount(tx.amount)}
+                    {formatSats(tx.amount)}
                   </span>
                   {!tx.confirmed && (
                     <span className="text-xs bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded">

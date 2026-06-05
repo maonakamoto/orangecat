@@ -30,7 +30,7 @@ interface Props {
 }
 
 export default function ProjectSummaryRail({ project, isOwner }: Props) {
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
   const goalCurrency = project.goal_currency || project.currency || PLATFORM_DEFAULT_CURRENCY;
   const [amountRaised, setAmountRaised] = useState<number>(0);
   const [refreshing, setRefreshing] = useState(false);
@@ -110,7 +110,7 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
               </span>
             </div>
             <div className="text-base font-semibold text-foreground">
-              {formatAmount(bitcoinBalanceBtc)}
+              {formatAmountBtc(bitcoinBalanceBtc)}
             </div>
             {bitcoinBalanceUpdatedAt && (
               <div className="text-xs text-muted-foreground mt-1">

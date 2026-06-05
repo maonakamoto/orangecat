@@ -23,7 +23,7 @@ interface WithdrawDialogProps {
   open: boolean;
   onClose: () => void;
   earnings: EarningsData | null;
-  formatAmount: (sats: number) => string;
+  formatSats: (sats: number) => string;
   formatAmountBtc: (btc: number) => string;
   onWithdrawSuccess: () => void;
 }
@@ -32,7 +32,7 @@ export function WithdrawDialog({
   open,
   onClose,
   earnings,
-  formatAmount,
+  formatSats,
   formatAmountBtc,
   onWithdrawSuccess,
 }: WithdrawDialogProps) {
@@ -46,7 +46,7 @@ export function WithdrawDialog({
   const handleWithdraw = async () => {
     const amount = parseInt(withdrawAmount, 10);
     if (isNaN(amount) || amount < MIN_WITHDRAWAL_SATS) {
-      toast.error(`Minimum withdrawal is ${formatAmount(MIN_WITHDRAWAL_SATS)}`);
+      toast.error(`Minimum withdrawal is ${formatSats(MIN_WITHDRAWAL_SATS)}`);
       return;
     }
     if (!lightningAddress || !lightningAddress.includes('@')) {
@@ -114,7 +114,7 @@ export function WithdrawDialog({
                 onClick={() => setWithdrawAmount(amount.toString())}
                 disabled={amount > bitcoinToSats(maxWithdrawable)}
               >
-                {formatAmount(amount)}
+                {formatSats(amount)}
               </Button>
             ))}
           </div>
@@ -128,7 +128,7 @@ export function WithdrawDialog({
               min={MIN_WITHDRAWAL_SATS}
               max={maxWithdrawable}
               className="mt-1"
-              placeholder={`Minimum: ${formatAmount(MIN_WITHDRAWAL_SATS)}`}
+              placeholder={`Minimum: ${formatSats(MIN_WITHDRAWAL_SATS)}`}
             />
           </div>
 
@@ -164,7 +164,7 @@ export function WithdrawDialog({
             >
               {withdrawing
                 ? 'Processing...'
-                : `Withdraw ${formatAmount(parseInt(withdrawAmount) || 0)}`}
+                : `Withdraw ${formatSats(parseInt(withdrawAmount) || 0)}`}
             </Button>
           </div>
         </div>

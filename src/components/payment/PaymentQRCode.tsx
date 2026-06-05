@@ -37,7 +37,7 @@ export function PaymentQRCode({
 }: PaymentQRCodeProps) {
   const { copied, copy } = useCopyToClipboard();
   const [secondsLeft, setSecondsLeft] = useState(expiresInSeconds ?? 0);
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
 
   // Live countdown timer
   useEffect(() => {
@@ -90,7 +90,7 @@ export function PaymentQRCode({
 
       {/* Amount display */}
       <div className="text-center">
-        <p className="text-lg font-semibold">{formatAmount(amountBtc)}</p>
+        <p className="text-lg font-semibold">{formatAmountBtc(amountBtc)}</p>
       </div>
 
       {/* Countdown timer */}

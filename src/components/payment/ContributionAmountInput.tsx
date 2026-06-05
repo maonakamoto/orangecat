@@ -29,7 +29,7 @@ export function ContributionAmountInput({
 }: ContributionAmountInputProps) {
   const [customMode, setCustomMode] = useState(false);
   const [customInput, setCustomInput] = useState('');
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
 
   const handleCustomBlur = () => {
     const val = parseFloat(customInput);
@@ -58,7 +58,7 @@ export function ContributionAmountInput({
               onChange(amount);
             }}
           >
-            {formatAmount(amount)}
+            {formatAmountBtc(amount)}
           </Button>
         ))}
         <Button
@@ -88,14 +88,14 @@ export function ContributionAmountInput({
             }
           }}
           onBlur={handleCustomBlur}
-          placeholder={`Min ${formatAmount(minBtc)}`}
+          placeholder={`Min ${formatAmountBtc(minBtc)}`}
           min={minBtc}
           max={maxBtc}
           className="w-full"
         />
       )}
 
-      {value > 0 && <p className="text-sm text-muted-foreground">{formatAmount(value)}</p>}
+      {value > 0 && <p className="text-sm text-muted-foreground">{formatAmountBtc(value)}</p>}
     </div>
   );
 }

@@ -33,7 +33,7 @@ interface ProjectUpdatesTimelineProps {
 }
 
 export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpdatesTimelineProps) {
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
   const [updates, setUpdates] = useState<ProjectUpdate[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchFailed, setFetchFailed] = useState(false);
@@ -162,7 +162,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
                     <p className="font-medium text-foreground">{update.title}</p>
                     {update.amount_btc && (
                       <span className="text-sm font-semibold text-bitcoinOrange flex-shrink-0">
-                        {formatAmount(update.amount_btc)}
+                        {formatAmountBtc(update.amount_btc)}
                       </span>
                     )}
                   </div>

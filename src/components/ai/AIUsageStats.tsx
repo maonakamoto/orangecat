@@ -29,7 +29,7 @@ interface AIUsageStatsProps {
  * - Last used timestamp
  */
 export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsProps) {
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
 
   const formatNumber = (num: number) => {
     if (num >= 1_000_000) {
@@ -77,7 +77,7 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
     },
     {
       label: 'Cost',
-      value: formatAmount(usage.totalCostBtc),
+      value: formatAmountBtc(usage.totalCostBtc),
       icon: Coins,
       color: 'text-amber-600',
       bgColor: 'bg-amber-100',

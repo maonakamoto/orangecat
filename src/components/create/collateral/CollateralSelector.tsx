@@ -41,7 +41,7 @@ export function CollateralSelector({
   disabled = false,
 }: CollateralSelectorProps) {
   const { profile } = useAuth();
-  const { formatAmountBtc: formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
 
   const {
     assets,
@@ -78,7 +78,7 @@ export function CollateralSelector({
     .map(w => ({
       id: w.id,
       label: w.label,
-      sublabel: w.balance_btc ? formatAmount(w.balance_btc) : undefined,
+      sublabel: w.balance_btc ? formatAmountBtc(w.balance_btc) : undefined,
     }));
 
   return (

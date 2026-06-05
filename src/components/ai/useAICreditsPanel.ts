@@ -59,7 +59,7 @@ export const getTransactionIcon = (type: string): React.ReactNode => {
 };
 
 export function useAICreditsPanel() {
-  const { formatAmount, formatAmountBtc } = useDisplayCurrency();
+  const { formatSats, formatAmountBtc } = useDisplayCurrency();
   const [data, setData] = useState<AICreditsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [depositing, setDepositing] = useState(false);
@@ -92,7 +92,7 @@ export function useAICreditsPanel() {
   const handleDeposit = async () => {
     const amount = parseInt(depositAmount, 10);
     if (isNaN(amount) || amount < 100) {
-      toast.error(`Minimum deposit is ${formatAmount(100)}`);
+      toast.error(`Minimum deposit is ${formatSats(100)}`);
       return;
     }
 
@@ -110,7 +110,7 @@ export function useAICreditsPanel() {
       }
 
       await response.json();
-      toast.success(`Added ${formatAmount(amount)} to your balance`);
+      toast.success(`Added ${formatSats(amount)} to your balance`);
       setShowDepositDialog(false);
       setDepositAmount('1000');
       fetchCredits();
@@ -123,7 +123,7 @@ export function useAICreditsPanel() {
   };
 
   return {
-    formatAmount,
+    formatSats,
     formatAmountBtc,
     data,
     loading,

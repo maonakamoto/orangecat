@@ -17,7 +17,7 @@ import { useAICreditsPanel, getTransactionIcon, getTransactionColor } from './us
 
 export function AICreditsPanel() {
   const {
-    formatAmount,
+    formatSats,
     formatAmountBtc,
     data,
     loading,
@@ -139,7 +139,7 @@ export function AICreditsPanel() {
                   size="sm"
                   onClick={() => setDepositAmount(amount.toString())}
                 >
-                  {formatAmount(amount)}
+                  {formatSats(amount)}
                 </Button>
               ))}
             </div>
@@ -155,7 +155,7 @@ export function AICreditsPanel() {
                 className="mt-1"
               />
               <p className="text-xs text-muted-foreground mt-1">
-                Minimum: {formatAmount(100)} | Maximum: {formatAmount(1000000)}
+                Minimum: {formatSats(100)} | Maximum: {formatSats(1000000)}
               </p>
             </div>
 
@@ -175,7 +175,7 @@ export function AICreditsPanel() {
                 Cancel
               </Button>
               <Button className="flex-1" onClick={handleDeposit} disabled={depositing}>
-                {depositing ? 'Adding...' : `Add ${formatAmount(parseInt(depositAmount) || 0)}`}
+                {depositing ? 'Adding...' : `Add ${formatSats(parseInt(depositAmount) || 0)}`}
               </Button>
             </div>
           </div>

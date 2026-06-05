@@ -69,7 +69,7 @@ export function BookEntityDialog({
   priceBtc,
   durationMinutes,
 }: BookEntityDialogProps) {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatSats } = useDisplayCurrency();
   const [startsAtLocal, setStartsAtLocal] = useState('');
   const [endsAtLocal, setEndsAtLocal] = useState('');
   const [notes, setNotes] = useState('');
@@ -152,7 +152,7 @@ export function BookEntityDialog({
             Send a booking request to the provider. They&apos;ll confirm or reject.
             {typeof priceBtc === 'number' && priceBtc > 0 && (
               <span className="mt-1 block text-sm">
-                Price: <span className="font-medium text-foreground">{formatAmount(priceBtc)}</span>
+                Price: <span className="font-medium text-foreground">{formatSats(priceBtc)}</span>
                 {hasDuration && ` · ${durationMinutes} min`}
               </span>
             )}
