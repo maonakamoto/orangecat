@@ -64,11 +64,11 @@ export function CatContextTab() {
   };
 
   const getCompletenessColor = (score: number) => {
+    // Keep a positive cue once "done well," but a soft mid-band metric
+    // doesn't warrant the amber status-warning chroma — the progress bar
+    // and verbal label already communicate "not done yet."
     if (score >= 70) {
       return 'text-status-positive';
-    }
-    if (score >= 40) {
-      return 'text-status-warning';
     }
     return 'text-muted-foreground';
   };
