@@ -10,7 +10,7 @@ import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
  * Reads from AI_CREDITS_CONFIG (SSOT: src/config/ai-credits.ts).
  */
 export function AICreditsPricing() {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
 
   const tiers = Object.entries(AI_CREDITS_CONFIG.tiers);
   const operations = Object.entries(AI_CREDITS_CONFIG.operations);
@@ -36,10 +36,10 @@ export function AICreditsPricing() {
               >
                 <div className="font-semibold text-sm">{tier.label}</div>
                 <div className="text-lg font-bold mt-1">
-                  {tier.price_btc === 0 ? 'Free' : `${formatAmount(tier.price_btc)}/mo`}
+                  {tier.price_btc === 0 ? 'Free' : `${formatAmountBtc(tier.price_btc)}/mo`}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  {formatAmount(tier.monthly_credits_btc)} credits/month
+                  {formatAmountBtc(tier.monthly_credits_btc)} credits/month
                 </div>
                 <div className="mt-2 pt-2 border-t border-border-subtle">
                   <div className="flex items-center gap-1.5 text-xs text-green-700">
@@ -66,7 +66,7 @@ export function AICreditsPricing() {
                 className="flex items-center justify-between py-2 px-3 rounded-lg bg-muted text-sm"
               >
                 <span>{op.label}</span>
-                <span className="font-medium text-foreground">{formatAmount(op.cost_btc)}</span>
+                <span className="font-medium text-foreground">{formatAmountBtc(op.cost_btc)}</span>
               </div>
             ))}
           </div>

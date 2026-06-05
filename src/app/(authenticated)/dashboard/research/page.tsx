@@ -37,7 +37,7 @@ import { ProjectCardSkeleton } from '@/components/ui/Skeleton';
 export default function ResearchDashboard() {
   const router = useRouter();
   const { isLoading: authLoading, hydrated } = useRequireAuth();
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
   const [entities, setEntities] = useState<ResearchEntity[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -129,7 +129,9 @@ export default function ResearchDashboard() {
             <div className="text-2xl font-bold">
               {loading
                 ? '—'
-                : formatAmount(entities.reduce((sum, e) => sum + (e.funding_raised_btc || 0), 0))}
+                : formatAmountBtc(
+                    entities.reduce((sum, e) => sum + (e.funding_raised_btc || 0), 0)
+                  )}
             </div>
           </CardContent>
         </Card>
@@ -248,8 +250,8 @@ export default function ResearchDashboard() {
                   <div className="flex justify-between text-sm">
                     <span>Funding Progress</span>
                     <span>
-                      {formatAmount(entity.funding_raised_btc || 0)} /{' '}
-                      {formatAmount(entity.funding_goal || 0)}
+                      {formatAmountBtc(entity.funding_raised_btc || 0)} /{' '}
+                      {formatAmountBtc(entity.funding_goal || 0)}
                     </span>
                   </div>
                   <Progress

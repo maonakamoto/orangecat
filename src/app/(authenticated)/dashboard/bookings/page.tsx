@@ -17,7 +17,7 @@ import type { TabType, FilterStatus, TabConfig } from './components/BookingTabs'
 
 export default function BookingsDashboardPage() {
   const router = useRouter();
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
   const [activeTab, setActiveTab] = useState<TabType>('incoming');
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -152,7 +152,7 @@ export default function BookingsDashboardPage() {
               key={booking.id}
               booking={booking}
               processingId={processingId}
-              formatAmount={formatAmount}
+              formatAmount={formatAmountBtc}
               onAction={handleAction}
               onViewDetails={id => router.push(`/dashboard/bookings/${id}`)}
             />

@@ -50,7 +50,7 @@ export function GroupWallets({
   wallets,
   onUpdate,
 }: GroupWalletsProps) {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmount, formatAmountBtc } = useDisplayCurrency();
   const [creating, setCreating] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState<CreateWalletForm>(EMPTY_FORM);
@@ -331,7 +331,7 @@ export function GroupWallets({
                           <div>
                             <div className="text-sm text-muted-foreground">Balance</div>
                             <div className="text-lg font-bold text-green-600">
-                              {formatAmount(wallet.current_balance_btc)}
+                              {formatAmountBtc(wallet.current_balance_btc)}
                             </div>
                           </div>
                           {wallet.bitcoin_address && (

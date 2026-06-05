@@ -38,7 +38,7 @@ const STATUS_COLORS: Record<string, string> = {
 export default function BookingDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
   const [booking, setBooking] = useState<BookingWithCustomer | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActing, setIsActing] = useState(false);
@@ -186,13 +186,13 @@ export default function BookingDetailPage() {
         <CardContent className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Total</span>
-            <span className="font-medium">{formatAmount(booking.price_btc)}</span>
+            <span className="font-medium">{formatAmountBtc(booking.price_btc)}</span>
           </div>
           {booking.deposit_btc > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Deposit</span>
               <span>
-                {formatAmount(booking.deposit_btc)}{' '}
+                {formatAmountBtc(booking.deposit_btc)}{' '}
                 {booking.deposit_paid ? (
                   <span className="text-green-600 text-xs">(paid)</span>
                 ) : (
@@ -205,7 +205,7 @@ export default function BookingDetailPage() {
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Paid</span>
               <span className="text-green-600 font-medium">
-                {formatAmount(booking.total_paid_btc)}
+                {formatAmountBtc(booking.total_paid_btc)}
               </span>
             </div>
           )}

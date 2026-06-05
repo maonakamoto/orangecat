@@ -111,11 +111,11 @@ export default async function WishlistItemDetailPage({ params }: PageProps) {
         <div className="space-y-2">
           <div className="flex justify-between">
             <span className="text-muted-foreground">Target:</span>
-            <FormattedAmount sats={item.target_amount_btc} className="font-medium" />
+            <FormattedAmount btc={item.target_amount_btc} className="font-medium" />
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Funded:</span>
-            <FormattedAmount sats={item.funded_amount_btc} className="font-medium" />
+            <FormattedAmount btc={item.funded_amount_btc} className="font-medium" />
           </div>
           <div className="w-full bg-muted rounded-full h-2 mt-4">
             <div

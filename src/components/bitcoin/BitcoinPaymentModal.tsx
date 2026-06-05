@@ -31,7 +31,7 @@ export default function BitcoinPaymentModal({
   suggestedAmount = 10000,
   recipientAddress,
 }: BitcoinPaymentModalProps) {
-  const { formatAmount } = useDisplayCurrency();
+  const { formatAmountBtc } = useDisplayCurrency();
   const [paymentType, setPaymentType] = useState<PaymentType>('lightning');
   const [amount, setAmount] = useState(suggestedAmount);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(null);
@@ -148,7 +148,7 @@ export default function BitcoinPaymentModal({
               />
 
               <div className="text-base text-muted-foreground">
-                Amount: {formatAmount(paymentRequest.amount_btc)}
+                Amount: {formatAmountBtc(paymentRequest.amount_btc)}
               </div>
               {transactionId && (
                 <div className="text-xs text-muted-foreground">Transaction created</div>

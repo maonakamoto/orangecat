@@ -14,14 +14,15 @@
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
 interface FormattedAmountProps {
-  sats: number;
+  /** Amount in BTC. The canonical unit on this platform — never pass sats here. */
+  btc: number;
   className?: string;
 }
 
-export function FormattedAmount({ sats, className }: FormattedAmountProps) {
-  const { formatAmount } = useDisplayCurrency();
+export function FormattedAmount({ btc, className }: FormattedAmountProps) {
+  const { formatAmountBtc } = useDisplayCurrency();
 
-  return <span className={className}>{formatAmount(sats)}</span>;
+  return <span className={className}>{formatAmountBtc(btc)}</span>;
 }
 
 export default FormattedAmount;
