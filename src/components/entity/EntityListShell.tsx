@@ -39,11 +39,16 @@ export default function EntityListShell({
   className,
 }: EntityListShellProps) {
   const crumbs = breadcrumbs ?? [{ label: title }];
+  // A single-segment auto-generated breadcrumb just repeats the page
+  // title (~24px of redundant chrome on every dashboard list page).
+  // Show only when there's an explicit trail OR a real multi-segment
+  // nav context.
+  const showBreadcrumb = !hideBreadcrumb && (!!breadcrumbs || crumbs.length > 1);
 
   return (
     <div className={cn('oc-page pb-20 md:pb-8', className)}>
       <div className="oc-page-container oc-page-stack">
-        {!hideBreadcrumb && <Breadcrumb items={crumbs} />}
+        {showBreadcrumb && <Breadcrumb items={crumbs} />}
         <div className="oc-page-header">
           <div className="flex-1 min-w-0">
             <h1 className="oc-page-title break-words">{title}</h1>
