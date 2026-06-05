@@ -30,6 +30,7 @@ import {
   Calendar,
 } from 'lucide-react';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { ROUTES } from '@/config/routes';
 import type { TaskDefinition, SmartQuestion, UserContext } from './types';
 
 /**
@@ -81,7 +82,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     description: 'Choose a unique username for your profile URL',
     priority: 'critical',
     category: 'setup',
-    action: { label: 'Set Username', href: '/dashboard/info/edit' },
+    action: { label: 'Set Username', href: ROUTES.DASHBOARD.INFO_EDIT },
     icon: Star,
     condition: ctx => !ctx.profile.username,
   },
@@ -103,7 +104,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     description: 'Tell people about yourself and your mission',
     priority: 'high',
     category: 'setup',
-    action: { label: 'Add Bio', href: '/dashboard/info/edit' },
+    action: { label: 'Add Bio', href: ROUTES.DASHBOARD.INFO_EDIT },
     icon: Edit3,
     condition: ctx => !ctx.profile.bio && !!ctx.profile.username,
   },
@@ -113,7 +114,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     description: 'Add a profile photo to build trust with supporters',
     priority: 'high',
     category: 'setup',
-    action: { label: 'Upload Photo', href: '/dashboard/info/edit' },
+    action: { label: 'Upload Photo', href: ROUTES.DASHBOARD.INFO_EDIT },
     icon: Star,
     condition: ctx => !ctx.profile.avatar_url && !!ctx.profile.username,
   },
@@ -126,7 +127,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
       'Cat is your AI economic agent — describe your goals and it will suggest the right first step',
     priority: 'high',
     category: 'setup',
-    action: { label: 'Open Cat', href: '/dashboard/cat' },
+    action: { label: 'Open Cat', href: ROUTES.DASHBOARD.CAT },
     icon: MessageSquare,
     // Show when the user has no entities at all — Cat is the best guide here
     condition: ctx => Object.values(ctx.entityCounts).reduce((sum, c) => sum + (c ?? 0), 0) === 0,
@@ -218,7 +219,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     description: 'Connect with like-minded people and collaborate',
     priority: 'medium',
     category: 'engage',
-    action: { label: 'Explore Groups', href: '/discover?type=groups' },
+    action: { label: 'Explore Groups', href: ROUTES.DISCOVER_TYPE('groups') },
     icon: Users,
     condition: ctx => ctx.profileCompletion >= 75 && (ctx.entityCounts.group ?? 0) === 0,
   },
@@ -244,7 +245,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     description: 'Discover and support projects in the community',
     priority: 'low',
     category: 'grow',
-    action: { label: 'Explore', href: '/discover' },
+    action: { label: 'Explore', href: ROUTES.DISCOVER },
     icon: Globe,
     condition: ctx => ctx.profileCompletion >= 50,
   },
@@ -256,7 +257,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     category: 'grow',
     action: {
       label: 'View Profile',
-      href: '/profile/me', // Will redirect to actual username
+      href: ROUTES.PROFILES.ME,
     },
     icon: Share2,
     condition: ctx => ctx.profileCompletion === 100,
@@ -267,7 +268,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     description: 'Connect with people who can help grow your projects',
     priority: 'low',
     category: 'grow',
-    action: { label: 'Find People', href: '/discover?type=people' },
+    action: { label: 'Find People', href: ROUTES.DISCOVER_TYPE('people') },
     icon: Users,
     condition: ctx => (ctx.entityCounts.project ?? 0) > 0 && ctx.hasPublishedEntities,
   },
@@ -277,7 +278,7 @@ export const TASK_DEFINITIONS: TaskDefinition[] = [
     description: 'Keep your supporters informed about your progress',
     priority: 'low',
     category: 'engage',
-    action: { label: 'Create Post', href: '/timeline/compose' },
+    action: { label: 'Create Post', href: `${ROUTES.TIMELINE}/compose` },
     icon: MessageSquare,
     condition: ctx =>
       ctx.hasPublishedEntities &&
@@ -295,7 +296,7 @@ export const SMART_QUESTIONS: SmartQuestion[] = [
   {
     id: 'find-collaborators-q',
     question: 'You have projects live. Want to find collaborators?',
-    action: { label: 'Find People', href: '/discover?type=people' },
+    action: { label: 'Find People', href: ROUTES.DISCOVER_TYPE('people') },
     condition: ctx => ctx.profileCompletion === 100 && (ctx.entityCounts.project ?? 0) > 0,
   },
   {
@@ -307,7 +308,7 @@ export const SMART_QUESTIONS: SmartQuestion[] = [
   {
     id: 'update-supporters-q',
     question: "It's been a while since your last post. Update your supporters?",
-    action: { label: 'Create Post', href: '/timeline/compose' },
+    action: { label: 'Create Post', href: `${ROUTES.TIMELINE}/compose` },
     condition: ctx =>
       ctx.profileCompletion === 100 &&
       ctx.hasPublishedEntities &&
@@ -317,13 +318,13 @@ export const SMART_QUESTIONS: SmartQuestion[] = [
   {
     id: 'explore-funding-q',
     question: 'Ready to explore funding opportunities?',
-    action: { label: 'Browse Projects', href: '/discover?type=projects' },
+    action: { label: 'Browse Projects', href: ROUTES.DISCOVER_TYPE('projects') },
     condition: ctx => ctx.profileCompletion === 100 && ctx.hasWallet && !ctx.hasPublishedEntities,
   },
   {
     id: 'grow-network-q',
     question: 'Want to grow your network? Join a group!',
-    action: { label: 'Find Groups', href: '/discover?type=groups' },
+    action: { label: 'Find Groups', href: ROUTES.DISCOVER_TYPE('groups') },
     condition: ctx => ctx.profileCompletion === 100 && (ctx.entityCounts.group ?? 0) === 0,
   },
   {
@@ -344,19 +345,19 @@ export const SMART_QUESTIONS: SmartQuestion[] = [
  */
 export const CELEBRATION_MESSAGES = {
   profileComplete: {
-    title: 'Profile Complete! 🎉',
+    title: 'Profile complete',
     description: "Your profile is 100% complete. You're ready to make the most of OrangeCat!",
   },
   firstEntity: {
-    title: 'First Creation! 🚀',
+    title: 'First creation shipped',
     description: "Congratulations on creating your first listing! You're on your way.",
   },
   allSetupComplete: {
-    title: 'All Set! ✨',
+    title: 'All set',
     description: "You've completed all recommended setup tasks. Now let's grow!",
   },
   engagementMaster: {
-    title: 'Engagement Pro! 🏆',
+    title: 'Engagement pro',
     description: 'You have a thriving presence on OrangeCat. Keep up the great work!',
   },
 };
