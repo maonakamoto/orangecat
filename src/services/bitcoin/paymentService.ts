@@ -184,6 +184,3 @@ export function getPaymentProvider(): PaymentProvider {
       return new MockPaymentProvider();
   }
 }
-
-// Export singleton instance (backward compatible)
-export const bitcoinPaymentService = new MockPaymentProvider();
