@@ -2,7 +2,6 @@
 
 import { Share2 } from 'lucide-react';
 import { CardContent } from '@/components/ui/Card';
-import { trackEvent } from '@/utils/monitoring';
 import ShareContent from './ShareContent';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { APP_NAME, SITE_URL } from '@/config/brand';
@@ -43,11 +42,6 @@ export default function ProjectShare({
   const shareTitle = `Support: ${projectTitle}`;
   const shareDescription =
     projectDescription || `Check out this community-funded project on ${APP_NAME}: ${projectTitle}`;
-
-  // Track share events for analytics
-  const _trackShareEvent = (platform: string) => {
-    trackEvent(`project_share_${platform}`, { projectId, projectTitle });
-  };
 
   // Enhanced onClose that tracks analytics
   const handleClose = () => {
