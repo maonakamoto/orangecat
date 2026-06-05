@@ -82,7 +82,7 @@ export default function BookingsDashboardPage() {
         );
         loadBookings();
       } else {
-        toast.error(data.error || 'Action failed');
+        toast.error(data.error?.message || 'Action failed');
       }
     } catch (error) {
       logger.error('Action error', error, 'Booking');

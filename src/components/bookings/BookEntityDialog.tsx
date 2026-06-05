@@ -127,7 +127,7 @@ export function BookEntityDialog({
       });
       const body = await res.json().catch(() => null);
       if (!res.ok) {
-        toast.error(body?.error || `Failed to book (${res.status})`);
+        toast.error(body?.error?.message || `Failed to book (${res.status})`);
         return;
       }
       toast.success('Booking request sent — provider will confirm or reject.');

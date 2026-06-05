@@ -57,7 +57,7 @@ export default function BookingDetailPage() {
       if (data.success) {
         setBooking(data.data);
       } else {
-        toast.error(data.error || 'Failed to load booking');
+        toast.error(data.error?.message || 'Failed to load booking');
         router.push('/dashboard/bookings');
       }
     } catch (err) {
@@ -93,7 +93,7 @@ export default function BookingDetailPage() {
         );
         void loadBooking();
       } else {
-        toast.error(data.error || 'Action failed');
+        toast.error(data.error?.message || 'Action failed');
       }
     } catch (err) {
       logger.error('Booking action error', err, 'BookingDetail');
