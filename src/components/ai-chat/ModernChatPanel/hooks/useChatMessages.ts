@@ -74,7 +74,14 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
           let msg = 'Failed to get response';
           try {
             const data = await res.json();
-            msg = data?.details?.message || data?.error || msg;
+            // standardResponse envelope: { success:false, error:{code,message,details} }.
+            // Prefer error.message; fall back through legacy shapes so anything
+            // truthy beats the generic default.
+            msg =
+              data?.error?.message ||
+              data?.details?.message ||
+              (typeof data?.error === 'string' ? data.error : undefined) ||
+              msg;
           } catch {}
           throw new Error(msg);
         }
