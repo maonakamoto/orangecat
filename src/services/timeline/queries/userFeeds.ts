@@ -293,59 +293,38 @@ export async function getEnrichedUserFeed(
     let totalEvents = 0;
 
     try {
-      const {
-        data: enrichedEvents,
-        error,
-        count,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } = await (supabase.rpc as any)('get_enriched_timeline_feed', {
-        p_user_id: userId,
-        p_limit: limit,
-        p_offset: offset,
-      });
-
-      if (error) {
-        logger.warn(
-          'Enriched timeline feed not available, falling back to basic feed',
-          error,
-          'Timeline'
-        );
-
-        // Fallback to basic timeline feed if enriched version isn't available
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: basicEvents, error: basicError } = await (supabase.rpc as any)(
-          'get_user_timeline_feed',
-          {
-            p_user_id: userId,
-            p_limit: limit,
-            p_offset: offset,
-          }
-        );
-
-        if (basicError) {
-          logger.warn(
-            'Basic timeline feed also not available, using empty feed',
-            basicError,
-            'Timeline'
-          );
-          events = [];
-          totalEvents = 0;
-        } else {
-          // Convert basic events to enriched format
-          events = ((basicEvents || []) as Record<string, unknown>[]).map(event => ({
-            ...event,
-            like_count: 0,
-            share_count: 0,
-            comment_count: 0,
-            user_liked: false,
-            user_shared: false,
-            user_commented: false,
-          }));
-          totalEvents = events.length;
+      // The DB only has get_user_timeline_feed today — the "enriched" variant
+      // was never created, so calling it just generated a 404 on every
+      // dashboard load and then fell through to this same basic-feed code
+      // path. Skip the broken probe and call the basic feed directly; the
+      // enrichment fields below default to zero, matching what the previous
+      // fallback emitted. If get_enriched_timeline_feed is added later,
+      // restore the original ladder.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: basicEvents, error: basicError } = await (supabase.rpc as any)(
+        'get_user_timeline_feed',
+        {
+          p_user_id: userId,
+          p_limit: limit,
+          p_offset: offset,
         }
+      );
+
+      if (basicError) {
+        logger.warn('Basic timeline feed not available, using empty feed', basicError, 'Timeline');
+        events = [];
+        totalEvents = 0;
       } else {
-        events = enrichedEvents || [];
-        totalEvents = count || 0;
+        events = ((basicEvents || []) as Record<string, unknown>[]).map(event => ({
+          ...event,
+          like_count: 0,
+          share_count: 0,
+          comment_count: 0,
+          user_liked: false,
+          user_shared: false,
+          user_commented: false,
+        }));
+        totalEvents = events.length;
       }
     } catch (dbError) {
       logger.warn('Database functions not available, returning demo timeline', dbError, 'Timeline');
