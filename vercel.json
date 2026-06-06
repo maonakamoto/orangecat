@@ -103,11 +103,6 @@
       "source": "/health",
       "destination": "/api/health",
       "permanent": false
-    },
-    {
-      "source": "/status",
-      "destination": "/api/health",
-      "permanent": false
     }
   ],
 
