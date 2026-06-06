@@ -76,12 +76,14 @@ export function useAISettings() {
         return;
       }
 
-      // Fetch preferences
+      // Fetch preferences. `maybeSingle()` returns `null` (not 406) when a
+      // user has no preferences row yet — the row is created lazily on first
+      // mutation by useAISettingsMutations.
       const { data: prefsData } = await supabase
         .from(DATABASE_TABLES.USER_AI_PREFERENCES)
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       // Fetch API keys
       const { data: keysData } = await supabase
@@ -111,13 +113,15 @@ export function useAISettings() {
     }
   }, []);
 
-  // Fetch platform usage
+  // Fetch platform usage. Route returns the standard apiSuccess envelope —
+  // unwrap `.data` before storing so consumers see `daily_requests` etc. at
+  // the top level of `platformUsage`.
   const fetchPlatformUsage = useCallback(async () => {
     try {
       const response = await fetch(API_ROUTES.AI.PLATFORM_USAGE);
       if (response.ok) {
-        const data = await response.json();
-        setPlatformUsage(data);
+        const body = await response.json();
+        setPlatformUsage(body?.data ?? body);
       }
     } catch (err) {
       logger.error('Failed to fetch platform usage', err, 'AI');

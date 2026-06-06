@@ -7,7 +7,7 @@
 
 import Link from 'next/link';
 import { FolderOpen, Settings2 } from 'lucide-react';
-import { CAT_AGENT, CAT_HUB_TAB_HREFS } from '@/config/cat-hub';
+import { CAT_AGENT, CAT_HUB_COPY, CAT_HUB_TAB_HREFS, type CatHubTab } from '@/config/cat-hub';
 import { cn } from '@/lib/utils';
 import { ModelSelector } from './ModernChatPanel/components/ModelSelector';
 
@@ -15,7 +15,7 @@ interface CatChatToolbarProps {
   selectedModel: string;
   onModelSelect: (model: string) => void;
   modelSelectorDisabled?: boolean;
-  activePanel?: 'chat' | 'context' | 'settings';
+  activePanel?: CatHubTab;
   className?: string;
 }
 
@@ -26,11 +26,11 @@ export function CatChatToolbar({
   activePanel = 'chat',
   className,
 }: CatChatToolbarProps) {
-  const panelLink = (tab: 'context' | 'settings') => {
+  const panelLink = (tab: Exclude<CatHubTab, 'chat'>) => {
     const href = CAT_HUB_TAB_HREFS[tab];
     const isActive = activePanel === tab;
     const Icon = tab === 'context' ? FolderOpen : Settings2;
-    const label = tab === 'context' ? 'Context' : 'Controls';
+    const label = tab === 'context' ? CAT_HUB_COPY.contextTitle : CAT_HUB_COPY.controlsTitle;
 
     return (
       <Link
@@ -71,7 +71,7 @@ export function CatChatToolbar({
           />
         )}
         {panelLink('context')}
-        {panelLink('settings')}
+        {panelLink('controls')}
       </div>
     </div>
   );

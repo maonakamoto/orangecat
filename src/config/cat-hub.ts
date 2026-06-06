@@ -12,7 +12,7 @@
 import { APP_NAME } from '@/config/brand';
 import { ROUTES } from '@/config/routes';
 
-export type CatHubTab = 'chat' | 'context' | 'settings';
+export type CatHubTab = 'chat' | 'context' | 'controls';
 
 /** In-product AI persona label (short form of APP_NAME agent) */
 export const CAT_AGENT = {
@@ -29,16 +29,16 @@ export const CAT_HUB_COPY = {
   composerPlaceholder: 'Message Cat…',
   contextTitle: 'Context',
   contextDescription: 'Documents and facts your Cat can use for better answers.',
-  settingsTitle: 'Controls',
-  settingsDescription: 'Model, keys, and permissions for autonomous actions.',
+  controlsTitle: 'Controls',
+  controlsDescription: 'Model, keys, and permissions for autonomous actions.',
   backToChat: 'Back to chat',
 } as const;
 
 export const CAT_HUB_TAB_HREFS: Record<Exclude<CatHubTab, 'chat'>, string> = {
   context: `${ROUTES.DASHBOARD.CAT}?tab=context`,
-  settings: `${ROUTES.DASHBOARD.CAT}?tab=settings`,
+  controls: `${ROUTES.DASHBOARD.CAT}?tab=controls`,
 };
 
 export function isCatHubTab(value: string | null): value is CatHubTab {
-  return value === 'chat' || value === 'context' || value === 'settings';
+  return value === 'chat' || value === 'context' || value === 'controls';
 }

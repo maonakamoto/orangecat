@@ -18,9 +18,9 @@ interface CatSecondaryPanelProps {
 }
 
 export function CatSecondaryPanel({ tab }: CatSecondaryPanelProps) {
-  const title = tab === 'context' ? CAT_HUB_COPY.contextTitle : CAT_HUB_COPY.settingsTitle;
+  const title = tab === 'context' ? CAT_HUB_COPY.contextTitle : CAT_HUB_COPY.controlsTitle;
   const description =
-    tab === 'context' ? CAT_HUB_COPY.contextDescription : CAT_HUB_COPY.settingsDescription;
+    tab === 'context' ? CAT_HUB_COPY.contextDescription : CAT_HUB_COPY.controlsDescription;
 
   return (
     <div className={`oc-chat-layout ${APP_CONTENT_HEIGHT_CLASS}`}>
