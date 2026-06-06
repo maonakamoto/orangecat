@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Cat Permissions',
+  title: { default: 'Cat Permissions', template: '%s | OrangeCat' },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

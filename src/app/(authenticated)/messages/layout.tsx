@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Messages',
+  title: { default: 'Messages', template: '%s | OrangeCat' },
   description: 'Direct messages and conversations on OrangeCat.',
   openGraph: {
     title: 'Messages - OrangeCat',
