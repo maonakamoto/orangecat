@@ -146,14 +146,20 @@ export function Header({
       </header>
 
       {/* Email Confirmation Banner — only on in-app surfaces. Hiding it on
-          marketing/auth pages avoids pushing the sign-in form down. */}
-      {isAuthRoute && authStatus.authenticated && authState.user && (
-        <EmailConfirmationBanner
-          emailConfirmedAt={authState.user.email_confirmed_at}
-          userId={authState.user.id}
-          className={`fixed ${HEADER_DIMENSIONS.TOP_OFFSET_MOBILE} ${HEADER_DIMENSIONS.TOP_OFFSET_DESKTOP} left-0 right-0 z-40`}
-        />
-      )}
+          marketing/auth pages avoids pushing the sign-in form down. Also
+          hide for anonymous users (signInAnonymously) — they have no email
+          to confirm, so the banner is nonsensical and just adds noise to
+          the "Try it anonymously" upgrade-anytime flow. */}
+      {isAuthRoute &&
+        authStatus.authenticated &&
+        authState.user &&
+        !authState.user.is_anonymous && (
+          <EmailConfirmationBanner
+            emailConfirmedAt={authState.user.email_confirmed_at}
+            userId={authState.user.id}
+            className={`fixed ${HEADER_DIMENSIONS.TOP_OFFSET_MOBILE} ${HEADER_DIMENSIONS.TOP_OFFSET_DESKTOP} left-0 right-0 z-40`}
+          />
+        )}
 
       {/* Mobile search now uses the CommandPalette — no separate modal. */}
 
