@@ -232,7 +232,17 @@ export default function DiscoverPage() {
                     research={research}
                     aiAssistants={aiAssistants}
                     totalResults={
-                      totalResults +
+                      // useSearch (which feeds `totalResults`) only handles
+                      // projects + profiles + all. When the active tab is one
+                      // of the entity-specific tabs (loans, causes, …) it
+                      // still returns its initialType count — i.e., a
+                      // projects count that nothing on-screen reflects —
+                      // and adding it produces "6 results found" while
+                      // only 3 loans render. Skip that contribution unless
+                      // the tab is one useSearch actually targets.
+                      (activeTab === 'all' || activeTab === 'projects' || activeTab === 'profiles'
+                        ? totalResults
+                        : 0) +
                       loans.length +
                       investments.length +
                       assets.length +
