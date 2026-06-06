@@ -9,6 +9,7 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { API_ROUTES } from '@/config/api-routes';
+import { ROUTES } from '@/config/routes';
 import { BADGE_COLORS } from '@/config/badge-colors';
 import { STATUS } from '@/config/database-constants';
 import { formatDate, formatTime } from '@/utils/dates';
@@ -50,7 +51,7 @@ export default function BookingDetailPage() {
       const res = await fetch(API_ROUTES.BOOKINGS.BY_ID(id));
       if (!res.ok) {
         toast.error('Booking not found');
-        router.push('/dashboard/bookings');
+        router.push(ROUTES.DASHBOARD.BOOKINGS);
         return;
       }
       const data = await res.json();
@@ -58,7 +59,7 @@ export default function BookingDetailPage() {
         setBooking(data.data);
       } else {
         toast.error(data.error?.message || 'Failed to load booking');
-        router.push('/dashboard/bookings');
+        router.push(ROUTES.DASHBOARD.BOOKINGS);
       }
     } catch (err) {
       logger.error('Failed to load booking', err, 'BookingDetail');
@@ -122,7 +123,10 @@ export default function BookingDetailPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
       <Breadcrumb
-        items={[{ label: 'Bookings', href: '/dashboard/bookings' }, { label: 'Booking Details' }]}
+        items={[
+          { label: 'Bookings', href: ROUTES.DASHBOARD.BOOKINGS },
+          { label: 'Booking Details' },
+        ]}
         className="mb-4"
       />
 
@@ -130,7 +134,7 @@ export default function BookingDetailPage() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => router.push('/dashboard/bookings')}
+          onClick={() => router.push(ROUTES.DASHBOARD.BOOKINGS)}
           className="gap-2"
         >
           <ArrowLeft className="h-4 w-4" />

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Bitcoin, Download } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
+import { ROUTES } from '@/config/routes';
 
 interface GetStartedCTAProps {
   onGetWallet: () => void;
@@ -34,7 +35,7 @@ export function GetStartedCTA({ onGetWallet }: GetStartedCTAProps) {
               <Download className="w-4 h-4 mr-2" />
               Get a Wallet Now
             </Button>
-            <Link href="/profile/setup">
+            <Link href={ROUTES.PROFILES.ME}>
               <Button
                 variant="outline"
                 className="border-bitcoinOrange text-bitcoinOrange hover:bg-bitcoinOrange/10"

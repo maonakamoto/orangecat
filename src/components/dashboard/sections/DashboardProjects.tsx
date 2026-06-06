@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button';
 import { BarChart3 } from 'lucide-react';
 import { ProjectCard } from '@/components/entity/variants/ProjectCard';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { ROUTES } from '@/config/routes';
 import { ENTITY_STATUS } from '@/config/database-constants';
 
 // Use a generic interface compatible with the project store
@@ -58,7 +59,7 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
               cause, service…) based on what you want to do.
             </p>
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
-              <Link href="/dashboard/cat">
+              <Link href={ROUTES.DASHBOARD.CAT}>
                 <Button variant="outline" size="sm">
                   Ask Cat
                 </Button>

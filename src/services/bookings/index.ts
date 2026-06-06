@@ -11,6 +11,7 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { ROUTES } from '@/config/routes';
 import { NotificationDispatcher } from '@/services/notifications/dispatcher';
 
 // Types
@@ -215,7 +216,7 @@ class BookingService {
       data: { bookingId: booking.id, bookableType, startsAt: booking.starts_at },
       sourceEntityType: bookableType,
       sourceEntityId: booking.bookable_id,
-      actionUrl: '/dashboard/bookings',
+      actionUrl: ROUTES.DASHBOARD.BOOKINGS,
     });
   }
 

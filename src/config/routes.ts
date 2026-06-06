@@ -261,6 +261,8 @@ export const ROUTES = {
   AUTH_LOGIN: '/auth?mode=login',
   AUTH_REGISTER: '/auth?mode=register',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
+  AUTH_RESET_PASSWORD: '/auth/reset-password',
+  AUTH_CALLBACK: '/auth/callback',
   DISCOVER: '/discover',
   WALLETS: '/wallets',
   CREATE: '/create',

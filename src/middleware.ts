@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
-import { getRouteSurface } from '@/config/routes';
+import { getRouteSurface, ROUTES } from '@/config/routes';
 
 // Edge middleware route classification reads from the SAME SSOT used by
 // AppShell / MobileBottomNav / Footer / Header (src/config/routes.ts).
@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
 
   // Handle Supabase code exchange links (?code=...) - early return for performance
   if (url.searchParams.has('code') && pathname === '/') {
-    const callbackUrl = new URL('/auth/callback', request.url);
+    const callbackUrl = new URL(ROUTES.AUTH_CALLBACK, request.url);
     url.searchParams.forEach((value, key) => callbackUrl.searchParams.set(key, value));
     return NextResponse.redirect(callbackUrl);
   }
@@ -67,9 +67,9 @@ export async function middleware(request: NextRequest) {
 
   if (
     ((hasResetTokens && isRecoveryType) || hasAuthErrors) &&
-    pathname !== '/auth/reset-password'
+    pathname !== ROUTES.AUTH_RESET_PASSWORD
   ) {
-    const resetUrl = new URL('/auth/reset-password', request.url);
+    const resetUrl = new URL(ROUTES.AUTH_RESET_PASSWORD, request.url);
     searchParams.forEach((value, key) => resetUrl.searchParams.set(key, value));
     if (hash) {
       resetUrl.hash = hash;

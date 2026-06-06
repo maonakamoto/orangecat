@@ -166,16 +166,13 @@ export function createEntityListHandler(config: EntityListHandlerConfig) {
       // Integration-key auth bypasses the public-list commerce helper —
       // we want only the bound actor's rows, drafts included.
       if (!boundActorId && useListHelper && commerceTables.includes(table)) {
-        const { items, total } = await listEntitiesPage(
-          table as 'user_products' | 'user_services' | 'user_causes',
-          {
-            limit,
-            offset,
-            category,
-            userId,
-            includeOwnDrafts,
-          }
-        );
+        const { items, total } = await listEntitiesPage(table, {
+          limit,
+          offset,
+          category,
+          userId,
+          includeOwnDrafts,
+        });
 
         return apiSuccess(items, {
           page: calculatePage(offset, limit),

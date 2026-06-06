@@ -22,6 +22,7 @@ import { useRecommendations } from '@/hooks/useRecommendations';
 import { SmartQuestionsPanel } from './SmartQuestionsPanel';
 import { TASK_DEFINITIONS } from '@/services/recommendations/tasks';
 import type { RecommendedTask, TaskPriority } from '@/services/recommendations/types';
+import { ROUTES } from '@/config/routes';
 import type { LucideIcon } from 'lucide-react';
 
 const TASK_ICON_MAP: Record<string, LucideIcon> = Object.fromEntries(
@@ -178,10 +179,10 @@ export default function TasksSection({
               </p>
             </div>
             <div className="flex gap-2">
-              <Link href="/dashboard/cat">
+              <Link href={ROUTES.DASHBOARD.CAT}>
                 <Button size="sm">Ask Cat</Button>
               </Link>
-              <Link href="/discover">
+              <Link href={ROUTES.DISCOVER}>
                 <Button size="sm" variant="outline">
                   Discover
                 </Button>
