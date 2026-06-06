@@ -37,6 +37,15 @@ export async function getProjectFeed(
     const offset = (page - 1) * limit;
 
     const currentUserId = await getCurrentUserId();
+    // When the visitor is unauthenticated, getCurrentUserId returns null.
+    // Interpolating that into `actor_id.eq.${currentUserId}` produces the
+    // literal string `actor_id.eq.null`, which PostgREST tries to parse as
+    // a UUID and 400s with "invalid input syntax for type uuid: null" —
+    // surfaced as a console error on every public visitor's project page.
+    // Only include the actor branch when we have a real UUID.
+    const orClause = currentUserId
+      ? `visibility.eq.public,actor_id.eq.${currentUserId}`
+      : `visibility.eq.public`;
     const {
       data: events,
       error,
@@ -46,7 +55,7 @@ export async function getProjectFeed(
       .select('*', { count: 'exact' })
       .eq('subject_type', 'project')
       .eq('subject_id', projectId)
-      .or(`visibility.eq.public,actor_id.eq.${currentUserId}`)
+      .or(orClause)
       .order('event_timestamp', { ascending: false })
       .range(offset, offset + limit - 1);
 
