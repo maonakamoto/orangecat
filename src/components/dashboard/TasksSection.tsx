@@ -70,7 +70,12 @@ export default function TasksSection({
   showQuestions = true,
 }: TasksSectionProps) {
   const { user, profile } = useAuth();
-  const [isExpanded, setIsExpanded] = useState(true);
+  // `userToggled` tracks whether the viewer has clicked the expand/collapse
+  // button. Default collapsed state derives from setup progress (collapse
+  // when 0 critical/high tasks remain) so the 100% chrome doesn't dominate
+  // the dashboard slot. Once the viewer clicks, we honor their choice.
+  const [userToggled, setUserToggled] = useState(false);
+  const [userExpanded, setUserExpanded] = useState(true);
   const [celebrationDismissed, setCelebrationDismissed] = useState(false);
 
   useEffect(() => {
@@ -208,6 +213,11 @@ export default function TasksSection({
   const taskPool = setupTasksRemaining === 0 ? setupTasks : tasks;
   const visibleTasks = taskPool.slice(0, maxTasks);
   const hiddenCount = Math.max(0, taskPool.length - maxTasks);
+  const isExpanded = userToggled ? userExpanded : setupTasksRemaining > 0;
+  const toggleExpanded = () => {
+    setUserToggled(true);
+    setUserExpanded(!isExpanded);
+  };
 
   return (
     <div className={className}>
@@ -233,7 +243,7 @@ export default function TasksSection({
                 </div>
               </div>
               <button
-                onClick={() => setIsExpanded(!isExpanded)}
+                onClick={toggleExpanded}
                 className="rounded-md p-2 transition-colors hover:bg-muted"
                 aria-label={isExpanded ? 'Collapse tasks' : 'Expand tasks'}
               >
@@ -268,7 +278,14 @@ export default function TasksSection({
 
               {hiddenCount > 0 && (
                 <div className="text-center pt-2">
-                  <Button variant="ghost" size="sm" onClick={() => setIsExpanded(true)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setUserToggled(true);
+                      setUserExpanded(true);
+                    }}
+                  >
                     Show {hiddenCount} more task{hiddenCount !== 1 ? 's' : ''}
                   </Button>
                 </div>
