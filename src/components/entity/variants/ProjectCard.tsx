@@ -14,10 +14,11 @@ import { EntityCard, EntityCardProps } from '@/components/entity/EntityCard';
 import { Badge } from '@/components/ui/badge';
 import { PROJECT_STATUSES } from '@/config/project-statuses';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
-import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import BTCAmountDisplay from '@/components/ui/BTCAmountDisplay';
+import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { useCurrencyConversion } from '@/hooks/useCurrencyConversion';
+import { cn } from '@/lib/utils';
 import type { SearchFundingPage } from '@/services/search';
-import type { CurrencyCode } from '@/config/currencies';
 
 interface ProjectCardProps extends Omit<
   EntityCardProps,
@@ -44,7 +45,23 @@ export function ProjectCard({
 }: ProjectCardProps) {
   const goalAmount = project.goal_amount ?? 0;
   const currentAmount = project.raised_amount ?? 0;
-  const projectCurrency = (project.currency || 'CHF') as CurrencyCode;
+  const projectCurrency = project.currency || 'CHF';
+
+  // SSOT: amounts are stored per-project in the project's chosen currency
+  // (e.g. goal=5000 stored as CHF, or goal=0.01 stored as BTC). Display
+  // must always honor the *viewer's* preference — convert through BTC, the
+  // canonical unit, then format via the viewer's display hook. Without this
+  // a CHF-preferring viewer would see "0 BTC" on a BTC-denominated project
+  // while CHF projects right next to it render as "0.00 CHF".
+  const { formatAmountBtc, displayCurrency } = useDisplayCurrency();
+  const { convertToBTC } = useCurrencyConversion();
+  const goalBtc = convertToBTC(goalAmount, projectCurrency);
+  const currentBtc = convertToBTC(currentAmount, projectCurrency);
+  const formattedCurrent = formatAmountBtc(currentBtc);
+  const formattedGoal = formatAmountBtc(goalBtc);
+  const amountColorClass =
+    displayCurrency === 'BTC' ? 'text-bitcoinOrange font-medium' : 'text-foreground';
+
   const showProgressBar = showProgress && goalAmount > 0;
   const progressPercentage = showProgressBar
     ? Math.min((currentAmount / goalAmount) * 100, 100)
@@ -68,8 +85,8 @@ export function ProjectCard({
           />
         </div>
         <div className="flex items-center justify-between text-xs">
-          <span className="font-medium">
-            <CurrencyDisplay amount={currentAmount} currency={projectCurrency} />
+          <span className={cn('font-medium font-mono tabular-nums', amountColorClass)}>
+            {formattedCurrent}
           </span>
           <span className="text-muted-foreground">{Math.round(progressPercentage)}%</span>
         </div>
@@ -88,12 +105,8 @@ export function ProjectCard({
           />
         </div>
         <div className="flex items-center justify-between text-sm font-medium">
-          <span>
-            <CurrencyDisplay amount={currentAmount} currency={projectCurrency} />
-          </span>
-          <span className="text-muted-foreground">
-            of <CurrencyDisplay amount={goalAmount} currency={projectCurrency} />
-          </span>
+          <span className={cn('font-mono tabular-nums', amountColorClass)}>{formattedCurrent}</span>
+          <span className="text-muted-foreground font-mono tabular-nums">of {formattedGoal}</span>
         </div>
       </div>
     )
@@ -105,12 +118,12 @@ export function ProjectCard({
       <div className="flex items-center gap-4 text-sm text-muted-foreground">
         {currentAmount > 0 && (
           <div className="flex items-center gap-1">
-            <span className="font-medium">
-              <CurrencyDisplay amount={currentAmount} currency={projectCurrency} />
+            <span className={cn('font-medium font-mono tabular-nums', amountColorClass)}>
+              {formattedCurrent}
             </span>
-            {projectCurrency !== 'BTC' && (
+            {displayCurrency !== 'BTC' && (
               <span className="text-xs text-muted-foreground">
-                (<BTCAmountDisplay amount={currentAmount} currency={projectCurrency} />)
+                (<BTCAmountDisplay amount={currentBtc} currency="BTC" />)
               </span>
             )}
           </div>
