@@ -1,15 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import { CardDescription, CardTitle } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import TimelineComponent from '@/components/timeline/TimelineComponent';
-import TimelineComposer from '@/components/timeline/TimelineComposer';
 import { TimelineFeedResponse } from '@/types/timeline';
-import { BookOpen, MessageSquare, Compass, RefreshCw, AlertCircle } from 'lucide-react';
+import { ArrowRight, MessageSquare, Compass, RefreshCw, AlertCircle } from 'lucide-react';
 import { TimelinePostSkeleton } from '@/components/ui/Skeleton';
 import { ROUTES } from '@/config/routes';
+
+const PREVIEW_LIMIT = 3;
 
 interface DashboardTimelineProps {
   timelineFeed: TimelineFeedResponse | null;
@@ -21,105 +22,112 @@ interface DashboardTimelineProps {
 }
 
 /**
- * DashboardTimeline - Modular timeline component for dashboard
+ * DashboardTimeline — recent-activity preview surface for the dashboard.
  *
- * Uses existing TimelineComponent and TimelineComposer (DRY principle).
- * No duplicate implementations - reuses established patterns.
+ * Renders at most three most-recent timeline events with a "View full
+ * timeline" CTA. The composer and the full feed live on the dedicated
+ * /timeline page; this surface exists so the dashboard can glance at what's
+ * new without surrendering the whole page to the social feed.
  */
 export function DashboardTimeline({
   timelineFeed,
   isLoading,
   error,
   onRefresh,
-  onPostSuccess,
-  userId,
+  // onPostSuccess kept on the prop type for parent compatibility; composing
+  // moved to /timeline so we don't fire it from here anymore.
+  onPostSuccess: _onPostSuccess,
+  userId: _userId,
 }: DashboardTimelineProps) {
-  const router = useRouter();
+  const previewFeed = useMemo<TimelineFeedResponse | null>(() => {
+    if (!timelineFeed) {
+      return null;
+    }
+    if (timelineFeed.events.length <= PREVIEW_LIMIT) {
+      return timelineFeed;
+    }
+    return { ...timelineFeed, events: timelineFeed.events.slice(0, PREVIEW_LIMIT) };
+  }, [timelineFeed]);
+
+  const totalEvents = timelineFeed?.events.length ?? 0;
+  const hiddenCount = Math.max(0, totalEvents - PREVIEW_LIMIT);
 
   return (
-    <div className="space-y-3 sm:space-y-4">
-      {/* Composer surface matches timeline UI */}
-      <div className="oc-surface overflow-hidden">
-        <TimelineComposer
-          targetOwnerId={userId}
-          targetOwnerType="profile"
-          allowProjectSelection={true}
-          onPostCreated={onPostSuccess}
-          placeholder="Share an update..."
-          buttonText="Post"
-        />
+    <div className="oc-surface overflow-hidden">
+      <div className="flex flex-col gap-3 border-b border-border-subtle px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
+        <div>
+          <CardTitle className="text-base font-semibold text-foreground sm:text-lg">
+            Recent activity
+          </CardTitle>
+          <CardDescription className="text-xs text-muted-foreground sm:text-sm">
+            Latest posts and updates from your network
+          </CardDescription>
+        </div>
+        <Link href={ROUTES.TIMELINE} className="shrink-0">
+          <Button variant="outline" size="sm" className="w-full sm:w-auto">
+            View full timeline
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </Link>
       </div>
 
-      {/* Timeline feed surface matches timeline UI */}
-      <div className="oc-surface overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-5 py-3 sm:py-4 border-b border-border-subtle">
-          <div>
-            <CardTitle className="text-base sm:text-lg font-semibold text-foreground">
-              Timeline
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm text-muted-foreground">
-              Recent activities, posts, and updates
-            </CardDescription>
+      <div className="p-0">
+        {isLoading ? (
+          <div className="px-4 py-3 sm:px-0 sm:py-4">
+            {[...Array(PREVIEW_LIMIT)].map((_, idx) => (
+              <TimelinePostSkeleton key={idx} />
+            ))}
           </div>
-          <Link href={ROUTES.TIMELINE} className="shrink-0">
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">
-              <BookOpen className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">View Full Timeline</span>
-              <span className="sm:hidden">Full Timeline</span>
+        ) : error ? (
+          <div className="px-4 py-8 text-center text-destructive sm:px-6 sm:py-10">
+            <AlertCircle className="mx-auto mb-3 h-10 w-10 sm:mb-4 sm:h-12 sm:w-12" />
+            <p className="mb-2 text-sm font-medium sm:text-base">Failed to load timeline</p>
+            <p className="mb-3 text-xs text-muted-foreground sm:mb-4 sm:text-sm">{error}</p>
+            <Button variant="outline" onClick={onRefresh} size="sm">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Retry
             </Button>
-          </Link>
-        </div>
-        <div className="p-0">
-          {isLoading ? (
-            <div className="py-3 sm:py-4 px-4 sm:px-0">
-              {[...Array(3)].map((_, idx) => (
-                <TimelinePostSkeleton key={idx} />
-              ))}
-            </div>
-          ) : error ? (
-            <div className="px-4 py-8 text-center text-destructive sm:px-6 sm:py-10">
-              <AlertCircle className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4" />
-              <p className="text-sm sm:text-base font-medium mb-2">Failed to load timeline</p>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">{error}</p>
-              <Button variant="outline" onClick={onRefresh} size="sm">
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Retry
-              </Button>
-            </div>
-          ) : timelineFeed && timelineFeed.events.length > 0 ? (
-            <div className="min-h-[200px]">
-              <TimelineComponent
-                feed={timelineFeed}
-                onLoadMore={onRefresh}
-                showFilters={false}
-                compact={false}
-              />
-            </div>
-          ) : (
-            <div className="text-center py-8 sm:py-12 px-4 text-muted-foreground">
-              <MessageSquare className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-muted-dim dark:text-muted-foreground" />
-              <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
-                Start your timeline
-              </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6 max-w-md mx-auto">
-                Share the first update. This feed will collect posts, project updates, and community
-                interactions.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
-                <Button onClick={() => router.push(`${ROUTES.TIMELINE}?compose=true`)} size="sm">
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Share Your First Post
-                </Button>
-                <Link href={ROUTES.DISCOVER}>
-                  <Button variant="outline" size="sm" className="w-full sm:w-auto">
-                    <Compass className="w-4 h-4 mr-2" />
-                    Explore Community
-                  </Button>
+          </div>
+        ) : previewFeed && previewFeed.events.length > 0 ? (
+          <>
+            <TimelineComponent feed={previewFeed} showFilters={false} compact />
+            {hiddenCount > 0 && (
+              <div className="border-t border-border-subtle px-4 py-3 text-center sm:px-5">
+                <Link
+                  href={ROUTES.TIMELINE}
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground"
+                >
+                  {hiddenCount} more {hiddenCount === 1 ? 'update' : 'updates'} on the full timeline
+                  <ArrowRight className="ml-1 inline h-3.5 w-3.5" />
                 </Link>
               </div>
+            )}
+          </>
+        ) : (
+          <div className="px-4 py-8 text-center text-muted-foreground sm:py-12">
+            <MessageSquare className="mx-auto mb-3 h-12 w-12 text-muted-dim sm:mb-4 sm:h-16 sm:w-16 dark:text-muted-foreground" />
+            <h3 className="mb-2 text-base font-semibold text-foreground sm:text-lg">
+              Nothing new yet
+            </h3>
+            <p className="mx-auto mb-4 max-w-md text-xs text-muted-foreground sm:mb-6 sm:text-sm">
+              Posts from your network land here. Share an update on the timeline to get started.
+            </p>
+            <div className="flex flex-col justify-center gap-2 sm:flex-row sm:gap-3">
+              <Link href={`${ROUTES.TIMELINE}?compose=true`}>
+                <Button size="sm" className="w-full sm:w-auto">
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Share your first post
+                </Button>
+              </Link>
+              <Link href={ROUTES.DISCOVER}>
+                <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                  <Compass className="mr-2 h-4 w-4" />
+                  Explore community
+                </Button>
+              </Link>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
