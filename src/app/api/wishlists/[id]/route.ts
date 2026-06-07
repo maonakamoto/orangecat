@@ -13,14 +13,21 @@ import {
   entityTransforms,
 } from '@/lib/api/buildUpdatePayload';
 
+// UPDATE never re-applies defaults — that's CREATE's job. Earlier this
+// builder hardcoded `visibility:'public'` and `is_active:true`, which
+// silently flipped private/draft wishlists back to public+active on any
+// partial PUT (form omits a field, partial REST update, etc.). Same bug
+// class as the create-path privacy bug fixed in c9897f9a, on the edit
+// path. Omitted fields now keep their existing DB value, which is what
+// every other PUT route should also do.
 const buildWishlistUpdatePayload = createUpdatePayloadBuilder([
   { from: 'title' },
   { from: 'description', transform: entityTransforms.emptyStringToNull },
-  { from: 'type', default: 'general' },
-  { from: 'visibility', default: 'public' },
+  { from: 'type' },
+  { from: 'visibility' },
   commonFieldMappings.dateField('event_date'),
   commonFieldMappings.urlField('cover_image_url'),
-  { from: 'is_active', default: true },
+  { from: 'is_active' },
 ]);
 
 const { GET, PUT, DELETE } = createEntityCrudHandlers({
