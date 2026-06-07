@@ -93,9 +93,32 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
     const { data: existing, error: fetchError } = await (supabase.from(tableName) as any)
       .select(`id, ${statusSelectColumn}, ${userIdField}`)
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
-    if (fetchError || !existing) {
+    if (fetchError) {
+      // PostgREST + supabase-js collapses RLS-blocked-read into a generic
+      // 404-shaped error if we use `.single()`, hiding the actual failure
+      // mode. Surface the error code/details so this stops being invisible.
+      logger.error('Entity status: fetch failed', {
+        entityType,
+        id,
+        userId: user.id,
+        errorCode: fetchError.code,
+        errorMessage: fetchError.message,
+        errorDetails: fetchError.details,
+      });
+      return apiNotFound(`${entityType} not found`);
+    }
+    if (!existing) {
+      // .maybeSingle returns null both for "row doesn't exist" AND "RLS
+      // blocked the read." Log so we can tell them apart when a user reports
+      // a Publish Now toast — historically these silently degraded to 404.
+      logger.warn('Entity status: row not visible to user', {
+        entityType,
+        id,
+        userId: user.id,
+        likelyCause: 'RLS-blocked or row missing',
+      });
       return apiNotFound(`${entityType} not found`);
     }
 
