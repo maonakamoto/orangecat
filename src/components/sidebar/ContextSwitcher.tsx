@@ -72,6 +72,17 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
 
   const avatarUrl = isGroupContext ? context.group?.avatar_url : profile.avatar_url;
 
+  // When the user's display name is the same string as their username (common
+  // for users who never set a separate display name — "mao" / "mao"), the
+  // sidebar header used to print both, stacked: "mao" / "@mao". That triple-
+  // ident pattern is what the team-of-experts dashboard review flagged as
+  // "mao mao mao at the top." Only show the @username row when it adds new
+  // information.
+  const showSecondaryHandle =
+    !isGroupContext &&
+    !!profile.username &&
+    profile.username.toLowerCase() !== (profile.name || '').toLowerCase();
+
   // Collapsed mode: just show the avatar, no dropdown
   if (!isExpanded) {
     return (
@@ -140,9 +151,11 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
             <p className="text-sm font-semibold text-foreground truncate">{displayName}</p>
             <NWCStatusBadge />
           </div>
-          <p className="text-xs text-muted-foreground truncate">
-            {isGroupContext ? 'Group' : `@${profile.username || 'user'}`}
-          </p>
+          {(isGroupContext || showSecondaryHandle) && (
+            <p className="text-xs text-muted-foreground truncate">
+              {isGroupContext ? 'Group' : `@${profile.username}`}
+            </p>
+          )}
         </div>
         <ChevronDown
           className={cn('w-4 h-4 text-muted-dim transition-transform', isOpen && 'rotate-180')}
