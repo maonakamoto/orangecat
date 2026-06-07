@@ -5,26 +5,32 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-function ImagePlaceholder() {
+// Pull the first grapheme of the title, uppercased. Skips leading whitespace
+// and emoji-style symbols (which read as mojibake at large sizes) so a title
+// like "  ✨ Open Source Privacy Tools" still surfaces as "O", not "✨".
+function titleInitial(title: string): string {
+  const trimmed = title.trim();
+  if (!trimmed) {
+    return '·';
+  }
+  const firstLetter = trimmed.match(/[\p{Letter}\p{Number}]/u);
+  return (firstLetter?.[0] ?? trimmed[0] ?? '·').toUpperCase();
+}
+
+function ImagePlaceholder({ title }: { title: string }) {
+  const initial = titleInitial(title);
   return (
-    <div className="flex h-full w-full items-center justify-center bg-muted/40">
-      <div className="text-center">
-        <svg
-          className="mx-auto h-12 w-12 text-muted-dim"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-          />
-        </svg>
-        <span className="mt-2 text-xs font-medium text-muted-foreground">No Image</span>
-      </div>
+    <div
+      className="flex h-full w-full items-center justify-center bg-muted/40"
+      role="img"
+      aria-label={`${title} — no cover image`}
+    >
+      <span
+        className="select-none text-5xl font-semibold tracking-tight text-muted-foreground/60"
+        aria-hidden="true"
+      >
+        {initial}
+      </span>
     </div>
   );
 }
@@ -77,7 +83,7 @@ export function EntityCardImage({ imageSrc, title, compact, href }: EntityCardIm
           {!imageLoaded && <ImageLoader />}
         </>
       ) : (
-        <ImagePlaceholder />
+        <ImagePlaceholder title={title} />
       )}
     </Link>
   );
