@@ -28,12 +28,16 @@ const buildServiceUpdatePayload = createUpdatePayloadBuilder([
   { from: 'currency' },
   { from: 'duration_minutes' },
   { from: 'availability_schedule' },
-  { from: 'service_location_type', default: 'remote' },
+  { from: 'service_location_type' },
   { from: 'service_area', transform: entityTransforms.emptyStringToNull },
   commonFieldMappings.arrayField('images', []),
   commonFieldMappings.arrayField('portfolio_links', []),
-  { from: 'show_on_profile', default: true },
-  { from: 'status', default: 'draft' }, // Ensure status is preserved
+  { from: 'show_on_profile' },
+  // Status omitted intentionally — UPDATE that drops the field should keep
+  // the existing row's status. Previous default:'draft' did the opposite of
+  // its own comment: it silently unpublished active services on partial PUT.
+  // Status transitions go through /api/entities/service/{id}/status.
+  { from: 'status' },
 ]);
 
 // Create handlers using generic factory

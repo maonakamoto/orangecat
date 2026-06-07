@@ -29,7 +29,7 @@ const buildLoanUpdatePayload = createUpdatePayloadBuilder([
   // Currency: only include if explicitly provided (don't override existing value)
   // Currency is for display/input only - all transactions are in BTC
   { from: 'currency' },
-  { from: 'fulfillment_type', default: 'manual' },
+  { from: 'fulfillment_type' },
   // Loan-specific fields
   { from: 'lender_name', transform: entityTransforms.emptyStringToNull },
   { from: 'loan_number', transform: entityTransforms.emptyStringToNull },
@@ -38,9 +38,12 @@ const buildLoanUpdatePayload = createUpdatePayloadBuilder([
   { from: 'monthly_payment' },
   { from: 'minimum_offer_amount' },
   { from: 'preferred_terms', transform: entityTransforms.emptyStringToNull },
-  { from: 'is_public', default: true },
-  { from: 'is_negotiable', default: true },
-  { from: 'contact_method', default: 'platform' },
+  // UPDATE never re-applies create defaults — same fix as 4bf52070 on
+  // wishlists. Earlier `default: true` here silently flipped private/
+  // non-negotiable loans back to public+negotiable on partial PUT.
+  { from: 'is_public' },
+  { from: 'is_negotiable' },
+  { from: 'contact_method' },
 ]);
 
 // Create handlers using generic factory

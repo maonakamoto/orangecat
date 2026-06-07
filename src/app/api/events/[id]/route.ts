@@ -37,17 +37,17 @@ const buildEventUpdatePayload = createUpdatePayloadBuilder([
   { from: 'venue_postal_code', transform: entityTransforms.emptyStringToNull },
   { from: 'latitude' },
   { from: 'longitude' },
-  { from: 'is_online', default: false },
+  { from: 'is_online' },
   commonFieldMappings.urlField('online_url'),
   commonFieldMappings.uuidField('asset_id'),
   { from: 'max_attendees' },
-  { from: 'requires_rsvp', default: true },
+  { from: 'requires_rsvp' },
   commonFieldMappings.dateField('rsvp_deadline'),
   // Amounts stored in user's currency (not satoshis)
   { from: 'ticket_price' },
   // Currency: only include if explicitly provided (don't override existing value)
   { from: 'currency' },
-  { from: 'is_free', default: false },
+  { from: 'is_free' },
   { from: 'funding_goal' },
   { from: 'bitcoin_address', transform: entityTransforms.emptyStringToNull },
   { from: 'lightning_address', transform: entityTransforms.emptyStringToNull },
@@ -55,7 +55,11 @@ const buildEventUpdatePayload = createUpdatePayloadBuilder([
   commonFieldMappings.urlField('thumbnail_url'),
   commonFieldMappings.urlField('banner_url'),
   commonFieldMappings.urlField('video_url'),
-  { from: 'status', default: 'draft' },
+  // status omitted intentionally — UPDATE that drops the field should keep
+  // the existing row's status. Previous default:'draft' silently
+  // unpublished active events on any partial PUT. Status transitions go
+  // through /api/entities/event/{id}/status, not this builder.
+  { from: 'status' },
 ]);
 
 // Create handlers using generic factory
