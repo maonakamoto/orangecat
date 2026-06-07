@@ -19,10 +19,16 @@ export const wishlistSchema = z.object({
     .max(100, 'Title must be at most 100 characters'),
   description: optionalText(1000),
   type: z.enum(WISHLIST_TYPES.map(t => t.value) as [string, ...string[]]).default('general'),
-  visibility: z.enum(WISHLIST_VISIBILITY_TYPES).default('public'),
+  // New wishlists land as drafts — not visible to anyone — so the
+  // EntityCreationSuccess "saved as a draft. not visible to anyone yet"
+  // message and the Publish Now button reflect reality. A wishlist with
+  // is_active=false is excluded from the public list query regardless of
+  // visibility; visibility='private' is belt-and-braces for the case where
+  // a caller flips is_active=true without going through the publish flow.
+  visibility: z.enum(WISHLIST_VISIBILITY_TYPES).default('private'),
   event_date: z.string().or(z.date()).optional().nullable(),
   cover_image_url: optionalUrl(),
-  is_active: z.boolean().default(true),
+  is_active: z.boolean().default(false),
 });
 
 export const wishlistItemSchema = z.object({

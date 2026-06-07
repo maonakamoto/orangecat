@@ -79,9 +79,19 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
     const tableName = getTableName(entityType as EntityType);
     const userIdField = getUserIdField(entityType as EntityType);
 
+    // Some entities (wishlists today; circles likely too) store their
+    // publish state as `is_active: boolean` instead of `status: text`.
+    // Without this branch the generic select+update below 500s on those
+    // tables ("column status does not exist"), which is exactly why the
+    // wishlist Publish Now button was silently broken.
+    // TODO: lift this into ENTITY_REGISTRY (`statusColumn: 'status' | 'is_active'`)
+    // when a third entity needs it — two cases is still under the rule of three.
+    const usesIsActive = entityType === 'wishlist';
+    const statusSelectColumn = usesIsActive ? 'is_active' : 'status';
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: existing, error: fetchError } = await (supabase.from(tableName) as any)
-      .select('id, status, ' + userIdField)
+      .select(`id, ${statusSelectColumn}, ${userIdField}`)
       .eq('id', id)
       .single();
 
@@ -97,7 +107,11 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
       return apiNotFound(`${entityType} not found`);
     }
 
-    const currentStatus = (existing.status || ENTITY_STATUS.DRAFT).toLowerCase();
+    const currentStatus = usesIsActive
+      ? existing.is_active
+        ? ENTITY_STATUS.ACTIVE
+        : ENTITY_STATUS.DRAFT
+      : (existing.status || ENTITY_STATUS.DRAFT).toLowerCase();
     const allowedTransitions = getAllowedStatusTransitions(currentStatus);
     if (!allowedTransitions.includes(newStatus)) {
       return apiValidationError(
@@ -105,9 +119,13 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
       );
     }
 
+    const updatePayload = usesIsActive
+      ? { is_active: newStatus === ENTITY_STATUS.ACTIVE, updated_at: new Date().toISOString() }
+      : { status: newStatus, updated_at: new Date().toISOString() };
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: updated, error: updateError } = await (supabase.from(tableName) as any)
-      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .update(updatePayload)
       .eq('id', id)
       .select()
       .single();

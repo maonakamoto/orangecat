@@ -136,8 +136,11 @@ export const wishlistConfig = createEntityConfig<WishlistFormData>({
     title: '',
     description: '',
     type: 'general',
-    visibility: 'public',
-    is_active: true,
+    // Defaults match the schema and the EntityCreationSuccess "saved as
+    // draft. not visible to anyone yet" promise. User can flip on the form
+    // before submit; otherwise Publish Now flips is_active to true.
+    visibility: 'private',
+    is_active: false,
     event_date: null,
     cover_image_url: '',
   },

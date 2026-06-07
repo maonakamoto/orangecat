@@ -76,7 +76,12 @@ export async function createWishlist(userId: string, data: WishlistFormData) {
     description: data.description,
     type: data.type,
     visibility: data.visibility,
-    is_active: data.is_active ?? true,
+    // Default to draft (false), not active. Earlier `?? true` forced every
+    // new wishlist live regardless of caller intent or schema default,
+    // which is what surfaced the privacy-bug verify finding (UI promised
+    // "saved as draft, not visible" while the row landed is_active=true,
+    // visibility='public').
+    is_active: data.is_active ?? false,
     cover_image_url: data.cover_image_url,
     event_date: data.event_date,
   });
