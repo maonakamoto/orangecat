@@ -119,10 +119,17 @@ async function defaultOwnershipCheck(
   ownershipField: string,
   useActorOwnership: boolean | undefined,
   action: 'update' | 'delete',
-  entityNamePlural: string
+  entityNamePlural: string,
+  // Pass the route's already-authed server supabase client. Without it,
+  // checkOwnership silently falls back to the browser client (no cookies
+  // in serverless), the actor fetch returns null, and every PUT/DELETE on
+  // an actor-owned entity 403s for the legitimate owner. Mirrors the fix
+  // shipped in 136f65ac for the STATUS endpoint.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase?: any
 ): Promise<NextResponse | null> {
   if (useActorOwnership && existing.actor_id) {
-    const hasAccess = await checkOwnership(existing as { actor_id: string }, userId);
+    const hasAccess = await checkOwnership(existing as { actor_id: string }, userId, supabase);
     if (!hasAccess) {
       return apiForbidden(`You can only ${action} your own ${entityNamePlural}`);
     }
@@ -317,7 +324,8 @@ function createPutHandler(config: EntityHandlerConfig) {
           ownershipField,
           config.useActorOwnership,
           'update',
-          meta.namePlural.toLowerCase()
+          meta.namePlural.toLowerCase(),
+          supabase
         );
         if (ownershipError) {
           return ownershipError;
@@ -437,7 +445,8 @@ function createDeleteHandler(config: EntityHandlerConfig) {
           ownershipField,
           config.useActorOwnership,
           'delete',
-          meta.namePlural.toLowerCase()
+          meta.namePlural.toLowerCase(),
+          supabase
         );
         if (ownershipError) {
           return ownershipError;

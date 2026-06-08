@@ -9,17 +9,30 @@
  * Last Modified Summary: Created actor service
  */
 
-import supabase from '@/lib/supabase/browser';
+import defaultBrowserClient from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import type { AnySupabaseClient } from '@/lib/supabase/types';
 import type { Actor } from './types/actor';
+
+// All public functions in this module accept an optional `client` parameter.
+// Callers from a server-side context (API routes, edge functions) MUST pass
+// the authed server client they already hold; the default browser client
+// has no cookies/auth in serverless and was the silent root cause of the
+// Publish Now 404 across every entity (fix 136f65ac inlined the workaround
+// in the STATUS route; this is the source-level fix so other callers stop
+// silently failing).
+function pickClient(client?: AnySupabaseClient): AnySupabaseClient {
+  return client ?? (defaultBrowserClient as unknown as AnySupabaseClient);
+}
 
 /**
  * Get actor by ID
  */
-export async function getActor(actorId: string): Promise<Actor | null> {
+export async function getActor(actorId: string, client?: AnySupabaseClient): Promise<Actor | null> {
+  const supabase = pickClient(client);
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from(DATABASE_TABLES.ACTORS)
       .select('*')
       .eq('id', actorId)
@@ -40,9 +53,13 @@ export async function getActor(actorId: string): Promise<Actor | null> {
 /**
  * Get actor by group ID
  */
-export async function getActorByGroup(groupId: string): Promise<Actor | null> {
+export async function getActorByGroup(
+  groupId: string,
+  client?: AnySupabaseClient
+): Promise<Actor | null> {
+  const supabase = pickClient(client);
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from(DATABASE_TABLES.ACTORS)
       .select('*')
       .eq('actor_type', 'group')
@@ -66,14 +83,16 @@ export async function getActorByGroup(groupId: string): Promise<Actor | null> {
  */
 export async function checkOwnership(
   entity: { actor_id: string | null },
-  userId: string
+  userId: string,
+  client?: AnySupabaseClient
 ): Promise<boolean> {
+  const supabase = pickClient(client);
   try {
     if (!entity.actor_id) {
       return false;
     }
 
-    const actor = await getActor(entity.actor_id);
+    const actor = await getActor(entity.actor_id, supabase);
     if (!actor) {
       return false;
     }
@@ -85,7 +104,7 @@ export async function checkOwnership(
 
     // If actor is a group, check membership
     if (actor.actor_type === 'group') {
-      const { data: membership } = await supabase
+      const { data: membership } = await (supabase as any)
         .from(DATABASE_TABLES.GROUP_MEMBERS)
         .select('role')
         .eq('group_id', actor.group_id!)
@@ -105,9 +124,13 @@ export async function checkOwnership(
 /**
  * Get actor display name by joining profiles (for user actors) or groups (for group actors)
  */
-export async function getActorDisplayName(actorId: string): Promise<string> {
+export async function getActorDisplayName(
+  actorId: string,
+  client?: AnySupabaseClient
+): Promise<string> {
+  const supabase = pickClient(client);
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from(DATABASE_TABLES.ACTORS)
       .select(
         `
