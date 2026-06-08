@@ -102,7 +102,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const profilePages: MetadataRoute.Sitemap = profiles
         .filter((p): p is SitemapProfile & { username: string } => p.username !== null)
         .map(profile => ({
-          url: `${BASE_URL}/profiles/${profile.username}`,
+          // encodeURIComponent: usernames containing '@' (we observed
+          // literal webdev@example.com profiles live) produce invalid
+          // <loc> entries in some sitemap consumers and broken
+          // crawl URLs. Same fix shape as the profile page canonical.
+          url: `${BASE_URL}/profiles/${encodeURIComponent(profile.username)}`,
           lastModified: profile.updated_at ? new Date(profile.updated_at) : new Date(),
           changeFrequency: 'weekly' as const,
           priority: 0.6,

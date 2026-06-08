@@ -76,9 +76,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `View ${displayName}'s profile on ${APP_NAME}. Explore their projects, services, and economic activity.`;
   // Dynamic share card with avatar + name + bio. See
   // src/app/api/og/profile/[username]/route.tsx.
-  const ogImage = `${SITE_URL}/api/og/profile/${profile.username || targetUsername}`;
+  // encodeURIComponent: usernames containing '@' (we observed literal
+  // webdev@example.com profiles live) need to be URL-escaped to produce
+  // valid OG image / canonical URLs that crawlers and link unfurlers
+  // accept. Without this the canonical URL contained a literal `@` and
+  // some sitemap/canonical consumers tripped on it. AvatarLink and
+  // messaging surfaces already use encodeURIComponent on the same field.
+  const safeUsername = encodeURIComponent(profile.username || targetUsername);
+  const ogImage = `${SITE_URL}/api/og/profile/${safeUsername}`;
   // Use actual username in URL, not "me" for better SEO
-  const url = `${SITE_URL}/profiles/${profile.username || targetUsername}`;
+  const url = `${SITE_URL}/profiles/${safeUsername}`;
 
   return {
     title: displayName,
