@@ -65,7 +65,16 @@ export async function createLoan(
       current_interest_rate: normalizeToNull(loanInput.current_interest_rate),
       monthly_payment: normalizeToNull(loanInput.monthly_payment),
       desired_rate: normalizeToNull(loanInput.desired_rate),
-      status: STATUS.LOANS.ACTIVE,
+      // Defaults match the EntityCreationSuccess UX contract: every entity
+      // lands as draft and not publicly visible until the user hits Publish
+      // Now. Earlier this service forced status=ACTIVE and never set
+      // is_public — DB column defaults filled in is_public=true and
+      // is_negotiable=true so the row landed publicly visible immediately,
+      // contradicting the "saved as a draft. not visible to anyone yet"
+      // success message. Same bug class as the wishlist fix in c9897f9a;
+      // matching shape here.
+      status: STATUS.LOANS.DRAFT,
+      is_public: false,
     },
     {
       client: supabase as unknown as AnySupabaseClient,
