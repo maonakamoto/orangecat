@@ -115,9 +115,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Public entity pages (active projects, products, services, etc.).
-    // Wishlist is excluded — its visibility model is is_active + visibility,
-    // not a `status` enum like the others; needs a custom filter to land
-    // in the sitemap. Tracked as T2.
+    // Standard entities use a `status` enum and ship in this loop.
     const SITEMAP_ENTITY_TYPES: EntityType[] = [
       'project',
       'product',
@@ -150,6 +148,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }));
         dynamicPages = [...dynamicPages, ...entityPages];
       }
+    }
+
+    // Wishlists use is_active + visibility instead of a status enum, so they
+    // need their own query. Publishing semantics: a wishlist is public when
+    // it's been activated AND the owner chose public visibility (defaults
+    // to private — see c9897f9a). Filter matches what the wishlist domain
+    // service treats as crawler-visible.
+    const wishlistMeta = ENTITY_REGISTRY['wishlist'];
+    const { data: wishlists } = (await supabase
+      .from(wishlistMeta.tableName)
+      .select('id, updated_at')
+      .eq('is_active', true)
+      .eq('visibility', 'public')) as { data: SitemapEntity[] | null };
+
+    if (wishlists) {
+      const wishlistPages: MetadataRoute.Sitemap = wishlists.map(wishlist => ({
+        url: `${BASE_URL}${wishlistMeta.publicBasePath}/${wishlist.id}`,
+        lastModified: wishlist.updated_at ? new Date(wishlist.updated_at) : new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
+      }));
+      dynamicPages = [...dynamicPages, ...wishlistPages];
     }
   } catch {
     // If DB query fails, return static pages only — sitemap should never break the build
