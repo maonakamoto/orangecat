@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { withOptionalAuth } from '@/lib/api/withAuth';
 import { apiSuccess, apiNotFound, handleApiError } from '@/lib/api/standardResponse';
 import { getTableName } from '@/config/entity-registry';
@@ -44,58 +44,48 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
         profile = profileByEmail;
         userId = profileByEmail.id;
       } else {
-        // If email field doesn't exist in profiles, try to find user by email in auth.users
-        // Use service role client if available for admin access
-        const serviceRoleKey =
-          process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-        if (serviceRoleKey && supabaseUrl) {
-          try {
-            const adminClient = createClient(supabaseUrl, serviceRoleKey, {
-              auth: {
-                autoRefreshToken: false,
-                persistSession: false,
-              },
-            });
-
-            // List users and find by email (compatible across versions)
-            const { data: usersData, error: listError } = await adminClient.auth.admin.listUsers();
-            if (!listError && usersData?.users) {
-              const user = usersData.users.find(
-                u => u.email?.toLowerCase() === trimmedIdentifier.toLowerCase()
-              );
-              if (user?.id) {
-                userId = user.id;
-              } else {
-                return apiNotFound('Profile not found');
-              }
+        // If email field doesn't exist in profiles, try to find user by email
+        // in auth.users via the admin client. Uses the createAdminClient SSOT
+        // (src/lib/supabase/admin.ts) so env-var fallback (SERVICE_ROLE_KEY
+        // → SECRET_KEY → SERVICE_KEY) stays consistent with every other
+        // server-side admin call.
+        try {
+          const adminClient = createAdminClient();
+          // List users and find by email (compatible across versions)
+          const { data: usersData, error: listError } = await adminClient.auth.admin.listUsers();
+          if (!listError && usersData?.users) {
+            const user = usersData.users.find(
+              u => u.email?.toLowerCase() === trimmedIdentifier.toLowerCase()
+            );
+            if (user?.id) {
+              userId = user.id;
             } else {
               return apiNotFound('Profile not found');
             }
-
-            // Now fetch the profile by user ID
-            if (userId) {
-              const { data: profileById, error: profileError } = await supabase
-                .from(DATABASE_TABLES.PROFILES)
-                .select('*')
-                .eq('id', userId)
-                .single();
-
-              if (!profileError && profileById) {
-                profile = profileById;
-              } else {
-                error = profileError;
-              }
-            } else {
-              return apiNotFound('Profile not found');
-            }
-          } catch {
-            // Fallback: return error suggesting username lookup
-            return apiNotFound('Profile not found. Please use username instead of email.');
+          } else {
+            return apiNotFound('Profile not found');
           }
-        } else {
-          // No service role key available, can't lookup by email
+
+          // Now fetch the profile by user ID
+          if (userId) {
+            const { data: profileById, error: profileError } = await supabase
+              .from(DATABASE_TABLES.PROFILES)
+              .select('*')
+              .eq('id', userId)
+              .single();
+
+            if (!profileError && profileById) {
+              profile = profileById;
+            } else {
+              error = profileError;
+            }
+          } else {
+            return apiNotFound('Profile not found');
+          }
+        } catch {
+          // createAdminClient returns a dummy proxy when service-role env vars
+          // are missing; calling .auth.admin.listUsers on it throws. That's
+          // expected — fall through to suggesting the username lookup.
           return apiNotFound('Profile not found. Please use username instead of email.');
         }
       }
