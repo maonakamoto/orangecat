@@ -28,8 +28,8 @@ import {
   type EntityType,
 } from '@/config/entity-registry';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
+import { checkOwnership } from '@/services/actors';
 import { ENTITY_STATUS } from '@/config/database-constants';
-import { DATABASE_TABLES } from '@/config/database-tables';
 import { z } from 'zod';
 import {
   CLIENT_STATUS_INTENTS,
@@ -122,40 +122,18 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
       return apiNotFound(`${entityType} not found`);
     }
 
-    // Ownership check. Previously delegated to `checkOwnership` from
-    // @/services/actors, which imports the BROWSER supabase client (no
-    // cookies, no auth) — when called from a server route, its actor
-    // fetch silently returns null in serverless context, hasAccess is
-    // false, and every Publish Now click 404s. That has been the bug
-    // since the endpoint shipped. Inline the check here using the
-    // already-authed server supabase client so the same code path that
-    // works for the fetch above works for ownership too.
-    let hasAccess = false;
-    if (userIdField === 'actor_id') {
-      const actorId = (existing as { actor_id?: string }).actor_id;
-      if (actorId) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: actor } = await (supabase.from(DATABASE_TABLES.ACTORS) as any)
-          .select('user_id, actor_type, group_id')
-          .eq('id', actorId)
-          .maybeSingle();
-        if (actor) {
-          if (actor.actor_type === 'user') {
-            hasAccess = actor.user_id === user.id;
-          } else if (actor.actor_type === 'group' && actor.group_id) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const { data: membership } = await (supabase.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
-              .select('role')
-              .eq('group_id', actor.group_id)
-              .eq('user_id', user.id)
-              .maybeSingle();
-            hasAccess = !!membership;
-          }
-        }
-      }
-    } else {
-      hasAccess = existing[userIdField] === user.id;
-    }
+    // Ownership check. checkOwnership now accepts the server supabase
+    // client (fixed at source in 6f55f05b), so the inline workaround
+    // from 136f65ac is no longer needed — pass `supabase` and the helper
+    // does the right thing for both individual + group-owned entities.
+    const hasAccess =
+      userIdField === 'actor_id'
+        ? await checkOwnership(
+            existing as { actor_id: string | null },
+            user.id,
+            supabase as unknown as Parameters<typeof checkOwnership>[2]
+          )
+        : existing[userIdField] === user.id;
     if (!hasAccess) {
       logger.warn('Entity status: ownership denied', {
         entityType,
