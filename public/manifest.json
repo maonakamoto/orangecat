@@ -1,11 +1,11 @@
 {
-  "name": "OrangeCat - Bitcoin Crowdfunding Platform",
+  "name": "OrangeCat — Your AI economic agent",
   "short_name": "OrangeCat",
-  "description": "The premier Bitcoin-native crowdfunding platform for funding your ideas and projects. A BitBaum company.",
+  "description": "Fund, lend, invest, and coordinate with any identity. Cat is your private AI agent for practical economic next steps.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#F7931A",
+  "theme_color": "#ff5c00",
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en",
@@ -26,21 +26,21 @@
   ],
   "shortcuts": [
     {
-      "name": "Create Campaign",
+      "name": "Create",
       "short_name": "Create",
-      "description": "Start a new funding campaign",
+      "description": "Start a new entity — project, product, service, cause, loan, and more",
       "url": "/create"
     },
     {
-      "name": "Discover Projects",
+      "name": "Discover",
       "short_name": "Discover",
-      "description": "Browse and discover projects to fund",
+      "description": "Browse entities to back, buy, or coordinate with",
       "url": "/discover"
     },
     {
-      "name": "My Dashboard",
+      "name": "Dashboard",
       "short_name": "Dashboard",
-      "description": "View your campaigns and activity",
+      "description": "Your activity, entities, and Cat",
       "url": "/dashboard"
     }
   ],
@@ -57,7 +57,7 @@
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Discover Projects - Mobile View"
+      "label": "Discover - Mobile View"
     },
     {
       "src": "/screenshots/desktop-homepage.png",
@@ -81,7 +81,7 @@
       "url": "/payment?address=%s"
     },
     {
-      "protocol": "web+lightning", 
+      "protocol": "web+lightning",
       "url": "/payment?invoice=%s"
     }
   ],
@@ -94,4 +94,4 @@
       }
     }
   ]
-} 
+}
