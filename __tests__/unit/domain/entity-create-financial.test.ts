@@ -39,8 +39,12 @@ describe('Financial entity create workflows (loan/investment)', () => {
   // ==================== LOAN ====================
 
   describe('createLoan', () => {
-    it('inserts into loans table with actor_id and default status', async () => {
-      const created = { id: 'loan-1', title: 'Business Loan', status: 'active' };
+    it('inserts into loans table with actor_id and default draft+private state', async () => {
+      // Defaults updated in 9267b6f0: loans now land as draft + is_public=false
+      // to match the EntityCreationSuccess UX contract ("saved as a draft, not
+      // visible to anyone yet"). Previously forced status='active' + relied on
+      // DB column default is_public=true — see commit message for rationale.
+      const created = { id: 'loan-1', title: 'Business Loan', status: 'draft' };
       mockChain.single.mockResolvedValue({ data: created, error: null });
 
       const result = await createLoan('user-1', {
@@ -58,7 +62,8 @@ describe('Financial entity create workflows (loan/investment)', () => {
           loan_type: 'new_request',
           original_amount: 0.1,
           remaining_balance: 0.1,
-          status: 'active',
+          status: 'draft',
+          is_public: false,
           fulfillment_type: 'manual',
         })
       );
@@ -176,9 +181,7 @@ describe('Financial entity create workflows (loan/investment)', () => {
         minimum_investment: 0.005,
       });
 
-      expect(mockChain.insert).toHaveBeenCalledWith(
-        expect.objectContaining({ is_public: false })
-      );
+      expect(mockChain.insert).toHaveBeenCalledWith(expect.objectContaining({ is_public: false }));
     });
   });
 });
