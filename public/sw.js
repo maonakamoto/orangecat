@@ -4,15 +4,17 @@
  */
 
 const CACHE_NAME = 'orangecat-v1.1.0';
-const OFFLINE_URL = '/offline';
 
 // Static assets to cache immediately
+// `/offline` removed — no offline page route exists in the app (only the
+// messaging offline-queue module shares the name). If/when an offline
+// fallback page is added at src/app/offline/page.tsx, re-add it here and
+// re-introduce OFFLINE_URL plus the fetch-handler fallback.
 const STATIC_CACHE_URLS = [
   '/',
   '/discover',
   '/auth',
   '/about',
-  '/offline',
   '/manifest.json',
   '/images/orange-cat-logo.svg',
 ];
@@ -232,13 +234,11 @@ async function staleWhileRevalidate(request) {
 // Offline fallback
 async function getOfflineFallback(request) {
   if (request.mode === 'navigate') {
-    // Return offline page for navigation requests
-    const offlineResponse = await caches.match(OFFLINE_URL);
-    if (offlineResponse) {
-      return offlineResponse;
-    }
-
-    // Fallback offline page if not cached
+    // No /offline route exists in the app, so we always return the inline
+    // HTML fallback below. Earlier code attempted `caches.match('/offline')`
+    // first, but that lookup never resolved (the page was never cached) so
+    // the inline fallback was effectively the only path. Dropping the
+    // useless cache-match keeps the same observable behavior.
     return new Response(
       `
       <!DOCTYPE html>
