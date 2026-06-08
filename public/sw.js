@@ -316,23 +316,18 @@ self.addEventListener('push', event => {
 
   try {
     const data = event.data.json();
+    // Icon/badge fields removed — public/icons/* PNGs referenced previously
+    // (icon-192x192.png, badge-72x72.png, action-view.png, action-dismiss.png)
+    // do not exist in the repo. Notifications fall back to the default
+    // browser icon. When push gets wired (booking notifications phase 2),
+    // generate PNGs from the brand mark and restore icon/badge/action.icon.
     const options = {
       body: data.body || 'New update from OrangeCat',
-      icon: '/icons/icon-192x192.png',
-      badge: '/icons/badge-72x72.png',
       tag: data.tag || 'orangecat-notification',
       requireInteraction: true,
       actions: [
-        {
-          action: 'view',
-          title: 'View',
-          icon: '/icons/action-view.png',
-        },
-        {
-          action: 'dismiss',
-          title: 'Dismiss',
-          icon: '/icons/action-dismiss.png',
-        },
+        { action: 'view', title: 'View' },
+        { action: 'dismiss', title: 'Dismiss' },
       ],
       data: {
         url: data.url || '/',
