@@ -5,6 +5,7 @@ import { ArrowRight, Globe, Cat, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { BrandMarkIcon } from '@/components/shell/BrandMarkIcon';
 import { ROUTES } from '@/config/routes';
+import { FEE_CLAIMS } from '@/config/landing-page';
 
 /**
  * Static Hero Section - Renders immediately without animations
@@ -84,7 +85,7 @@ export default function HeroSectionStatic() {
                     </p>
                   </div>
                   <div className="hidden sm:flex items-center rounded-full border border-border bg-muted/40 px-2.5 py-1 text-xs font-medium text-foreground">
-                    0% fees
+                    {FEE_CLAIMS.feeBadgeLabel}
                   </div>
                 </div>
               </div>
@@ -110,15 +111,24 @@ export default function HeroSectionStatic() {
                   ))}
                 </div>
 
-                {/* Stats */}
+                {/* Stats — derived from FEE_CLAIMS so they can't drift between
+                    the hero badge above and the headline numbers here. */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-1 sm:pt-2">
                   <div>
-                    <div className="text-xl sm:text-2xl font-bold text-foreground">0%</div>
-                    <div className="text-xs text-muted-foreground">Platform Fees</div>
+                    <div className="text-xl sm:text-2xl font-bold text-foreground">
+                      {FEE_CLAIMS.platformFee}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {FEE_CLAIMS.feeStatTopLabel}
+                    </div>
                   </div>
                   <div>
-                    <div className="text-xl sm:text-2xl font-bold text-foreground">100%</div>
-                    <div className="text-xs text-muted-foreground">To Creator</div>
+                    <div className="text-xl sm:text-2xl font-bold text-foreground">
+                      {FEE_CLAIMS.creatorShare}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {FEE_CLAIMS.feeStatBottomLabel}
+                    </div>
                   </div>
                 </div>
 

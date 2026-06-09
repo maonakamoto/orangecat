@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { BADGE_COLORS } from '@/config/badge-colors';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { FEE_CLAIMS } from '@/config/landing-page';
 
 export default function EventsPage() {
   const _router = useRouter();
@@ -182,26 +183,46 @@ export default function EventsPage() {
               ))}
             </div>
           </div>
+          {/* Right column previously rendered a 4-card "stat" grid:
+              0% Processing Fees / < 2min Ticket Setup / Global Attendee Reach /
+              Instant Check-in. Three of those (< 2min, Global, Instant) are
+              qualitative claims styled as measured stats — we have no
+              benchmark backing them. The 0% claim duplicates the homepage
+              hero. Replaced with a feature list that doesn't pretend to
+              have measurements behind it. */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Card className="p-6 text-center">
-              <Bitcoin className="w-8 h-8 text-foreground mx-auto mb-3" />
-              <div className="text-2xl font-bold text-foreground">0%</div>
-              <div className="text-sm text-muted-foreground">Processing Fees</div>
+            <Card className="p-6">
+              <Bitcoin className="w-8 h-8 text-foreground mb-3" />
+              <h3 className="font-semibold mb-1">
+                {FEE_CLAIMS.feeBadgeLabel.replace('fees', 'platform fees')}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Ticket sales go directly to your Bitcoin or Lightning wallet — we never sit between
+                you and the buyer.
+              </p>
             </Card>
-            <Card className="p-6 text-center">
-              <Zap className="w-8 h-8 text-foreground mx-auto mb-3" />
-              <div className="text-2xl font-bold text-foreground">&lt; 2min</div>
-              <div className="text-sm text-muted-foreground">Ticket Setup</div>
+            <Card className="p-6">
+              <Zap className="w-8 h-8 text-foreground mb-3" />
+              <h3 className="font-semibold mb-1">Lightning-Native</h3>
+              <p className="text-sm text-muted-foreground">
+                Accept micropayments and full-price tickets over Lightning with no special
+                integration.
+              </p>
             </Card>
-            <Card className="p-6 text-center">
-              <Users className="w-8 h-8 text-foreground mx-auto mb-3" />
-              <div className="text-2xl font-bold text-foreground">Global</div>
-              <div className="text-sm text-muted-foreground">Attendee Reach</div>
+            <Card className="p-6">
+              <Users className="w-8 h-8 text-foreground mb-3" />
+              <h3 className="font-semibold mb-1">No Geographic Limits</h3>
+              <p className="text-sm text-muted-foreground">
+                Bitcoin works the same in every country. Anyone with a wallet can buy a ticket.
+              </p>
             </Card>
-            <Card className="p-6 text-center">
-              <QrCode className="w-8 h-8 text-foreground mx-auto mb-3" />
-              <div className="text-2xl font-bold text-foreground">Instant</div>
-              <div className="text-sm text-muted-foreground">Check-in</div>
+            <Card className="p-6">
+              <QrCode className="w-8 h-8 text-foreground mb-3" />
+              <h3 className="font-semibold mb-1">QR Check-In</h3>
+              <p className="text-sm text-muted-foreground">
+                Each ticket gets a unique code attendees show at the door — no printing, no apps to
+                install.
+              </p>
             </Card>
           </div>
         </div>

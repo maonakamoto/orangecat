@@ -168,6 +168,25 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
   },
 ];
 
+// ==================== FEE CLAIMS — SSOT for "0% / 100%" language ====================
+
+/**
+ * Fee-related marketing claims. These were previously hardcoded in 5+
+ * places (HeroSectionStatic, events/page.tsx, how-it-works, technology,
+ * inline `0% fees` badges). Keeping them here means one edit covers every
+ * surface the moment the claim stops being true — and prevents drift like
+ * "100% to creator" on one page and "100% reaches the recipient" on another.
+ */
+export const FEE_CLAIMS = {
+  platformFee: '0%',
+  creatorShare: '100%',
+  feeBadgeLabel: '0% fees',
+  feeStatTopLabel: 'Platform Fees',
+  feeStatBottomLabel: 'To Creator',
+  // Use for body copy where you previously said "100% reaches the recipient"
+  passthroughClaim: '100% reaches the recipient — no middleman, no processing costs.',
+} as const;
+
 // ==================== PLATFORM COMPARISON ====================
 
 /**

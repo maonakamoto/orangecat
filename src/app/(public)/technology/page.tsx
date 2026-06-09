@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Bitcoin, Shield, Zap, Lock, Globe, Code, Server, CheckCircle } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
+import { FEE_CLAIMS } from '@/config/landing-page';
 
 export const metadata: Metadata = {
   title: 'Technology',
@@ -70,8 +71,8 @@ export default function TechnologyPage() {
               <Zap className="h-12 w-12 text-fg-secondary mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">Zero Platform Fees</h3>
               <p className="text-muted-foreground">
-                We don&apos;t take a cut. Payments go directly between parties — 100% reaches the
-                recipient.
+                We don&apos;t take a cut. Payments go directly between parties —{' '}
+                {FEE_CLAIMS.passthroughClaim}
               </p>
             </div>
           </div>

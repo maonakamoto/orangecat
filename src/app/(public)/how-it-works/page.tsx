@@ -8,6 +8,7 @@ import {
   SECTION_HEADERS,
   CTA_LABELS,
   SUPER_APP_CATEGORIES,
+  FEE_CLAIMS,
 } from '@/config/landing-page';
 import { ROUTES } from '@/config/routes';
 
@@ -40,8 +41,7 @@ const whyBitcoin = [
   {
     icon: Sparkles,
     title: 'Zero Platform Fees',
-    description:
-      'Direct peer-to-peer payments mean 100% goes to the recipient. No middlemen, no processing costs.',
+    description: `Direct peer-to-peer payments. ${FEE_CLAIMS.passthroughClaim}`,
   },
 ];
 
