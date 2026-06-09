@@ -153,3 +153,6 @@ __pycache__/
 *.p12
 *.pfx
 .claude/worktrees/
+
+# Local debug screenshots
+post-*.png
