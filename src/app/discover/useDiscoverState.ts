@@ -139,6 +139,24 @@ export function useDiscoverState() {
       ? Object.values(tabItems).every(items => items.length === 0)
       : (tabItems[activeTab]?.length ?? 0) === 0;
 
+  // Source-of-truth counts for tab badges — independent of pagination window
+  // so the "All" view's per-entity badges match the per-entity tab views.
+  const tabCounts: Partial<Record<DiscoverTabType, number>> = {
+    projects: counts.totalProjectsCount,
+    profiles: counts.totalProfilesCount,
+    loans: counts.totalLoansCount,
+    investments: counts.totalInvestmentsCount,
+    assets: counts.totalAssetsCount,
+    causes: counts.totalCausesCount,
+    events: counts.totalEventsCount,
+    products: counts.totalProductsCount,
+    services: counts.totalServicesCount,
+    groups: counts.totalGroupsCount,
+    wishlists: counts.totalWishlistsCount,
+    research: counts.totalResearchCount,
+    ai_assistants: counts.totalAiAssistantsCount,
+  };
+
   return {
     searchTerm,
     searchError,
@@ -164,6 +182,7 @@ export function useDiscoverState() {
     research: generic.research,
     aiAssistants: generic.aiAssistants,
     totalInvestmentsCount: counts.totalInvestmentsCount,
+    tabCounts,
     stats: {
       totalProjects: counts.totalProjectsCount,
       totalProfiles: counts.totalProfilesCount,
