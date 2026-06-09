@@ -181,6 +181,7 @@ export default function DiscoverResults({
             {totalResults} result{totalResults !== 1 ? 's' : ''} found
             {displayedCount < totalResults && (
               <span className="text-muted-foreground text-lg font-normal ml-2">
+                {' '}
                 (showing {displayedCount})
               </span>
             )}
