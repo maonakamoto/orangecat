@@ -19,6 +19,12 @@ interface ConversationListProps {
   onToggleSelect?: (id: string) => void;
   onRequestSelectionMode?: () => void;
   refreshSignal?: number;
+  /**
+   * Trigger to open the new-conversation modal. Wired to the empty
+   * state so users with zero conversations have an in-place CTA
+   * instead of being told to find a button in the page header.
+   */
+  onStartNew?: () => void;
 }
 
 export default function ConversationList({
@@ -31,6 +37,7 @@ export default function ConversationList({
   onToggleSelect,
   onRequestSelectionMode,
   refreshSignal,
+  onStartNew,
 }: ConversationListProps) {
   const { user } = useAuth();
   const [error, setError] = useState<string | null>(null);
@@ -192,9 +199,20 @@ export default function ConversationList({
               {searchQuery ? 'No conversations match your search' : 'No conversations yet'}
             </p>
             {!searchQuery && (
-              <p className="text-xs mt-1 text-muted-dim">
-                Start a new conversation to get started.
-              </p>
+              <>
+                <p className="mt-1 text-xs text-muted-dim">
+                  Start a new conversation to get started.
+                </p>
+                {onStartNew && (
+                  <button
+                    type="button"
+                    onClick={onStartNew}
+                    className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+                  >
+                    Start New Conversation
+                  </button>
+                )}
+              </>
             )}
           </div>
         ) : (
