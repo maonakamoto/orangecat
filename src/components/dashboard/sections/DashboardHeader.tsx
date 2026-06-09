@@ -23,6 +23,22 @@ function capitalizeName(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
+// Anonymous Supabase signups land in profiles with name='User' and
+// username='user_<8chars>' (the handle_new_user trigger's last-resort
+// fallback when there's no email and no OAuth metadata). Treating those
+// as a real name produces "Welcome back, User" — impersonal and a tell
+// that the platform doesn't actually know who you are. Detect the
+// placeholder pattern and skip the comma+name instead.
+function isPlaceholderName(name?: string | null, username?: string | null): boolean {
+  if (name === 'User') {
+    return true;
+  }
+  if (username && /^user_[0-9a-f]{8}$/.test(username)) {
+    return true;
+  }
+  return false;
+}
+
 interface DashboardHeaderProps {
   profile: {
     name?: string | null;
@@ -53,7 +69,9 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
           <div className="min-w-0 flex-1">
             <h1 className="mb-0 text-xl font-semibold leading-tight text-foreground sm:text-2xl">
               Welcome back
-              {profile && (profile.name || profile.username) ? (
+              {profile &&
+              (profile.name || profile.username) &&
+              !isPlaceholderName(profile.name, profile.username) ? (
                 <>, {capitalizeName(profile.name || profile.username || '')}</>
               ) : null}
             </h1>
