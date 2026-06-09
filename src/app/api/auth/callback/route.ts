@@ -26,9 +26,21 @@ export async function POST(request: NextRequest) {
     const { event, session } = body;
 
     // Handle sign out
-    if (event === 'SIGNED_OUT' || !session) {
-      await supabase.auth.signOut();
+    if (event === 'SIGNED_OUT') {
+      const { error: signOutError } = await supabase.auth.signOut();
+      if (signOutError) {
+        logger.error('Sign-out failed on server', { error: signOutError.message, event }, 'Auth');
+        return apiInternalError('Sign-out failed. Please try again.');
+      }
       return apiSuccess({ success: true });
+    }
+
+    // Reject non-SIGNED_OUT events that arrive without a session payload —
+    // previously this fell into the SIGNED_OUT branch and silently destroyed
+    // the user's existing session while returning 200.
+    if (!session) {
+      logger.warn('Auth callback received non-SIGNED_OUT event without session', { event }, 'Auth');
+      return apiBadRequest(`Missing session payload for event '${event}'`);
     }
 
     // Validate session structure

@@ -11,7 +11,13 @@ import { apiSuccess, apiBadRequest, apiInternalError } from '@/lib/api/standardR
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    let body: { token?: string };
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      logger.error('Failed to parse request body in verify-captcha', parseError, 'CaptchaAPI');
+      return apiBadRequest('Invalid request body');
+    }
     const { token } = body;
 
     if (!token) {

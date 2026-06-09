@@ -10,7 +10,16 @@ import {
 
 export async function POST(request: NextRequest) {
   try {
-    const { accessToken, refreshToken } = await request.json();
+    let body: { accessToken?: string; refreshToken?: string };
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      logger.error('Failed to parse request body in auth sync', {
+        error: parseError instanceof Error ? parseError.message : String(parseError),
+      });
+      return apiBadRequest('Invalid request body');
+    }
+    const { accessToken, refreshToken } = body;
 
     if (!accessToken) {
       return apiBadRequest('No access token provided');
@@ -28,7 +37,7 @@ export async function POST(request: NextRequest) {
     // Set the session in the server client (this should set cookies)
     const { data, error } = await supabase.auth.setSession({
       access_token: accessToken,
-      refresh_token: refreshToken || null,
+      refresh_token: refreshToken || '',
     });
 
     if (error) {
