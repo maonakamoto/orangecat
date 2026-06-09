@@ -42,7 +42,7 @@ export default function DiscoverPage() {
     aiAssistants,
     investmentsLoading,
     genericLoading,
-    tabCounts,
+    totalInvestmentsCount,
     stats,
 
     // UI state
@@ -132,7 +132,21 @@ export default function DiscoverPage() {
             <DiscoverTabs
               activeTab={activeTab}
               onTabChange={handleTabChange}
-              counts={tabCounts}
+              counts={{
+                projects: projects.length,
+                profiles: profiles.length,
+                loans: loans.length,
+                investments: investments.length || totalInvestmentsCount,
+                assets: assets.length,
+                causes: causes.length,
+                events: events.length,
+                products: products.length,
+                services: services.length,
+                groups: groups.length,
+                wishlists: wishlists.length,
+                research: research.length,
+                ai_assistants: aiAssistants.length,
+              }}
               loading={
                 loading || loansLoading || investmentsLoading || assetsLoading || genericLoading
               }
