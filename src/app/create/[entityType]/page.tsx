@@ -17,9 +17,17 @@ export default async function CreateEntityRedirect({
 }) {
   const { entityType } = await params;
 
-  // Look the slug up against the registry. If it's a known entity,
-  // redirect to its canonical create path. If not, fall back to the
-  // generic /create page which itself redirects to projects/create.
-  const meta = ENTITY_REGISTRY[entityType as EntityType];
+  // URL slugs commonly use hyphens (ai-assistant, ai_assistants —
+  // /dashboard/ai-assistants/create), but the registry keys are
+  // snake_case singular (ai_assistant). Try the most likely
+  // normalizations: the slug as-is, hyphen → underscore, and the
+  // trailing-`s` plural stripped. Falls back to /create if nothing
+  // matches, which itself redirects to projects/create.
+  const candidates = [
+    entityType,
+    entityType.replace(/-/g, '_'),
+    entityType.replace(/-/g, '_').replace(/s$/, ''),
+  ];
+  const meta = candidates.map(slug => ENTITY_REGISTRY[slug as EntityType]).find(Boolean);
   redirect(meta?.createPath ?? '/create');
 }
