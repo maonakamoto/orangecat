@@ -1,8 +1,14 @@
 'use client';
 
 import { Bitcoin, Heart, Copy, ShieldCheck, Zap } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import BitcoinPaymentButton from '@/components/bitcoin/BitcoinPaymentButton';
-import LightningPayment from '@/components/lightning/LightningPayment';
+
+// SSR-skipped: LightningPayment renders form inputs whose React id pool desyncs
+// between server and client renders.
+const LightningPayment = dynamic(() => import('@/components/lightning/LightningPayment'), {
+  ssr: false,
+});
 import Button from '@/components/ui/Button';
 import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
