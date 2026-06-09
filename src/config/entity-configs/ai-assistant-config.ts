@@ -210,7 +210,7 @@ export const aiAssistantConfig = createEntityConfig<AIAssistantFormData>({
   pageDescription: 'Build an autonomous AI service that earns Bitcoin',
   formTitle: 'AI Assistant Details',
   formDescription:
-    'Define your AI assistant\'s personality, capabilities, and pricing. Your system prompt is the "software" that makes your AI unique.',
+    'Define your AI assistant\'s personality and capabilities. Your system prompt is the "software" that makes your AI unique.',
   fieldGroups,
   validationSchema: aiAssistantSchema,
   defaultValues,
