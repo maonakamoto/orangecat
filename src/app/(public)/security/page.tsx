@@ -35,18 +35,20 @@ export default function SecurityPage() {
     },
     {
       icon: Server,
-      title: 'Secure Infrastructure',
-      description: 'Hosted on enterprise-grade cloud infrastructure with 99.9% uptime SLA.',
+      title: 'Managed Infrastructure',
+      description:
+        'Hosted on managed cloud platforms (Vercel for the app, Supabase for the database) that handle patching and uptime.',
     },
     {
       icon: Eye,
-      title: 'Transparency',
-      description: 'Open source codebase allows for public security audits and community review.',
+      title: 'Open Source',
+      description: 'The codebase is public on GitHub, so anyone can read, audit, or report issues.',
     },
     {
       icon: AlertTriangle,
-      title: 'Security Monitoring',
-      description: '24/7 monitoring and automated alerts for suspicious activity.',
+      title: 'Platform Monitoring',
+      description:
+        'Uptime and error monitoring are provided by the underlying platforms. We do not currently run a dedicated security operations center.',
     },
   ];
 
@@ -55,27 +57,25 @@ export default function SecurityPage() {
       title: 'Authentication & Authorization',
       items: [
         'Multi-factor authentication support',
-        'Secure password hashing with bcrypt',
+        'Password hashing handled by Supabase Auth (bcrypt-based)',
         'Session management with automatic expiration',
-        'OAuth 2.0 integration for social login',
+        'OAuth 2.0 social login (GitHub)',
       ],
     },
     {
       title: 'Data Protection',
       items: [
-        'Personal data encryption at rest',
-        'Regular security audits and penetration testing',
-        'GDPR compliance for EU users',
-        'Data minimization principles',
+        'Personal data encryption at rest (provided by Supabase)',
+        'Data minimization — we collect only what the product needs',
+        'Public bug-bounty channel via security@orangecat.ch',
       ],
     },
     {
       title: 'Bitcoin Security',
       items: [
-        'No custody of user funds',
-        'Support for hardware wallet integration',
-        'Lightning Network payment security',
-        'Transaction transparency on blockchain',
+        'No custody of user funds — payments flow directly to your wallet',
+        'Lightning Network support via LNURL',
+        'Transaction transparency on the Bitcoin blockchain',
       ],
     },
   ];
@@ -181,12 +181,11 @@ export default function SecurityPage() {
           </div>
         </div>
 
-        {/* Last Updated */}
+        {/* Last Updated — hardcoded to the actual review date so the line
+            doesn't drift to today on every render, which falsely implied
+            continuous review. Bump this when you actually re-audit the page. */}
         <div className="mt-8 text-center text-muted-foreground">
-          <p className="text-sm">
-            This security page was last updated on {new Date().toLocaleDateString()}. Our security
-            practices are continuously reviewed and updated.
-          </p>
+          <p className="text-sm">Page last reviewed: 2026-06-09.</p>
         </div>
       </div>
     </div>
