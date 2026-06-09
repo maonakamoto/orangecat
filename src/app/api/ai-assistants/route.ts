@@ -147,7 +147,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
         compute_provider_type: d.compute_provider_type || 'api',
         compute_provider_id: d.compute_provider_id,
         api_provider: d.api_provider,
-        pricing_model: d.pricing_model || 'per_message',
+        pricing_model: d.pricing_model || 'free',
         price_per_message: d.price_per_message || 0,
         price_per_1k_tokens: d.price_per_1k_tokens || 0,
         subscription_price: d.subscription_price || 0,

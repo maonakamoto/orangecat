@@ -61,12 +61,6 @@ export const API_ROUTES = {
     REQUEST: (id: string) => `/api/tasks/${id}/request`,
     ANALYTICS: '/api/task-analytics',
   },
-  AI_CREDITS: {
-    BASE: '/api/ai-credits',
-    ADD: '/api/ai-credits/add',
-    REVENUE: '/api/ai-credits/revenue',
-    WITHDRAWALS: '/api/ai-credits/withdrawals',
-  },
   AI: {
     FORM_PREFILL: '/api/ai/form-prefill',
     PLATFORM_USAGE: '/api/ai/platform-usage',

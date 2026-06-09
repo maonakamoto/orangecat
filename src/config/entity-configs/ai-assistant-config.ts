@@ -17,7 +17,7 @@ import { AI_ASSISTANT_TEMPLATES, type AIAssistantTemplate } from '@/components/c
 import { createEntityConfig } from './base-config-factory';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { WalletSelectorField } from '@/components/create/wallet-selector';
-import { AI_COMPUTE_PROVIDER_TYPES, AI_PRICING_MODELS } from '@/config/ai-assistants';
+import { AI_COMPUTE_PROVIDER_TYPES } from '@/config/ai-assistants';
 
 // ==================== CONSTANTS ====================
 
@@ -154,60 +154,10 @@ const fieldGroups: FieldGroup[] = [
     ],
   },
   {
-    id: 'pricing',
-    title: 'Pricing',
-    description: 'Set how users pay for your AI assistant',
-    fields: [
-      {
-        name: 'pricing_model',
-        label: 'Pricing Model',
-        type: 'select',
-        options: [...AI_PRICING_MODELS],
-        required: true,
-        colSpan: 2,
-      },
-      {
-        name: 'price_per_message',
-        label: 'Price per Message',
-        type: 'number',
-        placeholder: '10',
-        min: 0,
-        colSpan: 1,
-        hint: 'Only applies if pricing model is "Per Message"',
-      },
-      {
-        name: 'price_per_1k_tokens',
-        label: 'Price per 1K Tokens',
-        type: 'number',
-        placeholder: '5',
-        min: 0,
-        colSpan: 1,
-        hint: 'Only applies if pricing model is "Per Token"',
-      },
-      {
-        name: 'subscription_price',
-        label: 'Subscription Price (per month)',
-        type: 'number',
-        placeholder: '10000',
-        min: 0,
-        colSpan: 1,
-        hint: 'Only applies if pricing model is "Subscription"',
-      },
-      {
-        name: 'free_messages_per_day',
-        label: 'Free Messages per Day',
-        type: 'number',
-        placeholder: '5',
-        min: 0,
-        colSpan: 1,
-        hint: 'Number of free messages before charging',
-      },
-    ],
-  },
-  {
     id: 'payment',
     title: 'Bitcoin & Payments',
-    description: 'Select a wallet or enter an address',
+    description:
+      'Wallet for receiving donations to your assistant. Per-message charging is not currently active.',
     customComponent: WalletSelectorField,
     fields: [
       { name: 'bitcoin_address', label: 'Bitcoin Address', type: 'bitcoin_address' },
@@ -234,11 +184,11 @@ const defaultValues: AIAssistantFormData = {
   compute_provider_type: 'api',
   compute_provider_id: null,
   api_provider: '',
-  pricing_model: 'per_message',
+  pricing_model: 'free',
   price_per_message: 0,
   price_per_1k_tokens: 0,
   subscription_price: 0,
-  free_messages_per_day: 5,
+  free_messages_per_day: 0,
   is_public: true,
   is_featured: false,
   status: ENTITY_STATUS.DRAFT,

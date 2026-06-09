@@ -1,8 +1,7 @@
 import EntityDetailPage from '@/components/entity/EntityDetailPage';
 import { aiAssistantEntityConfig } from '@/config/entities/ai-assistants';
 import type { AIAssistant } from '@/types/database';
-import { capitalize, capitalizeWords } from '@/utils/string';
-import { displayBTC } from '@/services/currency/formatting';
+import { capitalize } from '@/utils/string';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -34,21 +33,7 @@ export default async function AIAssistantDetailPage({ params }: PageProps) {
           },
           { label: 'Category', value: assistant.category || '—' },
           { label: 'Model Preference', value: assistant.model_preference || 'Any' },
-          {
-            label: 'Pricing Model',
-            value: assistant.pricing_model ? capitalizeWords(assistant.pricing_model) : '—',
-          },
         ];
-
-        if (assistant.price_per_message) {
-          left.push({
-            label: 'Price per Message',
-            value: displayBTC(assistant.price_per_message),
-          });
-        }
-        if (assistant.free_messages_per_day) {
-          left.push({ label: 'Free Messages/Day', value: String(assistant.free_messages_per_day) });
-        }
 
         if (assistant.tags && assistant.tags.length > 0) {
           left.push({ label: 'Tags', value: assistant.tags.join(', ') });

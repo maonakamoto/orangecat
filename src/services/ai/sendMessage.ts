@@ -9,7 +9,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { STATUS } from '@/config/database-constants';
-import { createAIPaymentService } from '@/services/ai-payments';
 import { logger } from '@/utils/logger';
 import {
   createOpenRouterService,
@@ -50,13 +49,11 @@ interface AssistantRecord {
 interface SendMessageResult {
   userMessage: Record<string, unknown>;
   assistantMessage: Record<string, unknown>;
-  payment: { charged: number; balanceRemaining: number } | null;
   usage: {
     inputTokens: number;
     outputTokens: number;
     totalTokens: number;
     apiCostBtc: number;
-    creatorMarkupBtc: number;
     totalCostBtc: number;
   };
   userStatus: {
@@ -146,23 +143,10 @@ export async function sendAiMessage(
     freeMessagesPerDay
   );
 
-  // 8. Creator charge + balance check
-  const baseCreatorCharge =
-    assistant.pricing_model === 'per_message' ? assistant.price_per_message || 0 : 0;
-  const creatorCharge = usesFreeMessage ? 0 : baseCreatorCharge;
-
-  if (creatorCharge > 0) {
-    const paymentService = createAIPaymentService(supabase);
-    const balanceCheck = await paymentService.checkBalance(userId, assistantId);
-    if (!balanceCheck.hasBalance) {
-      return {
-        code: 'INSUFFICIENT_CREDITS',
-        currentBalance: balanceCheck.currentBalance,
-        requiredAmount: balanceCheck.requiredAmount,
-        shortfall: balanceCheck.shortfall ?? 0,
-      };
-    }
-  }
+  // 8. AI assistants are free for now — the credits/charging system was scaffolded
+  // but never wired to a real backing store. Strip the charge math; keep
+  // free-messages-per-day quota as the only spending dial.
+  const creatorCharge = 0;
 
   // 9. Store user message
   const userMsgResult = await storeUserMessage(supabase, convId, content);
@@ -208,23 +192,7 @@ export async function sendAiMessage(
   }
   const assistantMessage = aiMsgResult.message;
 
-  // 12. Post-message side effects
-  const paymentService = createAIPaymentService(supabase);
-  let paymentResult = null;
-
-  if (creatorCharge > 0) {
-    paymentResult = await paymentService.chargeForMessage({
-      userId,
-      assistantId,
-      conversationId: convId,
-      messageId: (assistantMessage as { id: string }).id,
-      tokenCount: aiResponse.totalTokens,
-    });
-    if (!paymentResult.success) {
-      logger.warn('Payment failed after message stored', paymentResult.error, 'AIMessagesService');
-    }
-  }
-
+  // 12. Post-message side effects (creator-charge block stripped — see #8)
   if (!hasByok) {
     await keyService.incrementPlatformUsage(userId, 1, aiResponse.totalTokens);
   }
@@ -243,18 +211,11 @@ export async function sendAiMessage(
       is_free_model: aiResponse.isFreeModel,
       used_byok: hasByok,
     },
-    payment: paymentResult
-      ? {
-          charged: paymentResult.amountCharged ?? 0,
-          balanceRemaining: paymentResult.balanceRemaining ?? 0,
-        }
-      : null,
     usage: {
       inputTokens: aiResponse.inputTokens,
       outputTokens: aiResponse.outputTokens,
       totalTokens: aiResponse.totalTokens,
       apiCostBtc,
-      creatorMarkupBtc: creatorCharge,
       totalCostBtc,
     },
     userStatus: {
