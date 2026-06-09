@@ -2,9 +2,11 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { AlertCircle, RefreshCw, Home } from 'lucide-react';
 import { logger } from '@/utils/logger';
-import { ROUTES } from '@/config/routes';
+import { ROUTES, getRouteSurface } from '@/config/routes';
+import { useAuth } from '@/hooks/useAuth';
 
 interface RouteErrorProps {
   error: Error & { digest?: string };
@@ -13,6 +15,9 @@ interface RouteErrorProps {
 }
 
 export function RouteError({ error, reset, context }: RouteErrorProps) {
+  const pathname = usePathname();
+  const { user, hydrated } = useAuth();
+
   useEffect(() => {
     logger.error(
       `${context} error boundary caught error`,
@@ -20,6 +25,15 @@ export function RouteError({ error, reset, context }: RouteErrorProps) {
       context
     );
   }, [error, context]);
+
+  // Route the secondary recovery button at a destination the visitor can
+  // actually use. An anonymous user landing on /discover/error doesn't
+  // want "Go to Dashboard" — that bounces them through auth. Send them
+  // back to the public home instead.
+  const surface = getRouteSurface(pathname ?? '/');
+  const isAuthedOnAppSurface = hydrated && !!user && surface === 'app';
+  const recoveryHref = isAuthedOnAppSurface ? ROUTES.DASHBOARD.HOME : ROUTES.HOME;
+  const recoveryLabel = isAuthedOnAppSurface ? 'Go to Dashboard' : 'Go to Home';
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center">
@@ -45,11 +59,11 @@ export function RouteError({ error, reset, context }: RouteErrorProps) {
           Try again
         </button>
         <Link
-          href={ROUTES.DASHBOARD.HOME}
+          href={recoveryHref}
           className="inline-flex items-center gap-2 rounded-md border border-border-strong bg-card px-4 py-2 text-foreground transition-colors hover:bg-muted"
         >
           <Home className="h-4 w-4" />
-          Go to Dashboard
+          {recoveryLabel}
         </Link>
       </div>
     </div>

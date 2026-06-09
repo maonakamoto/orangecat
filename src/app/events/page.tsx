@@ -122,10 +122,6 @@ export default function EventsPage() {
     }
   };
 
-  const handleViewDemo = () => {
-    _router.push('/demo/events');
-  };
-
   return (
     <PageLayout>
       {/* Hero Section */}
@@ -287,9 +283,6 @@ export default function EventsPage() {
             >
               Create Your Event
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button onClick={handleViewDemo} variant="outline" size="lg">
-              View Interactive Demo
             </Button>
           </div>
         </div>
