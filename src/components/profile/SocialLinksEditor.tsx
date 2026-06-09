@@ -51,14 +51,14 @@ export function SocialLinksEditor({ links, onChange, maxLinks = 15 }: SocialLink
       <div className="flex items-center justify-between">
         <div>
           <h4 className="text-sm font-medium text-foreground">Social Media & Links</h4>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             {links.length} {links.length === 1 ? 'link' : 'links'} added
           </p>
         </div>
         {canAddMore && !isAdding && editingIndex === null && (
           <button
             onClick={() => setIsAdding(true)}
-            className="text-xs font-medium text-foreground hover:underline underline-offset-4"
+            className="text-xs sm:text-sm font-medium text-foreground hover:underline underline-offset-4"
           >
             + Add Link
           </button>
@@ -101,7 +101,7 @@ export function SocialLinksEditor({ links, onChange, maxLinks = 15 }: SocialLink
       {links.length === 0 && !isAdding && (
         <div className="text-center py-8 border-2 border-dashed border-border-strong rounded-lg">
           <p className="text-sm text-muted-foreground mb-2">No social links yet</p>
-          <p className="text-xs text-muted-dim mb-4">
+          <p className="text-xs sm:text-sm text-muted-dim mb-4">
             Add links to build credibility and help supporters find you
           </p>
           {canAddMore && (
@@ -114,7 +114,7 @@ export function SocialLinksEditor({ links, onChange, maxLinks = 15 }: SocialLink
       )}
 
       {links.length > 0 && (
-        <p className="text-xs text-muted-foreground mt-2">
+        <p className="text-xs sm:text-sm text-muted-foreground mt-2">
           💡 More complete profiles build higher transparency scores
         </p>
       )}

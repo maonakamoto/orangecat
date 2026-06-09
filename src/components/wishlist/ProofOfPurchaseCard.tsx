@@ -65,7 +65,7 @@ export function ProofOfPurchaseCard({
           {isOwner && onDelete && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                <Button variant="ghost" size="sm" className="h-11 w-11 p-0" aria-label="Options">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>

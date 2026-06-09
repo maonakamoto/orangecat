@@ -81,7 +81,13 @@ export function SocialLinkForm({
         <h4 className="text-sm font-semibold text-foreground">
           {initialLink ? 'Edit Link' : 'Add Social Link'}
         </h4>
-        <Button onClick={onCancel} variant="ghost" size="sm" className="h-6 w-6 p-0">
+        <Button
+          onClick={onCancel}
+          variant="ghost"
+          size="sm"
+          className="h-11 w-11 p-0"
+          aria-label="Cancel"
+        >
           <X className="w-4 h-4" />
         </Button>
       </div>

@@ -29,14 +29,21 @@ export function SocialLinkCard({ link, onEdit, onDelete }: SocialLinkCardProps) 
         </div>
       </div>
       <div className="flex items-center gap-1 flex-shrink-0">
-        <Button onClick={onEdit} variant="ghost" size="sm" className="h-8 w-8 p-0">
+        <Button
+          onClick={onEdit}
+          variant="ghost"
+          size="sm"
+          className="h-11 w-11 p-0"
+          aria-label="Edit"
+        >
           <Edit2 className="w-4 h-4" />
         </Button>
         <Button
           onClick={onDelete}
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0 text-destructive hover:text-destructive/80"
+          className="h-11 w-11 p-0 text-destructive hover:text-destructive/80"
+          aria-label="Delete"
         >
           <Trash2 className="w-4 h-4" />
         </Button>

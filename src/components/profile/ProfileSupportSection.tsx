@@ -117,7 +117,10 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
                     No wallet connected yet. Profile owner can add one in settings.
                   </div>
                 )}
-                <button onClick={() => setSupportType(null)} className="text-xs underline">
+                <button
+                  onClick={() => setSupportType(null)}
+                  className="text-xs sm:text-sm underline"
+                >
                   Close
                 </button>
               </div>
@@ -169,7 +172,10 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
                     No Lightning address for subscriptions.
                   </div>
                 )}
-                <button onClick={() => setSupportType(null)} className="text-xs underline">
+                <button
+                  onClick={() => setSupportType(null)}
+                  className="text-xs sm:text-sm underline"
+                >
                   Close
                 </button>
               </div>

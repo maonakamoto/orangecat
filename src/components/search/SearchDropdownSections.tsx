@@ -118,7 +118,10 @@ export function SearchHistorySection({
           <History className="w-3 h-3" />
           Recent Searches
         </h4>
-        <button onClick={onClear} className="text-xs text-muted-foreground hover:text-foreground">
+        <button
+          onClick={onClear}
+          className="text-xs sm:text-sm text-muted-foreground hover:text-foreground"
+        >
           Clear
         </button>
       </div>
