@@ -14,7 +14,6 @@ import { AIKeyManager } from '@/components/ai/AIKeyManager';
 import { AIModelPreferences, type AIPreferences } from '@/components/ai/AIModelPreferences';
 import { AIUsageStats } from '@/components/ai/AIUsageStats';
 import { AIGuidanceSidebar } from '@/components/ai/AIGuidanceSidebar';
-import { AICreditsPricing } from '@/components/ai/AICreditsPricing';
 import type { AIFieldType } from '@/lib/ai-guidance';
 import { logger } from '@/utils/logger';
 
@@ -181,12 +180,6 @@ export default function AISettingsPage() {
                   periodLabel: 'All time',
                 }}
               />
-            </section>
-
-            {/* Credits Pricing */}
-            <section>
-              <h2 className="text-lg font-semibold text-foreground mb-4">Credits & Pricing</h2>
-              <AICreditsPricing />
             </section>
           </div>
 
