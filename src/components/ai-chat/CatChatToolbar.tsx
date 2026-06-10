@@ -10,6 +10,8 @@ import { FolderOpen, Settings2 } from 'lucide-react';
 import { CAT_AGENT, CAT_HUB_COPY, CAT_HUB_TAB_HREFS, type CatHubTab } from '@/config/cat-hub';
 import { cn } from '@/lib/utils';
 import { ModelSelector } from './ModernChatPanel/components/ModelSelector';
+import { QuotaMeter } from './ModernChatPanel/components/QuotaMeter';
+import type { CatQuota } from './ModernChatPanel/hooks/useCatQuota';
 
 interface CatChatToolbarProps {
   selectedModel: string;
@@ -17,6 +19,8 @@ interface CatChatToolbarProps {
   modelSelectorDisabled?: boolean;
   activePanel?: CatHubTab;
   className?: string;
+  /** Daily-cap meter; rendered on the chat panel only. */
+  quota?: CatQuota | null;
 }
 
 export function CatChatToolbar({
@@ -25,6 +29,7 @@ export function CatChatToolbar({
   modelSelectorDisabled,
   activePanel = 'chat',
   className,
+  quota = null,
 }: CatChatToolbarProps) {
   const panelLink = (tab: Exclude<CatHubTab, 'chat'>) => {
     const href = CAT_HUB_TAB_HREFS[tab];
@@ -63,6 +68,7 @@ export function CatChatToolbar({
       </div>
 
       <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2">
+        {activePanel === 'chat' && <QuotaMeter quota={quota} />}
         {activePanel === 'chat' && (
           <ModelSelector
             selectedModel={selectedModel}

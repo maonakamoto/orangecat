@@ -30,6 +30,12 @@ interface ModernChatPanelProps {
   selectedModel?: string;
   onModelSelect?: (model: string) => void;
   onLoadingChange?: (loading: boolean) => void;
+  /**
+   * Fires after every send attempt (success, abort, or error). The hub uses
+   * this to refresh its lifted quota meter so the chip ticks down without a
+   * page reload. Composed alongside the internal post-send wiring.
+   */
+  onMessageSent?: () => void;
   className?: string;
 }
 
@@ -40,6 +46,7 @@ export function ModernChatPanel({
   selectedModel: selectedModelProp,
   onModelSelect,
   onLoadingChange,
+  onMessageSent,
   className,
 }: ModernChatPanelProps = {}) {
   const router = useRouter();
@@ -68,7 +75,10 @@ export function ModernChatPanel({
   } = useChatMessages({
     selectedModel,
     onPendingResult: () => refreshPendingActionsRef.current?.(),
-    onMessageSent: refreshQuota,
+    onMessageSent: () => {
+      refreshQuota();
+      onMessageSent?.();
+    },
   });
 
   const { suggestions, hasContext, isLoadingSuggestions } = useSuggestions();

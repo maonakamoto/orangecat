@@ -12,6 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
 import { ModernChatPanel } from '@/components/ai-chat/ModernChatPanel/index';
+import { useCatQuota } from '@/components/ai-chat/ModernChatPanel/hooks/useCatQuota';
 import { CatChatToolbar } from '@/components/ai-chat/CatChatToolbar';
 import { CatSecondaryPanel } from '@/components/ai-chat/CatSecondaryPanel';
 import { isCatHubTab, type CatHubTab } from '@/config/cat-hub';
@@ -23,6 +24,7 @@ export default function CatHubPage() {
   const [activeTab, setActiveTab] = useState<CatHubTab>('chat');
   const [selectedModel, setSelectedModel] = useState('auto');
   const [chatIsLoading, setChatIsLoading] = useState(false);
+  const { quota, refresh: refreshQuota } = useCatQuota();
 
   useEffect(() => {
     const tab = searchParams?.get('tab');
@@ -59,6 +61,7 @@ export default function CatHubPage() {
         onModelSelect={handleModelSelect}
         modelSelectorDisabled={chatIsLoading}
         activePanel="chat"
+        quota={quota}
       />
       <ModernChatPanel
         variant="focus"
@@ -67,6 +70,7 @@ export default function CatHubPage() {
         selectedModel={selectedModel}
         onModelSelect={handleModelSelect}
         onLoadingChange={setChatIsLoading}
+        onMessageSent={refreshQuota}
         className="min-h-0 flex-1"
       />
     </div>
