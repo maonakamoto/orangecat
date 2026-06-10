@@ -26,10 +26,7 @@ on:
     branches: [main]
 
 env:
-  # No env-level secrets needed anymore — the deploy hook (set via
-  # VERCEL_DEPLOY_HOOK_URL on the deploy step) is the only credential.
-  # ORG/PROJECT IDs are still useful to read for logging if any future
-  # step wants them; keep them but expect them to be unused most days.
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
@@ -100,29 +97,25 @@ jobs:
           npm run build
           echo "✅ Application built successfully"
 
-      # Deploy step replaced 2026-06-09: the `vercel --prod --token=...`
-      # approach used a session token from a local `vercel login` that
-      # rotated every few weeks, causing recurring "token invalid"
-      # failures (twice on 2026-06-09 alone). The deploy-hook URL is
-      # stable forever (the URL itself is the secret), so the workflow
-      # can deploy without any rotating credential. The build/test
-      # steps above stay as the gating sanity check; Vercel re-runs
-      # its own build server-side via the hook.
-      - name: 🚀 Trigger Vercel Production Deploy
+      # Deploy with the Vercel CLI using a long-lived Personal Access
+      # Token (created in the Vercel dashboard, no expiration). The
+      # previous deploy-hook approach was credential-free but always
+      # produced PREVIEW builds for this project (the GitHub App has
+      # never produced production deploys here — verified against 100+
+      # historical deployments, all source=cli). The PAT does not get
+      # invalidated by `vercel login` the way the CLI session token
+      # used to, so this is stable. If you ever need to rotate it,
+      # generate a new one at https://vercel.com/account/tokens.
+      - name: 🚀 Deploy to Vercel Production
         id: deploy
         run: |
-          echo "🚀 Triggering Vercel via deploy hook..."
-          HTTP_CODE=$(curl -s -o /tmp/deploy-response.json -w '%{http_code}' \
-            -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}")
-          echo "HTTP status: $HTTP_CODE"
-          cat /tmp/deploy-response.json || true
-          echo ""
-          if [ "$HTTP_CODE" -ne 201 ] && [ "$HTTP_CODE" -ne 200 ]; then
-            echo "::error::Vercel deploy hook returned $HTTP_CODE — token-free hook may have been revoked. Re-create at https://vercel.com/orangecat/orangecat/settings/git#deploy-hooks and update VERCEL_DEPLOY_HOOK_URL secret."
-            exit 1
-          fi
-          echo "✅ Vercel build triggered. Live URL: https://orangecat.ch (after build completes)"
-          echo "deployment_url=https://orangecat.ch" >> $GITHUB_OUTPUT
+          echo "🚀 Deploying to Vercel production..."
+          npm install --global vercel@latest
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
+          DEPLOY_URL=$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")
+          echo "✅ Deployed: $DEPLOY_URL"
+          echo "deployment_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
 
       - name: 🔍 Health Check
         id: health_check
