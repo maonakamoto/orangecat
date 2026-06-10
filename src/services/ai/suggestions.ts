@@ -56,12 +56,16 @@ const DOCUMENT_TYPE_SUGGESTIONS: Record<string, (doc: DocumentContext) => string
   other: _doc => [`Give me advice based on my context`, `What opportunities should I consider?`],
 };
 
-// Shown to brand-new users with no context yet — broad, inviting, covers the full range
+// Shown to brand-new users with no context yet.
+// Lead with the magic moment — "Draft a product" lands a PrefilledFormCard
+// the user can publish in one click. That's Cat's superpower the rest of the
+// suggestions don't expose. Other entries cover the rest of the surface
+// (value-finding, profile setup, Bitcoin onboarding) without being filler.
 export const DEFAULT_SUGGESTIONS = [
-  'What can I do on OrangeCat?',
-  'I want to earn Bitcoin — where do I start?',
-  'Help me fund a project or cause',
-  'Tell me how Bitcoin payments work here',
+  'Draft a product I could sell on OrangeCat',
+  'What can I earn Bitcoin doing today?',
+  'Help me write a clear profile bio',
+  'How do Lightning payments work here?',
 ];
 
 const CONTEXT_AWARE_GENERIC = [
