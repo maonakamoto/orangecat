@@ -6,3 +6,4 @@
 export { useChatMessages } from './useChatMessages';
 export { useSuggestions } from './useSuggestions';
 export { usePendingActionsManager } from './usePendingActionsManager';
+export { useCatQuota, type CatQuota, type CatQuotaTier } from './useCatQuota';

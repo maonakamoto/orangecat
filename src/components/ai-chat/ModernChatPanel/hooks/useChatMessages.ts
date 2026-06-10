@@ -61,9 +61,19 @@ function readLocale(): string {
 interface UseChatMessagesOptions {
   selectedModel: string;
   onPendingResult?: () => void;
+  /**
+   * Fires once per send attempt after the request settles (success, error,
+   * or abort). Used to refresh the quota meter so the visible count tracks
+   * the platform's daily counter without a page reload.
+   */
+  onMessageSent?: () => void;
 }
 
-export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessagesOptions) {
+export function useChatMessages({
+  selectedModel,
+  onPendingResult,
+  onMessageSent,
+}: UseChatMessagesOptions) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -71,6 +81,8 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
   const abortControllerRef = useRef<AbortController | null>(null);
   const onPendingResultRef = useRef(onPendingResult);
   onPendingResultRef.current = onPendingResult;
+  const onMessageSentRef = useRef(onMessageSent);
+  onMessageSentRef.current = onMessageSent;
   const preferredCurrency = useUserCurrency();
 
   const { isLoadingHistory } = useChatHistory(setMessages);
@@ -258,6 +270,7 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
         clearTimeout(timeout);
         abortControllerRef.current = null;
         setIsLoading(false);
+        onMessageSentRef.current?.();
       }
     },
     [isLoading, selectedModel, preferredCurrency]

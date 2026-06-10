@@ -13,6 +13,7 @@ export const API_ROUTES = {
     CONTEXT: '/api/cat/context',
     PERMISSIONS: '/api/cat/permissions',
     ACTIONS: '/api/cat/actions',
+    QUOTA: '/api/cat/quota',
   },
   MESSAGES: {
     BASE: '/api/messages',

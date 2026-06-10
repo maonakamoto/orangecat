@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { Cat, Trash2, Settings2 } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 import { ModelSelector } from './ModelSelector';
+import { QuotaMeter } from './QuotaMeter';
+import type { CatQuota } from '../hooks/useCatQuota';
 
 interface ChatHeaderProps {
   selectedModel: string;
@@ -14,6 +16,7 @@ interface ChatHeaderProps {
   isLoading: boolean;
   hasMessages: boolean;
   onClearChat: () => void;
+  quota?: CatQuota | null;
 }
 
 export function ChatHeader({
@@ -22,6 +25,7 @@ export function ChatHeader({
   isLoading,
   hasMessages,
   onClearChat,
+  quota = null,
 }: ChatHeaderProps) {
   const router = useRouter();
 
@@ -38,6 +42,7 @@ export function ChatHeader({
       </div>
 
       <div className="flex items-center gap-2">
+        <QuotaMeter quota={quota} />
         <ModelSelector
           selectedModel={selectedModel}
           onSelect={onModelSelect}

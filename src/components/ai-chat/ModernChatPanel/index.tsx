@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
-import { useChatMessages, useSuggestions, usePendingActionsManager } from './hooks';
+import { useChatMessages, useSuggestions, usePendingActionsManager, useCatQuota } from './hooks';
 import { ChatHeader, ChatInput, EmptyState, ErrorDisplay, MessageBubble } from './components';
 import { PendingActionsCard } from '../PendingActionsCard';
 import type { CatAction } from './types';
@@ -52,6 +52,8 @@ export function ModernChatPanel({
   const refreshPendingActionsRef = useRef<(() => Promise<void>) | undefined>(undefined);
   const isFocus = variant === 'focus';
 
+  const { quota, refresh: refreshQuota } = useCatQuota();
+
   const {
     messages,
     isLoading,
@@ -66,6 +68,7 @@ export function ModernChatPanel({
   } = useChatMessages({
     selectedModel,
     onPendingResult: () => refreshPendingActionsRef.current?.(),
+    onMessageSent: refreshQuota,
   });
 
   const { suggestions, hasContext, isLoadingSuggestions } = useSuggestions();
@@ -171,6 +174,7 @@ export function ModernChatPanel({
           isLoading={isLoading}
           hasMessages={messages.length > 0}
           onClearChat={clearChat}
+          quota={quota}
         />
       )}
 

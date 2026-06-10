@@ -10,3 +10,4 @@ export { EmptyState } from './EmptyState';
 export { ChatHeader } from './ChatHeader';
 export { ChatInput } from './ChatInput';
 export { ErrorDisplay } from './ErrorDisplay';
+export { QuotaMeter } from './QuotaMeter';
