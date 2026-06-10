@@ -113,7 +113,11 @@ jobs:
           npm install --global vercel@latest
           vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
           vercel build --prod --token="$VERCEL_TOKEN"
-          DEPLOY_URL=$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")
+          # `--archive=tgz` uploads the prebuilt output as one tarball instead
+          # of thousands of files. Without it, every deploy counts hundreds of
+          # files toward the Vercel free-tier 5000/day upload cap and the
+          # ~3rd-4th deploy of the day silently fails with `api-upload-free`.
+          DEPLOY_URL=$(vercel deploy --prebuilt --prod --archive=tgz --token="$VERCEL_TOKEN")
           echo "✅ Deployed: $DEPLOY_URL"
           echo "deployment_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
 
