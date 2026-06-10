@@ -14,7 +14,6 @@ interface GetKeyStepProps {
     | {
         name: string;
         type: string;
-        setupTime: number;
         apiKeyPrefix?: string;
         apiKeyUrl: string;
       }
@@ -22,6 +21,12 @@ interface GetKeyStepProps {
   copiedUrl: boolean;
   onCopyUrl: (url: string) => Promise<void>;
 }
+
+const TYPE_LABEL: Record<string, string> = {
+  aggregator: 'Aggregator',
+  direct: 'Direct provider',
+  local: 'Local (runs on your machine)',
+};
 
 export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) {
   if (!provider) {
@@ -41,8 +46,7 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
           <div>
             <h3 className="font-semibold">{provider.name}</h3>
             <p className="text-sm text-muted-foreground">
-              {provider.type === 'aggregator' ? 'Aggregator' : 'Direct Provider'} • Setup time: ~
-              {provider.setupTime} min
+              {TYPE_LABEL[provider.type] ?? provider.type}
             </p>
           </div>
         </div>

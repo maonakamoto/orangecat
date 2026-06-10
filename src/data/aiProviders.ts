@@ -1,145 +1,88 @@
 /**
- * AI Provider Registry
+ * AI Provider Registry — SSOT for which providers Cat surfaces in the UI.
  *
- * Single source of truth for AI provider data.
- * Similar to walletProviders.ts but for AI API providers.
+ * Honest data only: no ratings, no review counts, no "difficulty levels,"
+ * no invented "setup time" numbers. Just what's factually true about each
+ * provider — the kind of fields you can verify in 30 seconds by visiting
+ * their site.
+ *
+ * `type` tells the UI which group to render the provider in:
+ *   - 'direct'     → vendor-owned API (Anthropic, OpenAI, Google, Groq, ...)
+ *   - 'aggregator' → single key fronts many upstream models (OpenRouter, Together)
+ *   - 'local'      → runs on the user's own machine (Ollama, LM Studio)
+ *
+ * Runtime support is layered separately. Today the chat route only routes
+ * Groq + OpenRouter natively; other providers get their keys stored and will
+ * route once the generic OpenAI-compatible client lands in a follow-up.
  *
  * Created: 2026-01-20
+ * Last Modified: 2026-06-10 (strip fake metadata, add Ollama + LM Studio)
  */
+
+export type AIProviderCategory = 'direct' | 'aggregator' | 'local';
 
 export interface AIProvider {
   id: string;
   name: string;
-  type: 'aggregator' | 'direct';
+  type: AIProviderCategory;
+  /** One-line factual description shown on the provider card. */
   description: string;
-  longDescription: string;
-  pros: string[];
-  cons: string[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  logoUrl?: string;
+  /** Provider home page. */
   websiteUrl: string;
+  /** Where to create / manage an API key. */
   apiKeyUrl: string;
-  pricingUrl: string;
+  /** Provider API docs (linked from settings for power users). */
   docsUrl: string;
-  features: string[];
-  supportedModels: string[];
-  billingType: 'prepaid' | 'postpaid' | 'both';
-  minimumDeposit?: number;
-  setupTime: number; // minutes
-  recommended?: boolean;
-  rating: number;
-  reviewCount: number;
-  lastUpdated: string;
-  verified: boolean;
+  /** Optional prefix the key must start with — used for format validation. */
   apiKeyPrefix?: string;
+  /** Placeholder shown in the key input. */
   apiKeyExample?: string;
 }
 
 export const aiProviders: AIProvider[] = [
-  // Aggregators
+  // ── Aggregators ────────────────────────────────────────────────────────
   {
     id: 'openrouter',
     name: 'OpenRouter',
     type: 'aggregator',
-    description: 'One API key for all major AI models. Best for beginners.',
-    longDescription:
-      'OpenRouter provides unified access to all major AI models (Claude, GPT-4, Llama, Gemini, and more) through a single API key. Pay only for what you use with transparent per-token pricing.',
-    pros: [
-      'Single API key for 100+ models',
-      'Simple prepaid billing - no surprises',
-      'Automatic fallbacks between models',
-      'Free tier available with rate limits',
-      'Transparent token-based pricing',
-      'No monthly minimums or subscriptions',
-    ],
-    cons: [
-      'Slightly higher prices than direct providers',
-      'Adds a middleman layer',
-      'Some models may have limited features',
-    ],
-    difficulty: 'beginner',
+    description: 'One key, 200+ models (Claude, GPT, Gemini, Llama, and more). Free pool included.',
     websiteUrl: 'https://openrouter.ai',
     apiKeyUrl: 'https://openrouter.ai/keys',
-    pricingUrl: 'https://openrouter.ai/models',
     docsUrl: 'https://openrouter.ai/docs',
-    features: [
-      'Multi-model access',
-      'Prepaid credits',
-      'Usage dashboard',
-      'Model comparison',
-      'Automatic retries',
-      'Free models available',
-    ],
-    supportedModels: [
-      'Claude 3.5 Sonnet',
-      'Claude 3 Opus',
-      'GPT-4o',
-      'GPT-4 Turbo',
-      'Llama 4',
-      'Gemini 2.0',
-      'DeepSeek',
-      '100+ more',
-    ],
-    billingType: 'prepaid',
-    minimumDeposit: 5,
-    setupTime: 2,
-    recommended: true,
-    rating: 4.8,
-    reviewCount: 12500,
-    lastUpdated: '2026-01-15',
-    verified: true,
     apiKeyPrefix: 'sk-or-',
     apiKeyExample: 'sk-or-v1-xxxxxxxxxxxxxxxx',
   },
+  {
+    id: 'together',
+    name: 'Together AI',
+    type: 'aggregator',
+    description: 'Open-source models at scale, including fine-tuning.',
+    websiteUrl: 'https://together.ai',
+    apiKeyUrl: 'https://api.together.ai/settings/api-keys',
+    docsUrl: 'https://docs.together.ai',
+    apiKeyExample: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+  },
 
-  // Direct Providers
+  // ── Direct providers ──────────────────────────────────────────────────
+  {
+    id: 'groq',
+    name: 'Groq',
+    type: 'direct',
+    description: 'Fastest inference. Free tier covers most chat use.',
+    websiteUrl: 'https://groq.com',
+    apiKeyUrl: 'https://console.groq.com/keys',
+    docsUrl: 'https://console.groq.com/docs',
+    apiKeyPrefix: 'gsk_',
+    apiKeyExample: 'gsk_xxxxxxxxxxxxxxxxxxxxxxxx',
+  },
   {
     id: 'anthropic',
     name: 'Anthropic',
     type: 'direct',
-    description: 'Direct access to Claude models from the creators.',
-    longDescription:
-      'Anthropic is the company behind Claude, known for AI safety research. Direct API access gives you the latest features and lowest latency for Claude models.',
-    pros: [
-      'Direct from Claude creators',
-      'Latest features first',
-      'Lower latency',
-      'Detailed usage analytics',
-      'Priority support available',
-    ],
-    cons: [
-      'Only Claude models available',
-      'Credit card required',
-      'Pay-as-you-go billing',
-      'More complex rate limits',
-    ],
-    difficulty: 'intermediate',
+    description: 'Claude models direct from the makers.',
     websiteUrl: 'https://anthropic.com',
     apiKeyUrl: 'https://console.anthropic.com/settings/keys',
-    pricingUrl: 'https://www.anthropic.com/pricing',
     docsUrl: 'https://docs.anthropic.com',
-    features: [
-      'Latest Claude features',
-      'Low latency',
-      'Usage analytics',
-      'Rate limit management',
-      'Workspaces',
-    ],
-    supportedModels: [
-      'Claude 3.5 Sonnet',
-      'Claude 3.5 Haiku',
-      'Claude 3 Opus',
-      'Claude 3 Haiku',
-      'Claude Sonnet 4',
-      'Claude Opus 4',
-    ],
-    billingType: 'postpaid',
-    setupTime: 5,
-    recommended: false,
-    rating: 4.7,
-    reviewCount: 8900,
-    lastUpdated: '2026-01-10',
-    verified: true,
     apiKeyPrefix: 'sk-ant-',
     apiKeyExample: 'sk-ant-api03-xxxxxxxxxxxxxxxx',
   },
@@ -147,44 +90,10 @@ export const aiProviders: AIProvider[] = [
     id: 'openai',
     name: 'OpenAI',
     type: 'direct',
-    description: 'Direct access to GPT-4 and other OpenAI models.',
-    longDescription:
-      'OpenAI offers direct API access to GPT-4, GPT-4o, and other models. Known for broad capabilities including vision, function calling, and structured outputs.',
-    pros: [
-      'Industry-leading models',
-      'Extensive documentation',
-      'Large developer community',
-      'Function calling support',
-      'Vision capabilities',
-    ],
-    cons: [
-      'Only OpenAI models',
-      'Complex pricing tiers',
-      'Rate limits can be restrictive',
-      'Credit card required',
-    ],
-    difficulty: 'intermediate',
+    description: 'GPT-4o and the OpenAI model family.',
     websiteUrl: 'https://openai.com',
     apiKeyUrl: 'https://platform.openai.com/api-keys',
-    pricingUrl: 'https://openai.com/pricing',
     docsUrl: 'https://platform.openai.com/docs',
-    features: [
-      'GPT-4 models',
-      'Function calling',
-      'Vision support',
-      'Structured outputs',
-      'Fine-tuning',
-      'Embeddings',
-    ],
-    supportedModels: ['GPT-4o', 'GPT-4o Mini', 'GPT-4 Turbo', 'GPT-3.5 Turbo'],
-    billingType: 'both',
-    minimumDeposit: 5,
-    setupTime: 5,
-    recommended: false,
-    rating: 4.6,
-    reviewCount: 15200,
-    lastUpdated: '2026-01-12',
-    verified: true,
     apiKeyPrefix: 'sk-',
     apiKeyExample: 'sk-proj-xxxxxxxxxxxxxxxx',
   },
@@ -192,42 +101,10 @@ export const aiProviders: AIProvider[] = [
     id: 'google',
     name: 'Google AI Studio',
     type: 'direct',
-    description: 'Direct access to Gemini models from Google.',
-    longDescription:
-      'Google AI Studio provides access to Gemini models with massive context windows (up to 2M tokens) and strong multimodal capabilities.',
-    pros: [
-      'Massive context window',
-      'Strong multimodal support',
-      'Competitive pricing',
-      'Free tier available',
-      'Good documentation',
-    ],
-    cons: [
-      'Only Google models',
-      'Newer platform',
-      'Some features in preview',
-      'Rate limits on free tier',
-    ],
-    difficulty: 'intermediate',
+    description: 'Gemini models with very long context windows.',
     websiteUrl: 'https://ai.google.dev',
     apiKeyUrl: 'https://aistudio.google.com/app/apikey',
-    pricingUrl: 'https://ai.google.dev/pricing',
     docsUrl: 'https://ai.google.dev/docs',
-    features: [
-      'Large context window',
-      'Multimodal support',
-      'Grounding',
-      'Code execution',
-      'Free tier',
-    ],
-    supportedModels: ['Gemini 2.0 Flash', 'Gemini 2.0 Pro', 'Gemini 1.5 Flash', 'Gemini 1.5 Pro'],
-    billingType: 'both',
-    setupTime: 3,
-    recommended: false,
-    rating: 4.5,
-    reviewCount: 6800,
-    lastUpdated: '2026-01-08',
-    verified: true,
     apiKeyPrefix: 'AIza',
     apiKeyExample: 'AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxx',
   },
@@ -235,177 +112,73 @@ export const aiProviders: AIProvider[] = [
     id: 'xai',
     name: 'xAI (Grok)',
     type: 'direct',
-    description: 'Direct access to Grok models from xAI.',
-    longDescription:
-      "xAI is Elon Musk's AI company offering Grok, a powerful AI assistant known for its uncensored responses, real-time knowledge, and humor. Great for users who want fewer restrictions.",
-    pros: [
-      'Less content restrictions',
-      'Real-time X/Twitter knowledge',
-      'Strong reasoning capabilities',
-      'Competitive pricing',
-      'Fast inference',
-    ],
-    cons: ['Only Grok models', 'Newer platform', 'Smaller community', 'Limited documentation'],
-    difficulty: 'intermediate',
+    description: 'Grok models — real-time X knowledge, fewer content restrictions.',
     websiteUrl: 'https://x.ai',
     apiKeyUrl: 'https://console.x.ai/api-keys',
-    pricingUrl: 'https://x.ai/pricing',
     docsUrl: 'https://docs.x.ai',
-    features: [
-      'Grok models',
-      'Function calling',
-      'Vision support',
-      'Real-time knowledge',
-      'Uncensored mode',
-    ],
-    supportedModels: ['Grok-2', 'Grok-2 Mini', 'Grok-3'],
-    billingType: 'prepaid',
-    minimumDeposit: 5,
-    setupTime: 3,
-    recommended: false,
-    rating: 4.5,
-    reviewCount: 3200,
-    lastUpdated: '2026-01-15',
-    verified: true,
     apiKeyPrefix: 'xai-',
     apiKeyExample: 'xai-xxxxxxxxxxxxxxxxxxxxxxxx',
-  },
-  {
-    id: 'groq',
-    name: 'Groq',
-    type: 'direct',
-    description: 'Ultra-fast inference with custom AI chips.',
-    longDescription:
-      'Groq offers blazing fast inference using their custom LPU chips. Perfect for real-time applications and users who need the fastest response times.',
-    pros: [
-      'Fastest inference available',
-      'Competitive pricing',
-      'Free tier available',
-      'Simple API',
-      'Great for real-time apps',
-    ],
-    cons: [
-      'Limited model selection',
-      'Newer platform',
-      'Lower rate limits',
-      'No vision support yet',
-    ],
-    difficulty: 'beginner',
-    websiteUrl: 'https://groq.com',
-    apiKeyUrl: 'https://console.groq.com/keys',
-    pricingUrl: 'https://groq.com/pricing',
-    docsUrl: 'https://console.groq.com/docs',
-    features: [
-      'Ultra-fast inference',
-      'Free tier',
-      'Simple setup',
-      'Llama models',
-      'Mixtral models',
-    ],
-    supportedModels: ['Llama 3.3 70B', 'Llama 3.1 8B', 'Mixtral 8x7B', 'Gemma 2 9B'],
-    billingType: 'both',
-    setupTime: 2,
-    recommended: false,
-    rating: 4.6,
-    reviewCount: 5100,
-    lastUpdated: '2026-01-12',
-    verified: true,
-    apiKeyPrefix: 'gsk_',
-    apiKeyExample: 'gsk_xxxxxxxxxxxxxxxxxxxxxxxx',
-  },
-  {
-    id: 'together',
-    name: 'Together AI',
-    type: 'direct',
-    description: 'Open-source models at scale with fine-tuning.',
-    longDescription:
-      'Together AI specializes in running open-source models with options for fine-tuning. Great for users who want customization and open models.',
-    pros: [
-      'Wide open-source selection',
-      'Fine-tuning support',
-      'Competitive pricing',
-      'Good documentation',
-      'Research-friendly',
-    ],
-    cons: ['No proprietary models', 'Fine-tuning complexity', 'Smaller community'],
-    difficulty: 'intermediate',
-    websiteUrl: 'https://together.ai',
-    apiKeyUrl: 'https://api.together.ai/settings/api-keys',
-    pricingUrl: 'https://together.ai/pricing',
-    docsUrl: 'https://docs.together.ai',
-    features: ['Open-source models', 'Fine-tuning', 'Embeddings', 'Custom deployments'],
-    supportedModels: ['Llama 3.3 70B', 'Qwen 2.5 72B', 'DeepSeek V3', 'Mixtral'],
-    billingType: 'prepaid',
-    minimumDeposit: 5,
-    setupTime: 3,
-    recommended: false,
-    rating: 4.4,
-    reviewCount: 4200,
-    lastUpdated: '2026-01-10',
-    verified: true,
-    apiKeyPrefix: '',
-    apiKeyExample: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   },
   {
     id: 'deepseek',
     name: 'DeepSeek',
     type: 'direct',
-    description: 'High-performance Chinese AI lab with competitive models.',
-    longDescription:
-      'DeepSeek offers powerful models at very competitive prices. Known for strong coding capabilities and excellent price-to-performance ratio.',
-    pros: [
-      'Excellent value',
-      'Strong coding ability',
-      'Large context windows',
-      'Competitive with top models',
-      'Free tier available',
-    ],
-    cons: ['Based in China', 'Occasional availability issues', 'Less documentation in English'],
-    difficulty: 'intermediate',
+    description: 'Strong coding, long context, very low prices.',
     websiteUrl: 'https://deepseek.com',
     apiKeyUrl: 'https://platform.deepseek.com/api_keys',
-    pricingUrl: 'https://platform.deepseek.com/api-docs/pricing',
     docsUrl: 'https://platform.deepseek.com/api-docs',
-    features: ['DeepSeek V3', 'Strong coding', 'Large context', 'Competitive pricing'],
-    supportedModels: ['DeepSeek V3', 'DeepSeek Coder', 'DeepSeek Chat'],
-    billingType: 'prepaid',
-    minimumDeposit: 1,
-    setupTime: 5,
-    recommended: false,
-    rating: 4.5,
-    reviewCount: 2800,
-    lastUpdated: '2026-01-08',
-    verified: true,
     apiKeyPrefix: 'sk-',
     apiKeyExample: 'sk-xxxxxxxxxxxxxxxxxxxxxxxx',
+  },
+
+  // ── Local ─────────────────────────────────────────────────────────────
+  {
+    id: 'ollama',
+    name: 'Ollama',
+    type: 'local',
+    description: 'Run models on your own machine. Nothing leaves the laptop.',
+    websiteUrl: 'https://ollama.com',
+    apiKeyUrl: 'https://ollama.com/download',
+    docsUrl: 'https://github.com/ollama/ollama/blob/main/docs/api.md',
+    apiKeyExample: 'http://localhost:11434',
+  },
+  {
+    id: 'lm-studio',
+    name: 'LM Studio',
+    type: 'local',
+    description: 'Desktop app for running open models locally with an OpenAI-compatible API.',
+    websiteUrl: 'https://lmstudio.ai',
+    apiKeyUrl: 'https://lmstudio.ai',
+    docsUrl: 'https://lmstudio.ai/docs',
+    apiKeyExample: 'http://localhost:1234/v1',
   },
 ];
 
 // ==================== UTILITY FUNCTIONS ====================
 
-/**
- * Get provider by ID
- */
+/** Get provider by ID. */
 export function getAIProvider(id: string): AIProvider | undefined {
   return aiProviders.find(p => p.id === id);
 }
 
-/**
- * Get recommended provider
- */
-export function getRecommendedProvider(): AIProvider {
-  return aiProviders.find(p => p.recommended) || aiProviders[0];
-}
-
-/**
- * Get providers by type
- */
-export function getProvidersByType(type: AIProvider['type']): AIProvider[] {
+/** Group providers by type for the settings UI. */
+export function getProvidersByCategory(type: AIProviderCategory): AIProvider[] {
   return aiProviders.filter(p => p.type === type);
 }
 
 /**
- * Validate API key format for a provider
+ * Default suggestion when the user hasn't picked anything yet. OpenRouter
+ * because one key fronts all the major models — least friction for new
+ * users, and the path most likely to "just work."
+ */
+export function getRecommendedProvider(): AIProvider {
+  return aiProviders.find(p => p.id === 'openrouter') || aiProviders[0];
+}
+
+/**
+ * Validate an API key against the provider's known prefix + a basic length
+ * sanity check. Doesn't actually call the provider — that happens server-side
+ * via the key-validation endpoint.
  */
 export function validateApiKeyFormat(
   providerId: string,
@@ -420,7 +193,16 @@ export function validateApiKeyFormat(
     return { valid: false, message: 'API key is required' };
   }
 
-  // Check prefix if provider has one
+  // Local providers take a URL, not a key — skip the prefix check.
+  if (provider.type === 'local') {
+    try {
+      new URL(apiKey);
+      return { valid: true };
+    } catch {
+      return { valid: false, message: 'Expected a URL like http://localhost:11434' };
+    }
+  }
+
   if (provider.apiKeyPrefix && !apiKey.startsWith(provider.apiKeyPrefix)) {
     return {
       valid: false,
@@ -428,7 +210,6 @@ export function validateApiKeyFormat(
     };
   }
 
-  // Basic length validation
   if (apiKey.length < 20) {
     return { valid: false, message: 'API key seems too short' };
   }
