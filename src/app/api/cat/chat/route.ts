@@ -182,7 +182,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       platformUsage,
       keyService,
       userGroqKey,
-      fallback,
+      fallbacks,
     } = resolved;
 
     // Resolve actor ID for exec_action execution
@@ -297,35 +297,51 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
               }
             };
 
+            // Walk the fallback chain on rate-limit. Each provider gets one
+            // attempt. We can only swap providers BEFORE any content streams
+            // — otherwise the client sees half a response and then a switch.
+            let lastErr: unknown = null;
             try {
               await consumeStream();
             } catch (err) {
-              if (isAiRateLimitError(err) && !streamStarted && !attemptedFallback && fallback) {
-                attemptedFallback = true;
-                activeProvider = fallback.provider;
-                activeModel = fallback.modelToUse;
-                activeService = fallback.aiService;
-                logger.info(
-                  'Cat chat: primary rate-limited, falling back',
-                  { from: provider, to: activeProvider, model: activeModel },
-                  'cat/chat'
-                );
-                // Tell the client the provider switched, then re-send the
-                // model+provider opener so any model-aware UI updates.
-                controller.enqueue(
-                  encoder.encode(
-                    `data: ${JSON.stringify({ fallback: { from: provider, to: activeProvider, model: activeModel, reason: 'rate_limit' } })}\n\n`
-                  )
-                );
-                controller.enqueue(
-                  encoder.encode(
-                    `data: ${JSON.stringify({ model: activeModel, provider: activeProvider })}\n\n`
-                  )
-                );
+              lastErr = err;
+            }
+            let fallbackIndex = 0;
+            while (
+              lastErr &&
+              isAiRateLimitError(lastErr) &&
+              !streamStarted &&
+              fallbackIndex < fallbacks.length
+            ) {
+              attemptedFallback = true;
+              const next = fallbacks[fallbackIndex++];
+              activeProvider = next.provider;
+              activeModel = next.modelToUse;
+              activeService = next.aiService;
+              logger.info(
+                'Cat chat: rate-limited, trying next fallback',
+                { from: provider, to: activeProvider, model: activeModel, attempt: fallbackIndex },
+                'cat/chat'
+              );
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({ fallback: { from: provider, to: activeProvider, model: activeModel, reason: 'rate_limit' } })}\n\n`
+                )
+              );
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({ model: activeModel, provider: activeProvider })}\n\n`
+                )
+              );
+              try {
                 await consumeStream();
-              } else {
-                throw err;
+                lastErr = null;
+              } catch (nextErr) {
+                lastErr = nextErr;
               }
+            }
+            if (lastErr) {
+              throw lastErr;
             }
 
             if (conversationId && fullContent) {
@@ -417,12 +433,13 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
         collectedPrefillProposals.push(proposal);
       }
     );
-    // Try primary; if it rate-limits, transparently retry on the fallback
-    // (typically OpenRouter free). Non-streaming is even safer than streaming
-    // because the response is atomic — no partial-content corruption risk.
+    // Try primary; on rate-limit, walk the fallback chain. Non-streaming
+    // is even safer than streaming because each attempt is atomic — no
+    // partial-content corruption risk to worry about.
     let activeProvider = provider;
     let result;
     let fellBackTo: FallbackProvider | null = null;
+    let lastErr: unknown = null;
     try {
       result = await aiService.chatCompletion({
         model: modelToUse,
@@ -430,22 +447,31 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
         temperature: 0.7,
       });
     } catch (err) {
-      if (isAiRateLimitError(err) && fallback) {
-        logger.info(
-          'Cat chat (non-streaming): primary rate-limited, falling back',
-          { from: provider, to: fallback.provider, model: fallback.modelToUse },
-          'cat/chat'
-        );
-        fellBackTo = fallback;
-        activeProvider = fallback.provider;
-        result = await fallback.aiService.chatCompletion({
-          model: fallback.modelToUse,
+      lastErr = err;
+    }
+    let fallbackIndex = 0;
+    while (!result && lastErr && isAiRateLimitError(lastErr) && fallbackIndex < fallbacks.length) {
+      const next = fallbacks[fallbackIndex++];
+      logger.info(
+        'Cat chat (non-streaming): rate-limited, trying next fallback',
+        { from: provider, to: next.provider, model: next.modelToUse, attempt: fallbackIndex },
+        'cat/chat'
+      );
+      try {
+        result = await next.aiService.chatCompletion({
+          model: next.modelToUse,
           messages,
           temperature: 0.7,
         });
-      } else {
-        throw err;
+        fellBackTo = next;
+        activeProvider = next.provider;
+        lastErr = null;
+      } catch (nextErr) {
+        lastErr = nextErr;
       }
+    }
+    if (!result) {
+      throw lastErr ?? new Error('Cat chat: no AI provider produced a response');
     }
 
     if (!hasByok) {

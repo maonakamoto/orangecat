@@ -1,0 +1,134 @@
+/**
+ * Platform-tier provider chain.
+ *
+ * Builds the ordered list of providers that can serve a Cat chat request
+ * when the user hasn't BYOK'd. Each entry is a ready-to-call AI service —
+ * the resolver and the chat route don't need to know which env vars are
+ * set; they just take the chain and walk it.
+ *
+ * Priority (first available wins, the rest become the fallback chain):
+ *   1. Groq           — fastest inference, generous free tier
+ *   2. OpenRouter     — broadest catalog via the free model pool
+ *   3. Together AI    — backup free pool, OpenAI-compatible
+ *   4. Platform Ollama — Hetzner-hosted small model, sovereignty backstop
+ *
+ * Each provider is enabled by the presence of its env var. The chain
+ * gracefully shrinks if some aren't configured — Cat works as long as
+ * any one of them is alive. That's the "Cat survives anything" story.
+ *
+ * Created: 2026-06-10
+ */
+
+import {
+  isGroqAvailable,
+  createGroqService,
+  createOpenRouterService,
+  createOpenAICompatibleServiceWithByok,
+  DEFAULT_GROQ_MODEL,
+} from '@/services/ai';
+import { getFreeModels, getModelMetadata, DEFAULT_FREE_MODEL_ID } from '@/config/ai-models';
+import { createAutoRouter } from '@/services/ai/auto-router';
+
+/** Minimal interface every platform AI service satisfies. */
+interface AiService {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  streamChatCompletion(opts: {
+    model: string;
+    messages: any[];
+    temperature: number;
+  }): AsyncIterable<{ content?: string; usage?: unknown; done?: boolean }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  chatCompletion(opts: { model: string; messages: any[]; temperature: number }): Promise<{
+    content: string;
+    model: string;
+    inputTokens: number;
+    outputTokens: number;
+    totalTokens: number;
+    isFreeModel: boolean;
+    usedByok: boolean;
+    costBtc?: number;
+  }>;
+}
+
+export interface PlatformProvider {
+  providerId: 'groq' | 'openrouter' | 'together' | 'ollama';
+  aiService: AiService;
+  /** Model to use when the user hasn't requested a specific one. */
+  defaultModel: string;
+}
+
+const TOGETHER_DEFAULT_MODEL = 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free';
+
+/**
+ * Default model name for the Hetzner-hosted Ollama, overridable by env.
+ * Llama 3.2 3B is the sweet spot for CPU-only Hetzner boxes (CCX23-class):
+ * ~10-15 tok/sec quantized, fits in 4-8GB RAM, usable for chat.
+ */
+const PLATFORM_OLLAMA_DEFAULT_MODEL = 'llama3.2';
+
+/**
+ * Compose the platform chain for a single chat request.
+ *
+ * @param message  the user's message — needed so the OpenRouter free-pool
+ *                 auto-router can pick a model whose context fits.
+ */
+export function buildPlatformProviders(message: string): PlatformProvider[] {
+  const out: PlatformProvider[] = [];
+
+  if (isGroqAvailable()) {
+    out.push({
+      providerId: 'groq',
+      aiService: createGroqService(),
+      defaultModel: DEFAULT_GROQ_MODEL,
+    });
+  }
+
+  if (process.env.OPENROUTER_API_KEY) {
+    out.push({
+      providerId: 'openrouter',
+      aiService: createOpenRouterService(),
+      defaultModel: pickOpenRouterFreeModel(message),
+    });
+  }
+
+  const togetherKey = process.env.TOGETHER_API_KEY;
+  if (togetherKey) {
+    out.push({
+      providerId: 'together',
+      aiService: createOpenAICompatibleServiceWithByok({
+        apiKey: togetherKey,
+        baseUrl: 'https://api.together.xyz/v1',
+        providerId: 'together',
+      }),
+      defaultModel: process.env.TOGETHER_DEFAULT_MODEL || TOGETHER_DEFAULT_MODEL,
+    });
+  }
+
+  const ollamaUrl = process.env.PLATFORM_OLLAMA_URL;
+  if (ollamaUrl) {
+    out.push({
+      providerId: 'ollama',
+      aiService: createOpenAICompatibleServiceWithByok({
+        // Ollama by default requires no auth, but some deployments front it
+        // with a reverse proxy that adds bearer auth. Allow either.
+        apiKey: process.env.PLATFORM_OLLAMA_API_KEY || 'ollama-no-auth-required',
+        baseUrl: ollamaUrl,
+        providerId: 'ollama',
+      }),
+      defaultModel: process.env.PLATFORM_OLLAMA_MODEL || PLATFORM_OLLAMA_DEFAULT_MODEL,
+    });
+  }
+
+  return out;
+}
+
+function pickOpenRouterFreeModel(message: string): string {
+  const auto = createAutoRouter();
+  const freeIds = getFreeModels().map(m => m.id);
+  const picked = auto.selectModel({
+    message,
+    conversationHistory: [],
+    allowedModels: freeIds,
+  }).model;
+  return getModelMetadata(picked) ? picked : DEFAULT_FREE_MODEL_ID;
+}

@@ -122,6 +122,25 @@ function generateKeyHint(apiKey: string): string {
   return `...${apiKey.slice(-4)}`;
 }
 
+/**
+ * Per-provider auth-check endpoint. All return 200 on a valid key, 401/403
+ * on an invalid one, and accept `Authorization: Bearer <key>`. Used by
+ * `validateKeyWithProvider` to give the user immediate feedback when they
+ * paste a key into the BYOK form — much better than the old behaviour
+ * (always hit OpenRouter, every other key rejected as "User not found").
+ *
+ * OpenRouter's `/auth/key` is special because it also returns the user's
+ * remaining rate-limit budget, which we forward to the UI.
+ */
+const PROVIDER_AUTH_ENDPOINTS: Record<string, string> = {
+  openrouter: 'https://openrouter.ai/api/v1/auth/key',
+  openai: 'https://api.openai.com/v1/models',
+  groq: 'https://api.groq.com/openai/v1/models',
+  together: 'https://api.together.xyz/v1/models',
+  deepseek: 'https://api.deepseek.com/v1/models',
+  xai: 'https://api.x.ai/v1/models',
+};
+
 // ==================== SERVICE CLASS ====================
 
 export class ApiKeyService {
@@ -139,17 +158,15 @@ export class ApiKeyService {
   }): Promise<{ success: boolean; key?: UserApiKey; error?: string }> {
     const { userId, provider, keyName, apiKey, isPrimary = false } = params;
 
-    // Server-side validation only knows OpenRouter today. For Groq and the
-    // OpenAI-compatible direct providers (OpenAI/Together/DeepSeek/xAI) we
-    // trust the client-side format check (prefix + length) and let the chat
-    // route surface a clear error if the key is actually wrong — that's a
-    // better signal than guessing here. Real per-provider validation can
-    // land later as a follow-up.
-    if (provider === 'openrouter') {
-      const validation = await this.validateKeyWithProvider(apiKey);
-      if (!validation.isValid) {
-        return { success: false, error: validation.error || 'Invalid API key' };
-      }
+    // Server-side validation hits each provider's own auth/models endpoint
+    // (see PROVIDER_AUTH_ENDPOINTS). The user gets immediate, accurate
+    // feedback on save — wrong-format keys and wrong-provider keys both get
+    // caught here instead of silently saving and failing later in the chat
+    // route. Unknown providers (not in the endpoint map) skip the network
+    // check and trust the format-level validation done client-side.
+    const validation = await this.validateKeyWithProvider(apiKey, provider);
+    if (!validation.isValid) {
+      return { success: false, error: validation.error || 'Invalid API key' };
     }
 
     // Encrypt the key
@@ -283,32 +300,55 @@ export class ApiKeyService {
   }
 
   /**
-   * Validate an API key with OpenRouter
+   * Validate an API key against its provider's own auth/models endpoint.
+   *
+   * Each provider exposes a cheap GET that returns 200 on a valid key and
+   * 401/403 on an invalid one. We use that as a real liveness check — much
+   * better than the old behaviour of always validating against OpenRouter
+   * (which would reject every non-OpenRouter key as "User not found").
+   *
+   * For OpenRouter specifically the endpoint returns rate-limit info, which
+   * we pass through unchanged so the UI can show how much budget is left.
+   * Unknown providers skip validation and trust the format check + chat-route
+   * surface for errors.
    */
-  async validateKeyWithProvider(apiKey: string): Promise<KeyValidationResult> {
+  async validateKeyWithProvider(
+    apiKey: string,
+    providerId: string = 'openrouter'
+  ): Promise<KeyValidationResult> {
+    const cleanKey = apiKey.replace(/[\s\x00-\x1f\x7f]+/g, '');
+    const endpoint = PROVIDER_AUTH_ENDPOINTS[providerId];
+    if (!endpoint) {
+      return { isValid: true };
+    }
+
     try {
-      const response = await fetch('https://openrouter.ai/api/v1/auth/key', {
+      const response = await fetch(endpoint, {
         headers: {
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${cleanKey}`,
           'Content-Type': 'application/json',
         },
       });
 
+      if (response.status === 401 || response.status === 403) {
+        return { isValid: false, error: 'Invalid API key' };
+      }
       if (!response.ok) {
-        if (response.status === 401) {
-          return { isValid: false, error: 'Invalid API key' };
-        }
         return { isValid: false, error: `Validation failed: ${response.status}` };
       }
 
-      const data = await response.json();
-      return {
-        isValid: true,
-        rateLimits: {
-          requestsRemaining: data.data?.rate_limit?.requests_remaining || 0,
-          requestsLimit: data.data?.rate_limit?.requests_limit || 0,
-        },
-      };
+      if (providerId === 'openrouter') {
+        const data = await response.json();
+        return {
+          isValid: true,
+          rateLimits: {
+            requestsRemaining: data.data?.rate_limit?.requests_remaining || 0,
+            requestsLimit: data.data?.rate_limit?.requests_limit || 0,
+          },
+        };
+      }
+
+      return { isValid: true };
     } catch {
       return { isValid: false, error: 'Failed to validate key' };
     }

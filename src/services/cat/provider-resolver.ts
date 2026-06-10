@@ -28,6 +28,7 @@ import {
   isOpenAICompatibleProvider,
 } from '@/config/ai-provider-runtime';
 import { createAutoRouter } from '@/services/ai/auto-router';
+import { buildPlatformProviders } from '@/services/ai/platform-providers';
 import { OPENROUTER_KEY_HEADER } from '@/config/http-headers';
 import { ROUTES } from '@/config/routes';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
@@ -59,9 +60,9 @@ interface AiService {
 
 /**
  * Pre-resolved alternate provider to use if the primary one rate-limits.
- * Currently only one direction: Groq primary → OpenRouter fallback (free model).
- * The reverse (OpenRouter → Groq) isn't useful because if a user is on
- * OpenRouter they explicitly opted in (BYOK or platform-OpenRouter-only).
+ * The chat route walks `fallbacks[]` in order, giving each provider one
+ * shot before surfacing the error. As long as one alternate is healthy,
+ * Cat keeps chatting.
  */
 export interface FallbackProvider {
   provider: AIProvider;
@@ -79,12 +80,12 @@ interface ResolvedProvider {
   keyService: ReturnType<typeof createApiKeyService>;
   userGroqKey: string | null;
   /**
-   * If non-null, the route should retry on this provider when the primary
-   * returns a rate-limit error. Free-tier safe: the chosen OpenRouter model
-   * is always one of the documented :free model IDs, so it never charges
-   * users who haven't added a credit card to OpenRouter.
+   * Ordered chain of fallback providers to try on rate-limit. Built from
+   * the platform chain (Groq + OpenRouter + Together + Ollama, whichever
+   * are env-configured), with the primary provider removed. May be empty
+   * — then a rate-limit just fails through to the honest error message.
    */
-  fallback: FallbackProvider | null;
+  fallbacks: FallbackProvider[];
 }
 
 /**
@@ -244,37 +245,20 @@ export async function resolveProvider(
     });
   }
 
-  // Pre-resolve a fallback provider so the route can retry on rate-limit
-  // without re-running the whole resolution dance. Only set when:
-  //   - primary is Groq (the one with the painful daily TPD cap on free)
-  //   - AND an OpenRouter path exists (user BYOK OR platform OPENROUTER_API_KEY)
-  // We always force a known-free OpenRouter model so non-BYOK users with no
-  // credit card on OpenRouter aren't surprise-charged.
-  let fallback: FallbackProvider | null = null;
-  if (provider === 'groq') {
-    const hasFallbackPath = !!userOpenRouterKey || !!process.env.OPENROUTER_API_KEY;
-    if (hasFallbackPath) {
-      const fallbackModel = (() => {
-        const auto = createAutoRouter();
-        const freeIds = getFreeModels().map(m => m.id);
-        const picked = auto.selectModel({
-          message,
-          conversationHistory: [],
-          allowedModels: freeIds,
-        }).model;
-        return getModelMetadata(picked) ? picked : DEFAULT_FREE_MODEL_ID;
-      })();
-      const fallbackService: AiService = userOpenRouterKey
-        ? createOpenRouterServiceWithByok(userOpenRouterKey)
-        : createOpenRouterService();
-      fallback = {
-        provider: 'openrouter',
-        modelToUse: fallbackModel,
-        aiService: fallbackService,
-        reason: 'rate_limit',
-      };
-    }
-  }
+  // Build the fallback chain from the platform provider list.
+  // Order: Groq → OpenRouter → Together → Ollama (whichever are env-configured).
+  // Skip whichever provider the user is already on (primary), so we don't
+  // try the same dead key twice. BYOK users also get the platform chain
+  // as fallback — if their key rate-limits, Cat keeps working.
+  const platformChain = buildPlatformProviders(message);
+  const fallbacks: FallbackProvider[] = platformChain
+    .filter(p => p.providerId !== provider)
+    .map(p => ({
+      provider: p.providerId as AIProvider,
+      modelToUse: p.defaultModel,
+      aiService: p.aiService,
+      reason: 'rate_limit' as const,
+    }));
 
   return {
     provider,
@@ -284,6 +268,6 @@ export async function resolveProvider(
     platformUsage,
     keyService,
     userGroqKey,
-    fallback,
+    fallbacks,
   };
 }
