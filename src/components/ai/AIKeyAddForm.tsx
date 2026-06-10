@@ -8,6 +8,15 @@ import { Input } from '@/components/ui/Input';
 import { cn } from '@/lib/utils';
 import { aiProviders, getAIProvider, validateApiKeyFormat } from '@/data/aiProviders';
 
+/**
+ * Providers Cat's chat route can actually route through today. Anything
+ * outside this list would store a key but the runtime would ignore it,
+ * which is exactly the decorative trap we're cutting. When the generic
+ * OpenAI-compatible client lands (follow-up commit), expand this list.
+ */
+const WIRED_PROVIDER_IDS = new Set(['groq', 'openrouter']);
+const wiredProviders = aiProviders.filter(p => WIRED_PROVIDER_IDS.has(p.id));
+
 interface AIKeyAddFormProps {
   onAdd: (data: { provider: string; apiKey: string; keyName: string }) => Promise<void>;
   onCancel: () => void;
@@ -63,11 +72,11 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">Provider</label>
           <div
-            className="grid grid-cols-2 md:grid-cols-4 gap-2"
+            className="grid grid-cols-2 gap-2"
             onFocus={() => onFieldFocus?.('provider')}
             onBlur={() => onFieldFocus?.(null)}
           >
-            {aiProviders.map(p => (
+            {wiredProviders.map(p => (
               <button
                 key={p.id}
                 type="button"
@@ -84,6 +93,11 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
               </button>
             ))}
           </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Want Claude, GPT-4o, Gemini, Grok, DeepSeek, Mistral, or others? Add an{' '}
+            <strong className="text-foreground">OpenRouter</strong> key — one key fronts all 200+
+            models. Direct support for those providers is on the roadmap.
+          </p>
         </div>
 
         <div>
