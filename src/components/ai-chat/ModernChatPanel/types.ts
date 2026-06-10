@@ -67,6 +67,19 @@ export interface PrefillProposal {
   confidence: Record<string, number>;
 }
 
+/**
+ * If the primary provider rate-limited and the route quietly switched to the
+ * fallback (typically OpenRouter free), the response carries this so the UI
+ * can show a small notice — "Cat ran on the backup model because the primary
+ * is rate-limited right now".
+ */
+export interface FallbackNotice {
+  from: string;
+  to: string;
+  model: string;
+  reason: string;
+}
+
 export interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -81,6 +94,8 @@ export interface Message {
   toolCalls?: ToolCallEvent[];
   /** Structured form drafts (prefill_entity_form). Rendered as cards below content. */
   prefillProposals?: PrefillProposal[];
+  /** Set when the route fell over from primary to fallback provider. */
+  fallback?: FallbackNotice;
 }
 
 export interface UserStatus {

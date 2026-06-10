@@ -231,6 +231,17 @@ export function MessageBubble({
             </button>
           </div>
         )}
+
+        {/* Fallback notice — shown when primary provider rate-limited and the
+            route silently switched to the backup. So users know which engine
+            actually answered and aren't surprised by a different tone/voice. */}
+        {!isUser && message.fallback && displayContent && (
+          <p className="mt-1 text-xs text-muted-dim italic">
+            ↻ {PROVIDER_LABELS[message.fallback.from] ?? message.fallback.from} was rate-limited;
+            answered on {PROVIDER_LABELS[message.fallback.to] ?? message.fallback.to} (free)
+            instead.
+          </p>
+        )}
       </div>
     </div>
   );

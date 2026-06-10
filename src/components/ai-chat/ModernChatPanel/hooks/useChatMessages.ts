@@ -157,6 +157,7 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
             execResults?: ExecActionResult[];
             tool_call?: ToolCallEvent;
             prefill_proposal?: PrefillProposal;
+            fallback?: { from: string; to: string; model: string; reason: string };
             error?: string;
           };
           if (event?.error) {
@@ -210,6 +211,12 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
                     }
                   : m
               )
+            );
+          }
+          if (event?.fallback) {
+            const notice = event.fallback;
+            setMessages(prev =>
+              prev.map(m => (m.id === assistantId ? { ...m, fallback: notice } : m))
             );
           }
         });

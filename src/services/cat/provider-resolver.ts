@@ -51,6 +51,19 @@ interface AiService {
   }>;
 }
 
+/**
+ * Pre-resolved alternate provider to use if the primary one rate-limits.
+ * Currently only one direction: Groq primary → OpenRouter fallback (free model).
+ * The reverse (OpenRouter → Groq) isn't useful because if a user is on
+ * OpenRouter they explicitly opted in (BYOK or platform-OpenRouter-only).
+ */
+export interface FallbackProvider {
+  provider: AIProvider;
+  modelToUse: string;
+  aiService: AiService;
+  reason: 'rate_limit';
+}
+
 interface ResolvedProvider {
   provider: AIProvider;
   hasByok: boolean;
@@ -59,6 +72,13 @@ interface ResolvedProvider {
   platformUsage: { daily_limit: number; requests_remaining: number } | null;
   keyService: ReturnType<typeof createApiKeyService>;
   userGroqKey: string | null;
+  /**
+   * If non-null, the route should retry on this provider when the primary
+   * returns a rate-limit error. Free-tier safe: the chosen OpenRouter model
+   * is always one of the documented :free model IDs, so it never charges
+   * users who haven't added a credit card to OpenRouter.
+   */
+  fallback: FallbackProvider | null;
 }
 
 /**
@@ -171,5 +191,46 @@ export async function resolveProvider(
         ? createOpenRouterServiceWithByok(userOpenRouterKey as string)
         : createOpenRouterService();
 
-  return { provider, hasByok, modelToUse, aiService, platformUsage, keyService, userGroqKey };
+  // Pre-resolve a fallback provider so the route can retry on rate-limit
+  // without re-running the whole resolution dance. Only set when:
+  //   - primary is Groq (the one with the painful daily TPD cap on free)
+  //   - AND an OpenRouter path exists (user BYOK OR platform OPENROUTER_API_KEY)
+  // We always force a known-free OpenRouter model so non-BYOK users with no
+  // credit card on OpenRouter aren't surprise-charged.
+  let fallback: FallbackProvider | null = null;
+  if (provider === 'groq') {
+    const hasFallbackPath = !!userOpenRouterKey || !!process.env.OPENROUTER_API_KEY;
+    if (hasFallbackPath) {
+      const fallbackModel = (() => {
+        const auto = createAutoRouter();
+        const freeIds = getFreeModels().map(m => m.id);
+        const picked = auto.selectModel({
+          message,
+          conversationHistory: [],
+          allowedModels: freeIds,
+        }).model;
+        return getModelMetadata(picked) ? picked : DEFAULT_FREE_MODEL_ID;
+      })();
+      const fallbackService: AiService = userOpenRouterKey
+        ? createOpenRouterServiceWithByok(userOpenRouterKey)
+        : createOpenRouterService();
+      fallback = {
+        provider: 'openrouter',
+        modelToUse: fallbackModel,
+        aiService: fallbackService,
+        reason: 'rate_limit',
+      };
+    }
+  }
+
+  return {
+    provider,
+    hasByok,
+    modelToUse,
+    aiService,
+    platformUsage,
+    keyService,
+    userGroqKey,
+    fallback,
+  };
 }

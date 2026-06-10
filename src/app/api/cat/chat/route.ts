@@ -26,7 +26,7 @@ import {
   getMessagesForContext,
   saveMessages,
 } from '@/services/cat/conversation-history';
-import { resolveProvider } from '@/services/cat/provider-resolver';
+import { resolveProvider, type FallbackProvider } from '@/services/cat/provider-resolver';
 import {
   maybeEnrichWithSearchResults,
   type ToolAugmentedMessage,
@@ -174,8 +174,16 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     if (resolved instanceof Response) {
       return resolved;
     }
-    const { provider, hasByok, modelToUse, aiService, platformUsage, keyService, userGroqKey } =
-      resolved;
+    const {
+      provider,
+      hasByok,
+      modelToUse,
+      aiService,
+      platformUsage,
+      keyService,
+      userGroqKey,
+      fallback,
+    } = resolved;
 
     // Resolve actor ID for exec_action execution
     const actorId = await getUserActorId(supabase, user.id);
@@ -246,29 +254,74 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
               }
             );
 
-            for await (const chunk of aiService.streamChatCompletion({
-              model: modelToUse,
-              messages,
-              temperature: 0.7,
-            })) {
-              if (chunk.usage) {
-                usage = chunk.usage;
+            // Track the *active* provider/model/service so we can swap to
+            // fallback (typically OpenRouter free) if primary rate-limits
+            // before emitting any content. After any content has streamed
+            // it's too late to swap cleanly without corrupting the response,
+            // so we only failover when nothing has been sent to the user yet.
+            let activeProvider = provider;
+            let activeModel = modelToUse;
+            let activeService = aiService;
+            let streamStarted = false;
+            let attemptedFallback = false;
+
+            const consumeStream = async () => {
+              for await (const chunk of activeService.streamChatCompletion({
+                model: activeModel,
+                messages,
+                temperature: 0.7,
+              })) {
+                if (chunk.usage) {
+                  usage = chunk.usage;
+                }
+                if (chunk.content) {
+                  streamStarted = true;
+                  fullContent += chunk.content;
+                  controller.enqueue(
+                    encoder.encode(`data: ${JSON.stringify({ content: chunk.content })}\n\n`)
+                  );
+                }
+                if (chunk.done) {
+                  const { actions } = parseActionsFromResponse(fullContent);
+                  const execResults = await runExecActions(supabase, user.id, actorId, actions);
+                  controller.enqueue(
+                    encoder.encode(
+                      `data: ${JSON.stringify({ done: true, usage, model: activeModel, provider: activeProvider, actions: actions.length > 0 ? actions : undefined, execResults: execResults.length > 0 ? execResults : undefined })}\n\n`
+                    )
+                  );
+                  break;
+                }
               }
-              if (chunk.content) {
-                fullContent += chunk.content;
-                controller.enqueue(
-                  encoder.encode(`data: ${JSON.stringify({ content: chunk.content })}\n\n`)
+            };
+
+            try {
+              await consumeStream();
+            } catch (err) {
+              if (isAiRateLimitError(err) && !streamStarted && !attemptedFallback && fallback) {
+                attemptedFallback = true;
+                activeProvider = fallback.provider;
+                activeModel = fallback.modelToUse;
+                activeService = fallback.aiService;
+                logger.info(
+                  'Cat chat: primary rate-limited, falling back',
+                  { from: provider, to: activeProvider, model: activeModel },
+                  'cat/chat'
                 );
-              }
-              if (chunk.done) {
-                const { actions } = parseActionsFromResponse(fullContent);
-                const execResults = await runExecActions(supabase, user.id, actorId, actions);
+                // Tell the client the provider switched, then re-send the
+                // model+provider opener so any model-aware UI updates.
                 controller.enqueue(
                   encoder.encode(
-                    `data: ${JSON.stringify({ done: true, usage, model: modelToUse, provider, actions: actions.length > 0 ? actions : undefined, execResults: execResults.length > 0 ? execResults : undefined })}\n\n`
+                    `data: ${JSON.stringify({ fallback: { from: provider, to: activeProvider, model: activeModel, reason: 'rate_limit' } })}\n\n`
                   )
                 );
-                break;
+                controller.enqueue(
+                  encoder.encode(
+                    `data: ${JSON.stringify({ model: activeModel, provider: activeProvider })}\n\n`
+                  )
+                );
+                await consumeStream();
+              } else {
+                throw err;
               }
             }
 
@@ -278,8 +331,8 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
                 {
                   role: 'assistant',
                   content: fullContent,
-                  model_used: modelToUse,
-                  provider,
+                  model_used: activeModel,
+                  provider: activeProvider,
                   token_count: usage?.totalTokens,
                 },
               ]).catch((err: unknown) => {
@@ -337,11 +390,36 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
         collectedPrefillProposals.push(proposal);
       }
     );
-    const result = await aiService.chatCompletion({
-      model: modelToUse,
-      messages,
-      temperature: 0.7,
-    });
+    // Try primary; if it rate-limits, transparently retry on the fallback
+    // (typically OpenRouter free). Non-streaming is even safer than streaming
+    // because the response is atomic — no partial-content corruption risk.
+    let activeProvider = provider;
+    let result;
+    let fellBackTo: FallbackProvider | null = null;
+    try {
+      result = await aiService.chatCompletion({
+        model: modelToUse,
+        messages,
+        temperature: 0.7,
+      });
+    } catch (err) {
+      if (isAiRateLimitError(err) && fallback) {
+        logger.info(
+          'Cat chat (non-streaming): primary rate-limited, falling back',
+          { from: provider, to: fallback.provider, model: fallback.modelToUse },
+          'cat/chat'
+        );
+        fellBackTo = fallback;
+        activeProvider = fallback.provider;
+        result = await fallback.aiService.chatCompletion({
+          model: fallback.modelToUse,
+          messages,
+          temperature: 0.7,
+        });
+      } else {
+        throw err;
+      }
+    }
 
     if (!hasByok) {
       await keyService.incrementPlatformUsage(user.id, 1, result.totalTokens);
@@ -357,7 +435,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
           role: 'assistant',
           content: cleanedMessage,
           model_used: result.model,
-          provider,
+          provider: activeProvider,
           token_count: result.totalTokens,
         },
       ]).catch((err: unknown) => {
@@ -374,7 +452,15 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
         prefillProposals:
           collectedPrefillProposals.length > 0 ? collectedPrefillProposals : undefined,
         modelUsed: result.model,
-        provider,
+        provider: activeProvider,
+        fallback: fellBackTo
+          ? {
+              from: provider,
+              to: fellBackTo.provider,
+              model: fellBackTo.modelToUse,
+              reason: 'rate_limit',
+            }
+          : undefined,
         usage: {
           inputTokens: result.inputTokens,
           outputTokens: result.outputTokens,
