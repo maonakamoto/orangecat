@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Check, Sparkles, Cat as CatIcon } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import { CAT_PLANS, CAT_FREE_DAILY_LIMIT, type CatPlan } from '@/config/cat-plans';
+import { CAT_PLANS, type CatPlan } from '@/config/cat-plans';
 import { cn } from '@/lib/utils';
 
 export const metadata = {
@@ -28,11 +28,12 @@ export default function PricingPage() {
             <CatIcon className="h-16 w-16 text-fg-secondary" />
           </div>
           <h1 className="mb-4 font-heading text-4xl font-bold tracking-display text-foreground">
-            Cat plans
+            Your AI, your bill, your choice
           </h1>
           <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
-            Cat is free for everyone — {CAT_FREE_DAILY_LIMIT} messages a day on open-source models.
-            Bring your own key for unlimited use, or help us fund a hosted Pro tier.
+            Cat works any way you want. Free out of the box, or bring your own key from six wired
+            providers — OpenAI, OpenRouter, Together, Groq, DeepSeek, xAI. OrangeCat doesn&apos;t
+            mark up inference; we earn from the platform, not your AI bill.
           </p>
         </div>
 

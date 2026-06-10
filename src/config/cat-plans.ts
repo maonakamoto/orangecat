@@ -44,6 +44,20 @@ export interface CatPlan {
  */
 export const CAT_FREE_DAILY_LIMIT = 10;
 
+/**
+ * Providers Cat actually routes through today, surfaced on /pricing so the
+ * BYOK card shows real names instead of a vague "any provider" promise.
+ * Mirrors WIRED_PROVIDER_IDS in AIKeyAddForm — keep in sync.
+ */
+export const CAT_WIRED_PROVIDERS = [
+  'Groq',
+  'OpenRouter',
+  'OpenAI',
+  'Together',
+  'DeepSeek',
+  'xAI (Grok)',
+] as const;
+
 export const CAT_PLANS: CatPlan[] = [
   {
     id: 'free',
@@ -52,9 +66,9 @@ export const CAT_PLANS: CatPlan[] = [
     priceCopy: 'CHF 0 / mo',
     bullets: [
       `${CAT_FREE_DAILY_LIMIT} Cat messages every day`,
-      'Free open-source models (Llama, Gemini, DeepSeek, Qwen)',
-      'Visible tool calls + cited results',
-      'Chats save to your history — clear anytime',
+      'Best free open-source model, picked automatically (Llama, Gemini, DeepSeek)',
+      'Cat reads your entities — knows your projects, products, wallet',
+      'Visible tool calls, cited results, chats clearable any time',
     ],
     cta: { label: 'Start chatting', href: ROUTES.DASHBOARD.CAT, variant: 'outline' },
     status: 'available',
@@ -62,17 +76,17 @@ export const CAT_PLANS: CatPlan[] = [
   {
     id: 'byok',
     name: 'Bring your own key',
-    tagline: 'Already have a Groq or OpenRouter key?',
-    priceCopy: 'CHF 0 / mo',
+    tagline: 'Any provider. Your bill. No markup.',
+    priceCopy: 'CHF 0 / mo to OrangeCat',
     bullets: [
-      'No daily cap — you pay your provider directly',
-      'Pick any model your provider exposes',
-      'Free Groq keys at console.groq.com take a minute',
-      'Keys encrypted at rest, scrubbed from logs, never echoed back',
+      `Six providers wired direct: ${CAT_WIRED_PROVIDERS.join(', ')}`,
+      'Want Claude / GPT-4o / Gemini? OpenRouter fronts 200+ models with one key',
+      'Cat routes through your key — OrangeCat never sees your bill, never marks it up',
+      'Keys encrypted at rest, scrubbed from logs, never echoed back to the client',
     ],
     cta: { label: 'Add your key', href: ROUTES.SETTINGS_AI, variant: 'accent' },
     status: 'available',
-    badge: 'Recommended',
+    badge: 'Most freedom',
   },
   {
     id: 'pro',
@@ -81,9 +95,9 @@ export const CAT_PLANS: CatPlan[] = [
     priceCopy: 'No price yet — waitlist first',
     bullets: [
       'What you pay for is still open: more Cat capacity, platform features, both',
-      'OrangeCat is Bitcoin-aligned: payments will use Lightning or BTC, not card-on-file',
-      'Until Pro ships, Free + BYOK cover most use — Cat works for everyone today',
-      'Tell us what you would actually pay for; the waitlist drives the spec',
+      'OrangeCat earns when you earn — likely transaction fees, not AI markup',
+      'Bitcoin-aligned: Lightning or BTC payments, no card-on-file required',
+      'Until Pro ships, Free + BYOK cover real use — Cat works for everyone today',
     ],
     cta: { label: 'Join the waitlist', href: '#waitlist', variant: 'outline' },
     status: 'coming-soon',
