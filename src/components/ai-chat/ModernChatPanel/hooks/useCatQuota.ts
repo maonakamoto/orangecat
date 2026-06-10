@@ -17,6 +17,10 @@ export interface CatQuota {
   tier: CatQuotaTier;
   hasGroqByok: boolean;
   hasOpenRouterByok: boolean;
+  /** Provider id Cat routes through when the user is on BYOK; null otherwise. */
+  activeByokProvider: string | null;
+  /** Human-readable provider name (e.g. "OpenAI"); null when not on BYOK. */
+  activeByokProviderName: string | null;
   dailyLimit: number;
   dailyRequests: number;
   requestsRemaining: number;

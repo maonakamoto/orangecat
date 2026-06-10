@@ -35,22 +35,20 @@ export function QuotaMeter({ quota, className }: QuotaMeterProps) {
   }
 
   if (quota.tier === 'byok') {
+    // Show the actual provider name when we know it — the freedom
+    // architecture is most visible when the user sees "OpenAI" or
+    // "Together" in their toolbar instead of a generic "Your key".
+    const label = quota.activeByokProviderName ?? 'Your key';
     return (
       <span
         className={cn(
           'inline-flex items-center gap-1 rounded-md border border-border-subtle bg-muted px-2 py-1 text-xs text-muted-foreground',
           className
         )}
-        title={
-          quota.hasGroqByok && quota.hasOpenRouterByok
-            ? 'Using your Groq + OpenRouter keys'
-            : quota.hasGroqByok
-              ? 'Using your Groq key'
-              : 'Using your OpenRouter key'
-        }
+        title={`Cat is routing through your ${label} key — you pay them directly.`}
       >
         <KeyRound className="h-3 w-3" aria-hidden="true" />
-        Your key
+        {label}
       </span>
     );
   }
