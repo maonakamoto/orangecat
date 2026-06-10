@@ -18,7 +18,12 @@ export type CatHubTab = 'chat' | 'context' | 'controls';
 export const CAT_AGENT = {
   name: 'Cat',
   productName: APP_NAME,
-  privacyBadge: 'Private · not saved',
+  /**
+   * Persisted to your account history; cleared from the trash button. Honest:
+   * the chat route saves every message to cat_messages. Previously this said
+   * "Private · not saved" but the implementation has always saved.
+   */
+  privacyBadge: 'Saved · clear anytime',
 } as const;
 
 export const CAT_HUB_COPY = {

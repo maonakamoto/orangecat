@@ -1,9 +1,10 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { getRouteChrome, getRouteSurface } from '@/config/routes';
+import { STORAGE_KEYS } from '@/config/storage-keys';
 import { Header } from './Header';
 import { Sidebar } from '@/components/sidebar/Sidebar';
 import Footer from './Footer';
@@ -68,6 +69,25 @@ export function AppShell({ children }: AppShellProps) {
       setSidebarCollapsed(true);
     }
   }, [pathname, routeChrome.preferCollapsedSidebar, setSidebarCollapsed]);
+
+  // Track the user's previous in-app path so Cat can reference "the page you
+  // just came from" — document.referrer is stale across Next.js client-side
+  // navigations, so we maintain a session breadcrumb ourselves.
+  const previousPathnameRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (typeof window === 'undefined' || !pathname) {
+      return;
+    }
+    const prev = previousPathnameRef.current;
+    if (prev && prev !== pathname) {
+      try {
+        window.sessionStorage.setItem(STORAGE_KEYS.LAST_VISITED_PATH, prev);
+      } catch {
+        /* sessionStorage unavailable; Cat falls back to document.referrer */
+      }
+    }
+    previousPathnameRef.current = pathname;
+  }, [pathname]);
 
   // Sidebar margin-left animates from 0 → 16rem/64rem when auth hydrates,
   // which produces a 300ms content slide on every page load — the
