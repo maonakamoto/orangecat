@@ -374,6 +374,17 @@ export class GroqAPIError extends Error {
 // ==================== FACTORY FUNCTIONS ====================
 
 /**
+ * Strip stray whitespace / newlines / control chars from an API key before
+ * it goes into an Authorization header. Env vars set via secret-set commands
+ * sometimes carry a trailing newline (or worse, a paste-artifact character)
+ * that the Fetch API rejects with "invalid header value". Trim defensively at
+ * every entry point.
+ */
+function sanitizeApiKey(key: string): string {
+  return key.replace(/[\s\x00-\x1f\x7f]+/g, '');
+}
+
+/**
  * Create a Groq service instance using platform API key
  * Used when user doesn't have BYOK
  */
@@ -382,14 +393,14 @@ export function createGroqService(): GroqService {
   if (!apiKey) {
     throw new Error('GROQ_API_KEY environment variable not set');
   }
-  return new GroqService(apiKey, { isByok: false });
+  return new GroqService(sanitizeApiKey(apiKey), { isByok: false });
 }
 
 /**
  * Create service with user's own API key (BYOK)
  */
 export function createGroqServiceWithByok(userApiKey: string): GroqService {
-  return new GroqService(userApiKey, { isByok: true });
+  return new GroqService(sanitizeApiKey(userApiKey), { isByok: true });
 }
 
 /**

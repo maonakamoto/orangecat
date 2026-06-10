@@ -454,6 +454,18 @@ class OpenRouterAPIError extends Error {
 // ==================== FACTORY FUNCTIONS ====================
 
 /**
+ * Strip stray whitespace / newlines / control chars from an API key before
+ * it goes into an Authorization header. Env vars set via `gh secret set` or
+ * `vercel env add` sometimes carry a trailing newline (or worse, a copy-paste
+ * trailing character) that the Fetch API rejects with "invalid header value".
+ * Trim defensively at every entry point so the failure stays in the env var,
+ * not in the runtime.
+ */
+function sanitizeApiKey(key: string): string {
+  return key.replace(/[\s\x00-\x1f\x7f]+/g, '');
+}
+
+/**
  * Create an OpenRouter service instance using platform API key
  * Used when user doesn't have BYOK
  */
@@ -462,7 +474,7 @@ export function createOpenRouterService(options?: { btcPriceUsd?: number }): Ope
   if (!apiKey) {
     throw new Error('OPENROUTER_API_KEY environment variable not set');
   }
-  return new OpenRouterService(apiKey, { ...options, isByok: false });
+  return new OpenRouterService(sanitizeApiKey(apiKey), { ...options, isByok: false });
 }
 
 /**
@@ -472,5 +484,5 @@ export function createOpenRouterServiceWithByok(
   userApiKey: string,
   options?: { btcPriceUsd?: number }
 ): OpenRouterService {
-  return new OpenRouterService(userApiKey, { ...options, isByok: true });
+  return new OpenRouterService(sanitizeApiKey(userApiKey), { ...options, isByok: true });
 }

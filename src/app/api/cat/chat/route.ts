@@ -343,12 +343,20 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
               await keyService.incrementPlatformUsage(user.id, 1, usage.totalTokens);
             }
           } catch (err) {
+            logger.error('Cat chat stream error', { err }, 'cat/chat');
             const errPayload = isAiRateLimitError(err)
               ? {
                   error: 'AI is temporarily busy. Please try again in a minute.',
                   code: 'AI_RATE_LIMITED',
                 }
-              : { error: err instanceof Error ? err.message : 'stream_error' };
+              : {
+                  // Never echo raw err.message — it can contain API keys (e.g.
+                  // a malformed Authorization header leaks the credential in
+                  // the Headers.append error). Log server-side; return a
+                  // generic to the client.
+                  error: 'Something went wrong generating the response. Please try again.',
+                  code: 'STREAM_ERROR',
+                };
             controller.enqueue(encoder.encode(`event: error\n`));
             controller.enqueue(encoder.encode(`data: ${JSON.stringify(errPayload)}\n\n`));
           } finally {
