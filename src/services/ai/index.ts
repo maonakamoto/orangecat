@@ -11,3 +11,10 @@ export {
   isGroqAvailable,
   DEFAULT_GROQ_MODEL,
 } from './groq';
+
+export {
+  OpenAICompatibleService,
+  OpenAICompatibleAPIError,
+  createOpenAICompatibleServiceWithByok,
+  type OpenAICompatMessage,
+} from './openai-compat';

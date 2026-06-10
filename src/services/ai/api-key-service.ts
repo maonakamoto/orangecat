@@ -139,10 +139,17 @@ export class ApiKeyService {
   }): Promise<{ success: boolean; key?: UserApiKey; error?: string }> {
     const { userId, provider, keyName, apiKey, isPrimary = false } = params;
 
-    // Validate the key with OpenRouter first
-    const validation = await this.validateKeyWithProvider(apiKey);
-    if (!validation.isValid) {
-      return { success: false, error: validation.error || 'Invalid API key' };
+    // Server-side validation only knows OpenRouter today. For Groq and the
+    // OpenAI-compatible direct providers (OpenAI/Together/DeepSeek/xAI) we
+    // trust the client-side format check (prefix + length) and let the chat
+    // route surface a clear error if the key is actually wrong — that's a
+    // better signal than guessing here. Real per-provider validation can
+    // land later as a follow-up.
+    if (provider === 'openrouter') {
+      const validation = await this.validateKeyWithProvider(apiKey);
+      if (!validation.isValid) {
+        return { success: false, error: validation.error || 'Invalid API key' };
+      }
     }
 
     // Encrypt the key

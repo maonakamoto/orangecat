@@ -9,12 +9,18 @@ import { cn } from '@/lib/utils';
 import { aiProviders, getAIProvider, validateApiKeyFormat } from '@/data/aiProviders';
 
 /**
- * Providers Cat's chat route can actually route through today. Anything
- * outside this list would store a key but the runtime would ignore it,
- * which is exactly the decorative trap we're cutting. When the generic
- * OpenAI-compatible client lands (follow-up commit), expand this list.
+ * Providers Cat's chat route can actually route through today.
+ *
+ * Direct: Groq + the OpenAI-compatible direct providers (OpenAI, Together,
+ * DeepSeek, xAI). Aggregator: OpenRouter. Local providers (Ollama,
+ * LM Studio) aren't here yet — they need a different architecture
+ * because the Vercel backend can't reach the user's localhost.
+ *
+ * Anthropic and Google are intentionally NOT here — they use different
+ * wire formats (not OpenAI-compatible) and need their own client classes.
+ * Users who want Claude or Gemini should add an OpenRouter key.
  */
-const WIRED_PROVIDER_IDS = new Set(['groq', 'openrouter']);
+const WIRED_PROVIDER_IDS = new Set(['groq', 'openrouter', 'openai', 'together', 'deepseek', 'xai']);
 const wiredProviders = aiProviders.filter(p => WIRED_PROVIDER_IDS.has(p.id));
 
 interface AIKeyAddFormProps {
@@ -94,9 +100,9 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
             ))}
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            Want Claude, GPT-4o, Gemini, Grok, DeepSeek, Mistral, or others? Add an{' '}
-            <strong className="text-foreground">OpenRouter</strong> key — one key fronts all 200+
-            models. Direct support for those providers is on the roadmap.
+            Want Claude or Gemini? Add an <strong className="text-foreground">OpenRouter</strong>{' '}
+            key — one key fronts all 200+ models. Direct Anthropic + Google support is on the
+            roadmap.
           </p>
         </div>
 

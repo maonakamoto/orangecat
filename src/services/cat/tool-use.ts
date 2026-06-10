@@ -218,12 +218,16 @@ export async function maybeEnrichWithSearchResults(
   supabase: AnySupabaseClient,
   messages: ToolAugmentedMessage[],
   userMessage: string,
-  provider: 'groq' | 'openrouter',
+  provider: string,
   groqKey: string | null,
   modelToUse: string,
   onToolCall?: OnToolCall,
   onPrefillProposal?: OnPrefillProposal
 ): Promise<ToolAugmentedMessage[]> {
+  // Tool use is wired through Groq's function-calling API only — every other
+  // provider falls back to the model's own knowledge (no platform tools).
+  // OpenAI/Anthropic/etc. all support tools natively but each needs its own
+  // adapter; that's a follow-up.
   if (provider !== 'groq') {
     return messages;
   }

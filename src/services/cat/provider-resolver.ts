@@ -12,6 +12,7 @@ import {
   createOpenRouterServiceWithByok,
   createGroqService,
   createGroqServiceWithByok,
+  createOpenAICompatibleServiceWithByok,
   isGroqAvailable,
   DEFAULT_GROQ_MODEL,
 } from '@/services/ai';
@@ -21,6 +22,11 @@ import {
   getFreeModels,
   DEFAULT_FREE_MODEL_ID,
 } from '@/config/ai-models';
+import {
+  OPENAI_COMPAT_PROVIDER_IDS,
+  getProviderRuntime,
+  isOpenAICompatibleProvider,
+} from '@/config/ai-provider-runtime';
 import { createAutoRouter } from '@/services/ai/auto-router';
 import { OPENROUTER_KEY_HEADER } from '@/config/http-headers';
 import { ROUTES } from '@/config/routes';
@@ -28,7 +34,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 const GROQ_KEY_HEADER = 'x-groq-api-key';
 
-export type AIProvider = 'groq' | 'openrouter';
+export type AIProvider = 'groq' | 'openrouter' | 'openai' | 'together' | 'deepseek' | 'xai';
 
 /** Minimal interface both Groq and OpenRouter services satisfy */
 interface AiService {
@@ -105,7 +111,26 @@ export async function resolveProvider(
   const userOpenRouterKey = clientOpenRouterKey || storedOpenRouterKey;
   const userGroqKey = clientGroqKey || storedGroqKey;
 
-  // Provider priority: User Groq key > User OpenRouter key > Platform Groq > Platform OpenRouter
+  // Look up OpenAI-compatible BYOK keys (OpenAI / Together / DeepSeek / xAI).
+  // We never send these via headers — only stored keys count. First match
+  // wins, in the order PROVIDER_RUNTIME declares (openai > together > ...).
+  let userOpenAICompatProvider: string | null = null;
+  let userOpenAICompatKey: string | null = null;
+  for (const providerId of OPENAI_COMPAT_PROVIDER_IDS) {
+    const key = await keyService.getDecryptedKey(userId, providerId);
+    if (key) {
+      userOpenAICompatProvider = providerId;
+      userOpenAICompatKey = key;
+      break;
+    }
+  }
+
+  // Provider priority:
+  //   1. User Groq BYOK (fastest)
+  //   2. User OpenRouter BYOK (broadest model coverage)
+  //   3. Any user OpenAI-compatible BYOK (OpenAI/Together/DeepSeek/xAI)
+  //   4. Platform Groq
+  //   5. Platform OpenRouter
   let provider: AIProvider;
   let hasByok = false;
 
@@ -114,6 +139,9 @@ export async function resolveProvider(
     hasByok = true;
   } else if (userOpenRouterKey) {
     provider = 'openrouter';
+    hasByok = true;
+  } else if (userOpenAICompatProvider && userOpenAICompatKey) {
+    provider = userOpenAICompatProvider as AIProvider;
     hasByok = true;
   } else if (isGroqAvailable()) {
     provider = 'groq';
@@ -160,6 +188,15 @@ export async function resolveProvider(
       requestedModel?.startsWith('gemma')
         ? requestedModel
         : DEFAULT_GROQ_MODEL;
+  } else if (isOpenAICompatibleProvider(provider)) {
+    // Direct OpenAI-compatible provider: trust the user's requested model
+    // when it's anything other than 'auto' (we don't know that provider's
+    // catalog, so we can't validate). Otherwise use the per-provider default.
+    const runtime = getProviderRuntime(provider);
+    modelToUse =
+      requestedModel && requestedModel !== 'auto' && requestedModel !== 'any'
+        ? requestedModel
+        : (runtime?.defaultModel ?? DEFAULT_FREE_MODEL_ID);
   } else {
     // OpenRouter: route through auto-router for free/BYOK users
     modelToUse = requestedModel || DEFAULT_FREE_MODEL_ID;
@@ -182,14 +219,30 @@ export async function resolveProvider(
   }
 
   // Instantiate the AI service
-  const aiService: AiService =
-    provider === 'groq'
-      ? hasByok
-        ? createGroqServiceWithByok(userGroqKey as string)
-        : createGroqService()
-      : hasByok
-        ? createOpenRouterServiceWithByok(userOpenRouterKey as string)
-        : createOpenRouterService();
+  let aiService: AiService;
+  if (provider === 'groq') {
+    aiService = hasByok ? createGroqServiceWithByok(userGroqKey as string) : createGroqService();
+  } else if (provider === 'openrouter') {
+    aiService = hasByok
+      ? createOpenRouterServiceWithByok(userOpenRouterKey as string)
+      : createOpenRouterService();
+  } else {
+    // OpenAI-compatible direct provider
+    const runtime = getProviderRuntime(provider);
+    if (!runtime || !userOpenAICompatKey) {
+      // Should be unreachable — we wouldn't have set this provider without
+      // both. Guard so the type narrows.
+      return Response.json(
+        { success: false, error: 'Provider not configured', code: 'NO_API_KEY' },
+        { status: 503 }
+      );
+    }
+    aiService = createOpenAICompatibleServiceWithByok({
+      apiKey: userOpenAICompatKey,
+      baseUrl: runtime.baseUrl,
+      providerId: provider,
+    });
+  }
 
   // Pre-resolve a fallback provider so the route can retry on rate-limit
   // without re-running the whole resolution dance. Only set when:
