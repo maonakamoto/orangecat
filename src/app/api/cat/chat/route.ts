@@ -487,8 +487,16 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     );
   } catch (error) {
     if (isAiRateLimitError(error)) {
+      logger.warn(
+        'Cat chat rate-limited after fallback (both providers exhausted)',
+        { errMsg: error instanceof Error ? error.message : 'unknown' },
+        'cat/chat'
+      );
+      // Include the substring "API key" so ErrorDisplay shows the
+      // "Configure API Key" CTA — the actionable path out of this state
+      // is to add your own free Groq key, not to wait silently.
       return apiError(
-        'AI is temporarily busy. Please try again in a minute.',
+        'The shared free AI quota for Cat is exhausted right now. To keep using Cat without waiting, add your own free Groq API key in Settings → AI (takes ~60s — get one at console.groq.com/keys).',
         'AI_RATE_LIMITED',
         429
       );
