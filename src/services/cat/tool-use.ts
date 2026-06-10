@@ -16,6 +16,9 @@
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import type { OpenRouterMessage } from '@/services/ai/openrouter';
 import { searchPlatform, type SearchType } from './platform-search';
+import { generateFormPrefill } from '@/lib/ai/form-prefill-service';
+import { getEntityConfig } from '@/config/entity-configs/get-config';
+import { isValidEntityType, type EntityType } from '@/config/entity-registry';
 
 /** Standard chat message (system/user/assistant) */
 export type { OpenRouterMessage as ChatMessage };
@@ -78,7 +81,31 @@ export type ToolCallEvent =
 
 export type OnToolCall = (event: ToolCallEvent) => void;
 
-const SEARCH_KEYWORDS = [
+/**
+ * Structured draft of an entity form, produced when the Cat calls
+ * prefill_entity_form. Surfaces in the UI as a PrefilledFormCard with [Open
+ * in form] / [Create] affordances instead of being narrated as prose.
+ */
+export interface PrefillProposal {
+  entityType: EntityType;
+  /** Free-text description the user gave, echoed back so the user can see what was drafted from. */
+  sourceDescription: string;
+  /** Field values keyed by the entity config's field names. */
+  data: Record<string, unknown>;
+  /** Per-field confidence 0–1 from the prefill service. */
+  confidence: Record<string, number>;
+}
+
+export type OnPrefillProposal = (proposal: PrefillProposal) => void;
+
+/**
+ * Cheap pre-filter to decide whether the user message MIGHT need a tool call.
+ * If none of these keywords appear, we skip the extra Groq tool-pass entirely
+ * to keep the cost / latency floor low. Both discovery-style and creation-style
+ * intents are covered.
+ */
+const TOOL_TRIGGER_KEYWORDS = [
+  // discovery / search_platform
   'find',
   'look',
   'search',
@@ -92,7 +119,45 @@ const SEARCH_KEYWORDS = [
   'know of',
   'looking for',
   'does anyone',
+  // creation / prefill_entity_form
+  'want to sell',
+  'want to offer',
+  'want to start',
+  'want to create',
+  'want to launch',
+  "i'd like to sell",
+  "i'd like to offer",
+  "i'd like to create",
+  "i'd like to start",
+  'create a',
+  'launch a',
+  'set up a',
+  'set up an',
+  'open a',
+  'open an',
+  'i sell',
+  'i make',
+  'i provide',
+  'i offer',
+  'i run',
+  'i teach',
+  'i organize',
+  'i need to raise',
+  'fundraise',
 ];
+
+const PREFILLABLE_ENTITY_TYPES = [
+  'product',
+  'service',
+  'project',
+  'cause',
+  'event',
+  'asset',
+  'loan',
+  'investment',
+  'research',
+  'wishlist',
+] as const;
 
 const PLATFORM_TOOL_DEFINITION = [
   {
@@ -115,6 +180,30 @@ const PLATFORM_TOOL_DEFINITION = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'prefill_entity_form',
+      description:
+        'Draft an entity (product, service, project, etc.) from a natural-language description. Use this INSTEAD of a create_* exec_action when the user has described what they want to create with enough detail (title-ish hint + at least one specific attribute like price, location, category, audience). Returns structured fields the user can review in a form before publishing — never auto-creates.',
+      parameters: {
+        type: 'object',
+        properties: {
+          entityType: {
+            type: 'string',
+            enum: PREFILLABLE_ENTITY_TYPES as unknown as string[],
+            description: 'Which kind of entity to draft.',
+          },
+          description: {
+            type: 'string',
+            description:
+              'A full natural-language description of the entity. Include everything the user said about it: what it is, who it is for, price if mentioned, location, materials, ingredients, schedule, etc. Min 10 chars.',
+          },
+        },
+        required: ['entityType', 'description'],
+      },
+    },
+  },
 ];
 
 /**
@@ -132,14 +221,16 @@ export async function maybeEnrichWithSearchResults(
   provider: 'groq' | 'openrouter',
   groqKey: string | null,
   modelToUse: string,
-  onToolCall?: OnToolCall
+  onToolCall?: OnToolCall,
+  onPrefillProposal?: OnPrefillProposal
 ): Promise<ToolAugmentedMessage[]> {
   if (provider !== 'groq') {
     return messages;
   }
 
-  const mightNeedSearch = SEARCH_KEYWORDS.some(kw => userMessage.toLowerCase().includes(kw));
-  if (!mightNeedSearch) {
+  const lowerMessage = userMessage.toLowerCase();
+  const mightNeedTool = TOOL_TRIGGER_KEYWORDS.some(kw => lowerMessage.includes(kw));
+  if (!mightNeedTool) {
     return messages;
   }
 
@@ -177,61 +268,172 @@ export async function maybeEnrichWithSearchResults(
 
     for (const toolCall of assistantMsg.tool_calls) {
       const toolName = toolCall.function?.name;
-      if (toolName !== 'search_platform') {
+
+      // ── search_platform ────────────────────────────────────────────────
+      if (toolName === 'search_platform') {
+        const parsedArgs = (() => {
+          try {
+            return JSON.parse(toolCall.function.arguments ?? '{}') as {
+              query?: string;
+              type?: string;
+            };
+          } catch {
+            return {} as { query?: string; type?: string };
+          }
+        })();
+
+        onToolCall?.({
+          id: toolCall.id,
+          name: toolName,
+          status: 'running',
+          args: { query: parsedArgs.query, type: parsedArgs.type ?? 'all' },
+        });
+
+        let searchContent: string;
+        try {
+          const results = await searchPlatform(
+            supabase,
+            parsedArgs.query ?? '',
+            (parsedArgs.type ?? 'all') as SearchType
+          );
+          if (results.length > 0) {
+            searchContent = JSON.stringify(results, null, 2);
+            const refs: ToolCallResultRef[] = results
+              .slice(0, 8)
+              .map(r => ({ url: r.url, type: r.type, title: r.title }));
+            onToolCall?.({
+              id: toolCall.id,
+              name: toolName,
+              status: 'completed',
+              resultCount: results.length,
+              results: refs,
+            });
+          } else {
+            searchContent = 'No results found for this search query.';
+            onToolCall?.({ id: toolCall.id, name: toolName, status: 'no_results' });
+          }
+        } catch (err) {
+          searchContent = 'Search failed. Please try a different query.';
+          onToolCall?.({
+            id: toolCall.id,
+            name: toolName,
+            status: 'failed',
+            error: err instanceof Error ? err.message : 'unknown',
+          });
+        }
+        enriched.push({ role: 'tool', tool_call_id: toolCall.id, content: searchContent });
         continue;
       }
 
-      const parsedArgs = (() => {
-        try {
-          return JSON.parse(toolCall.function.arguments ?? '{}') as {
-            query?: string;
-            type?: string;
-          };
-        } catch {
-          return {} as { query?: string; type?: string };
+      // ── prefill_entity_form ────────────────────────────────────────────
+      if (toolName === 'prefill_entity_form') {
+        const parsedArgs = (() => {
+          try {
+            return JSON.parse(toolCall.function.arguments ?? '{}') as {
+              entityType?: string;
+              description?: string;
+            };
+          } catch {
+            return {} as { entityType?: string; description?: string };
+          }
+        })();
+
+        const requestedType = parsedArgs.entityType ?? '';
+        const description = parsedArgs.description ?? '';
+
+        onToolCall?.({
+          id: toolCall.id,
+          name: toolName,
+          status: 'running',
+          args: { entityType: requestedType },
+        });
+
+        if (!isValidEntityType(requestedType)) {
+          enriched.push({
+            role: 'tool',
+            tool_call_id: toolCall.id,
+            content: `Invalid entityType "${requestedType}". Pick one of: ${PREFILLABLE_ENTITY_TYPES.join(', ')}.`,
+          });
+          onToolCall?.({
+            id: toolCall.id,
+            name: toolName,
+            status: 'failed',
+            error: 'invalid_entity_type',
+          });
+          continue;
         }
-      })();
 
-      onToolCall?.({
-        id: toolCall.id,
-        name: toolName,
-        status: 'running',
-        args: { query: parsedArgs.query, type: parsedArgs.type ?? 'all' },
-      });
+        const entityType = requestedType as EntityType;
+        const entityConfig = getEntityConfig(entityType);
+        if (!entityConfig) {
+          enriched.push({
+            role: 'tool',
+            tool_call_id: toolCall.id,
+            content: `No config for entity type "${entityType}". Skip prefill.`,
+          });
+          onToolCall?.({
+            id: toolCall.id,
+            name: toolName,
+            status: 'failed',
+            error: 'no_entity_config',
+          });
+          continue;
+        }
 
-      let content: string;
-      try {
-        const results = await searchPlatform(
-          supabase,
-          parsedArgs.query ?? '',
-          (parsedArgs.type ?? 'all') as SearchType
-        );
-        if (results.length > 0) {
-          content = JSON.stringify(results, null, 2);
-          const refs: ToolCallResultRef[] = results
-            .slice(0, 8)
-            .map(r => ({ url: r.url, type: r.type, title: r.title }));
+        try {
+          const prefill = await generateFormPrefill(entityType, description, entityConfig);
+          if (!prefill.success) {
+            enriched.push({
+              role: 'tool',
+              tool_call_id: toolCall.id,
+              content: `Prefill failed: ${prefill.error ?? 'unknown error'}`,
+            });
+            onToolCall?.({
+              id: toolCall.id,
+              name: toolName,
+              status: 'failed',
+              error: prefill.error ?? 'unknown',
+            });
+            continue;
+          }
+
+          const fieldCount = Object.keys(prefill.data).length;
+          enriched.push({
+            role: 'tool',
+            tool_call_id: toolCall.id,
+            // Short acknowledgment back to the LLM — the actual form draft is
+            // delivered to the user via the prefill_proposal SSE event below,
+            // not embedded in the conversation history.
+            content: `Drafted a ${entityType} with ${fieldCount} fields. The user will see a card to review and open in the form. Do not repeat the field values in your response — just briefly confirm what you drafted and invite them to review.`,
+          });
           onToolCall?.({
             id: toolCall.id,
             name: toolName,
             status: 'completed',
-            resultCount: results.length,
-            results: refs,
+            resultCount: fieldCount,
+            results: [],
           });
-        } else {
-          content = 'No results found for this search query.';
-          onToolCall?.({ id: toolCall.id, name: toolName, status: 'no_results' });
+          onPrefillProposal?.({
+            entityType,
+            sourceDescription: description,
+            data: prefill.data as Record<string, unknown>,
+            confidence: prefill.confidence as Record<string, number>,
+          });
+        } catch (err) {
+          enriched.push({
+            role: 'tool',
+            tool_call_id: toolCall.id,
+            content: 'Prefill failed unexpectedly.',
+          });
+          onToolCall?.({
+            id: toolCall.id,
+            name: toolName,
+            status: 'failed',
+            error: err instanceof Error ? err.message : 'unknown',
+          });
         }
-      } catch (err) {
-        content = 'Search failed. Please try a different query.';
-        onToolCall?.({
-          id: toolCall.id,
-          name: toolName,
-          status: 'failed',
-          error: err instanceof Error ? err.message : 'unknown',
-        });
+        continue;
       }
-      enriched.push({ role: 'tool', tool_call_id: toolCall.id, content });
     }
 
     return enriched;

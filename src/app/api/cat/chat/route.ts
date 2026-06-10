@@ -31,6 +31,7 @@ import {
   maybeEnrichWithSearchResults,
   type ToolAugmentedMessage,
   type ToolCallEvent,
+  type PrefillProposal,
 } from '@/services/cat/tool-use';
 import { fetchFullContextForCat, buildFullContextString } from '@/services/ai/document-context';
 import { createActionExecutor } from '@/services/cat';
@@ -222,7 +223,10 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
 
             // Tool use happens INSIDE the stream so we can surface each
             // lifecycle event ('running' → completed/no_results/failed) to
-            // the user in real time as `tool_call` SSE events.
+            // the user in real time as `tool_call` SSE events. Prefill
+            // proposals (the prefill_entity_form tool) emit a second event
+            // type carrying the structured draft so the UI can render a
+            // PrefilledFormCard instead of narrating field values as prose.
             const messages = await maybeEnrichWithSearchResults(
               supabase,
               baseMessages,
@@ -233,6 +237,11 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
               (event: ToolCallEvent) => {
                 controller.enqueue(
                   encoder.encode(`data: ${JSON.stringify({ tool_call: event })}\n\n`)
+                );
+              },
+              (proposal: PrefillProposal) => {
+                controller.enqueue(
+                  encoder.encode(`data: ${JSON.stringify({ prefill_proposal: proposal })}\n\n`)
                 );
               }
             );
@@ -310,8 +319,10 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     }
 
     // ── Non-streaming ──────────────────────────────────────────────────────────
-    // Buffer tool calls so the JSON response can carry them alongside the answer.
+    // Buffer tool calls + prefill proposals so the JSON response can carry
+    // them alongside the answer.
     const collectedToolCalls: ToolCallEvent[] = [];
+    const collectedPrefillProposals: PrefillProposal[] = [];
     const messages = await maybeEnrichWithSearchResults(
       supabase,
       baseMessages,
@@ -321,6 +332,9 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       modelToUse,
       (event: ToolCallEvent) => {
         collectedToolCalls.push(event);
+      },
+      (proposal: PrefillProposal) => {
+        collectedPrefillProposals.push(proposal);
       }
     );
     const result = await aiService.chatCompletion({
@@ -357,6 +371,8 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
         actions: actions.length > 0 ? actions : undefined,
         execResults: execResults.length > 0 ? execResults : undefined,
         toolCalls: collectedToolCalls.length > 0 ? collectedToolCalls : undefined,
+        prefillProposals:
+          collectedPrefillProposals.length > 0 ? collectedPrefillProposals : undefined,
         modelUsed: result.model,
         provider,
         usage: {

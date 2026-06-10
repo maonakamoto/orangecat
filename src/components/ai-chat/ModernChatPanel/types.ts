@@ -55,6 +55,18 @@ export type ToolCallEvent =
       error?: string;
     };
 
+/**
+ * A structured entity draft produced by the prefill_entity_form tool.
+ * Rendered as a PrefilledFormCard so the user can review/edit before opening
+ * the actual entity create form.
+ */
+export interface PrefillProposal {
+  entityType: string;
+  sourceDescription: string;
+  data: Record<string, unknown>;
+  confidence: Record<string, number>;
+}
+
 export interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -67,6 +79,8 @@ export interface Message {
   execResults?: ExecActionResult[];
   /** Tool calls the Cat made during this response. Rendered as chips above content. */
   toolCalls?: ToolCallEvent[];
+  /** Structured form drafts (prefill_entity_form). Rendered as cards below content. */
+  prefillProposals?: PrefillProposal[];
 }
 
 export interface UserStatus {

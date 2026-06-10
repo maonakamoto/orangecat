@@ -10,6 +10,7 @@ import { AI_MODEL_REGISTRY } from '@/config/ai-models';
 import { renderChatMarkdown } from '@/utils/markdown';
 import { ActionButton } from './ActionButton';
 import { ToolCallChip } from './ToolCallChip';
+import { PrefilledFormCard } from './PrefilledFormCard';
 import type { Message, CatAction, ExecActionResult } from '../types';
 import { ENTITY_REGISTRY, ENTITY_TYPES } from '@/config/entity-registry';
 
@@ -190,6 +191,15 @@ export function MessageBubble({
           <div className="mt-2 flex flex-wrap gap-1.5">
             {message.execResults.map((result, idx) => (
               <ExecResultChip key={idx} result={result} />
+            ))}
+          </div>
+        )}
+
+        {/* Prefilled form proposals: cards the user can review before opening the create form */}
+        {!isUser && message.prefillProposals && message.prefillProposals.length > 0 && (
+          <div className="space-y-2">
+            {message.prefillProposals.map((p, idx) => (
+              <PrefilledFormCard key={idx} proposal={p} />
             ))}
           </div>
         )}

@@ -4,7 +4,13 @@ import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
 import { STORAGE_KEYS } from '@/config/storage-keys';
-import type { Message, CatAction, ExecActionResult, ToolCallEvent } from '../types';
+import type {
+  Message,
+  CatAction,
+  ExecActionResult,
+  ToolCallEvent,
+  PrefillProposal,
+} from '../types';
 import { useChatHistory } from './useChatHistory';
 
 const STREAM_TIMEOUT_MS = 60_000;
@@ -150,6 +156,7 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
             actions?: CatAction[];
             execResults?: ExecActionResult[];
             tool_call?: ToolCallEvent;
+            prefill_proposal?: PrefillProposal;
             error?: string;
           };
           if (event?.error) {
@@ -190,6 +197,19 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
                     : [...existing, toolEvent];
                 return { ...m, toolCalls: next };
               })
+            );
+          }
+          if (event?.prefill_proposal) {
+            const proposal = event.prefill_proposal;
+            setMessages(prev =>
+              prev.map(m =>
+                m.id === assistantId
+                  ? {
+                      ...m,
+                      prefillProposals: [...(m.prefillProposals ?? []), proposal],
+                    }
+                  : m
+              )
             );
           }
         });
