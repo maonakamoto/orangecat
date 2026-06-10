@@ -9,8 +9,14 @@ import { Cat, User, Copy, Check, Clock, X } from 'lucide-react';
 import { AI_MODEL_REGISTRY } from '@/config/ai-models';
 import { renderChatMarkdown } from '@/utils/markdown';
 import { ActionButton } from './ActionButton';
+import { ToolCallChip } from './ToolCallChip';
 import type { Message, CatAction, ExecActionResult } from '../types';
 import { ENTITY_REGISTRY, ENTITY_TYPES } from '@/config/entity-registry';
+
+const PROVIDER_LABELS: Record<string, string> = {
+  groq: 'Groq',
+  openrouter: 'OpenRouter',
+};
 
 // Human-readable labels for exec_action IDs — shown when no displayMessage is available.
 // Entity-creation labels come from ENTITY_REGISTRY[type].name (SSOT); non-entity labels stay local.
@@ -129,6 +135,14 @@ export function MessageBubble({
       )}
 
       <div className={cn('min-w-0 flex-1', isUser ? 'text-right' : 'text-left')}>
+        {/* Tool calls: visible chips so the user can see what Cat actually did. */}
+        {!isUser && message.toolCalls && message.toolCalls.length > 0 && (
+          <div className="mb-2 flex flex-wrap gap-1.5">
+            {message.toolCalls.map(tc => (
+              <ToolCallChip key={tc.id} event={tc} />
+            ))}
+          </div>
+        )}
         <div
           className={cn(
             'inline-block max-w-full px-1 py-0.5 text-sm leading-relaxed sm:max-w-[92%]',
@@ -180,10 +194,20 @@ export function MessageBubble({
           </div>
         )}
 
-        {/* Model used indicator + copy button */}
+        {/* Provider · model indicator + copy button — provenance is honest */}
         {!isUser && message.modelUsed && displayContent && (
           <div className="flex items-center justify-between text-xs text-muted-dim mt-1">
-            <span>{AI_MODEL_REGISTRY[message.modelUsed]?.name || message.modelUsed}</span>
+            <span>
+              {message.provider && PROVIDER_LABELS[message.provider] && (
+                <>
+                  <span title={`Powered by ${PROVIDER_LABELS[message.provider]}`}>
+                    {PROVIDER_LABELS[message.provider]}
+                  </span>
+                  <span aria-hidden> · </span>
+                </>
+              )}
+              <span>{AI_MODEL_REGISTRY[message.modelUsed]?.name || message.modelUsed}</span>
+            </span>
             <button
               onClick={handleCopy}
               className="text-muted-dim hover:text-foreground transition-colors p-0.5"

@@ -4,7 +4,7 @@ import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
 import { STORAGE_KEYS } from '@/config/storage-keys';
-import type { Message, CatAction, ExecActionResult } from '../types';
+import type { Message, CatAction, ExecActionResult, ToolCallEvent } from '../types';
 import { useChatHistory } from './useChatHistory';
 
 const STREAM_TIMEOUT_MS = 60_000;
@@ -136,6 +136,7 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
         }
 
         let modelUsed = selectedModel;
+        let providerUsed: string | undefined;
         let actions: CatAction[] | undefined;
         let execResults: ExecActionResult[] | undefined;
 
@@ -145,8 +146,10 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
             done?: boolean;
             usage?: unknown;
             model?: string;
+            provider?: string;
             actions?: CatAction[];
             execResults?: ExecActionResult[];
+            tool_call?: ToolCallEvent;
             error?: string;
           };
           if (event?.error) {
@@ -162,11 +165,32 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
           if (event?.model) {
             modelUsed = event.model;
           }
+          if (event?.provider) {
+            providerUsed = event.provider;
+          }
           if (event?.actions) {
             actions = event.actions;
           }
           if (event?.execResults) {
             execResults = event.execResults;
+          }
+          if (event?.tool_call) {
+            const toolEvent = event.tool_call;
+            setMessages(prev =>
+              prev.map(m => {
+                if (m.id !== assistantId) {
+                  return m;
+                }
+                const existing = m.toolCalls ?? [];
+                // Merge: replace previous entry for the same tool-call id, else append.
+                const idx = existing.findIndex(t => t.id === toolEvent.id);
+                const next =
+                  idx >= 0
+                    ? existing.map((t, i) => (i === idx ? toolEvent : t))
+                    : [...existing, toolEvent];
+                return { ...m, toolCalls: next };
+              })
+            );
           }
         });
 
@@ -179,7 +203,11 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
         }
 
         setMessages(prev =>
-          prev.map(m => (m.id === assistantId ? { ...m, modelUsed, actions, execResults } : m))
+          prev.map(m =>
+            m.id === assistantId
+              ? { ...m, modelUsed, provider: providerUsed, actions, execResults }
+              : m
+          )
         );
       } catch (e) {
         const isAbort = e instanceof DOMException && e.name === 'AbortError';

@@ -33,7 +33,7 @@ export function ChatHeader({
         </div>
         <div>
           <h1 className="font-semibold text-foreground">Cat</h1>
-          <p className="text-xs text-muted-foreground">Private • Not saved</p>
+          <p className="text-xs text-muted-foreground">Saved to your history · clear anytime</p>
         </div>
       </div>
 

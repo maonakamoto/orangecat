@@ -27,7 +27,11 @@ import {
   saveMessages,
 } from '@/services/cat/conversation-history';
 import { resolveProvider } from '@/services/cat/provider-resolver';
-import { maybeEnrichWithSearchResults, type ToolAugmentedMessage } from '@/services/cat/tool-use';
+import {
+  maybeEnrichWithSearchResults,
+  type ToolAugmentedMessage,
+  type ToolCallEvent,
+} from '@/services/cat/tool-use';
 import { fetchFullContextForCat, buildFullContextString } from '@/services/ai/document-context';
 import { createActionExecutor } from '@/services/cat';
 import { getUserActorId } from '@/domain/actors';
@@ -195,22 +199,12 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     }
 
     // Build message array: system + few-shots + history + user message
-    let messages: ToolAugmentedMessage[] = [
+    const baseMessages: ToolAugmentedMessage[] = [
       { role: 'system', content: systemPrompt },
       ...getCatFewShotExamples(),
       ...historyMessages,
       { role: 'user', content: message },
     ];
-
-    // Tool use: optionally enrich with platform search results (Groq only)
-    messages = await maybeEnrichWithSearchResults(
-      supabase,
-      messages,
-      message,
-      provider,
-      userGroqKey,
-      modelToUse
-    );
 
     // ── Streaming ──────────────────────────────────────────────────────────────
     if (stream) {
@@ -224,6 +218,23 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
             let fullContent = '';
             controller.enqueue(
               encoder.encode(`data: ${JSON.stringify({ model: modelToUse, provider })}\n\n`)
+            );
+
+            // Tool use happens INSIDE the stream so we can surface each
+            // lifecycle event ('running' → completed/no_results/failed) to
+            // the user in real time as `tool_call` SSE events.
+            const messages = await maybeEnrichWithSearchResults(
+              supabase,
+              baseMessages,
+              message,
+              provider,
+              userGroqKey,
+              modelToUse,
+              (event: ToolCallEvent) => {
+                controller.enqueue(
+                  encoder.encode(`data: ${JSON.stringify({ tool_call: event })}\n\n`)
+                );
+              }
             );
 
             for await (const chunk of aiService.streamChatCompletion({
@@ -299,6 +310,19 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     }
 
     // ── Non-streaming ──────────────────────────────────────────────────────────
+    // Buffer tool calls so the JSON response can carry them alongside the answer.
+    const collectedToolCalls: ToolCallEvent[] = [];
+    const messages = await maybeEnrichWithSearchResults(
+      supabase,
+      baseMessages,
+      message,
+      provider,
+      userGroqKey,
+      modelToUse,
+      (event: ToolCallEvent) => {
+        collectedToolCalls.push(event);
+      }
+    );
     const result = await aiService.chatCompletion({
       model: modelToUse,
       messages,
@@ -332,6 +356,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
         message: cleanedMessage,
         actions: actions.length > 0 ? actions : undefined,
         execResults: execResults.length > 0 ? execResults : undefined,
+        toolCalls: collectedToolCalls.length > 0 ? collectedToolCalls : undefined,
         modelUsed: result.model,
         provider,
         usage: {

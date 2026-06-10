@@ -7,6 +7,10 @@
  * has real platform data to draw on.
  *
  * Only active for the Groq provider (OpenRouter tool use is not yet supported).
+ *
+ * The optional `onToolCall` callback fires for each lifecycle event of every tool
+ * the Cat triggers (running → completed/no_results/failed). The chat route pipes
+ * these into the SSE stream so the user sees what the Cat is actually doing.
  */
 
 import type { AnySupabaseClient } from '@/lib/supabase/types';
@@ -31,6 +35,48 @@ interface ToolResultMessage {
 
 /** Full union of message types that may appear in a Groq tool-augmented conversation */
 export type ToolAugmentedMessage = OpenRouterMessage | ToolCallAssistantMessage | ToolResultMessage;
+
+/**
+ * A reference to one entity surfaced by a tool call. Carries enough for the UI
+ * to render a clickable link (url + type) without re-fetching.
+ */
+export interface ToolCallResultRef {
+  url: string;
+  type: string;
+  title: string;
+}
+
+/**
+ * Lifecycle event for a single tool invocation. Emitted by maybeEnrichWithSearchResults
+ * via the onToolCall callback. The chat route relays these to the client over SSE.
+ */
+export type ToolCallEvent =
+  | {
+      id: string;
+      name: string;
+      status: 'running';
+      args?: Record<string, unknown>;
+    }
+  | {
+      id: string;
+      name: string;
+      status: 'completed';
+      resultCount: number;
+      results: ToolCallResultRef[];
+    }
+  | {
+      id: string;
+      name: string;
+      status: 'no_results';
+    }
+  | {
+      id: string;
+      name: string;
+      status: 'failed';
+      error?: string;
+    };
+
+export type OnToolCall = (event: ToolCallEvent) => void;
 
 const SEARCH_KEYWORDS = [
   'find',
@@ -74,6 +120,10 @@ const PLATFORM_TOOL_DEFINITION = [
 /**
  * Returns the messages array, possibly enriched with platform search results.
  * Non-fatal: on any failure returns the original messages unchanged.
+ *
+ * If `onToolCall` is provided, every tool the Cat invokes emits at least one
+ * lifecycle event ('running' → one of completed/no_results/failed). The route
+ * uses these to surface tool activity to the user via SSE.
  */
 export async function maybeEnrichWithSearchResults(
   supabase: AnySupabaseClient,
@@ -81,7 +131,8 @@ export async function maybeEnrichWithSearchResults(
   userMessage: string,
   provider: 'groq' | 'openrouter',
   groqKey: string | null,
-  modelToUse: string
+  modelToUse: string,
+  onToolCall?: OnToolCall
 ): Promise<ToolAugmentedMessage[]> {
   if (provider !== 'groq') {
     return messages;
@@ -125,26 +176,60 @@ export async function maybeEnrichWithSearchResults(
     const enriched: ToolAugmentedMessage[] = [...messages, assistantMsg];
 
     for (const toolCall of assistantMsg.tool_calls) {
-      if (toolCall.function?.name !== 'search_platform') {
+      const toolName = toolCall.function?.name;
+      if (toolName !== 'search_platform') {
         continue;
       }
+
+      const parsedArgs = (() => {
+        try {
+          return JSON.parse(toolCall.function.arguments ?? '{}') as {
+            query?: string;
+            type?: string;
+          };
+        } catch {
+          return {} as { query?: string; type?: string };
+        }
+      })();
+
+      onToolCall?.({
+        id: toolCall.id,
+        name: toolName,
+        status: 'running',
+        args: { query: parsedArgs.query, type: parsedArgs.type ?? 'all' },
+      });
+
       let content: string;
       try {
-        const args = JSON.parse(toolCall.function.arguments ?? '{}') as {
-          query?: string;
-          type?: string;
-        };
         const results = await searchPlatform(
           supabase,
-          args.query ?? '',
-          (args.type ?? 'all') as SearchType
+          parsedArgs.query ?? '',
+          (parsedArgs.type ?? 'all') as SearchType
         );
-        content =
-          results.length > 0
-            ? JSON.stringify(results, null, 2)
-            : 'No results found for this search query.';
-      } catch {
+        if (results.length > 0) {
+          content = JSON.stringify(results, null, 2);
+          const refs: ToolCallResultRef[] = results
+            .slice(0, 8)
+            .map(r => ({ url: r.url, type: r.type, title: r.title }));
+          onToolCall?.({
+            id: toolCall.id,
+            name: toolName,
+            status: 'completed',
+            resultCount: results.length,
+            results: refs,
+          });
+        } else {
+          content = 'No results found for this search query.';
+          onToolCall?.({ id: toolCall.id, name: toolName, status: 'no_results' });
+        }
+      } catch (err) {
         content = 'Search failed. Please try a different query.';
+        onToolCall?.({
+          id: toolCall.id,
+          name: toolName,
+          status: 'failed',
+          error: err instanceof Error ? err.message : 'unknown',
+        });
       }
       enriched.push({ role: 'tool', tool_call_id: toolCall.id, content });
     }
