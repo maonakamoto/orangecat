@@ -1,9 +1,10 @@
 /**
- * Cat Settings Tab - AI settings and permissions for the Cat hub
+ * Cat Settings Tab — what's actually controllable for this user.
  *
- * Combines model selection, API keys, and permissions in one place.
- *
- * Created: 2026-01-22
+ * Honest layout (no decorative tier picker): show the real state of
+ * the user's Cat — their tier + remaining quota, key status, and the
+ * permissions they grant the agent. Anything the user can't actually
+ * act on (e.g. picking a paid model without a key) doesn't render.
  */
 
 'use client';
@@ -11,123 +12,87 @@
 import Link from 'next/link';
 import { useAISettings } from '@/hooks/useAISettings';
 import { useCatPermissions } from '@/hooks/useCatPermissions';
+import { useCatQuota } from './ModernChatPanel/hooks/useCatQuota';
 import {
-  Bot,
   Key,
   Shield,
   ShieldAlert,
   ChevronRight,
   Loader2,
-  Sparkles,
-  Zap,
   AlertTriangle,
   Check,
-  Gift,
-  type LucideIcon,
+  ArrowUpRight,
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import { MODEL_TIERS, TIER_CONFIG, type ModelTier } from '@/config/ai-models';
 import { ROUTES } from '@/config/routes';
 
-const TIER_ICONS: Record<ModelTier, LucideIcon> = {
-  free: Gift,
-  economy: Zap,
-  standard: Bot,
-  premium: Sparkles,
-};
-
 export function CatSettingsTab() {
-  const { preferences, hasByok, updatePreferences, isLoading: aiLoading } = useAISettings();
+  const { hasByok } = useAISettings();
   const {
     permissions,
     isLoading: permLoading,
     isSaving: saving,
     toggleCategory,
   } = useCatPermissions();
-  const handleTierChange = async (tier: ModelTier) => {
-    try {
-      await updatePreferences({ default_tier: tier });
-    } catch {
-      // ignore
-    }
-  };
-
-  const currentTier = preferences?.default_tier || 'free';
+  const { quota } = useCatQuota();
 
   return (
     <div className="space-y-6">
-      {/* AI Model Selection */}
-      <div className="overflow-hidden rounded-md border border-border-subtle bg-background">
-        <div className="flex items-center gap-2 border-b border-border-subtle bg-muted/50 px-4 py-3">
-          <Bot className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-semibold text-foreground">AI Model</span>
-        </div>
-        <div className="p-4 space-y-3">
-          {MODEL_TIERS.map(tierId => {
-            const Icon = TIER_ICONS[tierId];
-            const isSelected = currentTier === tierId;
-            return (
-              <button
-                key={tierId}
-                onClick={() => handleTierChange(tierId)}
-                disabled={aiLoading}
-                className={`flex w-full items-center gap-3 rounded-md border p-3 transition-colors ${
-                  isSelected
-                    ? 'border-border-strong bg-muted'
-                    : 'border-border-subtle bg-background hover:border-border-strong hover:bg-muted/40'
-                }`}
-              >
-                <div className={`rounded-md p-2 ${isSelected ? 'bg-background' : 'bg-muted'}`}>
-                  <Icon
-                    className={`h-4 w-4 ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}
-                  />
-                </div>
-                <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-foreground">{TIER_CONFIG[tierId].label}</p>
-                  <p className="text-sm text-muted-foreground">{TIER_CONFIG[tierId].description}</p>
-                </div>
-                {isSelected && <Check className="h-5 w-5 text-foreground" />}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* API Keys Status */}
+      {/* What you're on right now */}
       <div className="overflow-hidden rounded-md border border-border-subtle bg-background">
         <div className="flex items-center gap-2 border-b border-border-subtle bg-muted/50 px-4 py-3">
           <Key className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-semibold text-foreground">API Keys</span>
+          <span className="text-sm font-semibold text-foreground">Your Cat plan</span>
         </div>
-        <div className="p-4">
+        <div className="space-y-3 p-4">
           {hasByok ? (
-            <div className="flex items-center gap-3 rounded-md border border-green-500/20 bg-green-500/10 p-3">
+            <div className="flex items-center gap-3 rounded-md border border-status-positive/20 bg-status-positive-subtle p-3">
               <div className="rounded-md bg-background p-2">
-                <Check className="h-4 w-4 text-green-700 dark:text-green-300" />
+                <Check className="h-4 w-4 text-status-positive" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">API key connected</p>
-                <p className="text-xs text-muted-foreground">Using your own provider key</p>
+                <p className="text-sm font-medium text-foreground">Your key — no platform cap</p>
+                <p className="text-xs text-muted-foreground">
+                  Cat routes every request through your provider. You pay your provider directly.
+                </p>
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-3 rounded-md border border-amber-500/20 bg-amber-500/10 p-3">
+            <div className="flex items-center gap-3 rounded-md border border-border-subtle bg-muted p-3">
               <div className="rounded-md bg-background p-2">
-                <AlertTriangle className="h-4 w-4 text-amber-700 dark:text-amber-300" />
+                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">Using platform key</p>
-                <p className="text-xs text-muted-foreground">Daily usage limits may apply</p>
+                <p className="text-sm font-medium text-foreground">
+                  Free —{' '}
+                  {quota
+                    ? `${quota.requestsRemaining} / ${quota.dailyLimit} messages left today`
+                    : 'platform key, daily cap'}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Add a free Groq key for unlimited use, or upgrade to Pro when it ships.
+                </p>
               </div>
             </div>
           )}
           <Link
             href={ROUTES.SETTINGS_AI}
-            className="mt-3 flex items-center justify-between rounded-md p-3 transition-colors hover:bg-muted"
+            className="flex min-h-11 items-center justify-between rounded-md border border-border-subtle bg-background px-3 py-2 transition-colors hover:bg-muted"
           >
-            <span className="text-sm text-muted-strong">Manage API Keys</span>
+            <span className="text-sm text-foreground">
+              {hasByok ? 'Manage your API keys' : 'Add a free Groq key'}
+            </span>
             <ChevronRight className="h-4 w-4 text-muted-dim" />
           </Link>
+          {!hasByok && (
+            <Link
+              href={ROUTES.PRICING}
+              className="flex min-h-11 items-center justify-between rounded-md border border-accent-warm/30 bg-accent-warm/10 px-3 py-2 transition-colors hover:bg-accent-warm/20"
+            >
+              <span className="text-sm font-medium text-foreground">See Pro pricing</span>
+              <ArrowUpRight className="h-4 w-4 text-accent-warm" />
+            </Link>
+          )}
         </div>
       </div>
 

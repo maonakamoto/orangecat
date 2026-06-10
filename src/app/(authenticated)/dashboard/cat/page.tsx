@@ -7,7 +7,7 @@
 
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useAuth';
 import Loading from '@/components/Loading';
@@ -22,8 +22,6 @@ export default function CatHubPage() {
   const { user, isLoading } = useRequireAuth();
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<CatHubTab>('chat');
-  const [selectedModel, setSelectedModel] = useState('auto');
-  const [chatIsLoading, setChatIsLoading] = useState(false);
   const { quota, refresh: refreshQuota } = useCatQuota();
 
   useEffect(() => {
@@ -34,10 +32,6 @@ export default function CatHubPage() {
       setActiveTab('chat');
     }
   }, [searchParams]);
-
-  const handleModelSelect = useCallback((model: string) => {
-    setSelectedModel(model);
-  }, []);
 
   if (isLoading) {
     return <Loading fullScreen message="Loading..." />;
@@ -56,20 +50,11 @@ export default function CatHubPage() {
 
   return (
     <div className={`oc-chat-layout ${APP_CONTENT_HEIGHT_CLASS}`}>
-      <CatChatToolbar
-        selectedModel={selectedModel}
-        onModelSelect={handleModelSelect}
-        modelSelectorDisabled={chatIsLoading}
-        activePanel="chat"
-        quota={quota}
-      />
+      <CatChatToolbar activePanel="chat" quota={quota} />
       <ModernChatPanel
         variant="focus"
         initialMessage={initialMessage}
         isNewUser={isNewUser}
-        selectedModel={selectedModel}
-        onModelSelect={handleModelSelect}
-        onLoadingChange={setChatIsLoading}
         onMessageSent={refreshQuota}
         className="min-h-0 flex-1"
       />

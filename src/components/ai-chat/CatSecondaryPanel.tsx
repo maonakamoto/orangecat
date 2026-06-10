@@ -24,12 +24,7 @@ export function CatSecondaryPanel({ tab }: CatSecondaryPanelProps) {
 
   return (
     <div className={`oc-chat-layout ${APP_CONTENT_HEIGHT_CLASS}`}>
-      <CatChatToolbar
-        selectedModel="auto"
-        onModelSelect={() => {}}
-        modelSelectorDisabled
-        activePanel={tab}
-      />
+      <CatChatToolbar activePanel={tab} />
 
       <div className="flex flex-shrink-0 items-center gap-2 border-b border-border-subtle px-3 py-2 sm:px-4">
         <Link
