@@ -43,24 +43,33 @@ export default function PricingPage() {
           ))}
         </div>
 
-        {/* Why pay? */}
+        {/* Why pay? — intentionally open-ended */}
         <section className="mb-16 rounded-lg border border-border bg-card p-8">
-          <h2 className="mb-4 text-2xl font-semibold text-foreground">Why pay if Free works?</h2>
+          <h2 className="mb-4 text-2xl font-semibold text-foreground">What Pro will be</h2>
           <div className="space-y-4 text-muted-strong">
             <p>
-              The Free tier runs on Groq and OpenRouter free pools. Those pools have hard daily caps
-              and shared rate limits — we can&apos;t lift them no matter how much we want to. The
-              honest path past those caps is one of two things:
+              We haven&apos;t decided. There are three plausible directions for what you&apos;d be
+              paying for, and we&apos;d rather hear from you before we lock one in:
             </p>
+            <ul className="space-y-3 pl-4">
+              <li>
+                <strong className="text-foreground">More Cat.</strong> Higher daily limits, better
+                default models — you pay OrangeCat, we pay the provider.
+              </li>
+              <li>
+                <strong className="text-foreground">Platform features.</strong> Unlimited entities,
+                Cat autonomous actions, verified badge, priority discovery — none of which touch the
+                AI bill.
+              </li>
+              <li>
+                <strong className="text-foreground">No subscription at all.</strong> OrangeCat earns
+                a small fee on transactions that happen on the platform (sales, funding, loans). AI
+                stays free for everyone, forever. Bitcoin-aligned: we win when you win.
+              </li>
+            </ul>
             <p>
-              <strong className="text-foreground">Bring your own key.</strong> Groq and OpenRouter
-              both give free keys with much higher per-account limits. Add yours and Cat routes
-              every request through it. You pay your provider — we never see your bill.
-            </p>
-            <p>
-              <strong className="text-foreground">Pay us directly.</strong> We&apos;d run a hosted
-              Pro tier where we top up the platform budget so you can keep chatting without juggling
-              keys. We haven&apos;t priced it yet — that&apos;s what the waitlist is for.
+              Most likely some mix. Until then: Free + BYOK cover real use today. Cat works for
+              everyone right now, no card on file, no commitment.
             </p>
           </div>
         </section>
@@ -70,11 +79,11 @@ export default function PricingPage() {
           <div className="text-center">
             <Sparkles className="mx-auto mb-4 h-10 w-10" aria-hidden="true" />
             <h2 className="mb-3 font-heading text-2xl font-bold tracking-display">
-              Help us price Pro
+              Shape what Pro becomes
             </h2>
             <p className="mx-auto mb-6 max-w-2xl text-fg-inverted/70">
-              No commitment, no payment details. Just tell us what you&apos;d pay for higher daily
-              limits and which features matter most. We read every reply.
+              No commitment, no payment details. Tell us which of the three directions above (or
+              something else) would make you actually pay. We read every reply.
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <a href="mailto:hello@orangecat.ch?subject=Cat%20Pro%20waitlist">
@@ -94,8 +103,8 @@ export default function PricingPage() {
         {/* Footer note */}
         <div className="text-center text-sm text-muted-foreground">
           <p>
-            BTC and Lightning are the planned default for Pro payments; CHF + EUR + USD via Stripe
-            come next. No prices are committed until you tell us what works.
+            Whatever Pro becomes, payments will be Bitcoin/Lightning-native — no card-on-file
+            required. The price isn&apos;t committed until you tell us what works.
           </p>
         </div>
       </div>

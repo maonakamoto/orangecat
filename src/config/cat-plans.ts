@@ -4,8 +4,12 @@
  * Three plans, honest about what's shipped:
  *   - free → what every user gets today (10 msgs/day on free models)
  *   - byok → already implemented; zero platform cost; recommended for power users
- *   - pro  → coming soon, waitlist-only; price is intentionally undeclared until
- *            we know what people will pay
+ *   - pro  → waitlist only. The Pro card is intentionally vague about WHAT
+ *            you'd be paying for — the business model isn't decided yet
+ *            (could be more Cat capacity, could be platform features like
+ *            entity caps + verified badge, could be transaction fees, could
+ *            be all of the above). The waitlist exists to collect signal
+ *            before any irreversible decision is made.
  *
  * The /pricing page and QuotaMeter both read from this file. If the daily
  * limit changes, update CAT_FREE_DAILY_LIMIT here and api-key-service.ts in
@@ -73,13 +77,13 @@ export const CAT_PLANS: CatPlan[] = [
   {
     id: 'pro',
     name: 'Pro',
-    tagline: 'Funds the Cat budget directly',
-    priceCopy: 'Coming soon — help us price it',
+    tagline: 'Shape it with us',
+    priceCopy: 'No price yet — waitlist first',
     bullets: [
-      'Higher daily cap (target ~200 messages / day)',
-      'Better default model with longer context',
-      'Pay with Lightning, BTC on-chain, or fiat',
-      'Same honest privacy: chats save to your history, clear anytime',
+      'What you pay for is still open: more Cat capacity, platform features, both',
+      'OrangeCat is Bitcoin-aligned: payments will use Lightning or BTC, not card-on-file',
+      'Until Pro ships, Free + BYOK cover most use — Cat works for everyone today',
+      'Tell us what you would actually pay for; the waitlist drives the spec',
     ],
     cta: { label: 'Join the waitlist', href: '#waitlist', variant: 'outline' },
     status: 'coming-soon',
