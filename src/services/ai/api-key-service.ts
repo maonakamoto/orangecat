@@ -310,13 +310,19 @@ export class ApiKeyService {
   // ==================== PLATFORM USAGE ====================
 
   /**
-   * Check platform usage limits for a user
+   * Check platform usage limits for a user.
+   *
+   * Source of truth = the `check_platform_limit` RPC, which since migration
+   * 20260610000001_user_plans reads `daily_limit` from `public.user_plans`
+   * (free=10, pro=their plan, expired-pro=10). The literal `10` below is the
+   * **last-resort safety fallback** for when the RPC or database itself is
+   * unreachable — never the source of truth. Keep them in sync with
+   * CAT_FREE_DAILY_LIMIT in `src/config/cat-plans.ts` if the free cap moves.
    */
   async checkPlatformUsage(userId: string): Promise<PlatformUsage> {
     const { data, error } = await this.supabase.rpc('check_platform_limit', { p_user_id: userId });
 
     if (error || !data || data.length === 0) {
-      // Default if no usage record exists
       return {
         daily_requests: 0,
         daily_limit: 10,

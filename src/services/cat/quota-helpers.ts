@@ -5,16 +5,30 @@
  * mocking Supabase auth, the API-key service, or the RPC.
  */
 
-export type CatTier = 'byok' | 'free';
+export type CatTier = 'byok' | 'pro' | 'free';
 
 /**
- * A user is on the BYOK tier as soon as they have at least one valid
- * stored key for any supported provider. Provider-stored keys (Groq or
- * OpenRouter) take precedence over the platform daily allowance because
- * the chat route routes through them first.
+ * Resolves the user-facing tier the QuotaMeter should show. Precedence:
+ *   1. byok — a stored Groq or OpenRouter key wins, because the chat route
+ *      routes through it before touching the platform credentials. The
+ *      paid plan is irrelevant in this case; there's no cap to enforce.
+ *   2. pro  — a paid, non-expired user_plans.tier='pro' row.
+ *   3. free — everything else (no key, no plan, expired plan, ...).
+ *
+ * `paidTier` is optional so existing callers stay binary-compatible.
  */
-export function resolveTier(opts: { hasGroqByok: boolean; hasOpenRouterByok: boolean }): CatTier {
-  return opts.hasGroqByok || opts.hasOpenRouterByok ? 'byok' : 'free';
+export function resolveTier(opts: {
+  hasGroqByok: boolean;
+  hasOpenRouterByok: boolean;
+  paidTier?: 'free' | 'pro';
+}): CatTier {
+  if (opts.hasGroqByok || opts.hasOpenRouterByok) {
+    return 'byok';
+  }
+  if (opts.paidTier === 'pro') {
+    return 'pro';
+  }
+  return 'free';
 }
 
 /**

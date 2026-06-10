@@ -11,7 +11,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { API_ROUTES } from '@/config/api-routes';
 import { logger } from '@/utils/logger';
 
-export type CatQuotaTier = 'byok' | 'free';
+export type CatQuotaTier = 'byok' | 'pro' | 'free';
 
 export interface CatQuota {
   tier: CatQuotaTier;
@@ -22,6 +22,8 @@ export interface CatQuota {
   requestsRemaining: number;
   canUsePlatform: boolean;
   resetInSeconds: number;
+  /** ISO timestamp of Pro renewal deadline; null on Free/BYOK. */
+  expiresAt: string | null;
 }
 
 interface UseCatQuotaResult {

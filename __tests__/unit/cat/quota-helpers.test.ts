@@ -16,6 +16,24 @@ describe('resolveTier', () => {
   it('returns free when no provider key is stored', () => {
     expect(resolveTier({ hasGroqByok: false, hasOpenRouterByok: false })).toBe('free');
   });
+
+  it('returns pro when no BYOK but paidTier=pro', () => {
+    expect(resolveTier({ hasGroqByok: false, hasOpenRouterByok: false, paidTier: 'pro' })).toBe(
+      'pro'
+    );
+  });
+
+  it('returns byok when both BYOK and paidTier=pro — BYOK wins', () => {
+    expect(resolveTier({ hasGroqByok: true, hasOpenRouterByok: false, paidTier: 'pro' })).toBe(
+      'byok'
+    );
+  });
+
+  it('returns free when paidTier=free', () => {
+    expect(resolveTier({ hasGroqByok: false, hasOpenRouterByok: false, paidTier: 'free' })).toBe(
+      'free'
+    );
+  });
 });
 
 describe('secondsUntilUtcMidnight', () => {
