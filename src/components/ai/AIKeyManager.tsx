@@ -67,7 +67,9 @@ export function AIKeyManager({
 
   const handleAddSuccess = async (data: { provider: string; apiKey: string; keyName: string }) => {
     await onAdd?.(data);
-    setIsAdding(false);
+    // The form owns its own success state — show the "Connected to X"
+    // confirmation card instead of silently closing. The user dismisses
+    // via "Add another key" or navigates away via "Start chatting."
   };
 
   return (

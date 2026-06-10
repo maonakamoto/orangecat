@@ -1,12 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-import { Key, AlertCircle, ExternalLink, Eye, EyeOff, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import {
+  Key,
+  AlertCircle,
+  ExternalLink,
+  Eye,
+  EyeOff,
+  Loader2,
+  CheckCircle,
+  Sparkles,
+} from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { cn } from '@/lib/utils';
 import { aiProviders, getAIProvider, validateApiKeyFormat } from '@/data/aiProviders';
+import { ROUTES } from '@/config/routes';
 
 /**
  * Providers Cat's chat route can actually route through today.
@@ -29,15 +40,31 @@ interface AIKeyAddFormProps {
   onFieldFocus?: (field: string | null) => void;
 }
 
+type FormState = 'idle' | 'submitting' | 'success';
+
 export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProps) {
   const [selectedProvider, setSelectedProvider] = useState<string>('openrouter');
   const [apiKey, setApiKey] = useState('');
   const [keyName, setKeyName] = useState('');
   const [showKey, setShowKey] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formState, setFormState] = useState<FormState>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [successProviderId, setSuccessProviderId] = useState<string | null>(null);
 
   const provider = getAIProvider(selectedProvider);
+  const successProvider = successProviderId ? getAIProvider(successProviderId) : null;
+
+  const resetForm = (keepProvider = true) => {
+    setApiKey('');
+    setKeyName('');
+    setError(null);
+    setShowKey(false);
+    setFormState('idle');
+    setSuccessProviderId(null);
+    if (!keepProvider) {
+      setSelectedProvider('openrouter');
+    }
+  };
 
   const handleSubmit = async () => {
     if (!apiKey || !provider) {
@@ -50,7 +77,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
       return;
     }
 
-    setIsSubmitting(true);
+    setFormState('submitting');
     setError(null);
 
     try {
@@ -59,14 +86,55 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
         apiKey,
         keyName: keyName || `${provider.name} Key`,
       });
+      setSuccessProviderId(selectedProvider);
       setApiKey('');
       setKeyName('');
+      setFormState('success');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add key');
-    } finally {
-      setIsSubmitting(false);
+      setFormState('idle');
     }
   };
+
+  if (formState === 'success' && successProvider) {
+    return (
+      <Card className="border-status-positive/30 bg-status-positive-subtle">
+        <CardContent className="space-y-4 p-6">
+          <div className="flex items-start gap-3">
+            <div className="rounded-md bg-background p-2">
+              <CheckCircle className="h-6 w-6 text-status-positive" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-foreground">
+                Connected to {successProvider.name}
+              </h3>
+              <p className="mt-1 text-sm text-muted-strong">
+                Cat is now routing every message through your {successProvider.name} key. You pay{' '}
+                {successProvider.name} directly — OrangeCat never sees your bill, never marks it up.
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                <Sparkles className="mr-1 inline h-3 w-3" aria-hidden="true" />
+                The freedom architecture: your provider, your bill, your choice. Always.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+            <Button variant="ghost" size="sm" onClick={() => resetForm()}>
+              Add another key
+            </Button>
+            <Link href={ROUTES.DASHBOARD.CAT}>
+              <Button variant="accent" size="sm">
+                <Sparkles className="mr-2 h-4 w-4" />
+                Start chatting
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const isSubmitting = formState === 'submitting';
 
   return (
     <Card className="border-border-subtle bg-muted/40/30">
@@ -176,7 +244,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Adding...
+                Validating…
               </>
             ) : (
               <>
