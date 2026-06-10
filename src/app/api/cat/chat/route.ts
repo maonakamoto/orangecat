@@ -220,6 +220,10 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       const encoder = new TextEncoder();
       const readable = new ReadableStream({
         async start(controller) {
+          // Lifted outside the try block so the catch at the bottom can
+          // tell whether the failover attempt was reached. Block-scoped
+          // `let` inside the try is invisible to the outer catch.
+          let attemptedFallback = false;
           try {
             let usage:
               | { inputTokens?: number; outputTokens?: number; totalTokens?: number }
@@ -263,7 +267,6 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
             let activeModel = modelToUse;
             let activeService = aiService;
             let streamStarted = false;
-            let attemptedFallback = false;
 
             const consumeStream = async () => {
               for await (const chunk of activeService.streamChatCompletion({
@@ -343,20 +346,36 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
               await keyService.incrementPlatformUsage(user.id, 1, usage.totalTokens);
             }
           } catch (err) {
-            logger.error('Cat chat stream error', { err }, 'cat/chat');
-            const errPayload = isAiRateLimitError(err)
-              ? {
-                  error: 'AI is temporarily busy. Please try again in a minute.',
-                  code: 'AI_RATE_LIMITED',
-                }
-              : {
-                  // Never echo raw err.message — it can contain API keys (e.g.
-                  // a malformed Authorization header leaks the credential in
-                  // the Headers.append error). Log server-side; return a
-                  // generic to the client.
-                  error: 'Something went wrong generating the response. Please try again.',
-                  code: 'STREAM_ERROR',
-                };
+            logger.error('Cat chat stream error', { err, attemptedFallback, hasByok }, 'cat/chat');
+            // Honest error copy. Never echo raw err.message — it can contain
+            // API keys (e.g. a malformed Authorization header leaks the
+            // credential in the Headers.append error). Log server-side;
+            // return a structured, actionable error to the client.
+            let errPayload: { error: string; code: string };
+            if (isAiRateLimitError(err)) {
+              errPayload = {
+                error: hasByok
+                  ? 'Your provider returned a rate-limit. Try again in a moment.'
+                  : 'Cat is temporarily busy. Add your own Groq key in Settings to skip the cap.',
+                code: 'AI_RATE_LIMITED',
+              };
+            } else if (attemptedFallback) {
+              // Both primary AND failover threw. This is the "all providers
+              // down" path — common when the platform OpenRouter key is
+              // revoked or both quotas are exhausted at the same time.
+              errPayload = {
+                error: hasByok
+                  ? 'Both providers are unreachable right now. Check your keys in Settings → API Keys.'
+                  : 'Both Cat providers are temporarily down. Add your own free Groq key in Settings → API Keys to keep chatting.',
+                code: 'ALL_PROVIDERS_DOWN',
+              };
+            } else {
+              errPayload = {
+                error:
+                  'Cat couldn’t generate a response. Try again, or add your own key in Settings → API Keys.',
+                code: 'STREAM_ERROR',
+              };
+            }
             controller.enqueue(encoder.encode(`event: error\n`));
             controller.enqueue(encoder.encode(`data: ${JSON.stringify(errPayload)}\n\n`));
           } finally {
