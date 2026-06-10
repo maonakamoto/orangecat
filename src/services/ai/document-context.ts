@@ -21,7 +21,9 @@ import type {
   TaskSummary,
   PaymentCapabilities,
   FullUserContext,
+  RuntimeContext,
 } from './document-context-types';
+import { isSupportedCurrency, PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 
 import { fetchEntitiesForCat } from './entity-context-fetcher';
 import {
@@ -44,6 +46,7 @@ export type {
   BookingRecord,
   InboundActivity,
   FullUserContext,
+  RuntimeContext,
 } from './document-context-types';
 
 // Re-export string builders so existing callers stay unchanged
@@ -203,9 +206,100 @@ async function fetchTasksForCat(
   }
 }
 
+/**
+ * Client-provided hints about the user's current session.
+ * Fully optional — when absent, we fall back to safe defaults (platform currency,
+ * en-US locale, individual actor). Server never trusts these for security-critical
+ * decisions; they only flavor how Cat phrases responses and which prices it quotes.
+ */
+export interface RuntimeContextHints {
+  /** ISO currency code from client (e.g. 'CHF'). Validated server-side. */
+  preferredCurrency?: string;
+  /** BCP-47 locale (e.g. 'de-CH'). Free text but expected to look like a locale. */
+  locale?: string;
+  /** Same-origin path of the page user came from. Stripped if it looks unsafe. */
+  lastVisitedPath?: string;
+}
+
+/**
+ * Sanitize a path string. Accepts only absolute same-origin paths (starting with '/').
+ * Caps length to 200 chars. Returns undefined for anything that doesn't look right —
+ * we'd rather omit the field than feed Cat garbage.
+ */
+function sanitizeLastVisitedPath(path: string | undefined): string | undefined {
+  if (!path || typeof path !== 'string') {
+    return undefined;
+  }
+  if (!path.startsWith('/') || path.startsWith('//')) {
+    return undefined;
+  }
+  if (path.length > 200) {
+    return undefined;
+  }
+  // Avoid pushing the Cat page itself back into the prompt as "where you came from".
+  if (path.startsWith('/dashboard/cat')) {
+    return undefined;
+  }
+  return path;
+}
+
+async function fetchRuntimeContextForCat(
+  supabase: AnySupabaseClient,
+  userId: string,
+  hints: RuntimeContextHints | undefined,
+  profile: ProfileContext | null
+): Promise<RuntimeContext> {
+  // Currency: validate client hint against supported list; fall back to platform default.
+  const candidateCurrency = hints?.preferredCurrency;
+  const preferredCurrency =
+    candidateCurrency && isSupportedCurrency(candidateCurrency)
+      ? candidateCurrency
+      : PLATFORM_DEFAULT_CURRENCY;
+
+  // Locale: accept anything that looks like BCP-47 (letters and one optional '-region').
+  // Default to 'en-US' — keeps existing date-format behavior when no hint provided.
+  const candidateLocale = hints?.locale;
+  const locale =
+    candidateLocale && /^[a-z]{2,3}(-[a-zA-Z0-9]{2,4})?$/i.test(candidateLocale)
+      ? candidateLocale
+      : 'en-US';
+
+  const lastVisitedPath = sanitizeLastVisitedPath(hints?.lastVisitedPath);
+
+  // Current actor: for Tier 1 we always use the individual actor. Group-context
+  // switching plumbs through later (Tier 5), with its own server-side validation
+  // that the user is actually a member.
+  let currentActor: RuntimeContext['currentActor'] = null;
+  try {
+    const { data: actorRow } = await supabase
+      .from(DATABASE_TABLES.ACTORS)
+      .select('id, actor_type')
+      .eq('actor_type', 'user')
+      .eq('user_id', userId)
+      .maybeSingle();
+    if (actorRow?.id) {
+      currentActor = {
+        id: actorRow.id,
+        type: 'individual',
+        name: profile?.name ?? profile?.username ?? null,
+      };
+    }
+  } catch (error) {
+    logger.warn('Could not resolve current actor for cat runtime', { error }, 'DocumentContext');
+  }
+
+  return {
+    preferredCurrency,
+    locale,
+    currentActor,
+    lastVisitedPath,
+  };
+}
+
 export async function fetchFullContextForCat(
   supabase: AnySupabaseClient,
-  userId: string
+  userId: string,
+  runtimeHints?: RuntimeContextHints
 ): Promise<FullUserContext> {
   const [
     profile,
@@ -227,6 +321,8 @@ export async function fetchFullContextForCat(
     fetchGroupMembershipsForCat(supabase, userId),
   ]);
 
+  const runtime = await fetchRuntimeContextForCat(supabase, userId, runtimeHints, profile);
+
   const urgentTasks = tasks.filter(
     t => t.priority === 'urgent' || t.current_status === 'needs_attention'
   ).length;
@@ -246,6 +342,7 @@ export async function fetchFullContextForCat(
     inboundActivity,
     memberGroups,
     paymentCapabilities,
+    runtime,
     stats: {
       ...stats,
       totalTasks: tasks.length,

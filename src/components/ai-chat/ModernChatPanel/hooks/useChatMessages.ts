@@ -2,10 +2,55 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { readEventStream } from '@/lib/sse';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
+import { useUserCurrency } from '@/hooks/useUserCurrency';
+import { STORAGE_KEYS } from '@/config/storage-keys';
 import type { Message, CatAction, ExecActionResult } from '../types';
 import { useChatHistory } from './useChatHistory';
 
 const STREAM_TIMEOUT_MS = 60_000;
+
+/**
+ * Collect the page the user navigated FROM before reaching Cat. Same-origin only.
+ * Returns undefined when there's no usable referrer (direct nav, cross-origin, etc.).
+ */
+function readLastVisitedPath(): string | undefined {
+  if (typeof window === 'undefined') {
+    return undefined;
+  }
+  // Prefer the sessionStorage breadcrumb (set by route-tracker) when present —
+  // it survives refresh and direct cat-page loads. Falls back to document.referrer.
+  try {
+    const stored = window.sessionStorage.getItem(STORAGE_KEYS.LAST_VISITED_PATH);
+    if (stored && stored.startsWith('/') && !stored.startsWith('/dashboard/cat')) {
+      return stored;
+    }
+  } catch {
+    /* sessionStorage may be unavailable; fall through */
+  }
+  const ref = document.referrer;
+  if (!ref) {
+    return undefined;
+  }
+  try {
+    const refUrl = new URL(ref);
+    if (refUrl.origin !== window.location.origin) {
+      return undefined;
+    }
+    if (refUrl.pathname.startsWith('/dashboard/cat')) {
+      return undefined;
+    }
+    return refUrl.pathname;
+  } catch {
+    return undefined;
+  }
+}
+
+function readLocale(): string {
+  if (typeof navigator === 'undefined') {
+    return 'en-US';
+  }
+  return navigator.language || 'en-US';
+}
 
 interface UseChatMessagesOptions {
   selectedModel: string;
@@ -20,6 +65,7 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
   const abortControllerRef = useRef<AbortController | null>(null);
   const onPendingResultRef = useRef(onPendingResult);
   onPendingResultRef.current = onPendingResult;
+  const preferredCurrency = useUserCurrency();
 
   const { isLoadingHistory } = useChatHistory(setMessages);
 
@@ -66,6 +112,9 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
             message: content,
             model: selectedModel !== 'auto' ? selectedModel : undefined,
             stream: true,
+            preferredCurrency,
+            locale: readLocale(),
+            lastVisitedPath: readLastVisitedPath(),
           }),
           signal: abortController.signal,
         });
@@ -156,7 +205,7 @@ export function useChatMessages({ selectedModel, onPendingResult }: UseChatMessa
         setIsLoading(false);
       }
     },
-    [isLoading, selectedModel]
+    [isLoading, selectedModel, preferredCurrency]
   );
 
   const clearChat = useCallback(() => {

@@ -100,6 +100,14 @@ const bodySchema = z.object({
   message: z.string().min(1).max(AI_MESSAGE_MAX_CHARS),
   model: z.string().optional(),
   stream: z.boolean().optional(),
+  /**
+   * Runtime session hints from the client. Optional and untrusted — the server
+   * validates each field. Drive Cat's locale, price quoting, and recent-page
+   * awareness. See RuntimeContext in document-context-types.ts.
+   */
+  preferredCurrency: z.string().max(8).optional(),
+  locale: z.string().max(20).optional(),
+  lastVisitedPath: z.string().max(200).optional(),
 });
 
 function isAiRateLimitError(error: unknown): boolean {
@@ -144,7 +152,14 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       return apiBadRequest('Invalid request', parsed.error.flatten());
     }
 
-    const { message, model: requestedModel, stream } = parsed.data;
+    const {
+      message,
+      model: requestedModel,
+      stream,
+      preferredCurrency,
+      locale,
+      lastVisitedPath,
+    } = parsed.data;
 
     // Resolve provider, BYOK keys, model, and platform limits
     const resolved = await resolveProvider(supabase, user.id, request.headers, {
@@ -160,8 +175,13 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     // Resolve actor ID for exec_action execution
     const actorId = await getUserActorId(supabase, user.id);
 
-    // Build context + history
-    const userContext = await fetchFullContextForCat(supabase, user.id);
+    // Build context + history. Runtime hints flow client→server so Cat knows
+    // currency, locale, and recent-page state for THIS exchange.
+    const userContext = await fetchFullContextForCat(supabase, user.id, {
+      preferredCurrency,
+      locale,
+      lastVisitedPath,
+    });
     const contextString = buildFullContextString(userContext);
     const systemPrompt = buildCatSystemPrompt({ userContext: contextString || undefined });
 

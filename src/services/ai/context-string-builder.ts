@@ -57,12 +57,41 @@ Use this context to personalize your responses. Reference their goals, skills, a
 
 export function buildFullContextString(context: FullUserContext): string {
   const sections: string[] = [];
+  const locale = context.runtime?.locale || 'en-US';
 
-  // Current date/time — injected first so Cat can reason temporally about reminders,
-  // deadlines, overdue tasks, and upcoming events
+  // Current session — what's true RIGHT NOW. Goes FIRST so Cat can scope everything
+  // (price quotes, language, "the page you just came from") from the top.
+  {
+    const r = context.runtime;
+    if (r) {
+      const lines: string[] = [];
+      if (r.currentActor) {
+        const actorLabel =
+          r.currentActor.type === 'individual'
+            ? `**Acting as**: yourself${r.currentActor.name ? ` (${r.currentActor.name})` : ''}`
+            : `**Acting as**: group "${r.currentActor.name ?? 'unnamed'}" (you have permission to act on this group's behalf)`;
+        lines.push(actorLabel);
+      }
+      lines.push(
+        `**Display currency**: ${r.preferredCurrency} — quote prices in this currency by default; convert to/from BTC as needed.`
+      );
+      lines.push(
+        `**Locale**: ${r.locale} — reply in the language and conventions of this locale unless the user writes in another language.`
+      );
+      if (r.lastVisitedPath) {
+        lines.push(
+          `**Just came from**: \`${r.lastVisitedPath}\` — if relevant to their question, reference what's on that page.`
+        );
+      }
+      sections.push(`## Current Session\n${lines.join('\n')}`);
+    }
+  }
+
+  // Current date/time — injected so Cat can reason temporally about reminders,
+  // deadlines, overdue tasks, and upcoming events. Formatted in the user's locale.
   {
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-US', {
+    const dateStr = now.toLocaleDateString(locale, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -227,7 +256,7 @@ export function buildFullContextString(context: FullUserContext): string {
         const due = new Date(t.due_date);
         const isOverdue = due < now;
         const dueStr =
-          due.toLocaleString('en-US', {
+          due.toLocaleString(locale, {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
@@ -314,7 +343,7 @@ export function buildFullContextString(context: FullUserContext): string {
 
     if (recentSales.length > 0) {
       const saleLines = recentSales.map(s => {
-        const date = new Date(s.created_at).toLocaleDateString('en-US', {
+        const date = new Date(s.created_at).toLocaleDateString(locale, {
           month: 'short',
           day: 'numeric',
           year: 'numeric',
@@ -327,7 +356,7 @@ export function buildFullContextString(context: FullUserContext): string {
 
     if (upcomingBookings.length > 0) {
       const bookingLines = upcomingBookings.map(b => {
-        const start = new Date(b.starts_at).toLocaleString('en-US', {
+        const start = new Date(b.starts_at).toLocaleString(locale, {
           month: 'short',
           day: 'numeric',
           year: 'numeric',

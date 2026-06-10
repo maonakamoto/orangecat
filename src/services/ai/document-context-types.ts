@@ -119,6 +119,32 @@ export interface InboundActivity {
   upcomingBookings: BookingRecord[];
 }
 
+/**
+ * Runtime session context — what's true RIGHT NOW about the user's session.
+ * Distinct from the long-lived profile context (entities, wallets, etc.).
+ * Used by the Cat to scope prices, language, and recent-activity awareness.
+ */
+export interface RuntimeContext {
+  /** User's chosen display currency (e.g. 'CHF', 'BTC'). Platform default 'CHF'. */
+  preferredCurrency: string;
+  /** BCP-47 locale string for response language and date formatting (e.g. 'de-CH', 'en-US'). */
+  locale: string;
+  /** The actor the user is currently operating as. */
+  currentActor: {
+    /** Actor UUID — owns any entity Cat creates this session. */
+    id: string;
+    /** Individual user or a group the user belongs to. */
+    type: 'individual' | 'group';
+    /** Display name of the actor (the user's name, or the group's name). */
+    name: string | null;
+  } | null;
+  /**
+   * Path in the product the user was on immediately before opening Cat (if same-origin).
+   * Lets Cat reference "the project you were just looking at" instead of starting cold.
+   */
+  lastVisitedPath?: string;
+}
+
 export interface FullUserContext {
   profile: ProfileContext | null;
   documents: DocumentContext[];
@@ -129,6 +155,8 @@ export interface FullUserContext {
   inboundActivity: InboundActivity;
   memberGroups: GroupMembershipSummary[];
   paymentCapabilities: PaymentCapabilities;
+  /** Runtime session context — what's true RIGHT NOW. See RuntimeContext for fields. */
+  runtime: RuntimeContext;
   stats: {
     totalProducts: number;
     totalServices: number;
