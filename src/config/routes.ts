@@ -279,6 +279,7 @@ export const ROUTES = {
   BLOG: '/blog',
   DOCS: '/docs',
   FAQ: '/faq',
+  PRICING: '/pricing',
   TECHNOLOGY: '/technology',
   PRIVACY: '/privacy',
   TERMS: '/terms',
