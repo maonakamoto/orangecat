@@ -12,7 +12,6 @@ import { logger } from '@/utils/logger';
 import { apiBadRequest, apiError, apiSuccess, apiInternalError } from '@/lib/api/standardResponse';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import { z } from 'zod';
-import { GroqAPIError } from '@/services/ai';
 import {
   applyRateLimitHeaders,
   createRateLimitResponse,
@@ -116,25 +115,35 @@ const bodySchema = z.object({
 });
 
 function isAiRateLimitError(error: unknown): boolean {
-  if (error instanceof GroqAPIError) {
-    if (error.type === 'rate_limit' || error.statusCode === 429) {
+  // Provider-agnostic detection. Every AI provider error class we ship
+  // (GroqAPIError, OpenRouterAPIError, OpenAICompatibleAPIError) carries
+  // a `statusCode` field — 429 means rate limit, full stop. Some providers
+  // also surface a `type: 'rate_limit'` discriminator. Check both first
+  // because they're cheap and unambiguous.
+  if (typeof error === 'object' && error !== null) {
+    const e = error as { statusCode?: number; type?: string };
+    if (e.statusCode === 429) {
       return true;
     }
-    const msg = error.message.toLowerCase();
-    if (
-      msg.includes('request too large') ||
-      msg.includes('rate limit') ||
-      msg.includes('tokens per minute')
-    ) {
+    if (e.type === 'rate_limit') {
       return true;
     }
   }
+
+  // Message-pattern fallback. Different providers phrase rate-limit
+  // messages differently — Groq says "rate limit" or "tokens per minute,"
+  // OpenRouter says "rate-limited upstream," Together says "too many
+  // requests" or "rate limit exceeded." Match all common variants.
   if (error instanceof Error) {
     const msg = error.message.toLowerCase();
     if (
-      msg.includes('request too large') ||
       msg.includes('rate limit') ||
-      msg.includes('tokens per minute')
+      msg.includes('rate-limit') ||
+      msg.includes('ratelimit') ||
+      msg.includes('tokens per minute') ||
+      msg.includes('request too large') ||
+      msg.includes('too many requests') ||
+      msg.includes('429')
     ) {
       return true;
     }
