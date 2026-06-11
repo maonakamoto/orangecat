@@ -238,7 +238,7 @@ export default function ShareContent({
         onClick={handleCopy}
         className={`w-full flex items-center justify-center gap-3 p-4 rounded-lg transition-all touch-manipulation active:scale-95 font-semibold ${
           copySuccess
-            ? 'bg-green-50 hover:bg-green-100 text-green-700 border-2 border-green-200'
+            ? 'bg-status-positive-subtle hover:bg-status-positive-subtle/80 text-status-positive border-2 border-status-positive/20'
             : 'bg-muted hover:bg-muted/80 text-foreground border-2 border-border'
         }`}
         aria-label="Copy URL to clipboard"

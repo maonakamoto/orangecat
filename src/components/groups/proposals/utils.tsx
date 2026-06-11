@@ -41,9 +41,9 @@ export function getStatusBadge(status: ProposalStatus) {
 export function getStatusIcon(status: ProposalStatus) {
   switch (status) {
     case PROPOSAL_STATUSES.PASSED:
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      return <CheckCircle2 className="h-4 w-4 text-status-positive" />;
     case PROPOSAL_STATUSES.FAILED:
-      return <XCircle className="h-4 w-4 text-red-500" />;
+      return <XCircle className="h-4 w-4 text-status-negative" />;
     case PROPOSAL_STATUSES.ACTIVE:
       return <Clock className="h-4 w-4 text-foreground" />;
     default:

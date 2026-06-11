@@ -330,7 +330,7 @@ export function GroupWallets({
                         <div className="flex items-center gap-2">
                           <div>
                             <div className="text-sm text-muted-foreground">Balance</div>
-                            <div className="text-lg font-bold text-green-600">
+                            <div className="text-lg font-bold text-status-positive">
                               {formatAmountBtc(wallet.current_balance_btc)}
                             </div>
                           </div>

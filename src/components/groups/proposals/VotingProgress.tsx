@@ -53,7 +53,7 @@ export function VotingProgress({ votingResults, threshold, totalMembers }: Votin
         <CardTitle>Voting Results</CardTitle>
         <CardDescription>
           {hasPassed ? (
-            <span className="text-green-600 font-medium">Proposal has passed!</span>
+            <span className="text-status-positive font-medium">Proposal has passed!</span>
           ) : (
             <span>
               Needs {threshold}% Yes votes to pass (currently {yesPercentage.toFixed(1)}%)
@@ -66,7 +66,7 @@ export function VotingProgress({ votingResults, threshold, totalMembers }: Votin
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-status-positive" />
               <span className="font-medium">Yes</span>
             </div>
             <div className="flex items-center gap-2">
@@ -81,7 +81,7 @@ export function VotingProgress({ votingResults, threshold, totalMembers }: Votin
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
-              <XCircle className="h-4 w-4 text-red-500" />
+              <XCircle className="h-4 w-4 text-status-negative" />
               <span className="font-medium">No</span>
             </div>
             <div className="flex items-center gap-2">
@@ -113,7 +113,7 @@ export function VotingProgress({ votingResults, threshold, totalMembers }: Votin
             <span className="font-medium">{threshold}%</span>
           </div>
           {yesPercentage >= threshold ? (
-            <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+            <p className="text-xs text-status-positive mt-1 flex items-center gap-1">
               <CheckCircle2 className="h-3 w-3" />
               Threshold met - Proposal will pass
             </p>

@@ -127,7 +127,7 @@ export function EntityCardActions({
             <DropdownMenuItem
               onClick={e => handleStatusClick(e, ENTITY_STATUS.ACTIVE)}
               disabled={isChangingStatus}
-              className="text-green-600 focus:text-green-600 focus:bg-green-50"
+              className="text-status-positive focus:text-status-positive focus:bg-status-positive-subtle"
             >
               <Rocket className="mr-2 h-4 w-4" />
               {isChangingStatus ? 'Publishing...' : 'Publish'}
@@ -146,7 +146,7 @@ export function EntityCardActions({
             <DropdownMenuItem
               onClick={e => handleStatusClick(e, ENTITY_STATUS.ACTIVE)}
               disabled={isChangingStatus}
-              className="text-green-600 focus:text-green-600 focus:bg-green-50"
+              className="text-status-positive focus:text-status-positive focus:bg-status-positive-subtle"
             >
               <Rocket className="mr-2 h-4 w-4" />
               {isChangingStatus ? 'Publishing...' : 'Resume'}

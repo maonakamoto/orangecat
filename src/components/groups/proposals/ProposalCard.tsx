@@ -133,15 +133,15 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
                 <div className="flex items-center gap-2 text-sm">
                   {proposal.status === PROPOSAL_STATUSES.PASSED ? (
                     <>
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
-                      <span className="text-green-600 font-medium">
+                      <CheckCircle2 className="h-4 w-4 text-status-positive" />
+                      <span className="text-status-positive font-medium">
                         Passed with {yesPercentage.toFixed(1)}% Yes votes
                       </span>
                     </>
                   ) : (
                     <>
-                      <XCircle className="h-4 w-4 text-red-500" />
-                      <span className="text-red-600 font-medium">
+                      <XCircle className="h-4 w-4 text-status-negative" />
+                      <span className="text-status-negative font-medium">
                         Failed with {yesPercentage.toFixed(1)}% Yes votes
                       </span>
                     </>

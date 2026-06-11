@@ -99,7 +99,7 @@ export default function ProfileOverviewTab({
           <Card>
             <CardContent className="pt-4 sm:pt-6">
               <div className="text-center">
-                <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-green-600">
+                <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-status-positive">
                   {formatAmountBtc(stats.totalRaised)}
                 </div>
                 <div className="text-xs sm:text-sm text-muted-foreground mt-1">Total Raised</div>

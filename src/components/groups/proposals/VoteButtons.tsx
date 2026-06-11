@@ -83,7 +83,7 @@ export function VoteButtons({
         onClick={() => handleVote('yes')}
         disabled={voting || disabled}
         variant={getButtonVariant('yes')}
-        className={`flex-1 ${selectedVote === 'yes' ? 'bg-green-500 hover:bg-green-600' : ''}`}
+        className={`flex-1 ${selectedVote === 'yes' ? 'bg-status-positive hover:bg-status-positive/90' : ''}`}
       >
         {voting && selectedVote === 'yes' ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -98,7 +98,7 @@ export function VoteButtons({
         onClick={() => handleVote('no')}
         disabled={voting || disabled}
         variant={getButtonVariant('no')}
-        className={`flex-1 ${selectedVote === 'no' ? 'bg-red-500 hover:bg-red-600' : ''}`}
+        className={`flex-1 ${selectedVote === 'no' ? 'bg-status-negative hover:bg-status-negative/90' : ''}`}
       >
         {voting && selectedVote === 'no' ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

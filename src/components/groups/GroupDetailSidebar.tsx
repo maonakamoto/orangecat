@@ -135,7 +135,7 @@ export function GroupDetailSidebar({
               <div className="text-sm text-muted-foreground">Members</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{wallets.length}</div>
+              <div className="text-2xl font-bold text-foreground">{wallets.length}</div>
               <div className="text-sm text-muted-foreground">Wallets</div>
             </div>
           </div>

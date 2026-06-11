@@ -98,7 +98,7 @@ export function FeedbackButtons({
           size="sm"
           className={cn(
             sizeClasses[size],
-            userFeedback === 'like' && 'bg-green-600 hover:bg-green-700 text-white'
+            userFeedback === 'like' && 'bg-status-positive hover:bg-status-positive/90 text-white'
           )}
           onClick={handleLikeClick}
           disabled={disabled}
@@ -113,7 +113,8 @@ export function FeedbackButtons({
           size="sm"
           className={cn(
             sizeClasses[size],
-            userFeedback === 'dislike' && 'bg-red-600 hover:bg-red-700 text-white'
+            userFeedback === 'dislike' &&
+              'bg-status-negative hover:bg-status-negative/90 text-white'
           )}
           onClick={handleDislikeClick}
           disabled={disabled}
@@ -143,16 +144,18 @@ export function FeedbackButtons({
               onChange={e => setDislikeComment(e.target.value)}
               rows={4}
               maxLength={500}
-              className={cn(!isCommentValid && dislikeComment.length > 0 && 'border-yellow-500')}
+              className={cn(
+                !isCommentValid && dislikeComment.length > 0 && 'border-status-warning'
+              )}
             />
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>
                 {!isCommentValid ? (
-                  <span className="text-yellow-600">
+                  <span className="text-status-warning">
                     {charactersNeeded} more character{charactersNeeded !== 1 ? 's' : ''} needed
                   </span>
                 ) : (
-                  <span className="text-green-600">Comment ready</span>
+                  <span className="text-status-positive">Comment ready</span>
                 )}
               </span>
               <span>{dislikeComment.length}/500</span>

@@ -88,13 +88,19 @@ export default function ProfileInfoTab({
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Email Verified</span>
-            <span className={profile.email ? 'text-green-600 font-medium' : 'text-muted-dim'}>
+            <span className={profile.email ? 'text-status-positive font-medium' : 'text-muted-dim'}>
               {profile.email ? '✓ Verified' : 'Not verified'}
             </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Profile Complete</span>
-            <span className="text-green-600 font-medium">
+            <span
+              className={
+                profile.bio && profile.avatar_url
+                  ? 'text-status-positive font-medium'
+                  : 'text-muted-foreground font-medium'
+              }
+            >
               {profile.bio && profile.avatar_url ? '✓ Complete' : 'In Progress'}
             </span>
           </div>

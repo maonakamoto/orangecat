@@ -43,7 +43,7 @@ export function BasicsStep({ form }: BasicsStepProps) {
           <FormItem>
             <FormLabel className="text-sm font-medium text-foreground flex items-center gap-1">
               Username
-              <span className="text-red-500 text-xs font-bold">*</span>
+              <span className="text-status-negative text-xs font-bold">*</span>
               <span className="text-xs text-muted-foreground font-normal">(required)</span>
             </FormLabel>
             <FormControl>

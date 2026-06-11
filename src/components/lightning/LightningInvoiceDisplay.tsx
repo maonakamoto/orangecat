@@ -73,7 +73,11 @@ export function LightningInvoiceDisplay({
             onClick={onCopy}
             variant="outline"
             size="sm"
-            className={copied ? 'bg-green-50 text-green-700 border-green-200' : ''}
+            className={
+              copied
+                ? 'bg-status-positive-subtle text-status-positive border-status-positive/20'
+                : ''
+            }
           >
             {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
           </Button>
@@ -109,7 +113,7 @@ export function LightningInvoiceDisplay({
       {/* Payment polling indicator */}
       {paymentStatus === 'pending' && nwcConnected && (
         <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+          <div className="w-2 h-2 bg-status-positive rounded-full animate-pulse" />
           Waiting for payment...
         </div>
       )}
