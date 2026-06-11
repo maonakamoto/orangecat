@@ -143,20 +143,13 @@ export default function ProjectMediaGallery({
     }
   };
 
-  if (loading) {
-    return (
-      <div className={`grid gap-2 ${className}`} aria-busy>
-        <div className="w-full aspect-video rounded-lg bg-muted animate-pulse" />
-        <div className="flex gap-2">
-          <div className="h-16 w-24 rounded bg-muted animate-pulse" />
-          <div className="h-16 w-24 rounded bg-muted animate-pulse" />
-          <div className="h-16 w-24 rounded bg-muted animate-pulse" />
-        </div>
-      </div>
-    );
-  }
-
-  if (!publicUrls.length) {
+  // Most projects don't have a media gallery, so the initial fetch almost
+  // always resolves to an empty array. Rendering a full-width aspect-video
+  // skeleton during that ~300ms creates a giant grey rectangle that
+  // dominates above-the-fold — and worse, persists if the fetch stalls.
+  // Render nothing while loading or when there's no media; the gallery only
+  // claims space when it actually has something to show.
+  if (loading || !publicUrls.length) {
     return null;
   }
 
