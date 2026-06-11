@@ -84,11 +84,19 @@ export function buildPlatformProviders(message: string): PlatformProvider[] {
   }
 
   if (process.env.OPENROUTER_API_KEY) {
-    out.push({
-      providerId: 'openrouter',
-      aiService: createOpenRouterService(),
-      defaultModel: pickOpenRouterFreeModel(message),
-    });
+    // OpenRouter exposes ~6 free models from different upstream providers
+    // (Venice, Lambda, Chutes, etc.). Each has its own rate limit. When one
+    // is congested (happens routinely on the popular Llama 3.3 70B), we want
+    // to roll to the next one rather than declare defeat. Contribute one
+    // entry per free model — the chat route walks them as separate fallbacks.
+    const openrouterService = createOpenRouterService();
+    for (const modelId of orderedOpenRouterFreeModels(message)) {
+      out.push({
+        providerId: 'openrouter',
+        aiService: openrouterService,
+        defaultModel: modelId,
+      });
+    }
   }
 
   const togetherKey = process.env.TOGETHER_API_KEY;
@@ -122,13 +130,29 @@ export function buildPlatformProviders(message: string): PlatformProvider[] {
   return out;
 }
 
-function pickOpenRouterFreeModel(message: string): string {
+/**
+ * Returns every OpenRouter free model the runtime knows about, ordered by
+ * the auto-router's preference for THIS message (best fit first, others as
+ * fallbacks). The first entry is what the auto-router would have picked
+ * standalone; the rest let the chat route roll through the pool when an
+ * upstream provider (Venice, Lambda, Chutes, ...) is congested.
+ */
+function orderedOpenRouterFreeModels(message: string): string[] {
+  const freeIds = getFreeModels()
+    .map(m => m.id)
+    .filter(id => !!getModelMetadata(id));
+  if (freeIds.length === 0) {
+    return [DEFAULT_FREE_MODEL_ID];
+  }
+
   const auto = createAutoRouter();
-  const freeIds = getFreeModels().map(m => m.id);
-  const picked = auto.selectModel({
+  const top = auto.selectModel({
     message,
     conversationHistory: [],
     allowedModels: freeIds,
   }).model;
-  return getModelMetadata(picked) ? picked : DEFAULT_FREE_MODEL_ID;
+
+  const head = getModelMetadata(top) ? top : freeIds[0];
+  const rest = freeIds.filter(id => id !== head);
+  return [head, ...rest];
 }
