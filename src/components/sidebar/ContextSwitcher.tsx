@@ -104,7 +104,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           <div
             className={cn(
               'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-sm border-2 border-background',
-              isGroupContext ? 'bg-muted/400' : 'bg-green-500'
+              isGroupContext ? 'bg-muted' : 'bg-status-positive'
             )}
           />
         </div>
@@ -142,7 +142,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           <div
             className={cn(
               'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-sm border-2 border-background',
-              isGroupContext ? 'bg-muted/400' : 'bg-green-500'
+              isGroupContext ? 'bg-muted' : 'bg-status-positive'
             )}
           />
         </div>

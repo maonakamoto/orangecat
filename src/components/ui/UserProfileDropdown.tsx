@@ -249,7 +249,7 @@ export default function UserProfileDropdown({
                 className="rounded-full ring-2 ring-border-subtle hover:ring-border-strong transition-all duration-200"
               />
             )}
-            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-400 border-2 border-card dark:border-card rounded-full shadow-sm"></div>
+            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-status-positive border-2 border-card rounded-full shadow-sm"></div>
           </span>
         )}
         <span className="font-medium text-sm sm:text-base max-w-[80px] sm:max-w-[100px] md:max-w-[140px] truncate flex items-center hidden sm:flex">

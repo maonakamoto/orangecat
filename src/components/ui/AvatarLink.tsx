@@ -124,7 +124,7 @@ export default function AvatarLink({
         </div>
       )}
       {showOnlineStatus && (
-        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-card rounded-full" />
+        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-status-positive border-2 border-card rounded-full" />
       )}
     </Link>
   );

@@ -95,7 +95,7 @@ export function UserProfileDropdownPanel({
                   className="rounded-full ring-4 ring-border-subtle cursor-pointer"
                 />
               )}
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-3 border-card rounded-full shadow-sm" />
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-status-positive border-3 border-card rounded-full shadow-sm" />
             </Link>
             <div className="flex-1 min-w-0">
               <button

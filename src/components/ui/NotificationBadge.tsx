@@ -33,7 +33,7 @@ export function NotificationBadge({ count, maxDisplay = 9, className }: Notifica
   return (
     <span
       className={cn(
-        'absolute top-1 right-1 bg-red-500 text-white text-2xs rounded-full h-4 w-4 min-w-4 flex items-center justify-center font-semibold leading-none',
+        'absolute top-1 right-1 bg-status-negative text-white text-2xs rounded-full h-4 w-4 min-w-4 flex items-center justify-center font-semibold leading-none',
         className
       )}
       aria-label={`${count} unread`}
