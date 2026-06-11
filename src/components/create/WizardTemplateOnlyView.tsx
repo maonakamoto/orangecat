@@ -35,16 +35,11 @@ export function WizardTemplateOnlyView<T extends Record<string, unknown>>({
         selectedTemplateId={null}
         showStartFromScratch
       />
-
-      <div className="text-center pt-6 border-t border-border mt-6">
-        <button
-          type="button"
-          onClick={() => onSelectTemplate(null)}
-          className="text-sm text-muted-foreground hover:text-foreground font-medium"
-        >
-          Or start from scratch →
-        </button>
-      </div>
+      {/* The WizardTemplatePicker already renders a "Start from scratch"
+          card (and pre-selects it) when showStartFromScratch=true, so an
+          extra link with the same affordance below the grid is just
+          duplicate UI — confused users into thinking they were two
+          different paths. Card wins; remove the bottom link. */}
     </div>
   );
 }
