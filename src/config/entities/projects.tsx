@@ -114,15 +114,41 @@ export const projectEntityConfig: EntityConfig<ProjectListItem> = {
       badge: statusBadge?.label,
       badgeVariant: statusBadge?.variant,
       metadata:
-        metadataParts.length > 0 || progress > 0 ? (
-          <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-            {metadataParts.map((part, idx) => (
-              <span key={idx} className="capitalize">
-                {part}
-              </span>
-            ))}
-            {progress > 0 && (
-              <span className="text-bitcoinOrange font-medium">{progress}% funded</span>
+        metadataParts.length > 0 || project.goal_amount ? (
+          <div className="space-y-1.5">
+            {/* Slim funding-progress bar — communicates the X / Y ratio
+                in priceLabel at a glance. Only shows when a goal is set;
+                no-goal projects skip the bar (the priceLabel falls back
+                to total_funding only). */}
+            {project.goal_amount && project.goal_amount > 0 ? (
+              <div className="space-y-0.5">
+                <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full bg-foreground transition-all duration-500"
+                    style={{ width: `${Math.min(progress, 100)}%` }}
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>
+                    {metadataParts.map((part, idx) => (
+                      <span key={idx} className="capitalize">
+                        {idx > 0 ? ' · ' : ''}
+                        {part}
+                      </span>
+                    ))}
+                  </span>
+                  <span className="font-medium tabular-nums">{progress}%</span>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                {metadataParts.map((part, idx) => (
+                  <span key={idx} className="capitalize">
+                    {part}
+                  </span>
+                ))}
+              </div>
             )}
           </div>
         ) : undefined,
