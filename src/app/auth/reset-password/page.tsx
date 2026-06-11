@@ -134,8 +134,8 @@ export default function ResetPasswordPage() {
       >
         <Card className="max-w-md w-full p-8 shadow-sm">
           <div className="text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 mb-6">
-              <AlertCircle className="h-8 w-8 text-red-600" />
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-status-negative-subtle mb-6">
+              <AlertCircle className="h-8 w-8 text-status-negative" />
             </div>
             <h1 className="text-2xl font-bold text-foreground mb-3">Reset Link Invalid</h1>
             <p className="text-muted-foreground mb-6">{error}</p>
@@ -160,8 +160,8 @@ export default function ResetPasswordPage() {
       >
         <Card className="max-w-md w-full p-8 shadow-sm">
           <div className="text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-6">
-              <CheckCircle2 className="h-8 w-8 text-green-600" />
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-status-positive-subtle mb-6">
+              <CheckCircle2 className="h-8 w-8 text-status-positive" />
             </div>
             <h1 className="text-2xl font-bold text-foreground mb-3">
               Password Updated Successfully
@@ -248,16 +248,16 @@ export default function ResetPasswordPage() {
           <div className="bg-muted rounded-lg p-4">
             <h3 className="text-sm font-medium text-foreground mb-2">Password Requirements:</h3>
             <ul className="text-xs text-muted-foreground space-y-1">
-              <li className={formData.password.length >= 8 ? 'text-green-600' : ''}>
+              <li className={formData.password.length >= 8 ? 'text-status-positive' : ''}>
                 • At least 8 characters long
               </li>
-              <li className={/(?=.*[a-z])/.test(formData.password) ? 'text-green-600' : ''}>
+              <li className={/(?=.*[a-z])/.test(formData.password) ? 'text-status-positive' : ''}>
                 • One lowercase letter
               </li>
-              <li className={/(?=.*[A-Z])/.test(formData.password) ? 'text-green-600' : ''}>
+              <li className={/(?=.*[A-Z])/.test(formData.password) ? 'text-status-positive' : ''}>
                 • One uppercase letter
               </li>
-              <li className={/(?=.*\d)/.test(formData.password) ? 'text-green-600' : ''}>
+              <li className={/(?=.*\d)/.test(formData.password) ? 'text-status-positive' : ''}>
                 • One number
               </li>
             </ul>

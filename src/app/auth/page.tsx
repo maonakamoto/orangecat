@@ -98,7 +98,7 @@ export default function AuthPage() {
           {error && (
             <div className="mb-6 p-4 rounded-lg oc-error-surface">
               <div className="flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                <AlertCircle className="w-5 h-5 text-status-negative mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
                   <p className="text-sm text-destructive mb-3">{error}</p>
                   <div className="flex gap-2">
@@ -107,7 +107,7 @@ export default function AuthPage() {
                       size="sm"
                       onClick={handleRetry}
                       disabled={loading}
-                      className="text-destructive/80 border-red-200 hover:bg-destructive/10"
+                      className="text-destructive/80 border-status-negative-subtle hover:bg-destructive/10"
                     >
                       <RefreshCw className="w-4 h-4 mr-2" />
                       Try Again
@@ -127,10 +127,10 @@ export default function AuthPage() {
           )}
 
           {success && (
-            <div className="mb-6 p-4 rounded-lg bg-green-50 border border-green-200">
+            <div className="mb-6 p-4 rounded-lg bg-status-positive-subtle border border-status-positive/20">
               <div className="flex items-center space-x-3">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
-                <p className="text-sm text-green-800">{success}</p>
+                <CheckCircle2 className="w-5 h-5 text-status-positive" />
+                <p className="text-sm text-status-positive">{success}</p>
               </div>
             </div>
           )}

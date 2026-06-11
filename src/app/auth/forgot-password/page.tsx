@@ -68,8 +68,8 @@ export default function ForgotPasswordPage() {
         <Card className="max-w-md w-full p-8 shadow-sm">
           <div className="text-center">
             {/* Success Icon */}
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-6">
-              <CheckCircle2 className="h-8 w-8 text-green-600" />
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-status-positive-subtle mb-6">
+              <CheckCircle2 className="h-8 w-8 text-status-positive" />
             </div>
 
             {/* Success Message */}
@@ -119,8 +119,8 @@ export default function ForgotPasswordPage() {
         <Card className="max-w-md w-full p-8 shadow-sm">
           <div className="text-center">
             {/* Error Icon */}
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 mb-6">
-              <AlertCircle className="h-8 w-8 text-red-600" />
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-status-negative-subtle mb-6">
+              <AlertCircle className="h-8 w-8 text-status-negative" />
             </div>
 
             {/* Error Message */}
