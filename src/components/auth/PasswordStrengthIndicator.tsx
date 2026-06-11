@@ -85,15 +85,19 @@ function getStrengthLevel(strength: number): {
     };
   }
   if (strength < 40) {
-    return { label: 'Weak', colorClass: 'text-destructive', bgClass: 'bg-red-500' };
+    return { label: 'Weak', colorClass: 'text-status-negative', bgClass: 'bg-status-negative' };
   }
   if (strength < 80) {
-    return { label: 'Fair', colorClass: 'text-yellow-600', bgClass: 'bg-yellow-500' };
+    return { label: 'Fair', colorClass: 'text-status-warning', bgClass: 'bg-status-warning' };
   }
   if (strength < 100) {
-    return { label: 'Good', colorClass: 'text-emerald-700', bgClass: 'bg-emerald-400' };
+    return {
+      label: 'Good',
+      colorClass: 'text-status-positive',
+      bgClass: 'bg-status-positive/70',
+    };
   }
-  return { label: 'Strong', colorClass: 'text-green-600', bgClass: 'bg-green-500' };
+  return { label: 'Strong', colorClass: 'text-status-positive', bgClass: 'bg-status-positive' };
 }
 
 export function PasswordStrengthIndicator({
@@ -153,11 +157,11 @@ export function PasswordStrengthIndicator({
               key={req.id}
               className={cn(
                 'flex items-center gap-2 text-xs transition-colors duration-200',
-                isMet ? 'text-green-600' : 'text-muted-foreground'
+                isMet ? 'text-status-positive' : 'text-muted-foreground'
               )}
             >
               {isMet ? (
-                <Check className="h-3 w-3 flex-shrink-0 text-green-600" />
+                <Check className="h-3 w-3 flex-shrink-0 text-status-positive" />
               ) : (
                 <X className="h-3 w-3 flex-shrink-0 text-muted-dim" />
               )}

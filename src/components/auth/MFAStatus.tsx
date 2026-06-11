@@ -77,8 +77,10 @@ export function MFAStatus({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-full ${hasMFA ? 'bg-green-100' : 'bg-muted'}`}>
-            <Shield className={`h-5 w-5 ${hasMFA ? 'text-green-600' : 'text-muted-foreground'}`} />
+          <div className={`p-2 rounded-full ${hasMFA ? 'bg-status-positive-subtle' : 'bg-muted'}`}>
+            <Shield
+              className={`h-5 w-5 ${hasMFA ? 'text-status-positive' : 'text-muted-foreground'}`}
+            />
           </div>
           <div>
             <p className="font-medium text-foreground">Two-Factor Authentication</p>

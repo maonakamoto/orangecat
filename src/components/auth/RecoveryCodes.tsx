@@ -166,8 +166,8 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
         <div className="flex justify-center mb-4">
-          <div className="p-3 bg-green-100 rounded-full">
-            <Shield className="h-8 w-8 text-green-600" />
+          <div className="p-3 bg-status-positive-subtle rounded-full">
+            <Shield className="h-8 w-8 text-status-positive" />
           </div>
         </div>
         <CardTitle>Your Recovery Codes</CardTitle>
@@ -202,7 +202,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           <Button variant="outline" onClick={handleCopy} className="flex-1">
             {copied ? (
               <>
-                <Check className="h-4 w-4 mr-2 text-green-600" />
+                <Check className="h-4 w-4 mr-2 text-status-positive" />
                 Copied!
               </>
             ) : (

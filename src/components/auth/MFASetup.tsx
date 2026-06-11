@@ -118,7 +118,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                   title="Copy to clipboard"
                 >
                   {secretCopied ? (
-                    <Check className="h-4 w-4 text-green-600" />
+                    <Check className="h-4 w-4 text-status-positive" />
                   ) : (
                     <Copy className="h-4 w-4" />
                   )}
@@ -191,8 +191,8 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
         return (
           <div className="space-y-6">
             <div className="flex justify-center">
-              <div className="p-4 bg-green-100 rounded-full">
-                <CheckCircle className="h-12 w-12 text-green-600" />
+              <div className="p-4 bg-status-positive-subtle rounded-full">
+                <CheckCircle className="h-12 w-12 text-status-positive" />
               </div>
             </div>
             <div className="text-center space-y-2">

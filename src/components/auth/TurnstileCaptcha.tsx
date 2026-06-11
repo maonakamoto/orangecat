@@ -76,7 +76,7 @@ export function TurnstileCaptcha({
     <div className={`space-y-2 ${className}`}>
       <div className="flex items-center justify-center min-h-[65px]">
         {status === 'success' ? (
-          <div className="flex items-center space-x-2 text-green-600 bg-green-50 px-4 py-2 rounded-lg">
+          <div className="flex items-center space-x-2 text-status-positive bg-status-positive-subtle px-4 py-2 rounded-lg">
             <CheckCircle2 className="w-5 h-5" />
             <span className="text-sm font-medium">Verified</span>
           </div>
