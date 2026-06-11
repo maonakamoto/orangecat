@@ -46,7 +46,7 @@ export function ToolCallChip({ event }: ToolCallChipProps) {
       break;
     case 'completed':
       icon = <Check className="h-3 w-3 flex-shrink-0" />;
-      badgeClass = 'border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-300';
+      badgeClass = 'border-status-positive/20 bg-status-positive-subtle text-status-positive';
       text = `Found ${event.resultCount} ${event.resultCount === 1 ? 'result' : 'results'}`;
       break;
     case 'no_results':

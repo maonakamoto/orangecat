@@ -99,14 +99,14 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
       <div
         className={`rounded-md border p-4 ${
           completed === 'confirmed'
-            ? 'border-green-500/20 bg-green-500/10'
+            ? 'border-status-positive/20 bg-status-positive-subtle'
             : 'border-border-subtle bg-muted'
         }`}
       >
         <div className="flex items-center gap-3">
           {completed === 'confirmed' ? (
             <>
-              <CheckCircle className="h-5 w-5 flex-shrink-0 text-green-700 dark:text-green-300" />
+              <CheckCircle className="h-5 w-5 flex-shrink-0 text-status-positive" />
               <span className="text-sm font-medium text-foreground">
                 {confirmMessage ?? 'Action confirmed and executed'}
               </span>

@@ -60,7 +60,7 @@ function ExecResultChip({ result }: { result: ExecActionResult }) {
     // Prefer the handler's displayMessage; fall back to generic "noun done"
     const label = result.displayMessage ?? `${noun} done`;
     return (
-      <span className="inline-flex items-center gap-1 rounded-sm border border-green-500/20 bg-green-500/10 px-2 py-1 text-xs text-green-700 dark:text-green-300">
+      <span className="inline-flex items-center gap-1 rounded-sm border border-status-positive/20 bg-status-positive-subtle px-2 py-1 text-xs text-status-positive">
         <Check className="h-3 w-3 flex-shrink-0" />
         {label}
       </span>
@@ -224,7 +224,7 @@ export function MessageBubble({
               title="Copy response"
             >
               {copied ? (
-                <Check className="h-3.5 w-3.5 text-green-500" />
+                <Check className="h-3.5 w-3.5 text-status-positive" />
               ) : (
                 <Copy className="h-3.5 w-3.5" />
               )}
