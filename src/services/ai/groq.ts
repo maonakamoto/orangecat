@@ -124,7 +124,20 @@ const GROQ_MODELS = {
   },
 } as const;
 
-export const DEFAULT_GROQ_MODEL = 'llama-3.3-70b-versatile';
+/**
+ * Default Groq model. Was llama-3.3-70b-versatile (smarter but Groq's free
+ * tier caps it at 100k tokens/day — a single user can blow through that in
+ * ~30 reasonable conversations). Switched to llama-3.1-8b-instant which
+ * has 500k tokens/day on the same free tier (5x the headroom) and runs
+ * ~3x faster, at a quality drop most chat queries don't notice. Heavy
+ * reasoning still gets routed to OpenRouter free models via the fallback
+ * chain when 8B underperforms.
+ *
+ * To override per-deployment without code change, set GROQ_DEFAULT_MODEL.
+ */
+export const DEFAULT_GROQ_MODEL: keyof typeof GROQ_MODELS =
+  (process.env.GROQ_DEFAULT_MODEL as keyof typeof GROQ_MODELS | undefined) ??
+  'llama-3.1-8b-instant';
 
 // ==================== SERVICE CLASS ====================
 
