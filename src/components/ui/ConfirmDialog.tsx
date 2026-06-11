@@ -49,7 +49,7 @@ export function ConfirmDialog({
           <Button
             onClick={handleConfirm}
             disabled={isLoading}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
           >
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             {confirmLabel}

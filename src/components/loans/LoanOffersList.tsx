@@ -72,7 +72,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Offer Amount</p>
-                <p className="text-lg font-semibold text-green-600">
+                <p className="text-lg font-semibold text-status-positive">
                   {formatLoanAmount(offer.offer_amount)}
                 </p>
               </div>

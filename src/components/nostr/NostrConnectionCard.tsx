@@ -89,7 +89,7 @@ export function NostrConnectionCard() {
                       title="Copy npub"
                     >
                       {copied ? (
-                        <Check className="h-3 w-3 text-green-500" />
+                        <Check className="h-3 w-3 text-status-positive" />
                       ) : (
                         <Copy className="h-3 w-3" />
                       )}
@@ -115,7 +115,7 @@ export function NostrConnectionCard() {
                 </span>
                 {nwcConnected ? (
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-green-600 font-medium">Connected</span>
+                    <span className="text-xs text-status-positive font-medium">Connected</span>
                     <Button variant="ghost" size="sm" onClick={removeNWC}>
                       <Unplug className="h-3 w-3" />
                     </Button>
@@ -126,13 +126,13 @@ export function NostrConnectionCard() {
               {nwcConnected ? (
                 <div className="space-y-2">
                   {balanceSats !== null && (
-                    <div className="flex items-center gap-2 p-2 rounded-md bg-green-50 border border-green-200">
-                      <Wallet className="h-4 w-4 text-green-600" />
-                      <span className="text-sm font-medium text-green-800">Balance:</span>
+                    <div className="flex items-center gap-2 p-2 rounded-md bg-status-positive-subtle border border-status-positive/20">
+                      <Wallet className="h-4 w-4 text-status-positive" />
+                      <span className="text-sm font-medium text-status-positive">Balance:</span>
                       <CurrencyDisplay
                         amount={balanceSats}
                         currency="SATS"
-                        className="text-sm font-semibold text-green-900"
+                        className="text-sm font-semibold text-status-positive"
                       />
                     </div>
                   )}

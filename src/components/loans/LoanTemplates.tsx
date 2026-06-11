@@ -37,7 +37,7 @@ const templates: LoanTemplate[] = [
   {
     id: 'home-renovation',
     name: 'Home Renovation (Secured)',
-    icon: <Home className="w-5 h-5 text-green-600" />,
+    icon: <Home className="w-5 h-5 text-status-positive" />,
     badge: 'Popular',
     data: {
       title: 'Home Renovation Bridge Loan',

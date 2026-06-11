@@ -65,7 +65,10 @@ const AlertDialogAction = React.forwardRef<HTMLButtonElement, AlertDialogActionP
   ({ className, children, ...props }, ref) => (
     <Button
       ref={ref}
-      className={cn('bg-red-600 hover:bg-red-700 text-white', className)}
+      className={cn(
+        'bg-destructive hover:bg-destructive/90 text-destructive-foreground',
+        className
+      )}
       {...props}
     >
       {children}

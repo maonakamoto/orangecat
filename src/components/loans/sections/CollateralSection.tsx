@@ -101,7 +101,9 @@ export function CollateralSection({
               </SelectItem>
             </SelectContent>
           </Select>
-          {assetsError && <FormDescription className="text-red-600">{assetsError}</FormDescription>}
+          {assetsError && (
+            <FormDescription className="text-destructive">{assetsError}</FormDescription>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-4">

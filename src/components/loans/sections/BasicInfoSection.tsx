@@ -98,7 +98,7 @@ export function BasicInfoSection({
                 </SelectContent>
               </Select>
               {categoriesError && (
-                <FormDescription className="text-red-600">{categoriesError}</FormDescription>
+                <FormDescription className="text-destructive">{categoriesError}</FormDescription>
               )}
               <FormMessage />
             </FormItem>
