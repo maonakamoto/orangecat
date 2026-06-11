@@ -195,6 +195,17 @@ export default function ProfileLayout({
             <p className="text-sm sm:text-base md:text-lg text-muted-foreground font-medium mb-3 sm:mb-4">
               @{profile.username}
             </p>
+            {profile.bio && (
+              // Bio used to live only on the Overview tab. Visitors hit
+              // Timeline by default and never saw who the person was unless
+              // they clicked through. Surface it in the header card so the
+              // "who is this" answer is immediate. Clamp to 3 lines so a
+              // long bio doesn't push tabs off-screen — Overview still has
+              // the full text.
+              <p className="mb-3 line-clamp-3 max-w-3xl text-sm text-fg-secondary sm:mb-4 sm:text-base">
+                {profile.bio}
+              </p>
+            )}
             {profile.website && (
               <a
                 href={profile.website}
