@@ -86,8 +86,8 @@ export default function TransparencySection() {
                 </div>
 
                 <div className="flex items-start gap-2 sm:gap-3">
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
-                    <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
+                  <div className="w-5 h-5 sm:w-6 sm:h-6 bg-status-positive-subtle rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
+                    <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-status-positive" />
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm sm:text-base mb-0.5 sm:mb-1">
@@ -113,7 +113,7 @@ export default function TransparencySection() {
               {/* Example Label */}
               <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-status-positive rounded-lg flex items-center justify-center">
                     <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                   <h3 className="text-lg sm:text-xl font-semibold text-foreground">
@@ -147,7 +147,7 @@ export default function TransparencySection() {
                     <span className="text-xs sm:text-sm font-medium text-muted-strong">
                       Transparency Score
                     </span>
-                    <span className="text-xl sm:text-2xl font-bold text-green-600">High</span>
+                    <span className="text-xl sm:text-2xl font-bold text-status-positive">High</span>
                   </div>
                   <div className="w-full h-2.5 sm:h-3 bg-muted rounded-full overflow-hidden">
                     <div className="h-full bg-success rounded-full" style={{ width: '85%' }} />
@@ -169,7 +169,7 @@ export default function TransparencySection() {
                       showing exactly how it was spent.&quot;
                     </p>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span className="bg-green-100 text-green-700 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded text-xs">
+                      <span className="bg-status-positive-subtle text-status-positive px-1.5 py-0.5 sm:px-2 sm:py-1 rounded text-xs">
                         Score increases
                       </span>
                       <span>With each update</span>

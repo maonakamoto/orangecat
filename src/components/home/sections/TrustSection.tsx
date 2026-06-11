@@ -60,22 +60,22 @@ export default function TrustSection() {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true, amount: 0.15 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className={row.highlight ? 'bg-green-50' : ''}
+                      className={row.highlight ? 'bg-status-positive-subtle' : ''}
                     >
                       <td className="px-6 py-4 text-sm font-medium text-foreground">
                         {row.feature}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <div className="flex items-center justify-center gap-2">
-                          <X className="w-4 h-4 text-red-500" />
+                          <X className="w-4 h-4 text-status-negative" />
                           <span className="text-sm text-muted-foreground">{row.traditional}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-center bg-muted/30">
                         <div className="flex items-center justify-center gap-2">
-                          <Check className="w-4 h-4 text-green-600" />
+                          <Check className="w-4 h-4 text-status-positive" />
                           <span
-                            className={`text-sm font-semibold ${row.highlight ? 'text-green-700' : 'text-foreground'}`}
+                            className={`text-sm font-semibold ${row.highlight ? 'text-status-positive' : 'text-foreground'}`}
                           >
                             {row.orangecat}
                           </span>
@@ -98,24 +98,24 @@ export default function TrustSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className={`bg-card rounded-lg shadow-sm border border-border p-4 ${row.highlight ? 'ring-2 ring-green-500 dark:ring-green-600' : ''}`}
+              className={`bg-card rounded-lg shadow-sm border border-border p-4 ${row.highlight ? 'ring-2 ring-status-positive' : ''}`}
             >
               <h4 className="text-sm font-semibold text-foreground mb-3">{row.feature}</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div className="text-center p-2 bg-muted/50 rounded">
                   <div className="flex items-center justify-center gap-1 mb-1">
-                    <X className="w-3 h-3 text-red-500" />
+                    <X className="w-3 h-3 text-status-negative" />
                     <span className="text-xs font-medium text-muted-foreground">Traditional</span>
                   </div>
                   <span className="text-xs text-muted-foreground">{row.traditional}</span>
                 </div>
                 <div className="text-center p-2 bg-muted/50 rounded">
                   <div className="flex items-center justify-center gap-1 mb-1">
-                    <Check className="w-3 h-3 text-green-600" />
+                    <Check className="w-3 h-3 text-status-positive" />
                     <span className="text-xs font-medium text-foreground">OrangeCat</span>
                   </div>
                   <span
-                    className={`text-xs font-semibold ${row.highlight ? 'text-green-700' : 'text-foreground'}`}
+                    className={`text-xs font-semibold ${row.highlight ? 'text-status-positive' : 'text-foreground'}`}
                   >
                     {row.orangecat}
                   </span>
@@ -161,7 +161,7 @@ export default function TrustSection() {
                 {index > 0 && (
                   <div className="w-px h-3 sm:h-4 bg-border-strong hidden sm:block mr-3 sm:mr-4 lg:mr-6" />
                 )}
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full" />
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-status-positive-subtle0 rounded-full" />
                 <span className="text-xs sm:text-sm font-medium text-foreground">{signal}</span>
               </div>
             ))}
