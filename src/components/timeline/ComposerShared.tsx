@@ -174,13 +174,13 @@ export function ComposerMessages({
 }: ComposerMessagesProps) {
   if (error) {
     return (
-      <div className="mt-2 rounded-md oc-error-surface p-3 dark:border-red-900/50 dark:bg-red-950/20">
+      <div className="mt-2 rounded-md oc-error-surface p-3">
         <div className="flex items-start gap-2">
           <div className="text-destructive text-sm flex-1">{error}</div>
           {onClearError && (
             <button
               onClick={onClearError}
-              className="text-red-400 hover:text-destructive min-h-11 min-w-11 flex items-center justify-center"
+              className="text-destructive/60 hover:text-destructive min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Dismiss error"
             >
               <X className="w-4 h-4" />
@@ -203,7 +203,7 @@ export function ComposerMessages({
 
   if (success) {
     return (
-      <div className="mt-2 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700 dark:border-green-900/50 dark:bg-green-950/20 dark:text-green-300">
+      <div className="mt-2 rounded-md border border-status-positive/20 bg-status-positive-subtle px-3 py-2 text-sm text-status-positive">
         {TIMELINE_COPY.savedPost}
       </div>
     );
@@ -233,7 +233,7 @@ export function CharacterCounter({
 
   const colorClass =
     count > dangerThreshold
-      ? 'text-red-500'
+      ? 'text-destructive'
       : count > warningThreshold
         ? 'text-status-warning'
         : 'text-muted-dim';

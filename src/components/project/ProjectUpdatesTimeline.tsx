@@ -90,7 +90,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
       case 'donation':
         return <Bitcoin className="w-4 h-4 text-bitcoinOrange" />;
       case 'milestone':
-        return <Trophy className="w-4 h-4 text-yellow-600" />;
+        return <Trophy className="w-4 h-4 text-status-warning" />;
       case 'update':
       default:
         return <MessageSquare className="w-4 h-4 text-foreground" />;
@@ -103,7 +103,7 @@ export function ProjectUpdatesTimeline({ projectId, className = '' }: ProjectUpd
       case 'donation':
         return 'bg-bitcoinOrange/10';
       case 'milestone':
-        return 'bg-yellow-100';
+        return 'bg-status-warning-subtle';
       case 'update':
       default:
         return 'bg-muted';

@@ -58,7 +58,7 @@ export function WizardProgressBar({
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm transition-all ${
                   isCompleted
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-status-positive text-white'
                     : isCurrent
                       ? `${theme.bg} text-white ring-4 ${theme.ring}`
                       : 'bg-muted text-muted-foreground'

@@ -75,7 +75,7 @@ export function PostActions({
         <button
           onClick={onRepostClick}
           disabled={isReposting}
-          className={actionClassName(event.userReposted || false, 'text-green-600')}
+          className={actionClassName(event.userReposted || false, 'text-status-positive')}
           aria-label="Repost"
         >
           <Repeat2 className={`w-5 h-5 ${event.userReposted ? 'fill-current' : ''}`} />

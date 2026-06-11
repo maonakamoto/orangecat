@@ -138,8 +138,8 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
             </div>
           )}
           {project.last_support_at && (
-            <div className="text-xs text-green-600 flex items-center gap-1">
-              <span className="w-2 h-2 bg-green-600 rounded-full animate-pulse" />
+            <div className="text-xs text-status-positive flex items-center gap-1">
+              <span className="w-2 h-2 bg-status-positive rounded-full animate-pulse" />
               Last contribution {formatRelativeTime(project.last_support_at)}
             </div>
           )}

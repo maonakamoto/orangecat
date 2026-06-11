@@ -114,10 +114,10 @@ export function CollateralSelector({
                       className={cn(
                         'h-2 rounded-full transition-all',
                         coveragePercentage >= 100
-                          ? 'bg-green-500'
+                          ? 'bg-status-positive'
                           : coveragePercentage >= 50
-                            ? 'bg-yellow-500'
-                            : 'bg-status-warning'
+                            ? 'bg-status-warning'
+                            : 'bg-status-negative'
                       )}
                       style={{ width: `${Math.min(100, coveragePercentage)}%` }}
                     />
@@ -129,13 +129,15 @@ export function CollateralSelector({
                 <div className="mt-2 flex items-center gap-1 text-xs">
                   {coveragePercentage >= 100 ? (
                     <>
-                      <CheckCircle2 className="w-3 h-3 text-green-600" />
-                      <span className="text-green-700">Collateral fully covers loan amount</span>
+                      <CheckCircle2 className="w-3 h-3 text-status-positive" />
+                      <span className="text-status-positive">
+                        Collateral fully covers loan amount
+                      </span>
                     </>
                   ) : coveragePercentage >= 50 ? (
                     <>
-                      <AlertCircle className="w-3 h-3 text-yellow-600" />
-                      <span className="text-yellow-700">Partial collateral coverage</span>
+                      <AlertCircle className="w-3 h-3 text-status-warning" />
+                      <span className="text-status-warning">Partial collateral coverage</span>
                     </>
                   ) : (
                     <>
@@ -190,7 +192,7 @@ export function CollateralSelector({
                   size="sm"
                   onClick={() => handleRemoveCollateral(item.id)}
                   disabled={disabled}
-                  className="text-red-600 hover:text-red-700"
+                  className="text-destructive hover:text-destructive/80"
                 >
                   Remove
                 </Button>

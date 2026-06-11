@@ -53,7 +53,7 @@ function formatTimestamp(value: string | null): string {
 function StatusBadge({ status }: { status: DeliveryRow['status'] }) {
   if (status === 'delivered') {
     return (
-      <span className="inline-flex items-center gap-1 rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-800">
+      <span className="inline-flex items-center gap-1 rounded bg-status-positive-subtle px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-status-positive">
         <CheckCircle2 className="h-3 w-3" />
         Delivered
       </span>

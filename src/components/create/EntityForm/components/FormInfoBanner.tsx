@@ -16,13 +16,13 @@ interface FormInfoBannerProps {
 export function FormInfoBanner({ banner }: FormInfoBannerProps) {
   const variantStyles = {
     warning: {
-      bg: 'border-yellow-500/20 bg-yellow-500/10',
-      title: 'text-yellow-700 dark:text-yellow-300',
+      bg: 'border-status-warning/20 bg-status-warning/10',
+      title: 'text-status-warning',
       content: 'text-muted-foreground',
     },
     success: {
-      bg: 'border-green-500/20 bg-green-500/10',
-      title: 'text-green-700 dark:text-green-300',
+      bg: 'border-status-positive/20 bg-status-positive/10',
+      title: 'text-status-positive',
       content: 'text-muted-foreground',
     },
     info: {

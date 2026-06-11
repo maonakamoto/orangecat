@@ -96,7 +96,7 @@ export function GuidancePanel({
           <ul className="space-y-1.5">
             {content.tips.map((tip, index) => (
               <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
-                <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-status-positive mt-0.5 flex-shrink-0" />
                 <span>{tip}</span>
               </li>
             ))}

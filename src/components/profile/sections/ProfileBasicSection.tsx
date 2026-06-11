@@ -67,7 +67,7 @@ export function ProfileBasicSection({
           return (
             <FormItem>
               <FormLabel className="text-sm font-medium text-foreground">
-                Username <span className="text-red-500">*</span>
+                Username <span className="text-destructive">*</span>
               </FormLabel>
               <FormControl>
                 <div className="relative">

@@ -49,7 +49,7 @@ function MessageStatusIcon({ message }: { message: Message }) {
 
   // Failed messages
   if (status === MESSAGE_STATUS.FAILED) {
-    return <AlertCircle className="h-3 w-3 text-red-500" aria-label="Failed" />;
+    return <AlertCircle className="h-3 w-3 text-destructive" aria-label="Failed" />;
   }
 
   // Pending (optimistic) messages

@@ -101,7 +101,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
           <span className="text-sm font-semibold text-foreground">
             {hasFilled ? 'AI filled the form' : 'Fill with AI'}
           </span>
-          {hasFilled && <CheckCircle2 className="h-4 w-4 text-green-500" />}
+          {hasFilled && <CheckCircle2 className="h-4 w-4 text-status-positive" />}
         </div>
         {hasFilled && (
           <button

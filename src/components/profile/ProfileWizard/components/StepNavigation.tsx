@@ -26,7 +26,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
               <div
                 className={`relative flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
                   isCompleted
-                    ? 'bg-green-500 border-green-500 text-white shadow-sm'
+                    ? 'bg-status-positive border-status-positive text-white shadow-sm'
                     : isCurrent
                       ? 'bg-foreground border-foreground text-card shadow-sm animate-pulse'
                       : isUpcoming
@@ -42,7 +42,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
 
                 {/* Priority indicator */}
                 {step.required && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border border-card" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full border border-card" />
                 )}
               </div>
 
@@ -51,7 +51,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                 <div
                   className={`text-sm font-semibold transition-colors ${
                     isCompleted
-                      ? 'text-green-600'
+                      ? 'text-status-positive'
                       : isCurrent
                         ? 'text-foreground'
                         : 'text-muted-foreground'
@@ -62,7 +62,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                 <div
                   className={`text-xs mt-1 transition-colors ${
                     isCompleted
-                      ? 'text-green-500'
+                      ? 'text-status-positive'
                       : isCurrent
                         ? 'text-foreground'
                         : 'text-muted-dim'
@@ -82,7 +82,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
               {index < steps.length - 1 && (
                 <div
                   className={`absolute top-6 left-1/2 w-full h-0.5 transition-colors ${
-                    isCompleted ? 'bg-green-400' : 'bg-border-strong'
+                    isCompleted ? 'bg-status-positive' : 'bg-border-strong'
                   }`}
                   style={{
                     width: 'calc(100% - 3rem)',

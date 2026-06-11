@@ -230,17 +230,17 @@ export function DocumentFileUpload({
 
         {state === 'success' && (
           <>
-            <div className="p-4 bg-green-100 rounded-full mb-4">
-              <CheckCircle className="h-8 w-8 text-green-600" />
+            <div className="p-4 bg-status-positive-subtle rounded-full mb-4">
+              <CheckCircle className="h-8 w-8 text-status-positive" />
             </div>
-            <h3 className="text-lg font-semibold text-green-900 mb-1">Content extracted!</h3>
-            <p className="text-base text-green-700 mb-3">{fileName}</p>
+            <h3 className="text-lg font-semibold text-status-positive mb-1">Content extracted!</h3>
+            <p className="text-base text-status-positive mb-3">{fileName}</p>
             <button
               onClick={e => {
                 e.stopPropagation();
                 handleReset();
               }}
-              className="text-sm text-green-600 hover:text-green-800 font-medium underline"
+              className="text-sm text-status-positive hover:text-status-positive/80 font-medium underline"
             >
               Upload a different file
             </button>
@@ -249,10 +249,10 @@ export function DocumentFileUpload({
 
         {state === 'error' && (
           <>
-            <div className="p-4 bg-red-100 rounded-full mb-4">
+            <div className="p-4 bg-destructive/10 rounded-full mb-4">
               <AlertCircle className="h-8 w-8 text-destructive" />
             </div>
-            <h3 className="text-lg font-semibold text-red-900 mb-1">Upload failed</h3>
+            <h3 className="text-lg font-semibold text-destructive mb-1">Upload failed</h3>
             <p className="text-base text-destructive mb-3">{errorMessage}</p>
             <p className="text-base text-muted-foreground">Click to try again</p>
           </>

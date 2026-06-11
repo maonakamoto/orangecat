@@ -131,20 +131,20 @@ export default function BitcoinWalletStatsCompact({
               >
                 <div className="flex items-center gap-2">
                   {tx.type === 'received' ? (
-                    <TrendingDown className="w-3 h-3 text-green-600" />
+                    <TrendingDown className="w-3 h-3 text-status-positive" />
                   ) : (
                     <TrendingUp className="w-3 h-3 text-destructive" />
                   )}
                   <span
                     className={`font-medium text-xs ${
-                      tx.type === 'received' ? 'text-green-600' : 'text-destructive'
+                      tx.type === 'received' ? 'text-status-positive' : 'text-destructive'
                     }`}
                   >
                     {tx.type === 'received' ? '+' : '-'}
                     {formatSats(tx.amount)}
                   </span>
                   {!tx.confirmed && (
-                    <span className="text-xs bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded">
+                    <span className="text-xs bg-status-warning-subtle text-status-warning px-1.5 py-0.5 rounded">
                       Pending
                     </span>
                   )}

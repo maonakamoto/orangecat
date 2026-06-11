@@ -134,10 +134,10 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
   }
 
   return (
-    <div className="space-y-3 rounded-md border border-amber-500/20 bg-amber-500/10 p-4">
+    <div className="space-y-3 rounded-md border border-status-warning/20 bg-status-warning/10 p-4">
       <div className="flex items-start gap-3">
         <div className="rounded-md bg-background p-2">
-          <AlertTriangle className="h-5 w-5 text-amber-700 dark:text-amber-300" />
+          <AlertTriangle className="h-5 w-5 text-status-warning" />
         </div>
         <div className="flex-1">
           <h4 className="font-medium text-foreground">Action requires confirmation</h4>

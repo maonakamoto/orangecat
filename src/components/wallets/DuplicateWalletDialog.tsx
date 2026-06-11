@@ -36,8 +36,8 @@ export function DuplicateWalletDialog({
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
           <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-amber-600" />
+            <div className="flex-shrink-0 w-10 h-10 bg-status-warning-subtle rounded-full flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-status-warning" />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-foreground">Duplicate Wallet Address</h3>
@@ -77,7 +77,7 @@ export function DuplicateWalletDialog({
             {/* Existing wallets */}
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-amber-600" />
+                <Wallet className="w-4 h-4 text-status-warning" />
                 <span className="text-sm font-medium text-foreground">
                   This address is already used for:
                 </span>
@@ -98,10 +98,10 @@ export function DuplicateWalletDialog({
             </div>
 
             {/* Warning message */}
-            <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
+            <div className="p-3 bg-status-warning-subtle rounded-lg border border-status-warning/20">
               <div className="flex gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-amber-800">
+                <AlertTriangle className="w-4 h-4 text-status-warning flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-status-warning">
                   <p className="font-medium mb-1">
                     Are you sure you want to add this wallet again?
                   </p>

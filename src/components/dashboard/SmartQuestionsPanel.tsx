@@ -57,7 +57,7 @@ export function SmartQuestionsPanel({
   return (
     <div className={className}>
       <div className="flex items-center gap-2 mb-4">
-        <Lightbulb className="w-5 h-5 text-amber-500" />
+        <Lightbulb className="w-5 h-5 text-status-warning" />
         <h3 className="text-sm font-semibold text-foreground">{title}</h3>
       </div>
 

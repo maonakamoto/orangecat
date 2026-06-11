@@ -270,7 +270,7 @@ export function FormField({
     <div>
       <label htmlFor={name} className="block text-sm font-medium text-foreground mb-2">
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="text-destructive ml-1">*</span>}
       </label>
       {renderInput()}
       {hint && !error && <p className="text-xs text-muted-foreground mt-1">{hint}</p>}

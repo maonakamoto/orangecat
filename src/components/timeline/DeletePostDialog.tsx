@@ -93,7 +93,7 @@ export function DeletePostDialog({
             <Button
               onClick={handleConfirm}
               disabled={isDeleting}
-              className="w-full rounded-md bg-red-600 py-3 font-semibold text-white hover:bg-red-700"
+              className="w-full rounded-md bg-destructive py-3 font-semibold text-destructive-foreground hover:bg-destructive/90"
             >
               {isDeleting ? (
                 <>

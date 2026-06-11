@@ -120,7 +120,7 @@ export default function MessagePanel({
                 </span>
                 <Button
                   size="sm"
-                  className="bg-red-600 hover:bg-red-700 text-white"
+                  className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
                   onClick={bulkDeleteSelected}
                   disabled={selectedConvIds.size === 0}
                 >

@@ -29,14 +29,14 @@ export function WalletDetail({ wallet }: WalletDetailProps) {
 
         <CardContent className="space-y-6">
           <div>
-            <h4 className="font-semibold text-green-700 mb-2 flex items-center gap-2">
+            <h4 className="font-semibold text-status-positive mb-2 flex items-center gap-2">
               <CheckCircle className="w-4 h-4" />
               Advantages
             </h4>
             <ul className="space-y-1 text-sm">
               {wallet.pros.map((pro, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <div className="w-1 h-1 bg-green-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1 h-1 bg-status-positive rounded-full mt-2 flex-shrink-0" />
                   {pro}
                 </li>
               ))}
@@ -44,14 +44,14 @@ export function WalletDetail({ wallet }: WalletDetailProps) {
           </div>
 
           <div>
-            <h4 className="font-semibold text-yellow-700 mb-2 flex items-center gap-2">
+            <h4 className="font-semibold text-status-warning mb-2 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4" />
               Considerations
             </h4>
             <ul className="space-y-1 text-sm">
               {wallet.cons.map((con, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <div className="w-1 h-1 bg-yellow-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1 h-1 bg-status-warning rounded-full mt-2 flex-shrink-0" />
                   {con}
                 </li>
               ))}

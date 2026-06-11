@@ -80,14 +80,14 @@ export function EmailConfirmationBanner({
 
   return (
     <div
-      className={cn('bg-amber-50 border-b border-amber-200', className)}
+      className={cn('bg-status-warning-subtle border-b border-status-warning/20', className)}
       role="alert"
       aria-live="polite"
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
-          <Mail className="w-4 h-4 text-amber-600 flex-shrink-0" aria-hidden="true" />
-          <p className="text-sm text-amber-800">
+          <Mail className="w-4 h-4 text-status-warning flex-shrink-0" aria-hidden="true" />
+          <p className="text-sm text-status-warning">
             <span className="hidden sm:inline">
               Please confirm your email to secure your account.{' '}
             </span>
@@ -95,7 +95,7 @@ export function EmailConfirmationBanner({
             <button
               onClick={handleResend}
               disabled={resending}
-              className="font-medium text-amber-900 hover:text-amber-950 underline underline-offset-2 disabled:opacity-50 disabled:cursor-wait"
+              className="font-medium text-status-warning hover:text-status-warning/80 underline underline-offset-2 disabled:opacity-50 disabled:cursor-wait"
             >
               {resending ? 'Sending...' : 'Resend'}
             </button>
@@ -103,7 +103,7 @@ export function EmailConfirmationBanner({
         </div>
         <button
           onClick={handleDismiss}
-          className="text-amber-600 hover:text-amber-800 p-1.5 rounded-md hover:bg-amber-100 transition-colors flex-shrink-0 min-h-11 min-w-11 flex items-center justify-center"
+          className="text-status-warning hover:text-status-warning/80 p-1.5 rounded-md hover:bg-status-warning/10 transition-colors flex-shrink-0 min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Dismiss notification"
         >
           <X className="w-4 h-4" />

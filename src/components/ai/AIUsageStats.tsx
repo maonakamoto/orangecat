@@ -79,8 +79,8 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       label: 'Cost',
       value: formatAmountBtc(usage.totalCostBtc),
       icon: Coins,
-      color: 'text-amber-600',
-      bgColor: 'bg-amber-100',
+      color: 'text-status-warning',
+      bgColor: 'bg-status-warning-subtle',
     },
     {
       label: 'Last Used',

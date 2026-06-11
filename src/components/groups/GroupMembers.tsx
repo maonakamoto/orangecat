@@ -63,7 +63,7 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
   const getRoleIcon = (role: GroupRole) => {
     switch (role) {
       case STATUS.GROUP_MEMBERS.FOUNDER:
-        return <Crown className="h-4 w-4 text-yellow-600" />;
+        return <Crown className="h-4 w-4 text-status-warning" />;
       case STATUS.GROUP_MEMBERS.ADMIN:
         return <Shield className="h-4 w-4 text-foreground" />;
       default:

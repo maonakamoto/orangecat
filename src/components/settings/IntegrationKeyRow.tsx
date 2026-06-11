@@ -35,7 +35,7 @@ export default function IntegrationKeyRow({
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-foreground">{key.name}</span>
           {key.is_test && (
-            <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800">
+            <span className="rounded bg-status-warning-subtle px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-status-warning">
               Sandbox
             </span>
           )}

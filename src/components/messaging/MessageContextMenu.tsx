@@ -159,7 +159,7 @@ export function MessageContextMenu({
             }}
             className={cn(
               'w-full px-4 py-2.5 text-left text-sm text-destructive',
-              'hover:bg-destructive/10 active:bg-red-100',
+              'hover:bg-destructive/10 active:bg-destructive/20',
               'flex items-center gap-3 transition-colors'
             )}
             role="menuitem"

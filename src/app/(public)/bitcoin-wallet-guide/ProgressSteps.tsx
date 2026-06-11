@@ -31,7 +31,7 @@ export function ProgressSteps({ currentStep, onStepClick }: ProgressStepsProps) 
                 isActive
                   ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20 border-bitcoinOrange shadow-sm'
                   : isCompleted
-                    ? 'bg-green-50 border-green-200 text-green-800'
+                    ? 'bg-status-positive-subtle border-status-positive/20 text-status-positive'
                     : 'bg-card border-border hover:border-border-strong dark:hover:border-border'
               }`}
               onClick={() => onStepClick(index)}
@@ -41,7 +41,7 @@ export function ProgressSteps({ currentStep, onStepClick }: ProgressStepsProps) 
                   isActive
                     ? 'bg-bitcoinOrange text-white'
                     : isCompleted
-                      ? 'bg-green-500 text-white'
+                      ? 'bg-status-positive text-white'
                       : 'bg-muted text-muted-foreground'
                 }`}
               >

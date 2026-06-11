@@ -69,7 +69,7 @@ function ExecResultChip({ result }: { result: ExecActionResult }) {
 
   if (result.status === 'pending_confirmation') {
     return (
-      <span className="inline-flex items-center gap-1 rounded-sm border border-amber-500/20 bg-amber-500/10 px-2 py-1 text-xs text-amber-700 dark:text-amber-300">
+      <span className="inline-flex items-center gap-1 rounded-sm border border-status-warning/20 bg-status-warning/10 px-2 py-1 text-xs text-status-warning">
         <Clock className="h-3 w-3 flex-shrink-0" />
         {noun} — confirm below
       </span>

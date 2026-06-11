@@ -161,7 +161,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                         </div>
                         <div className="bg-card/70 dark:bg-card/70 rounded-lg p-3">
                           <p className="text-xs text-muted-foreground mb-1">Raised</p>
-                          <p className="text-lg font-bold text-green-600">{story.raised}</p>
+                          <p className="text-lg font-bold text-status-positive">{story.raised}</p>
                         </div>
                         <div className="bg-card/70 dark:bg-card/70 rounded-lg p-3">
                           <p className="text-xs text-muted-foreground mb-1">Supporters</p>

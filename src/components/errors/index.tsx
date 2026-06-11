@@ -30,7 +30,7 @@ interface ErrorFallbackProps {
 function ErrorFallback({ icon, title, message, onRetry }: ErrorFallbackProps) {
   return (
     <div className="flex flex-col items-center justify-center p-6 text-center bg-card rounded-lg border border-border">
-      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-destructive/10 mb-4">
         {icon}
       </div>
       <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>

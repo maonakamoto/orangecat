@@ -64,8 +64,8 @@ export function ProjectDonationSection({
               variant={isFavorited ? 'primary' : 'outline'}
               className={`flex-1 flex items-center justify-center gap-2 ${
                 isFavorited
-                  ? 'bg-red-500 hover:bg-red-600 text-white border-destructive'
-                  : 'border-border-strong hover:border-red-300 hover:text-destructive'
+                  ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground border-destructive'
+                  : 'border-border-strong hover:border-destructive/40 hover:text-destructive'
               }`}
               aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
             >
@@ -91,7 +91,7 @@ export function ProjectDonationSection({
             <Button
               href={`${ROUTES.AUTH}?from=favorite`}
               variant="outline"
-              className="flex-1 flex items-center justify-center gap-2 border-border-strong hover:border-red-300 hover:text-destructive"
+              className="flex-1 flex items-center justify-center gap-2 border-border-strong hover:border-destructive/40 hover:text-destructive"
               aria-label="Sign in to favorite this project"
             >
               <Heart className="w-4 h-4" aria-hidden="true" />
@@ -179,7 +179,7 @@ export function ProjectDonationSection({
                 </div>
               </div>
               <div className="flex items-center gap-2 mt-3 text-sm text-muted-foreground">
-                <ShieldCheck className="w-4 h-4 text-green-600" aria-hidden="true" />
+                <ShieldCheck className="w-4 h-4 text-status-positive" aria-hidden="true" />
                 <span>Address verified and monitored</span>
               </div>
             </div>

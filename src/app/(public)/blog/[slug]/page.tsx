@@ -103,9 +103,9 @@ const mdxComponents = {
     return <div className={`mb-6 rounded-md border p-6 ${styles[type]}`}>{children}</div>;
   },
   SecurityFeature: ({ title, description }: { title: string; description: string }) => (
-    <div className="bg-card border border-green-200 dark:border-border rounded-lg p-6 mb-6">
+    <div className="bg-card border border-status-positive/20 rounded-lg p-6 mb-6">
       <h4 className="text-lg font-semibold text-foreground mb-2 flex items-center">
-        <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+        <span className="w-2 h-2 bg-status-positive rounded-full mr-3"></span>
         {title}
       </h4>
       <p className="text-muted-strong">{description}</p>

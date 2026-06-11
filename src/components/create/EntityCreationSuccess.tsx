@@ -90,8 +90,8 @@ export function EntityCreationSuccess({
         <CardContent className="pt-8 pb-6 px-6 text-center space-y-6">
           {/* Success icon */}
           <div className="flex justify-center">
-            <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
-              <CheckCircle2 className="h-8 w-8 text-green-600" />
+            <div className="h-16 w-16 rounded-full bg-status-positive-subtle flex items-center justify-center">
+              <CheckCircle2 className="h-8 w-8 text-status-positive" />
             </div>
           </div>
 

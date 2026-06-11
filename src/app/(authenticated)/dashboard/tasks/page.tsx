@@ -240,7 +240,7 @@ export default function TasksPage() {
 
       {/* Task List */}
       {error ? (
-        <div className="rounded-lg border bg-card p-6 text-red-600">{error}</div>
+        <div className="rounded-lg border bg-card p-6 text-destructive">{error}</div>
       ) : loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map(i => (

@@ -110,7 +110,7 @@ export function BulkActionsToolbar({
                     className="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2"
                     disabled={isProcessing}
                   >
-                    <Globe className="w-4 h-4 text-green-600" />
+                    <Globe className="w-4 h-4 text-status-positive" />
                     <span>Make Public</span>
                   </button>
                   <button

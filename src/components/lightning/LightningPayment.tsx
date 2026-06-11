@@ -84,11 +84,11 @@ export default function LightningPayment({
         </CardTitle>
 
         {!nwcConnected && (
-          <Alert className="mt-2 border-yellow-300 bg-yellow-50">
-            <AlertTriangle className="h-4 w-4 text-yellow-600" />
-            <AlertDescription className="text-yellow-800 text-sm">
+          <Alert className="mt-2 border-status-warning/30 bg-status-warning-subtle">
+            <AlertTriangle className="h-4 w-4 text-status-warning" />
+            <AlertDescription className="text-status-warning text-sm">
               <strong>Demo Mode</strong> — Invoices are simulated.{' '}
-              <Link href={ROUTES.SETTINGS} className="text-yellow-900 underline font-medium">
+              <Link href={ROUTES.SETTINGS} className="text-status-warning underline font-medium">
                 Connect your wallet
               </Link>{' '}
               via NWC to make real Lightning payments.

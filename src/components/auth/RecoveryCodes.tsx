@@ -114,8 +114,8 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
       <Card className="w-full max-w-md mx-auto">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-amber-100 rounded-full">
-              <Key className="h-8 w-8 text-amber-600" />
+            <div className="p-3 bg-status-warning-subtle rounded-full">
+              <Key className="h-8 w-8 text-status-warning" />
             </div>
           </div>
           <CardTitle>Recovery Codes</CardTitle>
@@ -124,12 +124,12 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+          <div className="p-4 bg-status-warning-subtle border border-status-warning/20 rounded-lg">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <AlertTriangle className="h-5 w-5 text-status-warning mt-0.5 flex-shrink-0" />
               <div className="space-y-1">
-                <p className="text-sm font-medium text-amber-800">Important</p>
-                <p className="text-xs text-amber-700">
+                <p className="text-sm font-medium text-status-warning">Important</p>
+                <p className="text-xs text-status-warning/80">
                   Recovery codes are your backup if you lose your authenticator device. Store them
                   securely and never share them with anyone.
                 </p>

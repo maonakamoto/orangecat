@@ -36,9 +36,9 @@ function getNotificationIcon(notification: Notification) {
     case 'message':
       return <MessageSquare className="w-5 h-5 text-foreground" />;
     case 'comment':
-      return <MessageSquare className="w-5 h-5 text-green-500" />;
+      return <MessageSquare className="w-5 h-5 text-status-positive" />;
     case 'like':
-      return <Heart className="w-5 h-5 text-red-500" />;
+      return <Heart className="w-5 h-5 text-destructive" />;
     case 'mention':
       return <AtSign className="w-5 h-5 text-foreground" />;
     case 'system':
@@ -99,7 +99,7 @@ export function NotificationItem({
                   className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 hover:bg-background"
                   title="Mark as read"
                 >
-                  <Check className="w-3 h-3 text-green-500" />
+                  <Check className="w-3 h-3 text-status-positive" />
                 </button>
               )}
               <button
@@ -110,7 +110,7 @@ export function NotificationItem({
                 className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 hover:bg-background"
                 title="Delete notification"
               >
-                <Trash2 className="w-3 h-3 text-red-500" />
+                <Trash2 className="w-3 h-3 text-destructive" />
               </button>
             </div>
           </div>

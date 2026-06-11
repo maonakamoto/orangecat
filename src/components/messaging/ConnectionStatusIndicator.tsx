@@ -30,17 +30,17 @@ function getStatusDisplay(status: ConnectionStatus) {
       return {
         icon: <Wifi className="w-4 h-4" />,
         text: 'Connected',
-        color: 'text-green-700 dark:text-green-300',
-        bgColor: 'bg-green-500/10',
-        borderColor: 'border-green-500/20',
+        color: 'text-status-positive',
+        bgColor: 'bg-status-positive/10',
+        borderColor: 'border-status-positive/20',
       };
     case 'reconnecting':
       return {
         icon: <RefreshCw className="w-4 h-4 animate-spin" />,
         text: 'Reconnecting...',
-        color: 'text-yellow-700 dark:text-yellow-300',
-        bgColor: 'bg-yellow-500/10',
-        borderColor: 'border-yellow-500/20',
+        color: 'text-status-warning',
+        bgColor: 'bg-status-warning/10',
+        borderColor: 'border-status-warning/20',
       };
     case 'disconnected':
       return {

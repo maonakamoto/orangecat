@@ -29,7 +29,7 @@ export function LocationStep({ form }: LocationStepProps) {
         <p className="text-muted-foreground mb-3">
           Help local people find and support your projects.
         </p>
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 text-xs rounded-full">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-status-positive-subtle text-status-positive text-xs rounded-full">
           <span>🌍</span>
           <span>All location fields are optional</span>
         </div>

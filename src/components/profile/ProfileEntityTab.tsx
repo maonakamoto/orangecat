@@ -180,7 +180,7 @@ export default function ProfileEntityTab({
                   <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border-subtle">
                     <span>{getRelativeTime(entity.created_at)}</span>
                     {entityType === 'asset' && entity.verification_status === 'verified' && (
-                      <span className="text-green-600 font-medium">Verified</span>
+                      <span className="text-status-positive font-medium">Verified</span>
                     )}
                   </div>
                 </div>

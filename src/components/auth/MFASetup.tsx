@@ -204,8 +204,8 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                 code from your authenticator app each time you sign in.
               </p>
             </div>
-            <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-              <p className="text-sm text-amber-800">
+            <div className="p-4 bg-status-warning-subtle border border-status-warning/20 rounded-lg">
+              <p className="text-sm text-status-warning">
                 <strong>Important:</strong> Make sure to save your recovery codes. You'll need them
                 if you lose access to your authenticator app.
               </p>
