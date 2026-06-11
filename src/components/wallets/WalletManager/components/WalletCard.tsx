@@ -115,7 +115,7 @@ export function WalletCard({
             </button>
             <button
               onClick={onDelete}
-              className="p-2 rounded-lg hover:bg-destructive/10 text-red-600 hover:text-red-700 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-2 rounded-lg hover:bg-destructive/10 text-destructive hover:text-destructive/80 transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Delete wallet"
               aria-label="Delete wallet"
             >

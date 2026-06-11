@@ -190,8 +190,8 @@ export function PaymentDialog({
           {/* Phase: Success */}
           {state.phase === 'success' && (
             <div className="flex flex-col items-center gap-4 py-8">
-              <CheckCircle2 className="h-12 w-12 text-green-600" />
-              <p className="text-lg font-semibold text-green-700">Payment successful!</p>
+              <CheckCircle2 className="h-12 w-12 text-status-positive" />
+              <p className="text-lg font-semibold text-status-positive">Payment successful!</p>
               <p className="text-sm text-muted-foreground">
                 {isContribution ? 'Thank you for your support!' : 'Your order has been placed.'}
               </p>

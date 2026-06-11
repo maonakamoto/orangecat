@@ -67,8 +67,8 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
             className={cn(
               'text-xs',
               wallet.level === 'beginner'
-                ? 'bg-green-50 text-green-700 border-green-200'
-                : 'bg-amber-50 text-amber-700 border-amber-200'
+                ? 'bg-status-positive-subtle text-status-positive border-status-positive/20'
+                : 'bg-status-warning-subtle text-status-warning border-status-warning/20'
             )}
           >
             {wallet.level === 'beginner' ? 'Beginner' : 'Advanced'}

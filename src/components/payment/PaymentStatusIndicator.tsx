@@ -30,28 +30,28 @@ const STATUS_CONFIG: Record<
   invoice_ready: {
     icon: Clock,
     label: 'Waiting for payment...',
-    color: 'text-yellow-600',
+    color: 'text-status-warning',
     animate: true,
   },
   paid: {
     icon: CheckCircle2,
     label: 'Payment confirmed!',
-    color: 'text-green-600',
+    color: 'text-status-positive',
   },
   buyer_confirmed: {
     icon: CheckCircle2,
     label: 'Payment sent!',
-    color: 'text-green-600',
+    color: 'text-status-positive',
   },
   expired: {
     icon: XCircle,
     label: 'Invoice expired',
-    color: 'text-red-500',
+    color: 'text-status-negative',
   },
   failed: {
     icon: AlertCircle,
     label: 'Payment failed',
-    color: 'text-red-500',
+    color: 'text-status-negative',
   },
 };
 

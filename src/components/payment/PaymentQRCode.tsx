@@ -100,7 +100,7 @@ export function PaymentQRCode({
             secondsLeft <= 0
               ? 'text-destructive font-medium'
               : secondsLeft < 60
-                ? 'text-red-500'
+                ? 'text-status-negative'
                 : 'text-muted-dim'
           }`}
         >
