@@ -25,20 +25,20 @@ export function ErrorDisplay({ error, onRetry, onDismiss }: ErrorDisplayProps) {
         <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" />
         <div className="flex-1 min-w-0">
           <p className="text-base text-destructive">{error}</p>
-          <div className="flex items-center gap-3 mt-1">
+          <div className="flex flex-wrap items-center gap-2 mt-2">
             {showApiKeyLink && (
               <button
                 onClick={() => router.push(ROUTES.SETTINGS_AI)}
-                className="flex items-center gap-1 text-xs text-destructive hover:text-foreground"
+                className="inline-flex items-center gap-1.5 rounded-md bg-accent-warm px-3 py-1.5 text-xs font-semibold text-white hover:bg-accent-warm/90 transition-colors"
               >
-                <Key className="h-3 w-3" />
-                Configure API Key
+                <Key className="h-3.5 w-3.5" />
+                Add your API key
               </button>
             )}
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="text-xs font-medium text-foreground hover:text-muted-foreground"
+                className="text-xs font-medium text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
               >
                 Try again
               </button>
