@@ -26,10 +26,12 @@ export function AIKeyCard({ apiKey: key, isLoading, onSetPrimary, onDelete }: AI
           <div
             className={cn(
               'w-10 h-10 rounded-lg flex items-center justify-center',
-              key.is_valid ? 'bg-green-100' : 'bg-red-100'
+              key.is_valid ? 'bg-status-positive-subtle' : 'bg-status-negative-subtle'
             )}
           >
-            <Key className={cn('w-5 h-5', key.is_valid ? 'text-green-600' : 'text-destructive')} />
+            <Key
+              className={cn('w-5 h-5', key.is_valid ? 'text-status-positive' : 'text-destructive')}
+            />
           </div>
           <div>
             <div className="flex items-center gap-2">

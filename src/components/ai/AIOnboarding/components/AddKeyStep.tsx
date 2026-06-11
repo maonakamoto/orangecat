@@ -81,7 +81,7 @@ export function AddKeyStep({
           {/* API Key Input */}
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
-              API Key <span className="text-red-500">*</span>
+              API Key <span className="text-status-negative">*</span>
             </label>
             <Input
               type="password"
@@ -90,14 +90,16 @@ export function AddKeyStep({
               onChange={e => onApiKeyChange(e.target.value)}
               disabled={keyAdded}
               className={cn(
-                keyValidation && !keyValidation.valid && 'border-red-300 focus:border-destructive'
+                keyValidation &&
+                  !keyValidation.valid &&
+                  'border-status-negative/40 focus:border-destructive'
               )}
             />
             {keyValidation && !keyValidation.valid && (
-              <p className="text-xs text-red-600 mt-1">{keyValidation.message}</p>
+              <p className="text-xs text-status-negative mt-1">{keyValidation.message}</p>
             )}
             {keyValidation?.valid && (
-              <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+              <p className="text-xs text-status-positive mt-1 flex items-center gap-1">
                 <CheckCircle className="w-3 h-3" />
                 Key format looks correct
               </p>
@@ -113,12 +115,12 @@ export function AddKeyStep({
 
           {/* Success Message */}
           {keyAdded && (
-            <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-              <div className="flex items-center gap-2 text-green-700">
+            <div className="p-3 bg-status-positive-subtle border border-status-positive/20 rounded-lg">
+              <div className="flex items-center gap-2 text-status-positive">
                 <CheckCircle className="w-5 h-5" />
                 <span className="font-medium">Key added successfully!</span>
               </div>
-              <p className="text-sm text-green-600 mt-1">
+              <p className="text-sm text-status-positive/80 mt-1">
                 Your key has been encrypted and saved securely.
               </p>
             </div>
