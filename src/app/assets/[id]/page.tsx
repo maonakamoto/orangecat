@@ -91,14 +91,14 @@ const config: EntityDetailConfig = {
           </CardHeader>
           <CardContent className="space-y-3">
             {entity.is_for_sale && (
-              <div className="p-3 bg-green-50 rounded-lg space-y-1">
+              <div className="p-3 bg-status-positive-subtle rounded-lg space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-green-800">For Sale</span>
+                  <span className="text-sm font-medium text-status-positive">For Sale</span>
                 </div>
                 {entity.sale_price_btc !== null && entity.sale_price_btc !== undefined && (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Sale Price</span>
-                    <span className="font-bold text-green-700">
+                    <span className="font-bold text-status-positive">
                       {displayBTC(Number(entity.sale_price_btc))}
                     </span>
                   </div>

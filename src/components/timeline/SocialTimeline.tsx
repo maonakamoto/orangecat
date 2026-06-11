@@ -200,7 +200,7 @@ export default function SocialTimeline({
       <TimelineSkeleton count={3} />
     ) : searchError ? (
       <div className="text-center py-10">
-        <Icon className="w-14 h-14 text-red-300 mx-auto mb-3" />
+        <Icon className="w-14 h-14 text-status-negative/60 mx-auto mb-3" />
         <p className="text-destructive text-lg mb-2">{searchError}</p>
         <Button variant="outline" onClick={handleClearSearch}>
           Clear Search
@@ -222,7 +222,7 @@ export default function SocialTimeline({
     <TimelineSkeleton count={5} />
   ) : error ? (
     <div className="text-center py-16">
-      <Icon className="w-16 h-16 text-red-300 mx-auto mb-4" />
+      <Icon className="w-16 h-16 text-status-negative/60 mx-auto mb-4" />
       <p className="text-destructive text-lg mb-4">{error}</p>
       <Button variant="outline" onClick={() => loadTimelineFeed(sortBy)}>
         Try Again

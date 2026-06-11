@@ -29,7 +29,7 @@ export default async function ProposalPage({ params }: PageProps) {
   if (!groupResult.success || !groupResult.group) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600">Group not found</p>
+        <p className="text-destructive">Group not found</p>
       </div>
     );
   }
