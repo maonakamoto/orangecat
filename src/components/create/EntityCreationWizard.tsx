@@ -13,34 +13,12 @@ import { WizardTemplateOnlyView } from './WizardTemplateOnlyView';
 import { useEntityCreationWizard } from './useEntityCreationWizard';
 import type { EntityConfig, EntityTemplate } from './types';
 
-const WIZARD_THEMES: Record<string, { gradient: string; ring: string; bg: string }> = {
-  orange: {
-    gradient: 'bg-amber-600',
-    ring: 'ring-amber-100',
-    bg: 'bg-amber-500',
-  },
-  tiffany: {
-    gradient: 'bg-emerald-600',
-    ring: 'ring-emerald-100',
-    bg: 'bg-emerald-500',
-  },
-  rose: {
-    gradient: 'bg-rose-600',
-    ring: 'ring-rose-100',
-    bg: 'bg-rose-500',
-  },
-  blue: {
-    gradient: 'bg-sky-600',
-    ring: 'ring-sky-100',
-    bg: 'bg-sky-500',
-  },
-  green: {
-    gradient: 'bg-success',
-    ring: 'ring-green-100',
-    bg: 'bg-green-500',
-  },
-};
-
+// The four colorTheme values that ENTITY_REGISTRY exposes used to drive a
+// per-entity chromatic palette in the wizard progress bar (amber, emerald,
+// rose, etc). The rebrand collapses entity surfaces to monochrome chrome +
+// one warm accent for top-of-funnel conversion (see CLAUDE.md design system).
+// The progress bar now renders that warm accent uniformly — completed steps
+// stay status-positive — and consumers no longer need to pass a theme prop.
 const WIZARD_STEP_VARIANTS = {
   enter: (direction: number) => ({
     x: direction > 0 ? 1000 : -1000,
@@ -90,8 +68,6 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
     handleCancel,
   } = useEntityCreationWizard({ config, initialData, onSuccess, onCancel });
 
-  const theme = WIZARD_THEMES[config.colorTheme] || WIZARD_THEMES.orange;
-
   // null = personal actor (default); UUID = group actor the user has rights to.
   // Server (entityPostHandler → resolveCreationActor) validates the choice.
   const [actorId, setActorId] = useState<string | null>(null);
@@ -139,7 +115,6 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
         currentStep={currentStep}
         completedSteps={completedSteps}
         progress={progress}
-        theme={theme}
         onStepClick={handleStepClick}
       />
 

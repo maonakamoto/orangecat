@@ -10,7 +10,6 @@ interface WizardProgressBarProps {
   currentStep: number;
   completedSteps: Set<number>;
   progress: number;
-  theme: { bg: string; ring: string };
   onStepClick: (index: number) => void;
 }
 
@@ -19,7 +18,6 @@ export function WizardProgressBar({
   currentStep,
   completedSteps,
   progress,
-  theme,
   onStepClick,
 }: WizardProgressBarProps) {
   const currentStepConfig = wizardSteps[currentStep];
@@ -60,7 +58,7 @@ export function WizardProgressBar({
                   isCompleted
                     ? 'bg-status-positive text-white'
                     : isCurrent
-                      ? `${theme.bg} text-white ring-4 ${theme.ring}`
+                      ? 'bg-accent-warm text-white ring-4 ring-accent-warm/20'
                       : 'bg-muted text-muted-foreground'
                 }`}
               >
