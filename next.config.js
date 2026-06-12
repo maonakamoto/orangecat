@@ -32,7 +32,9 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
 
   // Externalize Supabase packages for server-side rendering
-  // Note: 'standalone' output is REMOVED - it's incompatible with Vercel
+  // 'standalone' output is incompatible with Vercel, but it is exactly what
+  // the Hetzner self-host needs — opt in via SELF_HOST=1 at build time.
+  ...(process.env.SELF_HOST ? { output: 'standalone' } : {}),
   serverExternalPackages: ['@supabase/supabase-js', '@supabase/ssr'],
 
   // Image optimization

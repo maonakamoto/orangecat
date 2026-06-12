@@ -156,3 +156,4 @@ __pycache__/
 
 # Local debug screenshots
 post-*.png
+.env.selfhost.local
