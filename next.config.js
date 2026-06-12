@@ -58,6 +58,13 @@ const nextConfig = {
         port: '',
         pathname: '/storage/v1/object/public/**',
       },
+      {
+        // Self-hosted Supabase storage (Hetzner migration 2026-06)
+        protocol: 'https',
+        hostname: 'supabase.orangecat.ch',
+        port: '',
+        pathname: '/storage/v1/object/public/**',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],

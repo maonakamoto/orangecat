@@ -21,9 +21,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(message);
 }
 
-// Validate URL format early
-if (!supabaseUrl.startsWith('https://') || !supabaseUrl.includes('.supabase.co')) {
-  throw new Error('Supabase URL format looks incorrect. Expected https://<project>.supabase.co');
+// Validate URL format early. Any https origin is fine — the API has been
+// self-hosted (supabase.orangecat.ch) since the 2026-06 Hetzner migration.
+if (!supabaseUrl.startsWith('https://')) {
+  throw new Error('Supabase URL format looks incorrect. Expected an https:// URL');
 }
 
 // Safe storage with localStorage/sessionStorage fallback
