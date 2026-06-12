@@ -13,22 +13,26 @@ last_modified_summary: "Documented Playwright dev-server port expectation and re
 ## 🔍 Debugging Workflow
 
 ### 1. **Identify the Problem**
+
 - **Reproduce consistently** - Can you make it happen every time?
 - **Isolate variables** - What changed recently?
 - **Gather context** - Error messages, stack traces, user reports
 
 ### 2. **Choose Your Tools**
+
 - **Browser DevTools** - Frontend issues
 - **Server Logs** - Backend problems
 - **Database Tools** - Data issues
 - **Network Tools** - API problems
 
 ### 3. **Systematic Investigation**
+
 - **Binary search** - Isolate the problematic component
 - **Hypothesis testing** - Form and test theories
 - **Root cause analysis** - Find the underlying issue
 
 ### 4. **Implement & Verify**
+
 - **Fix the issue** - Implement the solution
 - **Test thoroughly** - Ensure fix works and doesn't break anything
 - **Document findings** - Help future debugging
@@ -36,11 +40,13 @@ last_modified_summary: "Documented Playwright dev-server port expectation and re
 ## 🛠️ Development Debugging Tools
 
 ### Dev server port for Playwright E2E
+
 - Run the Next dev server on port **3003** when executing `npm run test:e2e:node`, or update the test base URL if you intentionally change ports. This avoids `ERR_CONNECTION_REFUSED` during homepage navigation.
 
 ### Browser DevTools (Frontend)
 
 #### Console Tab
+
 ```javascript
 // Check for errors
 console.error('Debug message');
@@ -55,16 +61,19 @@ console.timeEnd('Operation');
 ```
 
 #### Network Tab
+
 - Monitor API requests and responses
 - Check response times and status codes
 - Inspect request headers and payloads
 
 #### Application Tab (React DevTools)
+
 - Inspect component state and props
 - Monitor component lifecycle
 - Check for unnecessary re-renders
 
 #### Performance Tab
+
 - Record performance profiles
 - Identify slow operations
 - Check memory usage
@@ -72,6 +81,7 @@ console.timeEnd('Operation');
 ### VS Code Debugging
 
 #### Breakpoints
+
 ```typescript
 // Set breakpoint on line
 const user = await getUser(id); // ← Set breakpoint here
@@ -83,15 +93,17 @@ if (user.email === 'test@example.com') {
 ```
 
 #### Debug Console
+
 ```javascript
 // Execute code in debug context
-user.email
-user.profile.verified
+user.email;
+user.profile.verified;
 ```
 
 ### Node.js Debugging
 
 #### Built-in Debugger
+
 ```bash
 # Start with debugging
 node --inspect-brk scripts/debug-script.js
@@ -101,6 +113,7 @@ node --inspect-brk scripts/debug-script.js
 ```
 
 #### VS Code Node.js Debugging
+
 ```json
 // .vscode/launch.json
 {
@@ -120,12 +133,14 @@ node --inspect-brk scripts/debug-script.js
 ## 🗄️ Database Debugging
 
 ### Supabase Dashboard
+
 1. **Go to your project** - supabase.com/dashboard
 2. **Table Editor** - View and edit data directly
 3. **SQL Editor** - Run queries and view results
 4. **Logs** - Monitor database activity
 
 ### Local Database Debugging
+
 ```bash
 # Start local Supabase
 supabase start
@@ -138,6 +153,7 @@ supabase logs
 ```
 
 ### Common Database Issues
+
 ```sql
 -- Check for constraint violations
 SELECT * FROM profiles WHERE email IS NULL;
@@ -146,24 +162,26 @@ SELECT * FROM profiles WHERE email IS NULL;
 SELECT * FROM pg_stat_statements ORDER BY mean_time DESC LIMIT 10;
 
 -- Check table sizes
-SELECT 
+SELECT
   schemaname,
   tablename,
   attname,
   n_distinct
-FROM pg_stats 
+FROM pg_stats
 WHERE schemaname = 'public';
 ```
 
 ## 🔗 API Debugging
 
 ### Network Tab Inspection
+
 - **Request Headers** - Check authentication and content-type
 - **Response Headers** - Look for caching and security headers
 - **Request Payload** - Inspect data being sent
 - **Response Body** - Check API responses
 
 ### API Endpoint Testing
+
 ```bash
 # Test API endpoints directly
 curl -X GET http://localhost:3003/api/health
@@ -179,6 +197,7 @@ curl -X POST http://localhost:3003/api/projects \
 ```
 
 ### API Error Debugging
+
 ```typescript
 // Client-side API debugging
 try {
@@ -196,6 +215,7 @@ try {
 ## 🚨 Common Issues & Solutions
 
 ### Port Conflicts
+
 ```bash
 # Check what's using ports
 lsof -i :3003
@@ -209,6 +229,7 @@ PORT=3004 npm run dev
 ```
 
 ### Database Connection Issues
+
 ```bash
 # Check Supabase status
 supabase status
@@ -221,12 +242,13 @@ echo $NEXT_PUBLIC_SUPABASE_URL
 ```
 
 ### Authentication Issues
+
 ```typescript
 // Debug auth state
 console.log('Auth state:', {
   user: user,
   session: session,
-  loading: loading
+  loading: loading,
 });
 
 // Check RLS policies
@@ -234,6 +256,7 @@ console.log('Auth state:', {
 ```
 
 ### Build Errors
+
 ```bash
 # Clear Next.js cache
 rm -rf .next
@@ -247,6 +270,7 @@ npm install
 ```
 
 ### Test Failures
+
 ```bash
 # Run specific test with debugging
 npm test -- --testNamePattern="specific test" --verbose
@@ -261,6 +285,7 @@ npm run test:db:debug
 ## 📊 Performance Debugging
 
 ### React Performance Profiler
+
 ```tsx
 import { Profiler } from 'react';
 
@@ -270,7 +295,7 @@ function onRenderCallback(
   actualDuration, // time spent rendering
   baseDuration, // estimated time without memoization
   startTime, // when React began rendering
-  commitTime, // when React committed the changes
+  commitTime // when React committed the changes
 ) {
   console.log('Render:', { id, phase, actualDuration, baseDuration });
 }
@@ -278,17 +303,18 @@ function onRenderCallback(
 // Wrap components with Profiler
 <Profiler id="Navigation" onRender={onRenderCallback}>
   <Navigation />
-</Profiler>
+</Profiler>;
 ```
 
 ### Database Query Performance
+
 ```sql
 -- Enable query timing
 \timing on
 
 -- Check slow queries
-SELECT * FROM pg_stat_statements 
-ORDER BY mean_time DESC 
+SELECT * FROM pg_stat_statements
+ORDER BY mean_time DESC
 LIMIT 10;
 
 -- Analyze specific query
@@ -296,6 +322,7 @@ EXPLAIN ANALYZE SELECT * FROM projects WHERE status = 'active';
 ```
 
 ### Bundle Size Analysis
+
 ```bash
 # Analyze bundle size
 npm run analyze
@@ -307,6 +334,7 @@ npm run bundle:check
 ## 🔒 Security Debugging
 
 ### Input Validation Issues
+
 ```typescript
 // Debug validation failures
 console.log('Validation input:', inputData);
@@ -318,6 +346,7 @@ console.log('After sanitization:', sanitizedInput);
 ```
 
 ### Authentication Flow
+
 ```typescript
 // Debug auth flow
 console.log('Auth attempt:', { email, password });
@@ -330,6 +359,7 @@ console.log('Token payload:', jwt.decode(token));
 ## 🧪 Testing Debugging
 
 ### Jest Debugging
+
 ```bash
 # Run tests in debug mode
 node --inspect-brk node_modules/.bin/jest --runInBand
@@ -339,6 +369,7 @@ npm test -- --testNamePattern="test name" --verbose
 ```
 
 ### Playwright Debugging
+
 ```bash
 # Run in headed mode (visible browser)
 npm run test:e2e:headed
@@ -353,6 +384,7 @@ npm run test:e2e:ui
 ## 📝 Logging & Monitoring
 
 ### Structured Logging
+
 ```typescript
 // Use the logger utility, not console.log
 import { logger } from '@/utils/logger';
@@ -365,6 +397,7 @@ logger.error('Critical error occurred', { error, stack, context });
 ```
 
 ### Error Tracking
+
 - **Development**: Console errors + logger
 - **Production**: Sentry + monitoring service
 - **Database**: Query performance tracking
@@ -372,6 +405,7 @@ logger.error('Critical error occurred', { error, stack, context });
 ## 🚨 Production Debugging
 
 ### Remote Debugging
+
 ```typescript
 // Enable remote debugging in production
 if (process.env.NODE_ENV === 'production') {
@@ -381,12 +415,13 @@ if (process.env.NODE_ENV === 'production') {
 ```
 
 ### Performance Monitoring
+
 ```bash
 # Check production metrics
 npm run monitor:metrics
 
-# View production logs
-npm run monitor:logs
+# View production logs (on the Hetzner box)
+journalctl -u orangecat-app -f
 ```
 
 ## 📚 Related Documentation
@@ -400,6 +435,7 @@ npm run monitor:logs
 ## 🆘 Getting Help
 
 ### **Quick Debug Checklist**
+
 - [ ] Can you reproduce the issue consistently?
 - [ ] What changed recently (code, environment, data)?
 - [ ] Check console/network tabs in browser
@@ -408,6 +444,7 @@ npm run monitor:logs
 - [ ] Review recent commits/deployments
 
 ### **Escalation Path**
+
 1. **Self-debug** using this guide
 2. **Team chat** - #dev-orangecat channel
 3. **GitHub Issues** - Document and track

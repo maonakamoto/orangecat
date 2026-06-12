@@ -24,11 +24,13 @@ This directory contains all automation scripts organized by purpose.
 ## Usage
 
 Most scripts can be run with:
+
 ```bash
 node scripts/{category}/script-name.js
 ```
 
 For deployment scripts:
+
 ```bash
 bash scripts/deployment/script-name.sh
 ```
@@ -36,6 +38,6 @@ bash scripts/deployment/script-name.sh
 ## Important Scripts
 
 - `scripts/dev/dev-start.js` - Main development server starter
-- `scripts/deployment/one-button-deploy.js` - Production deployment
+- `scripts/deployment/browser-verify.js` - Post-deploy browser smoke test (deploys themselves happen on the box — see docs/deployment/DEPLOYMENT_PROCESS.md)
 - `scripts/db/apply-migrations.ts` - Database migrations
 - `scripts/maintenance/cleanup-console-logs.ts` - Remove console.log statements

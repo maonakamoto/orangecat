@@ -4,23 +4,23 @@ This document describes all environment variables used in the OrangeCat applicat
 
 ## Required Variables
 
-| Variable | Description | Required | Example |
-|----------|-------------|----------|---------|
-| `NEXT_PUBLIC_SITE_URL` | Public site URL | ✅ | `https://orangecat.ch` |
-| `NEXT_PUBLIC_SITE_NAME` | Site name | ✅ | `OrangeCat` |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | ✅ | `https://xxx.supabase.co` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key | ✅ | `xxx` |
-| `BITCOIN_NETWORK` | Bitcoin network (mainnet/testnet) | ✅ | `mainnet` |
-| `LIGHTNING_NODE_URL` | Lightning node URL | ✅ | `https://xxx.lightning.node` |
-| `LIGHTNING_MACAROON` | Lightning macaroon | ✅ | `xxx` |
-| `LIGHTNING_TLS_CERT` | Lightning TLS certificate | ✅ | `xxx` |
+| Variable                        | Description                       | Required | Example                      |
+| ------------------------------- | --------------------------------- | -------- | ---------------------------- |
+| `NEXT_PUBLIC_SITE_URL`          | Public site URL                   | ✅       | `https://orangecat.ch`       |
+| `NEXT_PUBLIC_SITE_NAME`         | Site name                         | ✅       | `OrangeCat`                  |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL              | ✅       | `https://xxx.supabase.co`    |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key            | ✅       | `xxx`                        |
+| `BITCOIN_NETWORK`               | Bitcoin network (mainnet/testnet) | ✅       | `mainnet`                    |
+| `LIGHTNING_NODE_URL`            | Lightning node URL                | ✅       | `https://xxx.lightning.node` |
+| `LIGHTNING_MACAROON`            | Lightning macaroon                | ✅       | `xxx`                        |
+| `LIGHTNING_TLS_CERT`            | Lightning TLS certificate         | ✅       | `xxx`                        |
 
 ## Optional Variables
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `NODE_ENV` | Environment mode | ❌ | `development` |
-| `NEXT_PUBLIC_APP_URL` | Application URL | ❌ | `http://localhost:3000` |
+| Variable              | Description      | Required | Default                 |
+| --------------------- | ---------------- | -------- | ----------------------- |
+| `NODE_ENV`            | Environment mode | ❌       | `development`           |
+| `NEXT_PUBLIC_APP_URL` | Application URL  | ❌       | `http://localhost:3000` |
 
 ## Development Values
 
@@ -65,23 +65,14 @@ BITCOIN_NETWORK=mainnet
 
 ## Environment Synchronization
 
-We provide tools to synchronize environment variables between local development and Vercel:
+Since the 2026-06-12 Hetzner migration there is no env-sync tooling:
 
-### Pull from Vercel to Local
-
-```bash
-npm run env:pull
-```
-
-This will pull all environment variables from Vercel to your local `.env.local` file.
-
-### Push from Local to Vercel
-
-```bash
-npm run env:push
-```
-
-This will push your local `.env.local` environment variables to Vercel.
+- **Local development**: `.env.local` (developer-owned, never committed).
+- **Production**: `/opt/orangecat/app/.env` on the box (bitbaum), edited there
+  directly; restart `orangecat-app` after changes. See
+  `docs/deployment/DEPLOYMENT_PROCESS.md`.
+- **CI**: dummy values baked into the workflows; real secrets only as GitHub
+  Actions secrets (E2E credentials).
 
 ## Setting up Environment Variables
 
@@ -123,4 +114,4 @@ During CI/CD, we create a `.env.production` file from GitHub Secrets and use it 
 2. Use `NEXT_PUBLIC_` prefix for variables that need to be accessible in the browser
 3. Regularly sync environment variables between local and production
 4. Document new environment variables in this file
-5. Update `.env.example` when adding new variables 
+5. Update `.env.example` when adding new variables

@@ -8,27 +8,9 @@ This directory contains proven workflows and operational procedures for common d
 
 ### 1. Deployment Workflow
 
-**File:** `DEPLOYMENT_WORKFLOW.md`
-
-**Use this when:** You want to deploy code changes to production (triggered by `w` command)
-
-**Contains:**
-
-- Complete deployment pipeline (commit → test → deploy → validate)
-- Automated browser testing for local and production environments
-- Vercel deployment monitoring with retry logic
-- Error handling and recovery procedures
-- Success metrics and troubleshooting guides
-
-**Quick Start:**
-
-```bash
-# Full deployment workflow
-npm run w
-
-# Or directly
-./w
-```
+Production deploys happen on the Hetzner box since 2026-06-12 — see
+`docs/deployment/DEPLOYMENT_PROCESS.md`. (The old `w` / Vercel pipeline this
+section used to describe was removed with the migration.)
 
 ---
 
@@ -290,9 +272,7 @@ sed -n '163p' migration.sql
 
 **Deployment Pipeline:**
 
-- ✅ Code deploys safely with full testing validation
-- ✅ Local testing prevents production issues
-- ✅ Vercel deployments monitored with automatic retries
+- ✅ CI (type-check, lint, tests, build, E2E) green before any box deploy
 - ✅ Production validation confirms all workflows work
 
 **Migration Pipeline:**
