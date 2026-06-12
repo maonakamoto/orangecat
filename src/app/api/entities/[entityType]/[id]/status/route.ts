@@ -84,7 +84,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
     // Without this branch the generic select+update below 500s on those
     // tables ("column status does not exist"), which is exactly why the
     // wishlist Publish Now button was silently broken.
-    // TODO: lift this into ENTITY_REGISTRY (`statusColumn: 'status' | 'is_active'`)
+    // Lift this into ENTITY_REGISTRY (`statusColumn: 'status' | 'is_active'`)
     // when a third entity needs it — two cases is still under the rule of three.
     const usesIsActive = entityType === 'wishlist';
     const statusSelectColumn = usesIsActive ? 'is_active' : 'status';
