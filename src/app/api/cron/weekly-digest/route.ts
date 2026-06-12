@@ -1,10 +1,11 @@
 /**
  * Weekly Digest Cron Route
  *
- * Vercel Cron: runs every Monday at 8am UTC
- * vercel.json: { "path": "/api/cron/weekly-digest", "schedule": "0 8 * * 1" }
+ * Schedule: systemd timer `orangecat-cron@weekly-digest.timer` on bitbaum,
+ * Mondays 08:00 UTC. (The header used to claim a vercel.json entry that
+ * never existed — this route was unscheduled from creation until 2026-06.)
  *
- * Processes users in batches of 50 to stay within Vercel's 5-minute limit.
+ * Processes users in batches of 50 to bound per-request work.
  *
  * Created: 2026-03-28
  */

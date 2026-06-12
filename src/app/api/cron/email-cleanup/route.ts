@@ -1,8 +1,9 @@
 /**
  * Email Log Cleanup Cron Route
  *
- * Vercel Cron: runs weekly on Sunday at 2am UTC
- * vercel.json: { "path": "/api/cron/email-cleanup", "schedule": "0 2 * * 0" }
+ * Schedule: systemd timer `orangecat-cron@email-cleanup.timer` on bitbaum,
+ * Sundays 02:00 UTC. (The header used to claim a vercel.json entry that
+ * never existed — this route was unscheduled from creation until 2026-06.)
  *
  * Deletes notification_email_log entries older than 90 days
  * to prevent unbounded table growth.

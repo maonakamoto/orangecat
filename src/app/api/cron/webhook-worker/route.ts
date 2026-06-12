@@ -1,8 +1,8 @@
 /**
  * Webhook delivery worker.
  *
- * Vercel Cron: runs every minute.
- * vercel.json: { "path": "/api/cron/webhook-worker", "schedule": "* * * * *" }
+ * Schedule: systemd timer `orangecat-webhook-worker.timer` on bitbaum,
+ * every minute (installed 2026-06-13; was a Vercel cron until e5aef265).
  *
  * For each due delivery row:
  *   1. Optimistically claim (atomic UPDATE WHERE attempt_count = expected)
@@ -127,7 +127,7 @@ export async function GET(request: Request) {
     }
 
     // Process sequentially within the budget — webhook receivers may be
-    // slow, and Vercel cron runs every minute so latency is fine.
+    // slow, and the timer fires every minute so latency is fine.
     const outcomes: DeliveryOutcome[] = [];
     for (const delivery of due) {
       const outcome = await processDelivery(delivery);

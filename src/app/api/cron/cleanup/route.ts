@@ -1,13 +1,13 @@
 /**
  * Generic Cleanup Cron Route
  *
- * Vercel Cron: runs daily at 02:00 UTC.
- * vercel.json: { "path": "/api/cron/cleanup", "schedule": "0 2 * * *" }
+ * Schedule: systemd timer `orangecat-cron@cleanup.timer` on bitbaum,
+ * daily 02:00 UTC (was a Vercel cron until the 2026-06 Hetzner migration).
  *
  * Housekeeping for plumbing tables that grow unbounded otherwise.
  * Each cleanup is independent — one failing doesn't stop the others —
  * and the response reports per-task counts so we can see what was pruned
- * in the Vercel logs.
+ * in the journal.
  *
  * Today's tasks:
  *   - idempotency_results: delete rows past expires_at (24h TTL from
