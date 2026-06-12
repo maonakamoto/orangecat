@@ -69,6 +69,13 @@ export interface CreateBookingInput {
   customer_notes?: string;
 }
 
+function formatBookingStart(startsAt: string): string {
+  return new Date(startsAt).toLocaleString('en-US', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
+}
+
 /**
  * Booking Service Class
  */
@@ -93,9 +100,13 @@ class BookingService {
         ? q.eq('status', opts.allowedStatuses[0])
         : q.in('status', opts.allowedStatuses);
     const { data: booking, error } = await q.select().single();
-    return error || !booking
-      ? { success: false, error: opts.errorMessage }
-      : { success: true, booking };
+    if (error || !booking) {
+      return { success: false, error: opts.errorMessage };
+    }
+    // Fire-and-forget, like notifyProviderOfBooking: a notification failure
+    // must never roll back or block the status change itself.
+    void this.notifyCounterpartyOfStatusChange(booking as Booking);
+    return { success: true, booking };
   }
 
   /**
@@ -189,32 +200,93 @@ class BookingService {
     return { success: true, booking };
   }
 
+  private async resolveActorUserId(actorId: string): Promise<string | null> {
+    const { data: actor } = await this.supabase
+      .from(DATABASE_TABLES.ACTORS)
+      .select('user_id')
+      .eq('id', actorId)
+      .single<{ user_id: string | null }>();
+    return actor?.user_id ?? null;
+  }
+
   private async notifyProviderOfBooking(
     providerActorId: string,
     booking: Booking,
     bookableType: BookableType
   ): Promise<void> {
-    const { data: providerActor } = await this.supabase
-      .from(DATABASE_TABLES.ACTORS)
-      .select('user_id')
-      .eq('id', providerActorId)
-      .single<{ user_id: string | null }>();
-    const providerUserId = providerActor?.user_id;
+    const providerUserId = await this.resolveActorUserId(providerActorId);
     if (!providerUserId) {
       return;
     }
 
-    const startLocal = new Date(booking.starts_at).toLocaleString('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    });
     void NotificationDispatcher.dispatch({
       userId: providerUserId,
       type: 'booking_request',
       title: 'New booking request',
-      message: `A customer requested to book your ${bookableType} starting ${startLocal}.`,
+      message: `A customer requested to book your ${bookableType} starting ${formatBookingStart(booking.starts_at)}.`,
       data: { bookingId: booking.id, bookableType, startsAt: booking.starts_at },
       sourceEntityType: bookableType,
+      sourceEntityId: booking.bookable_id,
+      actionUrl: ROUTES.DASHBOARD.BOOKINGS,
+    });
+  }
+
+  /**
+   * Notify the counterparty when a booking changes status. The new status
+   * implies both the event and the recipient: confirmed/rejected/completed
+   * are provider actions (notify the customer), cancelled is a customer
+   * action (notify the provider).
+   */
+  private async notifyCounterpartyOfStatusChange(booking: Booking): Promise<void> {
+    const startLocal = formatBookingStart(booking.starts_at);
+    const reasonSuffix = booking.cancellation_reason
+      ? ` Reason: ${booking.cancellation_reason}`
+      : '';
+
+    let userId: string | null;
+    let title: string;
+    let message: string;
+
+    switch (booking.status) {
+      case STATUS.BOOKINGS.CONFIRMED:
+        userId = booking.customer_user_id;
+        title = 'Booking confirmed';
+        message = `Your ${booking.bookable_type} booking starting ${startLocal} was confirmed.`;
+        break;
+      case STATUS.BOOKINGS.REJECTED:
+        userId = booking.customer_user_id;
+        title = 'Booking declined';
+        message = `Your ${booking.bookable_type} booking starting ${startLocal} was declined.${reasonSuffix}`;
+        break;
+      case STATUS.BOOKINGS.COMPLETED:
+        userId = booking.customer_user_id;
+        title = 'Booking completed';
+        message = `Your ${booking.bookable_type} booking starting ${startLocal} was marked as completed.`;
+        break;
+      case STATUS.BOOKINGS.CANCELLED:
+        userId = await this.resolveActorUserId(booking.provider_actor_id);
+        title = 'Booking cancelled';
+        message = `The customer cancelled the ${booking.bookable_type} booking starting ${startLocal}.${reasonSuffix}`;
+        break;
+      default:
+        return;
+    }
+    if (!userId) {
+      return;
+    }
+
+    void NotificationDispatcher.dispatch({
+      userId,
+      type: 'booking_update',
+      title,
+      message,
+      data: {
+        bookingId: booking.id,
+        bookableType: booking.bookable_type,
+        status: booking.status,
+        startsAt: booking.starts_at,
+      },
+      sourceEntityType: booking.bookable_type,
       sourceEntityId: booking.bookable_id,
       actionUrl: ROUTES.DASHBOARD.BOOKINGS,
     });

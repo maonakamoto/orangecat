@@ -2,6 +2,7 @@
 
 import {
   Bell,
+  Calendar,
   Check,
   Bitcoin,
   Users,
@@ -41,6 +42,9 @@ function getNotificationIcon(notification: Notification) {
       return <Heart className="w-5 h-5 text-destructive" />;
     case 'mention':
       return <AtSign className="w-5 h-5 text-foreground" />;
+    case 'booking_request':
+    case 'booking_update':
+      return <Calendar className="w-5 h-5 text-foreground" />;
     case 'system':
       return <Settings className="w-5 h-5 text-muted-foreground" />;
     default:

@@ -32,6 +32,7 @@ const EMAIL_ENABLED_TYPES: Record<string, boolean> = {
   payment: true,
   project_funded: true,
   booking_request: true,
+  booking_update: true,
   // Onboarding drip emails are dispatched directly by the scheduler,
   // not through this config, since they use custom templates.
 };

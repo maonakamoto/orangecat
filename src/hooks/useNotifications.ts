@@ -21,7 +21,9 @@ export interface Notification {
     | 'task_attention'
     | 'task_request'
     | 'task_completed'
-    | 'task_broadcast';
+    | 'task_broadcast'
+    | 'booking_request'
+    | 'booking_update';
   title: string;
   message: string | null;
   action_url: string | null;
