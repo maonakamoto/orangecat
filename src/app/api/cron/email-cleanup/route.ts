@@ -14,17 +14,13 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/standardResponse';
+import { verifyCronSecret } from '@/lib/api/cronAuth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60; // 1 minute is plenty for cleanup
 
 const LOG_SOURCE = 'CronEmailCleanup';
 const RETENTION_DAYS = 90;
-
-function verifyCronSecret(request: Request): boolean {
-  const authHeader = request.headers.get('authorization');
-  return authHeader === `Bearer ${process.env.CRON_SECRET}`;
-}
 
 export async function GET(request: Request) {
   if (!verifyCronSecret(request)) {

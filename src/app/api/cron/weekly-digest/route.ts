@@ -16,6 +16,7 @@ import { buildWeeklyDigest } from '@/services/notifications/digestBuilder';
 import { NotificationEmailService } from '@/services/notifications/emailService';
 import { logger } from '@/utils/logger';
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/standardResponse';
+import { verifyCronSecret } from '@/lib/api/cronAuth';
 import { CRON } from '@/constants/cron';
 
 export const dynamic = 'force-dynamic';
@@ -23,10 +24,6 @@ export const maxDuration = 60;
 
 const LOG_SOURCE = 'CronWeeklyDigest';
 const BATCH_SIZE = CRON.BATCH_SIZE;
-
-function verifyCronSecret(request: Request): boolean {
-  return request.headers.get('authorization') === `Bearer ${process.env.CRON_SECRET}`;
-}
 
 /** Returns IDs of users who should receive a weekly digest (explicit weekly pref, or no pref row = default weekly). */
 async function getUserIdsForDigest(admin: SupabaseClient): Promise<string[]> {

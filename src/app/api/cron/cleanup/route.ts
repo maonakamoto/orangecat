@@ -28,17 +28,13 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/standardResponse';
+import { verifyCronSecret } from '@/lib/api/cronAuth';
 import { pruneDeliveredWebhookDeliveries } from '@/services/webhooks/deliveryService';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 const LOG_SOURCE = 'CronCleanup';
-
-function verifyCronSecret(request: Request): boolean {
-  const authHeader = request.headers.get('authorization');
-  return authHeader === `Bearer ${process.env.CRON_SECRET}`;
-}
 
 interface CleanupResult {
   task: string;

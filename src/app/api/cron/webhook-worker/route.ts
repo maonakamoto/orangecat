@@ -21,6 +21,7 @@
 
 import { logger } from '@/utils/logger';
 import { apiSuccess, apiError, apiUnauthorized } from '@/lib/api/standardResponse';
+import { verifyCronSecret } from '@/lib/api/cronAuth';
 import {
   pickDueDeliveries,
   claimDelivery,
@@ -40,11 +41,6 @@ export const maxDuration = 60;
 const LOG_SOURCE = 'CronWebhookWorker';
 const BATCH_SIZE = 20;
 const POST_TIMEOUT_MS = 5_000;
-
-function verifyCronSecret(request: Request): boolean {
-  const authHeader = request.headers.get('authorization');
-  return authHeader === `Bearer ${process.env.CRON_SECRET}`;
-}
 
 interface DeliveryOutcome {
   deliveryId: string;
