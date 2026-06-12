@@ -1,18 +1,29 @@
 # Infrastructure
 
-Primary: Vercel (Next.js app + serverless API). Vercel config in `vercel.json` + `next.config.js`.
+Primary: self-hosted on Hetzner ("bitbaum", since 2026-06-12; Vercel team was blocked for fair-use).
+
+- App: Next.js standalone build (`SELF_HOST=1 npm run build`) running as the `orangecat-app` systemd unit on port 4003.
+- Reverse proxy: Caddy serves `orangecat.ch` + `www.orangecat.ch`.
+- Supabase: self-hosted at `supabase.orangecat.ch` (replaces the hosted project).
+- Env: gitignored `.env.selfhost.local` on the box (originally a filtered `vercel env pull`).
+- Runbook: `fleetcrown/docs/infrastructure/hetzner-migration.md` (FleetCrown repo — same box).
+- Deploys are performed on the box; pushes to `main` run CI (`ci.yml`) and a prod login E2E (`e2e-auth.yml`) but do NOT deploy. The old Vercel one-button-deploy workflow was removed with the migration.
+
+Historical (pre-2026-06-12): Vercel (Next.js app + serverless API), config in `vercel.json` + `next.config.js`.
 
 Optional Self-Hosted Stack (for on-prem / advanced monitoring)
+
 - Compose file: `deployment/production/docker-compose.yml`
 - Services: Traefik, web (Next.js standalone), Postgres, Redis, Prometheus, Loki, Promtail, Grafana, scheduled Postgres backups.
 - Monitoring configs: `deployment/production/monitoring/` (Prometheus, Loki, Promtail, Grafana datasources).
 
 Security
+
 - Traefik dashboard should not be public; restrict by network/VPN.
 - Postgres/Redis are bound to `127.0.0.1` and internal network only.
 - Pin versions for all infra images to avoid drift.
 
 Backups
+
 - `prodrigestivill/postgres-backup-local` runs on a schedule with retention.
 - See runbook for restoration procedure.
-
