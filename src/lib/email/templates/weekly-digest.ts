@@ -10,9 +10,11 @@ import { emailLayout, emailPlainText, EMAIL_COLORS } from './layout';
 export interface WeeklyDigestStats {
   views?: number;
   payments?: number;
+  /** Pre-formatted display string (e.g. "0.001 BTC") — rendered verbatim */
   amountBtc?: string;
   followers?: number;
   newFollowers?: number;
+  newMessages?: number;
 }
 
 export interface EntityPerformance {
@@ -53,7 +55,7 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
   textSections.push(`Hi ${greeting}, here's what happened this week.`, '');
 
   // Stats section
-  const hasStats = stats.views || stats.payments || stats.newFollowers;
+  const hasStats = stats.views || stats.payments || stats.newFollowers || stats.newMessages;
 
   if (hasStats) {
     const statItems: string[] = [];
@@ -65,7 +67,7 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
     }
     if (stats.payments) {
       const paymentLabel = stats.amountBtc
-        ? `${stats.payments} (${stats.amountBtc} BTC)`
+        ? `${stats.payments} (${stats.amountBtc})`
         : String(stats.payments);
       statItems.push(statCell('Payments', paymentLabel));
       textStatItems.push(`Payments: ${paymentLabel}`);
@@ -73,6 +75,10 @@ export function weeklyDigestTemplate(data: WeeklyDigestEmailData): {
     if (stats.newFollowers) {
       statItems.push(statCell('New followers', String(stats.newFollowers)));
       textStatItems.push(`New followers: ${stats.newFollowers}`);
+    }
+    if (stats.newMessages) {
+      statItems.push(statCell('New messages', String(stats.newMessages)));
+      textStatItems.push(`New messages: ${stats.newMessages}`);
     }
     if (stats.followers) {
       statItems.push(statCell('Total followers', String(stats.followers)));

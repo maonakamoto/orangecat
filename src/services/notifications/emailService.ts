@@ -30,11 +30,8 @@ import {
 } from '@/config/notification-config';
 import { welcomeTemplate } from '@/lib/email/templates/welcome';
 import { milestoneTemplate, type MilestoneType } from '@/lib/email/templates/milestone';
-import {
-  weeklyDigestTemplate,
-  type WeeklyDigestStats,
-  type EntityPerformance,
-} from '@/lib/email/templates/weekly-digest';
+import { weeklyDigestTemplate, type EntityPerformance } from '@/lib/email/templates/weekly-digest';
+import { displayBTC } from '@/services/currency/formatting';
 import {
   groupActivityTemplate,
   type GroupActivityType,
@@ -380,11 +377,7 @@ export class NotificationEmailService {
 
     // --- Weekly digest ---
     if (type === 'weekly_digest') {
-      return weeklyDigestTemplate({
-        displayName,
-        stats: (data.stats as WeeklyDigestStats) || {},
-        topEntities: data.topEntities as EntityPerformance[] | undefined,
-        suggestions: data.suggestions as string[] | undefined,
+      return buildWeeklyDigestEmail(displayName, data, {
         dashboardUrl: `${APP_URL}/dashboard`,
         chatUrl: `${APP_URL}/dashboard/cat`,
         unsubscribeUrl,
@@ -439,4 +432,45 @@ export class NotificationEmailService {
     logger.warn(`No email template for notification type: ${type}`, { type }, LOG_SOURCE);
     return null;
   }
+}
+
+/**
+ * Map the digest builder's output (digestBuilder.ts WeeklyDigestData) onto
+ * the weekly-digest template's input. The two shapes drifted unnoticed —
+ * the digest pipeline shipped unscheduled and was never exercised, so the
+ * mismatches (object suggestions vs string[], totalPaymentsReceived vs
+ * payments) surfaced only when the cron was finally installed 2026-06.
+ * All digest→email field mapping lives HERE, covered by unit tests.
+ *
+ * Exported for tests; production callers go through sendNotificationEmail.
+ */
+export function buildWeeklyDigestEmail(
+  displayName: string,
+  data: Record<string, unknown>,
+  urls: { dashboardUrl: string; chatUrl: string; unsubscribeUrl: string }
+): { subject: string; html: string; text: string } {
+  const stats = (data.stats ?? {}) as {
+    totalViews?: number;
+    totalPaymentsReceived?: number;
+    paymentAmountBtc?: number;
+    newFollowers?: number;
+    newMessages?: number;
+  };
+  // Tolerate both shapes: the builder emits {text, actionLabel, actionUrl}
+  // objects; plain strings also render (the template shows text only).
+  const rawSuggestions = data.suggestions as Array<string | { text: string }> | undefined;
+
+  return weeklyDigestTemplate({
+    displayName,
+    stats: {
+      views: stats.totalViews,
+      payments: stats.totalPaymentsReceived,
+      amountBtc: stats.paymentAmountBtc ? displayBTC(stats.paymentAmountBtc) : undefined,
+      newFollowers: stats.newFollowers,
+      newMessages: stats.newMessages,
+    },
+    topEntities: data.topEntities as EntityPerformance[] | undefined,
+    suggestions: rawSuggestions?.map(s => (typeof s === 'string' ? s : s.text)),
+    ...urls,
+  });
 }
