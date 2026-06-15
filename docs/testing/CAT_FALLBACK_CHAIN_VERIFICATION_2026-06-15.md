@@ -55,12 +55,20 @@ platform default is genuinely repositionable and persists where placed.
 **Boundary behavior**: Move-up disabled on the first row, Move-down disabled on
 the last row — correct.
 
+**Native HTML5 drag** (grip handle) — verified bidirectionally:
+
+| action                                | resulting persisted order            |
+| ------------------------------------- | ------------------------------------ |
+| drag platform default to the bottom   | groq 0, openrouter 1, **platform 2** |
+| drag platform default back to the top | **platform 0**, groq 1, openrouter 2 |
+
+The grip-handle drag fires the real `dragstart`/`drop` handlers, reorders
+optimistically, and persists via PATCH — same end state as the arrow controls.
+Also incidentally confirmed the page renders correctly in **light mode** (the
+semantic migration holds in both themes).
+
 ## Not covered
 
-- **Native HTML5 drag** (grip handle): Playwright's synthetic events don't
-  reliably fire the dragstart/drop sequence. The arrow controls were verified
-  instead — they call the same `reorderTo` → PATCH path as drop. Recommend a
-  quick manual drag check for the affordance feel.
 - End-to-end _inference_ fallthrough (a key failing → next link serving) was not
   exercised here (dummy keys); resolver logic reviewed separately.
 
