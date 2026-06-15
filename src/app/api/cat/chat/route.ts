@@ -216,10 +216,23 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       /* Non-fatal — continue without history */
     }
 
-    // Build message array: system + few-shots + history + user message
+    // Build message array: system + few-shots + history + user message.
+    // The few-shots are wrapped in explicit boundary markers so weaker models
+    // don't mistake the illustrative turns for real history and carry their
+    // fictional personas (woodworking/photography/retail) into the answer.
     const baseMessages: ToolAugmentedMessage[] = [
       { role: 'system', content: systemPrompt },
+      {
+        role: 'system',
+        content:
+          'The next turns are ILLUSTRATIVE EXAMPLES with different, fictional people — NOT this conversation and NOT facts about the current user. Learn their format and when to ask vs. act; never carry their specific details (woodworking, photography, retail, etc.) into the real conversation.',
+      },
       ...getCatFewShotExamples(),
+      {
+        role: 'system',
+        content:
+          'End of examples. The real conversation begins now. You know nothing about the current user beyond the context block above and their own messages — if that gives no skill, trade, or interest, ASK before assuming one.',
+      },
       ...historyMessages,
       { role: 'user', content: message },
     ];
