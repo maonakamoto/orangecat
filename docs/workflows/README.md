@@ -9,7 +9,7 @@ Operational procedures for common development tasks.
 Production runs **self-hosted on the Hetzner box** (`bitbaum`, behind Caddy)
 since 2026-06-12. CI (GitHub Actions) gates merges but does **not** deploy.
 
-→ See [`../deployment/DEPLOYMENT_PROCESS.md`](../deployment/DEPLOYMENT_PROCESS.md).
+→ See [`../deployment/DEPLOYMENT_PROCESS.md`](../operations/deployment/DEPLOYMENT_PROCESS.md).
 
 ## Database migrations
 
@@ -21,7 +21,7 @@ applied with `psql` against the self-hosted Supabase instance
 psql "$POSTGRES_URL" -f supabase/migrations/<timestamp>_<name>.sql
 ```
 
-→ Full workflow: [`../supabase/migrations-guide.md`](../supabase/migrations-guide.md).
+→ Full workflow: [`operations/supabase/migrations-guide.md`](../operations/supabase/migrations-guide.md).
 → Verify auth/registration after a migration: `scripts/db/verify-self-host.sh`.
 
 ---

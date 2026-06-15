@@ -221,7 +221,7 @@ Both pages generate:
 
 ## 📚 Related Documentation
 
-- [PRD Review](../planning/PRD_REVIEW_PUBLIC_PROFILES_SHARING.md) - Original PRD analysis
+- [PRD Review](../forward-looking/planning/PRD_REVIEW_PUBLIC_PROFILES_SHARING.md) - Original PRD analysis
 - [Route Constants](../../src/lib/routes.ts) - Route definitions
 - [Next.js Metadata API](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) - Official docs
 

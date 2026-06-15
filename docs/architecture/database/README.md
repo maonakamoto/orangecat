@@ -172,7 +172,7 @@ See [Improvements Roadmap](./improvements-roadmap.md) for:
 - [Database Schema (Legacy)](../database-schema.md) - Original simplified docs
 - [Association System Design](../association-system-masterpiece-design.md) - Deep dive into polymorphic associations
 - [Supabase Schema Guide](../SUPABASE_SCHEMA_GUIDE.md) - Setup and migration guide
-- [API Documentation](../../api/README.md) - API endpoints using these tables
+- [API Documentation](../../reference/api/README.md) - API endpoints using these tables
 
 ## 🛠️ Maintenance
 

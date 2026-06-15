@@ -649,7 +649,7 @@ console.error('[Error]', {
 - **Actor System**: `src/lib/actors/`
 - **Entity Registry**: `src/config/entity-registry.ts`
 - **Remote Supabase**: `docs/operations/REMOTE_ONLY_SUPABASE.md`
-- **Deployment**: `docs/operations/DEPLOYMENT.md`
+- **Deployment**: `docs/operations/deployment/DEPLOYMENT_PROCESS.md`
 - **Terminology Guide**: `docs/design/TERMINOLOGY.md`
 
 ---
