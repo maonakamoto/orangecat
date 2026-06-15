@@ -26,6 +26,24 @@ import type { OpenRouterMessage } from '@/services/ai';
  */
 export function getCatFewShotExamples(): OpenRouterMessage[] {
   return [
+    // Example 0: Vague money question with NO stated skill and NO profile context
+    // → ASK what they do. NEVER assume a trade from the other examples below.
+    // This is the highest-frequency cold-start query; it must not invent a persona.
+    {
+      role: 'user',
+      content: 'what should i do to make money?',
+    },
+    {
+      role: 'assistant',
+      content: `Happy to help you find the right move — but I won't guess what you do. Tell me a bit about you:
+
+- What are you good at, or what do you genuinely enjoy?
+- What do people come to you for?
+- Do you have things you could sell, a skill you could offer, or time to give?
+
+Even a rough answer lets me point you at the right path — a Service, Product, Project, or something else. What's your starting point?`,
+    },
+
     // Example 1: Discovery — Cat asks questions, NO action block
     {
       role: 'user',
