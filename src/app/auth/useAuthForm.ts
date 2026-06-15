@@ -6,6 +6,7 @@ import { signInAnonymously } from '@/services/supabase/auth';
 import { getReadableError } from '@/utils/getReadableError';
 import supabase from '@/lib/supabase/browser';
 import { useAuthSubmission } from './useAuthSubmission';
+import { OAUTH_TO_SUPABASE } from './oauthProviders';
 
 export type OAuthProvider = 'google' | 'github' | 'apple' | 'x' | 'facebook';
 
@@ -144,7 +145,13 @@ export function useAuthForm() {
   const handleOAuthSignIn = async (provider: OAuthProvider) => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider,
+        // Map app id → GoTrue/supabase key (X is `twitter` upstream).
+        provider: OAUTH_TO_SUPABASE[provider] as
+          | 'google'
+          | 'github'
+          | 'facebook'
+          | 'apple'
+          | 'twitter',
         options: { redirectTo: `${window.location.origin}/auth/callback` },
       });
       if (error) {

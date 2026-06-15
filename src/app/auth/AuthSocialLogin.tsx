@@ -3,6 +3,7 @@
 import { Loader2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { OAUTH_PROVIDERS } from './OAuthIcons';
+import { useEnabledOAuthProviders } from './oauthProviders';
 import type { AuthMode, OAuthProvider } from './useAuthForm';
 
 interface AuthSocialLoginProps {
@@ -20,6 +21,10 @@ export function AuthSocialLogin({
   onOAuthSignIn,
   onAnonymousSignIn,
 }: AuthSocialLoginProps) {
+  // Only show providers the server actually has enabled — never a button that fails.
+  const { enabled } = useEnabledOAuthProviders();
+  const providers = OAUTH_PROVIDERS.filter(p => enabled.has(p.id));
+
   if (mode === 'forgot') {
     return (
       <div className="mt-6 text-center">
@@ -42,33 +47,47 @@ export function AuthSocialLogin({
           anonymous-sign-in TEXT LINK below that (no second full-width
           button competing for attention with the OAuth options). */}
       <div className="mt-6">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-border" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase tracking-wider">
-            <span className="bg-muted/40 dark:bg-background px-3 text-muted-dim">
-              Or continue with
-            </span>
-          </div>
-        </div>
+        {/* Social providers — only rendered for providers the server has
+            enabled (see useEnabledOAuthProviders). When none are enabled the
+            whole "Or continue with" block is omitted so users only ever see
+            working options (email + anonymous). */}
+        {providers.length > 0 && (
+          <>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase tracking-wider">
+                <span className="bg-muted/40 dark:bg-background px-3 text-muted-dim">
+                  Or continue with
+                </span>
+              </div>
+            </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {OAUTH_PROVIDERS.map(({ id, name, icon: Icon }) => (
-            <Button
-              key={id}
-              type="button"
-              variant="outline"
-              disabled={loading}
-              onClick={() => onOAuthSignIn(id)}
-              className="h-11 w-full border-border-subtle hover:border-border hover:bg-muted/60"
-              aria-label={`Sign in with ${name}`}
+            <div
+              className={
+                providers.length >= 3
+                  ? 'mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4'
+                  : 'mt-4 grid grid-cols-2 gap-3'
+              }
             >
-              <Icon className="h-5 w-5" />
-              <span className="ml-2 text-sm font-medium sm:hidden">{name}</span>
-            </Button>
-          ))}
-        </div>
+              {providers.map(({ id, name, icon: Icon }) => (
+                <Button
+                  key={id}
+                  type="button"
+                  variant="outline"
+                  disabled={loading}
+                  onClick={() => onOAuthSignIn(id)}
+                  className="h-11 w-full border-border-subtle hover:border-border hover:bg-muted/60"
+                  aria-label={`Sign in with ${name}`}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span className="ml-2 text-sm font-medium sm:hidden">{name}</span>
+                </Button>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* Anonymous sign-in — secondary text link, not a heavyweight button.
             Privacy-conscious users will find it; default users won't be
