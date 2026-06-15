@@ -8,6 +8,7 @@ import { CHANNELS, TIMING, debugLog } from '../lib/constants';
 import { useRealtimeSubscription } from './useRealtimeSubscription';
 import { useConversationsFetcher } from './useConversationsFetcher';
 import { API_ROUTES } from '@/config/api-routes';
+import { DATABASE_TABLES } from '@/config/database-tables';
 
 export function useConversations(searchQuery: string, selectedConversationId?: string | null) {
   const { user, hydrated, isLoading: authLoading, isAuthenticated } = useAuth();
@@ -79,7 +80,7 @@ export function useConversations(searchQuery: string, selectedConversationId?: s
 
   useRealtimeSubscription({
     channelName: CHANNELS.CONVERSATIONS_LIST,
-    table: 'conversations',
+    table: DATABASE_TABLES.CONVERSATIONS,
     events: ['*'],
     onEvent: useCallback(() => {
       const elapsed = Date.now() - lastFetch;
@@ -92,7 +93,7 @@ export function useConversations(searchQuery: string, selectedConversationId?: s
 
   useRealtimeSubscription({
     channelName: `${CHANNELS.CONVERSATIONS_LIST}-messages`,
-    table: 'messages',
+    table: DATABASE_TABLES.MESSAGES,
     events: ['INSERT'],
     onEvent: useCallback(() => {
       if (!refreshing) {
@@ -104,7 +105,7 @@ export function useConversations(searchQuery: string, selectedConversationId?: s
 
   useRealtimeSubscription({
     channelName: `${CHANNELS.CONVERSATIONS_LIST}-participants`,
-    table: 'conversation_participants',
+    table: DATABASE_TABLES.CONVERSATION_PARTICIPANTS,
     events: ['UPDATE'],
     onEvent: useCallback(() => {
       if (!refreshing) {

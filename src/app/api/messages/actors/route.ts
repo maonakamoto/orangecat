@@ -13,14 +13,9 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { apiSuccess, handleApiError } from '@/lib/api/standardResponse';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
-
-interface MessagingActor {
-  actor_id: string;
-  actor_type: 'user' | 'group';
-  name: string;
-  avatar_url: string | null;
-  is_personal: boolean;
-}
+// Single source of truth for the actor shape — shared with the client hook
+// that consumes this endpoint (avoids the response/consumer types drifting).
+import type { MessagingActor } from '@/features/messaging/hooks/useMessagingActors';
 
 // Actor row shape from database (joined with profiles)
 interface ActorRow {
