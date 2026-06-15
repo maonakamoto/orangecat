@@ -75,6 +75,15 @@ export function buildFullContextString(context: FullUserContext): string {
       lines.push(
         `**Display currency**: ${r.preferredCurrency} — quote prices in this currency by default; convert to/from BTC as needed.`
       );
+      if (r.btcRate) {
+        lines.push(
+          `**Live BTC price**: 1 BTC ≈ ${Math.round(r.btcRate.rate).toLocaleString('en-US')} ${r.btcRate.currency} right now — use THIS rate for every BTC⇄fiat conversion. Never recall or guess a rate.`
+        );
+      } else {
+        lines.push(
+          `**Live BTC price**: unavailable this turn — do NOT guess a BTC⇄fiat rate; say you can't quote an exact conversion right now.`
+        );
+      }
       lines.push(
         `**Locale**: ${r.locale} — reply in the language and conventions of this locale unless the user writes in another language.`
       );

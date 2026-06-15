@@ -143,6 +143,11 @@ export interface RuntimeContext {
    * Lets Cat reference "the project you were just looking at" instead of starting cold.
    */
   lastVisitedPath?: string;
+  /**
+   * Live BTC exchange-rate snapshot so Cat quotes real numbers for BTC⇄fiat
+   * conversions instead of recalling a stale rate from training data.
+   */
+  btcRate?: { currency: string; rate: number } | null;
 }
 
 export interface FullUserContext {

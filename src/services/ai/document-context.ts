@@ -24,6 +24,7 @@ import type {
   RuntimeContext,
 } from './document-context-types';
 import { isSupportedCurrency, PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
+import { currencyConverter } from '@/services/currency/rates';
 
 import { fetchEntitiesForCat } from './entity-context-fetcher';
 import {
@@ -288,11 +289,30 @@ async function fetchRuntimeContextForCat(
     logger.warn('Could not resolve current actor for cat runtime', { error }, 'DocumentContext');
   }
 
+  // Live BTC price so Cat quotes real conversions instead of recalling a stale
+  // training-data rate. Non-fatal: on failure Cat just omits the rate line and
+  // is instructed (in the system prompt) not to invent one.
+  let btcRate: RuntimeContext['btcRate'] = null;
+  try {
+    const rates = await currencyConverter.getRates();
+    const byCur: Record<string, number> = {
+      CHF: rates.btcToChf,
+      USD: rates.btcToUsd,
+      EUR: rates.btcToEur,
+    };
+    const fiat = preferredCurrency === 'BTC' ? 'CHF' : preferredCurrency.toUpperCase();
+    const rate = byCur[fiat];
+    btcRate = rate ? { currency: fiat, rate } : { currency: 'CHF', rate: rates.btcToChf };
+  } catch (error) {
+    logger.warn('Could not fetch BTC rate for cat runtime', { error }, 'DocumentContext');
+  }
+
   return {
     preferredCurrency,
     locale,
     currentActor,
     lastVisitedPath,
+    btcRate,
   };
 }
 
