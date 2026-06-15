@@ -67,14 +67,14 @@ Functional composition replaces inheritance. Each middleware does one thing.
 
 ## Tech Stack
 
-| Layer      | Technology                              |
-| ---------- | --------------------------------------- |
-| Framework  | Next.js 15, React 18, TypeScript 5.8    |
-| Styling    | Tailwind CSS, shadcn/ui                 |
-| Database   | Supabase (PostgreSQL + RLS)             |
-| Bitcoin    | Lightning Network, LNURL, bitcoinjs-lib |
-| Auth       | Supabase Auth, JWT, Row Level Security  |
-| Deployment | Vercel, GitHub Actions CI/CD            |
+| Layer      | Technology                                                                               |
+| ---------- | ---------------------------------------------------------------------------------------- |
+| Framework  | Next.js 15, React 18, TypeScript 5.8                                                     |
+| Styling    | Tailwind CSS, shadcn/ui                                                                  |
+| Database   | Self-hosted Supabase (PostgreSQL + Auth + RLS) on Hetzner                                |
+| Bitcoin    | Lightning Network, LNURL, bitcoinjs-lib                                                  |
+| Auth       | Supabase Auth, JWT, Row Level Security                                                   |
+| Deployment | Self-hosted on Hetzner (bitbaum, behind Caddy); GitHub Actions CI (gate only, no deploy) |
 
 <details>
 <summary><strong>Quick Start</strong></summary>

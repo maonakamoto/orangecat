@@ -9,21 +9,25 @@
 ## 🔍 Systematic Troubleshooting Approach
 
 ### **1. Gather Information**
+
 - **Reproduce the issue** - Can you make it happen consistently?
 - **Document symptoms** - What exactly is happening vs. what should happen?
 - **Collect context** - When did it start? What changed recently?
 
 ### **2. Form Hypotheses**
+
 - **Identify possible causes** - List likely root causes
 - **Prioritize by probability** - Start with most likely issues
 - **Consider impact** - Focus on issues affecting users first
 
 ### **3. Test & Verify**
+
 - **Test hypothesis** - Implement the fix or workaround
 - **Verify resolution** - Confirm the issue is resolved
 - **Check for side effects** - Ensure fix doesn't break other functionality
 
 ### **4. Document & Prevent**
+
 - **Document the solution** - Help future troubleshooting
 - **Implement prevention** - Prevent the issue from recurring
 - **Share learnings** - Improve team knowledge
@@ -31,15 +35,18 @@
 ## 🚨 Common Issue Categories
 
 ### **🔐 Authentication Issues**
+
 **Symptoms:** Users can't log in, sessions expire unexpectedly, auth redirects fail
 
 **Common Causes:**
+
 - Environment variables not set correctly
 - Supabase configuration issues
 - RLS policies too restrictive
 - JWT token expiration or corruption
 
 **Debugging Steps:**
+
 ```bash
 # Check environment variables
 echo $NEXT_PUBLIC_SUPABASE_URL
@@ -53,56 +60,64 @@ supabase logs --db-url
 ```
 
 **Solutions:**
+
 - Verify all required environment variables are set
 - Check Supabase dashboard for auth configuration
 - Review RLS policies in Supabase
 - Clear browser cookies and localStorage
 
 ### **🗄️ Database Issues**
+
 **Symptoms:** Queries slow, connection failures, data not persisting
 
 **Common Causes:**
+
 - Missing database indexes
 - Large table scans
 - Connection pool exhaustion
 - Incorrect query patterns
 
 **Debugging Steps:**
+
 ```sql
 -- Check slow queries
-SELECT * FROM pg_stat_statements 
+SELECT * FROM pg_stat_statements
 ORDER BY mean_time DESC LIMIT 10;
 
 -- Check table sizes
-SELECT 
+SELECT
   schemaname,
   tablename,
   pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as size
-FROM pg_tables 
+FROM pg_tables
 WHERE schemaname = 'public';
 
 -- Check for missing indexes
-SELECT * FROM pg_indexes 
-WHERE schemaname = 'public' 
+SELECT * FROM pg_indexes
+WHERE schemaname = 'public'
 ORDER BY tablename;
 ```
 
 **Solutions:**
+
 - Add missing indexes for common query patterns
 - Optimize queries to use indexes
 - Check connection pool configuration
 - Review query patterns in code
 
 ### **⚡ Performance Issues**
+
 **Symptoms:** Slow page loads, high memory usage, API timeouts
 
 **Common Causes:**
+
 - Large bundle sizes
 - Inefficient database queries
 - Memory leaks in components
 - Missing caching
 
 **Debugging Steps:**
+
 ```bash
 # Check bundle size
 npm run analyze
@@ -115,21 +130,25 @@ npm run analyze
 ```
 
 **Solutions:**
+
 - Implement code splitting for large components
 - Add database indexes for slow queries
 - Fix memory leaks with proper cleanup
 - Implement caching for frequently accessed data
 
 ### **🚀 Deployment Issues**
+
 **Symptoms:** Build failures, deployment errors, runtime crashes
 
 **Common Causes:**
+
 - Environment variable mismatches
 - Build configuration errors
 - Dependency conflicts
 - Platform-specific issues
 
 **Debugging Steps:**
+
 ```bash
 # Check build locally
 npm run build
@@ -142,6 +161,7 @@ vercel logs --follow
 ```
 
 **Solutions:**
+
 - Ensure all environment variables are properly set
 - Check build configuration for environment-specific settings
 - Resolve dependency conflicts
@@ -150,7 +170,9 @@ vercel logs --follow
 ## 🛠️ Issue-Specific Solutions
 
 ### **Port Conflicts**
+
 **Problem:** "Port 3003 is already in use"
+
 ```bash
 # Kill existing processes
 npm run kill:node
@@ -163,7 +185,9 @@ npm run fresh:start
 ```
 
 ### **Database Connection Issues**
+
 **Problem:** Supabase connection failures
+
 ```bash
 # Check Supabase status
 supabase status
@@ -176,7 +200,9 @@ supabase stop && supabase start
 ```
 
 ### **Build Failures**
+
 **Problem:** Next.js build errors
+
 ```bash
 # Clear cache and rebuild
 npm run clear:cache
@@ -190,7 +216,9 @@ npm run lint
 ```
 
 ### **Test Failures**
+
 **Problem:** Tests not passing
+
 ```bash
 # Run tests with verbose output
 npm test -- --verbose
@@ -203,13 +231,15 @@ npm test -- --testNamePattern="failing test name"
 ```
 
 ### **Memory Leaks**
+
 **Problem:** App slowing down over time
+
 ```typescript
 // Check for proper cleanup in useEffect
 useEffect(() => {
   const handleResize = () => {};
   window.addEventListener('resize', handleResize);
-  
+
   return () => {
     window.removeEventListener('resize', handleResize); // ✅ Proper cleanup
   };
@@ -219,6 +249,7 @@ useEffect(() => {
 ## 📊 Monitoring & Alerting
 
 ### **Application Health Checks**
+
 ```bash
 # Check application health
 npm run health:check
@@ -231,6 +262,7 @@ supabase status
 ```
 
 ### **Error Monitoring Setup**
+
 ```typescript
 // Production error tracking
 import * as Sentry from '@sentry/nextjs';
@@ -241,12 +273,13 @@ try {
   Sentry.captureException(error, {
     tags: { component: 'UserProfile' },
     user: { id: userId },
-    extra: { action: 'updateProfile' }
+    extra: { action: 'updateProfile' },
   });
 }
 ```
 
 ### **Performance Monitoring**
+
 ```typescript
 // Track performance metrics
 import { performanceMonitor } from '@/services/monitoring';
@@ -254,7 +287,7 @@ import { performanceMonitor } from '@/services/monitoring';
 export async function trackApiPerformance(endpoint: string, duration: number) {
   performanceMonitor.recordMetric('api_response_time', duration, {
     endpoint,
-    method: 'GET'
+    method: 'GET',
   });
 }
 ```
@@ -262,25 +295,31 @@ export async function trackApiPerformance(endpoint: string, duration: number) {
 ## 🔧 Development Environment Issues
 
 ### **VS Code Issues**
+
 **Problem:** Extensions not working, IntelliSense broken
 
 **Solutions:**
+
 - Reload VS Code window (`Ctrl+Shift+P` → "Developer: Reload Window")
 - Clear VS Code cache and restart
 - Reinstall problematic extensions
 
 ### **Node.js Issues**
+
 **Problem:** Node version conflicts, module resolution errors
 
 **Solutions:**
+
 - Use nvm to manage Node versions: `nvm use 18`
 - Clear npm cache: `npm cache clean --force`
 - Delete node_modules and reinstall: `rm -rf node_modules && npm install`
 
 ### **Git Issues**
+
 **Problem:** Merge conflicts, lost commits, repository corruption
 
 **Solutions:**
+
 - For merge conflicts: Use `git mergetool` or resolve manually
 - For lost commits: Check `git reflog`
 - For repository issues: `git gc --aggressive`
@@ -288,12 +327,14 @@ export async function trackApiPerformance(endpoint: string, duration: number) {
 ## 🆘 Escalation Procedures
 
 ### **When to Escalate**
+
 - **Critical issues** affecting production users
 - **Security vulnerabilities** or data breaches
 - **Persistent issues** that can't be resolved locally
 - **Infrastructure problems** requiring DevOps intervention
 
 ### **Escalation Path**
+
 1. **Self-debug** using this guide (15-30 minutes)
 2. **Team chat** - #dev-orangecat for collaborative debugging
 3. **Technical lead** for architectural or complex issues
@@ -301,6 +342,7 @@ export async function trackApiPerformance(endpoint: string, duration: number) {
 5. **Emergency on-call** for critical production issues
 
 ### **Emergency Contacts**
+
 - **Production Issues**: Check deployment documentation
 - **Security Incidents**: Follow security incident response plan
 - **Data Loss**: Contact technical lead immediately
@@ -308,6 +350,7 @@ export async function trackApiPerformance(endpoint: string, duration: number) {
 ## 📚 Documentation References
 
 ### **Quick Reference**
+
 - **[Development Setup](../development/SETUP.md)** - Environment configuration
 - **[Debugging Guide](../development/debugging.md)** - Development debugging
 - **[Performance Guide](../development/performance-debugging.md)** - Performance optimization
@@ -315,23 +358,28 @@ export async function trackApiPerformance(endpoint: string, duration: number) {
 - **[Monitoring Guide](../operations/monitoring.md)** - Production monitoring
 
 ### **External Resources**
+
 - **[Next.js Troubleshooting](https://nextjs.org/docs/advanced-features/debugging)** - Framework-specific issues
 - **[Supabase Troubleshooting](https://supabase.com/docs/guides/troubleshooting)** - Database issues
+  - Note: our DB is **self-hosted** (`supabase.orangecat.ch` on the Hetzner box) — for DB issues, check logs on the box; external Supabase Cloud docs may not apply.
 - **[React DevTools](https://react.dev/learn/react-developer-tools)** - Component debugging
 
 ## 🛡️ Prevention Strategies
 
 ### **Proactive Monitoring**
+
 - Set up automated health checks
 - Monitor error rates and performance metrics
 - Regular security audits and dependency updates
 
 ### **Code Quality Gates**
+
 - Pre-commit hooks for linting and tests
 - Pre-deployment validation
 - Automated code review requirements
 
 ### **Documentation Maintenance**
+
 - Keep troubleshooting guides current
 - Document solutions to recurring issues
 - Share learnings across the team
@@ -339,31 +387,39 @@ export async function trackApiPerformance(endpoint: string, duration: number) {
 ## 📝 Issue Documentation
 
 ### **Bug Report Template**
+
 ```markdown
 ## Issue Description
+
 [Clear description of the problem]
 
 ## Steps to Reproduce
+
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
 
 ## Expected Behavior
+
 [What should happen]
 
 ## Actual Behavior
+
 [What actually happens]
 
 ## Environment
+
 - Browser: [Chrome/Firefox/Safari]
 - Environment: [Development/Staging/Production]
 - Version: [Current version]
 
 ## Additional Context
+
 [Logs, screenshots, error messages]
 ```
 
 ### **Root Cause Analysis**
+
 - **What caused the issue?**
 - **Why wasn't it caught earlier?**
 - **How can we prevent it in the future?**
@@ -371,5 +427,5 @@ export async function trackApiPerformance(endpoint: string, duration: number) {
 
 ---
 
-**Last Updated:** October 17, 2025
+**Last Updated:** 2026-06-15
 **Troubleshooting Philosophy:** "Every problem solved makes us stronger - document the solution and prevent recurrence"

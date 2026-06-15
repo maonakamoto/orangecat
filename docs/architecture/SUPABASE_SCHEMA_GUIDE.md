@@ -226,11 +226,10 @@ Run the migration in `supabase/migrations/20250525000000_fix_profiles_schema.sql
 
 ### 1. Apply Database Migration
 
-Go to your Supabase dashboard → SQL Editor and run:
+Apply the migration via `psql` against the self-hosted DB (`supabase.orangecat.ch`) on the Hetzner box:
 
-```sql
--- Copy and paste the contents of:
--- supabase/migrations/20250525000000_fix_profiles_schema.sql
+```bash
+psql "$POSTGRES_URL" -f supabase/migrations/20250525000000_fix_profiles_schema.sql
 ```
 
 ### 2. Verify Schema
@@ -250,7 +249,7 @@ Your profile edit form should now work correctly with all fields.
 
 1. **"Column does not exist" errors**
    - **Cause**: Migration not applied
-   - **Solution**: Run the schema migration in Supabase SQL Editor
+   - **Solution**: Apply the schema migration via `psql` against the self-hosted DB (see "Apply Database Migration" above)
 
 2. **"Row Level Security" errors**
    - **Cause**: User not authenticated or wrong permissions

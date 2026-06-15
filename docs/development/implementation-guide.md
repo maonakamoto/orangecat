@@ -59,18 +59,13 @@ This guide provides step-by-step instructions for implementing the architecture 
 #### Step 1.1: Apply Migrations
 
 ```bash
-# Connect to your Supabase project
-cd /home/g/dev/orangecat
-
-# Apply migrations using Supabase CLI
-npx supabase db push
-
-# Or apply manually via SQL editor:
-# (Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; access via the box / founder.)
+# Apply each SQL migration via psql against the self-hosted DB on the box.
+# (DB is self-hosted Supabase at supabase.orangecat.ch — managed cloud retired 2026-06.)
+# See docs/supabase/migrations-guide.md for the canonical workflow.
 # Run each migration file in order:
-#    - 20251013_create_organization_members.sql
-#    - 20251013_create_projects.sql
-#    - 20251013_add_project_to_projects.sql
+psql "$POSTGRES_URL" -f supabase/migrations/20251013_create_organization_members.sql
+psql "$POSTGRES_URL" -f supabase/migrations/20251013_create_projects.sql
+psql "$POSTGRES_URL" -f supabase/migrations/20251013_add_project_to_projects.sql
 ```
 
 #### Step 1.2: Verify Tables Created

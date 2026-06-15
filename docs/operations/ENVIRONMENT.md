@@ -4,16 +4,16 @@ This document describes all environment variables used in the OrangeCat applicat
 
 ## Required Variables
 
-| Variable                        | Description                       | Required | Example                      |
-| ------------------------------- | --------------------------------- | -------- | ---------------------------- |
-| `NEXT_PUBLIC_SITE_URL`          | Public site URL                   | ✅       | `https://orangecat.ch`       |
-| `NEXT_PUBLIC_SITE_NAME`         | Site name                         | ✅       | `OrangeCat`                  |
-| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL              | ✅       | `https://xxx.supabase.co`    |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key            | ✅       | `xxx`                        |
-| `BITCOIN_NETWORK`               | Bitcoin network (mainnet/testnet) | ✅       | `mainnet`                    |
-| `LIGHTNING_NODE_URL`            | Lightning node URL                | ✅       | `https://xxx.lightning.node` |
-| `LIGHTNING_MACAROON`            | Lightning macaroon                | ✅       | `xxx`                        |
-| `LIGHTNING_TLS_CERT`            | Lightning TLS certificate         | ✅       | `xxx`                        |
+| Variable                        | Description                       | Required | Example                         |
+| ------------------------------- | --------------------------------- | -------- | ------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`          | Public site URL                   | ✅       | `https://orangecat.ch`          |
+| `NEXT_PUBLIC_SITE_NAME`         | Site name                         | ✅       | `OrangeCat`                     |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase URL (self-hosted)        | ✅       | `https://supabase.orangecat.ch` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key            | ✅       | `xxx`                           |
+| `BITCOIN_NETWORK`               | Bitcoin network (mainnet/testnet) | ✅       | `mainnet`                       |
+| `LIGHTNING_NODE_URL`            | Lightning node URL                | ✅       | `https://xxx.lightning.node`    |
+| `LIGHTNING_MACAROON`            | Lightning macaroon                | ✅       | `xxx`                           |
+| `LIGHTNING_TLS_CERT`            | Lightning TLS certificate         | ✅       | `xxx`                           |
 
 ## Optional Variables
 
@@ -52,9 +52,9 @@ BITCOIN_NETWORK=mainnet
 
 ## Production Setup
 
-1. Set variables in Vercel dashboard
-2. Mark sensitive variables as "Sensitive"
-3. Enable "Automatically expose System Environment Variables"
+Production env lives in the app's `.env` on the Hetzner box (not Vercel). Edit it
+there directly and restart the `orangecat-app` service after changes. See
+`docs/deployment/DEPLOYMENT_PROCESS.md`.
 
 ## Security Notes
 

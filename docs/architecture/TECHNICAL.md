@@ -1,11 +1,17 @@
 # Technical Documentation
 
+> **⚠️ Note (2026-06-15):** This document predates the 2026-06 self-host migration.
+> Current infrastructure is **self-hosted Supabase** (`https://supabase.orangecat.ch`)
+> with the app running on **Hetzner** (not Vercel). For the authoritative infra picture,
+> see `docs/devops/infrastructure.md`. Sections below describing Vercel/cloud Supabase
+> are historical.
+
 **Last Updated**: June 6, 2025  
 **Status**: 🛡️ Security Hardened | 📊 Test Coverage Critical Gap (4.9%)
 
 ## Technology Stack
 
-- **Frontend**: Next.js 14, React, TypeScript
+- **Frontend**: Next.js 15, React, TypeScript
 - **Styling**: Tailwind CSS with centralized theme system
 - **Database**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth (security hardened)

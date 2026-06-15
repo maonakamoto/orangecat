@@ -45,11 +45,10 @@ cp config/production.env.template .env.local
 
 ### 4. Database Setup
 
-OrangeCat uses **cloud Supabase only**. No database setup required.
+OrangeCat uses a **self-hosted Supabase instance at `https://supabase.orangecat.ch`** (Hetzner box).
 
-- Database is pre-configured and running in the cloud
-- All migrations are applied automatically
-- Environment variables are already configured
+- Point `.env.local` at the self-hosted instance (URL + keys)
+- Migrations are SQL files in `supabase/migrations/`, applied via `psql` on the box (see `docs/supabase/migrations-guide.md`)
 
 ### 5. Start Development Server
 
@@ -71,9 +70,9 @@ npm run dev:clean
 
 ### Supabase Configuration
 
-- **Development & Production**: Uses hosted Supabase instance only
-- **No Local Database**: Cloud-only setup for consistency and resource efficiency
-- **Migrations**: Via Supabase dashboard or API
+- **Development & Production**: Uses the self-hosted Supabase instance at `https://supabase.orangecat.ch` (Hetzner box)
+- **No Local Database**: Single self-hosted instance for consistency
+- **Migrations**: SQL files in `supabase/migrations/` applied via `psql` (see `docs/supabase/migrations-guide.md`)
 
 ### VS Code Extensions (Recommended)
 
@@ -262,5 +261,5 @@ If you encounter issues:
 
 ---
 
-**Last Updated:** October 17, 2025
+**Last Updated:** 2026-06-15
 **Setup Time:** ~5-10 minutes for basic setup, ~30 minutes for full environment
