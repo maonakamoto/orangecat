@@ -1,5 +1,6 @@
 import { createServerClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { SITE_URL } from '@/config/brand';
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -17,21 +18,19 @@ export async function GET(request: Request) {
 
       if (error) {
         return NextResponse.redirect(
-          `${requestUrl.origin}/auth?error=${encodeURIComponent('Authentication failed. Please try again.')}`
+          `${SITE_URL}/auth?error=${encodeURIComponent('Authentication failed. Please try again.')}`
         );
       }
 
       // Successfully authenticated, redirect to Cat — the primary interface
-      return NextResponse.redirect(`${requestUrl.origin}${next}`);
+      return NextResponse.redirect(`${SITE_URL}${next}`);
     } catch {
       return NextResponse.redirect(
-        `${requestUrl.origin}/auth?error=${encodeURIComponent('An unexpected error occurred during authentication')}`
+        `${SITE_URL}/auth?error=${encodeURIComponent('An unexpected error occurred during authentication')}`
       );
     }
   }
 
   // Return the user to an error page with instructions
-  return NextResponse.redirect(
-    `${requestUrl.origin}/auth?error=${encodeURIComponent('No code provided')}`
-  );
+  return NextResponse.redirect(`${SITE_URL}/auth?error=${encodeURIComponent('No code provided')}`);
 }

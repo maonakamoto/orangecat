@@ -1,6 +1,7 @@
 import { type EmailOtpType } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
+import { SITE_URL } from '@/config/brand';
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -21,7 +22,7 @@ export async function GET(request: Request) {
 
     if (!error) {
       // Email confirmed — redirect to Cat, the primary interface
-      return NextResponse.redirect(`${requestUrl.origin}${next}`);
+      return NextResponse.redirect(`${SITE_URL}${next}`);
     }
   }
 
@@ -29,6 +30,6 @@ export async function GET(request: Request) {
   const errorMessage =
     'Email verification failed. The link may have expired or already been used. Please try signing in or request a new verification email.';
   return NextResponse.redirect(
-    `${requestUrl.origin}/auth?error=${encodeURIComponent(errorMessage)}&showResend=true`
+    `${SITE_URL}/auth?error=${encodeURIComponent(errorMessage)}&showResend=true`
   );
 }
