@@ -1,6 +1,6 @@
 -- ============================================================================
 -- FIX AVATAR UPLOAD RLS POLICY
--- Run this in your Supabase SQL Editor: https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql
+-- Run this via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired
 -- ============================================================================
 
 -- Enable RLS on storage.objects if not already enabled

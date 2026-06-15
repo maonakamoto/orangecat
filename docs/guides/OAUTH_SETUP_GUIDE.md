@@ -11,12 +11,12 @@ This guide will help you configure GitHub, Google, and Twitter/X OAuth providers
 
 ---
 
-## 📋 Step 1: Access Your Supabase Dashboard
+## 📋 Step 1: Access Supabase Studio
 
-1. **Navigate to**: https://supabase.com/dashboard
-2. **Sign in** to your Supabase account
-3. **Select your project** (the one for OrangeCat)
-4. **Go to**: Settings → Authentication → Providers
+(Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; access via the box / founder.)
+
+1. **Open Studio** on the self-hosted instance
+2. **Go to**: Settings → Authentication → Providers
 
 You should see a screen like this:
 
@@ -29,16 +29,19 @@ You should see a screen like this:
 In your Supabase dashboard, enable these providers:
 
 ### ✅ GitHub Provider
+
 - **Toggle**: ON
 - **Client ID**: `your-github-client-id` (you'll get this from GitHub)
 - **Client Secret**: `your-github-client-secret` (you'll get this from GitHub)
 
 ### ✅ Google Provider
+
 - **Toggle**: ON
 - **Client ID**: `your-google-client-id` (you'll get this from Google)
 - **Client Secret**: `your-google-client-secret` (you'll get this from Google)
 
 ### ✅ Twitter/X Provider
+
 - **Toggle**: ON
 - **Client ID**: `your-twitter-client-id` (you'll get this from Twitter/X)
 - **Client Secret**: `your-twitter-client-secret` (you'll get this from Twitter/X)
@@ -152,16 +155,21 @@ npm run dev
 ## 🎯 Troubleshooting
 
 ### ❌ "Provider is not enabled" Error
+
 **Solution**: Go back to Supabase Dashboard → Authentication → Providers and ensure all three providers are enabled.
 
 ### ❌ "Invalid redirect URL" Error
+
 **Solution**: Make sure the redirect URL in Supabase matches exactly: `https://www.orangecat.ch/auth/callback`
 
 ### ❌ "Invalid client credentials" Error
+
 **Solution**: Double-check that the Client ID and Secret in `.env.local` match exactly what you copied from each OAuth provider.
 
 ### ❌ Social login buttons not showing
+
 **Solution**:
+
 1. Check browser console for errors
 2. Verify all OAuth providers are enabled in Supabase
 3. Check that `.env.local` has valid credentials
@@ -175,7 +183,7 @@ Your `.env.local` should look like this (with real values):
 
 ```bash
 # Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://supabase.orangecat.ch
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 # OAuth Provider Configuration

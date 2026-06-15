@@ -1,5 +1,7 @@
 # Migration Lessons Learned - Post-Mortem Analysis
 
+> ⚠️ **RETIRED — managed cloud only.** This post-mortem concerns the managed Supabase Cloud Management API / `PROJECT_REF` workflow, retired 2026-06. Schema work now happens against the self-hosted instance (`supabase.orangecat.ch`) via SQL migrations + `psql`. Kept for historical reference.
+
 **Date:** November 14, 2025
 **Task:** Apply timeline social features migration with dislikes system
 **Result:** ✅ Success (after debugging)

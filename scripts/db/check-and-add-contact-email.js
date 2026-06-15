@@ -60,8 +60,10 @@ async function checkAndAddColumn() {
           const errorText = await response.text();
           console.error('❌ Failed to execute SQL via REST API');
           console.error(`   Error: ${errorText}`);
-          console.log('\n💡 Please apply this SQL manually via Supabase Dashboard:');
-          console.log('   https://app.supabase.com/project/ohkueislstxomdjavyhs/sql/new\n');
+          console.log('\n💡 Please apply this SQL manually:');
+          console.log(
+            '   apply via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired\n'
+          );
           console.log('SQL to execute:');
           console.log(sql);
           process.exit(1);
@@ -101,6 +103,3 @@ checkAndAddColumn().catch(err => {
   console.error('❌ Unhandled error:', err);
   process.exit(1);
 });
-
-
-

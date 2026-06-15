@@ -1,3 +1,8 @@
+console.error(
+  'RETIRED: this script scraped the managed Supabase Cloud dashboard for API keys, which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch); read keys from .env.local / the self-hosted Studio. See docs/operations/DECOMMISSION-CLOUD.md.'
+);
+process.exit(1);
+
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
@@ -8,7 +13,7 @@ async function getSupabaseApiKeys() {
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
-    args: ['--start-maximized']
+    args: ['--start-maximized'],
   });
 
   const page = await browser.newPage();
@@ -16,7 +21,7 @@ async function getSupabaseApiKeys() {
   try {
     console.log('🔗 Navigating to Supabase project...');
     await page.goto('https://app.supabase.com/project/ohkueislstxomdjavyhs/settings/api', {
-      waitUntil: 'networkidle2'
+      waitUntil: 'networkidle2',
     });
 
     // Wait for the API keys section to load
@@ -32,7 +37,7 @@ async function getSupabaseApiKeys() {
       'tr:has(td:contains("anon")) code',
       'tr:has(td:contains("public")) code',
       '.api-key',
-      'code'
+      'code',
     ];
 
     let anonKey = null;
@@ -86,7 +91,6 @@ async function getSupabaseApiKeys() {
 
     await browser.close();
     return anonKey;
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     await browser.close();
@@ -95,12 +99,14 @@ async function getSupabaseApiKeys() {
 }
 
 // Run the function
-getSupabaseApiKeys().then((key) => {
+getSupabaseApiKeys().then(key => {
   if (key) {
     console.log('🎉 Success! OrangeCat should now work!');
     console.log('🔄 Restart your development server: npm run dev');
   } else {
     console.log('⚠️  Manual intervention required.');
-    console.log('🔗 Please visit: https://app.supabase.com/project/ohkueislstxomdjavyhs/settings/api');
+    console.log(
+      '🔗 Please visit: https://app.supabase.com/project/ohkueislstxomdjavyhs/settings/api'
+    );
   }
 });

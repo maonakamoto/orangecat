@@ -276,6 +276,6 @@ console.log('Update error:', error);
 
 - [Supabase Auth Documentation](https://supabase.com/docs/guides/auth)
 - [Row Level Security Guide](https://supabase.com/docs/guides/auth/row-level-security)
-- [Supabase SQL Editor](https://supabase.com/dashboard/project/YOUR_PROJECT/sql)
+- SQL editor — (Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; access via the box / founder.)
 
 This documentation should be updated whenever the schema changes to keep it accurate and useful for development and debugging.

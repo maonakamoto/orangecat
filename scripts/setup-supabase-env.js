@@ -15,11 +15,11 @@ const ENV_FILE_PATH = path.join(process.cwd(), '.env.local');
 function askQuestion(question) {
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
 
-  return new Promise((resolve) => {
-    rl.question(question, (answer) => {
+  return new Promise(resolve => {
+    rl.question(question, answer => {
       rl.close();
       resolve(answer);
     });
@@ -43,11 +43,15 @@ async function setupEnvironment() {
   }
 
   console.log('\n📋 You need your Supabase project credentials.');
-  console.log('   You can find them at: https://app.supabase.com/project/YOUR_PROJECT/settings/api');
+  console.log(
+    '   You can find them in .env.local or the self-hosted Supabase Studio (supabase.orangecat.ch) - managed cloud retired'
+  );
   console.log('');
 
   // Get Supabase URL
-  const supabaseUrl = await askQuestion('Enter your Supabase Project URL (e.g., https://your-project.supabase.co): ');
+  const supabaseUrl = await askQuestion(
+    'Enter your Supabase Project URL (e.g., https://your-project.supabase.co): '
+  );
 
   if (!supabaseUrl || !supabaseUrl.includes('supabase.co')) {
     console.error('❌ Invalid Supabase URL. It should end with .supabase.co');
@@ -55,7 +59,9 @@ async function setupEnvironment() {
   }
 
   // Get Supabase Anon Key
-  const supabaseKey = await askQuestion('Enter your Supabase anon/public key (starts with eyJ...): ');
+  const supabaseKey = await askQuestion(
+    'Enter your Supabase anon/public key (starts with eyJ...): '
+  );
 
   if (!supabaseKey || !supabaseKey.startsWith('eyJ')) {
     console.error('❌ Invalid Supabase key. It should start with "eyJ"');
@@ -105,7 +111,7 @@ NODE_ENV=development
       .limit(1);
 
     if (profilesError) {
-      console.log('⚠️ Connection test failed - this might be normal if tables don\'t exist yet');
+      console.log("⚠️ Connection test failed - this might be normal if tables don't exist yet");
       console.log(`   Error: ${profilesError.message}`);
     } else {
       console.log('✅ Database connection successful!');
@@ -121,4 +127,3 @@ NODE_ENV=development
 if (require.main === module) {
   setupEnvironment().catch(console.error);
 }
-

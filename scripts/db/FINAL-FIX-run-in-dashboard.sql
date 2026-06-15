@@ -1,6 +1,6 @@
 -- ============================================================================
 -- FINAL FIX FOR AVATAR UPLOAD RLS
--- Run this in: https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new
+-- Run this via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired
 -- ============================================================================
 
 -- Set role to postgres (superuser) to have permission to modify storage.objects

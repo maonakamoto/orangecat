@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+console.error(
+  'RETIRED: this script targeted the managed Supabase Cloud dashboard for API keys, which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch); read keys from .env.local / the self-hosted Studio. See docs/operations/DECOMMISSION-CLOUD.md.'
+);
+process.exit(1);
 
 /**
  * Simple API Key Update Script
@@ -74,11 +78,11 @@ function updateEnvFile(newApiKey) {
 async function promptForApiKey() {
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
 
-  return new Promise((resolve) => {
-    rl.question('🔑 Paste the anon public API key here: ', (answer) => {
+  return new Promise(resolve => {
+    rl.question('🔑 Paste the anon public API key here: ', answer => {
       rl.close();
       resolve(answer.trim());
     });
@@ -122,7 +126,9 @@ async function main() {
     const validation = validateApiKey(apiKey);
     if (validation.valid) {
       console.log('✅ API key validation passed');
-      console.log(`🔑 Key preview: ${apiKey.substring(0, 20)}...${apiKey.substring(apiKey.length - 20)}`);
+      console.log(
+        `🔑 Key preview: ${apiKey.substring(0, 20)}...${apiKey.substring(apiKey.length - 20)}`
+      );
 
       updateEnvFile(apiKey);
 

@@ -1,5 +1,7 @@
 # Supabase Migration Quick Reference
 
+> ⚠️ **RETIRED — managed cloud only.** The `PROJECT_REF` + `api.supabase.com` Management API workflow below targeted the managed Supabase Cloud, retired 2026-06. Schema work now happens against the self-hosted instance (`supabase.orangecat.ch`) via SQL migrations + `psql`. Kept for historical reference.
+
 **Use this for fast lookup. See SUPABASE_MIGRATION_WORKFLOW.md for detailed explanation.**
 
 ---

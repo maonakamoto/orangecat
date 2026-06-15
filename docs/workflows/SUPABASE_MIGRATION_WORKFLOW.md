@@ -1,5 +1,7 @@
 # Supabase Migration Workflow - Successful CLI Application
 
+> ⚠️ **RETIRED — managed cloud only.** This workflow targeted the managed Supabase Cloud project (`api.supabase.com` Management API + `PROJECT_REF`). The managed cloud was retired 2026-06; the DB is now self-hosted at `supabase.orangecat.ch` on the Hetzner box. Schema work now happens against the self-hosted instance via SQL migrations + `psql`. Kept for historical reference.
+
 ## 📋 Overview
 
 This document captures the **successful methodology** for applying Supabase migrations via CLI without leaving the development environment. This workflow was developed after resolving multiple authentication and SQL syntax issues.

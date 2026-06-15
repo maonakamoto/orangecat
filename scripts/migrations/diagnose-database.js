@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 
+console.error(
+  'RETIRED: this script used the managed Supabase Cloud Management API, which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch). Apply SQL via: psql "$POSTGRES_URL" -f <file>. See docs/operations/DECOMMISSION-CLOUD.md.'
+);
+process.exit(1);
+
 /**
  * Database Diagnostic Script
  * Checks the current state of timeline-related database objects

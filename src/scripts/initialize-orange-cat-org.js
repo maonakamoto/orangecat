@@ -10,8 +10,7 @@
 const { createClient } = require('@supabase/supabase-js');
 
 // Environment variables
-const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://ohkueislstxomdjavyhs.supabase.co';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://supabase.orangecat.ch';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'REDACTED_ANON_KEY';
 
 async function initializeOrangeCatOrganization() {

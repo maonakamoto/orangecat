@@ -75,7 +75,7 @@ try {
   console.log('─'.repeat(60))
 
   console.log('\n🎯 Instructions:')
-  console.log('1. Go to: https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new')
+  console.log('1. apply via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired')
   console.log('2. Paste the SQL above')
   console.log('3. Click "Run"')
   console.log('4. Verify: Index should appear in Database → Indexes')

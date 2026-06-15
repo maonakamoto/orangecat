@@ -1,10 +1,14 @@
 #!/usr/bin/env node
+console.error(
+  'RETIRED: this script used the managed Supabase Cloud Management API, which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch). Apply SQL via: psql "$POSTGRES_URL" -f <file>. See docs/operations/DECOMMISSION-CLOUD.md.'
+);
+process.exit(1);
 /**
  * Apply Production Readiness Migrations via Supabase Management API
- * 
+ *
  * Uses Supabase Management API to apply migrations.
  * Requires SUPABASE_ACCESS_TOKEN in .env.local
- * 
+ *
  * Usage: node scripts/db/apply-production-migrations-via-api.js
  */
 
@@ -64,7 +68,7 @@ const migrations = [
 function applyMigration(migration) {
   return new Promise((resolve, reject) => {
     const filePath = path.join(process.cwd(), migration.file);
-    
+
     if (!fs.existsSync(filePath)) {
       reject(new Error(`Migration file not found: ${filePath}`));
       return;
@@ -72,7 +76,7 @@ function applyMigration(migration) {
 
     console.log(`\n📄 ${migration.name}`);
     console.log(`   File: ${migration.file}`);
-    
+
     const sql = fs.readFileSync(filePath, 'utf-8');
     console.log(`   Size: ${sql.length} characters`);
 
@@ -128,7 +132,7 @@ async function main() {
     for (let i = 0; i < migrations.length; i++) {
       const migration = migrations[i];
       await applyMigration(migration);
-      
+
       // Small delay between migrations
       if (i < migrations.length - 1) {
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -141,7 +145,6 @@ async function main() {
     console.log('2. Test group creation/editing');
     console.log('3. Test entity ownership with actors');
     console.log('4. Run: npm run build (check for TypeScript errors)');
-    
   } catch (error) {
     console.error('\n❌ Migration failed:');
     console.error(error.message);
@@ -150,5 +153,3 @@ async function main() {
 }
 
 main();
-
-

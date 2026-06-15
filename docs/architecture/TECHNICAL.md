@@ -18,6 +18,7 @@
 ## Security Status
 
 ✅ **SECURE** - All critical vulnerabilities fixed (June 2025):
+
 - File upload authorization bypass - **FIXED**
 - Celebrity impersonation prevention - **IMPLEMENTED**
 - Console.log data exposure - **ELIMINATED**
@@ -28,6 +29,7 @@
 ## Test Coverage Status
 
 ⚠️ **CRITICAL GAP** - Current test coverage: **4.9%** (Target: 85%)
+
 - **Security Tests**: Excellent (77 tests)
 - **Component Tests**: Minimal coverage
 - **Integration Tests**: None
@@ -77,6 +79,7 @@ src/
 ## Key Components
 
 ### Authentication (✅ Security Hardened)
+
 - Implemented using Supabase Auth with enhanced security
 - `useAuth` hook for authentication state management (21 tests)
 - Protected routes using middleware
@@ -84,6 +87,7 @@ src/
 - **Security**: Auth state inconsistency fixes implemented
 
 ### Profile Management (✅ Security Hardened)
+
 - Complete CRUD operations through Supabase
 - Type-safe operations with TypeScript
 - **Security**: Enhanced profile validation and sanitization
@@ -92,6 +96,7 @@ src/
 - Avatar upload with security validation
 
 ### File Upload System (✅ Security Hardened)
+
 - **Security**: Mandatory user authentication
 - **Security**: Magic byte validation for file types
 - **Security**: Malicious content scanning
@@ -100,6 +105,7 @@ src/
 - Comprehensive security testing (9 tests)
 
 ### Funding System
+
 - Bitcoin and Lightning Network integration
 - Transaction tracking and verification
 - Goal tracking and progress updates
@@ -107,6 +113,7 @@ src/
 - **Security**: Enhanced Bitcoin address validation
 
 ### Testing Infrastructure (⚠️ CRITICAL GAP)
+
 - Jest for unit testing
 - React Testing Library for component testing
 - **Current Coverage**: 4.9% (Need 85% for production)
@@ -115,6 +122,7 @@ src/
 - **Integration Tests**: Critical gap
 
 ### Celebrity Impersonation Prevention (✅ NEW)
+
 - 75+ protected celebrity/brand usernames
 - Character substitution attack detection
 - Unicode lookalike character prevention
@@ -122,6 +130,7 @@ src/
 - Comprehensive testing (25 tests)
 
 ### Logging System (✅ Security Hardened)
+
 - Structured logging with proper log levels
 - Production-safe (no sensitive data exposure)
 - Replaced 85%+ of console.log statements
@@ -130,6 +139,7 @@ src/
 ## Environment Variables
 
 Required environment variables:
+
 ```env
 # Application Configuration
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
@@ -137,7 +147,7 @@ NEXT_PUBLIC_SITE_NAME=OrangeCat (Dev)
 NODE_ENV=development
 
 # Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://ohkueislstxomdjavyhs.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://supabase.orangecat.ch
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 
 # Bitcoin Configuration
@@ -149,6 +159,7 @@ BITCOIN_NETWORK=mainnet
 ## Database Schema
 
 ### Users Table
+
 ```sql
 create table users (
   id uuid references auth.users on delete cascade,
@@ -161,6 +172,7 @@ create table users (
 ```
 
 ### Profiles Table
+
 ```sql
 create table profiles (
   id uuid default uuid_generate_v4() primary key,
@@ -176,6 +188,7 @@ create table profiles (
 ```
 
 ### Funding Pages Table
+
 ```sql
 create table funding_pages (
   id uuid default uuid_generate_v4() primary key,
@@ -195,22 +208,26 @@ create table funding_pages (
 ## Development Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/g-but/orangecat.git
    cd orangecat
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Set up environment variables:
+
    ```bash
    cp .env.example .env.local
    ```
 
 4. Start development server (recommended):
+
    ```bash
    npm run fresh:start
    ```
@@ -242,6 +259,7 @@ npm test -- --testPathPattern="security|verification|validation"
 ```
 
 ### Test Coverage Goals
+
 - **Current**: 4.9% (CRITICAL - need improvement)
 - **Target**: 85% before production
 - **Security Coverage**: Excellent (77 tests)
@@ -250,6 +268,7 @@ npm test -- --testPathPattern="security|verification|validation"
 ## Deployment
 
 The application is deployed on Vercel with the following configuration:
+
 - Automatic deployments from main branch
 - Environment variables managed in Vercel dashboard
 - Production URL: https://orangecat.ch
@@ -260,6 +279,7 @@ The application is deployed on Vercel with the following configuration:
 ## Architecture Priorities
 
 ### ✅ COMPLETED
+
 - Critical security vulnerabilities fixed
 - Celebrity impersonation prevention
 - File upload security hardening
@@ -267,6 +287,7 @@ The application is deployed on Vercel with the following configuration:
 - Console.log production exposure eliminated
 
 ### 🚨 CRITICAL NEXT STEPS
+
 1. **Test Coverage** (Essential for production)
    - Increase from 4.9% to 85%
    - Add component testing
@@ -291,4 +312,4 @@ The application is deployed on Vercel with the following configuration:
 - **State Management**: Use Zustand for complex state (projects, auth)
 - **Logging**: Use structured logger, never console.log in production
 - **Validation**: Multi-layer security validation for all inputs
-- **Documentation**: Keep documentation updated with current state 
+- **Documentation**: Keep documentation updated with current state

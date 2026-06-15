@@ -1,4 +1,6 @@
 #!/bin/bash
+echo 'RETIRED: this script used the managed Supabase Cloud Management API (linked-project "supabase db push" + SUPABASE_ACCESS_TOKEN), which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch). Apply SQL via: psql "$POSTGRES_URL" -f <file>. See docs/operations/DECOMMISSION-CLOUD.md.' >&2
+exit 1
 # Apply RLS Fix Migration via Supabase CLI
 # 
 # This script applies the RLS fix migration using the Supabase CLI.
@@ -21,7 +23,7 @@ if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
   echo "   4. Then run this script again"
   echo ""
   echo "📋 Or apply manually via Supabase Studio:"
-  echo "   1. Go to: https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new"
+  echo "   1. apply via psql \"\$POSTGRES_URL\" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired"
   echo "   2. Copy contents of: supabase/migrations/20250130000007_fix_group_members_rls_recursion.sql"
   echo "   3. Paste and execute"
   exit 1
@@ -41,7 +43,7 @@ else
   echo "❌ Migration failed"
   echo ""
   echo "📋 Please apply manually via Supabase Studio:"
-  echo "   1. Go to: https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new"
+  echo "   1. apply via psql \"\$POSTGRES_URL\" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired"
   echo "   2. Copy contents of: supabase/migrations/20250130000007_fix_group_members_rls_recursion.sql"
   echo "   3. Paste and execute"
   exit 1

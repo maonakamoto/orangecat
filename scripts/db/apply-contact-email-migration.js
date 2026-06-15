@@ -117,7 +117,9 @@ async function applyMigration() {
 
     console.log('\n✨ Migration process complete!\n');
     console.log("💡 If the column still doesn't exist, apply the SQL manually:");
-    console.log('   1. Go to: https://app.supabase.com/project/ohkueislstxomdjavyhs/sql/new');
+    console.log(
+      '   1. apply via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired'
+    );
     console.log(
       '   2. Copy the SQL from: supabase/migrations/20251124060022_add_contact_email.sql'
     );
@@ -132,6 +134,3 @@ applyMigration().catch(err => {
   console.error('❌ Unhandled error:', err);
   process.exit(1);
 });
-
-
-

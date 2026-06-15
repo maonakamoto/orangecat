@@ -1,4 +1,6 @@
 #!/bin/bash
+echo 'RETIRED: this script used the managed Supabase Cloud Management API, which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch). Apply SQL via: psql "$POSTGRES_URL" -f <file>. See docs/operations/DECOMMISSION-CLOUD.md.' >&2
+exit 1
 
 # Apply full timeline_events migration
 # This creates the table, indexes, RLS policies, and functions

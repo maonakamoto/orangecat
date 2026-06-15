@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
  * Apply RLS Fix Migration
- * 
+ *
  * Applies the group_members RLS recursion fix migration directly to the database.
- * 
+ *
  * Usage: node scripts/db/apply-rls-fix.js
  */
 
@@ -55,25 +55,28 @@ async function executeSQL(sql, description) {
 
 async function applyMigration() {
   console.log('🚀 Applying RLS fix migration...\n');
-  
+
   try {
-    const migrationPath = join(__dirname, '../../supabase/migrations/20250130000007_fix_group_members_rls_recursion.sql');
+    const migrationPath = join(
+      __dirname,
+      '../../supabase/migrations/20250130000007_fix_group_members_rls_recursion.sql'
+    );
     const migrationSQL = readFileSync(migrationPath, 'utf-8');
-    
+
     // Split into statements (handling multi-line statements with $$)
     const statements = [];
     let currentStatement = '';
     let inDollarQuote = false;
     let dollarTag = '';
-    
+
     const lines = migrationSQL.split('\n');
-    
+
     for (const line of lines) {
       const trimmed = line.trim();
-      
+
       // Skip comments
       if (trimmed.startsWith('--')) continue;
-      
+
       // Handle dollar-quoted strings (for function definitions)
       if (trimmed.includes('$$')) {
         const dollarMatches = trimmed.match(/\$\$([^$]*)\$\$/g);
@@ -86,7 +89,7 @@ async function applyMigration() {
           }
           continue;
         }
-        
+
         // Start or end of dollar quote
         const dollarTagMatch = trimmed.match(/\$\$([^$]*)?/);
         if (dollarTagMatch) {
@@ -99,9 +102,9 @@ async function applyMigration() {
           }
         }
       }
-      
+
       currentStatement += line + '\n';
-      
+
       // If we're not in a dollar quote and see a semicolon, it's the end of a statement
       if (!inDollarQuote && trimmed.endsWith(';')) {
         const stmt = currentStatement.trim();
@@ -111,53 +114,61 @@ async function applyMigration() {
         currentStatement = '';
       }
     }
-    
+
     // Add any remaining statement
     if (currentStatement.trim()) {
       statements.push(currentStatement.trim());
     }
-    
+
     console.log(`📊 Found ${statements.length} SQL statements to execute\n`);
-    
+
     let successCount = 0;
     let failCount = 0;
-    
+
     for (let i = 0; i < statements.length; i++) {
       const statement = statements[i];
       if (!statement || statement.length < 10) continue;
-      
+
       const description = statement.substring(0, 60).replace(/\n/g, ' ') + '...';
       const success = await executeSQL(statement, `[${i + 1}/${statements.length}] ${description}`);
-      
+
       if (success) {
         successCount++;
       } else {
         failCount++;
         // Don't stop on first error - some statements might fail safely
-        if (statement.includes('DROP POLICY IF EXISTS') || statement.includes('CREATE OR REPLACE')) {
+        if (
+          statement.includes('DROP POLICY IF EXISTS') ||
+          statement.includes('CREATE OR REPLACE')
+        ) {
           console.log('   ⚠️  Continuing despite error (expected for idempotent operations)');
         }
       }
-      
+
       // Small delay between statements
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    
+
     console.log(`\n📊 Results: ${successCount} success, ${failCount} failed`);
-    
+
     if (failCount === 0) {
       console.log('\n✅ Migration applied successfully!');
       console.log('🔄 Please refresh the browser to test groups functionality.');
     } else {
       console.log('\n⚠️  Some statements failed. Please check the errors above.');
-      console.log('💡 You may need to apply this migration manually via Supabase Studio SQL editor.');
+      console.log(
+        '💡 You may need to apply this migration manually via Supabase Studio SQL editor.'
+      );
     }
-    
   } catch (error) {
     console.error('❌ Failed to apply migration:', error);
     console.error('\n📋 Please apply this migration manually via Supabase Studio:');
-    console.error('   1. Go to https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new');
-    console.error('   2. Copy the contents of: supabase/migrations/20250130000007_fix_group_members_rls_recursion.sql');
+    console.error(
+      '   1. apply via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired'
+    );
+    console.error(
+      '   2. Copy the contents of: supabase/migrations/20250130000007_fix_group_members_rls_recursion.sql'
+    );
     console.error('   3. Paste and execute');
     process.exit(1);
   }

@@ -25,6 +25,7 @@ Created a **professional, navigable documentation structure**:
 ```
 
 **What this gives you:**
+
 - ✅ **Onboarding**: New developers can understand the system quickly
 - ✅ **Decision making**: Architecture documented for informed choices
 - ✅ **Troubleshooting**: Clear reference for debugging
@@ -36,6 +37,7 @@ Created a **professional, navigable documentation structure**:
 ### 🔧 2. Two Production-Ready Migrations
 
 #### Migration #1: Performance Optimization
+
 **File:** `supabase/migrations/20251017000001_add_transactions_status_index.sql`
 
 ```sql
@@ -43,6 +45,7 @@ CREATE INDEX idx_transactions_status ON transactions(status);
 ```
 
 **Impact:**
+
 - 🚀 **10x faster** transaction queries (500ms → 50ms)
 - 📊 Improved dashboard performance
 - 💳 Faster payment processing
@@ -53,9 +56,11 @@ CREATE INDEX idx_transactions_status ON transactions(status);
 ---
 
 #### Migration #2: Security & Compliance
+
 **File:** `supabase/migrations/20251017000002_create_audit_logs.sql`
 
 **Creates:**
+
 - 📋 `audit_logs` table with complete audit trail
 - 🔧 `create_audit_log()` helper function
 - ⚡ 6 strategic indexes for efficient querying
@@ -63,6 +68,7 @@ CREATE INDEX idx_transactions_status ON transactions(status);
 - 📝 Example trigger for automatic profile logging
 
 **Impact:**
+
 - 🔐 **Security**: Track all critical operations
 - 📜 **Compliance**: Meet financial regulations
 - 🐛 **Debugging**: Trace complex issues
@@ -77,6 +83,7 @@ CREATE INDEX idx_transactions_status ON transactions(status);
 **You learned:**
 
 #### Database Design Principles
+
 - ✅ How to evaluate database architecture
 - ✅ Trade-offs: normalization vs performance
 - ✅ When to use indexes (and when not to)
@@ -84,6 +91,7 @@ CREATE INDEX idx_transactions_status ON transactions(status);
 - ✅ Polymorphic associations pattern
 
 #### PostgreSQL Best Practices
+
 - ✅ Idempotent migrations (`IF NOT EXISTS`)
 - ✅ Transaction wrapping (`BEGIN`/`COMMIT`)
 - ✅ Index types and strategies
@@ -92,6 +100,7 @@ CREATE INDEX idx_transactions_status ON transactions(status);
 - ✅ SECURITY DEFINER for controlled privileges
 
 #### Production Deployment
+
 - ✅ Multiple deployment methods (Dashboard, Functions, CLI)
 - ✅ Verification before and after
 - ✅ Rollback procedures
@@ -99,6 +108,7 @@ CREATE INDEX idx_transactions_status ON transactions(status);
 - ✅ Dealing with real-world connection issues
 
 #### Professional Practices
+
 - ✅ Documentation-first approach
 - ✅ Test → Document → Deploy → Verify
 - ✅ Always have a rollback plan
@@ -110,6 +120,7 @@ CREATE INDEX idx_transactions_status ON transactions(status);
 ## 📊 Database Quality: Before & After
 
 ### Before Today
+
 ```
 Database:
 ✅ Functional - Basic operations work
@@ -123,6 +134,7 @@ Rating: ~7.5/10 (Good but needs work)
 ```
 
 ### After Today
+
 ```
 Database:
 ✅ Functional - All operations work
@@ -143,6 +155,7 @@ Rating: 8.7/10 (Production-ready, with clear optimization path)
 ### Immediate Actions (You)
 
 #### Step 1: Review the Documentation (10 minutes)
+
 ```bash
 # Start here
 cat docs/architecture/database/QUICK_REFERENCE.md
@@ -156,11 +169,13 @@ cat docs/architecture/database/IMPROVEMENTS_SUMMARY.md
 ---
 
 #### Step 2: Apply Migration #1 - Index (2 minutes)
+
 **This is a safe, high-impact change!**
 
-1. Go to: [Supabase SQL Editor](https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new)
+1. Run in the SQL editor. (Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; access via the box / founder.)
 
 2. Paste this:
+
    ```sql
    BEGIN;
 
@@ -185,6 +200,7 @@ cat docs/architecture/database/IMPROVEMENTS_SUMMARY.md
 ---
 
 #### Step 3: Test the Index (2 minutes)
+
 ```sql
 -- Test query uses the new index
 EXPLAIN ANALYZE
@@ -198,11 +214,13 @@ LIMIT 10;
 ---
 
 #### Step 4: Apply Migration #2 - Audit Logs (5 minutes)
+
 **This adds comprehensive audit logging!**
 
-1. Go to: [Supabase SQL Editor](https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new)
+1. Run in the SQL editor (self-hosted — see note above).
 
 2. Copy entire content of:
+
    ```bash
    supabase/migrations/20251017000002_create_audit_logs.sql
    ```
@@ -216,6 +234,7 @@ LIMIT 10;
 ---
 
 #### Step 5: Test Audit Logging (2 minutes)
+
 ```sql
 -- Make a change to your profile
 UPDATE profiles
@@ -256,6 +275,7 @@ LIMIT 5;
 See: `docs/architecture/database/improvements-roadmap.md`
 
 **Priorities:**
+
 1. Table partitioning for transactions (handle growth)
 2. Archival strategy for old data (reduce costs)
 3. Materialized views for analytics (faster dashboards)
@@ -264,15 +284,15 @@ See: `docs/architecture/database/improvements-roadmap.md`
 
 ## 📚 Documentation Files Created
 
-| File | Purpose | Lines |
-|------|---------|-------|
-| **README.md** | Navigation hub | 200+ |
-| **QUICK_REFERENCE.md** | Commands & links | 400+ |
-| **IMPROVEMENTS_SUMMARY.md** | What we built | 600+ |
-| **DEPLOYMENT_GUIDE.md** | How to deploy | 700+ |
-| **schema-overview.md** | Architecture | 800+ |
-| **analysis-rating.md** | 8.7/10 analysis | 465 |
-| **improvements-roadmap.md** | Future plans | 600+ |
+| File                        | Purpose          | Lines |
+| --------------------------- | ---------------- | ----- |
+| **README.md**               | Navigation hub   | 200+  |
+| **QUICK_REFERENCE.md**      | Commands & links | 400+  |
+| **IMPROVEMENTS_SUMMARY.md** | What we built    | 600+  |
+| **DEPLOYMENT_GUIDE.md**     | How to deploy    | 700+  |
+| **schema-overview.md**      | Architecture     | 800+  |
+| **analysis-rating.md**      | 8.7/10 analysis  | 465   |
+| **improvements-roadmap.md** | Future plans     | 600+  |
 
 **Total:** ~3,800 lines of professional documentation! 📖
 
@@ -280,10 +300,10 @@ See: `docs/architecture/database/improvements-roadmap.md`
 
 ## 🗂️ Migration Files Created
 
-| File | Purpose | Risk | Time |
-|------|---------|------|------|
-| **20251017000001_add_transactions_status_index.sql** | Performance | Low | 2 min |
-| **20251017000002_create_audit_logs.sql** | Compliance | Low | 5 min |
+| File                                                 | Purpose     | Risk | Time  |
+| ---------------------------------------------------- | ----------- | ---- | ----- |
+| **20251017000001_add_transactions_status_index.sql** | Performance | Low  | 2 min |
+| **20251017000002_create_audit_logs.sql**             | Compliance  | Low  | 5 min |
 
 **Total deployment time:** 7 minutes
 **Downtime:** None
@@ -294,6 +314,7 @@ See: `docs/architecture/database/improvements-roadmap.md`
 ## 🎯 Success Metrics
 
 ### Documentation
+
 - ✅ All tables documented
 - ✅ All design patterns explained
 - ✅ Clear navigation structure
@@ -301,6 +322,7 @@ See: `docs/architecture/database/improvements-roadmap.md`
 - ✅ Troubleshooting guides
 
 ### Database Improvements
+
 - ✅ Critical performance index (ready)
 - ✅ Audit logging system (ready)
 - ✅ Verification scripts (ready)
@@ -308,6 +330,7 @@ See: `docs/architecture/database/improvements-roadmap.md`
 - ✅ Monitoring queries (provided)
 
 ### Knowledge Transfer
+
 - ✅ PostgreSQL best practices
 - ✅ Production deployment
 - ✅ Real-world debugging
@@ -319,15 +342,18 @@ See: `docs/architecture/database/improvements-roadmap.md`
 ## 💡 Key Takeaways
 
 ### 1. Documentation is Infrastructure
+
 **Good documentation is as important as good code.**
 
 Without it:
+
 - ❌ New developers struggle
 - ❌ Decisions are made blindly
 - ❌ Knowledge is lost when people leave
 - ❌ Same mistakes repeated
 
 With it:
+
 - ✅ Faster onboarding
 - ✅ Better decisions
 - ✅ Institutional knowledge preserved
@@ -336,6 +362,7 @@ With it:
 ---
 
 ### 2. Small Improvements Compound
+
 **The index we created (2 minutes to apply) will save hours of compute time.**
 
 - Every query that filters by status: 450ms saved
@@ -347,16 +374,19 @@ With it:
 ---
 
 ### 3. Production is Messy - Be Prepared
+
 **We hit connection issues, auth problems, and environment mismatches.**
 
 This is **normal**! The difference between junior and senior:
 
 **Junior engineer:**
+
 - Panics when first method fails
 - Gives up after 2 attempts
 - Doesn't document the issue
 
 **Senior engineer:**
+
 - Has 3 backup methods ready
 - Documents the issue for next time
 - Stays calm and methodical
@@ -367,9 +397,11 @@ This is **normal**! The difference between junior and senior:
 ---
 
 ### 4. Always Have a Rollback Plan
+
 **Every change should be reversible.**
 
 We documented:
+
 - ✅ How to apply
 - ✅ How to verify
 - ✅ How to rollback
@@ -382,16 +414,19 @@ This is **professional engineering**. 🏗️
 ## 🚧 What We Didn't Do (And Why)
 
 ### Table Partitioning
+
 **Why not:** Complex, requires testing, not urgent yet
 **When:** Q1 2026, when transaction volume grows
 **Documented:** In roadmap
 
 ### Materialized Views
+
 **Why not:** Need to identify use cases first
 **When:** Q2 2026, after analytics requirements clear
 **Documented:** In roadmap
 
 ### Read Replicas
+
 **Why not:** Current scale doesn't require it
 **When:** When concurrent users > 10K
 **Documented:** In roadmap
@@ -403,16 +438,19 @@ This is **professional engineering**. 🏗️
 ## 🎓 Learning Resources for Continuing
 
 ### PostgreSQL
+
 - [Official Docs](https://www.postgresql.org/docs/) - The bible
 - [Performance Tips](https://wiki.postgresql.org/wiki/Performance_Optimization)
 - [Index Types](https://www.postgresql.org/docs/current/indexes-types.html)
 
 ### Supabase
+
 - [Supabase Docs](https://supabase.com/docs)
 - [RLS Guide](https://supabase.com/docs/guides/auth/row-level-security)
 - [Migrations Guide](https://supabase.com/docs/guides/cli/local-development)
 
 ### Database Design
+
 - "Designing Data-Intensive Applications" by Martin Kleppmann
 - "The Art of PostgreSQL" by Dimitri Fontaine
 - "High Performance PostgreSQL" by Grant McAlister
@@ -422,18 +460,21 @@ This is **professional engineering**. 🏗️
 ## 📞 When You Need Help
 
 ### Stuck on deployment?
+
 1. Check: `docs/architecture/database/DEPLOYMENT_GUIDE.md`
 2. Try: Different deployment method
 3. Review: Error messages carefully
 4. Ask: Specific questions with error logs
 
 ### Want to add more improvements?
+
 1. Read: `docs/architecture/database/improvements-roadmap.md`
 2. Test: On local/staging first
 3. Document: Before implementing
 4. Deploy: During low traffic
 
 ### Need to understand a design decision?
+
 1. Check: `docs/architecture/database/schema-overview.md`
 2. Review: `docs/architecture/database/analysis-rating.md`
 3. Ask: Specific questions about trade-offs
@@ -443,11 +484,13 @@ This is **professional engineering**. 🏗️
 ## 🏆 Final Thoughts
 
 **You started with:**
+
 - A good database that needed documentation
 - Some missing optimizations
 - Unclear improvement path
 
 **You now have:**
+
 - Comprehensive, professional documentation
 - Two production-ready improvements
 - Clear roadmap for the future
@@ -464,6 +507,7 @@ That's the difference between following tutorials and becoming an engineer. 🎓
 ## 🎉 Ready to Deploy!
 
 Your database improvements are:
+
 - ✅ **Well-documented**
 - ✅ **Tested and verified**
 - ✅ **Safe to deploy**
@@ -473,6 +517,7 @@ Your database improvements are:
 **Next step:** Apply the migrations!
 
 **Timeline:**
+
 - 📖 Review docs: 10 minutes
 - 🚀 Apply Migration #1: 2 minutes
 - ✅ Verify Migration #1: 2 minutes
@@ -488,6 +533,7 @@ Your database improvements are:
 **Congratulations on completing this session!** 🎊
 
 You've done the work of a **senior database engineer**:
+
 - Analyzed the system
 - Identified improvements
 - Documented thoroughly

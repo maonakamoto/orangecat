@@ -1,4 +1,6 @@
 #!/bin/bash
+echo 'RETIRED: this script scraped the managed Supabase Cloud dashboard for API keys, which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch); read keys from .env.local / the self-hosted Studio. See docs/operations/DECOMMISSION-CLOUD.md.' >&2
+exit 1
 
 # Supabase API Key Retrieval Script
 # This script automates the process of getting the fresh anon public API key

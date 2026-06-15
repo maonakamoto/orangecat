@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SERVICE_KEY="${SUPABASE_SERVICE_ROLE_KEY}"
-BASE_URL="https://ohkueislstxomdjavyhs.supabase.co"
+BASE_URL="${NEXT_PUBLIC_SUPABASE_URL:?NEXT_PUBLIC_SUPABASE_URL is required (self-hosted: https://supabase.orangecat.ch) - managed cloud retired}"
 
 CONV_ID="2ef0fe8f-79ba-497e-8fe2-b66a9e4759a3"
 USER_ID="cec88bc9-557f-452b-92f1-e093092fecd6"

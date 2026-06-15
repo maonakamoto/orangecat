@@ -1,4 +1,6 @@
 #!/bin/bash
+echo 'RETIRED: this script used the managed Supabase Cloud Management API, which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch). Apply SQL via: psql "$POSTGRES_URL" -f <file>. See docs/operations/DECOMMISSION-CLOUD.md.' >&2
+exit 1
 # Run location field sync migration
 
 API_URL="https://api.supabase.com/v1/projects/ohkueislstxomdjavyhs/database/query"

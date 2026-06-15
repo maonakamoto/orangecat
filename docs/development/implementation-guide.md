@@ -41,6 +41,7 @@ This guide provides step-by-step instructions for implementing the architecture 
 ### TypeScript Updates
 
 **`/src/types/database.ts`** - Added:
+
 - `organization_members` table types (Row, Insert, Update)
 - `projects` table types (Row, Insert, Update)
 - `project_id` field to projects
@@ -64,9 +65,9 @@ cd /home/g/dev/orangecat
 # Apply migrations using Supabase CLI
 npx supabase db push
 
-# Or apply manually via Supabase Dashboard SQL Editor:
-# 1. Go to https://app.supabase.com/project/ohkueislstxomdjavyhs/editor
-# 2. Run each migration file in order:
+# Or apply manually via SQL editor:
+# (Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; access via the box / founder.)
+# Run each migration file in order:
 #    - 20251013_create_organization_members.sql
 #    - 20251013_create_projects.sql
 #    - 20251013_add_project_to_projects.sql
@@ -96,13 +97,13 @@ Create service files for the new entities following the existing pattern.
 **File:** `/src/services/supabase/organization-members.ts`
 
 ```typescript
-import { createServerClient } from './server'
+import { createServerClient } from './server';
 import type {
   OrganizationMember,
   OrganizationMemberInsert,
   OrganizationMemberUpdate,
-  OrganizationPermissions
-} from '@/types/database'
+  OrganizationPermissions,
+} from '@/types/database';
 
 /**
  * Get all members of an organization
@@ -110,17 +111,17 @@ import type {
 export async function getOrganizationMembers(
   organizationId: string
 ): Promise<OrganizationMember[]> {
-  const supabase = await createServerClient()
+  const supabase = await createServerClient();
 
   const { data, error } = await supabase
     .from('organization_members')
     .select('*, profiles(*)')
     .eq('organization_id', organizationId)
     .eq('status', 'active')
-    .order('joined_at', { ascending: true })
+    .order('joined_at', { ascending: true });
 
-  if (error) throw error
-  return data || []
+  if (error) throw error;
+  return data || [];
 }
 
 /**
@@ -133,7 +134,7 @@ export async function addOrganizationMember(
   invitedBy: string,
   permissions?: OrganizationPermissions
 ): Promise<OrganizationMember> {
-  const supabase = await createServerClient()
+  const supabase = await createServerClient();
 
   const memberData: OrganizationMemberInsert = {
     organization_id: organizationId,
@@ -141,17 +142,17 @@ export async function addOrganizationMember(
     role,
     invited_by: invitedBy,
     permissions: permissions || {},
-    status: 'pending' // Requires acceptance
-  }
+    status: 'pending', // Requires acceptance
+  };
 
   const { data, error } = await supabase
     .from('organization_members')
     .insert(memberData)
     .select()
-    .single()
+    .single();
 
-  if (error) throw error
-  return data
+  if (error) throw error;
+  return data;
 }
 
 /**
@@ -161,33 +162,28 @@ export async function updateOrganizationMember(
   memberId: string,
   updates: OrganizationMemberUpdate
 ): Promise<OrganizationMember> {
-  const supabase = await createServerClient()
+  const supabase = await createServerClient();
 
   const { data, error } = await supabase
     .from('organization_members')
     .update(updates)
     .eq('id', memberId)
     .select()
-    .single()
+    .single();
 
-  if (error) throw error
-  return data
+  if (error) throw error;
+  return data;
 }
 
 /**
  * Remove a member from an organization
  */
-export async function removeOrganizationMember(
-  memberId: string
-): Promise<void> {
-  const supabase = await createServerClient()
+export async function removeOrganizationMember(memberId: string): Promise<void> {
+  const supabase = await createServerClient();
 
-  const { error } = await supabase
-    .from('organization_members')
-    .delete()
-    .eq('id', memberId)
+  const { error } = await supabase.from('organization_members').delete().eq('id', memberId);
 
-  if (error) throw error
+  if (error) throw error;
 }
 
 /**
@@ -197,7 +193,7 @@ export async function canEditOrganization(
   userId: string,
   organizationId: string
 ): Promise<boolean> {
-  const supabase = await createServerClient()
+  const supabase = await createServerClient();
 
   const { data, error } = await supabase
     .from('organization_members')
@@ -205,17 +201,17 @@ export async function canEditOrganization(
     .eq('organization_id', organizationId)
     .eq('profile_id', userId)
     .eq('status', 'active')
-    .single()
+    .single();
 
-  if (error || !data) return false
+  if (error || !data) return false;
 
   // Owners and admins can always edit
   if (data.role === 'owner' || data.role === 'admin') {
-    return true
+    return true;
   }
 
   // Check specific permission
-  return (data.permissions as OrganizationPermissions)?.can_edit_org === true
+  return (data.permissions as OrganizationPermissions)?.can_edit_org === true;
 }
 ```
 
@@ -224,22 +220,14 @@ export async function canEditOrganization(
 **File:** `/src/services/supabase/projects.ts`
 
 ```typescript
-import { createServerClient } from './server'
-import type {
-  Project,
-  ProjectInsert,
-  ProjectUpdate,
-  ProjectWithProjects
-} from '@/types/database'
+import { createServerClient } from './server';
+import type { Project, ProjectInsert, ProjectUpdate, ProjectWithProjects } from '@/types/database';
 
 /**
  * Get all public projects
  */
-export async function getPublicProjects(
-  limit = 50,
-  offset = 0
-): Promise<Project[]> {
-  const supabase = await createServerClient()
+export async function getPublicProjects(limit = 50, offset = 0): Promise<Project[]> {
+  const supabase = await createServerClient();
 
   const { data, error } = await supabase
     .from('projects')
@@ -247,84 +235,70 @@ export async function getPublicProjects(
     .eq('visibility', 'public')
     .eq('status', 'active')
     .order('created_at', { ascending: false })
-    .range(offset, offset + limit - 1)
+    .range(offset, offset + limit - 1);
 
-  if (error) throw error
-  return data || []
+  if (error) throw error;
+  return data || [];
 }
 
 /**
  * Get project by slug
  */
-export async function getProjectBySlug(
-  slug: string
-): Promise<ProjectWithProjects | null> {
-  const supabase = await createServerClient()
+export async function getProjectBySlug(slug: string): Promise<ProjectWithProjects | null> {
+  const supabase = await createServerClient();
 
   const { data, error } = await supabase
     .from('projects')
     .select('*, projects(*)')
     .eq('slug', slug)
-    .single()
+    .single();
 
   if (error) {
-    if (error.code === 'PGRST116') return null // Not found
-    throw error
+    if (error.code === 'PGRST116') return null; // Not found
+    throw error;
   }
 
-  return data
+  return data;
 }
 
 /**
  * Create a new project
  */
-export async function createProject(
-  projectData: ProjectInsert
-): Promise<Project> {
-  const supabase = await createServerClient()
+export async function createProject(projectData: ProjectInsert): Promise<Project> {
+  const supabase = await createServerClient();
 
-  const { data, error } = await supabase
-    .from('projects')
-    .insert(projectData)
-    .select()
-    .single()
+  const { data, error } = await supabase.from('projects').insert(projectData).select().single();
 
-  if (error) throw error
-  return data
+  if (error) throw error;
+  return data;
 }
 
 /**
  * Update a project
  */
-export async function updateProject(
-  projectId: string,
-  updates: ProjectUpdate
-): Promise<Project> {
-  const supabase = await createServerClient()
+export async function updateProject(projectId: string, updates: ProjectUpdate): Promise<Project> {
+  const supabase = await createServerClient();
 
   const { data, error } = await supabase
     .from('projects')
     .update(updates)
     .eq('id', projectId)
     .select()
-    .single()
+    .single();
 
-  if (error) throw error
-  return data
+  if (error) throw error;
+  return data;
 }
 
 /**
  * Delete a project
  */
 export async function deleteProject(projectId: string): Promise<void> {
-  const supabase = await createServerClient()
+  const supabase = await createServerClient();
 
-  const { error } = await supabase
-    .from('projects')
-    .delete()
-    .eq('id', projectId)
+  const { error } = await supabase.from('projects').delete().eq('id', projectId);
 
-  if (error) throw error
+  if (error) throw error;
 }
 
 /**
@@ -334,17 +308,17 @@ export async function getProjectsByOwner(
   ownerType: 'profile' | 'organization',
   ownerId: string
 ): Promise<Project[]> {
-  const supabase = await createServerClient()
+  const supabase = await createServerClient();
 
   const { data, error } = await supabase
     .from('projects')
     .select('*')
     .eq('owner_type', ownerType)
     .eq('owner_id', ownerId)
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false });
 
-  if (error) throw error
-  return data || []
+  if (error) throw error;
+  return data || [];
 }
 ```
 
@@ -359,64 +333,52 @@ Create API endpoints following the existing pattern in `/src/app/api/`.
 **File:** `/src/app/api/organizations/[id]/members/route.ts`
 
 ```typescript
-import { NextRequest } from 'next/server'
-import { createServerClient } from '@/services/supabase/server'
+import { NextRequest } from 'next/server';
+import { createServerClient } from '@/services/supabase/server';
 import {
   getOrganizationMembers,
   addOrganizationMember,
-  canEditOrganization
-} from '@/services/supabase/organization-members'
-import { handleApiError, AuthError } from '@/lib/errors'
+  canEditOrganization,
+} from '@/services/supabase/organization-members';
+import { handleApiError, AuthError } from '@/lib/errors';
 
 // GET /api/organizations/[id]/members - List organization members
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const members = await getOrganizationMembers(params.id)
-    return Response.json({ success: true, data: members })
+    const members = await getOrganizationMembers(params.id);
+    return Response.json({ success: true, data: members });
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error);
   }
 }
 
 // POST /api/organizations/[id]/members - Add a member
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const supabase = await createServerClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const supabase = await createServerClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      throw new AuthError()
+      throw new AuthError();
     }
 
     // Check permission to add members
-    const canEdit = await canEditOrganization(user.id, params.id)
+    const canEdit = await canEditOrganization(user.id, params.id);
     if (!canEdit) {
-      return Response.json(
-        { success: false, error: 'Insufficient permissions' },
-        { status: 403 }
-      )
+      return Response.json({ success: false, error: 'Insufficient permissions' }, { status: 403 });
     }
 
-    const body = await request.json()
-    const { profile_id, role, permissions } = body
+    const body = await request.json();
+    const { profile_id, role, permissions } = body;
 
-    const member = await addOrganizationMember(
-      params.id,
-      profile_id,
-      role,
-      user.id,
-      permissions
-    )
+    const member = await addOrganizationMember(params.id, profile_id, role, user.id, permissions);
 
-    return Response.json({ success: true, data: member })
+    return Response.json({ success: true, data: member });
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error);
   }
 }
 ```
@@ -426,57 +388,60 @@ export async function POST(
 **File:** `/src/app/api/projects/route.ts`
 
 ```typescript
-import { NextRequest } from 'next/server'
-import { createServerClient } from '@/services/supabase/server'
-import { getPublicProjects, createProject } from '@/services/supabase/projects'
-import { handleApiError, AuthError } from '@/lib/errors'
+import { NextRequest } from 'next/server';
+import { createServerClient } from '@/services/supabase/server';
+import { getPublicProjects, createProject } from '@/services/supabase/projects';
+import { handleApiError, AuthError } from '@/lib/errors';
 
 // GET /api/projects - List public projects
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const { searchParams } = new URL(request.url);
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
-    const projects = await getPublicProjects(limit, offset)
-    return Response.json({ success: true, data: projects })
+    const projects = await getPublicProjects(limit, offset);
+    return Response.json({ success: true, data: projects });
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error);
   }
 }
 
 // POST /api/projects - Create a project
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createServerClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const supabase = await createServerClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      throw new AuthError()
+      throw new AuthError();
     }
 
-    const body = await request.json()
+    const body = await request.json();
 
     // If creating for organization, check permissions
     if (body.owner_type === 'organization') {
-      const { canEditOrganization } = await import('@/services/supabase/organization-members')
-      const canCreate = await canEditOrganization(user.id, body.owner_id)
+      const { canEditOrganization } = await import('@/services/supabase/organization-members');
+      const canCreate = await canEditOrganization(user.id, body.owner_id);
 
       if (!canCreate) {
         return Response.json(
           { success: false, error: 'Insufficient permissions' },
           { status: 403 }
-        )
+        );
       }
     } else {
       // For personal projects, ensure owner_id matches user
-      body.owner_id = user.id
+      body.owner_id = user.id;
     }
 
-    const project = await createProject(body)
-    return Response.json({ success: true, data: project })
+    const project = await createProject(body);
+    return Response.json({ success: true, data: project });
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error);
   }
 }
 ```
@@ -667,6 +632,7 @@ export function CreateProjectForm() {
 After implementation, test these scenarios:
 
 ### Organization Members
+
 - [ ] Create an organization
 - [ ] Add members with different roles (owner, admin, member)
 - [ ] Set granular permissions for members
@@ -675,6 +641,7 @@ After implementation, test these scenarios:
 - [ ] Verify RLS policies work (members can only see what they should)
 
 ### Projects
+
 - [ ] Create a personal project
 - [ ] Create an organization project
 - [ ] Link projects to projects
@@ -683,6 +650,7 @@ After implementation, test these scenarios:
 - [ ] Delete projects
 
 ### Permissions
+
 - [ ] Organization owners can manage all settings
 - [ ] Organization admins can manage members
 - [ ] Regular members cannot edit organization

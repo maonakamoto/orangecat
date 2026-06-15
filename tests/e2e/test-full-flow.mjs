@@ -107,7 +107,7 @@ async function testFullFlow() {
 
     // Test 6: Database connection verification
     console.log('\n💾 Test 6: Database connectivity...');
-    const dbTestUrl = 'https://ohkueislstxomdjavyhs.supabase.co/rest/v1/profiles?select=count&limit=1';
+    const dbTestUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/profiles?select=count&limit=1`;
     const dbResponse = await page.request.get(dbTestUrl, {
       headers: {
         'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,

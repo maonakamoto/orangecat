@@ -16,6 +16,8 @@ section used to describe was removed with the migration.)
 
 ### 2. Supabase Migration Workflow
 
+> ⚠️ **RETIRED — managed cloud only.** The migration workflow docs in this section (`SUPABASE_MIGRATION_WORKFLOW.md`, `MIGRATION_QUICK_REFERENCE.md`, `MIGRATION_LESSONS_LEARNED.md`) and the `PROJECT_REF` / `api.supabase.com` scripts they describe targeted the managed Supabase Cloud, retired 2026-06. Schema work now happens against the self-hosted instance (`supabase.orangecat.ch`, Hetzner box) via SQL migrations + `psql`. Kept for historical reference.
+
 **File:** `SUPABASE_MIGRATION_WORKFLOW.md`
 
 **Use this when:** You need to apply database migrations to Supabase

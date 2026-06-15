@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+console.error(
+  'RETIRED: this script scraped the managed Supabase Cloud dashboard for API keys, which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch); read keys from .env.local / the self-hosted Studio. See docs/operations/DECOMMISSION-CLOUD.md.'
+);
+process.exit(1);
 
 /**
  * Automated Supabase API Key Retrieval Script
@@ -50,7 +54,7 @@ const SELECTORS = {
   loginForm: 'form[action*="login"]',
   emailInput: 'input[type="email"]',
   passwordInput: 'input[type="password"]',
-  signInButton: 'button[type="submit"], button:has-text("Sign in")'
+  signInButton: 'button[type="submit"], button:has-text("Sign in")',
 };
 
 async function delay(ms) {
@@ -72,7 +76,7 @@ async function extractApiKey(page) {
         '[data-testid*="anon"]',
         '[data-testid*="api-key"]',
         '.anon-key',
-        '.api-key'
+        '.api-key',
       ];
 
       for (const selector of selectors) {
@@ -152,7 +156,7 @@ async function extractApiKey(page) {
         return matches.sort((a, b) => b.length - a.length)[0];
       }
       return null;
-    }
+    },
   ];
 
   // Try each strategy
@@ -219,14 +223,16 @@ async function main() {
         '--disable-accelerated-2d-canvas',
         '--no-first-run',
         '--no-zygote',
-        '--disable-gpu'
-      ]
+        '--disable-gpu',
+      ],
     });
 
     const page = await browser.newPage();
 
     // Set user agent
-    await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+    await page.setUserAgent(
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    );
 
     console.log('🌐 Navigating to Supabase dashboard...');
     await page.goto(DASHBOARD_URL, { waitUntil: 'networkidle2', timeout: 30000 });
@@ -263,7 +269,6 @@ async function main() {
     await updateEnvFile(apiKey);
 
     console.log('🎉 Success! API key has been updated in .env.local');
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     process.exit(1);

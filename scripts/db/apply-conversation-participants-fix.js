@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 
+console.error(
+  'RETIRED: this script used the managed Supabase Cloud Management API, which was removed 2026-06. The DB is now self-hosted (supabase.orangecat.ch). Apply SQL via: psql "$POSTGRES_URL" -f <file>. See docs/operations/DECOMMISSION-CLOUD.md.'
+);
+process.exit(1);
+
 /**
  * Apply conversation_participants RLS policies migration
  * Reads SUPABASE_ACCESS_TOKEN from .env.local and applies the migration
@@ -39,7 +44,10 @@ console.log(`📍 Project: ${PROJECT_REF}`);
 console.log(`🔑 Token: ${ACCESS_TOKEN.substring(0, 10)}...`);
 
 // Read migration SQL
-const migrationPath = path.join(__dirname, 'supabase/migrations/20250102000000_add_conversation_participants_policies.sql');
+const migrationPath = path.join(
+  __dirname,
+  'supabase/migrations/20250102000000_add_conversation_participants_policies.sql'
+);
 const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
 
 console.log('📄 Reading migration file...');
@@ -47,7 +55,7 @@ console.log(`📏 Migration size: ${migrationSQL.length} characters\n`);
 
 // Apply via Supabase Management API
 const postData = JSON.stringify({
-  query: migrationSQL
+  query: migrationSQL,
 });
 
 const options = {
@@ -58,17 +66,17 @@ const options = {
   headers: {
     'Content-Type': 'application/json',
     'Content-Length': postData.length,
-    'Authorization': `Bearer ${ACCESS_TOKEN}`,
-    'apikey': ACCESS_TOKEN
-  }
+    Authorization: `Bearer ${ACCESS_TOKEN}`,
+    apikey: ACCESS_TOKEN,
+  },
 };
 
 console.log('⚡ Applying migration...\n');
 
-const req = https.request(options, (res) => {
+const req = https.request(options, res => {
   let data = '';
 
-  res.on('data', (chunk) => {
+  res.on('data', chunk => {
     data += chunk;
   });
 
@@ -99,12 +107,10 @@ const req = https.request(options, (res) => {
   });
 });
 
-req.on('error', (error) => {
+req.on('error', error => {
   console.error('❌ Request error:', error);
   process.exit(1);
 });
 
 req.write(postData);
 req.end();
-
-
