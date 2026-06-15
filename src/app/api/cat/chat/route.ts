@@ -18,7 +18,7 @@ import {
   rateLimitWriteAsync,
 } from '@/lib/rate-limit';
 import { buildCatSystemPrompt } from '@/services/cat/system-prompt';
-import { getCatFewShotExamples } from '@/services/cat/few-shot-examples';
+import { getCatFewShotExamplesText } from '@/services/cat/few-shot-examples';
 import { parseActionsFromResponse } from '@/services/cat/response-parser';
 import {
   getOrCreateDefaultConversation,
@@ -205,7 +205,9 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       lastVisitedPath,
     });
     const contextString = buildFullContextString(userContext);
-    const systemPrompt = buildCatSystemPrompt({ userContext: contextString || undefined });
+    // Examples are appended as labeled text (not injected as fake conversation
+    // turns) so weaker models can't mistake the example people for the real user.
+    const systemPrompt = `${buildCatSystemPrompt({ userContext: contextString || undefined })}\n\n${getCatFewShotExamplesText()}`;
 
     let conversationId: string | null = null;
     let historyMessages: Array<{ role: 'user' | 'assistant'; content: string }> = [];
@@ -216,23 +218,10 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       /* Non-fatal — continue without history */
     }
 
-    // Build message array: system + few-shots + history + user message.
-    // The few-shots are wrapped in explicit boundary markers so weaker models
-    // don't mistake the illustrative turns for real history and carry their
-    // fictional personas (woodworking/photography/retail) into the answer.
+    // Build message array: system (now includes example dialogues as text) +
+    // real history + the user's message. No fake example turns in the array.
     const baseMessages: ToolAugmentedMessage[] = [
       { role: 'system', content: systemPrompt },
-      {
-        role: 'system',
-        content:
-          'The next turns are ILLUSTRATIVE EXAMPLES with different, fictional people — NOT this conversation and NOT facts about the current user. Learn their format and when to ask vs. act; never carry their specific details (woodworking, photography, retail, etc.) into the real conversation.',
-      },
-      ...getCatFewShotExamples(),
-      {
-        role: 'system',
-        content:
-          'End of examples. The real conversation begins now. You know nothing about the current user beyond the context block above and their own messages — if that gives no skill, trade, or interest, ASK before assuming one.',
-      },
       ...historyMessages,
       { role: 'user', content: message },
     ];
