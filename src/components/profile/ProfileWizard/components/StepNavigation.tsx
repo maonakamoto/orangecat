@@ -13,7 +13,7 @@ interface StepNavigationProps {
 
 export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
   return (
-    <div className="px-6 py-6 bg-muted/30 border-b relative">
+    <div className="px-6 py-6 bg-surface-raised/30 border-b relative">
       <div className="flex items-center justify-between max-w-2xl mx-auto relative">
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
@@ -28,10 +28,10 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                   isCompleted
                     ? 'bg-status-positive border-status-positive text-white shadow-sm'
                     : isCurrent
-                      ? 'bg-foreground border-foreground text-card shadow-sm animate-pulse'
+                      ? 'bg-fg-primary border-fg-primary text-fg-inverted shadow-sm animate-pulse'
                       : isUpcoming
-                        ? 'bg-card border-border-strong text-muted-dim'
-                        : 'bg-muted border-border-strong text-muted-foreground'
+                        ? 'bg-surface-base border-strong text-fg-tertiary'
+                        : 'bg-surface-raised border-strong text-fg-secondary'
                 }`}
               >
                 {isCompleted ? (
@@ -42,7 +42,7 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
 
                 {/* Priority indicator */}
                 {step.required && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full border border-card" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-status-negative rounded-full border border-fg-inverted" />
                 )}
               </div>
 
@@ -53,8 +53,8 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                     isCompleted
                       ? 'text-status-positive'
                       : isCurrent
-                        ? 'text-foreground'
-                        : 'text-muted-foreground'
+                        ? 'text-fg-primary'
+                        : 'text-fg-secondary'
                   }`}
                 >
                   {step.title.split(' ').slice(1).join(' ')}
@@ -64,8 +64,8 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
                     isCompleted
                       ? 'text-status-positive'
                       : isCurrent
-                        ? 'text-foreground'
-                        : 'text-muted-dim'
+                        ? 'text-fg-primary'
+                        : 'text-fg-tertiary'
                   }`}
                 >
                   {isCompleted
@@ -97,11 +97,11 @@ export function StepNavigation({ steps, currentStep }: StepNavigationProps) {
 
       {/* Current Step Description */}
       <div className="mt-6 text-center max-w-md mx-auto">
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        <p className="text-sm text-fg-secondary leading-relaxed">
           {steps[currentStep].description}
         </p>
         {steps[currentStep].required && (
-          <div className="mt-2 inline-flex items-center gap-1 rounded-md border border-destructive/20 bg-destructive/10 px-2 py-1 text-xs text-destructive">
+          <div className="mt-2 inline-flex items-center gap-1 rounded-md border border-status-negative/20 bg-status-negative/10 px-2 py-1 text-xs text-status-negative">
             <span aria-hidden="true">!</span>
             <span>This step is required to continue</span>
           </div>

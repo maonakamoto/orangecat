@@ -86,7 +86,7 @@ export function PostActions({
         <button
           onClick={handleLike}
           disabled={isLiking}
-          className={actionClassName(event.userLiked || false, 'text-destructive')}
+          className={actionClassName(event.userLiked || false, 'text-status-negative')}
           aria-label="Like"
         >
           <Heart className={`w-5 h-5 ${event.userLiked ? 'fill-current' : ''}`} />
@@ -111,7 +111,7 @@ export function PostActions({
         <button
           onClick={handleShareOpen}
           disabled={isSharing}
-          className={actionClassName(event.userShared || false, 'text-foreground')}
+          className={actionClassName(event.userShared || false, 'text-fg-primary')}
           aria-label="Share"
         >
           <Share2 className="w-5 h-5" />

@@ -176,24 +176,24 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
       <CardContent className="space-y-6">
         <div className="p-4 oc-error-surface rounded-lg">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
+            <AlertTriangle className="h-5 w-5 text-status-negative mt-0.5 flex-shrink-0" />
             <div className="space-y-1">
-              <p className="text-sm font-medium text-destructive">Save these codes now!</p>
-              <p className="text-xs text-destructive/80">
+              <p className="text-sm font-medium text-status-negative">Save these codes now!</p>
+              <p className="text-xs text-status-negative/80">
                 You won't be able to see them again. Each code can only be used once.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 p-4 bg-muted border border-border rounded-lg">
+        <div className="grid grid-cols-2 gap-2 p-4 bg-surface-raised border border-default rounded-lg">
           {formattedCodes.map(({ number, code }) => (
             <div
               key={code}
-              className="flex items-center gap-2 px-3 py-2 bg-card border border-border-subtle rounded"
+              className="flex items-center gap-2 px-3 py-2 bg-surface-base border border-subtle rounded"
             >
-              <span className="text-xs text-muted-dim w-4">{number}.</span>
-              <code className="text-sm font-mono text-foreground">{code}</code>
+              <span className="text-xs text-fg-tertiary w-4">{number}.</span>
+              <code className="text-sm font-mono text-fg-primary">{code}</code>
             </div>
           ))}
         </div>
@@ -218,11 +218,11 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
           </Button>
         </div>
 
-        <div className="pt-4 border-t border-border">
+        <div className="pt-4 border-t border-default">
           <button
             onClick={handleRegenerate}
             disabled={generating}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm text-fg-secondary hover:text-fg-primary transition-colors"
           >
             {generating ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -231,7 +231,7 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
             )}
             Generate new codes
           </button>
-          <p className="text-xs text-muted-dim mt-1">This will invalidate your current codes</p>
+          <p className="text-xs text-fg-tertiary mt-1">This will invalidate your current codes</p>
         </div>
 
         <label className="flex items-start gap-3 cursor-pointer">
@@ -239,9 +239,9 @@ export function RecoveryCodes({ onCodesGenerated, onClose, initialCodes }: Recov
             type="checkbox"
             checked={acknowledged}
             onChange={e => setAcknowledged(e.target.checked)}
-            className="mt-0.5 h-4 w-4 rounded border-border-strong text-foreground focus:ring-ring"
+            className="mt-0.5 h-4 w-4 rounded border-strong text-fg-primary focus:ring-ring"
           />
-          <span className="text-sm text-foreground">
+          <span className="text-sm text-fg-primary">
             I have saved my recovery codes in a secure location
           </span>
         </label>

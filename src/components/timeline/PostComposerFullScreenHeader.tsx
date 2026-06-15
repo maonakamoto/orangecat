@@ -23,7 +23,7 @@ export function PostComposerFullScreenHeader({
   onPost,
 }: PostComposerFullScreenHeaderProps) {
   return (
-    <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
+    <div className="flex items-center justify-between border-b border-subtle px-4 py-3">
       <button
         onClick={onClose || onCancel}
         className={TIMELINE_SURFACE.iconButton}

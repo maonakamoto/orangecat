@@ -14,8 +14,8 @@ interface Props {
 export function SettingsEmailSection({ email, isSubmitting, onChange, onSubmit }: Props) {
   return (
     <div>
-      <h3 className="text-lg font-semibold text-foreground mb-4">Email Address</h3>
-      <p className="text-muted-foreground mb-6">
+      <h3 className="text-lg font-semibold text-fg-primary mb-4">Email Address</h3>
+      <p className="text-fg-secondary mb-6">
         This is the email address associated with your account. You&apos;ll receive important
         notifications here.
       </p>
@@ -29,8 +29,8 @@ export function SettingsEmailSection({ email, isSubmitting, onChange, onSubmit }
           icon={Mail}
           className="max-w-md"
         />
-        <div className="max-w-md rounded-md border border-border-subtle bg-muted/30 p-4">
-          <p className="text-base text-muted-foreground">
+        <div className="max-w-md rounded-md border border-subtle bg-surface-raised/30 p-4">
+          <p className="text-base text-fg-secondary">
             <strong>Note:</strong> When you update your email, we&apos;ll send a confirmation link
             to your new address.
           </p>

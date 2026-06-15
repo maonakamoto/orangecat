@@ -39,7 +39,7 @@ export default function MessageComposer({
 
   return (
     <div
-      className="border-t border-border-subtle bg-background p-3 pb-safe sm:p-4 md:pb-4"
+      className="border-t border-subtle bg-surface-page p-3 pb-safe sm:p-4 md:pb-4"
       style={{
         paddingBottom: 'max(0.75rem, calc(0.75rem + env(safe-area-inset-bottom, 0px) + 4rem))',
       }}
@@ -63,11 +63,11 @@ export default function MessageComposer({
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
             className={cn(
-              'w-full resize-none rounded-md border border-border-subtle py-2.5 pl-3 pr-3 text-sm sm:py-3 sm:pl-4 sm:pr-4 sm:text-base',
-              'bg-background text-foreground',
-              'focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring',
+              'w-full resize-none rounded-md border border-subtle py-2.5 pl-3 pr-3 text-sm sm:py-3 sm:pl-4 sm:pr-4 sm:text-base',
+              'bg-surface-page text-fg-primary',
+              'focus:outline-none focus:ring-2 focus:ring-ring focus:border-interactive',
               'max-h-32 min-h-11',
-              'placeholder:text-muted-dim',
+              'placeholder:text-fg-tertiary',
               isSending && 'opacity-50 cursor-not-allowed'
             )}
             rows={1}
@@ -79,7 +79,7 @@ export default function MessageComposer({
           type="submit"
           size="sm"
           className={cn(
-            'rounded-md bg-foreground px-3 py-2.5 text-background hover:bg-foreground/90 sm:px-4 sm:py-3',
+            'rounded-md bg-fg-primary px-3 py-2.5 text-fg-inverted hover:bg-fg-primary/90 sm:px-4 sm:py-3',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             'transition-colors duration-200 flex-shrink-0',
             'min-w-11 sm:min-w-[auto]'
@@ -88,7 +88,7 @@ export default function MessageComposer({
           aria-label="Send message"
         >
           {isSending ? (
-            <div className="h-4 w-4 animate-spin rounded-sm border-2 border-background border-t-transparent sm:h-5 sm:w-5" />
+            <div className="h-4 w-4 animate-spin rounded-sm border-2 border-surface-page border-t-transparent sm:h-5 sm:w-5" />
           ) : (
             <Send className="w-4 h-4 sm:w-5 sm:h-5" />
           )}
@@ -96,18 +96,18 @@ export default function MessageComposer({
       </form>
 
       {typingText && (
-        <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1">
+        <div className="mt-2 text-xs text-fg-secondary flex items-center gap-1">
           <span className="inline-flex gap-0.5">
             <span
-              className="h-1.5 w-1.5 animate-bounce rounded-sm bg-muted-foreground"
+              className="h-1.5 w-1.5 animate-bounce rounded-sm bg-fg-secondary"
               style={{ animationDelay: '0ms' }}
             />
             <span
-              className="h-1.5 w-1.5 animate-bounce rounded-sm bg-muted-foreground"
+              className="h-1.5 w-1.5 animate-bounce rounded-sm bg-fg-secondary"
               style={{ animationDelay: '150ms' }}
             />
             <span
-              className="h-1.5 w-1.5 animate-bounce rounded-sm bg-muted-foreground"
+              className="h-1.5 w-1.5 animate-bounce rounded-sm bg-fg-secondary"
               style={{ animationDelay: '300ms' }}
             />
           </span>

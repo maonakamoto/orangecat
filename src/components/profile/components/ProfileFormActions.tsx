@@ -27,8 +27,8 @@ export function ProfileFormActions({
 }: ProfileFormActionsProps) {
   const containerClass =
     variant === 'inline'
-      ? 'flex items-center justify-between gap-3 pt-6 border-t border-border mt-6 bg-muted -mx-6 px-6 py-4 rounded-b-xl'
-      : 'flex items-center justify-between gap-3 pt-6 border-t border-border bg-muted -mx-6 px-6 py-4 rounded-b-lg';
+      ? 'flex items-center justify-between gap-3 pt-6 border-t border-default mt-6 bg-surface-raised -mx-6 px-6 py-4 rounded-b-xl'
+      : 'flex items-center justify-between gap-3 pt-6 border-t border-default bg-surface-raised -mx-6 px-6 py-4 rounded-b-lg';
 
   return (
     <div className={containerClass}>
@@ -37,18 +37,18 @@ export function ProfileFormActions({
         variant="ghost"
         onClick={onCancel}
         disabled={isSaving}
-        className="px-4 text-muted-foreground hover:text-foreground"
+        className="px-4 text-fg-secondary hover:text-fg-primary"
       >
         Cancel
       </Button>
       <Button
         type="submit"
         disabled={isSaving || !isValid}
-        className="px-8 py-3 text-base font-semibold bg-foreground hover:bg-foreground/90 text-background shadow-sm oc-card-link duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-8 py-3 text-base font-semibold bg-fg-primary hover:bg-fg-primary/90 text-fg-inverted shadow-sm oc-card-link duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSaving ? (
           <>
-            <div className="w-5 h-5 mr-2 border-2 border-card border-t-transparent rounded-full animate-spin" />
+            <div className="w-5 h-5 mr-2 border-2 border-fg-inverted border-t-transparent rounded-full animate-spin" />
             Saving...
           </>
         ) : (

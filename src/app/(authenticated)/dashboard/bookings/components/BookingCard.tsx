@@ -74,19 +74,19 @@ export default function BookingCard({
   } | null>(null);
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
+    <div className="bg-surface-base border border-default rounded-lg p-6">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           {/* Header */}
           <div className="flex items-center gap-3 mb-3">
-            <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-              <User className="h-5 w-5 text-muted-foreground" />
+            <div className="h-10 w-10 rounded-full bg-surface-raised flex items-center justify-center">
+              <User className="h-5 w-5 text-fg-secondary" />
             </div>
             <div>
-              <p className="font-medium text-foreground">
+              <p className="font-medium text-fg-primary">
                 {booking.customer?.display_name || booking.customer?.username || 'Customer'}
               </p>
-              <p className="text-base text-muted-foreground">
+              <p className="text-base text-fg-secondary">
                 {(booking.metadata?.service_title as string) || 'Service booking'}
               </p>
             </div>
@@ -96,25 +96,25 @@ export default function BookingCard({
           {/* Details */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div className="flex items-center gap-2 text-sm">
-              <Calendar className="h-4 w-4 text-muted-dim" />
-              <span className="text-muted-foreground">{formatDate(booking.starts_at)}</span>
+              <Calendar className="h-4 w-4 text-fg-tertiary" />
+              <span className="text-fg-secondary">{formatDate(booking.starts_at)}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <Clock className="h-4 w-4 text-muted-dim" />
-              <span className="text-muted-foreground">
+              <Clock className="h-4 w-4 text-fg-tertiary" />
+              <span className="text-fg-secondary">
                 {formatTime(booking.starts_at)} - {formatTime(booking.ends_at)}
               </span>
             </div>
-            <div className="text-sm font-medium text-foreground">
+            <div className="text-sm font-medium text-fg-primary">
               {formatBtc(booking.price_btc)}
             </div>
           </div>
 
           {/* Customer Notes */}
           {booking.customer_notes && (
-            <div className="bg-muted rounded-md p-3 mb-4">
-              <p className="text-xs font-medium text-muted-foreground mb-1">Customer notes:</p>
-              <p className="text-base text-foreground">{booking.customer_notes}</p>
+            <div className="bg-surface-raised rounded-md p-3 mb-4">
+              <p className="text-xs font-medium text-fg-secondary mb-1">Customer notes:</p>
+              <p className="text-base text-fg-primary">{booking.customer_notes}</p>
             </div>
           )}
 
@@ -124,7 +124,7 @@ export default function BookingCard({
               <p className="text-xs font-medium mb-1">
                 {booking.status === STATUS.BOOKINGS.REJECTED ? 'Rejection' : 'Cancellation'} reason:
               </p>
-              <p className="text-base text-destructive/80">{booking.cancellation_reason}</p>
+              <p className="text-base text-status-negative/80">{booking.cancellation_reason}</p>
             </div>
           )}
         </div>
@@ -191,7 +191,7 @@ export default function BookingCard({
           {(booking.status === STATUS.BOOKINGS.COMPLETED ||
             booking.status === STATUS.BOOKINGS.CANCELLED ||
             booking.status === STATUS.BOOKINGS.REJECTED) && (
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-fg-secondary">
               {booking.status === STATUS.BOOKINGS.COMPLETED && (
                 <span className="flex items-center gap-1 text-status-positive">
                   <CheckCircle className="h-4 w-4" />
@@ -199,7 +199,7 @@ export default function BookingCard({
                 </span>
               )}
               {booking.status === STATUS.BOOKINGS.CANCELLED && (
-                <span className="flex items-center gap-1 text-muted-foreground">
+                <span className="flex items-center gap-1 text-fg-secondary">
                   <AlertCircle className="h-4 w-4" />
                   Cancelled
                 </span>
@@ -216,7 +216,7 @@ export default function BookingCard({
       </div>
 
       {/* Footer */}
-      <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-muted-foreground">
+      <div className="mt-4 pt-4 border-t border-subtle flex items-center justify-between text-xs text-fg-secondary">
         <span>
           Requested{' '}
           {new Date(booking.created_at).toLocaleDateString([], {
@@ -228,7 +228,7 @@ export default function BookingCard({
         </span>
         <button
           onClick={() => onViewDetails(booking.id)}
-          className="text-foreground hover:text-foreground"
+          className="text-fg-primary hover:text-fg-primary"
         >
           View details &rarr;
         </button>
@@ -241,7 +241,7 @@ export default function BookingCard({
             </DialogTitle>
           </DialogHeader>
           <textarea
-            className="w-full px-3 py-2 border border-border-strong rounded-lg resize-none text-sm bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-ring"
+            className="w-full px-3 py-2 border border-strong rounded-lg resize-none text-sm bg-surface-page text-fg-primary focus:ring-2 focus:ring-ring focus:border-interactive"
             rows={3}
             placeholder="Reason (optional)"
             value={reasonDialog?.reason ?? ''}

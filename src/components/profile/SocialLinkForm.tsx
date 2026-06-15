@@ -76,9 +76,9 @@ export function SocialLinkForm({
   const Icon = platformConfig?.icon || X;
 
   return (
-    <div className="border dark:border-border rounded-lg p-4 bg-card space-y-4">
+    <div className="border dark:border-default rounded-lg p-4 bg-surface-base space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-semibold text-foreground">
+        <h4 className="text-sm font-semibold text-fg-primary">
           {initialLink ? 'Edit Link' : 'Add Social Link'}
         </h4>
         <Button
@@ -93,13 +93,13 @@ export function SocialLinkForm({
       </div>
 
       {error && (
-        <div className="oc-error-surface text-destructive/80 px-3 py-2 rounded text-sm">
+        <div className="oc-error-surface text-status-negative/80 px-3 py-2 rounded text-sm">
           {error}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">Platform</label>
+        <label className="block text-sm font-medium text-fg-primary mb-2">Platform</label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {availablePlatforms.map(p => {
             const PlatformIcon = p.icon;
@@ -114,8 +114,8 @@ export function SocialLinkForm({
                 }}
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   isSelected
-                    ? 'border-foreground bg-muted/40'
-                    : 'border-border-strong hover:border-border-strong'
+                    ? 'border-fg-primary bg-surface-raised/40'
+                    : 'border-strong hover:border-strong'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -133,8 +133,8 @@ export function SocialLinkForm({
             }}
             className={`p-3 border rounded-lg text-left transition-colors ${
               platform === 'custom'
-                ? 'border-foreground bg-muted/40'
-                : 'border-border-strong hover:border-border-strong'
+                ? 'border-fg-primary bg-surface-raised/40'
+                : 'border-strong hover:border-strong'
             }`}
           >
             <div className="flex items-center gap-2">
@@ -147,7 +147,7 @@ export function SocialLinkForm({
 
       {isCustom && (
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">Platform Name *</label>
+          <label className="block text-sm font-medium text-fg-primary mb-2">Platform Name *</label>
           <Input
             value={label}
             onChange={e => {
@@ -161,13 +161,13 @@ export function SocialLinkForm({
       )}
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
+        <label className="block text-sm font-medium text-fg-primary mb-2">
           {isCustom ? 'URL *' : platformConfig?.label || 'Value'} *
         </label>
         <div className="relative">
           {platformConfig && (
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-              <Icon className="w-4 h-4 text-muted-dim" />
+              <Icon className="w-4 h-4 text-fg-tertiary" />
             </div>
           )}
           <Input
@@ -182,7 +182,7 @@ export function SocialLinkForm({
           />
         </div>
         {platformConfig?.formatHint && (
-          <p className="mt-1 text-xs text-muted-foreground">{platformConfig.formatHint}</p>
+          <p className="mt-1 text-xs text-fg-secondary">{platformConfig.formatHint}</p>
         )}
       </div>
 

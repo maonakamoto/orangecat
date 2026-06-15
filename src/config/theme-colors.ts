@@ -9,8 +9,8 @@ export const FORM_THEME: Record<
   EntityMetadata['colorTheme'],
   { pageSurface: string; btnGradient: string }
 > = {
-  orange: { pageSurface: 'bg-background', btnGradient: GRADIENTS.brandOrangeDark },
-  tiffany: { pageSurface: 'bg-background', btnGradient: GRADIENTS.brandTiffanyDark },
-  rose: { pageSurface: 'bg-background', btnGradient: GRADIENTS.brandRoseDark },
-  green: { pageSurface: 'bg-background', btnGradient: GRADIENTS.brandGreen },
+  orange: { pageSurface: 'bg-surface-page', btnGradient: GRADIENTS.brandOrangeDark },
+  tiffany: { pageSurface: 'bg-surface-page', btnGradient: GRADIENTS.brandTiffanyDark },
+  rose: { pageSurface: 'bg-surface-page', btnGradient: GRADIENTS.brandRoseDark },
+  green: { pageSurface: 'bg-surface-page', btnGradient: GRADIENTS.brandGreen },
 };

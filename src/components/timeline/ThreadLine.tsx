@@ -26,13 +26,15 @@ export function ThreadLine({ depth = 1, isLast: _isLast = false, className }: Th
         {/* Vertical line connecting to parent */}
         <div
           className={cn(
-            'w-0.5 bg-gray-300 dark:bg-muted flex-shrink-0',
+            'w-0.5 bg-gray-300 dark:bg-surface-raised flex-shrink-0',
             depth > 1 ? 'h-4 -mt-2 mb-2' : 'h-2 mb-2'
           )}
         />
 
         {/* Horizontal connector (only for nested replies) */}
-        {depth > 1 && <div className="w-6 h-0.5 bg-gray-300 dark:bg-muted flex-shrink-0" />}
+        {depth > 1 && (
+          <div className="w-6 h-0.5 bg-gray-300 dark:bg-surface-raised flex-shrink-0" />
+        )}
       </div>
 
       {/* Content spacer */}
@@ -66,14 +68,14 @@ export function ThreadConnector({
       {/* Vertical thread line */}
       <div className="flex flex-col items-center w-8 flex-shrink-0">
         {/* Line above current post */}
-        {depth > 0 && <div className="w-0.5 bg-gray-300 dark:bg-muted h-2" />}
+        {depth > 0 && <div className="w-0.5 bg-gray-300 dark:bg-surface-raised h-2" />}
 
         {/* Thread node */}
-        <div className="w-2 h-2 bg-gray-400 dark:bg-muted-foreground rounded-full flex-shrink-0" />
+        <div className="w-2 h-2 bg-gray-400 dark:bg-fg-secondary rounded-full flex-shrink-0" />
 
         {/* Line below current post (if has children) */}
         {hasChildren && !isLastInThread && (
-          <div className="w-0.5 bg-gray-300 dark:bg-muted flex-1 min-h-4" />
+          <div className="w-0.5 bg-gray-300 dark:bg-surface-raised flex-1 min-h-4" />
         )}
       </div>
 

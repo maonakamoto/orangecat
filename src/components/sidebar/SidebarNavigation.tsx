@@ -60,25 +60,25 @@ export function SidebarNavigation({
             <div key={section.id} className="space-y-1">
               {/* Section Divider - Only on desktop for visual separation between icon groups */}
               {!isExpanded && section.id !== sections[0].id && (
-                <div className="mx-2 my-2 border-t border-border" />
+                <div className="mx-2 my-2 border-t border-default" />
               )}
 
               {/* Section Header - Hidden on desktop (icons only), visible on mobile (expanded) */}
               {isExpanded && (
                 <div className="flex items-center justify-between px-3 mb-1">
-                  <h3 className="text-xs font-semibold uppercase text-muted-foreground">
+                  <h3 className="text-xs font-semibold uppercase text-fg-secondary">
                     {section.title}
                   </h3>
                   {section.collapsible && (
                     <button
                       onClick={() => toggleSection(section.id)}
-                      className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 transition-colors hover:bg-muted active:bg-muted touch-manipulation"
+                      className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 transition-colors hover:bg-surface-raised active:bg-surface-raised touch-manipulation"
                       aria-label={`${navigationLabels.SECTION_TOGGLE} ${section.title}`}
                     >
                       {isCollapsed ? (
-                        <ChevronRight className="w-4 h-4 text-muted-dim" />
+                        <ChevronRight className="w-4 h-4 text-fg-tertiary" />
                       ) : (
-                        <ChevronDown className="w-4 h-4 text-muted-dim" />
+                        <ChevronDown className="w-4 h-4 text-fg-tertiary" />
                       )}
                     </button>
                   )}
@@ -106,7 +106,7 @@ export function SidebarNavigation({
 
       {/* Bottom Navigation Items */}
       {bottomItems.length > 0 && (
-        <div className={`border-t border-border-subtle py-2 space-y-1 ${isExpanded ? 'px-2' : ''}`}>
+        <div className={`border-t border-subtle py-2 space-y-1 ${isExpanded ? 'px-2' : ''}`}>
           {bottomItems.map(item => (
             <SidebarNavItem
               key={item.name}

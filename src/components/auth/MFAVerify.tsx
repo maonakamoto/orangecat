@@ -117,8 +117,8 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardContent className="flex flex-col items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-foreground mb-4" />
-          <p className="text-sm text-muted-foreground">Loading authentication...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-fg-primary mb-4" />
+          <p className="text-sm text-fg-secondary">Loading authentication...</p>
         </CardContent>
       </Card>
     );
@@ -128,8 +128,8 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
         <div className="flex justify-center mb-4">
-          <div className="p-3 bg-muted rounded-full">
-            <Shield className="h-8 w-8 text-foreground" />
+          <div className="p-3 bg-surface-raised rounded-full">
+            <Shield className="h-8 w-8 text-fg-primary" />
           </div>
         </div>
         <CardTitle>Two-Factor Authentication</CardTitle>
@@ -148,7 +148,7 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
               onChange={handleCodeChange}
               placeholder="000000"
               disabled={verifying}
-              className="w-full px-4 py-4 text-center text-3xl font-mono tracking-[0.5em] border border-border-strong rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:opacity-50 disabled:cursor-not-allowed dark:bg-muted dark:text-foreground"
+              className="w-full px-4 py-4 text-center text-3xl font-mono tracking-[0.5em] border border-strong rounded-lg focus:ring-2 focus:ring-ring focus:border-interactive disabled:opacity-50 disabled:cursor-not-allowed dark:bg-surface-raised dark:text-fg-primary"
               maxLength={6}
             />
           </div>
@@ -156,8 +156,8 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
           {/* Error message */}
           {error && (
             <div className="flex items-center gap-2 p-3 oc-error-surface rounded-lg">
-              <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0" />
-              <p className="text-sm text-destructive/80">{error}</p>
+              <AlertCircle className="h-4 w-4 text-status-negative flex-shrink-0" />
+              <p className="text-sm text-status-negative/80">{error}</p>
             </div>
           )}
 
@@ -174,7 +174,7 @@ export function MFAVerify({ onVerificationComplete, onCancel }: MFAVerifyProps) 
           </Button>
 
           {/* Help text */}
-          <p className="text-xs text-muted-foreground text-center">
+          <p className="text-xs text-fg-secondary text-center">
             Open your authenticator app (Google Authenticator, Authy, etc.) and enter the code for
             OrangeCat.
           </p>

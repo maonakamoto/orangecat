@@ -62,7 +62,7 @@ export default function BitcoinWalletStatsCompact({
 
   if (loading) {
     return (
-      <div className={`bg-card rounded-lg p-4 border border-border ${className}`}>
+      <div className={`bg-surface-base rounded-lg p-4 border border-default ${className}`}>
         <div className="flex items-center justify-center py-4">
           <RefreshCw className="w-5 h-5 animate-spin text-bitcoinOrange" />
         </div>
@@ -72,8 +72,8 @@ export default function BitcoinWalletStatsCompact({
 
   if (error || balance === null) {
     return (
-      <div className={`bg-card rounded-lg p-4 border border-border ${className}`}>
-        <div className="text-center text-muted-foreground py-2">
+      <div className={`bg-surface-base rounded-lg p-4 border border-default ${className}`}>
+        <div className="text-center text-fg-secondary py-2">
           <p className="text-sm mb-2">Unable to load wallet data</p>
           <Button variant="outline" size="sm" onClick={fetchData}>
             <RefreshCw className="w-3 h-3 mr-1" />
@@ -91,7 +91,9 @@ export default function BitcoinWalletStatsCompact({
   const hasTransactions = transactions.length > 0;
 
   return (
-    <div className={`bg-card rounded-lg border border-border overflow-hidden ${className}`}>
+    <div
+      className={`bg-surface-base rounded-lg border border-default overflow-hidden ${className}`}
+    >
       {/* Balance Display */}
       <div className={`${GRADIENTS.brandOrangeAmber} p-4 text-white`}>
         <div className="flex items-center justify-between mb-1">
@@ -118,7 +120,7 @@ export default function BitcoinWalletStatsCompact({
       {/* Transaction Summary */}
       {hasTransactions ? (
         <div className="p-4">
-          <h4 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-1">
+          <h4 className="text-xs font-semibold text-fg-primary mb-3 flex items-center gap-1">
             <TrendingUp className="w-3 h-3" />
             Recent Activity
           </h4>
@@ -127,17 +129,17 @@ export default function BitcoinWalletStatsCompact({
             {transactions.slice(0, 3).map(tx => (
               <div
                 key={tx.txid}
-                className="flex items-center justify-between text-sm p-2 bg-muted rounded"
+                className="flex items-center justify-between text-sm p-2 bg-surface-raised rounded"
               >
                 <div className="flex items-center gap-2">
                   {tx.type === 'received' ? (
                     <TrendingDown className="w-3 h-3 text-status-positive" />
                   ) : (
-                    <TrendingUp className="w-3 h-3 text-destructive" />
+                    <TrendingUp className="w-3 h-3 text-status-negative" />
                   )}
                   <span
                     className={`font-medium text-xs ${
-                      tx.type === 'received' ? 'text-status-positive' : 'text-destructive'
+                      tx.type === 'received' ? 'text-status-positive' : 'text-status-negative'
                     }`}
                   >
                     {tx.type === 'received' ? '+' : '-'}
@@ -149,7 +151,7 @@ export default function BitcoinWalletStatsCompact({
                     </span>
                   )}
                 </div>
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-fg-secondary">
                   {tx.timestamp ? formatDate(new Date(tx.timestamp * 1000)) : 'Unconfirmed'}
                 </div>
               </div>
@@ -158,14 +160,14 @@ export default function BitcoinWalletStatsCompact({
 
           {transactions.length > 3 && (
             <div className="mt-3 text-center">
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-fg-secondary">
                 +{transactions.length - 3} more transactions
               </span>
             </div>
           )}
         </div>
       ) : (
-        <div className="p-4 text-center text-muted-foreground">
+        <div className="p-4 text-center text-fg-secondary">
           <p className="text-xs">No transactions yet</p>
         </div>
       )}

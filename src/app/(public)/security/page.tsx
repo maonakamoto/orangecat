@@ -88,33 +88,33 @@ export default function SecurityPage() {
           <div className="flex justify-center mb-4">
             <Shield className="w-16 h-16 text-fg-secondary" />
           </div>
-          <h1 className="font-heading tracking-display text-4xl font-bold text-foreground mb-4">
+          <h1 className="font-heading tracking-display text-4xl font-bold text-fg-primary mb-4">
             Security &amp; Privacy
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-xl text-fg-secondary">
             Your security and privacy are our top priorities at OrangeCat
           </p>
         </div>
 
         {/* Security Overview */}
-        <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-foreground mb-4">Our Security Philosophy</h2>
-          <p className="text-muted-strong mb-6">
+        <div className="bg-surface-base rounded-lg shadow-sm border border-default p-6 mb-8">
+          <h2 className="text-2xl font-semibold text-fg-primary mb-4">Our Security Philosophy</h2>
+          <p className="text-fg-primary mb-6">
             OrangeCat is built on Bitcoin-first principles, which means we prioritize
             decentralization, self-custody, and transparency. We never hold your funds, and we
             design our systems to minimize the data we collect while maximizing security.
           </p>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-muted/40 border border-border-subtle p-6 rounded-lg">
-              <h3 className="font-semibold text-foreground mb-2">Bitcoin Security</h3>
-              <p className="text-muted-foreground text-sm">
+            <div className="bg-surface-raised/40 border border-subtle p-6 rounded-lg">
+              <h3 className="font-semibold text-fg-primary mb-2">Bitcoin Security</h3>
+              <p className="text-fg-secondary text-sm">
                 Your Bitcoin remains under your control. We facilitate payments but never custody
                 funds.
               </p>
             </div>
-            <div className="bg-muted/40 border border-border-subtle p-6 rounded-lg">
-              <h3 className="font-semibold text-foreground mb-2">Data Minimization</h3>
-              <p className="text-muted-foreground text-sm">
+            <div className="bg-surface-raised/40 border border-subtle p-6 rounded-lg">
+              <h3 className="font-semibold text-fg-primary mb-2">Data Minimization</h3>
+              <p className="text-fg-secondary text-sm">
                 We collect only the minimum data necessary to provide our services.
               </p>
             </div>
@@ -123,17 +123,20 @@ export default function SecurityPage() {
 
         {/* Security Features Grid */}
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold text-foreground mb-8 text-center">
+          <h2 className="text-2xl font-semibold text-fg-primary mb-8 text-center">
             Security Features
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {securityFeatures.map((feature, index) => (
-              <div key={index} className="bg-card rounded-lg shadow-sm border border-border p-6">
+              <div
+                key={index}
+                className="bg-surface-base rounded-lg shadow-sm border border-default p-6"
+              >
                 <div className="flex items-center mb-4">
                   <feature.icon className="w-8 h-8 text-fg-secondary mr-3" />
-                  <h3 className="font-semibold text-foreground">{feature.title}</h3>
+                  <h3 className="font-semibold text-fg-primary">{feature.title}</h3>
                 </div>
-                <p className="text-muted-foreground text-sm">{feature.description}</p>
+                <p className="text-fg-secondary text-sm">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -142,13 +145,16 @@ export default function SecurityPage() {
         {/* Security Practices */}
         <div className="space-y-8">
           {securityPractices.map((practice, index) => (
-            <div key={index} className="bg-card rounded-lg shadow-sm border border-border p-6">
-              <h3 className="text-lg font-semibold text-foreground mb-6">{practice.title}</h3>
+            <div
+              key={index}
+              className="bg-surface-base rounded-lg shadow-sm border border-default p-6"
+            >
+              <h3 className="text-lg font-semibold text-fg-primary mb-6">{practice.title}</h3>
               <ul className="space-y-3">
                 {practice.items.map((item, itemIndex) => (
                   <li key={itemIndex} className="flex items-start">
-                    <div className="w-2 h-2 bg-foreground rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <span className="text-muted-strong">{item}</span>
+                    <div className="w-2 h-2 bg-fg-primary rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <span className="text-fg-primary">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -184,7 +190,7 @@ export default function SecurityPage() {
         {/* Last Updated — hardcoded to the actual review date so the line
             doesn't drift to today on every render, which falsely implied
             continuous review. Bump this when you actually re-audit the page. */}
-        <div className="mt-8 text-center text-muted-foreground">
+        <div className="mt-8 text-center text-fg-secondary">
           <p className="text-sm">Page last reviewed: 2026-06-09.</p>
         </div>
       </div>

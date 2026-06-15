@@ -37,7 +37,7 @@ export function ProfileBannerSection({
       {/* Banner — monochrome neutral default per migration 6/N; user
           banner_url image overlays on top. The dark-bottom overlay stays
           so action buttons remain readable. */}
-      <div className="relative h-32 sm:h-48 md:h-64 lg:h-80 bg-surface-raised border border-border-subtle rounded-lg sm:rounded-md shadow-none overflow-hidden">
+      <div className="relative h-32 sm:h-48 md:h-64 lg:h-80 bg-surface-raised border border-subtle rounded-lg sm:rounded-md shadow-none overflow-hidden">
         {profile.banner_url && (
           <Image
             src={profile.banner_url}
@@ -60,12 +60,12 @@ export function ProfileBannerSection({
             alt={profile.name || 'User'}
             width={128}
             height={128}
-            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-lg sm:rounded-lg object-cover border-2 sm:border-4 border-card shadow-sm"
+            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-lg sm:rounded-lg object-cover border-2 sm:border-4 border-fg-inverted shadow-sm"
           />
         ) : (
           <DefaultAvatar
             size={128}
-            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-lg sm:rounded-lg border-2 sm:border-4 border-card shadow-sm"
+            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-lg sm:rounded-lg border-2 sm:border-4 border-fg-inverted shadow-sm"
           />
         )}
       </div>
@@ -77,7 +77,7 @@ export function ProfileBannerSection({
             onClick={onShareToggle}
             variant="outline"
             size="sm"
-            className="bg-card/90 dark:bg-card/90 backdrop-blur-sm hover:bg-muted dark:hover:bg-card shadow-sm text-xs sm:text-sm"
+            className="bg-surface-base/90 dark:bg-surface-base/90 backdrop-blur-sm hover:bg-surface-raised dark:hover:bg-surface-base shadow-sm text-xs sm:text-sm"
           >
             <Share2 className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
             <span className="hidden sm:inline">Share</span>

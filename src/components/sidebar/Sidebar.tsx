@@ -128,12 +128,10 @@ export function Sidebar({
 
             {/* Desktop Collapse Toggle Button */}
             {isDesktop && (
-              <div
-                className={`border-t border-border-subtle ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}
-              >
+              <div className={`border-t border-subtle ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}>
                 <button
                   onClick={toggleSidebarCollapse}
-                  className={`flex w-full items-center gap-3 rounded-md p-2 text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground ${
+                  className={`flex w-full items-center gap-3 rounded-md p-2 text-fg-secondary transition-colors duration-200 hover:bg-surface-raised hover:text-fg-primary ${
                     !isExpanded ? 'justify-center' : ''
                   }`}
                   aria-label={
@@ -157,12 +155,10 @@ export function Sidebar({
 
             {/* Mobile Close Button */}
             {navigationState.isSidebarOpen && !isDesktop && (
-              <div
-                className={`border-t border-border-subtle ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}
-              >
+              <div className={`border-t border-subtle ${SIDEBAR_SPACING.PADDING_X} py-2 mt-auto`}>
                 <button
                   onClick={toggleSidebar}
-                  className="flex min-h-11 w-full items-center gap-3 rounded-md p-2 text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
+                  className="flex min-h-11 w-full items-center gap-3 rounded-md p-2 text-fg-secondary transition-colors duration-200 hover:bg-surface-raised hover:text-fg-primary"
                   aria-label={navigationLabels.SIDEBAR_COLLAPSE}
                 >
                   <X className="h-5 w-5" />

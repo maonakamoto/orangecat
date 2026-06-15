@@ -40,19 +40,19 @@ export function AIChatMessage({
   }
 
   return (
-    <div className={cn('flex gap-3 py-4 px-4', isUser ? 'bg-muted' : 'bg-card')}>
+    <div className={cn('flex gap-3 py-4 px-4', isUser ? 'bg-surface-raised' : 'bg-surface-base')}>
       <Avatar className="h-8 w-8 flex-shrink-0">
         {isUser ? (
           <>
             <AvatarImage src={userAvatar || undefined} alt={userName} />
-            <AvatarFallback className="bg-muted text-fg-secondary">
+            <AvatarFallback className="bg-surface-raised text-fg-secondary">
               <User className="h-4 w-4" />
             </AvatarFallback>
           </>
         ) : (
           <>
             <AvatarImage src={assistantAvatar || undefined} alt={assistantName} />
-            <AvatarFallback className="bg-muted text-fg-secondary">
+            <AvatarFallback className="bg-surface-raised text-fg-secondary">
               <Bot className="h-4 w-4" />
             </AvatarFallback>
           </>
@@ -61,19 +61,19 @@ export function AIChatMessage({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className="font-medium text-sm text-foreground">
+          <span className="font-medium text-sm text-fg-primary">
             {isUser ? userName : assistantName}
           </span>
-          <span className="text-xs text-muted-dim">{formatShortTime(message.created_at)}</span>
+          <span className="text-xs text-fg-tertiary">{formatShortTime(message.created_at)}</span>
           {!isUser && message.tokens_used && message.tokens_used > 0 && (
-            <span className="text-xs text-muted-dim">({message.tokens_used} tokens)</span>
+            <span className="text-xs text-fg-tertiary">({message.tokens_used} tokens)</span>
           )}
         </div>
-        <div className="prose prose-sm max-w-none text-foreground whitespace-pre-wrap">
+        <div className="prose prose-sm max-w-none text-fg-primary whitespace-pre-wrap">
           {message.content}
         </div>
         {!isUser && message.cost_btc && message.cost_btc > 0 && (
-          <div className="mt-2 text-xs text-muted-dim">
+          <div className="mt-2 text-xs text-fg-tertiary">
             Cost: {formatAmountBtc(message.cost_btc)}
           </div>
         )}

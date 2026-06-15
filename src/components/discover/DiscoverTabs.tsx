@@ -82,7 +82,7 @@ export default function DiscoverTabs({
   const allCount = Object.values(counts).reduce((sum, n) => sum + (n || 0), 0);
 
   return (
-    <div className="border-b border-border bg-card backdrop-blur-sm rounded-t-lg sticky top-0 z-10 overflow-x-auto">
+    <div className="border-b border-default bg-surface-base backdrop-blur-sm rounded-t-lg sticky top-0 z-10 overflow-x-auto">
       <nav className="-mb-px flex space-x-6 px-6 pt-4 min-w-max" aria-label="Tabs">
         {tabs.map(({ id, label, Icon }) => {
           const isActive = activeTab === id;
@@ -97,8 +97,8 @@ export default function DiscoverTabs({
                 transition-colors duration-200
                 ${
                   isActive
-                    ? 'text-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:border-border-strong'
+                    ? 'text-fg-primary'
+                    : 'text-fg-secondary hover:text-fg-primary hover:border-strong'
                 }
               `}
               aria-current={isActive ? 'page' : undefined}
@@ -107,7 +107,7 @@ export default function DiscoverTabs({
               <span
                 className={`
                 transition-colors duration-200
-                ${isActive ? 'text-foreground' : 'text-muted-dim group-hover:text-muted-foreground dark:group-hover:text-foreground'}
+                ${isActive ? 'text-fg-primary' : 'text-fg-tertiary group-hover:text-fg-secondary dark:group-hover:text-fg-primary'}
               `}
               >
                 <Icon className="w-4 h-4" />
@@ -124,8 +124,8 @@ export default function DiscoverTabs({
                     transition-colors duration-200
                     ${
                       isActive
-                        ? 'border border-border-strong bg-muted text-foreground'
-                        : 'bg-muted text-muted-foreground border border-border group-hover:bg-gray-200 dark:group-hover:bg-muted/80'
+                        ? 'border border-strong bg-surface-raised text-fg-primary'
+                        : 'bg-surface-raised text-fg-secondary border border-default group-hover:bg-gray-200 dark:group-hover:bg-surface-raised/80'
                     }
                   `}
                 >
@@ -134,7 +134,7 @@ export default function DiscoverTabs({
               )}
 
               {/* Active indicator line */}
-              {isActive && <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground" />}
+              {isActive && <div className="absolute bottom-0 left-0 right-0 h-px bg-fg-primary" />}
             </button>
           );
         })}

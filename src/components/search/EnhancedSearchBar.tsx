@@ -73,7 +73,7 @@ export default function EnhancedSearchBar({
   return (
     <div ref={searchRef} className={`relative ${className}`}>
       <form onSubmit={handleSubmit} className="relative">
-        <Search className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-dim" />
+        <Search className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-fg-tertiary" />
         <input
           ref={inputRef}
           type="text"
@@ -83,7 +83,7 @@ export default function EnhancedSearchBar({
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleInputKeyDown}
           autoFocus={autoFocus}
-          className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-muted hover:bg-muted dark:hover:bg-card dark:text-foreground transition-all duration-200 placeholder:text-muted-dim"
+          className="w-full pl-9 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-2.5 text-sm border border-default rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-interactive bg-surface-raised hover:bg-surface-raised dark:hover:bg-surface-base dark:text-fg-primary transition-all duration-200 placeholder:text-fg-tertiary"
           aria-label="Search"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
@@ -91,8 +91,8 @@ export default function EnhancedSearchBar({
           aria-autocomplete="list"
           aria-controls="search-results-listbox"
         />
-        <div className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 flex items-center text-xs text-muted-dim">
-          <kbd className="hidden sm:inline-flex px-1.5 py-0.5 bg-muted rounded border dark:border-border text-xs dark:text-muted-foreground">
+        <div className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 flex items-center text-xs text-fg-tertiary">
+          <kbd className="hidden sm:inline-flex px-1.5 py-0.5 bg-surface-raised rounded border dark:border-default text-xs dark:text-fg-secondary">
             ⌘K
           </kbd>
         </div>
@@ -101,7 +101,7 @@ export default function EnhancedSearchBar({
       {/* Search Dropdown */}
       {isOpen && (
         <div
-          className="absolute top-full left-0 right-0 mt-2 bg-card rounded-lg border border-border shadow-sm z-50 max-h-96 overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-2 bg-surface-base rounded-lg border border-default shadow-sm z-50 max-h-96 overflow-y-auto"
           role="listbox"
           aria-label="Search suggestions"
         >

@@ -40,8 +40,8 @@ export function DesktopNavigation({ items }: DesktopNavigationProps) {
           className={cn(
             'px-3 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap',
             isNavHrefActive(pathname, item.href!)
-              ? 'text-foreground bg-muted'
-              : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              ? 'text-fg-primary bg-surface-raised'
+              : 'text-fg-secondary hover:text-fg-primary hover:bg-surface-raised'
           )}
         >
           {item.name}

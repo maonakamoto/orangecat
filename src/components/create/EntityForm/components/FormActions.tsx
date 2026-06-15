@@ -42,7 +42,7 @@ export function FormActions({
     <div className="pt-6 border-t space-y-3">
       {/* Draft save indicator */}
       {mode === 'create' && lastSavedAt && !wizardMode && formatRelativeTime && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2 text-sm text-fg-secondary">
           <Save className="h-4 w-4" />
           <span>Draft saved {formatRelativeTime(lastSavedAt.toISOString())}</span>
         </div>

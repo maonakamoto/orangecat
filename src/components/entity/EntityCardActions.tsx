@@ -101,10 +101,10 @@ export function EntityCardActions({
           <button
             type="button"
             onClick={e => e.stopPropagation()}
-            className="h-8 w-8 flex items-center justify-center rounded-md hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity"
+            className="h-8 w-8 flex items-center justify-center rounded-md hover:bg-surface-raised opacity-0 group-hover:opacity-100 transition-opacity"
             aria-label="Actions"
           >
-            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+            <MoreHorizontal className="h-4 w-4 text-fg-secondary" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -156,7 +156,7 @@ export function EntityCardActions({
             <DropdownMenuItem
               onClick={handleVisibilityClick}
               disabled={isTogglingVisibility}
-              className={showOnProfile === false ? 'text-muted-foreground' : ''}
+              className={showOnProfile === false ? 'text-fg-secondary' : ''}
             >
               {showOnProfile === false ? (
                 <>
@@ -178,7 +178,7 @@ export function EntityCardActions({
                 e.stopPropagation();
                 setShowDeleteDialog(true);
               }}
-              className="text-destructive focus:text-destructive focus:bg-destructive/10"
+              className="text-status-negative focus:text-status-negative focus:bg-status-negative/10"
             >
               <Trash2 className="mr-2 h-4 w-4" />
               Delete

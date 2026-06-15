@@ -23,8 +23,8 @@ export function TextFormatToolbar({
 
   const colorClasses =
     variant === 'accent'
-      ? 'text-foreground hover:bg-muted active:bg-muted/80'
-      : 'text-muted-foreground hover:bg-muted hover:text-foreground';
+      ? 'text-fg-primary hover:bg-surface-raised active:bg-surface-raised/80'
+      : 'text-fg-secondary hover:bg-surface-raised hover:text-fg-primary';
 
   return (
     <div className="flex items-center gap-1">
@@ -79,7 +79,7 @@ export function ProjectSelectionPanel({
   return (
     <div className={cn('mt-3 p-3', TIMELINE_SURFACE.panel)}>
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-semibold uppercase text-muted-foreground">
+        <span className="text-xs font-semibold uppercase text-fg-secondary">
           {TIMELINE_COPY.crossPostLabel}
         </span>
         <button
@@ -101,7 +101,7 @@ export function ProjectSelectionPanel({
               TIMELINE_SURFACE.chip,
               selectedProjects.includes(project.id)
                 ? variant === 'accent'
-                  ? 'border-foreground bg-foreground text-card hover:text-card'
+                  ? 'border-fg-primary bg-fg-primary text-fg-inverted hover:text-fg-inverted'
                   : TIMELINE_SURFACE.chipActive
                 : ''
             )}
@@ -111,7 +111,7 @@ export function ProjectSelectionPanel({
         ))}
       </div>
       {selectedProjects.length > 0 && (
-        <p className="mt-2 text-xs text-muted-foreground">
+        <p className="mt-2 text-xs text-fg-secondary">
           This post will appear on {selectedProjects.length} project timeline
           {selectedProjects.length > 1 ? 's' : ''}
         </p>
@@ -143,9 +143,9 @@ export function ProjectToggleButton({
         'flex h-9 w-9 items-center justify-center rounded-md transition-colors touch-manipulation',
         isActive
           ? variant === 'accent'
-            ? 'bg-muted text-foreground ring-1 ring-border-strong'
-            : 'bg-muted text-foreground'
-          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+            ? 'bg-surface-raised text-fg-primary ring-1 ring-border-strong'
+            : 'bg-surface-raised text-fg-primary'
+          : 'text-fg-secondary hover:bg-surface-raised hover:text-fg-primary'
       )}
       title="Cross-post to projects"
       aria-label="Toggle project selection"
@@ -176,11 +176,11 @@ export function ComposerMessages({
     return (
       <div className="mt-2 rounded-md oc-error-surface p-3">
         <div className="flex items-start gap-2">
-          <div className="text-destructive text-sm flex-1">{error}</div>
+          <div className="text-status-negative text-sm flex-1">{error}</div>
           {onClearError && (
             <button
               onClick={onClearError}
-              className="text-destructive/60 hover:text-destructive min-h-11 min-w-11 flex items-center justify-center"
+              className="text-status-negative/60 hover:text-status-negative min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Dismiss error"
             >
               <X className="w-4 h-4" />
@@ -191,7 +191,7 @@ export function ComposerMessages({
           <div className="mt-2">
             <button
               onClick={onRetry}
-              className="text-sm text-destructive hover:text-destructive underline rounded-md min-h-11 px-2 flex items-center"
+              className="text-sm text-status-negative hover:text-status-negative underline rounded-md min-h-11 px-2 flex items-center"
             >
               Try again
             </button>
@@ -233,10 +233,10 @@ export function CharacterCounter({
 
   const colorClass =
     count > dangerThreshold
-      ? 'text-destructive'
+      ? 'text-status-negative'
       : count > warningThreshold
         ? 'text-status-warning'
-        : 'text-muted-dim';
+        : 'text-fg-tertiary';
 
   return (
     <div className={cn('text-sm font-medium', colorClass, className)}>

@@ -35,12 +35,12 @@ export function EntityCreateEditPage<T extends Record<string, unknown>>({
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center">
         <h3 className="text-lg font-semibold mb-2">{editError}</h3>
-        <p className="text-muted-foreground mb-4">
+        <p className="text-fg-secondary mb-4">
           Unable to load {meta.name.toLowerCase()} for editing.
         </p>
         <button
           onClick={() => router.push(meta.basePath)}
-          className="text-sm font-medium text-muted-foreground hover:text-foreground underline"
+          className="text-sm font-medium text-fg-secondary hover:text-fg-primary underline"
         >
           Back to {meta.namePlural.toLowerCase()}
         </button>

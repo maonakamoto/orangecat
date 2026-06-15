@@ -37,7 +37,7 @@ export type ServiceFieldType =
 
 export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, GuidanceContent> = {
   title: {
-    icon: React.createElement(Briefcase, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Briefcase, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Service Title',
     description:
       'Your service title should clearly communicate what you offer. Be specific and professional.',
@@ -56,7 +56,7 @@ export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, Guida
     ],
   },
   description: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Service Description',
     description:
       'Describe what you offer, your experience, and what clients can expect when working with you.',
@@ -73,7 +73,7 @@ export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, Guida
     ],
   },
   category: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Service Category',
     description:
       'Categories help clients find your service. Choose the category that best matches your expertise.',
@@ -91,7 +91,7 @@ export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, Guida
     ],
   },
   hourly_rate: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Hourly Rate',
     description:
       'Set your hourly rate in your preferred currency. This is ideal for ongoing work or consultations.',
@@ -109,7 +109,7 @@ export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, Guida
     ],
   },
   fixed_price: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Fixed Price',
     description:
       'Set a fixed price for complete projects or packages. Great for defined deliverables.',
@@ -128,7 +128,7 @@ export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, Guida
     ],
   },
   duration_minutes: {
-    icon: React.createElement(Clock, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Clock, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Typical Duration',
     description: 'How long does a typical session or engagement last? This helps clients plan.',
     tips: [
@@ -144,7 +144,7 @@ export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, Guida
     ],
   },
   service_location_type: {
-    icon: React.createElement(MapPin, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(MapPin, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Service Location',
     description: 'Where can you deliver your service? This affects who can hire you.',
     tips: [
@@ -160,7 +160,7 @@ export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, Guida
     ],
   },
   service_area: {
-    icon: React.createElement(MapPin, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(MapPin, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Service Area',
     description: 'For on-site services, specify where you can travel to meet clients.',
     tips: [
@@ -176,7 +176,7 @@ export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, Guida
     ],
   },
   portfolio_links: {
-    icon: React.createElement(LinkIcon, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(LinkIcon, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Portfolio Links',
     description:
       'Link to examples of your work. Portfolios build trust and show your capabilities.',
@@ -201,15 +201,15 @@ export const serviceDefaultGuidance: DefaultGuidance = {
     'Services are your skills and expertise offered to clients. Consulting, development, design, teaching - get paid in Bitcoin for your work.',
   features: [
     {
-      icon: React.createElement(Briefcase, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Briefcase, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Offer your professional expertise',
     },
     {
-      icon: React.createElement(Users, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Users, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Connect with clients globally',
     },
     {
-      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(CheckCircle2, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Set your own rates and availability',
     },
   ],

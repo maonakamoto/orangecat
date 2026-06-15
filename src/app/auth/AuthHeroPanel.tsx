@@ -26,10 +26,10 @@ const HIGHLIGHTS = [
 
 export function AuthHeroPanel() {
   return (
-    <div className="relative hidden flex-1 flex-col justify-between border-r border-border bg-card p-10 lg:flex lg:p-12">
+    <div className="relative hidden flex-1 flex-col justify-between border-r border-default bg-surface-base p-10 lg:flex lg:p-12">
       <Link
         href={ROUTES.HOME}
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        className="inline-flex items-center gap-1.5 text-sm text-fg-secondary transition-colors hover:text-fg-primary"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to home
@@ -37,22 +37,22 @@ export function AuthHeroPanel() {
 
       <div className="max-w-lg">
         <div className="mb-8 flex items-center gap-3">
-          <div className="ui-brand-mark ui-brand-mark-default text-foreground">
+          <div className="ui-brand-mark ui-brand-mark-default text-fg-primary">
             <BrandMarkIcon size={24} />
           </div>
           <div>
             <p className="ui-kicker">{APP_KICKER}</p>
-            <span className="block text-lg font-medium tracking-tight text-foreground">
+            <span className="block text-lg font-medium tracking-tight text-fg-primary">
               {APP_NAME}
             </span>
           </div>
         </div>
 
-        <h1 className="mb-5 text-4xl font-bold leading-tight tracking-tight text-foreground lg:text-5xl">
+        <h1 className="mb-5 text-4xl font-bold leading-tight tracking-tight text-fg-primary lg:text-5xl">
           {APP_TAGLINE}
         </h1>
 
-        <p className="mb-10 text-lg leading-relaxed text-muted-foreground">
+        <p className="mb-10 text-lg leading-relaxed text-fg-secondary">
           Fund, lend, invest, trade, and govern — with any identity, any currency, any counterparty.
           No gatekeepers.
         </p>
@@ -60,10 +60,10 @@ export function AuthHeroPanel() {
         <ul className="space-y-3">
           {HIGHLIGHTS.map(({ icon: Icon, label }) => (
             <li key={label} className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle bg-muted/40">
-                <Icon className="h-4 w-4 text-foreground" />
+              <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-subtle bg-surface-raised/40">
+                <Icon className="h-4 w-4 text-fg-primary" />
               </div>
-              <span className="pt-1 text-sm text-muted-foreground">{label}</span>
+              <span className="pt-1 text-sm text-fg-secondary">{label}</span>
             </li>
           ))}
         </ul>

@@ -44,7 +44,7 @@ export function NostrConnectionCard() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Key className="h-5 w-5 text-foreground" />
+          <Key className="h-5 w-5 text-fg-primary" />
           Nostr
         </CardTitle>
         <CardDescription>
@@ -61,7 +61,7 @@ export function NostrConnectionCard() {
 
         {connected && npub ? (
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/40 border border-border-subtle">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-surface-raised/40 border border-subtle">
               <div className="flex items-center gap-3 min-w-0">
                 {profile?.picture ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -71,8 +71,8 @@ export function NostrConnectionCard() {
                     className="h-8 w-8 rounded-full"
                   />
                 ) : (
-                  <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                    <Key className="h-4 w-4 text-foreground" />
+                  <div className="h-8 w-8 rounded-full bg-surface-raised flex items-center justify-center">
+                    <Key className="h-4 w-4 text-fg-primary" />
                   </div>
                 )}
                 <div className="min-w-0">
@@ -81,11 +81,11 @@ export function NostrConnectionCard() {
                       {profile.display_name || profile.name}
                     </div>
                   ) : null}
-                  <div className="text-xs font-mono text-muted-foreground flex items-center gap-1">
+                  <div className="text-xs font-mono text-fg-secondary flex items-center gap-1">
                     {shortenNpub(npub)}
                     <button
                       onClick={handleCopyNpub}
-                      className="p-0.5 hover:text-foreground transition-colors"
+                      className="p-0.5 hover:text-fg-primary transition-colors"
                       title="Copy npub"
                     >
                       {copied ? (
@@ -97,12 +97,7 @@ export function NostrConnectionCard() {
                   </div>
                 </div>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={disconnect}
-                className="text-muted-foreground"
-              >
+              <Button variant="ghost" size="sm" onClick={disconnect} className="text-fg-secondary">
                 <Unplug className="h-4 w-4" />
               </Button>
             </div>
@@ -137,9 +132,9 @@ export function NostrConnectionCard() {
                     </div>
                   )}
                   {balanceLoading && (
-                    <p className="text-xs text-muted-foreground">Loading balance...</p>
+                    <p className="text-xs text-fg-secondary">Loading balance...</p>
                   )}
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-fg-secondary">
                     Your wallet is connected via NWC. You can send and receive Lightning payments.
                   </p>
                 </div>
@@ -154,8 +149,8 @@ export function NostrConnectionCard() {
                     }
                     className="font-mono text-xs"
                   />
-                  {nwcError && <p className="text-xs text-destructive">{nwcError}</p>}
-                  <p className="text-xs text-muted-foreground">
+                  {nwcError && <p className="text-xs text-status-negative">{nwcError}</p>}
+                  <p className="text-xs text-fg-secondary">
                     Get this from your Lightning wallet (Alby, Mutiny, etc.)
                   </p>
                   <div className="flex gap-2">
@@ -181,7 +176,7 @@ export function NostrConnectionCard() {
             </div>
 
             {profile?.nip05 && (
-              <div className="text-xs text-muted-foreground">NIP-05: {profile.nip05}</div>
+              <div className="text-xs text-fg-secondary">NIP-05: {profile.nip05}</div>
             )}
           </div>
         ) : (
@@ -190,7 +185,7 @@ export function NostrConnectionCard() {
               <Button
                 onClick={connectWithExtension}
                 disabled={loading}
-                className="w-full bg-foreground hover:bg-foreground"
+                className="w-full bg-fg-primary hover:bg-fg-primary"
               >
                 <Key className="h-4 w-4 mr-2" />
                 {loading ? 'Connecting...' : 'Connect with Extension'}
@@ -201,13 +196,13 @@ export function NostrConnectionCard() {
                   <Key className="h-4 w-4 mr-2" />
                   No Nostr Extension Found
                 </Button>
-                <p className="text-xs text-muted-foreground text-center">
+                <p className="text-xs text-fg-secondary text-center">
                   Install{' '}
                   <a
                     href="https://getalby.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-foreground hover:underline inline-flex items-center gap-0.5"
+                    className="text-fg-primary hover:underline inline-flex items-center gap-0.5"
                   >
                     Alby <ExternalLink className="h-3 w-3" />
                   </a>{' '}
@@ -216,7 +211,7 @@ export function NostrConnectionCard() {
                     href="https://github.com/niccokunzmann/nos2x"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-foreground hover:underline inline-flex items-center gap-0.5"
+                    className="text-fg-primary hover:underline inline-flex items-center gap-0.5"
                   >
                     nos2x <ExternalLink className="h-3 w-3" />
                   </a>{' '}
@@ -230,7 +225,7 @@ export function NostrConnectionCard() {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">or</span>
+                <span className="bg-surface-page px-2 text-fg-secondary">or</span>
               </div>
             </div>
 
@@ -262,7 +257,7 @@ export function NostrConnectionCard() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowNpubInput(true)}
-                className="w-full text-muted-foreground"
+                className="w-full text-fg-secondary"
               >
                 Enter npub manually
               </Button>

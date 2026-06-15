@@ -150,7 +150,7 @@ export function GroupWallets({
 
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Name <span className="text-destructive">*</span>
+                  Name <span className="text-status-negative">*</span>
                 </label>
                 <input
                   type="text"
@@ -159,7 +159,7 @@ export function GroupWallets({
                   value={form.name}
                   onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                   placeholder="e.g. Operations Treasury"
-                  className="w-full border border-input rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full border border-default rounded-md px-3 py-2 text-sm bg-surface-page focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
 
@@ -168,7 +168,7 @@ export function GroupWallets({
                 <select
                   value={form.purpose}
                   onChange={e => setForm(f => ({ ...f, purpose: e.target.value }))}
-                  className="w-full border border-input rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full border border-default rounded-md px-3 py-2 text-sm bg-surface-page focus:outline-none focus:ring-2 focus:ring-ring"
                 >
                   {WALLET_PURPOSES.map(p => (
                     <option key={p.value} value={p.value}>
@@ -186,7 +186,7 @@ export function GroupWallets({
                   value={form.description}
                   onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                   placeholder="Optional description"
-                  className="w-full border border-input rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full border border-default rounded-md px-3 py-2 text-sm bg-surface-page focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
 
@@ -197,7 +197,7 @@ export function GroupWallets({
                   value={form.bitcoin_address}
                   onChange={e => setForm(f => ({ ...f, bitcoin_address: e.target.value }))}
                   placeholder="bc1q… or xpub…"
-                  className="w-full border border-input rounded-md px-3 py-2 text-sm font-mono bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full border border-default rounded-md px-3 py-2 text-sm font-mono bg-surface-page focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
 
@@ -208,11 +208,11 @@ export function GroupWallets({
                   value={form.lightning_address}
                   onChange={e => setForm(f => ({ ...f, lightning_address: e.target.value }))}
                   placeholder="user@domain.com"
-                  className="w-full border border-input rounded-md px-3 py-2 text-sm font-mono bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full border border-default rounded-md px-3 py-2 text-sm font-mono bg-surface-page focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
 
-              <p className="text-xs text-muted-foreground">At least one address is required.</p>
+              <p className="text-xs text-fg-secondary">At least one address is required.</p>
 
               <div className="flex gap-2">
                 <Button type="submit" disabled={submitting || !form.name} className="flex-1">
@@ -251,7 +251,7 @@ export function GroupWallets({
         </CardHeader>
         <CardContent>
           {typedWallets.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No wallets yet</div>
+            <div className="text-center py-8 text-fg-secondary">No wallets yet</div>
           ) : (
             <div className="space-y-4">
               {typedWallets.map(wallet => (
@@ -272,16 +272,16 @@ export function GroupWallets({
                   <CardContent className="space-y-3">
                     {wallet.purpose && (
                       <div className="text-sm">
-                        <span className="text-muted-foreground">Purpose: </span>
+                        <span className="text-fg-secondary">Purpose: </span>
                         <span className="font-medium capitalize">{wallet.purpose}</span>
                       </div>
                     )}
 
                     {wallet.bitcoin_address && (
                       <div className="space-y-1">
-                        <div className="text-sm text-muted-foreground">Bitcoin Address</div>
+                        <div className="text-sm text-fg-secondary">Bitcoin Address</div>
                         <div className="flex items-center gap-2">
-                          <code className="flex-1 font-mono text-xs break-all text-sm bg-muted p-2 rounded">
+                          <code className="flex-1 font-mono text-xs break-all text-sm bg-surface-raised p-2 rounded">
                             {wallet.bitcoin_address}
                           </code>
                           <Button
@@ -309,9 +309,9 @@ export function GroupWallets({
 
                     {wallet.lightning_address && (
                       <div className="space-y-1">
-                        <div className="text-sm text-muted-foreground">Lightning Address</div>
+                        <div className="text-sm text-fg-secondary">Lightning Address</div>
                         <div className="flex items-center gap-2">
-                          <code className="flex-1 font-mono text-xs bg-muted p-2 rounded">
+                          <code className="flex-1 font-mono text-xs bg-surface-raised p-2 rounded">
                             {wallet.lightning_address}
                           </code>
                           <Button
@@ -329,7 +329,7 @@ export function GroupWallets({
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <div>
-                            <div className="text-sm text-muted-foreground">Balance</div>
+                            <div className="text-sm text-fg-secondary">Balance</div>
                             <div className="text-lg font-bold text-status-positive">
                               {formatAmountBtc(wallet.current_balance_btc)}
                             </div>
@@ -352,7 +352,7 @@ export function GroupWallets({
                         </div>
                       </div>
                       {wallet.required_signatures > 1 && (
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-sm text-fg-secondary">
                           Multi-sig: {wallet.required_signatures} signatures required
                         </div>
                       )}

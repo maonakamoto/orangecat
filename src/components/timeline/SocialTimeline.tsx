@@ -86,10 +86,10 @@ export default function SocialTimeline({
 
   if (hydrated && authCheckComplete && !isLoading && !user) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex min-h-screen items-center justify-center bg-surface-page">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-foreground mb-4">Please sign in</h2>
-          <p className="text-muted-foreground mb-6">You need to be signed in to view this page.</p>
+          <h2 className="text-2xl font-semibold text-fg-primary mb-4">Please sign in</h2>
+          <p className="text-fg-secondary mb-6">You need to be signed in to view this page.</p>
           <Button onClick={() => (window.location.href = '/auth')}>Sign In</Button>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default function SocialTimeline({
 
   if (!authCheckComplete) {
     return (
-      <div className="min-h-screen bg-background p-4">
+      <div className="min-h-screen bg-surface-page p-4">
         <TimelineSkeleton count={5} />
       </div>
     );
@@ -201,16 +201,16 @@ export default function SocialTimeline({
     ) : searchError ? (
       <div className="text-center py-10">
         <Icon className="w-14 h-14 text-status-negative/60 mx-auto mb-3" />
-        <p className="text-destructive text-lg mb-2">{searchError}</p>
+        <p className="text-status-negative text-lg mb-2">{searchError}</p>
         <Button variant="outline" onClick={handleClearSearch}>
           Clear Search
         </Button>
       </div>
     ) : activeFeed.events.length === 0 ? (
       <div className="text-center py-10">
-        <Icon className="w-14 h-14 text-muted-dim dark:text-muted-foreground mx-auto mb-3" />
-        <h3 className="text-lg font-semibold text-foreground mb-1">No posts found</h3>
-        <p className="text-muted-foreground">Try another search term.</p>
+        <Icon className="w-14 h-14 text-fg-tertiary dark:text-fg-secondary mx-auto mb-3" />
+        <h3 className="text-lg font-semibold text-fg-primary mb-1">No posts found</h3>
+        <p className="text-fg-secondary">Try another search term.</p>
         <div className="mt-4">
           <Button variant="secondary" onClick={handleClearSearch}>
             Clear search
@@ -223,16 +223,16 @@ export default function SocialTimeline({
   ) : error ? (
     <div className="text-center py-16">
       <Icon className="w-16 h-16 text-status-negative/60 mx-auto mb-4" />
-      <p className="text-destructive text-lg mb-4">{error}</p>
+      <p className="text-status-negative text-lg mb-4">{error}</p>
       <Button variant="outline" onClick={() => loadTimelineFeed(sortBy)}>
         Try Again
       </Button>
     </div>
   ) : timelineFeed?.events.length === 0 ? (
     <div className="text-center py-16">
-      <Icon className="w-20 h-20 text-muted-dim dark:text-muted-foreground mx-auto mb-4" />
-      <h3 className="text-lg font-semibold text-foreground mb-2">No posts yet</h3>
-      <p className="text-muted-foreground max-w-md mx-auto">
+      <Icon className="w-20 h-20 text-fg-tertiary dark:text-fg-secondary mx-auto mb-4" />
+      <h3 className="text-lg font-semibold text-fg-primary mb-2">No posts yet</h3>
+      <p className="text-fg-secondary max-w-md mx-auto">
         {mode === 'timeline'
           ? "Share your first update about what you're working on!"
           : 'Be the first to share something productive with the community!'}

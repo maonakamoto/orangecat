@@ -97,7 +97,7 @@ export function WalletSelectorField({
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-2 py-6 justify-center text-muted-foreground">
+      <div className="flex items-center gap-2 py-6 justify-center text-fg-secondary">
         <Loader2 className="w-4 h-4 animate-spin" />
         <span className="text-sm">Loading wallets...</span>
       </div>
@@ -115,8 +115,8 @@ export function WalletSelectorField({
             disabled={disabled}
             className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors ${
               mode === 'select'
-                ? 'border-foreground bg-muted/40 text-foreground font-medium'
-                : 'border-border text-muted-foreground hover:border-border-strong dark:hover:border-border'
+                ? 'border-fg-primary bg-surface-raised/40 text-fg-primary font-medium'
+                : 'border-default text-fg-secondary hover:border-strong dark:hover:border-default'
             }`}
           >
             <WalletIcon className="w-4 h-4" />
@@ -128,8 +128,8 @@ export function WalletSelectorField({
             disabled={disabled}
             className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors ${
               mode === 'manual'
-                ? 'border-foreground bg-muted/40 text-foreground font-medium'
-                : 'border-border text-muted-foreground hover:border-border-strong dark:hover:border-border'
+                ? 'border-fg-primary bg-surface-raised/40 text-fg-primary font-medium'
+                : 'border-default text-fg-secondary hover:border-strong dark:hover:border-default'
             }`}
           >
             <PenLine className="w-4 h-4" />
@@ -164,7 +164,7 @@ export function WalletSelectorField({
               placeholder="bc1q... or 1..."
               disabled={disabled}
             />
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-fg-secondary mt-1">
               Your Bitcoin address for receiving funding
             </p>
           </div>
@@ -176,7 +176,7 @@ export function WalletSelectorField({
               placeholder="you@lightning.address"
               disabled={disabled}
             />
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-fg-secondary mt-1">
               Optional: Lightning Network address for instant payments
             </p>
           </div>
@@ -184,7 +184,7 @@ export function WalletSelectorField({
       )}
 
       {fetchError && wallets.length === 0 && (
-        <p className="text-xs text-muted-foreground">{fetchError}</p>
+        <p className="text-xs text-fg-secondary">{fetchError}</p>
       )}
     </div>
   );

@@ -134,7 +134,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
           {!compact && !fullScreen && (
             <div className="flex items-center gap-3 mb-4">
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-foreground">
+                <div className="text-sm font-medium text-fg-primary">
                   {user?.user_metadata?.name ||
                     (typeof user?.email === 'string' && user.email.includes('@')
                       ? user.email.split('@')[0]
@@ -170,7 +170,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
                 'leading-relaxed break-words',
                 'max-h-[60vh] overflow-y-auto',
                 'empty:before:content-[attr(data-placeholder)]',
-                'empty:before:text-muted-foreground dark:empty:before:text-muted-foreground',
+                'empty:before:text-fg-secondary dark:empty:before:text-fg-secondary',
                 'empty:before:pointer-events-none',
                 fullScreen
                   ? 'text-xl min-h-[120px]'
@@ -212,9 +212,9 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
       />
 
       {fullScreen && (
-        <div className="flex items-center gap-4 px-4 pt-4 border-t border-border mt-4">
+        <div className="flex items-center gap-4 px-4 pt-4 border-t border-default mt-4">
           <button
-            className="flex min-h-11 min-w-11 cursor-not-allowed items-center justify-center rounded-md p-2 text-muted-dim transition-colors"
+            className="flex min-h-11 min-w-11 cursor-not-allowed items-center justify-center rounded-md p-2 text-fg-tertiary transition-colors"
             aria-label={TIMELINE_COPY.addImageUnavailable}
             title={TIMELINE_COPY.addImageUnavailable}
             disabled
@@ -257,7 +257,7 @@ const PostComposerMobile: React.FC<PostComposerMobileProps> = ({
   }
 
   return (
-    <div className={cn('border-b border-border-subtle bg-background p-4', compact && 'p-3')}>
+    <div className={cn('border-b border-subtle bg-surface-page p-4', compact && 'p-3')}>
       {renderComposerContent()}
     </div>
   );

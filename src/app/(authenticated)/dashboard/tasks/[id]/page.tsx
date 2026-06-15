@@ -110,7 +110,7 @@ export default function TaskDetailPage() {
       <div className={cn(GRADIENTS.pageBg, 'min-h-screen p-4 sm:p-6 lg:p-8')}>
         <div className="max-w-3xl mx-auto">
           <Breadcrumb items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }]} className="mb-4" />
-          <div className="bg-card rounded-lg border border-border-subtle p-6 text-status-negative">
+          <div className="bg-surface-base rounded-lg border border-subtle p-6 text-status-negative">
             {error || 'Task not found'}
           </div>
         </div>
@@ -137,18 +137,18 @@ export default function TaskDetailPage() {
               onClick={requestArchiveConfirm}
               variant="ghost"
               size="sm"
-              className="text-status-negative hover:bg-destructive/10"
+              className="text-status-negative hover:bg-status-negative/10"
             >
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
-        <div className="bg-card rounded-lg border border-border overflow-hidden">
+        <div className="bg-surface-base rounded-lg border border-default overflow-hidden">
           <div className="p-6">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
-                <h1 className="text-2xl font-bold text-foreground mb-2">{task.title}</h1>
+                <h1 className="text-2xl font-bold text-fg-primary mb-2">{task.title}</h1>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusInfo.className}`}
@@ -166,58 +166,58 @@ export default function TaskDetailPage() {
 
             {task.description && (
               <div className="mb-6">
-                <h2 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                <h2 className="text-sm font-medium text-fg-secondary mb-2 flex items-center gap-2">
                   <FileText className="h-4 w-4" />
                   Description
                 </h2>
-                <p className="text-foreground whitespace-pre-wrap">{task.description}</p>
+                <p className="text-fg-primary whitespace-pre-wrap">{task.description}</p>
               </div>
             )}
 
             {task.instructions && (
-              <div className="mb-6 bg-muted/40 rounded-lg p-4">
-                <h2 className="text-sm font-medium text-foreground mb-2">Instructions</h2>
-                <p className="text-foreground whitespace-pre-wrap">{task.instructions}</p>
+              <div className="mb-6 bg-surface-raised/40 rounded-lg p-4">
+                <h2 className="text-sm font-medium text-fg-primary mb-2">Instructions</h2>
+                <p className="text-fg-primary whitespace-pre-wrap">{task.instructions}</p>
               </div>
             )}
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
               <div>
-                <span className="text-muted-foreground flex items-center gap-1">
+                <span className="text-fg-secondary flex items-center gap-1">
                   <Tag className="h-4 w-4" />
                   Category
                 </span>
-                <span className="font-medium text-foreground">
+                <span className="font-medium text-fg-primary">
                   {TASK_CATEGORY_LABELS[task.category as keyof typeof TASK_CATEGORY_LABELS]}
                 </span>
               </div>
               <div>
-                <span className="text-muted-foreground flex items-center gap-1">
+                <span className="text-fg-secondary flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
                   Type
                 </span>
-                <span className="font-medium text-foreground">
+                <span className="font-medium text-fg-primary">
                   {TASK_TYPE_LABELS[task.task_type as keyof typeof TASK_TYPE_LABELS]}
                 </span>
               </div>
               {task.estimated_minutes && (
                 <div>
-                  <span className="text-muted-foreground flex items-center gap-1">
+                  <span className="text-fg-secondary flex items-center gap-1">
                     <Clock className="h-4 w-4" />
                     Estimated Time
                   </span>
-                  <span className="font-medium text-foreground">
+                  <span className="font-medium text-fg-primary">
                     ~{task.estimated_minutes} minutes
                   </span>
                 </div>
               )}
               {task.creator && (
                 <div>
-                  <span className="text-muted-foreground flex items-center gap-1">
+                  <span className="text-fg-secondary flex items-center gap-1">
                     <User className="h-4 w-4" />
                     Created by
                   </span>
-                  <span className="font-medium text-foreground">
+                  <span className="font-medium text-fg-primary">
                     {task.creator.display_name || task.creator.username}
                   </span>
                 </div>
@@ -225,7 +225,7 @@ export default function TaskDetailPage() {
             </div>
           </div>
 
-          <div className="border-t border-border p-4 bg-muted flex flex-wrap gap-2">
+          <div className="border-t border-default p-4 bg-surface-raised flex flex-wrap gap-2">
             <Button onClick={() => setActiveModal('complete')} className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4" />
               Done
@@ -241,7 +241,7 @@ export default function TaskDetailPage() {
             <Button
               onClick={() => setActiveModal('attention')}
               variant="outline"
-              className="flex items-center gap-2 text-status-warning border-border-subtle hover:bg-status-warning-subtle"
+              className="flex items-center gap-2 text-status-warning border-subtle hover:bg-status-warning-subtle"
             >
               <AlertTriangle className="h-4 w-4" />
               Flag

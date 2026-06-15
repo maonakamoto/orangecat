@@ -51,19 +51,19 @@ export default function MissingWalletBanner({
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-2">
-            <h3 className="text-lg font-semibold text-foreground">
+            <h3 className="text-lg font-semibold text-fg-primary">
               Add Your Bitcoin Address to Start Receiving Funding
             </h3>
             <button
               onClick={() => setIsDismissed(true)}
-              className="text-muted-dim hover:text-muted-foreground dark:hover:text-foreground transition-colors flex-shrink-0"
+              className="text-fg-tertiary hover:text-fg-secondary dark:hover:text-fg-primary transition-colors flex-shrink-0"
               aria-label="Dismiss"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <p className="text-sm text-foreground mb-4">
+          <p className="text-sm text-fg-primary mb-4">
             Your project is live, but you can't receive funding yet! Add your Bitcoin or Lightning
             address so supporters can contribute.
           </p>
@@ -89,7 +89,7 @@ export default function MissingWalletBanner({
           </div>
 
           {/* Info */}
-          <div className="mt-4 flex items-start gap-2 text-xs text-muted-foreground">
+          <div className="mt-4 flex items-start gap-2 text-xs text-fg-secondary">
             <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-bitcoinOrange" />
             <p>
               <strong>Self-custodial:</strong> Funding goes directly to your wallet. No KYC, no

@@ -10,14 +10,14 @@ interface Props {
 
 export function SettingsDangerSection({ isDeleting, onDelete }: Props) {
   return (
-    <div className="border-t border-destructive/20 pt-10">
-      <h3 className="mb-4 flex items-center text-lg font-semibold text-destructive">
+    <div className="border-t border-status-negative/20 pt-10">
+      <h3 className="mb-4 flex items-center text-lg font-semibold text-status-negative">
         <AlertTriangle className="w-6 h-6 mr-2" />
         Danger Zone
       </h3>
-      <div className="rounded-md border border-destructive/20 bg-destructive/10 p-6">
-        <h4 className="mb-2 text-lg font-medium text-destructive">Delete Account</h4>
-        <p className="mb-4 text-base text-muted-foreground">
+      <div className="rounded-md border border-status-negative/20 bg-status-negative/10 p-6">
+        <h4 className="mb-2 text-lg font-medium text-status-negative">Delete Account</h4>
+        <p className="mb-4 text-base text-fg-secondary">
           This will permanently delete your account and all associated data including your profile,
           projects, and transaction history. This action cannot be undone.
         </p>
@@ -30,7 +30,7 @@ export function SettingsDangerSection({ isDeleting, onDelete }: Props) {
         >
           {isDeleting ? (
             <>
-              <div className="mr-2 h-4 w-4 animate-spin rounded-sm border-2 border-background border-t-transparent" />
+              <div className="mr-2 h-4 w-4 animate-spin rounded-sm border-2 border-surface-page border-t-transparent" />
               Deleting...
             </>
           ) : (

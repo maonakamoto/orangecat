@@ -15,7 +15,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-surface-page">
       {/* Hero Section — monochrome per migration 6/N */}
-      <div className="bg-surface-base border-b border-border-subtle">
+      <div className="bg-surface-base border-b border-subtle">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="font-heading tracking-display text-4xl font-bold text-fg-primary sm:text-5xl md:text-6xl">
@@ -29,11 +29,11 @@ export default function AboutPage() {
       </div>
 
       {/* Mission & Values */}
-      <div className="bg-background">
+      <div className="bg-surface-page">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-12">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">Our Mission</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <h2 className="text-2xl font-semibold text-fg-primary mb-4">Our Mission</h2>
+            <p className="text-lg text-fg-secondary max-w-3xl mx-auto">
               Enable anyone — any person, pseudonym, or organization — to participate in the full
               spectrum of economic and governance activity: exchanging, funding, lending, investing,
               and governing, with any counterparty, in any currency, without gatekeepers.
@@ -43,7 +43,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Mission cards — monochrome neutral tiles per migration 6/N */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-surface-raised border border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
                 <TreePine className="w-8 h-8 text-fg-secondary" />
               </div>
               <h3 className="text-lg font-semibold text-fg-primary mb-2">
@@ -56,7 +56,7 @@ export default function AboutPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-surface-raised border border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
                 <Zap className="w-8 h-8 text-fg-secondary" />
               </div>
               <h3 className="text-lg font-semibold text-fg-primary mb-2">Any Currency</h3>
@@ -67,7 +67,7 @@ export default function AboutPage() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-surface-raised border border-border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-surface-raised border border-subtle rounded-full flex items-center justify-center mx-auto mb-4">
                 <Cat className="w-8 h-8 text-fg-secondary" />
               </div>
               <h3 className="text-lg font-semibold text-fg-primary mb-2">

@@ -25,10 +25,10 @@ export function OnlinePresenceSection({
   return (
     <div className="oc-surface space-y-4 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
-        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-fg-primary uppercase tracking-wide">
           {PROFILE_SECTIONS.ONLINE_PRESENCE}
         </h3>
-        <p className="mt-1 text-xs text-muted-foreground">
+        <p className="mt-1 text-xs text-fg-secondary">
           {PROFILE_SECTION_DESCRIPTIONS.ONLINE_PRESENCE}
         </p>
       </div>
@@ -39,7 +39,7 @@ export function OnlinePresenceSection({
         name="website"
         render={({ field }) => (
           <FormItem id="website">
-            <FormLabel className="text-sm font-medium text-foreground">Website</FormLabel>
+            <FormLabel className="text-sm font-medium text-fg-primary">Website</FormLabel>
             <FormControl>
               <Input
                 placeholder="https://your-website.com"
@@ -54,7 +54,7 @@ export function OnlinePresenceSection({
       />
 
       {/* Social Media & Links */}
-      <div id="socialLinks" className="pt-4 mt-2 border-t border-border-subtle">
+      <div id="socialLinks" className="pt-4 mt-2 border-t border-subtle">
         <div onFocus={() => onFieldFocus?.('socialLinks')} tabIndex={-1}>
           <SocialLinksEditor
             links={socialLinks}
@@ -62,11 +62,11 @@ export function OnlinePresenceSection({
             maxLinks={MAX_SOCIAL_LINKS}
           />
         </div>
-        <p className="text-xs text-muted-foreground mt-3">
+        <p className="text-xs text-fg-secondary mt-3">
           💡 Want to add wallets? Manage them in{' '}
           <a
             href={ROUTES.DASHBOARD.WALLETS}
-            className="text-foreground hover:underline underline-offset-4"
+            className="text-fg-primary hover:underline underline-offset-4"
             target="_blank"
             rel="noopener noreferrer"
           >

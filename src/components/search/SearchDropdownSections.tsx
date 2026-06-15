@@ -30,8 +30,8 @@ function DropdownItem({ onClick, isFocused, children, itemRef }: DropdownItemPro
     <button
       ref={itemRef}
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors text-left ${
-        isFocused ? 'bg-muted/40 border border-border-subtle text-foreground' : ''
+      className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-fg-primary hover:bg-surface-raised rounded-lg transition-colors text-left ${
+        isFocused ? 'bg-surface-raised/40 border border-subtle text-fg-primary' : ''
       }`}
       role="option"
       aria-selected={isFocused}
@@ -61,9 +61,9 @@ export function QuickActionsSection({
   ];
 
   return (
-    <div className="p-3 border-b border-border-subtle">
+    <div className="p-3 border-b border-subtle">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-medium text-muted-strong uppercase tracking-wide">
+        <h4 className="text-xs font-medium text-fg-primary uppercase tracking-wide">
           Quick Actions
         </h4>
       </div>
@@ -79,9 +79,9 @@ export function QuickActionsSection({
                 itemRefs.current[currentIndex] = el;
               }}
             >
-              <div className="text-foreground">{icons[index]}</div>
+              <div className="text-fg-primary">{icons[index]}</div>
               <span>{action.label}</span>
-              <ArrowUpRight className="w-3 h-3 ml-auto text-muted-dim" />
+              <ArrowUpRight className="w-3 h-3 ml-auto text-fg-tertiary" />
             </DropdownItem>
           );
         })}
@@ -112,15 +112,15 @@ export function SearchHistorySection({
   }
 
   return (
-    <div className="p-3 border-b border-border-subtle">
+    <div className="p-3 border-b border-subtle">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-medium text-muted-strong uppercase tracking-wide flex items-center gap-1">
+        <h4 className="text-xs font-medium text-fg-primary uppercase tracking-wide flex items-center gap-1">
           <History className="w-3 h-3" />
           Recent Searches
         </h4>
         <button
           onClick={onClear}
-          className="text-xs sm:text-sm text-muted-foreground hover:text-foreground"
+          className="text-xs sm:text-sm text-fg-secondary hover:text-fg-primary"
         >
           Clear
         </button>
@@ -137,7 +137,7 @@ export function SearchHistorySection({
                 itemRefs.current[currentIndex] = el;
               }}
             >
-              <Clock className="w-3 h-3 text-muted-dim" />
+              <Clock className="w-3 h-3 text-fg-tertiary" />
               <span>{item}</span>
             </DropdownItem>
           );
@@ -163,9 +163,9 @@ export function TrendingSearchesSection({
   itemRefs,
 }: TrendingSearchesSectionProps) {
   return (
-    <div className="p-3 border-b border-border-subtle">
+    <div className="p-3 border-b border-subtle">
       <div className="flex items-center mb-2">
-        <h4 className="text-xs font-medium text-muted-strong uppercase tracking-wide flex items-center gap-1">
+        <h4 className="text-xs font-medium text-fg-primary uppercase tracking-wide flex items-center gap-1">
           <Sparkles className="w-3 h-3" />
           Trending
         </h4>
@@ -182,7 +182,7 @@ export function TrendingSearchesSection({
                 itemRefs.current[currentIndex] = el;
               }}
             >
-              <TrendingUp className="w-3 h-3 text-foreground" />
+              <TrendingUp className="w-3 h-3 text-fg-primary" />
               <span>{item}</span>
             </DropdownItem>
           );
@@ -216,11 +216,9 @@ export function SuggestionsSection({
   return (
     <div className="p-3">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-medium text-muted-strong uppercase tracking-wide">
-          Suggestions
-        </h4>
+        <h4 className="text-xs font-medium text-fg-primary uppercase tracking-wide">Suggestions</h4>
         {loading && (
-          <div className="w-3 h-3 border border-border-subtle border-t-orange-500 rounded-full animate-spin" />
+          <div className="w-3 h-3 border border-subtle border-t-fg-primary rounded-full animate-spin" />
         )}
       </div>
 
@@ -237,28 +235,26 @@ export function SuggestionsSection({
                   itemRefs.current[currentIndex] = el;
                 }}
               >
-                <Search className="w-3 h-3 text-muted-dim" />
+                <Search className="w-3 h-3 text-fg-tertiary" />
                 <span>{suggestion}</span>
               </DropdownItem>
             );
           })}
         </div>
       ) : (
-        !loading && (
-          <div className="text-sm text-muted-foreground px-3 py-2">No suggestions found</div>
-        )
+        !loading && <div className="text-sm text-fg-secondary px-3 py-2">No suggestions found</div>
       )}
 
       {/* Search for exact query */}
-      <div className="mt-2 pt-2 border-t border-border-subtle">
+      <div className="mt-2 pt-2 border-t border-subtle">
         <button
           ref={el => {
             itemRefs.current[searchQueryIndex] = el;
           }}
           onClick={() => onSearch(query)}
-          className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-muted/40 rounded-lg transition-colors font-medium ${
+          className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-fg-primary hover:bg-surface-raised/40 rounded-lg transition-colors font-medium ${
             focusedIndex === searchQueryIndex
-              ? 'bg-muted border border-border-strong text-foreground'
+              ? 'bg-surface-raised border border-strong text-fg-primary'
               : ''
           }`}
           role="option"
@@ -276,10 +272,10 @@ export function SuggestionsSection({
 export function EmptyState() {
   return (
     <div className="p-6 text-center">
-      <Search className="w-8 h-8 text-muted-dim dark:text-muted-foreground/40 mx-auto mb-2" />
-      <p className="text-sm text-muted-foreground">Start typing to search</p>
-      <p className="text-xs text-muted-dim/70 mt-1">Find projects, people, and organizations</p>
-      <p className="text-xs text-muted-dim/70 mt-2">Use ↑↓ arrows to navigate, Enter to select</p>
+      <Search className="w-8 h-8 text-fg-tertiary dark:text-fg-secondary/40 mx-auto mb-2" />
+      <p className="text-sm text-fg-secondary">Start typing to search</p>
+      <p className="text-xs text-fg-tertiary/70 mt-1">Find projects, people, and organizations</p>
+      <p className="text-xs text-fg-tertiary/70 mt-2">Use ↑↓ arrows to navigate, Enter to select</p>
     </div>
   );
 }

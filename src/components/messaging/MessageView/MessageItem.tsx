@@ -49,14 +49,14 @@ function MessageStatusIcon({ message }: { message: Message }) {
 
   // Failed messages
   if (status === MESSAGE_STATUS.FAILED) {
-    return <AlertCircle className="h-3 w-3 text-destructive" aria-label="Failed" />;
+    return <AlertCircle className="h-3 w-3 text-status-negative" aria-label="Failed" />;
   }
 
   // Pending (optimistic) messages
   if (status === MESSAGE_STATUS.PENDING || isOptimisticMessage(message)) {
     return (
       <div
-        className="h-3 w-3 rounded-full border border-border-strong dark:border-muted-foreground animate-pulse"
+        className="h-3 w-3 rounded-full border border-strong dark:border-fg-secondary animate-pulse"
         aria-label="Sending"
       />
     );
@@ -64,16 +64,16 @@ function MessageStatusIcon({ message }: { message: Message }) {
 
   // Read messages - double check in tiffany
   if (isRead) {
-    return <CheckCheck className="h-3 w-3 text-foreground" aria-label="Read" />;
+    return <CheckCheck className="h-3 w-3 text-fg-primary" aria-label="Read" />;
   }
 
   // Delivered messages - single check
   if (isDelivered) {
-    return <Check className="h-3 w-3 text-muted-dim" aria-label="Delivered" />;
+    return <Check className="h-3 w-3 text-fg-tertiary" aria-label="Delivered" />;
   }
 
   // Default: show as delivered (message exists in DB)
-  return <Check className="h-3 w-3 text-muted-dim" aria-label="Delivered" />;
+  return <Check className="h-3 w-3 text-fg-tertiary" aria-label="Delivered" />;
 }
 
 export default function MessageItem({
@@ -139,7 +139,7 @@ export default function MessageItem({
       {/* Date Divider */}
       {showDateDivider && dateDividerText && (
         <div className="flex justify-center my-4">
-          <div className="bg-muted text-muted-foreground text-xs px-3 py-1 rounded-full">
+          <div className="bg-surface-raised text-fg-secondary text-xs px-3 py-1 rounded-full">
             {dateDividerText}
           </div>
         </div>
@@ -162,7 +162,9 @@ export default function MessageItem({
           <div
             className={cn(
               'rounded-lg px-4 py-2',
-              isCurrentUser ? 'bg-muted/400 text-white' : 'bg-muted text-foreground',
+              isCurrentUser
+                ? 'bg-surface-raised/400 text-white'
+                : 'bg-surface-raised text-fg-primary',
               isEditing && 'p-2'
             )}
           >
@@ -172,7 +174,7 @@ export default function MessageItem({
                   value={editDraft}
                   onChange={e => setEditDraft(e.target.value)}
                   onKeyDown={handleEditKeyDown}
-                  className="w-full min-w-[200px] bg-card text-foreground text-sm rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full min-w-[200px] bg-surface-base text-fg-primary text-sm rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-ring"
                   rows={Math.min(6, editDraft.split('\n').length + 1)}
                   autoFocus
                 />
@@ -194,7 +196,7 @@ export default function MessageItem({
                         onEditCancel?.();
                       }
                     }}
-                    className="text-sm px-3 py-1.5 min-h-9 rounded bg-card text-foreground font-medium hover:bg-card/90 dark:hover:bg-card/90"
+                    className="text-sm px-3 py-1.5 min-h-9 rounded bg-surface-base text-fg-primary font-medium hover:bg-surface-base/90 dark:hover:bg-surface-base/90"
                   >
                     Save
                   </button>
@@ -208,7 +210,7 @@ export default function MessageItem({
           {/* Timestamp and Read Receipt */}
           <div
             className={cn(
-              'flex items-center gap-1 mt-1 text-xs text-muted-foreground',
+              'flex items-center gap-1 mt-1 text-xs text-fg-secondary',
               isCurrentUser ? 'justify-end' : 'justify-start'
             )}
           >
@@ -222,7 +224,7 @@ export default function MessageItem({
             )}
 
             {/* Edited indicator */}
-            {message.edited_at && <span className="text-muted-dim italic">edited</span>}
+            {message.edited_at && <span className="text-fg-tertiary italic">edited</span>}
           </div>
         </div>
       </div>

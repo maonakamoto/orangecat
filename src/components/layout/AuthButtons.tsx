@@ -26,7 +26,7 @@ export default function AuthButtons({ className = '' }: AuthButtonsProps) {
   // 'Sign In / Get Started' for a frame before their user menu appears.
   if (!authState.hydrated) {
     if (isAuthRoute) {
-      return <div className="h-9 w-9 rounded-full bg-muted animate-pulse" aria-hidden />;
+      return <div className="h-9 w-9 rounded-full bg-surface-raised animate-pulse" aria-hidden />;
     }
     return (
       <UnauthenticatedButtons
@@ -42,7 +42,7 @@ export default function AuthButtons({ className = '' }: AuthButtonsProps) {
   if (authStatus.showLoading) {
     return (
       <div className={`flex items-center justify-center ${className}`}>
-        <Loader2 className="h-4 w-4 animate-spin text-foreground" />
+        <Loader2 className="h-4 w-4 animate-spin text-fg-primary" />
       </div>
     );
   }

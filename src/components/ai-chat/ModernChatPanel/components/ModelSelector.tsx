@@ -42,43 +42,41 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
         disabled={disabled}
         className={cn(
           'flex items-center gap-2 rounded-md px-3 py-1.5 text-sm',
-          'border border-border-subtle bg-muted transition-colors hover:bg-muted/80',
+          'border border-subtle bg-surface-raised transition-colors hover:bg-surface-raised/80',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
-        <Sparkles className="h-4 w-4 text-muted-foreground" />
-        <span className="text-foreground max-w-[120px] truncate">{displayName}</span>
+        <Sparkles className="h-4 w-4 text-fg-secondary" />
+        <span className="text-fg-primary max-w-[120px] truncate">{displayName}</span>
         <ChevronDown
-          className={cn('h-4 w-4 text-muted-dim transition-transform', isOpen && 'rotate-180')}
+          className={cn('h-4 w-4 text-fg-tertiary transition-transform', isOpen && 'rotate-180')}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-full z-50 mt-2 max-h-80 w-72 overflow-y-auto rounded-md border border-border-subtle bg-popover py-2 shadow-sm">
+        <div className="absolute left-0 top-full z-50 mt-2 max-h-80 w-72 overflow-y-auto rounded-md border border-subtle bg-surface-modal py-2 shadow-sm">
           <button
             onClick={() => {
               onSelect('auto');
               setIsOpen(false);
             }}
             className={cn(
-              'flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-muted',
-              selectedModel === 'auto' && 'bg-muted'
+              'flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-surface-raised',
+              selectedModel === 'auto' && 'bg-surface-raised'
             )}
           >
             <div className="flex-1">
-              <div className="font-medium text-foreground flex items-center gap-2">
+              <div className="font-medium text-fg-primary flex items-center gap-2">
                 Auto (Best Free)
-                {selectedModel === 'auto' && <Check className="h-4 w-4 text-foreground" />}
+                {selectedModel === 'auto' && <Check className="h-4 w-4 text-fg-primary" />}
               </div>
-              <div className="text-xs text-muted-foreground">
-                Automatically selects the best model
-              </div>
+              <div className="text-xs text-fg-secondary">Automatically selects the best model</div>
             </div>
           </button>
 
           <div className="h-px bg-border-subtle my-1" />
 
-          <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground uppercase">
+          <div className="px-3 py-1.5 text-xs font-medium text-fg-secondary uppercase">
             Free Models
           </div>
           {freeModels.map(model => (
@@ -89,18 +87,18 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
                 setIsOpen(false);
               }}
               className={cn(
-                'flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-muted',
-                selectedModel === model.id && 'bg-muted'
+                'flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-surface-raised',
+                selectedModel === model.id && 'bg-surface-raised'
               )}
             >
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-foreground flex items-center gap-2 truncate">
+                <div className="font-medium text-fg-primary flex items-center gap-2 truncate">
                   {model.name}
                   {selectedModel === model.id && (
-                    <Check className="h-4 w-4 flex-shrink-0 text-foreground" />
+                    <Check className="h-4 w-4 flex-shrink-0 text-fg-primary" />
                   )}
                 </div>
-                <div className="text-xs text-muted-foreground truncate">
+                <div className="text-xs text-fg-secondary truncate">
                   {model.provider} • {model.rateLimit}
                 </div>
               </div>

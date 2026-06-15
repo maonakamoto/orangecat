@@ -10,8 +10,8 @@ import { ArrowUp } from 'lucide-react';
 import { APP_NAME } from '@/config/brand';
 
 const footerLinkClass =
-  'group flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors py-1.5 rounded-md min-h-9';
-const footerHeadingClass = 'text-xs font-medium text-muted-foreground uppercase tracking-normal';
+  'group flex items-center text-sm text-fg-secondary hover:text-fg-primary transition-colors py-1.5 rounded-md min-h-9';
+const footerHeadingClass = 'text-xs font-medium text-fg-secondary uppercase tracking-normal';
 
 const Footer = React.memo(function Footer() {
   const pathname = usePathname();
@@ -29,11 +29,11 @@ const Footer = React.memo(function Footer() {
   }
 
   return (
-    <footer className="bg-background border-t border-border mt-auto relative">
+    <footer className="bg-surface-page border-t border-default mt-auto relative">
       {/* Back to top button */}
       <button
         onClick={scrollToTop}
-        className="absolute -top-5 right-4 sm:right-8 w-10 h-10 bg-card text-foreground rounded-md border border-border hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background flex items-center justify-center group z-10"
+        className="absolute -top-5 right-4 sm:right-8 w-10 h-10 bg-surface-base text-fg-primary rounded-md border border-default hover:bg-surface-raised transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background flex items-center justify-center group z-10"
         aria-label="Back to top"
         type="button"
       >
@@ -49,7 +49,7 @@ const Footer = React.memo(function Footer() {
               <div className="flex items-center space-x-4 mb-2">
                 <Logo />
               </div>
-              <p className="text-muted-foreground text-base leading-relaxed max-w-xs">
+              <p className="text-fg-secondary text-base leading-relaxed max-w-xs">
                 Your AI economic agent — and the platform where it operates.
               </p>
             </div>
@@ -60,7 +60,7 @@ const Footer = React.memo(function Footer() {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="group w-9 h-9 bg-card border border-border rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+                  className="group w-9 h-9 bg-surface-base border border-default rounded-md flex items-center justify-center text-fg-secondary hover:text-fg-primary hover:bg-surface-raised transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Follow us on ${item.name}`}
@@ -130,12 +130,12 @@ const Footer = React.memo(function Footer() {
           <div className="space-y-6 sm:col-span-2 lg:col-span-1">
             <h3 className={footerHeadingClass}>[ Stay Updated ]</h3>
             <div className="space-y-4">
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-fg-secondary leading-relaxed">
                 Get the latest updates on economic freedom, Bitcoin, and building on {APP_NAME}.
               </p>
               <Link
                 href={`${ROUTES.AUTH}?mode=register`}
-                className="inline-flex items-center justify-center w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-background bg-foreground rounded-md hover:bg-muted-strong transition-colors min-h-10"
+                className="inline-flex items-center justify-center w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-fg-inverted bg-fg-primary rounded-md hover:bg-muted-strong transition-colors min-h-10"
               >
                 Get Started Today
               </Link>
@@ -144,9 +144,9 @@ const Footer = React.memo(function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border">
+        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-default">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
-            <div className="text-sm text-muted-foreground text-center sm:text-left">
+            <div className="text-sm text-fg-secondary text-center sm:text-left">
               <p>&copy; 2026 {APP_NAME}. All rights reserved.</p>
             </div>
 

@@ -95,11 +95,11 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
   }, [project.id, project.bitcoin_address]);
 
   return (
-    <aside className="sticky top-6 rounded-lg border bg-card dark:border-border p-6 space-y-4">
+    <aside className="sticky top-6 rounded-lg border bg-surface-base dark:border-default p-6 space-y-4">
       <div>
         <div className="text-2xl font-bold">{formatCurrency(amountRaised, goalCurrency)}</div>
         {project.goal_amount && (
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-fg-secondary">
             of {formatCurrency(project.goal_amount, goalCurrency)} goal
           </div>
         )}
@@ -111,19 +111,19 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
                 Bitcoin Balance
               </span>
             </div>
-            <div className="text-base font-semibold text-foreground">
+            <div className="text-base font-semibold text-fg-primary">
               {formatAmountBtc(bitcoinBalanceBtc)}
             </div>
             {bitcoinBalanceUpdatedAt && (
-              <div className="text-xs text-muted-foreground mt-1">
+              <div className="text-xs text-fg-secondary mt-1">
                 Updated {formatRelativeTime(bitcoinBalanceUpdatedAt)}
               </div>
             )}
           </div>
         )}
       </div>
-      <div className="w-full bg-muted rounded-full h-3">
-        <div className="bg-foreground h-3 rounded-full" style={{ width: `${progress}%` }} />
+      <div className="w-full bg-surface-raised rounded-full h-3">
+        <div className="bg-fg-primary h-3 rounded-full" style={{ width: `${progress}%` }} />
       </div>
 
       {/* Social Proof - Supporters Count */}
@@ -131,8 +131,8 @@ export default function ProjectSummaryRail({ project, isOwner }: Props) {
         <div className="space-y-2 text-sm border-t pt-4">
           {project.supporters_count !== undefined && project.supporters_count > 0 && (
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Supporters</span>
-              <span className="font-semibold text-foreground">
+              <span className="text-fg-secondary">Supporters</span>
+              <span className="font-semibold text-fg-primary">
                 {project.supporters_count} {project.supporters_count === 1 ? 'person' : 'people'}
               </span>
             </div>

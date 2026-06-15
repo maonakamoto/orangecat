@@ -66,13 +66,13 @@ export function WishlistItemCard({
                 className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
               />
             ) : (
-              <div className="w-14 h-14 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
-                <Gift className="w-6 h-6 text-muted-dim dark:text-muted-foreground/50" />
+              <div className="w-14 h-14 bg-surface-raised rounded-lg flex items-center justify-center flex-shrink-0">
+                <Gift className="w-6 h-6 text-fg-tertiary dark:text-fg-secondary/50" />
               </div>
             )}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
-                <span className="font-medium text-foreground">{item.title}</span>
+                <span className="font-medium text-fg-primary">{item.title}</span>
                 <div className="flex gap-1 flex-shrink-0">
                   {item.is_fulfilled && (
                     <Badge variant="secondary" className="text-xs">
@@ -85,17 +85,15 @@ export function WishlistItemCard({
                 </div>
               </div>
               {item.description && (
-                <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">
-                  {item.description}
-                </p>
+                <p className="text-sm text-fg-secondary mt-0.5 line-clamp-1">{item.description}</p>
               )}
               {item.external_url && (
-                <span className="text-xs text-foreground">External link →</span>
+                <span className="text-xs text-fg-primary">External link →</span>
               )}
               {item.target_amount_btc > 0 && (
                 <div className="mt-2 space-y-1">
                   <Progress value={itemProgress} className="h-1" />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-fg-secondary">
                     {displayBTC(Number(item.funded_amount_btc))} /{' '}
                     {displayBTC(Number(item.target_amount_btc))}
                   </p>
@@ -131,9 +129,9 @@ export function WishlistItemList({
       </div>
 
       {items.length === 0 ? (
-        <div className="text-center py-10 border-2 border-dashed border-border rounded-lg">
-          <Gift className="w-8 h-8 mx-auto mb-2 text-muted-dim dark:text-muted-foreground/50" />
-          <p className="text-muted-foreground mb-3">No items yet</p>
+        <div className="text-center py-10 border-2 border-dashed border-default rounded-lg">
+          <Gift className="w-8 h-8 mx-auto mb-2 text-fg-tertiary dark:text-fg-secondary/50" />
+          <p className="text-fg-secondary mb-3">No items yet</p>
           <Link href={`${wishlistBasePath}/items/new?wishlist_id=${id}`}>
             <Button size="sm">
               <Plus className="w-4 h-4 mr-1" />
@@ -161,22 +159,22 @@ export function WishlistDetailsSidebar({ wishlist }: { wishlist: WishlistWithSta
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
           <div>
-            <div className="text-muted-foreground">Type</div>
+            <div className="text-fg-secondary">Type</div>
             <div className="font-medium capitalize">
               {WISHLIST_TYPE_LABELS[wishlist.type] || wishlist.type}
             </div>
           </div>
           <div>
-            <div className="text-muted-foreground">Visibility</div>
+            <div className="text-fg-secondary">Visibility</div>
             <div className="font-medium capitalize">{wishlist.visibility}</div>
           </div>
           <div>
-            <div className="text-muted-foreground">Status</div>
+            <div className="text-fg-secondary">Status</div>
             <div className="font-medium">{wishlist.is_active ? 'Active' : 'Inactive'}</div>
           </div>
           {wishlist.event_date && (
             <div>
-              <div className="text-muted-foreground">Event Date</div>
+              <div className="text-fg-secondary">Event Date</div>
               <div className="font-medium">
                 {new Date(wishlist.event_date).toLocaleDateString('en-US', {
                   month: 'long',
@@ -187,12 +185,12 @@ export function WishlistDetailsSidebar({ wishlist }: { wishlist: WishlistWithSta
             </div>
           )}
           <div>
-            <div className="text-muted-foreground">Created</div>
+            <div className="text-fg-secondary">Created</div>
             <div className="font-medium">{formatDate(wishlist.created_at)}</div>
           </div>
           {wishlist.fulfilled_item_count > 0 && (
             <div>
-              <div className="text-muted-foreground">Fulfilled Items</div>
+              <div className="text-fg-secondary">Fulfilled Items</div>
               <div className="font-medium">
                 {wishlist.fulfilled_item_count} of {wishlist.item_count}
               </div>
@@ -207,7 +205,7 @@ export function WishlistDetailsSidebar({ wishlist }: { wishlist: WishlistWithSta
             <CardTitle className="text-base">Description</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-foreground whitespace-pre-wrap">{wishlist.description}</p>
+            <p className="text-sm text-fg-primary whitespace-pre-wrap">{wishlist.description}</p>
           </CardContent>
         </Card>
       )}

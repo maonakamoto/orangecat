@@ -55,8 +55,8 @@ export function SearchTrigger({ compact = false, className }: SearchTriggerProps
         onClick={() => setOpen(true)}
         aria-label="Open search"
         className={cn(
-          'flex items-center rounded-md border border-border-subtle bg-muted/40 text-muted-foreground',
-          'transition-colors hover:bg-muted/60 hover:text-foreground',
+          'flex items-center rounded-md border border-subtle bg-surface-raised/40 text-fg-secondary',
+          'transition-colors hover:bg-surface-raised/60 hover:text-fg-primary',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40',
           compact ? 'h-9 w-9 justify-center' : 'h-9 w-full justify-between gap-2 px-3 text-sm',
           className
@@ -67,7 +67,7 @@ export function SearchTrigger({ compact = false, className }: SearchTriggerProps
           {!compact && <span className="truncate">{PLACEHOLDER}</span>}
         </span>
         {!compact && (
-          <kbd className="hidden flex-shrink-0 items-center rounded border border-border-subtle bg-background px-1.5 py-0.5 text-[10px] font-medium text-muted-dim sm:inline-flex">
+          <kbd className="hidden flex-shrink-0 items-center rounded border border-subtle bg-surface-page px-1.5 py-0.5 text-[10px] font-medium text-fg-tertiary sm:inline-flex">
             ⌘K
           </kbd>
         )}

@@ -74,7 +74,7 @@ export function DeleteDocumentButton({ documentId, documentTitle }: DeleteDocume
       <Button
         variant="outline"
         size="sm"
-        className="text-destructive hover:text-destructive"
+        className="text-status-negative hover:text-status-negative"
         onClick={() => setIsOpen(true)}
       >
         <Trash2 className="h-4 w-4 mr-2" />
@@ -93,7 +93,7 @@ export function DeleteDocumentButton({ documentId, documentTitle }: DeleteDocume
             <AlertDialogAction
               onClick={handleDelete}
               disabled={isDeleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-status-negative text-fg-inverted hover:bg-status-negative/90"
             >
               {isDeleting ? (
                 <>

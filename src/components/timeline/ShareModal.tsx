@@ -31,7 +31,7 @@ export function ShareModal({
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} title="Share Post">
       <div className="p-4 space-y-4">
-        <label htmlFor="share-text" className="text-sm font-medium text-foreground">
+        <label htmlFor="share-text" className="text-sm font-medium text-fg-primary">
           Add a comment (optional)
         </label>
         <textarea
@@ -45,7 +45,7 @@ export function ShareModal({
             }
           }}
           rows={4}
-          className="w-full rounded-md border border-border-subtle bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          className="w-full rounded-md border border-subtle bg-surface-page p-3 text-sm text-fg-primary placeholder:text-fg-secondary focus:outline-none focus:ring-2 focus:ring-ring"
           maxLength={TIMELINE_CONTENT_LIMITS.quote}
           placeholder="Add context to your share..."
         />

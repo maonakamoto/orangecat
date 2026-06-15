@@ -36,8 +36,8 @@ export function CatChatToolbar({
         className={cn(
           'flex min-h-10 min-w-10 items-center justify-center gap-1.5 rounded-md px-2.5 text-sm transition-colors sm:min-w-0 sm:px-3',
           isActive
-            ? 'bg-muted text-foreground'
-            : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground'
+            ? 'bg-surface-raised text-fg-primary'
+            : 'text-fg-secondary hover:bg-surface-raised/60 hover:text-fg-primary'
         )}
         aria-current={isActive ? 'page' : undefined}
       >
@@ -54,8 +54,8 @@ export function CatChatToolbar({
           Show only on >=sm so mobile reclaims this row width for the
           ModelSelector + Context/Controls. */}
       <div className="hidden min-w-0 items-center gap-2 sm:flex" title={CAT_AGENT.privacyBadge}>
-        <p className="truncate text-sm font-medium text-foreground">{CAT_AGENT.name}</p>
-        <p className="hidden truncate text-xs text-muted-foreground sm:inline">
+        <p className="truncate text-sm font-medium text-fg-primary">{CAT_AGENT.name}</p>
+        <p className="hidden truncate text-xs text-fg-secondary sm:inline">
           · {CAT_AGENT.privacyBadge}
         </p>
       </div>

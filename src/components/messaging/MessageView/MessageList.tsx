@@ -92,7 +92,7 @@ export default function MessageList({
             size="sm"
             onClick={handleLoadMore}
             disabled={isLoadingMore}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-fg-secondary hover:text-fg-primary"
           >
             {isLoadingMore ? (
               <Loader2 className="h-4 w-4 animate-spin mr-2" />

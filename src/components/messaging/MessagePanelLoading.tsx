@@ -21,13 +21,13 @@ export function MessagePanelLoading({
   const inner = (
     <div
       className={cn(
-        'flex h-full bg-card shadow-sm items-center justify-center',
-        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-lg border border-border'
+        'flex h-full bg-surface-base shadow-sm items-center justify-center',
+        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-lg border border-default'
       )}
     >
       <div className="text-center p-10">
-        <Loader2 className="w-8 h-8 animate-spin text-foreground mx-auto mb-4" />
-        <p className="text-muted-foreground">Loading messages...</p>
+        <Loader2 className="w-8 h-8 animate-spin text-fg-primary mx-auto mb-4" />
+        <p className="text-fg-secondary">Loading messages...</p>
       </div>
     </div>
   );

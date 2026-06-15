@@ -13,36 +13,36 @@ import { FEE_CLAIMS } from '@/config/landing-page';
  */
 export default function HeroSectionStatic() {
   return (
-    <section className="relative overflow-hidden bg-background">
+    <section className="relative overflow-hidden bg-surface-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-28">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Column - Content */}
           <div>
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-card border border-border mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-base border border-default mb-6">
               <div className="flex items-center gap-1.5">
                 <div className="w-2 h-2 bg-status-positive rounded-full" />
-                <span className="text-sm font-medium text-foreground">Create anything</span>
+                <span className="text-sm font-medium text-fg-primary">Create anything</span>
               </div>
-              <span className="text-muted-dim">•</span>
-              <span className="text-sm font-medium text-foreground">Any identity</span>
-              <span className="text-muted-dim">•</span>
-              <span className="text-sm font-medium text-foreground">Zero fees</span>
+              <span className="text-fg-tertiary">•</span>
+              <span className="text-sm font-medium text-fg-primary">Any identity</span>
+              <span className="text-fg-tertiary">•</span>
+              <span className="text-sm font-medium text-fg-primary">Zero fees</span>
             </div>
 
             {/* Main Headline — display typography (Space Grotesk) per migration 7/N */}
-            <h1 className="font-heading tracking-display text-3xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] mb-4 sm:mb-6">
-              Everyone Can <span className="text-foreground">Make Things.</span>
+            <h1 className="font-heading tracking-display text-3xl sm:text-5xl lg:text-6xl font-bold text-fg-primary leading-[1.05] mb-4 sm:mb-6">
+              Everyone Can <span className="text-fg-primary">Make Things.</span>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground leading-relaxed mb-3 sm:mb-4">
+            <p className="text-lg sm:text-xl lg:text-2xl text-fg-secondary leading-relaxed mb-3 sm:mb-4">
               Create products, services, projects, causes, events, loans — with your own AI, under
               any identity, in any currency.
             </p>
 
             {/* Supporting text */}
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-6 sm:mb-8">
+            <p className="text-base sm:text-lg text-fg-secondary leading-relaxed mb-6 sm:mb-8">
               OrangeCat gives every person and organization an AI agent to create and participate in
               the full economic spectrum. No gatekeepers. No fees. Bitcoin-native, but not
               Bitcoin-only.
@@ -69,22 +69,20 @@ export default function HeroSectionStatic() {
           {/* Right Column - Visual Demo */}
           <div className="relative">
             {/* Demo Card */}
-            <div className="relative bg-card rounded-lg border border-border shadow-sm">
+            <div className="relative bg-surface-base rounded-lg border border-default shadow-sm">
               {/* Card Header */}
-              <div className="p-4 sm:p-6 border-b border-border">
+              <div className="p-4 sm:p-6 border-b border-default">
                 <div className="flex items-start gap-3 sm:gap-4">
                   {/* Cat avatar — monochrome neutral per migration 6/N; the
                       warm accent is reserved for CTAs, not the brand mark */}
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-surface-raised border border-border-subtle flex items-center justify-center text-foreground flex-shrink-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-surface-raised border border-subtle flex items-center justify-center text-fg-primary flex-shrink-0">
                     <BrandMarkIcon size={24} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground text-sm sm:text-base">Cat</h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground">
-                      Your AI economic agent
-                    </p>
+                    <h3 className="font-semibold text-fg-primary text-sm sm:text-base">Cat</h3>
+                    <p className="text-xs sm:text-sm text-fg-secondary">Your AI economic agent</p>
                   </div>
-                  <div className="hidden sm:flex items-center rounded-full border border-border bg-muted/40 px-2.5 py-1 text-xs font-medium text-foreground">
+                  <div className="hidden sm:flex items-center rounded-full border border-default bg-surface-raised/40 px-2.5 py-1 text-xs font-medium text-fg-primary">
                     {FEE_CLAIMS.feeBadgeLabel}
                   </div>
                 </div>
@@ -101,10 +99,10 @@ export default function HeroSectionStatic() {
                   ].map(feature => (
                     <div
                       key={feature}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                      className="flex items-center gap-2 text-sm text-fg-secondary"
                     >
-                      <div className="w-4 h-4 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-foreground" />
+                      <div className="w-4 h-4 rounded-full bg-surface-raised flex items-center justify-center flex-shrink-0">
+                        <div className="w-1.5 h-1.5 rounded-full bg-fg-primary" />
                       </div>
                       {feature}
                     </div>
@@ -115,37 +113,33 @@ export default function HeroSectionStatic() {
                     the hero badge above and the headline numbers here. */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-1 sm:pt-2">
                   <div>
-                    <div className="text-xl sm:text-2xl font-bold text-foreground">
+                    <div className="text-xl sm:text-2xl font-bold text-fg-primary">
                       {FEE_CLAIMS.platformFee}
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      {FEE_CLAIMS.feeStatTopLabel}
-                    </div>
+                    <div className="text-xs text-fg-secondary">{FEE_CLAIMS.feeStatTopLabel}</div>
                   </div>
                   <div>
-                    <div className="text-xl sm:text-2xl font-bold text-foreground">
+                    <div className="text-xl sm:text-2xl font-bold text-fg-primary">
                       {FEE_CLAIMS.creatorShare}
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      {FEE_CLAIMS.feeStatBottomLabel}
-                    </div>
+                    <div className="text-xs text-fg-secondary">{FEE_CLAIMS.feeStatBottomLabel}</div>
                   </div>
                 </div>
 
                 {/* CTA Button in Demo */}
                 <Link
                   href={ROUTES.DISCOVER}
-                  className="block w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-foreground text-background text-sm sm:text-base font-semibold rounded-lg hover:bg-muted-strong transition-colors duration-150 flex items-center justify-center gap-2"
+                  className="block w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-fg-primary text-fg-inverted text-sm sm:text-base font-semibold rounded-lg hover:bg-muted-strong transition-colors duration-150 flex items-center justify-center gap-2"
                 >
                   <Cat className="w-4 h-4 sm:w-5 sm:h-5" />
                   Explore Platform
                 </Link>
 
                 <div className="flex flex-wrap gap-2 text-xs font-medium">
-                  <span className="rounded-full border border-border bg-muted/40 px-2.5 py-1 text-foreground">
+                  <span className="rounded-full border border-default bg-surface-raised/40 px-2.5 py-1 text-fg-primary">
                     AI-powered
                   </span>
-                  <span className="rounded-full border border-border bg-muted/40 px-2.5 py-1 text-foreground">
+                  <span className="rounded-full border border-default bg-surface-raised/40 px-2.5 py-1 text-fg-primary">
                     Non-custodial
                   </span>
                 </div>

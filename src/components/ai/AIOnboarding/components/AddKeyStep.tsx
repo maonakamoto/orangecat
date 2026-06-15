@@ -47,15 +47,15 @@ export function AddKeyStep({
         <div className="space-y-4">
           {/* Provider Display */}
           {provider && (
-            <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-              <div className="w-10 h-10 bg-card rounded-lg flex items-center justify-center border border-border-subtle">
-                <Layers className="w-5 h-5 text-foreground" />
+            <div className="flex items-center gap-3 p-3 bg-surface-raised rounded-lg">
+              <div className="w-10 h-10 bg-surface-base rounded-lg flex items-center justify-center border border-subtle">
+                <Layers className="w-5 h-5 text-fg-primary" />
               </div>
               <div>
                 <p className="font-medium">{provider.name}</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-fg-secondary">
                   Key format:{' '}
-                  <code className="bg-muted px-1 rounded">{provider.apiKeyExample}</code>
+                  <code className="bg-surface-raised px-1 rounded">{provider.apiKeyExample}</code>
                 </p>
               </div>
             </div>
@@ -63,7 +63,7 @@ export function AddKeyStep({
 
           {/* Key Name Input */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">
+            <label className="block text-sm font-medium text-fg-primary mb-1">
               Key Name (optional)
             </label>
             <Input
@@ -73,14 +73,14 @@ export function AddKeyStep({
               onChange={e => onKeyNameChange(e.target.value)}
               disabled={keyAdded}
             />
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-fg-secondary mt-1">
               A friendly name to identify this key later
             </p>
           </div>
 
           {/* API Key Input */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">
+            <label className="block text-sm font-medium text-fg-primary mb-1">
               API Key <span className="text-status-negative">*</span>
             </label>
             <Input
@@ -92,7 +92,7 @@ export function AddKeyStep({
               className={cn(
                 keyValidation &&
                   !keyValidation.valid &&
-                  'border-status-negative/40 focus:border-destructive'
+                  'border-status-negative/40 focus:border-status-negative'
               )}
             />
             {keyValidation && !keyValidation.valid && (
@@ -141,14 +141,14 @@ export function AddKeyStep({
       </Card>
 
       {/* Security Info */}
-      <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
+      <div className="bg-surface-raised/40 border border-subtle rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Shield className="w-5 h-5 text-foreground mt-0.5 flex-shrink-0" />
+          <Shield className="w-5 h-5 text-fg-primary mt-0.5 flex-shrink-0" />
           <div>
-            <h4 className="font-semibold text-foreground mb-1">
+            <h4 className="font-semibold text-fg-primary mb-1">
               {aiOnboardingContent.addKey.whyTitle}
             </h4>
-            <p className="text-sm text-foreground">{aiOnboardingContent.addKey.whyContent}</p>
+            <p className="text-sm text-fg-primary">{aiOnboardingContent.addKey.whyContent}</p>
           </div>
         </div>
       </div>
@@ -156,9 +156,12 @@ export function AddKeyStep({
       {/* Encryption Details */}
       <div className="flex flex-wrap gap-3">
         {aiOnboardingContent.addKey.tips?.map((tip, index) => (
-          <div key={index} className="flex items-center gap-2 px-3 py-2 bg-muted rounded-full">
-            <Lock className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">{tip}</span>
+          <div
+            key={index}
+            className="flex items-center gap-2 px-3 py-2 bg-surface-raised rounded-full"
+          >
+            <Lock className="w-4 h-4 text-fg-secondary" />
+            <span className="text-sm text-fg-secondary">{tip}</span>
           </div>
         ))}
       </div>

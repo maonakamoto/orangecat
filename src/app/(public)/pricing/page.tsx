@@ -27,10 +27,10 @@ export default function PricingPage() {
           <div className="mb-4 flex justify-center">
             <CatIcon className="h-16 w-16 text-fg-secondary" />
           </div>
-          <h1 className="mb-4 font-heading text-4xl font-bold tracking-display text-foreground">
+          <h1 className="mb-4 font-heading text-4xl font-bold tracking-display text-fg-primary">
             Your AI, your bill, your choice
           </h1>
-          <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
+          <p className="mx-auto max-w-2xl text-xl text-fg-secondary">
             Cat works any way you want. Free out of the box, or bring your own key from six wired
             providers — OpenAI, OpenRouter, Together, Groq, DeepSeek, xAI. OrangeCat doesn&apos;t
             mark up inference; we earn from the platform, not your AI bill.
@@ -45,25 +45,25 @@ export default function PricingPage() {
         </div>
 
         {/* Why pay? — intentionally open-ended */}
-        <section className="mb-16 rounded-lg border border-border bg-card p-8">
-          <h2 className="mb-4 text-2xl font-semibold text-foreground">What Pro will be</h2>
-          <div className="space-y-4 text-muted-strong">
+        <section className="mb-16 rounded-lg border border-default bg-surface-base p-8">
+          <h2 className="mb-4 text-2xl font-semibold text-fg-primary">What Pro will be</h2>
+          <div className="space-y-4 text-fg-primary">
             <p>
               We haven&apos;t decided. There are three plausible directions for what you&apos;d be
               paying for, and we&apos;d rather hear from you before we lock one in:
             </p>
             <ul className="space-y-3 pl-4">
               <li>
-                <strong className="text-foreground">More Cat.</strong> Higher daily limits, better
+                <strong className="text-fg-primary">More Cat.</strong> Higher daily limits, better
                 default models — you pay OrangeCat, we pay the provider.
               </li>
               <li>
-                <strong className="text-foreground">Platform features.</strong> Unlimited entities,
+                <strong className="text-fg-primary">Platform features.</strong> Unlimited entities,
                 Cat autonomous actions, verified badge, priority discovery — none of which touch the
                 AI bill.
               </li>
               <li>
-                <strong className="text-foreground">No subscription at all.</strong> OrangeCat earns
+                <strong className="text-fg-primary">No subscription at all.</strong> OrangeCat earns
                 a small fee on transactions that happen on the platform (sales, funding, loans). AI
                 stays free for everyone, forever. Bitcoin-aligned: we win when you win.
               </li>
@@ -102,7 +102,7 @@ export default function PricingPage() {
         </section>
 
         {/* Footer note */}
-        <div className="text-center text-sm text-muted-foreground">
+        <div className="text-center text-sm text-fg-secondary">
           <p>
             Whatever Pro becomes, payments will be Bitcoin/Lightning-native — no card-on-file
             required. The price isn&apos;t committed until you tell us what works.
@@ -120,8 +120,8 @@ function PlanCard({ plan }: { plan: CatPlan }) {
   return (
     <div
       className={cn(
-        'relative flex flex-col rounded-lg border bg-card p-6 shadow-sm',
-        hasBadge ? 'border-accent-warm' : 'border-border'
+        'relative flex flex-col rounded-lg border bg-surface-base p-6 shadow-sm',
+        hasBadge ? 'border-accent-warm' : 'border-default'
       )}
     >
       {hasBadge && (
@@ -131,17 +131,17 @@ function PlanCard({ plan }: { plan: CatPlan }) {
       )}
 
       <div className="mb-4">
-        <h3 className="font-heading text-2xl font-bold tracking-display text-foreground">
+        <h3 className="font-heading text-2xl font-bold tracking-display text-fg-primary">
           {plan.name}
         </h3>
-        <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
+        <p className="mt-1 text-sm text-fg-secondary">{plan.tagline}</p>
       </div>
 
       <div className="mb-6">
         <p
           className={cn(
             'text-lg font-semibold',
-            isComingSoon ? 'text-muted-strong' : 'text-foreground'
+            isComingSoon ? 'text-fg-primary' : 'text-fg-primary'
           )}
         >
           {plan.priceCopy}
@@ -150,11 +150,11 @@ function PlanCard({ plan }: { plan: CatPlan }) {
 
       <ul className="mb-8 flex-1 space-y-3">
         {plan.bullets.map(bullet => (
-          <li key={bullet} className="flex items-start gap-2 text-sm text-muted-strong">
+          <li key={bullet} className="flex items-start gap-2 text-sm text-fg-primary">
             <Check
               className={cn(
                 'mt-0.5 h-4 w-4 flex-shrink-0',
-                isComingSoon ? 'text-muted-foreground' : 'text-status-positive'
+                isComingSoon ? 'text-fg-secondary' : 'text-status-positive'
               )}
               aria-hidden="true"
             />

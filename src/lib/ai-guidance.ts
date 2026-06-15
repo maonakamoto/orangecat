@@ -37,7 +37,7 @@ export type AIFieldType =
 
 export const aiGuidanceContent: Record<NonNullable<AIFieldType>, FieldGuidanceContent> = {
   provider: {
-    icon: React.createElement(Layers, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Layers, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'AI Provider',
     description:
       'Choose how you access AI models. Aggregators like OpenRouter give you access to many models with one key, while direct providers offer specific models from the source.',
@@ -54,7 +54,7 @@ export const aiGuidanceContent: Record<NonNullable<AIFieldType>, FieldGuidanceCo
     ],
   },
   apiKey: {
-    icon: React.createElement(Key, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Key, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'API Key',
     description:
       'Your API key is like a password that lets OrangeCat use AI models on your behalf. It is stored encrypted and never leaves your account.',
@@ -72,7 +72,7 @@ export const aiGuidanceContent: Record<NonNullable<AIFieldType>, FieldGuidanceCo
     ],
   },
   defaultModel: {
-    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Cpu, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Default Model',
     description:
       'The AI model used by default for your conversations. Different models have different strengths, speeds, and costs.',
@@ -89,7 +89,7 @@ export const aiGuidanceContent: Record<NonNullable<AIFieldType>, FieldGuidanceCo
     ],
   },
   defaultTier: {
-    icon: React.createElement(Sparkles, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Sparkles, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Default Tier',
     description:
       'Model tiers group AI models by capability and cost. Choose based on your typical usage patterns.',
@@ -107,7 +107,7 @@ export const aiGuidanceContent: Record<NonNullable<AIFieldType>, FieldGuidanceCo
     ],
   },
   autoRouter: {
-    icon: React.createElement(Zap, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Zap, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Auto Router',
     description:
       'Automatically selects the best model based on your message complexity. Simple questions use cheaper models, complex ones use more powerful models.',
@@ -124,7 +124,7 @@ export const aiGuidanceContent: Record<NonNullable<AIFieldType>, FieldGuidanceCo
     ],
   },
   maxCostBtc: {
-    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Maximum Cost (BTC)',
     description:
       'Set a cost limit per request in BTC. The auto-router will not select models that exceed this limit.',
@@ -141,7 +141,7 @@ export const aiGuidanceContent: Record<NonNullable<AIFieldType>, FieldGuidanceCo
     ],
   },
   requireVision: {
-    icon: React.createElement(Eye, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Eye, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Require Vision',
     description:
       'When enabled, only models with vision capability (image understanding) will be selected by the auto-router.',
@@ -158,7 +158,7 @@ export const aiGuidanceContent: Record<NonNullable<AIFieldType>, FieldGuidanceCo
     ],
   },
   requireFunctionCalling: {
-    icon: React.createElement(Settings2, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Settings2, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Require Function Calling',
     description:
       'When enabled, only models that support function/tool calling will be selected. Useful for advanced AI integrations.',
@@ -182,19 +182,19 @@ export const aiDefaultContent: DefaultContent = {
     'My AI is your personal AI infrastructure on OrangeCat. Bring your own API keys to access powerful AI models, or use the free tier to get started.',
   features: [
     {
-      icon: React.createElement(Bot, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Bot, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Access 100+ AI models through one interface',
     },
     {
-      icon: React.createElement(Lock, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Lock, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Your keys are encrypted with AES-256-GCM',
     },
     {
-      icon: React.createElement(TrendingUp, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(TrendingUp, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Track usage and costs in satoshis',
     },
     {
-      icon: React.createElement(Zap, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Zap, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Auto-router optimizes model selection for cost',
     },
   ],

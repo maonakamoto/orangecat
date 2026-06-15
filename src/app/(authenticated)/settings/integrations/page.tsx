@@ -38,11 +38,11 @@ export default function IntegrationsPage() {
     const returnTo = `${ROUTES.AUTH}?mode=login&from=${encodeURIComponent(ROUTES.SETTINGS_INTEGRATIONS)}`;
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center p-6 text-center">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-border-subtle bg-muted/30">
-          <KeyRound className="h-5 w-5 text-muted-foreground" />
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-subtle bg-surface-raised/30">
+          <KeyRound className="h-5 w-5 text-fg-secondary" />
         </div>
-        <h1 className="text-xl font-semibold text-foreground">Sign in to manage integrations</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <h1 className="text-xl font-semibold text-fg-primary">Sign in to manage integrations</h1>
+        <p className="mt-2 text-sm text-fg-secondary">
           Integration keys and webhook endpoints both bind to a specific actor. Sign in to mint,
           view, or revoke them.
         </p>
@@ -52,10 +52,7 @@ export default function IntegrationsPage() {
             Sign in
           </Button>
         </Link>
-        <Link
-          href={ROUTES.HOME}
-          className="mt-3 text-xs text-muted-foreground hover:text-foreground"
-        >
+        <Link href={ROUTES.HOME} className="mt-3 text-xs text-fg-secondary hover:text-fg-primary">
           ← Back to home
         </Link>
       </div>
@@ -75,20 +72,20 @@ export default function IntegrationsPage() {
       <div>
         <Link
           href={ROUTES.SETTINGS}
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center gap-1.5 text-sm text-fg-secondary hover:text-fg-primary"
         >
           <ArrowLeft className="h-4 w-4" />
           Settings
         </Link>
-        <h1 className="mt-3 text-2xl font-semibold text-foreground">Integrations</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <h1 className="mt-3 text-2xl font-semibold text-fg-primary">Integrations</h1>
+        <p className="mt-1 text-sm text-fg-secondary">
           Let external services authenticate to OrangeCat and receive signed events.
         </p>
-        <p className="mt-2 text-xs text-muted-foreground">
+        <p className="mt-2 text-xs text-fg-secondary">
           API contract:{' '}
           <a
             href="/api/v1/openapi.json"
-            className="underline hover:text-foreground"
+            className="underline hover:text-fg-primary"
             target="_blank"
             rel="noreferrer"
           >
@@ -97,7 +94,7 @@ export default function IntegrationsPage() {
           ·{' '}
           <a
             href="/api/v1"
-            className="underline hover:text-foreground"
+            className="underline hover:text-fg-primary"
             target="_blank"
             rel="noreferrer"
           >
@@ -107,26 +104,26 @@ export default function IntegrationsPage() {
       </div>
 
       <div>
-        <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-foreground">
+        <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-fg-primary">
           <KeyRound className="h-5 w-5" />
           Integration keys
         </h2>
-        <p className="mb-4 text-sm text-muted-foreground">
+        <p className="mb-4 text-sm text-fg-secondary">
           Outbound API auth. Each key acts as one actor and can be revoked individually.
         </p>
         <IntegrationKeysCard actors={actors} defaultActorId={defaultActorId} />
       </div>
 
       <div>
-        <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-foreground">
+        <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-fg-primary">
           <Webhook className="h-5 w-5" />
           Webhook endpoints
         </h2>
-        <p className="mb-4 text-sm text-muted-foreground">
+        <p className="mb-4 text-sm text-fg-secondary">
           Receive signed POST events when entities the bound actor owns are created. Verify
           deliveries with{' '}
-          <code className="rounded bg-muted px-1 text-xs">verifyWebhookSignature</code> from{' '}
-          <code className="rounded bg-muted px-1 text-xs">@orangecat/sdk</code>.
+          <code className="rounded bg-surface-raised px-1 text-xs">verifyWebhookSignature</code>{' '}
+          from <code className="rounded bg-surface-raised px-1 text-xs">@orangecat/sdk</code>.
         </p>
         <WebhookEndpointsCard actors={actors} defaultActorId={defaultActorId} />
       </div>

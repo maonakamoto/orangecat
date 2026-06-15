@@ -52,35 +52,38 @@ export function TemplatePicker<T extends GenericTemplate>({
 
   return (
     <div
-      className={cn('space-y-4 rounded-md border border-border-subtle bg-muted/30 p-5', className)}
+      className={cn(
+        'space-y-4 rounded-md border border-subtle bg-surface-raised/30 p-5',
+        className
+      )}
     >
       <div className="flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-md border border-border-subtle bg-background text-foreground">
+        <div className="flex h-8 w-8 items-center justify-center rounded-md border border-subtle bg-surface-page text-fg-primary">
           <Lightbulb className="w-4 h-4" />
         </div>
         <div className="flex-1">
-          <h3 className="text-sm font-semibold text-foreground">Need inspiration?</h3>
-          <p className="text-xs text-muted-foreground">
+          <h3 className="text-sm font-semibold text-fg-primary">Need inspiration?</h3>
+          <p className="text-xs text-fg-secondary">
             Quick-start with a template and customize from there.
           </p>
         </div>
-        <span className="text-xs font-medium text-muted-foreground">{label}</span>
+        <span className="text-xs font-medium text-fg-secondary">{label}</span>
       </div>
       <div className="space-y-3">
         {visibleTemplates.map(template => (
           <button
             key={template.id}
             onClick={() => onSelectTemplate(template)}
-            className="w-full rounded-md border border-border-subtle bg-background p-3 text-left transition-colors hover:border-border-strong hover:bg-muted"
+            className="w-full rounded-md border border-subtle bg-surface-page p-3 text-left transition-colors hover:border-strong hover:bg-surface-raised"
             type="button"
           >
             <div className="flex items-start gap-3">
-              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle bg-muted text-foreground">
+              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md border border-subtle bg-surface-raised text-fg-primary">
                 {template.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-semibold text-foreground mb-0.5">{template.name}</h4>
-                <p className="text-xs text-muted-foreground line-clamp-2">{template.tagline}</p>
+                <h4 className="text-sm font-semibold text-fg-primary mb-0.5">{template.name}</h4>
+                <p className="text-xs text-fg-secondary line-clamp-2">{template.tagline}</p>
               </div>
             </div>
           </button>
@@ -88,7 +91,7 @@ export function TemplatePicker<T extends GenericTemplate>({
         {hasMore && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex w-full items-center justify-center gap-2 py-2 text-sm font-medium text-foreground transition-colors hover:text-muted-foreground"
+            className="flex w-full items-center justify-center gap-2 py-2 text-sm font-medium text-fg-primary transition-colors hover:text-fg-secondary"
             type="button"
           >
             {isExpanded ? (

@@ -17,18 +17,18 @@ export default function ProofSection() {
   const { exampleUseCases } = SECTION_HEADERS;
 
   return (
-    <section className="py-12 sm:py-16 lg:py-24 bg-muted/20">
+    <section className="py-12 sm:py-16 lg:py-24 bg-surface-raised/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted text-foreground mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-raised text-fg-primary mb-4">
             <Lightbulb className="w-4 h-4" />
             <span className="text-sm font-medium">Makers</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-foreground mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-fg-primary mb-3 sm:mb-4">
             {exampleUseCases.title}
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-fg-secondary max-w-3xl mx-auto">
             {exampleUseCases.subtitle}
           </p>
         </div>
@@ -47,23 +47,23 @@ export default function ProofSection() {
               {/* Category Badge */}
               <div className="flex items-start justify-between mb-4">
                 <span className="text-3xl sm:text-4xl">{useCase.emoji}</span>
-                <span className="px-3 py-1 bg-muted text-muted-foreground text-xs sm:text-sm font-medium rounded-md">
+                <span className="px-3 py-1 bg-surface-raised text-fg-secondary text-xs sm:text-sm font-medium rounded-md">
                   {useCase.category}
                 </span>
               </div>
 
               {/* Title & Description */}
-              <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-fg-primary mb-2">
                 {useCase.title}
               </h3>
-              <p className="text-sm sm:text-base text-muted-strong mb-4 leading-relaxed">
+              <p className="text-sm sm:text-base text-fg-primary mb-4 leading-relaxed">
                 {useCase.description}
               </p>
 
               {/* Transparency Example */}
-              <div className="bg-muted/50 rounded-lg p-3 sm:p-4">
-                <p className="text-xs sm:text-sm text-muted-foreground">
-                  <span className="font-semibold text-foreground">Transparency in action: </span>
+              <div className="bg-surface-raised/50 rounded-lg p-3 sm:p-4">
+                <p className="text-xs sm:text-sm text-fg-secondary">
+                  <span className="font-semibold text-fg-primary">Transparency in action: </span>
                   {useCase.transparencyExample}
                 </p>
               </div>
@@ -79,7 +79,7 @@ export default function ProofSection() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="text-center"
         >
-          <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-fg-secondary mb-4 sm:mb-6">
             These are just examples. What will you create?
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">

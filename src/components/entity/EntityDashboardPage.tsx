@@ -293,7 +293,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
         {showSearch && (
           <div className="relative flex-1 sm:flex-initial">
             <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-dim w-4 h-4"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-fg-tertiary w-4 h-4"
               aria-hidden="true"
             />
             <Input
@@ -307,7 +307,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-dim hover:text-foreground min-h-11 min-w-11 flex items-center justify-center"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-tertiary hover:text-fg-primary min-h-11 min-w-11 flex items-center justify-center"
                 aria-label="Clear search"
               >
                 <X className="w-4 h-4" aria-hidden="true" />
@@ -319,7 +319,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
           <select
             value={statusValue}
             onChange={e => setStatusValue(e.target.value)}
-            className="px-3 py-2 border border-border-strong rounded-lg text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring w-full sm:w-auto min-w-[140px]"
+            className="px-3 py-2 border border-strong rounded-lg text-sm bg-surface-base text-fg-primary focus:outline-none focus:ring-2 focus:ring-ring focus:border-interactive w-full sm:w-auto min-w-[140px]"
             aria-label="Filter by status"
           >
             {statusFilter!.options.map(opt => (
@@ -370,7 +370,7 @@ export default function EntityDashboardPage<T extends BaseEntity>({
             <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className="text-sm font-medium">Failed to load</p>
-              <p className="mt-1 text-sm text-destructive/80">{error}</p>
+              <p className="mt-1 text-sm text-status-negative/80">{error}</p>
               <Button variant="outline" size="sm" onClick={() => refresh()} className="mt-3">
                 Try again
               </Button>
@@ -380,12 +380,12 @@ export default function EntityDashboardPage<T extends BaseEntity>({
           <>
             {showSelection && filteredItems.length > 0 && allowBulkSelect && (
               <div className="oc-list-row mb-4 flex items-center justify-between">
-                <label className="flex items-center gap-2 text-sm text-foreground">
+                <label className="flex items-center gap-2 text-sm text-fg-primary">
                   <input
                     type="checkbox"
                     checked={selectedIds.size === filteredItems.length && filteredItems.length > 0}
                     onChange={() => toggleSelectAll(filteredItems.map(item => item.id))}
-                    className="h-4 w-4 rounded border-border-strong bg-card text-foreground focus:ring-ring"
+                    className="h-4 w-4 rounded border-strong bg-surface-base text-fg-primary focus:ring-ring"
                   />
                   <span>Select All</span>
                 </label>

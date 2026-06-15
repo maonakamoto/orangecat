@@ -69,7 +69,7 @@ export default function JobsPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-dim" />
+          <Loader2 className="h-6 w-6 animate-spin text-fg-tertiary" />
         </div>
       </div>
     );
@@ -80,7 +80,7 @@ export default function JobsPage() {
       <div className="container mx-auto px-4 py-8">
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-destructive mb-4">{error}</p>
+            <p className="text-status-negative mb-4">{error}</p>
             <Button onClick={() => loadJobs()}>Try Again</Button>
           </CardContent>
         </Card>
@@ -96,9 +96,9 @@ export default function JobsPage() {
       {jobs.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <Briefcase className="h-12 w-12 text-muted-dim/50 mx-auto mb-4" />
-            <p className="text-muted-foreground mb-2">No job postings available</p>
-            <p className="text-base text-muted-dim/70">
+            <Briefcase className="h-12 w-12 text-fg-tertiary/50 mx-auto mb-4" />
+            <p className="text-fg-secondary mb-2">No job postings available</p>
+            <p className="text-base text-fg-tertiary/70">
               Check back later or create a group to post jobs
             </p>
           </CardContent>
@@ -112,7 +112,7 @@ export default function JobsPage() {
                   <div className="flex-1">
                     <CardTitle className="text-xl mb-2">{job.title}</CardTitle>
                     {job.groups && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                      <div className="flex items-center gap-2 text-sm text-fg-secondary mb-2">
                         <Building2 className="h-4 w-4" />
                         <Link
                           href={`${ENTITY_REGISTRY['group'].publicBasePath}/${job.groups.slug}`}
@@ -128,14 +128,14 @@ export default function JobsPage() {
                       </CardDescription>
                     )}
                   </div>
-                  <Badge variant="default" className="bg-muted/400">
+                  <Badge variant="default" className="bg-surface-raised/400">
                     Active
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-4 text-sm text-fg-secondary">
                     {job.action_data?.location && (
                       <div className="flex items-center gap-1">
                         <MapPin className="h-4 w-4" />

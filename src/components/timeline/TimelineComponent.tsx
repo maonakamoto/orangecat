@@ -180,7 +180,7 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
         <>
           {!isSelectionMode ? (
             // Entry point to selection mode - small button
-            <div className="sticky top-16 z-10 border-b border-border-subtle bg-background/90 px-4 py-2.5 backdrop-blur-xl">
+            <div className="sticky top-16 z-10 border-b border-subtle bg-surface-page/90 px-4 py-2.5 backdrop-blur-xl">
               <Button
                 variant="outline"
                 size="sm"
@@ -229,7 +229,7 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
       {feed.pagination.hasNext && onLoadMore && (
         <div ref={sentinelRef} className="flex items-center justify-center py-6">
           {isLoadingMore ? (
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center gap-2 text-fg-secondary">
               <Loader2 className="h-5 w-5 animate-spin" />
               <span className="text-sm">Loading more posts...</span>
             </div>
@@ -242,28 +242,28 @@ export const TimelineComponent: React.FC<TimelineComponentProps> = ({
       {/* End of feed indicator */}
       {!feed.pagination.hasNext && events.length > 0 && (
         <div className="text-center py-6">
-          <span className="text-sm text-muted-dim">You've reached the end</span>
+          <span className="text-sm text-fg-tertiary">You've reached the end</span>
         </div>
       )}
 
       {/* Bulk Delete Confirmation Modal */}
       {showBulkDeleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-          <Card className="mx-4 w-full max-w-md rounded-md border-border-subtle bg-background">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-page/80 backdrop-blur-sm">
+          <Card className="mx-4 w-full max-w-md rounded-md border-subtle bg-surface-page">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-md border border-destructive/20 bg-destructive/10">
-                  <Trash2 className="w-6 h-6 text-destructive" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-md border border-status-negative/20 bg-status-negative/10">
+                  <Trash2 className="w-6 h-6 text-status-negative" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold">
                     Delete {selectedCount} {selectedCount === 1 ? 'post' : 'posts'}?
                   </h2>
-                  <p className="text-sm text-muted-foreground">This action cannot be undone</p>
+                  <p className="text-sm text-fg-secondary">This action cannot be undone</p>
                 </div>
               </div>
 
-              <p className="text-foreground mb-6">
+              <p className="text-fg-primary mb-6">
                 Are you sure you want to delete {selectedCount === 1 ? 'this post' : 'these posts'}?
                 {selectedCount > 1 && ' They will be'} permanently removed from your timeline.
               </p>

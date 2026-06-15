@@ -139,16 +139,16 @@ export default class ErrorBoundary extends Component<Props, State> {
             <AlertTriangle className="h-5 w-5 mt-0.5 mr-3 flex-shrink-0" />
             <div className="flex-1">
               <h3 className="text-sm font-medium">Component Error</h3>
-              <p className="mt-1 text-sm text-destructive/80">
+              <p className="mt-1 text-sm text-status-negative/80">
                 This component encountered an error and could not render properly.
               </p>
 
               {showDetails && error && (
                 <details className="mt-3">
-                  <summary className="cursor-pointer text-xs text-destructive hover:text-destructive/80">
+                  <summary className="cursor-pointer text-xs text-status-negative hover:text-status-negative/80">
                     Show details
                   </summary>
-                  <div className="mt-2 rounded-md border border-destructive/20 bg-background/60 p-2 font-mono text-xs text-destructive break-all">
+                  <div className="mt-2 rounded-md border border-status-negative/20 bg-surface-page/60 p-2 font-mono text-xs text-status-negative break-all">
                     {error.message}
                     {eventId && <div className="mt-1">Event ID: {eventId}</div>}
                   </div>
@@ -162,7 +162,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                     Retry ({retryCount}/{maxRetries})
                   </Button>
                 ) : (
-                  <p className="text-xs text-destructive">
+                  <p className="text-xs text-status-negative">
                     Maximum retry attempts reached. Please refresh the page.
                   </p>
                 )}
@@ -176,21 +176,21 @@ export default class ErrorBoundary extends Component<Props, State> {
     return (
       <div className="oc-page flex items-center justify-center px-4">
         <div className="oc-surface max-w-md w-full p-6 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md border border-destructive/20 bg-destructive/10 text-destructive">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md border border-status-negative/20 bg-status-negative/10 text-status-negative">
             <AlertTriangle className="h-6 w-6" />
           </div>
 
-          <h2 className="text-xl font-semibold text-foreground mb-2">Something went wrong</h2>
+          <h2 className="text-xl font-semibold text-fg-primary mb-2">Something went wrong</h2>
 
-          <p className="text-muted-foreground mb-6">
+          <p className="text-fg-secondary mb-6">
             We encountered an unexpected error. Our team has been notified.
           </p>
 
           {showDetails && error && (
             <div className="oc-surface-muted mb-6 p-4 text-left">
-              <h3 className="text-sm font-medium text-foreground mb-2">Error Details:</h3>
-              <p className="text-xs text-muted-foreground font-mono break-all">{error.message}</p>
-              {eventId && <p className="text-xs text-muted-foreground mt-2">Event ID: {eventId}</p>}
+              <h3 className="text-sm font-medium text-fg-primary mb-2">Error Details:</h3>
+              <p className="text-xs text-fg-secondary font-mono break-all">{error.message}</p>
+              {eventId && <p className="text-xs text-fg-secondary mt-2">Event ID: {eventId}</p>}
             </div>
           )}
 

@@ -21,22 +21,22 @@ function getNotificationIcon(notification: Notification) {
     case 'project_funded':
       return <Bitcoin className="w-5 h-5 text-bitcoin-orange" />;
     case 'follow':
-      return <Users className="w-5 h-5 text-foreground" />;
+      return <Users className="w-5 h-5 text-fg-primary" />;
     case 'message':
-      return <MessageSquare className="w-5 h-5 text-foreground" />;
+      return <MessageSquare className="w-5 h-5 text-fg-primary" />;
     case 'comment':
       return <MessageSquare className="w-5 h-5 text-status-positive" />;
     case 'like':
-      return <Heart className="w-5 h-5 text-destructive" />;
+      return <Heart className="w-5 h-5 text-status-negative" />;
     case 'mention':
-      return <AtSign className="w-5 h-5 text-foreground" />;
+      return <AtSign className="w-5 h-5 text-fg-primary" />;
     case 'booking_request':
     case 'booking_update':
-      return <Calendar className="w-5 h-5 text-foreground" />;
+      return <Calendar className="w-5 h-5 text-fg-primary" />;
     case 'system':
-      return <Settings className="w-5 h-5 text-muted-foreground" />;
+      return <Settings className="w-5 h-5 text-fg-secondary" />;
     default:
-      return <Bell className="w-5 h-5 text-muted-foreground" />;
+      return <Bell className="w-5 h-5 text-fg-secondary" />;
   }
 }
 
@@ -57,8 +57,8 @@ export function NotificationItem({
     <div
       className={`group relative cursor-pointer rounded-md border p-3 transition-colors ${
         notification.is_read
-          ? 'border-border-subtle bg-background hover:bg-muted'
-          : 'border-border-strong bg-muted hover:bg-muted/80'
+          ? 'border-subtle bg-surface-page hover:bg-surface-raised'
+          : 'border-strong bg-surface-raised hover:bg-surface-raised/80'
       }`}
       onClick={() => onClick(notification)}
     >
@@ -68,17 +68,17 @@ export function NotificationItem({
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h4 className="text-sm font-medium text-foreground">
+              <h4 className="text-sm font-medium text-fg-primary">
                 {notificationTitle(notification)}
               </h4>
               {notification.message && notification.message !== notificationTitle(notification) && (
                 <p
-                  className={`text-sm mt-1 ${notification.is_read ? 'text-muted-foreground' : 'text-foreground'}`}
+                  className={`text-sm mt-1 ${notification.is_read ? 'text-fg-secondary' : 'text-fg-primary'}`}
                 >
                   {notification.message}
                 </p>
               )}
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-fg-secondary mt-2">
                 {formatRelativeTime(notification.created_at)}
               </p>
             </div>
@@ -90,7 +90,7 @@ export function NotificationItem({
                     e.stopPropagation();
                     onMarkAsRead(notification.id);
                   }}
-                  className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 hover:bg-background"
+                  className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 hover:bg-surface-page"
                   title="Mark as read"
                 >
                   <Check className="w-3 h-3 text-status-positive" />
@@ -101,10 +101,10 @@ export function NotificationItem({
                   e.stopPropagation();
                   onDelete(notification.id);
                 }}
-                className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 hover:bg-background"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 hover:bg-surface-page"
                 title="Delete notification"
               >
-                <Trash2 className="w-3 h-3 text-destructive" />
+                <Trash2 className="w-3 h-3 text-status-negative" />
               </button>
             </div>
           </div>
@@ -112,7 +112,7 @@ export function NotificationItem({
       </div>
 
       {!notification.is_read && (
-        <div className="absolute right-3 top-3 h-2 w-2 rounded-sm bg-foreground" />
+        <div className="absolute right-3 top-3 h-2 w-2 rounded-sm bg-fg-primary" />
       )}
     </div>
   );

@@ -69,15 +69,15 @@ export default function AnalyticsPage() {
         label: 'Active Projects',
         value: activeProjects.length,
         icon: Target,
-        color: 'text-foreground',
+        color: 'text-fg-primary',
       },
-      { label: 'Total Supporters', value: totalSupporters, icon: Users, color: 'text-foreground' },
+      { label: 'Total Supporters', value: totalSupporters, icon: Users, color: 'text-fg-primary' },
       {
         label: 'Avg Contribution',
         value: avgContribution,
         format: 'currency',
         icon: TrendingUp,
-        color: 'text-foreground',
+        color: 'text-fg-primary',
       },
       {
         label: 'Success Rate',
@@ -116,22 +116,22 @@ export default function AnalyticsPage() {
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Project Analytics</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-2xl font-bold text-fg-primary">Project Analytics</h1>
+            <p className="text-fg-secondary mt-1">
               Track your fundraising performance and insights
             </p>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex bg-muted rounded-lg p-1">
+            <div className="flex bg-surface-raised rounded-lg p-1">
               {(['7d', '30d', '90d', 'all'] as const).map(range => (
                 <button
                   key={range}
                   onClick={() => setTimeRange(range)}
                   className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
                     timeRange === range
-                      ? 'bg-card text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground'
+                      ? 'bg-surface-base text-fg-primary shadow-sm'
+                      : 'text-fg-secondary hover:text-fg-primary'
                   }`}
                 >
                   {range === 'all' ? 'All Time' : range.toUpperCase()}
@@ -142,7 +142,7 @@ export default function AnalyticsPage() {
             <select
               value={selectedProject}
               onChange={e => setSelectedProject(e.target.value)}
-              className="border border-border-strong dark:bg-muted dark:text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-ring"
+              className="border border-strong dark:bg-surface-raised dark:text-fg-primary rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-interactive"
             >
               <option value="all">All Projects</option>
               {projects.map(project => (

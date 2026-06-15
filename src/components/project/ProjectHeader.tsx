@@ -90,7 +90,7 @@ export default function ProjectHeader({
     <div className="mb-6">
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex-1">
-          <h1 className="text-4xl font-bold text-foreground mb-3">{project.title}</h1>
+          <h1 className="text-4xl font-bold text-fg-primary mb-3">{project.title}</h1>
 
           {/* Categories - Show prominently for quick project understanding */}
           {(project.category || (project.tags && project.tags.length > 0)) && (
@@ -99,7 +99,7 @@ export default function ProjectHeader({
                 (category, idx) => (
                   <span
                     key={`${category}-${idx}`}
-                    className="px-3 py-1 rounded-full text-xs font-medium bg-muted text-fg-secondary border border-border-subtle"
+                    className="px-3 py-1 rounded-full text-xs font-medium bg-surface-raised text-fg-secondary border border-subtle"
                     role="listitem"
                   >
                     {category}
@@ -127,16 +127,16 @@ export default function ProjectHeader({
                       className="rounded-full cursor-pointer"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-muted text-fg-secondary font-semibold text-sm cursor-pointer hover:opacity-80 transition-opacity">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-surface-raised text-fg-secondary font-semibold text-sm cursor-pointer hover:opacity-80 transition-opacity">
                       {getInitial(project.profiles.name || project.profiles.username, 'A')}
                     </div>
                   )}
                 </Link>
                 <div>
-                  <p className="text-sm text-muted-foreground">Created by</p>
+                  <p className="text-sm text-fg-secondary">Created by</p>
                   <Link
                     href={creatorProfileUrl}
-                    className="text-sm font-semibold text-foreground hover:underline underline-offset-4"
+                    className="text-sm font-semibold text-fg-primary hover:underline underline-offset-4"
                   >
                     {project.profiles.name ||
                       project.profiles.username ||
@@ -148,14 +148,14 @@ export default function ProjectHeader({
           ) : project.user_id ? (
             // Profile exists but wasn't loaded - show user ID as fallback
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-muted text-fg-secondary font-semibold text-sm">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-surface-raised text-fg-secondary font-semibold text-sm">
                 ?
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Created by</p>
+                <p className="text-sm text-fg-secondary">Created by</p>
                 <Link
                   href={`/profiles/${project.user_id}`}
-                  className="text-sm font-semibold text-foreground hover:underline underline-offset-4"
+                  className="text-sm font-semibold text-fg-primary hover:underline underline-offset-4"
                 >
                   User {project.user_id.substring(0, 8)}
                 </Link>
@@ -163,12 +163,12 @@ export default function ProjectHeader({
             </div>
           ) : (
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-muted text-fg-secondary font-semibold text-sm">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-surface-raised text-fg-secondary font-semibold text-sm">
                 ?
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Created by</p>
-                <span className="text-sm font-semibold text-foreground">Anonymous</span>
+                <p className="text-sm text-fg-secondary">Created by</p>
+                <span className="text-sm font-semibold text-fg-primary">Anonymous</span>
               </div>
             </div>
           )}
@@ -182,7 +182,7 @@ export default function ProjectHeader({
             >
               {statusInfo.label}
             </span>
-            <time dateTime={project.created_at} className="text-sm text-muted-foreground">
+            <time dateTime={project.created_at} className="text-sm text-fg-secondary">
               Created {formatRelativeTime(project.created_at)}
             </time>
           </div>

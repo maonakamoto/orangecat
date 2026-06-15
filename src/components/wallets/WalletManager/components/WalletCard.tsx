@@ -78,17 +78,15 @@ export function WalletCard({
               <h4 className="font-semibold text-base sm:text-lg truncate">{wallet.label}</h4>
               {wallet.is_primary && (
                 <span className="text-xs bg-bitcoinOrange/10 text-bitcoinOrange px-2 py-0.5 rounded-full flex items-center gap-1 flex-shrink-0">
-                  <Star className="w-3 h-3 fill-orange-700" />
+                  <Star className="w-3 h-3 fill-fg-primary" />
                   Primary
                 </span>
               )}
             </div>
             {wallet.description && (
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                {wallet.description}
-              </p>
+              <p className="text-sm text-fg-secondary mt-1 line-clamp-2">{wallet.description}</p>
             )}
-            <p className="text-xs text-muted-foreground mt-1">{categoryInfo.label}</p>
+            <p className="text-xs text-fg-secondary mt-1">{categoryInfo.label}</p>
           </div>
         </div>
 
@@ -107,7 +105,7 @@ export function WalletCard({
             )}
             <button
               onClick={onEdit}
-              className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-2 rounded-lg hover:bg-surface-raised text-fg-secondary hover:text-fg-primary transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Edit wallet"
               aria-label="Edit wallet"
             >
@@ -115,7 +113,7 @@ export function WalletCard({
             </button>
             <button
               onClick={onDelete}
-              className="p-2 rounded-lg hover:bg-destructive/10 text-destructive hover:text-destructive/80 transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-2 rounded-lg hover:bg-status-negative/10 text-status-negative hover:text-status-negative/80 transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Delete wallet"
               aria-label="Delete wallet"
             >
@@ -126,13 +124,13 @@ export function WalletCard({
       </div>
 
       {/* Balance */}
-      <div className="bg-muted rounded-lg p-3 sm:p-4 mb-4">
+      <div className="bg-surface-raised rounded-lg p-3 sm:p-4 mb-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-foreground">Current Balance</span>
+          <span className="text-sm font-medium text-fg-primary">Current Balance</span>
           {isOwner && wallet.balance_updated_at && (
             <button
               onClick={onRefresh}
-              className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-muted/50 text-muted-foreground hover:text-foreground transition-colors min-h-11 min-w-11 flex items-center justify-center"
+              className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-surface-raised/50 text-fg-secondary hover:text-fg-primary transition-colors min-h-11 min-w-11 flex items-center justify-center"
               title="Refresh balance"
               aria-label="Refresh balance"
             >
@@ -144,7 +142,7 @@ export function WalletCard({
           {displayBTC(wallet.balance_btc)}
         </div>
         {wallet.balance_updated_at && (
-          <div className="text-xs text-muted-foreground mt-2">
+          <div className="text-xs text-fg-secondary mt-2">
             Updated {new Date(wallet.balance_updated_at).toLocaleString()}
           </div>
         )}
@@ -154,30 +152,30 @@ export function WalletCard({
       {wallet.goal_amount && (
         <div className="mb-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-muted-foreground font-medium">Goal</span>
-            <span className="font-semibold text-foreground">
+            <span className="text-fg-secondary font-medium">Goal</span>
+            <span className="font-semibold text-fg-primary">
               {displayBTC(wallet.balance_btc)} / {wallet.goal_amount} {wallet.goal_currency}
             </span>
           </div>
-          <div className="w-full bg-muted rounded-full h-2.5 mb-1">
+          <div className="w-full bg-surface-raised rounded-full h-2.5 mb-1">
             <div
               className="bg-bitcoinOrange h-2.5 rounded-full transition-all"
               style={{ width: `${Math.min(progressPercent, 100)}%` }}
             />
           </div>
-          <div className="text-xs text-muted-foreground">{progressPercent.toFixed(1)}% funded</div>
+          <div className="text-xs text-fg-secondary">{progressPercent.toFixed(1)}% funded</div>
         </div>
       )}
 
       {/* Address (truncated) */}
-      <div className="pt-4 border-t border-border">
+      <div className="pt-4 border-t border-default">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium text-muted-foreground">
+          <span className="text-xs font-medium text-fg-secondary">
             {wallet.wallet_type === 'xpub' ? 'Extended Public Key' : 'Bitcoin Address'}
           </span>
           <button
             onClick={handleCopy}
-            className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-bitcoinOrange transition-colors flex items-center gap-1 min-h-11"
+            className="p-1.5 rounded-md hover:bg-surface-raised text-fg-secondary hover:text-bitcoinOrange transition-colors flex items-center gap-1 min-h-11"
             title="Copy address"
             aria-label="Copy address"
           >
@@ -185,7 +183,7 @@ export function WalletCard({
             <span className="text-xs hidden sm:inline">Copy</span>
           </button>
         </div>
-        <code className="text-xs text-foreground block font-mono break-all bg-muted p-2 rounded border dark:border-border">
+        <code className="text-xs text-fg-primary block font-mono break-all bg-surface-raised p-2 rounded border dark:border-default">
           {truncateAddress(wallet.address_or_xpub, 20, 10)}
         </code>
       </div>

@@ -106,7 +106,7 @@ export function WishlistDonationTiers({
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <Gift className="h-5 w-5 text-rose-500" />
-        <h4 className="font-semibold text-foreground">Support a specific goal:</h4>
+        <h4 className="font-semibold text-fg-primary">Support a specific goal:</h4>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -122,14 +122,14 @@ export function WishlistDonationTiers({
             <button
               key={item.id}
               onClick={() => handleTierClick(item)}
-              className="flex flex-col items-start p-4 border-2 border-border rounded-lg hover:border-bitcoinOrange hover:bg-bitcoinOrange/5 transition-all text-left group"
+              className="flex flex-col items-start p-4 border-2 border-default rounded-lg hover:border-bitcoinOrange hover:bg-bitcoinOrange/5 transition-all text-left group"
             >
-              <span className="text-sm font-bold text-foreground group-hover:text-bitcoinOrange">
+              <span className="text-sm font-bold text-fg-primary group-hover:text-bitcoinOrange">
                 {formattedAmount}
               </span>
-              <span className="text-xs text-muted-dim mt-0.5">≈ {btcDisplay}</span>
-              <span className="text-xs text-muted-foreground mt-1 line-clamp-1">{item.title}</span>
-              <div className="w-full bg-muted rounded-full h-1 mt-3">
+              <span className="text-xs text-fg-tertiary mt-0.5">≈ {btcDisplay}</span>
+              <span className="text-xs text-fg-secondary mt-1 line-clamp-1">{item.title}</span>
+              <div className="w-full bg-surface-raised rounded-full h-1 mt-3">
                 <div
                   className="bg-bitcoinOrange h-1 rounded-full"
                   style={{

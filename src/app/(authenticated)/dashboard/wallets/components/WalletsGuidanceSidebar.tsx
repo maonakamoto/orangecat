@@ -26,15 +26,15 @@ export function WalletsGuidanceSidebar({ focusedField }: WalletsGuidanceSidebarP
     <div className="hidden lg:block lg:col-span-5 lg:order-2">
       <div className="lg:sticky lg:top-8 space-y-6">
         {/* Simple explainer / checklist */}
-        <Card className="p-6 shadow-sm border-border">
+        <Card className="p-6 shadow-sm border-default">
           <div className="mb-3">
-            <h3 className="text-base font-semibold text-foreground">How wallet setup works</h3>
-            <p className="text-sm text-muted-foreground mt-1">
+            <h3 className="text-base font-semibold text-fg-primary">How wallet setup works</h3>
+            <p className="text-sm text-fg-secondary mt-1">
               Create one wallet per funding goal or budget. You can always edit or archive wallets
               later.
             </p>
           </div>
-          <ul className="list-disc list-inside text-sm text-foreground space-y-1">
+          <ul className="list-disc list-inside text-sm text-fg-primary space-y-1">
             <li>Choose a clear category like Rent, Food, or Emergency</li>
             <li>Give the wallet a human name that explains its purpose</li>
             <li>Paste a Bitcoin address or xpub from your own wallet</li>

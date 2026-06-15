@@ -12,14 +12,14 @@ import { TIMELINE_COPY } from '@/config/timeline';
 const SocialTimeline = dynamic(() => import('@/components/timeline/SocialTimeline'), {
   ssr: false,
   loading: () => (
-    <div className="h-[400px] rounded-md border border-border-subtle bg-background animate-pulse" />
+    <div className="h-[400px] rounded-md border border-subtle bg-surface-page animate-pulse" />
   ),
 });
 
 const PostComposerMobile = dynamic(() => import('@/components/timeline/PostComposerMobile'), {
   ssr: false,
   loading: () => (
-    <div className="h-[320px] rounded-md border border-border-subtle bg-background animate-pulse" />
+    <div className="h-[320px] rounded-md border border-subtle bg-surface-page animate-pulse" />
   ),
 });
 

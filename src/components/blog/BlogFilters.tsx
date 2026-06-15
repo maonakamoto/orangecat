@@ -35,7 +35,7 @@ export function BlogFilters({
       {tags.length > 0 && (
         <div>
           <div className="flex items-center mb-4">
-            <Tag className="w-4 h-4 mr-2 text-muted-foreground" />
+            <Tag className="w-4 h-4 mr-2 text-fg-secondary" />
             <h3 className="text-lg font-semibold">Filter by Topic</h3>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -43,8 +43,8 @@ export function BlogFilters({
               onClick={() => setSelectedTag(null)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 !selectedTag
-                  ? 'bg-muted/400 text-white'
-                  : 'bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                  ? 'bg-surface-raised/400 text-white'
+                  : 'bg-surface-raised text-fg-secondary hover:bg-gray-200 dark:hover:bg-surface-raised/80'
               }`}
             >
               All Topics
@@ -55,8 +55,8 @@ export function BlogFilters({
                 onClick={() => setSelectedTag(tag)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedTag === tag
-                    ? 'bg-muted/400 text-white'
-                    : 'bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                    ? 'bg-surface-raised/400 text-white'
+                    : 'bg-surface-raised text-fg-secondary hover:bg-gray-200 dark:hover:bg-surface-raised/80'
                 }`}
               >
                 {tag}
@@ -68,7 +68,7 @@ export function BlogFilters({
 
       <div>
         <div className="flex items-center mb-4">
-          <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
+          <Calendar className="w-4 h-4 mr-2 text-fg-secondary" />
           <h3 className="text-lg font-semibold">Filter by Time</h3>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -78,8 +78,8 @@ export function BlogFilters({
               onClick={() => setSelectedTimeFilter(option.key)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 selectedTimeFilter === option.key
-                  ? 'bg-muted/400 text-white'
-                  : 'bg-muted text-muted-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                  ? 'bg-surface-raised/400 text-white'
+                  : 'bg-surface-raised text-fg-secondary hover:bg-gray-200 dark:hover:bg-surface-raised/80'
               }`}
             >
               {option.label}
@@ -90,28 +90,28 @@ export function BlogFilters({
       </div>
 
       {(selectedTag || selectedTimeFilter !== 'all') && (
-        <div className="flex items-center gap-4 p-4 bg-muted rounded-lg">
-          <Filter className="w-4 h-4 text-muted-foreground" />
+        <div className="flex items-center gap-4 p-4 bg-surface-raised rounded-lg">
+          <Filter className="w-4 h-4 text-fg-secondary" />
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-muted-foreground">Showing:</span>
+            <span className="text-fg-secondary">Showing:</span>
             {selectedTag && (
-              <span className="px-2 py-1 bg-muted text-foreground rounded text-xs font-medium">
+              <span className="px-2 py-1 bg-surface-raised text-fg-primary rounded text-xs font-medium">
                 {selectedTag}
               </span>
             )}
             {selectedTimeFilter !== 'all' && (
-              <span className="px-2 py-1 bg-muted text-foreground rounded text-xs font-medium">
+              <span className="px-2 py-1 bg-surface-raised text-fg-primary rounded text-xs font-medium">
                 {timeFilterOptions.find(opt => opt.key === selectedTimeFilter)?.label}
               </span>
             )}
-            <span className="text-muted-foreground">•</span>
-            <span className="text-muted-foreground font-medium">
+            <span className="text-fg-secondary">•</span>
+            <span className="text-fg-secondary font-medium">
               {filteredPosts.length} post{filteredPosts.length !== 1 ? 's' : ''}
             </span>
           </div>
           <button
             onClick={clearFilters}
-            className="ml-auto text-xs text-muted-foreground hover:text-foreground underline"
+            className="ml-auto text-xs text-fg-secondary hover:text-fg-primary underline"
           >
             Clear all filters
           </button>

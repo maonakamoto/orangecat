@@ -63,13 +63,13 @@ export const loanEntityConfig: EntityConfig<Loan> = {
       badgeVariant: statusBadge?.variant,
       metadata:
         metadataParts.length > 0 ? (
-          <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+          <div className="flex flex-wrap gap-2 text-xs text-fg-secondary">
             {metadataParts.map((part, idx) => (
               <span key={idx} className="capitalize">
                 {part}
               </span>
             ))}
-            {progress > 0 && <span className="text-foreground font-medium">{progress}% paid</span>}
+            {progress > 0 && <span className="text-fg-primary font-medium">{progress}% paid</span>}
           </div>
         ) : undefined,
       showEditButton: true,

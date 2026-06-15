@@ -35,7 +35,7 @@ const config: EntityDetailConfig = {
     return (
       <span
         className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
-          ASSET_VERIFICATION_COLORS[verificationStatus] ?? 'bg-muted text-foreground'
+          ASSET_VERIFICATION_COLORS[verificationStatus] ?? 'bg-surface-raised text-fg-primary'
         }`}
       >
         {ASSET_VERIFICATION_LABELS[verificationStatus] ?? verificationStatus}
@@ -61,7 +61,7 @@ const config: EntityDetailConfig = {
         <CardContent className="space-y-3">
           {entity.type && (
             <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Type</span>
+              <span className="text-sm text-fg-secondary">Type</span>
               <Badge variant="secondary">
                 {ASSET_TYPE_LABELS[entity.type as string] ?? String(entity.type)}
               </Badge>
@@ -69,13 +69,13 @@ const config: EntityDetailConfig = {
           )}
           {entity.location && (
             <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Location</span>
+              <span className="text-sm text-fg-secondary">Location</span>
               <span className="font-medium text-sm">{String(entity.location)}</span>
             </div>
           )}
           {entity.estimated_value !== null && entity.estimated_value !== undefined && (
             <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Estimated Value</span>
+              <span className="text-sm text-fg-secondary">Estimated Value</span>
               <span className="font-semibold">
                 {Number(entity.estimated_value).toLocaleString()} {String(entity.currency || 'CHF')}
               </span>
@@ -97,7 +97,7 @@ const config: EntityDetailConfig = {
                 </div>
                 {entity.sale_price_btc !== null && entity.sale_price_btc !== undefined && (
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Sale Price</span>
+                    <span className="text-sm text-fg-secondary">Sale Price</span>
                     <span className="font-bold text-status-positive">
                       {displayBTC(Number(entity.sale_price_btc))}
                     </span>
@@ -106,21 +106,21 @@ const config: EntityDetailConfig = {
               </div>
             )}
             {entity.is_for_rent && (
-              <div className="p-3 bg-muted/40 rounded-lg space-y-2">
+              <div className="p-3 bg-surface-raised/40 rounded-lg space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-foreground">For Rent</span>
+                  <span className="text-sm font-medium text-fg-primary">For Rent</span>
                 </div>
                 {entity.rental_price_btc !== null && entity.rental_price_btc !== undefined && (
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Rental Price</span>
-                    <span className="font-bold text-foreground">
+                    <span className="text-sm text-fg-secondary">Rental Price</span>
+                    <span className="font-bold text-fg-primary">
                       {displayBTC(Number(entity.rental_price_btc))} /{' '}
                       {ASSET_RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
                     </span>
                   </div>
                 )}
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Minimum Period</span>
+                  <span className="text-sm text-fg-secondary">Minimum Period</span>
                   <span className="font-medium">
                     {entity.min_rental_period}{' '}
                     {ASSET_RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
@@ -129,7 +129,7 @@ const config: EntityDetailConfig = {
                 </div>
                 {entity.max_rental_period !== null && entity.max_rental_period !== undefined && (
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Maximum Period</span>
+                    <span className="text-sm text-fg-secondary">Maximum Period</span>
                     <span className="font-medium">
                       {entity.max_rental_period}{' '}
                       {ASSET_RENTAL_PERIOD_LABELS[entity.rental_period_type as string] ?? 'period'}
@@ -142,8 +142,8 @@ const config: EntityDetailConfig = {
             {entity.requires_deposit &&
               entity.deposit_amount_btc !== null &&
               entity.deposit_amount_btc !== undefined && (
-                <div className="flex justify-between items-center border-t dark:border-border pt-2">
-                  <span className="text-sm text-muted-foreground">Security Deposit</span>
+                <div className="flex justify-between items-center border-t dark:border-default pt-2">
+                  <span className="text-sm text-fg-secondary">Security Deposit</span>
                   <span className="font-semibold">
                     {displayBTC(Number(entity.deposit_amount_btc))}
                   </span>

@@ -102,24 +102,24 @@ export default async function WishlistItemDetailPage({ params }: PageProps) {
           className="mb-4"
         />
         <h1 className="text-3xl font-bold mt-2">{item.title}</h1>
-        {item.description && <p className="text-muted-foreground mt-2">{item.description}</p>}
+        {item.description && <p className="text-fg-secondary mt-2">{item.description}</p>}
       </div>
 
       {/* Funding Status */}
-      <div className="bg-card rounded-lg border border-border p-6 mb-6">
+      <div className="bg-surface-base rounded-lg border border-default p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">Funding Status</h2>
         <div className="space-y-2">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Target:</span>
+            <span className="text-fg-secondary">Target:</span>
             <FormattedAmount btc={item.target_amount_btc} className="font-medium" />
           </div>
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Funded:</span>
+            <span className="text-fg-secondary">Funded:</span>
             <FormattedAmount btc={item.funded_amount_btc} className="font-medium" />
           </div>
-          <div className="w-full bg-muted rounded-full h-2 mt-4">
+          <div className="w-full bg-surface-raised rounded-full h-2 mt-4">
             <div
-              className="bg-foreground h-2 rounded-full"
+              className="bg-fg-primary h-2 rounded-full"
               style={{
                 width: `${Math.min(100, (item.funded_amount_btc / item.target_amount_btc) * 100)}%`,
               }}

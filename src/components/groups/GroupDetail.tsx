@@ -38,8 +38,8 @@ export function GroupDetail({ groupSlug }: GroupDetailProps) {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="h-64 bg-muted animate-pulse rounded-lg" />
-        <div className="h-32 bg-muted animate-pulse rounded-lg" />
+        <div className="h-64 bg-surface-raised animate-pulse rounded-lg" />
+        <div className="h-32 bg-surface-raised animate-pulse rounded-lg" />
       </div>
     );
   }
@@ -47,7 +47,7 @@ export function GroupDetail({ groupSlug }: GroupDetailProps) {
   if (error || !group) {
     return (
       <div className="text-center py-12">
-        <p className="text-destructive">{error || 'Group not found'}</p>
+        <p className="text-status-negative">{error || 'Group not found'}</p>
         <Button onClick={() => router.push(ROUTES.GROUPS.LIST)} className="mt-4">
           Back to Groups
         </Button>

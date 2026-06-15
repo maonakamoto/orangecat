@@ -61,25 +61,25 @@ const COLOR_CLASSES: Record<
   { bg: string; border: string; title: string; body: string; icon: string }
 > = {
   tiffany: {
-    bg: 'bg-muted/40',
-    border: 'border-border-subtle',
-    title: 'text-foreground',
-    body: 'text-foreground',
-    icon: 'text-foreground',
+    bg: 'bg-surface-raised/40',
+    border: 'border-subtle',
+    title: 'text-fg-primary',
+    body: 'text-fg-primary',
+    icon: 'text-fg-primary',
   },
   green: {
     bg: 'bg-status-positive-subtle',
-    border: 'border-border-subtle',
+    border: 'border-subtle',
     title: 'text-status-positive',
     body: 'text-status-positive',
     icon: 'text-status-positive',
   },
   orange: {
-    bg: 'bg-muted/40',
-    border: 'border-border-subtle',
-    title: 'text-foreground',
-    body: 'text-foreground',
-    icon: 'text-foreground',
+    bg: 'bg-surface-raised/40',
+    border: 'border-subtle',
+    title: 'text-fg-primary',
+    body: 'text-fg-primary',
+    icon: 'text-fg-primary',
   },
 };
 
@@ -98,7 +98,7 @@ function FundingProgressChart({ projects }: { projects: Project[] }) {
   if (projectsWithGoal.length === 0) {
     return (
       <div className="h-64 flex items-center justify-center">
-        <div className="text-center text-muted-foreground">
+        <div className="text-center text-fg-secondary">
           <BarChart3 className="w-10 h-10 mx-auto mb-3 opacity-30" />
           <p className="text-sm">No projects with goals yet</p>
           <p className="text-xs mt-1">Set a funding goal on your projects to see progress</p>
@@ -123,16 +123,16 @@ function FundingProgressChart({ projects }: { projects: Project[] }) {
           <div key={project.id}>
             <div className="flex justify-between items-center mb-1">
               <span
-                className="text-sm font-medium text-foreground truncate max-w-[60%]"
+                className="text-sm font-medium text-fg-primary truncate max-w-[60%]"
                 title={project.title}
               >
                 {project.title}
               </span>
-              <span className="text-xs text-muted-foreground ml-2 shrink-0">
+              <span className="text-xs text-fg-secondary ml-2 shrink-0">
                 {pct.toFixed(0)}% of goal
               </span>
             </div>
-            <div className="h-2 bg-muted rounded-full overflow-hidden">
+            <div className="h-2 bg-surface-raised rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all"
                 style={{
@@ -142,14 +142,14 @@ function FundingProgressChart({ projects }: { projects: Project[] }) {
               />
             </div>
             <div className="flex justify-between mt-0.5">
-              <span className="text-xs text-muted-foreground">{raised.toFixed(4)} BTC raised</span>
-              <span className="text-xs text-muted-foreground">{goal.toFixed(4)} BTC goal</span>
+              <span className="text-xs text-fg-secondary">{raised.toFixed(4)} BTC raised</span>
+              <span className="text-xs text-fg-secondary">{goal.toFixed(4)} BTC goal</span>
             </div>
           </div>
         );
       })}
       {projectsWithGoal.length > 6 && (
-        <p className="text-xs text-muted-foreground text-center pt-1">
+        <p className="text-xs text-fg-secondary text-center pt-1">
           +{projectsWithGoal.length - 6} more projects
         </p>
       )}
@@ -164,7 +164,7 @@ function SupporterDistributionChart({ projects }: { projects: Project[] }) {
   if (total === 0) {
     return (
       <div className="h-64 flex items-center justify-center">
-        <div className="text-center text-muted-foreground">
+        <div className="text-center text-fg-secondary">
           <Users className="w-10 h-10 mx-auto mb-3 opacity-30" />
           <p className="text-sm">No supporters yet</p>
           <p className="text-xs mt-1">Supporters will appear here once you receive funding</p>
@@ -190,7 +190,9 @@ function SupporterDistributionChart({ projects }: { projects: Project[] }) {
             />
           );
         })}
-        {withSupporters.length > 6 && <div className="flex-1 bg-muted" title="Other projects" />}
+        {withSupporters.length > 6 && (
+          <div className="flex-1 bg-surface-raised" title="Other projects" />
+        )}
       </div>
 
       {/* Legend */}
@@ -205,18 +207,18 @@ function SupporterDistributionChart({ projects }: { projects: Project[] }) {
                 className="w-2.5 h-2.5 rounded-sm shrink-0"
                 style={{ backgroundColor: color.bar }}
               />
-              <span className="text-sm text-foreground truncate" title={project.title}>
+              <span className="text-sm text-fg-primary truncate" title={project.title}>
                 {project.title}
               </span>
             </div>
-            <span className="text-sm text-muted-foreground ml-2 shrink-0">
+            <span className="text-sm text-fg-secondary ml-2 shrink-0">
               {count} ({pct}%)
             </span>
           </div>
         );
       })}
 
-      <div className="pt-2 border-t border-border flex justify-between text-xs text-muted-foreground">
+      <div className="pt-2 border-t border-default flex justify-between text-xs text-fg-secondary">
         <span>{withSupporters.length} projects</span>
         <span>{total} total supporters</span>
       </div>
@@ -286,7 +288,7 @@ export default function AnalyticsInsights({ projects }: AnalyticsInsightsProps) 
                 );
               })
             ) : (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-8 text-fg-secondary">
                 <Activity className="w-12 h-12 mx-auto mb-4 opacity-30" />
                 <p>Create your first project to see insights</p>
                 <Button href={ROUTES.PROJECTS.CREATE} className="mt-4">

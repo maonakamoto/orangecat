@@ -26,7 +26,7 @@ export function LightningInvoiceForm({
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
+        <label className="block text-sm font-medium text-fg-primary mb-2">
           Amount ({displayCurrency})
         </label>
         <Input
@@ -40,7 +40,7 @@ export function LightningInvoiceForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">Message (optional)</label>
+        <label className="block text-sm font-medium text-fg-primary mb-2">Message (optional)</label>
         <Input
           type="text"
           value={message}
@@ -50,12 +50,12 @@ export function LightningInvoiceForm({
         />
       </div>
 
-      <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
+      <div className="bg-surface-raised/40 border border-subtle rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Zap className="w-5 h-5 text-foreground mt-0.5" />
+          <Zap className="w-5 h-5 text-fg-primary mt-0.5" />
           <div>
-            <h4 className="font-medium text-foreground mb-1">Lightning Benefits</h4>
-            <ul className="text-sm text-foreground space-y-1">
+            <h4 className="font-medium text-fg-primary mb-1">Lightning Benefits</h4>
+            <ul className="text-sm text-fg-primary space-y-1">
               <li>Instant payments (usually under 3 seconds)</li>
               <li>Extremely low fees (typically &lt; 1 sat)</li>
               <li>Perfect for small amounts and tips</li>

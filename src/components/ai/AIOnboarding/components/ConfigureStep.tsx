@@ -29,12 +29,12 @@ export function ConfigureStep({
       <Card className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <Zap className="w-5 h-5 text-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-surface-raised flex items-center justify-center">
+              <Zap className="w-5 h-5 text-fg-primary" />
             </div>
             <div>
               <h3 className="font-medium">Auto Router</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-fg-secondary">
                 Automatically selects the best model based on message complexity
               </p>
             </div>
@@ -46,22 +46,22 @@ export function ConfigureStep({
             onClick={() => onAutoRouterChange(!autoRouterEnabled)}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              autoRouterEnabled ? 'bg-foreground' : 'bg-muted'
+              autoRouterEnabled ? 'bg-fg-primary' : 'bg-surface-raised'
             )}
           >
             <span
               className={cn(
-                'inline-block h-4 w-4 transform rounded-full bg-card dark:bg-foreground transition-transform',
+                'inline-block h-4 w-4 transform rounded-full bg-surface-base dark:bg-fg-primary transition-transform',
                 autoRouterEnabled ? 'translate-x-6' : 'translate-x-1'
               )}
             />
           </button>
         </div>
         {autoRouterEnabled && (
-          <div className="mt-3 p-3 bg-muted/40 rounded-lg">
+          <div className="mt-3 p-3 bg-surface-raised/40 rounded-lg">
             <div className="flex items-start gap-2">
-              <Lightbulb className="w-4 h-4 text-foreground mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-foreground">
+              <Lightbulb className="w-4 h-4 text-fg-primary mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-fg-primary">
                 Simple messages use cheaper models. Complex tasks use more powerful ones. Saves
                 money without sacrificing quality.
               </p>
@@ -72,10 +72,10 @@ export function ConfigureStep({
 
       {/* Default Tier Selection */}
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
+        <label className="block text-sm font-medium text-fg-primary mb-2">
           Default Tier
           {autoRouterEnabled && (
-            <span className="text-muted-foreground font-normal ml-2">
+            <span className="text-fg-secondary font-normal ml-2">
               (fallback when auto-router is uncertain)
             </span>
           )}
@@ -94,8 +94,8 @@ export function ConfigureStep({
                 className={cn(
                   'p-4 rounded-lg border-2 text-left transition-all',
                   isSelected
-                    ? 'border-foreground bg-muted/40'
-                    : 'border-border hover:border-border-strong dark:hover:border-border'
+                    ? 'border-fg-primary bg-surface-raised/40'
+                    : 'border-default hover:border-strong dark:hover:border-default'
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">
@@ -106,7 +106,7 @@ export function ConfigureStep({
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground">{tierInfo?.description}</p>
+                <p className="text-xs text-fg-secondary">{tierInfo?.description}</p>
               </button>
             );
           })}
@@ -115,9 +115,9 @@ export function ConfigureStep({
 
       {/* Tier Details */}
       {selectedTier && tierDescriptions[selectedTier] && (
-        <Card className="p-4 bg-muted">
+        <Card className="p-4 bg-surface-raised">
           <h4 className="font-medium mb-2">{tierDescriptions[selectedTier].title}</h4>
-          <p className="text-sm text-muted-foreground mb-3">
+          <p className="text-sm text-fg-secondary mb-3">
             Best for: {tierDescriptions[selectedTier].bestFor}
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -131,14 +131,14 @@ export function ConfigureStep({
       )}
 
       {/* Tips */}
-      <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
-        <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+      <div className="bg-surface-raised/40 border border-subtle rounded-lg p-4">
+        <h4 className="font-semibold text-fg-primary mb-2 flex items-center gap-2">
           <Lightbulb className="w-4 h-4" />
           Tips
         </h4>
         <ul className="space-y-1">
           {aiOnboardingContent.configure.tips?.map((tip, index) => (
-            <li key={index} className="text-sm text-foreground flex items-start gap-2">
+            <li key={index} className="text-sm text-fg-primary flex items-start gap-2">
               <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
               {tip}
             </li>

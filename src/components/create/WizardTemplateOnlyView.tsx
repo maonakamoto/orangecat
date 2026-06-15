@@ -20,13 +20,13 @@ export function WizardTemplateOnlyView<T extends Record<string, unknown>>({
       <div className="mb-8">
         <button
           onClick={onCancel}
-          className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4 transition-colors"
+          className="inline-flex items-center text-fg-secondary hover:text-fg-primary mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Cancel
         </button>
-        <h1 className="text-3xl font-bold text-foreground mb-2">{config.pageTitle}</h1>
-        <p className="text-muted-foreground">{config.pageDescription}</p>
+        <h1 className="text-3xl font-bold text-fg-primary mb-2">{config.pageTitle}</h1>
+        <p className="text-fg-secondary">{config.pageDescription}</p>
       </div>
 
       <WizardTemplatePicker

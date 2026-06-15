@@ -52,7 +52,7 @@ export function ModelSelector({
               {model.tier === 'paid' && <Crown className="h-3 w-3 text-fg-secondary" />}
               <span>{model.name}</span>
               {showPricing && model.costPerMessage && (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-fg-secondary">
                   (${model.costPerMessage.toFixed(3)})
                 </span>
               )}

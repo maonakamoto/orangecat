@@ -158,10 +158,10 @@ export default function ConversationList({
         {[...Array(3)].map((_, i) => (
           <div key={i} className="animate-pulse">
             <div className="flex items-center gap-3 p-3">
-              <div className="h-10 w-10 rounded-md bg-muted-foreground/20"></div>
+              <div className="h-10 w-10 rounded-md bg-fg-secondary/20"></div>
               <div className="flex-1">
-                <div className="mb-2 h-4 rounded bg-muted-foreground/20"></div>
-                <div className="h-3 w-3/4 rounded bg-muted-foreground/20"></div>
+                <div className="mb-2 h-4 rounded bg-fg-secondary/20"></div>
+                <div className="h-3 w-3/4 rounded bg-fg-secondary/20"></div>
               </div>
             </div>
           </div>
@@ -173,14 +173,14 @@ export default function ConversationList({
   if (error) {
     return (
       <div className="p-8 text-center">
-        <MessageSquare className="mx-auto mb-2 h-8 w-8 text-destructive" />
-        <p className="mb-3 text-sm text-destructive">{error}</p>
+        <MessageSquare className="mx-auto mb-2 h-8 w-8 text-status-negative" />
+        <p className="mb-3 text-sm text-status-negative">{error}</p>
         <button
           onClick={() => {
             setError(null);
             refresh();
           }}
-          className="inline-flex items-center gap-2 text-sm text-foreground hover:text-muted-foreground"
+          className="inline-flex items-center gap-2 text-sm text-fg-primary hover:text-fg-secondary"
         >
           <RefreshCw className="w-4 h-4" />
           Try again
@@ -191,23 +191,23 @@ export default function ConversationList({
 
   return (
     <>
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-fg-tertiary">
         {filteredConversations.length === 0 ? (
-          <div className="p-10 text-center text-muted-foreground">
+          <div className="p-10 text-center text-fg-secondary">
             <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-60" />
             <p className="text-sm font-medium">
               {searchQuery ? 'No conversations match your search' : 'No conversations yet'}
             </p>
             {!searchQuery && (
               <>
-                <p className="mt-1 text-xs text-muted-dim">
+                <p className="mt-1 text-xs text-fg-tertiary">
                   Start a new conversation to get started.
                 </p>
                 {onStartNew && (
                   <button
                     type="button"
                     onClick={onStartNew}
-                    className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+                    className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-md bg-fg-primary px-4 py-2 text-sm font-medium text-fg-inverted transition-colors hover:bg-fg-primary/90"
                   >
                     Start New Conversation
                   </button>

@@ -145,7 +145,7 @@ export function BookEntityDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-foreground" />
+            <Calendar className="h-5 w-5 text-fg-primary" />
             Book {bookableTitle}
           </DialogTitle>
           <DialogDescription>
@@ -153,7 +153,7 @@ export function BookEntityDialog({
             {typeof priceBtc === 'number' && priceBtc > 0 && (
               <span className="mt-1 block text-sm">
                 Price:{' '}
-                <span className="font-medium text-foreground">{formatAmountBtc(priceBtc)}</span>
+                <span className="font-medium text-fg-primary">{formatAmountBtc(priceBtc)}</span>
                 {hasDuration && ` · ${durationMinutes} min`}
               </span>
             )}
@@ -163,7 +163,7 @@ export function BookEntityDialog({
         <div className="space-y-4">
           <div>
             <label
-              className="mb-1 block text-sm font-medium text-foreground"
+              className="mb-1 block text-sm font-medium text-fg-primary"
               htmlFor="booking-start"
             >
               Start time
@@ -180,7 +180,7 @@ export function BookEntityDialog({
           {!hasDuration && (
             <div>
               <label
-                className="mb-1 block text-sm font-medium text-foreground"
+                className="mb-1 block text-sm font-medium text-fg-primary"
                 htmlFor="booking-end"
               >
                 End time
@@ -197,7 +197,7 @@ export function BookEntityDialog({
 
           <div>
             <label
-              className="mb-1 block text-sm font-medium text-foreground"
+              className="mb-1 block text-sm font-medium text-fg-primary"
               htmlFor="booking-notes"
             >
               Notes (optional)
@@ -210,7 +210,7 @@ export function BookEntityDialog({
               rows={3}
               maxLength={1000}
               placeholder="Anything the provider should know"
-              className="w-full rounded-md border border-border-strong bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-dim focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full rounded-md border border-strong bg-surface-base px-3 py-2 text-sm text-fg-primary placeholder:text-fg-tertiary focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
         </div>

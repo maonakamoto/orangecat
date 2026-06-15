@@ -38,10 +38,10 @@ export function GuidancePanel({
   if (!activeField) {
     return (
       <div className="sticky top-4">
-        <div className="p-4 rounded-lg border border-border-subtle bg-muted/40">
-          <h2 className="font-semibold text-foreground mb-2">{defaultGuidance.title}</h2>
-          <p className="text-sm text-foreground mb-3">{defaultGuidance.description}</p>
-          <ul className="text-sm text-foreground space-y-2">
+        <div className="p-4 rounded-lg border border-subtle bg-surface-raised/40">
+          <h2 className="font-semibold text-fg-primary mb-2">{defaultGuidance.title}</h2>
+          <p className="text-sm text-fg-primary mb-3">{defaultGuidance.description}</p>
+          <ul className="text-sm text-fg-primary space-y-2">
             {defaultGuidance.features.map((feature, index) => (
               <li key={index} className="flex items-start gap-2">
                 <span className="mt-0.5 flex-shrink-0">{feature.icon}</span>
@@ -50,7 +50,7 @@ export function GuidancePanel({
             ))}
           </ul>
           {defaultGuidance.hint && (
-            <p className="text-xs text-muted-foreground mt-3">{defaultGuidance.hint}</p>
+            <p className="text-xs text-fg-secondary mt-3">{defaultGuidance.hint}</p>
           )}
         </div>
       </div>
@@ -65,7 +65,7 @@ export function GuidancePanel({
     return (
       <div className="sticky top-4">
         <Card className="p-4">
-          <p className="text-sm text-muted-foreground">No guidance available for this field.</p>
+          <p className="text-sm text-fg-secondary">No guidance available for this field.</p>
         </Card>
       </div>
     );
@@ -75,27 +75,27 @@ export function GuidancePanel({
     <div className="sticky top-4">
       <Card className="p-4">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-border-subtle">
-          <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-subtle">
+          <div className="w-10 h-10 rounded-lg bg-surface-raised flex items-center justify-center flex-shrink-0">
             {content.icon}
           </div>
           <div>
-            <h3 className="text-base font-semibold text-foreground">{content.title}</h3>
-            <p className="text-xs text-muted-foreground">Guidance</p>
+            <h3 className="text-base font-semibold text-fg-primary">{content.title}</h3>
+            <p className="text-xs text-fg-secondary">Guidance</p>
           </div>
         </div>
 
         {/* Description */}
-        <p className="text-sm text-foreground mb-3">{content.description}</p>
+        <p className="text-sm text-fg-primary mb-3">{content.description}</p>
 
         {/* Tips */}
         <div>
-          <h4 className="text-xs font-semibold text-foreground uppercase tracking-wide mb-2">
+          <h4 className="text-xs font-semibold text-fg-primary uppercase tracking-wide mb-2">
             Best Practices
           </h4>
           <ul className="space-y-1.5">
             {content.tips.map((tip, index) => (
-              <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+              <li key={index} className="flex items-start gap-2 text-xs text-fg-secondary">
                 <CheckCircle2 className="w-4 h-4 text-status-positive mt-0.5 flex-shrink-0" />
                 <span>{tip}</span>
               </li>
@@ -105,15 +105,15 @@ export function GuidancePanel({
 
         {/* Examples */}
         {content.examples && content.examples.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-border-subtle">
-            <h4 className="text-xs font-semibold text-foreground uppercase tracking-wide mb-2">
+          <div className="mt-3 pt-3 border-t border-subtle">
+            <h4 className="text-xs font-semibold text-fg-primary uppercase tracking-wide mb-2">
               Examples
             </h4>
             <div className="space-y-1.5">
               {content.examples.map((example, index) => (
                 <div
                   key={index}
-                  className="text-xs text-muted-foreground bg-muted rounded px-2 py-1.5 border border-border"
+                  className="text-xs text-fg-secondary bg-surface-raised rounded px-2 py-1.5 border border-default"
                 >
                   {example}
                 </div>
@@ -124,7 +124,7 @@ export function GuidancePanel({
 
         {/* Additional Content (e.g., currency converter) */}
         {additionalContent && (
-          <div className="mt-3 pt-3 border-t border-border-subtle">{additionalContent}</div>
+          <div className="mt-3 pt-3 border-t border-subtle">{additionalContent}</div>
         )}
       </Card>
     </div>

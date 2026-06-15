@@ -58,12 +58,12 @@ export default function DashboardInfoEditPage() {
                 Back to View
               </Button>
             </Link>
-            <div className="p-2 bg-muted rounded-lg">
-              <Edit className="w-5 h-5 text-foreground" />
+            <div className="p-2 bg-surface-raised rounded-lg">
+              <Edit className="w-5 h-5 text-fg-primary" />
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-foreground">Edit Profile</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-fg-primary">Edit Profile</h1>
           </div>
-          <p className="text-base text-muted-foreground ml-12">
+          <p className="text-base text-fg-secondary ml-12">
             Update your profile details. This information will be visible on your public profile.
           </p>
         </div>

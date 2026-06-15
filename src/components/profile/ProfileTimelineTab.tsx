@@ -55,13 +55,13 @@ function TimelineLoadingSkeleton() {
   return (
     <div className="space-y-4 animate-pulse">
       {[...Array(3)].map((_, i) => (
-        <div key={i} className="bg-card border border-border rounded-lg p-4">
+        <div key={i} className="bg-surface-base border border-default rounded-lg p-4">
           <div className="flex items-start space-x-3">
-            <div className="w-10 h-10 bg-muted rounded-full" />
+            <div className="w-10 h-10 bg-surface-raised rounded-full" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 bg-muted rounded w-1/4" />
-              <div className="h-4 bg-muted rounded w-3/4" />
-              <div className="h-4 bg-muted rounded w-1/2" />
+              <div className="h-4 bg-surface-raised rounded w-1/4" />
+              <div className="h-4 bg-surface-raised rounded w-3/4" />
+              <div className="h-4 bg-surface-raised rounded w-1/2" />
             </div>
           </div>
         </div>

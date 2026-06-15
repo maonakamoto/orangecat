@@ -52,7 +52,7 @@ export function ProofOfPurchaseCard({
           </Avatar>
           <div>
             <p className="text-sm font-medium">{proof.user?.username || 'Anonymous'}</p>
-            <p className="text-xs text-muted-foreground">{timeAgo}</p>
+            <p className="text-xs text-fg-secondary">{timeAgo}</p>
           </div>
         </div>
 
@@ -72,7 +72,7 @@ export function ProofOfPurchaseCard({
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onClick={onDelete}
-                  className="text-destructive focus:text-destructive"
+                  className="text-status-negative focus:text-status-negative"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete Proof
@@ -85,7 +85,7 @@ export function ProofOfPurchaseCard({
 
       {/* Proof Image */}
       {proof.image_url && (
-        <div className="relative w-full aspect-video mb-3 rounded-lg overflow-hidden bg-muted">
+        <div className="relative w-full aspect-video mb-3 rounded-lg overflow-hidden bg-surface-raised">
           <Image
             src={proof.image_url}
             alt="Proof of purchase"
@@ -97,11 +97,11 @@ export function ProofOfPurchaseCard({
       )}
 
       {/* Description */}
-      <p className="text-sm text-foreground mb-3">{proof.description}</p>
+      <p className="text-sm text-fg-primary mb-3">{proof.description}</p>
 
       {/* Transaction ID */}
       {proof.transaction_id && (
-        <div className="flex items-center gap-2 p-2 bg-muted rounded-md mb-3">
+        <div className="flex items-center gap-2 p-2 bg-surface-raised rounded-md mb-3">
           <Bitcoin className="h-4 w-4 text-bitcoin-orange" />
           <code className="text-xs font-mono flex-1 truncate">{proof.transaction_id}</code>
           <Button

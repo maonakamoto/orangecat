@@ -33,26 +33,28 @@ export default function IntegrationKeyRow({
     <li className="flex flex-wrap items-start justify-between gap-3 p-4">
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-foreground">{key.name}</span>
+          <span className="text-sm font-medium text-fg-primary">{key.name}</span>
           {key.is_test && (
             <span className="rounded bg-status-warning-subtle px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-status-warning">
               Sandbox
             </span>
           )}
           {isRevoked && (
-            <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+            <span className="rounded bg-surface-raised px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-fg-secondary">
               Revoked
             </span>
           )}
         </div>
-        <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
+        <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-fg-secondary">
           <span>
-            <code className="rounded bg-muted px-1">{key.key_prefix}…</code>
+            <code className="rounded bg-surface-raised px-1">{key.key_prefix}…</code>
           </span>
           <span>Acts as {actorLabel}</span>
           <span>
             Scopes:{' '}
-            <code className="rounded bg-muted px-1">{(key.scopes ?? ['*']).join(', ')}</code>
+            <code className="rounded bg-surface-raised px-1">
+              {(key.scopes ?? ['*']).join(', ')}
+            </code>
           </span>
           <span>Created {formatTimestamp(key.created_at)}</span>
           <span>Last used {formatTimestamp(key.last_used_at)}</span>
@@ -63,7 +65,7 @@ export default function IntegrationKeyRow({
           <button
             type="button"
             onClick={() => onRotate(key)}
-            className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+            className="inline-flex items-center gap-1 rounded-md border border-subtle px-2.5 py-1.5 text-xs text-fg-secondary hover:bg-surface-raised/60 hover:text-fg-primary"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             Rotate
@@ -71,7 +73,7 @@ export default function IntegrationKeyRow({
           <button
             type="button"
             onClick={() => onRevoke(key)}
-            className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-destructive"
+            className="inline-flex items-center gap-1 rounded-md border border-subtle px-2.5 py-1.5 text-xs text-fg-secondary hover:bg-surface-raised/60 hover:text-status-negative"
           >
             <Trash2 className="h-3.5 w-3.5" />
             Revoke

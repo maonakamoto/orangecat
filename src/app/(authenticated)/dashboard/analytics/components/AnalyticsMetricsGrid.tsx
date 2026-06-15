@@ -34,7 +34,7 @@ function getChangeColor(changeType?: string) {
     case 'decrease':
       return 'text-status-negative';
     default:
-      return 'text-muted-foreground';
+      return 'text-fg-secondary';
   }
 }
 
@@ -48,12 +48,12 @@ export default function AnalyticsMetricsGrid({ metrics }: AnalyticsMetricsGridPr
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg bg-muted`}>
+                  <div className={`p-2 rounded-lg bg-surface-raised`}>
                     <Icon className={`w-5 h-5 ${metric.color}`} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">{metric.label}</p>
-                    <p className="text-2xl font-bold text-foreground">
+                    <p className="text-sm font-medium text-fg-secondary">{metric.label}</p>
+                    <p className="text-2xl font-bold text-fg-primary">
                       {metric.format === 'currency' && typeof metric.value === 'number'
                         ? formatCurrency(metric.value, 'BTC')
                         : metric.value}

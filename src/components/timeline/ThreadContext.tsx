@@ -108,14 +108,14 @@ export function ThreadContext({
   if (loading) {
     return (
       <div className={cn('flex items-center justify-center py-8', className)}>
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-border dark:border-muted"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-default dark:border-subtle"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className={cn('text-center py-8 text-destructive', className)}>
+      <div className={cn('text-center py-8 text-status-negative', className)}>
         <p>{error}</p>
         <Button variant="outline" size="sm" onClick={loadThread} className="mt-2">
           Try Again
@@ -126,8 +126,8 @@ export function ThreadContext({
 
   if (!threadPosts.length) {
     return (
-      <div className={cn('text-center py-8 text-muted-foreground', className)}>
-        <MessageCircle className="w-12 h-12 mx-auto mb-4 text-muted-dim dark:text-muted-foreground" />
+      <div className={cn('text-center py-8 text-fg-secondary', className)}>
+        <MessageCircle className="w-12 h-12 mx-auto mb-4 text-fg-tertiary dark:text-fg-secondary" />
         <p>No posts in this thread.</p>
       </div>
     );
@@ -139,12 +139,12 @@ export function ThreadContext({
   return (
     <div className={cn(TIMELINE_SURFACE.panel, className)}>
       {/* Thread Header */}
-      <div className="flex items-center justify-between p-4 border-b border-border-subtle">
+      <div className="flex items-center justify-between p-4 border-b border-subtle">
         <div className="flex items-center gap-3">
-          <MessageCircle className="w-5 h-5 text-muted-foreground" />
+          <MessageCircle className="w-5 h-5 text-fg-secondary" />
           <div>
-            <h3 className="font-semibold text-foreground">Thread</h3>
-            <p className="text-sm text-muted-foreground">
+            <h3 className="font-semibold text-fg-primary">Thread</h3>
+            <p className="text-sm text-fg-secondary">
               {threadPosts.length} posts
               {threadParticipants > 1 && (
                 <>
@@ -169,7 +169,7 @@ export function ThreadContext({
             <ChevronUp className="w-4 h-4" />
           </Button>
 
-          <span className="text-sm text-muted-foreground min-w-[3rem] text-center">
+          <span className="text-sm text-fg-secondary min-w-[3rem] text-center">
             {currentIndex + 1} / {threadPosts.length}
           </span>
 
@@ -203,9 +203,9 @@ export function ThreadContext({
 
       {/* Current Post Highlight */}
       {currentPost && (
-        <div className="border-t border-border-subtle bg-muted p-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className="h-2 w-2 rounded-sm bg-foreground"></div>
+        <div className="border-t border-subtle bg-surface-raised p-4">
+          <div className="flex items-center gap-2 text-sm text-fg-secondary">
+            <div className="h-2 w-2 rounded-sm bg-fg-primary"></div>
             Currently viewing: {currentPost.actor.name}'s post
           </div>
         </div>
@@ -235,7 +235,7 @@ export function ThreadIndicator({
   }
 
   return (
-    <div className={cn('flex items-center gap-1 text-xs text-muted-foreground', className)}>
+    <div className={cn('flex items-center gap-1 text-xs text-fg-secondary', className)}>
       <MessageCircle className="w-3 h-3" />
       <span>Part of thread ({replyCount} replies)</span>
       {onShowThread && (
@@ -243,7 +243,7 @@ export function ThreadIndicator({
           variant="ghost"
           size="sm"
           onClick={onShowThread}
-          className="h-auto p-0 text-xs text-foreground hover:text-foreground/80"
+          className="h-auto p-0 text-xs text-fg-primary hover:text-fg-primary/80"
         >
           Show thread
         </Button>

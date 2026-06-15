@@ -54,12 +54,12 @@ export function DashboardTimeline({
 
   return (
     <div className="oc-surface overflow-hidden">
-      <div className="flex flex-col gap-3 border-b border-border-subtle px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
+      <div className="flex flex-col gap-3 border-b border-subtle px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
         <div>
-          <CardTitle className="text-base font-semibold text-foreground sm:text-lg">
+          <CardTitle className="text-base font-semibold text-fg-primary sm:text-lg">
             Recent activity
           </CardTitle>
-          <CardDescription className="text-xs text-muted-foreground sm:text-sm">
+          <CardDescription className="text-xs text-fg-secondary sm:text-sm">
             Latest posts and updates from your network
           </CardDescription>
         </div>
@@ -79,10 +79,10 @@ export function DashboardTimeline({
             ))}
           </div>
         ) : error ? (
-          <div className="px-4 py-8 text-center text-destructive sm:px-6 sm:py-10">
+          <div className="px-4 py-8 text-center text-status-negative sm:px-6 sm:py-10">
             <AlertCircle className="mx-auto mb-3 h-10 w-10 sm:mb-4 sm:h-12 sm:w-12" />
             <p className="mb-2 text-sm font-medium sm:text-base">Failed to load timeline</p>
-            <p className="mb-3 text-xs text-muted-foreground sm:mb-4 sm:text-sm">{error}</p>
+            <p className="mb-3 text-xs text-fg-secondary sm:mb-4 sm:text-sm">{error}</p>
             <Button variant="outline" onClick={onRefresh} size="sm">
               <RefreshCw className="mr-2 h-4 w-4" />
               Retry
@@ -92,10 +92,10 @@ export function DashboardTimeline({
           <>
             <TimelineComponent feed={previewFeed} showFilters={false} compact />
             {hiddenCount > 0 && (
-              <div className="border-t border-border-subtle px-4 py-3 text-center sm:px-5">
+              <div className="border-t border-subtle px-4 py-3 text-center sm:px-5">
                 <Link
                   href={ROUTES.TIMELINE}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground"
+                  className="text-sm font-medium text-fg-secondary hover:text-fg-primary"
                 >
                   {hiddenCount} more {hiddenCount === 1 ? 'update' : 'updates'} on the full timeline
                   <ArrowRight className="ml-1 inline h-3.5 w-3.5" />
@@ -104,12 +104,12 @@ export function DashboardTimeline({
             )}
           </>
         ) : (
-          <div className="px-4 py-8 text-center text-muted-foreground sm:py-12">
-            <MessageSquare className="mx-auto mb-3 h-12 w-12 text-muted-dim sm:mb-4 sm:h-16 sm:w-16 dark:text-muted-foreground" />
-            <h3 className="mb-2 text-base font-semibold text-foreground sm:text-lg">
+          <div className="px-4 py-8 text-center text-fg-secondary sm:py-12">
+            <MessageSquare className="mx-auto mb-3 h-12 w-12 text-fg-tertiary sm:mb-4 sm:h-16 sm:w-16 dark:text-fg-secondary" />
+            <h3 className="mb-2 text-base font-semibold text-fg-primary sm:text-lg">
               Nothing new yet
             </h3>
-            <p className="mx-auto mb-4 max-w-md text-xs text-muted-foreground sm:mb-6 sm:text-sm">
+            <p className="mx-auto mb-4 max-w-md text-xs text-fg-secondary sm:mb-6 sm:text-sm">
               Posts from your network land here. Share an update on the timeline to get started.
             </p>
             <div className="flex flex-col justify-center gap-2 sm:flex-row sm:gap-3">

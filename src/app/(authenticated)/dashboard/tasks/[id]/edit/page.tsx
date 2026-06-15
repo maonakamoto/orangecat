@@ -50,10 +50,10 @@ export default function EditTaskPage() {
           className="mb-6"
         />
 
-        <div className="bg-card rounded-lg border border-border overflow-hidden">
-          <div className="p-6 border-b border-border">
-            <h1 className="text-2xl font-bold text-foreground">Edit Task</h1>
-            <p className="text-muted-foreground mt-1">Edit the details of this task</p>
+        <div className="bg-surface-base rounded-lg border border-default overflow-hidden">
+          <div className="p-6 border-b border-default">
+            <h1 className="text-2xl font-bold text-fg-primary">Edit Task</h1>
+            <p className="text-fg-secondary mt-1">Edit the details of this task</p>
           </div>
 
           <TaskFormFields

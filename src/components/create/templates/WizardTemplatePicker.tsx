@@ -69,26 +69,26 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
             onClick={() => handleSelect(null)}
             className={cn(
               'relative flex min-h-[120px] flex-col items-start rounded-md border p-4 text-left transition-colors sm:p-5',
-              'hover:border-border-strong hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+              'hover:border-strong hover:bg-surface-raised focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
               selected === null
-                ? 'border-border-strong bg-muted ring-2 ring-ring/20'
-                : 'border-border-subtle bg-background'
+                ? 'border-strong bg-surface-raised ring-2 ring-ring/20'
+                : 'border-subtle bg-surface-page'
             )}
           >
             {selected === null && (
               <div className="absolute top-3 right-3">
-                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground">
-                  <Check className="h-4 w-4 text-background" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-fg-primary">
+                  <Check className="h-4 w-4 text-fg-inverted" />
                 </div>
               </div>
             )}
-            <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-md bg-muted text-muted-foreground sm:mb-4 sm:h-12 sm:w-12">
+            <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-md bg-surface-raised text-fg-secondary sm:mb-4 sm:h-12 sm:w-12">
               <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1">
+            <h3 className="text-sm sm:text-base font-semibold text-fg-primary mb-1">
               Start from scratch
             </h3>
-            <p className="text-xs sm:text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-fg-secondary">
               {entityLabel
                 ? `Create a blank ${entityLabel.toLowerCase()}`
                 : 'Start with a blank form'}
@@ -106,26 +106,26 @@ export function WizardTemplatePicker<T extends EntityTemplate>({
               onClick={() => handleSelect(template.id)}
               className={cn(
                 'relative flex min-h-[120px] flex-col items-start rounded-md border p-4 text-left transition-colors sm:p-5',
-                'hover:border-border-strong hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                'hover:border-strong hover:bg-surface-raised focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                 isSelected
-                  ? 'border-border-strong bg-muted ring-2 ring-ring/20'
-                  : 'border-border-subtle bg-background'
+                  ? 'border-strong bg-surface-raised ring-2 ring-ring/20'
+                  : 'border-subtle bg-surface-page'
               )}
             >
               {isSelected && (
                 <div className="absolute top-3 right-3">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground">
-                    <Check className="h-4 w-4 text-background" />
+                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-fg-primary">
+                    <Check className="h-4 w-4 text-fg-inverted" />
                   </div>
                 </div>
               )}
-              <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-md border border-border-subtle bg-muted text-foreground sm:mb-4 sm:h-12 sm:w-12">
+              <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-md border border-subtle bg-surface-raised text-fg-primary sm:mb-4 sm:h-12 sm:w-12">
                 {template.icon}
               </div>
-              <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1 pr-8">
+              <h3 className="text-sm sm:text-base font-semibold text-fg-primary mb-1 pr-8">
                 {template.name}
               </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+              <p className="text-xs sm:text-sm text-fg-secondary line-clamp-2">
                 {template.tagline}
               </p>
             </button>

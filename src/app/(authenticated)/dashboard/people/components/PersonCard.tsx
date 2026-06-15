@@ -41,7 +41,7 @@ export default function PersonCard({
               {profile.avatar_url ? (
                 <Image src={profile.avatar_url} alt={displayName} fill className="object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-foreground font-semibold text-xl">
+                <div className="w-full h-full flex items-center justify-center text-fg-primary font-semibold text-xl">
                   {displayName.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -51,21 +51,21 @@ export default function PersonCard({
           {/* Info */}
           <div className="flex-1 min-w-0">
             <Link href={`/profiles/${profile.username || profile.id}`}>
-              <h3 className="font-semibold text-foreground hover:hover:underline underline-offset-4 truncate">
+              <h3 className="font-semibold text-fg-primary hover:hover:underline underline-offset-4 truncate">
                 {displayName}
               </h3>
             </Link>
             {profile.username && (
-              <p className="text-sm text-muted-foreground truncate">@{profile.username}</p>
+              <p className="text-sm text-fg-secondary truncate">@{profile.username}</p>
             )}
             {profile.bio && (
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{profile.bio}</p>
+              <p className="text-sm text-fg-secondary mt-1 line-clamp-2">{profile.bio}</p>
             )}
 
             {/* Actions */}
             <div className="flex gap-2 mt-3 items-center">
               {activeTab === 'followers' && !isUserFollowing && (
-                <span className="px-2 py-0.5 text-xs rounded-full bg-muted text-foreground border border-border-subtle">
+                <span className="px-2 py-0.5 text-xs rounded-full bg-surface-raised text-fg-primary border border-subtle">
                   Follow back
                 </span>
               )}

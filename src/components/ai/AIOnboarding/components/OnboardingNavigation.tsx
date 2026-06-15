@@ -26,7 +26,7 @@ export function OnboardingNavigation({
   const isLastStep = currentStep === totalSteps - 1;
 
   return (
-    <div className="flex items-center justify-between pt-8 border-t border-border">
+    <div className="flex items-center justify-between pt-8 border-t border-default">
       <Button variant="outline" onClick={onBack} disabled={currentStep === 0}>
         <ArrowLeft className="w-4 h-4 mr-2" />
         Previous

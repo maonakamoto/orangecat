@@ -174,9 +174,9 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
           'md:hidden fixed bottom-0 left-0 right-0 border-t',
           'transition-all duration-300 ease-in-out',
           shouldBeTransparent
-            ? 'bg-background/20 backdrop-blur-sm border-transparent'
-            : 'bg-background/95 backdrop-blur-md',
-          isAuthenticated ? 'border-border shadow-sm' : 'border-border'
+            ? 'bg-surface-page/20 backdrop-blur-sm border-transparent'
+            : 'bg-surface-page/95 backdrop-blur-md',
+          isAuthenticated ? 'border-default shadow-sm' : 'border-default'
         )}
         style={{
           zIndex: Z_INDEX.MOBILE_BOTTOM_NAV,
@@ -225,9 +225,9 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                   'transition-all duration-200',
                   'touch-manipulation select-none',
                   '-webkit-tap-highlight-color-transparent',
-                  'active:scale-95 active:bg-muted dark:active:bg-muted',
-                  isActive && 'text-foreground',
-                  !isActive && 'text-muted-foreground',
+                  'active:scale-95 active:bg-surface-raised dark:active:bg-surface-raised',
+                  isActive && 'text-fg-primary',
+                  !isActive && 'text-fg-secondary',
                   item.primary && 'relative',
                   shouldBeSmall ? 'min-h-12 gap-0.5' : 'min-h-14 gap-1'
                 )}
@@ -240,7 +240,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                     className={cn(
                       'absolute flex items-center justify-center rounded-full shadow-sm',
                       'transition-all duration-300 hover:scale-105 active:scale-95',
-                      'bg-foreground'
+                      'bg-fg-primary'
                     )}
                     style={{
                       width: shouldBeSmall ? '48px' : '56px',
@@ -250,7 +250,7 @@ const MobileBottomNav = React.memo(function MobileBottomNav() {
                   >
                     <Icon
                       className={cn(
-                        'text-background transition-all duration-300',
+                        'text-fg-inverted transition-all duration-300',
                         shouldBeSmall ? 'w-5 h-5' : 'w-6 h-6'
                       )}
                       strokeWidth={2}

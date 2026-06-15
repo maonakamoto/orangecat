@@ -30,13 +30,13 @@ export function MessageActorSelector({
   onSelectActor,
 }: MessageActorSelectorProps) {
   return (
-    <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
+    <div className="mb-2 flex items-center gap-2 text-xs text-fg-secondary">
       <span>Sending as:</span>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-muted hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
+            className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-raised hover:bg-gray-200 dark:hover:bg-surface-raised/80 transition-colors"
           >
             <Avatar className="h-4 w-4">
               <AvatarImage src={selectedActor.avatar_url || undefined} />
@@ -48,8 +48,8 @@ export function MessageActorSelector({
                 )}
               </AvatarFallback>
             </Avatar>
-            <span className="font-medium text-foreground">{selectedActor.name}</span>
-            <ChevronDown className="h-3 w-3 text-muted-dim" />
+            <span className="font-medium text-fg-primary">{selectedActor.name}</span>
+            <ChevronDown className="h-3 w-3 text-fg-tertiary" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-56">
@@ -60,7 +60,8 @@ export function MessageActorSelector({
               onClick={() => onSelectActor(null)}
               className={cn(
                 'flex items-center gap-2 cursor-pointer',
-                (!selectedActorId || selectedActorId === personalActor.actor_id) && 'bg-muted'
+                (!selectedActorId || selectedActorId === personalActor.actor_id) &&
+                  'bg-surface-raised'
               )}
             >
               <Avatar className="h-6 w-6">
@@ -71,14 +72,14 @@ export function MessageActorSelector({
               </Avatar>
               <div className="flex-1">
                 <p className="text-sm font-medium">{personalActor.name}</p>
-                <p className="text-xs text-muted-foreground">Personal account</p>
+                <p className="text-xs text-fg-secondary">Personal account</p>
               </div>
             </DropdownMenuItem>
           )}
           {groupActors.length > 0 && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuLabel className="text-xs text-muted-foreground">
+              <DropdownMenuLabel className="text-xs text-fg-secondary">
                 Organizations
               </DropdownMenuLabel>
               {groupActors.map(actor => (
@@ -87,7 +88,7 @@ export function MessageActorSelector({
                   onClick={() => onSelectActor(actor.actor_id)}
                   className={cn(
                     'flex items-center gap-2 cursor-pointer',
-                    selectedActorId === actor.actor_id && 'bg-muted'
+                    selectedActorId === actor.actor_id && 'bg-surface-raised'
                   )}
                 >
                   <Avatar className="h-6 w-6">
@@ -98,7 +99,7 @@ export function MessageActorSelector({
                   </Avatar>
                   <div className="flex-1">
                     <p className="text-sm font-medium">{actor.name}</p>
-                    <p className="text-xs text-muted-foreground">Organization</p>
+                    <p className="text-xs text-fg-secondary">Organization</p>
                   </div>
                 </DropdownMenuItem>
               ))}

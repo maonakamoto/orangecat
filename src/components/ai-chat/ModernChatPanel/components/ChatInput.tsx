@@ -46,13 +46,13 @@ export function ChatInput({
   };
 
   return (
-    <div className={cn(isFocus ? 'oc-chat-composer-wrap' : 'border-t border-border-subtle p-4')}>
+    <div className={cn(isFocus ? 'oc-chat-composer-wrap' : 'border-t border-subtle p-4')}>
       <div className={cn('mx-auto flex w-full items-end gap-2', CHAT_CONTENT_MAX_WIDTH_CLASS)}>
         {isFocus && hasMessages && onClearChat && (
           <button
             type="button"
             onClick={onClearChat}
-            className="mb-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            className="mb-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg text-fg-secondary transition-colors hover:bg-surface-raised hover:text-fg-primary"
             aria-label="Clear chat"
             title="Clear chat"
           >
@@ -73,7 +73,7 @@ export function ChatInput({
             <button
               type="button"
               onClick={onStop}
-              className="mb-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-foreground text-background transition-opacity hover:opacity-90"
+              className="mb-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-fg-primary text-fg-inverted transition-opacity hover:opacity-90"
               aria-label="Stop generating"
             >
               <Square className="h-3.5 w-3.5 fill-current" />
@@ -86,8 +86,8 @@ export function ChatInput({
               className={cn(
                 'mb-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg transition-colors',
                 value.trim() && !isLoading
-                  ? 'bg-foreground text-background hover:opacity-90'
-                  : 'cursor-not-allowed text-muted-foreground'
+                  ? 'bg-fg-primary text-fg-inverted hover:opacity-90'
+                  : 'cursor-not-allowed text-fg-secondary'
               )}
               aria-label="Send message"
             >

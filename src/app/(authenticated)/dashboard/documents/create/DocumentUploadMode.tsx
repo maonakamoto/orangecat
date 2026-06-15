@@ -17,13 +17,13 @@ export function DocumentUploadMode({ onBack, onWrite, onContentExtracted, onErro
       <div className="mb-8">
         <button
           onClick={onBack}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
+          className="inline-flex items-center text-sm text-fg-secondary hover:text-fg-primary mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to options
         </button>
-        <h1 className="text-2xl font-bold text-foreground mb-2">Upload a file</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl font-bold text-fg-primary mb-2">Upload a file</h1>
+        <p className="text-fg-secondary">
           Upload a text file and we&apos;ll extract the content for you.
         </p>
       </div>
@@ -31,10 +31,10 @@ export function DocumentUploadMode({ onBack, onWrite, onContentExtracted, onErro
       <DocumentFileUpload onContentExtracted={onContentExtracted} onError={onError} />
 
       <div className="mt-6 text-center">
-        <span className="text-muted-dim text-sm">or</span>
+        <span className="text-fg-tertiary text-sm">or</span>
         <button
           onClick={onWrite}
-          className="block mx-auto mt-2 text-sm text-foreground hover:text-foreground font-medium"
+          className="block mx-auto mt-2 text-sm text-fg-primary hover:text-fg-primary font-medium"
         >
           Write from scratch instead →
         </button>

@@ -121,7 +121,7 @@ export function ProposalsList({
       <Card>
         <CardContent className="py-12">
           <div className="flex items-center justify-center">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-dim" />
+            <Loader2 className="h-6 w-6 animate-spin text-fg-tertiary" />
           </div>
         </CardContent>
       </Card>
@@ -134,7 +134,7 @@ export function ProposalsList({
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold">Proposals</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-fg-secondary">
             {proposals.length} proposal{proposals.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -169,9 +169,9 @@ export function ProposalsList({
       {proposals.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FileText className="h-12 w-12 text-muted-dim mx-auto mb-4" />
-            <p className="text-muted-foreground mb-2">No proposals found</p>
-            <p className="text-sm text-muted-dim">
+            <FileText className="h-12 w-12 text-fg-tertiary mx-auto mb-4" />
+            <p className="text-fg-secondary mb-2">No proposals found</p>
+            <p className="text-sm text-fg-tertiary">
               {statusFilter !== 'all'
                 ? `No ${statusFilter} proposals`
                 : 'Be the first to create a proposal'}

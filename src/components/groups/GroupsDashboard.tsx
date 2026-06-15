@@ -115,9 +115,9 @@ export function GroupsDashboard() {
 
         <TabsContent value="my-groups" className="space-y-4">
           {myGroups.length === 0 ? (
-            <div className="text-center py-12 px-4 bg-card rounded-lg border dark:border-border">
+            <div className="text-center py-12 px-4 bg-surface-base rounded-lg border dark:border-default">
               <h3 className="text-lg font-semibold mb-2">No groups yet</h3>
-              <p className="text-muted-foreground mb-6">Create your first group to get started</p>
+              <p className="text-fg-secondary mb-6">Create your first group to get started</p>
               <Link href={ROUTES.DASHBOARD.GROUPS_CREATE}>
                 <Button className="gap-2">
                   <Plus className="h-4 w-4" />
@@ -137,9 +137,9 @@ export function GroupsDashboard() {
 
         <TabsContent value="discover" className="space-y-4">
           {availableGroups.length === 0 ? (
-            <div className="text-center py-12 px-4 bg-card rounded-lg border dark:border-border">
+            <div className="text-center py-12 px-4 bg-surface-base rounded-lg border dark:border-default">
               <h3 className="text-lg font-semibold mb-2">No groups available</h3>
-              <p className="text-muted-foreground mb-6">Be the first to create a group!</p>
+              <p className="text-fg-secondary mb-6">Be the first to create a group!</p>
               <Link href={ROUTES.DASHBOARD.GROUPS_CREATE}>
                 <Button className="gap-2">
                   <Plus className="h-4 w-4" />
@@ -163,11 +163,11 @@ export function GroupsDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Groups</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-fg-secondary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{myGroups.length}</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-fg-secondary">
               {informalCount} informal, {formalCount} formal
             </p>
           </CardContent>
@@ -176,7 +176,7 @@ export function GroupsDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Group Types</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+            <Target className="h-4 w-4 text-fg-secondary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -185,18 +185,18 @@ export function GroupsDashboard() {
                   .length
               }
             </div>
-            <p className="text-xs text-muted-foreground">Different labels used</p>
+            <p className="text-xs text-fg-secondary">Different labels used</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Available</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-fg-secondary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{availableGroups.length}</div>
-            <p className="text-xs text-muted-foreground">Groups to discover</p>
+            <p className="text-xs text-fg-secondary">Groups to discover</p>
           </CardContent>
         </Card>
       </div>

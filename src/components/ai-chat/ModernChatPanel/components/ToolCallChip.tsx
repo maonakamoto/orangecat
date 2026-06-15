@@ -41,7 +41,7 @@ export function ToolCallChip({ event }: ToolCallChipProps) {
   switch (event.status) {
     case 'running':
       icon = <Loader2 className="h-3 w-3 flex-shrink-0 animate-spin" />;
-      badgeClass = 'border-border-subtle bg-muted text-muted-foreground';
+      badgeClass = 'border-subtle bg-surface-raised text-fg-secondary';
       text = query ? `${label.running} "${query}"…` : `${label.running}…`;
       break;
     case 'completed':
@@ -51,12 +51,12 @@ export function ToolCallChip({ event }: ToolCallChipProps) {
       break;
     case 'no_results':
       icon = <Search className="h-3 w-3 flex-shrink-0" />;
-      badgeClass = 'border-border-subtle bg-muted text-muted-foreground';
+      badgeClass = 'border-subtle bg-surface-raised text-fg-secondary';
       text = query ? `No results for "${query}"` : 'No results';
       break;
     case 'failed':
       icon = <AlertCircle className="h-3 w-3 flex-shrink-0" />;
-      badgeClass = 'border-destructive/20 bg-destructive/10 text-destructive';
+      badgeClass = 'border-status-negative/20 bg-status-negative/10 text-status-negative';
       text = 'Search failed';
       break;
   }
@@ -83,13 +83,13 @@ export function ToolCallChip({ event }: ToolCallChipProps) {
       </button>
 
       {expanded && completedResults && (
-        <ul className="ml-2 space-y-1 border-l border-border-subtle pl-3 text-xs">
+        <ul className="ml-2 space-y-1 border-l border-subtle pl-3 text-xs">
           {completedResults.map(r => (
             <li key={r.url}>
-              <Link href={r.url} className="text-foreground underline-offset-2 hover:underline">
+              <Link href={r.url} className="text-fg-primary underline-offset-2 hover:underline">
                 {r.title}
               </Link>
-              <span className="ml-2 text-muted-dim">· {r.type}</span>
+              <span className="ml-2 text-fg-tertiary">· {r.type}</span>
             </li>
           ))}
         </ul>

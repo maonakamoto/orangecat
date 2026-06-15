@@ -67,7 +67,7 @@ export function AIChatInput({
   }, []);
 
   return (
-    <div className="border-t border-border bg-card p-4">
+    <div className="border-t border-default bg-surface-base p-4">
       <div className="flex items-end gap-3">
         <div className="flex-1 relative">
           <textarea
@@ -78,11 +78,11 @@ export function AIChatInput({
             placeholder={placeholder}
             disabled={disabled || isSending}
             className={cn(
-              'w-full px-4 py-3 pr-12 border border-border rounded-lg resize-none',
-              'bg-background text-foreground',
-              'focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring',
+              'w-full px-4 py-3 pr-12 border border-default rounded-lg resize-none',
+              'bg-surface-page text-fg-primary',
+              'focus:outline-none focus:ring-2 focus:ring-ring focus:border-interactive',
               'max-h-48 min-h-12 text-sm',
-              'placeholder:text-muted-dim',
+              'placeholder:text-fg-tertiary',
               (disabled || isSending) && 'opacity-50 cursor-not-allowed'
             )}
             rows={1}
@@ -94,7 +94,7 @@ export function AIChatInput({
           onClick={handleSubmit}
           disabled={!content.trim() || isSending || disabled}
           className={cn(
-            'px-4 py-3 bg-foreground hover:bg-muted-strong text-background rounded-lg',
+            'px-4 py-3 bg-fg-primary hover:bg-muted-strong text-fg-inverted rounded-lg',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             'transition-colors duration-200 flex-shrink-0',
             'min-w-12 min-h-12'
@@ -105,7 +105,7 @@ export function AIChatInput({
         </Button>
       </div>
 
-      <p className="text-xs text-muted-dim mt-2">Press Enter to send, Shift+Enter for new line</p>
+      <p className="text-xs text-fg-tertiary mt-2">Press Enter to send, Shift+Enter for new line</p>
     </div>
   );
 }

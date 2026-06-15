@@ -39,7 +39,7 @@ export default function PostPage() {
   } = usePostThread(postId);
 
   const pageHeader = (
-    <header className="sticky top-0 z-10 bg-card backdrop-blur-sm border-b border-border">
+    <header className="sticky top-0 z-10 bg-surface-base backdrop-blur-sm border-b border-default">
       <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-4">
         <Button variant="ghost" size="sm" onClick={() => router.back()} className="-ml-2">
           <ArrowLeft className="w-5 h-5" />
@@ -55,7 +55,7 @@ export default function PostPage() {
         <div
           key={reply.id}
           className={cn(
-            depth === 0 ? 'border-b border-border' : 'border-l border-border-subtle',
+            depth === 0 ? 'border-b border-default' : 'border-l border-subtle',
             depth > 0 ? 'pl-4 ml-4' : ''
           )}
         >
@@ -73,10 +73,10 @@ export default function PostPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-surface-page">
         {pageHeader}
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-muted-dim" />
+          <Loader2 className="w-8 h-8 animate-spin text-fg-tertiary" />
         </div>
       </div>
     );
@@ -84,11 +84,11 @@ export default function PostPage() {
 
   if (error || !mainPost) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-surface-page">
         {pageHeader}
         <div className="flex flex-col items-center justify-center py-20 text-center px-4">
-          <p className="text-xl font-bold text-foreground mb-2">This post doesn&apos;t exist</p>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-xl font-bold text-fg-primary mb-2">This post doesn&apos;t exist</p>
+          <p className="text-fg-secondary mb-4">
             It may have been deleted or the link is incorrect.
           </p>
           <Link href={ROUTES.TIMELINE}>
@@ -100,7 +100,7 @@ export default function PostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-surface-page">
       {pageHeader}
 
       <div className="max-w-2xl mx-auto">
@@ -124,7 +124,7 @@ export default function PostPage() {
         )}
 
         {/* Main post - expanded view */}
-        <div className="border-b border-border">
+        <div className="border-b border-default">
           <PostCard
             event={mainPost}
             onUpdate={updates => handlePostUpdate(mainPost.id, updates)}
@@ -132,23 +132,23 @@ export default function PostPage() {
           />
 
           {/* Engagement stats bar */}
-          <div className="px-4 py-3 border-t border-border-subtle flex items-center gap-6 text-sm">
+          <div className="px-4 py-3 border-t border-subtle flex items-center gap-6 text-sm">
             {(mainPost.repostsCount || 0) > 0 && (
               <button className="hover:underline">
-                <span className="font-bold text-foreground">{mainPost.repostsCount}</span>
-                <span className="text-muted-foreground ml-1">Reposts</span>
+                <span className="font-bold text-fg-primary">{mainPost.repostsCount}</span>
+                <span className="text-fg-secondary ml-1">Reposts</span>
               </button>
             )}
             {(mainPost.likesCount || 0) > 0 && (
               <button className="hover:underline">
-                <span className="font-bold text-foreground">{mainPost.likesCount}</span>
-                <span className="text-muted-foreground ml-1">Likes</span>
+                <span className="font-bold text-fg-primary">{mainPost.likesCount}</span>
+                <span className="text-fg-secondary ml-1">Likes</span>
               </button>
             )}
             {(mainPost.commentsCount || 0) > 0 && (
               <button className="hover:underline">
-                <span className="font-bold text-foreground">{mainPost.commentsCount}</span>
-                <span className="text-muted-foreground ml-1">
+                <span className="font-bold text-fg-primary">{mainPost.commentsCount}</span>
+                <span className="text-fg-secondary ml-1">
                   {mainPost.commentsCount === 1 ? 'Reply' : 'Replies'}
                 </span>
               </button>
@@ -158,7 +158,7 @@ export default function PostPage() {
 
         {/* Reply composer */}
         {user && (
-          <div className="border-b border-border">
+          <div className="border-b border-default">
             <TimelineComposer
               placeholder={`Reply to @${mainPost.actor.username || mainPost.actor.name}`}
               buttonText="Reply"
@@ -172,8 +172,8 @@ export default function PostPage() {
         {/* Replies section */}
         {replies.length > 0 && (
           <div>
-            <div className="px-4 py-3 border-b border-border">
-              <h2 className="font-bold text-foreground">Replies</h2>
+            <div className="px-4 py-3 border-b border-default">
+              <h2 className="font-bold text-fg-primary">Replies</h2>
             </div>
             {renderReplies(replies)}
           </div>
@@ -181,8 +181,8 @@ export default function PostPage() {
 
         {replies.length === 0 && (
           <div className="py-12 text-center">
-            <p className="text-muted-foreground">No replies yet</p>
-            {user && <p className="text-sm text-muted-dim mt-1">Be the first to reply!</p>}
+            <p className="text-fg-secondary">No replies yet</p>
+            {user && <p className="text-sm text-fg-tertiary mt-1">Be the first to reply!</p>}
           </div>
         )}
       </div>

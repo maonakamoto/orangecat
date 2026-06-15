@@ -30,16 +30,16 @@ export function WizardFooter({
   const currentStepData = steps[currentStep];
 
   return (
-    <div className="px-6 py-6 bg-muted/30 border-t">
+    <div className="px-6 py-6 bg-surface-raised/30 border-t">
       {/* Progress encouragement */}
       <div className="text-center mb-4">
-        <div className="text-sm text-muted-foreground mb-2">
+        <div className="text-sm text-fg-secondary mb-2">
           {currentStep === 0 && "🚀 Let's get your profile started!"}
           {currentStep === 1 && '📍 Great! Local supporters will love this.'}
           {currentStep === 2 && '📖 Your story matters - share it!'}
           {isLastStep && '₿ Almost there! Funding awaits.'}
         </div>
-        <div className="text-xs text-muted-foreground">
+        <div className="text-xs text-fg-secondary">
           {steps.filter((_, i) => i <= currentStep).length} of {steps.length} steps completed
         </div>
       </div>
@@ -69,7 +69,7 @@ export function WizardFooter({
               variant="ghost"
               onClick={onNext}
               disabled={isSaving}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-fg-secondary hover:text-fg-primary"
             >
               Skip for now
             </Button>
@@ -102,7 +102,7 @@ export function WizardFooter({
       {/* Optional encouragement for completion */}
       {isLastStep && (
         <div className="mt-4 text-center">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-fg-secondary">
             🎉 Completing your profile unlocks funding features and helps you stand out!
           </p>
         </div>

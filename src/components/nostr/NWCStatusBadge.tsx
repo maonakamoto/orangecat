@@ -29,7 +29,7 @@ export function NWCStatusBadge({ className, showLabel = false }: NWCStatusBadgeP
     <div
       className={cn(
         'inline-flex items-center gap-1 text-xs',
-        nwcConnected ? 'text-status-positive' : 'text-muted-foreground',
+        nwcConnected ? 'text-status-positive' : 'text-fg-secondary',
         className
       )}
       title={nwcConnected ? 'NWC Wallet Connected' : 'No wallet connected'}

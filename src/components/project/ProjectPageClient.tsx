@@ -205,20 +205,20 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
           so this bar consistently sits above MobileBottomNav. */}
       {!isOwner && project.bitcoin_address && showFloatingCTA && (
         <div
-          className={`lg:hidden fixed inset-x-0 oc-above-mobile-nav ${Z_INDEX_CLASSES.MOBILE_ACTION_BAR} bg-card border-t border-border shadow-sm transition-transform duration-300 ${
+          className={`lg:hidden fixed inset-x-0 oc-above-mobile-nav ${Z_INDEX_CLASSES.MOBILE_ACTION_BAR} bg-surface-base border-t border-default shadow-sm transition-transform duration-300 ${
             showFloatingCTA ? 'translate-y-0' : 'translate-y-full'
           }`}
         >
           <div className="max-w-lg mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-3">
               <div className="flex-1 min-w-0">
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-fg-secondary">
                   Goal: {formatCurrency(project.goal_amount ?? 0, project.currency)}
                 </div>
-                <div className="text-lg font-bold text-foreground truncate">
+                <div className="text-lg font-bold text-fg-primary truncate">
                   {formatCurrency(project.raised_amount ?? 0, project.currency)}
                 </div>
-                <div className="h-1.5 bg-muted rounded-full mt-1">
+                <div className="h-1.5 bg-surface-raised rounded-full mt-1">
                   <div
                     className="h-1.5 bg-bitcoinOrange rounded-full transition-all duration-300"
                     style={{ width: `${progressPercentage}%` }}

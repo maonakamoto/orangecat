@@ -42,7 +42,7 @@ export function QuotaMeter({ quota, className }: QuotaMeterProps) {
     return (
       <span
         className={cn(
-          'inline-flex items-center gap-1 rounded-md border border-border-subtle bg-muted px-2 py-1 text-xs text-muted-foreground',
+          'inline-flex items-center gap-1 rounded-md border border-subtle bg-surface-raised px-2 py-1 text-xs text-fg-secondary',
           className
         )}
         title={`Cat is routing through your ${label} key — you pay them directly.`}
@@ -67,8 +67,8 @@ export function QuotaMeter({ quota, className }: QuotaMeterProps) {
         !isCapped &&
           !isNearCap &&
           isPro &&
-          'border-accent-warm/30 bg-accent-warm/10 text-foreground',
-        !isCapped && !isNearCap && !isPro && 'border-border-subtle bg-muted text-muted-foreground',
+          'border-accent-warm/30 bg-accent-warm/10 text-fg-primary',
+        !isCapped && !isNearCap && !isPro && 'border-subtle bg-surface-raised text-fg-secondary',
         className
       )}
     >

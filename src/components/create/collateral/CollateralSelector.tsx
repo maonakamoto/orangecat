@@ -95,10 +95,10 @@ export function CollateralSelector({
       </CardHeader>
       <CardContent className="space-y-4">
         {selectedCollateral.length > 0 && (
-          <div className="bg-muted border border-border-subtle rounded-lg p-4">
+          <div className="bg-surface-raised border border-subtle rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-muted-strong">Total Collateral Value</span>
-              <span className="text-lg font-bold text-foreground">
+              <span className="text-sm font-medium text-fg-primary">Total Collateral Value</span>
+              <span className="text-lg font-bold text-fg-primary">
                 {totalCollateral.toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -109,7 +109,7 @@ export function CollateralSelector({
             {loanAmount && coveragePercentage !== null && (
               <>
                 <div className="flex items-center gap-2 mt-2">
-                  <div className="flex-1 bg-muted rounded-full h-2">
+                  <div className="flex-1 bg-surface-raised rounded-full h-2">
                     <div
                       className={cn(
                         'h-2 rounded-full transition-all',
@@ -122,7 +122,7 @@ export function CollateralSelector({
                       style={{ width: `${Math.min(100, coveragePercentage)}%` }}
                     />
                   </div>
-                  <span className="text-xs text-muted-foreground font-medium">
+                  <span className="text-xs text-fg-secondary font-medium">
                     {coveragePercentage.toFixed(0)}% coverage
                   </span>
                 </div>
@@ -156,7 +156,7 @@ export function CollateralSelector({
             {selectedCollateral.map(item => (
               <div
                 key={`${item.type}-${item.id}`}
-                className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border"
+                className="flex items-center justify-between p-3 bg-surface-raised/50 rounded-lg border border-default"
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -173,12 +173,12 @@ export function CollateralSelector({
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-foreground">{item.name}</span>
+                      <span className="text-sm font-medium text-fg-primary">{item.name}</span>
                       <Badge variant="outline" className="text-xs">
                         {item.type === 'asset' ? 'Asset' : 'Wallet'}
                       </Badge>
                     </div>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-fg-secondary">
                       {item.value.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -192,7 +192,7 @@ export function CollateralSelector({
                   size="sm"
                   onClick={() => handleRemoveCollateral(item.id)}
                   disabled={disabled}
-                  className="text-destructive hover:text-destructive/80"
+                  className="text-status-negative hover:text-status-negative/80"
                 >
                   Remove
                 </Button>

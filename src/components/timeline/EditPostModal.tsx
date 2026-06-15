@@ -114,17 +114,17 @@ export function EditPostModal({
       onKeyDown={handleKeyDown}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-surface-page/80 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-xl rounded-md border border-border-subtle bg-background shadow-sm animate-in fade-in-0 zoom-in-95 duration-200">
+      <div className="relative w-full max-w-xl rounded-md border border-subtle bg-surface-page shadow-sm animate-in fade-in-0 zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
+        <div className="flex items-center justify-between border-b border-subtle px-4 py-3">
           <button onClick={onClose} className={TIMELINE_SURFACE.iconButton} aria-label="Close">
             <X className="w-5 h-5" />
           </button>
 
-          <h2 className="text-lg font-semibold text-foreground">Edit post</h2>
+          <h2 className="text-lg font-semibold text-fg-primary">Edit post</h2>
 
           <Button
             onClick={handleSave}
@@ -149,7 +149,7 @@ export function EditPostModal({
           {error && (
             <div
               role="alert"
-              className="mb-3 p-3 oc-error-surface rounded-lg text-sm text-destructive/80"
+              className="mb-3 p-3 oc-error-surface rounded-lg text-sm text-status-negative/80"
             >
               {error}
             </div>
@@ -161,15 +161,15 @@ export function EditPostModal({
             onChange={e => setContent(e.target.value)}
             placeholder={TIMELINE_COPY.composePlaceholder}
             className={cn(
-              'min-h-[150px] text-base leading-relaxed border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-muted-foreground',
-              isOverLimit && 'text-destructive'
+              'min-h-[150px] text-base leading-relaxed border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-fg-secondary',
+              isOverLimit && 'text-status-negative'
             )}
             disabled={isSaving}
             autoFocus
           />
 
           {/* Footer */}
-          <div className="flex items-center justify-between mt-4 pt-3 border-t border-border-subtle">
+          <div className="flex items-center justify-between mt-4 pt-3 border-t border-subtle">
             {/* Visibility selector */}
             <div className="flex items-center gap-2">
               <button
@@ -198,7 +198,7 @@ export function EditPostModal({
             <div
               className={cn(
                 'text-sm',
-                isOverLimit ? 'text-destructive font-medium' : 'text-muted-dim'
+                isOverLimit ? 'text-status-negative font-medium' : 'text-fg-tertiary'
               )}
             >
               {charCount.toLocaleString()} / {maxChars.toLocaleString()}

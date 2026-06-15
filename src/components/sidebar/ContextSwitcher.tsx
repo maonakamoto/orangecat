@@ -86,7 +86,7 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
   // Collapsed mode: just show the avatar, no dropdown
   if (!isExpanded) {
     return (
-      <div className={cn('px-2 py-3 border-b border-border-subtle flex justify-center', className)}>
+      <div className={cn('px-2 py-3 border-b border-subtle flex justify-center', className)}>
         <div className="relative">
           {avatarUrl ? (
             <Image
@@ -103,8 +103,8 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           {/* Context indicator dot */}
           <div
             className={cn(
-              'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-sm border-2 border-background',
-              isGroupContext ? 'bg-muted' : 'bg-status-positive'
+              'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-sm border-2 border-surface-page',
+              isGroupContext ? 'bg-surface-raised' : 'bg-status-positive'
             )}
           />
         </div>
@@ -113,14 +113,11 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
   }
 
   return (
-    <div
-      ref={dropdownRef}
-      className={cn('relative px-2 py-3 border-b border-border-subtle', className)}
-    >
+    <div ref={dropdownRef} className={cn('relative px-2 py-3 border-b border-subtle', className)}>
       {/* Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted"
+        className="flex w-full items-center gap-3 rounded-md p-2 transition-colors hover:bg-surface-raised"
       >
         <div className="relative flex-shrink-0">
           {avatarUrl ? (
@@ -133,64 +130,64 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
               unoptimized={avatarUrl?.includes('supabase.co')}
             />
           ) : isGroupContext ? (
-            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-muted">
-              <Users className="w-5 h-5 text-foreground" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-surface-raised">
+              <Users className="w-5 h-5 text-fg-primary" />
             </div>
           ) : (
             <DefaultAvatar size={40} className="rounded-md" />
           )}
           <div
             className={cn(
-              'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-sm border-2 border-background',
-              isGroupContext ? 'bg-muted' : 'bg-status-positive'
+              'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-sm border-2 border-surface-page',
+              isGroupContext ? 'bg-surface-raised' : 'bg-status-positive'
             )}
           />
         </div>
         <div className="flex-1 min-w-0 text-left">
           <div className="flex items-center gap-1.5">
-            <p className="text-sm font-semibold text-foreground truncate">{displayName}</p>
+            <p className="text-sm font-semibold text-fg-primary truncate">{displayName}</p>
             <NWCStatusBadge />
           </div>
           {(isGroupContext || showSecondaryHandle) && (
-            <p className="text-xs text-muted-foreground truncate">
+            <p className="text-xs text-fg-secondary truncate">
               {isGroupContext ? 'Group' : `@${profile.username}`}
             </p>
           )}
         </div>
         <ChevronDown
-          className={cn('w-4 h-4 text-muted-dim transition-transform', isOpen && 'rotate-180')}
+          className={cn('w-4 h-4 text-fg-tertiary transition-transform', isOpen && 'rotate-180')}
         />
       </button>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute left-2 right-2 top-full z-50 mt-1 max-h-80 overflow-y-auto rounded-md border border-border-subtle bg-popover py-1 shadow-sm">
+        <div className="absolute left-2 right-2 top-full z-50 mt-1 max-h-80 overflow-y-auto rounded-md border border-subtle bg-surface-modal py-1 shadow-sm">
           {/* Individual context option */}
           <button
             onClick={handleSwitchToIndividual}
             className={cn(
-              'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-muted transition-colors',
-              !isGroupContext && 'bg-muted'
+              'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-surface-raised transition-colors',
+              !isGroupContext && 'bg-surface-raised'
             )}
           >
-            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-muted">
-              <User className="w-4 h-4 text-foreground" />
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-surface-raised">
+              <User className="w-4 h-4 text-fg-primary" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-foreground truncate">
+              <p className="text-sm font-medium text-fg-primary truncate">
                 {profile.name || profile.username || 'You'}
               </p>
-              <p className="text-xs text-muted-foreground">Personal</p>
+              <p className="text-xs text-fg-secondary">Personal</p>
             </div>
-            {!isGroupContext && <div className="h-2 w-2 flex-shrink-0 rounded-sm bg-foreground" />}
+            {!isGroupContext && <div className="h-2 w-2 flex-shrink-0 rounded-sm bg-fg-primary" />}
           </button>
 
           {/* Groups section */}
           {(userGroups.length > 0 || loadingGroups) && (
             <>
-              <div className="border-t border-border-subtle my-1" />
+              <div className="border-t border-subtle my-1" />
               <div className="px-3 py-1.5">
-                <p className="text-xs font-medium text-muted-dim uppercase tracking-wider">
+                <p className="text-xs font-medium text-fg-tertiary uppercase tracking-wider">
                   Groups
                 </p>
               </div>
@@ -198,15 +195,15 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
           )}
 
           {loadingGroups ? (
-            <div className="px-3 py-2 text-xs text-muted-dim">Loading groups...</div>
+            <div className="px-3 py-2 text-xs text-fg-tertiary">Loading groups...</div>
           ) : (
             userGroups.map(group => (
               <button
                 key={group.id}
                 onClick={() => handleSwitchToGroup(group)}
                 className={cn(
-                  'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-muted transition-colors',
-                  isGroupContext && context.group?.id === group.id && 'bg-muted'
+                  'w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-surface-raised transition-colors',
+                  isGroupContext && context.group?.id === group.id && 'bg-surface-raised'
                 )}
               >
                 <div className="flex-shrink-0">
@@ -220,35 +217,35 @@ export function ContextSwitcher({ profile, isExpanded, className }: ContextSwitc
                       unoptimized={group.avatar_url?.includes('supabase.co')}
                     />
                   ) : (
-                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted">
-                      <Users className="w-4 h-4 text-foreground" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-surface-raised">
+                      <Users className="w-4 h-4 text-fg-primary" />
                     </div>
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-foreground truncate">{group.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{group.slug}</p>
+                  <p className="text-sm font-medium text-fg-primary truncate">{group.name}</p>
+                  <p className="text-xs text-fg-secondary truncate">{group.slug}</p>
                 </div>
                 {isGroupContext && context.group?.id === group.id && (
-                  <div className="h-2 w-2 flex-shrink-0 rounded-sm bg-foreground" />
+                  <div className="h-2 w-2 flex-shrink-0 rounded-sm bg-fg-primary" />
                 )}
               </button>
             ))
           )}
 
           {/* Create group option */}
-          <div className="border-t border-border-subtle my-1" />
+          <div className="border-t border-subtle my-1" />
           <button
             onClick={() => {
               setIsOpen(false);
               router.push(`${ROUTES.DASHBOARD.GROUPS}/create`);
             }}
-            className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-muted transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-surface-raised transition-colors"
           >
-            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-muted">
-              <Plus className="w-4 h-4 text-muted-foreground" />
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-surface-raised">
+              <Plus className="w-4 h-4 text-fg-secondary" />
             </div>
-            <p className="text-sm text-muted-foreground">Create a group</p>
+            <p className="text-sm text-fg-secondary">Create a group</p>
           </button>
         </div>
       )}

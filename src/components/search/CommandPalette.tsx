@@ -297,7 +297,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       className={cn(
         'fixed left-1/2 top-[15vh] z-[100] w-[min(640px,calc(100vw-2rem))]',
         '-translate-x-1/2 overflow-hidden rounded-xl',
-        'border border-border-subtle bg-background shadow-2xl'
+        'border border-subtle bg-surface-page shadow-2xl'
       )}
       overlayClassName="fixed inset-0 z-[99] bg-black/60 backdrop-blur-sm"
     >
@@ -308,13 +308,13 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       <VisuallyHidden.Root>
         <DialogPrimitive.Title>Command palette</DialogPrimitive.Title>
       </VisuallyHidden.Root>
-      <div className="flex items-center border-b border-border-subtle px-3.5">
-        <Search className="h-4 w-4 flex-shrink-0 text-muted-dim" aria-hidden />
+      <div className="flex items-center border-b border-subtle px-3.5">
+        <Search className="h-4 w-4 flex-shrink-0 text-fg-tertiary" aria-hidden />
         <Command.Input
           value={query}
           onValueChange={setQuery}
           placeholder="Search or jump to…"
-          className="w-full bg-transparent px-3 py-3.5 text-sm text-foreground placeholder:text-muted-dim focus:outline-none"
+          className="w-full bg-transparent px-3 py-3.5 text-sm text-fg-primary placeholder:text-fg-tertiary focus:outline-none"
           onKeyDown={e => {
             // Cmd/Ctrl+Enter does a full search rather than picking the
             // focused item. Plain Enter on no-match also falls through.
@@ -324,15 +324,15 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
             }
           }}
         />
-        <kbd className="hidden flex-shrink-0 rounded border border-border-subtle bg-muted/40 px-1.5 py-0.5 text-[10px] text-muted-foreground sm:inline">
+        <kbd className="hidden flex-shrink-0 rounded border border-subtle bg-surface-raised/40 px-1.5 py-0.5 text-[10px] text-fg-secondary sm:inline">
           ESC
         </kbd>
       </div>
 
       <Command.List className="max-h-[60vh] overflow-y-auto p-2">
-        <Command.Empty className="px-3 py-8 text-center text-sm text-muted-foreground">
+        <Command.Empty className="px-3 py-8 text-center text-sm text-fg-secondary">
           No matches. Press{' '}
-          <kbd className="rounded border border-border-subtle bg-muted/40 px-1.5 py-0.5 text-[10px]">
+          <kbd className="rounded border border-subtle bg-surface-raised/40 px-1.5 py-0.5 text-[10px]">
             ⌘ Enter
           </kbd>{' '}
           to search Discover.
@@ -341,7 +341,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         {query.trim().length > 0 && (
           <Command.Group
             heading="Search"
-            className="text-[10px] uppercase tracking-wider text-muted-dim"
+            className="text-[10px] uppercase tracking-wider text-fg-tertiary"
           >
             <PaletteRow
               icon={Search}
@@ -355,7 +355,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
         <Command.Group
           heading="Jump to"
-          className="mt-1 text-[10px] uppercase tracking-wider text-muted-dim"
+          className="mt-1 text-[10px] uppercase tracking-wider text-fg-tertiary"
         >
           {pages.map(item => (
             <PaletteRow
@@ -371,7 +371,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
         <Command.Group
           heading="Create"
-          className="mt-1 text-[10px] uppercase tracking-wider text-muted-dim"
+          className="mt-1 text-[10px] uppercase tracking-wider text-fg-tertiary"
         >
           {quickActions.map(item => (
             <PaletteRow
@@ -388,7 +388,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         {query.trim().length > 1 && hits.length > 0 && (
           <Command.Group
             heading="Results"
-            className="mt-1 text-[10px] uppercase tracking-wider text-muted-dim"
+            className="mt-1 text-[10px] uppercase tracking-wider text-fg-tertiary"
           >
             {hits.map(hit => (
               <PaletteRow
@@ -406,7 +406,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           </Command.Group>
         )}
 
-        {hitsLoading && <div className="px-3 py-2 text-xs text-muted-dim">Searching…</div>}
+        {hitsLoading && <div className="px-3 py-2 text-xs text-fg-tertiary">Searching…</div>}
       </Command.List>
     </Command.Dialog>
   );
@@ -427,13 +427,13 @@ function PaletteRow({ value, icon: Icon, label, hint, onSelect }: PaletteRowProp
       onSelect={onSelect}
       className={cn(
         'flex cursor-pointer items-center gap-3 rounded-md px-2.5 py-2 text-sm',
-        'aria-selected:bg-muted/60 aria-selected:text-foreground',
-        'text-muted-foreground transition-colors'
+        'aria-selected:bg-surface-raised/60 aria-selected:text-fg-primary',
+        'text-fg-secondary transition-colors'
       )}
     >
       <Icon className="h-4 w-4 flex-shrink-0" />
-      <span className="text-foreground">{label}</span>
-      {hint && <span className="text-xs text-muted-dim">{hint}</span>}
+      <span className="text-fg-primary">{label}</span>
+      {hint && <span className="text-xs text-fg-tertiary">{hint}</span>}
       <ArrowRight className="ml-auto h-3.5 w-3.5 flex-shrink-0 opacity-0 group-aria-selected:opacity-100" />
     </Command.Item>
   );

@@ -137,10 +137,10 @@ export default function WalletRecommendationCards() {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-foreground mb-2">
+        <h2 className="text-2xl font-semibold text-fg-primary mb-2">
           Find the perfect Bitcoin wallet for receiving funding
         </h2>
-        <p className="text-muted-foreground">
+        <p className="text-fg-secondary">
           All recommendations are non-custodial — you control your keys. We connect directly for
           transparent autoposting.
         </p>
@@ -163,7 +163,7 @@ export default function WalletRecommendationCards() {
         </div>
       ) : (
         <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">No wallets match your filters.</p>
+          <p className="text-fg-secondary mb-4">No wallets match your filters.</p>
           <Button onClick={resetFilters} variant="outline" size="sm">
             Reset filters
           </Button>

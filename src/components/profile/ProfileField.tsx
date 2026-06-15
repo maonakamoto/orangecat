@@ -29,22 +29,22 @@ export function ProfileField({
 }: ProfileFieldProps) {
   return (
     <div className="flex items-start gap-3">
-      <Icon className="w-5 h-5 text-muted-dim mt-0.5" />
+      <Icon className="w-5 h-5 text-fg-tertiary mt-0.5" />
       <div className="flex-1">
-        <div className="text-sm text-muted-foreground">{label}</div>
+        <div className="text-sm text-fg-secondary">{label}</div>
         {value ? (
           <>{value}</>
         ) : isOwnProfile && editHref ? (
           <Link
             href={editHref}
-            className="inline-flex items-center gap-2 text-foreground hover:underline underline-offset-4 group"
+            className="inline-flex items-center gap-2 text-fg-primary hover:underline underline-offset-4 group"
           >
-            <span className="text-muted-dim italic group-hover:text-foreground">{emptyText}</span>
+            <span className="text-fg-tertiary italic group-hover:text-fg-primary">{emptyText}</span>
             <EditIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
             <span className="text-xs">Click to add</span>
           </Link>
         ) : (
-          <div className="text-muted-dim italic">{emptyText}</div>
+          <div className="text-fg-tertiary italic">{emptyText}</div>
         )}
       </div>
     </div>

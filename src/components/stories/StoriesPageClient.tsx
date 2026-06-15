@@ -31,9 +31,9 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-surface-page">
       {/* Hero Section */}
-      <section className="bg-foreground text-white py-16 sm:py-20">
+      <section className="bg-fg-primary text-white py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -43,7 +43,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
               Real People.{' '}
-              <span className="bg-card bg-clip-text text-transparent">Real Projects.</span>
+              <span className="bg-surface-base bg-clip-text text-transparent">Real Projects.</span>
             </h1>
             <p className="text-lg sm:text-xl max-w-3xl mx-auto opacity-90 mb-8">
               From artists to entrepreneurs, medical researchers to educators—real stories of how
@@ -58,7 +58,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                 variant="outline"
                 size="lg"
                 href={ROUTES.AUTH}
-                className="bg-card/10 border-card/30 hover:bg-muted/20"
+                className="bg-surface-base/10 border-fg-inverted/30 hover:bg-surface-raised/20"
               >
                 Start Your Project
               </Button>
@@ -68,7 +68,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
       </section>
 
       {/* Filters Section */}
-      <section className="bg-card border-b border-border sticky top-0 z-10 shadow-sm">
+      <section className="bg-surface-base border-b border-default sticky top-0 z-10 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Search Input */}
@@ -78,21 +78,21 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                 placeholder="Search stories..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-border-strong rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-card text-foreground"
+                className="w-full px-4 py-2 border border-strong rounded-lg focus:ring-2 focus:ring-ring focus:border-interactive bg-surface-base text-fg-primary"
               />
             </div>
 
             {/* Category Filter */}
             <div className="flex items-center gap-2 flex-wrap justify-center">
-              <Filter className="w-5 h-5 text-muted-foreground hidden sm:block" />
+              <Filter className="w-5 h-5 text-fg-secondary hidden sm:block" />
               {categories.map(category => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     selectedCategory === category
-                      ? 'bg-foreground text-background'
-                      : 'bg-muted text-foreground hover:bg-gray-200 dark:hover:bg-muted/80'
+                      ? 'bg-fg-primary text-fg-inverted'
+                      : 'bg-surface-raised text-fg-primary hover:bg-gray-200 dark:hover:bg-surface-raised/80'
                   }`}
                 >
                   {category}
@@ -102,7 +102,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
           </div>
 
           {/* Results Count */}
-          <div className="mt-4 text-sm text-muted-foreground">
+          <div className="mt-4 text-sm text-fg-secondary">
             Showing {filteredStories.length} {filteredStories.length === 1 ? 'story' : 'stories'}
           </div>
         </div>
@@ -113,9 +113,7 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredStories.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-muted-foreground text-lg">
-                No stories found matching your criteria.
-              </p>
+              <p className="text-fg-secondary text-lg">No stories found matching your criteria.</p>
               <Button
                 variant="outline"
                 className="mt-4"
@@ -141,51 +139,51 @@ export default function StoriesPageClient({ stories, categories }: StoriesPageCl
                     <div className="p-8">
                       {/* Story Header */}
                       <div className="flex items-start gap-4 mb-6">
-                        <div className="w-16 h-16 text-4xl flex items-center justify-center bg-card rounded-lg shadow-sm">
+                        <div className="w-16 h-16 text-4xl flex items-center justify-center bg-surface-base rounded-lg shadow-sm">
                           {story.emoji}
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-2xl font-semibold text-foreground mb-1">
+                          <h3 className="text-2xl font-semibold text-fg-primary mb-1">
                             {story.name}
                           </h3>
-                          <p className="text-muted-strong font-medium">{story.role}</p>
-                          <p className="text-muted-foreground text-sm">{story.location}</p>
+                          <p className="text-fg-primary font-medium">{story.role}</p>
+                          <p className="text-fg-secondary text-sm">{story.location}</p>
                         </div>
                       </div>
 
                       {/* Funding Details */}
                       <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div className="bg-card/70 dark:bg-card/70 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">Goal</p>
-                          <p className="text-lg font-bold text-foreground">{story.goal}</p>
+                        <div className="bg-surface-base/70 dark:bg-surface-base/70 rounded-lg p-3">
+                          <p className="text-xs text-fg-secondary mb-1">Goal</p>
+                          <p className="text-lg font-bold text-fg-primary">{story.goal}</p>
                         </div>
-                        <div className="bg-card/70 dark:bg-card/70 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">Raised</p>
+                        <div className="bg-surface-base/70 dark:bg-surface-base/70 rounded-lg p-3">
+                          <p className="text-xs text-fg-secondary mb-1">Raised</p>
                           <p className="text-lg font-bold text-status-positive">{story.raised}</p>
                         </div>
-                        <div className="bg-card/70 dark:bg-card/70 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">Supporters</p>
-                          <p className="text-lg font-bold text-foreground">{story.supporters}</p>
+                        <div className="bg-surface-base/70 dark:bg-surface-base/70 rounded-lg p-3">
+                          <p className="text-xs text-fg-secondary mb-1">Supporters</p>
+                          <p className="text-lg font-bold text-fg-primary">{story.supporters}</p>
                         </div>
-                        <div className="bg-card/70 dark:bg-card/70 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">Timeline</p>
-                          <p className="text-lg font-bold text-foreground">{story.timeline}</p>
+                        <div className="bg-surface-base/70 dark:bg-surface-base/70 rounded-lg p-3">
+                          <p className="text-xs text-fg-secondary mb-1">Timeline</p>
+                          <p className="text-lg font-bold text-fg-primary">{story.timeline}</p>
                         </div>
                       </div>
 
                       {/* Summary */}
-                      <p className="text-muted-strong font-medium mb-6 leading-relaxed">
+                      <p className="text-fg-primary font-medium mb-6 leading-relaxed">
                         {story.summary}
                       </p>
 
                       {/* Story Content (MDX) */}
-                      <div className="prose prose-sm max-w-none mb-6 text-muted-strong">
+                      <div className="prose prose-sm max-w-none mb-6 text-fg-primary">
                         <MDXRemote source={story.story} />
                       </div>
 
                       {/* Category Badge */}
                       <div className="mt-6">
-                        <span className="inline-block px-3 py-1 bg-card/70 dark:bg-card/70 text-muted-strong text-sm font-medium rounded-full">
+                        <span className="inline-block px-3 py-1 bg-surface-base/70 dark:bg-surface-base/70 text-fg-primary text-sm font-medium rounded-full">
                           {story.category}
                         </span>
                       </div>

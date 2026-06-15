@@ -189,7 +189,7 @@ export default function EntityList<T extends EntityItem>({
                   checked={isSelected}
                   onChange={() => onToggleSelect(item.id)}
                   onClick={e => e.stopPropagation()}
-                  className="h-5 w-5 rounded border-border-strong bg-card text-foreground focus:ring-ring cursor-pointer"
+                  className="h-5 w-5 rounded border-strong bg-surface-base text-fg-primary focus:ring-ring cursor-pointer"
                   aria-label={`Select ${title}`}
                 />
               </div>
@@ -228,7 +228,7 @@ function EntityCardSkeleton() {
         <Skeleton className="h-5 w-24" />
 
         {/* Actions skeleton */}
-        <div className="mt-auto pt-3 border-t border-border-subtle">
+        <div className="mt-auto pt-3 border-t border-subtle">
           <Skeleton className="h-9 w-20 rounded-md" />
         </div>
       </div>

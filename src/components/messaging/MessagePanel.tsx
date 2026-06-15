@@ -79,19 +79,19 @@ export default function MessagePanel({
   const content = (
     <div
       className={cn(
-        'relative flex h-full flex-col overflow-hidden bg-background md:flex-row',
-        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-md border border-border-subtle'
+        'relative flex h-full flex-col overflow-hidden bg-surface-page md:flex-row',
+        fullPage ? 'w-full rounded-none' : 'w-full max-w-5xl rounded-md border border-subtle'
       )}
     >
       {/* Conversations Sidebar */}
       <div
         className={cn(
-          'flex flex-col border-r border-border-subtle bg-muted/30 transition-transform duration-300 ease-in-out',
+          'flex flex-col border-r border-subtle bg-surface-raised/30 transition-transform duration-300 ease-in-out',
           selectedConversationId ? 'hidden md:flex md:w-80' : 'flex w-full md:w-80',
           fullPage && 'w-[23rem]'
         )}
       >
-        <div className="flex items-center justify-between border-b border-border-subtle bg-background p-4">
+        <div className="flex items-center justify-between border-b border-subtle bg-surface-page p-4">
           <div className="flex items-center gap-2">
             {!fullPage && (
               <Button variant="ghost" size="sm" onClick={onClose} className="-ml-2">
@@ -99,8 +99,8 @@ export default function MessagePanel({
               </Button>
             )}
             <div>
-              <h1 className="text-xl font-semibold text-foreground">Messages</h1>
-              <p className="text-xs text-muted-foreground">Reach anyone on {APP_NAME}</p>
+              <h1 className="text-xl font-semibold text-fg-primary">Messages</h1>
+              <p className="text-xs text-fg-secondary">Reach anyone on {APP_NAME}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -109,18 +109,16 @@ export default function MessagePanel({
                 variant="ghost"
                 size="sm"
                 onClick={() => setConvSelectionMode(true)}
-                className="text-muted-foreground"
+                className="text-fg-secondary"
               >
                 Select
               </Button>
             ) : (
               <>
-                <span className="text-sm text-muted-foreground">
-                  {selectedConvIds.size} selected
-                </span>
+                <span className="text-sm text-fg-secondary">{selectedConvIds.size} selected</span>
                 <Button
                   size="sm"
-                  className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                  className="bg-status-negative hover:bg-status-negative/90 text-fg-inverted"
                   onClick={bulkDeleteSelected}
                   disabled={selectedConvIds.size === 0}
                 >
@@ -141,7 +139,7 @@ export default function MessagePanel({
             <Button
               size="sm"
               onClick={() => setShowNewModal(true)}
-              className="bg-foreground text-background hover:bg-foreground/90"
+              className="bg-fg-primary text-fg-inverted hover:bg-fg-primary/90"
             >
               <Plus className="w-4 h-4 mr-1" />
               New
@@ -149,7 +147,7 @@ export default function MessagePanel({
           </div>
         </div>
 
-        <div className="space-y-3 border-b border-border-subtle bg-background p-4">
+        <div className="space-y-3 border-b border-subtle bg-surface-page p-4">
           <div className="flex items-center gap-2">
             {(['all', 'requests'] as const).map(tab => (
               <button
@@ -158,8 +156,8 @@ export default function MessagePanel({
                 className={cn(
                   'rounded-md border px-3 py-1.5 text-sm font-medium transition-colors',
                   activeTab === tab
-                    ? 'border-border-strong bg-muted text-foreground'
-                    : 'border-border-subtle bg-background text-muted-foreground hover:bg-muted'
+                    ? 'border-strong bg-surface-raised text-fg-primary'
+                    : 'border-subtle bg-surface-page text-fg-secondary hover:bg-surface-raised'
                 )}
               >
                 {tab === 'all' ? 'All' : 'Requests'}
@@ -167,13 +165,13 @@ export default function MessagePanel({
             ))}
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-dim" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-fg-tertiary" />
             <input
               type="text"
               placeholder="Search conversations"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full rounded-md border border-border-subtle bg-background py-3 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-dim transition-colors focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full rounded-md border border-subtle bg-surface-page py-3 pl-10 pr-4 text-sm text-fg-primary placeholder:text-fg-tertiary transition-colors focus:border-interactive focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
         </div>
@@ -204,7 +202,7 @@ export default function MessagePanel({
       {/* Message View */}
       <div
         className={cn(
-          'flex min-h-0 flex-1 flex-col bg-background transition-opacity duration-200 ease-in-out',
+          'flex min-h-0 flex-1 flex-col bg-surface-page transition-opacity duration-200 ease-in-out',
           selectedConversationId ? 'flex w-full' : 'hidden md:flex'
         )}
       >
@@ -224,18 +222,18 @@ export default function MessagePanel({
             <div className="px-4 pt-2">
               <ConnectionStatusIndicator />
             </div>
-            <div className="flex-1 flex items-center justify-center text-muted-foreground bg-muted/30">
+            <div className="flex-1 flex items-center justify-center text-fg-secondary bg-surface-raised/30">
               <div className="text-center p-10 max-w-md">
-                <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-md border border-border-subtle bg-background">
-                  <MessageSquare className="w-8 h-8 text-muted-dim" />
+                <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-md border border-subtle bg-surface-page">
+                  <MessageSquare className="w-8 h-8 text-fg-tertiary" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Select a chat</h3>
-                <p className="text-sm text-muted-foreground mb-5">
+                <h3 className="text-lg font-semibold text-fg-primary mb-2">Select a chat</h3>
+                <p className="text-sm text-fg-secondary mb-5">
                   Choose from your existing conversations or start a new one.
                 </p>
                 <Button
                   onClick={() => setShowNewModal(true)}
-                  className="bg-foreground text-background hover:bg-foreground/90"
+                  className="bg-fg-primary text-fg-inverted hover:bg-fg-primary/90"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   New chat

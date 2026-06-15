@@ -137,9 +137,9 @@ export default function CatPermissionsPage() {
 
   if (error || !data) {
     return (
-      <div className="min-h-screen bg-background p-6">
+      <div className="min-h-screen bg-surface-page p-6">
         <div className="max-w-3xl mx-auto">
-          <div className="rounded-md border border-destructive/20 bg-destructive/10 p-4 text-destructive">
+          <div className="rounded-md border border-status-negative/20 bg-status-negative/10 p-4 text-status-negative">
             {error || 'Failed to load permissions'}
           </div>
         </div>
@@ -151,23 +151,23 @@ export default function CatPermissionsPage() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background p-4 pb-20 sm:p-6 sm:pb-6">
+      <div className="min-h-screen bg-surface-page p-4 pb-20 sm:p-6 sm:pb-6">
         <div className="max-w-3xl mx-auto">
           <div className="mb-6">
             <Link
               href={ROUTES.DASHBOARD.CAT}
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4"
+              className="inline-flex items-center gap-2 text-fg-secondary hover:text-fg-primary mb-4"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Cat
             </Link>
             <div className="flex items-center gap-4">
-              <div className="rounded-md border border-border-subtle bg-muted p-3">
-                <Cat className="h-8 w-8 text-foreground" />
+              <div className="rounded-md border border-subtle bg-surface-raised p-3">
+                <Cat className="h-8 w-8 text-fg-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">Cat Permissions</h1>
-                <p className="text-muted-foreground">
+                <h1 className="text-2xl font-bold text-fg-primary">Cat Permissions</h1>
+                <p className="text-fg-secondary">
                   Control what actions Cat can perform on your behalf
                 </p>
               </div>
@@ -177,13 +177,13 @@ export default function CatPermissionsPage() {
           <PermissionStats summary={summary} />
 
           {summary.highRiskEnabled && (
-            <div className="mb-6 flex items-start gap-3 rounded-md border border-border-subtle bg-status-warning-subtle p-4">
+            <div className="mb-6 flex items-start gap-3 rounded-md border border-subtle bg-status-warning-subtle p-4">
               <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-status-warning dark:text-status-warning" />
               <div>
                 <p className="font-medium text-status-warning dark:text-status-warning">
                   High-risk actions enabled
                 </p>
-                <p className="text-base text-muted-foreground">
+                <p className="text-base text-fg-secondary">
                   You have enabled actions that can send Bitcoin or post public content. Cat will
                   always ask for confirmation before executing them.
                 </p>

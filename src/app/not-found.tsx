@@ -30,8 +30,8 @@ export default function NotFound() {
 
         {/* Title */}
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-foreground">Page Not Found</h2>
-          <p className="mt-3 text-base text-muted-foreground">
+          <h2 className="text-2xl font-semibold text-fg-primary">Page Not Found</h2>
+          <p className="mt-3 text-base text-fg-secondary">
             The page you&apos;re looking for doesn&apos;t exist or has been moved.
           </p>
         </div>
@@ -40,7 +40,7 @@ export default function NotFound() {
         <div className="space-y-3">
           <Link
             href={primary.href}
-            className="group relative flex w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 py-3 text-sm font-medium text-background transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-md bg-fg-primary px-4 py-3 text-sm font-medium text-fg-inverted transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <primary.Icon className="h-4 w-4" />
             {primary.label}
@@ -48,7 +48,7 @@ export default function NotFound() {
 
           <Link
             href={ROUTES.DISCOVER}
-            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-default bg-surface-base px-4 py-3 text-sm font-medium text-fg-primary transition-colors hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <Search className="h-4 w-4" />
             Discover Projects
@@ -59,7 +59,7 @@ export default function NotFound() {
           {showDashboardPrimary && (
             <Link
               href={ROUTES.HOME}
-              className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+              className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-default bg-surface-base px-4 py-3 text-sm font-medium text-fg-primary transition-colors hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
             >
               <ArrowLeft className="h-4 w-4" />
               Go to Homepage
@@ -68,12 +68,12 @@ export default function NotFound() {
         </div>
 
         {/* Help text */}
-        <div className="text-center pt-4 border-t border-border">
-          <p className="text-sm text-muted-foreground">
+        <div className="text-center pt-4 border-t border-default">
+          <p className="text-sm text-fg-secondary">
             Looking for something specific?{' '}
             <Link
               href={ROUTES.FAQ}
-              className="font-medium text-foreground hover:text-foreground dark:text-foreground"
+              className="font-medium text-fg-primary hover:text-fg-primary dark:text-fg-primary"
             >
               Visit our FAQ
             </Link>

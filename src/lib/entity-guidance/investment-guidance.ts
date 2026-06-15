@@ -46,7 +46,7 @@ export const investmentGuidanceContent: Record<string, GuidanceContent> = {
     ],
   },
   bitcoin_address: {
-    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Bitcoin Payment',
     description: 'Provide a Bitcoin or Lightning address to receive investments.',
     tips: [
@@ -81,7 +81,7 @@ export const investmentDefaultGuidance: DefaultGuidance = {
       text: 'Transparent risk disclosure',
     },
     {
-      icon: React.createElement(Bitcoin, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Bitcoin, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Accept investments via Bitcoin & Lightning',
     },
   ],

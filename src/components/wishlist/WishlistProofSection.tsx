@@ -111,11 +111,11 @@ export function WishlistProofSection({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Receipt className="h-5 w-5 text-muted-foreground" />
+          <Receipt className="h-5 w-5 text-fg-secondary" />
           <h3 className="font-semibold">
             Proof of Purchase
             {proofs.length > 0 && (
-              <span className="ml-2 text-muted-foreground font-normal">({proofs.length})</span>
+              <span className="ml-2 text-fg-secondary font-normal">({proofs.length})</span>
             )}
           </h3>
         </div>

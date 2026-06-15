@@ -18,14 +18,14 @@ export function SocialLinkCard({ link, onEdit, onDelete }: SocialLinkCardProps) 
   const displayValue = link.value;
 
   return (
-    <div className="flex items-center justify-between p-3 border border-border rounded-lg hover:border-border-strong transition-colors bg-muted">
+    <div className="flex items-center justify-between p-3 border border-default rounded-lg hover:border-strong transition-colors bg-surface-raised">
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <div className="flex-shrink-0">
-          <Icon className="w-5 h-5 text-muted-foreground" />
+          <Icon className="w-5 h-5 text-fg-secondary" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-sm font-medium text-foreground truncate">{displayLabel}</div>
-          <div className="text-xs text-muted-foreground truncate">{displayValue}</div>
+          <div className="text-sm font-medium text-fg-primary truncate">{displayLabel}</div>
+          <div className="text-xs text-fg-secondary truncate">{displayValue}</div>
         </div>
       </div>
       <div className="flex items-center gap-1 flex-shrink-0">
@@ -42,7 +42,7 @@ export function SocialLinkCard({ link, onEdit, onDelete }: SocialLinkCardProps) 
           onClick={onDelete}
           variant="ghost"
           size="sm"
-          className="h-11 w-11 p-0 text-destructive hover:text-destructive/80"
+          className="h-11 w-11 p-0 text-status-negative hover:text-status-negative/80"
           aria-label="Delete"
         >
           <Trash2 className="w-4 h-4" />

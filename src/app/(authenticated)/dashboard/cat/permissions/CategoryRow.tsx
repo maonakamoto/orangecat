@@ -21,7 +21,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
   return (
     <div
       className={`flex items-center justify-between p-3 rounded-lg ${
-        isCategoryEnabled ? 'bg-card' : 'bg-muted opacity-60'
+        isCategoryEnabled ? 'bg-surface-base' : 'bg-surface-raised opacity-60'
       }`}
     >
       <div className="flex items-center gap-3 flex-1">
@@ -37,7 +37,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
         </Tooltip>
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-medium text-foreground text-sm">{action.name}</span>
+            <span className="font-medium text-fg-primary text-sm">{action.name}</span>
             {action.requiresConfirmation && (
               <Badge variant="outline" className="text-xs">
                 <Zap className="h-3 w-3 mr-1" />
@@ -45,7 +45,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
               </Badge>
             )}
           </div>
-          <p className="text-sm text-muted-foreground">{action.description}</p>
+          <p className="text-sm text-fg-secondary">{action.description}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -57,7 +57,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
                   checked={true}
                   onCheckedChange={checked => onToggle(action.id, action.category, checked)}
                   disabled={isSaving || isAnySaving}
-                  className="data-[state=checked]:bg-foreground"
+                  className="data-[state=checked]:bg-fg-primary"
                 />
               </div>
             </TooltipTrigger>
@@ -68,7 +68,7 @@ function ActionRow({ action, isCategoryEnabled, isSaving, isAnySaving, onToggle 
         ) : (
           <Tooltip>
             <TooltipTrigger>
-              <Info className="h-4 w-4 text-muted-dim" />
+              <Info className="h-4 w-4 text-fg-tertiary" />
             </TooltipTrigger>
             <TooltipContent>
               <p>Enable the category first to configure this action</p>
@@ -100,27 +100,27 @@ export function CategoryRow({
   onToggleAction,
 }: CategoryRowProps) {
   return (
-    <div className="bg-card rounded-lg border border-border overflow-hidden">
+    <div className="bg-surface-base rounded-lg border border-default overflow-hidden">
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center gap-3 flex-1">
           <button
             onClick={() => onToggleExpanded(cat.category)}
-            className="p-1 hover:bg-muted rounded"
+            className="p-1 hover:bg-surface-raised rounded"
           >
             {isExpanded ? (
-              <ChevronDown className="h-5 w-5 text-muted-dim" />
+              <ChevronDown className="h-5 w-5 text-fg-tertiary" />
             ) : (
-              <ChevronRight className="h-5 w-5 text-muted-dim" />
+              <ChevronRight className="h-5 w-5 text-fg-tertiary" />
             )}
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-foreground">{cat.name}</h3>
+              <h3 className="font-semibold text-fg-primary">{cat.name}</h3>
               <Badge variant="secondary" className="text-xs">
                 {cat.enabledActionCount}/{cat.actionCount}
               </Badge>
             </div>
-            <p className="text-base text-muted-foreground">{cat.description}</p>
+            <p className="text-base text-fg-secondary">{cat.description}</p>
           </div>
         </div>
         <Switch
@@ -131,7 +131,7 @@ export function CategoryRow({
       </div>
 
       {isExpanded && (
-        <div className="border-t border-border-subtle bg-muted p-4">
+        <div className="border-t border-subtle bg-surface-raised p-4">
           <div className="space-y-3">
             {actions.map(action => (
               <ActionRow

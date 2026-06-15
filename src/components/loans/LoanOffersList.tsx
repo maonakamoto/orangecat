@@ -32,9 +32,9 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
   if (offers.length === 0) {
     return (
       <div className="text-center py-8">
-        <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+        <Target className="h-12 w-12 text-fg-secondary mx-auto mb-4" />
         <h3 className="text-lg font-semibold">No offers yet</h3>
-        <p className="text-muted-foreground">Your offers will appear here</p>
+        <p className="text-fg-secondary">Your offers will appear here</p>
       </div>
     );
   }
@@ -71,7 +71,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
             {/* Offer Details */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Offer Amount</p>
+                <p className="text-sm text-fg-secondary">Offer Amount</p>
                 <p className="text-lg font-semibold text-status-positive">
                   {formatLoanAmount(offer.offer_amount)}
                 </p>
@@ -79,21 +79,21 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
 
               {offer.interest_rate && (
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Interest Rate</p>
+                  <p className="text-sm text-fg-secondary">Interest Rate</p>
                   <p className="text-lg font-semibold">{offer.interest_rate}%</p>
                 </div>
               )}
 
               {offer.term_months && (
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Term</p>
+                  <p className="text-sm text-fg-secondary">Term</p>
                   <p className="text-lg font-semibold">{offer.term_months} months</p>
                 </div>
               )}
 
               {offer.monthly_payment && (
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Monthly Payment</p>
+                  <p className="text-sm text-fg-secondary">Monthly Payment</p>
                   <p className="text-lg font-semibold">{formatLoanAmount(offer.monthly_payment)}</p>
                 </div>
               )}
@@ -103,13 +103,15 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
             {offer.terms && (
               <div className="space-y-2">
                 <p className="text-sm font-medium">Terms & Conditions</p>
-                <p className="text-sm text-muted-foreground bg-muted p-3 rounded">{offer.terms}</p>
+                <p className="text-sm text-fg-secondary bg-surface-raised p-3 rounded">
+                  {offer.terms}
+                </p>
               </div>
             )}
 
             {/* Status-specific info */}
             <div className="flex items-center justify-between pt-2 border-t">
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-fg-secondary">
                 {offer.status === STATUS.LOAN_OFFERS.PENDING && offer.expires_at && (
                   <span>Expires {formatRelativeTime(offer.expires_at)}</span>
                 )}
@@ -131,7 +133,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-destructive hover:text-destructive/80"
+                      className="text-status-negative hover:text-status-negative/80"
                     >
                       Cancel Offer
                     </Button>

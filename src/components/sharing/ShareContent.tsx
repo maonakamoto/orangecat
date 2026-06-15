@@ -24,8 +24,8 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'X',
     icon: XIcon,
-    color: 'text-foreground',
-    bgColor: 'bg-muted hover:bg-muted/80',
+    color: 'text-fg-primary',
+    bgColor: 'bg-surface-raised hover:bg-surface-raised/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const text = `${shareTitle}\n\n${shareDescription}\n\n#Bitcoin #${APP_NAME}`;
       window.open(
@@ -38,8 +38,8 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'Facebook',
     icon: Facebook,
-    color: 'text-foreground',
-    bgColor: 'bg-muted/40 hover:bg-muted',
+    color: 'text-fg-primary',
+    bgColor: 'bg-surface-raised/40 hover:bg-surface-raised',
     action: (shareUrl, shareTitle) => {
       window.open(
         `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareTitle)}`,
@@ -51,8 +51,8 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'LinkedIn',
     icon: Linkedin,
-    color: 'text-foreground',
-    bgColor: 'bg-muted/40 hover:bg-muted',
+    color: 'text-fg-primary',
+    bgColor: 'bg-surface-raised/40 hover:bg-surface-raised',
     action: (shareUrl, shareTitle, shareDescription) => {
       window.open(
         `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}&summary=${encodeURIComponent(shareDescription || '')}`,
@@ -76,8 +76,8 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'Email',
     icon: Mail,
-    color: 'text-muted-foreground',
-    bgColor: 'bg-muted hover:bg-muted/80',
+    color: 'text-fg-secondary',
+    bgColor: 'bg-surface-raised hover:bg-surface-raised/80',
     action: (shareUrl, shareTitle, shareDescription) => {
       const subject = encodeURIComponent(`Check out ${shareTitle}`);
       const body = encodeURIComponent(`${shareDescription}\n\n${shareUrl}`);
@@ -170,15 +170,15 @@ export default function ShareContent({
   // Modern share UI - Modal on mobile, dropdown on desktop
   const shareContent = (
     <div
-      className={`bg-card rounded-lg shadow-sm border border-border dark:border-border/50 backdrop-blur-xl p-5 sm:p-6 w-full max-w-md mx-auto ${className}`}
+      className={`bg-surface-base rounded-lg shadow-sm border border-default dark:border-default/50 backdrop-blur-xl p-5 sm:p-6 w-full max-w-md mx-auto ${className}`}
       style={{
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       }}
       onClick={e => e.stopPropagation()}
     >
       {showTitle && (
-        <div className="flex items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-border-subtle">
-          <h3 className="font-semibold text-foreground flex items-center gap-2 text-lg">
+        <div className="flex items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-subtle">
+          <h3 className="font-semibold text-fg-primary flex items-center gap-2 text-lg">
             <div
               className={`w-8 h-8 rounded-full ${GRADIENTS.brandOrange} flex items-center justify-center`}
             >
@@ -189,7 +189,7 @@ export default function ShareContent({
           {onClose && (
             <button
               onClick={onClose}
-              className="text-muted-dim hover:text-foreground transition-colors p-2 hover:bg-muted rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
+              className="text-fg-tertiary hover:text-fg-primary transition-colors p-2 hover:bg-surface-raised rounded-full touch-manipulation min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Close share menu"
             >
               <X className="w-5 h-5" />
@@ -202,7 +202,7 @@ export default function ShareContent({
       {hasNativeShare && (
         <button
           onClick={handleNativeShare}
-          className={`w-full mb-5 flex items-center justify-center gap-3 p-4 rounded-lg ${GRADIENTS.btnOrange} text-white font-semibold transition-all touch-manipulation active:scale-95 shadow-sm shadow-orange-500/30`}
+          className={`w-full mb-5 flex items-center justify-center gap-3 p-4 rounded-lg ${GRADIENTS.btnOrange} text-white font-semibold transition-all touch-manipulation active:scale-95 shadow-sm`}
         >
           <Share2 className="w-5 h-5" />
           <span>Share via...</span>
@@ -225,7 +225,7 @@ export default function ShareContent({
               >
                 <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${platform.color}`} />
               </div>
-              <span className="text-xs sm:text-sm font-medium text-muted-strong group-hover:text-foreground dark:group-hover:text-foreground">
+              <span className="text-xs sm:text-sm font-medium text-fg-primary group-hover:text-fg-primary dark:group-hover:text-fg-primary">
                 {platform.name}
               </span>
             </button>
@@ -239,7 +239,7 @@ export default function ShareContent({
         className={`w-full flex items-center justify-center gap-3 p-4 rounded-lg transition-all touch-manipulation active:scale-95 font-semibold ${
           copySuccess
             ? 'bg-status-positive-subtle hover:bg-status-positive-subtle/80 text-status-positive border-2 border-status-positive/20'
-            : 'bg-muted hover:bg-muted/80 text-foreground border-2 border-border'
+            : 'bg-surface-raised hover:bg-surface-raised/80 text-fg-primary border-2 border-default'
         }`}
         aria-label="Copy URL to clipboard"
       >

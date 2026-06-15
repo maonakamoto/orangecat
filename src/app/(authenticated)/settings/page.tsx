@@ -77,13 +77,13 @@ export default function SettingsPage() {
         title="Account Settings"
         description="Manage your email, password, and security"
       >
-        <div className="bg-card rounded-lg shadow-sm border border-border-subtle overflow-hidden">
-          <div className="bg-foreground px-6 py-6">
+        <div className="bg-surface-base rounded-lg shadow-sm border border-subtle overflow-hidden">
+          <div className="bg-fg-primary px-6 py-6">
             <div className="flex items-center text-white">
               <Lock className="w-8 h-8 mr-4" />
               <div>
                 <h2 className="text-2xl font-semibold">Account & Security</h2>
-                <p className="text-background/70 text-base mt-1">
+                <p className="text-fg-inverted/70 text-base mt-1">
                   Manage your login credentials and account security
                 </p>
               </div>
@@ -116,10 +116,10 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="mt-6 rounded-lg border border-border-subtle bg-card">
-          <div className="border-b border-border-subtle px-4 py-3">
-            <h2 className="text-sm font-medium text-foreground">More settings</h2>
-            <p className="mt-0.5 text-xs text-muted-foreground">
+        <div className="mt-6 rounded-lg border border-subtle bg-surface-base">
+          <div className="border-b border-subtle px-4 py-3">
+            <h2 className="text-sm font-medium text-fg-primary">More settings</h2>
+            <p className="mt-0.5 text-xs text-fg-secondary">
               Configuration that lives outside the account-and-security card above.
             </p>
           </div>
@@ -128,13 +128,16 @@ export default function SettingsPage() {
               const Icon = page.icon;
               return (
                 <li key={page.href}>
-                  <Link href={page.href} className="flex items-center gap-3 p-4 hover:bg-muted/30">
-                    <Icon className="h-5 w-5 text-muted-foreground" />
+                  <Link
+                    href={page.href}
+                    className="flex items-center gap-3 p-4 hover:bg-surface-raised/30"
+                  >
+                    <Icon className="h-5 w-5 text-fg-secondary" />
                     <div className="min-w-0 flex-1">
-                      <div className="text-sm font-medium text-foreground">{page.label}</div>
-                      <p className="mt-0.5 text-xs text-muted-foreground">{page.description}</p>
+                      <div className="text-sm font-medium text-fg-primary">{page.label}</div>
+                      <p className="mt-0.5 text-xs text-fg-secondary">{page.description}</p>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    <ChevronRight className="h-4 w-4 text-fg-secondary" />
                   </Link>
                 </li>
               );

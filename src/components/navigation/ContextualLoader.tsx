@@ -35,8 +35,8 @@ export function ContextualLoader({ className, pathname: propPathname }: Contextu
           <IconComponent className={cn('w-6 h-6', content.color)} aria-hidden="true" />
         </div>
         <div className="space-y-1">
-          <h2 className="text-base font-medium text-foreground">{content.title}</h2>
-          <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+          <h2 className="text-base font-medium text-fg-primary">{content.title}</h2>
+          <p className="inline-flex items-center gap-2 text-sm text-fg-secondary">
             <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" />
             Loading…
           </p>

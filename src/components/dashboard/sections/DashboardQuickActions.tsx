@@ -23,7 +23,7 @@ export function DashboardQuickActions() {
           <Link href={ROUTES.DASHBOARD.CAT}>
             <Button
               variant="outline"
-              className="min-h-11 hover:border-border-strong hover:bg-muted"
+              className="min-h-11 hover:border-strong hover:bg-surface-raised"
             >
               <Cat className="w-4 h-4 mr-2" />
               Ask Cat

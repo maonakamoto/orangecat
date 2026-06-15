@@ -33,7 +33,7 @@ export type WalletFieldType =
 
 export const walletGuidanceContent: Record<NonNullable<WalletFieldType>, FieldGuidanceContent> = {
   category: {
-    icon: React.createElement(Wallet, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Wallet, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Wallet Category',
     description:
       'The category tells supporters what this wallet is for – rent, food, emergencies, projects, and more.',
@@ -50,7 +50,7 @@ export const walletGuidanceContent: Record<NonNullable<WalletFieldType>, FieldGu
     ],
   },
   label: {
-    icon: React.createElement(Target, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Target, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Wallet Name',
     description:
       'The wallet name is how you and your supporters recognise this wallet. Think of it as the title of a funding bucket.',
@@ -62,7 +62,7 @@ export const walletGuidanceContent: Record<NonNullable<WalletFieldType>, FieldGu
     examples: ['Rent – Winter 2025', 'Food & Groceries', 'Medical Bills – Maria'],
   },
   description: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Description',
     description:
       'Use the description to briefly explain what this wallet is for and why you are collecting funds here.',
@@ -78,7 +78,7 @@ export const walletGuidanceContent: Record<NonNullable<WalletFieldType>, FieldGu
     ],
   },
   addressOrXpub: {
-    icon: React.createElement(KeyRound, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(KeyRound, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Bitcoin Address or Extended Public Key',
     description:
       'This is where the Bitcoin actually goes. We recommend using an extended public key (xpub/ypub/zpub) for automatic tracking of all addresses and transactions.',
@@ -95,7 +95,7 @@ export const walletGuidanceContent: Record<NonNullable<WalletFieldType>, FieldGu
     ],
   },
   goalAmount: {
-    icon: React.createElement(PiggyBank, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(PiggyBank, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Funding Goal (optional)',
     description:
       'The funding goal shows what you are aiming for with this wallet – for example one month of rent or a specific medical bill.',
@@ -107,7 +107,7 @@ export const walletGuidanceContent: Record<NonNullable<WalletFieldType>, FieldGu
     examples: ['1200 CHF for one month of rent', '400 CHF for winter heating costs'],
   },
   goalCurrency: {
-    icon: React.createElement(Coins, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Coins, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Goal Currency',
     description:
       'The currency is only for display – all funding still arrives in Bitcoin, but you can explain your goal in CHF, EUR, USD, BTC, or SATS.',
@@ -126,19 +126,19 @@ export const walletDefaultContent: DefaultContent = {
     'A wallet on OrangeCat is a funding bucket connected to your own Bitcoin wallet. Each wallet can represent a concrete need such as rent, food, or a savings goal.',
   features: [
     {
-      icon: React.createElement(Wallet, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Wallet, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Connect addresses or xpubs from wallets you control',
     },
     {
-      icon: React.createElement(PiggyBank, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(PiggyBank, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Create separate wallets for rent, food, emergencies, and projects',
     },
     {
-      icon: React.createElement(Shield, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Shield, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Non‑custodial by design – you always stay in control of your funds',
     },
     {
-      icon: React.createElement(RefreshCcw, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(RefreshCcw, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Update goals and categories over time as your situation changes',
     },
   ],

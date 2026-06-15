@@ -7,7 +7,7 @@ export default function CommunityLoading() {
         <PageHeaderSkeleton />
       </div>
 
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-fg-tertiary">
         <TimelinePostSkeleton />
         <TimelinePostSkeleton />
         <TimelinePostSkeleton />

@@ -66,21 +66,21 @@ export function getTimelineVisibilityOption(
 }
 
 export const TIMELINE_SURFACE = {
-  page: 'min-h-screen bg-background text-foreground',
+  page: 'min-h-screen bg-surface-page text-fg-primary',
   rail: 'mx-auto flex w-full max-w-6xl justify-center px-0 sm:px-4 lg:px-8',
-  feed: 'w-full max-w-2xl border-x border-border-subtle bg-background',
+  feed: 'w-full max-w-2xl border-x border-subtle bg-surface-page',
   header:
-    'sticky top-0 z-20 flex items-center justify-between border-b border-border-subtle bg-background/90 px-4 py-3 backdrop-blur-xl sm:px-5',
-  composer: 'border-b border-border-subtle bg-background px-4 py-4 sm:px-5',
-  post: 'border-b border-border-subtle bg-background px-4 py-3 transition-colors hover:bg-muted/35',
-  selectedPost: 'bg-muted/60 hover:bg-muted/70',
+    'sticky top-0 z-20 flex items-center justify-between border-b border-subtle bg-surface-page/90 px-4 py-3 backdrop-blur-xl sm:px-5',
+  composer: 'border-b border-subtle bg-surface-page px-4 py-4 sm:px-5',
+  post: 'border-b border-subtle bg-surface-page px-4 py-3 transition-colors hover:bg-surface-raised/35',
+  selectedPost: 'bg-surface-raised/60 hover:bg-surface-raised/70',
   buttonPrimary:
-    'rounded-md bg-foreground px-5 py-2 text-sm font-semibold text-background transition-colors hover:bg-foreground/90 disabled:bg-muted disabled:text-muted-foreground',
+    'rounded-md bg-fg-primary px-5 py-2 text-sm font-semibold text-fg-inverted transition-colors hover:bg-fg-primary/90 disabled:bg-surface-raised disabled:text-fg-secondary',
   iconButton:
-    'flex min-h-10 min-w-10 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50',
-  chip: 'inline-flex items-center gap-1.5 rounded-md border border-border-subtle bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-border hover:text-foreground',
+    'flex min-h-10 min-w-10 items-center justify-center rounded-md text-fg-secondary transition-colors hover:bg-surface-raised hover:text-fg-primary disabled:cursor-not-allowed disabled:opacity-50',
+  chip: 'inline-flex items-center gap-1.5 rounded-md border border-subtle bg-surface-page px-2.5 py-1 text-xs font-medium text-fg-secondary transition-colors hover:border-default hover:text-fg-primary',
   chipActive:
-    'border-foreground bg-foreground text-background hover:border-foreground hover:text-background',
-  panel: 'rounded-md border border-border-subtle bg-muted/25',
-  menu: 'rounded-md border border-border-subtle bg-popover shadow-sm',
+    'border-fg-primary bg-fg-primary text-fg-inverted hover:border-fg-primary hover:text-fg-inverted',
+  panel: 'rounded-md border border-subtle bg-surface-raised/25',
+  menu: 'rounded-md border border-subtle bg-surface-modal shadow-sm',
 } as const;

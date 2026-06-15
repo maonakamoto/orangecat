@@ -119,7 +119,7 @@ export function AISettingsStatus({
               <span
                 className={cn(
                   'font-medium',
-                  isNearLimit ? 'text-destructive' : 'text-status-warning'
+                  isNearLimit ? 'text-status-negative' : 'text-status-warning'
                 )}
               >
                 {dailyUsage.used} / {dailyUsage.limit} messages today
@@ -138,8 +138,8 @@ export function AISettingsStatus({
           {/* Near Limit Warning */}
           {isNearLimit && !compact && (
             <div className="oc-error-surface flex items-start gap-2 p-2">
-              <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-destructive/80">
+              <AlertCircle className="w-4 h-4 text-status-negative mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-status-negative/80">
                 You are running low on free messages. Add your own API key for unlimited usage.
               </p>
             </div>

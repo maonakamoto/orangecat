@@ -61,8 +61,8 @@ export function ThreadPost({
       >
         {/* Quote reply indicator */}
         {isQuoteReply && event.quotedContent && (
-          <div className="mb-2 p-3 bg-muted border-l-4 border-foreground rounded-r-md">
-            <div className="text-sm text-muted-foreground italic">"{event.quotedContent}"</div>
+          <div className="mb-2 p-3 bg-surface-raised border-l-4 border-fg-primary rounded-r-md">
+            <div className="text-sm text-fg-secondary italic">"{event.quotedContent}"</div>
           </div>
         )}
 
@@ -98,7 +98,7 @@ export function ThreadView({
   className,
 }: ThreadViewProps) {
   if (!events || events.length === 0) {
-    return <div className="text-center py-8 text-muted-foreground">No posts in this thread.</div>;
+    return <div className="text-center py-8 text-fg-secondary">No posts in this thread.</div>;
   }
 
   return (

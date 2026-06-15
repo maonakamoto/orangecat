@@ -20,7 +20,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'About OrangeCat',
     icon: HelpCircle,
-    color: 'text-foreground',
+    color: 'text-fg-primary',
     items: [
       {
         question: 'What is OrangeCat?',
@@ -47,7 +47,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Your Cat (AI Agent)',
     icon: Bot,
-    color: 'text-foreground',
+    color: 'text-fg-primary',
     items: [
       {
         question: 'What is "My Cat"?',
@@ -88,7 +88,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Economic Activity',
     icon: Coins,
-    color: 'text-foreground',
+    color: 'text-fg-primary',
     items: [
       {
         question: 'What kinds of economic activity can I do on OrangeCat?',
@@ -141,7 +141,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Payments & Bitcoin',
     icon: Zap,
-    color: 'text-foreground',
+    color: 'text-fg-primary',
     items: [
       {
         question: 'Do I need Bitcoin to use OrangeCat?',
@@ -168,7 +168,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Groups & Governance',
     icon: Users,
-    color: 'text-foreground',
+    color: 'text-fg-primary',
     items: [
       {
         question: 'What are Groups?',
@@ -185,7 +185,7 @@ const FAQ_SECTIONS: FaqSection[] = [
   {
     title: 'Privacy & Security',
     icon: Shield,
-    color: 'text-foreground',
+    color: 'text-fg-primary',
     items: [
       {
         question: 'Who can see my activity?',
@@ -216,24 +216,24 @@ function FaqAccordionItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border border-border rounded-lg overflow-hidden">
+    <div className="border border-default rounded-lg overflow-hidden">
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-5 py-4 text-left bg-card hover:bg-muted transition-colors"
+        className="w-full flex items-center justify-between px-5 py-4 text-left bg-surface-base hover:bg-surface-raised transition-colors"
         aria-expanded={isOpen}
       >
-        <span className="font-medium text-foreground pr-4">{item.question}</span>
+        <span className="font-medium text-fg-primary pr-4">{item.question}</span>
         <ChevronDown
           className={cn(
-            'h-5 w-5 text-muted-dim flex-shrink-0 transition-transform duration-200',
+            'h-5 w-5 text-fg-tertiary flex-shrink-0 transition-transform duration-200',
             isOpen && 'rotate-180'
           )}
         />
       </button>
       {isOpen && (
-        <div className="px-5 pb-5 pt-1 bg-card border-t border-border-subtle">
-          <div className="text-muted-foreground leading-relaxed text-[15px]">{item.answer}</div>
+        <div className="px-5 pb-5 pt-1 bg-surface-base border-t border-subtle">
+          <div className="text-fg-secondary leading-relaxed text-[15px]">{item.answer}</div>
         </div>
       )}
     </div>
@@ -250,10 +250,10 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen pt-20 pb-24">
       {/* Header */}
-      <div className="border-b border-border bg-background py-16 px-4">
+      <div className="border-b border-default bg-surface-page py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Frequently Asked Questions</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-fg-primary mb-4">Frequently Asked Questions</h1>
+          <p className="text-xl text-fg-secondary max-w-2xl mx-auto">
             Everything you need to know about OrangeCat — your AI economic agent.
           </p>
         </div>
@@ -269,7 +269,7 @@ export default function FAQPage() {
                 <a
                   key={section.title}
                   href={`#${slugifyFaqSection(section.title)}`}
-                  className="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  className="block rounded-md px-3 py-2 text-sm text-fg-secondary transition-colors hover:bg-surface-raised hover:text-fg-primary"
                 >
                   {section.title}
                 </a>
@@ -287,10 +287,10 @@ export default function FAQPage() {
                   className="scroll-mt-24"
                 >
                   <div className="flex items-center gap-3 mb-5">
-                    <div className={cn('p-2 rounded-lg bg-muted', section.color)}>
+                    <div className={cn('p-2 rounded-lg bg-surface-raised', section.color)}>
                       <Icon className="h-5 w-5" />
                     </div>
-                    <h2 className="text-xl font-semibold text-foreground">{section.title}</h2>
+                    <h2 className="text-xl font-semibold text-fg-primary">{section.title}</h2>
                   </div>
                   <div className="space-y-2">
                     {section.items.map((item, i) => {
@@ -310,15 +310,15 @@ export default function FAQPage() {
             })}
 
             {/* Still have questions */}
-            <div className="text-center bg-muted border border-border rounded-lg p-8">
-              <h3 className="text-lg font-semibold text-foreground mb-2">Still have questions?</h3>
-              <p className="text-muted-foreground mb-4">
+            <div className="text-center bg-surface-raised border border-default rounded-lg p-8">
+              <h3 className="text-lg font-semibold text-fg-primary mb-2">Still have questions?</h3>
+              <p className="text-fg-secondary mb-4">
                 Ask your Cat — open the chat panel in your dashboard and type your question. Or
                 reach out directly.
               </p>
               <a
                 href="mailto:hello@orangecat.ch"
-                className="inline-flex items-center gap-2 bg-foreground hover:bg-muted-strong text-background font-medium px-5 py-2.5 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 bg-fg-primary hover:bg-muted-strong text-fg-inverted font-medium px-5 py-2.5 rounded-lg transition-colors"
               >
                 Contact Us
               </a>

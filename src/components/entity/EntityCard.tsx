@@ -137,7 +137,7 @@ export function EntityCard({
 
       {showOnProfile === false && (
         <div className="absolute top-2 left-2 z-10">
-          <span className="inline-flex items-center gap-1 rounded-md border border-border-subtle bg-background/90 px-2 py-1 text-xs font-medium text-foreground backdrop-blur">
+          <span className="inline-flex items-center gap-1 rounded-md border border-subtle bg-surface-page/90 px-2 py-1 text-xs font-medium text-fg-primary backdrop-blur">
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
@@ -165,7 +165,7 @@ export function EntityCard({
         <Link href={detailHref}>
           <h3
             className={cn(
-              'font-semibold text-foreground transition-colors group-hover:underline underline-offset-4 line-clamp-1',
+              'font-semibold text-fg-primary transition-colors group-hover:underline underline-offset-4 line-clamp-1',
               compact ? 'text-sm' : 'text-lg'
             )}
           >
@@ -174,11 +174,11 @@ export function EntityCard({
         </Link>
 
         {description && !compact && (
-          <p className="mt-2 text-base text-muted-foreground line-clamp-2">{description}</p>
+          <p className="mt-2 text-base text-fg-secondary line-clamp-2">{description}</p>
         )}
 
         {priceLabel && (
-          <p className={cn(compact ? 'mt-1' : 'mt-2', 'text-sm font-medium text-foreground')}>
+          <p className={cn(compact ? 'mt-1' : 'mt-2', 'text-sm font-medium text-fg-primary')}>
             {priceLabel}
           </p>
         )}
@@ -200,7 +200,7 @@ export function EntityCard({
               )}
             </div>
             {goalAmount && (
-              <span className="text-sm font-medium text-foreground">{goalAmount}</span>
+              <span className="text-sm font-medium text-fg-primary">{goalAmount}</span>
             )}
           </div>
         )}
@@ -208,12 +208,12 @@ export function EntityCard({
         {fundingProgress !== undefined && (
           <div className={cn(compact ? 'mt-2' : 'mt-3')}>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Progress</span>
-              <span className="font-medium text-foreground">{fundingProgress}%</span>
+              <span className="text-fg-secondary">Progress</span>
+              <span className="font-medium text-fg-primary">{fundingProgress}%</span>
             </div>
-            <div className="mt-1 h-2 w-full rounded-full bg-muted">
+            <div className="mt-1 h-2 w-full rounded-full bg-surface-raised">
               <div
-                className="h-2 rounded-full bg-foreground transition-all duration-300"
+                className="h-2 rounded-full bg-fg-primary transition-all duration-300"
                 style={{ width: `${Math.min(100, fundingProgress)}%` }}
               />
             </div>
@@ -224,7 +224,7 @@ export function EntityCard({
         {metricsSlot && <div className={cn(compact ? 'mt-2' : 'mt-3')}>{metricsSlot}</div>}
 
         {footerSlot && (
-          <div className={cn(compact ? 'mt-2 pt-2' : 'mt-3 pt-3', 'border-t border-border-subtle')}>
+          <div className={cn(compact ? 'mt-2 pt-2' : 'mt-3 pt-3', 'border-t border-subtle')}>
             {footerSlot}
           </div>
         )}

@@ -82,10 +82,10 @@ export function CollateralSection({
             </FormControl>
             <SelectContent>
               {assetsLoading && (
-                <div className="px-3 py-2 text-sm text-muted-foreground">Loading assets...</div>
+                <div className="px-3 py-2 text-sm text-fg-secondary">Loading assets...</div>
               )}
               {!assetsLoading && assets.length === 0 && (
-                <div className="px-3 py-2 text-sm text-muted-foreground">
+                <div className="px-3 py-2 text-sm text-fg-secondary">
                   No assets found. Create one under Assets.
                 </div>
               )}
@@ -96,13 +96,13 @@ export function CollateralSection({
                   </SelectItem>
                 ))}
               {/* Create Asset Option */}
-              <SelectItem value="__create_asset__" className="text-foreground font-medium">
+              <SelectItem value="__create_asset__" className="text-fg-primary font-medium">
                 ➕ Create New Asset
               </SelectItem>
             </SelectContent>
           </Select>
           {assetsError && (
-            <FormDescription className="text-destructive">{assetsError}</FormDescription>
+            <FormDescription className="text-status-negative">{assetsError}</FormDescription>
           )}
         </div>
 

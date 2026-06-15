@@ -100,7 +100,7 @@ export default function DashboardWalletsPage() {
 
           {/* Main Content - Wallet Manager */}
           <div className="lg:col-span-7 lg:order-1 order-1">
-            <div className="bg-card rounded-lg shadow-sm border border-border p-4 sm:p-6">
+            <div className="bg-surface-base rounded-lg shadow-sm border border-default p-4 sm:p-6">
               <WalletManager
                 wallets={walletsState}
                 entityType="profile"

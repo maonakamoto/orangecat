@@ -61,14 +61,14 @@ function StatusBadge({ status }: { status: DeliveryRow['status'] }) {
   }
   if (status === 'failed') {
     return (
-      <span className="inline-flex items-center gap-1 rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-destructive">
+      <span className="inline-flex items-center gap-1 rounded bg-status-negative/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-status-negative">
         <XCircle className="h-3 w-3" />
         Failed
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+    <span className="inline-flex items-center gap-1 rounded bg-surface-raised px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-fg-secondary">
       <Clock className="h-3 w-3" />
       Pending
     </span>
@@ -151,14 +151,14 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
   }, [load]);
 
   return (
-    <div className="mt-3 rounded-md border border-border-subtle bg-muted/20 p-3">
+    <div className="mt-3 rounded-md border border-subtle bg-surface-raised/20 p-3">
       <div className="mb-2 flex items-center justify-between">
-        <h4 className="text-xs font-medium text-foreground">Recent deliveries</h4>
+        <h4 className="text-xs font-medium text-fg-primary">Recent deliveries</h4>
         <button
           type="button"
           onClick={load}
           disabled={loading}
-          className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2 py-1 text-[11px] text-muted-foreground hover:bg-muted/60 hover:text-foreground disabled:opacity-50"
+          className="inline-flex items-center gap-1 rounded-md border border-subtle px-2 py-1 text-[11px] text-fg-secondary hover:bg-surface-raised/60 hover:text-fg-primary disabled:opacity-50"
         >
           <RefreshCw className={`h-3 w-3 ${loading ? 'animate-spin' : ''}`} />
           Refresh
@@ -166,15 +166,15 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
       </div>
 
       {error && (
-        <div className="mb-2 rounded border border-destructive/30 bg-destructive/5 px-2 py-1 text-xs text-destructive">
+        <div className="mb-2 rounded border border-status-negative/30 bg-status-negative/5 px-2 py-1 text-xs text-status-negative">
           {error}
         </div>
       )}
 
       {loading && deliveries.length === 0 ? (
-        <p className="text-xs text-muted-foreground">Loading…</p>
+        <p className="text-xs text-fg-secondary">Loading…</p>
       ) : deliveries.length === 0 ? (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-fg-secondary">
           No deliveries yet. The next entity create on this actor will fire here.
         </p>
       ) : (
@@ -186,9 +186,9 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
                 <button
                   type="button"
                   onClick={() => setExpandedId(prev => (prev === d.id ? null : d.id))}
-                  className="flex w-full items-start gap-2 text-left hover:bg-muted/30 rounded-sm px-1 -mx-1 py-0.5"
+                  className="flex w-full items-start gap-2 text-left hover:bg-surface-raised/30 rounded-sm px-1 -mx-1 py-0.5"
                 >
-                  <span className="mt-0.5 text-muted-foreground">
+                  <span className="mt-0.5 text-fg-secondary">
                     {isExpanded ? (
                       <ChevronDown className="h-3 w-3" />
                     ) : (
@@ -198,15 +198,17 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <StatusBadge status={d.status} />
-                      <code className="rounded bg-muted px-1 text-[10px]">{d.event_type}</code>
+                      <code className="rounded bg-surface-raised px-1 text-[10px]">
+                        {d.event_type}
+                      </code>
                       {d.response_status !== null && (
-                        <span className="text-muted-foreground">HTTP {d.response_status}</span>
+                        <span className="text-fg-secondary">HTTP {d.response_status}</span>
                       )}
                       {d.attempt_count > 1 && (
-                        <span className="text-muted-foreground">attempt {d.attempt_count}</span>
+                        <span className="text-fg-secondary">attempt {d.attempt_count}</span>
                       )}
                     </div>
-                    <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-muted-foreground">
+                    <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-fg-secondary">
                       <span>Enqueued {formatTimestamp(d.created_at)}</span>
                       <span>Last attempt {formatTimestamp(d.last_attempt_at)}</span>
                       {d.status === 'pending' && d.next_attempt_at && (
@@ -222,7 +224,7 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
                         type="button"
                         onClick={() => handleReplay(d.id)}
                         disabled={replayingId === d.id}
-                        className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2 py-1 text-[11px] text-muted-foreground hover:bg-muted/60 hover:text-foreground disabled:opacity-50"
+                        className="inline-flex items-center gap-1 rounded-md border border-subtle px-2 py-1 text-[11px] text-fg-secondary hover:bg-surface-raised/60 hover:text-fg-primary disabled:opacity-50"
                       >
                         <RotateCcw
                           className={`h-3 w-3 ${replayingId === d.id ? 'animate-spin' : ''}`}
@@ -231,19 +233,19 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
                       </button>
                     </div>
                     <div>
-                      <div className="mb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+                      <div className="mb-1 text-[10px] uppercase tracking-wide text-fg-secondary">
                         Sent payload
                       </div>
-                      <pre className="max-h-64 overflow-auto rounded border border-border-subtle bg-background p-2 text-[10px] leading-snug text-foreground">
+                      <pre className="max-h-64 overflow-auto rounded border border-subtle bg-surface-page p-2 text-[10px] leading-snug text-fg-primary">
                         {prettyPrintPayload(d.payload)}
                       </pre>
                     </div>
                     {d.response_body && (
                       <div>
-                        <div className="mb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+                        <div className="mb-1 text-[10px] uppercase tracking-wide text-fg-secondary">
                           Receiver response
                         </div>
-                        <pre className="max-h-32 overflow-auto rounded border border-border-subtle bg-background p-2 text-[10px] leading-snug text-foreground">
+                        <pre className="max-h-32 overflow-auto rounded border border-subtle bg-surface-page p-2 text-[10px] leading-snug text-fg-primary">
                           {d.response_body}
                         </pre>
                       </div>

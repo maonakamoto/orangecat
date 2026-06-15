@@ -63,7 +63,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-3 py-2 min-h-11 rounded-md text-base text-foreground hover:bg-muted"
+                className="block px-3 py-2 min-h-11 rounded-md text-base text-fg-primary hover:bg-surface-raised"
                 onClick={onClose}
               >
                 {item.name}
@@ -73,7 +73,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
         </div>
 
         {/* Footer sections */}
-        <div className="mt-auto border-t border-border-subtle">
+        <div className="mt-auto border-t border-subtle">
           {(['product', 'company', 'legal'] as const).map(sectionKey => {
             const section = footer?.[sectionKey] || [];
             if (!section || section.length === 0) {
@@ -81,7 +81,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
             }
             return (
               <div key={sectionKey} className="p-4">
-                <div className="text-xs font-semibold text-muted-foreground uppercase mb-2">
+                <div className="text-xs font-semibold text-fg-secondary uppercase mb-2">
                   {sectionKey}
                 </div>
                 <div className="grid grid-cols-1 gap-1">
@@ -89,7 +89,7 @@ export function HeaderNavigation(props: HeaderNavigationProps) {
                     <Link
                       key={`${sectionKey}-${link.name}-${link.href}`}
                       href={link.href}
-                      className="px-3 py-2 min-h-11 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-muted"
+                      className="px-3 py-2 min-h-11 rounded-md text-sm text-fg-secondary hover:text-fg-primary hover:bg-surface-raised"
                       onClick={onClose}
                     >
                       {link.name}
@@ -146,14 +146,14 @@ function HeaderNavLink({ href, label, isActive }: HeaderNavLinkProps) {
   const linkClasses = cn(
     'px-4 py-2.5 text-sm font-medium rounded-md transition-colors duration-150 relative',
     isActive
-      ? 'text-foreground bg-muted'
-      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+      ? 'text-fg-primary bg-surface-raised'
+      : 'text-fg-secondary hover:text-fg-primary hover:bg-surface-raised'
   );
 
   return (
     <Link href={href} className={linkClasses}>
       {label}
-      {isActive && <div className="absolute inset-x-3 bottom-0 h-px bg-foreground" />}
+      {isActive && <div className="absolute inset-x-3 bottom-0 h-px bg-fg-primary" />}
     </Link>
   );
 }
@@ -199,17 +199,17 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
         className={cn(
           'px-4 py-2.5 min-h-11 text-sm font-medium rounded-md transition-colors duration-150 relative flex items-center gap-1',
           hasActiveChild
-            ? 'text-foreground bg-muted'
-            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+            ? 'text-fg-primary bg-surface-raised'
+            : 'text-fg-secondary hover:text-fg-primary hover:bg-surface-raised'
         )}
       >
         {item.name}
         <ChevronDown className={cn('w-4 h-4 transition-transform', isOpen && 'rotate-180')} />
-        {hasActiveChild && <div className="absolute inset-x-3 bottom-0 h-px bg-foreground" />}
+        {hasActiveChild && <div className="absolute inset-x-3 bottom-0 h-px bg-fg-primary" />}
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-56 bg-card rounded-lg shadow-sm border border-border py-2 z-50">
+        <div className="absolute top-full left-0 mt-2 w-56 bg-surface-base rounded-lg shadow-sm border border-default py-2 z-50">
           {item.children?.map((child, _index) => {
             // Skip children without href
             if (!child.href) {
@@ -223,14 +223,14 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
                 className={cn(
                   'block px-4 py-2.5 min-h-11 text-sm transition-colors',
                   isActive(child.href)
-                    ? 'text-foreground bg-muted font-medium'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    ? 'text-fg-primary bg-surface-raised font-medium'
+                    : 'text-fg-secondary hover:text-fg-primary hover:bg-surface-raised'
                 )}
                 onClick={() => setIsOpen(false)}
               >
                 <div className="font-medium">{child.name}</div>
                 {child.description && (
-                  <div className="text-xs text-muted-foreground mt-0.5">{child.description}</div>
+                  <div className="text-xs text-fg-secondary mt-0.5">{child.description}</div>
                 )}
               </Link>
             );

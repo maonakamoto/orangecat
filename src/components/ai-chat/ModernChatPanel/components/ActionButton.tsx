@@ -23,7 +23,7 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
         onClick={onClick}
         className={cn(
           'flex items-center gap-2 rounded-md px-4 py-2.5',
-          'bg-foreground text-sm font-medium text-background hover:bg-foreground/90',
+          'bg-fg-primary text-sm font-medium text-fg-inverted hover:bg-fg-primary/90',
           'transition-colors'
         )}
       >
@@ -62,8 +62,8 @@ export function ActionButton({ action, onClick }: ActionButtonProps) {
           ? 'bg-status-positive hover:bg-status-positive/90'
           : action.type === 'update_entity'
             ? 'bg-muted-strong hover:bg-muted-strong/90'
-            : 'bg-foreground hover:bg-foreground/90',
-        'text-sm font-medium text-background',
+            : 'bg-fg-primary hover:bg-fg-primary/90',
+        'text-sm font-medium text-fg-inverted',
         'transition-colors'
       )}
     >

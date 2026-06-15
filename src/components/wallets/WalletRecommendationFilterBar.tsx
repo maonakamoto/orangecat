@@ -18,8 +18,9 @@ interface WalletRecommendationFilterBarProps {
   onReset: () => void;
 }
 
-const ACTIVE_CLASS = 'bg-bitcoinOrange/10 text-bitcoinOrange border-2 border-border-strong';
-const INACTIVE_CLASS = 'bg-muted text-foreground border-2 border-transparent hover:bg-muted/80';
+const ACTIVE_CLASS = 'bg-bitcoinOrange/10 text-bitcoinOrange border-2 border-strong';
+const INACTIVE_CLASS =
+  'bg-surface-raised text-fg-primary border-2 border-transparent hover:bg-surface-raised/80';
 const BTN_BASE =
   'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all';
 
@@ -35,7 +36,7 @@ export function WalletRecommendationFilterBar({
     <div className="mb-8 space-y-4">
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-foreground">Platform:</span>
+          <span className="text-sm font-medium text-fg-primary">Platform:</span>
           <button
             onClick={() => onTogglePlatform('mobile')}
             className={cn(
@@ -59,7 +60,7 @@ export function WalletRecommendationFilterBar({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-foreground">Level:</span>
+          <span className="text-sm font-medium text-fg-primary">Level:</span>
           <button
             onClick={() => onToggleLevel('beginner')}
             className={cn(
@@ -81,7 +82,7 @@ export function WalletRecommendationFilterBar({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-foreground">Features:</span>
+          <span className="text-sm font-medium text-fg-primary">Features:</span>
           <button
             onClick={onToggleLightning}
             className={cn(BTN_BASE, filters.lightning ? ACTIVE_CLASS : INACTIVE_CLASS)}
@@ -94,7 +95,7 @@ export function WalletRecommendationFilterBar({
         {hasActiveFilters && (
           <button
             onClick={onReset}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-fg-secondary hover:text-fg-primary hover:bg-surface-raised transition-all"
           >
             <X className="w-4 h-4" />
             Reset filters
@@ -102,7 +103,7 @@ export function WalletRecommendationFilterBar({
         )}
       </div>
 
-      <p className="text-xs text-muted-foreground flex items-center gap-1">
+      <p className="text-xs text-fg-secondary flex items-center gap-1">
         <Shield className="w-3 h-3" />
         All wallets shown are non-custodial — you control your keys
       </p>

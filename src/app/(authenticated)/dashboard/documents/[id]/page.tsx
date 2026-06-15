@@ -120,7 +120,7 @@ export default async function DocumentDetailPage({ params }: PageProps) {
       {/* Back link */}
       <Link
         href={`${ROUTES.DASHBOARD.CAT}?tab=context`}
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="inline-flex items-center gap-2 text-sm text-fg-secondary hover:text-fg-primary transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to My Context
@@ -164,7 +164,7 @@ export default async function DocumentDetailPage({ params }: PageProps) {
           {doc.content ? (
             <div className="prose prose-sm max-w-none whitespace-pre-wrap">{doc.content}</div>
           ) : (
-            <p className="text-muted-foreground italic">No content</p>
+            <p className="text-fg-secondary italic">No content</p>
           )}
         </CardContent>
       </Card>
@@ -195,7 +195,7 @@ export default async function DocumentDetailPage({ params }: PageProps) {
         <CardContent>
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
             <div>
-              <dt className="text-muted-foreground">Created</dt>
+              <dt className="text-fg-secondary">Created</dt>
               <dd className="font-medium mt-1">
                 {new Date(doc.created_at).toLocaleDateString('en-US', {
                   year: 'numeric',
@@ -207,7 +207,7 @@ export default async function DocumentDetailPage({ params }: PageProps) {
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Last Updated</dt>
+              <dt className="text-fg-secondary">Last Updated</dt>
               <dd className="font-medium mt-1">
                 {new Date(doc.updated_at).toLocaleDateString('en-US', {
                   year: 'numeric',
@@ -224,7 +224,7 @@ export default async function DocumentDetailPage({ params }: PageProps) {
 
       {/* Help text */}
       {doc.visibility === 'cat_visible' && (
-        <div className="rounded-md border border-border-subtle bg-muted/30 p-4 text-sm text-muted-foreground">
+        <div className="rounded-md border border-subtle bg-surface-raised/30 p-4 text-sm text-fg-secondary">
           <p>
             <strong>Your Cat can see this document.</strong> This context helps your Cat give you
             personalized advice based on your{' '}
@@ -234,7 +234,7 @@ export default async function DocumentDetailPage({ params }: PageProps) {
       )}
 
       {doc.visibility === 'private' && (
-        <div className="rounded-md border border-border-subtle bg-muted p-4 text-sm text-muted-foreground">
+        <div className="rounded-md border border-subtle bg-surface-raised p-4 text-sm text-fg-secondary">
           <p>
             <strong>This document is private.</strong> Only you can see it. Change the visibility to
             "Cat Only" if you want your Cat to use this as context for advice.

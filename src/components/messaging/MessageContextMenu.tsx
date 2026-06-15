@@ -120,7 +120,7 @@ export function MessageContextMenu({
       <div
         ref={menuRef}
         className={cn(
-          'fixed z-50 bg-card rounded-lg shadow-sm border border-border',
+          'fixed z-50 bg-surface-base rounded-lg shadow-sm border border-default',
           'min-w-40 py-1',
           'animate-in fade-in-0 zoom-in-95 duration-150'
         )}
@@ -139,13 +139,13 @@ export function MessageContextMenu({
               onClose();
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-left text-sm text-foreground',
-              'hover:bg-muted active:bg-muted dark:active:bg-muted',
+              'w-full px-4 py-2.5 text-left text-sm text-fg-primary',
+              'hover:bg-surface-raised active:bg-surface-raised dark:active:bg-surface-raised',
               'flex items-center gap-3 transition-colors'
             )}
             role="menuitem"
           >
-            <Edit className="w-4 h-4 text-muted-foreground" />
+            <Edit className="w-4 h-4 text-fg-secondary" />
             <span>Edit</span>
           </button>
         )}
@@ -158,27 +158,27 @@ export function MessageContextMenu({
               onClose();
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-left text-sm text-destructive',
-              'hover:bg-destructive/10 active:bg-destructive/20',
+              'w-full px-4 py-2.5 text-left text-sm text-status-negative',
+              'hover:bg-status-negative/10 active:bg-status-negative/20',
               'flex items-center gap-3 transition-colors'
             )}
             role="menuitem"
           >
-            <Trash2 className="w-4 h-4 text-destructive" />
+            <Trash2 className="w-4 h-4 text-status-negative" />
             <span>Delete</span>
           </button>
         )}
 
         {/* Close button (mobile) */}
-        <div className="border-t border-border-subtle mt-1 pt-1 md:hidden">
+        <div className="border-t border-subtle mt-1 pt-1 md:hidden">
           <button
             onClick={e => {
               e.stopPropagation();
               onClose();
             }}
             className={cn(
-              'w-full px-4 py-2.5 text-center text-sm text-muted-foreground',
-              'hover:bg-muted active:bg-muted dark:active:bg-muted',
+              'w-full px-4 py-2.5 text-center text-sm text-fg-secondary',
+              'hover:bg-surface-raised active:bg-surface-raised dark:active:bg-surface-raised',
               'flex items-center justify-center gap-2 transition-colors'
             )}
             role="menuitem"

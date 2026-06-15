@@ -212,7 +212,7 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
   return (
     <section className="space-y-4">
       {error && (
-        <div className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-md border border-status-negative/30 bg-status-negative/5 px-3 py-2 text-sm text-status-negative">
           {error}
         </div>
       )}
@@ -246,17 +246,17 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
         />
       )}
 
-      <div className="rounded-lg border border-border-subtle">
-        <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
-          <h3 className="text-sm font-medium text-foreground">Your keys</h3>
-          <span className="text-xs text-muted-foreground">
+      <div className="rounded-lg border border-subtle">
+        <div className="flex items-center justify-between border-b border-subtle px-4 py-3">
+          <h3 className="text-sm font-medium text-fg-primary">Your keys</h3>
+          <span className="text-xs text-fg-secondary">
             {keys.length} {keys.length === 1 ? 'key' : 'keys'}
           </span>
         </div>
         {loading ? (
-          <div className="p-4 text-sm text-muted-foreground">Loading…</div>
+          <div className="p-4 text-sm text-fg-secondary">Loading…</div>
         ) : keys.length === 0 ? (
-          <div className="p-6 text-center text-sm text-muted-foreground">
+          <div className="p-6 text-center text-sm text-fg-secondary">
             No keys yet. Create one above to integrate an external service.
           </div>
         ) : (

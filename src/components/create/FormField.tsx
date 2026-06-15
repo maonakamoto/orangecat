@@ -36,8 +36,8 @@ export function FormField({
   const { name, label, type, placeholder, required, options, hint, min, max, rows = 4 } = config;
 
   const baseInputClass = error
-    ? 'border-destructive focus:ring-destructive/20'
-    : 'border-border-strong';
+    ? 'border-status-negative focus:ring-status-negative/20'
+    : 'border-strong';
 
   const renderInput = () => {
     switch (type) {
@@ -116,8 +116,8 @@ export function FormField({
             onFocus={onFocus}
             onBlur={onBlur}
             disabled={disabled}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:border-ring transition-colors ${baseInputClass} ${
-              disabled ? 'bg-muted cursor-not-allowed' : ''
+            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:border-interactive transition-colors ${baseInputClass} ${
+              disabled ? 'bg-surface-raised cursor-not-allowed' : ''
             }`}
           >
             <option value="">Select {label.toLowerCase()}</option>
@@ -145,9 +145,9 @@ export function FormField({
                   className="mt-1"
                 />
                 <div>
-                  <span className="text-sm font-medium text-foreground">{option.label}</span>
+                  <span className="text-sm font-medium text-fg-primary">{option.label}</span>
                   {option.description && (
-                    <p className="text-xs text-muted-foreground">{option.description}</p>
+                    <p className="text-xs text-fg-secondary">{option.description}</p>
                   )}
                 </div>
               </label>
@@ -165,9 +165,9 @@ export function FormField({
               onChange={e => onChange(e.target.checked)}
               onFocus={onFocus}
               disabled={disabled}
-              className="w-4 h-4 rounded border-border-strong text-foreground focus:ring-ring"
+              className="w-4 h-4 rounded border-strong text-fg-primary focus:ring-ring"
             />
-            <span className="text-sm text-foreground">{placeholder || label}</span>
+            <span className="text-sm text-fg-primary">{placeholder || label}</span>
           </label>
         );
 
@@ -258,7 +258,7 @@ export function FormField({
       <div>
         {renderInput()}
         {error && (
-          <p role="alert" className="text-destructive text-sm mt-1">
+          <p role="alert" className="text-status-negative text-sm mt-1">
             {error}
           </p>
         )}
@@ -268,14 +268,14 @@ export function FormField({
 
   return (
     <div>
-      <label htmlFor={name} className="block text-sm font-medium text-foreground mb-2">
+      <label htmlFor={name} className="block text-sm font-medium text-fg-primary mb-2">
         {label}
-        {required && <span className="text-destructive ml-1">*</span>}
+        {required && <span className="text-status-negative ml-1">*</span>}
       </label>
       {renderInput()}
-      {hint && !error && <p className="text-xs text-muted-foreground mt-1">{hint}</p>}
+      {hint && !error && <p className="text-xs text-fg-secondary mt-1">{hint}</p>}
       {error && (
-        <p role="alert" className="text-destructive text-sm mt-1">
+        <p role="alert" className="text-status-negative text-sm mt-1">
           {error}
         </p>
       )}

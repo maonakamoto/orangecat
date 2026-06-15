@@ -38,7 +38,7 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
           <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-fg-secondary" />
           Support this Profile
         </h3>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-sm text-fg-secondary mt-1">
           Donate one-time or subscribe to recurring support — payments go directly to the profile's
           Lightning or Bitcoin address.
         </p>
@@ -47,28 +47,28 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
         <div className="grid grid-cols-2 gap-2">
           <button
             onClick={() => setSupportType('donate')}
-            className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'donate' ? 'border-foreground bg-muted' : 'border-border hover:border-border-strong'}`}
+            className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'donate' ? 'border-fg-primary bg-surface-raised' : 'border-default hover:border-strong'}`}
           >
             <Heart className="w-5 h-5" />
             <span>Donate</span>
-            <span className="text-[10px] text-muted-foreground">One-time support</span>
+            <span className="text-[10px] text-fg-secondary">One-time support</span>
           </button>
           <button
             onClick={() => setSupportType('subscribe')}
-            className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'subscribe' ? 'border-foreground bg-muted' : 'border-border hover:border-border-strong'}`}
+            className={`flex flex-col items-center justify-center gap-1 p-3 rounded-xl border text-sm transition-all ${supportType === 'subscribe' ? 'border-fg-primary bg-surface-raised' : 'border-default hover:border-strong'}`}
           >
             <Repeat className="w-5 h-5" />
             <span>Subscribe</span>
-            <span className="text-[10px] text-muted-foreground">Recurring</span>
+            <span className="text-[10px] text-fg-secondary">Recurring</span>
           </button>
         </div>
 
         {supportType && (
-          <div className="mt-4 p-4 border border-border rounded-xl bg-surface/50">
+          <div className="mt-4 p-4 border border-default rounded-xl bg-surface/50">
             {supportType === 'donate' && (
               <div className="space-y-3">
                 <div className="font-medium">Donate to this profile</div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-fg-secondary">
                   One-time contribution. Send to the profile's Bitcoin or Lightning address (real
                   engine integrates the full PublicEntityPaymentSection / LightningPayment flow for
                   invoicing + confirmation).
@@ -77,7 +77,7 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
                   <div className="space-y-2 text-sm">
                     {profile.lightning_address && (
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
+                        <span className="font-mono text-xs bg-surface-raised px-2 py-1 rounded flex-1 truncate">
                           {profile.lightning_address}
                         </span>
                         <button
@@ -93,7 +93,7 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
                     )}
                     {profile.bitcoin_address && (
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
+                        <span className="font-mono text-xs bg-surface-raised px-2 py-1 rounded flex-1 truncate">
                           {profile.bitcoin_address}
                         </span>
                         <button
@@ -107,13 +107,13 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
                         </button>
                       </div>
                     )}
-                    <div className="text-[10px] text-muted-foreground">
+                    <div className="text-[10px] text-fg-secondary">
                       Send any amount. For integrated checkout with amount selection and status, see
                       project support pages.
                     </div>
                   </div>
                 ) : (
-                  <div className="text-sm text-muted-foreground italic">
+                  <div className="text-sm text-fg-secondary italic">
                     No wallet connected yet. Profile owner can add one in settings.
                   </div>
                 )}
@@ -129,7 +129,7 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
             {supportType === 'subscribe' && (
               <div className="space-y-3">
                 <div className="font-medium">Buy a subscription</div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-fg-secondary">
                   Recurring support (e.g. monthly contributions for updates, early access, or to
                   fund development). Real engine would create a subscription record + recurring
                   invoices.
@@ -144,12 +144,12 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
                     <option value={0.001}>{formatAmountBtc(0.001)} / month</option>
                     <option value={0.0025}>{formatAmountBtc(0.0025)} / month</option>
                   </select>
-                  <span className="text-xs text-muted-foreground">per month</span>
+                  <span className="text-xs text-fg-secondary">per month</span>
                 </div>
                 {profile.lightning_address ? (
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
+                      <span className="font-mono text-xs bg-surface-raised px-2 py-1 rounded flex-1 truncate">
                         {profile.lightning_address}
                       </span>
                       <button
@@ -162,13 +162,13 @@ export function ProfileSupportSection({ profile }: ProfileSupportSectionProps) {
                         <Copy className="w-4 h-4" />
                       </button>
                     </div>
-                    <div className="text-[10px] text-muted-foreground">
+                    <div className="text-[10px] text-fg-secondary">
                       Set up recurring sends manually or via wallet. Full engine would create
                       subscription row + auto-invoice scheduler tied to this profile.
                     </div>
                   </div>
                 ) : (
-                  <div className="text-sm text-muted-foreground italic">
+                  <div className="text-sm text-fg-secondary italic">
                     No Lightning address for subscriptions.
                   </div>
                 )}

@@ -35,22 +35,22 @@ export default function PlaintextRevealCard({
   }
 
   return (
-    <div className="rounded-lg border border-ring/50 bg-muted/40 p-4">
-      <p className="text-sm font-medium text-foreground">
+    <div className="rounded-lg border border-interactive/50 bg-surface-raised/40 p-4">
+      <p className="text-sm font-medium text-fg-primary">
         Copy this {label} now — you won&apos;t see it again
       </p>
-      <p className="mt-1 text-xs text-muted-foreground">
-        Prefix <code className="rounded bg-muted px-1">{prefix}</code> is all you&apos;ll see after
-        closing this card.
+      <p className="mt-1 text-xs text-fg-secondary">
+        Prefix <code className="rounded bg-surface-raised px-1">{prefix}</code> is all you&apos;ll
+        see after closing this card.
       </p>
       <div className="mt-3 flex items-center gap-2">
-        <code className="flex-1 truncate rounded-md border border-border-subtle bg-background px-3 py-2 font-mono text-xs text-foreground">
+        <code className="flex-1 truncate rounded-md border border-subtle bg-surface-page px-3 py-2 font-mono text-xs text-fg-primary">
           {plaintext}
         </code>
         <button
           type="button"
           onClick={copy}
-          className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-foreground hover:bg-muted/60"
+          className="inline-flex items-center gap-1 rounded-md border border-subtle px-2.5 py-1.5 text-xs text-fg-primary hover:bg-surface-raised/60"
         >
           <Copy className="h-3.5 w-3.5" />
           Copy
@@ -58,7 +58,7 @@ export default function PlaintextRevealCard({
         <button
           type="button"
           onClick={onDismiss}
-          className="text-xs text-muted-foreground hover:text-foreground"
+          className="text-xs text-fg-secondary hover:text-fg-primary"
         >
           Close
         </button>

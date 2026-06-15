@@ -58,7 +58,7 @@ export function SmartQuestionsPanel({
     <div className={className}>
       <div className="flex items-center gap-2 mb-4">
         <Lightbulb className="w-5 h-5 text-status-warning" />
-        <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+        <h3 className="text-sm font-semibold text-fg-primary">{title}</h3>
       </div>
 
       <div className="space-y-2">
@@ -80,11 +80,11 @@ export function SmartQuestionsPanel({
 function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDismiss: () => void }) {
   return (
     <div className="oc-list-row group flex items-center justify-between gap-3 oc-card-link">
-      <p className="text-sm text-foreground flex-1">{question.question}</p>
+      <p className="text-sm text-fg-primary flex-1">{question.question}</p>
 
       <div className="flex items-center gap-2 flex-shrink-0">
         <Link href={question.action.href}>
-          <Button size="sm" variant="outline" className="bg-card">
+          <Button size="sm" variant="outline" className="bg-surface-base">
             {question.action.label}
             <ArrowRight className="w-3 h-3 ml-1" />
           </Button>
@@ -92,7 +92,7 @@ function QuestionCard({ question, onDismiss }: { question: SmartQuestion; onDism
 
         <button
           onClick={onDismiss}
-          className="p-1 text-muted-dim hover:text-foreground rounded opacity-0 group-hover:opacity-100 transition-opacity min-h-11 min-w-11 flex items-center justify-center"
+          className="p-1 text-fg-tertiary hover:text-fg-primary rounded opacity-0 group-hover:opacity-100 transition-opacity min-h-11 min-w-11 flex items-center justify-center"
           aria-label="Dismiss question"
         >
           <X className="w-4 h-4" />

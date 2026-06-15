@@ -57,12 +57,12 @@ export default function TimelineLayout({
         <div className={TIMELINE_SURFACE.feed}>
           <div className={cn(TIMELINE_SURFACE.header)}>
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-muted text-foreground">
+              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-surface-raised text-fg-primary">
                 <Icon className="w-5 h-5" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground">{title}</h1>
-                {description && <p className="text-sm text-muted-foreground">{description}</p>}
+                <h1 className="text-xl font-bold text-fg-primary">{title}</h1>
+                {description && <p className="text-sm text-fg-secondary">{description}</p>}
               </div>
             </div>
             {additionalHeaderContent && (

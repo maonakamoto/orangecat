@@ -24,8 +24,8 @@ export function WalletsStep({ form }: WalletsStepProps) {
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-foreground mb-2">Bitcoin Wallets</h2>
-        <p className="text-muted-foreground mb-3">
+        <h2 className="text-2xl font-semibold text-fg-primary mb-2">Bitcoin Wallets</h2>
+        <p className="text-fg-secondary mb-3">
           Set up addresses where people can send you funding.
         </p>
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-bitcoinOrange/10 text-bitcoinOrange border border-bitcoinOrange/20 text-xs rounded-full">
@@ -39,7 +39,7 @@ export function WalletsStep({ form }: WalletsStepProps) {
         name="bitcoin_address"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-foreground">Bitcoin Address</FormLabel>
+            <FormLabel className="text-sm font-medium text-fg-primary">Bitcoin Address</FormLabel>
             <FormControl>
               <Input
                 {...field}
@@ -48,7 +48,7 @@ export function WalletsStep({ form }: WalletsStepProps) {
                 className="text-sm font-mono"
               />
             </FormControl>
-            <FormDescription className="text-xs text-muted-foreground">
+            <FormDescription className="text-xs text-fg-secondary">
               Optional: Your Bitcoin address for receiving funding
             </FormDescription>
             <FormMessage />
@@ -61,7 +61,7 @@ export function WalletsStep({ form }: WalletsStepProps) {
         name="lightning_address"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-foreground">Lightning Address</FormLabel>
+            <FormLabel className="text-sm font-medium text-fg-primary">Lightning Address</FormLabel>
             <FormControl>
               <Input
                 {...field}
@@ -70,7 +70,7 @@ export function WalletsStep({ form }: WalletsStepProps) {
                 className="text-sm"
               />
             </FormControl>
-            <FormDescription className="text-xs text-muted-foreground">
+            <FormDescription className="text-xs text-fg-secondary">
               Optional: Lightning address for instant, low-fee payments
             </FormDescription>
             <FormMessage />
@@ -78,15 +78,15 @@ export function WalletsStep({ form }: WalletsStepProps) {
         )}
       />
 
-      <div className="mt-8 bg-muted rounded-lg p-6 border border-border">
-        <div className="text-center text-muted-foreground py-8">
-          <Wallet className="w-16 h-16 mx-auto mb-4 text-muted-dim" />
-          <h3 className="text-lg font-medium text-foreground mb-2">Manage Wallets Later</h3>
+      <div className="mt-8 bg-surface-raised rounded-lg p-6 border border-default">
+        <div className="text-center text-fg-secondary py-8">
+          <Wallet className="w-16 h-16 mx-auto mb-4 text-fg-tertiary" />
+          <h3 className="text-lg font-medium text-fg-primary mb-2">Manage Wallets Later</h3>
           <p className="text-sm mb-4">
             You can add and manage multiple Bitcoin wallets from your profile page or dashboard
             after completing setup.
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-fg-secondary">
             Go to Profile → Wallets tab or Dashboard → My Wallets
           </p>
         </div>

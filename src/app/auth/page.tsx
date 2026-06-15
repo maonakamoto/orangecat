@@ -53,7 +53,7 @@ export default function AuthPage() {
 
   if (showMFAVerify) {
     return (
-      <div className="min-h-screen bg-muted/40 dark:bg-background flex items-center justify-center p-8">
+      <div className="min-h-screen bg-surface-raised/40 dark:bg-surface-page flex items-center justify-center p-8">
         <MFAVerify
           onVerificationComplete={handleMFAVerificationComplete}
           onCancel={handleMFACancelled}
@@ -63,30 +63,30 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/40 dark:bg-background flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-surface-raised/40 dark:bg-surface-page flex flex-col lg:flex-row">
       <AuthHeroPanel />
 
-      <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-12 bg-muted/40 dark:bg-background">
+      <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-12 bg-surface-raised/40 dark:bg-surface-page">
         {/* Mobile-only back link — the desktop hero panel hosts the same
             link but is hidden below lg. Without this, mobile users have
             no non-browser escape from the form. */}
         <Link
           href={ROUTES.HOME}
-          className="mb-6 inline-flex items-center gap-1.5 self-start text-sm text-muted-foreground transition-colors hover:text-foreground lg:hidden"
+          className="mb-6 inline-flex items-center gap-1.5 self-start text-sm text-fg-secondary transition-colors hover:text-fg-primary lg:hidden"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to home
         </Link>
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold mb-2 text-foreground">
+            <h2 className="text-2xl font-semibold mb-2 text-fg-primary">
               {mode === 'login'
                 ? 'Welcome back'
                 : mode === 'register'
                   ? 'Get started'
                   : 'Reset password'}
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-fg-secondary">
               {mode === 'login'
                 ? `Sign in to your ${APP_NAME} account`
                 : mode === 'register'
@@ -100,14 +100,14 @@ export default function AuthPage() {
               <div className="flex items-start space-x-3">
                 <AlertCircle className="w-5 h-5 text-status-negative mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
-                  <p className="text-sm text-destructive mb-3">{error}</p>
+                  <p className="text-sm text-status-negative mb-3">{error}</p>
                   <div className="flex gap-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={handleRetry}
                       disabled={loading}
-                      className="text-destructive/80 border-status-negative-subtle hover:bg-destructive/10"
+                      className="text-status-negative/80 border-status-negative-subtle hover:bg-status-negative/10"
                     >
                       <RefreshCw className="w-4 h-4 mr-2" />
                       Try Again
@@ -116,7 +116,7 @@ export default function AuthPage() {
                       variant="ghost"
                       size="sm"
                       onClick={handleClearError}
-                      className="text-destructive hover:bg-destructive/10"
+                      className="text-status-negative hover:bg-status-negative/10"
                     >
                       Dismiss
                     </Button>

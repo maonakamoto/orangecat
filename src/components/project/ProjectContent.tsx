@@ -49,7 +49,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
             <h3 id="about-heading" className="text-lg font-semibold mb-2">
               About
             </h3>
-            <p className="text-foreground whitespace-pre-wrap">{project.description}</p>
+            <p className="text-fg-primary whitespace-pre-wrap">{project.description}</p>
           </section>
 
           {/* Funding Purpose */}
@@ -58,7 +58,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
               <h3 id="funding-purpose-heading" className="text-lg font-semibold mb-2">
                 What the funds will be used for
               </h3>
-              <p className="text-foreground">{project.funding_purpose}</p>
+              <p className="text-fg-primary">{project.funding_purpose}</p>
             </section>
           )}
 
@@ -72,7 +72,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 href={project.website_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-foreground hover:underline underline-offset-4"
+                className="inline-flex items-center gap-2 text-fg-primary hover:underline underline-offset-4"
                 aria-label={`Visit project website: ${project.website_url}`}
               >
                 <ExternalLink className="w-4 h-4" aria-hidden="true" />
@@ -91,7 +91,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 {getUniqueCategories(project.category, project.tags).map((category, idx) => (
                   <span
                     key={`${category}-${idx}`}
-                    className="px-3 py-1 rounded-full text-sm bg-muted text-foreground"
+                    className="px-3 py-1 rounded-full text-sm bg-surface-raised text-fg-primary"
                     role="listitem"
                   >
                     {category}
@@ -122,7 +122,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                       }
                     />
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-sm text-fg-secondary">
                     of{' '}
                     <CurrencyDisplay
                       amount={project.goal_amount}
@@ -139,7 +139,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                 </div>
               </div>
               <div
-                className="w-full bg-muted rounded-full h-4"
+                className="w-full bg-surface-raised rounded-full h-4"
                 role="progressbar"
                 aria-valuenow={progressPercentage}
                 aria-valuemin={0}
@@ -151,7 +151,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>
-              <div className="text-sm text-muted-foreground mt-2">
+              <div className="text-sm text-fg-secondary mt-2">
                 {progressPercentage.toFixed(1)}% funded
               </div>
             </section>

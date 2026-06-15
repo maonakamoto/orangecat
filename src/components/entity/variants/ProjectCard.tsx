@@ -60,7 +60,7 @@ export function ProjectCard({
   const formattedCurrent = formatAmountBtc(currentBtc);
   const formattedGoal = formatAmountBtc(goalBtc);
   const amountColorClass =
-    displayCurrency === 'BTC' ? 'text-bitcoinOrange font-medium' : 'text-foreground';
+    displayCurrency === 'BTC' ? 'text-bitcoinOrange font-medium' : 'text-fg-primary';
 
   const showProgressBar = showProgress && goalAmount > 0;
   const progressPercentage = showProgressBar
@@ -78,9 +78,9 @@ export function ProjectCard({
     compact ? (
       // Compact progress: just bar and percentage
       <div className="w-full space-y-1">
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-raised">
           <div
-            className="h-full bg-foreground transition-all duration-500"
+            className="h-full bg-fg-primary transition-all duration-500"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
@@ -88,25 +88,25 @@ export function ProjectCard({
           <span className={cn('font-medium font-mono tabular-nums', amountColorClass)}>
             {formattedCurrent}
           </span>
-          <span className="text-muted-foreground">{Math.round(progressPercentage)}%</span>
+          <span className="text-fg-secondary">{Math.round(progressPercentage)}%</span>
         </div>
       </div>
     ) : (
       // Full progress: label, bar, amounts
       <div className="w-full space-y-2">
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="flex items-center justify-between text-xs text-fg-secondary">
           <span>Progress</span>
           <span className="font-medium">{Math.round(progressPercentage)}%</span>
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-surface-raised">
           <div
-            className="h-full bg-foreground transition-all duration-500"
+            className="h-full bg-fg-primary transition-all duration-500"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
         <div className="flex items-center justify-between text-sm font-medium">
           <span className={cn('font-mono tabular-nums', amountColorClass)}>{formattedCurrent}</span>
-          <span className="text-muted-foreground font-mono tabular-nums">of {formattedGoal}</span>
+          <span className="text-fg-secondary font-mono tabular-nums">of {formattedGoal}</span>
         </div>
       </div>
     )
@@ -115,14 +115,14 @@ export function ProjectCard({
   // Metrics slot - hide in compact mode (shown in progress slot)
   const metricsSlot =
     showMetrics && !compact ? (
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+      <div className="flex items-center gap-4 text-sm text-fg-secondary">
         {currentAmount > 0 && (
           <div className="flex items-center gap-1">
             <span className={cn('font-medium font-mono tabular-nums', amountColorClass)}>
               {formattedCurrent}
             </span>
             {displayCurrency !== 'BTC' && (
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-fg-secondary">
                 (<BTCAmountDisplay amount={currentBtc} currency="BTC" />)
               </span>
             )}

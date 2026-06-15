@@ -52,10 +52,10 @@ export function ProfileBasicSection({
   return (
     <div className="oc-surface space-y-4 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
-        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-fg-primary uppercase tracking-wide">
           {PROFILE_SECTIONS.PROFILE}
         </h3>
-        <p className="mt-1 text-xs text-muted-foreground">{PROFILE_SECTION_DESCRIPTIONS.PROFILE}</p>
+        <p className="mt-1 text-xs text-fg-secondary">{PROFILE_SECTION_DESCRIPTIONS.PROFILE}</p>
       </div>
 
       {/* Username - Required field */}
@@ -66,12 +66,12 @@ export function ProfileBasicSection({
           const { value, ...rest } = field;
           return (
             <FormItem>
-              <FormLabel className="text-sm font-medium text-foreground">
-                Username <span className="text-destructive">*</span>
+              <FormLabel className="text-sm font-medium text-fg-primary">
+                Username <span className="text-status-negative">*</span>
               </FormLabel>
               <FormControl>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground font-medium z-10 pointer-events-none">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fg-secondary font-medium z-10 pointer-events-none">
                     @
                   </span>
                   <Input
@@ -95,7 +95,7 @@ export function ProfileBasicSection({
         name="name"
         render={({ field }) => (
           <FormItem id="name">
-            <FormLabel className="text-sm font-medium text-foreground">Name</FormLabel>
+            <FormLabel className="text-sm font-medium text-fg-primary">Name</FormLabel>
             <FormControl>
               <Input
                 placeholder="Your display name"
@@ -104,7 +104,7 @@ export function ProfileBasicSection({
                 onFocus={() => onFieldFocus?.('name')}
               />
             </FormControl>
-            <FormDescription className="text-xs text-muted-foreground">
+            <FormDescription className="text-xs text-fg-secondary">
               This is how others will see you
             </FormDescription>
             <FormMessage />
@@ -118,7 +118,7 @@ export function ProfileBasicSection({
         name="bio"
         render={({ field }) => (
           <FormItem id="bio">
-            <FormLabel className="text-sm font-medium text-foreground">Bio</FormLabel>
+            <FormLabel className="text-sm font-medium text-fg-primary">Bio</FormLabel>
             <FormControl>
               <Textarea
                 placeholder="Tell your story..."
@@ -128,7 +128,7 @@ export function ProfileBasicSection({
                 onFocus={() => onFieldFocus?.('bio')}
               />
             </FormControl>
-            <FormDescription className="text-xs text-muted-foreground">
+            <FormDescription className="text-xs text-fg-secondary">
               Share your story with the community
             </FormDescription>
             <FormMessage />

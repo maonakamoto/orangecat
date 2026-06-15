@@ -23,13 +23,13 @@ function getTypeIcon(type: WalletOption['type']) {
 function getDifficultyColor(difficulty: WalletOption['difficulty']) {
   switch (difficulty) {
     case 'beginner':
-      return 'border-success/25 bg-success/10 text-success';
+      return 'border-status-positive/25 bg-status-positive/10 text-status-positive';
     case 'intermediate':
-      return 'border-warning/30 bg-warning/10 text-foreground';
+      return 'border-warning/30 bg-status-warning/10 text-fg-primary';
     case 'advanced':
-      return 'border-destructive/25 bg-destructive/10 text-destructive';
+      return 'border-status-negative/25 bg-status-negative/10 text-status-negative';
     default:
-      return 'text-muted-foreground bg-muted border-border';
+      return 'text-fg-secondary bg-surface-raised border-default';
   }
 }
 
@@ -48,25 +48,25 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
         className={`cursor-pointer transition-all duration-200 ${
           isSelected
             ? 'ring-2 ring-bitcoinOrange border-bitcoinOrange'
-            : 'oc-card-link border-border'
-        } ${wallet.recommended ? 'ring-1 ring-success/20 bg-success/5' : ''}`}
+            : 'oc-card-link border-default'
+        } ${wallet.recommended ? 'ring-1 ring-success/20 bg-status-positive/5' : ''}`}
         onClick={() => onSelect(wallet.id)}
       >
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div
-                className={`p-2 rounded-lg ${isSelected ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20' : 'bg-muted'}`}
+                className={`p-2 rounded-lg ${isSelected ? 'bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20' : 'bg-surface-raised'}`}
               >
                 <TypeIcon
-                  className={`w-5 h-5 ${isSelected ? 'text-bitcoinOrange' : 'text-muted-foreground'}`}
+                  className={`w-5 h-5 ${isSelected ? 'text-bitcoinOrange' : 'text-fg-secondary'}`}
                 />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <CardTitle className="text-lg">{wallet.name}</CardTitle>
                   {wallet.recommended && (
-                    <div className="flex items-center gap-1 rounded-md border border-success/20 bg-success/10 px-2 py-1 text-xs font-medium text-success">
+                    <div className="flex items-center gap-1 rounded-md border border-status-positive/20 bg-status-positive/10 px-2 py-1 text-xs font-medium text-status-positive">
                       <Star className="w-3 h-3" />
                       Recommended
                     </div>
@@ -80,7 +80,7 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
               </div>
             </div>
             <ChevronRight
-              className={`w-5 h-5 transition-transform ${isSelected ? 'rotate-90 text-bitcoinOrange' : 'text-muted-dim'}`}
+              className={`w-5 h-5 transition-transform ${isSelected ? 'rotate-90 text-bitcoinOrange' : 'text-fg-tertiary'}`}
             />
           </div>
         </CardHeader>
@@ -91,13 +91,13 @@ export function WalletCard({ wallet, isSelected, onSelect }: WalletCardProps) {
             {wallet.features.map(feature => (
               <span
                 key={feature}
-                className="px-2 py-1 bg-muted text-muted-strong rounded-full text-xs"
+                className="px-2 py-1 bg-surface-raised text-fg-primary rounded-full text-xs"
               >
                 {feature}
               </span>
             ))}
           </div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-fg-secondary">
             <strong>Platforms:</strong> {wallet.supportedPlatforms.join(', ')}
           </div>
         </CardContent>

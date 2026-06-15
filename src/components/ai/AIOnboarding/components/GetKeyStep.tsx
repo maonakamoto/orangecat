@@ -31,21 +31,21 @@ const TYPE_LABEL: Record<string, string> = {
 export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) {
   if (!provider) {
     return (
-      <div className="text-center py-8 text-muted-foreground">Please select a provider first.</div>
+      <div className="text-center py-8 text-fg-secondary">Please select a provider first.</div>
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Provider Info */}
-      <Card className="p-6 bg-card">
+      <Card className="p-6 bg-surface-base">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
-            <Key className="w-6 h-6 text-foreground" />
+          <div className="w-12 h-12 bg-surface-raised rounded-lg flex items-center justify-center">
+            <Key className="w-6 h-6 text-fg-primary" />
           </div>
           <div>
             <h3 className="font-semibold">{provider.name}</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-fg-secondary">
               {TYPE_LABEL[provider.type] ?? provider.type}
             </p>
           </div>
@@ -53,46 +53,46 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
 
         {/* Steps */}
         <div className="space-y-3 mb-6">
-          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-            <div className="w-6 h-6 rounded-full bg-foreground text-card flex items-center justify-center text-sm font-medium flex-shrink-0">
+          <div className="flex items-start gap-3 p-3 bg-surface-raised/50 rounded-lg">
+            <div className="w-6 h-6 rounded-full bg-fg-primary text-fg-inverted flex items-center justify-center text-sm font-medium flex-shrink-0">
               1
             </div>
             <div>
               <p className="text-sm font-medium">Visit {provider.name}</p>
-              <p className="text-xs text-muted-foreground">
-                Create an account if you do not have one
-              </p>
+              <p className="text-xs text-fg-secondary">Create an account if you do not have one</p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-            <div className="w-6 h-6 rounded-full bg-foreground text-card flex items-center justify-center text-sm font-medium flex-shrink-0">
+          <div className="flex items-start gap-3 p-3 bg-surface-raised/50 rounded-lg">
+            <div className="w-6 h-6 rounded-full bg-fg-primary text-fg-inverted flex items-center justify-center text-sm font-medium flex-shrink-0">
               2
             </div>
             <div>
               <p className="text-sm font-medium">Go to API Keys page</p>
-              <p className="text-xs text-muted-foreground">Usually under Settings or Account</p>
+              <p className="text-xs text-fg-secondary">Usually under Settings or Account</p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-            <div className="w-6 h-6 rounded-full bg-foreground text-card flex items-center justify-center text-sm font-medium flex-shrink-0">
+          <div className="flex items-start gap-3 p-3 bg-surface-raised/50 rounded-lg">
+            <div className="w-6 h-6 rounded-full bg-fg-primary text-fg-inverted flex items-center justify-center text-sm font-medium flex-shrink-0">
               3
             </div>
             <div>
               <p className="text-sm font-medium">Create a new API key</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-fg-secondary">
                 Name it &ldquo;{APP_NAME}&rdquo; for easy identification
               </p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-            <div className="w-6 h-6 rounded-full bg-foreground text-card flex items-center justify-center text-sm font-medium flex-shrink-0">
+          <div className="flex items-start gap-3 p-3 bg-surface-raised/50 rounded-lg">
+            <div className="w-6 h-6 rounded-full bg-fg-primary text-fg-inverted flex items-center justify-center text-sm font-medium flex-shrink-0">
               4
             </div>
             <div>
               <p className="text-sm font-medium">Copy your key</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-fg-secondary">
                 Keys start with{' '}
-                <code className="bg-muted px-1 rounded">{provider.apiKeyPrefix || 'sk-'}</code>
+                <code className="bg-surface-raised px-1 rounded">
+                  {provider.apiKeyPrefix || 'sk-'}
+                </code>
               </p>
             </div>
           </div>
@@ -131,14 +131,14 @@ export function GetKeyStep({ provider, copiedUrl, onCopyUrl }: GetKeyStepProps) 
       </div>
 
       {/* Tips */}
-      <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
-        <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+      <div className="bg-surface-raised/40 border border-subtle rounded-lg p-4">
+        <h4 className="font-semibold text-fg-primary mb-2 flex items-center gap-2">
           <Shield className="w-4 h-4" />
           Security Tips
         </h4>
         <ul className="space-y-1">
           {aiOnboardingContent.getKey.tips?.map((tip, index) => (
-            <li key={index} className="text-sm text-foreground flex items-start gap-2">
+            <li key={index} className="text-sm text-fg-primary flex items-start gap-2">
               <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
               {tip}
             </li>

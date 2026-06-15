@@ -117,7 +117,7 @@ export function AIKeyManager({
       {keys.length > 0 && (
         <div className="space-y-3">
           {canReorder && (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-fg-secondary">
               Cat tries this chain top to bottom, skipping any link that fails or rate-limits. Drag
               (or use the arrows) to reorder — the free OrangeCat default can sit anywhere, even
               first.
@@ -149,13 +149,13 @@ export function AIKeyManager({
                 }`}
               >
                 {canReorder && (
-                  <div className="flex flex-col items-center gap-1 pt-3 text-muted-foreground">
+                  <div className="flex flex-col items-center gap-1 pt-3 text-fg-secondary">
                     <button
                       type="button"
                       aria-label="Move up"
                       disabled={index === 0 || isLoading}
                       onClick={() => reorderTo(index, index - 1)}
-                      className="rounded p-0.5 hover:text-foreground disabled:opacity-30"
+                      className="rounded p-0.5 hover:text-fg-primary disabled:opacity-30"
                     >
                       <ChevronUp className="h-4 w-4" />
                     </button>
@@ -165,7 +165,7 @@ export function AIKeyManager({
                       aria-label="Move down"
                       disabled={index === chain.length - 1 || isLoading}
                       onClick={() => reorderTo(index, index + 1)}
-                      className="rounded p-0.5 hover:text-foreground disabled:opacity-30"
+                      className="rounded p-0.5 hover:text-fg-primary disabled:opacity-30"
                     >
                       <ChevronDown className="h-4 w-4" />
                     </button>
@@ -173,17 +173,17 @@ export function AIKeyManager({
                 )}
                 <div className="flex-1">
                   {it.kind === 'platform' ? (
-                    <div className="rounded-md border border-border-subtle bg-muted/30 p-3">
+                    <div className="rounded-md border border-subtle bg-surface-raised/30 p-3">
                       <div className="flex items-center gap-2">
                         <Bot className="h-4 w-4 text-fg-secondary" />
-                        <p className="text-sm font-medium text-foreground">
+                        <p className="text-sm font-medium text-fg-primary">
                           OrangeCat free default
                         </p>
-                        <span className="inline-flex items-center rounded-full border border-border-subtle bg-background px-2 py-0.5 text-xs text-muted-foreground">
+                        <span className="inline-flex items-center rounded-full border border-subtle bg-surface-page px-2 py-0.5 text-xs text-fg-secondary">
                           Always on
                         </span>
                       </div>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
+                      <p className="mt-0.5 text-xs text-fg-secondary">
                         The shared free model pool. Can&apos;t be removed — it&apos;s the safety net
                         that keeps Cat answering.
                       </p>
@@ -229,12 +229,12 @@ export function AIKeyManager({
               cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          {deleteError && <p className="text-sm text-destructive px-6">{deleteError}</p>}
+          {deleteError && <p className="text-sm text-status-negative px-6">{deleteError}</p>}
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-status-negative text-fg-inverted hover:bg-status-negative/90"
             >
               Delete
             </AlertDialogAction>

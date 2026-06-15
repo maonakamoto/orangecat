@@ -73,12 +73,12 @@ export default function IntelligentOnboarding() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="flex min-h-screen items-center justify-center bg-surface-page p-4">
       <div className="w-full max-w-lg">
         {/* Back navigation */}
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-fg-secondary hover:text-fg-primary mb-6 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back
@@ -86,18 +86,18 @@ export default function IntelligentOnboarding() {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md border border-border-subtle bg-muted">
-            <Cat className="h-8 w-8 text-foreground" />
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md border border-subtle bg-surface-raised">
+            <Cat className="h-8 w-8 text-fg-primary" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Tell Cat what you need</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl font-bold text-fg-primary mb-2">Tell Cat what you need</h1>
+          <p className="text-fg-secondary">
             Describe what you are trying to do. Cat will suggest the right tools and help you get
             set up.
           </p>
         </div>
 
         {/* Input */}
-        <div className="space-y-4 rounded-md border border-border-subtle bg-background p-6">
+        <div className="space-y-4 rounded-md border border-subtle bg-surface-page p-6">
           <Input
             data-testid="onboarding-display-name"
             label="What should Cat call you?"
@@ -109,7 +109,7 @@ export default function IntelligentOnboarding() {
             required
           />
 
-          <label className="block text-sm font-medium text-foreground">
+          <label className="block text-sm font-medium text-fg-primary">
             What are you here to do?
           </label>
 
@@ -138,13 +138,13 @@ export default function IntelligentOnboarding() {
 
           {/* Example prompts */}
           <div className="space-y-1">
-            <p className="text-xs text-muted-dim font-medium uppercase tracking-wide">Examples</p>
+            <p className="text-xs text-fg-tertiary font-medium uppercase tracking-wide">Examples</p>
             <div className="flex flex-wrap gap-2">
               {EXAMPLE_PROMPTS.map(prompt => (
                 <button
                   key={prompt}
                   onClick={() => setDescription(prompt)}
-                  className="rounded-sm border border-border-subtle px-3 py-1.5 text-left text-xs text-muted-foreground transition-colors hover:border-border-strong hover:bg-muted hover:text-foreground"
+                  className="rounded-sm border border-subtle px-3 py-1.5 text-left text-xs text-fg-secondary transition-colors hover:border-strong hover:bg-surface-raised hover:text-fg-primary"
                 >
                   {prompt.length > 50 ? prompt.slice(0, 50) + '…' : prompt}
                 </button>
@@ -156,7 +156,7 @@ export default function IntelligentOnboarding() {
             data-testid="onboarding-start-chat"
             onClick={handleStartChat}
             disabled={!canSubmit || isRedirecting}
-            className="w-full bg-foreground text-background hover:bg-foreground/90"
+            className="w-full bg-fg-primary text-fg-inverted hover:bg-fg-primary/90"
           >
             {isRedirecting ? (
               <>
@@ -171,7 +171,7 @@ export default function IntelligentOnboarding() {
             )}
           </Button>
 
-          <p className="text-xs text-center text-muted-dim">
+          <p className="text-xs text-center text-fg-tertiary">
             Cat will ask follow-up questions and suggest the right setup for your situation
           </p>
         </div>

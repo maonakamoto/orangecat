@@ -125,14 +125,14 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
   return (
     <div className={cn('w-full', className)}>
       {/* Tab Navigation - X/Twitter-style horizontal scroll on mobile, flex on desktop */}
-      <div className="border-b border-border mb-4 sm:mb-6 relative">
+      <div className="border-b border-default mb-4 sm:mb-6 relative">
         {/* Left fade indicator - only on mobile when scrolled */}
         {showLeftFade && (
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-background/80 pointer-events-none z-10 sm:hidden" />
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-surface-page/80 pointer-events-none z-10 sm:hidden" />
         )}
         {/* Right fade indicator - only on mobile when more tabs available */}
         {showRightFade && (
-          <div className="absolute right-0 top-0 bottom-0 w-8 bg-background/80 pointer-events-none z-10 sm:hidden" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-surface-page/80 pointer-events-none z-10 sm:hidden" />
         )}
         <nav
           ref={navRef}
@@ -155,8 +155,8 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                 className={cn(
                   'group inline-flex items-center justify-center sm:justify-start py-2.5 sm:py-3 lg:py-4 px-3 sm:px-1 md:px-2 border-b-2 font-medium text-sm sm:text-sm transition-colors whitespace-nowrap touch-manipulation min-h-11 flex-shrink-0',
                   isActive
-                    ? 'border-foreground text-foreground'
-                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border-strong dark:hover:border-border'
+                    ? 'border-fg-primary text-fg-primary'
+                    : 'border-transparent text-fg-secondary hover:text-fg-primary hover:border-strong dark:hover:border-default'
                 )}
                 aria-current={isActive ? 'page' : undefined}
               >
@@ -165,8 +165,8 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                     className={cn(
                       'mr-1.5 sm:mr-2 transition-colors flex-shrink-0',
                       isActive
-                        ? 'text-foreground'
-                        : 'text-muted-dim group-hover:text-muted-foreground dark:group-hover:text-foreground'
+                        ? 'text-fg-primary'
+                        : 'text-fg-tertiary group-hover:text-fg-secondary dark:group-hover:text-fg-primary'
                     )}
                   >
                     {tab.icon}
@@ -177,7 +177,9 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
                   <span
                     className={cn(
                       'ml-1.5 sm:ml-2 py-0.5 px-1.5 sm:px-2 rounded-full text-2xs sm:text-xs font-medium flex-shrink-0',
-                      isActive ? 'bg-foreground text-card' : 'bg-muted text-muted-foreground'
+                      isActive
+                        ? 'bg-fg-primary text-fg-inverted'
+                        : 'bg-surface-raised text-fg-secondary'
                     )}
                   >
                     {tab.badge}

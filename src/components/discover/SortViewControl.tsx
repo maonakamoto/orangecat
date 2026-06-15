@@ -15,9 +15,9 @@ interface SortViewControlProps {
 }
 
 const SELECT_CLASS =
-  'w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground';
-const LABEL_CLASS = 'block text-sm font-medium text-foreground mb-2';
-const VIEW_WRAP_CLASS = 'flex gap-1 rounded-md border border-border bg-card p-1';
+  'w-full rounded-md border border-default bg-surface-base px-3 py-2 text-sm text-fg-primary';
+const LABEL_CLASS = 'block text-sm font-medium text-fg-primary mb-2';
+const VIEW_WRAP_CLASS = 'flex gap-1 rounded-md border border-default bg-surface-base p-1';
 
 export function SortViewControl({
   isMobile,

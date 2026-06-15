@@ -161,11 +161,11 @@ export default function NotificationSettingsPage() {
     const returnTo = `${ROUTES.AUTH}?mode=login&from=${encodeURIComponent(ROUTES.SETTINGS_NOTIFICATIONS)}`;
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center p-6 text-center">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-border-subtle bg-muted/30">
-          <Bell className="h-5 w-5 text-muted-foreground" />
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-subtle bg-surface-raised/30">
+          <Bell className="h-5 w-5 text-fg-secondary" />
         </div>
-        <h1 className="text-xl font-semibold text-foreground">Sign in to manage notifications</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <h1 className="text-xl font-semibold text-fg-primary">Sign in to manage notifications</h1>
+        <p className="mt-2 text-sm text-fg-secondary">
           Pick which emails you receive and how often you get the digest.
         </p>
         <Link href={returnTo} className="mt-6 inline-block">
@@ -183,36 +183,36 @@ export default function NotificationSettingsPage() {
       <div>
         <Link
           href={ROUTES.SETTINGS}
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center gap-1.5 text-sm text-fg-secondary hover:text-fg-primary"
         >
           <ArrowLeft className="h-4 w-4" />
           Settings
         </Link>
-        <h1 className="mt-3 flex items-center gap-2 text-2xl font-semibold text-foreground">
+        <h1 className="mt-3 flex items-center gap-2 text-2xl font-semibold text-fg-primary">
           <Bell className="h-5 w-5" />
           Notifications
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 text-sm text-fg-secondary">
           Transactional emails (auth, security) are always sent. Everything else is in your hands.
         </p>
       </div>
 
       {error && (
-        <div className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-md border border-status-negative/30 bg-status-negative/5 px-3 py-2 text-sm text-status-negative">
           {error}
         </div>
       )}
 
       {loading || !prefs ? (
-        <div className="rounded-lg border border-border-subtle p-6 text-sm text-muted-foreground">
+        <div className="rounded-lg border border-subtle p-6 text-sm text-fg-secondary">
           Loading your preferences…
         </div>
       ) : (
         <>
-          <section className="rounded-lg border border-border-subtle">
-            <div className="border-b border-border-subtle px-4 py-3">
-              <h2 className="text-sm font-medium text-foreground">Categories</h2>
-              <p className="mt-0.5 text-xs text-muted-foreground">
+          <section className="rounded-lg border border-subtle">
+            <div className="border-b border-subtle px-4 py-3">
+              <h2 className="text-sm font-medium text-fg-primary">Categories</h2>
+              <p className="mt-0.5 text-xs text-fg-secondary">
                 Toggle whole families of emails on or off.
               </p>
             </div>
@@ -220,10 +220,10 @@ export default function NotificationSettingsPage() {
               {CATEGORIES.map(cat => (
                 <li key={cat.key} className="flex items-start justify-between gap-3 p-4">
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm font-medium text-foreground">{cat.label}</div>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{cat.description}</p>
+                    <div className="text-sm font-medium text-fg-primary">{cat.label}</div>
+                    <p className="mt-0.5 text-xs text-fg-secondary">{cat.description}</p>
                   </div>
-                  <label className="inline-flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
+                  <label className="inline-flex cursor-pointer items-center gap-2 text-xs text-fg-secondary">
                     <input
                       type="checkbox"
                       checked={prefs[cat.key]}
@@ -237,9 +237,9 @@ export default function NotificationSettingsPage() {
             </ul>
           </section>
 
-          <section className="rounded-lg border border-border-subtle p-4">
-            <h2 className="text-sm font-medium text-foreground">Digest frequency</h2>
-            <p className="mt-0.5 text-xs text-muted-foreground">
+          <section className="rounded-lg border border-subtle p-4">
+            <h2 className="text-sm font-medium text-fg-primary">Digest frequency</h2>
+            <p className="mt-0.5 text-xs text-fg-secondary">
               How often to receive a summary of activity you missed.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -248,8 +248,8 @@ export default function NotificationSettingsPage() {
                   key={opt.value}
                   className={`inline-flex cursor-pointer items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs ${
                     prefs.digest_frequency === opt.value
-                      ? 'border-ring/60 bg-muted/40 text-foreground'
-                      : 'border-border-subtle text-muted-foreground hover:bg-muted/20'
+                      ? 'border-interactive/60 bg-surface-raised/40 text-fg-primary'
+                      : 'border-subtle text-fg-secondary hover:bg-surface-raised/20'
                   }`}
                 >
                   <input
@@ -267,7 +267,7 @@ export default function NotificationSettingsPage() {
           </section>
 
           <div className="flex items-center justify-end gap-3">
-            {savedAt && <span className="text-xs text-muted-foreground">Saved at {savedAt}</span>}
+            {savedAt && <span className="text-xs text-fg-secondary">Saved at {savedAt}</span>}
             <Button onClick={handleSave} disabled={saving}>
               <Save className="mr-1 h-4 w-4" />
               {saving ? 'Saving…' : 'Save changes'}

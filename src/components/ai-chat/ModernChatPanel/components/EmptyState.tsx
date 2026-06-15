@@ -30,15 +30,15 @@ export function EmptyState({
       <h2
         className={
           isFocus
-            ? 'max-w-lg text-2xl font-semibold tracking-tight text-foreground sm:text-3xl'
-            : 'mb-2 text-2xl font-semibold text-foreground'
+            ? 'max-w-lg text-2xl font-semibold tracking-tight text-fg-primary sm:text-3xl'
+            : 'mb-2 text-2xl font-semibold text-fg-primary'
         }
       >
         {title}
       </h2>
       {/* Hint is verbose on mobile and competes with the suggestion
           buttons, which already act as the hint. Show on >=sm only. */}
-      <p className="mt-2 hidden max-w-md text-sm text-muted-foreground sm:block">
+      <p className="mt-2 hidden max-w-md text-sm text-fg-secondary sm:block">
         {CAT_HUB_COPY.greetingHint}
       </p>
 
@@ -46,7 +46,7 @@ export function EmptyState({
         <div className="mt-8 flex w-full max-w-2xl flex-col gap-2 sm:grid sm:grid-cols-2">
           {isLoadingSuggestions
             ? [1, 2, 3, 4].map(i => (
-                <div key={i} className="h-11 animate-pulse rounded-lg bg-muted" />
+                <div key={i} className="h-11 animate-pulse rounded-lg bg-surface-raised" />
               ))
             : suggestions.map((suggestion, i) => (
                 <button

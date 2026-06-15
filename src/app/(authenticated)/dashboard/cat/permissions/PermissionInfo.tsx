@@ -1,8 +1,8 @@
 export function PermissionInfo() {
   return (
-    <div className="mt-8 rounded-md border border-border-subtle bg-muted/30 p-4">
-      <h4 className="mb-2 font-medium text-foreground">How permissions work</h4>
-      <ul className="space-y-1 text-base text-muted-foreground">
+    <div className="mt-8 rounded-md border border-subtle bg-surface-raised/30 p-4">
+      <h4 className="mb-2 font-medium text-fg-primary">How permissions work</h4>
+      <ul className="space-y-1 text-base text-fg-secondary">
         <li>
           <strong>Low risk</strong> actions (like adding context) can run without asking.
         </li>

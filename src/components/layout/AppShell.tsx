@@ -111,7 +111,7 @@ export function AppShell({ children }: AppShellProps) {
   // self-contained universe with its own minimal back-link.
   if (isAuthSurface) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-surface-page">
         <MessageSyncManagerInitializer />
         <main id="main-content" className="min-h-screen">
           {children}
@@ -121,7 +121,7 @@ export function AppShell({ children }: AppShellProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-surface-page">
       {/* Initialize message sync manager */}
       <MessageSyncManagerInitializer />
 

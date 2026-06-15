@@ -44,7 +44,9 @@ export default function Loading({
       <div
         className={cn(
           'min-h-screen flex items-center justify-center',
-          overlay ? 'fixed inset-0 bg-card/95 dark:bg-card/95 backdrop-blur-sm z-loading' : '',
+          overlay
+            ? 'fixed inset-0 bg-surface-base/95 dark:bg-surface-base/95 backdrop-blur-sm z-loading'
+            : '',
           className
         )}
         suppressHydrationWarning
@@ -56,8 +58,8 @@ export default function Loading({
 
   const content = (
     <div className="flex flex-col items-center space-y-3" suppressHydrationWarning>
-      <Loader2 className={`${sizeClasses[size]} animate-spin text-foreground`} />
-      {message && <p className="text-sm text-muted-foreground font-sans">{message}</p>}
+      <Loader2 className={`${sizeClasses[size]} animate-spin text-fg-primary`} />
+      {message && <p className="text-sm text-fg-secondary font-sans">{message}</p>}
     </div>
   );
 

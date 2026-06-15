@@ -78,7 +78,7 @@ export function PostHeader({
       {/* User Info - X-style inline */}
       <Link
         href={`/profiles/${displayAuthor.username}`}
-        className="font-bold text-sm text-foreground hover:underline"
+        className="font-bold text-sm text-fg-primary hover:underline"
         onClick={e => e.stopPropagation()}
       >
         {displayAuthor.name}
@@ -86,18 +86,18 @@ export function PostHeader({
 
       <Link
         href={`/profiles/${displayAuthor.username}`}
-        className="text-muted-foreground text-sm"
+        className="text-fg-secondary text-sm"
         onClick={e => e.stopPropagation()}
       >
         @{displayAuthor.username}
       </Link>
 
-      <span className="text-muted-foreground">·</span>
+      <span className="text-fg-secondary">·</span>
 
       {/* Timestamp */}
       <time
         dateTime={timestamp}
-        className="text-muted-foreground text-sm hover:underline"
+        className="text-fg-secondary text-sm hover:underline"
         title={timestamp ? new Date(timestamp).toLocaleString() : undefined}
       >
         {timestamp ? formatRelativeTime(timestamp) : ''}
@@ -106,19 +106,19 @@ export function PostHeader({
       {/* Visibility Indicator */}
       {event.visibility === 'private' && (
         <span title="Only you can see this">
-          <Lock className="w-3.5 h-3.5 text-muted-dim" />
+          <Lock className="w-3.5 h-3.5 text-fg-tertiary" />
         </span>
       )}
       {event.visibility === 'followers' && (
         <span title="Followers only">
-          <Users className="w-3.5 h-3.5 text-muted-dim" />
+          <Users className="w-3.5 h-3.5 text-fg-tertiary" />
         </span>
       )}
 
       {/* Edited indicator */}
       {isEdited && (
         <span
-          className="text-muted-dim text-xs"
+          className="text-fg-tertiary text-xs"
           title={updatedTimestamp ? `Edited ${formatRelativeTime(updatedTimestamp)}` : 'Edited'}
         >
           · edited
@@ -153,7 +153,7 @@ export function PostHeader({
                     e.stopPropagation();
                     onEdit?.();
                   }}
-                  className="w-full text-left px-4 py-2.5 text-sm text-foreground hover:bg-muted flex items-center gap-3"
+                  className="w-full text-left px-4 py-2.5 text-sm text-fg-primary hover:bg-surface-raised flex items-center gap-3"
                   role="menuitem"
                 >
                   <Pencil className="w-4 h-4" />
@@ -164,7 +164,7 @@ export function PostHeader({
                     e.stopPropagation();
                     onDelete?.();
                   }}
-                  className="w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 flex items-center gap-3"
+                  className="w-full text-left px-4 py-2.5 text-sm text-status-negative hover:bg-status-negative/10 flex items-center gap-3"
                   role="menuitem"
                 >
                   <Trash2 className="w-4 h-4" />

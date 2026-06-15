@@ -25,7 +25,7 @@ export default function PublicEntityCTA({
             {label}
           </Button>
         </Link>
-        <p className="text-xs text-muted-foreground text-center">{description}</p>
+        <p className="text-xs text-fg-secondary text-center">{description}</p>
       </CardContent>
     </Card>
   );

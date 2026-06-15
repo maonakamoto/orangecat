@@ -65,15 +65,15 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       label: 'Requests',
       value: formatNumber(usage.totalRequests),
       icon: MessageSquare,
-      color: 'text-foreground',
-      bgColor: 'bg-muted',
+      color: 'text-fg-primary',
+      bgColor: 'bg-surface-raised',
     },
     {
       label: 'Tokens',
       value: formatNumber(usage.totalTokens),
       icon: BarChart2,
-      color: 'text-foreground',
-      bgColor: 'bg-muted',
+      color: 'text-fg-primary',
+      bgColor: 'bg-surface-raised',
     },
     {
       label: 'Cost',
@@ -86,8 +86,8 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       label: 'Last Used',
       value: formatRelativeCompact(usage.lastUsedAt),
       icon: Clock,
-      color: 'text-muted-foreground',
-      bgColor: 'bg-muted',
+      color: 'text-fg-secondary',
+      bgColor: 'bg-surface-raised',
     },
   ];
 
@@ -96,19 +96,19 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-foreground" />
+            <TrendingUp className="w-5 h-5 text-fg-primary" />
             Usage Statistics
           </CardTitle>
           {periodSelector}
         </div>
-        {usage.periodLabel && <p className="text-sm text-muted-foreground">{usage.periodLabel}</p>}
+        {usage.periodLabel && <p className="text-sm text-fg-secondary">{usage.periodLabel}</p>}
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map(stat => (
             <div
               key={stat.label}
-              className="p-4 rounded-lg border border-border-subtle bg-muted/40/50 dark:bg-muted"
+              className="p-4 rounded-lg border border-subtle bg-surface-raised/40/50 dark:bg-surface-raised"
             >
               <div className="flex items-center gap-2 mb-2">
                 <div
@@ -120,19 +120,19 @@ export function AIUsageStats({ usage, periodSelector, className }: AIUsageStatsP
                   <stat.icon className={cn('w-4 h-4', stat.color)} />
                 </div>
               </div>
-              <div className="text-2xl font-semibold text-foreground">{stat.value}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
+              <div className="text-2xl font-semibold text-fg-primary">{stat.value}</div>
+              <div className="text-sm text-fg-secondary">{stat.label}</div>
             </div>
           ))}
         </div>
 
         {/* Zero State */}
         {usage.totalRequests === 0 && (
-          <div className="mt-4 p-4 bg-muted rounded-lg border border-border-subtle">
+          <div className="mt-4 p-4 bg-surface-raised rounded-lg border border-subtle">
             <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-muted-dim mt-0.5" />
+              <Info className="w-5 h-5 text-fg-tertiary mt-0.5" />
               <div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-fg-secondary">
                   No usage recorded yet. Start a conversation with Cat to see your statistics.
                 </p>
               </div>

@@ -39,37 +39,37 @@ export function CatSettingsTab() {
   return (
     <div className="space-y-6">
       {/* What you're on right now */}
-      <div className="overflow-hidden rounded-md border border-border-subtle bg-background">
-        <div className="flex items-center gap-2 border-b border-border-subtle bg-muted/50 px-4 py-3">
-          <Key className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-semibold text-foreground">Your Cat plan</span>
+      <div className="overflow-hidden rounded-md border border-subtle bg-surface-page">
+        <div className="flex items-center gap-2 border-b border-subtle bg-surface-raised/50 px-4 py-3">
+          <Key className="h-4 w-4 text-fg-secondary" />
+          <span className="text-sm font-semibold text-fg-primary">Your Cat plan</span>
         </div>
         <div className="space-y-3 p-4">
           {hasByok ? (
             <div className="flex items-center gap-3 rounded-md border border-status-positive/20 bg-status-positive-subtle p-3">
-              <div className="rounded-md bg-background p-2">
+              <div className="rounded-md bg-surface-page p-2">
                 <Check className="h-4 w-4 text-status-positive" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">Your key — no platform cap</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm font-medium text-fg-primary">Your key — no platform cap</p>
+                <p className="text-xs text-fg-secondary">
                   Cat routes every request through your provider. You pay your provider directly.
                 </p>
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-3 rounded-md border border-border-subtle bg-muted p-3">
-              <div className="rounded-md bg-background p-2">
-                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-3 rounded-md border border-subtle bg-surface-raised p-3">
+              <div className="rounded-md bg-surface-page p-2">
+                <AlertTriangle className="h-4 w-4 text-fg-secondary" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-sm font-medium text-fg-primary">
                   Free —{' '}
                   {quota
                     ? `${quota.requestsRemaining} / ${quota.dailyLimit} messages left today`
                     : 'platform key, daily cap'}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-fg-secondary">
                   Add a free Groq key for unlimited use, or upgrade to Pro when it ships.
                 </p>
               </div>
@@ -77,19 +77,19 @@ export function CatSettingsTab() {
           )}
           <Link
             href={ROUTES.SETTINGS_AI}
-            className="flex min-h-11 items-center justify-between rounded-md border border-border-subtle bg-background px-3 py-2 transition-colors hover:bg-muted"
+            className="flex min-h-11 items-center justify-between rounded-md border border-subtle bg-surface-page px-3 py-2 transition-colors hover:bg-surface-raised"
           >
-            <span className="text-sm text-foreground">
+            <span className="text-sm text-fg-primary">
               {hasByok ? 'Manage your API keys' : 'Add a free Groq key'}
             </span>
-            <ChevronRight className="h-4 w-4 text-muted-dim" />
+            <ChevronRight className="h-4 w-4 text-fg-tertiary" />
           </Link>
           {!hasByok && (
             <Link
               href={ROUTES.PRICING}
               className="flex min-h-11 items-center justify-between rounded-md border border-accent-warm/30 bg-accent-warm/10 px-3 py-2 transition-colors hover:bg-accent-warm/20"
             >
-              <span className="text-sm font-medium text-foreground">See Pro pricing</span>
+              <span className="text-sm font-medium text-fg-primary">See Pro pricing</span>
               <ArrowUpRight className="h-4 w-4 text-accent-warm" />
             </Link>
           )}
@@ -97,14 +97,14 @@ export function CatSettingsTab() {
       </div>
 
       {/* Permissions */}
-      <div className="overflow-hidden rounded-md border border-border-subtle bg-background">
-        <div className="flex items-center justify-between border-b border-border-subtle bg-muted/50 px-4 py-3">
+      <div className="overflow-hidden rounded-md border border-subtle bg-surface-page">
+        <div className="flex items-center justify-between border-b border-subtle bg-surface-raised/50 px-4 py-3">
           <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-semibold text-foreground">Permissions</span>
+            <Shield className="h-4 w-4 text-fg-secondary" />
+            <span className="text-sm font-semibold text-fg-primary">Permissions</span>
           </div>
           {permissions && (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-fg-secondary">
               {permissions.summary.enabledActions}/{permissions.summary.totalActions} enabled
             </span>
           )}
@@ -112,20 +112,20 @@ export function CatSettingsTab() {
 
         {permLoading ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-5 w-5 animate-spin text-muted-dim" />
+            <Loader2 className="h-5 w-5 animate-spin text-fg-tertiary" />
           </div>
         ) : permissions ? (
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-fg-tertiary">
             {permissions.summary.categories.map(cat => {
               const isSaving = saving === cat.category;
               return (
                 <div key={cat.category} className="flex items-center justify-between px-4 py-3">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground">{cat.name}</p>
-                    <p className="text-sm text-muted-foreground truncate">{cat.description}</p>
+                    <p className="text-sm font-medium text-fg-primary">{cat.name}</p>
+                    <p className="text-sm text-fg-secondary truncate">{cat.description}</p>
                   </div>
                   <div className="flex items-center gap-2 ml-3">
-                    {isSaving && <Loader2 className="h-4 w-4 animate-spin text-muted-dim" />}
+                    {isSaving && <Loader2 className="h-4 w-4 animate-spin text-fg-tertiary" />}
                     <Switch
                       checked={cat.enabled}
                       onCheckedChange={checked => toggleCategory(cat.category, checked)}
@@ -137,15 +137,15 @@ export function CatSettingsTab() {
             })}
           </div>
         ) : (
-          <div className="p-4 text-center text-sm text-muted-foreground">
+          <div className="p-4 text-center text-sm text-fg-secondary">
             Failed to load permissions
           </div>
         )}
 
         {permissions?.summary.highRiskEnabled && (
-          <div className="flex items-center gap-2 border-t border-destructive/20 bg-destructive/10 px-4 py-3">
-            <ShieldAlert className="h-4 w-4 text-destructive" />
-            <span className="text-xs text-destructive">High-risk actions enabled</span>
+          <div className="flex items-center gap-2 border-t border-status-negative/20 bg-status-negative/10 px-4 py-3">
+            <ShieldAlert className="h-4 w-4 text-status-negative" />
+            <span className="text-xs text-status-negative">High-risk actions enabled</span>
           </div>
         )}
       </div>
@@ -153,7 +153,7 @@ export function CatSettingsTab() {
       {/* Link to full settings */}
       <Link
         href={ROUTES.SETTINGS_AI}
-        className="block py-2 text-center text-sm text-muted-foreground hover:text-foreground"
+        className="block py-2 text-center text-sm text-fg-secondary hover:text-fg-primary"
       >
         View all AI settings
       </Link>

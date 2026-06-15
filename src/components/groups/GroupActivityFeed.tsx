@@ -161,9 +161,9 @@ export function GroupActivityFeed({ groupSlug }: Props) {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-10 text-center">
-            <Activity className="h-10 w-10 text-muted-foreground mb-3" />
-            <p className="text-sm font-medium text-foreground">Could not load activity</p>
-            <p className="text-xs text-muted-foreground mt-1">Try refreshing the page.</p>
+            <Activity className="h-10 w-10 text-fg-secondary mb-3" />
+            <p className="text-sm font-medium text-fg-primary">Could not load activity</p>
+            <p className="text-xs text-fg-secondary mt-1">Try refreshing the page.</p>
           </div>
         </CardContent>
       </Card>
@@ -178,9 +178,9 @@ export function GroupActivityFeed({ groupSlug }: Props) {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-10 text-center">
-            <Activity className="h-10 w-10 text-muted-foreground mb-3" />
-            <p className="text-sm font-medium text-foreground">No activity yet</p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <Activity className="h-10 w-10 text-fg-secondary mb-3" />
+            <p className="text-sm font-medium text-fg-primary">No activity yet</p>
+            <p className="text-xs text-fg-secondary mt-1">
               Activity will appear when members join, create proposals, vote, or schedule events.
             </p>
           </div>
@@ -200,7 +200,7 @@ export function GroupActivityFeed({ groupSlug }: Props) {
             const config = ACTIVITY_CONFIG[activity.activity_type];
             const Icon = config?.icon ?? Activity;
             const label = config?.label(activity.metadata) ?? activity.activity_type;
-            const iconColor = config?.color ?? 'text-muted-foreground';
+            const iconColor = config?.color ?? 'text-fg-secondary';
 
             return (
               <li key={activity.id} className="flex items-start gap-3">
@@ -211,11 +211,11 @@ export function GroupActivityFeed({ groupSlug }: Props) {
                   <AvatarFallback className="text-xs">{initials(activity.user)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-foreground leading-snug">
+                  <p className="text-sm text-fg-primary leading-snug">
                     <span className="font-medium">{displayName(activity.user)}</span>{' '}
-                    <span className="text-muted-foreground">{label}</span>
+                    <span className="text-fg-secondary">{label}</span>
                   </p>
-                  <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+                  <p className="text-xs text-fg-secondary mt-0.5 flex items-center gap-1">
                     <Icon className={`h-3 w-3 ${iconColor}`} />
                     {timeAgo(activity.created_at)}
                   </p>

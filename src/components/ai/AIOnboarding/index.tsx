@@ -110,7 +110,7 @@ export function AIOnboarding(props: AIOnboardingProps) {
   const currentStepData = steps[state.currentStep];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-surface-page">
       <OnboardingHeader
         currentStep={state.currentStep}
         totalSteps={state.totalSteps}
@@ -131,15 +131,13 @@ export function AIOnboarding(props: AIOnboardingProps) {
           >
             {/* Step Header */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                <currentStepData.icon className="w-8 h-8 text-foreground" />
+              <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
+                <currentStepData.icon className="w-8 h-8 text-fg-primary" />
               </div>
-              <h2 className="text-2xl font-semibold text-foreground mb-2">
+              <h2 className="text-2xl font-semibold text-fg-primary mb-2">
                 {currentStepData.title}
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                {currentStepData.description}
-              </p>
+              <p className="text-fg-secondary max-w-2xl mx-auto">{currentStepData.description}</p>
             </div>
 
             {/* Step Content */}

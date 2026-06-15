@@ -35,22 +35,22 @@ interface ScopeRowProps {
 function ScopeRow({ label, readToken, writeToken, selectedScopes, onToggle }: ScopeRowProps) {
   return (
     <>
-      <span className="capitalize text-foreground">{label}</span>
-      <label className="flex items-center gap-1.5 text-foreground">
+      <span className="capitalize text-fg-primary">{label}</span>
+      <label className="flex items-center gap-1.5 text-fg-primary">
         <input
           type="checkbox"
           checked={selectedScopes.has(readToken)}
           onChange={() => onToggle(readToken)}
         />
-        <code className="rounded bg-muted px-1 text-[10px]">{readToken}</code>
+        <code className="rounded bg-surface-raised px-1 text-[10px]">{readToken}</code>
       </label>
-      <label className="flex items-center gap-1.5 text-foreground">
+      <label className="flex items-center gap-1.5 text-fg-primary">
         <input
           type="checkbox"
           checked={selectedScopes.has(writeToken)}
           onChange={() => onToggle(writeToken)}
         />
-        <code className="rounded bg-muted px-1 text-[10px]">{writeToken}</code>
+        <code className="rounded bg-surface-raised px-1 text-[10px]">{writeToken}</code>
       </label>
     </>
   );
@@ -92,12 +92,12 @@ export default function IntegrationKeyMintForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="space-y-3 rounded-lg border border-border-subtle bg-muted/20 p-4"
+      className="space-y-3 rounded-lg border border-subtle bg-surface-raised/20 p-4"
     >
-      <h3 className="text-sm font-medium text-foreground">Create a new key</h3>
+      <h3 className="text-sm font-medium text-fg-primary">Create a new key</h3>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className="text-xs text-muted-foreground">
+        <label className="text-xs text-fg-secondary">
           Name
           <input
             type="text"
@@ -106,15 +106,15 @@ export default function IntegrationKeyMintForm({
             value={name}
             onChange={e => onNameChange(e.target.value)}
             placeholder='e.g. "FleetCrown production"'
-            className="mt-1 w-full rounded-md border border-border-subtle bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring/50 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-subtle bg-surface-page px-3 py-2 text-sm text-fg-primary placeholder:text-fg-secondary focus:border-interactive/50 focus:outline-none"
           />
         </label>
-        <label className="text-xs text-muted-foreground">
+        <label className="text-xs text-fg-secondary">
           Acts as
           <select
             value={selectedActorId ?? ''}
             onChange={e => onActorChange(e.target.value || null)}
-            className="mt-1 w-full rounded-md border border-border-subtle bg-background px-3 py-2 text-sm text-foreground focus:border-ring/50 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-subtle bg-surface-page px-3 py-2 text-sm text-fg-primary focus:border-interactive/50 focus:outline-none"
           >
             {actors.map(actor => (
               <option key={actor.actor_id} value={actor.actor_id}>
@@ -125,22 +125,23 @@ export default function IntegrationKeyMintForm({
         </label>
       </div>
 
-      <fieldset className="space-y-2 rounded-md border border-border-subtle bg-background/40 p-3">
-        <legend className="px-1 text-xs text-muted-foreground">Environment</legend>
-        <label className="flex items-center gap-2 text-xs text-foreground">
+      <fieldset className="space-y-2 rounded-md border border-subtle bg-surface-page/40 p-3">
+        <legend className="px-1 text-xs text-fg-secondary">Environment</legend>
+        <label className="flex items-center gap-2 text-xs text-fg-primary">
           <input
             type="checkbox"
             checked={isTest}
             onChange={e => onIsTestChange(e.target.checked)}
           />
-          Sandbox key (prefix <code className="rounded bg-muted px-1">ock_test_</code>) — only reads
-          and writes test entities. Use for integration testing without touching production data.
+          Sandbox key (prefix <code className="rounded bg-surface-raised px-1">ock_test_</code>) —
+          only reads and writes test entities. Use for integration testing without touching
+          production data.
         </label>
       </fieldset>
 
-      <fieldset className="space-y-2 rounded-md border border-border-subtle bg-background/40 p-3">
-        <legend className="px-1 text-xs text-muted-foreground">Permissions</legend>
-        <label className="flex items-center gap-2 text-xs text-foreground">
+      <fieldset className="space-y-2 rounded-md border border-subtle bg-surface-page/40 p-3">
+        <legend className="px-1 text-xs text-fg-secondary">Permissions</legend>
+        <label className="flex items-center gap-2 text-xs text-fg-primary">
           <input
             type="radio"
             name="permissions"
@@ -152,7 +153,7 @@ export default function IntegrationKeyMintForm({
           />
           Full access (wildcard) — the key can call every public endpoint on its actor.
         </label>
-        <label className="flex items-center gap-2 text-xs text-foreground">
+        <label className="flex items-center gap-2 text-xs text-fg-primary">
           <input
             type="radio"
             name="permissions"
@@ -162,11 +163,11 @@ export default function IntegrationKeyMintForm({
           Restrict to specific scopes (least privilege).
         </label>
         {restrictPermissions && (
-          <div className="mt-2 rounded-md border border-border-subtle bg-muted/20 p-3">
+          <div className="mt-2 rounded-md border border-subtle bg-surface-raised/20 p-3">
             <div className="grid grid-cols-[auto,1fr,1fr] items-center gap-x-3 gap-y-1.5 text-xs">
-              <span className="text-muted-foreground" />
-              <span className="text-muted-foreground">Read</span>
-              <span className="text-muted-foreground">Write</span>
+              <span className="text-fg-secondary" />
+              <span className="text-fg-secondary">Read</span>
+              <span className="text-fg-secondary">Write</span>
               {PUBLIC_API_ENTITY_TYPES.map(entity => (
                 <ScopeRow
                   key={entity}
@@ -178,7 +179,7 @@ export default function IntegrationKeyMintForm({
                 />
               ))}
             </div>
-            <p className="mt-2 text-[10px] text-muted-foreground">
+            <p className="mt-2 text-[10px] text-fg-secondary">
               {selectedScopes.size === 0
                 ? 'No scopes picked — the key will be unable to do anything.'
                 : `Selected: ${selectedScopes.size} of ${PUBLIC_API_SCOPE_TOKENS.length}.`}

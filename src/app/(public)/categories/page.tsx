@@ -35,7 +35,7 @@ export default function CategoriesPage() {
           <h1 className="font-heading tracking-display text-4xl font-bold mb-4">
             Find Your Community
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-fg-secondary max-w-2xl mx-auto">
             Whether you&apos;re a creator, builder, educator, or organization, OrangeCat helps you
             exchange, fund, lend, invest, and govern—without gatekeepers.
           </p>
@@ -48,14 +48,14 @@ export default function CategoriesPage() {
               return null;
             }
             return (
-              <div key={category.id} className="bg-card rounded-lg shadow-sm p-6">
+              <div key={category.id} className="bg-surface-base rounded-lg shadow-sm p-6">
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 rounded-full bg-surface-raised border border-border-subtle flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-surface-raised border border-subtle flex items-center justify-center">
                     <Icon className="w-6 h-6 text-fg-secondary" />
                   </div>
                   <div className="ml-4">
-                    <h2 className="text-2xl font-semibold text-foreground">{category.name}</h2>
-                    <p className="text-muted-foreground">{category.description}</p>
+                    <h2 className="text-2xl font-semibold text-fg-primary">{category.name}</h2>
+                    <p className="text-fg-secondary">{category.description}</p>
                   </div>
                 </div>
 
@@ -64,13 +64,13 @@ export default function CategoriesPage() {
                     <Link
                       key={group.id}
                       href={`/browse?category=${category.id}&group=${group.id}`}
-                      className="block p-6 bg-muted rounded-lg hover:bg-muted/80 dark:hover:bg-muted/80 transition-colors group"
+                      className="block p-6 bg-surface-raised rounded-lg hover:bg-surface-raised/80 dark:hover:bg-surface-raised/80 transition-colors group"
                     >
                       <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{group.name}</h3>
-                        <ArrowRight className="w-5 h-5 text-muted-dim group-hover:text-foreground transition-colors" />
+                        <h3 className="text-lg font-semibold text-fg-primary mb-2">{group.name}</h3>
+                        <ArrowRight className="w-5 h-5 text-fg-tertiary group-hover:text-fg-primary transition-colors" />
                       </div>
-                      <p className="text-muted-foreground text-sm">{group.description}</p>
+                      <p className="text-fg-secondary text-sm">{group.description}</p>
                     </Link>
                   ))}
                 </div>
@@ -84,11 +84,11 @@ export default function CategoriesPage() {
             {session ? 'Start Creating' : 'Get Started'}
           </Button>
           {!session && (
-            <p className="mt-4 text-sm text-muted-foreground">
+            <p className="mt-4 text-sm text-fg-secondary">
               Already have an account?{' '}
               <Link
                 href={ROUTES.AUTH_LOGIN}
-                className="text-foreground hover:text-muted-strong underline-offset-4 hover:underline"
+                className="text-fg-primary hover:text-fg-primary underline-offset-4 hover:underline"
               >
                 Sign in
               </Link>

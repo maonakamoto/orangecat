@@ -148,7 +148,7 @@ export function FeedbackButtons({
                 !isCommentValid && dislikeComment.length > 0 && 'border-status-warning'
               )}
             />
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="flex justify-between text-xs text-fg-secondary">
               <span>
                 {!isCommentValid ? (
                   <span className="text-status-warning">

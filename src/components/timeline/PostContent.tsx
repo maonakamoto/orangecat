@@ -44,10 +44,10 @@ export function PostContent({ event }: PostContentProps) {
     <div className="space-y-2">
       {/* Thread affordance: one-level parent preview + view conversation link */}
       {event.parentEventId && !isRepost && (
-        <div className="-mt-1 mb-1 text-xs text-muted-foreground">
+        <div className="-mt-1 mb-1 text-xs text-fg-secondary">
           Replying in a thread ·{' '}
           <button
-            className="text-foreground hover:underline underline-offset-4"
+            className="text-fg-primary hover:underline underline-offset-4"
             onClick={() => {
               try {
                 const url = new URL(window.location.href);
@@ -68,7 +68,7 @@ export function PostContent({ event }: PostContentProps) {
 
       {/* Event Description/Content */}
       {displayContent && (!isRepost || isQuoteRepost) && (
-        <div className="text-foreground text-[15px] leading-relaxed whitespace-pre-line break-words">
+        <div className="text-fg-primary text-[15px] leading-relaxed whitespace-pre-line break-words">
           {renderMarkdownToReact(displayContent)}
         </div>
       )}
@@ -79,16 +79,16 @@ export function PostContent({ event }: PostContentProps) {
           {event.subject && event.subject.url && (
             <Link
               href={event.subject.url}
-              className="text-foreground hover:underline underline-offset-4 text-sm font-medium"
+              className="text-fg-primary hover:underline underline-offset-4 text-sm font-medium"
             >
               {event.subject.name}
             </Link>
           )}
-          {event.target && <span className="text-muted-dim">→</span>}
+          {event.target && <span className="text-fg-tertiary">→</span>}
           {event.target && event.target.url && (
             <Link
               href={event.target.url}
-              className="text-foreground hover:underline underline-offset-4 text-sm font-medium"
+              className="text-fg-primary hover:underline underline-offset-4 text-sm font-medium"
             >
               {event.target.name}
             </Link>
@@ -113,28 +113,26 @@ export function PostContent({ event }: PostContentProps) {
                 <div className="flex items-center gap-1 flex-wrap">
                   <Link
                     href={`/profiles/${originalAuthor.username}`}
-                    className="font-semibold text-foreground hover:underline"
+                    className="font-semibold text-fg-primary hover:underline"
                   >
                     {originalAuthor.name}
                   </Link>
                   {originalAuthor.username && (
-                    <span className="text-muted-foreground text-sm">
-                      @{originalAuthor.username}
-                    </span>
+                    <span className="text-fg-secondary text-sm">@{originalAuthor.username}</span>
                   )}
                 </div>
               </div>
             </div>
             {originalDescription ? (
-              <div className="text-foreground text-sm leading-relaxed whitespace-pre-line break-words">
+              <div className="text-fg-primary text-sm leading-relaxed whitespace-pre-line break-words">
                 {renderMarkdownToReact(originalDescription)}
               </div>
             ) : (
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-fg-secondary">
                 Original post
                 <Link
                   href={`?focus=${originalEventId}`}
-                  className="ml-2 text-foreground hover:underline underline-offset-4 font-medium"
+                  className="ml-2 text-fg-primary hover:underline underline-offset-4 font-medium"
                 >
                   View
                 </Link>
@@ -161,20 +159,18 @@ export function PostContent({ event }: PostContentProps) {
                 <div className="flex items-center gap-1 flex-wrap">
                   <Link
                     href={`/profiles/${originalAuthor.username}`}
-                    className="font-semibold text-foreground hover:underline"
+                    className="font-semibold text-fg-primary hover:underline"
                   >
                     {originalAuthor.name}
                   </Link>
                   {originalAuthor.username && (
-                    <span className="text-muted-foreground text-sm">
-                      @{originalAuthor.username}
-                    </span>
+                    <span className="text-fg-secondary text-sm">@{originalAuthor.username}</span>
                   )}
                 </div>
               </div>
             </div>
             {originalDescription && (
-              <div className="text-foreground text-sm leading-relaxed whitespace-pre-line break-words">
+              <div className="text-fg-primary text-sm leading-relaxed whitespace-pre-line break-words">
                 {renderMarkdownToReact(originalDescription)}
               </div>
             )}
@@ -189,8 +185,8 @@ export function PostContent({ event }: PostContentProps) {
         return attachments.length > 0 ? (
           <div className="mt-3 space-y-2">
             {attachments.map((attachment: { type: string; filename: string }, index: number) => (
-              <div key={index} className="rounded-md bg-muted p-4">
-                <p className="text-sm text-muted-foreground">
+              <div key={index} className="rounded-md bg-surface-raised p-4">
+                <p className="text-sm text-fg-secondary">
                   Media attachment: {attachment.type} - {attachment.filename}
                 </p>
               </div>

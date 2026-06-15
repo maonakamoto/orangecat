@@ -71,7 +71,7 @@ export function VotingProgress({ votingResults, threshold, totalMembers }: Votin
             </div>
             <div className="flex items-center gap-2">
               <span className="font-semibold">{yesPercentage.toFixed(1)}%</span>
-              <span className="text-muted-foreground">({votingResults.yes_votes} votes)</span>
+              <span className="text-fg-secondary">({votingResults.yes_votes} votes)</span>
             </div>
           </div>
           <Progress value={yesPercentage} className="h-2" />
@@ -86,7 +86,7 @@ export function VotingProgress({ votingResults, threshold, totalMembers }: Votin
             </div>
             <div className="flex items-center gap-2">
               <span className="font-semibold">{noPercentage.toFixed(1)}%</span>
-              <span className="text-muted-foreground">({votingResults.no_votes} votes)</span>
+              <span className="text-fg-secondary">({votingResults.no_votes} votes)</span>
             </div>
           </div>
           <Progress value={noPercentage} className="h-2" />
@@ -95,12 +95,12 @@ export function VotingProgress({ votingResults, threshold, totalMembers }: Votin
         {/* Participation */}
         {totalMembers && (
           <div className="pt-2 border-t">
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <div className="flex items-center justify-between text-sm text-fg-secondary">
               <span>Participation</span>
               <span className="font-medium">{participationRate.toFixed(1)}%</span>
             </div>
             <Progress value={participationRate} className="h-2 mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-fg-secondary mt-1">
               {votingResults.total_voting_power} of {totalMembers} members have voted
             </p>
           </div>
@@ -109,7 +109,7 @@ export function VotingProgress({ votingResults, threshold, totalMembers }: Votin
         {/* Threshold Indicator */}
         <div className="pt-2 border-t">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Required Threshold</span>
+            <span className="text-fg-secondary">Required Threshold</span>
             <span className="font-medium">{threshold}%</span>
           </div>
           {yesPercentage >= threshold ? (
@@ -118,7 +118,7 @@ export function VotingProgress({ votingResults, threshold, totalMembers }: Votin
               Threshold met - Proposal will pass
             </p>
           ) : (
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-fg-secondary mt-1">
               Need {((threshold - yesPercentage) / 100) * votingResults.total_voting_power} more Yes
               votes
             </p>

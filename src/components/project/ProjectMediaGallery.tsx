@@ -160,7 +160,7 @@ export default function ProjectMediaGallery({
       <div className={`grid gap-2 ${className}`}>
         {/* Main Image - Clickable - Smaller and Elegant */}
         <div
-          className="w-full overflow-hidden rounded-lg border border-border bg-card cursor-pointer group relative aspect-[16/9] max-h-[400px]"
+          className="w-full overflow-hidden rounded-lg border border-default bg-surface-base cursor-pointer group relative aspect-[16/9] max-h-[400px]"
           onClick={() => openLightbox(0)}
         >
           <Image
@@ -187,7 +187,7 @@ export default function ProjectMediaGallery({
             {thumbs.slice(0, 3).map((thumb, idx) => (
               <div
                 key={thumb.id}
-                className="aspect-[4/3] overflow-hidden rounded-md border border-border bg-card cursor-pointer group relative"
+                className="aspect-[4/3] overflow-hidden rounded-md border border-default bg-surface-base cursor-pointer group relative"
                 onClick={() => openLightbox(idx + 1)}
               >
                 <Image
@@ -204,12 +204,12 @@ export default function ProjectMediaGallery({
             ))}
             {thumbs.length > 3 && (
               <div
-                className="aspect-[4/3] overflow-hidden rounded-md border border-border bg-muted cursor-pointer group relative flex items-center justify-center"
+                className="aspect-[4/3] overflow-hidden rounded-md border border-default bg-surface-raised cursor-pointer group relative flex items-center justify-center"
                 onClick={() => openLightbox(4)}
               >
                 <div className="text-center">
-                  <div className="text-xl font-semibold text-foreground">+{thumbs.length - 3}</div>
-                  <div className="text-xs text-muted-foreground">more</div>
+                  <div className="text-xl font-semibold text-fg-primary">+{thumbs.length - 3}</div>
+                  <div className="text-xs text-fg-secondary">more</div>
                 </div>
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-200" />
               </div>
@@ -227,7 +227,7 @@ export default function ProjectMediaGallery({
           {/* Close Button */}
           <button
             onClick={e => closeLightbox(e)}
-            className="absolute top-4 right-4 z-[60] text-white/90 hover:text-white transition-colors p-2 rounded-full hover:bg-muted/20 bg-black/40 backdrop-blur-sm min-h-11 min-w-11 flex items-center justify-center"
+            className="absolute top-4 right-4 z-[60] text-white/90 hover:text-white transition-colors p-2 rounded-full hover:bg-surface-raised/20 bg-black/40 backdrop-blur-sm min-h-11 min-w-11 flex items-center justify-center"
             aria-label="Close gallery"
           >
             <X className="w-6 h-6" />
@@ -256,14 +256,14 @@ export default function ProjectMediaGallery({
               <>
                 <button
                   onClick={goToPrevious}
-                  className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white hover:text-white transition-all p-2 md:p-3 rounded-full hover:bg-muted/20 bg-black/50 backdrop-blur-sm z-10 min-h-11 min-w-11 flex items-center justify-center"
+                  className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white hover:text-white transition-all p-2 md:p-3 rounded-full hover:bg-surface-raised/20 bg-black/50 backdrop-blur-sm z-10 min-h-11 min-w-11 flex items-center justify-center"
                   aria-label="Previous image"
                 >
                   <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
                 <button
                   onClick={goToNext}
-                  className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white hover:text-white transition-all p-2 md:p-3 rounded-full hover:bg-muted/20 bg-black/50 backdrop-blur-sm z-10 min-h-11 min-w-11 flex items-center justify-center"
+                  className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white hover:text-white transition-all p-2 md:p-3 rounded-full hover:bg-surface-raised/20 bg-black/50 backdrop-blur-sm z-10 min-h-11 min-w-11 flex items-center justify-center"
                   aria-label="Next image"
                 >
                   <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />

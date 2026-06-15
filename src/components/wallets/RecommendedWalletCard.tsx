@@ -29,7 +29,7 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
     <Card
       className={cn(
         'p-6 relative overflow-hidden transition-all duration-300',
-        wallet.recommended && 'ring-2 ring-bitcoinOrange/40 border-border-strong'
+        wallet.recommended && 'ring-2 ring-bitcoinOrange/40 border-strong'
       )}
     >
       {wallet.recommended && (
@@ -40,8 +40,8 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
 
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">{wallet.name}</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">{wallet.description}</p>
+          <h3 className="text-lg font-semibold text-fg-primary mb-2">{wallet.name}</h3>
+          <p className="text-sm text-fg-secondary leading-relaxed">{wallet.description}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -50,8 +50,8 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
             className={cn(
               'text-xs',
               wallet.platform === 'mobile'
-                ? 'bg-muted text-foreground border-border-subtle'
-                : 'bg-muted text-foreground border-border-subtle'
+                ? 'bg-surface-raised text-fg-primary border-subtle'
+                : 'bg-surface-raised text-fg-primary border-subtle'
             )}
           >
             {wallet.platform === 'mobile' ? (
@@ -84,7 +84,10 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
             </Badge>
           )}
 
-          <Badge variant="outline" className="text-xs bg-muted text-foreground border-border">
+          <Badge
+            variant="outline"
+            className="text-xs bg-surface-raised text-fg-primary border-default"
+          >
             <Shield className="w-3 h-3 mr-1" />
             Non-custodial
           </Badge>

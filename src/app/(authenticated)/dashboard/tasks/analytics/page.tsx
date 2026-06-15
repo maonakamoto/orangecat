@@ -33,7 +33,7 @@ export default function TaskAnalyticsPage() {
             items={[{ label: 'Tasks', href: ROUTES.DASHBOARD.TASKS }, { label: 'Analytics' }]}
             className="mb-4"
           />
-          <div className="bg-card rounded-lg border border-border-subtle p-6 text-status-negative">
+          <div className="bg-surface-base rounded-lg border border-subtle p-6 text-status-negative">
             {error}
           </div>
         </div>
@@ -51,11 +51,11 @@ export default function TaskAnalyticsPage() {
         />
 
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-foreground">Task Statistics</h1>
+          <h1 className="text-2xl font-bold text-fg-primary">Task Statistics</h1>
           <select
             value={days}
             onChange={e => setDays(parseInt(e.target.value))}
-            className="rounded-lg border border-border-strong bg-card text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            className="rounded-lg border border-strong bg-surface-base text-fg-primary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           >
             <option value={7}>Last 7 days</option>
             <option value={30}>Last 30 days</option>
@@ -92,39 +92,39 @@ export default function TaskAnalyticsPage() {
           </div>
         )}
 
-        <div className="bg-card rounded-lg border border-border p-6">
-          <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+        <div className="bg-surface-base rounded-lg border border-default p-6">
+          <h2 className="text-lg font-semibold text-fg-primary mb-4 flex items-center gap-2">
             <Users className="h-5 w-5" />
             Contributions by Person
           </h2>
           {contributions.length === 0 ? (
-            <p className="text-muted-foreground text-base text-center py-8">
+            <p className="text-fg-secondary text-base text-center py-8">
               No data for the selected period
             </p>
           ) : (
             <div className="space-y-4">
               {contributions.map((contribution, index) => (
                 <div key={contribution.user.id} className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-foreground font-semibold text-sm">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-surface-raised text-fg-primary font-semibold text-sm">
                     {index + 1}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-foreground truncate">
+                      <span className="font-medium text-fg-primary truncate">
                         {contribution.user.display_name || contribution.user.username}
                       </span>
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-sm text-fg-secondary">
                         {contribution.totalCompletions} tasks
                         {contribution.totalMinutes > 0 && (
-                          <span className="text-muted-dim ml-2">
+                          <span className="text-fg-tertiary ml-2">
                             ({Math.round(contribution.totalMinutes / 60)}h)
                           </span>
                         )}
                       </span>
                     </div>
-                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-2 bg-surface-raised rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-muted/400 rounded-full transition-all duration-500"
+                        className="h-full bg-surface-raised/400 rounded-full transition-all duration-500"
                         style={{
                           width: `${(contribution.totalCompletions / maxCompletions) * 100}%`,
                         }}
@@ -138,7 +138,7 @@ export default function TaskAnalyticsPage() {
                           .map(([category, count]) => (
                             <span
                               key={category}
-                              className="text-xs px-2 py-0.5 bg-muted rounded-full text-muted-foreground"
+                              className="text-xs px-2 py-0.5 bg-surface-raised rounded-full text-fg-secondary"
                             >
                               {TASK_CATEGORY_LABELS[
                                 category as keyof typeof TASK_CATEGORY_LABELS
@@ -155,17 +155,17 @@ export default function TaskAnalyticsPage() {
           )}
         </div>
 
-        <div className="bg-card rounded-lg border border-border p-6">
-          <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+        <div className="bg-surface-base rounded-lg border border-default p-6">
+          <h2 className="text-lg font-semibold text-fg-primary mb-4 flex items-center gap-2">
             <Award className="h-5 w-5" />
             Fairness Overview
           </h2>
-          <p className="text-base text-muted-foreground mb-4">
+          <p className="text-base text-fg-secondary mb-4">
             Shows how evenly recurring tasks are distributed. Low values indicate that a task is
             being completed by only a few people.
           </p>
           {fairnessData.length === 0 ? (
-            <p className="text-muted-foreground text-base text-center py-8">
+            <p className="text-fg-secondary text-base text-center py-8">
               No recurring tasks with completions
             </p>
           ) : (
@@ -173,22 +173,22 @@ export default function TaskAnalyticsPage() {
               {fairnessData.slice(0, 10).map(item => (
                 <div
                   key={item.task.id}
-                  className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors cursor-pointer"
+                  className="flex items-center gap-4 p-3 bg-surface-raised/50 rounded-lg hover:bg-surface-raised transition-colors cursor-pointer"
                   onClick={() => router.push(`/dashboard/tasks/${item.task.id}`)}
                 >
                   <FairnessIndicator level={item.fairnessLevel} />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-foreground truncate">{item.task.title}</div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="font-medium text-fg-primary truncate">{item.task.title}</div>
+                    <div className="text-sm text-fg-secondary">
                       {item.totalCompletions} completions by {item.uniqueCompleterCount} person
                       {item.uniqueCompleterCount !== 1 && 's'}
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-semibold text-foreground">
+                    <div className="text-lg font-semibold text-fg-primary">
                       {item.fairnessScore}%
                     </div>
-                    <div className="text-xs text-muted-foreground">Fairness</div>
+                    <div className="text-xs text-fg-secondary">Fairness</div>
                   </div>
                 </div>
               ))}

@@ -26,18 +26,18 @@ export function PermissionPresets({
 
   return (
     <div className="mt-8">
-      <h3 className="font-semibold text-foreground mb-3">Quick Presets</h3>
+      <h3 className="font-semibold text-fg-primary mb-3">Quick Presets</h3>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <button
           onClick={() => applyPreset(id => id === 'context')}
           disabled={saving !== null}
-          className="rounded-md border border-border-subtle p-4 text-left transition-colors hover:border-border-strong hover:bg-muted disabled:opacity-50"
+          className="rounded-md border border-subtle p-4 text-left transition-colors hover:border-strong hover:bg-surface-raised disabled:opacity-50"
         >
           <div className="flex items-center gap-2 mb-1">
             <ShieldCheck className="h-5 w-5 text-status-positive" />
-            <span className="font-medium text-foreground">Minimal</span>
+            <span className="font-medium text-fg-primary">Minimal</span>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-fg-secondary">
             Only context management. Safest option for new users.
           </p>
         </button>
@@ -45,13 +45,13 @@ export function PermissionPresets({
         <button
           onClick={() => applyPreset(id => ['entities', 'context', 'communication'].includes(id))}
           disabled={saving !== null}
-          className="rounded-md border border-border-subtle p-4 text-left transition-colors hover:border-border-strong hover:bg-muted disabled:opacity-50"
+          className="rounded-md border border-subtle p-4 text-left transition-colors hover:border-strong hover:bg-surface-raised disabled:opacity-50"
         >
           <div className="flex items-center gap-2 mb-1">
-            <Zap className="h-5 w-5 text-foreground" />
-            <span className="font-medium text-foreground">Creator</span>
+            <Zap className="h-5 w-5 text-fg-primary" />
+            <span className="font-medium text-fg-primary">Creator</span>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-fg-secondary">
             Create content & communicate. Best for most users.
           </p>
         </button>
@@ -59,13 +59,13 @@ export function PermissionPresets({
         <button
           onClick={() => applyPreset(id => id !== 'payments')}
           disabled={saving !== null}
-          className="rounded-md border border-border-subtle p-4 text-left transition-colors hover:border-border-strong hover:bg-muted disabled:opacity-50"
+          className="rounded-md border border-subtle p-4 text-left transition-colors hover:border-strong hover:bg-surface-raised disabled:opacity-50"
         >
           <div className="flex items-center gap-2 mb-1">
             <Shield className="h-5 w-5 text-status-warning" />
-            <span className="font-medium text-foreground">Power User</span>
+            <span className="font-medium text-fg-primary">Power User</span>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-fg-secondary">
             Everything except payments. For experienced users.
           </p>
         </button>
@@ -77,7 +77,7 @@ export function PermissionPresets({
           size="sm"
           onClick={() => applyPreset(() => false)}
           disabled={saving !== null}
-          className="text-muted-foreground hover:text-status-negative"
+          className="text-fg-secondary hover:text-status-negative"
         >
           Disable All Permissions
         </Button>

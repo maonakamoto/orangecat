@@ -37,7 +37,7 @@ export function ProfileLocationSection({
         name="location_search"
         render={({ field }) => (
           <FormItem id="location">
-            <FormLabel className="text-sm font-medium text-foreground">Location</FormLabel>
+            <FormLabel className="text-sm font-medium text-fg-primary">Location</FormLabel>
             <FormControl>
               <LocationInput
                 value={field.value || ''}
@@ -87,7 +87,7 @@ export function ProfileLocationSection({
                 placeholder="Type your city or address..."
               />
             </FormControl>
-            <FormDescription className="text-xs text-muted-foreground">
+            <FormDescription className="text-xs text-fg-secondary">
               Choose how this appears below: show real city, hide it, or use a custom group like
               &quot;Moon&quot; or &quot;Hell&quot;.
             </FormDescription>
@@ -97,34 +97,34 @@ export function ProfileLocationSection({
       />
 
       {/* Location visibility/group controls */}
-      <div className="mt-2 rounded-lg border border-border bg-muted p-3">
-        <div className="text-xs font-medium text-foreground mb-2">Location visibility</div>
+      <div className="mt-2 rounded-lg border border-default bg-surface-raised p-3">
+        <div className="text-xs font-medium text-fg-primary mb-2">Location visibility</div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-          <label className="inline-flex items-center gap-2 text-sm text-foreground">
+          <label className="inline-flex items-center gap-2 text-sm text-fg-primary">
             <input
               type="radio"
               name="location_mode"
-              className="accent-orange-600"
+              className="accent-fg-primary"
               checked={locationMode === 'actual'}
               onChange={() => setLocationMode('actual')}
             />
             Show actual city/region
           </label>
-          <label className="inline-flex items-center gap-2 text-sm text-foreground">
+          <label className="inline-flex items-center gap-2 text-sm text-fg-primary">
             <input
               type="radio"
               name="location_mode"
-              className="accent-orange-600"
+              className="accent-fg-primary"
               checked={locationMode === 'hidden'}
               onChange={() => setLocationMode('hidden')}
             />
             Hide my location
           </label>
-          <label className="inline-flex items-center gap-2 text-sm text-foreground">
+          <label className="inline-flex items-center gap-2 text-sm text-fg-primary">
             <input
               type="radio"
               name="location_mode"
-              className="accent-orange-600"
+              className="accent-fg-primary"
               checked={locationMode === 'group'}
               onChange={() => setLocationMode('group')}
             />
@@ -139,7 +139,7 @@ export function ProfileLocationSection({
               onChange={e => setLocationGroupLabel(e.target.value)}
               className="max-w-sm"
             />
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-fg-secondary">
               People with the same label see each other.
             </span>
           </div>

@@ -30,14 +30,17 @@ export function AIKeyCard({ apiKey: key, isLoading, onSetPrimary, onDelete }: AI
             )}
           >
             <Key
-              className={cn('w-5 h-5', key.is_valid ? 'text-status-positive' : 'text-destructive')}
+              className={cn(
+                'w-5 h-5',
+                key.is_valid ? 'text-status-positive' : 'text-status-negative'
+              )}
             />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-medium">{key.key_name}</span>
               {key.is_primary && (
-                <Badge className="bg-muted text-foreground border-border-subtle">
+                <Badge className="bg-surface-raised text-fg-primary border-subtle">
                   <Star className="w-3 h-3 mr-1 fill-current" />
                   Primary
                 </Badge>
@@ -54,7 +57,7 @@ export function AIKeyCard({ apiKey: key, isLoading, onSetPrimary, onDelete }: AI
                 </Badge>
               )}
             </div>
-            <div className="text-sm text-muted-foreground flex items-center gap-2">
+            <div className="text-sm text-fg-secondary flex items-center gap-2">
               <span>{keyProvider?.name || key.provider}</span>
               <span>•</span>
               <span className="font-mono">****{key.key_hint}</span>
@@ -83,7 +86,7 @@ export function AIKeyCard({ apiKey: key, isLoading, onSetPrimary, onDelete }: AI
             variant="ghost"
             size="sm"
             onClick={() => onDelete(key)}
-            className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
+            className="text-status-negative hover:text-status-negative/80 hover:bg-status-negative/10"
             title="Delete key"
           >
             <Trash2 className="w-4 h-4" />

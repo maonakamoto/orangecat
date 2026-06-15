@@ -55,12 +55,12 @@ export default function WebhookEndpointMintForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="space-y-3 rounded-lg border border-border-subtle bg-muted/20 p-4"
+      className="space-y-3 rounded-lg border border-subtle bg-surface-raised/20 p-4"
     >
-      <h3 className="text-sm font-medium text-foreground">Create a new endpoint</h3>
+      <h3 className="text-sm font-medium text-fg-primary">Create a new endpoint</h3>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className="text-xs text-muted-foreground sm:col-span-1">
+        <label className="text-xs text-fg-secondary sm:col-span-1">
           Name
           <input
             type="text"
@@ -69,15 +69,15 @@ export default function WebhookEndpointMintForm({
             value={name}
             onChange={e => onNameChange(e.target.value)}
             placeholder='e.g. "FleetCrown subscriptions"'
-            className="mt-1 w-full rounded-md border border-border-subtle bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring/50 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-subtle bg-surface-page px-3 py-2 text-sm text-fg-primary placeholder:text-fg-secondary focus:border-interactive/50 focus:outline-none"
           />
         </label>
-        <label className="text-xs text-muted-foreground sm:col-span-1">
+        <label className="text-xs text-fg-secondary sm:col-span-1">
           Acts as
           <select
             value={selectedActorId ?? ''}
             onChange={e => onActorChange(e.target.value || null)}
-            className="mt-1 w-full rounded-md border border-border-subtle bg-background px-3 py-2 text-sm text-foreground focus:border-ring/50 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-subtle bg-surface-page px-3 py-2 text-sm text-fg-primary focus:border-interactive/50 focus:outline-none"
           >
             {actors.map(actor => (
               <option key={actor.actor_id} value={actor.actor_id}>
@@ -86,7 +86,7 @@ export default function WebhookEndpointMintForm({
             ))}
           </select>
         </label>
-        <label className="text-xs text-muted-foreground sm:col-span-2">
+        <label className="text-xs text-fg-secondary sm:col-span-2">
           Target URL (https in production)
           <input
             type="url"
@@ -95,14 +95,14 @@ export default function WebhookEndpointMintForm({
             value={url}
             onChange={e => onUrlChange(e.target.value)}
             placeholder="https://fleetcrown.app/webhooks/orangecat"
-            className="mt-1 w-full rounded-md border border-border-subtle bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring/50 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-subtle bg-surface-page px-3 py-2 text-sm text-fg-primary placeholder:text-fg-secondary focus:border-interactive/50 focus:outline-none"
           />
         </label>
       </div>
 
-      <fieldset className="space-y-2 rounded-md border border-border-subtle bg-background/40 p-3">
-        <legend className="px-1 text-xs text-muted-foreground">Events</legend>
-        <p className="text-[11px] text-muted-foreground">
+      <fieldset className="space-y-2 rounded-md border border-subtle bg-surface-page/40 p-3">
+        <legend className="px-1 text-xs text-fg-secondary">Events</legend>
+        <p className="text-[11px] text-fg-secondary">
           {selectedEvents.size === 0
             ? 'Receive every event for this actor. Tick boxes to restrict.'
             : `Receive only the ${selectedEvents.size} ticked event${selectedEvents.size === 1 ? '' : 's'}.`}
@@ -111,14 +111,14 @@ export default function WebhookEndpointMintForm({
           {PUBLIC_API_WEBHOOK_EVENTS.map(eventName => (
             <label
               key={eventName}
-              className="flex items-center gap-1.5 text-[11px] text-foreground"
+              className="flex items-center gap-1.5 text-[11px] text-fg-primary"
             >
               <input
                 type="checkbox"
                 checked={selectedEvents.has(eventName)}
                 onChange={() => onToggleEvent(eventName)}
               />
-              <code className="rounded bg-muted px-1 text-[10px]">{eventName}</code>
+              <code className="rounded bg-surface-raised px-1 text-[10px]">{eventName}</code>
             </label>
           ))}
         </div>

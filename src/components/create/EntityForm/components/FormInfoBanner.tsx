@@ -18,17 +18,17 @@ export function FormInfoBanner({ banner }: FormInfoBannerProps) {
     warning: {
       bg: 'border-status-warning/20 bg-status-warning/10',
       title: 'text-status-warning',
-      content: 'text-muted-foreground',
+      content: 'text-fg-secondary',
     },
     success: {
       bg: 'border-status-positive/20 bg-status-positive/10',
       title: 'text-status-positive',
-      content: 'text-muted-foreground',
+      content: 'text-fg-secondary',
     },
     info: {
-      bg: 'border-border-subtle bg-muted/30',
-      title: 'text-foreground',
-      content: 'text-muted-foreground',
+      bg: 'border-subtle bg-surface-raised/30',
+      title: 'text-fg-primary',
+      content: 'text-fg-secondary',
     },
   };
 

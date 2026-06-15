@@ -73,16 +73,16 @@ export default function ForgotPasswordPage() {
             </div>
 
             {/* Success Message */}
-            <h1 className="text-2xl font-bold text-foreground mb-3">Check Your Email</h1>
-            <p className="text-muted-foreground mb-2">We've sent password reset instructions to:</p>
-            <p className="text-sm font-medium text-foreground bg-muted px-3 py-2 rounded-lg mb-6">
+            <h1 className="text-2xl font-bold text-fg-primary mb-3">Check Your Email</h1>
+            <p className="text-fg-secondary mb-2">We've sent password reset instructions to:</p>
+            <p className="text-sm font-medium text-fg-primary bg-surface-raised px-3 py-2 rounded-lg mb-6">
               {email}
             </p>
 
             {/* Instructions */}
-            <div className="text-left bg-muted rounded-lg p-4 mb-6">
-              <h3 className="font-medium text-foreground mb-2">Next steps:</h3>
-              <ol className="text-sm text-muted-foreground space-y-1">
+            <div className="text-left bg-surface-raised rounded-lg p-4 mb-6">
+              <h3 className="font-medium text-fg-primary mb-2">Next steps:</h3>
+              <ol className="text-sm text-fg-secondary space-y-1">
                 <li>1. Check your email inbox</li>
                 <li>2. Click the reset link in the email</li>
                 <li>3. Create your new password</li>
@@ -95,11 +95,11 @@ export default function ForgotPasswordPage() {
                 Back to Login
               </Button>
 
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-fg-secondary">
                 Didn't receive an email? Check your spam folder or{' '}
                 <button
                   onClick={handleRetry}
-                  className="text-foreground hover:text-muted-strong underline"
+                  className="text-fg-primary hover:text-fg-primary underline"
                 >
                   try again
                 </button>
@@ -124,8 +124,8 @@ export default function ForgotPasswordPage() {
             </div>
 
             {/* Error Message */}
-            <h1 className="text-2xl font-bold text-foreground mb-3">Something Went Wrong</h1>
-            <p className="text-muted-foreground mb-6">{error}</p>
+            <h1 className="text-2xl font-bold text-fg-primary mb-3">Something Went Wrong</h1>
+            <p className="text-fg-secondary mb-6">{error}</p>
 
             {/* Actions */}
             <div className="space-y-3">
@@ -151,12 +151,12 @@ export default function ForgotPasswordPage() {
         {/* Header */}
         <div className="text-center mb-8">
           {/* Icon */}
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-lg bg-card border border-border mb-6">
-            <Mail className="h-8 w-8 text-foreground" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-lg bg-surface-base border border-default mb-6">
+            <Mail className="h-8 w-8 text-fg-primary" />
           </div>
 
-          <h1 className="text-2xl font-bold text-foreground mb-2">Reset Your Password</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl font-bold text-fg-primary mb-2">Reset Your Password</h1>
+          <p className="text-fg-secondary">
             Enter your email address and we'll send you instructions to reset your password.
           </p>
         </div>
@@ -195,7 +195,7 @@ export default function ForgotPasswordPage() {
         <div className="mt-8 text-center">
           <Link
             href={`${ROUTES.AUTH}?mode=login`}
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="inline-flex items-center text-sm text-fg-secondary hover:text-fg-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             Back to Login
@@ -204,11 +204,11 @@ export default function ForgotPasswordPage() {
 
         {/* Help Text */}
         <div className="mt-6 text-center">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-fg-secondary">
             Remember your password?{' '}
             <Link
               href={`${ROUTES.AUTH}?mode=login`}
-              className="text-foreground hover:text-muted-strong underline"
+              className="text-fg-primary hover:text-fg-primary underline"
             >
               Sign in instead
             </Link>

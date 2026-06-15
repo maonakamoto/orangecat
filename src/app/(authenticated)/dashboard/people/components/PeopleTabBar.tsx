@@ -31,15 +31,15 @@ export default function PeopleTabBar({
   return (
     <>
       {/* Tabs */}
-      <div className="mb-6 flex gap-4 border-b border-border">
+      <div className="mb-6 flex gap-4 border-b border-default">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={`px-4 py-2 font-medium transition-colors ${
               activeTab === tab.id
-                ? 'text-foreground border-b-2 border-foreground'
-                : 'text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground'
+                ? 'text-fg-primary border-b-2 border-fg-primary'
+                : 'text-fg-secondary hover:text-fg-primary dark:text-fg-secondary dark:hover:text-fg-primary'
             }`}
           >
             {tab.label} ({tab.count})
@@ -50,7 +50,7 @@ export default function PeopleTabBar({
       {/* Search */}
       <div className="mb-6">
         <div className="relative max-w-md">
-          <Search className="w-4 h-4 text-muted-dim absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-fg-tertiary absolute left-3 top-1/2 -translate-y-1/2" />
           <Input
             value={searchTerm}
             onChange={e => onSearchChange(e.target.value)}

@@ -65,18 +65,20 @@ export function ProofUploadForm({
                   onClick={() => handleTypeSelect(option.value)}
                   className={cn(
                     'flex flex-col items-center p-3 rounded-lg border-2 transition-colors',
-                    'hover:bg-muted/50',
-                    selectedType === option.value ? 'border-primary bg-primary/5' : 'border-muted'
+                    'hover:bg-surface-raised/50',
+                    selectedType === option.value
+                      ? 'border-fg-primary bg-fg-primary/5'
+                      : 'border-subtle'
                   )}
                 >
                   <Icon
                     className={cn(
                       'h-5 w-5 mb-1',
-                      selectedType === option.value ? 'text-primary' : 'text-muted-foreground'
+                      selectedType === option.value ? 'text-fg-primary' : 'text-fg-secondary'
                     )}
                   />
                   <span className="text-sm font-medium">{option.label}</span>
-                  <span className="text-xs text-muted-foreground text-center">
+                  <span className="text-xs text-fg-secondary text-center">
                     {option.description}
                   </span>
                 </button>
@@ -84,7 +86,7 @@ export function ProofUploadForm({
             })}
           </div>
           {errors.proof_type && (
-            <p className="text-sm text-destructive">{errors.proof_type.message}</p>
+            <p className="text-sm text-status-negative">{errors.proof_type.message}</p>
           )}
         </div>
 
@@ -120,11 +122,11 @@ export function ProofUploadForm({
                     className="font-mono text-sm"
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-fg-secondary">
                   The transaction ID can be found in your wallet or on a block explorer
                 </p>
                 {errors.transaction_id && (
-                  <p className="text-sm text-destructive">{errors.transaction_id.message}</p>
+                  <p className="text-sm text-status-negative">{errors.transaction_id.message}</p>
                 )}
               </div>
             )}
@@ -137,9 +139,9 @@ export function ProofUploadForm({
                 placeholder="Describe how you used the funds..."
                 rows={3}
               />
-              <p className="text-xs text-muted-foreground">Minimum 10 characters required</p>
+              <p className="text-xs text-fg-secondary">Minimum 10 characters required</p>
               {errors.description && (
-                <p className="text-sm text-destructive">{errors.description.message}</p>
+                <p className="text-sm text-status-negative">{errors.description.message}</p>
               )}
             </div>
 

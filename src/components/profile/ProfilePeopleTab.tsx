@@ -175,9 +175,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
   }, [profile.id, isOwnProfile, user?.id]);
 
   if (loading) {
-    return (
-      <div className="text-muted-foreground text-sm py-8 text-center">Loading connections...</div>
-    );
+    return <div className="text-fg-secondary text-sm py-8 text-center">Loading connections...</div>;
   }
 
   const currentList = activeView === 'following' ? following : followers;
@@ -186,13 +184,13 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
   return (
     <div className="space-y-6">
       {/* Toggle between Followers and Following */}
-      <div className="flex gap-2 sm:gap-4 border-b border-border">
+      <div className="flex gap-2 sm:gap-4 border-b border-default">
         <button
           onClick={() => setActiveView('followers')}
           className={`pb-2 sm:pb-3 px-2 sm:px-4 text-sm sm:text-base font-medium transition-colors ${
             activeView === 'followers'
-              ? 'text-foreground border-b-2 border-foreground'
-              : 'text-muted-foreground hover:text-foreground'
+              ? 'text-fg-primary border-b-2 border-fg-primary'
+              : 'text-fg-secondary hover:text-fg-primary'
           }`}
         >
           Followers ({followers.length})
@@ -201,8 +199,8 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
           onClick={() => setActiveView('following')}
           className={`pb-2 sm:pb-3 px-2 sm:px-4 text-sm sm:text-base font-medium transition-colors ${
             activeView === 'following'
-              ? 'text-foreground border-b-2 border-foreground'
-              : 'text-muted-foreground hover:text-foreground'
+              ? 'text-fg-primary border-b-2 border-fg-primary'
+              : 'text-fg-secondary hover:text-fg-primary'
           }`}
         >
           Following ({following.length})
@@ -212,11 +210,11 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
       {/* Empty State */}
       {!hasConnections && (
         <div className="text-center py-12">
-          <Users className="w-16 h-16 text-muted-dim dark:text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-foreground mb-2">
+          <Users className="w-16 h-16 text-fg-tertiary dark:text-fg-secondary mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-fg-primary mb-2">
             {activeView === 'following' ? 'No Following Yet' : 'No Followers Yet'}
           </h3>
-          <p className="text-muted-foreground">
+          <p className="text-fg-secondary">
             {isOwnProfile
               ? activeView === 'following'
                 ? 'Start following people to see them here'
@@ -242,7 +240,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
               <Link
                 key={person.id}
                 href={`/profiles/${person.username}`}
-                className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-border hover:border-border-strong oc-card-link"
+                className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-default hover:border-strong oc-card-link"
               >
                 {person.avatar_url ? (
                   <Image
@@ -256,14 +254,12 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
                   <DefaultAvatar size={40} className="rounded-lg flex-shrink-0 sm:!w-12 sm:!h-12" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-foreground truncate text-sm sm:text-base">
+                  <h4 className="font-semibold text-fg-primary truncate text-sm sm:text-base">
                     {person.name || person.username}
                   </h4>
-                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">
-                    @{person.username}
-                  </p>
+                  <p className="text-xs sm:text-sm text-fg-secondary mb-1">@{person.username}</p>
                   {person.bio && (
-                    <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1 sm:line-clamp-2">
+                    <p className="text-xs sm:text-sm text-fg-secondary line-clamp-1 sm:line-clamp-2">
                       {person.bio}
                     </p>
                   )}

@@ -49,18 +49,18 @@ export default function HowItWorksPage() {
   const { howItWorks, whatCanYouDo } = SECTION_HEADERS;
 
   return (
-    <div className="min-h-screen bg-background pb-16">
+    <div className="min-h-screen bg-surface-page pb-16">
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center py-12 sm:py-16 mb-8">
-          <div className="inline-flex items-center gap-2 bg-card text-foreground border border-border px-4 py-2 rounded-full mb-6">
+          <div className="inline-flex items-center gap-2 bg-surface-base text-fg-primary border border-default px-4 py-2 rounded-full mb-6">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">Simple, Universal, Powerful</span>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-fg-primary">
             {howItWorks.title}
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-fg-secondary max-w-3xl mx-auto leading-relaxed">
             One platform. Endless possibilities. Here's how to get started with anything on
             OrangeCat.
           </p>
@@ -96,11 +96,11 @@ export default function HowItWorksPage() {
                           >
                             Step {step.number}
                           </span>
-                          <h3 className="text-2xl font-bold text-foreground flex-1">
+                          <h3 className="text-2xl font-bold text-fg-primary flex-1">
                             {step.title}
                           </h3>
                         </div>
-                        <p className="text-muted-foreground text-lg leading-relaxed">
+                        <p className="text-fg-secondary text-lg leading-relaxed">
                           {step.description}
                         </p>
                       </div>
@@ -116,9 +116,7 @@ export default function HowItWorksPage() {
         <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold mb-4">{whatCanYouDo.title}</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              {whatCanYouDo.subtitle}
-            </p>
+            <p className="text-xl text-fg-secondary max-w-3xl mx-auto">{whatCanYouDo.subtitle}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
@@ -129,16 +127,16 @@ export default function HowItWorksPage() {
                   <Card className="p-6 h-full oc-card-link">
                     <div className="flex items-start gap-4">
                       <div className={`${category.bgColor} p-3 rounded-lg flex-shrink-0`}>
-                        <Icon className="w-6 h-6 text-foreground" />
+                        <Icon className="w-6 h-6 text-fg-primary" />
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
-                        <p className="text-muted-foreground mb-3">{category.description}</p>
+                        <p className="text-fg-secondary mb-3">{category.description}</p>
                         <ul className="space-y-1">
                           {category.features.map(feature => (
                             <li
                               key={feature.title}
-                              className="text-sm text-muted-foreground flex items-center gap-2"
+                              className="text-sm text-fg-secondary flex items-center gap-2"
                             >
                               <div
                                 className={`w-1.5 h-1.5 rounded-full ${category.iconGradient}`}
@@ -160,7 +158,7 @@ export default function HowItWorksPage() {
         <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold mb-4">Why Bitcoin Powers Everything</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-fg-secondary max-w-3xl mx-auto">
               Bitcoin isn't just a payment method—it's the foundation for transparent, global,
               permissionless transactions.
             </p>
@@ -173,12 +171,12 @@ export default function HowItWorksPage() {
                 <div key={item.title}>
                   <Card className="p-6 h-full oc-card-link">
                     <div className="flex items-start gap-4">
-                      <div className="bg-muted p-3 rounded-lg flex-shrink-0">
-                        <Icon className="w-6 h-6 text-foreground" />
+                      <div className="bg-surface-raised p-3 rounded-lg flex-shrink-0">
+                        <Icon className="w-6 h-6 text-fg-primary" />
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                        <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+                        <p className="text-fg-secondary leading-relaxed">{item.description}</p>
                       </div>
                     </div>
                   </Card>
@@ -190,9 +188,9 @@ export default function HowItWorksPage() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <Card className="p-12 bg-muted/30 border-border">
+          <Card className="p-12 bg-surface-raised/30 border-default">
             <h2 className="text-2xl font-semibold mb-4">Ready to Get Started?</h2>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-fg-secondary mb-8 max-w-2xl mx-auto">
               Exchange, fund, lend, invest, and govern — with your AI agent, under any identity, in
               any currency.
             </p>
@@ -210,7 +208,7 @@ export default function HowItWorksPage() {
                 {CTA_LABELS.secondaryAction}
               </Button>
             </div>
-            <p className="mt-6 text-sm text-muted-foreground">
+            <p className="mt-6 text-sm text-fg-secondary">
               No credit card required • Free forever • Set up in minutes
             </p>
           </Card>
@@ -218,7 +216,7 @@ export default function HowItWorksPage() {
 
         {/* Additional Help */}
         <div className="mt-12 text-center">
-          <p className="text-muted-foreground mb-4">Need more help?</p>
+          <p className="text-fg-secondary mb-4">Need more help?</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Button href={ROUTES.DISCOVER} variant="ghost">
               See What Others Are Doing

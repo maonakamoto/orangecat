@@ -42,7 +42,7 @@ export function ContributionAmountInput({
 
   return (
     <div className="space-y-3">
-      <label className="text-sm font-medium text-foreground">Amount</label>
+      <label className="text-sm font-medium text-fg-primary">Amount</label>
 
       {/* Quick select buttons */}
       <div className="flex flex-wrap gap-2">
@@ -95,7 +95,7 @@ export function ContributionAmountInput({
         />
       )}
 
-      {value > 0 && <p className="text-sm text-muted-foreground">{formatAmountBtc(value)}</p>}
+      {value > 0 && <p className="text-sm text-fg-secondary">{formatAmountBtc(value)}</p>}
     </div>
   );
 }

@@ -34,9 +34,9 @@ export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
   if (loans.length === 0) {
     return (
       <div className="text-center py-8">
-        <Target className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+        <Target className="h-12 w-12 text-fg-secondary mx-auto mb-4" />
         <h3 className="text-lg font-semibold">No loans available</h3>
-        <p className="text-muted-foreground">Check back later for new listings</p>
+        <p className="text-fg-secondary">Check back later for new listings</p>
       </div>
     );
   }
@@ -64,13 +64,13 @@ export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
                 {/* Financial Summary */}
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Remaining</span>
-                    <span className="font-semibold text-destructive">
+                    <span className="text-sm text-fg-secondary">Remaining</span>
+                    <span className="font-semibold text-status-negative">
                       {formatLoanAmount(loan.remaining_balance, loan.currency)}
                     </span>
                   </div>
                   <Progress value={progress} className="h-1.5" />
-                  <div className="flex justify-between text-xs text-muted-foreground">
+                  <div className="flex justify-between text-xs text-fg-secondary">
                     <span>{progress.toFixed(0)}% paid</span>
                     <span>{formatLoanAmount(loan.original_amount, loan.currency)} total</span>
                   </div>
@@ -79,7 +79,7 @@ export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
                 {/* Interest Rate */}
                 {loan.interest_rate && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Rate</span>
+                    <span className="text-sm text-fg-secondary">Rate</span>
                     <Badge variant="secondary" className="gap-1">
                       <Percent className="h-3 w-3" />
                       {loan.interest_rate}%
@@ -90,7 +90,7 @@ export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
                 {/* Monthly Payment */}
                 {loan.monthly_payment && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Monthly</span>
+                    <span className="text-sm text-fg-secondary">Monthly</span>
                     <span className="font-medium">
                       {formatLoanAmount(loan.monthly_payment, loan.currency)}
                     </span>
@@ -99,7 +99,7 @@ export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
 
                 {/* Lender Info */}
                 {loan.lender_name && (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 text-xs text-fg-secondary">
                     <User className="h-3 w-3" />
                     <span className="truncate">{loan.lender_name}</span>
                   </div>

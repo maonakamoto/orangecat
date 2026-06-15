@@ -37,18 +37,18 @@ export default function DiscoverEmptyState({
   if (!hasFilters) {
     return (
       <div className="text-center py-16">
-        <div className="bg-muted/30 rounded-lg border border-border p-8 text-center max-w-2xl mx-auto">
-          <div className="w-16 h-16 rounded-lg bg-card border border-border flex items-center justify-center mx-auto mb-4">
-            <EntityIcon className="w-8 h-8 text-foreground" />
+        <div className="bg-surface-raised/30 rounded-lg border border-default p-8 text-center max-w-2xl mx-auto">
+          <div className="w-16 h-16 rounded-lg bg-surface-base border border-default flex items-center justify-center mx-auto mb-4">
+            <EntityIcon className="w-8 h-8 text-fg-primary" />
           </div>
-          <h3 className="text-2xl font-semibold text-foreground mb-3">
+          <h3 className="text-2xl font-semibold text-fg-primary mb-3">
             {activeTab === 'profiles'
               ? 'No People Found'
               : activeTab === 'all'
                 ? 'Nothing Here Yet'
                 : `No ${meta?.namePlural ?? 'Results'} Yet`}
           </h3>
-          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+          <p className="text-lg text-fg-secondary mb-6 leading-relaxed">
             {activeTab === 'profiles'
               ? 'No profiles match your search criteria. Try adjusting your filters or browse all people.'
               : activeTab === 'all'
@@ -67,9 +67,9 @@ export default function DiscoverEmptyState({
                 {meta.createActionLabel}
               </Button>
 
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-fg-secondary">
                 Already have an account?{' '}
-                <a href={ROUTES.AUTH} className="text-foreground hover:underline font-medium">
+                <a href={ROUTES.AUTH} className="text-fg-primary hover:underline font-medium">
                   Sign in
                 </a>{' '}
                 to get started.
@@ -85,9 +85,9 @@ export default function DiscoverEmptyState({
   return (
     <div className="text-center py-16">
       <div className="max-w-md mx-auto">
-        <EntityIcon className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-foreground mb-2">No matches found</h3>
-        <p className="text-muted-foreground mb-8">
+        <EntityIcon className="w-16 h-16 text-fg-secondary mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-fg-primary mb-2">No matches found</h3>
+        <p className="text-fg-secondary mb-8">
           {activeTab === 'profiles'
             ? 'Try different filters or browse all people to discover someone new.'
             : `Try different filters or browse all ${meta?.namePlural?.toLowerCase() ?? 'results'} to discover something new.`}

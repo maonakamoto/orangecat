@@ -18,13 +18,13 @@ const STATUS_CONFIG: Record<
   initiating: {
     icon: Loader2,
     label: 'Creating invoice...',
-    color: 'text-muted-foreground',
+    color: 'text-fg-secondary',
     animate: true,
   },
   created: {
     icon: Loader2,
     label: 'Generating invoice...',
-    color: 'text-muted-foreground',
+    color: 'text-fg-secondary',
     animate: true,
   },
   invoice_ready: {

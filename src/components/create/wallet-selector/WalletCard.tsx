@@ -21,12 +21,12 @@ export function WalletCard({ wallet, selected, onSelect, disabled }: WalletCardP
       disabled={disabled}
       className={`relative w-full text-left p-3 rounded-lg border-2 transition-all ${
         selected
-          ? 'border-foreground bg-muted/40 ring-1 ring-foreground/20'
-          : 'border-border hover:border-border-strong dark:hover:border-border'
+          ? 'border-fg-primary bg-surface-raised/40 ring-1 ring-fg-primary/20'
+          : 'border-default hover:border-strong dark:hover:border-default'
       } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       {selected && (
-        <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-foreground flex items-center justify-center">
+        <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-fg-primary flex items-center justify-center">
           <Check className="w-3 h-3 text-white" />
         </div>
       )}
@@ -34,11 +34,11 @@ export function WalletCard({ wallet, selected, onSelect, disabled }: WalletCardP
         <span className="text-lg">{categoryInfo.icon}</span>
         <div className="min-w-0 flex-1">
           <div className="font-medium text-sm truncate">{wallet.label}</div>
-          <div className="text-xs text-muted-foreground mt-0.5 font-mono">
+          <div className="text-xs text-fg-secondary mt-0.5 font-mono">
             {truncateAddress(wallet.address_or_xpub)}
           </div>
           {wallet.lightning_address && (
-            <div className="text-xs text-muted-foreground mt-0.5 truncate">
+            <div className="text-xs text-fg-secondary mt-0.5 truncate">
               {wallet.lightning_address}
             </div>
           )}

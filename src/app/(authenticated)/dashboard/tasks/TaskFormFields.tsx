@@ -36,12 +36,12 @@ function FieldError({ message }: { message?: string }) {
 }
 
 const fieldClass = (hasError: boolean) =>
-  `w-full rounded-lg border px-3 py-2 bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring ${
-    hasError ? 'border-destructive' : 'border-border-strong'
+  `w-full rounded-lg border px-3 py-2 bg-surface-base text-fg-primary focus:outline-none focus:ring-2 focus:ring-ring ${
+    hasError ? 'border-status-negative' : 'border-strong'
   }`;
 
 const selectClass =
-  'w-full rounded-lg border border-border-strong bg-card text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring';
+  'w-full rounded-lg border border-strong bg-surface-base text-fg-primary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring';
 
 export function TaskFormFields({
   formData,
@@ -61,7 +61,7 @@ export function TaskFormFields({
   return (
     <form onSubmit={onSubmit} className="p-6 space-y-4">
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">
+        <label className="block text-sm font-medium text-fg-primary mb-1">
           Title <span className="text-status-negative">*</span>
         </label>
         <input
@@ -76,7 +76,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">
+        <label className="block text-sm font-medium text-fg-primary mb-1">
           Task Type <span className="text-status-negative">*</span>
         </label>
         <select
@@ -92,7 +92,7 @@ export function TaskFormFields({
           ))}
         </select>
         {showTaskTypeHint && (
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-fg-secondary mt-1">
             {formData.task_type === TASK_TYPES.ONE_TIME &&
               'One-time task, marked as completed once done'}
             {formData.task_type === TASK_TYPES.RECURRING_SCHEDULED &&
@@ -105,7 +105,7 @@ export function TaskFormFields({
 
       {formData.task_type === TASK_TYPES.RECURRING_SCHEDULED && (
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1">Schedule</label>
+          <label className="block text-sm font-medium text-fg-primary mb-1">Schedule</label>
           <input
             type="text"
             name="schedule_human"
@@ -115,7 +115,7 @@ export function TaskFormFields({
             className={selectClass}
           />
           {showTaskTypeHint && (
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-fg-secondary mt-1">
               Describe when this task should be completed
             </p>
           )}
@@ -123,7 +123,7 @@ export function TaskFormFields({
       )}
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">
+        <label className="block text-sm font-medium text-fg-primary mb-1">
           Category <span className="text-status-negative">*</span>
         </label>
         <select
@@ -141,7 +141,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">Priority</label>
+        <label className="block text-sm font-medium text-fg-primary mb-1">Priority</label>
         <select
           name="priority"
           value={formData.priority}
@@ -157,7 +157,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">
+        <label className="block text-sm font-medium text-fg-primary mb-1">
           Estimated Time (Minutes)
         </label>
         <input
@@ -174,7 +174,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">Description</label>
+        <label className="block text-sm font-medium text-fg-primary mb-1">Description</label>
         <textarea
           name="description"
           value={formData.description}
@@ -187,7 +187,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">Instructions</label>
+        <label className="block text-sm font-medium text-fg-primary mb-1">Instructions</label>
         <textarea
           name="instructions"
           value={formData.instructions}
@@ -200,7 +200,7 @@ export function TaskFormFields({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">Tags</label>
+        <label className="block text-sm font-medium text-fg-primary mb-1">Tags</label>
         <div className="flex gap-2 mb-2">
           <input
             type="text"
@@ -213,7 +213,7 @@ export function TaskFormFields({
               }
             }}
             placeholder="Add tag..."
-            className="flex-1 rounded-lg border border-border-strong bg-card text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1 rounded-lg border border-strong bg-surface-base text-fg-primary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
           />
           <Button type="button" variant="outline" onClick={onAddTag}>
             Add
@@ -224,13 +224,13 @@ export function TaskFormFields({
             {formData.tags.map(tag => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-muted rounded-full text-sm dark:text-foreground"
+                className="inline-flex items-center gap-1 px-2 py-1 bg-surface-raised rounded-full text-sm dark:text-fg-primary"
               >
                 {tag}
                 <button
                   type="button"
                   onClick={() => onRemoveTag(tag)}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-fg-secondary hover:text-fg-primary"
                 >
                   &times;
                 </button>
@@ -240,7 +240,7 @@ export function TaskFormFields({
         )}
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-border">
+      <div className="flex justify-end gap-3 pt-4 border-t border-default">
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>

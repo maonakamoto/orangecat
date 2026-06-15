@@ -55,7 +55,7 @@ export function AuthFormBody({
   return (
     <form onSubmit={mode === 'forgot' ? handleForgotPassword : handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+        <label htmlFor="email" className="block text-sm font-medium text-fg-primary mb-2">
           Email address
         </label>
         <Input
@@ -65,7 +65,7 @@ export function AuthFormBody({
           onChange={e => setFormData({ ...formData, email: e.target.value })}
           disabled={loading}
           placeholder="Enter your email"
-          className="w-full h-12 px-4 rounded-lg border-border-strong focus:border-ring focus:ring-ring bg-card dark:text-foreground"
+          className="w-full h-12 px-4 rounded-lg border-strong focus:border-interactive focus:ring-ring bg-surface-base dark:text-fg-primary"
           autoComplete="email"
           required
         />
@@ -73,7 +73,7 @@ export function AuthFormBody({
 
       {mode !== 'forgot' && (
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
+          <label htmlFor="password" className="block text-sm font-medium text-fg-primary mb-2">
             Password
           </label>
           <div className="relative">
@@ -86,14 +86,14 @@ export function AuthFormBody({
               onBlur={() => setIsPasswordFocused(false)}
               disabled={loading}
               placeholder="Enter your password"
-              className="w-full h-12 px-4 pr-12 rounded-lg border-border-strong focus:border-ring focus:ring-ring bg-card dark:text-foreground"
+              className="w-full h-12 px-4 pr-12 rounded-lg border-strong focus:border-interactive focus:ring-ring bg-surface-base dark:text-fg-primary"
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-dim hover:text-muted-foreground dark:hover:text-foreground min-h-11 min-w-11 flex items-center justify-center rounded-lg hover:bg-muted transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-fg-tertiary hover:text-fg-secondary dark:hover:text-fg-primary min-h-11 min-w-11 flex items-center justify-center rounded-lg hover:bg-surface-raised transition-colors"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -113,7 +113,7 @@ export function AuthFormBody({
         <div>
           <label
             htmlFor="confirmPassword"
-            className="block text-sm font-medium text-foreground mb-2"
+            className="block text-sm font-medium text-fg-primary mb-2"
           >
             Confirm Password
           </label>
@@ -125,14 +125,14 @@ export function AuthFormBody({
               onChange={e => setFormData({ ...formData, confirmPassword: e.target.value })}
               disabled={loading}
               placeholder="Confirm your password"
-              className="w-full h-12 px-4 pr-12 rounded-lg border-border-strong focus:border-ring focus:ring-ring bg-card dark:text-foreground"
+              className="w-full h-12 px-4 pr-12 rounded-lg border-strong focus:border-interactive focus:ring-ring bg-surface-base dark:text-fg-primary"
               autoComplete="new-password"
               required
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-dim hover:text-muted-foreground dark:hover:text-foreground min-h-11 min-w-11 flex items-center justify-center rounded-lg hover:bg-muted transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-fg-tertiary hover:text-fg-secondary dark:hover:text-fg-primary min-h-11 min-w-11 flex items-center justify-center rounded-lg hover:bg-surface-raised transition-colors"
               aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
             >
               {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -143,7 +143,7 @@ export function AuthFormBody({
 
       {mode === 'register' && captchaEnabled && turnstileSiteKey && (
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-medium text-fg-primary mb-2">
             Verify you&apos;re human
           </label>
           <TurnstileCaptcha
@@ -164,14 +164,14 @@ export function AuthFormBody({
               checked={rememberMe}
               onChange={e => setRememberMe(e.target.checked)}
               disabled={loading}
-              className="h-4 w-4 rounded border-border-strong text-foreground focus:ring-ring cursor-pointer"
+              className="h-4 w-4 rounded border-strong text-fg-primary focus:ring-ring cursor-pointer"
             />
-            <span className="text-sm text-muted-foreground">Remember me</span>
+            <span className="text-sm text-fg-secondary">Remember me</span>
           </label>
           <button
             type="button"
             onClick={() => setMode('forgot')}
-            className="text-sm text-foreground hover:text-muted-strong font-medium transition-colors"
+            className="text-sm text-fg-primary hover:text-fg-primary font-medium transition-colors"
           >
             Forgot password?
           </button>

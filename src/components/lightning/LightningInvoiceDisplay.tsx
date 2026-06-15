@@ -42,13 +42,13 @@ export function LightningInvoiceDisplay({
           className="text-xl font-semibold"
         />
         {invoice.description && (
-          <p className="text-sm text-muted-foreground mt-1">{invoice.description}</p>
+          <p className="text-sm text-fg-secondary mt-1">{invoice.description}</p>
         )}
       </div>
 
       {/* QR Code */}
       {paymentStatus !== 'expired' && (
-        <div className="flex justify-center p-4 bg-card border border-border rounded-lg">
+        <div className="flex justify-center p-4 bg-surface-base border border-default rounded-lg">
           <QRCodeSVG
             value={invoice.bolt11.toUpperCase()}
             size={200}
@@ -60,14 +60,10 @@ export function LightningInvoiceDisplay({
 
       {/* Invoice String */}
       <div>
-        <label className="block text-sm font-medium text-muted-strong mb-2">
-          Lightning Invoice
-        </label>
+        <label className="block text-sm font-medium text-fg-primary mb-2">Lightning Invoice</label>
         <div className="flex gap-2">
-          <div className="flex-1 p-3 bg-muted rounded-lg border border-border">
-            <code className="text-xs text-muted-foreground break-all font-mono">
-              {invoice.bolt11}
-            </code>
+          <div className="flex-1 p-3 bg-surface-raised rounded-lg border border-default">
+            <code className="text-xs text-fg-secondary break-all font-mono">{invoice.bolt11}</code>
           </div>
           <Button
             onClick={onCopy}
@@ -105,14 +101,14 @@ export function LightningInvoiceDisplay({
 
       {/* Timer */}
       {timeLeft !== null && timeLeft > 0 && (
-        <div className="text-center text-sm text-muted-foreground">
+        <div className="text-center text-sm text-fg-secondary">
           Invoice expires in {formatTime(timeLeft)}
         </div>
       )}
 
       {/* Payment polling indicator */}
       {paymentStatus === 'pending' && nwcConnected && (
-        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+        <div className="flex items-center justify-center gap-2 text-sm text-fg-secondary">
           <div className="w-2 h-2 bg-status-positive rounded-full animate-pulse" />
           Waiting for payment...
         </div>

@@ -53,7 +53,7 @@ export function PublicEntityPaymentSection({
     return (
       <Card>
         <CardContent className="pt-6 flex justify-center">
-          <div className="h-11 w-full animate-pulse rounded-md bg-muted" />
+          <div className="h-11 w-full animate-pulse rounded-md bg-surface-raised" />
         </CardContent>
       </Card>
     );
@@ -70,7 +70,7 @@ export function PublicEntityPaymentSection({
               Sign in to continue
             </Button>
           </Link>
-          <p className="text-xs text-muted-foreground text-center">
+          <p className="text-xs text-fg-secondary text-center">
             Sign in to buy or support with Bitcoin
           </p>
         </CardContent>
@@ -83,7 +83,7 @@ export function PublicEntityPaymentSection({
     return (
       <Card>
         <CardContent className="pt-6 flex justify-center">
-          <div className="h-11 w-full animate-pulse rounded-md bg-muted" />
+          <div className="h-11 w-full animate-pulse rounded-md bg-surface-raised" />
         </CardContent>
       </Card>
     );

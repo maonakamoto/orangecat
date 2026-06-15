@@ -64,8 +64,8 @@ export function ProjectDonationSection({
               variant={isFavorited ? 'primary' : 'outline'}
               className={`flex-1 flex items-center justify-center gap-2 ${
                 isFavorited
-                  ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground border-destructive'
-                  : 'border-border-strong hover:border-destructive/40 hover:text-destructive'
+                  ? 'bg-status-negative hover:bg-status-negative/90 text-fg-inverted border-status-negative'
+                  : 'border-strong hover:border-status-negative/40 hover:text-status-negative'
               }`}
               aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
             >
@@ -91,7 +91,7 @@ export function ProjectDonationSection({
             <Button
               href={`${ROUTES.AUTH}?from=favorite`}
               variant="outline"
-              className="flex-1 flex items-center justify-center gap-2 border-border-strong hover:border-destructive/40 hover:text-destructive"
+              className="flex-1 flex items-center justify-center gap-2 border-strong hover:border-status-negative/40 hover:text-status-negative"
               aria-label="Sign in to favorite this project"
             >
               <Heart className="w-4 h-4" aria-hidden="true" />
@@ -122,7 +122,7 @@ export function ProjectDonationSection({
             </div>
           )}
         </div>
-        <p className="text-sm text-muted-foreground mt-3">
+        <p className="text-sm text-fg-secondary mt-3">
           {user
             ? isFavorited
               ? 'You can find this project in your Favorites to support later.'
@@ -143,8 +143,8 @@ export function ProjectDonationSection({
           </h3>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="flex flex-col items-center justify-center bg-card p-6 rounded-lg border border-border">
-              <div className="bg-card p-3 rounded-lg shadow-sm">
+            <div className="flex flex-col items-center justify-center bg-surface-base p-6 rounded-lg border border-default">
+              <div className="bg-surface-base p-3 rounded-lg shadow-sm">
                 <QRCodeSVG
                   value={`bitcoin:${bitcoinAddress}`}
                   size={180}
@@ -153,18 +153,18 @@ export function ProjectDonationSection({
                   className="w-full h-auto"
                 />
               </div>
-              <p className="text-xs text-center text-muted-foreground mt-3">
+              <p className="text-xs text-center text-fg-secondary mt-3">
                 Scan with your Bitcoin wallet
               </p>
             </div>
 
             <div className="flex flex-col justify-center">
-              <div className="bg-muted rounded-lg p-4 border border-border">
-                <label className="text-xs font-medium text-muted-foreground mb-2 block uppercase tracking-wide">
+              <div className="bg-surface-raised rounded-lg p-4 border border-default">
+                <label className="text-xs font-medium text-fg-secondary mb-2 block uppercase tracking-wide">
                   Bitcoin Address
                 </label>
                 <div className="flex items-start gap-2">
-                  <code className="text-sm font-mono text-foreground break-all flex-1 leading-relaxed">
+                  <code className="text-sm font-mono text-fg-primary break-all flex-1 leading-relaxed">
                     {bitcoinAddress}
                   </code>
                   <Button
@@ -178,7 +178,7 @@ export function ProjectDonationSection({
                   </Button>
                 </div>
               </div>
-              <div className="flex items-center gap-2 mt-3 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 mt-3 text-sm text-fg-secondary">
                 <ShieldCheck className="w-4 h-4 text-status-positive" aria-hidden="true" />
                 <span>Address verified and monitored</span>
               </div>
@@ -196,7 +196,7 @@ export function ProjectDonationSection({
           )}
 
           <div className="mt-6 border-t pt-6">
-            <p className="text-sm font-medium text-foreground mb-3">
+            <p className="text-sm font-medium text-fg-primary mb-3">
               {ownerId && !isOwner ? 'Other amounts:' : 'Suggested support amounts:'}
             </p>
             <div className="grid grid-cols-3 gap-3">
@@ -216,18 +216,18 @@ export function ProjectDonationSection({
                         description: `Suggested ${label.toLowerCase()} support (≈ ${formattedAmount})`,
                       });
                     }}
-                    className="px-4 py-3 border-2 border-border-strong rounded-lg hover:border-bitcoinOrange hover:bg-bitcoinOrange/5 transition-all text-center group"
+                    className="px-4 py-3 border-2 border-strong rounded-lg hover:border-bitcoinOrange hover:bg-bitcoinOrange/5 transition-all text-center group"
                   >
-                    <div className="font-semibold text-foreground group-hover:text-bitcoinOrange">
+                    <div className="font-semibold text-fg-primary group-hover:text-bitcoinOrange">
                       {formattedAmount}
                     </div>
-                    <div className="text-xs text-muted-dim mt-0.5">≈ {btcDisplay}</div>
-                    <div className="text-xs text-muted-foreground mt-1">{label}</div>
+                    <div className="text-xs text-fg-tertiary mt-0.5">≈ {btcDisplay}</div>
+                    <div className="text-xs text-fg-secondary mt-1">{label}</div>
                   </button>
                 );
               })}
             </div>
-            <p className="text-xs text-muted-foreground mt-3 text-center">
+            <p className="text-xs text-fg-secondary mt-3 text-center">
               Click to copy address with suggested amount reminder
             </p>
           </div>
@@ -245,10 +245,10 @@ export function ProjectDonationSection({
             projectTitle={projectTitle}
             projectId={projectId}
           />
-          <div className="mt-3 bg-muted rounded-lg p-3 border border-border">
+          <div className="mt-3 bg-surface-raised rounded-lg p-3 border border-default">
             <div className="flex items-center justify-between gap-4">
               <code
-                className="text-xs font-mono text-muted-foreground break-all"
+                className="text-xs font-mono text-fg-secondary break-all"
                 aria-label={`Lightning address: ${lightningAddress}`}
               >
                 {lightningAddress}

@@ -172,7 +172,7 @@ export function ModernChatPanel({
     <div
       className={cn(
         'oc-chat-layout',
-        !isFocus && 'min-h-[34rem] rounded-md border border-border-subtle',
+        !isFocus && 'min-h-[34rem] rounded-md border border-subtle',
         !isFocus && 'h-[calc(100dvh-15.5rem)] sm:h-[calc(100dvh-13rem)]',
         className
       )}
@@ -192,7 +192,7 @@ export function ModernChatPanel({
         <div className="oc-chat-scroll">
           {isLoadingHistory ? (
             <div className="flex h-full items-center justify-center">
-              <p className="text-sm text-muted-foreground">Loading conversation…</p>
+              <p className="text-sm text-fg-secondary">Loading conversation…</p>
             </div>
           ) : messages.length === 0 ? (
             <EmptyState

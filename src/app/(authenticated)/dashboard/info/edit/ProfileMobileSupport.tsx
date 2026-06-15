@@ -29,12 +29,12 @@ export function ProfileMobileSupport({
     <>
       {/* Progress bar at top (mobile only) */}
       <div className="lg:hidden mb-6">
-        <div className="bg-card rounded-lg border border-border shadow-sm p-4">
+        <div className="bg-surface-base rounded-lg border border-default shadow-sm p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-muted-strong">Profile Completion</span>
-            <span className="text-sm font-bold text-foreground">{completionPercentage}%</span>
+            <span className="text-sm font-medium text-fg-primary">Profile Completion</span>
+            <span className="text-sm font-bold text-fg-primary">{completionPercentage}%</span>
           </div>
-          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-surface-raised rounded-full h-2 overflow-hidden">
             <div
               className={`${GRADIENTS.progressBitcoin} h-2 rounded-full transition-all duration-700 ease-out`}
               style={{ width: `${completionPercentage}%` }}
@@ -46,7 +46,7 @@ export function ProfileMobileSupport({
               <span className="font-medium">Profile complete!</span>
             </div>
           ) : (
-            <div className="mt-3 text-xs text-muted-strong">
+            <div className="mt-3 text-xs text-fg-primary">
               <div className="font-medium mb-1">To reach 100%, add:</div>
               <ul className="list-disc list-inside space-y-0.5">
                 {missingFields.map(field => (
@@ -79,17 +79,17 @@ export function ProfileMobileSupport({
           onClick={() => setShowMobileGuidance(false)}
         >
           <div
-            className="w-full bg-card rounded-t-lg shadow-sm max-h-[80vh] overflow-y-auto"
+            className="w-full bg-surface-base rounded-t-lg shadow-sm max-h-[80vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-foreground">Help & Guidance</h3>
+            <div className="sticky top-0 bg-surface-base border-b border-default px-4 py-3 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-fg-primary">Help & Guidance</h3>
               <button
                 onClick={() => setShowMobileGuidance(false)}
-                className="p-2 hover:bg-muted rounded-lg transition-colors"
+                className="p-2 hover:bg-surface-raised rounded-lg transition-colors"
               >
                 <svg
-                  className="w-5 h-5 text-muted-foreground"
+                  className="w-5 h-5 text-fg-secondary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

@@ -26,14 +26,14 @@ export function BrandMark({
     <div className={cn('flex min-w-0 items-center gap-2.5 sm:gap-3', className)}>
       <div
         className={cn(
-          'ui-brand-mark text-foreground transition-transform hover:scale-[1.02] active:scale-[0.985]',
+          'ui-brand-mark text-fg-primary transition-transform hover:scale-[1.02] active:scale-[0.985]',
           markSize
         )}
       >
         <BrandMarkIcon size={iconSize} />
       </div>
       {showWordmark && !compact && (
-        <span className="min-w-0 truncate text-base font-semibold tracking-tight text-foreground sm:text-lg">
+        <span className="min-w-0 truncate text-base font-semibold tracking-tight text-fg-primary sm:text-lg">
           {APP_NAME}
         </span>
       )}

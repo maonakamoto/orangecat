@@ -46,49 +46,49 @@ export function AIModelSelector({
         disabled={disabled}
         className={cn(
           'w-full p-3 rounded-lg border-2 text-left transition-all flex items-center justify-between',
-          isOpen ? 'border-foreground bg-muted/40' : 'border-border hover:border-border-strong',
+          isOpen ? 'border-fg-primary bg-surface-raised/40' : 'border-default hover:border-strong',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
         <div className="flex items-center gap-3">
-          <Cpu className="w-5 h-5 text-muted-dim" />
+          <Cpu className="w-5 h-5 text-fg-tertiary" />
           {selectedModel ? (
             <div>
               <span className="font-medium">{selectedModel.name}</span>
-              <span className="text-sm text-muted-foreground ml-2">{selectedModel.provider}</span>
+              <span className="text-sm text-fg-secondary ml-2">{selectedModel.provider}</span>
             </div>
           ) : (
-            <span className="text-muted-foreground">
+            <span className="text-fg-secondary">
               {autoRouterEnabled ? 'Auto-selected based on tier' : 'Select a model...'}
             </span>
           )}
         </div>
         <ChevronDown
-          className={cn('w-5 h-5 text-muted-dim transition-transform', isOpen && 'rotate-180')}
+          className={cn('w-5 h-5 text-fg-tertiary transition-transform', isOpen && 'rotate-180')}
         />
       </button>
 
       {isOpen && (
-        <div className="mt-2 p-2 border border-border rounded-lg bg-card shadow-sm max-h-64 overflow-y-auto">
+        <div className="mt-2 p-2 border border-default rounded-lg bg-surface-base shadow-sm max-h-64 overflow-y-auto">
           {getModelsByTier(defaultTier).map(model => (
             <button
               key={model.id}
               type="button"
               onClick={() => handleModelSelect(model)}
               className={cn(
-                'w-full p-2 rounded-lg text-left hover:bg-muted flex items-center justify-between',
-                selectedModel?.id === model.id && 'bg-muted/40'
+                'w-full p-2 rounded-lg text-left hover:bg-surface-raised flex items-center justify-between',
+                selectedModel?.id === model.id && 'bg-surface-raised/40'
               )}
             >
               <div>
                 <div className="font-medium text-sm">{model.name}</div>
-                <div className="text-xs text-muted-foreground">{model.provider}</div>
+                <div className="text-xs text-fg-secondary">{model.provider}</div>
               </div>
               <div className="flex items-center gap-2">
                 {model.isFree && <Badge className={`${BADGE_COLORS.success} text-xs`}>FREE</Badge>}
                 {model.capabilities.includes('vision') && (
                   <span title="Vision capable">
-                    <Eye className="w-3 h-3 text-muted-dim" />
+                    <Eye className="w-3 h-3 text-fg-tertiary" />
                   </span>
                 )}
               </div>

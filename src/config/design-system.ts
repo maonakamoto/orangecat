@@ -13,14 +13,14 @@ export const UI_TOKENS = {
     pill: 'rounded-full',
   },
   border: {
-    subtle: 'border border-border',
-    strong: 'border border-border-strong',
+    subtle: 'border border-default',
+    strong: 'border border-strong',
   },
   surface: {
-    base: 'bg-background text-foreground',
-    panel: 'bg-card text-card-foreground',
-    muted: 'bg-muted/40 text-foreground',
-    inverse: 'bg-foreground text-background',
+    base: 'bg-surface-page text-fg-primary',
+    panel: 'bg-surface-base text-fg-primary',
+    muted: 'bg-surface-raised/40 text-fg-primary',
+    inverse: 'bg-fg-primary text-fg-inverted',
   },
   shadow: {
     none: 'shadow-none',
@@ -43,12 +43,12 @@ export const COMPONENT_STYLES = {
       'touch-manipulation select-none',
     ].join(' '),
     variants: {
-      primary: 'bg-foreground text-background hover:bg-muted-strong',
-      secondary: 'bg-secondary text-secondary-foreground hover:bg-muted',
-      ghost: 'text-muted-strong hover:bg-muted hover:text-foreground',
-      danger: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-      outline: 'border border-border-strong bg-transparent text-foreground hover:bg-muted',
-      gradient: 'bg-foreground text-background hover:bg-muted-strong',
+      primary: 'bg-fg-primary text-fg-inverted hover:bg-muted-strong',
+      secondary: 'bg-surface-raised text-fg-primary hover:bg-surface-raised',
+      ghost: 'text-fg-primary hover:bg-surface-raised hover:text-fg-primary',
+      danger: 'bg-status-negative text-fg-inverted hover:bg-status-negative/90',
+      outline: 'border border-strong bg-transparent text-fg-primary hover:bg-surface-raised',
+      gradient: 'bg-fg-primary text-fg-inverted hover:bg-muted-strong',
       // Migration commit 3/N: warm-accent CTA per FleetCrown — the single
       // chromatic color reserved for top-of-funnel conversion ("Start
       // Creating", "Get Started", "Sign Up"). Everything else stays
@@ -71,9 +71,9 @@ export const COMPONENT_STYLES = {
       'touch-manipulation select-none',
     ].join(' '),
     variants: {
-      ghost: 'text-muted-strong hover:bg-muted hover:text-foreground',
-      outline: 'border border-border bg-card text-foreground hover:bg-muted',
-      inverse: 'bg-foreground text-background hover:bg-muted-strong',
+      ghost: 'text-fg-primary hover:bg-surface-raised hover:text-fg-primary',
+      outline: 'border border-default bg-surface-base text-fg-primary hover:bg-surface-raised',
+      inverse: 'bg-fg-primary text-fg-inverted hover:bg-muted-strong',
     },
   },
   card: {
@@ -85,25 +85,26 @@ export const COMPONENT_STYLES = {
     ].join(' '),
     variants: {
       default: '',
-      elevated: 'bg-card',
+      elevated: 'bg-surface-base',
       minimal: 'bg-transparent shadow-none',
-      gradient: 'bg-card',
+      gradient: 'bg-surface-base',
     },
   },
   field: {
-    label: 'block text-sm font-medium text-foreground',
-    description: 'text-sm text-muted-foreground',
-    errorText: 'text-sm text-destructive',
-    required: 'ml-1 text-destructive',
+    label: 'block text-sm font-medium text-fg-primary',
+    description: 'text-sm text-fg-secondary',
+    errorText: 'text-sm text-status-negative',
+    required: 'ml-1 text-status-negative',
     control: [
-      'w-full border border-input bg-card text-foreground',
+      'w-full border border-default bg-surface-base text-fg-primary',
       UI_TOKENS.radius.control,
-      'placeholder:text-muted-dim',
+      'placeholder:text-fg-tertiary',
       UI_TOKENS.transition,
-      'focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20',
+      'focus:border-interactive focus:outline-none focus:ring-2 focus:ring-ring/20',
       'disabled:cursor-not-allowed disabled:opacity-50',
     ].join(' '),
-    errorControl: 'border-destructive focus:border-destructive focus:ring-destructive/20',
+    errorControl:
+      'border-status-negative focus:border-status-negative focus:ring-status-negative/20',
   },
   badge: {
     base: [
@@ -114,8 +115,8 @@ export const COMPONENT_STYLES = {
     ].join(' '),
   },
   accent: {
-    text: 'text-foreground',
-    surface: 'bg-foreground text-card',
-    hairline: 'bg-foreground/60',
+    text: 'text-fg-primary',
+    surface: 'bg-fg-primary text-fg-inverted',
+    hairline: 'bg-fg-primary/60',
   },
 } as const;

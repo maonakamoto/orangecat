@@ -50,10 +50,8 @@ export default function TimelineView({
   if (hydrated && !authLoading && !user && (feedType === 'journey' || feedType === 'community')) {
     return (
       <div className="text-center py-16">
-        <h2 className="text-2xl font-semibold text-foreground mb-4">Please sign in</h2>
-        <p className="text-muted-foreground mb-6">
-          You need to be signed in to view this timeline.
-        </p>
+        <h2 className="text-2xl font-semibold text-fg-primary mb-4">Please sign in</h2>
+        <p className="text-fg-secondary mb-6">You need to be signed in to view this timeline.</p>
         <Button onClick={() => (window.location.href = '/auth')}>Sign In</Button>
       </div>
     );
@@ -65,14 +63,14 @@ export default function TimelineView({
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
-            className="animate-pulse rounded-md border border-border-subtle bg-background p-4"
+            className="animate-pulse rounded-md border border-subtle bg-surface-page p-4"
           >
             <div className="flex items-start space-x-3">
-              <div className="h-12 w-12 rounded-md bg-muted" />
+              <div className="h-12 w-12 rounded-md bg-surface-raised" />
               <div className="flex-1 space-y-2">
-                <div className="h-4 bg-muted rounded w-1/4" />
-                <div className="h-4 bg-muted rounded w-3/4" />
-                <div className="h-4 bg-muted rounded w-1/2" />
+                <div className="h-4 bg-surface-raised rounded w-1/4" />
+                <div className="h-4 bg-surface-raised rounded w-3/4" />
+                <div className="h-4 bg-surface-raised rounded w-1/2" />
               </div>
             </div>
           </div>
@@ -84,7 +82,7 @@ export default function TimelineView({
   if (error) {
     return (
       <div className="text-center py-16">
-        <p className="text-destructive text-lg mb-4">{error}</p>
+        <p className="text-status-negative text-lg mb-4">{error}</p>
         <Button variant="outline" onClick={() => loadFeed()}>
           Try Again
         </Button>
@@ -109,10 +107,10 @@ export default function TimelineView({
 
     return (
       <div className="text-center py-16">
-        <h3 className="text-lg font-semibold text-foreground mb-2">
+        <h3 className="text-lg font-semibold text-fg-primary mb-2">
           {emptyStateTitle || defaultTitle}
         </h3>
-        <p className="text-muted-foreground max-w-md mx-auto">
+        <p className="text-fg-secondary max-w-md mx-auto">
           {emptyStateDescription || defaultDescription}
         </p>
       </div>
@@ -140,11 +138,11 @@ export default function TimelineView({
             showBanner={Boolean(ownerId && ownerId !== user.id)}
           />
         ) : (
-          <div className="rounded-md border border-dashed border-border-subtle bg-background px-4 py-5">
+          <div className="rounded-md border border-dashed border-subtle bg-surface-page px-4 py-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="font-medium text-foreground">Sign in to post</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="font-medium text-fg-primary">Sign in to post</p>
+                <p className="text-sm text-fg-secondary">
                   You need to be signed in to write on this timeline.
                 </p>
               </div>
@@ -186,9 +184,9 @@ function FocusScroller() {
         const el = document.querySelector(`[data-event-id="${focusId}"]`);
         if (el) {
           (el as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
-          (el as HTMLElement).classList.add('ring-2', 'ring-foreground', 'ring-offset-2');
+          (el as HTMLElement).classList.add('ring-2', 'ring-fg-primary', 'ring-offset-2');
           setTimeout(() => {
-            (el as HTMLElement).classList.remove('ring-2', 'ring-foreground', 'ring-offset-2');
+            (el as HTMLElement).classList.remove('ring-2', 'ring-fg-primary', 'ring-offset-2');
           }, 1800);
         }
       }

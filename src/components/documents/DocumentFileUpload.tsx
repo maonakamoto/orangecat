@@ -182,25 +182,25 @@ export function DocumentFileUpload({
           'relative rounded-lg border-2 border-dashed transition-all duration-200',
           'flex flex-col items-center justify-center p-8 text-center',
           state === 'idle' &&
-            'border-border-strong bg-muted hover:border-foreground hover:bg-muted/80 cursor-pointer',
-          state === 'dragging' && 'border-foreground bg-muted/400/10 scale-[1.02]',
-          state === 'uploading' && 'border-foreground bg-muted/400/10 cursor-wait',
-          state === 'success' && 'border-success/40 bg-success/10',
-          state === 'error' && 'border-destructive/40 bg-destructive/10 cursor-pointer'
+            'border-strong bg-surface-raised hover:border-fg-primary hover:bg-surface-raised/80 cursor-pointer',
+          state === 'dragging' && 'border-fg-primary bg-surface-raised/400/10 scale-[1.02]',
+          state === 'uploading' && 'border-fg-primary bg-surface-raised/400/10 cursor-wait',
+          state === 'success' && 'border-status-positive/40 bg-status-positive/10',
+          state === 'error' && 'border-status-negative/40 bg-status-negative/10 cursor-pointer'
         )}
       >
         {state === 'idle' && (
           <>
-            <div className="p-4 bg-muted rounded-full mb-4">
-              <Upload className="h-8 w-8 text-foreground" />
+            <div className="p-4 bg-surface-raised rounded-full mb-4">
+              <Upload className="h-8 w-8 text-fg-primary" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-1">Upload a file</h3>
-            <p className="text-base text-muted-foreground mb-3">Drag & drop or click to browse</p>
+            <h3 className="text-lg font-semibold text-fg-primary mb-1">Upload a file</h3>
+            <p className="text-base text-fg-secondary mb-3">Drag & drop or click to browse</p>
             <div className="flex flex-wrap justify-center gap-2">
               {ACCEPTED_EXTENSIONS.map(ext => (
                 <span
                   key={ext}
-                  className="px-2 py-1 bg-card rounded-md text-xs font-medium text-muted-foreground border border-border"
+                  className="px-2 py-1 bg-surface-base rounded-md text-xs font-medium text-fg-secondary border border-default"
                 >
                   {ext}
                 </span>
@@ -211,20 +211,20 @@ export function DocumentFileUpload({
 
         {state === 'dragging' && (
           <>
-            <div className="p-4 bg-muted rounded-full mb-4 animate-pulse">
-              <Upload className="h-8 w-8 text-foreground" />
+            <div className="p-4 bg-surface-raised rounded-full mb-4 animate-pulse">
+              <Upload className="h-8 w-8 text-fg-primary" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground">Drop your file here</h3>
+            <h3 className="text-lg font-semibold text-fg-primary">Drop your file here</h3>
           </>
         )}
 
         {state === 'uploading' && (
           <>
-            <div className="p-4 bg-muted rounded-full mb-4">
-              <Loader2 className="h-8 w-8 text-foreground animate-spin" />
+            <div className="p-4 bg-surface-raised rounded-full mb-4">
+              <Loader2 className="h-8 w-8 text-fg-primary animate-spin" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-1">Processing...</h3>
-            <p className="text-base text-muted-foreground">Extracting content from {fileName}</p>
+            <h3 className="text-lg font-semibold text-fg-primary mb-1">Processing...</h3>
+            <p className="text-base text-fg-secondary">Extracting content from {fileName}</p>
           </>
         )}
 
@@ -249,12 +249,12 @@ export function DocumentFileUpload({
 
         {state === 'error' && (
           <>
-            <div className="p-4 bg-destructive/10 rounded-full mb-4">
-              <AlertCircle className="h-8 w-8 text-destructive" />
+            <div className="p-4 bg-status-negative/10 rounded-full mb-4">
+              <AlertCircle className="h-8 w-8 text-status-negative" />
             </div>
-            <h3 className="text-lg font-semibold text-destructive mb-1">Upload failed</h3>
-            <p className="text-base text-destructive mb-3">{errorMessage}</p>
-            <p className="text-base text-muted-foreground">Click to try again</p>
+            <h3 className="text-lg font-semibold text-status-negative mb-1">Upload failed</h3>
+            <p className="text-base text-status-negative mb-3">{errorMessage}</p>
+            <p className="text-base text-fg-secondary">Click to try again</p>
           </>
         )}
       </div>

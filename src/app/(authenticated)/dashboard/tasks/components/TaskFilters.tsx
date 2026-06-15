@@ -33,14 +33,14 @@ export default function TaskFilters({
   onShowArchivedChange,
 }: TaskFiltersProps) {
   return (
-    <div className="bg-card rounded-lg border border-border p-4 mb-6 space-y-4">
+    <div className="bg-surface-base rounded-lg border border-default p-4 mb-6 space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1">Category</label>
+          <label className="block text-sm font-medium text-fg-primary mb-1">Category</label>
           <select
             value={categoryFilter}
             onChange={e => onCategoryChange(e.target.value as TaskCategory | '')}
-            className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full rounded-lg border border-strong px-3 py-2 text-sm bg-surface-base text-fg-primary focus:outline-none focus:ring-2 focus:ring-ring"
           >
             <option value="">All categories</option>
             {Object.entries(TASK_CATEGORY_LABELS).map(([value, label]) => (
@@ -51,11 +51,11 @@ export default function TaskFilters({
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1">Status</label>
+          <label className="block text-sm font-medium text-fg-primary mb-1">Status</label>
           <select
             value={statusFilter}
             onChange={e => onStatusChange(e.target.value as TaskStatus | '')}
-            className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full rounded-lg border border-strong px-3 py-2 text-sm bg-surface-base text-fg-primary focus:outline-none focus:ring-2 focus:ring-ring"
           >
             <option value="">All statuses</option>
             {Object.entries(TASK_STATUS_LABELS).map(([value, label]) => (
@@ -66,11 +66,11 @@ export default function TaskFilters({
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1">Type</label>
+          <label className="block text-sm font-medium text-fg-primary mb-1">Type</label>
           <select
             value={typeFilter}
             onChange={e => onTypeChange(e.target.value as TaskType | '')}
-            className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full rounded-lg border border-strong px-3 py-2 text-sm bg-surface-base text-fg-primary focus:outline-none focus:ring-2 focus:ring-ring"
           >
             <option value="">All types</option>
             {Object.entries(TASK_TYPE_LABELS).map(([value, label]) => (
@@ -82,12 +82,12 @@ export default function TaskFilters({
         </div>
       </div>
       <div className="flex items-center">
-        <label className="flex items-center gap-2 text-sm text-foreground">
+        <label className="flex items-center gap-2 text-sm text-fg-primary">
           <input
             type="checkbox"
             checked={showArchived}
             onChange={e => onShowArchivedChange(e.target.checked)}
-            className="h-4 w-4 rounded border-border-strong text-foreground focus:ring-ring"
+            className="h-4 w-4 rounded border-strong text-fg-primary focus:ring-ring"
           />
           <span>Show archived</span>
         </label>

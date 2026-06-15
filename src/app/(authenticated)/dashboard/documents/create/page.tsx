@@ -40,10 +40,10 @@ function DocumentPageContent() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="oc-error-surface p-6 text-center">
           <h2 className="text-lg font-semibold mb-2">Error</h2>
-          <p className="mb-4 text-destructive/80">{loadError}</p>
+          <p className="mb-4 text-status-negative/80">{loadError}</p>
           <button
             onClick={() => router.push(`${ROUTES.DASHBOARD.CAT}?tab=context`)}
-            className="text-sm text-destructive underline hover:text-destructive/80"
+            className="text-sm text-status-negative underline hover:text-status-negative/80"
           >
             Back to My Context
           </button>
@@ -83,7 +83,7 @@ function DocumentPageContent() {
   return (
     <div className="container max-w-4xl py-8">
       {uploadedFileName && (
-        <div className="mb-4 px-4 py-3 bg-status-positive-subtle border border-border-subtle rounded-lg flex items-center gap-2">
+        <div className="mb-4 px-4 py-3 bg-status-positive-subtle border border-subtle rounded-lg flex items-center gap-2">
           <FileText className="h-4 w-4 text-status-positive" />
           <span className="text-sm text-status-positive">
             Content extracted from <strong>{uploadedFileName}</strong>. Review and save below.

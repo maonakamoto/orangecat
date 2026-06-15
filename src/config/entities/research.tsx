@@ -23,7 +23,7 @@ export const researchEntityConfig: EntityConfig<ResearchEntity> = {
   makeCardProps: entity => ({
     badge: entity.status ? String(entity.status) : undefined,
     metadata: entity.field ? (
-      <span className="text-xs text-muted-foreground capitalize">
+      <span className="text-xs text-fg-secondary capitalize">
         {String(entity.field).replace(/_/g, ' ')}
       </span>
     ) : undefined,

@@ -79,7 +79,7 @@ function ExecResultChip({ result }: { result: ExecActionResult }) {
   // failed
   return (
     <span
-      className="inline-flex items-center gap-1 rounded-sm border border-destructive/20 bg-destructive/10 px-2 py-1 text-xs text-destructive"
+      className="inline-flex items-center gap-1 rounded-sm border border-status-negative/20 bg-status-negative/10 px-2 py-1 text-xs text-status-negative"
       title={result.error}
     >
       <X className="h-3 w-3 flex-shrink-0" />
@@ -123,14 +123,14 @@ export function MessageBubble({
       {!isFocus && (
         <div
           className={cn(
-            'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border-subtle',
-            isUser ? 'bg-muted' : 'bg-background'
+            'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-subtle',
+            isUser ? 'bg-surface-raised' : 'bg-surface-page'
           )}
         >
           {isUser ? (
-            <User className="h-4 w-4 text-muted-foreground" />
+            <User className="h-4 w-4 text-fg-secondary" />
           ) : (
-            <Cat className="h-4 w-4 text-foreground" />
+            <Cat className="h-4 w-4 text-fg-primary" />
           )}
         </div>
       )}
@@ -149,11 +149,11 @@ export function MessageBubble({
             'inline-block max-w-full px-1 py-0.5 text-sm leading-relaxed sm:max-w-[92%]',
             isUser
               ? isFocus
-                ? 'rounded-2xl bg-muted px-4 py-2.5 text-foreground'
-                : 'rounded-md rounded-tr-sm bg-foreground px-4 py-2.5 text-background'
+                ? 'rounded-2xl bg-surface-raised px-4 py-2.5 text-fg-primary'
+                : 'rounded-md rounded-tr-sm bg-fg-primary px-4 py-2.5 text-fg-inverted'
               : isFocus
-                ? 'text-foreground'
-                : 'rounded-md rounded-tl-sm bg-muted px-4 py-2.5 text-foreground'
+                ? 'text-fg-primary'
+                : 'rounded-md rounded-tl-sm bg-surface-raised px-4 py-2.5 text-fg-primary'
           )}
         >
           <div className={cn('break-words', isUser && 'whitespace-pre-wrap')}>
@@ -161,15 +161,15 @@ export function MessageBubble({
             {isLast && !isUser && !displayContent && (
               <span className="inline-flex items-center gap-1">
                 <span
-                  className="h-2 w-2 animate-bounce rounded-sm bg-muted-foreground"
+                  className="h-2 w-2 animate-bounce rounded-sm bg-fg-secondary"
                   style={{ animationDelay: '0ms' }}
                 />
                 <span
-                  className="h-2 w-2 animate-bounce rounded-sm bg-muted-foreground"
+                  className="h-2 w-2 animate-bounce rounded-sm bg-fg-secondary"
                   style={{ animationDelay: '150ms' }}
                 />
                 <span
-                  className="h-2 w-2 animate-bounce rounded-sm bg-muted-foreground"
+                  className="h-2 w-2 animate-bounce rounded-sm bg-fg-secondary"
                   style={{ animationDelay: '300ms' }}
                 />
               </span>
@@ -206,7 +206,7 @@ export function MessageBubble({
 
         {/* Provider · model indicator + copy button — provenance is honest */}
         {!isUser && message.modelUsed && displayContent && (
-          <div className="flex items-center justify-between text-xs text-muted-dim mt-1">
+          <div className="flex items-center justify-between text-xs text-fg-tertiary mt-1">
             <span>
               {message.provider && PROVIDER_LABELS[message.provider] && (
                 <>
@@ -220,7 +220,7 @@ export function MessageBubble({
             </span>
             <button
               onClick={handleCopy}
-              className="text-muted-dim hover:text-foreground transition-colors p-0.5"
+              className="text-fg-tertiary hover:text-fg-primary transition-colors p-0.5"
               title="Copy response"
             >
               {copied ? (
@@ -236,7 +236,7 @@ export function MessageBubble({
             route silently switched to the backup. So users know which engine
             actually answered and aren't surprised by a different tone/voice. */}
         {!isUser && message.fallback && displayContent && (
-          <p className="mt-1 text-xs text-muted-dim italic">
+          <p className="mt-1 text-xs text-fg-tertiary italic">
             ↻ {PROVIDER_LABELS[message.fallback.from] ?? message.fallback.from} was rate-limited;
             answered on {PROVIDER_LABELS[message.fallback.to] ?? message.fallback.to} (free)
             instead.

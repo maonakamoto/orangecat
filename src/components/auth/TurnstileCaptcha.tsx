@@ -99,14 +99,14 @@ export function TurnstileCaptcha({
       {/* Error state with retry */}
       {(status === 'error' || status === 'expired') && (
         <div className="flex items-center justify-between p-3 oc-error-surface rounded-lg">
-          <div className="flex items-center space-x-2 text-destructive/80">
+          <div className="flex items-center space-x-2 text-status-negative/80">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span className="text-sm">{errorMessage}</span>
           </div>
           <button
             type="button"
             onClick={handleRetry}
-            className="flex items-center space-x-1 text-sm text-destructive/80 hover:text-destructive font-medium"
+            className="flex items-center space-x-1 text-sm text-status-negative/80 hover:text-status-negative font-medium"
           >
             <RefreshCw className="w-4 h-4" />
             <span>Retry</span>

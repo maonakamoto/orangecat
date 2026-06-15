@@ -33,20 +33,20 @@ export default function Error({
       <div className="oc-surface max-w-lg w-full space-y-8 p-6">
         {/* Icon */}
         <div className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-md border border-destructive/20 bg-destructive/10 text-destructive">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-md border border-status-negative/20 bg-status-negative/10 text-status-negative">
             <AlertTriangle className="h-8 w-8" />
           </div>
         </div>
 
         {/* Title */}
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-foreground">Oops! Something went wrong</h2>
+          <h2 className="text-2xl font-semibold text-fg-primary">Oops! Something went wrong</h2>
           {isAuthError ? (
-            <p className="mt-3 text-base text-muted-foreground">
+            <p className="mt-3 text-base text-fg-secondary">
               It looks like you need to be logged in to access this page.
             </p>
           ) : (
-            <p className="mt-3 text-base text-muted-foreground">
+            <p className="mt-3 text-base text-fg-secondary">
               We encountered an unexpected error. Don't worry, your data is safe.
             </p>
           )}
@@ -64,14 +64,14 @@ export default function Error({
           {isAuthError ? (
             <Link
               href={ROUTES.AUTH}
-              className="group relative flex w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 py-3 text-sm font-medium text-background transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+              className="group relative flex w-full items-center justify-center gap-2 rounded-md bg-fg-primary px-4 py-3 text-sm font-medium text-fg-inverted transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
             >
               Sign In
             </Link>
           ) : (
             <button
               onClick={reset}
-              className="group relative flex w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 py-3 text-sm font-medium text-background transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+              className="group relative flex w-full items-center justify-center gap-2 rounded-md bg-fg-primary px-4 py-3 text-sm font-medium text-fg-inverted transition-colors hover:bg-muted-strong focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
             >
               <RefreshCw className="h-4 w-4" />
               Try Again
@@ -80,7 +80,7 @@ export default function Error({
 
           <button
             onClick={() => router.back()}
-            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-border-strong bg-card px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-strong bg-surface-base px-4 py-3 text-sm font-medium text-fg-primary transition-colors hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <ArrowLeft className="h-4 w-4" />
             Go Back
@@ -88,7 +88,7 @@ export default function Error({
 
           <Link
             href={ROUTES.HOME}
-            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-border-strong bg-card px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-md border border-strong bg-surface-base px-4 py-3 text-sm font-medium text-fg-primary transition-colors hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           >
             <Home className="h-4 w-4" />
             Go to Homepage
@@ -96,12 +96,12 @@ export default function Error({
         </div>
 
         {/* Help text */}
-        <div className="text-center pt-4 border-t border-border">
-          <p className="text-sm text-muted-foreground">
+        <div className="text-center pt-4 border-t border-default">
+          <p className="text-sm text-fg-secondary">
             Still having issues?{' '}
             <Link
               href={ROUTES.FAQ}
-              className="font-medium text-foreground hover:text-foreground dark:text-foreground"
+              className="font-medium text-fg-primary hover:text-fg-primary dark:text-fg-primary"
             >
               Visit our FAQ
             </Link>

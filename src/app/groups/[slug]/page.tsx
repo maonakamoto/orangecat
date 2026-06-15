@@ -12,9 +12,9 @@ const GroupDetailClient = dynamic(
     loading: () => (
       <div className="max-w-5xl mx-auto p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-10 w-2/3 bg-muted rounded" />
-          <div className="h-4 w-1/2 bg-muted rounded" />
-          <div className="h-72 w-full bg-muted rounded" />
+          <div className="h-10 w-2/3 bg-surface-raised rounded" />
+          <div className="h-4 w-1/2 bg-surface-raised rounded" />
+          <div className="h-72 w-full bg-surface-raised rounded" />
         </div>
       </div>
     ),

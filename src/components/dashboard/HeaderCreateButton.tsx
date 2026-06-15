@@ -19,7 +19,7 @@ export function HeaderCreateButton() {
         ref={buttonRef}
         onClick={toggle}
         className={cn(
-          'flex h-10 w-10 items-center justify-center rounded-md bg-foreground text-background transition-colors duration-150 sm:h-9 sm:w-9',
+          'flex h-10 w-10 items-center justify-center rounded-md bg-fg-primary text-fg-inverted transition-colors duration-150 sm:h-9 sm:w-9',
           'hover:bg-muted-strong',
           'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background',
           'touch-manipulation',
@@ -39,7 +39,7 @@ export function HeaderCreateButton() {
 
       {isOpen && (
         <div
-          className="fixed z-50 overflow-hidden rounded-md border border-border-subtle bg-card shadow-none animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right"
+          className="fixed z-50 overflow-hidden rounded-md border border-subtle bg-surface-base shadow-none animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 origin-top-right"
           style={{
             top: buttonRef.current ? buttonRef.current.getBoundingClientRect().bottom + 12 : 'auto',
             right: buttonRef.current
@@ -52,7 +52,7 @@ export function HeaderCreateButton() {
           aria-label="Create new"
         >
           <div className="p-2 max-h-[70vh] overflow-y-auto">
-            <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <div className="px-3 py-2 text-xs font-semibold text-fg-secondary uppercase tracking-wider">
               Create New
             </div>
             <div className="space-y-0.5">
@@ -61,7 +61,7 @@ export function HeaderCreateButton() {
                   <Link
                     href={option.href}
                     onClick={close}
-                    className="group flex items-center gap-3 rounded-md px-3 py-2.5 transition-colors hover:bg-muted"
+                    className="group flex items-center gap-3 rounded-md px-3 py-2.5 transition-colors hover:bg-surface-raised"
                     role="menuitem"
                     tabIndex={isOpen ? 0 : -1}
                   >
@@ -69,16 +69,14 @@ export function HeaderCreateButton() {
                       <option.icon className={cn('w-4 h-4', option.color)} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-foreground transition-colors group-hover:text-muted-strong">
+                      <div className="font-medium text-fg-primary transition-colors group-hover:text-fg-primary">
                         {option.name}
                       </div>
-                      <div className="text-xs text-muted-foreground truncate">
-                        {option.description}
-                      </div>
+                      <div className="text-xs text-fg-secondary truncate">{option.description}</div>
                     </div>
                   </Link>
                   {shouldShowDivider(option, CREATE_OPTIONS[index + 1]) && (
-                    <div className="my-1.5 mx-3 border-t border-border-subtle" />
+                    <div className="my-1.5 mx-3 border-t border-subtle" />
                   )}
                 </div>
               ))}

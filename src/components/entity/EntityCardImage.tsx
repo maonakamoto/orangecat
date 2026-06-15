@@ -53,7 +53,7 @@ function ImagePlaceholder({ title }: { title: string }) {
   return (
     <div
       className={cn(
-        'relative flex h-full w-full items-center justify-center overflow-hidden bg-muted/40',
+        'relative flex h-full w-full items-center justify-center overflow-hidden bg-surface-raised/40',
         gradient
       )}
       role="img"
@@ -62,7 +62,7 @@ function ImagePlaceholder({ title }: { title: string }) {
       {/* Soft radial vignette so the initial doesn't float in dead center */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/[0.04] to-transparent" />
       <span
-        className="relative select-none font-heading text-6xl font-bold tracking-display text-foreground/30 mix-blend-multiply"
+        className="relative select-none font-heading text-6xl font-bold tracking-display text-fg-primary/30 mix-blend-multiply"
         aria-hidden="true"
       >
         {initial}
@@ -73,8 +73,8 @@ function ImagePlaceholder({ title }: { title: string }) {
 
 function ImageLoader() {
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-muted/40">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-border-strong border-t-tiffany-600" />
+    <div className="absolute inset-0 flex items-center justify-center bg-surface-raised/40">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-strong border-t-fg-primary" />
     </div>
   );
 }
@@ -96,7 +96,7 @@ export function EntityCardImage({ imageSrc, title, compact, href }: EntityCardIm
     <Link
       href={href}
       className={cn(
-        'relative w-full overflow-hidden bg-muted block',
+        'relative w-full overflow-hidden bg-surface-raised block',
         compact ? 'aspect-[4/3]' : 'aspect-video'
       )}
     >

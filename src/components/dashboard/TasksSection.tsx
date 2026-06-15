@@ -45,9 +45,9 @@ function getPriorityColor(priority: TaskPriority): string {
     case 'high':
       return 'border-status-warning/30 bg-status-warning-subtle text-status-warning';
     case 'medium':
-      return 'border-border-subtle bg-muted text-fg-secondary';
+      return 'border-subtle bg-surface-raised text-fg-secondary';
     case 'low':
-      return 'border-border-subtle bg-muted/60 text-fg-tertiary';
+      return 'border-subtle bg-surface-raised/60 text-fg-tertiary';
   }
 }
 
@@ -114,8 +114,8 @@ export default function TasksSection({
     return (
       <Card className={className}>
         <CardContent className="p-6 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-muted-dim" />
-          <span className="ml-2 text-muted-foreground">Loading recommendations...</span>
+          <Loader2 className="w-6 h-6 animate-spin text-fg-tertiary" />
+          <span className="ml-2 text-fg-secondary">Loading recommendations...</span>
         </CardContent>
       </Card>
     );
@@ -126,12 +126,12 @@ export default function TasksSection({
       <div className={className}>
         <Card>
           <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
-            <AlertCircle className="w-6 h-6 text-muted-foreground" />
+            <AlertCircle className="w-6 h-6 text-fg-secondary" />
             <div>
-              <p className="text-sm font-medium text-foreground">
+              <p className="text-sm font-medium text-fg-primary">
                 Couldn&apos;t load recommendations
               </p>
-              <p className="text-xs text-muted-foreground">{error.message}</p>
+              <p className="text-xs text-fg-secondary">{error.message}</p>
             </div>
             <Button size="sm" variant="outline" onClick={() => refresh()}>
               <RefreshCw className="w-3 h-3 mr-1.5" />
@@ -146,20 +146,20 @@ export default function TasksSection({
   if (celebration && !celebrationDismissed) {
     return (
       <div className={className}>
-        <Card className="border-border-subtle bg-background">
+        <Card className="border-subtle bg-surface-page">
           <CardContent className="p-6 text-center relative">
             <button
               onClick={dismissCelebration}
-              className="absolute right-3 top-3 rounded-md p-1.5 text-muted-dim transition-colors hover:bg-muted hover:text-foreground"
+              className="absolute right-3 top-3 rounded-md p-1.5 text-fg-tertiary transition-colors hover:bg-surface-raised hover:text-fg-primary"
               aria-label="Dismiss"
             >
               <X className="w-4 h-4" />
             </button>
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md border border-border-subtle bg-muted/40">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-md border border-subtle bg-surface-raised/40">
               <Sparkles className="w-8 h-8 text-status-positive" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">{celebration.title}</h3>
-            <p className="text-muted-foreground mb-4">{celebration.description}</p>
+            <h3 className="text-lg font-semibold text-fg-primary mb-2">{celebration.title}</h3>
+            <p className="text-fg-secondary mb-4">{celebration.description}</p>
             {showQuestions && questions.length > 0 && (
               <SmartQuestionsPanel questions={questions} className="mt-6 text-left" />
             )}
@@ -174,12 +174,12 @@ export default function TasksSection({
       <div className={className}>
         <Card>
           <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-md border border-border-subtle bg-muted/40">
+            <div className="flex h-12 w-12 items-center justify-center rounded-md border border-subtle bg-surface-raised/40">
               <CheckCircle2 className="w-6 h-6 text-status-positive" />
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">You&apos;re all caught up</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm font-medium text-fg-primary">You&apos;re all caught up</p>
+              <p className="text-xs text-fg-secondary">
                 Nothing pending. Ask Cat what to do next or explore the platform.
               </p>
             </div>
@@ -229,14 +229,14 @@ export default function TasksSection({
                 <Target className="w-5 h-5 text-fg-secondary" />
                 Recommended Next Steps
               </CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-fg-secondary mt-1">
                 Complete these to get the most out of OrangeCat
               </p>
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <div className="text-sm font-medium text-foreground">{taskCompletion}% Setup</div>
-                <div className="text-xs text-muted-foreground">
+                <div className="text-sm font-medium text-fg-primary">{taskCompletion}% Setup</div>
+                <div className="text-xs text-fg-secondary">
                   {setupTasksRemaining === 0
                     ? 'Setup complete'
                     : `${setupTasksRemaining} task${setupTasksRemaining !== 1 ? 's' : ''} remaining`}
@@ -244,7 +244,7 @@ export default function TasksSection({
               </div>
               <button
                 onClick={toggleExpanded}
-                className="rounded-md p-2 transition-colors hover:bg-muted"
+                className="rounded-md p-2 transition-colors hover:bg-surface-raised"
                 aria-label={isExpanded ? 'Collapse tasks' : 'Expand tasks'}
               >
                 {isExpanded ? (
@@ -256,9 +256,9 @@ export default function TasksSection({
             </div>
           </div>
 
-          <div className="mt-3 h-2 w-full overflow-hidden rounded-sm bg-muted">
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-sm bg-surface-raised">
             <div
-              className="h-2 rounded-sm bg-foreground transition-all duration-500"
+              className="h-2 rounded-sm bg-fg-primary transition-all duration-500"
               style={{ width: `${taskCompletion}%` }}
             />
           </div>
@@ -317,12 +317,12 @@ function TaskCard({
     <div
       className={`
         flex items-start gap-4 rounded-md border p-4 transition-colors
-        ${isCompleted ? 'border-border-subtle bg-muted/50 opacity-70' : 'border-border-subtle hover:border-border-strong hover:bg-muted/30'}
+        ${isCompleted ? 'border-subtle bg-surface-raised/50 opacity-70' : 'border-subtle hover:border-strong hover:bg-surface-raised/30'}
       `}
     >
       <button
         onClick={onComplete}
-        className="mt-0.5 flex-shrink-0 text-muted-dim transition-colors hover:text-foreground"
+        className="mt-0.5 flex-shrink-0 text-fg-tertiary transition-colors hover:text-fg-primary"
         aria-label={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
       >
         {isCompleted ? (
@@ -336,9 +336,9 @@ function TaskCard({
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <IconComponent className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+              <IconComponent className="w-4 h-4 text-fg-secondary flex-shrink-0" />
               <h4
-                className={`font-medium ${isCompleted ? 'line-through text-muted-foreground' : 'text-foreground'}`}
+                className={`font-medium ${isCompleted ? 'line-through text-fg-secondary' : 'text-fg-primary'}`}
               >
                 {task.title}
               </h4>
@@ -349,14 +349,14 @@ function TaskCard({
               </span>
             </div>
 
-            <p className="text-sm text-muted-foreground mb-3">{task.description}</p>
+            <p className="text-sm text-fg-secondary mb-3">{task.description}</p>
 
             {!isCompleted && (
               <Link href={task.action.href}>
                 <Button
                   size="sm"
                   variant="outline"
-                  className="hover:border-border-strong hover:bg-muted hover:text-foreground"
+                  className="hover:border-strong hover:bg-surface-raised hover:text-fg-primary"
                 >
                   {task.action.label}
                   <ArrowRight className="w-3 h-3 ml-1" />

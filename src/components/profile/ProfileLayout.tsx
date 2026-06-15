@@ -189,10 +189,10 @@ export default function ProfileLayout({
 
         <div className="mt-12 sm:mt-16 md:mt-20">
           <div className="oc-surface mb-4 p-4 sm:mb-6 sm:p-6">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-1 sm:mb-2">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-fg-primary mb-1 sm:mb-2">
               {profile.name || profile.username || 'User'}
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground font-medium mb-3 sm:mb-4">
+            <p className="text-sm sm:text-base md:text-lg text-fg-secondary font-medium mb-3 sm:mb-4">
               @{profile.username}
             </p>
             {profile.bio && (
@@ -211,7 +211,7 @@ export default function ProfileLayout({
                 href={profile.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center text-foreground hover:text-muted-strong font-medium underline-offset-4 hover:underline"
+                className="inline-flex items-center text-fg-primary hover:text-fg-primary font-medium underline-offset-4 hover:underline"
               >
                 <Globe className="w-4 h-4 mr-2" />
                 Visit Website

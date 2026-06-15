@@ -33,7 +33,7 @@ export function PostComposerInlineControls({
 }: PostComposerInlineControlsProps) {
   return (
     <>
-      <div className="mt-4 flex items-center justify-between border-t border-border-subtle pt-3">
+      <div className="mt-4 flex items-center justify-between border-t border-subtle pt-3">
         <div className="flex items-center gap-2">
           {!compact && showOptionsButton && (
             <button
@@ -58,7 +58,7 @@ export function PostComposerInlineControls({
               size="sm"
               onClick={onCancel}
               disabled={isPosting}
-              className="text-muted-foreground"
+              className="text-fg-secondary"
             >
               Cancel
             </Button>
@@ -75,7 +75,7 @@ export function PostComposerInlineControls({
           >
             {isPosting ? (
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-card border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-fg-inverted border-t-transparent rounded-full animate-spin" />
                 <span>{TIMELINE_COPY.postingButton}</span>
               </div>
             ) : (
@@ -86,7 +86,7 @@ export function PostComposerInlineControls({
       </div>
 
       {loadingProjects && (
-        <div className="mt-2 text-xs text-muted-foreground">{TIMELINE_COPY.loadingProjects}</div>
+        <div className="mt-2 text-xs text-fg-secondary">{TIMELINE_COPY.loadingProjects}</div>
       )}
     </>
   );

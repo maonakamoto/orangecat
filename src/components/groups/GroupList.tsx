@@ -26,9 +26,9 @@ interface GroupListProps {
 export function GroupList({ groups, onGroupClick, emptyState }: GroupListProps) {
   if (groups.length === 0) {
     return (
-      <div className="text-center py-12 px-4 bg-card rounded-lg border dark:border-border">
+      <div className="text-center py-12 px-4 bg-surface-base rounded-lg border dark:border-default">
         <h3 className="text-lg font-semibold mb-2">{emptyState?.title || 'No groups yet'}</h3>
-        <p className="text-muted-foreground mb-6">
+        <p className="text-fg-secondary mb-6">
           {emptyState?.description || 'Create your first group to get started'}
         </p>
         {/* Empty state action button will be handled by parent component */}

@@ -27,10 +27,10 @@ export default function ResultsSection({
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {icon && <span className="text-muted-foreground">{icon}</span>}
-          <h3 className="text-lg font-semibold text-foreground">
+          {icon && <span className="text-fg-secondary">{icon}</span>}
+          <h3 className="text-lg font-semibold text-fg-primary">
             {title}
-            <span className="ml-2 text-base font-normal text-muted-foreground">({count})</span>
+            <span className="ml-2 text-base font-normal text-fg-secondary">({count})</span>
           </h3>
         </div>
 
@@ -39,7 +39,7 @@ export default function ResultsSection({
             onClick={onViewAll}
             variant="ghost"
             size="sm"
-            className="text-foreground hover:text-muted-strong"
+            className="text-fg-primary hover:text-fg-primary"
           >
             {viewAllLabel}
             <ArrowRight className="w-4 h-4 ml-1" />

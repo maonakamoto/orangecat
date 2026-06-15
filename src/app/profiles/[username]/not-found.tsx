@@ -11,12 +11,12 @@ export default function ProfileNotFound() {
       <Card className="max-w-lg mx-auto shadow-sm">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <UserX className="w-16 h-16 text-muted-dim" />
+            <UserX className="w-16 h-16 text-fg-tertiary" />
           </div>
           <CardTitle>Profile Not Found</CardTitle>
         </CardHeader>
         <CardContent className="p-6 text-center">
-          <p className="text-muted-foreground mb-6">
+          <p className="text-fg-secondary mb-6">
             The profile you are looking for does not exist or may have been removed.
           </p>
           <div className="flex gap-2 justify-center">

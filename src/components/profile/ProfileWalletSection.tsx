@@ -76,15 +76,15 @@ export default function ProfileWalletSection({
                         )}
                       </h4>
                       {wallet.description && (
-                        <p className="text-sm text-muted-foreground mt-1">{wallet.description}</p>
+                        <p className="text-sm text-fg-secondary mt-1">{wallet.description}</p>
                       )}
-                      <p className="text-xs text-muted-foreground mt-1">{categoryInfo.label}</p>
+                      <p className="text-xs text-fg-secondary mt-1">{categoryInfo.label}</p>
                     </div>
                   </div>
 
                   {/* Balance */}
-                  <div className="bg-muted rounded-lg p-3 mb-3">
-                    <div className="text-sm text-muted-foreground mb-1">Current Balance</div>
+                  <div className="bg-surface-raised rounded-lg p-3 mb-3">
+                    <div className="text-sm text-fg-secondary mb-1">Current Balance</div>
                     <div className="text-xl font-bold text-bitcoinOrange">
                       {formatAmountBtc(wallet.balance_btc)}
                     </div>
@@ -94,19 +94,19 @@ export default function ProfileWalletSection({
                   {wallet.goal_amount && (
                     <div className="mb-3">
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-muted-foreground">Goal</span>
+                        <span className="text-fg-secondary">Goal</span>
                         <span className="font-medium">
                           {formatAmountBtc(wallet.balance_btc)} / {wallet.goal_amount}{' '}
                           {wallet.goal_currency}
                         </span>
                       </div>
-                      <div className="w-full bg-muted rounded-full h-2">
+                      <div className="w-full bg-surface-raised rounded-full h-2">
                         <div
                           className="bg-bitcoinOrange h-2 rounded-full transition-all"
                           style={{ width: `${Math.min(progressPercent, 100)}%` }}
                         />
                       </div>
-                      <div className="text-xs text-muted-foreground mt-1">
+                      <div className="text-xs text-fg-secondary mt-1">
                         {progressPercent.toFixed(1)}% funded
                       </div>
                     </div>
@@ -114,7 +114,7 @@ export default function ProfileWalletSection({
 
                   {/* QR Code for easy scanning */}
                   <div className="mb-4 flex justify-center">
-                    <div className="bg-card p-3 rounded-lg border-2 border-border shadow-sm">
+                    <div className="bg-surface-base p-3 rounded-lg border-2 border-default shadow-sm">
                       <QRCodeSVG
                         value={`bitcoin:${wallet.address_or_xpub}`}
                         size={120}
@@ -127,7 +127,7 @@ export default function ProfileWalletSection({
                   {/* Address with copy button */}
                   <div className="pt-3 border-t">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-fg-secondary">
                         {wallet.wallet_type === 'xpub' ? 'Extended Public Key' : 'Bitcoin Address'}
                       </span>
                       <button
@@ -135,7 +135,7 @@ export default function ProfileWalletSection({
                           navigator.clipboard.writeText(wallet.address_or_xpub);
                           toast.success('Address copied to clipboard');
                         }}
-                        className="text-xs text-foreground hover:text-muted-strong font-medium"
+                        className="text-xs text-fg-primary hover:text-fg-primary font-medium"
                         aria-label="Copy wallet address"
                       >
                         <Copy className="w-3 h-3 inline mr-1" />
@@ -143,7 +143,7 @@ export default function ProfileWalletSection({
                       </button>
                     </div>
                     <code
-                      className="text-xs text-foreground block font-mono break-all bg-muted p-2 rounded cursor-pointer hover:bg-muted/80 transition-colors"
+                      className="text-xs text-fg-primary block font-mono break-all bg-surface-raised p-2 rounded cursor-pointer hover:bg-surface-raised/80 transition-colors"
                       onClick={() => {
                         navigator.clipboard.writeText(wallet.address_or_xpub);
                         toast.success('Address copied to clipboard');
@@ -185,9 +185,9 @@ export default function ProfileWalletSection({
   if (wallets.length === 0 && isOwnProfile) {
     return (
       <div className="oc-surface p-6">
-        <div className="text-center text-muted-foreground py-8">
-          <Bitcoin className="w-12 h-12 mx-auto mb-3 text-muted-dim dark:text-muted-foreground" />
-          <h3 className="text-lg font-semibold text-foreground mb-2">Accept Bitcoin Funding</h3>
+        <div className="text-center text-fg-secondary py-8">
+          <Bitcoin className="w-12 h-12 mx-auto mb-3 text-fg-tertiary dark:text-fg-secondary" />
+          <h3 className="text-lg font-semibold text-fg-primary mb-2">Accept Bitcoin Funding</h3>
           <p className="text-sm mb-4">
             Add Bitcoin wallets to start receiving funding from supporters
           </p>
@@ -218,10 +218,10 @@ export default function ProfileWalletSection({
 
   // No wallets and not own profile - show nothing
   return (
-    <div className="oc-surface p-6 text-center text-muted-foreground">
-      <Bitcoin className="w-10 h-10 mx-auto mb-3 text-muted-dim dark:text-muted-foreground" />
-      <h3 className="text-lg font-semibold text-foreground mb-1">No wallets shared yet</h3>
-      <p className="text-sm text-muted-foreground">
+    <div className="oc-surface p-6 text-center text-fg-secondary">
+      <Bitcoin className="w-10 h-10 mx-auto mb-3 text-fg-tertiary dark:text-fg-secondary" />
+      <h3 className="text-lg font-semibold text-fg-primary mb-1">No wallets shared yet</h3>
+      <p className="text-sm text-fg-secondary">
         This profile has not added any wallets you can send to yet.
       </p>
     </div>

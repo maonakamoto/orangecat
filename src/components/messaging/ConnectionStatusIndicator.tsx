@@ -46,25 +46,25 @@ function getStatusDisplay(status: ConnectionStatus) {
       return {
         icon: <WifiOff className="w-4 h-4" />,
         text: 'Disconnected',
-        color: 'text-muted-foreground',
-        bgColor: 'bg-muted',
-        borderColor: 'border-border',
+        color: 'text-fg-secondary',
+        bgColor: 'bg-surface-raised',
+        borderColor: 'border-default',
       };
     case 'error':
       return {
         icon: <AlertCircle className="w-4 h-4" />,
         text: 'Connection Error',
-        color: 'text-destructive',
-        bgColor: 'bg-destructive/10',
-        borderColor: 'border-destructive/20',
+        color: 'text-status-negative',
+        bgColor: 'bg-status-negative/10',
+        borderColor: 'border-status-negative/20',
       };
     default:
       return {
         icon: <WifiOff className="w-4 h-4" />,
         text: 'Unknown',
-        color: 'text-muted-foreground',
-        bgColor: 'bg-muted',
-        borderColor: 'border-border',
+        color: 'text-fg-secondary',
+        bgColor: 'bg-surface-raised',
+        borderColor: 'border-default',
       };
   }
 }

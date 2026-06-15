@@ -85,9 +85,7 @@ export function BasicInfoSection({
                 </FormControl>
                 <SelectContent>
                   {categoriesLoading && (
-                    <div className="px-3 py-2 text-sm text-muted-foreground">
-                      Loading categories...
-                    </div>
+                    <div className="px-3 py-2 text-sm text-fg-secondary">Loading categories...</div>
                   )}
                   {!categoriesLoading &&
                     categories.map(category => (
@@ -98,7 +96,9 @@ export function BasicInfoSection({
                 </SelectContent>
               </Select>
               {categoriesError && (
-                <FormDescription className="text-destructive">{categoriesError}</FormDescription>
+                <FormDescription className="text-status-negative">
+                  {categoriesError}
+                </FormDescription>
               )}
               <FormMessage />
             </FormItem>

@@ -39,10 +39,10 @@ export function FormHeader({
       <div className="flex items-center gap-3">
         <Icon className={`w-8 h-8 ${COLOR_CLASSES[colorTheme].text}`} />
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold text-fg-primary">
             {mode === 'create' ? 'Create' : 'Edit'} {name}
           </h1>
-          <p className="text-muted-foreground mt-1">{pageDescription}</p>
+          <p className="text-fg-secondary mt-1">{pageDescription}</p>
         </div>
       </div>
     </div>

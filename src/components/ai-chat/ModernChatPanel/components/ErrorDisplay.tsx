@@ -20,11 +20,11 @@ export function ErrorDisplay({ error, onRetry, onDismiss }: ErrorDisplayProps) {
     error.includes('API key') || error.includes('openrouter') || error.includes('not configured');
 
   return (
-    <div className="mx-4 mb-2 rounded-md border border-destructive/20 bg-destructive/10 p-3">
+    <div className="mx-4 mb-2 rounded-md border border-status-negative/20 bg-status-negative/10 p-3">
       <div className="flex items-start gap-2">
-        <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" />
+        <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-status-negative" />
         <div className="flex-1 min-w-0">
-          <p className="text-base text-destructive">{error}</p>
+          <p className="text-base text-status-negative">{error}</p>
           <div className="flex flex-wrap items-center gap-2 mt-2">
             {showApiKeyLink && (
               <button
@@ -38,7 +38,7 @@ export function ErrorDisplay({ error, onRetry, onDismiss }: ErrorDisplayProps) {
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="text-xs font-medium text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
+                className="text-xs font-medium text-fg-secondary hover:text-fg-primary underline-offset-4 hover:underline"
               >
                 Try again
               </button>
@@ -49,7 +49,7 @@ export function ErrorDisplay({ error, onRetry, onDismiss }: ErrorDisplayProps) {
           <button
             onClick={onDismiss}
             aria-label="Dismiss error"
-            className="text-muted-dim hover:text-foreground flex-shrink-0"
+            className="text-fg-tertiary hover:text-fg-primary flex-shrink-0"
           >
             <X className="h-3.5 w-3.5" />
           </button>

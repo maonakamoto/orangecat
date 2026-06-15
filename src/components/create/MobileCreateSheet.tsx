@@ -36,15 +36,15 @@ export function MobileCreateSheet({ isOpen, onClose, onSelect }: MobileCreateShe
 
       {/* Sheet */}
       <div
-        className="absolute bottom-0 left-0 right-0 max-h-[85vh] overflow-y-auto rounded-t-md border-t border-border-subtle bg-background p-4 pb-8 animate-in slide-in-from-bottom duration-300"
+        className="absolute bottom-0 left-0 right-0 max-h-[85vh] overflow-y-auto rounded-t-md border-t border-subtle bg-surface-page p-4 pb-8 animate-in slide-in-from-bottom duration-300"
         onClick={e => e.stopPropagation()}
         style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
       >
         {/* Handle indicator */}
-        <div className="mx-auto mb-4 h-1 w-12 rounded-sm bg-muted-foreground/20" />
+        <div className="mx-auto mb-4 h-1 w-12 rounded-sm bg-fg-secondary/20" />
 
         {/* Header */}
-        <h3 className="text-lg font-semibold text-foreground mb-4 px-2">Create New</h3>
+        <h3 className="text-lg font-semibold text-fg-primary mb-4 px-2">Create New</h3>
 
         {/* Options Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -53,12 +53,12 @@ export function MobileCreateSheet({ isOpen, onClose, onSelect }: MobileCreateShe
               key={option.name}
               href={option.href}
               onClick={() => handleSelect(option)}
-              className="flex touch-manipulation flex-col items-center gap-1.5 rounded-md border border-border-subtle p-3 transition-colors hover:border-border-strong hover:bg-muted active:bg-muted/80"
+              className="flex touch-manipulation flex-col items-center gap-1.5 rounded-md border border-subtle p-3 transition-colors hover:border-strong hover:bg-surface-raised active:bg-surface-raised/80"
             >
               <div className={cn('rounded-md p-2.5', option.bgColor)}>
                 <option.icon className={cn('w-5 h-5', option.color)} />
               </div>
-              <span className="text-xs font-medium text-foreground text-center">{option.name}</span>
+              <span className="text-xs font-medium text-fg-primary text-center">{option.name}</span>
             </Link>
           ))}
         </div>

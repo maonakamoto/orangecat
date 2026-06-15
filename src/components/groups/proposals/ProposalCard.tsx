@@ -75,7 +75,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
               {proposal.description ? (
                 <span className="line-clamp-2">{proposal.description}</span>
               ) : (
-                <span className="text-muted-dim">No description</span>
+                <span className="text-fg-tertiary">No description</span>
               )}
             </CardDescription>
           </div>
@@ -84,7 +84,7 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <div className="flex items-center justify-between text-sm text-fg-secondary">
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1">
                 <Badge variant="outline" className="text-xs">
@@ -92,27 +92,25 @@ export function ProposalCard({ proposal }: ProposalCardProps) {
                 </Badge>
               </span>
               {proposal.proposer && (
-                <span className="text-muted-foreground">
-                  by {proposal.proposer.name || 'Unknown'}
-                </span>
+                <span className="text-fg-secondary">by {proposal.proposer.name || 'Unknown'}</span>
               )}
             </div>
-            <span className="text-muted-dim">{formatRelativeTime(proposal.created_at)}</span>
+            <span className="text-fg-tertiary">{formatRelativeTime(proposal.created_at)}</span>
           </div>
 
           {proposal.status === PROPOSAL_STATUSES.ACTIVE && proposal.voting_results && (
             <div className="pt-2 border-t">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Voting Progress</span>
+                <span className="text-fg-secondary">Voting Progress</span>
                 <span className="font-medium">{yesPercentage.toFixed(1)}% Yes</span>
               </div>
-              <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
+              <div className="mt-2 h-2 bg-surface-raised rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-foreground transition-all"
+                  className="h-full bg-fg-primary transition-all"
                   style={{ width: `${yesPercentage}%` }}
                 />
               </div>
-              <div className="flex items-center justify-between text-xs text-muted-foreground mt-1">
+              <div className="flex items-center justify-between text-xs text-fg-secondary mt-1">
                 <span>
                   {proposal.voting_results.yes_votes} Yes, {proposal.voting_results.no_votes} No
                 </span>

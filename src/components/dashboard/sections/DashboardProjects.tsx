@@ -51,10 +51,10 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
           </div>
         </CardHeader>
         <CardContent className="p-4 sm:p-6">
-          <div className="text-center py-8 text-muted-foreground">
-            <BarChart3 className="w-12 h-12 mx-auto mb-3 text-muted-dim dark:text-muted-foreground" />
+          <div className="text-center py-8 text-fg-secondary">
+            <BarChart3 className="w-12 h-12 mx-auto mb-3 text-fg-tertiary dark:text-fg-secondary" />
             <p className="text-sm mb-2">No projects yet</p>
-            <p className="text-xs text-muted-dim mb-4">
+            <p className="text-xs text-fg-tertiary mb-4">
               Not sure what to create? Ask Cat — it can suggest the right shape (project, wishlist,
               cause, service…) based on what you want to do.
             </p>

@@ -80,8 +80,8 @@ function getStrengthLevel(strength: number): {
   if (strength === 0) {
     return {
       label: '',
-      colorClass: 'text-muted-dim',
-      bgClass: 'bg-muted',
+      colorClass: 'text-fg-tertiary',
+      bgClass: 'bg-surface-raised',
     };
   }
   if (strength < 40) {
@@ -118,10 +118,10 @@ export function PasswordStrengthIndicator({
   if (!password) {
     return (
       <div className={cn('mt-2 space-y-2', className)}>
-        <p className="text-xs text-muted-foreground">Password must contain:</p>
+        <p className="text-xs text-fg-secondary">Password must contain:</p>
         <ul className="space-y-1">
           {PASSWORD_REQUIREMENTS.map(req => (
-            <li key={req.id} className="flex items-center gap-2 text-xs text-muted-dim">
+            <li key={req.id} className="flex items-center gap-2 text-xs text-fg-tertiary">
               <Circle className="h-3 w-3 flex-shrink-0" />
               <span>{req.label}</span>
             </li>
@@ -135,7 +135,7 @@ export function PasswordStrengthIndicator({
     <div className={cn('mt-2 space-y-2', className)}>
       {/* Strength Bar */}
       <div className="flex items-center gap-2">
-        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+        <div className="flex-1 h-1.5 bg-surface-raised rounded-full overflow-hidden">
           <div
             className={cn('h-full transition-all duration-300', strengthLevel.bgClass)}
             style={{ width: `${strength}%` }}
@@ -157,13 +157,13 @@ export function PasswordStrengthIndicator({
               key={req.id}
               className={cn(
                 'flex items-center gap-2 text-xs transition-colors duration-200',
-                isMet ? 'text-status-positive' : 'text-muted-foreground'
+                isMet ? 'text-status-positive' : 'text-fg-secondary'
               )}
             >
               {isMet ? (
                 <Check className="h-3 w-3 flex-shrink-0 text-status-positive" />
               ) : (
-                <X className="h-3 w-3 flex-shrink-0 text-muted-dim" />
+                <X className="h-3 w-3 flex-shrink-0 text-fg-tertiary" />
               )}
               <span className={isMet ? 'line-through opacity-70' : ''}>{req.label}</span>
             </li>

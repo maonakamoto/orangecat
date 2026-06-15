@@ -68,8 +68,8 @@ export function ProofImageUpload({
           className={cn(
             'border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors',
             isDragging
-              ? 'border-primary bg-primary/5'
-              : 'border-muted hover:border-muted-foreground/50',
+              ? 'border-fg-primary bg-fg-primary/5'
+              : 'border-subtle hover:border-fg-secondary/50',
             isUploading && 'pointer-events-none opacity-60'
           )}
           onClick={() => fileInputRef.current?.click()}
@@ -88,36 +88,36 @@ export function ProofImageUpload({
 
           {isUploading ? (
             <div className="space-y-3">
-              <Loader2 className="h-8 w-8 mx-auto text-primary animate-spin" />
+              <Loader2 className="h-8 w-8 mx-auto text-fg-primary animate-spin" />
               <p className="text-sm font-medium">Uploading...</p>
-              <div className="w-full max-w-xs mx-auto bg-muted rounded-full h-2 overflow-hidden">
+              <div className="w-full max-w-xs mx-auto bg-surface-raised rounded-full h-2 overflow-hidden">
                 <div
-                  className="h-full bg-primary transition-all duration-300"
+                  className="h-full bg-fg-primary transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
-              <p className="text-xs text-muted-foreground">{uploadProgress}% complete</p>
+              <p className="text-xs text-fg-secondary">{uploadProgress}% complete</p>
             </div>
           ) : (
             <>
-              <ImageIcon className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+              <ImageIcon className="h-8 w-8 mx-auto text-fg-secondary mb-2" />
               <p className="text-sm font-medium mb-1">
                 {isDragging ? 'Drop image here' : 'Click to upload or drag and drop'}
               </p>
-              <p className="text-xs text-muted-foreground">JPEG, PNG, WebP or GIF (max 10MB)</p>
+              <p className="text-xs text-fg-secondary">JPEG, PNG, WebP or GIF (max 10MB)</p>
             </>
           )}
         </div>
       )}
 
       {uploadError && (
-        <div className="flex items-center gap-2 text-sm text-destructive">
+        <div className="flex items-center gap-2 text-sm text-status-negative">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>{uploadError}</span>
         </div>
       )}
 
-      {imageUrlError && <p className="text-sm text-destructive">{imageUrlError.message}</p>}
+      {imageUrlError && <p className="text-sm text-status-negative">{imageUrlError.message}</p>}
     </div>
   );
 }

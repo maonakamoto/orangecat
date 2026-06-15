@@ -100,21 +100,21 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
         className={`rounded-md border p-4 ${
           completed === 'confirmed'
             ? 'border-status-positive/20 bg-status-positive-subtle'
-            : 'border-border-subtle bg-muted'
+            : 'border-subtle bg-surface-raised'
         }`}
       >
         <div className="flex items-center gap-3">
           {completed === 'confirmed' ? (
             <>
               <CheckCircle className="h-5 w-5 flex-shrink-0 text-status-positive" />
-              <span className="text-sm font-medium text-foreground">
+              <span className="text-sm font-medium text-fg-primary">
                 {confirmMessage ?? 'Action confirmed and executed'}
               </span>
             </>
           ) : (
             <>
-              <XCircle className="h-5 w-5 text-muted-foreground" />
-              <span className="text-sm font-medium text-muted-foreground">Action rejected</span>
+              <XCircle className="h-5 w-5 text-fg-secondary" />
+              <span className="text-sm font-medium text-fg-secondary">Action rejected</span>
             </>
           )}
         </div>
@@ -124,8 +124,8 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
 
   if (isExpired) {
     return (
-      <div className="rounded-md border border-border-subtle bg-muted p-4">
-        <div className="flex items-center gap-3 text-muted-foreground">
+      <div className="rounded-md border border-subtle bg-surface-raised p-4">
+        <div className="flex items-center gap-3 text-fg-secondary">
           <Clock className="h-5 w-5" />
           <span className="text-sm">This action has expired</span>
         </div>
@@ -136,16 +136,16 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
   return (
     <div className="space-y-3 rounded-md border border-status-warning/20 bg-status-warning/10 p-4">
       <div className="flex items-start gap-3">
-        <div className="rounded-md bg-background p-2">
+        <div className="rounded-md bg-surface-page p-2">
           <AlertTriangle className="h-5 w-5 text-status-warning" />
         </div>
         <div className="flex-1">
-          <h4 className="font-medium text-foreground">Action requires confirmation</h4>
-          <p className="mt-1 text-base text-muted-foreground">{action.description}</p>
+          <h4 className="font-medium text-fg-primary">Action requires confirmation</h4>
+          <p className="mt-1 text-base text-fg-secondary">{action.description}</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+      <div className="flex items-center gap-4 text-xs text-fg-secondary">
         <div className="flex items-center gap-1">
           <Icon className="h-4 w-4" />
           <span className="capitalize">{action.actionId.replace(/_/g, ' ')}</span>
@@ -157,9 +157,9 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
       </div>
 
       {Object.keys(action.parameters).length > 0 && (
-        <div className="rounded-md bg-background/70 p-3 text-xs">
-          <div className="mb-1 font-medium text-foreground">Details:</div>
-          <ul className="space-y-0.5 text-muted-foreground">
+        <div className="rounded-md bg-surface-page/70 p-3 text-xs">
+          <div className="mb-1 font-medium text-fg-primary">Details:</div>
+          <ul className="space-y-0.5 text-fg-secondary">
             {Object.entries(action.parameters)
               .slice(0, 4)
               .map(([key, value]) => (
@@ -176,7 +176,7 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
       )}
 
       {actionError && (
-        <div className="flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+        <div className="flex items-center gap-2 rounded-md border border-status-negative/20 bg-status-negative/10 px-3 py-2 text-xs text-status-negative">
           <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0" />
           <span>{actionError}</span>
         </div>
@@ -187,7 +187,7 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
           onClick={handleConfirm}
           disabled={confirming || rejecting}
           size="sm"
-          className="flex-1 bg-foreground text-background hover:bg-foreground/90"
+          className="flex-1 bg-fg-primary text-fg-inverted hover:bg-fg-primary/90"
         >
           {confirming ? (
             <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -201,7 +201,7 @@ export function PendingActionsCard({ action, onConfirm, onReject }: PendingActio
           disabled={confirming || rejecting}
           variant="outline"
           size="sm"
-          className="flex-1 border-border-strong text-foreground hover:bg-muted"
+          className="flex-1 border-strong text-fg-primary hover:bg-surface-raised"
         >
           {rejecting ? (
             <Loader2 className="h-4 w-4 animate-spin mr-2" />

@@ -30,14 +30,14 @@ export function ChatHeader({
   const router = useRouter();
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-border-subtle">
+    <div className="flex items-center justify-between px-4 py-3 border-b border-subtle">
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-md border border-border-subtle bg-muted">
-          <Cat className="h-5 w-5 text-foreground" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-md border border-subtle bg-surface-raised">
+          <Cat className="h-5 w-5 text-fg-primary" />
         </div>
         <div>
-          <h1 className="font-semibold text-foreground">Cat</h1>
-          <p className="text-xs text-muted-foreground">Saved to your history · clear anytime</p>
+          <h1 className="font-semibold text-fg-primary">Cat</h1>
+          <p className="text-xs text-fg-secondary">Saved to your history · clear anytime</p>
         </div>
       </div>
 
@@ -52,7 +52,7 @@ export function ChatHeader({
         {hasMessages && (
           <button
             onClick={onClearChat}
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-muted-dim transition-colors hover:bg-muted hover:text-foreground"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-fg-tertiary transition-colors hover:bg-surface-raised hover:text-fg-primary"
             aria-label="Clear chat"
             title="Clear chat"
           >
@@ -62,7 +62,7 @@ export function ChatHeader({
 
         <button
           onClick={() => router.push(ROUTES.SETTINGS_AI)}
-          className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-muted-dim transition-colors hover:bg-muted hover:text-foreground"
+          className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-fg-tertiary transition-colors hover:bg-surface-raised hover:text-fg-primary"
           aria-label="AI settings"
           title="AI Settings"
         >

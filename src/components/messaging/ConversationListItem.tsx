@@ -79,7 +79,7 @@ function getConversationAvatar(
 
   if (conversation.is_group) {
     return (
-      <div className="flex h-10 w-10 items-center justify-center rounded-md border border-border-subtle bg-muted text-foreground">
+      <div className="flex h-10 w-10 items-center justify-center rounded-md border border-subtle bg-surface-raised text-fg-primary">
         <Users className="w-5 h-5" />
       </div>
     );
@@ -100,8 +100,8 @@ function getConversationAvatar(
   }
 
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-muted">
-      <MessageSquare className="w-5 h-5 text-muted-foreground" />
+    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-surface-raised">
+      <MessageSquare className="w-5 h-5 text-fg-secondary" />
     </div>
   );
 }
@@ -144,8 +144,8 @@ export function ConversationListItem({
       onPointerCancel={onPointerUp}
       onClick={onClick}
       className={cn(
-        'group flex cursor-pointer items-start gap-3 p-3 transition-colors duration-150 hover:bg-muted/50 sm:p-4',
-        isActiveConversation && 'border-l-2 border-foreground bg-muted',
+        'group flex cursor-pointer items-start gap-3 p-3 transition-colors duration-150 hover:bg-surface-raised/50 sm:p-4',
+        isActiveConversation && 'border-l-2 border-fg-primary bg-surface-raised',
         selectionMode && 'pr-3'
       )}
     >
@@ -166,7 +166,7 @@ export function ConversationListItem({
         <div className="flex items-start gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="font-medium text-foreground truncate">
+              <h3 className="font-medium text-fg-primary truncate">
                 {profileHref ? (
                   <Link href={profileHref} className="hover:underline">
                     {displayName}
@@ -176,21 +176,21 @@ export function ConversationListItem({
                 )}
               </h3>
               {conversation.unread_count > 0 && (
-                <span className="rounded-sm bg-foreground px-2 py-0.5 text-[11px] leading-4 text-background">
+                <span className="rounded-sm bg-fg-primary px-2 py-0.5 text-[11px] leading-4 text-fg-inverted">
                   {conversation.unread_count > 99 ? '99+' : conversation.unread_count}
                 </span>
               )}
             </div>
-            <p className="text-sm text-muted-foreground truncate">
+            <p className="text-sm text-fg-secondary truncate">
               {conversation.last_message_preview || 'No messages yet'}
             </p>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 text-xs text-fg-secondary">
               <span>
                 {conversation.last_message_at
                   ? formatRelativeTime(conversation.last_message_at)
                   : 'No messages'}
               </span>
-              <span className="h-1 w-1 rounded-sm bg-muted-foreground/40" />
+              <span className="h-1 w-1 rounded-sm bg-fg-secondary/40" />
               <span>
                 {conversation.is_group
                   ? `${conversation.participants.length} members`
@@ -202,7 +202,7 @@ export function ConversationListItem({
             <button
               type="button"
               aria-label="Delete conversation"
-              className="p-1 rounded-md text-muted-dim hover:text-destructive hover:bg-destructive/10 self-start"
+              className="p-1 rounded-md text-fg-tertiary hover:text-status-negative hover:bg-status-negative/10 self-start"
               onClick={e => {
                 e.stopPropagation();
                 onDeleteRequest();

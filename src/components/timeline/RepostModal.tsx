@@ -141,10 +141,10 @@ export function RepostModal({
     <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
       <DialogContent className="max-w-xl p-0">
         <DialogTitle className="sr-only">Repost</DialogTitle>
-        <div className="w-full rounded-md border border-border-subtle bg-background">
+        <div className="w-full rounded-md border border-subtle bg-surface-page">
           {/* Header */}
-          <div className="flex items-center border-b border-border-subtle px-4 py-3">
-            <div className="text-sm font-semibold text-foreground">Repost</div>
+          <div className="flex items-center border-b border-subtle px-4 py-3">
+            <div className="text-sm font-semibold text-fg-primary">Repost</div>
           </div>
 
           {/* Quote-first layout like X */}
@@ -170,7 +170,7 @@ export function RepostModal({
                   }
                 }}
                 rows={4}
-                className="w-full resize-none rounded-md border border-border-subtle bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
+                className="w-full resize-none rounded-md border border-subtle bg-surface-page px-4 py-3 text-base text-fg-primary placeholder:text-fg-secondary focus:border-interactive focus:outline-none focus:ring-2 focus:ring-ring"
                 placeholder="Add a comment"
                 maxLength={QUOTE_MAX_LENGTH}
                 aria-label="Add your comment before reposting"
@@ -178,17 +178,17 @@ export function RepostModal({
               />
             </div>
             <div className="flex items-center justify-between text-sm px-1">
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="flex items-center gap-2 text-fg-secondary">
                 <span
                   className={
                     remainingCharacters <= 20
                       ? 'text-status-warning font-semibold'
-                      : 'text-muted-foreground'
+                      : 'text-fg-secondary'
                   }
                 >
                   {remainingCharacters}
                 </span>
-                <span className="text-muted-dim">characters left</span>
+                <span className="text-fg-tertiary">characters left</span>
               </div>
               <div className="flex items-center gap-2">
                 <Button
@@ -211,7 +211,7 @@ export function RepostModal({
             </div>
 
             {/* Original Post Preview (X-style) */}
-            <div className="rounded-md border border-border-subtle bg-muted p-3 transition-colors hover:bg-muted/80">
+            <div className="rounded-md border border-subtle bg-surface-raised p-3 transition-colors hover:bg-surface-raised/80">
               <div className="flex items-start gap-3">
                 <AvatarLink
                   username={originalAuthor.username || null}
@@ -229,22 +229,22 @@ export function RepostModal({
                           ? `/profiles/${originalAuthor.username}`
                           : `/profiles/${originalAuthor.id}`
                       }
-                      className="font-semibold text-sm text-foreground hover:underline"
+                      className="font-semibold text-sm text-fg-primary hover:underline"
                     >
                       {originalAuthor.name}
                     </Link>
                     {originalAuthor.username && (
                       <>
-                        <span className="text-muted-foreground text-sm">
+                        <span className="text-fg-secondary text-sm">
                           @{originalAuthor.username}
                         </span>
-                        <span className="text-muted-dim text-sm">·</span>
+                        <span className="text-fg-tertiary text-sm">·</span>
                       </>
                     )}
-                    <span className="text-muted-foreground text-sm">{timeAgo}</span>
+                    <span className="text-fg-secondary text-sm">{timeAgo}</span>
                   </div>
                   {originalBody && (
-                    <p className="text-sm text-foreground whitespace-pre-wrap break-words leading-relaxed">
+                    <p className="text-sm text-fg-primary whitespace-pre-wrap break-words leading-relaxed">
                       {originalBody}
                     </p>
                   )}

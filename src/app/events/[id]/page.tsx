@@ -30,7 +30,7 @@ const config: EntityDetailConfig = {
   }),
   renderHeaderExtra: entity =>
     entity.start_date ? (
-      <span className="text-muted-foreground text-sm">
+      <span className="text-fg-secondary text-sm">
         {format(new Date(entity.start_date as string), 'EEEE, MMMM d, yyyy')}
       </span>
     ) : null,
@@ -42,14 +42,14 @@ const config: EntityDetailConfig = {
       <CardContent className="space-y-4">
         {entity.start_date && (
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-muted/40 rounded-lg flex items-center justify-center">
-              <CalendarIcon className="w-5 h-5 text-foreground" />
+            <div className="w-10 h-10 bg-surface-raised/40 rounded-lg flex items-center justify-center">
+              <CalendarIcon className="w-5 h-5 text-fg-primary" />
             </div>
             <div>
               <div className="font-medium">
                 {format(new Date(entity.start_date as string), 'EEEE, MMMM d, yyyy')}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-fg-secondary">
                 {format(new Date(entity.start_date as string), 'h:mm a')}
                 {entity.end_date && ` - ${format(new Date(entity.end_date as string), 'h:mm a')}`}
               </div>
@@ -58,8 +58,8 @@ const config: EntityDetailConfig = {
         )}
         {entity.location && (
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-muted/40 rounded-lg flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-foreground" />
+            <div className="w-10 h-10 bg-surface-raised/40 rounded-lg flex items-center justify-center">
+              <MapPin className="w-5 h-5 text-fg-primary" />
             </div>
             <div>
               <div className="font-medium">{entity.location as string}</div>
@@ -68,8 +68,8 @@ const config: EntityDetailConfig = {
         )}
         {entity.max_attendees && (
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-muted/40 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-foreground" />
+            <div className="w-10 h-10 bg-surface-raised/40 rounded-lg flex items-center justify-center">
+              <Users className="w-5 h-5 text-fg-primary" />
             </div>
             <div>
               <div className="font-medium">Max {entity.max_attendees as number} attendees</div>

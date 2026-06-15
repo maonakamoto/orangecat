@@ -29,7 +29,7 @@ const config: EntityDetailConfig = {
           <CardTitle className="text-lg">Price</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-bold text-foreground">{displayBTC(entity.price_btc)}</p>
+          <p className="text-2xl font-bold text-fg-primary">{displayBTC(entity.price_btc)}</p>
         </CardContent>
       </Card>
     ) : null,

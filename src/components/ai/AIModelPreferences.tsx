@@ -56,10 +56,10 @@ function CapabilityToggleCard({
     <Card variant="minimal" className="p-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Icon className="w-5 h-5 text-muted-foreground" />
+          <Icon className="w-5 h-5 text-fg-secondary" />
           <div>
             <span className="font-medium text-sm">{label}</span>
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <p className="text-xs text-fg-secondary">{description}</p>
           </div>
         </div>
         <button
@@ -72,13 +72,13 @@ function CapabilityToggleCard({
           disabled={disabled}
           className={cn(
             'relative inline-flex h-5 w-9 items-center rounded-full transition-colors',
-            checked ? 'bg-foreground' : 'bg-muted',
+            checked ? 'bg-fg-primary' : 'bg-surface-raised',
             disabled && 'opacity-50 cursor-not-allowed'
           )}
         >
           <span
             className={cn(
-              'inline-block h-3 w-3 transform rounded-full bg-card dark:bg-foreground transition-transform',
+              'inline-block h-3 w-3 transform rounded-full bg-surface-base dark:bg-fg-primary transition-transform',
               checked ? 'translate-x-5' : 'translate-x-1'
             )}
           />
@@ -109,12 +109,12 @@ export function AIModelPreferences({
       <Card variant="minimal" className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-              <Zap className="w-5 h-5 text-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-surface-raised flex items-center justify-center">
+              <Zap className="w-5 h-5 text-fg-primary" />
             </div>
             <div>
               <h3 className="font-medium">Auto Router</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-fg-secondary">
                 Automatically selects the best model based on message complexity
               </p>
             </div>
@@ -129,23 +129,23 @@ export function AIModelPreferences({
             disabled={disabled}
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              preferences.autoRouterEnabled ? 'bg-foreground' : 'bg-muted',
+              preferences.autoRouterEnabled ? 'bg-fg-primary' : 'bg-surface-raised',
               disabled && 'opacity-50 cursor-not-allowed'
             )}
           >
             <span
               className={cn(
-                'inline-block h-4 w-4 transform rounded-full bg-card dark:bg-foreground transition-transform',
+                'inline-block h-4 w-4 transform rounded-full bg-surface-base dark:bg-fg-primary transition-transform',
                 preferences.autoRouterEnabled ? 'translate-x-6' : 'translate-x-1'
               )}
             />
           </button>
         </div>
         {preferences.autoRouterEnabled && (
-          <div className="mt-3 p-3 bg-muted/40 rounded-lg">
+          <div className="mt-3 p-3 bg-surface-raised/40 rounded-lg">
             <div className="flex items-start gap-2">
-              <Info className="w-4 h-4 text-foreground mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-foreground">
+              <Info className="w-4 h-4 text-fg-primary mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-fg-primary">
                 Simple messages → Economy models. Complex tasks → Standard/Premium models. Saves
                 money without sacrificing quality.
               </p>
@@ -155,10 +155,10 @@ export function AIModelPreferences({
       </Card>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
+        <label className="block text-sm font-medium text-fg-primary mb-2">
           Default Tier
           {preferences.autoRouterEnabled && (
-            <span className="text-muted-foreground font-normal ml-2">
+            <span className="text-fg-secondary font-normal ml-2">
               (fallback when auto-router is uncertain)
             </span>
           )}
@@ -182,8 +182,8 @@ export function AIModelPreferences({
                 className={cn(
                   'p-3 rounded-lg border-2 text-left transition-all',
                   isSelected
-                    ? 'border-foreground bg-muted/40'
-                    : 'border-border hover:border-border-strong',
+                    ? 'border-fg-primary bg-surface-raised/40'
+                    : 'border-default hover:border-strong',
                   disabled && 'opacity-50 cursor-not-allowed'
                 )}
               >
@@ -195,7 +195,7 @@ export function AIModelPreferences({
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground">{models.length} models</p>
+                <p className="text-xs text-fg-secondary">{models.length} models</p>
               </button>
             );
           })}
@@ -203,9 +203,9 @@ export function AIModelPreferences({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
+        <label className="block text-sm font-medium text-fg-primary mb-2">
           Default Model
-          <span className="text-muted-foreground font-normal ml-2">(optional)</span>
+          <span className="text-fg-secondary font-normal ml-2">(optional)</span>
         </label>
         <AIModelSelector
           defaultModelId={preferences.defaultModelId}
@@ -218,12 +218,12 @@ export function AIModelPreferences({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
+        <label className="block text-sm font-medium text-fg-primary mb-2">
           Maximum Cost per Request ({displayCurrency})
         </label>
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
-            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-dim" />
+            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-fg-tertiary" />
             <Input
               type="number"
               value={preferences.maxCostBtc}
@@ -236,15 +236,15 @@ export function AIModelPreferences({
               placeholder="100"
             />
           </div>
-          <span className="text-sm text-muted-foreground">{displayCurrency}</span>
+          <span className="text-sm text-fg-secondary">{displayCurrency}</span>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">
+        <p className="mt-1 text-xs text-fg-secondary">
           Set to 0 for unlimited. Auto-router will avoid models exceeding this limit.
         </p>
       </div>
 
       <div className="space-y-3">
-        <label className="block text-sm font-medium text-foreground">Required Capabilities</label>
+        <label className="block text-sm font-medium text-fg-primary">Required Capabilities</label>
         <CapabilityToggleCard
           icon={Eye}
           label="Vision"

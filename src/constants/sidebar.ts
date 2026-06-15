@@ -44,12 +44,12 @@ export const SIDEBAR_SPACING = {
  * Sidebar colors
  */
 export const SIDEBAR_COLORS = {
-  BACKGROUND: 'bg-background',
-  BORDER: 'border-border-subtle',
-  ACTIVE_BACKGROUND: 'bg-muted',
-  ACTIVE_TEXT: 'text-foreground',
-  ACTIVE_BORDER: 'border-border-subtle',
-  HOVER_BACKGROUND: 'hover:bg-muted',
-  TEXT_PRIMARY: 'text-foreground',
-  TEXT_SECONDARY: 'text-muted-foreground',
+  BACKGROUND: 'bg-surface-page',
+  BORDER: 'border-subtle',
+  ACTIVE_BACKGROUND: 'bg-surface-raised',
+  ACTIVE_TEXT: 'text-fg-primary',
+  ACTIVE_BORDER: 'border-subtle',
+  HOVER_BACKGROUND: 'hover:bg-surface-raised',
+  TEXT_PRIMARY: 'text-fg-primary',
+  TEXT_SECONDARY: 'text-fg-secondary',
 } as const;

@@ -34,16 +34,16 @@ export function TimelineSearchControls({
   searchTotal,
 }: TimelineSearchControlsProps) {
   return (
-    <div className="border-b border-border-subtle bg-background px-4 py-3">
+    <div className="border-b border-subtle bg-surface-page px-4 py-3">
       <form onSubmit={onSearch} className="flex items-center gap-2">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-muted-dim absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-fg-tertiary absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={e => onSearchQueryChange(e.target.value)}
             placeholder="Search posts"
-            className="w-full rounded-md border border-border-subtle bg-background py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
+            className="w-full rounded-md border border-subtle bg-surface-page py-2 pl-9 pr-3 text-sm text-fg-primary placeholder:text-fg-secondary focus:border-interactive focus:outline-none focus:ring-2 focus:ring-ring/20"
           />
         </div>
         <Button type="submit" size="sm" disabled={searching} className={TIMELINE_SURFACE.chip}>
@@ -67,9 +67,9 @@ export function TimelineSearchControls({
           </Button>
         )}
       </form>
-      {searchError && <p className="text-sm text-destructive mt-2">{searchError}</p>}
+      {searchError && <p className="text-sm text-status-negative mt-2">{searchError}</p>}
       {isSearchActive && !searchError && (
-        <p className="text-xs text-muted-foreground mt-2">
+        <p className="text-xs text-fg-secondary mt-2">
           Showing {searchResultsCount} of {searchTotal ?? searchResultsCount} results
         </p>
       )}

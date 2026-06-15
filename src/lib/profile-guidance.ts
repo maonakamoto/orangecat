@@ -44,7 +44,7 @@ export type ProfileFieldType =
 
 export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, FieldGuidanceContent> = {
   username: {
-    icon: React.createElement(User, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(User, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Username',
     description:
       'Your unique identifier on the platform. This is how others will find and mention you.',
@@ -58,7 +58,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     examples: ['@johndoe', '@bitcoin_enthusiast', '@zurich_creator', '@sarah_swiss'],
   },
   name: {
-    icon: React.createElement(User, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(User, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Display Name',
     description:
       'How others will see you. More personal and flexible than username. Optional but recommended.',
@@ -72,7 +72,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     examples: ['John Doe', 'Bitcoin Enthusiast', 'Sarah from Zurich', 'Community Builder'],
   },
   bio: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Bio',
     description:
       "Tell your story. Share who you are, what you do, and why you're on OrangeCat. This builds trust and connection.",
@@ -89,7 +89,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     ],
   },
   location: {
-    icon: React.createElement(MapPin, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(MapPin, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Location',
     description:
       'Help local people and projects find you. Location enables neighborhood connections and local discovery.',
@@ -103,7 +103,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     examples: ['Zurich, Switzerland', 'Basel, 4051', 'Geneva'],
   },
   website: {
-    icon: React.createElement(LinkIcon, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(LinkIcon, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Website',
     description:
       'Link to your personal website, blog, or portfolio. Helps build credibility and gives supporters more context.',
@@ -121,7 +121,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     ],
   },
   socialLinks: {
-    icon: React.createElement(Share2, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Share2, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Social Media & Links',
     description:
       'Add links to your social media profiles and other platforms. Build credibility and help supporters find you elsewhere.',
@@ -139,7 +139,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     ],
   },
   contactEmail: {
-    icon: React.createElement(Mail, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Mail, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Contact Email',
     description:
       'Public email address for supporters to contact you. Different from your registration email (which is private).',
@@ -153,7 +153,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     examples: ['contact@yourwebsite.com', 'hello@yourname.com'],
   },
   phone: {
-    icon: React.createElement(Phone, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Phone, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Phone Number',
     description:
       'Optional phone number for direct contact. Helps supporters reach you, especially for local connections.',
@@ -167,7 +167,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     examples: ['+41 79 123 45 67', '+1 555 123 4567'],
   },
   physicalAddress: {
-    icon: React.createElement(Home, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Home, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Physical Address',
     description:
       'Your physical address for receiving physical mail or goods. Essential for shipping and local services.',
@@ -184,7 +184,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     ],
   },
   privacySettings: {
-    icon: React.createElement(EyeOff, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(EyeOff, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Privacy Settings',
     description:
       'Control what information is visible on your public profile. You enter the data once, then decide who sees it.',
@@ -198,7 +198,7 @@ export const profileGuidanceContent: Record<NonNullable<ProfileFieldType>, Field
     examples: ['Show email: ON - Phone: OFF', 'Show city: ON - Full address: OFF'],
   },
   currencyPreference: {
-    icon: React.createElement(Coins, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Coins, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Currency Preference',
     description:
       'Choose your preferred currency for viewing amounts. All transactions happen in Bitcoin, but you can see equivalent values in your local currency.',
@@ -219,15 +219,15 @@ export const profileDefaultContent: DefaultContent = {
     'Your profile is your identity on OrangeCat. Share who you are, what you do, and connect with supporters who believe in your mission.',
   features: [
     {
-      icon: React.createElement(Heart, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Heart, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Build trust and credibility with a complete profile',
     },
     {
-      icon: React.createElement(Users, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Users, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Help neighbors and supporters find you',
     },
     {
-      icon: React.createElement(Shield, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Shield, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Higher transparency scores attract more support',
     },
   ],

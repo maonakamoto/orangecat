@@ -122,14 +122,14 @@ export const projectEntityConfig: EntityConfig<ProjectListItem> = {
                 to total_funding only). */}
             {project.goal_amount && project.goal_amount > 0 ? (
               <div className="space-y-0.5">
-                <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
+                <div className="h-1 w-full overflow-hidden rounded-full bg-surface-raised">
                   <div
-                    className="h-full bg-foreground transition-all duration-500"
+                    className="h-full bg-fg-primary transition-all duration-500"
                     style={{ width: `${Math.min(progress, 100)}%` }}
                     aria-hidden="true"
                   />
                 </div>
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <div className="flex items-center justify-between text-xs text-fg-secondary">
                   <span>
                     {metadataParts.map((part, idx) => (
                       <span key={idx} className="capitalize">
@@ -142,7 +142,7 @@ export const projectEntityConfig: EntityConfig<ProjectListItem> = {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+              <div className="flex flex-wrap gap-2 text-xs text-fg-secondary">
                 {metadataParts.map((part, idx) => (
                   <span key={idx} className="capitalize">
                     {part}

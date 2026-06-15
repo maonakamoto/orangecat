@@ -27,7 +27,7 @@ type DocumentFieldType = 'title' | 'content' | 'document_type' | 'visibility' | 
 
 export const documentGuidanceContent: Record<NonNullable<DocumentFieldType>, GuidanceContent> = {
   title: {
-    icon: React.createElement(FileText, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(FileText, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Document Title',
     description:
       'Give your document a clear, descriptive title that helps My Cat understand what information it contains.',
@@ -45,7 +45,7 @@ export const documentGuidanceContent: Record<NonNullable<DocumentFieldType>, Gui
     ],
   },
   content: {
-    icon: React.createElement(StickyNote, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(StickyNote, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Document Content',
     description:
       'Write the information you want My Cat to know about you. The more detail you provide, the better advice My Cat can give.',
@@ -61,7 +61,7 @@ export const documentGuidanceContent: Record<NonNullable<DocumentFieldType>, Gui
     ],
   },
   document_type: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Document Type',
     description:
       'Choose the type that best describes your document. This helps My Cat understand the context.',
@@ -80,7 +80,7 @@ export const documentGuidanceContent: Record<NonNullable<DocumentFieldType>, Gui
     ],
   },
   visibility: {
-    icon: React.createElement(Eye, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Eye, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Visibility',
     description:
       'Control who can see this document and whether My Cat can use it for personalized advice.',
@@ -97,7 +97,7 @@ export const documentGuidanceContent: Record<NonNullable<DocumentFieldType>, Gui
     ],
   },
   tags: {
-    icon: React.createElement(Tag, { className: 'w-5 h-5 text-foreground' }),
+    icon: React.createElement(Tag, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Tags',
     description:
       'Add tags to help organize and find your documents. Tags also help My Cat understand the context.',
@@ -121,23 +121,23 @@ export const documentDefaultGuidance: DefaultGuidance = {
     'Documents help My Cat understand your goals, skills, and situation. The more context you provide, the more personalized and helpful advice My Cat can give you.',
   features: [
     {
-      icon: React.createElement(Target, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Target, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Share your goals and aspirations',
     },
     {
-      icon: React.createElement(DollarSign, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(DollarSign, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Provide financial context for advice',
     },
     {
-      icon: React.createElement(Wrench, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Wrench, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Document your skills and expertise',
     },
     {
-      icon: React.createElement(Briefcase, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Briefcase, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Share business plans and ideas',
     },
     {
-      icon: React.createElement(Cat, { className: 'w-4 h-4 text-foreground' }),
+      icon: React.createElement(Cat, { className: 'w-4 h-4 text-fg-primary' }),
       text: 'Get personalized advice from My Cat',
     },
   ],

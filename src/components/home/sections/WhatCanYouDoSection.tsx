@@ -38,7 +38,7 @@ export default function WhatCanYouDoSection() {
   const { whatCanYouDo } = SECTION_HEADERS;
 
   return (
-    <section className="py-12 sm:py-16 lg:py-24 bg-background">
+    <section className="py-12 sm:py-16 lg:py-24 bg-surface-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -48,14 +48,14 @@ export default function WhatCanYouDoSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-10 sm:mb-12 lg:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted text-foreground mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-raised text-fg-primary mb-4">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">For Makers</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-foreground mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-semibold text-fg-primary mb-3 sm:mb-4">
             {whatCanYouDo.title}
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-fg-secondary max-w-3xl mx-auto">
             {whatCanYouDo.subtitle}
           </p>
         </motion.div>
@@ -78,16 +78,16 @@ export default function WhatCanYouDoSection() {
                 className="oc-surface oc-card-link overflow-hidden"
               >
                 {/* Category Header */}
-                <div className="p-4 sm:p-6 border-b border-border bg-muted/30">
+                <div className="p-4 sm:p-6 border-b border-default bg-surface-raised/30">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-card border border-border flex items-center justify-center">
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-foreground" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-surface-base border border-default flex items-center justify-center">
+                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-fg-primary" />
                     </div>
                     <div>
-                      <h3 className="text-xl sm:text-2xl font-semibold text-foreground">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-fg-primary">
                         {category.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-muted-foreground">
+                      <p className="text-sm sm:text-base text-fg-secondary">
                         {category.description}
                       </p>
                     </div>
@@ -99,14 +99,14 @@ export default function WhatCanYouDoSection() {
                   {category.features.map(feature => (
                     <div
                       key={feature.title}
-                      className="flex items-start gap-3 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors duration-200"
+                      className="flex items-start gap-3 p-3 sm:p-4 rounded-lg hover:bg-surface-raised/50 transition-colors duration-200"
                     >
-                      <div className="w-2 h-2 rounded-full bg-foreground mt-2 flex-shrink-0" />
+                      <div className="w-2 h-2 rounded-full bg-fg-primary mt-2 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-foreground text-sm sm:text-base mb-1">
+                        <h4 className="font-semibold text-fg-primary text-sm sm:text-base mb-1">
                           {feature.title}
                         </h4>
-                        <p className="text-xs sm:text-sm text-muted-foreground">
+                        <p className="text-xs sm:text-sm text-fg-secondary">
                           {feature.description}
                         </p>
                       </div>
@@ -126,14 +126,14 @@ export default function WhatCanYouDoSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center"
         >
-          <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-fg-secondary mb-4 sm:mb-6">
             Ready to make something? These features work together seamlessly.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
               href={ROUTES.AUTH}
               className={cn(
-                'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-background bg-foreground rounded-lg hover:bg-muted-strong transition-colors duration-150'
+                'inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-fg-inverted bg-fg-primary rounded-lg hover:bg-muted-strong transition-colors duration-150'
               )}
             >
               {CTA_LABELS.startCreating}
@@ -141,7 +141,7 @@ export default function WhatCanYouDoSection() {
             </Link>
             <Link
               href={ROUTES.DISCOVER}
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-foreground bg-card hover:bg-muted border border-border rounded-lg transition-all duration-200"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-fg-primary bg-surface-base hover:bg-surface-raised border border-default rounded-lg transition-all duration-200"
             >
               {CTA_LABELS.discoverAction}
             </Link>

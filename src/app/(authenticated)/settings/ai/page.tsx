@@ -48,38 +48,38 @@ export default function AISettingsPage() {
 
   return (
     <div className="min-h-screen bg-surface-page">
-      <div className="border-b border-border bg-card">
+      <div className="border-b border-default bg-surface-base">
         <div className="mx-auto flex h-16 max-w-4xl items-center gap-4 px-4 sm:px-6 lg:px-8">
-          <Link href={ROUTES.SETTINGS} className="text-muted-foreground hover:text-foreground">
+          <Link href={ROUTES.SETTINGS} className="text-fg-secondary hover:text-fg-primary">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <Bot className="h-6 w-6 text-fg-secondary" />
-          <h1 className="text-xl font-semibold text-foreground">Cat AI</h1>
+          <h1 className="text-xl font-semibold text-fg-primary">Cat AI</h1>
         </div>
       </div>
 
       <div className="mx-auto max-w-4xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
-        <p className="text-muted-strong">
+        <p className="text-fg-primary">
           Cat works any of three ways. Pick whichever fits — they&apos;re all first-class. OrangeCat
           earns from platform activity, not from your AI bill.
         </p>
 
         {/* ── Managed ───────────────────────────────────────────────────── */}
-        <section className="rounded-lg border border-border bg-card p-6">
+        <section className="rounded-lg border border-default bg-surface-base p-6">
           <div className="mb-4 flex items-start gap-3">
-            <div className="rounded-md bg-muted p-2">
-              <Bot className="h-5 w-5 text-foreground" />
+            <div className="rounded-md bg-surface-raised p-2">
+              <Bot className="h-5 w-5 text-fg-primary" />
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-semibold text-foreground">Use OrangeCat</h2>
+                <h2 className="text-lg font-semibold text-fg-primary">Use OrangeCat</h2>
                 {!hasByok && (
                   <span className="inline-flex items-center gap-1 rounded-full border border-status-positive/30 bg-status-positive-subtle px-2 py-0.5 text-xs font-medium text-status-positive">
                     <Check className="h-3 w-3" /> Active
                   </span>
                 )}
               </div>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-1 text-sm text-fg-secondary">
                 Free out of the box. OrangeCat picks the best open-source model on the free pool. No
                 setup, no key, daily cap. See{' '}
                 <Link href={ROUTES.PRICING} className="underline hover:no-underline">
@@ -92,21 +92,21 @@ export default function AISettingsPage() {
         </section>
 
         {/* ── BYOK ──────────────────────────────────────────────────────── */}
-        <section className="rounded-lg border border-border bg-card p-6">
+        <section className="rounded-lg border border-default bg-surface-base p-6">
           <div className="mb-4 flex items-start gap-3">
-            <div className="rounded-md bg-muted p-2">
-              <Server className="h-5 w-5 text-foreground" />
+            <div className="rounded-md bg-surface-raised p-2">
+              <Server className="h-5 w-5 text-fg-primary" />
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-semibold text-foreground">Bring your own key</h2>
+                <h2 className="text-lg font-semibold text-fg-primary">Bring your own key</h2>
                 {hasByok && (
                   <span className="inline-flex items-center gap-1 rounded-full border border-status-positive/30 bg-status-positive-subtle px-2 py-0.5 text-xs font-medium text-status-positive">
                     <Check className="h-3 w-3" /> Active
                   </span>
                 )}
               </div>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-1 text-sm text-fg-secondary">
                 Use any provider — direct or aggregator. You pay them, OrangeCat never sees your
                 bill. Want Claude or GPT-4o? Add an OpenRouter key — one key fronts all 200+ models.
               </p>
@@ -124,14 +124,14 @@ export default function AISettingsPage() {
         </section>
 
         {/* ── Local ─────────────────────────────────────────────────────── */}
-        <section className="rounded-lg border border-border bg-card p-6">
+        <section className="rounded-lg border border-default bg-surface-base p-6">
           <div className="mb-4 flex items-start gap-3">
-            <div className="rounded-md bg-muted p-2">
-              <Terminal className="h-5 w-5 text-foreground" />
+            <div className="rounded-md bg-surface-raised p-2">
+              <Terminal className="h-5 w-5 text-fg-primary" />
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-semibold text-foreground">Run locally</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <h2 className="text-lg font-semibold text-fg-primary">Run locally</h2>
+              <p className="mt-1 text-sm text-fg-secondary">
                 Cat talks to a model running on your own machine. Nothing leaves the laptop. Free
                 forever. Limited by your hardware (8B–70B models run on most laptops).
               </p>
@@ -141,28 +141,28 @@ export default function AISettingsPage() {
             {localProviders.map(p => (
               <div
                 key={p.id}
-                className="flex items-start gap-3 rounded-md border border-border-subtle bg-muted/30 p-3"
+                className="flex items-start gap-3 rounded-md border border-subtle bg-surface-raised/30 p-3"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium text-foreground">{p.name}</p>
-                    <span className="inline-flex items-center gap-1 rounded-full border border-border-subtle bg-background px-2 py-0.5 text-xs text-muted-foreground">
+                    <p className="text-sm font-medium text-fg-primary">{p.name}</p>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-subtle bg-surface-page px-2 py-0.5 text-xs text-fg-secondary">
                       <AlertCircle className="h-3 w-3" /> Coming soon
                     </span>
                   </div>
-                  <p className="mt-0.5 text-sm text-muted-foreground">{p.description}</p>
+                  <p className="mt-0.5 text-sm text-fg-secondary">{p.description}</p>
                 </div>
                 <Link
                   href={p.websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground underline hover:text-foreground"
+                  className="text-sm text-fg-secondary underline hover:text-fg-primary"
                 >
                   Learn more
                 </Link>
               </div>
             ))}
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-fg-secondary">
               Cat doesn&apos;t route to local endpoints yet. Wiring this is on the roadmap so the
               sovereignty path is real, not decorative.
             </p>
@@ -170,9 +170,9 @@ export default function AISettingsPage() {
         </section>
 
         {/* Privacy footnote */}
-        <div className="rounded-md border border-border-subtle bg-muted/30 p-4 text-sm text-muted-foreground">
+        <div className="rounded-md border border-subtle bg-surface-raised/30 p-4 text-sm text-fg-secondary">
           <p>
-            <strong className="text-foreground">Privacy:</strong> keys are encrypted at rest, never
+            <strong className="text-fg-primary">Privacy:</strong> keys are encrypted at rest, never
             logged, and stripped of whitespace before use. Cat chats save to your history; clear
             them anytime from the chat panel.
           </p>

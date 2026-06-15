@@ -56,7 +56,7 @@ export default function NotificationCenter({
               <Bell className="w-5 h-5" />
               Notifications
               {unreadCount > 0 && (
-                <span className="flex h-5 w-5 items-center justify-center rounded-sm bg-destructive text-xs text-destructive-foreground">
+                <span className="flex h-5 w-5 items-center justify-center rounded-sm bg-status-negative text-xs text-fg-inverted">
                   {unreadCount}
                 </span>
               )}
@@ -65,7 +65,7 @@ export default function NotificationCenter({
 
           <CardContent className="flex flex-col flex-1 overflow-hidden">
             {error && (
-              <div className="mb-4 flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-destructive">
+              <div className="mb-4 flex items-center gap-2 rounded-md border border-status-negative/20 bg-status-negative/10 p-3 text-status-negative">
                 <AlertCircle className="w-4 h-4" />
                 <span className="text-sm">{error.message}</span>
                 <Button variant="ghost" size="sm" onClick={refresh} className="ml-auto">
@@ -74,15 +74,15 @@ export default function NotificationCenter({
               </div>
             )}
 
-            <div className="mb-4 flex gap-1 rounded-md bg-muted p-1">
+            <div className="mb-4 flex gap-1 rounded-md bg-surface-raised p-1">
               {FILTER_TABS.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setUIFilter(tab.key)}
                   className={`flex-1 px-3 py-1.5 text-sm rounded-md transition-colors ${
                     uiFilter === tab.key
-                      ? 'bg-background text-foreground'
-                      : 'text-muted-foreground hover:text-foreground'
+                      ? 'bg-surface-page text-fg-primary'
+                      : 'text-fg-secondary hover:text-fg-primary'
                   }`}
                 >
                   {tab.label}
@@ -92,7 +92,7 @@ export default function NotificationCenter({
 
             {unreadCount > 0 && (
               <div className="flex justify-between items-center mb-4">
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-fg-secondary">
                   {unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}
                 </span>
                 <Button variant="ghost" size="sm" onClick={handleMarkAllAsRead}>
@@ -107,24 +107,24 @@ export default function NotificationCenter({
                 <div className="space-y-3">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="animate-pulse">
-                      <div className="flex items-start gap-3 rounded-md bg-muted p-3">
-                        <div className="h-8 w-8 rounded-md bg-muted-foreground/20" />
+                      <div className="flex items-start gap-3 rounded-md bg-surface-raised p-3">
+                        <div className="h-8 w-8 rounded-md bg-fg-secondary/20" />
                         <div className="flex-1">
-                          <div className="mb-2 h-4 rounded bg-muted-foreground/20" />
-                          <div className="h-3 w-3/4 rounded bg-muted-foreground/20" />
+                          <div className="mb-2 h-4 rounded bg-fg-secondary/20" />
+                          <div className="h-3 w-3/4 rounded bg-fg-secondary/20" />
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : notifications.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-8 text-fg-secondary">
                   <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   <p>No notifications found</p>
                   {uiFilter !== 'all' && (
                     <button
                       onClick={() => setUIFilter('all')}
-                      className="text-foreground text-sm mt-2 hover:underline"
+                      className="text-fg-primary text-sm mt-2 hover:underline"
                     >
                       View all notifications
                     </button>
@@ -153,7 +153,7 @@ export default function NotificationCenter({
             </div>
 
             {notifications.length > 0 && (
-              <div className="pt-4 mt-4 border-t border-border">
+              <div className="pt-4 mt-4 border-t border-default">
                 <div className="flex gap-2">
                   <Button
                     variant="outline"

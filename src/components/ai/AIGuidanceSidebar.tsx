@@ -35,28 +35,25 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
             >
               {/* Header */}
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-surface-raised flex items-center justify-center">
                   {content.icon}
                 </div>
-                <h3 className="font-semibold text-foreground">{content.title}</h3>
+                <h3 className="font-semibold text-fg-primary">{content.title}</h3>
               </div>
 
               {/* Description */}
-              <p className="text-sm text-muted-foreground mb-4">{content.description}</p>
+              <p className="text-sm text-fg-secondary mb-4">{content.description}</p>
 
               {/* Tips */}
               {content.tips && content.tips.length > 0 && (
                 <div className="space-y-2 mb-4">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  <h4 className="text-xs font-semibold text-fg-secondary uppercase tracking-wide">
                     Tips
                   </h4>
                   <ul className="space-y-2">
                     {content.tips.map((tip, index) => (
-                      <li
-                        key={index}
-                        className="flex items-start gap-2 text-sm text-muted-foreground"
-                      >
-                        <CheckCircle className="w-4 h-4 text-foreground mt-0.5 flex-shrink-0" />
+                      <li key={index} className="flex items-start gap-2 text-sm text-fg-secondary">
+                        <CheckCircle className="w-4 h-4 text-fg-primary mt-0.5 flex-shrink-0" />
                         <span>{tip}</span>
                       </li>
                     ))}
@@ -67,14 +64,14 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
               {/* Examples */}
               {content.examples && content.examples.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                  <h4 className="text-xs font-semibold text-fg-secondary uppercase tracking-wide mb-2">
                     Examples
                   </h4>
                   <ul className="space-y-1.5">
                     {content.examples.map((example, index) => (
                       <li
                         key={index}
-                        className="text-sm text-muted-foreground italic pl-3 border-l-2 border-border"
+                        className="text-sm text-fg-secondary italic pl-3 border-l-2 border-default"
                       >
                         {example}
                       </li>
@@ -94,28 +91,28 @@ export function AIGuidanceSidebar({ focusedField, className }: AIGuidanceSidebar
               className="p-6"
             >
               {/* Header */}
-              <h3 className="font-semibold text-foreground mb-2">{aiDefaultContent.title}</h3>
+              <h3 className="font-semibold text-fg-primary mb-2">{aiDefaultContent.title}</h3>
 
               {/* Description */}
-              <p className="text-sm text-muted-foreground mb-4">{aiDefaultContent.description}</p>
+              <p className="text-sm text-fg-secondary mb-4">{aiDefaultContent.description}</p>
 
               {/* Features */}
               <div className="space-y-3 mb-4">
                 {aiDefaultContent.features.map((feature, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-surface-raised flex items-center justify-center flex-shrink-0">
                       {feature.icon}
                     </div>
-                    <span className="text-sm text-muted-foreground pt-1">{feature.text}</span>
+                    <span className="text-sm text-fg-secondary pt-1">{feature.text}</span>
                   </div>
                 ))}
               </div>
 
               {/* Hint */}
               {aiDefaultContent.hint && (
-                <div className="flex items-start gap-2 p-3 bg-muted/40 rounded-lg">
-                  <Lightbulb className="w-4 h-4 text-foreground mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-foreground">{aiDefaultContent.hint}</p>
+                <div className="flex items-start gap-2 p-3 bg-surface-raised/40 rounded-lg">
+                  <Lightbulb className="w-4 h-4 text-fg-primary mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-fg-primary">{aiDefaultContent.hint}</p>
                 </div>
               )}
             </motion.div>

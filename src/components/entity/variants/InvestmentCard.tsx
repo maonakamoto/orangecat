@@ -30,11 +30,11 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
         <Card className="oc-card-link">
           <div className="flex items-center p-4 gap-4">
             <div className="oc-icon-tile h-12 w-12">
-              <TrendingUp className="w-6 h-6 text-success" />
+              <TrendingUp className="w-6 h-6 text-status-positive" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-foreground truncate">{investment.title}</h3>
-              <p className="text-sm text-muted-foreground truncate">
+              <h3 className="font-semibold text-fg-primary truncate">{investment.title}</h3>
+              <p className="text-sm text-fg-secondary truncate">
                 {formatAmount(investment.total_raised)} raised of{' '}
                 {formatAmount(investment.target_amount)}
               </p>
@@ -47,9 +47,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
                     {investment.expected_return_rate}% return
                   </Badge>
                 )}
-              <span className="text-muted-foreground">
-                {formatRelativeTime(investment.created_at)}
-              </span>
+              <span className="text-fg-secondary">{formatRelativeTime(investment.created_at)}</span>
             </div>
           </div>
         </Card>
@@ -64,7 +62,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
               <div className="oc-icon-tile h-8 w-8">
-                <TrendingUp className="w-4 h-4 text-success" />
+                <TrendingUp className="w-4 h-4 text-status-positive" />
               </div>
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-base truncate">{investment.title}</CardTitle>
@@ -81,18 +79,18 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
 
         <CardContent className="space-y-3">
           {investment.description && (
-            <p className="text-sm text-muted-foreground line-clamp-2">{investment.description}</p>
+            <p className="text-sm text-fg-secondary line-clamp-2">{investment.description}</p>
           )}
 
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Raised</span>
-              <span className="font-semibold text-success">
+              <span className="text-sm text-fg-secondary">Raised</span>
+              <span className="font-semibold text-status-positive">
                 {formatAmount(investment.total_raised)}
               </span>
             </div>
             <Progress value={progress} className="h-1.5" />
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="flex justify-between text-xs text-fg-secondary">
               <span>{progress}% funded</span>
               <span>{formatAmount(investment.target_amount)} goal</span>
             </div>
@@ -102,7 +100,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
             {investment.expected_return_rate !== null &&
               investment.expected_return_rate !== undefined && (
                 <div className="flex items-center gap-1">
-                  <Percent className="h-3 w-3 text-muted-dim" />
+                  <Percent className="h-3 w-3 text-fg-tertiary" />
                   <span>{investment.expected_return_rate}% expected return</span>
                 </div>
               )}
@@ -110,7 +108,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
               <span
                 className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 ${
                   INVESTMENT_RISK_COLORS[investment.risk_level] ??
-                  'bg-muted text-muted-strong border-border'
+                  'bg-surface-raised text-fg-primary border-default'
                 }`}
               >
                 <Shield className="h-3 w-3" />
@@ -120,7 +118,7 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
           </div>
 
           {investment.term_months !== null && investment.term_months !== undefined && (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-fg-secondary">
               {investment.term_months}-month term · min{' '}
               {formatAmount(investment.minimum_investment)}
             </p>

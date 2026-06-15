@@ -41,25 +41,25 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
         return (
           <div className="space-y-6">
             <div className="flex justify-center">
-              <div className="p-4 bg-muted rounded-full">
-                <Shield className="h-12 w-12 text-foreground" />
+              <div className="p-4 bg-surface-raised rounded-full">
+                <Shield className="h-12 w-12 text-fg-primary" />
               </div>
             </div>
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-foreground">Secure Your Account</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-lg font-semibold text-fg-primary">Secure Your Account</h3>
+              <p className="text-sm text-fg-secondary">
                 Two-factor authentication adds an extra layer of security to your account. You'll
                 need to enter a code from your authenticator app each time you sign in.
               </p>
             </div>
             <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                <Smartphone className="h-5 w-5 text-muted-foreground mt-0.5" />
+              <div className="flex items-start gap-3 p-3 bg-surface-raised rounded-lg">
+                <Smartphone className="h-5 w-5 text-fg-secondary mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-foreground">
+                  <p className="text-sm font-medium text-fg-primary">
                     Install an authenticator app
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-fg-secondary">
                     We recommend Google Authenticator, Authy, or 1Password.
                   </p>
                 </div>
@@ -85,14 +85,14 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
         return (
           <div className="space-y-6">
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-foreground">Scan QR Code</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-lg font-semibold text-fg-primary">Scan QR Code</h3>
+              <p className="text-sm text-fg-secondary">
                 Open your authenticator app and scan this QR code to add your account.
               </p>
             </div>
             {enrollmentData?.qrCode && (
               <div className="flex justify-center">
-                <div className="p-4 bg-card border-2 border-border rounded-lg">
+                <div className="p-4 bg-surface-base border-2 border-default rounded-lg">
                   <Image
                     src={enrollmentData.qrCode}
                     alt="QR Code for authenticator app"
@@ -105,16 +105,16 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
               </div>
             )}
             <div className="space-y-2">
-              <p className="text-xs text-muted-foreground text-center">
+              <p className="text-xs text-fg-secondary text-center">
                 Can't scan? Enter this code manually:
               </p>
-              <div className="flex items-center gap-2 p-2 bg-muted rounded border border-border">
-                <code className="flex-1 text-xs font-mono text-foreground break-all">
+              <div className="flex items-center gap-2 p-2 bg-surface-raised rounded border border-default">
+                <code className="flex-1 text-xs font-mono text-fg-primary break-all">
                   {enrollmentData?.secret}
                 </code>
                 <button
                   onClick={handleCopySecret}
-                  className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
+                  className="p-1.5 text-fg-secondary hover:text-fg-primary hover:bg-surface-raised rounded transition-colors"
                   title="Copy to clipboard"
                 >
                   {secretCopied ? (
@@ -135,15 +135,15 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
         return (
           <div className="space-y-6">
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-foreground">Verify Setup</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-lg font-semibold text-fg-primary">Verify Setup</h3>
+              <p className="text-sm text-fg-secondary">
                 Enter the 6-digit code from your authenticator app to verify the setup.
               </p>
             </div>
             <div className="space-y-2">
               <label
                 htmlFor="verification-code"
-                className="block text-sm font-medium text-foreground"
+                className="block text-sm font-medium text-fg-primary"
               >
                 Verification Code
               </label>
@@ -155,14 +155,14 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
                 value={verificationCode}
                 onChange={handleCodeChange}
                 placeholder="000000"
-                className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-border-strong rounded-lg focus:ring-2 focus:ring-ring focus:border-ring dark:bg-muted dark:text-foreground"
+                className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-strong rounded-lg focus:ring-2 focus:ring-ring focus:border-interactive dark:bg-surface-raised dark:text-fg-primary"
                 maxLength={6}
               />
             </div>
             {error && (
               <div className="flex items-center gap-2 p-3 oc-error-surface rounded-lg">
-                <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0" />
-                <p className="text-sm text-destructive/80">{error}</p>
+                <AlertCircle className="h-4 w-4 text-status-negative flex-shrink-0" />
+                <p className="text-sm text-status-negative/80">{error}</p>
               </div>
             )}
             <div className="flex gap-3">
@@ -196,10 +196,10 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
               </div>
             </div>
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-foreground">
+              <h3 className="text-lg font-semibold text-fg-primary">
                 Two-Factor Authentication Enabled
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-fg-secondary">
                 Your account is now protected with two-factor authentication. You'll need to enter a
                 code from your authenticator app each time you sign in.
               </p>
@@ -219,7 +219,7 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-foreground" />
+          <Shield className="h-5 w-5 text-fg-primary" />
           Two-Factor Authentication
         </CardTitle>
         <CardDescription>Protect your account with an authenticator app</CardDescription>
@@ -227,8 +227,8 @@ export function MFASetup({ onSetupComplete, onCancel }: MFASetupProps) {
       <CardContent>
         {error && step !== 'verify' && (
           <div className="mb-4 flex items-center gap-2 p-3 oc-error-surface rounded-lg">
-            <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0" />
-            <p className="text-sm text-destructive/80">{error}</p>
+            <AlertCircle className="h-4 w-4 text-status-negative flex-shrink-0" />
+            <p className="text-sm text-status-negative/80">{error}</p>
           </div>
         )}
         {renderStepContent()}

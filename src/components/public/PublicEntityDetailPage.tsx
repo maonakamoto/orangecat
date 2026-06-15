@@ -30,7 +30,7 @@ import type { ReactNode } from 'react';
 // rebrand commits to monochromatic surfaces, status colors only for
 // actual status. Anything that wants a chromatic accent should opt in
 // via renderHeaderIcon, not the global icon-box theme.
-const NEUTRAL_THEME = { bg: 'bg-muted', icon: 'text-foreground', text: 'text-foreground' };
+const NEUTRAL_THEME = { bg: 'bg-surface-raised', icon: 'text-fg-primary', text: 'text-fg-primary' };
 
 const THEME_CLASSES: Record<string, { bg: string; icon: string; text: string }> = {
   tiffany: NEUTRAL_THEME,
@@ -40,10 +40,10 @@ const THEME_CLASSES: Record<string, { bg: string; icon: string; text: string }> 
 };
 
 const PAGE_SURFACE_CLASSES: Record<string, string> = {
-  tiffany: 'bg-background',
-  rose: 'bg-background',
-  orange: 'bg-background',
-  green: 'bg-background',
+  tiffany: 'bg-surface-page',
+  rose: 'bg-surface-page',
+  orange: 'bg-surface-page',
+  green: 'bg-surface-page',
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -162,7 +162,7 @@ export default async function PublicEntityDetailPage({
     <>
       <JsonLdScript data={jsonLd} />
       <div className={`min-h-screen oc-mobile-action-stack-padding ${pageSurface}`}>
-        <div className="bg-card border-b border-border">
+        <div className="bg-surface-base border-b border-default">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
               items={[
@@ -181,7 +181,7 @@ export default async function PublicEntityDetailPage({
                   </div>
                 )}
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{entity.title}</h1>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-fg-primary">{entity.title}</h1>
                   <div className="flex items-center gap-3 mt-2">
                     {entity.status && (
                       <Badge variant="default" className="capitalize">
@@ -213,7 +213,7 @@ export default async function PublicEntityDetailPage({
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-strong whitespace-pre-wrap">{entity.description}</p>
+                    <p className="text-fg-primary whitespace-pre-wrap">{entity.description}</p>
                   </CardContent>
                 </Card>
               )}
@@ -298,11 +298,11 @@ function StickyBar({ href, label }: { href: string; label: string }) {
   // to the page wrapper) reserves matching scroll-bottom room.
   return (
     <div
-      className={`md:hidden fixed inset-x-0 oc-above-mobile-nav ${Z_INDEX_CLASSES.MOBILE_ACTION_BAR} border-t border-border-subtle bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 px-4 py-3 shadow-lg`}
+      className={`md:hidden fixed inset-x-0 oc-above-mobile-nav ${Z_INDEX_CLASSES.MOBILE_ACTION_BAR} border-t border-subtle bg-surface-base/95 backdrop-blur supports-[backdrop-filter]:bg-surface-base/80 px-4 py-3 shadow-lg`}
     >
       <a
         href={href}
-        className="flex w-full items-center justify-center gap-2 rounded-md bg-foreground px-4 py-3 text-sm font-semibold text-background hover:bg-foreground/90 transition-colors min-h-12"
+        className="flex w-full items-center justify-center gap-2 rounded-md bg-fg-primary px-4 py-3 text-sm font-semibold text-fg-inverted hover:bg-fg-primary/90 transition-colors min-h-12"
       >
         {label}
       </a>

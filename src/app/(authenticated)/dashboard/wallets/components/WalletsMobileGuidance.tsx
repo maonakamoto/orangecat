@@ -37,7 +37,7 @@ export function WalletsMobileGuidance({
       {/* Floating Help Button */}
       <button
         onClick={() => onShowMobileGuidance(true)}
-        className="fixed bottom-6 right-6 z-50 rounded-full bg-foreground hover:bg-foreground/90 p-4 text-background transition-colors duration-200 lg:hidden"
+        className="fixed bottom-6 right-6 z-50 rounded-full bg-fg-primary hover:bg-fg-primary/90 p-4 text-fg-inverted transition-colors duration-200 lg:hidden"
         aria-label="Get help with this field"
       >
         <HelpCircle className="w-6 h-6" />
@@ -50,17 +50,17 @@ export function WalletsMobileGuidance({
           onClick={() => onShowMobileGuidance(false)}
         >
           <div
-            className="w-full bg-card rounded-t-lg shadow-sm max-h-[80vh] overflow-y-auto"
+            className="w-full bg-surface-base rounded-t-lg shadow-sm max-h-[80vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-foreground">Wallet Help & Guidance</h3>
+            <div className="sticky top-0 bg-surface-base border-b border-default px-4 py-3 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-fg-primary">Wallet Help & Guidance</h3>
               <button
                 onClick={() => onShowMobileGuidance(false)}
-                className="p-2 hover:bg-muted rounded-lg transition-colors"
+                className="p-2 hover:bg-surface-raised rounded-lg transition-colors"
               >
                 <svg
-                  className="w-5 h-5 text-muted-foreground"
+                  className="w-5 h-5 text-fg-secondary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

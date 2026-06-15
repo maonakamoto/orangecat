@@ -21,12 +21,12 @@ export function FormErrorDisplay({ errors }: FormErrorDisplayProps) {
   return (
     <div className="oc-error-surface">
       <div className="flex items-start gap-2">
-        <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md bg-destructive text-xs font-bold text-destructive-foreground">
+        <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md bg-status-negative text-xs font-bold text-fg-inverted">
           !
         </div>
         <div className="flex-1">
           <h4 className="text-sm font-semibold mb-2">Please fix the following errors:</h4>
-          <ul className="text-sm text-destructive/80 space-y-1 list-disc list-inside">
+          <ul className="text-sm text-status-negative/80 space-y-1 list-disc list-inside">
             {Object.entries(errors).map(([field, error]) => (
               <li key={field}>
                 <span className="font-medium">{field}:</span>{' '}

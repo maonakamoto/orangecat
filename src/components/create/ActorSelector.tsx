@@ -48,7 +48,7 @@ function ActorBadge({ actor }: { actor: MessagingActor }) {
           <Icon className="h-2.5 w-2.5" />
         </AvatarFallback>
       </Avatar>
-      <span className="text-sm font-medium text-foreground">{actor.name}</span>
+      <span className="text-sm font-medium text-fg-primary">{actor.name}</span>
     </span>
   );
 }
@@ -66,7 +66,7 @@ export function ActorSelector({ value, onChange, disabled, className }: ActorSel
     (value === personalActor.actor_id ? personalActor : personalActor);
 
   return (
-    <div className={cn('flex items-center gap-2 text-xs text-muted-foreground', className)}>
+    <div className={cn('flex items-center gap-2 text-xs text-fg-secondary', className)}>
       <span>Create as</span>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -74,12 +74,12 @@ export function ActorSelector({ value, onChange, disabled, className }: ActorSel
             type="button"
             disabled={disabled}
             className={cn(
-              'flex items-center gap-1.5 rounded-md border border-border-subtle bg-background px-2 py-1',
-              'hover:bg-muted/60 disabled:cursor-not-allowed disabled:opacity-60'
+              'flex items-center gap-1.5 rounded-md border border-subtle bg-surface-page px-2 py-1',
+              'hover:bg-surface-raised/60 disabled:cursor-not-allowed disabled:opacity-60'
             )}
           >
             <ActorBadge actor={selected} />
-            <ChevronDown className="h-3.5 w-3.5 text-muted-dim" />
+            <ChevronDown className="h-3.5 w-3.5 text-fg-tertiary" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-60">
@@ -87,20 +87,21 @@ export function ActorSelector({ value, onChange, disabled, className }: ActorSel
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => onChange(null)}
-            className={cn('flex items-center gap-2', !value && 'bg-muted')}
+            className={cn('flex items-center gap-2', !value && 'bg-surface-raised')}
           >
             <ActorBadge actor={personalActor} />
-            <span className="ml-auto text-xs text-muted-foreground">Personal</span>
+            <span className="ml-auto text-xs text-fg-secondary">Personal</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuLabel className="text-xs text-muted-foreground">
-            Organizations
-          </DropdownMenuLabel>
+          <DropdownMenuLabel className="text-xs text-fg-secondary">Organizations</DropdownMenuLabel>
           {groupActors.map(actor => (
             <DropdownMenuItem
               key={actor.actor_id}
               onClick={() => onChange(actor.actor_id)}
-              className={cn('flex items-center gap-2', value === actor.actor_id && 'bg-muted')}
+              className={cn(
+                'flex items-center gap-2',
+                value === actor.actor_id && 'bg-surface-raised'
+              )}
             >
               <ActorBadge actor={actor} />
             </DropdownMenuItem>

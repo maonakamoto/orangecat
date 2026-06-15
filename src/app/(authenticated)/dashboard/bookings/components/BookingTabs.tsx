@@ -28,7 +28,7 @@ export default function BookingTabs({
 }: BookingTabsProps) {
   return (
     <>
-      <div className="border-b border-border mb-6">
+      <div className="border-b border-default mb-6">
         <nav className="-mb-px flex space-x-8">
           {tabs.map(tab => (
             <button
@@ -37,8 +37,8 @@ export default function BookingTabs({
               className={cn(
                 'py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap',
                 activeTab === tab.id
-                  ? 'border-foreground text-foreground'
-                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border-strong dark:hover:border-border'
+                  ? 'border-fg-primary text-fg-primary'
+                  : 'border-transparent text-fg-secondary hover:text-fg-primary hover:border-strong dark:hover:border-default'
               )}
             >
               {tab.label}
@@ -47,8 +47,8 @@ export default function BookingTabs({
                   className={cn(
                     'ml-2 py-0.5 px-2 rounded-full text-xs',
                     activeTab === tab.id
-                      ? 'bg-muted text-foreground'
-                      : 'bg-muted text-muted-foreground'
+                      ? 'bg-surface-raised text-fg-primary'
+                      : 'bg-surface-raised text-fg-secondary'
                   )}
                 >
                   {tab.count}
@@ -61,11 +61,11 @@ export default function BookingTabs({
 
       {activeTab === 'history' && (
         <div className="mb-6 flex items-center gap-2">
-          <Filter className="h-4 w-4 text-muted-foreground" />
+          <Filter className="h-4 w-4 text-fg-secondary" />
           <select
             value={filterStatus}
             onChange={e => onFilterChange(e.target.value as FilterStatus)}
-            className="text-sm border border-border-strong dark:bg-muted dark:text-foreground rounded-md px-3 py-1.5"
+            className="text-sm border border-strong dark:bg-surface-raised dark:text-fg-primary rounded-md px-3 py-1.5"
           >
             <option value="all">All</option>
             <option value={STATUS.BOOKINGS.COMPLETED}>Completed</option>

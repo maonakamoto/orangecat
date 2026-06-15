@@ -29,10 +29,10 @@ export function ProfileDetailsCard({
 
   const locationValue = (() => {
     if (isLocationHidden(profile.location_context || '')) {
-      return <div className="font-medium text-muted-dim">Hidden</div>;
+      return <div className="font-medium text-fg-tertiary">Hidden</div>;
     }
     const label = profile.location_search || profile.location;
-    return label ? <div className="font-medium text-foreground">{label}</div> : undefined;
+    return label ? <div className="font-medium text-fg-primary">{label}</div> : undefined;
   })();
 
   const socialLinks =
@@ -48,7 +48,7 @@ export function ProfileDetailsCard({
     <Card>
       <CardHeader>
         <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
-          <Info className="w-5 h-5 text-muted-foreground" />
+          <Info className="w-5 h-5 text-fg-secondary" />
           {isDashboardView ? 'Profile & Account Details' : 'Profile Information'}
         </h3>
       </CardHeader>
@@ -57,20 +57,18 @@ export function ProfileDetailsCard({
           <div className="mb-3">
             <h4
               id="profile-section-heading"
-              className="text-sm font-semibold text-foreground uppercase tracking-wide"
+              className="text-sm font-semibold text-fg-primary uppercase tracking-wide"
             >
               Profile
             </h4>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Basic information about who you are.
-            </p>
+            <p className="mt-1 text-xs text-fg-secondary">Basic information about who you are.</p>
           </div>
           <div className="space-y-4">
             <ProfileField
               icon={User}
               label="Username"
               value={
-                <div className="font-medium text-foreground">@{profile.username || 'Not set'}</div>
+                <div className="font-medium text-fg-primary">@{profile.username || 'Not set'}</div>
               }
               isOwnProfile={isOwnProfile}
             />
@@ -79,7 +77,7 @@ export function ProfileDetailsCard({
               label="Display Name"
               value={
                 profile.name ? (
-                  <div className="font-medium text-foreground">{profile.name}</div>
+                  <div className="font-medium text-fg-primary">{profile.name}</div>
                 ) : undefined
               }
               editHref={`${ROUTES.DASHBOARD.INFO_EDIT}#name`}
@@ -90,7 +88,7 @@ export function ProfileDetailsCard({
               label="Bio"
               value={
                 profile.bio ? (
-                  <p className="text-foreground whitespace-pre-wrap leading-relaxed">
+                  <p className="text-fg-primary whitespace-pre-wrap leading-relaxed">
                     {profile.bio}
                   </p>
                 ) : undefined
@@ -114,18 +112,16 @@ export function ProfileDetailsCard({
 
         <section
           aria-labelledby="online-presence-section-heading"
-          className="pt-6 border-t border-border"
+          className="pt-6 border-t border-default"
         >
           <div className="mb-3">
             <h4
               id="online-presence-section-heading"
-              className="text-sm font-semibold text-foreground uppercase tracking-wide"
+              className="text-sm font-semibold text-fg-primary uppercase tracking-wide"
             >
               Online Presence
             </h4>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Where people can find you on the web.
-            </p>
+            <p className="mt-1 text-xs text-fg-secondary">Where people can find you on the web.</p>
           </div>
           <div className="space-y-4">
             <ProfileField
@@ -137,7 +133,7 @@ export function ProfileDetailsCard({
                     href={profile.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium text-foreground hover:underline underline-offset-4 break-all"
+                    className="font-medium text-fg-primary hover:underline underline-offset-4 break-all"
                   >
                     {profile.website}
                   </a>
@@ -157,15 +153,15 @@ export function ProfileDetailsCard({
           </div>
         </section>
 
-        <section aria-labelledby="contact-section-heading" className="pt-6 border-t border-border">
+        <section aria-labelledby="contact-section-heading" className="pt-6 border-t border-default">
           <div className="mb-3">
             <h4
               id="contact-section-heading"
-              className="text-sm font-semibold text-foreground uppercase tracking-wide"
+              className="text-sm font-semibold text-fg-primary uppercase tracking-wide"
             >
               Contact Information
             </h4>
-            <p className="mt-1 text-xs text-muted-foreground">How people can reach you.</p>
+            <p className="mt-1 text-xs text-fg-secondary">How people can reach you.</p>
           </div>
           <div className="space-y-4">
             {isOwnProfile && (
@@ -174,10 +170,10 @@ export function ProfileDetailsCard({
                 label="Registration Email (private)"
                 value={
                   <div>
-                    <div className="font-medium text-foreground break-all">
+                    <div className="font-medium text-fg-primary break-all">
                       {profile.email || userEmail || 'Unknown'}
                     </div>
-                    <p className="mt-1 text-xs text-muted-foreground">
+                    <p className="mt-1 text-xs text-fg-secondary">
                       Used for account login. Not shown on public profile.
                     </p>
                   </div>
@@ -192,7 +188,7 @@ export function ProfileDetailsCard({
                 publicContactEmail ? (
                   <a
                     href={`mailto:${publicContactEmail}`}
-                    className="font-medium text-foreground hover:underline underline-offset-4 break-all"
+                    className="font-medium text-fg-primary hover:underline underline-offset-4 break-all"
                   >
                     {publicContactEmail}
                   </a>
@@ -208,7 +204,7 @@ export function ProfileDetailsCard({
                 profile.phone ? (
                   <a
                     href={`tel:${profile.phone}`}
-                    className="font-medium text-foreground hover:underline underline-offset-4"
+                    className="font-medium text-fg-primary hover:underline underline-offset-4"
                   >
                     {profile.phone}
                   </a>
@@ -220,11 +216,11 @@ export function ProfileDetailsCard({
           </div>
         </section>
 
-        <section aria-labelledby="meta-section-heading" className="pt-6 border-t border-border">
+        <section aria-labelledby="meta-section-heading" className="pt-6 border-t border-default">
           <div className="mb-3">
             <h4
               id="meta-section-heading"
-              className="text-sm font-semibold text-foreground uppercase tracking-wide"
+              className="text-sm font-semibold text-fg-primary uppercase tracking-wide"
             >
               Account Activity
             </h4>
@@ -235,7 +231,7 @@ export function ProfileDetailsCard({
                 icon={Calendar}
                 label="Member Since"
                 value={
-                  <div className="font-medium text-foreground">
+                  <div className="font-medium text-fg-primary">
                     {format(joinDate, 'MMMM d, yyyy')}
                   </div>
                 }
@@ -246,7 +242,7 @@ export function ProfileDetailsCard({
                 icon={Clock}
                 label="Last Active"
                 value={
-                  <div className="font-medium text-foreground">
+                  <div className="font-medium text-fg-primary">
                     {format(lastActive, 'MMMM d, yyyy')}
                   </div>
                 }

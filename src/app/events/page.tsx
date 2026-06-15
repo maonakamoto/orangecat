@@ -136,9 +136,9 @@ export default function EventsPage() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <Card key={index} className="p-6 text-center">
-              <feature.icon className="w-12 h-12 text-foreground mx-auto mb-4" />
+              <feature.icon className="w-12 h-12 text-fg-primary mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
-              <p className="text-muted-foreground">{feature.description}</p>
+              <p className="text-fg-secondary">{feature.description}</p>
             </Card>
           ))}
         </div>
@@ -152,10 +152,10 @@ export default function EventsPage() {
             <Card key={index} className="p-6">
               <type.icon className={`w-12 h-12 mx-auto mb-4 ${type.color}`} />
               <h3 className="text-lg font-semibold mb-4 text-center">{type.category}</h3>
-              <ul className="text-muted-foreground space-y-2">
+              <ul className="text-fg-secondary space-y-2">
                 {type.examples.map((example, i) => (
                   <li key={i} className="flex items-center text-sm">
-                    <Check className="w-4 h-4 text-foreground mr-2 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-fg-primary mr-2 flex-shrink-0" />
                     {example}
                   </li>
                 ))}
@@ -173,8 +173,8 @@ export default function EventsPage() {
             <div className="space-y-4">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start">
-                  <Check className="w-5 h-5 text-foreground mr-3 mt-0.5 flex-shrink-0" />
-                  <span className="text-muted-strong">{benefit}</span>
+                  <Check className="w-5 h-5 text-fg-primary mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-fg-primary">{benefit}</span>
                 </div>
               ))}
             </div>
@@ -188,34 +188,34 @@ export default function EventsPage() {
               have measurements behind it. */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Card className="p-6">
-              <Bitcoin className="w-8 h-8 text-foreground mb-3" />
+              <Bitcoin className="w-8 h-8 text-fg-primary mb-3" />
               <h3 className="font-semibold mb-1">
                 {FEE_CLAIMS.feeBadgeLabel.replace('fees', 'platform fees')}
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-fg-secondary">
                 Ticket sales go directly to your Bitcoin or Lightning wallet — we never sit between
                 you and the buyer.
               </p>
             </Card>
             <Card className="p-6">
-              <Zap className="w-8 h-8 text-foreground mb-3" />
+              <Zap className="w-8 h-8 text-fg-primary mb-3" />
               <h3 className="font-semibold mb-1">Lightning-Native</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-fg-secondary">
                 Accept micropayments and full-price tickets over Lightning with no special
                 integration.
               </p>
             </Card>
             <Card className="p-6">
-              <Users className="w-8 h-8 text-foreground mb-3" />
+              <Users className="w-8 h-8 text-fg-primary mb-3" />
               <h3 className="font-semibold mb-1">No Geographic Limits</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-fg-secondary">
                 Bitcoin works the same in every country. Anyone with a wallet can buy a ticket.
               </p>
             </Card>
             <Card className="p-6">
-              <QrCode className="w-8 h-8 text-foreground mb-3" />
+              <QrCode className="w-8 h-8 text-fg-primary mb-3" />
               <h3 className="font-semibold mb-1">QR Check-In</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-fg-secondary">
                 Each ticket gets a unique code attendees show at the door — no printing, no apps to
                 install.
               </p>
@@ -229,38 +229,38 @@ export default function EventsPage() {
         <h2 className="text-2xl font-semibold text-center mb-12">How Event Organization Works</h2>
         <div className="grid md:grid-cols-4 gap-6">
           <div className="text-center">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-bold text-foreground">1</span>
+            <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-fg-primary">1</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Create Your Event</h3>
-            <p className="text-muted-foreground">
+            <p className="text-fg-secondary">
               Set up your event details, ticket pricing, and Bitcoin payment address
             </p>
           </div>
           <div className="text-center">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-bold text-foreground">2</span>
+            <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-fg-primary">2</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Promote & Sell</h3>
-            <p className="text-muted-foreground">
+            <p className="text-fg-secondary">
               Share your event and sell tickets with instant Bitcoin payments
             </p>
           </div>
           <div className="text-center">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-bold text-foreground">3</span>
+            <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-fg-primary">3</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Manage Attendees</h3>
-            <p className="text-muted-foreground">
+            <p className="text-fg-secondary">
               Track RSVPs, send updates, and manage your attendee list
             </p>
           </div>
           <div className="text-center">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-bold text-foreground">4</span>
+            <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-fg-primary">4</span>
             </div>
             <h3 className="text-lg font-semibold mb-3">Run the Event</h3>
-            <p className="text-muted-foreground">
+            <p className="text-fg-secondary">
               Use QR check-in, track attendance, and create memorable experiences
             </p>
           </div>
@@ -271,7 +271,7 @@ export default function EventsPage() {
       <PageSection>
         <div className="text-center">
           <h2 className="text-2xl font-semibold mb-6">Ready to Organize Your Event?</h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-fg-secondary mb-8 max-w-2xl mx-auto">
             Join event organizers worldwide who use OrangeCat to create amazing experiences with
             seamless ticketing and Bitcoin-native payments.
           </p>
@@ -279,7 +279,7 @@ export default function EventsPage() {
             <Button
               onClick={handleGetStarted}
               size="lg"
-              className="bg-muted/400 hover:bg-foreground text-white"
+              className="bg-surface-raised/400 hover:bg-fg-primary text-white"
             >
               Create Your Event
               <ArrowRight className="ml-2 h-5 w-5" />

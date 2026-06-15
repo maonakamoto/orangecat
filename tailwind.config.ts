@@ -27,6 +27,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // Semantic border tier (FleetCrown). `border-default`/`-interactive` are
+      // the migration targets for legacy `border-border`; subtle/strong carry
+      // the existing neutral border vars forward under semantic names.
+      borderColor: {
+        default: 'hsl(var(--border-default))',
+        interactive: 'hsl(var(--border-interactive))',
+        subtle: 'hsl(var(--border-subtle))',
+        strong: 'hsl(var(--border-strong))',
+      },
       fontSize: {
         // Native mobile app typography scale
         '2xs': ['0.625rem', { lineHeight: '1rem' }], // 10px - Badges, micro labels

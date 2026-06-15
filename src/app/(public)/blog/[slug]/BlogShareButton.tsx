@@ -17,7 +17,7 @@ export default function BlogShareButton({ title, description, url }: BlogShareBu
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-muted text-sm font-medium text-foreground transition-colors"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-default hover:bg-surface-raised text-sm font-medium text-fg-primary transition-colors"
         aria-label="Share article"
       >
         <Share2 className="w-4 h-4" />

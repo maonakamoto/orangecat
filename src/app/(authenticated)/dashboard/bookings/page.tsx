@@ -131,7 +131,7 @@ export default function BookingsDashboardPage() {
       {/* Bookings List */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-dim" />
+          <Loader2 className="h-8 w-8 animate-spin text-fg-tertiary" />
         </div>
       ) : filteredBookings.length === 0 ? (
         <EmptyState

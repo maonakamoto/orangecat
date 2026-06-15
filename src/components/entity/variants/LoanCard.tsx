@@ -39,13 +39,13 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
           <div className="flex items-center p-4 gap-4">
             {/* Icon */}
             <div className="oc-icon-tile h-12 w-12">
-              <DollarSign className="w-6 h-6 text-foreground" />
+              <DollarSign className="w-6 h-6 text-fg-primary" />
             </div>
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-foreground truncate">{loan.title}</h3>
-              <p className="text-sm text-muted-foreground truncate">
+              <h3 className="font-semibold text-fg-primary truncate">{loan.title}</h3>
+              <p className="text-sm text-fg-secondary truncate">
                 {formatAmount(loan.remaining_balance, loan.currency)} remaining
               </p>
             </div>
@@ -58,7 +58,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
                   {loan.interest_rate}%
                 </Badge>
               )}
-              <span className="text-muted-foreground">{formatRelativeTime(loan.created_at)}</span>
+              <span className="text-fg-secondary">{formatRelativeTime(loan.created_at)}</span>
             </div>
           </div>
         </Card>
@@ -73,7 +73,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
               <div className="oc-icon-tile h-8 w-8">
-                <DollarSign className="w-4 h-4 text-foreground" />
+                <DollarSign className="w-4 h-4 text-fg-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-base truncate">{loan.title}</CardTitle>
@@ -94,19 +94,19 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
         <CardContent className="space-y-3">
           {/* Description */}
           {loan.description && (
-            <p className="text-sm text-muted-foreground line-clamp-2">{loan.description}</p>
+            <p className="text-sm text-fg-secondary line-clamp-2">{loan.description}</p>
           )}
 
           {/* Financial Summary */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Remaining</span>
-              <span className="font-semibold text-foreground">
+              <span className="text-sm text-fg-secondary">Remaining</span>
+              <span className="font-semibold text-fg-primary">
                 {formatAmount(loan.remaining_balance, loan.currency)}
               </span>
             </div>
             <Progress value={progress} className="h-1.5" />
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="flex justify-between text-xs text-fg-secondary">
               <span>{progress.toFixed(0)}% funded</span>
               <span>{formatAmount(loan.original_amount, loan.currency)} total</span>
             </div>
@@ -116,13 +116,13 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
           <div className="flex items-center justify-between text-sm">
             {loan.interest_rate && (
               <div className="flex items-center gap-1">
-                <Percent className="h-3 w-3 text-muted-dim" />
+                <Percent className="h-3 w-3 text-fg-tertiary" />
                 <span>{loan.interest_rate}% APR</span>
               </div>
             )}
             {loan.monthly_payment && (
               <div className="flex items-center gap-1">
-                <TrendingUp className="h-3 w-3 text-muted-dim" />
+                <TrendingUp className="h-3 w-3 text-fg-tertiary" />
                 <span>{formatAmount(loan.monthly_payment, loan.currency)}/mo</span>
               </div>
             )}
@@ -130,7 +130,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
 
           {/* Lender Info */}
           {loan.lender_name && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 text-xs text-fg-secondary">
               <User className="h-3 w-3" />
               <span className="truncate">Current lender: {loan.lender_name}</span>
             </div>

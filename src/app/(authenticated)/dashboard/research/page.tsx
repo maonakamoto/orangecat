@@ -103,7 +103,7 @@ export default function ResearchDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Entities</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+            <Target className="h-4 w-4 text-fg-secondary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{loading ? '—' : entities.length}</div>
@@ -112,7 +112,7 @@ export default function ResearchDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Research</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-fg-secondary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -123,7 +123,7 @@ export default function ResearchDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Funding</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <DollarSign className="h-4 w-4 text-fg-secondary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -138,7 +138,7 @@ export default function ResearchDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Contributors</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-fg-secondary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -151,7 +151,7 @@ export default function ResearchDashboard() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fg-secondary w-4 h-4" />
           <Input
             placeholder="Search research projects..."
             value={searchTerm}
@@ -198,9 +198,9 @@ export default function ResearchDashboard() {
         </div>
       ) : filteredEntities.length === 0 ? (
         <div className="text-center py-12">
-          <Microscope className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+          <Microscope className="mx-auto mb-4 h-12 w-12 text-fg-secondary" />
           <h3 className="text-lg font-semibold mb-2">No research entities found</h3>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-fg-secondary mb-4">
             {searchTerm || fieldFilter !== 'all' || statusFilter !== 'all'
               ? 'Try adjusting your filters'
               : 'Start your first research project'}
@@ -229,7 +229,7 @@ export default function ResearchDashboard() {
                   <Badge
                     className={
                       RESEARCH_STATUS_DOT_COLORS[entity.status || 'draft'] ??
-                      'bg-muted/400 dark:bg-muted'
+                      'bg-surface-raised/400 dark:bg-surface-raised'
                     }
                   >
                     {entity.status || 'draft'}
@@ -240,7 +240,7 @@ export default function ResearchDashboard() {
                 <Badge
                   className={
                     RESEARCH_FIELD_COLORS[entity.field as ResearchField] ??
-                    'bg-muted text-foreground'
+                    'bg-surface-raised text-fg-primary'
                   }
                 >
                   {RESEARCH_FIELDS.find(f => f.value === entity.field)?.label ??
@@ -270,7 +270,7 @@ export default function ResearchDashboard() {
                   </div>
                   <Progress value={entity.completion_percentage} className="h-2" />
                 </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
+                <div className="flex justify-between text-sm text-fg-secondary">
                   <span>{entity.total_contributors} contributors</span>
                   <span>{entity.follower_count} followers</span>
                 </div>

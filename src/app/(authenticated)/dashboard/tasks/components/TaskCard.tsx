@@ -57,7 +57,7 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
   return (
     <div
       className={`oc-surface oc-card-link cursor-pointer p-4 ${
-        isOverdue ? 'border-destructive/25 bg-destructive/10' : 'border-border'
+        isOverdue ? 'border-status-negative/25 bg-status-negative/10' : 'border-default'
       }`}
       onClick={onClick}
     >
@@ -65,9 +65,9 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
             {task.is_reminder && (
-              <Bell className="h-3.5 w-3.5 text-foreground flex-shrink-0" aria-label="Reminder" />
+              <Bell className="h-3.5 w-3.5 text-fg-primary flex-shrink-0" aria-label="Reminder" />
             )}
-            <h3 className="text-base font-semibold text-foreground truncate">{task.title}</h3>
+            <h3 className="text-base font-semibold text-fg-primary truncate">{task.title}</h3>
             <span
               className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusInfo.className}`}
             >
@@ -82,9 +82,9 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
             )}
           </div>
           {task.description && (
-            <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{task.description}</p>
+            <p className="text-sm text-fg-secondary line-clamp-2 mb-2">{task.description}</p>
           )}
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex items-center gap-3 text-xs text-fg-secondary">
             <span>{TASK_CATEGORY_LABELS[task.category as keyof typeof TASK_CATEGORY_LABELS]}</span>
             <span>&bull;</span>
             <span>{TASK_TYPE_LABELS[task.task_type as keyof typeof TASK_TYPE_LABELS]}</span>
@@ -98,7 +98,7 @@ export default function TaskCard({ task, onComplete, onFlagAttention, onClick }:
               <>
                 <span>&bull;</span>
                 <span
-                  className={`flex items-center gap-1 ${isOverdue ? 'text-status-negative font-medium' : 'text-muted-foreground'}`}
+                  className={`flex items-center gap-1 ${isOverdue ? 'text-status-negative font-medium' : 'text-fg-secondary'}`}
                 >
                   <Clock className="h-3 w-3" />
                   {formatDueDate(task.due_date)}

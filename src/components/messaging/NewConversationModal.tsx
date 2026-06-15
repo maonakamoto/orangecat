@@ -162,37 +162,37 @@ export default function NewConversationModal({
         }
       }}
     >
-      <div className="w-full max-w-md overflow-hidden rounded-md border border-border-subtle bg-background animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-md overflow-hidden rounded-md border border-subtle bg-surface-page animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="p-4 border-b border-border-subtle flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">New Message</h3>
+        <div className="p-4 border-b border-subtle flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-fg-primary">New Message</h3>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 transition-colors hover:bg-muted hover:text-foreground"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 transition-colors hover:bg-surface-raised hover:text-fg-primary"
           >
-            <X className="w-5 h-5 text-muted-foreground" />
+            <X className="w-5 h-5 text-fg-secondary" />
           </button>
         </div>
 
         {/* Search */}
-        <div className="p-4 border-b border-border-subtle">
+        <div className="p-4 border-b border-subtle">
           <div className="relative">
-            <Search className="w-5 h-5 text-muted-dim absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-5 h-5 text-fg-tertiary absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               ref={inputRef}
               value={search}
               onChange={e => handleChange(e.target.value)}
               placeholder="Search by name or @username"
-              className="w-full rounded-md border border-border-subtle bg-muted py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full rounded-md border border-subtle bg-surface-raised py-3 pl-11 pr-4 text-sm text-fg-primary placeholder:text-fg-secondary transition-colors focus:bg-surface-page focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
         </div>
 
         {/* Error message */}
         {error && (
-          <div className="border-b border-destructive/20 bg-destructive/10 px-4 py-3">
-            <p className="text-sm text-destructive">{error}</p>
+          <div className="border-b border-status-negative/20 bg-status-negative/10 px-4 py-3">
+            <p className="text-sm text-status-negative">{error}</p>
           </div>
         )}
 
@@ -200,15 +200,15 @@ export default function NewConversationModal({
         <div className="max-h-[50vh] overflow-y-auto">
           {loading && !creatingId ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-6 h-6 animate-spin text-muted-dim" />
+              <Loader2 className="w-6 h-6 animate-spin text-fg-tertiary" />
             </div>
           ) : profiles.length === 0 ? (
             <div className="py-12 text-center">
-              <MessageSquare className="w-10 h-10 mx-auto mb-3 text-muted-dim dark:text-muted-foreground" />
-              <p className="text-muted-foreground font-medium">
+              <MessageSquare className="w-10 h-10 mx-auto mb-3 text-fg-tertiary dark:text-fg-secondary" />
+              <p className="text-fg-secondary font-medium">
                 {search ? 'No people found' : 'Search for someone to message'}
               </p>
-              <p className="text-sm text-muted-dim mt-1">
+              <p className="text-sm text-fg-tertiary mt-1">
                 {search ? 'Try a different search term' : 'Type a name or username above'}
               </p>
             </div>
@@ -221,7 +221,7 @@ export default function NewConversationModal({
                   tabIndex={0}
                   aria-disabled={!!creatingId}
                   className={cn(
-                    'flex w-full items-center gap-3 rounded-md px-4 py-3 text-left transition-colors hover:bg-muted',
+                    'flex w-full items-center gap-3 rounded-md px-4 py-3 text-left transition-colors hover:bg-surface-raised',
                     creatingId === p.id && 'opacity-60'
                   )}
                   onClick={() => {
@@ -243,20 +243,20 @@ export default function NewConversationModal({
                   <img
                     src={p.avatar_url || '/default-avatar.svg'}
                     alt={p.name || p.username || 'User'}
-                    className="h-11 w-11 rounded-md bg-muted object-cover"
+                    className="h-11 w-11 rounded-md bg-surface-raised object-cover"
                   />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-foreground truncate">
+                    <div className="font-medium text-fg-primary truncate">
                       {p.name || p.username || 'User'}
                     </div>
                     {p.username && (
-                      <div className="text-sm text-muted-foreground truncate">@{p.username}</div>
+                      <div className="text-sm text-fg-secondary truncate">@{p.username}</div>
                     )}
                   </div>
                   <Button
                     size="sm"
                     disabled={!!creatingId && creatingId !== p.id}
-                    className="flex-shrink-0 bg-foreground text-background hover:bg-foreground/90"
+                    className="flex-shrink-0 bg-fg-primary text-fg-inverted hover:bg-fg-primary/90"
                     onClick={e => {
                       e.stopPropagation();
                       if (!creatingId) {

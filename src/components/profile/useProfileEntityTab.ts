@@ -146,7 +146,7 @@ export function useProfileEntityTab(profile: ScalableProfile, entityType: Entity
         currency: entity.currency || PLATFORM_DEFAULT_CURRENCY,
         size: 'sm',
       }),
-      label && React.createElement('span', { className: 'text-muted-foreground text-xs' }, label)
+      label && React.createElement('span', { className: 'text-fg-secondary text-xs' }, label)
     );
   };
 

@@ -110,10 +110,10 @@ export function WishlistItemProofSection({ itemId, canAddProof }: WishlistItemPr
   if (error) {
     return (
       <div className="oc-error-surface rounded-lg p-4">
-        <p className="text-destructive text-sm">{error}</p>
+        <p className="text-status-negative text-sm">{error}</p>
         <button
           onClick={fetchProofs}
-          className="mt-2 text-sm text-destructive hover:text-destructive underline"
+          className="mt-2 text-sm text-status-negative hover:text-status-negative underline"
         >
           Try again
         </button>
@@ -122,7 +122,7 @@ export function WishlistItemProofSection({ itemId, canAddProof }: WishlistItemPr
   }
 
   return (
-    <div className="bg-card rounded-lg border dark:border-border p-6">
+    <div className="bg-surface-base rounded-lg border dark:border-default p-6">
       <WishlistProofSection
         wishlistItemId={itemId}
         proofs={proofs}

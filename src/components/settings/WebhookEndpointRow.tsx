@@ -49,21 +49,21 @@ export default function WebhookEndpointRow({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground">{endpoint.name}</span>
+            <span className="text-sm font-medium text-fg-primary">{endpoint.name}</span>
             {isRevoked && (
-              <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+              <span className="rounded bg-surface-raised px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-fg-secondary">
                 Revoked
               </span>
             )}
           </div>
-          <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
+          <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-fg-secondary">
             <span className="truncate max-w-full sm:max-w-xs">
-              <code className="rounded bg-muted px-1">{endpoint.url}</code>
+              <code className="rounded bg-surface-raised px-1">{endpoint.url}</code>
             </span>
             <span>Acts as {actorLabel}</span>
             <span>
               Events:{' '}
-              <code className="rounded bg-muted px-1">
+              <code className="rounded bg-surface-raised px-1">
                 {endpoint.event_types && endpoint.event_types.length > 0
                   ? endpoint.event_types.join(', ')
                   : 'all'}
@@ -77,7 +77,7 @@ export default function WebhookEndpointRow({
           <button
             type="button"
             onClick={onToggleExpand}
-            className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+            className="inline-flex items-center gap-1 rounded-md border border-subtle px-2.5 py-1.5 text-xs text-fg-secondary hover:bg-surface-raised/60 hover:text-fg-primary"
           >
             {isExpanded ? (
               <ChevronDown className="h-3.5 w-3.5" />
@@ -90,7 +90,7 @@ export default function WebhookEndpointRow({
             <button
               type="button"
               onClick={() => onRevoke(endpoint)}
-              className="inline-flex items-center gap-1 rounded-md border border-border-subtle px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/60 hover:text-destructive"
+              className="inline-flex items-center gap-1 rounded-md border border-subtle px-2.5 py-1.5 text-xs text-fg-secondary hover:bg-surface-raised/60 hover:text-status-negative"
             >
               <Trash2 className="h-3.5 w-3.5" />
               Revoke

@@ -45,9 +45,9 @@ export function getStatusIcon(status: ProposalStatus) {
     case PROPOSAL_STATUSES.FAILED:
       return <XCircle className="h-4 w-4 text-status-negative" />;
     case PROPOSAL_STATUSES.ACTIVE:
-      return <Clock className="h-4 w-4 text-foreground" />;
+      return <Clock className="h-4 w-4 text-fg-primary" />;
     default:
-      return <FileText className="h-4 w-4 text-muted-foreground" />;
+      return <FileText className="h-4 w-4 text-fg-secondary" />;
   }
 }
 

@@ -26,10 +26,10 @@ export function ResourceCard({ resource, featured = false }: ResourceCardProps) 
               <Icon className="w-6 h-6 text-bitcoinOrange" />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:underline underline-offset-4">
+              <h3 className="text-lg font-semibold text-fg-primary mb-2 group-hover:underline underline-offset-4">
                 {resource.title}
               </h3>
-              <p className="text-muted-foreground mb-4 leading-relaxed">{resource.description}</p>
+              <p className="text-fg-secondary mb-4 leading-relaxed">{resource.description}</p>
               <Link
                 href={resource.href}
                 className="inline-flex items-center text-bitcoinOrange font-medium hover:underline underline-offset-4"
@@ -53,16 +53,14 @@ export function ResourceCard({ resource, featured = false }: ResourceCardProps) 
     <Card className="group oc-card-link duration-200">
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center group-hover:bg-bitcoinOrange/15 transition-colors">
-            <Icon className="w-5 h-5 text-muted-foreground group-hover:underline underline-offset-4" />
+          <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center group-hover:bg-bitcoinOrange/15 transition-colors">
+            <Icon className="w-5 h-5 text-fg-secondary group-hover:underline underline-offset-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-foreground mb-1 group-hover:underline underline-offset-4">
+            <h3 className="font-semibold text-fg-primary mb-1 group-hover:underline underline-offset-4">
               {resource.title}
             </h3>
-            <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-              {resource.description}
-            </p>
+            <p className="text-sm text-fg-secondary mb-3 leading-relaxed">{resource.description}</p>
             <Link
               href={resource.href}
               className="inline-flex items-center text-sm text-bitcoinOrange font-medium hover:underline underline-offset-4"

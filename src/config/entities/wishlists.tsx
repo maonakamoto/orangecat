@@ -47,7 +47,7 @@ export const wishlistEntityConfig: EntityConfig<WishlistListItem> = {
     showEditButton: true,
     editHref: `${ENTITY_REGISTRY['wishlist'].createPath}?edit=${item.id}`,
     metadata: (
-      <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+      <div className="flex flex-wrap gap-2 text-xs text-fg-secondary">
         <span>{item.visibility}</span>
         <span>{item.items_count || 0} items</span>
       </div>

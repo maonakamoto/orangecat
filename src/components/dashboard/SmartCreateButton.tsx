@@ -40,8 +40,8 @@ function generateCreateOptions(): CreateOption[] {
     description: 'Share an update on your timeline',
     href: '/timeline?compose=true',
     icon: MessageSquare,
-    color: 'text-foreground',
-    bgColor: 'bg-muted',
+    color: 'text-fg-primary',
+    bgColor: 'bg-surface-raised',
     category: 'content',
   };
 
@@ -125,10 +125,10 @@ export default function SmartCreateButton({
   const getButtonClassName = () => {
     if (shouldShowDraftPrompt) {
       return variant === 'outline'
-        ? 'border-border-strong text-foreground hover:bg-muted'
+        ? 'border-strong text-fg-primary hover:bg-surface-raised'
         : variant === 'ghost'
-          ? 'text-foreground hover:bg-muted'
-          : 'bg-foreground text-background hover:bg-foreground/90';
+          ? 'text-fg-primary hover:bg-surface-raised'
+          : 'bg-fg-primary text-fg-inverted hover:bg-fg-primary/90';
     }
     return '';
   };

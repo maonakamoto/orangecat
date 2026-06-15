@@ -67,7 +67,7 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
             <User className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="mb-0 text-xl font-semibold leading-tight text-foreground sm:text-2xl">
+            <h1 className="mb-0 text-xl font-semibold leading-tight text-fg-primary sm:text-2xl">
               Welcome back
               {profile &&
               (profile.name || profile.username) &&
@@ -75,7 +75,7 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
                 <>, {capitalizeName(profile.name || profile.username || '')}</>
               ) : null}
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-fg-secondary mt-1">
               {totalProjects > 0
                 ? `${totalProjects} project${totalProjects !== 1 ? 's' : ''}${totalDrafts > 0 ? ` • ${totalDrafts} draft${totalDrafts !== 1 ? 's' : ''}` : ''}`
                 : "Let's get started"}
@@ -89,14 +89,14 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
             // — header used to have no action affordance on <sm because of
             // a `hidden sm:flex` that wasted the founder's primary viewport.
             <Link href={ROUTES.DASHBOARD.CAT}>
-              <div className="flex items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-sm font-medium text-background transition-colors hover:bg-muted-strong">
+              <div className="flex items-center gap-1.5 rounded-md bg-fg-primary px-3 py-1.5 text-sm font-medium text-fg-inverted transition-colors hover:bg-muted-strong">
                 <Sparkles className="h-4 w-4" />
                 Ask Cat
               </div>
             </Link>
           )}
           {profileCategory && (
-            <div className="hidden md:flex items-center gap-1.5 rounded-md border border-border-subtle px-3 py-1.5 text-sm font-medium text-muted-foreground">
+            <div className="hidden md:flex items-center gap-1.5 rounded-md border border-subtle px-3 py-1.5 text-sm font-medium text-fg-secondary">
               {(() => {
                 const profileType = (profile?.profile_type ||
                   'individual') as keyof typeof PROFILE_TYPE_ICONS;

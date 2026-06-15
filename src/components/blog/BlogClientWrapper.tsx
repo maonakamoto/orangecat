@@ -50,8 +50,8 @@ export default function BlogClientWrapper({
         </div>
       ) : (
         <div className="text-center py-16">
-          <h3 className="text-lg font-semibold text-foreground mb-4">No posts found</h3>
-          <p className="text-base text-muted-foreground mb-8">
+          <h3 className="text-lg font-semibold text-fg-primary mb-4">No posts found</h3>
+          <p className="text-base text-fg-secondary mb-8">
             {selectedTag || selectedTimeFilter !== 'all'
               ? 'Try adjusting your filters or clear them to see all posts.'
               : 'We have more great content in development. Check back soon for our latest insights and updates.'}
@@ -67,7 +67,7 @@ export default function BlogClientWrapper({
       <div className="mt-16">
         <Card className="p-8 text-center">
           <h2 className="text-2xl font-semibold mb-4">Stay Updated</h2>
-          <p className="text-base text-muted-foreground mb-6">
+          <p className="text-base text-fg-secondary mb-6">
             Subscribe to our newsletter for the latest updates and insights about Bitcoin funding
           </p>
           <div className="max-w-md mx-auto">
@@ -75,7 +75,7 @@ export default function BlogClientWrapper({
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-2 border border-border-strong bg-card text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                className="flex-1 px-4 py-2 border border-strong bg-surface-base text-fg-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
               />
               <Button variant="primary" size="sm">
                 Subscribe

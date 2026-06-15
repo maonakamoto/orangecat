@@ -110,7 +110,7 @@ export const RESEARCH_FIELD_COLORS: Record<ResearchField, string> = {
   social_science: 'bg-violet-100 text-violet-800',
   artificial_intelligence: 'bg-pink-100 text-pink-800',
   blockchain_cryptography: 'bg-yellow-100 text-yellow-800',
-  other: 'bg-muted text-foreground',
+  other: 'bg-surface-raised text-fg-primary',
 };
 
 // DB constraint: CHECK (status IN ('draft', 'active', 'completed', 'paused', 'cancelled'))

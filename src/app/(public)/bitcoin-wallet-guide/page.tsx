@@ -21,12 +21,12 @@ export default function BitcoinWalletGuidePage() {
   return (
     <div className="min-h-screen bg-surface-page">
       {/* Header */}
-      <div className="bg-card border-b border-border-subtle">
+      <div className="bg-surface-base border-b border-subtle">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link
               href="/"
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-2 text-fg-secondary hover:text-fg-primary transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               Back to OrangeCat
@@ -47,21 +47,21 @@ export default function BitcoinWalletGuidePage() {
           <div className="inline-flex items-center gap-3 p-4 rounded-lg mb-6 bg-bitcoinOrange/10 text-bitcoinOrange border border-bitcoinOrange/20">
             <Bitcoin className="w-12 h-12" />
             <div className="text-left">
-              <h1 className="font-heading tracking-display text-3xl md:text-4xl font-bold text-foreground">
+              <h1 className="font-heading tracking-display text-3xl md:text-4xl font-bold text-fg-primary">
                 Get Your Bitcoin Wallet
               </h1>
-              <p className="text-lg text-muted-foreground mt-2">
+              <p className="text-lg text-fg-secondary mt-2">
                 Start receiving Bitcoin funding on OrangeCat
               </p>
             </div>
           </div>
 
-          <div className="bg-muted/40 border border-border-subtle rounded-lg p-4 max-w-3xl mx-auto">
+          <div className="bg-surface-raised/40 border border-subtle rounded-lg p-4 max-w-3xl mx-auto">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-fg-secondary mt-0.5 flex-shrink-0" />
               <div className="text-left">
-                <h3 className="font-semibold text-foreground mb-1">New to Bitcoin?</h3>
-                <p className="text-muted-foreground text-sm">
+                <h3 className="font-semibold text-fg-primary mb-1">New to Bitcoin?</h3>
+                <p className="text-fg-secondary text-sm">
                   A Bitcoin wallet is like a digital bank account that lets you receive, store, and
                   send Bitcoin. You control your wallet completely - no bank or company can freeze
                   your funds.
@@ -76,7 +76,7 @@ export default function BitcoinWalletGuidePage() {
         {/* Wallet picker + detail */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-semibold text-foreground mb-6">Choose Your Wallet</h2>
+            <h2 className="text-2xl font-semibold text-fg-primary mb-6">Choose Your Wallet</h2>
             <div className="space-y-4">
               {walletOptions.map(wallet => (
                 <WalletCard

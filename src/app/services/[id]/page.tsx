@@ -42,13 +42,13 @@ const config: EntityDetailConfig = {
         <CardContent className="space-y-4">
           {typeof priceBtc === 'number' && priceBtc > 0 && (
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Price</span>
-              <span className="text-xl font-bold text-foreground">{displayBTC(priceBtc)}</span>
+              <span className="text-fg-secondary">Price</span>
+              <span className="text-xl font-bold text-fg-primary">{displayBTC(priceBtc)}</span>
             </div>
           )}
           {durationMinutes && (
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Duration</span>
+              <span className="text-fg-secondary">Duration</span>
               <span className="font-medium">{durationMinutes} minutes</span>
             </div>
           )}

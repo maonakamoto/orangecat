@@ -82,14 +82,14 @@ export function WalletForm({
   const selectedCategory = WALLET_CATEGORIES[formData.category];
 
   return (
-    <div className="border dark:border-border rounded-lg p-4 bg-muted">
-      <h4 className="font-semibold dark:text-foreground mb-4">{submitLabel}</h4>
+    <div className="border dark:border-default rounded-lg p-4 bg-surface-raised">
+      <h4 className="font-semibold dark:text-fg-primary mb-4">{submitLabel}</h4>
 
       {error && <div className="oc-error-surface mb-4 px-4 py-2">{error}</div>}
 
       {/* Category selection */}
       <div className="mb-4">
-        <label className="block text-sm font-medium dark:text-foreground mb-2">Category</label>
+        <label className="block text-sm font-medium dark:text-fg-primary mb-2">Category</label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {(Object.keys(WALLET_CATEGORIES) as WalletCategory[]).map(cat => {
             const catInfo = WALLET_CATEGORIES[cat];
@@ -104,21 +104,21 @@ export function WalletForm({
                 className={`p-3 border rounded-lg text-left transition-colors ${
                   formData.category === cat
                     ? 'border-bitcoinOrange bg-bitcoinOrange/5'
-                    : 'border-border-strong hover:border-border-strong'
+                    : 'border-strong hover:border-strong'
                 }`}
               >
                 <div className="text-2xl mb-1">{catInfo.icon}</div>
-                <div className="text-sm font-medium dark:text-foreground">{catInfo.label}</div>
+                <div className="text-sm font-medium dark:text-fg-primary">{catInfo.label}</div>
               </button>
             );
           })}
         </div>
-        <p className="text-xs text-muted-foreground mt-2">{selectedCategory.description}</p>
+        <p className="text-xs text-fg-secondary mt-2">{selectedCategory.description}</p>
       </div>
 
       {/* Label */}
       <div className="mb-4">
-        <label className="block text-sm font-medium dark:text-foreground mb-2">Wallet Name *</label>
+        <label className="block text-sm font-medium dark:text-fg-primary mb-2">Wallet Name *</label>
         <Input
           value={formData.label}
           onChange={e => setFormData({ ...formData, label: e.target.value })}
@@ -130,7 +130,7 @@ export function WalletForm({
 
       {/* Description */}
       <div className="mb-4">
-        <label className="block text-sm font-medium dark:text-foreground mb-2">
+        <label className="block text-sm font-medium dark:text-fg-primary mb-2">
           Description (optional)
         </label>
         <Textarea
@@ -144,9 +144,9 @@ export function WalletForm({
 
       {/* Address or xpub */}
       <div className="mb-4">
-        <label className="block text-sm font-medium dark:text-foreground mb-2">
+        <label className="block text-sm font-medium dark:text-fg-primary mb-2">
           Bitcoin Address or Extended Public Key
-          <span className="ml-2 text-xs font-normal text-muted-foreground">
+          <span className="ml-2 text-xs font-normal text-fg-secondary">
             (optional if Lightning address provided)
           </span>
         </label>
@@ -157,7 +157,7 @@ export function WalletForm({
           placeholder="zpub... (recommended) or bc1q..."
           required
         />
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="text-xs text-fg-secondary mt-1">
           Extended public keys (xpub/ypub/zpub) automatically track all addresses and transactions.
           Single addresses work but only track that one address.
         </p>
@@ -165,7 +165,7 @@ export function WalletForm({
 
       {/* Lightning Address */}
       <div className="mb-4">
-        <label className="block text-sm font-medium dark:text-foreground mb-2">
+        <label className="block text-sm font-medium dark:text-fg-primary mb-2">
           Lightning Address (optional)
         </label>
         <Input
@@ -174,14 +174,14 @@ export function WalletForm({
           onFocus={() => onFieldFocus?.('label')}
           placeholder="you@getalby.com"
         />
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="text-xs text-fg-secondary mt-1">
           Lightning address for instant, low-fee payments (e.g., you@getalby.com)
         </p>
       </div>
 
       {/* Goal (optional) */}
       <div className="mb-4">
-        <label className="block text-sm font-medium dark:text-foreground mb-2">
+        <label className="block text-sm font-medium dark:text-fg-primary mb-2">
           Funding Goal (optional)
         </label>
         <div className="flex gap-2">
@@ -219,11 +219,11 @@ export function WalletForm({
               type="checkbox"
               checked={formData.is_primary || false}
               onChange={e => setFormData({ ...formData, is_primary: e.target.checked })}
-              className="w-4 h-4 text-bitcoinOrange border-border-strong rounded focus:ring-ring"
+              className="w-4 h-4 text-bitcoinOrange border-strong rounded focus:ring-ring"
             />
             <span className="text-sm font-medium">Set as primary wallet</span>
           </label>
-          <p className="text-xs text-muted-foreground mt-1 ml-6">
+          <p className="text-xs text-fg-secondary mt-1 ml-6">
             The primary wallet is displayed prominently on your profile. Only one wallet can be
             primary at a time.
           </p>

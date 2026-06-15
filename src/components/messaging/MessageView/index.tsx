@@ -45,7 +45,7 @@ export default function MessageView({ conversationId, onBack }: MessageViewProps
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-dim" />
+        <Loader2 className="h-8 w-8 animate-spin text-fg-tertiary" />
       </div>
     );
   }
@@ -54,14 +54,14 @@ export default function MessageView({ conversationId, onBack }: MessageViewProps
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <h3 className="text-lg font-semibold text-foreground mb-2">
+          <h3 className="text-lg font-semibold text-fg-primary mb-2">
             {error === 'forbidden'
               ? 'Access Denied'
               : error === 'not_found'
                 ? 'Conversation Not Found'
                 : 'Error Loading Messages'}
           </h3>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-fg-secondary mb-4">
             {error === 'forbidden'
               ? "You don't have access to this conversation"
               : error === 'not_found'
@@ -78,16 +78,16 @@ export default function MessageView({ conversationId, onBack }: MessageViewProps
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <MessageSquare className="h-12 w-12 text-muted-dim mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-foreground mb-2">No conversation selected</h3>
-          <p className="text-muted-foreground">Select a conversation to start messaging</p>
+          <MessageSquare className="h-12 w-12 text-fg-tertiary mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-fg-primary mb-2">No conversation selected</h3>
+          <p className="text-fg-secondary">Select a conversation to start messaging</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full bg-card">
+    <div className="flex flex-col h-full bg-surface-base">
       <MessageHeader
         conversation={conversation}
         currentUserId={currentUserId}

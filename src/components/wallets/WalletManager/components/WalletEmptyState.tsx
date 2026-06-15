@@ -16,10 +16,10 @@ interface WalletEmptyStateProps {
 export function WalletEmptyState({ isOwner, onAddClick }: WalletEmptyStateProps) {
   return (
     <>
-      <div className="text-center py-12 border-2 border-dashed border-border-strong rounded-lg bg-muted/40/50 dark:bg-muted/50">
-        <WalletIcon className="w-16 h-16 text-muted-dim mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-foreground mb-2">No wallets yet</h3>
-        <p className="text-muted-foreground mb-4 max-w-md mx-auto">
+      <div className="text-center py-12 border-2 border-dashed border-strong rounded-lg bg-surface-raised/40/50 dark:bg-surface-raised/50">
+        <WalletIcon className="w-16 h-16 text-fg-tertiary mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-fg-primary mb-2">No wallets yet</h3>
+        <p className="text-fg-secondary mb-4 max-w-md mx-auto">
           Add your first Bitcoin wallet to start receiving support.
         </p>
         {isOwner && (
@@ -32,7 +32,7 @@ export function WalletEmptyState({ isOwner, onAddClick }: WalletEmptyStateProps)
         <div className="text-center">
           <Link
             href={ROUTES.WALLETS}
-            className="text-sm text-muted-foreground hover:text-bitcoinOrange dark:hover:text-foreground transition-colors inline-flex items-center gap-1"
+            className="text-sm text-fg-secondary hover:text-bitcoinOrange dark:hover:text-fg-primary transition-colors inline-flex items-center gap-1"
           >
             I don't have a wallet yet
             <ExternalLink className="w-4 h-4" />

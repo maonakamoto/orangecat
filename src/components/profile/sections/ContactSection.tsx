@@ -34,10 +34,10 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
   return (
     <div className="oc-surface space-y-4 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
-        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-fg-primary uppercase tracking-wide">
           {PROFILE_SECTIONS.CONTACT}
         </h3>
-        <p className="mt-1 text-xs text-muted-foreground">{PROFILE_SECTION_DESCRIPTIONS.CONTACT}</p>
+        <p className="mt-1 text-xs text-fg-secondary">{PROFILE_SECTION_DESCRIPTIONS.CONTACT}</p>
       </div>
 
       {/* Contact Email */}
@@ -46,7 +46,7 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
         name="contact_email"
         render={({ field }) => (
           <FormItem id="contactEmail">
-            <FormLabel className="text-sm font-medium text-foreground">
+            <FormLabel className="text-sm font-medium text-fg-primary">
               Contact Email (public)
             </FormLabel>
             <FormControl>
@@ -58,7 +58,7 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
                 onFocus={() => onFieldFocus?.('contactEmail')}
               />
             </FormControl>
-            <FormDescription className="text-xs text-muted-foreground">
+            <FormDescription className="text-xs text-fg-secondary">
               Visible on your public profile. Defaults to your registration email.
             </FormDescription>
             <FormMessage />
@@ -68,15 +68,15 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
 
       {/* Registration Email (read-only) */}
       {userEmail && (
-        <div className="p-3 bg-muted rounded-lg border border-border-subtle">
+        <div className="p-3 bg-surface-raised rounded-lg border border-subtle">
           <div className="flex items-center gap-2 mb-1">
-            <Mail className="w-4 h-4 text-muted-dim" />
-            <span className="text-xs font-medium text-muted-foreground">
+            <Mail className="w-4 h-4 text-fg-tertiary" />
+            <span className="text-xs font-medium text-fg-secondary">
               Registration Email (private)
             </span>
           </div>
-          <p className="text-sm text-foreground">{userEmail}</p>
-          <p className="text-xs text-muted-foreground mt-1">Used for account login only</p>
+          <p className="text-sm text-fg-primary">{userEmail}</p>
+          <p className="text-xs text-fg-secondary mt-1">Used for account login only</p>
         </div>
       )}
 
@@ -86,7 +86,7 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
         name="phone"
         render={({ field }) => (
           <FormItem id="phone">
-            <FormLabel className="text-sm font-medium text-foreground">Phone (optional)</FormLabel>
+            <FormLabel className="text-sm font-medium text-fg-primary">Phone (optional)</FormLabel>
             <FormControl>
               <Input
                 type="tel"
@@ -96,7 +96,7 @@ export function ContactSection({ control, onFieldFocus, userEmail }: ContactSect
                 onFocus={() => onFieldFocus?.('phone')}
               />
             </FormControl>
-            <FormDescription className="text-xs text-muted-foreground">
+            <FormDescription className="text-xs text-fg-secondary">
               Helps supporters contact you
             </FormDescription>
             <FormMessage />

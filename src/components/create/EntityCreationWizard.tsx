@@ -99,15 +99,15 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
         <div className="flex flex-wrap items-center gap-3 mb-1">
           <button
             onClick={handleCancel}
-            className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors shrink-0"
+            className="inline-flex items-center text-fg-secondary hover:text-fg-primary transition-colors shrink-0"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             Cancel
           </button>
-          <h1 className="text-xl sm:text-2xl font-bold text-foreground">{config.pageTitle}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-fg-primary">{config.pageTitle}</h1>
           <ActorSelector value={actorId} onChange={setActorId} className="ml-auto" />
         </div>
-        <p className="text-sm text-muted-foreground ml-12">{config.pageDescription}</p>
+        <p className="text-sm text-fg-secondary ml-12">{config.pageDescription}</p>
       </div>
 
       <WizardProgressBar
@@ -135,7 +135,7 @@ export function EntityCreationWizard<T extends Record<string, unknown>>({
             <Card className="mb-6">
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  {isTemplateStep && <Sparkles className="h-6 w-6 text-foreground" />}
+                  {isTemplateStep && <Sparkles className="h-6 w-6 text-fg-primary" />}
                   <div>
                     <CardTitle>{currentStepConfig.title}</CardTitle>
                     <CardDescription>{currentStepConfig.description}</CardDescription>

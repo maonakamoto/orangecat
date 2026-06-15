@@ -39,12 +39,10 @@ export function PreferencesSection({ control, onFieldFocus }: PreferencesSection
   return (
     <div className="oc-surface space-y-4 px-4 py-5 sm:px-5 sm:py-6">
       <div className="mb-1">
-        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+        <h3 className="text-sm font-semibold text-fg-primary uppercase tracking-wide">
           {PROFILE_SECTIONS.PREFERENCES}
         </h3>
-        <p className="mt-1 text-xs text-muted-foreground">
-          {PROFILE_SECTION_DESCRIPTIONS.PREFERENCES}
-        </p>
+        <p className="mt-1 text-xs text-fg-secondary">{PROFILE_SECTION_DESCRIPTIONS.PREFERENCES}</p>
       </div>
 
       {/* Currency Preference */}
@@ -53,7 +51,7 @@ export function PreferencesSection({ control, onFieldFocus }: PreferencesSection
         name="currency"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-foreground">Default Currency</FormLabel>
+            <FormLabel className="text-sm font-medium text-fg-primary">Default Currency</FormLabel>
             <Select onValueChange={field.onChange} value={field.value || PLATFORM_DEFAULT_CURRENCY}>
               <FormControl>
                 <SelectTrigger
@@ -71,7 +69,7 @@ export function PreferencesSection({ control, onFieldFocus }: PreferencesSection
                 ))}
               </SelectContent>
             </Select>
-            <FormDescription className="text-xs text-muted-foreground">
+            <FormDescription className="text-xs text-fg-secondary">
               Prices and amounts will be displayed in this currency. All transactions are settled in
               Bitcoin.
             </FormDescription>

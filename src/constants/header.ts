@@ -56,10 +56,10 @@ export const TOUCH_TARGETS = {
  */
 export const HEADER_BUTTON_BASE = {
   /** Base button classes */
-  BASE: 'flex-shrink-0 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors touch-manipulation relative',
+  BASE: 'flex-shrink-0 flex items-center justify-center text-fg-secondary hover:text-fg-primary hover:bg-surface-raised rounded-lg transition-colors touch-manipulation relative',
   /** Mobile search button specific */
   MOBILE_SEARCH:
-    'md:hidden text-muted-strong hover:bg-muted/40 active:bg-muted border border-border hover:border-border-strong shadow-sm',
+    'md:hidden text-fg-primary hover:bg-surface-raised/40 active:bg-surface-raised border border-default hover:border-strong shadow-sm',
 } as const;
 
 /**
@@ -72,8 +72,8 @@ export const MOBILE_MENU = {
   MAX_WIDTH: 'max-w-[85vw] sm:max-w-sm',
   /** Position */
   POSITION: 'fixed top-16 bottom-0 left-0',
-  // eslint-disable-next-line no-restricted-syntax -- mobile menu uses gray-900 dark; bg-card (3.9%) and bg-muted (11%) diverge visually from the intended shade
-  BACKGROUND: 'bg-card dark:bg-background',
+  // eslint-disable-next-line no-restricted-syntax -- mobile menu uses gray-900 dark; bg-surface-base (3.9%) and bg-surface-raised (11%) diverge visually from the intended shade
+  BACKGROUND: 'bg-surface-base dark:bg-surface-page',
   /** Shadow */
   SHADOW: 'shadow-sm',
   /** Overflow */

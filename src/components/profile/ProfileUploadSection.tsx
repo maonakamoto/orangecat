@@ -140,10 +140,13 @@ export function ProfileUploadSection({
               alt="Profile avatar"
               width={128}
               height={128}
-              className="rounded-lg object-cover border-4 border-card shadow-sm"
+              className="rounded-lg object-cover border-4 border-fg-inverted shadow-sm"
             />
           ) : (
-            <DefaultAvatar size={128} className="rounded-lg border-4 border-card shadow-sm" />
+            <DefaultAvatar
+              size={128}
+              className="rounded-lg border-4 border-fg-inverted shadow-sm"
+            />
           )}
 
           {/* Avatar Upload Button */}

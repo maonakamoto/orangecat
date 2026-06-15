@@ -65,9 +65,9 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
       case STATUS.GROUP_MEMBERS.FOUNDER:
         return <Crown className="h-4 w-4 text-status-warning" />;
       case STATUS.GROUP_MEMBERS.ADMIN:
-        return <Shield className="h-4 w-4 text-foreground" />;
+        return <Shield className="h-4 w-4 text-fg-primary" />;
       default:
-        return <User className="h-4 w-4 text-muted-foreground" />;
+        return <User className="h-4 w-4 text-fg-secondary" />;
     }
   };
 
@@ -107,16 +107,16 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
         </CardHeader>
         <CardContent>
           {members.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No members yet</div>
+            <div className="text-center py-8 text-fg-secondary">No members yet</div>
           ) : (
             <div className="space-y-3">
               {members.map(member => (
                 <div
                   key={member.id}
-                  className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/40 dark:hover:bg-gray-800 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border hover:bg-surface-raised/40 dark:hover:bg-gray-800 transition-colors"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="h-10 w-10 rounded-full flex items-center justify-center bg-muted text-fg-secondary border-2 border-border-strong">
+                    <div className="h-10 w-10 rounded-full flex items-center justify-center bg-surface-raised text-fg-secondary border-2 border-strong">
                       {getInitial(member.display_name || member.username)}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -126,7 +126,7 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
                         </p>
                         {getRoleIcon(member.role)}
                       </div>
-                      <p className="text-sm text-muted-foreground truncate">
+                      <p className="text-sm text-fg-secondary truncate">
                         @{member.username || 'user'}
                       </p>
                     </div>

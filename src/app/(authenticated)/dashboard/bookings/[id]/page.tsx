@@ -107,7 +107,7 @@ export default function BookingDetailPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-fg-secondary" />
       </div>
     );
   }
@@ -140,7 +140,7 @@ export default function BookingDetailPage() {
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <h1 className="text-2xl font-bold text-foreground">{serviceTitle}</h1>
+        <h1 className="text-2xl font-bold text-fg-primary">{serviceTitle}</h1>
         <span
           className={cn(
             'px-2 py-1 text-xs font-medium rounded-full',
@@ -159,7 +159,7 @@ export default function BookingDetailPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="font-medium text-foreground">{partyName}</p>
+          <p className="font-medium text-fg-primary">{partyName}</p>
         </CardContent>
       </Card>
 
@@ -169,17 +169,17 @@ export default function BookingDetailPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-center gap-2 text-sm">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="h-4 w-4 text-fg-secondary" />
             <span>{formatDate(booking.starts_at)}</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <Clock className="h-4 w-4 text-fg-secondary" />
             <span>
               {formatTime(booking.starts_at)} – {formatTime(booking.ends_at)}
               {booking.duration_minutes ? ` (${booking.duration_minutes} min)` : ''}
             </span>
           </div>
-          {booking.timezone && <p className="text-xs text-muted-foreground">{booking.timezone}</p>}
+          {booking.timezone && <p className="text-xs text-fg-secondary">{booking.timezone}</p>}
         </CardContent>
       </Card>
 
@@ -189,12 +189,12 @@ export default function BookingDetailPage() {
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Total</span>
+            <span className="text-fg-secondary">Total</span>
             <span className="font-medium">{formatAmountBtc(booking.price_btc)}</span>
           </div>
           {booking.deposit_btc > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Deposit</span>
+              <span className="text-fg-secondary">Deposit</span>
               <span>
                 {formatAmountBtc(booking.deposit_btc)}{' '}
                 {booking.deposit_paid ? (
@@ -207,7 +207,7 @@ export default function BookingDetailPage() {
           )}
           {booking.total_paid_btc > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Paid</span>
+              <span className="text-fg-secondary">Paid</span>
               <span className="text-status-positive font-medium">
                 {formatAmountBtc(booking.total_paid_btc)}
               </span>
@@ -224,19 +224,19 @@ export default function BookingDetailPage() {
           <CardContent className="space-y-3">
             {booking.customer_notes && (
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Customer note</p>
+                <p className="text-xs text-fg-secondary mb-1">Customer note</p>
                 <p className="text-sm">{booking.customer_notes}</p>
               </div>
             )}
             {booking.provider_notes && (
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Provider note</p>
+                <p className="text-xs text-fg-secondary mb-1">Provider note</p>
                 <p className="text-sm">{booking.provider_notes}</p>
               </div>
             )}
             {booking.cancellation_reason && (
               <div>
-                <p className="text-xs text-muted-foreground mb-1">
+                <p className="text-xs text-fg-secondary mb-1">
                   {booking.status === STATUS.BOOKINGS.REJECTED ? 'Rejection' : 'Cancellation'}{' '}
                   reason
                 </p>

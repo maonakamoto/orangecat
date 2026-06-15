@@ -89,15 +89,15 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
   };
 
   return (
-    <div className="mt-3 rounded-md border border-border-subtle bg-muted/30 p-4">
+    <div className="mt-3 rounded-md border border-subtle bg-surface-raised/30 p-4">
       <div className="mb-3 flex items-center gap-2">
-        <Sparkles className="h-4 w-4 text-foreground" />
-        <span className="text-sm font-semibold text-foreground">
+        <Sparkles className="h-4 w-4 text-fg-primary" />
+        <span className="text-sm font-semibold text-fg-primary">
           Drafted a {meta.name.toLowerCase()}
         </span>
       </div>
       {sourceDescription && (
-        <p className="mb-3 text-xs italic text-muted-foreground">
+        <p className="mb-3 text-xs italic text-fg-secondary">
           From: &ldquo;
           {sourceDescription.length > 180
             ? sourceDescription.slice(0, 180) + '…'
@@ -108,21 +108,21 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
       <dl className="space-y-1.5 text-sm">
         {populatedFields.slice(0, 8).map(([key, value]) => (
           <div key={key} className="flex gap-2">
-            <dt className="w-32 flex-shrink-0 text-xs uppercase tracking-wide text-muted-dim">
+            <dt className="w-32 flex-shrink-0 text-xs uppercase tracking-wide text-fg-tertiary">
               {PREVIEW_LABELS[key] ?? key.replace(/_/g, ' ')}
             </dt>
-            <dd className="flex-1 text-foreground">{formatValue(key, value)}</dd>
+            <dd className="flex-1 text-fg-primary">{formatValue(key, value)}</dd>
           </div>
         ))}
         {populatedFields.length > 8 && (
-          <p className="text-xs text-muted-dim">+ {populatedFields.length - 8} more fields</p>
+          <p className="text-xs text-fg-tertiary">+ {populatedFields.length - 8} more fields</p>
         )}
       </dl>
       <div className="mt-4 flex flex-wrap gap-2">
         <button
           type="button"
           onClick={handleOpenInForm}
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-md bg-fg-primary px-4 py-2 text-sm font-medium text-fg-inverted transition-colors hover:bg-fg-primary/90"
         >
           Open in form
           <ArrowRight className="h-4 w-4" />

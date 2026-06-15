@@ -47,34 +47,34 @@ export default function ProjectSelectionModal({
       closeOnOverlayClick={true}
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border-subtle px-4 py-3">
+      <div className="flex items-center justify-between border-b border-subtle px-4 py-3">
         <button onClick={onClose} className={TIMELINE_SURFACE.iconButton} aria-label="Close">
-          <ArrowLeft className="w-5 h-5 text-foreground" />
+          <ArrowLeft className="w-5 h-5 text-fg-primary" />
         </button>
-        <h2 className="text-lg font-semibold text-foreground">Crosspost to projects</h2>
+        <h2 className="text-lg font-semibold text-fg-primary">Crosspost to projects</h2>
         <div className="w-9" /> {/* Spacer for centering */}
       </div>
 
       {/* Content */}
       <div className="overflow-y-auto max-h-[calc(100dvh-60px)]">
         {/* Everyone option (default - always selected) */}
-        <div className="px-4 py-4 border-b border-border">
+        <div className="px-4 py-4 border-b border-default">
           <button
             className="flex items-center justify-between w-full min-h-11"
             disabled
             aria-label="Everyone (default)"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-foreground">
+              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-fg-primary">
                 <Users className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
-                <div className="text-base font-semibold text-foreground">Everyone</div>
-                <div className="text-sm text-muted-foreground">Post to your timeline</div>
+                <div className="text-base font-semibold text-fg-primary">Everyone</div>
+                <div className="text-sm text-fg-secondary">Post to your timeline</div>
               </div>
             </div>
-            <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-foreground">
-              <Check className="w-4 h-4 text-background" />
+            <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-fg-primary">
+              <Check className="w-4 h-4 text-fg-inverted" />
             </div>
           </button>
         </div>
@@ -82,7 +82,7 @@ export default function ProjectSelectionModal({
         {/* My Projects section */}
         {projects.length > 0 && (
           <div className="px-4 py-3">
-            <h3 className="text-sm font-semibold text-foreground mb-3">My Projects</h3>
+            <h3 className="text-sm font-semibold text-fg-primary mb-3">My Projects</h3>
             <div className="space-y-1">
               {projects.map(project => {
                 const isSelected = selectedProjects.includes(project.id);
@@ -92,8 +92,8 @@ export default function ProjectSelectionModal({
                     onClick={() => onToggleProject(project.id)}
                     className={cn(
                       'flex min-h-[60px] w-full items-center justify-between rounded-md px-3 py-3 transition-colors',
-                      'hover:bg-muted active:bg-muted dark:active:bg-muted',
-                      isSelected && 'bg-muted'
+                      'hover:bg-surface-raised active:bg-surface-raised dark:active:bg-surface-raised',
+                      isSelected && 'bg-surface-raised'
                     )}
                     aria-label={`${isSelected ? 'Deselect' : 'Select'} ${project.title}`}
                   >
@@ -110,8 +110,8 @@ export default function ProjectSelectionModal({
                           />
                         </div>
                       ) : (
-                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-muted">
-                          <span className="text-sm font-semibold text-foreground">
+                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-surface-raised">
+                          <span className="text-sm font-semibold text-fg-primary">
                             {project.title[0]?.toUpperCase() || 'P'}
                           </span>
                         </div>
@@ -119,11 +119,11 @@ export default function ProjectSelectionModal({
 
                       {/* Project info */}
                       <div className="flex-1 min-w-0 text-left">
-                        <div className="text-base font-semibold text-foreground truncate">
+                        <div className="text-base font-semibold text-fg-primary truncate">
                           {project.title}
                         </div>
                         {project.contributor_count !== undefined && (
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-sm text-fg-secondary">
                             {project.contributor_count.toLocaleString()} supporter
                             {project.contributor_count !== 1 ? 's' : ''}
                           </div>
@@ -136,11 +136,11 @@ export default function ProjectSelectionModal({
                       className={cn(
                         'ml-3 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-sm border',
                         isSelected
-                          ? 'border-foreground bg-foreground'
-                          : 'border-border-strong bg-background'
+                          ? 'border-fg-primary bg-fg-primary'
+                          : 'border-strong bg-surface-page'
                       )}
                     >
-                      {isSelected && <Check className="w-4 h-4 text-background" />}
+                      {isSelected && <Check className="w-4 h-4 text-fg-inverted" />}
                     </div>
                   </button>
                 );
@@ -152,8 +152,8 @@ export default function ProjectSelectionModal({
         {/* Empty state */}
         {!loading && projects.length === 0 && (
           <div className="px-4 py-12 text-center">
-            <div className="text-muted-foreground text-sm">No projects available</div>
-            <div className="text-muted-dim text-xs mt-1">
+            <div className="text-fg-secondary text-sm">No projects available</div>
+            <div className="text-fg-tertiary text-xs mt-1">
               Create a project to crosspost your updates
             </div>
           </div>
@@ -162,7 +162,7 @@ export default function ProjectSelectionModal({
         {/* Loading state */}
         {loading && (
           <div className="px-4 py-12 text-center">
-            <div className="text-muted-foreground text-sm">{TIMELINE_COPY.loadingProjects}</div>
+            <div className="text-fg-secondary text-sm">{TIMELINE_COPY.loadingProjects}</div>
           </div>
         )}
       </div>

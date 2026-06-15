@@ -50,15 +50,15 @@ const config: EntityDetailConfig = {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-fg-secondary">
                   {displayBTC(fundingRaised)} raised
                 </span>
-                <span className="font-bold text-lg text-foreground">
+                <span className="font-bold text-lg text-fg-primary">
                   {displayBTC(fundingGoal)} goal
                 </span>
               </div>
               <Progress value={progress} className="h-2" />
-              <p className="text-sm text-muted-foreground">{progress}% funded</p>
+              <p className="text-sm text-fg-secondary">{progress}% funded</p>
             </CardContent>
           </Card>
         )}
@@ -71,7 +71,7 @@ const config: EntityDetailConfig = {
           <CardContent className="space-y-3">
             {entity.methodology && (
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Methodology</span>
+                <span className="text-fg-secondary">Methodology</span>
                 <span className="font-medium">
                   {METHODOLOGY_LABELS[entity.methodology] || entity.methodology}
                 </span>
@@ -79,7 +79,7 @@ const config: EntityDetailConfig = {
             )}
             {entity.timeline && (
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Timeline</span>
+                <span className="text-fg-secondary">Timeline</span>
                 <span className="font-medium">
                   {TIMELINE_LABELS[entity.timeline] || entity.timeline}
                 </span>
@@ -87,14 +87,14 @@ const config: EntityDetailConfig = {
             )}
             {entity.lead_researcher && (
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Lead Researcher</span>
+                <span className="text-fg-secondary">Lead Researcher</span>
                 <span className="font-medium">{entity.lead_researcher}</span>
               </div>
             )}
             {entity.expected_outcome && (
-              <div className="pt-2 border-t border-border-subtle">
-                <p className="text-sm text-muted-foreground mb-1">Expected Outcome</p>
-                <p className="text-sm text-muted-strong">{entity.expected_outcome}</p>
+              <div className="pt-2 border-t border-subtle">
+                <p className="text-sm text-fg-secondary mb-1">Expected Outcome</p>
+                <p className="text-sm text-fg-primary">{entity.expected_outcome}</p>
               </div>
             )}
           </CardContent>

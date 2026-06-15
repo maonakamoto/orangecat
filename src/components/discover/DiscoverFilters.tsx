@@ -10,19 +10,19 @@ import { SortViewControl, type ViewMode } from './SortViewControl';
 // Status styles mapping for Tailwind (dynamic classes don't work with string interpolation)
 const STATUS_STYLES = {
   active: {
-    selected: 'bg-muted border-border-strong text-foreground',
+    selected: 'bg-surface-raised border-strong text-fg-primary',
     label: 'Active',
   },
   paused: {
-    selected: 'bg-muted border-border-strong text-foreground',
+    selected: 'bg-surface-raised border-strong text-fg-primary',
     label: 'Paused',
   },
   completed: {
-    selected: 'bg-muted border-border-strong text-foreground',
+    selected: 'bg-surface-raised border-strong text-fg-primary',
     label: 'Completed',
   },
   cancelled: {
-    selected: 'bg-muted border-border-strong text-foreground',
+    selected: 'bg-surface-raised border-strong text-fg-primary',
     label: 'Cancelled',
   },
 } as const;
@@ -85,21 +85,21 @@ export default function DiscoverFilters({
   return (
     <>
       <div className="mb-6">
-        <label className="block text-sm font-medium text-foreground mb-2">Search</label>
+        <label className="block text-sm font-medium text-fg-primary mb-2">Search</label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-muted-dim" />
+            <Search className="h-4 w-4 text-fg-tertiary" />
           </div>
           <Input
             type="text"
             placeholder="Search projects..."
             value={searchTerm}
             onChange={e => onSearchChange(e.target.value)}
-            className="rounded-md border-border bg-card py-2 pl-10 pr-4 text-sm"
+            className="rounded-md border-default bg-surface-base py-2 pl-10 pr-4 text-sm"
           />
           {loading && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <Loader2 className="h-4 w-4 animate-spin text-muted-dim" />
+              <Loader2 className="h-4 w-4 animate-spin text-fg-tertiary" />
             </div>
           )}
         </div>
@@ -115,7 +115,7 @@ export default function DiscoverFilters({
 
       {showStatusFilter && (
         <div className="mb-6">
-          <label className="block text-sm font-medium text-foreground mb-2">Project Status</label>
+          <label className="block text-sm font-medium text-fg-primary mb-2">Project Status</label>
           <div className="flex flex-wrap gap-2">
             {(Object.keys(STATUS_STYLES) as StatusKey[]).map(statusKey => (
               <button
@@ -124,14 +124,14 @@ export default function DiscoverFilters({
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedStatuses.includes(statusKey)
                     ? STATUS_STYLES[statusKey].selected
-                    : 'border-border bg-card text-foreground hover:bg-muted/80'
+                    : 'border-default bg-surface-base text-fg-primary hover:bg-surface-raised/80'
                 }`}
               >
                 {STATUS_STYLES[statusKey].label}
               </button>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-xs text-fg-secondary mt-2">
             Draft projects are not shown in search results
           </p>
         </div>
@@ -139,7 +139,7 @@ export default function DiscoverFilters({
 
       {showCategoryFilter && (
         <div className="mb-6">
-          <label className="block text-sm font-medium text-foreground mb-2">Categories</label>
+          <label className="block text-sm font-medium text-fg-primary mb-2">Categories</label>
           <div className="flex flex-wrap gap-2">
             {simpleCategories.map(cat => (
               <button
@@ -147,8 +147,8 @@ export default function DiscoverFilters({
                 onClick={() => onToggleCategory(cat.value)}
                 className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
                   selectedCategories.includes(cat.value)
-                    ? 'bg-muted border-border-strong text-foreground'
-                    : 'border-border bg-card text-foreground hover:bg-muted/80'
+                    ? 'bg-surface-raised border-strong text-fg-primary'
+                    : 'border-default bg-surface-base text-fg-primary hover:bg-surface-raised/80'
                 }`}
               >
                 {cat.label}
@@ -159,29 +159,29 @@ export default function DiscoverFilters({
       )}
 
       <div className="space-y-3 mb-6">
-        <label className="block text-sm font-medium text-foreground">Location</label>
+        <label className="block text-sm font-medium text-fg-primary">Location</label>
         <input
           value={country}
           onChange={e => onCountryChange(e.target.value)}
           placeholder="Country"
-          className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
+          className="w-full rounded-md border border-default bg-surface-base px-3 py-2 text-sm text-fg-primary"
         />
         <input
           value={city}
           onChange={e => onCityChange(e.target.value)}
           placeholder="City/Region"
-          className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
+          className="w-full rounded-md border border-default bg-surface-base px-3 py-2 text-sm text-fg-primary"
         />
         <input
           value={postal}
           onChange={e => onPostalChange(e.target.value)}
           placeholder="Postal code"
-          className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
+          className="w-full rounded-md border border-default bg-surface-base px-3 py-2 text-sm text-fg-primary"
         />
         <select
           value={radiusKm}
           onChange={e => onRadiusChange(Number(e.target.value))}
-          className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground"
+          className="w-full rounded-md border border-default bg-surface-base px-3 py-2 text-sm text-fg-primary"
         >
           <option value={0}>Anywhere</option>
           <option value={10}>Within 10 km</option>
@@ -199,29 +199,29 @@ export default function DiscoverFilters({
           postal ||
           radiusKm ||
           sortBy !== 'recent') && (
-          <div className="mb-6 pb-6 border-b border-border">
-            <label className="block text-sm font-medium text-foreground mb-2">Active filters</label>
+          <div className="mb-6 pb-6 border-b border-default">
+            <label className="block text-sm font-medium text-fg-primary mb-2">Active filters</label>
             <div className="flex flex-wrap gap-2">
               {searchTerm && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-foreground">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-surface-raised text-fg-primary">
                   &quot;{searchTerm}&quot;
                 </span>
               )}
               {selectedCategories.map(cat => (
                 <span
                   key={cat}
-                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-foreground"
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-surface-raised text-fg-primary"
                 >
                   {cat}
                 </span>
               ))}
               {(country || city || postal) && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-foreground">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-surface-raised text-fg-primary">
                   {country || city || postal}
                 </span>
               )}
               {sortBy !== 'recent' && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-muted text-foreground">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-surface-raised text-fg-primary">
                   {sortBy}
                 </span>
               )}

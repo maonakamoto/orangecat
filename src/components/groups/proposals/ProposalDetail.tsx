@@ -153,7 +153,7 @@ export function ProposalDetail({
       <Card>
         <CardContent className="py-12">
           <div className="flex items-center justify-center">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-dim" />
+            <Loader2 className="h-6 w-6 animate-spin text-fg-tertiary" />
           </div>
         </CardContent>
       </Card>
@@ -164,7 +164,7 @@ export function ProposalDetail({
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <p className="text-muted-foreground">Proposal not found</p>
+          <p className="text-fg-secondary">Proposal not found</p>
           <Link href={`${ENTITY_REGISTRY['group'].publicBasePath}/${groupSlug}`}>
             <Button variant="outline" className="mt-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -206,7 +206,7 @@ export function ProposalDetail({
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Proposal Metadata */}
-          <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
+          <div className="grid grid-cols-2 gap-4 text-sm text-fg-secondary">
             {proposal.proposer && (
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -222,7 +222,7 @@ export function ProposalDetail({
             </div>
             {proposal.voting_ends_at && proposal.status === PROPOSAL_STATUSES.ACTIVE && (
               <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-foreground" />
+                <Clock className="h-4 w-4 text-fg-primary" />
                 <span>Voting ends {formatRelativeTime(proposal.voting_ends_at)}</span>
               </div>
             )}
@@ -235,7 +235,7 @@ export function ProposalDetail({
                 {activating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Activate Proposal
               </Button>
-              <p className="text-sm text-muted-foreground mt-2">
+              <p className="text-sm text-fg-secondary mt-2">
                 Activating will start the voting period. This cannot be undone.
               </p>
             </div>

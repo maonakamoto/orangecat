@@ -22,9 +22,9 @@ const DashboardTimeline = dynamic(
     loading: () => (
       <div className="oc-surface oc-surface-padding">
         <div className="animate-pulse space-y-4">
-          <div className="h-4 bg-muted rounded w-1/4"></div>
-          <div className="h-24 bg-muted rounded"></div>
-          <div className="h-24 bg-muted rounded"></div>
+          <div className="h-4 bg-surface-raised rounded w-1/4"></div>
+          <div className="h-24 bg-surface-raised rounded"></div>
+          <div className="h-24 bg-surface-raised rounded"></div>
         </div>
       </div>
     ),

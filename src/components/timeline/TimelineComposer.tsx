@@ -169,7 +169,7 @@ const TimelineComposer = React.memo(function TimelineComposer({
               'leading-relaxed break-words',
               'max-h-[60vh] overflow-y-auto',
               'empty:before:content-[attr(data-placeholder)]',
-              'empty:before:text-muted-dim dark:empty:before:text-muted-foreground',
+              'empty:before:text-fg-tertiary dark:empty:before:text-fg-secondary',
               'empty:before:pointer-events-none',
               postComposer.isPosting && 'opacity-50 cursor-not-allowed'
             )}
@@ -188,7 +188,7 @@ const TimelineComposer = React.memo(function TimelineComposer({
 
           <ComposerMessages error={postComposer.error} success={postComposer.postSuccess} />
 
-          <div className="mt-4 flex items-center justify-between border-t border-border-subtle pt-3">
+          <div className="mt-4 flex items-center justify-between border-t border-subtle pt-3">
             <div className="flex flex-wrap items-center gap-2">
               {!simpleMode && <TextFormatToolbar onFormat={handleFormat} />}
 

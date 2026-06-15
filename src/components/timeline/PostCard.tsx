@@ -106,7 +106,7 @@ export function PostCard({
         {isSimpleRepost && (
           <div
             className={cn(
-              'flex items-center gap-2 text-muted-foreground text-xs mb-1',
+              'flex items-center gap-2 text-fg-secondary text-xs mb-1',
               isSelectionMode ? 'ml-14' : 'ml-12'
             )}
           >
@@ -125,8 +125,8 @@ export function PostCard({
                 className={cn(
                   'flex h-5 w-5 items-center justify-center rounded-sm border transition-colors',
                   isSelected
-                    ? 'border-foreground bg-foreground text-background'
-                    : 'border-border-strong bg-background hover:border-foreground'
+                    ? 'border-fg-primary bg-fg-primary text-fg-inverted'
+                    : 'border-strong bg-surface-page hover:border-fg-primary'
                 )}
                 aria-label={isSelected ? 'Deselect post' : 'Select post'}
                 aria-checked={isSelected}
@@ -187,7 +187,7 @@ export function PostCard({
               )}
 
             {showReplyInput && user && (
-              <div className="mt-3 flex gap-3 pt-3 border-t border-border-subtle">
+              <div className="mt-3 flex gap-3 pt-3 border-t border-subtle">
                 <AvatarLink
                   username={profile?.username || null}
                   userId={user.id}
@@ -201,7 +201,7 @@ export function PostCard({
                     value={replyText}
                     onChange={e => setReplyText(e.target.value)}
                     placeholder="Post your reply"
-                    className="min-h-11 text-sm border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-muted-foreground"
+                    className="min-h-11 text-sm border-none bg-transparent p-0 focus:ring-0 resize-none placeholder:text-fg-secondary"
                     disabled={isReplying}
                     autoFocus
                   />

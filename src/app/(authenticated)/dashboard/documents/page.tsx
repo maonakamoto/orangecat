@@ -16,14 +16,14 @@ import { Cat } from 'lucide-react';
 
 function CatInfoBanner() {
   return (
-    <div className="mb-4 rounded-md border border-border-subtle bg-muted/30 p-4">
+    <div className="mb-4 rounded-md border border-subtle bg-surface-raised/30 p-4">
       <div className="flex items-start gap-3">
-        <div className="rounded-md border border-border-subtle bg-background p-2">
-          <Cat className="h-5 w-5 text-foreground" />
+        <div className="rounded-md border border-subtle bg-surface-page p-2">
+          <Cat className="h-5 w-5 text-fg-primary" />
         </div>
         <div>
-          <h3 className="font-medium text-foreground">Help your Cat understand you</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h3 className="font-medium text-fg-primary">Help your Cat understand you</h3>
+          <p className="mt-1 text-sm text-fg-secondary">
             Add documents about your goals, skills, financial situation, or business plans. Only
             documents marked <span className="font-medium">&ldquo;Cat Only&rdquo;</span> or{' '}
             <span className="font-medium">&ldquo;Public&rdquo;</span> are visible to your Cat.

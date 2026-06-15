@@ -29,7 +29,7 @@ const ENTITY_TYPES = ENTITY_TYPE_KEYS.filter(t => t !== 'wallet') // wallet is i
  * /docs — monochrome surfaces, single Bitcoin Orange accent on the
  * Lightning Network entry where it semantically marks Bitcoin. Every
  * other section icon tile flows through bg-surface-raised + fg-secondary;
- * info boxes use bg-muted/40. Migration 6/N.
+ * info boxes use bg-surface-raised/40. Migration 6/N.
  */
 export default function DocsPage() {
   return (
@@ -37,10 +37,10 @@ export default function DocsPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-14">
-          <h1 className="font-heading tracking-display text-4xl font-bold text-foreground mb-4">
+          <h1 className="font-heading tracking-display text-4xl font-bold text-fg-primary mb-4">
             Platform Documentation
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-fg-secondary max-w-2xl mx-auto">
             How OrangeCat works — the AI agent, entity system, payments, and security.
           </p>
         </div>
@@ -48,26 +48,26 @@ export default function DocsPage() {
         {/* The Cat */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+            <div className="p-2 rounded-lg bg-surface-raised border border-subtle">
               <Bot className="h-5 w-5 text-fg-secondary" />
             </div>
-            <h2 className="text-2xl font-semibold text-foreground">Your Cat — AI Economic Agent</h2>
+            <h2 className="text-2xl font-semibold text-fg-primary">Your Cat — AI Economic Agent</h2>
           </div>
-          <div className="bg-card rounded-lg border border-border p-6 space-y-4">
-            <p className="text-muted-foreground leading-relaxed">
+          <div className="bg-surface-base rounded-lg border border-default p-6 space-y-4">
+            <p className="text-fg-secondary leading-relaxed">
               Every user and group has a <strong>Cat</strong> — a personal AI agent that understands
               your context and acts on your behalf. The Cat can create entities, draft content,
               search for opportunities, send messages, and coordinate economic activity in plain
               language.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-fg-secondary leading-relaxed">
               The Cat reads your authorized data — your own entities, public profiles you interact
               with, and conversations you start. It proposes actions and waits for your confirmation
               before executing them. You stay in control; the Cat handles complexity.
             </p>
-            <div className="bg-muted/40 border border-border-subtle rounded-lg p-4">
-              <p className="text-sm text-foreground font-medium mb-2">Example Cat commands:</p>
-              <ul className="text-sm text-muted-foreground space-y-1">
+            <div className="bg-surface-raised/40 border border-subtle rounded-lg p-4">
+              <p className="text-sm text-fg-primary font-medium mb-2">Example Cat commands:</p>
+              <ul className="text-sm text-fg-secondary space-y-1">
                 <li>
                   &ldquo;Create a project for my open-source library with a 0.1 BTC goal&rdquo;
                 </li>
@@ -82,24 +82,27 @@ export default function DocsPage() {
         {/* Entity System */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+            <div className="p-2 rounded-lg bg-surface-raised border border-subtle">
               <Coins className="h-5 w-5 text-fg-secondary" />
             </div>
-            <h2 className="text-2xl font-semibold text-foreground">Entity System</h2>
+            <h2 className="text-2xl font-semibold text-fg-primary">Entity System</h2>
           </div>
-          <div className="bg-card rounded-lg border border-border p-6">
-            <p className="text-muted-foreground leading-relaxed mb-5">
+          <div className="bg-surface-base rounded-lg border border-default p-6">
+            <p className="text-fg-secondary leading-relaxed mb-5">
               Everything on OrangeCat is an <strong>entity</strong> — a structured unit of economic
               or governance activity. Entities give the Cat a rich world model to read and operate
               on. There are 14 entity types covering the full economic spectrum:
             </p>
             <div className="grid sm:grid-cols-2 gap-3">
               {ENTITY_TYPES.map(entity => (
-                <div key={entity.name} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                  <div className="w-2 h-2 rounded-full bg-foreground mt-2 flex-shrink-0" />
+                <div
+                  key={entity.name}
+                  className="flex items-start gap-3 p-3 bg-surface-raised rounded-lg"
+                >
+                  <div className="w-2 h-2 rounded-full bg-fg-primary mt-2 flex-shrink-0" />
                   <div>
-                    <span className="font-medium text-foreground text-sm">{entity.name}</span>
-                    <p className="text-muted-foreground text-xs mt-0.5">{entity.description}</p>
+                    <span className="font-medium text-fg-primary text-sm">{entity.name}</span>
+                    <p className="text-fg-secondary text-xs mt-0.5">{entity.description}</p>
                   </div>
                 </div>
               ))}
@@ -110,44 +113,40 @@ export default function DocsPage() {
         {/* Payments */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+            <div className="p-2 rounded-lg bg-surface-raised border border-subtle">
               <Zap className="h-5 w-5 text-fg-secondary" />
             </div>
-            <h2 className="text-2xl font-semibold text-foreground">Payments</h2>
+            <h2 className="text-2xl font-semibold text-fg-primary">Payments</h2>
           </div>
-          <div className="bg-card rounded-lg border border-border p-6 space-y-4">
-            <p className="text-muted-foreground leading-relaxed">
+          <div className="bg-surface-base rounded-lg border border-default p-6 space-y-4">
+            <p className="text-fg-secondary leading-relaxed">
               Bitcoin and Lightning Network are the native and preferred payment rails. OrangeCat
               supports Lightning addresses (e.g.{' '}
-              <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono">
+              <code className="bg-surface-raised px-1 py-0.5 rounded text-sm font-mono">
                 yourname@orangecat.ch
               </code>
               ) for instant, near-zero-fee payments. On-chain Bitcoin is also supported.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-fg-secondary leading-relaxed">
               OrangeCat is not Bitcoin-only. Any payment method — Twint, PayPal, Venmo, bank
               transfers — can be listed as a receiving option. Users choose the method that works
               for them. Meet counterparties where they are.
             </p>
             <div className="grid sm:grid-cols-3 gap-4">
               {/* Highlight cards — uniform neutral tiles per migration 6/N */}
-              <div className="p-4 bg-muted/40 border border-border-subtle rounded-lg text-center">
-                <p className="font-medium text-foreground text-sm">No platform fees</p>
-                <p className="text-muted-foreground text-xs mt-1">
+              <div className="p-4 bg-surface-raised/40 border border-subtle rounded-lg text-center">
+                <p className="font-medium text-fg-primary text-sm">No platform fees</p>
+                <p className="text-fg-secondary text-xs mt-1">
                   Payments go directly between parties
                 </p>
               </div>
-              <div className="p-4 bg-muted/40 border border-border-subtle rounded-lg text-center">
-                <p className="font-medium text-foreground text-sm">Non-custodial</p>
-                <p className="text-muted-foreground text-xs mt-1">
-                  OrangeCat never holds your funds
-                </p>
+              <div className="p-4 bg-surface-raised/40 border border-subtle rounded-lg text-center">
+                <p className="font-medium text-fg-primary text-sm">Non-custodial</p>
+                <p className="text-fg-secondary text-xs mt-1">OrangeCat never holds your funds</p>
               </div>
-              <div className="p-4 bg-muted/40 border border-border-subtle rounded-lg text-center">
-                <p className="font-medium text-foreground text-sm">Any currency</p>
-                <p className="text-muted-foreground text-xs mt-1">
-                  Bitcoin, Lightning, fiat, and more
-                </p>
+              <div className="p-4 bg-surface-raised/40 border border-subtle rounded-lg text-center">
+                <p className="font-medium text-fg-primary text-sm">Any currency</p>
+                <p className="text-fg-secondary text-xs mt-1">Bitcoin, Lightning, fiat, and more</p>
               </div>
             </div>
           </div>
@@ -156,13 +155,13 @@ export default function DocsPage() {
         {/* Identity & Privacy */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+            <div className="p-2 rounded-lg bg-surface-raised border border-subtle">
               <Shield className="h-5 w-5 text-fg-secondary" />
             </div>
-            <h2 className="text-2xl font-semibold text-foreground">Identity &amp; Privacy</h2>
+            <h2 className="text-2xl font-semibold text-fg-primary">Identity &amp; Privacy</h2>
           </div>
-          <div className="bg-card rounded-lg border border-border p-6 space-y-4">
-            <p className="text-muted-foreground leading-relaxed">
+          <div className="bg-surface-base rounded-lg border border-default p-6 space-y-4">
+            <p className="text-fg-secondary leading-relaxed">
               OrangeCat is <strong>pseudonymous by default</strong>. You can participate fully —
               sell, fund, lend, invest, govern — under any identity you choose. Real-name
               verification is opt-in, never required.
@@ -171,8 +170,8 @@ export default function DocsPage() {
               <div className="flex items-start gap-3">
                 <Lock className="h-5 w-5 text-fg-secondary mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-medium text-foreground text-sm">Row-Level Security</p>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="font-medium text-fg-primary text-sm">Row-Level Security</p>
+                  <p className="text-fg-secondary text-sm">
                     All database queries are enforced at the database level — one user cannot access
                     another&apos;s private data, even if there is an application bug.
                   </p>
@@ -181,8 +180,8 @@ export default function DocsPage() {
               <div className="flex items-start gap-3">
                 <Globe className="h-5 w-5 text-fg-secondary mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-medium text-foreground text-sm">Visibility control</p>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="font-medium text-fg-primary text-sm">Visibility control</p>
+                  <p className="text-fg-secondary text-sm">
                     Each entity has a visibility setting: public, followers-only, or private. Your
                     profile information is also configurable.
                   </p>
@@ -191,8 +190,8 @@ export default function DocsPage() {
               <div className="flex items-start gap-3">
                 <Users className="h-5 w-5 text-fg-secondary mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-medium text-foreground text-sm">Authentication</p>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="font-medium text-fg-primary text-sm">Authentication</p>
+                  <p className="text-fg-secondary text-sm">
                     Handled by Supabase Auth with industry-standard practices. Passwords are hashed
                     and never stored in plaintext.
                   </p>
@@ -205,19 +204,19 @@ export default function DocsPage() {
         {/* Groups & Governance */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-surface-raised border border-border-subtle">
+            <div className="p-2 rounded-lg bg-surface-raised border border-subtle">
               <Users className="h-5 w-5 text-fg-secondary" />
             </div>
-            <h2 className="text-2xl font-semibold text-foreground">Groups &amp; Governance</h2>
+            <h2 className="text-2xl font-semibold text-fg-primary">Groups &amp; Governance</h2>
           </div>
-          <div className="bg-card rounded-lg border border-border p-6 space-y-4">
-            <p className="text-muted-foreground leading-relaxed">
+          <div className="bg-surface-base rounded-lg border border-default p-6 space-y-4">
+            <p className="text-fg-secondary leading-relaxed">
               <strong>Groups</strong> are organizations on OrangeCat with a shared identity,
               treasury, and governance. Members can have different roles, propose and vote on
               decisions, manage shared funds, and run economic activities collectively. Think DAOs,
               cooperatives, clubs, or any collective that needs to coordinate.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-fg-secondary leading-relaxed">
               Every group has its own Cat — a group AI agent that coordinates on behalf of the
               collective, same as individual Cats work for users.
             </p>
@@ -227,16 +226,16 @@ export default function DocsPage() {
         {/* Tech Stack */}
         <section className="mb-10">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 rounded-lg bg-muted">
-              <Code2 className="h-5 w-5 text-muted-foreground" />
+            <div className="p-2 rounded-lg bg-surface-raised">
+              <Code2 className="h-5 w-5 text-fg-secondary" />
             </div>
-            <h2 className="text-2xl font-semibold text-foreground">Technology Stack</h2>
+            <h2 className="text-2xl font-semibold text-fg-primary">Technology Stack</h2>
           </div>
-          <div className="bg-card rounded-lg border border-border p-6">
+          <div className="bg-surface-base rounded-lg border border-default p-6">
             <div className="grid sm:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-medium text-foreground mb-3">Frontend</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
+                <h3 className="font-medium text-fg-primary mb-3">Frontend</h3>
+                <ul className="space-y-2 text-sm text-fg-secondary">
                   <li className="flex items-center gap-2">
                     <Code2 className="h-4 w-4 text-fg-tertiary" />
                     Next.js 15 (App Router)
@@ -252,8 +251,8 @@ export default function DocsPage() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-medium text-foreground mb-3">Backend</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
+                <h3 className="font-medium text-fg-primary mb-3">Backend</h3>
+                <ul className="space-y-2 text-sm text-fg-secondary">
                   <li className="flex items-center gap-2">
                     <Database className="h-4 w-4 text-fg-tertiary" />
                     Supabase (PostgreSQL + Auth + RLS)
@@ -274,7 +273,7 @@ export default function DocsPage() {
 
         {/* Getting Started — public-surface near-black band per FleetCrown pattern */}
         <section className="mb-10">
-          <div className="bg-surface-public border border-border-subtle rounded-lg p-8 text-center">
+          <div className="bg-surface-public border border-subtle rounded-lg p-8 text-center">
             <h2 className="font-heading tracking-display text-2xl font-bold text-fg-inverted mb-3">
               Ready to get started?
             </h2>

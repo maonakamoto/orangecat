@@ -48,7 +48,7 @@ export function BulkActionsToolbar({
   return (
     <div
       className={cn(
-        'sticky top-0 z-30 border-b border-border-subtle bg-background/90 backdrop-blur-xl',
+        'sticky top-0 z-30 border-b border-subtle bg-surface-page/90 backdrop-blur-xl',
         'px-4 py-2.5 transition-all duration-200',
         className
       )}
@@ -72,8 +72,8 @@ export function BulkActionsToolbar({
           </button>
 
           {/* Selection count */}
-          <div className="text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">{selectedCount}</span>
+          <div className="text-sm text-fg-secondary">
+            <span className="font-semibold text-fg-primary">{selectedCount}</span>
             <span className="hidden sm:inline"> of {totalCount}</span>
             <span className="sm:hidden">/{totalCount}</span>
             <span className="ml-1">{selectedCount === 1 ? 'post' : 'posts'}</span>
@@ -107,7 +107,7 @@ export function BulkActionsToolbar({
                       onBulkVisibilityChange('public');
                       setShowVisibilityMenu(false);
                     }}
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2"
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-surface-raised flex items-center gap-2"
                     disabled={isProcessing}
                   >
                     <Globe className="w-4 h-4 text-status-positive" />
@@ -118,10 +118,10 @@ export function BulkActionsToolbar({
                       onBulkVisibilityChange('private');
                       setShowVisibilityMenu(false);
                     }}
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2"
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-surface-raised flex items-center gap-2"
                     disabled={isProcessing}
                   >
-                    <Lock className="w-4 h-4 text-muted-foreground" />
+                    <Lock className="w-4 h-4 text-fg-secondary" />
                     <span>Make Private</span>
                   </button>
                 </div>

@@ -19,68 +19,71 @@ import { ROUTES } from '@/config/routes';
 const mdxComponents = {
   // Customize markdown elements
   h1: ({ children, ...props }: ComponentProps<'h1'>) => (
-    <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-6 leading-tight" {...props}>
+    <h1 className="text-3xl sm:text-4xl font-bold text-fg-primary mb-6 leading-tight" {...props}>
       {children}
     </h1>
   ),
   h2: ({ children, ...props }: ComponentProps<'h2'>) => (
-    <h2 className="text-2xl font-semibold text-foreground mb-6 mt-12 flex items-center" {...props}>
+    <h2 className="text-2xl font-semibold text-fg-primary mb-6 mt-12 flex items-center" {...props}>
       {children}
     </h2>
   ),
   h3: ({ children, ...props }: ComponentProps<'h3'>) => (
-    <h3 className="text-lg font-semibold text-foreground mb-4 mt-8" {...props}>
+    <h3 className="text-lg font-semibold text-fg-primary mb-4 mt-8" {...props}>
       {children}
     </h3>
   ),
   h4: ({ children, ...props }: ComponentProps<'h4'>) => (
-    <h4 className="text-base font-semibold text-foreground mb-3 mt-6" {...props}>
+    <h4 className="text-base font-semibold text-fg-primary mb-3 mt-6" {...props}>
       {children}
     </h4>
   ),
   p: ({ children, ...props }: ComponentProps<'p'>) => (
-    <p className="text-lg text-muted-strong leading-relaxed mb-6" {...props}>
+    <p className="text-lg text-fg-primary leading-relaxed mb-6" {...props}>
       {children}
     </p>
   ),
   ul: ({ children, ...props }: ComponentProps<'ul'>) => (
-    <ul className="space-y-3 text-muted-strong mb-6 ml-6" {...props}>
+    <ul className="space-y-3 text-fg-primary mb-6 ml-6" {...props}>
       {children}
     </ul>
   ),
   ol: ({ children, ...props }: ComponentProps<'ol'>) => (
-    <ol className="space-y-3 text-muted-strong mb-6 ml-6 list-decimal" {...props}>
+    <ol className="space-y-3 text-fg-primary mb-6 ml-6 list-decimal" {...props}>
       {children}
     </ol>
   ),
   li: ({ children, ...props }: ComponentProps<'li'>) => (
     <li className="flex items-start" {...props}>
-      <span className="w-2 h-2 bg-muted/400 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+      <span className="w-2 h-2 bg-surface-raised/400 rounded-full mt-2 mr-4 flex-shrink-0"></span>
       <span>{children}</span>
     </li>
   ),
   blockquote: ({ children, ...props }: ComponentProps<'blockquote'>) => (
     <blockquote
-      className="border-l-4 border-foreground pl-6 my-8 bg-muted/40 dark:bg-accent py-4 rounded-r-lg"
+      className="border-l-4 border-fg-primary pl-6 my-8 bg-surface-raised/40 dark:bg-surface-overlay py-4 rounded-r-lg"
       {...props}
     >
-      <div className="text-lg text-muted-strong italic">{children}</div>
+      <div className="text-lg text-fg-primary italic">{children}</div>
     </blockquote>
   ),
   code: ({ children, ...props }: ComponentProps<'code'>) => (
-    <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground" {...props}>
+    <code
+      className="bg-surface-raised px-2 py-1 rounded text-sm font-mono text-fg-primary"
+      {...props}
+    >
       {children}
     </code>
   ),
   pre: ({ children, ...props }: ComponentProps<'pre'>) => (
-    <pre className="bg-foreground text-background p-6 rounded-lg overflow-x-auto mb-6" {...props}>
+    <pre className="bg-fg-primary text-fg-inverted p-6 rounded-lg overflow-x-auto mb-6" {...props}>
       {children}
     </pre>
   ),
   a: ({ href, children, ...props }: ComponentProps<'a'>) => (
     <Link
       href={href || '#'}
-      className="text-foreground hover:text-foreground font-medium underline"
+      className="text-fg-primary hover:text-fg-primary font-medium underline"
       {...props}
     >
       {children}
@@ -95,20 +98,20 @@ const mdxComponents = {
     children: React.ReactNode;
   }) => {
     const styles = {
-      info: 'border-border-subtle bg-muted/30 text-foreground',
-      warning: 'border-warning/30 bg-warning/10 text-foreground',
-      success: 'border-success/25 bg-success/10 text-success',
-      error: 'border-destructive/25 bg-destructive/10 text-destructive',
+      info: 'border-subtle bg-surface-raised/30 text-fg-primary',
+      warning: 'border-warning/30 bg-status-warning/10 text-fg-primary',
+      success: 'border-status-positive/25 bg-status-positive/10 text-status-positive',
+      error: 'border-status-negative/25 bg-status-negative/10 text-status-negative',
     };
     return <div className={`mb-6 rounded-md border p-6 ${styles[type]}`}>{children}</div>;
   },
   SecurityFeature: ({ title, description }: { title: string; description: string }) => (
-    <div className="bg-card border border-status-positive/20 rounded-lg p-6 mb-6">
-      <h4 className="text-lg font-semibold text-foreground mb-2 flex items-center">
+    <div className="bg-surface-base border border-status-positive/20 rounded-lg p-6 mb-6">
+      <h4 className="text-lg font-semibold text-fg-primary mb-2 flex items-center">
         <span className="w-2 h-2 bg-status-positive rounded-full mr-3"></span>
         {title}
       </h4>
-      <p className="text-muted-strong">{description}</p>
+      <p className="text-fg-primary">{description}</p>
     </div>
   ),
 };
@@ -204,17 +207,17 @@ export default async function BlogPost({ params }: PageProps) {
             {/* Article Header */}
             <header className="mb-12">
               {post.featured && (
-                <div className="flex items-center text-sm text-foreground mb-4 font-medium">
-                  <span className="bg-muted px-3 py-1 rounded-full">Featured Article</span>
+                <div className="flex items-center text-sm text-fg-primary mb-4 font-medium">
+                  <span className="bg-surface-raised px-3 py-1 rounded-full">Featured Article</span>
                 </div>
               )}
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold text-fg-primary mb-6 leading-tight">
                 {post.title}
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed mb-6">{post.excerpt}</p>
+              <p className="text-xl text-fg-secondary leading-relaxed mb-6">{post.excerpt}</p>
 
               {/* Post Meta */}
-              <div className="flex items-center text-sm text-muted-foreground border-t border-b border-border py-4">
+              <div className="flex items-center text-sm text-fg-secondary border-t border-b border-default py-4">
                 <Calendar className="w-4 h-4 mr-2" />
                 {new Date(post.date).toLocaleDateString('en-US', {
                   year: 'numeric',
@@ -238,7 +241,7 @@ export default async function BlogPost({ params }: PageProps) {
                     <Link
                       key={tag}
                       href={`/blog?tag=${encodeURIComponent(tag)}`}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-muted text-foreground hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-surface-raised text-fg-primary hover:bg-gray-200 dark:hover:bg-surface-raised/80 transition-colors"
                     >
                       <Tag className="w-3 h-3 mr-1" />
                       {tag}
@@ -254,7 +257,7 @@ export default async function BlogPost({ params }: PageProps) {
             </article>
 
             {/* Share and Navigation */}
-            <div className="mt-16 pt-8 border-t border-border">
+            <div className="mt-16 pt-8 border-t border-default">
               <div className="flex flex-col sm:flex-row justify-between items-center">
                 <Link href={ROUTES.BLOG}>
                   <Button variant="outline">
@@ -268,7 +271,7 @@ export default async function BlogPost({ params }: PageProps) {
                     description={post.excerpt}
                     url={`${SITE_URL}/blog/${slug}`}
                   />
-                  <p className="text-muted-foreground text-xs">
+                  <p className="text-fg-secondary text-xs">
                     Part of our commitment to building in public
                   </p>
                 </div>
@@ -277,8 +280,8 @@ export default async function BlogPost({ params }: PageProps) {
 
             {/* Related Posts CTA */}
             <div className={`mt-12 ${GRADIENTS.sectionOrangeTiffany} rounded-lg p-8 text-center`}>
-              <h3 className="text-2xl font-bold text-foreground mb-4">More from {APP_NAME}</h3>
-              <p className="text-lg text-muted-strong mb-6">
+              <h3 className="text-2xl font-bold text-fg-primary mb-4">More from {APP_NAME}</h3>
+              <p className="text-lg text-fg-primary mb-6">
                 Discover more insights about Bitcoin, security, and building in public.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

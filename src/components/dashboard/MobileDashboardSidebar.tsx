@@ -37,7 +37,7 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
 
   return (
     <div className="space-y-4 lg:hidden">
-      <Card className="border-border-subtle bg-background">
+      <Card className="border-subtle bg-surface-page">
         <CardContent className="p-4">
           <button
             type="button"
@@ -45,23 +45,23 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
             className="flex w-full items-center gap-2 mb-4 text-left"
           >
             <TrendingUp className="w-5 h-5 text-fg-secondary" />
-            <h3 className="text-base font-semibold text-foreground">Your Impact</h3>
+            <h3 className="text-base font-semibold text-fg-primary">Your Impact</h3>
           </button>
           <div className="grid grid-cols-2 gap-3 mb-3">
-            <div className="rounded-md border border-border-subtle bg-muted/30 p-3 text-center">
-              <div className="text-2xl font-bold text-foreground">{totalProjects}</div>
-              <div className="text-xs text-muted-foreground">Projects</div>
+            <div className="rounded-md border border-subtle bg-surface-raised/30 p-3 text-center">
+              <div className="text-2xl font-bold text-fg-primary">{totalProjects}</div>
+              <div className="text-xs text-fg-secondary">Projects</div>
             </div>
-            <div className="rounded-md border border-border-subtle bg-muted/30 p-3 text-center">
-              <div className="text-lg font-bold text-foreground">
+            <div className="rounded-md border border-subtle bg-surface-raised/30 p-3 text-center">
+              <div className="text-lg font-bold text-fg-primary">
                 <CurrencyDisplay amount={totalRaised} currency={primaryCurrency} />
               </div>
-              <div className="text-xs text-muted-foreground">Raised</div>
+              <div className="text-xs text-fg-secondary">Raised</div>
             </div>
           </div>
-          <div className="rounded-md border border-border-subtle bg-muted/30 p-2 text-center">
-            <div className="text-lg font-bold text-foreground">{totalSupporters}</div>
-            <div className="text-xs text-muted-foreground">Supporters</div>
+          <div className="rounded-md border border-subtle bg-surface-raised/30 p-2 text-center">
+            <div className="text-lg font-bold text-fg-primary">{totalSupporters}</div>
+            <div className="text-xs text-fg-secondary">Supporters</div>
           </div>
         </CardContent>
       </Card>

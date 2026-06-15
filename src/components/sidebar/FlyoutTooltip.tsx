@@ -84,7 +84,7 @@ export function FlyoutTooltip({ isVisible, children, targetElement }: FlyoutTool
 
   return (
     <div
-      className="fixed hidden whitespace-nowrap rounded-md border border-border-subtle bg-popover px-3 py-2 text-sm font-medium text-popover-foreground shadow-sm pointer-events-none lg:block"
+      className="fixed hidden whitespace-nowrap rounded-md border border-subtle bg-surface-modal px-3 py-2 text-sm font-medium text-fg-primary shadow-sm pointer-events-none lg:block"
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,

@@ -34,7 +34,7 @@ export function ProfileImagesSection({
       {/* Banner Upload */}
       <div className="relative">
         <div
-          className="relative h-32 bg-muted rounded-lg border-2 border-dashed border-border-strong cursor-pointer overflow-hidden"
+          className="relative h-32 bg-surface-raised rounded-lg border-2 border-dashed border-strong cursor-pointer overflow-hidden"
           onClick={() => bannerInputRef.current?.click()}
         >
           {bannerPreview || profile.banner_url ? (
@@ -47,8 +47,11 @@ export function ProfileImagesSection({
           ) : (
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
-                <Camera className="w-8 h-8 mx-auto text-muted-dim mb-2" data-testid="camera-icon" />
-                <p className="text-sm text-muted-foreground">Add banner photo</p>
+                <Camera
+                  className="w-8 h-8 mx-auto text-fg-tertiary mb-2"
+                  data-testid="camera-icon"
+                />
+                <p className="text-sm text-fg-secondary">Add banner photo</p>
               </div>
             </div>
           )}
@@ -65,7 +68,7 @@ export function ProfileImagesSection({
       {/* Avatar Upload */}
       <div className="flex items-start gap-4">
         <div
-          className="relative w-20 h-20 bg-muted rounded-full border-2 border-border-strong cursor-pointer overflow-hidden flex-shrink-0"
+          className="relative w-20 h-20 bg-surface-raised rounded-full border-2 border-strong cursor-pointer overflow-hidden flex-shrink-0"
           onClick={() => avatarInputRef.current?.click()}
         >
           {avatarPreview || profile.avatar_url ? (
@@ -77,7 +80,7 @@ export function ProfileImagesSection({
             />
           ) : (
             <div className="flex items-center justify-center w-full h-full">
-              <User className="w-8 h-8 text-muted-dim" data-testid="camera-icon" />
+              <User className="w-8 h-8 text-fg-tertiary" data-testid="camera-icon" />
             </div>
           )}
           <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 flex items-center justify-center rounded-full">

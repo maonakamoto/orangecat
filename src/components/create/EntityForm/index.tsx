@@ -206,7 +206,7 @@ export function EntityForm<T extends Record<string, unknown>>({
                   config.templates.length > 0 &&
                   mode === 'create' &&
                   !wizardMode && (
-                    <div className="mt-8 pt-8 border-t border-border">
+                    <div className="mt-8 pt-8 border-t border-default">
                       <TemplatePicker
                         label={config.namePlural}
                         templates={config.templates as EntityTemplate<T>[]}

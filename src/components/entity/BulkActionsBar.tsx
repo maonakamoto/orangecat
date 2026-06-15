@@ -51,7 +51,7 @@ export default function BulkActionsBar({
         // Above the mobile bottom nav on mobile; on >=md the mobile nav
         // is hidden so positioning is irrelevant. Z + clearance pulled
         // from the design SSOT (.oc-above-mobile-nav + MOBILE_ACTION_BAR).
-        'fixed inset-x-0 md:bottom-0 border-t border-border bg-card shadow-none oc-above-mobile-nav',
+        'fixed inset-x-0 md:bottom-0 border-t border-default bg-surface-base shadow-none oc-above-mobile-nav',
         Z_INDEX_CLASSES.MOBILE_ACTION_BAR,
         'pb-safe', // Safe area on hardware notch
         className
@@ -61,7 +61,7 @@ export default function BulkActionsBar({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 flex-1 min-w-0">
-            <span className="text-sm font-medium text-foreground whitespace-nowrap">
+            <span className="text-sm font-medium text-fg-primary whitespace-nowrap">
               {selectedCount} {entityNamePlural} selected
             </span>
             {additionalInfo && <div className="flex-1 min-w-0">{additionalInfo}</div>}
@@ -69,7 +69,7 @@ export default function BulkActionsBar({
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 flex-wrap justify-end">
             <button
               onClick={onClearSelection}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+              className="text-sm text-fg-secondary hover:text-fg-primary transition-colors whitespace-nowrap"
               disabled={isDisabled}
             >
               Clear
