@@ -7,11 +7,13 @@
 Before you begin, ensure you have:
 
 ### Required Software
+
 - **Node.js** 18+ LTS - [Download](https://nodejs.org/)
 - **Git** - Version control system
 - **npm** or **yarn** - Package manager (npm recommended)
 
 ### Optional but Recommended
+
 - **VS Code** - IDE with excellent TypeScript support
 - **Supabase CLI** - For local database development
 - **Docker** - For containerized development
@@ -19,17 +21,20 @@ Before you begin, ensure you have:
 ## ⚡ Quick Setup (5 minutes)
 
 ### 1. Clone Repository
+
 ```bash
 git clone <repository-url>
 cd orangecat
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Set Up Environment Variables
+
 ```bash
 # Copy template
 cp config/production.env.template .env.local
@@ -39,13 +44,14 @@ cp config/production.env.template .env.local
 ```
 
 ### 4. Database Setup
-OrangeCat uses **cloud Supabase only**. No database setup required.
 
-- Database is pre-configured and running in the cloud
-- All migrations are applied automatically
-- Environment variables are already configured
+OrangeCat uses a **self-hosted Supabase instance at `https://supabase.orangecat.ch`** (Hetzner box).
+
+- Point `.env.local` at the self-hosted instance (URL + keys)
+- Migrations are SQL files in `supabase/migrations/`, applied via `psql` on the box (see `docs/supabase/migrations-guide.md`)
 
 ### 5. Start Development Server
+
 ```bash
 # Use the clean start command (recommended)
 npm run fresh:start
@@ -57,16 +63,19 @@ npm run dev:clean
 ## 🔧 Development Environment Details
 
 ### Node.js Setup
+
 - **Version**: 18.17.0+ (LTS)
 - **Package Manager**: npm (yarn also supported)
 - **Environment**: Development uses `.env.local`
 
 ### Supabase Configuration
-- **Development & Production**: Uses hosted Supabase instance only
-- **No Local Database**: Cloud-only setup for consistency and resource efficiency
-- **Migrations**: Via Supabase dashboard or API
+
+- **Development & Production**: Uses the self-hosted Supabase instance at `https://supabase.orangecat.ch` (Hetzner box)
+- **No Local Database**: Single self-hosted instance for consistency
+- **Migrations**: SQL files in `supabase/migrations/` applied via `psql` (see `docs/supabase/migrations-guide.md`)
 
 ### VS Code Extensions (Recommended)
+
 ```json
 {
   "recommendations": [
@@ -83,6 +92,7 @@ npm run dev:clean
 ## 🧪 Testing Setup
 
 ### Test Database
+
 ```bash
 # Set up test environment
 cp .env.example .env.test.local
@@ -95,6 +105,7 @@ npm run test:coverage
 ```
 
 ### Browser Testing
+
 ```bash
 # Install Playwright browsers
 npx playwright install
@@ -106,6 +117,7 @@ npm run test:e2e
 ## 🔒 Security Setup
 
 ### Environment Variables
+
 ```bash
 # Required for development
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
@@ -117,6 +129,7 @@ SUPABASE_ACCESS_TOKEN=your_access_token
 ```
 
 ### Authentication Setup
+
 - Supabase handles authentication automatically
 - No additional setup required for basic auth
 - Social logins configured in Supabase dashboard
@@ -124,12 +137,14 @@ SUPABASE_ACCESS_TOKEN=your_access_token
 ## 🐛 Debugging Setup
 
 ### Browser DevTools
+
 1. Open Chrome DevTools (F12)
 2. Go to Network tab
 3. Check Console for errors
 4. Monitor Application tab for React DevTools
 
 ### VS Code Debugging
+
 ```json
 // .vscode/launch.json
 {
@@ -150,6 +165,7 @@ SUPABASE_ACCESS_TOKEN=your_access_token
 ## 📊 Monitoring Setup
 
 ### Local Monitoring
+
 ```bash
 # Start monitoring dashboard
 npm run monitor:metrics
@@ -159,6 +175,7 @@ npm run health:check
 ```
 
 ### Error Tracking
+
 - Console errors automatically logged
 - Production errors sent to monitoring service
 - Database query performance tracked
@@ -166,6 +183,7 @@ npm run health:check
 ## 🚀 Advanced Setup Options
 
 ### Docker Development
+
 ```bash
 # Build and run with Docker
 docker-compose up --build
@@ -175,11 +193,12 @@ docker-compose run --rm app npm test
 ```
 
 ### Multiple Environment Setup
+
 ```bash
 # Development
 cp config/production.env.template .env.local
 
-# Staging  
+# Staging
 cp config/production.env.template .env.staging
 
 # Production
@@ -189,6 +208,7 @@ cp config/production.env.template .env.staging
 ## 🔧 Troubleshooting Setup Issues
 
 ### Port Conflicts
+
 ```bash
 # Kill existing Node processes
 npm run kill:node
@@ -201,19 +221,19 @@ npm run fresh:start
 ```
 
 ### Database Issues
+
 OrangeCat uses cloud Supabase - no local database to manage.
 
 ```bash
 # Check cloud database connectivity
 node scripts/diagnostics/check-supabase.js
 
-# View database logs (via Supabase dashboard)
-# https://app.supabase.com/project/ohkueislstxomdjavyhs/dashboard
-
-# For schema changes, use the dashboard SQL editor
+# View database logs / run schema changes
+# (Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; access via the box / founder.)
 ```
 
 ### Permission Issues
+
 ```bash
 # Fix file permissions
 chmod +x scripts/*.sh
@@ -241,5 +261,5 @@ If you encounter issues:
 
 ---
 
-**Last Updated:** October 17, 2025
+**Last Updated:** 2026-06-15
 **Setup Time:** ~5-10 minutes for basic setup, ~30 minutes for full environment

@@ -19,32 +19,35 @@
 
 ## 🔗 Essential Links
 
-| Resource | URL |
-|----------|-----|
-| **Supabase Dashboard** | https://supabase.com/dashboard/project/ohkueislstxomdjavyhs |
-| **SQL Editor** | https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new |
-| **Database Explorer** | https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/editor |
-| **Logs** | https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/logs/explorer |
-| **Indexes** | https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/database/indexes |
+> (Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; Studio / SQL editor / logs are accessed via the box / founder.)
+
+| Resource              | URL                                 |
+| --------------------- | ----------------------------------- |
+| **Supabase Studio**   | self-hosted (via the box / founder) |
+| **SQL Editor**        | self-hosted Studio                  |
+| **Database Explorer** | self-hosted Studio                  |
+| **Logs**              | self-hosted Studio                  |
+| **Indexes**           | self-hosted Studio                  |
 
 ---
 
 ## 📁 Documentation Navigation
 
-| Document | Purpose |
-|----------|---------|
-| **[README.md](./README.md)** | Start here - navigation hub |
-| **[schema-overview.md](./schema-overview.md)** | Architecture & design patterns |
-| **[analysis-rating.md](./analysis-rating.md)** | Comprehensive 8.7/10 analysis |
-| **[improvements-roadmap.md](./improvements-roadmap.md)** | Planned enhancements |
-| **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** | How to apply migrations |
-| **[IMPROVEMENTS_SUMMARY.md](./IMPROVEMENTS_SUMMARY.md)** | What we built today |
+| Document                                                 | Purpose                        |
+| -------------------------------------------------------- | ------------------------------ |
+| **[README.md](./README.md)**                             | Start here - navigation hub    |
+| **[schema-overview.md](./schema-overview.md)**           | Architecture & design patterns |
+| **[analysis-rating.md](./analysis-rating.md)**           | Comprehensive 8.7/10 analysis  |
+| **[improvements-roadmap.md](./improvements-roadmap.md)** | Planned enhancements           |
+| **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)**         | How to apply migrations        |
+| **[IMPROVEMENTS_SUMMARY.md](./IMPROVEMENTS_SUMMARY.md)** | What we built today            |
 
 ---
 
 ## ⚡ Common Commands
 
 ### Check Table Sizes
+
 ```sql
 SELECT
   schemaname,
@@ -56,6 +59,7 @@ ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 ```
 
 ### Check Index Usage
+
 ```sql
 SELECT
   schemaname,
@@ -68,6 +72,7 @@ ORDER BY idx_scan ASC;
 ```
 
 ### Find Slow Queries
+
 ```sql
 SELECT
   pid,
@@ -81,6 +86,7 @@ ORDER BY duration DESC;
 ```
 
 ### Check Active Connections
+
 ```sql
 SELECT
   count(*) as total_connections,
@@ -90,6 +96,7 @@ FROM pg_stat_activity;
 ```
 
 ### View Recent Audit Logs (After Migration #2)
+
 ```sql
 SELECT
   created_at,
@@ -109,6 +116,7 @@ LIMIT 20;
 ### ✅ Ready to Apply
 
 #### 1. Add transactions.status Index
+
 ```bash
 File: supabase/migrations/20251017000001_add_transactions_status_index.sql
 Priority: P0 - Critical
@@ -118,11 +126,13 @@ Time: 2 minutes
 ```
 
 **Quick Apply (Supabase Dashboard):**
+
 ```sql
 CREATE INDEX IF NOT EXISTS idx_transactions_status ON transactions(status);
 ```
 
 #### 2. Create Audit Logs Table
+
 ```bash
 File: supabase/migrations/20251017000002_create_audit_logs.sql
 Priority: P0 - Compliance
@@ -138,6 +148,7 @@ Time: 5 minutes
 ## 🔍 Verification Queries
 
 ### After Migration #1 (Index)
+
 ```sql
 -- Verify index exists
 SELECT * FROM pg_indexes
@@ -152,6 +163,7 @@ LIMIT 10;
 ```
 
 ### After Migration #2 (Audit Logs)
+
 ```sql
 -- Verify table exists
 SELECT count(*) FROM audit_logs;
@@ -169,6 +181,7 @@ SELECT * FROM audit_logs ORDER BY created_at DESC LIMIT 1;
 ## 📊 Monitoring Queries
 
 ### Index Health
+
 ```sql
 SELECT
   indexname,
@@ -182,6 +195,7 @@ ORDER BY idx_scan DESC;
 ```
 
 ### Table Bloat
+
 ```sql
 SELECT
   tablename,
@@ -195,6 +209,7 @@ ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 ```
 
 ### Audit Log Volume (After Migration #2)
+
 ```sql
 SELECT
   date_trunc('day', created_at) as day,
@@ -211,6 +226,7 @@ ORDER BY day DESC;
 ## 🛠️ Useful Functions
 
 ### Create Manual Audit Log (After Migration #2)
+
 ```sql
 SELECT create_audit_log(
   p_user_id := auth.uid(),
@@ -223,11 +239,13 @@ SELECT create_audit_log(
 ```
 
 ### Increment Profile Views
+
 ```sql
 SELECT increment_profile_views('profile-uuid');
 ```
 
 ### Update Follow Counts (Automatic via Trigger)
+
 ```sql
 -- Automatically maintained when follows are added/removed
 INSERT INTO follows (follower_id, following_id)
@@ -239,12 +257,14 @@ VALUES ('user-a-id', 'user-b-id');
 ## 🚨 Troubleshooting
 
 ### Connection Issues
+
 ```sql
 -- Check if you can connect
 SELECT current_database(), current_user, version();
 ```
 
 ### Permission Issues
+
 ```sql
 -- Check your role
 SELECT current_user, session_user;
@@ -258,6 +278,7 @@ WHERE schemaname = 'public';
 ```
 
 ### Migration Failed
+
 ```sql
 -- Check what migrations were applied
 SELECT * FROM supabase_migrations.schema_migrations
@@ -272,6 +293,7 @@ ROLLBACK;
 ## 📈 Performance Baselines
 
 ### Current (Before Improvements)
+
 ```
 transactions table:
 - Status filter query: ~500ms (seq scan)
@@ -279,6 +301,7 @@ transactions table:
 ```
 
 ### Target (After Improvements)
+
 ```
 transactions table:
 - Status filter query: ~50ms (index scan) ✨ 10x faster
@@ -306,6 +329,7 @@ Before applying any migration:
 ## 📞 Emergency Contacts
 
 ### Supabase Support
+
 - Status Page: https://status.supabase.com/
 - Support: Dashboard → Help → Support
 - Community: https://github.com/supabase/supabase/discussions
@@ -313,6 +337,7 @@ Before applying any migration:
 ### Rollback Procedures
 
 #### Rollback Index Creation
+
 ```sql
 BEGIN;
 DROP INDEX IF EXISTS idx_transactions_status;
@@ -320,6 +345,7 @@ COMMIT;
 ```
 
 #### Rollback Audit Logs (if needed)
+
 ```sql
 BEGIN;
 DROP TRIGGER IF EXISTS trigger_audit_profile_changes ON profiles;
@@ -334,11 +360,13 @@ COMMIT;
 ## 🎓 Learning Resources
 
 ### PostgreSQL
+
 - Official Docs: https://www.postgresql.org/docs/
 - Performance Tips: https://wiki.postgresql.org/wiki/Performance_Optimization
 - Index Types: https://www.postgresql.org/docs/current/indexes-types.html
 
 ### Supabase
+
 - Docs: https://supabase.com/docs
 - RLS Guide: https://supabase.com/docs/guides/auth/row-level-security
 - Migrations: https://supabase.com/docs/guides/cli/local-development#database-migrations
@@ -348,6 +376,7 @@ COMMIT;
 ## 💡 Pro Tips
 
 1. **Always wrap in transactions**
+
    ```sql
    BEGIN;
    -- your changes
@@ -355,6 +384,7 @@ COMMIT;
    ```
 
 2. **Use EXPLAIN ANALYZE**
+
    ```sql
    EXPLAIN ANALYZE SELECT ...
    ```

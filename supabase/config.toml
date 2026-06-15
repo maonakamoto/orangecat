@@ -255,7 +255,7 @@ max_frequency = "5s"
 #
 # OAuth Setup Instructions:
 # 1. Register an app at each provider's developer console
-# 2. Set callback URL to: https://ohkueislstxomdjavyhs.supabase.co/auth/v1/callback
+# 2. Set callback URL to: https://supabase.orangecat.ch/auth/v1/callback
 # 3. Add client ID and secret in Supabase Dashboard > Authentication > Providers
 # 4. Or set them below using environment variable substitution
 

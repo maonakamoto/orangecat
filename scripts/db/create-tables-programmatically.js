@@ -46,7 +46,9 @@ async function createTables() {
     console.log('📋 For security, Supabase requires manual application via Dashboard');
     console.log('');
     console.log('🔗 Please apply the migration manually:');
-    console.log('   1. Go to: https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new');
+    console.log(
+      '   1. apply via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired'
+    );
     console.log(
       '   2. Copy the entire SQL from: supabase/migrations/20251202_create_personal_economy_tables.sql'
     );
@@ -88,6 +90,3 @@ async function createTables() {
 }
 
 createTables();
-
-
-

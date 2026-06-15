@@ -21,6 +21,7 @@ Many users come to OrangeCat wanting to create projects or profiles but get stuc
 ## Implementation
 
 ### Page Location
+
 - **URL**: `/bitcoin-wallet-guide`
 - **File**: `src/app/bitcoin-wallet-guide/page.tsx`
 
@@ -43,6 +44,7 @@ The guide is linked from three key locations where Bitcoin addresses are request
 ### Design System Compliance
 
 The page follows OrangeCat's design system:
+
 - Uses **Bitcoin Orange** (#F7931A) for all Bitcoin-related elements
 - Implements the centralized theme system from `src/lib/theme.ts`
 - Uses `BitcoinBadge` component for consistent Bitcoin branding
@@ -93,11 +95,13 @@ The guide includes curated wallet options:
 ## User Experience
 
 ### Target Audience
+
 - **Primary**: Complete Bitcoin beginners
 - **Secondary**: Users familiar with crypto but new to Bitcoin
 - **Tertiary**: Existing Bitcoin users looking for wallet alternatives
 
 ### User Journey
+
 1. User encounters Bitcoin address field (empty)
 2. Sees helpful prompt with link to wallet guide
 3. Clicks link → opens guide in new tab
@@ -106,6 +110,7 @@ The guide includes curated wallet options:
 6. Completes profile/project setup
 
 ### Accessibility
+
 - **Keyboard navigation** support
 - **Screen reader** friendly
 - **High contrast** design elements
@@ -115,22 +120,23 @@ The guide includes curated wallet options:
 ## Technical Implementation
 
 ### Components Used
+
 - `BitcoinBadge` - For consistent Bitcoin branding
 - `Card` components - For wallet option layouts
 - `Button` - For CTAs and navigation
 - `motion` from Framer Motion - For smooth animations
 
 ### Theme Integration
+
 ```tsx
-import { componentColors, getColorClasses } from '@/lib/theme'
+import { componentColors, getColorClasses } from '@/lib/theme';
 
 // Bitcoin elements automatically get Bitcoin Orange
-<div className={componentColors.bitcoinElement.className}>
-  Bitcoin content
-</div>
+<div className={componentColors.bitcoinElement.className}>Bitcoin content</div>;
 ```
 
 ### Responsive Design
+
 - **Mobile-first** approach
 - **Grid layouts** that adapt to screen size
 - **Touch-friendly** interactive elements
@@ -139,12 +145,14 @@ import { componentColors, getColorClasses } from '@/lib/theme'
 ## Content Strategy
 
 ### Educational Approach
+
 - **Simple language** avoiding technical jargon
 - **Visual hierarchy** with clear sections
 - **Progressive disclosure** of information
 - **Practical examples** and use cases
 
 ### Trust Building
+
 - **Official wallet links** only
 - **Security warnings** prominently displayed
 - **Transparent pros/cons** for each option
@@ -153,12 +161,14 @@ import { componentColors, getColorClasses } from '@/lib/theme'
 ## Analytics & Metrics
 
 ### Success Metrics
+
 - **Conversion rate**: Users who visit guide → complete Bitcoin address setup
 - **Bounce rate**: Users who leave guide without taking action
 - **Wallet preference**: Which wallets users choose most often
 - **Return rate**: Users who come back to complete setup
 
 ### Tracking Points
+
 - Guide page visits
 - Wallet download link clicks
 - Form completion after guide visit
@@ -167,6 +177,7 @@ import { componentColors, getColorClasses } from '@/lib/theme'
 ## Future Enhancements
 
 ### Planned Improvements
+
 1. **Video tutorials** for visual learners
 2. **Wallet setup wizards** with screenshots
 3. **QR code generation** for easy mobile downloads
@@ -174,6 +185,7 @@ import { componentColors, getColorClasses } from '@/lib/theme'
 5. **Integration with wallet APIs** for automatic address verification
 
 ### Advanced Features
+
 1. **Wallet comparison tool** with filtering
 2. **Security score** for each wallet option
 3. **Community reviews** and ratings
@@ -183,12 +195,14 @@ import { componentColors, getColorClasses } from '@/lib/theme'
 ## Maintenance
 
 ### Content Updates
+
 - **Regular review** of wallet recommendations
 - **Security advisory** updates when needed
 - **New wallet additions** as they become popular
 - **Link verification** to ensure official sources
 
 ### Technical Maintenance
+
 - **Performance monitoring** for page load times
 - **Mobile compatibility** testing
 - **Accessibility audits** for compliance
@@ -198,13 +212,14 @@ import { componentColors, getColorClasses } from '@/lib/theme'
 
 - [Design System Guide](../design-system/README.md)
 - [Color System Developer Guide](../development/color-system-guide.md)
-- [Component Documentation](../components/README.md)
+- [Component Documentation](../development/components/README.md)
 - [User Onboarding Flow](../user-experience/onboarding.md)
 
 ## Support
 
 For questions about this feature:
+
 - **Technical issues**: Check component documentation
 - **Design questions**: Refer to design system guide
 - **User feedback**: Monitor analytics and user support channels
-- **Content updates**: Follow content review process 
+- **Content updates**: Follow content review process

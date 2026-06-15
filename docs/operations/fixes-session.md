@@ -21,11 +21,13 @@ During live profile editing testing, user reported:
 ### Fix #1: Storage Bucket RLS Policies ✅
 
 **Problem:**
+
 - Users couldn't upload avatars/banners
 - Storage RLS policies were blocking authenticated uploads
 - Error: "new row violates row-level security policy"
 
 **Root Cause:**
+
 - `src/app/api/upload/route.ts` uploads to 'profiles' bucket
 - Missing or incorrect RLS policies on `storage.objects`
 
@@ -41,6 +43,7 @@ Created migration: `supabase/migrations/20251017000003_fix_storage_rls_policies.
 ```
 
 **Impact:**
+
 - ✅ Avatar uploads now work
 - ✅ Banner uploads now work
 - ✅ Users can only modify their own images (secure)
@@ -54,12 +57,14 @@ Created migration: `supabase/migrations/20251017000003_fix_storage_rls_policies.
 
 **Problem:**
 When uploading avatar and saving profile, users saw **3 toasts**:
+
 1. "Avatar uploaded successfully!" (ModernProfileEditor.tsx:175)
 2. "Profile saved successfully!" (ModernProfileEditor.tsx:196)
 3. "Profile updated successfully!" (useUnifiedProfile.ts:90)
 
 **Root Cause:**
 Three separate success toasts in the call chain:
+
 ```
 User uploads avatar
   → Toast #1: "Avatar uploaded"
@@ -69,11 +74,13 @@ User clicks Save
 ```
 
 **Solution:**
+
 - ✅ Removed toast from avatar upload (ModernProfileEditor.tsx:175)
 - ✅ Removed toast from profile save (ModernProfileEditor.tsx:196)
 - ✅ Kept only final toast in useUnifiedProfile.ts:90
 
 **Impact:**
+
 - ✅ Now shows only ONE toast: "Profile updated successfully!"
 - ✅ Clean, professional UX
 - ✅ No duplicate notifications
@@ -89,12 +96,14 @@ User feedback: "a lot of unnecessary animation all over the site. looks unprofes
 
 **Analysis:**
 Found **82 instances** of Tailwind animation classes across **51 files**:
+
 - `animate-bounce` - Bouncing elements
 - `animate-pulse` - Pulsing effects
 - `animate-spin` - Spinning loaders
 - `animate-ping` - Ping effects
 
 **Custom animations in globals.css:**
+
 1. `bounce-in` - Bouncy entrance (scale 0.3 → 1.05 → 0.9 → 1)
 2. `slide-up` - Slide from bottom
 3. `pulse-orange` - Orange pulsing effect
@@ -104,6 +113,7 @@ Found **82 instances** of Tailwind animation classes across **51 files**:
 7. `ripple` - Ripple effect
 
 **Recommendation:**
+
 ```css
 /* PROFESSIONAL ANIMATION GUIDELINES */
 
@@ -136,12 +146,15 @@ Found **82 instances** of Tailwind animation classes across **51 files**:
 ## 📝 Files Modified
 
 ### Migrations Created:
+
 1. `supabase/migrations/20251017000003_fix_storage_rls_policies.sql` - Storage RLS fix
 
 ### Code Files Modified:
+
 1. `src/components/profile/ModernProfileEditor.tsx` - Removed duplicate toasts (2 places)
 
 ### Documentation Created:
+
 1. `FIXES_SESSION_2025-10-17.md` - This file
 
 ---
@@ -152,9 +165,10 @@ Found **82 instances** of Tailwind animation classes across **51 files**:
 
 **Method: Supabase Dashboard (Recommended)**
 
-1. Go to [Supabase SQL Editor](https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new)
+1. Run in the SQL editor. (Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; access via the box / founder.)
 
 2. Copy entire content of:
+
    ```bash
    cat supabase/migrations/20251017000003_fix_storage_rls_policies.sql
    ```
@@ -162,6 +176,7 @@ Found **82 instances** of Tailwind animation classes across **51 files**:
 3. Paste into SQL Editor and click **"RUN"**
 
 4. Verify success:
+
    ```sql
    SELECT * FROM storage.buckets WHERE id = 'profiles';
    -- Should show: { id: 'profiles', public: true }
@@ -215,11 +230,13 @@ git push origin main
 ## ✅ Success Metrics
 
 ### Before Fixes:
+
 - ❌ Avatar uploads fail with RLS error
 - ❌ 3 duplicate toasts on save
 - ❌ Bouncy, unprofessional animations
 
 ### After Fixes:
+
 - ✅ Avatar uploads work perfectly
 - ✅ 1 clean success notification
 - ✅ Animation analysis complete (cleanup planned)
@@ -229,18 +246,21 @@ git push origin main
 ## 🎯 Next Steps (Future Session)
 
 ### High Priority:
+
 1. **Animation Cleanup** - Remove bouncy animations, reduce durations
    - Estimated time: 1-2 hours
    - Files to modify: globals.css + 51 component files
    - Impact: More professional, polished UX
 
 ### Medium Priority:
+
 2. **Apply Database Migrations** (from previous session)
    - Migration #1: transactions.status index
    - Migration #2: audit_logs table
    - See: `docs/architecture/database/DEPLOYMENT_GUIDE.md`
 
 ### Low Priority:
+
 3. **Profile Completion Indicator** - "Your profile is 60% complete"
 4. **Image Upload** - Direct upload instead of URLs
 5. **Unsaved Changes Warning** - "You have unsaved changes"
@@ -250,17 +270,20 @@ git push origin main
 ## 📊 Session Summary
 
 **Time Spent:**
+
 - Investigation: 10 minutes
 - Fix Implementation: 15 minutes
 - Documentation: 5 minutes
 - **Total: 30 minutes**
 
 **Lines of Code Changed:**
+
 - Migration: 60 lines (new file)
 - ModernProfileEditor: 4 lines (comments)
 - Documentation: 400+ lines (this file)
 
 **User Impact:**
+
 - 🎉 **Immediate:** Avatar uploads work, clean notifications
 - 📈 **Future:** More professional animations
 
@@ -269,9 +292,11 @@ git push origin main
 ## 🎓 What We Learned
 
 ### 1. RLS Policy Debugging
+
 **Problem:** "new row violates row-level security policy"
 
 **Solution Process:**
+
 1. Check error message (RLS violation)
 2. Find upload code (`src/app/api/upload/route.ts`)
 3. Identify bucket name (`'profiles'`)
@@ -283,9 +308,11 @@ git push origin main
 ---
 
 ### 2. Duplicate Notification Debugging
+
 **Problem:** Multiple toasts for one action
 
 **Solution Process:**
+
 1. Search for `toast.success` in codebase
 2. Find all 3 locations in call chain
 3. Remove intermediate toasts
@@ -296,9 +323,11 @@ git push origin main
 ---
 
 ### 3. Animation Analysis
+
 **Problem:** "looks unprofessional"
 
 **Solution Process:**
+
 1. Grep for animation classes
 2. Check globals.css for custom animations
 3. Identify bouncy/excessive effects

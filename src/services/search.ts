@@ -17,6 +17,7 @@ import {
   searchFundingPages,
   searchLoans,
   getSearchSuggestions,
+  getGlobalSearchResults,
   getTrending as getTrendingData,
 } from './search/queries';
 
@@ -53,18 +54,23 @@ export async function search(options: SearchOptions): Promise<SearchResponse> {
     const results: SearchResult[] = [];
     let totalCount = 0;
 
-    // Use Promise.all for parallel searches when type is 'all'
+    // Use Promise.all for parallel searches when type is 'all'.
+    // Each entity is fetched from the start up to (offset + limit) rows — the
+    // smallest window that can contain this page once results are merged and
+    // re-ranked globally. (Applying `offset` per-entity here would be wrong:
+    // the merged ranking, not any single entity's, defines the page.)
     if (type === 'all') {
+      const windowSize = offset + limit;
       const [profiles, projects, loans] = await Promise.all([
-        searchProfiles(query, filters, limit, offset).catch(error => {
+        searchProfiles(query, filters, windowSize, 0).catch(error => {
           logger.warn('Error searching profiles', error, 'Search');
           return [];
         }),
-        searchFundingPages(query, filters, limit, offset).catch(error => {
+        searchFundingPages(query, filters, windowSize, 0).catch(error => {
           logger.warn('Error searching projects', error, 'Search');
           return [];
         }),
-        searchLoans(query, filters, limit, offset).catch(error => {
+        searchLoans(query, filters, windowSize, 0).catch(error => {
           logger.warn('Error searching loans', error, 'Search');
           return [];
         }),
@@ -147,9 +153,20 @@ export async function search(options: SearchOptions): Promise<SearchResponse> {
     // Sort results
     const sortedResults = sortResults(results, sortBy, query);
 
-    // Apply pagination after sorting (for mixed results)
-    const paginatedResults = sortedResults.slice(offset, offset + limit);
-    totalCount = sortedResults.length;
+    // Paginate. For 'all' we fetched a [0, offset+limit) window per entity and
+    // merged them, so slice out this page. For a single type the sub-query
+    // already returned the [offset, offset+limit) page — slicing again would
+    // (wrongly) drop everything for page 2+.
+    let paginatedResults: SearchResult[];
+    let computedHasMore: boolean;
+    if (type === 'all') {
+      paginatedResults = sortedResults.slice(offset, offset + limit);
+      computedHasMore = sortedResults.length > offset + limit;
+    } else {
+      paginatedResults = sortedResults;
+      computedHasMore = sortedResults.length === limit;
+    }
+    totalCount = offset + sortedResults.length;
 
     // Get facets only if needed
     let facets: SearchResponse['facets'] | undefined;
@@ -164,7 +181,7 @@ export async function search(options: SearchOptions): Promise<SearchResponse> {
     const response: SearchResponse = {
       results: paginatedResults,
       totalCount,
-      hasMore: totalCount > offset + limit,
+      hasMore: computedHasMore,
       facets,
     };
 
@@ -218,4 +235,5 @@ export async function getTrending(): Promise<SearchResponse> {
 }
 
 // Re-export utility functions
-export { getSearchSuggestions };
+export { getSearchSuggestions, getGlobalSearchResults };
+export type { GlobalSearchHit } from './search/queries';

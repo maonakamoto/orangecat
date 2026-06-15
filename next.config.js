@@ -53,13 +53,8 @@ const nextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https',
-        hostname: 'ohkueislstxomdjavyhs.supabase.co',
-        port: '',
-        pathname: '/storage/v1/object/public/**',
-      },
-      {
-        // Self-hosted Supabase storage (Hetzner migration 2026-06)
+        // Self-hosted Supabase storage on Hetzner — the SSOT.
+        // Managed-cloud host (ohkueislstxomdjavyhs.supabase.co) retired 2026-06.
         protocol: 'https',
         hostname: 'supabase.orangecat.ch',
         port: '',

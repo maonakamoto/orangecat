@@ -82,7 +82,7 @@ export function useNotificationCenter({ onClose }: UseNotificationCenterParams) 
   };
 
   const handleNotificationClick = async (notification: Notification) => {
-    if (!notification.read) {
+    if (!notification.is_read) {
       await handleMarkAsRead(notification.id);
     }
     if (notification.type === 'message') {

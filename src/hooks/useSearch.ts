@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   search,
   getTrending,
@@ -68,6 +68,10 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [debouncedQuery, setDebouncedQuery] = useState(query);
 
+  // Monotonic request id: only the latest in-flight search may write state, so
+  // a slow earlier query can't clobber the results of a newer one.
+  const requestIdRef = useRef(0);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
@@ -77,6 +81,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
 
   const executeSearch = useCallback(
     async (offset = 0, append = false) => {
+      const requestId = ++requestIdRef.current;
       try {
         setLoading(true);
         setError(null);
@@ -104,6 +109,11 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
           });
         }
 
+        // A newer search started while this one was in flight — drop it.
+        if (requestId !== requestIdRef.current) {
+          return;
+        }
+
         if (append) {
           setResults(prev => [...prev, ...response.results]);
         } else {
@@ -115,9 +125,15 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
         setHasMore(response.hasMore);
         setCurrentOffset(offset + response.results.length);
       } catch (err: unknown) {
+        if (requestId !== requestIdRef.current) {
+          return;
+        }
         setError(err instanceof Error ? err.message : 'Failed to perform search');
       } finally {
-        setLoading(false);
+        // Only the latest request controls the spinner.
+        if (requestId === requestIdRef.current) {
+          setLoading(false);
+        }
       }
     },
     [debouncedQuery, searchType, sortBy, filters]

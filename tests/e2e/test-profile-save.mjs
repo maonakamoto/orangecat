@@ -29,7 +29,7 @@ async function testProfileSave() {
     console.log('-'.repeat(70));
 
     // First, let's verify the schema consistency
-    const profileResponse = await page.request.get('https://ohkueislstxomdjavyhs.supabase.co/rest/v1/profiles?select=*&limit=1', {
+    const profileResponse = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/profiles?select=*&limit=1`, {
       headers: {
         'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         'Authorization': 'Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}'

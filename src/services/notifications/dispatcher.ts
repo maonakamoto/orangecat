@@ -29,7 +29,9 @@ const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'notifications@orangecat.ch'
  * Add types here as email templates are created.
  */
 const EMAIL_ENABLED_TYPES: Record<string, boolean> = {
-  payment: true,
+  // NOTE: 'payment' intentionally omitted — payment confirmation emails are
+  // sent via the dedicated payment-received template in paymentFlowService
+  // (sendSellerPaymentNotification). Enabling it here double-emails the seller.
   project_funded: true,
   booking_request: true,
   booking_update: true,

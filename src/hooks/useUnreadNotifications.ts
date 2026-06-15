@@ -51,7 +51,7 @@ export function useUnreadNotifications() {
           event: '*',
           schema: 'public',
           table: DATABASE_TABLES.NOTIFICATIONS,
-          filter: `recipient_user_id=eq.${userId}`,
+          filter: `user_id=eq.${userId}`,
         },
         () => fetchCount()
       )

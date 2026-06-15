@@ -85,7 +85,7 @@ async function addContactEmailColumn() {
           if (error.message.includes('contact_email') || error.message.includes('column')) {
             console.log('❌ Column does not exist. Please apply the migration manually:\n');
             console.log(
-              '   1. Go to: https://app.supabase.com/project/ohkueislstxomdjavyhs/sql/new'
+              '   1. apply via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired'
             );
             console.log('   2. Copy and paste this SQL:\n');
             console.log(sql);
@@ -100,7 +100,9 @@ async function addContactEmailColumn() {
       } catch (checkError) {
         console.error('❌ Error checking column:', checkError.message);
         console.log('\n💡 Please apply the migration manually via Supabase Dashboard:\n');
-        console.log('   1. Go to: https://app.supabase.com/project/ohkueislstxomdjavyhs/sql/new');
+        console.log(
+          '   1. apply via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired'
+        );
         console.log('   2. Copy and paste this SQL:\n');
         console.log(sql);
         console.log('\n   3. Click "Run"\n');
@@ -126,7 +128,9 @@ async function addContactEmailColumn() {
     console.error('❌ Fatal error:', err.message);
     console.error(err.stack);
     console.log('\n💡 Please apply the migration manually via Supabase Dashboard:\n');
-    console.log('   1. Go to: https://app.supabase.com/project/ohkueislstxomdjavyhs/sql/new');
+    console.log(
+      '   1. apply via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired'
+    );
     console.log('   2. Copy and paste this SQL:\n');
     console.log(sql);
     console.log('\n   3. Click "Run"\n');
@@ -138,6 +142,3 @@ addContactEmailColumn().catch(err => {
   console.error('❌ Unhandled error:', err);
   process.exit(1);
 });
-
-
-

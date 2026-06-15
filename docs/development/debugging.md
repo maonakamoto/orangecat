@@ -132,9 +132,11 @@ node --inspect-brk scripts/debug-script.js
 
 ## 🗄️ Database Debugging
 
-### Supabase Dashboard
+### Supabase Studio
 
-1. **Go to your project** - supabase.com/dashboard
+(Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; access via the box / founder.)
+
+1. **Open Studio** on the self-hosted instance
 2. **Table Editor** - View and edit data directly
 3. **SQL Editor** - Run queries and view results
 4. **Logs** - Monitor database activity

@@ -1,213 +1,30 @@
-# 📚 OrangeCat Documentation
-
-**Welcome to the OrangeCat Bitcoin Crowdfunding Platform documentation!**
-
-This is your centralized knowledge base for understanding, developing, deploying, and maintaining the OrangeCat platform.
-
----
-
-## 🚀 Quick Start
-
-### For New Developers
-
-1. **[Developer Guide](./getting-started/developer-guide.md)** - Complete setup and first steps
-2. **[Development Setup](./development/SETUP.md)** - Environment configuration
-3. **[Contributing Guide](./contributing/CONTRIBUTING.md)** - How to contribute effectively
-
-### For Users
-
-- **[API Reference](./api/README.md)** - API documentation for integrations
-- **[Features Guide](./features/README.md)** - Platform features overview
-
----
-
-## 📂 Documentation Structure
-
-```
-docs/
-├── getting-started/     # 🚀 Onboarding & setup
-├── architecture/        # 🏗️ System design & architecture
-├── development/         # 💻 Development guides & workflows
-├── workflows/           # 🔄 Proven operational workflows
-├── features/            # ✨ Feature documentation
-│   └── posting/         # 📝 Posting system (mobile-first)
-├── operations/          # 🔧 Operations & maintenance
-├── deployment/          # 🚢 Deployment guides
-├── security/            # 🔒 Security practices
-├── testing/             # 🧪 Testing guides
-├── changelog/           # 📝 Release notes
-├── standards/           # 📏 Standards & conventions
-└── archive/             # 🗄️ Historical docs (2024)
-```
-
----
-
-## 📖 Key Documentation
-
-### **Architecture & Design**
-
-- **[System Architecture](./architecture/ARCHITECTURE.md)** - High-level system design
-- **[Database Schema](./architecture/database/README.md)** - Database design and relationships
-- **[Services Architecture](./architecture/services-architecture.md)** - Service layer design
-- **[Component Architecture](./components/component-architecture.md)** - UI component patterns
-
-### **Development**
-
-- **[Best Practices](./development/BEST_PRACTICES.md)** - Development guidelines
-- **[Engineering Principles](./standards/engineering_principles.md)** - First principles (privacy/local-first, SSOT/DRY/SoC, a11y, security)
-- **[Code Review Guide](./development/code-review.md)** - Code review process
-- **[Technical Debt](./development/technical-debt.md)** - Current technical debt items
-- **[Dashboard Analysis](./development/dashboard-analysis.md)** - Dashboard page analysis
-- **[Hooks Guide](./development/hooks-guide.md)** - Custom React hooks
-- **[Utils Guide](./development/utils-guide.md)** - Utility functions
-- **[Types Guide](./development/types-guide.md)** - TypeScript types
-
-### **Features**
-
-- **[Posting System](./features/posting/README.md)** ⭐ NEW - Twitter/X-style posting with mobile-first design
-- **[Bitcoin Wallet](./features/bitcoin-wallet-guide.md)** - Bitcoin wallet integration
-- **[Intelligent Onboarding](./features/INTELLIGENT_ONBOARDING.md)** - Smart user onboarding
-
-### **Workflows**
-
-- **[Supabase Migration Workflow](./workflows/SUPABASE_MIGRATION_WORKFLOW.md)** - Complete migration guide
-- **[Migration Quick Reference](./workflows/MIGRATION_QUICK_REFERENCE.md)** - Fast lookup for common tasks
-- **[Migration Lessons Learned](./workflows/MIGRATION_LESSONS_LEARNED.md)** - What we learned from failures
-
-### **Database**
-
-- **[Database Schema](./architecture/database/DB_SCHEMA.md)** - Complete schema reference
-- **[Migrations Guide](./supabase/migrations-guide.md)** - Database migration workflow
-- **[Schema Quick Reference](./architecture/database/QUICK_REFERENCE.md)** - Quick lookup
-- **[Database Improvements](./operations/database-improvements.md)** - Recent improvements
-
-### **Operations**
-
-- **[Deployment Guide](./operations/DEPLOYMENT.md)** - Production deployment
-- **[Environment Setup](./operations/ENVIRONMENT.md)** - Environment variables
-- **[Troubleshooting](./operations/troubleshooting.md)** - Common issues
-- **[Port Management](./operations/PORT_MANAGEMENT_README.md)** - Development ports
-
-### **Security**
-
-- **[Security Overview](./security/README.md)** - Security principles
-- **[Auth System](./security/auth_system.md)** - Authentication implementation
-- **[Security Audit](./security/audit-report.md)** - Latest security audit
-
-### **Testing**
-
-- **[Test Guide](./testing/test-guide.md)** - Testing strategy
-- **[Test Coverage](./testing/comprehensive-test-coverage-report.md)** - Coverage report
-- **[User Journeys](./testing/USER_JOURNEY_VERIFICATION.md)** - E2E test scenarios
-
----
-
-## 🎯 Common Tasks
-
-### Development
-
-- **Setting up local environment**: See [Development Setup](./development/SETUP.md)
-- **Running migrations**: See [Migration Workflow](./workflows/SUPABASE_MIGRATION_WORKFLOW.md) or [Quick Reference](./workflows/MIGRATION_QUICK_REFERENCE.md)
-- **Creating components**: See [Component Architecture](./components/component-architecture.md)
-- **Writing tests**: See [Test Guide](./testing/test-guide.md)
-
-### Deployment
-
-- **Deploy to production**: See [Deployment Guide](./operations/DEPLOYMENT.md)
-- **Set up monitoring**: See [Observability](./devops/observability.md)
-- **Configure CI/CD**: See [CI/CD Guide](./devops/ci-cd.md)
-
-### Debugging
-
-- **Performance issues**: See [Performance Debugging](./development/performance-debugging.md)
-- **Database issues**: See [Troubleshooting](./operations/troubleshooting.md)
-- **Error handling**: See [Error Handling](./development/error-handling.md)
-
----
-
-## 📋 Standards & Best Practices
-
-### Code Standards
-
-- **[Documentation Standards](./standards/documentation_standards.md)** - How to write docs
-- **[Datetime Standards](./standards/datetime_standards.md)** - Date/time handling
-- **[Color System](./development/color-system-guide.md)** - Design system colors
-
-### Templates
-
-- **[Component Template](./templates/component.md)** - Component boilerplate
-- **[API Endpoint Template](./templates/api-endpoint.md)** - API endpoint structure
-- **[ADR Template](./templates/adr.md)** - Architecture decision records
-- **[Documentation Template](./templates/documentation_template.md)** - Doc structure
-
----
-
-## 🔍 Finding Information
-
-### **Search Documentation**
-
-Use your IDE's search (Ctrl+Shift+F) to search across all documentation files.
-
-### **Recently Updated**
-
-- **[My Cat: Voice + Local Models](./my-cat-voice-and-local-models.md)** - 2026-01-18 ⭐ NEW
-- **[Engineering Principles](./standards/engineering_principles.md)** - 2026-01-18 ⭐ NEW
-- **[My Cat Spec](./my-cat-spec.md)** - 2026-01-18
-
----
-
-## 📞 Getting Help
-
-### **Team Resources**
-
-- **GitHub Issues** - Report bugs and request features
-- **Pull Requests** - All code changes require review
-- **Architecture Decisions** - Document in `docs/architecture/`
-
-### **External Documentation**
-
-- **[Next.js Docs](https://nextjs.org/docs)** - React framework
-- **[Supabase Docs](https://supabase.com/docs)** - Database and auth
-- **[Tailwind CSS](https://tailwindcss.com/docs)** - Styling framework
-- **[Zustand](https://docs.pmnd.rs/zustand)** - State management
-
----
-
-## 🎯 Documentation Principles
-
-This documentation follows these principles:
-
-- ✅ **Always Current** - Updated with every major change
-- ✅ **Actionable** - Step-by-step instructions
-- ✅ **Contextual** - Explains why, not just how
-- ✅ **Searchable** - Clear structure and keywords
-- ✅ **Reviewed** - Regular reviews and updates
-- ✅ **No Duplication** - Single source of truth
-
----
-
-## 📝 Contributing to Docs
-
-When contributing documentation:
-
-1. Follow the [Documentation Standards](./standards/documentation_standards.md)
-2. Use the appropriate [template](./templates/)
-3. Keep docs in the correct directory
-4. Update this index if adding new sections
-5. Test all code examples
-6. Get docs reviewed with code PRs
-
----
-
-**Last Updated:** 2025-11-16
-**Version:** 2.2.0
-**Maintainers:** Development Team
-
----
-
-## 🗄️ Archive
-
-Historical documentation is preserved separately:
-
-- **[Archive Index](./archives/README.md)**
-  - Previous audits, evaluations, and implementation plans
+# OrangeCat Documentation
+
+Documentation for the OrangeCat platform. Start with the area you need.
+
+| Area                                 | What's inside                                                                                                           |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| [getting-started/](getting-started/) | First-time setup and orientation                                                                                        |
+| [architecture/](architecture/)       | System design, entity model, the Cat, ADRs ([adr/](architecture/adr/)), DB schema ([database/](architecture/database/)) |
+| [development/](development/)         | Day-to-day dev: standards, contributing, guides, examples, templates, components                                        |
+| [operations/](operations/)           | Running prod: deployment, devops/runbooks, self-hosted Supabase                                                         |
+| [design-system/](design-system/)     | Design tokens, UI/UX, navigation, branding                                                                              |
+| [features/](features/)               | Feature-level docs (posting, messaging, etc.)                                                                           |
+| [security/](security/)               | Security model and practices                                                                                            |
+| [testing/](testing/)                 | Test strategy and coverage                                                                                              |
+| [business/](business/)               | Executive, legal, marketing                                                                                             |
+| [reference/](reference/)             | API, changelog, content, misc reference material                                                                        |
+| [forward-looking/](forward-looking/) | Plans, proposals, in-flight ideas                                                                                       |
+| [non-public/](non-public/)           | Internal-only material                                                                                                  |
+| [archive/](archive/)                 | Frozen historical docs (incl. the retired managed-cloud era)                                                            |
+
+## Ground truth (2026-06)
+
+- **Database** — self-hosted Supabase at `supabase.orangecat.ch` on the Hetzner box (`bitbaum`). The managed Supabase Cloud was retired 2026-06. Schema = SQL files in [`../supabase/migrations/`](../supabase/migrations/) applied via `psql`. See [operations/supabase/](operations/supabase/).
+- **Deployment** — self-hosted on Hetzner behind Caddy; GitHub Actions CI gates merges but does not deploy. See [operations/deployment/](operations/deployment/).
+- **Bitcoin** — BTC is the canonical stored unit (`NUMERIC(18,8)`); satoshis are display-only.
+
+## Conventions
+
+- Point-in-time reports, audits, and completed runbooks live in [archive/](archive/) — keep active docs current, not historical.
+- Engineering rules the AI agent follows live in [`../.claude/`](../.claude/), not here.

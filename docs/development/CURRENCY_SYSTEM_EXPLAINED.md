@@ -1,7 +1,7 @@
 # Currency System Explained
 
 **Created:** 2026-01-05  
-**Last Modified:** 2026-01-05  
+**Last Modified:** 2026-06-15  
 **Last Modified Summary:** Complete explanation of currency system, conversions, and BTC transactions
 
 ## Overview
@@ -10,7 +10,7 @@ This document explains how the currency system works end-to-end: from user input
 
 ## Key Principle: BTC is the Source of Truth
 
-**All amounts are stored in satoshis (sats) in the database.** Currency is ONLY for display and input purposes. All transactions settle in Bitcoin.
+**All amounts are stored in Bitcoin as `NUMERIC(18,8)` in the database.** Satoshis are display-only (shown when the user selects SATS as their currency). Other currencies are also for display and input purposes only. All transactions settle in Bitcoin.
 
 ## What Happens When User Chooses USD as Default Currency?
 
@@ -20,7 +20,7 @@ When a user changes their currency preference to USD in settings:
 
 ```typescript
 // Stored in profiles.currency
-profiles.currency = 'USD'
+profiles.currency = 'USD';
 ```
 
 **Database:** The `profiles` table has a `currency` column that stores the user's preference. This is the SSOT for user's display currency.
@@ -30,10 +30,11 @@ profiles.currency = 'USD'
 **Scenario:** User with USD preference creates an event with ticket price $50
 
 #### Step 1: Form Input
+
 ```typescript
 // User sees form with CurrencyInput component
 // Input currency defaults to user's preference (USD)
-<CurrencyInput 
+<CurrencyInput
   defaultCurrency="USD"  // From profiles.currency
   userCurrency="USD"
   value={ticketPriceSats}  // Always stored as sats
@@ -42,6 +43,7 @@ profiles.currency = 'USD'
 ```
 
 #### Step 2: User Enters Amount
+
 ```typescript
 // User types: "50"
 // CurrencyInput converts USD → SATS in real-time
@@ -50,6 +52,7 @@ const sats = convertToSats(50, 'USD');
 ```
 
 #### Step 3: Form Submission
+
 ```typescript
 // Form data sent to API:
 {
@@ -59,6 +62,7 @@ const sats = convertToSats(50, 'USD');
 ```
 
 #### Step 4: API Handler
+
 ```typescript
 // src/app/api/events/route.ts
 transformData: async (data, userId, supabase) => {
@@ -68,20 +72,21 @@ transformData: async (data, userId, supabase) => {
     .select('currency')
     .eq('id', userId)
     .single();
-  
+
   const userCurrency = profile?.currency || 'CHF';
-  
+
   // Set currency field (for display purposes)
   if (!data.currency) {
     data.currency = userCurrency; // 'USD'
   }
-  
+
   // ticket_price_sats is already in satoshis (from CurrencyInput)
   return data;
-}
+};
 ```
 
 #### Step 5: Database Storage
+
 ```sql
 -- events table
 INSERT INTO events (
@@ -96,6 +101,7 @@ INSERT INTO events (
 ```
 
 **Key Point:** The database stores:
+
 - `ticket_price_sats = 515463` (the actual amount in satoshis)
 - `currency = 'USD'` (just metadata for display)
 
@@ -107,7 +113,7 @@ When displaying the event to users:
 // Get event from database
 const event = {
   ticket_price_sats: 515463,
-  currency: 'USD'
+  currency: 'USD',
 };
 
 // Display to different users:
@@ -227,15 +233,15 @@ convert(amount: number, fromCurrency: Currency, toCurrency: Currency): number
 
 ```typescript
 // USD → SATS
-convertToSats(50, 'USD')
+convertToSats(50, 'USD');
 // At $97,000/BTC: 50 / 97000 * 100000000 = 515,463 sats
 
 // SATS → USD
-convertFromSats(515463, 'USD')
+convertFromSats(515463, 'USD');
 // 515463 / 100000000 * 97000 = $50.00
 
 // USD → CHF (via sats)
-convert(50, 'USD', 'CHF')
+convert(50, 'USD', 'CHF');
 // USD → SATS → CHF
 // 50 USD → 515463 sats → 43.33 CHF (at CHF 84,000/BTC)
 ```
@@ -246,10 +252,10 @@ Exchange rates are cached and updated periodically:
 
 ```typescript
 // Default rates (from src/services/currency/index.ts)
-BTC_USD: 97000
-BTC_EUR: 91000
-BTC_CHF: 86000
-BTC_SATS: 100000000  // Fixed: 1 BTC = 100M sats
+BTC_USD: 97000;
+BTC_EUR: 91000;
+BTC_CHF: 86000;
+BTC_SATS: 100000000; // Fixed: 1 BTC = 100M sats
 ```
 
 Rates are fetched from `/api/currency/rates` and cached for 5 minutes.
@@ -278,7 +284,7 @@ The transaction always uses the satoshi amount, regardless of what currency the 
 
 ```typescript
 // User changes currency in settings
-profiles.currency = 'USD'
+profiles.currency = 'USD';
 
 // This affects:
 // 1. Default currency in forms
@@ -300,11 +306,13 @@ const displayAmount = convertFromSats(amountSats, userCurrency);
 ## Database Defaults vs User Preference
 
 ### Database Default
+
 - **Default:** `'CHF'` (platform default)
 - **Purpose:** Used when user hasn't set a preference
 - **Stored in:** Database column default
 
 ### User Preference
+
 - **Source:** `profiles.currency`
 - **Overrides:** Database default when creating entities
 - **Stored in:** User's profile

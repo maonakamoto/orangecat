@@ -757,7 +757,7 @@ const snapshot = (await mcp_cursor) - ide - browser_browser_snapshot();
 ## References
 
 - **Design System**: `docs/design-system/README.md`
-- **Navigation UX**: `docs/design/NAVIGATION_UX_DESIGN.md`
+- **Navigation UX**: `docs/design-system/NAVIGATION_UX_DESIGN.md`
 - **Modularity Philosophy**: `docs/architecture/MODULARITY_PHILOSOPHY.md`
 - **Tailwind Config**: `tailwind.config.ts`
 - **shadcn/ui Components**: `src/components/ui/`

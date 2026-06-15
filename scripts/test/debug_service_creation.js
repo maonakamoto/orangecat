@@ -1,8 +1,14 @@
 // Comprehensive debug script for service creation
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://ohkueislstxomdjavyhs.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsImtpZCI6Ik13K25NM0twQVdEL1dLU2G0.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa3VlaXNsc3R4b21kamF2eWhzIiwicm9sZSI6MjA2MDEyMzk1MH0.Qc6ahUbs_5BCa4csEYsBtyxNUDYb4h3Y4K_16N1DNaY';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+if (!supabaseUrl || !supabaseKey) {
+  console.error(
+    'Missing NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY (self-hosted: https://supabase.orangecat.ch) - managed cloud retired'
+  );
+  process.exit(1);
+}
 
 async function debugServiceCreation() {
   console.log('🔍 Comprehensive Service Creation Debug\n');
@@ -11,7 +17,10 @@ async function debugServiceCreation() {
 
   // Test 1: Check authentication
   console.log('1️⃣ Testing Authentication...');
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
   if (authError || !user) {
     console.log('❌ Not authenticated:', authError?.message || 'No user');
     return;
@@ -64,7 +73,7 @@ async function debugServiceCreation() {
     title: 'Debug Test Service',
     description: 'Test service for debugging',
     category: 'Other',
-    status: 'draft'
+    status: 'draft',
   };
 
   console.log('📝 Attempting to create service with data:', minimalService);

@@ -7,9 +7,9 @@ echo "🔧 Applying Post Duplication Fix Migration"
 echo "=========================================="
 echo ""
 
-# Apply migration using Supabase CLI
+# Apply migration using Supabase CLI against the self-hosted DB (supabase.orangecat.ch) - managed cloud retired
 echo "📝 Pushing migration to database..."
-npx supabase db push --db-url "postgresql://postgres.ohkueislstxomdjavyhs:${SUPABASE_SERVICE_ROLE_KEY}@aws-0-us-west-1.pooler.supabase.com:6543/postgres"
+npx supabase db push --db-url "${POSTGRES_URL:?POSTGRES_URL is required (self-hosted: supabase.orangecat.ch) - managed cloud retired}"
 
 echo ""
 echo "✨ Migration complete!"

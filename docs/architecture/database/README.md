@@ -10,29 +10,35 @@
 ## 📋 Quick Navigation
 
 ### 🚀 Getting Started
+
 - **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - Essential commands & links (start here!)
 - **[IMPROVEMENTS_SUMMARY.md](./IMPROVEMENTS_SUMMARY.md)** - What we built & how to deploy
 - **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Step-by-step deployment instructions
 
 ### Core Documentation
+
 - **[Schema Overview](./schema-overview.md)** - High-level architecture and design patterns
 - **[Analysis & Rating](./analysis-rating.md)** - Comprehensive 9.2/10 analysis of simplified architecture
 - **[Current Schema](./database-schema.md)** - Complete database schema reference
 - **[Migration Guide](./migrations-guide.md)** - Database migration instructions
 
 ### Current Tables (5 Core Tables)
+
 - **[profiles](./tables/profiles.md)** - User profiles with Bitcoin features (15 essential fields)
 - **[projects](./tables/projects.md)** - Unified fundraising entity (replaces campaigns + projects)
 - **[transactions](./tables/transactions.md)** - Multi-entity Bitcoin payments (any → any)
 - **[organizations](./tables/organizations.md)** - Group entities for collaborative fundraising
 - **[organization_members](./tables/organization_members.md)** - Simple team management
+
 ### Key Features
+
 - **Multi-Entity Transactions** - Any entity can donate to any other entity
 - **Bitcoin Wallet Integration** - Lightning/Bitcoin addresses for all entities
 - **Transparency by Default** - Public transaction visibility and audit trails
 - **Simplified Permissions** - Clear role-based access control
 
 ### Database Benefits
+
 - ✅ **60% Fewer Tables** - 5 core tables vs 10+ complex tables
 - ✅ **Bitcoin-Native** - Lightning/Bitcoin addresses for all entities
 - ✅ **Transparent** - Public transaction visibility and audit trails
@@ -40,12 +46,14 @@
 - ✅ **Maintainable** - Simple relationships and clear data flow
 
 ### Analysis & Roadmap
+
 - **[Architecture Analysis & Rating](./analysis-rating.md)** - Comprehensive 9.2/10 analysis of simplified architecture
 - **[Improvements Roadmap](./improvements-roadmap.md)** - Planned enhancements for current schema
 
 ## 🎯 Database at a Glance
 
 ### Statistics
+
 - **5 Core Tables** - Essential entities for Bitcoin crowdfunding
 - **Multi-Entity Transactions** - Any entity can donate to any other
 - **Bitcoin Wallet Support** - Lightning/Bitcoin addresses for all entities
@@ -59,6 +67,7 @@
 ### Key Features
 
 #### 1. Bitcoin-Native Architecture (9/10)
+
 - ✅ Precise decimal handling: `numeric(20,8)` for satoshi precision
 - ✅ Multiple payment methods: On-chain + Lightning Network
 - ✅ Address validation with regex patterns
@@ -67,6 +76,7 @@
 - ✅ Revenue sharing via `reward_percentage`
 
 #### 2. Polymorphic Associations (10/10)
+
 - ✅ Flexible entity relationships in single table
 - ✅ Temporal relationships (starts_at, ends_at)
 - ✅ Version tracking for change history
@@ -74,12 +84,14 @@
 - ✅ Complete audit trail
 
 #### 3. Security First (8.5/10)
+
 - ✅ RLS enabled on all tables
 - ✅ Principle of least privilege
 - ✅ Role-based access for organizations
 - ✅ SECURITY DEFINER functions for controlled escalation
 
 #### 4. Performance Optimized (8/10)
+
 - ✅ GIN trigram indexes for fuzzy search
 - ✅ Partial indexes for hot queries
 - ✅ Denormalized counters with triggers
@@ -88,6 +100,7 @@
 ## 🚀 Quick Start
 
 ### Accessing the Database
+
 ```bash
 # Using Supabase CLI
 supabase db pull
@@ -97,13 +110,15 @@ psql $DATABASE_URL
 ```
 
 ### Environment Variables
+
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=https://ohkueislstxomdjavyhs.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://supabase.orangecat.ch
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
 SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
 ```
 
 ### Common Queries
+
 ```sql
 -- Get profile with associations
 SELECT p.*,
@@ -138,12 +153,15 @@ WHERE status IN ('pending', 'processing');
 ## ⚠️ Important Notes
 
 ### Current Limitations
+
 - Transactions table not partitioned (will need this as volume grows)
 - No dedicated audit log table (recommended for compliance)
 - Missing index on `transactions.status` (being added)
 
 ### Planned Improvements
+
 See [Improvements Roadmap](./improvements-roadmap.md) for:
+
 - Table partitioning strategy
 - Audit logging implementation
 - Materialized views for analytics
@@ -154,17 +172,19 @@ See [Improvements Roadmap](./improvements-roadmap.md) for:
 - [Database Schema (Legacy)](../database-schema.md) - Original simplified docs
 - [Association System Design](../association-system-masterpiece-design.md) - Deep dive into polymorphic associations
 - [Supabase Schema Guide](../SUPABASE_SCHEMA_GUIDE.md) - Setup and migration guide
-- [API Documentation](../../api/README.md) - API endpoints using these tables
+- [API Documentation](../../reference/api/README.md) - API endpoints using these tables
 
 ## 🛠️ Maintenance
 
 ### Regular Tasks
+
 - **Weekly**: Review slow query logs
 - **Monthly**: Check index usage statistics
 - **Quarterly**: Analyze table bloat and vacuum
 - **As needed**: Update RLS policies for new features
 
 ### Monitoring
+
 ```sql
 -- Check table sizes
 SELECT

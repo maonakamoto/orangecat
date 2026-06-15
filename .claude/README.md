@@ -56,6 +56,7 @@ p
 ```
 
 **Why This Works**:
+
 - QUICK_REFERENCE.md covers 80% of common operations
 - Detailed rules loaded on-demand (when needed)
 - Saves ~3000 tokens per session start
@@ -105,6 +106,7 @@ pickup
 ### Pre-Edit Hooks
 
 Runs **before** file edits to prevent mistakes:
+
 - Blocks sensitive file edits (.env without backup)
 - Warns about migration file changes
 - Checks for protected files
@@ -112,6 +114,7 @@ Runs **before** file edits to prevent mistakes:
 ### Post-Edit Hooks
 
 Runs **after** file edits for self-correction:
+
 - Type checking
 - Linting (with auto-fix)
 - Magic string detection
@@ -135,6 +138,7 @@ Runs **after** file edits for self-correction:
 ### Supabase (Database)
 
 Credentials in `.env.local`:
+
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
@@ -142,6 +146,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 ```
 
 **MCP Tools**:
+
 - `mcp_supabase_list_tables()` - List tables
 - `mcp_supabase_execute_sql()` - Run queries
 - `mcp_supabase_apply_migration()` - Create migrations
@@ -150,6 +155,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 ### Browser Automation
 
 **MCP Tools**:
+
 - `mcp_cursor-ide-browser_browser_navigate()` - Navigate to page
 - `mcp_cursor-ide-browser_browser_snapshot()` - Capture page state
 - `mcp_cursor-ide-browser_browser_click()` - Click elements
@@ -158,6 +164,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 ### Context7 (Documentation)
 
 **MCP Tools**:
+
 - `mcp_context7_resolve-library-id()` - Find library
 - `mcp_context7_query-docs()` - Get documentation
 
@@ -204,17 +211,20 @@ h  # Create handoff document
 ## 🎯 Success Metrics
 
 ### Code Quality
+
 - Type safety: 100%
 - Magic strings: 0
 - Entity registry usage: 100%
 - Test coverage: > 80%
 
 ### Performance
+
 - First Contentful Paint: < 1.5s
 - Time to Interactive: < 3s
 - Bundle size: monitored
 
 ### Development Velocity
+
 - New entity: < 1 hour
 - Bug fixes: < 30 minutes
 - Feature additions: hours, not days
@@ -224,7 +234,7 @@ h  # Create handoff document
 ## 📚 References
 
 - **Main Guide**: `.claude/CLAUDE.md`
-- **Common Patterns**: `docs/guides/ai/COMMON.md`
+- **Common Patterns**: `docs/development/guides/ai/COMMON.md`
 - **Engineering Principles**: `docs/development/ENGINEERING_PRINCIPLES.md`
 - **Design System**: `docs/design-system/README.md`
 - **Entity Registry**: `src/config/entity-registry.ts`
@@ -259,6 +269,7 @@ h  # Create handoff document
 ## 🎓 Philosophy
 
 **Claude is**:
+
 - **Agentic**: Uses tools autonomously, chains operations
 - **Guardian**: Enforces principles, prevents tech debt
 - **Tool-driven**: Supabase MCP, browser automation, Context7

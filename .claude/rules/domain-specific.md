@@ -273,49 +273,46 @@ CREATE TABLE user_products (
 
 ---
 
-## Remote-Only Supabase
+## Self-Hosted Supabase on Hetzner (SSOT)
 
 ### Critical Rules
 
-**NO local Supabase** for development:
+The database is a **self-hosted Supabase instance on the Hetzner box** at
+`https://supabase.orangecat.ch`. It is the single source of truth.
 
-- Always use remote instance
-- Connection string in `.env.local`
-- See `docs/operations/REMOTE_ONLY_SUPABASE.md`
+- Connection string + keys in `.env.local` (already points at the self-host)
+- **The managed Supabase Cloud project (`ohkueislstxomdjavyhs`) is RETIRED (2026-06)**
 
 **Environment Variables**:
 
 ```bash
 # .env.local
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
+NEXT_PUBLIC_SUPABASE_URL=https://supabase.orangecat.ch
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
 ```
 
-**Why Remote-Only**:
+**Why self-hosted on Hetzner**:
 
-- Shared database across team
-- No local Docker complexity
-- Consistent data for all developers
-- Easier onboarding
-- Real-time features work correctly
+- We own the data and the box — no managed-cloud dependency or fair-use limits
+- Single SSOT for prod and (per current setup) local dev
+- Real-time, auth, storage all served from the one instance
 
-**Commands to AVOID**:
+**Do NOT**:
 
 ```bash
-# ❌ Don't run these
-npx supabase start        # Won't work
-npx supabase stop         # Won't work
-npx supabase db reset     # Use remote migration instead
+# ❌ Don't use the retired managed cloud or its MCP
+mcp_supabase_*            # talks to managed-cloud Management API — retired
+# ❌ Don't spin up a throwaway local stack for normal work
+npx supabase start
 ```
 
 **Use Instead**:
 
 ```bash
-# ✅ Use MCP tools
-mcp_supabase_list_tables()
-mcp_supabase_execute_sql()
-mcp_supabase_apply_migration()
+# ✅ Talk to the self-hosted DB directly
+psql "$POSTGRES_URL" -c 'select 1;'
+# ✅ Schema changes = a new file in supabase/migrations/ applied to the self-host
 ```
 
 ---
@@ -652,7 +649,7 @@ console.error('[Error]', {
 - **Actor System**: `src/lib/actors/`
 - **Entity Registry**: `src/config/entity-registry.ts`
 - **Remote Supabase**: `docs/operations/REMOTE_ONLY_SUPABASE.md`
-- **Deployment**: `docs/operations/DEPLOYMENT.md`
+- **Deployment**: `docs/operations/deployment/DEPLOYMENT_PROCESS.md`
 - **Terminology Guide**: `docs/design/TERMINOLOGY.md`
 
 ---

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SERVICE_KEY="${SUPABASE_SERVICE_ROLE_KEY}"
-BASE_URL="https://ohkueislstxomdjavyhs.supabase.co"
+BASE_URL="${NEXT_PUBLIC_SUPABASE_URL:?NEXT_PUBLIC_SUPABASE_URL is required (self-hosted: https://supabase.orangecat.ch) - managed cloud retired}"
 
 # Check realtime config via the Supabase REST API
 echo "Checking realtime enablement for tables..."

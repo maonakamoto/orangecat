@@ -63,6 +63,34 @@ interface BroadcastResult {
 }
 
 /**
+ * Build a notifications row in the live schema.
+ *
+ * The table stores: user_id, type, message (NOT NULL), action_url, is_read, metadata.
+ * There is no title / source_* column — those are folded into metadata so the
+ * UI can still surface them (title via metadata.title). message falls back to
+ * title to satisfy the NOT NULL constraint when a caller passes none.
+ */
+function buildNotificationRow(
+  userId: string,
+  options: Omit<CreateNotificationOptions, 'recipientUserId'>
+) {
+  return {
+    user_id: userId,
+    type: options.type,
+    message: options.message || options.title,
+    action_url: options.actionUrl || null,
+    is_read: false,
+    metadata: {
+      ...(options.metadata || {}),
+      title: options.title,
+      source_actor_id: options.sourceActorId || null,
+      source_entity_type: options.sourceEntityType || null,
+      source_entity_id: options.sourceEntityId || null,
+    },
+  };
+}
+
+/**
  * Notification Service for server-side notification management
  */
 export class NotificationService {
@@ -75,17 +103,7 @@ export class NotificationService {
     try {
       const { data, error } = await this.supabase
         .from(DATABASE_TABLES.NOTIFICATIONS)
-        .insert({
-          recipient_user_id: options.recipientUserId,
-          type: options.type,
-          title: options.title,
-          message: options.message || null,
-          action_url: options.actionUrl || null,
-          source_actor_id: options.sourceActorId || null,
-          source_entity_type: options.sourceEntityType || null,
-          source_entity_id: options.sourceEntityId || null,
-          metadata: options.metadata || {},
-        })
+        .insert(buildNotificationRow(options.recipientUserId, options))
         .select('id')
         .single();
 
@@ -140,17 +158,7 @@ export class NotificationService {
       }
 
       // Batch insert notifications
-      const notifications = users.map(user => ({
-        recipient_user_id: user.id,
-        type: options.type,
-        title: options.title,
-        message: options.message || null,
-        action_url: options.actionUrl || null,
-        source_actor_id: options.sourceActorId || null,
-        source_entity_type: options.sourceEntityType || null,
-        source_entity_id: options.sourceEntityId || null,
-        metadata: options.metadata || {},
-      }));
+      const notifications = users.map(user => buildNotificationRow(user.id, options));
 
       const { error: insertError } = await this.supabase
         .from(DATABASE_TABLES.NOTIFICATIONS)
@@ -185,8 +193,8 @@ export class NotificationService {
       const { count, error } = await this.supabase
         .from(DATABASE_TABLES.NOTIFICATIONS)
         .select('*', { count: 'exact', head: true })
-        .eq('recipient_user_id', userId)
-        .eq('read', false);
+        .eq('user_id', userId)
+        .eq('is_read', false);
 
       if (error) {
         logger.error('Failed to get unread count', { error, userId }, 'NotificationService');
@@ -207,8 +215,8 @@ export class NotificationService {
     try {
       let query = this.supabase
         .from(DATABASE_TABLES.NOTIFICATIONS)
-        .update({ read: true, read_at: new Date().toISOString() })
-        .eq('recipient_user_id', userId);
+        .update({ is_read: true, read_at: new Date().toISOString() })
+        .eq('user_id', userId);
 
       if (notificationIds && notificationIds.length > 0) {
         query = query.in('id', notificationIds);
@@ -259,24 +267,15 @@ export class NotificationService {
 
       let query = this.supabase
         .from(DATABASE_TABLES.NOTIFICATIONS)
-        .select(
-          `
-          *,
-          source_actor:actors!source_actor_id (
-            id,
-            actor_type,
-            user_id,
-            profiles:user_id (name, avatar_url)
-          )
-        `,
-          { count: 'exact' }
-        )
-        .eq('recipient_user_id', userId)
+        .select('id, user_id, type, message, action_url, is_read, read_at, created_at, metadata', {
+          count: 'exact',
+        })
+        .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .range(offset, offset + limit - 1);
 
       if (unreadOnly) {
-        query = query.eq('read', false);
+        query = query.eq('is_read', false);
       }
 
       const { data, error, count } = await query;
@@ -309,7 +308,7 @@ export class NotificationService {
         .from(DATABASE_TABLES.NOTIFICATIONS)
         .delete()
         .eq('id', notificationId)
-        .eq('recipient_user_id', userId);
+        .eq('user_id', userId);
 
       if (error) {
         logger.error(
@@ -332,27 +331,19 @@ export class NotificationService {
   }
 }
 
-// Re-export notification interface for convenience
+// Re-export notification interface for convenience.
+// Matches the live `notifications` table: title and any source_* ids live
+// inside metadata (see buildNotificationRow), not as top-level columns.
 interface Notification {
   id: string;
-  recipient_user_id: string;
+  user_id: string;
   type: NotificationType;
-  title: string;
-  message: string | null;
+  message: string;
   action_url: string | null;
-  read: boolean;
+  is_read: boolean;
   read_at: string | null;
   created_at: string;
   metadata: Record<string, unknown>;
-  source_actor_id: string | null;
-  source_entity_type: string | null;
-  source_entity_id: string | null;
-  source_actor?: {
-    id: string;
-    actor_type: string;
-    user_id: string | null;
-    profiles: { name: string | null; avatar_url: string | null } | null;
-  } | null;
 }
 
 export type { Notification };

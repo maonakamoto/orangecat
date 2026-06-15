@@ -63,7 +63,9 @@ async function applyMigration() {
     // For now, let's try using rpc if there's an exec_sql function, or guide user
     console.log('⚠️  Direct SQL execution via JS client is limited.');
     console.log('📋 Please apply this migration manually:\n');
-    console.log('   1. Go to: https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new');
+    console.log(
+      '   1. apply via psql "$POSTGRES_URL" on the self-hosted DB (supabase.orangecat.ch) - managed cloud retired'
+    );
     console.log('   2. Copy and paste the contents of:');
     console.log(`      ${migrationPath}`);
     console.log('   3. Click "Run"\n');

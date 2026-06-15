@@ -176,28 +176,41 @@ const { data } = await supabase
 
 ---
 
-## Critical: Remote-Only Supabase
+## Critical: Self-Hosted Supabase on Hetzner is the SSOT
 
-**NO local Supabase** - always use remote instance.
+The database is a **self-hosted Supabase instance on the Hetzner box (`bitbaum`),
+reachable at `https://supabase.orangecat.ch`**. This is the single source of truth.
+
+> ⚠️ **The managed Supabase Cloud project (`ohkueislstxomdjavyhs.supabase.co`) is
+> RETIRED (2026-06).** Do NOT use it, and do NOT use the Supabase **MCP**
+> (`mcp_supabase_*` / `mcp__claude_ai_Supabase__*`) — it only talks to the
+> managed-cloud Management API, which no longer backs production. Any
+> `mcp_supabase_*` examples elsewhere in `.claude/` are legacy and being retired.
 
 ```bash
-# Credentials in .env.local
-NEXT_PUBLIC_SUPABASE_URL=https://...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
+# Credentials live in .env.local (points at supabase.orangecat.ch).
+NEXT_PUBLIC_SUPABASE_URL=https://supabase.orangecat.ch
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
 
-# DON'T use these:
-npx supabase start   # Won't work
-npx supabase stop    # Won't work
+# Do NOT spin up a separate local stack for normal work:
+npx supabase start   # not the workflow
 ```
 
-**Use MCP tools instead**:
+**To inspect / change the DB**, connect to the self-hosted instance directly:
 
-```typescript
-mcp_supabase_list_tables();
-mcp_supabase_execute_sql();
-mcp_supabase_apply_migration();
+```bash
+# Read/query via the pooled connection string in .env.local
+psql "$POSTGRES_URL" -c '\d+ notifications'
+
+# Schema changes: add a migration under supabase/migrations/ and apply it
+# against the self-hosted DB (psql or supabase CLI pointed at supabase.orangecat.ch).
+# Migrations are the SSOT for schema — keep them runnable on a fresh box.
 ```
+
+Note: this agent's sandbox generally cannot reach `supabase.orangecat.ch` directly
+(it's behind Caddy on the box). Box-side DB work goes through the founder /
+FleetCrown agent. Never reintroduce the managed-cloud project as a shortcut.
 
 ---
 

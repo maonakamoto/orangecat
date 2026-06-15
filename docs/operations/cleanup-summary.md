@@ -10,6 +10,7 @@ Successfully completed comprehensive cleanup and backend fixes for the OrangeCat
 ## ✅ Completed Tasks
 
 ### 1. Backend Fixes
+
 - ✅ **Organization API** - Verified existing API routes are functional
 - ✅ **Social/Follow API** - Confirmed follow/unfollow endpoints working
 - ✅ **Profile Services** - Already consolidated to modular architecture (facade, reader, writer)
@@ -20,13 +21,14 @@ Successfully completed comprehensive cleanup and backend fixes for the OrangeCat
   - Storage service: Created `src/services/profile/storage.ts` for avatar/banner uploads
 
 ### 2. File Organization
+
 - ✅ **UI Components** - Fixed case-sensitivity issues
   - Resolved webpack warnings for Button/Input/Textarea
   - Added named exports to support both import styles
   - Build now compiles cleanly
 
 - ✅ **Script Cleanup** - Reduced from 111 to 69 scripts
-  - Removed 42 obsolete scripts (fix-*, test duplicates, one-time migrations)
+  - Removed 42 obsolete scripts (fix-\*, test duplicates, one-time migrations)
   - Organized remaining scripts by category:
     - DB scripts: 12
     - Test scripts: 5
@@ -45,12 +47,13 @@ Successfully completed comprehensive cleanup and backend fixes for the OrangeCat
   - Kept active documentation in `/docs/` structure
 
 ### 3. Configuration
+
 - ✅ **.gitignore** - Updated to exclude:
   - Test artifacts (.jest-cache/, coverage/)
-  - Build files (*.tsbuildinfo)
+  - Build files (\*.tsbuildinfo)
   - Backup directories (backup/, backups/)
-  - Temporary files (*.pid)
-  - Python cache (__pycache__/)
+  - Temporary files (\*.pid)
+  - Python cache (**pycache**/)
 
 - ✅ **next.config.js** - Fixed and optimized
   - Removed references to deleted webpack-bundle-optimizer
@@ -58,6 +61,7 @@ Successfully completed comprehensive cleanup and backend fixes for the OrangeCat
   - Kept essential webpack optimizations
 
 ### 4. Build Verification
+
 - ✅ **Clean Build** - No webpack warnings or errors
   - Before: Multiple "modules with different casing" warnings
   - After: ✓ Compiled successfully with zero warnings
@@ -66,12 +70,14 @@ Successfully completed comprehensive cleanup and backend fixes for the OrangeCat
 ## 📊 Impact Summary
 
 ### File Reduction
+
 - **Scripts:** 111 → 69 (38% reduction)
 - **SQL Files:** 42 → 11 (74% reduction)
 - **Documentation:** Removed 4 obsolete files
 - **Total:** ~50 files removed
 
 ### Backend Completeness
+
 - ✅ Profile API - Working
 - ✅ Organization API - Working (authentication required)
 - ✅ Social/Follow API - Working (authentication required)
@@ -79,6 +85,7 @@ Successfully completed comprehensive cleanup and backend fixes for the OrangeCat
 - ✅ Storage Service - NEW - Avatar/Banner uploads functional
 
 ### Code Quality Improvements
+
 - Zero webpack warnings
 - Clean build process
 - Organized file structure
@@ -112,8 +119,11 @@ The application is now production-ready with:
 ## 🔄 Next Steps (Optional)
 
 1. **Apply Database Migrations**
+
    ```bash
-   npx supabase db push
+   # Apply SQL migrations via psql against the self-hosted DB (supabase.orangecat.ch).
+   # See docs/supabase/migrations-guide.md.
+   psql "$POSTGRES_URL" -f supabase/migrations/<file>.sql
    ```
 
 2. **Test with Authentication**
@@ -137,7 +147,3 @@ The application is now production-ready with:
 
 **Cleanup executed successfully without user intervention.**
 **All todos completed. Ready for deployment.**
-
-
-
-

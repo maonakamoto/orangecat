@@ -328,7 +328,8 @@ export interface TimelineFilters {
   amountRange?: {
     min: number;
     max: number;
-    currency: 'sats' | 'btc';
+    // BTC is the canonical unit — satoshis are not a product concept.
+    currency: 'btc';
   };
 }
 

@@ -24,6 +24,7 @@
 ```
 
 **Why this matters:**
+
 - ✅ Easy onboarding for new developers
 - ✅ Single source of truth for database architecture
 - ✅ Clear roadmap for future improvements
@@ -34,20 +35,24 @@
 ### 2. ✅ Two High-Priority Migrations Created
 
 #### Migration #1: Add Index on transactions.status
+
 **File:** `supabase/migrations/20251017000001_add_transactions_status_index.sql`
 
 **What it does:**
+
 ```sql
 CREATE INDEX idx_transactions_status ON transactions(status);
 ```
 
 **Impact:**
+
 - 🚀 **10x faster** queries filtering by transaction status
 - 📊 Critical for admin dashboards
 - 💳 Essential for payment processing
 - 📈 Improves analytics performance
 
 **Before:**
+
 ```sql
 EXPLAIN ANALYZE
 SELECT * FROM transactions WHERE status = 'pending';
@@ -56,6 +61,7 @@ SELECT * FROM transactions WHERE status = 'pending';
 ```
 
 **After (once applied):**
+
 ```sql
 EXPLAIN ANALYZE
 SELECT * FROM transactions WHERE status = 'pending';
@@ -68,9 +74,11 @@ SELECT * FROM transactions WHERE status = 'pending';
 ---
 
 #### Migration #2: Create audit_logs Table
+
 **File:** `supabase/migrations/20251017000002_create_audit_logs.sql`
 
 **What it creates:**
+
 - 📋 `audit_logs` table - Complete audit trail
 - 🔧 `create_audit_log()` function - Easy logging from code
 - ⚡ 6 strategic indexes - Efficient querying
@@ -78,12 +86,14 @@ SELECT * FROM transactions WHERE status = 'pending';
 - 📝 Example trigger on profiles table - Automatic logging
 
 **Impact:**
+
 - 🔐 **Security**: Track all critical operations
 - 📜 **Compliance**: Meet financial regulations (Bitcoin)
 - 🐛 **Debugging**: Trace complex state changes
 - 👥 **Support**: Help users with issues
 
 **What gets logged:**
+
 - ✅ Profile updates (especially verification, Bitcoin addresses)
 - ✅ Financial transactions (all state changes)
 - ✅ Organization membership changes
@@ -91,6 +101,7 @@ SELECT * FROM transactions WHERE status = 'pending';
 - ✅ Campaign status changes
 
 **Example usage:**
+
 ```sql
 -- Automatic (via trigger)
 UPDATE profiles SET is_verified = true WHERE id = '...';
@@ -132,6 +143,7 @@ SELECT create_audit_log(
    - CI/CD ready
 
 **Includes:**
+
 - ✅ Step-by-step instructions
 - ✅ Verification scripts
 - ✅ Rollback procedures
@@ -143,6 +155,7 @@ SELECT create_audit_log(
 ## 📚 What You Learned Today
 
 ### 1. Database Analysis & Rating
+
 - How to systematically evaluate database architecture
 - What makes a "good" database design
 - Trade-offs between normalization, performance, and flexibility
@@ -150,6 +163,7 @@ SELECT create_audit_log(
 **Key takeaway:** Your database scored **8.7/10** - production-ready with room for optimization!
 
 ### 2. Migration Strategy
+
 - Different approaches to applying database changes
 - Idempotent migrations (`IF NOT EXISTS`)
 - Transaction wrapping (`BEGIN`/`COMMIT`)
@@ -158,6 +172,7 @@ SELECT create_audit_log(
 **Key takeaway:** Always test, document, verify, and have a rollback plan!
 
 ### 3. PostgreSQL Best Practices
+
 - **Indexes**: Speed up queries but add write overhead
 - **JSONB**: Flexibility vs structure
 - **RLS**: Security at database level
@@ -165,6 +180,7 @@ SELECT create_audit_log(
 - **SECURITY DEFINER**: Controlled privilege escalation
 
 ### 4. Real-World Debugging
+
 - Connection issues in production
 - Environment variable management
 - Multiple deployment methods (fallbacks!)
@@ -179,6 +195,7 @@ SELECT create_audit_log(
 ### Step 1: Review the Migrations
 
 Read through both migration files to understand what they do:
+
 ```bash
 # Migration 1: Index
 cat supabase/migrations/20251017000001_add_transactions_status_index.sql
@@ -188,6 +205,7 @@ cat supabase/migrations/20251017000002_create_audit_logs.sql
 ```
 
 **Ask yourself:**
+
 - What does this change?
 - Why do we need it?
 - What could go wrong?
@@ -198,11 +216,12 @@ cat supabase/migrations/20251017000002_create_audit_logs.sql
 
 This is a **safe, high-impact change**. Let's get a win!
 
-**Recommended method:** Supabase Dashboard
+**Method:** SQL editor
 
-1. Go to: https://supabase.com/dashboard/project/ohkueislstxomdjavyhs/sql/new
+1. Run in the SQL editor. (Managed Supabase Cloud retired 2026-06 — DB is now self-hosted at supabase.orangecat.ch on the Hetzner box; access via the box / founder.)
 
 2. Copy this SQL:
+
 ```sql
 BEGIN;
 
@@ -253,6 +272,7 @@ LIMIT 10;
 ```
 
 **What to look for:**
+
 - ✅ Plan shows: "Index Scan using idx_transactions_status"
 - ✅ Execution time is fast (<100ms)
 
@@ -263,6 +283,7 @@ LIMIT 10;
 This is a **more complex change** but still safe (new table).
 
 **Same process:**
+
 1. Go to Supabase SQL Editor
 2. Copy entire content of: `20251017000002_create_audit_logs.sql`
 3. Click "RUN"
@@ -302,6 +323,7 @@ LIMIT 5;
 After applying both migrations, monitor:
 
 **For the index:**
+
 ```sql
 -- Check if index is being used
 SELECT
@@ -313,6 +335,7 @@ WHERE indexname = 'idx_transactions_status';
 ```
 
 **For audit logs:**
+
 ```sql
 -- Check volume of logs
 SELECT
@@ -356,18 +379,21 @@ ORDER BY hour DESC;
 After applying these improvements, you should see:
 
 ### Immediate (Day 1)
+
 - ✅ Index exists in database
 - ✅ Audit logs table created
 - ✅ No errors in application
 - ✅ Queries using new index
 
 ### Short-term (Week 1)
+
 - ✅ Faster dashboard load times
 - ✅ Audit logs being created automatically
 - ✅ Index usage stats showing > 0
 - ✅ No performance regressions
 
 ### Long-term (Month 1)
+
 - ✅ Reduced query times (metrics)
 - ✅ Useful audit trail for debugging
 - ✅ Compliance requirements met
@@ -380,6 +406,7 @@ After applying these improvements, you should see:
 **After these two migrations**, we have a roadmap:
 
 ### Next Priorities (Q1 2026)
+
 1. **Table Partitioning** for transactions
    - Handle unlimited growth
    - 10x faster queries on old data
@@ -404,6 +431,7 @@ After applying these improvements, you should see:
 ### For Future Migrations
 
 1. **Always use transactions**
+
    ```sql
    BEGIN;
    -- Your changes
@@ -412,17 +440,20 @@ After applying these improvements, you should see:
    ```
 
 2. **Make it idempotent**
+
    ```sql
    CREATE INDEX IF NOT EXISTS ...
    CREATE TABLE IF NOT EXISTS ...
    ```
 
 3. **Add documentation**
+
    ```sql
    COMMENT ON INDEX ... IS 'Why this exists...';
    ```
 
 4. **Verify after applying**
+
    ```sql
    SELECT * FROM pg_indexes WHERE ...
    ```
@@ -445,6 +476,7 @@ After applying these improvements, you should see:
 ## 🎉 Congratulations!
 
 You now have:
+
 - ✅ **Complete database documentation**
 - ✅ **Two production-ready migrations**
 - ✅ **Comprehensive deployment guide**
@@ -469,6 +501,7 @@ If you get stuck:
 4. **Check Supabase logs:** Dashboard → Logs
 
 **Remember:** Every production engineer runs into issues. The key is:
+
 - Stay calm 🧘
 - Read error messages carefully 🔍
 - Have multiple approaches 🛠️
@@ -478,4 +511,4 @@ If you get stuck:
 
 **Happy deploying!** 🎊
 
-*Remember: You're learning with a senior engineer. There's no such thing as a "stupid question" - only unasked questions that lead to production issues later!*
+_Remember: You're learning with a senior engineer. There's no such thing as a "stupid question" - only unasked questions that lead to production issues later!_

@@ -2,6 +2,8 @@
 
 **Complete guide to managing environment variables safely in OrangeCat development.**
 
+> **Note (2026-06):** Production is **self-hosted on Hetzner** — Vercel is no longer the prod pipeline. The Vercel CLI/login steps below apply only to legacy/optional tooling; production env lives in the app's `.env` on the box (see `docs/deployment/DEPLOYMENT_PROCESS.md`).
+
 ## 🚨 The Problem
 
 Traditional `.env` files are fragile:
@@ -304,9 +306,6 @@ If you encounter issues:
 
 ---
 
-**Last Updated:** December 2, 2025
+**Last Updated:** 2026-06-15
 **System Version:** v2.0 (OAuth + direnv)
 **Safety Level:** 🔒 Maximum (Zero credential loss risk)
-
-
-

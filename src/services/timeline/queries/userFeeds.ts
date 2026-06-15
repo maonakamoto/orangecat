@@ -167,12 +167,13 @@ export async function getFollowedUsersFeed(
     const limit = Math.min(pagination?.limit || DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
     const offset = (page - 1) * limit;
 
-    // Get list of followed user IDs
+    // Get list of followed user IDs. The follows table's canonical columns are
+    // follower_id / following_id — there is no followed_user_id or is_active
+    // column (selecting them 400s and silently empties this feed).
     const { data: follows, error: followsError } = await supabase
       .from(DATABASE_TABLES.FOLLOWS)
-      .select('followed_user_id')
-      .eq('follower_id', currentUserId)
-      .eq('is_active', true);
+      .select('following_id')
+      .eq('follower_id', currentUserId);
 
     if (followsError) {
       logger.error('Failed to fetch followed users', followsError, 'Timeline');
@@ -180,7 +181,7 @@ export async function getFollowedUsersFeed(
     }
 
     const followedUserIds =
-      (follows as { followed_user_id: string }[] | null)?.map(f => f.followed_user_id) || [];
+      (follows as { following_id: string }[] | null)?.map(f => f.following_id) || [];
 
     if (followedUserIds.length === 0) {
       return {
