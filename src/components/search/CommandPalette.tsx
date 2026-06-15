@@ -47,9 +47,42 @@ import {
   Wallet,
 } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
-import { useSearchSuggestions } from '@/hooks/useSearchSuggestions';
+import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { cn } from '@/lib/utils';
+import type { GlobalSearchHit } from '@/services/search';
 import type { LucideIcon } from 'lucide-react';
+
+/** Public detail URL for a global_search hit (profiles route by username). */
+function hrefForHit(hit: GlobalSearchHit): string {
+  switch (hit.entity_type) {
+    case 'project':
+      return ROUTES.PROJECTS.VIEW(hit.id);
+    case 'product':
+      return ROUTES.PRODUCTS.VIEW(hit.id);
+    case 'service':
+      return ROUTES.SERVICES.VIEW(hit.id);
+    case 'cause':
+      return ROUTES.CAUSES.VIEW(hit.id);
+    case 'loan':
+      return ROUTES.LOANS.VIEW(hit.id);
+    case 'event':
+      return ROUTES.EVENTS.VIEW(hit.id);
+    case 'profile':
+      return ROUTES.PROFILES.VIEW((hit.subtitle ?? '').replace(/^@/, '') || hit.id);
+    default:
+      return ROUTES.DISCOVER;
+  }
+}
+
+const HIT_ICONS: Record<string, LucideIcon> = {
+  project: Lightbulb,
+  product: Package,
+  service: Briefcase,
+  cause: HandHeart,
+  loan: PiggyBank,
+  event: Calendar,
+  profile: Users,
+};
 
 export interface CommandPaletteProps {
   open: boolean;
@@ -68,7 +101,7 @@ interface PaletteItem {
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const router = useRouter();
   const [query, setQuery] = useState('');
-  const { suggestions, loading: suggestionsLoading } = useSearchSuggestions(
+  const { results: hits, loading: hitsLoading } = useGlobalSearch(
     query,
     open && query.trim().length > 1
   );
@@ -352,24 +385,28 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           ))}
         </Command.Group>
 
-        {query.trim().length > 1 && suggestions.length > 0 && (
+        {query.trim().length > 1 && hits.length > 0 && (
           <Command.Group
-            heading="Suggestions"
+            heading="Results"
             className="mt-1 text-[10px] uppercase tracking-wider text-muted-dim"
           >
-            {suggestions.map(suggestion => (
+            {hits.map(hit => (
               <PaletteRow
-                key={`suggestion-${suggestion}`}
-                value={`suggestion-${suggestion}`}
-                icon={Search}
-                label={suggestion}
-                onSelect={() => submitFullSearch(suggestion)}
+                // `value` is prefixed with the live query so cmdk's built-in
+                // filter always keeps server-ranked (typo-tolerant) hits, which
+                // may not literally contain the typed text.
+                key={`${hit.entity_type}-${hit.id}`}
+                value={`${query} ${hit.entity_type} ${hit.title} ${hit.id}`}
+                icon={HIT_ICONS[hit.entity_type] ?? Search}
+                label={hit.title}
+                hint={hit.subtitle ?? hit.entity_type}
+                onSelect={() => navigateTo(hrefForHit(hit))}
               />
             ))}
           </Command.Group>
         )}
 
-        {suggestionsLoading && <div className="px-3 py-2 text-xs text-muted-dim">Searching…</div>}
+        {hitsLoading && <div className="px-3 py-2 text-xs text-muted-dim">Searching…</div>}
       </Command.List>
     </Command.Dialog>
   );
