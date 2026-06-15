@@ -139,6 +139,18 @@ export const DEFAULT_GROQ_MODEL: keyof typeof GROQ_MODELS =
   (process.env.GROQ_DEFAULT_MODEL as keyof typeof GROQ_MODELS | undefined) ??
   'llama-3.1-8b-instant';
 
+/**
+ * Default max output tokens for chat completions.
+ *
+ * Groq's free tier limits tokens-PER-MINUTE (e.g. 6000 TPM for
+ * llama-3.1-8b-instant), and the *reserved* `max_tokens` counts against that
+ * bucket up-front — so defaulting to the model's full 8192 output capability
+ * makes every request exceed TPM and 429 (which silently fell the Cat back to
+ * OpenRouter on every message). 2048 is ample for chat; callers that need more
+ * pass `maxTokens` explicitly.
+ */
+export const GROQ_CHAT_MAX_TOKENS = 2048;
+
 // ==================== SERVICE CLASS ====================
 
 export class GroqService {
@@ -197,7 +209,7 @@ export class GroqService {
       model,
       messages: fullMessages,
       temperature,
-      max_tokens: maxTokens || maxOutput,
+      max_tokens: maxTokens || Math.min(maxOutput, GROQ_CHAT_MAX_TOKENS),
       stream: false,
     };
 
@@ -252,7 +264,7 @@ export class GroqService {
         model,
         messages: fullMessages,
         temperature,
-        max_tokens: maxTokens || maxOutput,
+        max_tokens: maxTokens || Math.min(maxOutput, GROQ_CHAT_MAX_TOKENS),
         stream: true,
       }),
     });
