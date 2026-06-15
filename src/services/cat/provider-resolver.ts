@@ -8,25 +8,14 @@
 
 import { createApiKeyService } from '@/services/ai/api-key-service';
 import {
-  createOpenRouterService,
   createOpenRouterServiceWithByok,
-  createGroqService,
   createGroqServiceWithByok,
   createOpenAICompatibleServiceWithByok,
   isGroqAvailable,
   DEFAULT_GROQ_MODEL,
 } from '@/services/ai';
-import {
-  isModelFree,
-  getModelMetadata,
-  getFreeModels,
-  DEFAULT_FREE_MODEL_ID,
-} from '@/config/ai-models';
-import {
-  OPENAI_COMPAT_PROVIDER_IDS,
-  getProviderRuntime,
-  isOpenAICompatibleProvider,
-} from '@/config/ai-provider-runtime';
+import { getModelMetadata, DEFAULT_FREE_MODEL_ID } from '@/config/ai-models';
+import { getProviderRuntime, isOpenAICompatibleProvider } from '@/config/ai-provider-runtime';
 import { createAutoRouter } from '@/services/ai/auto-router';
 import { buildPlatformProviders } from '@/services/ai/platform-providers';
 import { OPENROUTER_KEY_HEADER } from '@/config/http-headers';
@@ -101,54 +90,145 @@ export async function resolveProvider(
   const { requestedModel, message } = opts;
   const keyService = createApiKeyService(supabase);
 
-  // Resolve BYOK keys (header takes priority over stored)
+  // Per-request header keys are a one-off override (never persisted) and
+  // always lead the chain. Stored keys come from the ordered chain below.
   const clientOpenRouterKey = requestHeaders.get(OPENROUTER_KEY_HEADER);
   const clientGroqKey = requestHeaders.get(GROQ_KEY_HEADER);
-  const storedOpenRouterKey = clientOpenRouterKey
-    ? null
-    : await keyService.getDecryptedKey(userId, 'openrouter');
-  const storedGroqKey = clientGroqKey ? null : await keyService.getDecryptedKey(userId, 'groq');
 
-  const userOpenRouterKey = clientOpenRouterKey || storedOpenRouterKey;
-  const userGroqKey = clientGroqKey || storedGroqKey;
+  // ── Build one merged, fully-ordered fallback chain ─────────────────────
+  // The user can place the free OrangeCat platform default anywhere in the
+  // chain (including first = primary), interleaved with their own keys. The
+  // first entry is the primary; the rest are fallbacks tried in order on
+  // rate-limit/error. For a user with no keys the chain is just [platform],
+  // identical to the original behaviour.
+  type ChainStep = {
+    provider: AIProvider;
+    modelToUse: string;
+    aiService: AiService;
+    hasByok: boolean;
+  };
 
-  // Look up OpenAI-compatible BYOK keys (OpenAI / Together / DeepSeek / xAI).
-  // We never send these via headers — only stored keys count. First match
-  // wins, in the order PROVIDER_RUNTIME declares (openai > together > ...).
-  let userOpenAICompatProvider: string | null = null;
-  let userOpenAICompatKey: string | null = null;
-  for (const providerId of OPENAI_COMPAT_PROVIDER_IDS) {
-    const key = await keyService.getDecryptedKey(userId, providerId);
-    if (key) {
-      userOpenAICompatProvider = providerId;
-      userOpenAICompatKey = key;
-      break;
+  const groqModelFor = (m?: string): string =>
+    m?.startsWith('llama') || m?.startsWith('mixtral') || m?.startsWith('gemma')
+      ? m
+      : DEFAULT_GROQ_MODEL;
+
+  // A concrete step for one BYOK key. Returns null for unknown/unconfigured
+  // providers, which are then skipped from the chain.
+  const buildKeyStep = (prov: string, key: string): ChainStep | null => {
+    if (prov === 'groq') {
+      return {
+        provider: 'groq',
+        modelToUse: groqModelFor(requestedModel),
+        aiService: createGroqServiceWithByok(key),
+        hasByok: true,
+      };
     }
+    if (prov === 'openrouter') {
+      let model =
+        requestedModel && requestedModel !== 'auto' && requestedModel !== 'any'
+          ? requestedModel
+          : DEFAULT_FREE_MODEL_ID;
+      if (requestedModel === 'auto' || requestedModel === 'any') {
+        model = createAutoRouter().selectModel({ message, conversationHistory: [] }).model;
+      }
+      if (!getModelMetadata(model)) {
+        model = DEFAULT_FREE_MODEL_ID;
+      }
+      return {
+        provider: 'openrouter',
+        modelToUse: model,
+        aiService: createOpenRouterServiceWithByok(key),
+        hasByok: true,
+      };
+    }
+    if (isOpenAICompatibleProvider(prov)) {
+      const rt = getProviderRuntime(prov);
+      if (!rt) {
+        return null;
+      }
+      const model =
+        requestedModel && requestedModel !== 'auto' && requestedModel !== 'any'
+          ? requestedModel
+          : (rt.defaultModel ?? DEFAULT_FREE_MODEL_ID);
+      return {
+        provider: prov as AIProvider,
+        modelToUse: model,
+        aiService: createOpenAICompatibleServiceWithByok({
+          apiKey: key,
+          baseUrl: rt.baseUrl,
+          providerId: prov,
+        }),
+        hasByok: true,
+      };
+    }
+    return null;
+  };
+
+  // Ordered entries — each expands to zero or more steps. Lower order =
+  // earlier in the chain.
+  type Entry = { order: number; build: () => ChainStep[] };
+  const entries: Entry[] = [];
+  const seenKeys = new Set<string>();
+
+  if (clientGroqKey) {
+    seenKeys.add(clientGroqKey);
+    entries.push({
+      order: -2,
+      build: () => {
+        const s = buildKeyStep('groq', clientGroqKey);
+        return s ? [s] : [];
+      },
+    });
+  }
+  if (clientOpenRouterKey) {
+    seenKeys.add(clientOpenRouterKey);
+    entries.push({
+      order: -1,
+      build: () => {
+        const s = buildKeyStep('openrouter', clientOpenRouterKey);
+        return s ? [s] : [];
+      },
+    });
   }
 
-  // Provider priority:
-  //   1. User Groq BYOK (fastest)
-  //   2. User OpenRouter BYOK (broadest model coverage)
-  //   3. Any user OpenAI-compatible BYOK (OpenAI/Together/DeepSeek/xAI)
-  //   4. Platform Groq
-  //   5. Platform OpenRouter
-  let provider: AIProvider;
-  let hasByok = false;
+  // Stored user keys in their saved order.
+  const storedKeys = await keyService.listDecryptedKeysOrdered(userId);
+  for (const k of storedKeys) {
+    if (seenKeys.has(k.key)) {
+      continue; // a header already supplied this exact key
+    }
+    seenKeys.add(k.key);
+    entries.push({
+      order: k.sortOrder,
+      build: () => {
+        const s = buildKeyStep(k.provider, k.key);
+        return s ? [s] : [];
+      },
+    });
+  }
 
-  if (userGroqKey) {
-    provider = 'groq';
-    hasByok = true;
-  } else if (userOpenRouterKey) {
-    provider = 'openrouter';
-    hasByok = true;
-  } else if (userOpenAICompatProvider && userOpenAICompatKey) {
-    provider = userOpenAICompatProvider as AIProvider;
-    hasByok = true;
-  } else if (isGroqAvailable()) {
-    provider = 'groq';
-  } else if (process.env.OPENROUTER_API_KEY) {
-    provider = 'openrouter';
-  } else {
+  // The free platform default at its saved position (only if env-configured).
+  const platformConfigured = isGroqAvailable() || !!process.env.OPENROUTER_API_KEY;
+  if (platformConfigured) {
+    const platformPos = await keyService.getPlatformChainPosition(userId);
+    entries.push({
+      order: platformPos,
+      build: () =>
+        buildPlatformProviders(message).map(p => ({
+          provider: p.providerId as AIProvider,
+          modelToUse: p.defaultModel,
+          aiService: p.aiService,
+          hasByok: false,
+        })),
+    });
+  }
+
+  // Sort by position, then expand into the concrete chain.
+  entries.sort((a, b) => a.order - b.order);
+  const chain: ChainStep[] = entries.flatMap(e => e.build());
+
+  if (chain.length === 0) {
     return Response.json(
       {
         success: false,
@@ -163,7 +243,16 @@ export async function resolveProvider(
     );
   }
 
-  // Platform usage check (non-BYOK only)
+  const primary = chain[0];
+  const provider = primary.provider;
+  const hasByok = primary.hasByok;
+  const modelToUse = primary.modelToUse;
+  const aiService = primary.aiService;
+
+  // Platform usage limit applies only when the platform default is the
+  // primary (it will actually serve and increment usage). This matches the
+  // chat route, which increments platform usage on `!hasByok`, and keeps the
+  // no-keys path identical to before.
   let platformUsage: { daily_limit: number; requests_remaining: number } | null = null;
   if (!hasByok) {
     const usage = await keyService.checkPlatformUsage(userId);
@@ -179,128 +268,22 @@ export async function resolveProvider(
     };
   }
 
-  // Model selection
-  let modelToUse: string;
-  if (provider === 'groq') {
-    // Groq: use requested model only if it's a known Groq model family
-    modelToUse =
-      requestedModel?.startsWith('llama') ||
-      requestedModel?.startsWith('mixtral') ||
-      requestedModel?.startsWith('gemma')
-        ? requestedModel
-        : DEFAULT_GROQ_MODEL;
-  } else if (isOpenAICompatibleProvider(provider)) {
-    // Direct OpenAI-compatible provider: trust the user's requested model
-    // when it's anything other than 'auto' (we don't know that provider's
-    // catalog, so we can't validate). Otherwise use the per-provider default.
-    const runtime = getProviderRuntime(provider);
-    modelToUse =
-      requestedModel && requestedModel !== 'auto' && requestedModel !== 'any'
-        ? requestedModel
-        : (runtime?.defaultModel ?? DEFAULT_FREE_MODEL_ID);
-  } else {
-    // OpenRouter: route through auto-router for free/BYOK users
-    modelToUse = requestedModel || DEFAULT_FREE_MODEL_ID;
-    const auto = createAutoRouter();
-    if (!hasByok) {
-      if (modelToUse === 'auto' || modelToUse === 'any' || !isModelFree(modelToUse)) {
-        const freeModelIds = getFreeModels().map(m => m.id);
-        modelToUse = auto.selectModel({
-          message,
-          conversationHistory: [],
-          allowedModels: freeModelIds,
-        }).model;
-      }
-    } else if (modelToUse === 'auto' || modelToUse === 'any') {
-      modelToUse = auto.selectModel({ message, conversationHistory: [] }).model;
-    }
-    if (!getModelMetadata(modelToUse)) {
-      modelToUse = DEFAULT_FREE_MODEL_ID;
-    }
-  }
+  // Surfaced for the chat route's Groq tool-calling enrichment — the primary
+  // Groq BYOK key if that's what's leading the chain, else null (platform
+  // Groq carries its own env key inside the service).
+  const userGroqKey =
+    provider === 'groq' && hasByok
+      ? (clientGroqKey ?? storedKeys.find(k => k.provider === 'groq')?.key ?? null)
+      : null;
 
-  // Instantiate the AI service
-  let aiService: AiService;
-  if (provider === 'groq') {
-    aiService = hasByok ? createGroqServiceWithByok(userGroqKey as string) : createGroqService();
-  } else if (provider === 'openrouter') {
-    aiService = hasByok
-      ? createOpenRouterServiceWithByok(userOpenRouterKey as string)
-      : createOpenRouterService();
-  } else {
-    // OpenAI-compatible direct provider
-    const runtime = getProviderRuntime(provider);
-    if (!runtime || !userOpenAICompatKey) {
-      // Should be unreachable — we wouldn't have set this provider without
-      // both. Guard so the type narrows.
-      return Response.json(
-        { success: false, error: 'Provider not configured', code: 'NO_API_KEY' },
-        { status: 503 }
-      );
-    }
-    aiService = createOpenAICompatibleServiceWithByok({
-      apiKey: userOpenAICompatKey,
-      baseUrl: runtime.baseUrl,
-      providerId: provider,
-    });
-  }
-
-  // Build the fallback chain. The Cat walks it top-to-bottom, trying the next
-  // entry on rate-limit/error.
-  //
-  //   1. The user's OTHER keys, in their chosen order (sort_order) — a user can
-  //      add as many keys as they want; each becomes a fallback. Their own
-  //      quota is used before the shared platform tier, and one key
-  //      rate-limiting no longer takes the Cat down.
-  //   2. The platform provider list (Groq → OpenRouter → …) as the base
-  //      safety net, skipping whichever provider is already the primary.
-  const primaryKeyValue = userGroqKey || userOpenRouterKey || userOpenAICompatKey;
-  const userKeyFallbacks: FallbackProvider[] = [];
-  for (const k of await keyService.listDecryptedKeysOrdered(userId)) {
-    if (k.key === primaryKeyValue) {
-      continue; // already the primary — don't try the same key twice
-    }
-    let svc: AiService;
-    let model: string;
-    if (k.provider === 'groq') {
-      svc = createGroqServiceWithByok(k.key);
-      model = DEFAULT_GROQ_MODEL;
-    } else if (k.provider === 'openrouter') {
-      svc = createOpenRouterServiceWithByok(k.key);
-      model = DEFAULT_FREE_MODEL_ID;
-    } else if (isOpenAICompatibleProvider(k.provider)) {
-      const rt = getProviderRuntime(k.provider);
-      if (!rt) {
-        continue;
-      }
-      svc = createOpenAICompatibleServiceWithByok({
-        apiKey: k.key,
-        baseUrl: rt.baseUrl,
-        providerId: k.provider,
-      });
-      model = rt.defaultModel ?? DEFAULT_FREE_MODEL_ID;
-    } else {
-      continue;
-    }
-    userKeyFallbacks.push({
-      provider: k.provider as AIProvider,
-      modelToUse: model,
-      aiService: svc,
-      reason: 'rate_limit' as const,
-    });
-  }
-
-  const platformChain = buildPlatformProviders(message);
-  const platformFallbacks: FallbackProvider[] = platformChain
-    .filter(p => p.providerId !== provider)
-    .map(p => ({
-      provider: p.providerId as AIProvider,
-      modelToUse: p.defaultModel,
-      aiService: p.aiService,
-      reason: 'rate_limit' as const,
-    }));
-
-  const fallbacks: FallbackProvider[] = [...userKeyFallbacks, ...platformFallbacks];
+  // Everything after the primary becomes the fallback chain, tried in order
+  // on rate-limit/error. The Cat keeps chatting as long as one link is alive.
+  const fallbacks: FallbackProvider[] = chain.slice(1).map(s => ({
+    provider: s.provider,
+    modelToUse: s.modelToUse,
+    aiService: s.aiService,
+    reason: 'rate_limit' as const,
+  }));
 
   return {
     provider,

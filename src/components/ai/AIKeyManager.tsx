@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Plus, ChevronUp, ChevronDown } from 'lucide-react';
+import { useState, type DragEvent } from 'react';
+import { Plus, ChevronUp, ChevronDown, GripVertical, Bot } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import {
   AlertDialog,
@@ -33,13 +33,21 @@ export interface UserApiKey {
   updated_at: string;
 }
 
+/** The free OrangeCat default's position in the chain (sentinel id). */
+const PLATFORM_ID = 'platform';
+
+/** A row in the merged fallback chain: a user key or the platform default. */
+type ChainItem = { kind: 'key'; key: UserApiKey } | { kind: 'platform' };
+
 interface AIKeyManagerProps {
   keys: UserApiKey[];
   onAdd?: (data: { provider: string; apiKey: string; keyName: string }) => Promise<void>;
   onDelete?: (keyId: string) => Promise<void>;
   onSetPrimary?: (keyId: string) => Promise<void>;
-  /** Persist a new fallback order (key ids, first = tried earliest). */
+  /** Persist a new fallback order — ids (first = tried earliest), incl. 'platform'. */
   onReorder?: (orderedIds: string[]) => Promise<void>;
+  /** The platform default's position in the chain (0 = tried first). */
+  platformPosition?: number;
   isLoading?: boolean;
   onFieldFocus?: (field: string | null) => void;
 }
@@ -50,12 +58,14 @@ export function AIKeyManager({
   onDelete,
   onSetPrimary,
   onReorder,
+  platformPosition = 0,
   isLoading = false,
   onFieldFocus,
 }: AIKeyManagerProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [keyToDelete, setKeyToDelete] = useState<UserApiKey | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
 
   const handleDelete = async () => {
     if (!keyToDelete || !onDelete) {
@@ -76,17 +86,31 @@ export function AIKeyManager({
     // via "Add another key" or navigates away via "Start chatting."
   };
 
-  const move = async (index: number, dir: -1 | 1) => {
-    const next = index + dir;
-    if (!onReorder || next < 0 || next >= keys.length) {
+  // Reconstruct the merged chain from stored positions. Keys carry their
+  // sort_order; the platform default sits at platformPosition. Both share one
+  // 0-based index space, so sorting by it interleaves them correctly even
+  // after reordering leaves gaps in the key sort_orders.
+  const chain: ChainItem[] = [
+    ...keys.map(key => ({ order: key.sort_order, item: { kind: 'key', key } as ChainItem })),
+    { order: platformPosition, item: { kind: 'platform' } as ChainItem },
+  ]
+    .sort((a, b) => a.order - b.order)
+    .map(entry => entry.item);
+
+  const itemId = (it: ChainItem) => (it.kind === 'platform' ? PLATFORM_ID : it.key.id);
+
+  // Move the chain item at `from` to slot `to`, then persist the new order.
+  const reorderTo = async (from: number, to: number) => {
+    if (!onReorder || from === to || to < 0 || to >= chain.length) {
       return;
     }
-    const ids = keys.map(k => k.id);
-    [ids[index], ids[next]] = [ids[next], ids[index]];
-    await onReorder(ids);
+    const next = [...chain];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    await onReorder(next.map(itemId));
   };
 
-  const canReorder = !!onReorder && keys.length > 1;
+  const canReorder = !!onReorder && chain.length > 1;
 
   return (
     <div className="space-y-4">
@@ -94,44 +118,88 @@ export function AIKeyManager({
         <div className="space-y-3">
           {canReorder && (
             <p className="text-xs text-muted-foreground">
-              Cat tries your keys top to bottom, skipping any that fail or rate-limit, then falls
-              back to the free OrangeCat default. Reorder with the arrows.
+              Cat tries this chain top to bottom, skipping any link that fails or rate-limits. Drag
+              (or use the arrows) to reorder — the free OrangeCat default can sit anywhere, even
+              first.
             </p>
           )}
-          {keys.map((key, index) => (
-            <div key={key.id} className="flex items-start gap-2">
-              {canReorder && (
-                <div className="flex flex-col gap-1 pt-3">
-                  <button
-                    type="button"
-                    aria-label="Move up"
-                    disabled={index === 0 || isLoading}
-                    onClick={() => move(index, -1)}
-                    className="rounded p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30"
-                  >
-                    <ChevronUp className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Move down"
-                    disabled={index === keys.length - 1 || isLoading}
-                    onClick={() => move(index, 1)}
-                    className="rounded p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30"
-                  >
-                    <ChevronDown className="h-4 w-4" />
-                  </button>
+          {chain.map((it, index) => {
+            const id = itemId(it);
+            const rowProps = canReorder
+              ? {
+                  draggable: !isLoading,
+                  onDragStart: () => setDragIndex(index),
+                  onDragOver: (e: DragEvent) => e.preventDefault(),
+                  onDrop: (e: DragEvent) => {
+                    e.preventDefault();
+                    if (dragIndex !== null) {
+                      void reorderTo(dragIndex, index);
+                    }
+                    setDragIndex(null);
+                  },
+                  onDragEnd: () => setDragIndex(null),
+                }
+              : {};
+            return (
+              <div
+                key={id}
+                {...rowProps}
+                className={`flex items-start gap-2 rounded-md ${
+                  dragIndex === index ? 'opacity-50' : ''
+                }`}
+              >
+                {canReorder && (
+                  <div className="flex flex-col items-center gap-1 pt-3 text-muted-foreground">
+                    <button
+                      type="button"
+                      aria-label="Move up"
+                      disabled={index === 0 || isLoading}
+                      onClick={() => reorderTo(index, index - 1)}
+                      className="rounded p-0.5 hover:text-foreground disabled:opacity-30"
+                    >
+                      <ChevronUp className="h-4 w-4" />
+                    </button>
+                    <GripVertical className="h-4 w-4 cursor-grab opacity-50" aria-hidden />
+                    <button
+                      type="button"
+                      aria-label="Move down"
+                      disabled={index === chain.length - 1 || isLoading}
+                      onClick={() => reorderTo(index, index + 1)}
+                      className="rounded p-0.5 hover:text-foreground disabled:opacity-30"
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+                <div className="flex-1">
+                  {it.kind === 'platform' ? (
+                    <div className="rounded-md border border-border-subtle bg-muted/30 p-3">
+                      <div className="flex items-center gap-2">
+                        <Bot className="h-4 w-4 text-fg-secondary" />
+                        <p className="text-sm font-medium text-foreground">
+                          OrangeCat free default
+                        </p>
+                        <span className="inline-flex items-center rounded-full border border-border-subtle bg-background px-2 py-0.5 text-xs text-muted-foreground">
+                          Always on
+                        </span>
+                      </div>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        The shared free model pool. Can&apos;t be removed — it&apos;s the safety net
+                        that keeps Cat answering.
+                      </p>
+                    </div>
+                  ) : (
+                    <AIKeyCard
+                      apiKey={it.key}
+                      isLoading={isLoading}
+                      onSetPrimary={kid => onSetPrimary?.(kid)}
+                      onDelete={setKeyToDelete}
+                    />
+                  )}
                 </div>
-              )}
-              <div className="flex-1">
-                <AIKeyCard
-                  apiKey={key}
-                  isLoading={isLoading}
-                  onSetPrimary={id => onSetPrimary?.(id)}
-                  onDelete={setKeyToDelete}
-                />
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

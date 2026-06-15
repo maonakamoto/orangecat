@@ -28,6 +28,7 @@ export default function AISettingsPage() {
 
   const {
     keys,
+    preferences,
     isLoading: settingsLoading,
     hasByok,
     addKey,
@@ -117,6 +118,7 @@ export default function AISettingsPage() {
             onDelete={deleteKey}
             onSetPrimary={setPrimaryKey}
             onReorder={reorderKeys}
+            platformPosition={preferences?.platform_chain_position ?? 0}
             isLoading={settingsLoading}
           />
         </section>

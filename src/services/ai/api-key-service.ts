@@ -299,21 +299,39 @@ export class ApiKeyService {
    */
   async reorderKeys(userId: string, orderedIds: string[]): Promise<boolean> {
     for (let i = 0; i < orderedIds.length; i++) {
+      const id = orderedIds[i];
+      if (id === 'platform') {
+        // The free OrangeCat default — store its position in prefs.
+        const { error } = await this.supabase
+          .from(DATABASE_TABLES.USER_AI_PREFERENCES)
+          .upsert({ user_id: userId, platform_chain_position: i }, { onConflict: 'user_id' });
+        if (error) {
+          logger.error('Failed to set platform chain position', { userId, error }, 'APIKeyService');
+          return false;
+        }
+        continue;
+      }
       const { error } = await this.supabase
         .from(DATABASE_TABLES.USER_API_KEYS)
-        .update({ sort_order: i + 1 })
-        .eq('id', orderedIds[i])
+        .update({ sort_order: i })
+        .eq('id', id)
         .eq('user_id', userId);
       if (error) {
-        logger.error(
-          'Failed to reorder key',
-          { userId, keyId: orderedIds[i], error },
-          'APIKeyService'
-        );
+        logger.error('Failed to reorder key', { userId, keyId: id, error }, 'APIKeyService');
         return false;
       }
     }
     return true;
+  }
+
+  /** The platform default's position in the user's fallback chain (0 = first). */
+  async getPlatformChainPosition(userId: string): Promise<number> {
+    const { data } = await this.supabase
+      .from(DATABASE_TABLES.USER_AI_PREFERENCES)
+      .select('platform_chain_position')
+      .eq('user_id', userId)
+      .maybeSingle();
+    return (data?.platform_chain_position as number | undefined) ?? 0;
   }
 
   /**

@@ -23,6 +23,8 @@ export interface UserAIPreferences {
   onboarding_completed: boolean;
   onboarding_completed_at: string | null;
   onboarding_step: number;
+  /** The free platform default's position in the Cat fallback chain (0 = first). */
+  platform_chain_position: number;
   cached_total_requests: number;
   cached_total_tokens: number;
   cached_total_cost_btc: number;
@@ -152,11 +154,26 @@ export function useAISettings() {
   const reorderKeys = useCallback(
     async (orderedIds: string[]) => {
       setState(prev => {
+        // Optimistically stamp each item's new chain index (shared by keys via
+        // sort_order and the platform default via platform_chain_position) so
+        // the merged-chain UI reflects the move before the server round-trip.
         const byId = new Map(prev.keys.map(k => [k.id, k]));
-        const reordered = orderedIds
-          .map(id => byId.get(id))
-          .filter((k): k is UserApiKey => Boolean(k));
-        return { ...prev, keys: reordered };
+        const reordered: UserApiKey[] = [];
+        orderedIds.forEach((id, idx) => {
+          if (id === 'platform') {
+            return;
+          }
+          const k = byId.get(id);
+          if (k) {
+            reordered.push({ ...k, sort_order: idx });
+          }
+        });
+        const platformIdx = orderedIds.indexOf('platform');
+        const preferences =
+          prev.preferences && platformIdx >= 0
+            ? { ...prev.preferences, platform_chain_position: platformIdx }
+            : prev.preferences;
+        return { ...prev, keys: reordered, preferences };
       });
       const res = await fetch('/api/user/api-keys', {
         method: 'PATCH',

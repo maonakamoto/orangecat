@@ -31,7 +31,12 @@ const addKeySchema = z.object({
 });
 
 const reorderSchema = z.object({
-  order: z.array(z.string().uuid()).min(1).max(50),
+  // Each entry is a key id (uuid) or the literal 'platform' sentinel for the
+  // free OrangeCat default's position in the chain.
+  order: z
+    .array(z.union([z.string().uuid(), z.literal('platform')]))
+    .min(1)
+    .max(50),
 });
 
 /**
