@@ -17,5 +17,6 @@
 export { searchProfiles } from './profiles';
 export { searchFundingPages } from './projects';
 export { searchLoans } from './loans';
-export { getSearchSuggestions } from './suggestions';
+export { getSearchSuggestions, getGlobalSearchResults } from './suggestions';
+export type { GlobalSearchHit } from './suggestions';
 export { getTrending } from './trending';

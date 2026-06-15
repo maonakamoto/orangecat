@@ -17,6 +17,7 @@ import {
   searchFundingPages,
   searchLoans,
   getSearchSuggestions,
+  getGlobalSearchResults,
   getTrending as getTrendingData,
 } from './search/queries';
 
@@ -218,4 +219,5 @@ export async function getTrending(): Promise<SearchResponse> {
 }
 
 // Re-export utility functions
-export { getSearchSuggestions };
+export { getSearchSuggestions, getGlobalSearchResults };
+export type { GlobalSearchHit } from './search/queries';

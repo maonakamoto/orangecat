@@ -1,7 +1,9 @@
 /**
  * Search Suggestions Queries
  *
- * Provides type-ahead / autocomplete suggestions from profiles and projects.
+ * Type-ahead / autocomplete backed by the `global_search` RPC (typo-tolerant,
+ * accent-insensitive, ranked, across all main entity types). Falls back to a
+ * simple ILIKE query on profiles + projects if the RPC is unavailable.
  */
 
 import supabase from '@/lib/supabase/browser';
@@ -11,18 +13,77 @@ import { PUBLIC_SEARCH_STATUSES } from '@/config/project-statuses';
 import { getTableName } from '@/config/entity-registry';
 import { sanitizeQuery } from './helpers';
 
+/** A single ranked, navigable search hit from global_search(). */
+export interface GlobalSearchHit {
+  entity_type: string;
+  id: string;
+  title: string;
+  subtitle: string | null;
+  image_url: string | null;
+  rank: number;
+}
+
 /**
- * Get search suggestions from database
+ * Ranked structured results across all main entity types (projects, profiles,
+ * products, services, causes, loans, events). Use for richer surfaces like the
+ * command palette where each hit links straight to its entity.
+ */
+export async function getGlobalSearchResults(
+  query: string,
+  limit: number = 10
+): Promise<GlobalSearchHit[]> {
+  if (!query || query.trim().length < 2) {
+    return [];
+  }
+  try {
+    const { data, error } = await supabase.rpc('global_search', {
+      p_query: query,
+      p_limit: limit,
+    } as never);
+    if (error) {
+      logger.warn('global_search RPC unavailable', error, 'Search');
+      return [];
+    }
+    return (data as GlobalSearchHit[]) ?? [];
+  } catch (error) {
+    logger.warn('global_search RPC threw', error, 'Search');
+    return [];
+  }
+}
+
+/**
+ * Type-ahead suggestion strings. Backed by global_search (so suggestions are
+ * typo-tolerant and span every entity type); falls back to ILIKE on
+ * profiles + projects only if the RPC is unavailable.
  */
 export async function getSearchSuggestions(query: string, limit: number = 5): Promise<string[]> {
-  if (!query || query.length < 2) {
+  if (!query || query.trim().length < 2) {
     return [];
   }
 
+  // Primary: ranked, typo-tolerant suggestions from global_search.
+  const hits = await getGlobalSearchResults(query, limit * 3);
+  if (hits.length > 0) {
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const hit of hits) {
+      const title = hit.title?.trim();
+      if (title && !seen.has(title.toLowerCase())) {
+        seen.add(title.toLowerCase());
+        out.push(title);
+        if (out.length >= limit) {
+          break;
+        }
+      }
+    }
+    if (out.length > 0) {
+      return out;
+    }
+  }
+
+  // Fallback: simple ILIKE on profiles + projects.
   try {
     const sanitized = sanitizeQuery(query);
-
-    // Use Promise.all for parallel suggestion queries
     const [profileSuggestions, projectSuggestions] = await Promise.all([
       supabase
         .from(DATABASE_TABLES.PROFILES)
@@ -30,7 +91,6 @@ export async function getSearchSuggestions(query: string, limit: number = 5): Pr
         .or(`username.ilike.%${sanitized}%,name.ilike.%${sanitized}%`)
         .not('username', 'is', null)
         .limit(limit),
-
       supabase
         .from(getTableName('project'))
         .select('title, category')
@@ -40,8 +100,6 @@ export async function getSearchSuggestions(query: string, limit: number = 5): Pr
     ]);
 
     const suggestions: Set<string> = new Set();
-
-    // Add profile suggestions
     if (!profileSuggestions.error && profileSuggestions.data) {
       (profileSuggestions.data as Array<{ username?: string; name?: string }>).forEach(profile => {
         if (profile.username) {
@@ -52,8 +110,6 @@ export async function getSearchSuggestions(query: string, limit: number = 5): Pr
         }
       });
     }
-
-    // Add project suggestions
     if (!projectSuggestions.error && projectSuggestions.data) {
       (projectSuggestions.data as Array<{ title?: string; category?: string }>).forEach(project => {
         if (project.title) {
@@ -64,7 +120,6 @@ export async function getSearchSuggestions(query: string, limit: number = 5): Pr
         }
       });
     }
-
     return Array.from(suggestions).slice(0, limit);
   } catch (error) {
     logger.error('Error getting search suggestions', error, 'Search');
