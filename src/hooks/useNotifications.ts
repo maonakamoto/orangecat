@@ -24,22 +24,19 @@ export interface Notification {
     | 'task_broadcast'
     | 'booking_request'
     | 'booking_update';
-  title: string;
-  message: string | null;
+  message: string;
   action_url: string | null;
-  read: boolean;
+  is_read: boolean;
   read_at: string | null;
   created_at: string;
-  metadata: Record<string, unknown>;
-  source_actor_id: string | null;
-  source_entity_type: string | null;
-  source_entity_id: string | null;
-  source_actor?: {
-    id: string;
-    actor_type: string;
-    user_id: string | null;
-    profiles: { name: string | null; avatar_url: string | null } | null;
-  } | null;
+  // Live schema folds the human-readable title and any source actor/entity ids
+  // into metadata (see buildNotificationRow / NotificationDispatcher).
+  metadata: Record<string, unknown> & { title?: string };
+}
+
+/** Human-readable heading for a notification (title lives in metadata). */
+export function notificationTitle(n: Notification): string {
+  return n.metadata?.title ?? n.message;
 }
 
 interface UseNotificationsOptions {

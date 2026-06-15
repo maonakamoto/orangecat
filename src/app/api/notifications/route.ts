@@ -24,20 +24,20 @@ export const GET = withAuth(async (req: AuthenticatedRequest) => {
     const filter = searchParams.get('filter') || 'all';
 
     const admin = createAdminClient();
+    // Live schema: notifications uses user_id / is_read / metadata (title and
+    // any source actor/entity ids live inside metadata). There is no title,
+    // read, or source_* column — see migration *_align_notifications_to_live_schema.
     let query = admin
       .from(DATABASE_TABLES.NOTIFICATIONS)
-      .select(
-        `id, type, title, message, action_url, read, read_at, created_at, metadata,
-        source_actor_id, source_entity_type, source_entity_id,
-        source_actor:actors!source_actor_id (id, actor_type, user_id, profiles:user_id (name, avatar_url))`,
-        { count: 'exact' }
-      )
-      .eq('recipient_user_id', user.id)
+      .select(`id, type, message, action_url, is_read, read_at, created_at, metadata`, {
+        count: 'exact',
+      })
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 
     if (filter === 'unread') {
-      query = query.eq('read', false);
+      query = query.eq('is_read', false);
     } else if (filter !== 'all') {
       query = query.eq('type', filter);
     }
@@ -75,15 +75,12 @@ export const DELETE = withAuth(async (req: AuthenticatedRequest) => {
     const clearType = searchParams.get('clear');
 
     const admin = createAdminClient();
-    let deleteQuery = admin
-      .from(DATABASE_TABLES.NOTIFICATIONS)
-      .delete()
-      .eq('recipient_user_id', user.id);
+    let deleteQuery = admin.from(DATABASE_TABLES.NOTIFICATIONS).delete().eq('user_id', user.id);
 
     if (notificationId) {
       deleteQuery = deleteQuery.eq('id', notificationId);
     } else if (clearType === 'read') {
-      deleteQuery = deleteQuery.eq('read', true);
+      deleteQuery = deleteQuery.eq('is_read', true);
     } else if (clearType !== 'all') {
       return apiSuccess({ deleted: 0 });
     }

@@ -13,21 +13,9 @@ import {
   Trash2,
 } from 'lucide-react';
 import { formatRelativeTime } from '@/utils/dates';
-import { type Notification } from '@/hooks/useNotifications';
-import { getInitial } from '@/utils/string';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { notificationTitle, type Notification } from '@/hooks/useNotifications';
 
 function getNotificationIcon(notification: Notification) {
-  const sourceProfile = notification.source_actor?.profiles;
-  if (sourceProfile?.avatar_url) {
-    return (
-      <Avatar className="h-8 w-8">
-        <AvatarImage src={sourceProfile.avatar_url} />
-        <AvatarFallback>{getInitial(sourceProfile.name, '?')}</AvatarFallback>
-      </Avatar>
-    );
-  }
-
   switch (notification.type) {
     case 'payment':
     case 'project_funded':
@@ -68,7 +56,7 @@ export function NotificationItem({
   return (
     <div
       className={`group relative cursor-pointer rounded-md border p-3 transition-colors ${
-        notification.read
+        notification.is_read
           ? 'border-border-subtle bg-background hover:bg-muted'
           : 'border-border-strong bg-muted hover:bg-muted/80'
       }`}
@@ -80,10 +68,12 @@ export function NotificationItem({
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h4 className="text-sm font-medium text-foreground">{notification.title}</h4>
-              {notification.message && (
+              <h4 className="text-sm font-medium text-foreground">
+                {notificationTitle(notification)}
+              </h4>
+              {notification.message && notification.message !== notificationTitle(notification) && (
                 <p
-                  className={`text-sm mt-1 ${notification.read ? 'text-muted-foreground' : 'text-foreground'}`}
+                  className={`text-sm mt-1 ${notification.is_read ? 'text-muted-foreground' : 'text-foreground'}`}
                 >
                   {notification.message}
                 </p>
@@ -94,7 +84,7 @@ export function NotificationItem({
             </div>
 
             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              {!notification.read && (
+              {!notification.is_read && (
                 <button
                   onClick={e => {
                     e.stopPropagation();
@@ -121,7 +111,7 @@ export function NotificationItem({
         </div>
       </div>
 
-      {!notification.read && (
+      {!notification.is_read && (
         <div className="absolute right-3 top-3 h-2 w-2 rounded-sm bg-foreground" />
       )}
     </div>

@@ -43,14 +43,14 @@ export function useNotificationsMutations({
 
         if (id === 'all') {
           setNotifications(prev =>
-            prev.map(n => ({ ...n, read: true, read_at: new Date().toISOString() }))
+            prev.map(n => ({ ...n, is_read: true, read_at: new Date().toISOString() }))
           );
           setUnreadCount(0);
         } else {
           const ids = Array.isArray(id) ? id : [id];
           setNotifications(prev =>
             prev.map(n =>
-              ids.includes(n.id) ? { ...n, read: true, read_at: new Date().toISOString() } : n
+              ids.includes(n.id) ? { ...n, is_read: true, read_at: new Date().toISOString() } : n
             )
           );
           setUnreadCount(prev => Math.max(0, prev - ids.length));
@@ -80,7 +80,7 @@ export function useNotificationsMutations({
 
         setNotifications(prev => {
           const notification = prev.find(n => n.id === id);
-          if (notification && !notification.read) {
+          if (notification && !notification.is_read) {
             setUnreadCount(c => Math.max(0, c - 1));
           }
           return prev.filter(n => n.id !== id);
@@ -108,7 +108,7 @@ export function useNotificationsMutations({
         throw new Error(data.error?.message || 'Failed to clear read notifications');
       }
 
-      setNotifications(prev => prev.filter(n => !n.read));
+      setNotifications(prev => prev.filter(n => !n.is_read));
       setTotal(prev => prev - (data.data.deleted || 0));
     } catch (err) {
       logger.error('Failed to clear read notifications', err, 'Notifications');

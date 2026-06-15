@@ -45,7 +45,7 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
           event: 'INSERT',
           schema: 'public',
           table: DATABASE_TABLES.NOTIFICATIONS,
-          filter: `recipient_user_id=eq.${userId}`,
+          filter: `user_id=eq.${userId}`,
         },
         (payload: { new: Record<string, unknown> }) => {
           onInsertRef.current(payload.new as unknown as Notification);
@@ -57,7 +57,7 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
           event: 'UPDATE',
           schema: 'public',
           table: DATABASE_TABLES.NOTIFICATIONS,
-          filter: `recipient_user_id=eq.${userId}`,
+          filter: `user_id=eq.${userId}`,
         },
         (payload: { new: Record<string, unknown> }) => {
           onUpdateRef.current(payload.new);
@@ -69,7 +69,7 @@ export function useNotificationsRealtime({ user, enabled, onInsert, onUpdate, on
           event: 'DELETE',
           schema: 'public',
           table: DATABASE_TABLES.NOTIFICATIONS,
-          filter: `recipient_user_id=eq.${userId}`,
+          filter: `user_id=eq.${userId}`,
         },
         (payload: { old: { id: string } }) => {
           onDeleteRef.current(payload.old.id);
