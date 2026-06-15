@@ -33,6 +33,7 @@ export default function AISettingsPage() {
     addKey,
     deleteKey,
     setPrimaryKey,
+    reorderKeys,
   } = useAISettings();
 
   if (!hydrated || authLoading) {
@@ -115,6 +116,7 @@ export default function AISettingsPage() {
             onAdd={addKey}
             onDelete={deleteKey}
             onSetPrimary={setPrimaryKey}
+            onReorder={reorderKeys}
             isLoading={settingsLoading}
           />
         </section>

@@ -245,13 +245,53 @@ export async function resolveProvider(
     });
   }
 
-  // Build the fallback chain from the platform provider list.
-  // Order: Groq → OpenRouter → Together → Ollama (whichever are env-configured).
-  // Skip whichever provider the user is already on (primary), so we don't
-  // try the same dead key twice. BYOK users also get the platform chain
-  // as fallback — if their key rate-limits, Cat keeps working.
+  // Build the fallback chain. The Cat walks it top-to-bottom, trying the next
+  // entry on rate-limit/error.
+  //
+  //   1. The user's OTHER keys, in their chosen order (sort_order) — a user can
+  //      add as many keys as they want; each becomes a fallback. Their own
+  //      quota is used before the shared platform tier, and one key
+  //      rate-limiting no longer takes the Cat down.
+  //   2. The platform provider list (Groq → OpenRouter → …) as the base
+  //      safety net, skipping whichever provider is already the primary.
+  const primaryKeyValue = userGroqKey || userOpenRouterKey || userOpenAICompatKey;
+  const userKeyFallbacks: FallbackProvider[] = [];
+  for (const k of await keyService.listDecryptedKeysOrdered(userId)) {
+    if (k.key === primaryKeyValue) {
+      continue; // already the primary — don't try the same key twice
+    }
+    let svc: AiService;
+    let model: string;
+    if (k.provider === 'groq') {
+      svc = createGroqServiceWithByok(k.key);
+      model = DEFAULT_GROQ_MODEL;
+    } else if (k.provider === 'openrouter') {
+      svc = createOpenRouterServiceWithByok(k.key);
+      model = DEFAULT_FREE_MODEL_ID;
+    } else if (isOpenAICompatibleProvider(k.provider)) {
+      const rt = getProviderRuntime(k.provider);
+      if (!rt) {
+        continue;
+      }
+      svc = createOpenAICompatibleServiceWithByok({
+        apiKey: k.key,
+        baseUrl: rt.baseUrl,
+        providerId: k.provider,
+      });
+      model = rt.defaultModel ?? DEFAULT_FREE_MODEL_ID;
+    } else {
+      continue;
+    }
+    userKeyFallbacks.push({
+      provider: k.provider as AIProvider,
+      modelToUse: model,
+      aiService: svc,
+      reason: 'rate_limit' as const,
+    });
+  }
+
   const platformChain = buildPlatformProviders(message);
-  const fallbacks: FallbackProvider[] = platformChain
+  const platformFallbacks: FallbackProvider[] = platformChain
     .filter(p => p.providerId !== provider)
     .map(p => ({
       provider: p.providerId as AIProvider,
@@ -259,6 +299,8 @@ export async function resolveProvider(
       aiService: p.aiService,
       reason: 'rate_limit' as const,
     }));
+
+  const fallbacks: FallbackProvider[] = [...userKeyFallbacks, ...platformFallbacks];
 
   return {
     provider,

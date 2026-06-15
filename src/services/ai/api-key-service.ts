@@ -26,6 +26,7 @@ export interface UserApiKey {
   key_hint: string;
   is_valid: boolean;
   is_primary: boolean;
+  sort_order: number;
   last_validated_at: string | null;
   last_used_at: string | null;
   total_requests: number;
@@ -208,11 +209,11 @@ export class ApiKeyService {
     const { data, error } = await this.supabase
       .from(DATABASE_TABLES.USER_API_KEYS)
       .select(
-        'id, user_id, provider, key_name, key_hint, is_valid, is_primary, last_validated_at, last_used_at, total_requests, total_tokens_used, created_at, updated_at'
+        'id, user_id, provider, key_name, key_hint, is_valid, is_primary, sort_order, last_validated_at, last_used_at, total_requests, total_tokens_used, created_at, updated_at'
       )
       .eq('user_id', userId)
-      .order('is_primary', { ascending: false })
-      .order('created_at', { ascending: false });
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
 
     if (error) {
       logger.error('Error fetching API keys', { error, userId }, 'APIKeyService');
@@ -245,6 +246,74 @@ export class ApiKeyService {
       logger.error('Failed to decrypt API key', { userId, provider }, 'APIKeyService');
       return null;
     }
+  }
+
+  /**
+   * All valid keys for a user, decrypted, in fallback order (sort_order asc).
+   * Powers the Cat's multi-key fallback chain — the resolver walks these in
+   * order, trying the next on rate-limit/error.
+   */
+  async listDecryptedKeysOrdered(
+    userId: string
+  ): Promise<Array<{ id: string; provider: string; key: string; sortOrder: number }>> {
+    const { data, error } = await this.supabase
+      .from(DATABASE_TABLES.USER_API_KEYS)
+      .select('id, provider, encrypted_key, sort_order')
+      .eq('user_id', userId)
+      .eq('is_valid', true)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
+
+    if (error || !data) {
+      return [];
+    }
+
+    const out: Array<{ id: string; provider: string; key: string; sortOrder: number }> = [];
+    for (const row of data as Array<{
+      id: string;
+      provider: string;
+      encrypted_key: string;
+      sort_order: number;
+    }>) {
+      try {
+        out.push({
+          id: row.id,
+          provider: row.provider,
+          key: decryptApiKey(row.encrypted_key),
+          sortOrder: row.sort_order,
+        });
+      } catch {
+        logger.error(
+          'Failed to decrypt key for fallback chain',
+          { userId, keyId: row.id },
+          'APIKeyService'
+        );
+      }
+    }
+    return out;
+  }
+
+  /**
+   * Reorder a user's keys. `orderedIds` is the desired fallback order (first =
+   * tried earliest). Any key not listed keeps its relative position after these.
+   */
+  async reorderKeys(userId: string, orderedIds: string[]): Promise<boolean> {
+    for (let i = 0; i < orderedIds.length; i++) {
+      const { error } = await this.supabase
+        .from(DATABASE_TABLES.USER_API_KEYS)
+        .update({ sort_order: i + 1 })
+        .eq('id', orderedIds[i])
+        .eq('user_id', userId);
+      if (error) {
+        logger.error(
+          'Failed to reorder key',
+          { userId, keyId: orderedIds[i], error },
+          'APIKeyService'
+        );
+        return false;
+      }
+    }
+    return true;
   }
 
   /**

@@ -30,6 +30,10 @@ const addKeySchema = z.object({
   isPrimary: z.boolean().default(true),
 });
 
+const reorderSchema = z.object({
+  order: z.array(z.string().uuid()).min(1).max(50),
+});
+
 /**
  * GET /api/user/api-keys
  * List all API keys for the current user
@@ -94,6 +98,38 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     return apiCreated(addResult.key);
   } catch (error) {
     logger.error('Error adding API key', error, 'ApiKeysAPI');
+    return apiInternalError('Internal server error');
+  }
+});
+
+/**
+ * PATCH /api/user/api-keys
+ * Reorder the fallback chain — body: { order: string[] } (key ids, first tried earliest)
+ */
+export const PATCH = withAuth(async (request: AuthenticatedRequest) => {
+  try {
+    const { user, supabase } = request;
+
+    const rl = await rateLimitWriteAsync(user.id);
+    if (!rl.success) {
+      return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
+    }
+
+    const body = await request.json();
+    const result = reorderSchema.safeParse(body);
+    if (!result.success) {
+      return apiBadRequest('Validation failed', result.error.flatten());
+    }
+
+    const keyService = createApiKeyService(supabase);
+    const ok = await keyService.reorderKeys(user.id, result.data.order);
+    if (!ok) {
+      return apiInternalError('Failed to reorder keys');
+    }
+
+    return apiSuccess({ keys: await keyService.getKeys(user.id) });
+  } catch (error) {
+    logger.error('Error reordering API keys', error, 'ApiKeysAPI');
     return apiInternalError('Internal server error');
   }
 });

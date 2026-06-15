@@ -90,8 +90,8 @@ export function useAISettings() {
         .from(DATABASE_TABLES.USER_API_KEYS)
         .select('*')
         .eq('user_id', user.id)
-        .order('is_primary', { ascending: false })
-        .order('created_at', { ascending: false });
+        .order('sort_order', { ascending: true })
+        .order('created_at', { ascending: true });
 
       const keys: UserApiKey[] = keysData || [];
       const primaryKey = keys.find((k: UserApiKey) => k.is_primary) || keys[0] || null;
@@ -147,6 +147,31 @@ export function useAISettings() {
     fetchData,
   });
 
+  // Reorder the fallback chain. Optimistically reflects the new order, then
+  // persists via PATCH; reverts to server truth if it fails.
+  const reorderKeys = useCallback(
+    async (orderedIds: string[]) => {
+      setState(prev => {
+        const byId = new Map(prev.keys.map(k => [k.id, k]));
+        const reordered = orderedIds
+          .map(id => byId.get(id))
+          .filter((k): k is UserApiKey => Boolean(k));
+        return { ...prev, keys: reordered };
+      });
+      const res = await fetch('/api/user/api-keys', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order: orderedIds }),
+      });
+      if (!res.ok) {
+        await fetchData();
+        throw new Error('Failed to reorder keys');
+      }
+      await fetchData();
+    },
+    [fetchData]
+  );
+
   return {
     // State
     ...state,
@@ -159,6 +184,7 @@ export function useAISettings() {
     addKey,
     deleteKey,
     setPrimaryKey,
+    reorderKeys,
     completeOnboarding,
     updateOnboardingStep,
   };
