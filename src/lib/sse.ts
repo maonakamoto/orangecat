@@ -30,16 +30,26 @@ export async function readEventStream(
           onData('[DONE]');
           continue;
         }
+        // SSE framing lines like "event: error" carry no JSON payload — skip
+        // them so only the following "data:" line is parsed.
+        if (line.startsWith('event:')) {
+          continue;
+        }
         let payload = line;
         if (line.startsWith('data:')) {
           payload = line.replace(/^data:\s?/, '');
         }
+        let json: unknown;
         try {
-          const json = JSON.parse(payload);
-          onData(json);
+          json = JSON.parse(payload);
         } catch {
-          // ignore non-JSON lines
+          // ignore non-JSON lines (SSE comments, blank framing, etc.)
+          continue;
         }
+        // onData errors (e.g. a stream error the consumer re-throws) must
+        // propagate to the caller — they were previously swallowed by the
+        // JSON guard above, leaving failed streams hanging on "…" forever.
+        onData(json);
       }
     }
   } finally {
