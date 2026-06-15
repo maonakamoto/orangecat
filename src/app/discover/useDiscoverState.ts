@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSearch } from '@/hooks/useSearch';
 import { SearchFundingPage, SearchProfile } from '@/services/search';
@@ -157,10 +157,40 @@ export function useDiscoverState() {
     ai_assistants: counts.totalAiAssistantsCount,
   };
 
+  // Every data source initialises its loading flag to `false` and only flips
+  // it `true` inside a post-mount effect. So the very first render has all
+  // flags false AND empty arrays — which previously rendered the "Nothing Here
+  // Yet" empty state for a beat (longer on a slow DB) before loading even
+  // began, making a populated platform look dead. Guard the empty state behind
+  // "we have observed at least one full load cycle (loading went true → false)".
+  const anyLoading =
+    loading ||
+    financial.loansLoading ||
+    financial.investmentsLoading ||
+    financial.assetsLoading ||
+    generic.genericLoading;
+
+  const sawLoadingRef = useRef(false);
+  const [hasCompletedFirstLoad, setHasCompletedFirstLoad] = useState(false);
+  useEffect(() => {
+    if (anyLoading) {
+      sawLoadingRef.current = true;
+    } else if (sawLoadingRef.current && !hasCompletedFirstLoad) {
+      setHasCompletedFirstLoad(true);
+    }
+  }, [anyLoading, hasCompletedFirstLoad]);
+
+  // Show the skeleton while fetching OR before the first load settles; only
+  // show the empty state once a load has genuinely completed with no results.
+  const showInitialLoading = (anyLoading || !hasCompletedFirstLoad) && !searchError;
+  const showEmptyState = hasCompletedFirstLoad && !anyLoading && !searchError && isEmpty;
+
   return {
     searchTerm,
     searchError,
     loading,
+    showInitialLoading,
+    showEmptyState,
     loansLoading: financial.loansLoading,
     investmentsLoading: financial.investmentsLoading,
     assetsLoading: financial.assetsLoading,

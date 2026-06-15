@@ -8,6 +8,7 @@ import DiscoverTabs from '@/components/discover/DiscoverTabs';
 import DiscoverFilters from '@/components/discover/DiscoverFilters';
 import DiscoverHero from '@/components/discover/DiscoverHero';
 import DiscoverEmptyState from '@/components/discover/DiscoverEmptyState';
+import { DiscoverLoadingState } from '@/components/discover/DiscoverLoadingState';
 import DiscoverResults from '@/components/discover/DiscoverResults';
 import { GRADIENTS } from '@/config/gradients';
 import { useDiscoverState } from './useDiscoverState';
@@ -65,6 +66,8 @@ export default function DiscoverPage() {
 
     // Derived state
     isEmpty,
+    showInitialLoading,
+    showEmptyState,
     hasFilters,
 
     // Handlers
@@ -178,82 +181,73 @@ export default function DiscoverPage() {
                 </div>
               )}
 
-              {/* Empty State */}
-              {!loading &&
-                !loansLoading &&
-                !investmentsLoading &&
-                !assetsLoading &&
-                !genericLoading &&
-                !searchError &&
-                isEmpty && (
-                  <DiscoverEmptyState
-                    activeTab={activeTab}
-                    hasFilters={hasFilters}
-                    onClearFilters={clearFilters}
-                  />
-                )}
+              {/* Loading skeleton — shown while fetching and until the first
+                  load cycle settles, so a populated platform never flashes the
+                  empty state on a slow connection. */}
+              {showInitialLoading && (
+                <DiscoverLoadingState viewMode={viewMode} activeTab={activeTab} />
+              )}
+
+              {/* Empty State — only after a load has genuinely completed empty */}
+              {showEmptyState && (
+                <DiscoverEmptyState
+                  activeTab={activeTab}
+                  hasFilters={hasFilters}
+                  onClearFilters={clearFilters}
+                />
+              )}
 
               {/* Results */}
-              {!loading &&
-                !loansLoading &&
-                !investmentsLoading &&
-                !assetsLoading &&
-                !genericLoading &&
-                !searchError &&
-                !isEmpty && (
-                  <DiscoverResults
-                    activeTab={activeTab}
-                    viewMode={viewMode}
-                    projects={projects}
-                    profiles={profiles}
-                    loans={loans}
-                    investments={investments}
-                    assets={assets}
-                    causes={causes}
-                    events={events}
-                    products={products}
-                    services={services}
-                    groups={groups}
-                    wishlists={wishlists}
-                    research={research}
-                    aiAssistants={aiAssistants}
-                    totalResults={
-                      // useSearch (which feeds `totalResults`) only handles
-                      // projects + profiles + all. When the active tab is one
-                      // of the entity-specific tabs (loans, causes, …) it
-                      // still returns its initialType count — i.e., a
-                      // projects count that nothing on-screen reflects —
-                      // and adding it produces "6 results found" while
-                      // only 3 loans render. Skip that contribution unless
-                      // the tab is one useSearch actually targets.
-                      (activeTab === 'all' || activeTab === 'projects' || activeTab === 'profiles'
-                        ? totalResults
-                        : 0) +
-                      loans.length +
-                      investments.length +
-                      assets.length +
-                      causes.length +
-                      events.length +
-                      products.length +
-                      services.length +
-                      groups.length +
-                      wishlists.length +
-                      research.length +
-                      aiAssistants.length
-                    }
-                    loading={
-                      loading ||
-                      loansLoading ||
-                      investmentsLoading ||
-                      assetsLoading ||
-                      genericLoading
-                    }
-                    hasMore={hasMore}
-                    isLoadingMore={isLoadingMore}
-                    onLoadMore={handleLoadMore}
-                    onTabChange={handleTabChange}
-                  />
-                )}
+              {!showInitialLoading && !searchError && !isEmpty && (
+                <DiscoverResults
+                  activeTab={activeTab}
+                  viewMode={viewMode}
+                  projects={projects}
+                  profiles={profiles}
+                  loans={loans}
+                  investments={investments}
+                  assets={assets}
+                  causes={causes}
+                  events={events}
+                  products={products}
+                  services={services}
+                  groups={groups}
+                  wishlists={wishlists}
+                  research={research}
+                  aiAssistants={aiAssistants}
+                  totalResults={
+                    // useSearch (which feeds `totalResults`) only handles
+                    // projects + profiles + all. When the active tab is one
+                    // of the entity-specific tabs (loans, causes, …) it
+                    // still returns its initialType count — i.e., a
+                    // projects count that nothing on-screen reflects —
+                    // and adding it produces "6 results found" while
+                    // only 3 loans render. Skip that contribution unless
+                    // the tab is one useSearch actually targets.
+                    (activeTab === 'all' || activeTab === 'projects' || activeTab === 'profiles'
+                      ? totalResults
+                      : 0) +
+                    loans.length +
+                    investments.length +
+                    assets.length +
+                    causes.length +
+                    events.length +
+                    products.length +
+                    services.length +
+                    groups.length +
+                    wishlists.length +
+                    research.length +
+                    aiAssistants.length
+                  }
+                  loading={
+                    loading || loansLoading || investmentsLoading || assetsLoading || genericLoading
+                  }
+                  hasMore={hasMore}
+                  isLoadingMore={isLoadingMore}
+                  onLoadMore={handleLoadMore}
+                  onTabChange={handleTabChange}
+                />
+              )}
             </div>
           </div>
         </div>
