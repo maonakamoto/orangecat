@@ -14,6 +14,8 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { getTableName } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { ENTITY_STATUS } from '@/config/database-constants';
+import { embeddingsEnabled, embedText } from '@/services/ai/embeddings';
+import { logger } from '@/utils/logger';
 
 export type SearchType =
   | 'all'
@@ -47,6 +49,22 @@ export async function searchPlatform(
     return [];
   }
 
+  // 1) Semantic search (meaning-based) when an embedding provider is configured
+  //    AND the index has data. Ranks by conceptual similarity, so "help me
+  //    launch a hardware gadget" finds an "electronics prototyping" profile.
+  //    Falls through to keyword search if disabled, empty index, or no hits.
+  if (embeddingsEnabled()) {
+    try {
+      const semantic = await semanticSearch(supabase, q, type);
+      if (semantic.length > 0) {
+        return semantic;
+      }
+    } catch (err) {
+      logger.warn('Semantic search failed, falling back to keyword', { err }, 'PlatformSearch');
+    }
+  }
+
+  // 2) Keyword fallback (tokenized ILIKE) — always works, no provider needed.
   // Tokenize: match ANY significant word (OR), not the whole phrase. A model
   // query like "tattoo artist collaboration" must match a bio that says
   // "Tattoo artist based in Berlin" — a single %phrase% ILIKE never would.
@@ -131,6 +149,71 @@ const SEARCH_STOPWORDS = new Set([
  *  alphanumeric-only so they're safe to interpolate). */
 function ilikeOrConditions(fields: string[], tokens: string[]): string {
   return tokens.flatMap(t => fields.map(f => `${f}.ilike.%${t}%`)).join(',');
+}
+
+// ─── Semantic search (pgvector) ──────────────────────────────────────────────
+
+/** SearchType (Cat-facing) → content_embeddings.entity_type (stored). */
+const TYPE_TO_ENTITY: Record<SearchType, string | null> = {
+  all: null,
+  people: 'profile',
+  projects: 'project',
+  products: 'product',
+  services: 'service',
+  events: 'event',
+  causes: 'cause',
+};
+
+/** content_embeddings.entity_type → SearchType (for result mapping). */
+const ENTITY_TO_TYPE: Record<string, SearchType> = {
+  profile: 'people',
+  project: 'projects',
+  product: 'products',
+  service: 'services',
+  event: 'events',
+  cause: 'causes',
+};
+
+/** Minimum cosine similarity to count as a real match (filters weak/irrelevant). */
+const MIN_SIMILARITY = 0.25;
+
+async function semanticSearch(
+  supabase: AnySupabaseClient,
+  query: string,
+  type: SearchType
+): Promise<SearchResult[]> {
+  const vec = await embedText(query);
+  if (!vec) {
+    return [];
+  }
+  const { data, error } = await supabase.rpc('match_content', {
+    // pgvector accepts its text format ("[0.1,0.2,…]") for the vector param.
+    query_embedding: JSON.stringify(vec),
+    match_count: type === 'all' ? 12 : 6,
+    filter_type: TYPE_TO_ENTITY[type] ?? null,
+  });
+  if (error || !data) {
+    if (error) {
+      logger.warn('match_content RPC failed', { error }, 'PlatformSearch');
+    }
+    return [];
+  }
+  return (
+    data as Array<{
+      entity_type: string;
+      title: string | null;
+      url: string | null;
+      text_preview: string | null;
+      similarity: number;
+    }>
+  )
+    .filter(r => r.similarity >= MIN_SIMILARITY)
+    .map(r => ({
+      type: ENTITY_TO_TYPE[r.entity_type] ?? 'all',
+      title: r.title || 'Untitled',
+      description: r.text_preview?.slice(0, 200) || '',
+      url: r.url || '#',
+    }));
 }
 
 // ─── Private helpers ─────────────────────────────────────────────────────────
