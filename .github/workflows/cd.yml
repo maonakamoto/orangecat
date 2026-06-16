@@ -1,0 +1,109 @@
+# Continuous Deployment — OrangeCat → bitbaum (self-hosted Hetzner).
+#
+# Runs ONLY after the CI workflow succeeds on main, builds the standalone bundle
+# off-box (the box OOMs on build), and ships it via the atomic-swap+rollback
+# deploy verb (scripts/deploy-selfhost.sh). The deploy half the manual runbook
+# used to do by hand — this closes the tested→live seam.
+#
+# DISABLED until secrets are configured: every deploy step is gated on
+# `steps.guard.outputs.ok`, which is false unless SELFHOST_SSH_KEY exists. So
+# merging this file is a safe no-op; CD activates the moment the key is added.
+#
+# Required repo secrets (Settings → Secrets and variables → Actions):
+#   SELFHOST_SSH_KEY   private SSH key whose public half is in the box's
+#                      authorized_keys for the OC_BOX user (default root). Treat
+#                      as a deploy credential; rotate if leaked.
+#   SELFHOST_KNOWN_HOSTS  output of `ssh-keyscan 167.233.22.31` (pins the host).
+#   NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY /
+#   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY   real self-host values, baked at build.
+# Optional repo variables (vars.*):
+#   OC_BOX (default root@167.233.22.31)
+#
+# Note: OrangeCat's build does not require live-DB access (no blocking SSG DB
+# queries), so unlike fleetcrown/scripts/hetzner/deploy.sh this needs no tunnel.
+
+name: CD
+
+on:
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch: {} # allow manual redeploy of current main
+
+concurrency:
+  group: cd-selfhost
+  cancel-in-progress: false # never interrupt a deploy mid-swap
+
+jobs:
+  deploy:
+    # Only on green CI (or a manual dispatch).
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+      OC_BOX: ${{ vars.OC_BOX || 'root@167.233.22.31' }}
+    steps:
+      - name: Guard — is the deploy key configured?
+        id: guard
+        env:
+          KEY: ${{ secrets.SELFHOST_SSH_KEY }}
+        run: |
+          if [ -n "$KEY" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::SELFHOST_SSH_KEY not set — CD is dormant. Add it to enable deploys."
+          fi
+
+      - name: Checkout
+        if: steps.guard.outputs.ok == 'true'
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        if: steps.guard.outputs.ok == 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.guard.outputs.ok == 'true'
+        run: npm ci
+
+      - name: Build standalone (SELF_HOST=1)
+        if: steps.guard.outputs.ok == 'true'
+        env:
+          NODE_ENV: production
+          SELF_HOST: '1'
+        run: npm run build
+
+      - name: Configure SSH
+        if: steps.guard.outputs.ok == 'true'
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SELFHOST_SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          if [ -n "${{ secrets.SELFHOST_KNOWN_HOSTS }}" ]; then
+            echo "${{ secrets.SELFHOST_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          else
+            ssh-keyscan -H 167.233.22.31 >> ~/.ssh/known_hosts 2>/dev/null
+          fi
+          cat > ~/.ssh/config <<'EOF'
+          Host bitbaum
+            HostName 167.233.22.31
+            IdentityFile ~/.ssh/id_deploy
+            IdentitiesOnly yes
+          EOF
+
+      - name: Deploy (atomic swap + rollback)
+        if: steps.guard.outputs.ok == 'true'
+        run: |
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_deploy
+          bash scripts/deploy-selfhost.sh --no-build
