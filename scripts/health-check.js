@@ -33,8 +33,8 @@ function loadEnv() {
     console.log(`\n${yellow}Setup Instructions:${reset}`);
     console.log(`  1. Copy .env.example to .env.local:`);
     console.log(`     ${cyan}cp .env.example .env.local${reset}`);
-    console.log(`  2. Pull credentials from Vercel:`);
-    console.log(`     ${cyan}vercel env pull .env.local --environment=production --yes${reset}`);
+    console.log(`  2. Fill in Supabase + Postgres credentials (production lives in`);
+    console.log(`     ${cyan}/opt/orangecat/app/.env${reset} on the Hetzner box)`);
     console.log(`  3. Add GitHub token:`);
     console.log(`     ${cyan}gh auth token${reset} and add to GITHUB_TOKEN in .env.local`);
     console.log(`  4. Optional: Add OpenRouter API key for platform-level AI\n`);
@@ -148,8 +148,8 @@ function healthCheck() {
   if (hasErrors) {
     console.log(`\n${red}✗ Health Check FAILED${reset}`);
     console.log(`\n${yellow}Missing required credentials. Follow these steps:${reset}`);
-    console.log(`  1. Pull credentials from Vercel:`);
-    console.log(`     ${cyan}vercel env pull .env.local --environment=production --yes${reset}`);
+    console.log(`  1. Fill in Supabase + Postgres credentials (production lives in`);
+    console.log(`     ${cyan}/opt/orangecat/app/.env${reset} on the Hetzner box)`);
     console.log(`  2. Add GitHub token:`);
     console.log(`     Run: ${cyan}gh auth token${reset}`);
     console.log(`     Then add to ${cyan}GITHUB_TOKEN${reset} in .env.local`);

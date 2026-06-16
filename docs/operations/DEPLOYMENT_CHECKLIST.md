@@ -43,11 +43,11 @@ Status: Ready for use
 - Local (Ollama/LM Studio): Event-streams enabled; confirm incremental updates.
 - BYOK header constant: `OPENROUTER_KEY_HEADER` (`x-openrouter-key`).
 
-## 6) Vercel Deployment
+## 6) Self-Hosted Deployment (Hetzner)
 
-- Node 20; `next build`/`next start`.
-- Configure all envs in Vercel; mark sensitive.
-- Optional: `npm run env:push` to sync local envs.
+- Node 20; `next build` / `next start` on the box (bitbaum), behind Caddy.
+- Production env lives in `/opt/orangecat/app/.env` (no cloud dashboard).
+- See docs/operations/deployment/DEPLOYMENT_PROCESS.md for the on-box flow.
 
 ## 7) Post‑Deploy Verification
 
