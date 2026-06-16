@@ -69,14 +69,14 @@ export async function POST(request: Request) {
 
   // Active entities.
   const entityTables: Array<{ table: string; type: string; basePath: string }> = [
-    { table: 'user_products', type: 'product', basePath: '/market' },
+    { table: 'user_products', type: 'product', basePath: '/products' },
     { table: 'user_services', type: 'service', basePath: '/services' },
     { table: 'user_causes', type: 'cause', basePath: '/causes' },
   ];
   for (const { table, type, basePath } of entityTables) {
     const { data } = await supabase
       .from(table)
-      .select('id, title, description, slug')
+      .select('id, title, description')
       .eq('status', ENTITY_STATUS.ACTIVE);
     for (const e of data ?? []) {
       const text = [e.title, e.description].filter(Boolean).join('. ').trim();
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
         entity_type: type,
         entity_id: e.id,
         title: e.title || 'Untitled',
-        url: `${basePath}/${e.slug || e.id}`,
+        url: `${basePath}/${e.id}`,
         text,
       });
     }

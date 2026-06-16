@@ -99,7 +99,7 @@ export async function searchPlatform(
       ? searchTable(supabase, getTableName('cause'), 'causes', '/causes', tokens, results)
       : Promise.resolve(),
     type === 'all' || type === 'products'
-      ? searchTable(supabase, getTableName('product'), 'products', '/market', tokens, results)
+      ? searchTable(supabase, getTableName('product'), 'products', '/products', tokens, results)
       : Promise.resolve(),
     type === 'all' || type === 'services'
       ? searchTable(supabase, getTableName('service'), 'services', '/services', tokens, results)
@@ -258,7 +258,7 @@ async function searchTable(
 ): Promise<void> {
   const { data } = await supabase
     .from(table)
-    .select('id, title, description, slug')
+    .select('id, title, description')
     .eq('status', ENTITY_STATUS.ACTIVE)
     .or(ilikeOrConditions(['title', 'description'], tokens))
     .limit(MAX_RESULTS_PER_TYPE);
@@ -271,13 +271,12 @@ async function searchTable(
     id: string;
     title: string;
     description: string | null;
-    slug: string | null;
   }>) {
     results.push({
       type,
       title: row.title,
       description: row.description?.slice(0, 200) || '',
-      url: `${basePath}/${row.slug || row.id}`,
+      url: `${basePath}/${row.id}`,
     });
   }
 }
