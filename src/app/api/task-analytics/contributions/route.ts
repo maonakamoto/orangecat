@@ -44,7 +44,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     if (uniqueUserIds.length > 0) {
       const { data: profiles } = await supabase
         .from(DATABASE_TABLES.PROFILES)
-        .select('id, username, display_name, avatar_url')
+        .select('id, username, display_name:name, avatar_url')
         .in('id', uniqueUserIds);
       for (const p of (profiles || []) as ProfileRow[]) {
         profilesMap.set(p.id, p);

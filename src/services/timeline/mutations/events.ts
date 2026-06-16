@@ -366,7 +366,7 @@ export async function createTransactionEvent(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: supporter } = await (supabase as any)
     .from(DATABASE_TABLES.PROFILES)
-    .select('username, display_name')
+    .select('username, display_name:name')
     .eq('id', supporterId)
     .single();
 

@@ -147,7 +147,7 @@ async function enrichWithProfiles(rows: CommentRow[]): Promise<Record<string, un
   if (userIds.length > 0) {
     const { data: profiles, error: pErr } = await db
       .from(DATABASE_TABLES.PROFILES)
-      .select('id, display_name, username, avatar_url')
+      .select('id, display_name:name, username, avatar_url')
       .in('id', userIds as string[]);
     if (!pErr && profiles) {
       profilesMap = Object.fromEntries(

@@ -31,6 +31,7 @@
     "lint:check": "next lint",
     "lint:umlauts": "grep -rn --include='*.ts' --include='*.tsx' -E '(fuer|koennen|moeglich|muessen|wuerde|aehnlich|aerger|aendern|oeffnen|ueber|ueberall|zurueck|natuerlich|genuegt|Strasse|Gruesse)' src/ || echo 'No umlaut violations found'",
     "type-check": "tsc --noEmit --skipLibCheck",
+    "audit:schema": "node scripts/db/audit-schema-drift.mjs",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --ci --coverage --watchAll=false",

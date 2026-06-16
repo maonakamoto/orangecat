@@ -215,7 +215,7 @@ export class NotificationEmailService {
 
     // Profile: contact_email + display name
     const { data: profile } = await (admin.from(DATABASE_TABLES.PROFILES) as any)
-      .select('contact_email, display_name, username')
+      .select('contact_email, display_name:name, username')
       .eq('id', userId)
       .single();
 

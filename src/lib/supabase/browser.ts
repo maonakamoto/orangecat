@@ -112,7 +112,7 @@ const supabase = createBrowserClient<Database>(supabaseUrl, supabaseAnonKey, {
 if (process.env.NODE_ENV === 'development') {
   const testConnection = async () => {
     try {
-      const { error } = await supabase.from(DATABASE_TABLES.PROFILES).select('count').limit(1);
+      const { error } = await supabase.from(DATABASE_TABLES.PROFILES).select('id').limit(1);
       if (error) {
         logger.warn('Supabase connection test failed', { errorMessage: error.message }, 'Supabase');
       } else {

@@ -260,7 +260,7 @@ async function fetchAssistant(
   const { data, error } = await supabase
     .from(DATABASE_TABLES.AI_ASSISTANTS)
     .select(
-      'id, title, system_prompt, welcome_message, pricing_model, price_per_message, price_per_1k_tokens, user_id, model_preference, allowed_models, min_model_tier, temperature, max_tokens_per_response, free_messages_per_day'
+      'id, title, system_prompt, welcome_message, pricing_model, price_per_message, price_per_1k_tokens, user_id, model_preference, temperature, max_tokens_per_response, free_messages_per_day'
     )
     .eq('id', assistantId)
     .single();

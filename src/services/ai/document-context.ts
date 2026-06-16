@@ -137,7 +137,7 @@ async function fetchWalletsForCat(
     const { data: profile } = await supabase
       .from(DATABASE_TABLES.PROFILES)
       .select('id')
-      .eq('user_id', userId)
+      .eq('id', userId)
       .maybeSingle();
 
     if (!profile) {

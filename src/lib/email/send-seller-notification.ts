@@ -42,7 +42,7 @@ export async function sendSellerPaymentNotification(
     // 1. Fetch seller profile (contact_email, display_name, username)
     const { data: sellerProfile } = await supabase
       .from(DATABASE_TABLES.PROFILES)
-      .select('contact_email, display_name, username')
+      .select('contact_email, display_name:name, username')
       .eq('id', sellerId)
       .single();
 
@@ -67,7 +67,7 @@ export async function sendSellerPaymentNotification(
     // 3. Resolve buyer display name (never expose buyer email)
     const { data: buyerProfile } = await supabase
       .from(DATABASE_TABLES.PROFILES)
-      .select('display_name, username')
+      .select('display_name:name, username')
       .eq('id', paymentIntent.buyer_id)
       .single();
 

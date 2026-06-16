@@ -83,7 +83,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     if (completerIds.length > 0) {
       const { data: profiles } = await supabase
         .from(DATABASE_TABLES.PROFILES)
-        .select('id, username, display_name, avatar_url')
+        .select('id, username, display_name:name, avatar_url')
         .in('id', completerIds);
       for (const p of profiles || []) {
         profilesMap[p.id] = p;

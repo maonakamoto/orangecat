@@ -94,7 +94,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     // Send notification
     const { data: profile } = await supabase
       .from(DATABASE_TABLES.PROFILES)
-      .select('username, display_name')
+      .select('username, display_name:name')
       .eq('id', user.id)
       .single();
     const requesterName = profile?.display_name || profile?.username || 'Someone';

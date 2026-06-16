@@ -152,7 +152,7 @@ export class NotificationDispatcher {
 
     // Resolve email: profile contact_email -> auth user email
     const { data: profile } = await (admin.from(DATABASE_TABLES.PROFILES) as any)
-      .select('contact_email, display_name')
+      .select('contact_email, display_name:name')
       .eq('id', params.userId)
       .single();
 

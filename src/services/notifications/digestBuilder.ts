@@ -95,7 +95,7 @@ async function fetchUserProfile(
   userId: string
 ): Promise<{ name: string; bio: string | null } | null> {
   const { data } = await (admin.from(DATABASE_TABLES.PROFILES) as any)
-    .select('display_name, username, bio')
+    .select('display_name:name, username, bio')
     .eq('id', userId)
     .single();
 

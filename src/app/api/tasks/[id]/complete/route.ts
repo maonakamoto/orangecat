@@ -94,7 +94,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     if (task.created_by !== user.id) {
       const { data: profile } = await supabase
         .from(DATABASE_TABLES.PROFILES)
-        .select('username, display_name')
+        .select('username, display_name:name')
         .eq('id', user.id)
         .single();
       const completerName = profile?.display_name || profile?.username || 'Someone';
