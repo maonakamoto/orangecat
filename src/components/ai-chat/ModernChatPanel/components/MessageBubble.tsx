@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { Cat, User, Copy, Check, Clock, X } from 'lucide-react';
 import { AI_MODEL_REGISTRY } from '@/config/ai-models';
+import { getModelCapability } from '@/config/model-capability';
 import { renderChatMarkdown } from '@/utils/markdown';
 import { ActionButton } from './ActionButton';
 import { ToolCallChip } from './ToolCallChip';
@@ -217,6 +218,20 @@ export function MessageBubble({
                 </>
               )}
               <span>{AI_MODEL_REGISTRY[message.modelUsed]?.name || message.modelUsed}</span>
+              {(() => {
+                const cap = getModelCapability(message.modelUsed);
+                return (
+                  <>
+                    <span aria-hidden> · </span>
+                    <span
+                      title={cap.blurb}
+                      className="cursor-help underline decoration-dotted decoration-fg-tertiary/50 underline-offset-2"
+                    >
+                      {cap.label}
+                    </span>
+                  </>
+                );
+              })()}
             </span>
             <button
               onClick={handleCopy}

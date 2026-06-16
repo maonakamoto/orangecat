@@ -87,6 +87,12 @@ export default function AISettingsPage() {
                 </Link>{' '}
                 for the Pro option (coming soon — it&apos;s a waitlist for now).
               </p>
+              <p className="mt-2 text-xs text-fg-tertiary">
+                Capability: <span className="font-medium text-fg-secondary">Capable</span> — great
+                for chat, drafting, and suggestions. Discovery, matchmaking, and multi-step tasks
+                work best on a <span className="font-medium text-fg-secondary">frontier</span> model
+                — add a Claude, GPT-4o, or Grok key below to unlock them.
+              </p>
             </div>
           </div>
         </section>
