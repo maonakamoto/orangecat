@@ -12,6 +12,7 @@ import {
   DashboardProjects,
 } from '@/components/dashboard/sections';
 import { MobileDashboardSidebar } from '@/components/dashboard/MobileDashboardSidebar';
+import { CatNudges } from '@/components/dashboard/CatNudges';
 import { PendingActionsCard } from '@/components/ai-chat/PendingActionsCard';
 import { useDashboard } from './useDashboard';
 
@@ -118,6 +119,8 @@ export default function DashboardPage() {
         )}
 
         <DashboardJourney />
+
+        <CatNudges />
 
         <div className="space-y-4 sm:space-y-6">
           <div className="block lg:hidden">
