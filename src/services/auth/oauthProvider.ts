@@ -172,7 +172,10 @@ export interface TokenResponse {
   scope: string;
 }
 
-async function profileClaims(userId: string, scopes: string[]): Promise<Record<string, unknown>> {
+export async function profileClaims(
+  userId: string,
+  scopes: string[]
+): Promise<Record<string, unknown>> {
   if (!scopes.includes('profile') && !scopes.includes('email')) {
     return {};
   }

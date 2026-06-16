@@ -75,9 +75,12 @@ export function createEntityGetByIdHandler(config: EntityGetByIdHandlerConfig) {
 
       const auth = await resolveRequestAuth(request);
 
-      // Integration-key scope check. Sessions always pass (scopes=['*']).
-      // Anonymous reads pass — public reads aren't gated.
-      if (auth?.source === 'integration_key' && !hasScope(auth.scopes, `${entityType}.read`)) {
+      // Token scope check (integration key OR OIDC). Sessions always pass
+      // (scopes=['*']). Anonymous reads pass — public reads aren't gated.
+      if (
+        (auth?.source === 'integration_key' || auth?.source === 'oidc') &&
+        !hasScope(auth.scopes, `${entityType}.read`)
+      ) {
         return apiForbidden(
           `This key is not allowed to read ${ENTITY_REGISTRY[entityType].namePlural.toLowerCase()}.`
         );

@@ -15,9 +15,17 @@
  * even where OIDC env isn't set (e.g. some dev/test). The error surfaces only
  * when an OIDC endpoint actually needs to sign or publish a key.
  */
-import { importPKCS8, exportJWK, type JWK, type CryptoKey } from 'jose';
+import {
+  importPKCS8,
+  exportJWK,
+  createLocalJWKSet,
+  jwtVerify,
+  type JWK,
+  type CryptoKey,
+  type JWTPayload,
+} from 'jose';
 import { createPublicKey } from 'node:crypto';
-import { OAUTH_SIGNING_ALG } from './config';
+import { OAUTH_ISSUER, OAUTH_SIGNING_ALG } from './config';
 
 interface SigningKey {
   privateKey: CryptoKey;
@@ -77,4 +85,21 @@ export async function getPublicJwks(): Promise<{ keys: JWK[] }> {
     }
   }
   return { keys };
+}
+
+/**
+ * Verify an OrangeCat-issued access/id token against our own public key set.
+ * Returns the payload on success, or null on ANY failure (bad signature, wrong
+ * issuer, expired, not our token). Callers must treat null as "not an OIDC token"
+ * and may fall through to other auth — so it must not throw.
+ */
+export async function verifyAccessToken(token: string): Promise<JWTPayload | null> {
+  try {
+    const jwks = await getPublicJwks();
+    const keySet = createLocalJWKSet(jwks);
+    const { payload } = await jwtVerify(token, keySet, { issuer: OAUTH_ISSUER });
+    return payload;
+  } catch {
+    return null;
+  }
 }

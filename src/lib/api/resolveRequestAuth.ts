@@ -18,12 +18,12 @@ import { verifyIntegrationKey } from '@/services/auth/integrationKeys';
 export interface ResolvedRequestAuth {
   userId: string;
   /**
-   * Actor the request must act as. Set for integration-key auth (the key
-   * is bound to an actor at mint time); null for session auth.
+   * Actor the request must act as. Set for integration-key and OIDC auth (both
+   * are pre-bound to an actor); null for session auth.
    */
   boundActorId: string | null;
   /** Source — useful for logs and feature gating. */
-  source: 'session' | 'integration_key';
+  source: 'session' | 'integration_key' | 'oidc';
   /** Set for integration-key auth so we can log which key was used. */
   integrationKeyId: string | null;
   /**
@@ -80,7 +80,32 @@ export async function resolveRequestAuth(req: NextRequest): Promise<ResolvedRequ
     return null;
   }
 
-  // No integration key — try the Supabase session.
+  // OIDC bearer ("Login with OrangeCat" access token). Only activates for a
+  // valid OrangeCat-issued JWT; an unrecognized bearer (e.g. a Supabase token)
+  // verifies to null and falls through to the session path below.
+  const authHeader = req.headers.get('authorization');
+  if (authHeader && authHeader.startsWith(BEARER_PREFIX)) {
+    const token = authHeader.slice(BEARER_PREFIX.length).trim();
+    if (!token.startsWith('ock_')) {
+      // Lazy import: keeps `jose` (ESM-only) out of the static graph so
+      // non-OIDC code paths (and Jest's ts-jest preset) never load it.
+      const { verifyAccessToken } = await import('@/lib/oauth/keys');
+      const payload = await verifyAccessToken(token);
+      if (payload?.sub) {
+        const scopeClaim = typeof payload.scope === 'string' ? payload.scope : '';
+        return {
+          userId: typeof payload.uid === 'string' ? payload.uid : '',
+          boundActorId: payload.sub,
+          source: 'oidc',
+          integrationKeyId: null,
+          scopes: scopeClaim.split(/\s+/).filter(Boolean),
+          isTest: false,
+        };
+      }
+    }
+  }
+
+  // No token — try the Supabase session.
   const supabase = await createServerClient();
   const {
     data: { user },

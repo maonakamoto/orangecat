@@ -118,10 +118,13 @@ export function createEntityListHandler(config: EntityListHandlerConfig) {
       const boundActorId = auth?.boundActorId ?? null;
       const userId = boundActorId ? null : queryUserId;
 
-      // Integration-key scope check. Sessions always pass (scopes=['*']).
-      // Anonymous reads also pass — public listings aren't gated. Only
-      // an authenticated key with a narrowed scope can be denied here.
-      if (auth?.source === 'integration_key' && !hasScope(auth.scopes, `${entityType}.read`)) {
+      // Token scope check (integration key OR OIDC). Sessions always pass
+      // (scopes=['*']). Anonymous reads also pass — public listings aren't gated.
+      // Only an authenticated token with a narrowed scope can be denied here.
+      if (
+        (auth?.source === 'integration_key' || auth?.source === 'oidc') &&
+        !hasScope(auth.scopes, `${entityType}.read`)
+      ) {
         return apiForbidden(
           `This key is not allowed to read ${ENTITY_REGISTRY[entityType].namePlural.toLowerCase()}.`
         );
