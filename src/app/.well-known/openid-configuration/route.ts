@@ -14,8 +14,10 @@ import {
   oauthUrl,
 } from '@/lib/oauth/config';
 
-// Static config — safe to cache at the edge.
-export const dynamic = 'force-static';
+// Must read OAUTH_ISSUER from the runtime env (the box), not bake the build-time
+// value — otherwise the advertised issuer/endpoints would be wrong in prod.
+// Cached via Cache-Control below; cheap and rarely hit.
+export const dynamic = 'force-dynamic';
 
 export function GET() {
   const doc = {
