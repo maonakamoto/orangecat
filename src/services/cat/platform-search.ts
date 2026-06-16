@@ -47,46 +47,104 @@ export async function searchPlatform(
     return [];
   }
 
-  const escaped = q.replace(/[%_]/g, '\\$&');
-  const pattern = `%${escaped}%`;
+  // Tokenize: match ANY significant word (OR), not the whole phrase. A model
+  // query like "tattoo artist collaboration" must match a bio that says
+  // "Tattoo artist based in Berlin" — a single %phrase% ILIKE never would.
+  // (Recall-first; pgvector semantic ranking is the next slice.) Split on
+  // non-alphanumerics so tokens are safe to embed in PostgREST .or() strings.
+  let tokens = q
+    .toLowerCase()
+    .split(/[^a-z0-9]+/i)
+    .filter(t => t.length >= 3 && !SEARCH_STOPWORDS.has(t))
+    .slice(0, 6);
+  if (tokens.length === 0) {
+    tokens = [
+      q
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]+/g, '')
+        .trim(),
+    ].filter(Boolean);
+  }
+  if (tokens.length === 0) {
+    return [];
+  }
   const results: SearchResult[] = [];
 
   await Promise.all([
     type === 'all' || type === 'people'
-      ? searchProfiles(supabase, pattern, results)
+      ? searchProfiles(supabase, tokens, results)
       : Promise.resolve(),
     type === 'all' || type === 'projects'
-      ? searchTable(supabase, getTableName('project'), 'projects', '/fund', pattern, results)
+      ? searchTable(supabase, getTableName('project'), 'projects', '/fund', tokens, results)
       : Promise.resolve(),
     type === 'all' || type === 'causes'
-      ? searchTable(supabase, getTableName('cause'), 'causes', '/causes', pattern, results)
+      ? searchTable(supabase, getTableName('cause'), 'causes', '/causes', tokens, results)
       : Promise.resolve(),
     type === 'all' || type === 'products'
-      ? searchTable(supabase, getTableName('product'), 'products', '/market', pattern, results)
+      ? searchTable(supabase, getTableName('product'), 'products', '/market', tokens, results)
       : Promise.resolve(),
     type === 'all' || type === 'services'
-      ? searchTable(supabase, getTableName('service'), 'services', '/services', pattern, results)
+      ? searchTable(supabase, getTableName('service'), 'services', '/services', tokens, results)
       : Promise.resolve(),
     type === 'all' || type === 'events'
-      ? searchTable(supabase, getTableName('event'), 'events', '/events', pattern, results)
+      ? searchTable(supabase, getTableName('event'), 'events', '/events', tokens, results)
       : Promise.resolve(),
   ]);
 
   return results;
 }
 
+/** Query-framing words that add noise to matchmaking searches, not signal. */
+const SEARCH_STOPWORDS = new Set([
+  'the',
+  'and',
+  'for',
+  'with',
+  'that',
+  'this',
+  'you',
+  'your',
+  'who',
+  'whom',
+  'find',
+  'need',
+  'want',
+  'looking',
+  'someone',
+  'anyone',
+  'somebody',
+  'collaborate',
+  'collaboration',
+  'collaborator',
+  'partner',
+  'platform',
+  'orangecat',
+  'people',
+  'person',
+  'can',
+  'help',
+  'near',
+  'about',
+]);
+
+/** Build a PostgREST `.or()` string: any token, in any field (tokens are
+ *  alphanumeric-only so they're safe to interpolate). */
+function ilikeOrConditions(fields: string[], tokens: string[]): string {
+  return tokens.flatMap(t => fields.map(f => `${f}.ilike.%${t}%`)).join(',');
+}
+
 // ─── Private helpers ─────────────────────────────────────────────────────────
 
 async function searchProfiles(
   supabase: AnySupabaseClient,
-  pattern: string,
+  tokens: string[],
   results: SearchResult[]
 ): Promise<void> {
   const { data } = await supabase
     .from(DATABASE_TABLES.PROFILES)
     .select('username, name, bio')
     .not('username', 'is', null)
-    .or(`username.ilike.${pattern},name.ilike.${pattern},bio.ilike.${pattern}`)
+    .or(ilikeOrConditions(['username', 'name', 'bio'], tokens))
     .limit(MAX_RESULTS_PER_TYPE);
 
   if (!data?.length) {
@@ -112,14 +170,14 @@ async function searchTable(
   table: string,
   type: SearchType,
   basePath: string,
-  pattern: string,
+  tokens: string[],
   results: SearchResult[]
 ): Promise<void> {
   const { data } = await supabase
     .from(table)
     .select('id, title, description, slug')
     .eq('status', ENTITY_STATUS.ACTIVE)
-    .or(`title.ilike.${pattern},description.ilike.${pattern}`)
+    .or(ilikeOrConditions(['title', 'description'], tokens))
     .limit(MAX_RESULTS_PER_TYPE);
 
   if (!data?.length) {
