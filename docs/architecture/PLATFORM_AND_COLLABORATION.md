@@ -3,9 +3,9 @@
 **Status:** Architecture decision / north star. Not fully built — this is the
 design both products converge toward.
 **Scope:** OrangeCat (this repo) + FleetCrown (separate repo,
-`/home/g/dev/fleetcrown`). Cross-product.
-**Companion specs:** `cross-product-identity-bridge.md` (FleetCrown repo — the
-"Login with OrangeCat" / OIDC keystone).
+`/home/g/dev/fleetcrown`). Cross-product; aligned by both agent tabs 2026-06-16.
+**Companion spec:** `cross-product-identity-bridge.md` (FleetCrown repo — the
+"Login with OrangeCat" / OIDC keystone + the FleetCrown relying-party side).
 
 ---
 
@@ -39,7 +39,7 @@ platform), and is rendered natively wherever it's needed.
 ## The reframe: OrangeCat is two things
 
 1. **OrangeCat the _platform_** — the headless backbone: identity, social graph,
-   messaging, economy, event stream, collaboration primitives. API-first.
+   messaging, economy, publish/activity stream, collaboration primitives. API-first.
 2. **OrangeCat the _app_** — one client of that platform (the public social/economy
    product).
 
@@ -55,106 +55,111 @@ the one identity + economy.
                  ┌───────────────────────────────────────────────┐
                  │            OrangeCat — the platform            │
                  │  actors · groups · follows · conversations ·   │
-                 │  timeline_events (event bus) · wallets ·       │
+                 │  timeline_events (publish bus) · wallets ·     │
                  │  payment_intents · project_roles · OIDC        │
                  └───────────────▲───────────────▲───────────────┘
-                                 │ API + OIDC     │ API + OIDC
+                                 │ API + OIDC     │ API + OIDC + async publish
                  ┌───────────────┴──────┐  ┌──────┴────────────────┐
                  │   OrangeCat the app   │  │      FleetCrown       │
-                 │ (presence + economy)  │  │ (build/execution)     │
+                 │ (presence + economy)  │  │ (build/execution +    │
+                 │                       │  │  PRIVATE event spine)  │
                  └───────────────────────┘  └───────────────────────┘
-                   both render the SAME shared collaboration surfaces
+        OC renders shared surfaces natively; FleetCrown embeds them inline
 ```
 
 ## SSOT spine — one home per concern
 
 Neither app forks these. FleetCrown **references**, never re-implements.
 
-| Concern              | Single source of truth                                   | Both apps        |
-| -------------------- | -------------------------------------------------------- | ---------------- |
-| Identity             | `actors` (OIDC `sub` = `actor_id`)                       | reference        |
-| Team / org           | `groups` + `group_members` + `group_wallets` (multi-sig) | reference        |
-| Social graph         | `follows`, `stakeholder_relationships`                   | read             |
-| Messaging            | `conversations`                                          | render inline    |
-| Activity / changelog | `timeline_events` (the event bus)                        | write + read     |
-| Economy              | `wallets`, `payment_intents`, `contributions`            | surface fund/pay |
-| Collaboration needs  | `project_roles` (new)                                    | surface board    |
+| Concern             | Single source of truth                                   | Both apps         |
+| ------------------- | -------------------------------------------------------- | ----------------- |
+| Identity            | `actors` (OIDC `sub` = `actor_id`)                       | reference         |
+| Team / org          | OC `groups` + `group_members` + `group_wallets` (target) | map at boundary\* |
+| Social graph        | `follows`, `stakeholder_relationships`                   | read              |
+| Messaging           | `conversations`                                          | embed inline      |
+| Public activity     | `timeline_events` (the **publish** bus)                  | publish + read    |
+| Economy             | `wallets`, `payment_intents`, `contributions`            | surface fund/pay  |
+| Collaboration needs | `project_roles` (new) → existing `/jobs` surface         | surface board     |
 
-FleetCrown owns only its domain: agents, `orchestration_runs`, repos, the build
-cockpit.
+FleetCrown owns only its domain: agents, `orchestration_runs`,
+`control_audit_events`, its **private** build-event spine, repos, the build cockpit.
 
-## "Building is collaborative" → the team _is_ an OrangeCat group
+\* Teams are **mapped, not migrated** yet — see below.
 
-A build team is not a FleetCrown concept. It is an **OrangeCat group** with a shared
-**multi-sig `group_wallet`**:
+## Two streams, one publish bus (NOT a general event bus)
 
-- Membership = `group_members` (SSOT identity).
-- Treasury = `group_wallets` (`required_signatures`) — funded on OC, **spent by
-  FleetCrown** on behalf of the group's actors via scoped OIDC tokens.
-- Comms = `conversations`, rendered **inside** FleetCrown's project view.
-- Roles / needs = `project_roles`, surfaced in both.
+This is the correction that keeps SoC intact: `timeline_events` is the
+**publish / activity bus**, not a firehose.
 
-"Pay the collaborator", "fund the milestone", "who's on this build" all resolve to
-OC group / actor / wallet state. One graph, rendered in both cockpits.
+- **FleetCrown keeps its own private build-event spine** (`events.jsonl`,
+  `orchestration_runs`, `control_audit_events`) — high-volume, private. It renders
+  its cockpit from its own data.
+- A curated **"promote" step** lifts only publish-worthy events
+  (`milestone.shipped`, `deployed`) into `timeline_events`. Which `event_type` is
+  publish-worthy is a **config-driven policy**, not a hardcoded call site.
+- **Each app reads its own stream; publish bridges between them.** The firehose
+  never touches the public wall.
 
-## Connective tissue: an event bus, not app-to-app calls
+### Publishing is async + idempotent + reconcilable
 
-Generalize "FleetCrown emits, OrangeCat distributes" into the architecture: **both
-apps write domain events to one stream (`timeline_events`) and read the slices they
-care about.**
+Changelog → wall is **async / best-effort**, reusing FleetCrown's existing
+fire-and-forget pattern (`syncSubscriptionToOrangeCat`) — **never a synchronous
+cross-app write.** That is what actually gives availability decoupling: FleetCrown
+renders from its own data regardless of OC's state.
 
-- FleetCrown writes `milestone.shipped` → OC renders it on the public wall **and**
-  FleetCrown renders it in the cockpit.
-- OC writes `backer.funded` → FleetCrown shows "budget increased".
+But "best-effort" alone silently drops posts, so OC (which owns the receiving end)
+makes the published event:
 
-Why event-driven, not direct calls: it **decouples availability and latency** (an
-app renders last-known state when the other is down) and avoids a distributed
-monolith. This is DRY at the data-flow layer.
+- **idempotent** — a `dedupe_key` on the `timeline_event` so a retry never
+  double-posts;
+- **reconcilable** — a periodic backfill (the same reconciler pattern OC already
+  uses for embeddings) re-publishes anything missed while OC was down.
 
-## DRY in _code_: registry + shared components
+## "Building is collaborative" → map teams now, converge later
 
-Rendering the same concern in two UIs is where duplication creeps back. Kill it the
-way we already kill it for entities (`entity-registry`):
+The _end state_ is that a build team is an **OrangeCat group** with a shared
+multi-sig `group_wallet`. But **don't single-source teams into OC groups yet** —
+FleetCrown has its own `orgs` / `orgMemberships` wired into auth bootstrap
+(`createPersonalOrg` in `events.signIn`), project sharing, and billing. That's an
+auth-critical working subsystem; swapping it is merge-territory, deferred.
 
-1. **Shared UI package** `@oc/collab-ui`: `MessageThread`, `ActivityFeed`,
-   `CollaboratorBoard`, `FundButton`, `PresenceBar`. Both apps import; neither
-   reimplements. The visual layer is already shared (OC adopted FleetCrown's
-   semantic token tier), so they render identically.
-2. **Config-driven surface manifest** — the entity-registry pattern applied across
-   products:
+**For now — map at the boundary:**
 
-```ts
-export const COLLAB_SURFACES = {
-  messaging: {
-    source: 'oc:conversations',
-    scopes: ['messages.*'],
-    component: MessageThread,
-    mountIn: ['fc.project', 'oc.project', 'oc.profile'],
-  },
-  activity: {
-    source: 'oc:timeline_events',
-    scopes: ['timeline.read'],
-    component: ActivityFeed,
-    mountIn: ['fc.project', 'oc.project', 'oc.profile'],
-  },
-  roles: {
-    source: 'oc:project_roles',
-    scopes: ['roles.*'],
-    component: CollaboratorBoard,
-    mountIn: ['oc.project', 'oc.discover'],
-  },
-  fund: {
-    source: 'oc:payment_intents',
-    scopes: ['wallet.read'],
-    component: FundButton,
-    mountIn: ['fc.project', 'oc.project'],
-  },
-};
-```
+- FleetCrown keeps its orgs for internal build access.
+- When a FleetCrown project is team-funded / published, **associate** it with an OC
+  `group` + `group_wallet` (funded on OC, spent by FleetCrown via scoped OIDC
+  tokens).
+- The association requires FleetCrown org members to **resolve to OC actors via the
+  OIDC `sub`** — so even mapping is gated on the identity keystone.
 
-Adding a new collaborative surface = **one config entry, mounted in both apps** —
-"maximize config-driven, minimize hardcoding", and it scales to a third client for
-free.
+Converge to one team model later, if/when the apps merge.
+
+## DRY across UIs: embed OC surfaces, don't share a UI package
+
+Rendering the same concern in two UIs is where duplication creeps back. The naive
+fix — a shared `@oc/collab-ui` React package — is the **wrong** call here: the
+stacks diverge (FleetCrown = Next 16 / Tailwind v4 / Drizzle / a four-layer `ui-*`
+design system; OrangeCat = Next 15 / Supabase). A shared component package means
+ongoing build-pipeline coupling + version lock.
+
+**Instead — embeddable OC widget routes.** OrangeCat exposes self-contained widget
+routes (messaging panel, fund button, activity strip, collaborator board);
+FleetCrown mounts them inline via **iframe / web-component**, passing a **scoped
+OIDC token over `postMessage`**. One implementation, **owned by OC, rendered
+natively in FleetCrown, zero build-pipeline coupling.**
+
+Because OC _serves_ the embeds, OC owns their security:
+
+- **origin-pinned `postMessage`** — only accept from / send to
+  `fleetcrown.orangecat.ch`;
+- **`frame-ancestors` CSP** on the embed routes — only trusted origins may frame
+  them (anti-clickjacking);
+- **short-lived scoped token** over `postMessage` — never the full session.
+
+The set of embeddable surfaces is still **config-driven** (one registry entry per
+surface → which route, scopes, and where it mounts), so adding a surface is one
+config change. A shared npm package is reconsidered **only if embedding proves
+insufficient** — unlikely for years.
 
 ## Keeping the UX good
 
@@ -164,7 +169,7 @@ In priority order:
    identity, shared design tokens. The user is in _Build_ mode or _Be/Trade_ mode,
    not on a different website.
 2. **Embed at the right altitude; deep-link for depth.** Inline the lightweight
-   widget (chat panel, fund button, 3-line feed) so the user never leaves;
+   widget (chat panel, fund button, activity strip) so the user never leaves;
    deep-link to the full surface for the rich experience. Progressive disclosure,
    across products.
 3. **The Cat is the cross-product concierge.** One assistant spanning both worlds
@@ -176,27 +181,34 @@ In priority order:
 
 ## Honest costs (or it becomes worse than two apps)
 
-- **Shared code across two repos** needs a versioned package (or, eventually, a
-  monorepo). Real overhead — don't pretend it's free.
+- **Embed coupling, not code coupling** — embeddable widget routes keep the build
+  pipelines independent, but OC owns the embed contract (postMessage protocol,
+  CSP, token scopes). Version that contract deliberately.
 - **Authz must be SSOT too** — one permission model (OIDC scopes + RLS on
   actor/project/group), expressed once. Never "FleetCrown's idea of who can post"
   _and_ "OrangeCat's".
-- **Availability coupling** — embedded OC surfaces must degrade gracefully when OC
-  is slow/down (the event-bus read-model makes that possible).
-- **YAGNI the heavy stuff** — don't build the shared UI package + full manifest
-  before the pain is real.
+- **Availability coupling** — async + idempotent + reconcilable publishing is what
+  makes the seam survive either app being down; never a synchronous cross-app write.
+- **YAGNI the heavy stuff** — no shared UI package, no team migration, until the
+  pain is real. Map and embed first.
 
 ## Sequencing
 
 1. **OIDC provider** (the platform's front door) — identity SSOT. _Everything is
-   gated on this._
-2. **Read-only event surfacing** — FleetCrown changelog/status on OC walls + the
-   cockpit. Cheap, high-signal; just deep-links + a status pill, no shared package
-   yet.
+   gated on this._ (`.well-known/openid-configuration` + JWKS + `/oauth/authorize`
+   reusing the Supabase session + `getOrCreateUserActor` + `/oauth/token` PKCE +
+   `oauth_clients` / `oauth_auth_codes`, aligned to `integration_keys`' actor-bound
+   model + revocation.) Then the **`resolveRequestAuth` JWT branch** so the
+   access_token doubles as the v1 bearer.
+2. **Async publish + read-only surfacing** — FleetCrown promotes publish-worthy
+   build events; OC ingests them idempotently onto the wall; status/changelog shown
+   in both via deep-links + a status pill. No embeds yet.
 3. **`project_roles` collaborator primitive** — the one genuinely missing thing;
-   folds into the existing `/jobs` surface.
-4. **Then, when the pain is real** — extract `@oc/collab-ui` + the surface manifest,
-   and embed inline messaging/fund inside FleetCrown.
+   folds into the existing `/jobs` surface. (Parallel — doesn't touch FleetCrown.)
+4. **Home feed** — personalized reverse-chron feed of followed actors via the
+   existing `get_user_timeline_feed` RPC. (Parallel — doesn't touch FleetCrown.)
+5. **Then, when the pain is real** — embeddable OC widget routes (messaging / fund /
+   activity), mounted inline in FleetCrown over postMessage.
 
 **Building the seam this way _is_ the merge-later de-risk.** A real platform makes
 "merging" just co-hosting two clients of one backbone. Growing two of everything
@@ -207,5 +219,6 @@ SoC now, and a free option to merge later — without committing to it.
 
 > OrangeCat is the collaboration-and-economy **platform**; the OrangeCat app and
 > FleetCrown are two purpose-built **clients** of it; collaboration state is
-> **single-sourced** and rendered everywhere it's needed via **shared,
-> config-driven surfaces**; and the **Cat** makes the seam invisible.
+> **single-sourced** and **embedded** everywhere it's needed; publishing between
+> them is **async, idempotent, reconcilable**; and the **Cat** makes the seam
+> invisible.
