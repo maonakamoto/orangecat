@@ -84,9 +84,9 @@ async function searchProfiles(
 ): Promise<void> {
   const { data } = await supabase
     .from(DATABASE_TABLES.PROFILES)
-    .select('username, display_name, bio')
+    .select('username, name, bio')
     .not('username', 'is', null)
-    .or(`username.ilike.${pattern},display_name.ilike.${pattern},bio.ilike.${pattern}`)
+    .or(`username.ilike.${pattern},name.ilike.${pattern},bio.ilike.${pattern}`)
     .limit(MAX_RESULTS_PER_TYPE);
 
   if (!data?.length) {
@@ -95,14 +95,14 @@ async function searchProfiles(
 
   for (const row of data as Array<{
     username: string;
-    display_name: string | null;
+    name: string | null;
     bio: string | null;
   }>) {
     results.push({
       type: 'people',
-      title: row.display_name || row.username,
+      title: row.name || row.username,
       description: row.bio?.slice(0, 200) || `@${row.username} on OrangeCat`,
-      url: `/profile/${row.username}`,
+      url: `/profiles/${row.username}`,
     });
   }
 }
