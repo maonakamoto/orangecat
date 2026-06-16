@@ -252,13 +252,27 @@ export async function maybeEnrichWithSearchResults(
     return messages;
   }
 
+  // Tool detection runs on a SLIM, routing-only prompt — NOT the full
+  // conversational system prompt. The big "be a warm helpful agent" prompt
+  // biases the model to chat (finish_reason=stop) instead of emitting a
+  // tool_call, so platform search never fired. Here the only job is: decide
+  // which tool (if any) the request needs and with what args.
+  const detectionMessages = [
+    {
+      role: 'system' as const,
+      content:
+        'You route an OrangeCat chat request to platform tools. If the user wants to FIND, discover, or connect with people / projects / products / services / events / causes, call search_platform with a concise query (and a type when clear). If the user clearly described something to CREATE, call prefill_entity_form. Otherwise call no tool. Only decide and call the tool — do not write a chat reply.',
+    },
+    { role: 'user' as const, content: userMessage },
+  ];
+
   try {
     const res = await fetch(toolEndpoint, {
       method: 'POST',
       headers: { Authorization: `Bearer ${toolKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: modelToUse,
-        messages,
+        messages: detectionMessages,
         tools: PLATFORM_TOOL_DEFINITION,
         tool_choice: 'auto',
         stream: false,
