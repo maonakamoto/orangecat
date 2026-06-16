@@ -17,7 +17,7 @@ step has the exact command, a verification, and a rollback if it fails.
 ```
 [ ] 1. Mint a customer integration key at orangecat.ch/settings/integrations
 [ ] 2. Mint a webhook endpoint pointing at the customer's inbound URL
-[ ] 3. Set customer Vercel env vars
+[ ] 3. Set customer-side env vars
        (ORANGECAT_API_KEY + ORANGECAT_API_BASE + WEBHOOK_SECRET)
 [ ] 4. Run customer-side DB migrations
        (e.g. cd ~/dev/fleetcrown && npm run migrate)
@@ -79,9 +79,10 @@ either `all` or the selected list.
 
 ---
 
-## Step 3 — Set customer-side Vercel env vars
+## Step 3 — Set customer-side env vars
 
-In the customer's Vercel project (e.g. FleetCrown), set:
+In the customer's environment (e.g. FleetCrown — self-hosted on the same
+Hetzner box; edit `/opt/fleetcrown/app/.env`), set:
 
 | Var                  | Value                                  |
 | -------------------- | -------------------------------------- |
@@ -90,8 +91,8 @@ In the customer's Vercel project (e.g. FleetCrown), set:
 | `WEBHOOK_SECRET`     | The `ock_whk_…` plaintext from step 2. |
 
 Apply to all environments the integration should run in (Production
-typically). Trigger a redeploy so the new env reaches the Vercel
-runtime.
+typically). Restart the customer app (e.g. `systemctl restart
+fleetcrown-app`) so the new env is loaded.
 
 **Verify**: the customer's logs show the SDK initialised with the new
 key on first call.

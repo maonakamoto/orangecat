@@ -108,7 +108,7 @@ npm run dev
 - **Styling**: Tailwind CSS
 - **State Management**: Zustand
 - **Testing**: Jest, Playwright
-- **Deployment**: Vercel
+- **Deployment**: Self-hosted on Hetzner (bitbaum, behind Caddy)
 
 ### Key Features
 - **Bitcoin Funding Platform** - Crowdfunding with Bitcoin/Lightning
@@ -297,14 +297,13 @@ test('renders correctly', () => {
 # Build for production
 npm run build:production
 
-# Deploy to Vercel (automatic via GitHub)
-git push origin main
+# Deploy: self-hosted on Hetzner (bitbaum, behind Caddy).
+# See docs/operations/deployment/DEPLOYMENT_PROCESS.md for the on-box flow.
 ```
 
 ### Environment Variables
-- **Development**: `.env.local`
-- **Production**: Vercel environment variables
-- **Staging**: Separate Vercel project
+- **Development**: `.env.local` (gitignored)
+- **Production**: `/opt/orangecat/app/.env` on the Hetzner box
 
 ### Database Migrations
 ```bash
