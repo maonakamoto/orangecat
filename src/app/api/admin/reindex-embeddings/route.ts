@@ -1,13 +1,22 @@
 /**
- * POST /api/admin/reindex-embeddings
+ * POST /api/admin/reindex-embeddings  — incremental semantic-index reconciler
  *
- * One-time / on-demand backfill of the content_embeddings table that powers
- * semantic search. Reads public profiles + active entities, embeds their text,
- * and upserts the vectors. Idempotent (upsert on entity_type+entity_id).
+ * Keeps content_embeddings in sync with the searchable corpus (public profiles
+ * with a bio + ACTIVE entities). Designed to run frequently (cron, every couple
+ * of minutes) AND to be safe to spam:
  *
- * Protected by a shared secret in the `x-reindex-secret` header (set
- * REINDEX_SECRET in the server env). Intended to be curled from the box after
- * the embedding provider key is configured, or run periodically.
+ *   - INCREMENTAL (default): embeds only items that are NEW or whose source
+ *     `updated_at` is newer than what we last embedded. Unchanged items are
+ *     skipped → near-zero cost per run.
+ *   - PRUNE: removes index rows whose source no longer qualifies (deleted,
+ *     deactivated, bio removed).
+ *   - FULL (?full=true): re-embeds everything (use after changing the model).
+ *
+ * Decoupled from the write path on purpose: saving a profile never waits on an
+ * embedding call; the reconciler converges the index in the background, and if
+ * the embedding provider is down, items simply wait for the next run.
+ *
+ * Protected by the `x-reindex-secret` header == REINDEX_SECRET env.
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -26,9 +35,20 @@ interface IndexItem {
   title: string;
   url: string;
   text: string;
+  updated_at: string | null;
 }
 
 const EMBED_BATCH = 96;
+const key = (t: string, id: string) => `${t}:${id}`;
+const isNewer = (a: string | null, b: string | null) => {
+  if (!a) {
+    return false;
+  } // no source timestamp ⇒ don't force re-embed
+  if (!b) {
+    return true;
+  } // never embedded ⇒ embed
+  return new Date(a).getTime() > new Date(b).getTime();
+};
 
 export async function POST(request: Request) {
   const secret = process.env.REINDEX_SECRET;
@@ -42,15 +62,15 @@ export async function POST(request: Request) {
     );
   }
 
-  // content_embeddings isn't in the generated Database types yet, so use a
-  // permissive client for this backfill (same pattern as platform-search.ts).
+  const full = new URL(request.url).searchParams.get('full') === 'true';
   const supabase = createAdminClient() as any;
+
+  // ── 1. Build the current searchable corpus (with source timestamps) ─────────
   const items: IndexItem[] = [];
 
-  // Profiles (people) — only those with real content.
   const { data: profiles } = await supabase
     .from('profiles')
-    .select('id, username, name, bio, location_city')
+    .select('id, username, name, bio, location_city, updated_at')
     .not('username', 'is', null)
     .not('bio', 'is', null);
   for (const p of profiles ?? []) {
@@ -64,10 +84,10 @@ export async function POST(request: Request) {
       title: p.name || p.username,
       url: `/profiles/${p.username}`,
       text,
+      updated_at: p.updated_at ?? null,
     });
   }
 
-  // Active entities.
   const entityTables: Array<{ table: string; type: string; basePath: string }> = [
     { table: 'user_products', type: 'product', basePath: '/products' },
     { table: 'user_services', type: 'service', basePath: '/services' },
@@ -76,7 +96,7 @@ export async function POST(request: Request) {
   for (const { table, type, basePath } of entityTables) {
     const { data } = await supabase
       .from(table)
-      .select('id, title, description')
+      .select('id, title, description, updated_at')
       .eq('status', ENTITY_STATUS.ACTIVE);
     for (const e of data ?? []) {
       const text = [e.title, e.description].filter(Boolean).join('. ').trim();
@@ -89,18 +109,35 @@ export async function POST(request: Request) {
         title: e.title || 'Untitled',
         url: `${basePath}/${e.id}`,
         text,
+        updated_at: e.updated_at ?? null,
       });
     }
   }
 
-  if (items.length === 0) {
-    return NextResponse.json({ success: true, indexed: 0, message: 'Nothing to index.' });
+  // ── 2. Load what's already indexed (key → last-embedded source timestamp) ────
+  const { data: existingRows } = await supabase
+    .from('content_embeddings')
+    .select('entity_type, entity_id, updated_at');
+  const existing = new Map<string, string | null>();
+  for (const r of existingRows ?? []) {
+    existing.set(key(r.entity_type, r.entity_id), r.updated_at ?? null);
   }
 
+  // ── 3. Diff: what needs (re)embedding, what to prune ────────────────────────
+  const currentKeys = new Set(items.map(it => key(it.entity_type, it.entity_id)));
+  const toEmbed = full
+    ? items
+    : items.filter(it => {
+        const k = key(it.entity_type, it.entity_id);
+        return !existing.has(k) || isNewer(it.updated_at, existing.get(k) ?? null);
+      });
+  const toPrune = [...existing.keys()].filter(k => !currentKeys.has(k));
+
+  // ── 4. Embed + upsert (store SOURCE updated_at so the next diff works) ───────
   let indexed = 0;
   let failed = 0;
-  for (let i = 0; i < items.length; i += EMBED_BATCH) {
-    const batch = items.slice(i, i + EMBED_BATCH);
+  for (let i = 0; i < toEmbed.length; i += EMBED_BATCH) {
+    const batch = toEmbed.slice(i, i + EMBED_BATCH);
     const vectors = await embedTexts(batch.map(b => b.text));
     const rows = batch
       .map((b, j) => {
@@ -116,11 +153,10 @@ export async function POST(request: Request) {
           url: b.url,
           text_preview: b.text.slice(0, 500),
           embedding: JSON.stringify(vec),
-          updated_at: new Date().toISOString(),
+          updated_at: b.updated_at ?? new Date().toISOString(),
         };
       })
       .filter((r): r is NonNullable<typeof r> => r !== null);
-
     if (rows.length > 0) {
       const { error } = await supabase
         .from('content_embeddings')
@@ -134,6 +170,29 @@ export async function POST(request: Request) {
     }
   }
 
-  logger.info('Reindex complete', { indexed, failed, total: items.length }, 'Reindex');
-  return NextResponse.json({ success: true, indexed, failed, total: items.length });
+  // ── 5. Prune stale rows (deleted / deactivated / bio removed) ───────────────
+  let pruned = 0;
+  for (const k of toPrune) {
+    const [etype, eid] = k.split(':');
+    const { error } = await supabase
+      .from('content_embeddings')
+      .delete()
+      .eq('entity_type', etype)
+      .eq('entity_id', eid);
+    if (!error) {
+      pruned++;
+    }
+  }
+
+  const result = {
+    success: true,
+    mode: full ? 'full' : 'incremental',
+    corpus: items.length,
+    indexed,
+    skipped: items.length - toEmbed.length,
+    pruned,
+    failed,
+  };
+  logger.info('Reindex reconcile complete', result, 'Reindex');
+  return NextResponse.json(result);
 }
