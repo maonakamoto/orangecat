@@ -187,6 +187,59 @@ export function renderChatMarkdown(text: string): React.ReactNode {
       continue;
     }
 
+    // GFM table: a "| a | b |" header row followed by a "|---|---|" separator.
+    if (
+      line.includes('|') &&
+      i + 1 < lines.length &&
+      /^[\s|:-]+$/.test(lines[i + 1].trim()) &&
+      lines[i + 1].includes('-') &&
+      lines[i + 1].includes('|')
+    ) {
+      const parseRow = (l: string) =>
+        l
+          .trim()
+          .replace(/^\||\|$/g, '')
+          .split('|')
+          .map(c => c.trim());
+      const headers = parseRow(line);
+      i += 2; // consume header + separator
+      const rows: string[][] = [];
+      while (i < lines.length && lines[i].includes('|') && lines[i].trim()) {
+        rows.push(parseRow(lines[i]));
+        i++;
+      }
+      elements.push(
+        <div key={`tbl-${i}`} className="my-2 overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr>
+                {headers.map((h, hi) => (
+                  <th
+                    key={hi}
+                    className="border border-default bg-surface-raised px-2 py-1 text-left font-semibold"
+                  >
+                    {renderInlineTokens(h)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, ri) => (
+                <tr key={ri}>
+                  {r.map((c, ci) => (
+                    <td key={ci} className="border border-default px-2 py-1 align-top">
+                      {renderInlineTokens(c)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+      continue;
+    }
+
     elements.push(<div key={`p-${i}`}>{renderInlineTokens(line)}</div>);
     i++;
   }

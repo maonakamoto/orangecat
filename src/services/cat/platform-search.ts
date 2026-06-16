@@ -31,6 +31,9 @@ export interface SearchResult {
   title: string;
   description: string;
   url: string;
+  /** Cosine similarity 0–1 for semantic hits (absent for keyword hits). Lets the
+   *  Cat distinguish a strong match from a loosely-related one. */
+  similarity?: number;
 }
 
 const MAX_RESULTS_PER_TYPE = 5;
@@ -174,8 +177,10 @@ const ENTITY_TO_TYPE: Record<string, SearchType> = {
   cause: 'causes',
 };
 
-/** Minimum cosine similarity to count as a real match (filters weak/irrelevant). */
-const MIN_SIMILARITY = 0.25;
+/** Minimum cosine similarity to count as a real match. 0.35 keeps on-topic hits
+ *  (e.g. a tattoo artist for "ink a design on my skin" ~0.45) while dropping
+ *  loose neighbours (a ceramicist/engineer ~0.2–0.3) that were polluting results. */
+const MIN_SIMILARITY = 0.35;
 
 async function semanticSearch(
   supabase: AnySupabaseClient,
@@ -213,6 +218,7 @@ async function semanticSearch(
       title: r.title || 'Untitled',
       description: r.text_preview?.slice(0, 200) || '',
       url: r.url || '#',
+      similarity: Math.round(r.similarity * 100) / 100,
     }));
 }
 
