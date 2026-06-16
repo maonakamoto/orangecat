@@ -224,11 +224,21 @@ export async function maybeEnrichWithSearchResults(
   onToolCall?: OnToolCall,
   onPrefillProposal?: OnPrefillProposal
 ): Promise<ToolAugmentedMessage[]> {
-  // Tool use is wired through Groq's function-calling API only — every other
-  // provider falls back to the model's own knowledge (no platform tools).
-  // OpenAI/Anthropic/etc. all support tools natively but each needs its own
-  // adapter; that's a follow-up.
-  if (provider !== 'groq') {
+  // Tool detection uses OpenAI-compatible function-calling. Enabled on the two
+  // providers that actually serve OrangeCat: Groq (BYOK, paid TPM) and
+  // OpenRouter (the platform path + many BYOK models — gpt-oss-120b returns
+  // proper tool_calls). Without this, platform-tier discovery/matchmaking was
+  // dead (Groq 429s, so the platform runs on OpenRouter). Other providers fall
+  // back to no tools until they get an adapter.
+  let toolEndpoint: string;
+  let toolKey: string | undefined;
+  if (provider === 'groq') {
+    toolEndpoint = 'https://api.groq.com/openai/v1/chat/completions';
+    toolKey = groqKey ?? process.env.GROQ_API_KEY;
+  } else if (provider === 'openrouter') {
+    toolEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
+    toolKey = process.env.OPENROUTER_API_KEY;
+  } else {
     return messages;
   }
 
@@ -238,15 +248,14 @@ export async function maybeEnrichWithSearchResults(
     return messages;
   }
 
-  const key = groqKey ?? process.env.GROQ_API_KEY;
-  if (!key) {
+  if (!toolKey) {
     return messages;
   }
 
   try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const res = await fetch(toolEndpoint, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      headers: { Authorization: `Bearer ${toolKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: modelToUse,
         messages,
