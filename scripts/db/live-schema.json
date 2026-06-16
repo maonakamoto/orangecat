@@ -673,6 +673,46 @@
     "read_at",
     "action_url"
   ],
+  "oauth_auth_codes": [
+    "id",
+    "code_hash",
+    "client_id",
+    "actor_id",
+    "user_id",
+    "redirect_uri",
+    "scopes",
+    "code_challenge",
+    "code_challenge_method",
+    "nonce",
+    "expires_at",
+    "consumed_at",
+    "created_at"
+  ],
+  "oauth_clients": [
+    "id",
+    "client_id",
+    "client_secret_hash",
+    "name",
+    "redirect_uris",
+    "allowed_scopes",
+    "is_confidential",
+    "is_trusted",
+    "created_at",
+    "disabled_at"
+  ],
+  "oauth_refresh_tokens": [
+    "id",
+    "token_hash",
+    "client_id",
+    "actor_id",
+    "user_id",
+    "scopes",
+    "expires_at",
+    "revoked_at",
+    "last_used_at",
+    "created_at"
+  ],
+  "oauth_user_grants": ["id", "user_id", "client_id", "scopes", "granted_at"],
   "orders": [
     "id",
     "payment_intent_id",
