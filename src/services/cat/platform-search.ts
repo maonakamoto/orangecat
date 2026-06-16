@@ -196,6 +196,9 @@ async function semanticSearch(
     query_embedding: JSON.stringify(vec),
     match_count: type === 'all' ? 12 : 6,
     filter_type: TYPE_TO_ENTITY[type] ?? null,
+    // Relevance gate in SQL; results come back ordered by a blended score
+    // (similarity + a small quality_score boost) — outcome-aware ranking.
+    min_similarity: MIN_SIMILARITY,
   });
   if (error || !data) {
     if (error) {

@@ -36,7 +36,39 @@ interface IndexItem {
   url: string;
   text: string;
   updated_at: string | null;
+  /** 0–1 outcome/quality signal, blended into ranking (secondary to relevance). */
+  quality: number;
 }
+
+// ── Quality signals (real outcomes) ─────────────────────────────────────────
+const DAY_MS = 86_400_000;
+const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
+/** Recency 1→0 over ~90 days; null/unknown ⇒ low. */
+const recency = (ts: string | null | undefined): number => {
+  if (!ts) {
+    return 0.1;
+  }
+  const days = (Date.now() - new Date(ts).getTime()) / DAY_MS;
+  return Math.min(1, Math.max(0.05, 1 - days / 90));
+};
+const isVerified = (status: string | null | undefined): boolean =>
+  status === 'verified' || status === 'approved';
+/** People: recency of activity + followers + verification. */
+const profileQuality = (o: {
+  lastActiveAt?: string | null;
+  followers?: number;
+  verified?: boolean;
+}): number =>
+  clamp01(
+    0.5 * recency(o.lastActiveAt) +
+      0.3 * Math.min((o.followers ?? 0) / 5, 1) +
+      0.2 * (o.verified ? 1 : 0)
+  );
+/** Causes: recency + how close to goal (funding traction). */
+const causeQuality = (o: { updatedAt?: string | null; raised?: number; goal?: number }): number => {
+  const ratio = o.goal && o.goal > 0 ? Math.min((o.raised ?? 0) / o.goal, 1) : 0;
+  return clamp01(0.6 * recency(o.updatedAt) + 0.4 * ratio);
+};
 
 const EMBED_BATCH = 96;
 const key = (t: string, id: string) => `${t}:${id}`;
@@ -62,12 +94,18 @@ async function reconcileOne(
   if (type === 'profile') {
     const { data } = await supabase
       .from('profiles')
-      .select('id, username, name, bio, location_city, updated_at')
+      .select(
+        'id, username, name, bio, location_city, updated_at, last_active_at, verification_status'
+      )
       .eq('id', id)
       .maybeSingle();
     if (data?.username && data?.bio) {
       const text = [data.name, data.bio, data.location_city].filter(Boolean).join('. ').trim();
       if (text) {
+        const { count: followers } = await supabase
+          .from('follows')
+          .select('id', { count: 'exact', head: true })
+          .eq('following_id', data.id);
         item = {
           entity_type: 'profile',
           entity_id: data.id,
@@ -75,16 +113,21 @@ async function reconcileOne(
           url: `/profiles/${data.username}`,
           text,
           updated_at: data.updated_at ?? null,
+          quality: profileQuality({
+            lastActiveAt: data.last_active_at,
+            followers: followers ?? 0,
+            verified: isVerified(data.verification_status),
+          }),
         };
       }
     }
   } else if (ENTITY_CFG[type]) {
     const { table, basePath } = ENTITY_CFG[type];
-    const { data } = await supabase
-      .from(table)
-      .select('id, title, description, status, updated_at')
-      .eq('id', id)
-      .maybeSingle();
+    const cols =
+      type === 'cause'
+        ? 'id, title, description, status, updated_at, total_raised, goal_amount'
+        : 'id, title, description, status, updated_at';
+    const { data } = await supabase.from(table).select(cols).eq('id', id).maybeSingle();
     if (data && data.status === ENTITY_STATUS.ACTIVE) {
       const text = [data.title, data.description].filter(Boolean).join('. ').trim();
       if (text) {
@@ -95,6 +138,14 @@ async function reconcileOne(
           url: `${basePath}/${data.id}`,
           text,
           updated_at: data.updated_at ?? null,
+          quality:
+            type === 'cause'
+              ? causeQuality({
+                  updatedAt: data.updated_at,
+                  raised: Number(data.total_raised ?? 0),
+                  goal: Number(data.goal_amount ?? 0),
+                })
+              : clamp01(recency(data.updated_at)),
         };
       }
     }
@@ -118,6 +169,7 @@ async function reconcileOne(
         url: item.url,
         text_preview: item.text.slice(0, 500),
         embedding: JSON.stringify(vec),
+        quality_score: item.quality,
         updated_at: item.updated_at ?? new Date().toISOString(),
       },
     ],
@@ -168,9 +220,20 @@ export async function POST(request: Request) {
   // ── 1. Build the current searchable corpus (with source timestamps) ─────────
   const items: IndexItem[] = [];
 
+  // Follower counts (one query) → per-profile connection signal.
+  const followerCount = new Map<string, number>();
+  const { data: follows } = await supabase.from('follows').select('following_id');
+  for (const f of follows ?? []) {
+    if (f.following_id) {
+      followerCount.set(f.following_id, (followerCount.get(f.following_id) ?? 0) + 1);
+    }
+  }
+
   const { data: profiles } = await supabase
     .from('profiles')
-    .select('id, username, name, bio, location_city, updated_at')
+    .select(
+      'id, username, name, bio, location_city, updated_at, last_active_at, verification_status'
+    )
     .not('username', 'is', null)
     .not('bio', 'is', null);
   for (const p of profiles ?? []) {
@@ -185,19 +248,36 @@ export async function POST(request: Request) {
       url: `/profiles/${p.username}`,
       text,
       updated_at: p.updated_at ?? null,
+      quality: profileQuality({
+        lastActiveAt: p.last_active_at,
+        followers: followerCount.get(p.id) ?? 0,
+        verified: isVerified(p.verification_status),
+      }),
     });
   }
 
-  const entityTables: Array<{ table: string; type: string; basePath: string }> = [
-    { table: 'user_products', type: 'product', basePath: '/products' },
-    { table: 'user_services', type: 'service', basePath: '/services' },
-    { table: 'user_causes', type: 'cause', basePath: '/causes' },
+  const entityTables: Array<{ table: string; type: string; basePath: string; cols: string }> = [
+    {
+      table: 'user_products',
+      type: 'product',
+      basePath: '/products',
+      cols: 'id, title, description, updated_at',
+    },
+    {
+      table: 'user_services',
+      type: 'service',
+      basePath: '/services',
+      cols: 'id, title, description, updated_at',
+    },
+    {
+      table: 'user_causes',
+      type: 'cause',
+      basePath: '/causes',
+      cols: 'id, title, description, updated_at, total_raised, goal_amount',
+    },
   ];
-  for (const { table, type, basePath } of entityTables) {
-    const { data } = await supabase
-      .from(table)
-      .select('id, title, description, updated_at')
-      .eq('status', ENTITY_STATUS.ACTIVE);
+  for (const { table, type, basePath, cols } of entityTables) {
+    const { data } = await supabase.from(table).select(cols).eq('status', ENTITY_STATUS.ACTIVE);
     for (const e of data ?? []) {
       const text = [e.title, e.description].filter(Boolean).join('. ').trim();
       if (!text) {
@@ -210,6 +290,14 @@ export async function POST(request: Request) {
         url: `${basePath}/${e.id}`,
         text,
         updated_at: e.updated_at ?? null,
+        quality:
+          type === 'cause'
+            ? causeQuality({
+                updatedAt: e.updated_at,
+                raised: Number(e.total_raised ?? 0),
+                goal: Number(e.goal_amount ?? 0),
+              })
+            : clamp01(recency(e.updated_at)),
       });
     }
   }
@@ -253,6 +341,7 @@ export async function POST(request: Request) {
           url: b.url,
           text_preview: b.text.slice(0, 500),
           embedding: JSON.stringify(vec),
+          quality_score: b.quality,
           updated_at: b.updated_at ?? new Date().toISOString(),
         };
       })
@@ -267,6 +356,26 @@ export async function POST(request: Request) {
       } else {
         indexed += rows.length;
       }
+    }
+  }
+
+  // ── 4b. Refresh quality_score for UNCHANGED items ───────────────────────────
+  // Outcomes (new follows, funding, activity) change a profile's quality without
+  // changing its own row, so they wouldn't be re-embedded. Cheaply update just
+  // the score for items we didn't re-embed, keeping ranking current.
+  let qualityRefreshed = 0;
+  const embeddedKeys = new Set(toEmbed.map(it => key(it.entity_type, it.entity_id)));
+  for (const it of items) {
+    if (embeddedKeys.has(key(it.entity_type, it.entity_id))) {
+      continue;
+    }
+    const { error } = await supabase
+      .from('content_embeddings')
+      .update({ quality_score: it.quality })
+      .eq('entity_type', it.entity_type)
+      .eq('entity_id', it.entity_id);
+    if (!error) {
+      qualityRefreshed++;
     }
   }
 
@@ -290,6 +399,7 @@ export async function POST(request: Request) {
     corpus: items.length,
     indexed,
     skipped: items.length - toEmbed.length,
+    qualityRefreshed,
     pruned,
     failed,
   };
