@@ -17,6 +17,84 @@ import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
 import { getCurrentUserId, getUserGroupIds } from '../utils/helpers';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
+// Legacy query fields → live `groups` schema. The table has no `type`,
+// `category`, `governance_model`, or `member_count` columns; those are legacy
+// API params that map onto the real columns (label, tags, governance_preset).
+// member_count has no equivalent yet, so it is ignored rather than 400-ing the
+// whole query. Kept in ONE place and shared by every groups list query.
+const TYPE_TO_LABEL: Record<string, string> = {
+  circle: 'circle',
+  community: 'network_state',
+  collective: 'cooperative',
+  dao: 'dao',
+  company: 'company',
+  nonprofit: 'nonprofit',
+  foundation: 'nonprofit',
+  guild: 'guild',
+};
+
+const GOVERNANCE_MODEL_TO_PRESET: Record<string, string> = {
+  consensus: 'consensus',
+  flat: 'consensus',
+  democratic: 'democratic',
+  hierarchical: 'hierarchical',
+  liquid_democracy: 'democratic',
+  quadratic_voting: 'democratic',
+  stake_weighted: 'democratic',
+  reputation_based: 'democratic',
+};
+
+// Columns that actually exist on `groups` and are safe to ORDER BY. `member_count`
+// is in the legacy sort union but has no column, so it falls back to created_at.
+const SORTABLE_GROUP_COLUMNS = new Set(['created_at', 'name']);
+
+function safeGroupSort(sortBy?: string): string {
+  return sortBy && SORTABLE_GROUP_COLUMNS.has(sortBy) ? sortBy : 'created_at';
+}
+
+/**
+ * Apply GroupsQuery filters onto a `groups` query, mapping legacy fields onto the
+ * live schema. Shared by getUserGroups / getAvailableGroups / searchGroups so the
+ * mapping lives in exactly one place (was triplicated and drifting).
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function applyGroupFilters(dbQuery: any, q?: GroupsQuery): any {
+  if (!q) {
+    return dbQuery;
+  }
+
+  const label = q.label ?? (q.type ? (TYPE_TO_LABEL[q.type] ?? q.type) : undefined);
+  if (label) {
+    dbQuery = dbQuery.eq('label', label);
+  }
+
+  const preset =
+    q.governance_preset ??
+    (q.governance_model
+      ? (GOVERNANCE_MODEL_TO_PRESET[q.governance_model] ?? q.governance_model)
+      : undefined);
+  if (preset) {
+    dbQuery = dbQuery.eq('governance_preset', preset);
+  }
+
+  if (q.category) {
+    dbQuery = dbQuery.contains('tags', [q.category]); // category is folded into tags
+  }
+  if (q.visibility) {
+    dbQuery = dbQuery.eq('visibility', q.visibility);
+  }
+  if (q.is_public !== undefined) {
+    dbQuery = dbQuery.eq('is_public', q.is_public);
+  }
+  if (q.has_treasury !== undefined) {
+    dbQuery = q.has_treasury
+      ? dbQuery.not('bitcoin_address', 'is', null)
+      : dbQuery.is('bitcoin_address', null);
+  }
+
+  return dbQuery;
+}
+
 /**
  * Get a specific group by slug
  * Convenience wrapper around getGroup
@@ -112,19 +190,11 @@ export async function getUserGroups(
       .select('*', { count: 'exact' })
       .in('id', groupIds);
 
-    // Apply filters
-    if (query?.type) {
-      dbQuery = dbQuery.eq('type', query.type);
-    }
-    if (query?.governance_model) {
-      dbQuery = dbQuery.eq('governance_model', query.governance_model);
-    }
-    if (query?.category) {
-      dbQuery = dbQuery.eq('category', query.category);
-    }
+    // Apply filters (legacy fields mapped to live schema)
+    dbQuery = applyGroupFilters(dbQuery, query);
 
     // Apply sorting
-    const sortBy = query?.sort_by || 'created_at';
+    const sortBy = safeGroupSort(query?.sort_by);
     const sortOrder = query?.sort_order || 'desc';
     dbQuery = dbQuery.order(sortBy, { ascending: sortOrder === 'asc' });
 
@@ -166,60 +236,11 @@ export async function getAvailableGroups(
       .select('*', { count: 'exact' })
       .eq('is_public', true);
 
-    // Apply filters
-    if (query?.type) {
-      // Map legacy type to label
-      const typeToLabel: Record<string, string> = {
-        circle: 'circle',
-        community: 'network_state',
-        collective: 'cooperative',
-        dao: 'dao',
-        company: 'company',
-        nonprofit: 'nonprofit',
-        foundation: 'nonprofit',
-        guild: 'guild',
-      };
-      const label = typeToLabel[query.type] || query.type;
-      dbQuery = dbQuery.eq('label', label);
-    }
-    if (query?.governance_model) {
-      // Map legacy governance_model to governance_preset
-      const modelToPreset: Record<string, string> = {
-        consensus: 'consensus',
-        flat: 'consensus',
-        democratic: 'democratic',
-        hierarchical: 'hierarchical',
-        liquid_democracy: 'democratic',
-        quadratic_voting: 'democratic',
-        stake_weighted: 'democratic',
-        reputation_based: 'democratic',
-      };
-      const preset = modelToPreset[query.governance_model] || query.governance_model;
-      dbQuery = dbQuery.eq('governance_preset', preset);
-    }
-    if (query?.category) {
-      // Category is now in tags array
-      dbQuery = dbQuery.contains('tags', [query.category]);
-    }
-    if (query?.visibility) {
-      dbQuery = dbQuery.eq('visibility', query.visibility);
-    }
-    if (query?.member_count_min) {
-      dbQuery = dbQuery.gte('member_count', query.member_count_min);
-    }
-    if (query?.member_count_max) {
-      dbQuery = dbQuery.lte('member_count', query.member_count_max);
-    }
-    if (query?.has_treasury !== undefined) {
-      if (query.has_treasury) {
-        dbQuery = dbQuery.not('bitcoin_address', 'is', null);
-      } else {
-        dbQuery = dbQuery.is('bitcoin_address', null);
-      }
-    }
+    // Apply filters (legacy fields mapped to live schema)
+    dbQuery = applyGroupFilters(dbQuery, query);
 
     // Apply sorting
-    const sortBy = query?.sort_by || 'created_at';
+    const sortBy = safeGroupSort(query?.sort_by);
     const sortOrder = query?.sort_order || 'desc';
     dbQuery = dbQuery.order(sortBy, { ascending: sortOrder === 'asc' });
 
@@ -263,32 +284,11 @@ export async function searchGroups(
       .select('*', { count: 'exact' })
       .or(`name.ilike.%${escapedSearchQuery}%,description.ilike.%${escapedSearchQuery}%`);
 
-    // Apply filters
-    if (filters?.type) {
-      // Map legacy type to label
-      const typeToLabel: Record<string, string> = {
-        circle: 'circle',
-        community: 'network_state',
-        collective: 'cooperative',
-        dao: 'dao',
-        company: 'company',
-        nonprofit: 'nonprofit',
-        foundation: 'nonprofit',
-        guild: 'guild',
-      };
-      const label = typeToLabel[filters.type] || filters.type;
-      dbQuery = dbQuery.eq('label', label);
-    }
-    if (filters?.category) {
-      // Category is now in tags array
-      dbQuery = dbQuery.contains('tags', [filters.category]);
-    }
-    if (filters?.is_public !== undefined) {
-      dbQuery = dbQuery.eq('is_public', filters.is_public);
-    }
+    // Apply filters (legacy fields mapped to live schema)
+    dbQuery = applyGroupFilters(dbQuery, filters);
 
     // Apply sorting
-    const sortBy = filters?.sort_by || 'created_at';
+    const sortBy = safeGroupSort(filters?.sort_by);
     const sortOrder = filters?.sort_order || 'desc';
     dbQuery = dbQuery.order(sortBy, { ascending: sortOrder === 'asc' });
 

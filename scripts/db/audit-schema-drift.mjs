@@ -40,10 +40,6 @@ const ALLOW = new Set([
   // (b) KNOWN DRIFT — needs fix (triaged 2026-06-16):
   'wishlist_feedback.user_id', // table keys on actor_id; needs actor resolution
   'wishlist_fulfillment_proofs.user_id', // proofs have no owner column — product decision
-  'groups.type', // groups schema has no `type`
-  'groups.governance_model', // → likely `governance_preset` (verify intent)
-  'groups.category', // groups schema has no `category`
-  'groups.member_count', // no column — needs a computed count
   'group_proposals.is_public', // proposals have no public flag
 ]);
 
