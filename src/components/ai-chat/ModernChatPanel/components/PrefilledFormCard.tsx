@@ -21,6 +21,8 @@ import { useRouter } from 'next/navigation';
 import { Sparkles, ArrowRight, Check, Loader2 } from 'lucide-react';
 import { STORAGE_KEYS } from '@/config/storage-keys';
 import { ENTITY_REGISTRY, isValidEntityType, type EntityType } from '@/config/entity-registry';
+import { resolvePublishStatus } from '@/config/entity-status';
+import { ENTITY_STATUS } from '@/config/database-constants';
 import type { PrefillProposal } from '../types';
 
 const EDITABLE_KEYS = ['title', 'name', 'description', 'price', 'price_btc', 'currency'];
@@ -93,7 +95,7 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
     return true;
   });
 
-  const buildPayload = (status: 'active' | 'draft'): Record<string, unknown> => {
+  const buildPayload = (status: string): Record<string, unknown> => {
     const payload: Record<string, unknown> = { ...data, status };
     payload.title = title.trim();
     payload.description = description.trim() || undefined;
@@ -113,23 +115,44 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
     setPhase('saving');
     setErrorMsg(null);
     try {
+      // 1. Create. The entity create API always persists a DRAFT (status in the
+      //    body is ignored on create), so publishing is a second step.
       const res = await fetch(meta.apiEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(buildPayload(publish ? 'active' : 'draft')),
+        body: JSON.stringify(buildPayload(ENTITY_STATUS.DRAFT)),
       });
       const json = await res.json().catch(() => null);
       if (!res.ok || !json?.success) {
         const msg =
           json?.error?.message ||
           (typeof json?.error === 'string' ? json.error : null) ||
-          `Couldn't ${publish ? 'publish' : 'save'} this — try "Open full form".`;
+          `Couldn't create this — try "Open full form".`;
         setErrorMsg(msg);
         setPhase('error');
         return;
       }
-      setPublished(publish);
+
+      // 2. Publish: flip the draft to its per-type live status via the update
+      //    endpoint. Only claim "published" if this actually succeeds (honest state).
+      const id = json.data?.id as string | undefined;
+      let didPublish = false;
+      if (publish && id) {
+        const liveStatus = isValidEntityType(entityType)
+          ? resolvePublishStatus(entityType as EntityType, ENTITY_STATUS.ACTIVE)
+          : ENTITY_STATUS.ACTIVE;
+        const pubRes = await fetch(`${meta.apiEndpoint}/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(buildPayload(liveStatus)),
+        });
+        const pubJson = await pubRes.json().catch(() => null);
+        didPublish = pubRes.ok && pubJson?.success === true;
+      }
+
+      setPublished(didPublish);
       setPhase('done');
     } catch {
       setErrorMsg('Network error — try "Open full form".');
