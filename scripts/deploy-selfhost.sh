@@ -41,6 +41,11 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
 if [ "${1:-}" != "--no-build" ]; then
+  # Fail fast: a ~30s type-check before the ~7-min build, so a type error never
+  # costs a full build+rsync cycle to discover. (next build type-checks too, but
+  # only after compiling.) type-check is non-incremental → deterministic.
+  echo "=== type-check (fail fast) ==="
+  npm run type-check
   echo "=== build (SELF_HOST=1) ==="
   SELF_HOST=1 npm run build
 fi

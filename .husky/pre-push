@@ -9,6 +9,13 @@ fi
 
 echo "🚀 Running pre-push checks..."
 
+# Type-check FIRST — pre-commit's incremental check can miss errors under
+# concurrent builds (stale .tsbuildinfo); this non-incremental run is the
+# reliable gate, so type errors are caught before push, not at deploy/build.
+echo "🔎 Type-checking..."
+npm run type-check || { echo "❌ Type check failed"; exit 1; }
+echo "✅ Type check passed"
+
 # Run tests before pushing (target: ≤30s)
 
 echo "🧪 Running unit tests..."

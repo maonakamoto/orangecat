@@ -69,7 +69,7 @@ export async function listOpenRoles(filters: ListFilters = {}): Promise<ProjectR
   if (error) {
     throw new Error(error.message);
   }
-  return (data ?? []) as ProjectRole[];
+  return (data ?? []) as unknown as ProjectRole[];
 }
 
 /** All roles for one project (owner sees all statuses via RLS; others see open). */
@@ -82,7 +82,7 @@ export async function getRolesForProject(projectId: string): Promise<ProjectRole
   if (error) {
     throw new Error(error.message);
   }
-  return (data ?? []) as ProjectRole[];
+  return (data ?? []) as unknown as ProjectRole[];
 }
 
 export interface CreateRoleInput {
@@ -138,7 +138,7 @@ export async function createRole(input: CreateRoleInput, userId: string): Promis
   if (error) {
     throw new Error(error.message);
   }
-  return data as ProjectRole;
+  return data as unknown as ProjectRole;
 }
 
 export async function updateRoleStatus(
@@ -155,7 +155,7 @@ export async function updateRoleStatus(
   if (!role) {
     throw new RoleValidationError('role not found');
   }
-  if ((role.projects as { user_id?: string } | null)?.user_id !== userId) {
+  if ((role.projects as unknown as { user_id?: string } | null)?.user_id !== userId) {
     throw new RoleForbiddenError('you do not own this role');
   }
 
@@ -168,5 +168,5 @@ export async function updateRoleStatus(
   if (error) {
     throw new Error(error.message);
   }
-  return data as ProjectRole;
+  return data as unknown as ProjectRole;
 }
