@@ -70,6 +70,21 @@ handlers currently require a session).
 | `/api/v1/assets`      | POST   | Create an asset              |
 | `/api/v1/wishlists`   | POST   | Create a wishlist            |
 
+### Publish bus
+
+| Endpoint                   | Method | What it does                                          |
+| -------------------------- | ------ | ----------------------------------------------------- |
+| `/api/v1/timeline/publish` | POST   | Publish an external build event onto a project's wall |
+
+`/api/v1/timeline/publish` is the async publish bus: an external client
+(FleetCrown) lands a publish-worthy build event onto a project's OrangeCat
+wall (`timeline_events`). Requires the `timeline.write` scope and ownership of
+the subject project. Idempotent + reconcilable — keyed by
+`(source, external_id)`, so a retry or an edit updates the same row rather than
+duplicating it. Inbound contract SSOT: `src/config/external-publish.ts`. See
+`docs/architecture/PLATFORM_AND_COLLABORATION.md` ("Async publish + read-only
+surfacing").
+
 ## Out of scope for v1 (until further notice)
 
 - `/api/wallets/*` — wallet linkage has app-specific semantics
