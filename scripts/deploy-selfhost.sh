@@ -75,6 +75,16 @@ set -euo pipefail
 # carry over runtime config the staging tree intentionally excludes
 cp "$BASE/app/.env" "$BASE/app-next/.env"
 [ -f "$BASE/app/launch.sh" ] && cp "$BASE/app/launch.sh" "$BASE/app-next/launch.sh"
+
+# Ensure Node accepts large request headers. Default cap is 16KB; a browser with
+# many accumulated sb-* auth cookies sends a Cookie header past that and gets a
+# hard 431 (Request Header Fields Too Large) — "won't open in Brave". Raise to
+# 64KB. Idempotent, so re-running / a freshly-regenerated launch.sh self-heals.
+LSN="$BASE/app-next/launch.sh"
+if [ -f "$LSN" ] && ! grep -q "max-http-header-size" "$LSN"; then
+  sed -i 's#/usr/bin/node "#/usr/bin/node --max-http-header-size=65536 "#' "$LSN"
+fi
+
 chown -R ubuntu:ubuntu "$BASE/app-next"
 
 # boot-test the staged build on a scratch port before touching the live tree
