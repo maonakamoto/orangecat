@@ -13,7 +13,7 @@
 import { NextRequest } from 'next/server';
 import { resolveRequestAuth, hasScope } from '@/lib/api/resolveRequestAuth';
 import { apiCreated, apiSuccess, apiError } from '@/lib/api/standardResponse';
-import { externalPublishSchema } from '@/config/external-publish';
+import { externalPublishSchema, isAllowedSourceUrl } from '@/config/external-publish';
 import { ingestExternalEvent } from '@/services/timeline/externalPublish';
 import { logger } from '@/utils/logger';
 
@@ -44,6 +44,16 @@ export async function POST(request: NextRequest) {
   const parsed = externalPublishSchema.safeParse(body);
   if (!parsed.success) {
     return apiError('Validation failed', 'VALIDATION_ERROR', 422, parsed.error.flatten());
+  }
+
+  // Defence-in-depth: a deep-link, if present, must point back at the source's
+  // own origin — never an arbitrary host surfaced on a user's wall.
+  if (parsed.data.url && !isAllowedSourceUrl(parsed.data.source, parsed.data.url)) {
+    return apiError(
+      `url must be on an allowed origin for source "${parsed.data.source}"`,
+      'VALIDATION_ERROR',
+      422
+    );
   }
 
   const result = await ingestExternalEvent(parsed.data, auth.userId);

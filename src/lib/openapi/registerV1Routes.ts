@@ -22,6 +22,7 @@ import {
   publicApiEndpoint,
 } from '@/config/public-api';
 import { getEntityMetadata } from '@/config/entity-registry';
+import { externalPublishSchema } from '@/config/external-publish';
 import {
   userProductSchema,
   userServiceSchema,
@@ -256,4 +257,63 @@ export function registerV1Routes(): void {
       },
     });
   }
+
+  // Publish bus — not an entity create, so registered explicitly. External
+  // clients (FleetCrown) land a build event on a project's wall; idempotent +
+  // reconcilable by (source, external_id).
+  const publishResponseSchema = z
+    .object({
+      id: z.string().uuid().openapi({ description: 'OrangeCat timeline event id.' }),
+      status: z
+        .enum(['created', 'updated'])
+        .openapi({
+          description: '`created` on first publish, `updated` on a reconciling re-publish.',
+        }),
+    })
+    .openapi('TimelinePublishResponse');
+
+  openApiRegistry.registerPath({
+    method: 'post',
+    path: `${PUBLIC_API_BASE}/timeline/publish`,
+    summary: 'Publish an external build event to a project wall',
+    description:
+      "Async publish bus: an external client (e.g. FleetCrown) lands a publish-worthy build event onto a project's OrangeCat wall. Requires the `timeline.write` scope and ownership of the subject project. Idempotent + reconcilable — keyed by (source, external_id), so a retry or an edit updates the same event rather than duplicating it.",
+    tags: ['Timeline'],
+    security: [{ IntegrationKey: [] }],
+    request: {
+      body: {
+        required: true,
+        content: {
+          'application/json': { schema: externalPublishSchema.openapi('TimelinePublish') },
+        },
+      },
+    },
+    responses: {
+      201: {
+        description: 'Event published for the first time.',
+        content: {
+          'application/json': {
+            schema: apiSuccessSchema(publishResponseSchema, 'TimelinePublishCreatedResponse'),
+          },
+        },
+      },
+      200: {
+        description: 'Event reconciled (a prior publish of the same source event was updated).',
+        content: {
+          'application/json': {
+            schema: apiSuccessSchema(publishResponseSchema, 'TimelinePublishUpdatedResponse'),
+          },
+        },
+      },
+      401: COMMON_ERROR_RESPONSES[401],
+      403: COMMON_ERROR_RESPONSES[403],
+      404: COMMON_ERROR_RESPONSES[404],
+      422: {
+        description: 'Validation error — body did not match the schema, or url origin not allowed.',
+        content: { 'application/json': { schema: apiErrorSchema } },
+      },
+      429: COMMON_ERROR_RESPONSES[429],
+      500: COMMON_ERROR_RESPONSES[500],
+    },
+  });
 }

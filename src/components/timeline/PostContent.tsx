@@ -2,9 +2,11 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { ExternalLink } from 'lucide-react';
 import { TimelineDisplayEvent } from '@/types/timeline';
 import { renderMarkdownToReact } from '@/utils/markdown';
 import { TIMELINE_SURFACE } from '@/config/timeline';
+import { getExternalAttribution } from '@/config/external-publish';
 
 interface PostContentProps {
   event: TimelineDisplayEvent;
@@ -36,6 +38,10 @@ export function PostContent({ event }: PostContentProps) {
   };
 
   const displayContent = getDisplayContent();
+
+  // Read-only surfacing of an externally-published build event (e.g. FleetCrown):
+  // a status pill + a "via <source>" deep-link back to the originating surface.
+  const attribution = getExternalAttribution(event.metadata);
 
   // Threads-like: never show separate titles; keep posts conversational
   const _shouldShowTitle = false;
@@ -70,6 +76,28 @@ export function PostContent({ event }: PostContentProps) {
       {displayContent && (!isRepost || isQuoteRepost) && (
         <div className="text-fg-primary text-[15px] leading-relaxed whitespace-pre-line break-words">
           {renderMarkdownToReact(displayContent)}
+        </div>
+      )}
+
+      {/* External-publish attribution: status pill + deep-link to the source. */}
+      {attribution && (
+        <div className="flex flex-wrap items-center gap-2 pt-0.5">
+          <span className="inline-flex items-center rounded-full bg-surface-raised px-2 py-0.5 text-xs font-medium text-fg-secondary">
+            {event.displayType}
+          </span>
+          {attribution.url ? (
+            <a
+              href={attribution.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-fg-secondary hover:text-fg-primary hover:underline underline-offset-4"
+            >
+              via {attribution.sourceLabel}
+              <ExternalLink className="h-3 w-3" aria-hidden="true" />
+            </a>
+          ) : (
+            <span className="text-xs text-fg-secondary">via {attribution.sourceLabel}</span>
+          )}
         </div>
       )}
 
