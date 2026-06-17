@@ -16,8 +16,36 @@ import { Search, Check, AlertCircle, Loader2, ChevronDown, ChevronUp } from 'luc
 import { cn } from '@/lib/utils';
 import type { ToolCallEvent } from '../types';
 
-const TOOL_LABELS: Record<string, { running: string; verb: string }> = {
-  search_platform: { running: 'Searching', verb: 'Search' },
+interface ToolLabel {
+  running: string;
+  completed: (n: number) => string;
+  noResults: string;
+  failed: string;
+}
+
+// Tool-aware labels. The chip is shared across tools, so a prefill that drafts 6
+// fields must NOT read "Found 6 results" (search language) — and a prefill error
+// must not say "Search failed".
+const TOOL_LABELS: Record<string, ToolLabel> = {
+  search_platform: {
+    running: 'Searching',
+    completed: n => `Found ${n} ${n === 1 ? 'result' : 'results'}`,
+    noResults: 'No results',
+    failed: 'Search failed',
+  },
+  prefill_entity_form: {
+    running: 'Drafting',
+    completed: n => (n > 0 ? `Drafted ${n} field${n === 1 ? '' : 's'}` : 'Draft ready'),
+    noResults: 'Nothing to draft',
+    failed: "Couldn't draft",
+  },
+};
+
+const DEFAULT_LABEL: ToolLabel = {
+  running: 'Working',
+  completed: n => `Done (${n})`,
+  noResults: 'Nothing found',
+  failed: 'Action failed',
 };
 
 interface ToolCallChipProps {
@@ -26,7 +54,7 @@ interface ToolCallChipProps {
 
 export function ToolCallChip({ event }: ToolCallChipProps) {
   const [expanded, setExpanded] = useState(false);
-  const label = TOOL_LABELS[event.name] ?? { running: 'Running', verb: event.name };
+  const label = TOOL_LABELS[event.name] ?? DEFAULT_LABEL;
 
   const query = event.status === 'running' ? (event.args?.query as string | undefined) : undefined;
 
@@ -47,17 +75,17 @@ export function ToolCallChip({ event }: ToolCallChipProps) {
     case 'completed':
       icon = <Check className="h-3 w-3 flex-shrink-0" />;
       badgeClass = 'border-status-positive/20 bg-status-positive-subtle text-status-positive';
-      text = `Found ${event.resultCount} ${event.resultCount === 1 ? 'result' : 'results'}`;
+      text = label.completed(event.resultCount);
       break;
     case 'no_results':
       icon = <Search className="h-3 w-3 flex-shrink-0" />;
       badgeClass = 'border-subtle bg-surface-raised text-fg-secondary';
-      text = query ? `No results for "${query}"` : 'No results';
+      text = query ? `No results for "${query}"` : label.noResults;
       break;
     case 'failed':
       icon = <AlertCircle className="h-3 w-3 flex-shrink-0" />;
       badgeClass = 'border-status-negative/20 bg-status-negative/10 text-status-negative';
-      text = 'Search failed';
+      text = label.failed;
       break;
   }
 
