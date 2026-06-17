@@ -1,15 +1,13 @@
 /**
- * Menu Toggle Button Component
+ * Menu Toggle Button — sidebar / mobile-menu trigger.
  *
- * Reusable menu toggle button for sidebar and mobile menu.
- * Follows DRY principle - extracted from Header component.
- *
- * Created: 2026-01-16
+ * Thin wrapper over the shared HeaderIconButton primitive so it shares the
+ * header rail's geometry and hover treatment with every other action.
  */
 
 import { Menu } from 'lucide-react';
 import { forwardRef } from 'react';
-import { TOUCH_TARGETS, HEADER_BUTTON_BASE } from '@/constants/header';
+import { HeaderIconButton } from './HeaderIconButton';
 import { cn } from '@/lib/utils';
 
 interface MenuToggleButtonProps {
@@ -21,24 +19,16 @@ interface MenuToggleButtonProps {
   className?: string;
 }
 
-/**
- * Menu toggle button
- *
- * Reusable component for sidebar/menu toggle with proper touch targets
- */
 export const MenuToggleButton = forwardRef<HTMLButtonElement, MenuToggleButtonProps>(
-  ({ onClick, ariaLabel, className }, ref) => {
-    return (
-      <button
-        ref={ref}
-        onClick={onClick}
-        className={cn('lg:hidden', TOUCH_TARGETS.RESPONSIVE, HEADER_BUTTON_BASE.BASE, className)}
-        aria-label={ariaLabel}
-      >
-        <Menu className="w-6 h-6 sm:w-5 sm:h-5" />
-      </button>
-    );
-  }
+  ({ onClick, ariaLabel, className }, ref) => (
+    <HeaderIconButton
+      ref={ref}
+      icon={Menu}
+      label={ariaLabel}
+      onClick={onClick}
+      className={cn('lg:hidden', className)}
+    />
+  )
 );
 
 MenuToggleButton.displayName = 'MenuToggleButton';

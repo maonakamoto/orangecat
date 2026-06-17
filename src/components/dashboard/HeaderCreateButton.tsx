@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { useDropdown } from '@/hooks/useDropdown';
 import { cn } from '@/lib/utils';
+import { HeaderIconButton } from '@/components/layout/HeaderIconButton';
 import { CREATE_OPTIONS, shouldShowDivider } from './SmartCreateButton';
 
 export function HeaderCreateButton() {
@@ -15,27 +16,17 @@ export function HeaderCreateButton() {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <button
+      <HeaderIconButton
         ref={buttonRef}
+        icon={Plus}
+        label="Create new"
+        variant="inverse"
+        active={isOpen}
         onClick={toggle}
-        className={cn(
-          'flex h-10 w-10 items-center justify-center rounded-md bg-fg-primary text-fg-inverted transition-colors duration-150 sm:h-9 sm:w-9',
-          'hover:bg-muted-strong',
-          'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background',
-          'touch-manipulation',
-          isOpen && 'bg-muted-strong'
-        )}
-        aria-label="Create new"
         aria-expanded={isOpen}
         aria-haspopup="true"
-      >
-        <Plus
-          className={cn(
-            'w-5 h-5 sm:w-5 sm:h-5 transition-transform duration-200',
-            isOpen && 'rotate-45'
-          )}
-        />
-      </button>
+        iconClassName={cn('transition-transform duration-200', isOpen && 'rotate-45')}
+      />
 
       {isOpen && (
         <div

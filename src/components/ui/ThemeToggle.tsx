@@ -4,8 +4,7 @@ import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useProfileTheme } from '@/hooks/useProfileTheme';
-import { cn } from '@/lib/utils';
-import { COMPONENT_STYLES } from '@/config/design-system';
+import { HeaderIconButton } from '@/components/layout/HeaderIconButton';
 
 export function ThemeToggle({ className = '' }: { className?: string }) {
   const { theme, setTheme } = useTheme();
@@ -24,17 +23,12 @@ export function ThemeToggle({ className = '' }: { className?: string }) {
   };
 
   return (
-    <button
+    <HeaderIconButton
+      icon={isDark ? Sun : Moon}
+      label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       onClick={handleToggle}
-      className={cn(
-        COMPONENT_STYLES.iconButton.base,
-        COMPONENT_STYLES.iconButton.variants.outline,
-        className
-      )}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       disabled={!mounted}
-    >
-      {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
+      className={className}
+    />
   );
 }

@@ -40,27 +40,11 @@ export const HEADER_SPACING = {
 } as const;
 
 /**
- * Touch target sizes (minimum 44x44px for accessibility)
+ * Header icon-button geometry (size, icon, radius, hover) now lives in the
+ * HeaderIconButton primitive — see src/components/layout/HeaderIconButton.tsx.
+ * Keep it there as the single source of truth; don't reintroduce per-button
+ * class constants here.
  */
-export const TOUCH_TARGETS = {
-  /** Mobile touch target (11 * 4px = 44px) */
-  MOBILE: 'w-11 h-11 min-w-11 min-h-11',
-  /** Desktop touch target */
-  DESKTOP: 'sm:w-10 sm:h-10 sm:min-w-0 sm:min-h-0',
-  /** Combined mobile and desktop */
-  RESPONSIVE: 'w-11 h-11 sm:w-10 sm:h-10 min-w-11 min-h-11 sm:min-w-0 sm:min-h-0',
-} as const;
-
-/**
- * Button base styles (DRY)
- */
-export const HEADER_BUTTON_BASE = {
-  /** Base button classes */
-  BASE: 'flex-shrink-0 flex items-center justify-center text-fg-secondary hover:text-fg-primary hover:bg-surface-raised rounded-lg transition-colors touch-manipulation relative',
-  /** Mobile search button specific */
-  MOBILE_SEARCH:
-    'md:hidden text-fg-primary hover:bg-surface-raised/40 active:bg-surface-raised border border-default hover:border-strong shadow-sm',
-} as const;
 
 /**
  * Mobile menu constants

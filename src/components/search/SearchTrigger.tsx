@@ -18,6 +18,7 @@
 import { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 import { CommandPalette } from './CommandPalette';
+import { HeaderIconButton } from '@/components/layout/HeaderIconButton';
 import { cn } from '@/lib/utils';
 
 interface SearchTriggerProps {
@@ -50,28 +51,36 @@ export function SearchTrigger({ compact = false, className }: SearchTriggerProps
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-label="Open search"
-        className={cn(
-          'flex items-center rounded-md border border-subtle bg-surface-raised/40 text-fg-secondary',
-          'transition-colors hover:bg-surface-raised/60 hover:text-fg-primary',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40',
-          compact ? 'h-9 w-9 justify-center' : 'h-9 w-full justify-between gap-2 px-3 text-sm',
-          className
-        )}
-      >
-        <span className="flex items-center gap-2">
-          <Search className="h-4 w-4 flex-shrink-0" aria-hidden />
-          {!compact && <span className="truncate">{PLACEHOLDER}</span>}
-        </span>
-        {!compact && (
+      {compact ? (
+        // Tight header rail — share geometry with the rest of the action row.
+        <HeaderIconButton
+          icon={Search}
+          label="Open search"
+          onClick={() => setOpen(true)}
+          className={className}
+        />
+      ) : (
+        // Inline pill with placeholder + ⌘K hint (Linear / Vercel / Stripe).
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Open search"
+          className={cn(
+            'flex h-9 w-full items-center justify-between gap-2 rounded-md border border-subtle bg-surface-raised/40 px-3 text-sm text-fg-secondary',
+            'transition-colors hover:bg-surface-raised/60 hover:text-fg-primary',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40',
+            className
+          )}
+        >
+          <span className="flex items-center gap-2">
+            <Search className="h-4 w-4 flex-shrink-0" aria-hidden />
+            <span className="truncate">{PLACEHOLDER}</span>
+          </span>
           <kbd className="hidden flex-shrink-0 items-center rounded border border-subtle bg-surface-page px-1.5 py-0.5 text-[10px] font-medium text-fg-tertiary sm:inline-flex">
             ⌘K
           </kbd>
-        )}
-      </button>
+        </button>
+      )}
       <CommandPalette open={open} onOpenChange={setOpen} />
     </>
   );

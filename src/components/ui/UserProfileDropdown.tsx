@@ -164,7 +164,6 @@ export default function UserProfileDropdown({
     displayName = 'Me';
   }
 
-  const firstName = (displayName || '').split(' ')[0] || 'User';
   const username = profile?.username;
 
   // Debug logging (remove in production)
@@ -252,9 +251,8 @@ export default function UserProfileDropdown({
             <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-status-positive border-2 border-card rounded-full shadow-sm"></div>
           </span>
         )}
-        <span className="font-medium text-sm sm:text-base max-w-[80px] sm:max-w-[100px] md:max-w-[140px] truncate flex items-center hidden sm:flex">
-          {firstName}
-        </span>
+        {/* Identity (name/@username/email) lives once in the dropdown panel —
+            no name text in the trigger, to avoid the doubled "Mao / Mao" read. */}
         <ChevronDown
           className={`h-4 w-4 transition-transform duration-300 ease-out ${isOpen ? 'rotate-180' : ''}`}
         />
