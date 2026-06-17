@@ -9,7 +9,12 @@
  */
 
 // User feeds
-export { getUserFeed, getFollowedUsersFeed, getEnrichedUserFeed } from './userFeeds';
+export {
+  getUserFeed,
+  getFollowedUsersFeed,
+  getEnrichedUserFeed,
+  getEnrichedFollowingFeed,
+} from './userFeeds';
 
 // Project feeds
 export { getProjectFeed, getProjectTimeline } from './projectFeeds';

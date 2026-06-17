@@ -82,6 +82,7 @@ interface NavItem {
 const headerNavigationConfig = {
   /** Navigation for authenticated users */
   authenticated: [
+    { name: 'Home', href: ROUTES.FEED },
     { name: 'Dashboard', href: ROUTES.DASHBOARD.HOME },
     { name: 'Discover', href: ROUTES.DISCOVER },
     { name: 'Community', href: ROUTES.COMMUNITY },

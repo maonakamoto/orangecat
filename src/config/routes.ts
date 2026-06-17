@@ -392,6 +392,8 @@ export const ROUTES = {
 
   // Timeline routes
   TIMELINE: '/timeline',
+  // Personalized "Following" home feed (people/projects you follow)
+  FEED: '/home',
 
   // Messages routes
   MESSAGES: '/messages',

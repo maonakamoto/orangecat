@@ -16,7 +16,7 @@ export interface SocialTimelineProps {
   title: string;
   description: string;
   icon: LucideIcon;
-  mode: 'timeline' | 'community';
+  mode: 'timeline' | 'community' | 'following';
   timelineOwnerId?: string;
   timelineOwnerType?: 'profile' | 'project';
   timelineOwnerName?: string;

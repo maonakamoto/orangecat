@@ -283,7 +283,10 @@ export async function getEnrichedUserFeed(
   userId: string,
   filters?: Partial<TimelineFilters>,
   pagination?: Partial<TimelinePagination>,
-  getDemoTimelineEvents?: (userId: string) => Record<string, unknown>[]
+  getDemoTimelineEvents?: (userId: string) => Record<string, unknown>[],
+  // Which feed RPC to call. Default = the journey feed (own + followed + public).
+  // Pass 'get_following_feed' for the true home feed (own + followed only).
+  rpcName: 'get_user_timeline_feed' | 'get_following_feed' = 'get_user_timeline_feed'
 ): Promise<TimelineFeedResponse> {
   try {
     const page = pagination?.page || 1;
@@ -302,14 +305,11 @@ export async function getEnrichedUserFeed(
       // fallback emitted. If get_enriched_timeline_feed is added later,
       // restore the original ladder.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: basicEvents, error: basicError } = await (supabase.rpc as any)(
-        'get_user_timeline_feed',
-        {
-          p_user_id: userId,
-          p_limit: limit,
-          p_offset: offset,
-        }
-      );
+      const { data: basicEvents, error: basicError } = await (supabase.rpc as any)(rpcName, {
+        p_user_id: userId,
+        p_limit: limit,
+        p_offset: offset,
+      });
 
       if (basicError) {
         logger.warn('Basic timeline feed not available, using empty feed', basicError, 'Timeline');
@@ -418,4 +418,17 @@ export async function getEnrichedUserFeed(
       },
     };
   }
+}
+
+/**
+ * Home feed — posts from people/projects the user FOLLOWS (plus their own),
+ * excluding the public-everyone firehose. The true "Twitter home" feed, distinct
+ * from the journey feed (getEnrichedUserFeed) and /community (getCommunityFeed).
+ */
+export async function getEnrichedFollowingFeed(
+  userId: string,
+  filters?: Partial<TimelineFilters>,
+  pagination?: Partial<TimelinePagination>
+): Promise<TimelineFeedResponse> {
+  return getEnrichedUserFeed(userId, filters, pagination, undefined, 'get_following_feed');
 }

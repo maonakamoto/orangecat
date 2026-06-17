@@ -10,7 +10,7 @@ import { useInvalidateTimeline } from '@/hooks/useTimelineQuery';
 import { useSocialTimelineSearch } from './useSocialTimelineSearch';
 
 export interface UseSocialTimelineProps {
-  mode: 'timeline' | 'community';
+  mode: 'timeline' | 'community' | 'following';
   defaultSort?: 'recent' | 'trending' | 'popular';
   onOptimisticUpdate?: (event: TimelineDisplayEvent) => void;
 }
@@ -73,6 +73,8 @@ export function useSocialTimeline({
         let feed: TimelineFeedResponse;
         if (mode === 'timeline') {
           feed = await timelineService.getEnrichedUserFeed(user.id, {}, { page, limit: 20 });
+        } else if (mode === 'following') {
+          feed = await timelineService.getEnrichedFollowingFeed(user.id, {}, { page, limit: 20 });
         } else {
           feed = await timelineService.getCommunityFeed(
             { sortBy: sort as 'recent' | 'trending' | 'popular' },

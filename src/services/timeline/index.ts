@@ -32,6 +32,7 @@ import {
   getFollowedUsersFeed,
   getCommunityFeed,
   getEnrichedUserFeed,
+  getEnrichedFollowingFeed,
   getEventById,
   getReplies,
   searchPosts,
@@ -204,6 +205,15 @@ class TimelineService {
     pagination?: Partial<TimelinePagination>
   ): Promise<TimelineFeedResponse> {
     return getEnrichedUserFeed(userId, filters, pagination, getDemoTimelineEvents);
+  }
+
+  /** Home feed — posts from people/projects the user follows (+ own), no public firehose. */
+  async getEnrichedFollowingFeed(
+    userId: string,
+    filters?: Partial<TimelineFilters>,
+    pagination?: Partial<TimelinePagination>
+  ): Promise<TimelineFeedResponse> {
+    return getEnrichedFollowingFeed(userId, filters, pagination);
   }
 
   /**
