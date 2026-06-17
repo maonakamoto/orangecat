@@ -24,10 +24,37 @@ const VALID_WALLET_CATEGORIES = Object.keys(WALLET_CATEGORIES);
 const VALID_BEHAVIOR_TYPES = ['general', 'recurring_budget', 'one_time_goal'];
 
 interface ParsedResponse {
-  /** The response text with action blocks removed */
+  /** The response text with action and quick_replies blocks removed */
   message: string;
   /** Any valid action blocks found in the response */
   actions: CatAction[];
+  /** Tappable answer chips the user can tap to reply in one click. */
+  quickReplies?: string[];
+}
+
+// Quick replies: ```quick_replies ["...", "..."]``` — tappable answers rendered
+// as chips below the message. Best-effort: a malformed or oversized block is
+// dropped silently (no chips), never shown as raw text.
+const QUICK_REPLIES_REGEX = /```quick_replies\s*([\s\S]*?)```/i;
+
+function parseQuickReplies(content: string): string[] {
+  const m = QUICK_REPLIES_REGEX.exec(content);
+  if (!m) {
+    return [];
+  }
+  try {
+    const raw = JSON.parse(m[1].trim());
+    if (!Array.isArray(raw)) {
+      return [];
+    }
+    return raw
+      .filter((s): s is string => typeof s === 'string')
+      .map(s => s.trim())
+      .filter(s => s.length > 0 && s.length <= 40)
+      .slice(0, 4);
+  } catch {
+    return [];
+  }
 }
 
 /**
@@ -105,5 +132,14 @@ export function parseActionsFromResponse(content: string): ParsedResponse {
     cleanedMessage = cleanedMessage.replace(match[0], '').trim();
   }
 
-  return { message: cleanedMessage, actions };
+  // Quick replies are parsed + stripped after action blocks (the action regex
+  // never matches `quick_replies`, so the block survives the loop above).
+  const quickReplies = parseQuickReplies(cleanedMessage);
+  cleanedMessage = cleanedMessage.replace(QUICK_REPLIES_REGEX, '').trim();
+
+  return {
+    message: cleanedMessage,
+    actions,
+    quickReplies: quickReplies.length > 0 ? quickReplies : undefined,
+  };
 }

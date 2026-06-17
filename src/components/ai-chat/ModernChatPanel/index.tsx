@@ -211,6 +211,7 @@ export function ModernChatPanel({
                   message={msg}
                   isLast={i === messages.length - 1 && pendingActions.length === 0}
                   onActionClick={handleActionClick}
+                  onQuickReply={handleSuggestionClick}
                   variant={variant}
                 />
               ))}

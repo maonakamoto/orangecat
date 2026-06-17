@@ -93,6 +93,8 @@ interface MessageBubbleProps {
   message: Message;
   isLast: boolean;
   onActionClick?: (action: CatAction) => void;
+  /** Tap a quick-reply chip → send it as the next user message. */
+  onQuickReply?: (text: string) => void;
   variant?: 'default' | 'focus';
 }
 
@@ -100,15 +102,17 @@ export function MessageBubble({
   message,
   isLast,
   onActionClick,
+  onQuickReply,
   variant = 'focus',
 }: MessageBubbleProps) {
   const isUser = message.role === 'user';
   const isFocus = variant === 'focus';
   const { copied, copy } = useCopyToClipboard();
 
-  // Clean the message content by removing action and exec_action blocks for display
+  // Clean the message content by removing action, exec_action, and quick_replies
+  // blocks for display (quick_replies render as chips below, never as raw text).
   const displayContent = message.content
-    .replace(/```(?:action|exec_action)[\s\S]*?```/g, '')
+    .replace(/```(?:action|exec_action|quick_replies)[\s\S]*?```/g, '')
     .trim();
 
   const handleCopy = () => void copy(displayContent);
@@ -177,6 +181,23 @@ export function MessageBubble({
             )}
           </div>
         </div>
+
+        {/* Tappable answers — only on the latest assistant turn (older turns'
+            chips would be stale). Tap sends the label as the next message. */}
+        {!isUser && isLast && message.quickReplies && message.quickReplies.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {message.quickReplies.map((reply, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => onQuickReply?.(reply)}
+                className="rounded-full border border-default bg-surface-base px-3 py-1.5 text-sm text-fg-secondary transition-colors hover:border-strong hover:bg-surface-raised hover:text-fg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {reply}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Action buttons. When a prefill card is also present for an entity draft,
             suppress the redundant `create_entity` button — the card is the richer,

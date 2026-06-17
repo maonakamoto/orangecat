@@ -94,6 +94,8 @@ export interface Message {
   toolCalls?: ToolCallEvent[];
   /** Structured form drafts (prefill_entity_form). Rendered as cards below content. */
   prefillProposals?: PrefillProposal[];
+  /** Tappable answer chips — tap to reply in one click instead of typing. */
+  quickReplies?: string[];
   /** Set when the route fell over from primary to fallback provider. */
   fallback?: FallbackNotice;
 }

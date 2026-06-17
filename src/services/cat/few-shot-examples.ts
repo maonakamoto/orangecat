@@ -26,30 +26,34 @@ interface FewShotTurn {
 }
 
 const FEW_SHOT_TURNS: FewShotTurn[] = [
-  // Cold-start: vague money question, NO stated skill → ASK, never assume a trade.
-  // Highest-frequency query; must not invent a persona from the examples below.
+  // Cold-start: vague money question, NO stated skill → ONE question + tappable
+  // buckets, never assume a trade. Highest-frequency query; must not invent a
+  // persona from the examples below.
   {
     user: 'what should i do to make money?',
-    assistant: `Happy to help you find the right move — but I won't guess what you do. Tell me a bit about you:
+    assistant: `Happy to help — give me a rough sense of you and I'll point you at the right path here (a Service, Product, Project, or more). What's your starting point?
 
-- What are you good at, or what do you genuinely enjoy?
-- What do people come to you for?
-- Do you have things you could sell, a skill you could offer, or time to give?
-
-Even a rough answer lets me point you at the right path — a Service, Product, Project, or something else. What's your starting point?`,
+\`\`\`quick_replies
+["I make things", "I have a skill", "I have stuff to rent", "Not sure yet"]
+\`\`\``,
   },
 
-  // Discovery — user states a skill → ask focused questions, NO action block.
+  // Discovery — user states what they do → LEAD with concrete options mapped to
+  // their word, at most ONE optional question, offer to draft now or later, plus
+  // tappable answers. This is the core "be useful fast, don't interrogate" shape.
   {
     user: "I'm good at woodworking",
-    assistant: `Woodworking is a great foundation — real skills that produce real things people want.
+    assistant: `Nice — woodworking gives you a few ways to earn here. You could:
 
-A few questions so I can suggest the right path:
-- Are you looking to earn from this, or is it a hobby?
-- What do you make — furniture, crafts, custom pieces?
-- Have you sold before, or would this be your first time?
+- Sell finished pieces (furniture, crafts) as **Products**
+- Offer custom builds as a bookable **Service**
+- Teach a workshop as an **Event**
 
-Depending on your answers, you could sell finished pieces as **Products**, offer custom builds as a **Service**, or teach workshops as **Events**. What sounds right?`,
+Want me to start a draft for one? Tell me what you make and roughly what you'd charge and I'll fill it in — or we can refine it later.
+
+\`\`\`quick_replies
+["Sell my pieces", "Offer custom builds", "Teach a workshop", "Help me decide"]
+\`\`\``,
   },
 
   // Multi-entity strategy with an action block — user states a CLEAR skill.
@@ -88,7 +92,11 @@ Can I ask: outside of work, are there people who come to you? Family, neighbors,
 
 Sometimes the thing you do naturally — feeding people, helping someone navigate paperwork, being the person who remembers names — can become something with structure. Not a business, just: a regular gathering, a community kitchen, a weekly thing people look forward to.
 
-Would you be open to exploring what that could look like?`,
+Would you be open to exploring what that could look like?
+
+\`\`\`quick_replies
+["Yes, tell me more", "Maybe later", "It's just me"]
+\`\`\``,
   },
 
   // exec_action — explicit instruction to execute something.

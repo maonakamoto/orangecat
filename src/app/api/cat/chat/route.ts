@@ -18,6 +18,7 @@ import {
   rateLimitWriteAsync,
 } from '@/lib/rate-limit';
 import { buildCatSystemPrompt } from '@/services/cat/system-prompt';
+import { buildReplyLanguageDirective } from '@/services/cat/reply-language';
 import { getCatFewShotExamplesText } from '@/services/cat/few-shot-examples';
 import { parseActionsFromResponse } from '@/services/cat/response-parser';
 import {
@@ -207,7 +208,10 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     const contextString = buildFullContextString(userContext);
     // Examples are appended as labeled text (not injected as fake conversation
     // turns) so weaker models can't mistake the example people for the real user.
-    const systemPrompt = `${buildCatSystemPrompt({ userContext: contextString || undefined })}\n\n${getCatFewShotExamplesText()}`;
+    // The per-turn reply-language directive goes DEAD LAST: weak free models
+    // weight the prompt tail most, and burying the language rule mid-prompt let
+    // them default to the browser locale's language (English in → German out).
+    const systemPrompt = `${buildCatSystemPrompt({ userContext: contextString || undefined })}\n\n${getCatFewShotExamplesText()}${buildReplyLanguageDirective(message)}`;
 
     let conversationId: string | null = null;
     let historyMessages: Array<{ role: 'user' | 'assistant'; content: string }> = [];
@@ -296,11 +300,11 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
                   );
                 }
                 if (chunk.done) {
-                  const { actions } = parseActionsFromResponse(fullContent);
+                  const { actions, quickReplies } = parseActionsFromResponse(fullContent);
                   const execResults = await runExecActions(supabase, user.id, actorId, actions);
                   controller.enqueue(
                     encoder.encode(
-                      `data: ${JSON.stringify({ done: true, usage, model: activeModel, provider: activeProvider, actions: actions.length > 0 ? actions : undefined, execResults: execResults.length > 0 ? execResults : undefined })}\n\n`
+                      `data: ${JSON.stringify({ done: true, usage, model: activeModel, provider: activeProvider, actions: actions.length > 0 ? actions : undefined, execResults: execResults.length > 0 ? execResults : undefined, quickReplies })}\n\n`
                     )
                   );
                   break;
@@ -489,7 +493,11 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       await keyService.incrementPlatformUsage(user.id, 1, result.totalTokens);
     }
 
-    const { message: cleanedMessage, actions } = parseActionsFromResponse(result.content);
+    const {
+      message: cleanedMessage,
+      actions,
+      quickReplies,
+    } = parseActionsFromResponse(result.content);
     const execResults = await runExecActions(supabase, user.id, actorId, actions);
 
     if (conversationId) {
@@ -511,6 +519,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       apiSuccess({
         message: cleanedMessage,
         actions: actions.length > 0 ? actions : undefined,
+        quickReplies,
         execResults: execResults.length > 0 ? execResults : undefined,
         toolCalls: collectedToolCalls.length > 0 ? collectedToolCalls : undefined,
         prefillProposals:

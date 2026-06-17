@@ -157,6 +157,7 @@ export function useChatMessages({
         let providerUsed: string | undefined;
         let actions: CatAction[] | undefined;
         let execResults: ExecActionResult[] | undefined;
+        let quickReplies: string[] | undefined;
 
         await readEventStream(res.body, (json: unknown) => {
           const event = json as {
@@ -167,6 +168,7 @@ export function useChatMessages({
             provider?: string;
             actions?: CatAction[];
             execResults?: ExecActionResult[];
+            quickReplies?: string[];
             tool_call?: ToolCallEvent;
             prefill_proposal?: PrefillProposal;
             fallback?: { from: string; to: string; model: string; reason: string };
@@ -193,6 +195,9 @@ export function useChatMessages({
           }
           if (event?.execResults) {
             execResults = event.execResults;
+          }
+          if (event?.quickReplies) {
+            quickReplies = event.quickReplies;
           }
           if (event?.tool_call) {
             const toolEvent = event.tool_call;
@@ -244,7 +249,7 @@ export function useChatMessages({
         setMessages(prev =>
           prev.map(m =>
             m.id === assistantId
-              ? { ...m, modelUsed, provider: providerUsed, actions, execResults }
+              ? { ...m, modelUsed, provider: providerUsed, actions, execResults, quickReplies }
               : m
           )
         );
