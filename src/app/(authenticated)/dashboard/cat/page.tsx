@@ -16,7 +16,6 @@ import { useCatQuota } from '@/components/ai-chat/ModernChatPanel/hooks/useCatQu
 import { CatChatToolbar } from '@/components/ai-chat/CatChatToolbar';
 import { CatSecondaryPanel } from '@/components/ai-chat/CatSecondaryPanel';
 import { isCatHubTab, type CatHubTab } from '@/config/cat-hub';
-import { APP_CONTENT_HEIGHT_CLASS } from '@/config/layout-chrome';
 
 export default function CatHubPage() {
   const { user, isLoading } = useRequireAuth();
@@ -49,7 +48,10 @@ export default function CatHubPage() {
   }
 
   return (
-    <div className={`oc-chat-layout ${APP_CONTENT_HEIGHT_CLASS}`}>
+    // h-full (not a 100dvh calc): fill the flex-resolved <main> height so the
+    // composer pins to the bottom. The dvh calc was collapsing to content height
+    // on this route, floating the composer halfway up the page.
+    <div className="oc-chat-layout h-full min-h-0">
       <CatChatToolbar activePanel="chat" quota={quota} />
       <ModernChatPanel
         variant="focus"

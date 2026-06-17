@@ -246,6 +246,8 @@ export function ModernChatPanel({
           variant={variant}
           hasMessages={messages.length > 0}
           onClearChat={clearChat}
+          selectedModel={selectedModel}
+          onModelSelect={setSelectedModel}
         />
       </div>
     </div>
