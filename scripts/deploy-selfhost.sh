@@ -116,6 +116,37 @@ rm -rf "$BASE/app-old"
 echo "DEPLOY_OK (local health 200)"
 REMOTE
 
+echo "=== ensure Caddy advertises no HTTP/3 (Brave/QUIC self-heal) ==="
+# Root cause this guards against: Caddy defaults to HTTP/3, advertising
+# `alt-svc: h3` for 30 days. Brave honours that cached alt-svc aggressively and
+# hangs when QUIC is in any way flaky (SSE/streaming over h3 timed out on this
+# box) — so the site "won't open in Brave" while Chrome silently falls back to
+# h2. The box Caddyfile is hand-maintained; a global `{ servers { protocols h1
+# h2 } }` block disables h3, but it has been dropped when the file was rewritten.
+# This step re-asserts it idempotently on every deploy so the fix is permanent.
+# (install -m 644: the file MUST stay readable by the caddy service user, or
+# `systemctl reload caddy` fails with permission-denied.)
+ssh "${SSH_OPTS[@]}" "$OC_BOX" 'bash -s' <<'CADDY_GUARD' || echo "WARN: caddy h3-guard step failed (non-fatal)" >&2
+set -e
+CF=/etc/caddy/Caddyfile
+if grep -q "protocols h1 h2" "$CF"; then
+  echo "caddy h3-guard: already present — ok"
+  exit 0
+fi
+echo "caddy h3-guard: MISSING -> re-asserting global protocols h1 h2"
+cp "$CF" "$CF.bak.$(date +%Y%m%d-%H%M%S)"
+TMP=$(mktemp)
+printf '{\n\tservers {\n\t\tprotocols h1 h2\n\t}\n}\n\n' > "$TMP"
+cat "$CF" >> "$TMP"
+if caddy validate --adapter caddyfile --config "$TMP" >/dev/null 2>&1; then
+  install -m 644 -o root -g root "$TMP" "$CF" && rm -f "$TMP"
+  systemctl reload caddy && echo "caddy h3-guard: applied + reloaded"
+else
+  rm -f "$TMP"
+  echo "caddy h3-guard: validate FAILED (a different global block may exist) - left untouched" >&2
+fi
+CADDY_GUARD
+
 echo "=== verify public ==="
 pub="$(curl -sL -o /dev/null -w '%{http_code}' --max-time 20 "$OC_PUBLIC" || echo 000)"
 echo "public $OC_PUBLIC → $pub"
