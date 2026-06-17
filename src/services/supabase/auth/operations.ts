@@ -4,6 +4,7 @@
 
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
+import { ROUTES } from '@/config/routes';
 import type {
   AuthResponse,
   SignInRequest,
@@ -99,6 +100,19 @@ export async function signOut(): Promise<{ error: AuthError | null }> {
     if (error) {
       logger.auth('Sign out failed', { error: error.message });
       return { error: error as AuthError };
+    }
+
+    // The browser client stores the session in localStorage (safeStorage), so the
+    // signOut() above only clears localStorage. The auth COOKIES are written
+    // server-side (/api/auth/sync, the auth callback, and middleware refresh), and
+    // nothing else clears them — so without this they accumulate across every
+    // login/logout cycle (and orphan across project-ref changes) until the Cookie
+    // header overflows the server limit (HTTP 431, "won't open in Brave"). Hit the
+    // route that deletes every sb-*/supabase/auth cookie. Best-effort, never blocks.
+    try {
+      await fetch(ROUTES.AUTH_SIGNOUT, { method: 'POST', credentials: 'same-origin' });
+    } catch (cookieClearError) {
+      logger.warn('Sign out: failed to clear server cookies', { error: cookieClearError }, 'Auth');
     }
 
     logger.auth('Sign out successful');

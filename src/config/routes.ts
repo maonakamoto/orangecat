@@ -263,6 +263,7 @@ export const ROUTES = {
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_RESET_PASSWORD: '/auth/reset-password',
   AUTH_CALLBACK: '/auth/callback',
+  AUTH_SIGNOUT: '/auth/signout',
   DISCOVER: '/discover',
   WALLETS: '/wallets',
   CREATE: '/create',
