@@ -116,34 +116,57 @@ rm -rf "$BASE/app-old"
 echo "DEPLOY_OK (local health 200)"
 REMOTE
 
-echo "=== ensure Caddy advertises no HTTP/3 (Brave/QUIC self-heal) ==="
+echo "=== ensure Caddy kills HTTP/3 (Brave/QUIC self-heal) ==="
 # Root cause this guards against: Caddy defaults to HTTP/3, advertising
 # `alt-svc: h3` for 30 days. Brave honours that cached alt-svc aggressively and
 # hangs when QUIC is in any way flaky (SSE/streaming over h3 timed out on this
 # box) — so the site "won't open in Brave" while Chrome silently falls back to
-# h2. The box Caddyfile is hand-maintained; a global `{ servers { protocols h1
-# h2 } }` block disables h3, but it has been dropped when the file was rewritten.
-# This step re-asserts it idempotently on every deploy so the fix is permanent.
+# h2. Two complementary guards, both idempotent, both re-asserted every deploy
+# because the box Caddyfile is hand-maintained and these get dropped on rewrite:
+#   1. global `{ servers { protocols h1 h2 } }` — stops NEW h3 advertising.
+#   2. `header Alt-Svc "clear"` in the orangecat.ch block — actively EVICTS h3
+#      entries already cached in a visitor's Brave (protocols-only can't undo a
+#      cache that was set before h3 was disabled; this is why Brave kept hanging).
 # (install -m 644: the file MUST stay readable by the caddy service user, or
 # `systemctl reload caddy` fails with permission-denied.)
 ssh "${SSH_OPTS[@]}" "$OC_BOX" 'bash -s' <<'CADDY_GUARD' || echo "WARN: caddy h3-guard step failed (non-fatal)" >&2
 set -e
 CF=/etc/caddy/Caddyfile
+changed=0
+backup_once() { [ "$changed" = 0 ] && cp "$CF" "$CF.bak.$(date +%Y%m%d-%H%M%S)"; changed=1; }
+
+# Guard 1: global protocols h1 h2 (no new h3 advertising)
 if grep -q "protocols h1 h2" "$CF"; then
-  echo "caddy h3-guard: already present — ok"
-  exit 0
-fi
-echo "caddy h3-guard: MISSING -> re-asserting global protocols h1 h2"
-cp "$CF" "$CF.bak.$(date +%Y%m%d-%H%M%S)"
-TMP=$(mktemp)
-printf '{\n\tservers {\n\t\tprotocols h1 h2\n\t}\n}\n\n' > "$TMP"
-cat "$CF" >> "$TMP"
-if caddy validate --adapter caddyfile --config "$TMP" >/dev/null 2>&1; then
-  install -m 644 -o root -g root "$TMP" "$CF" && rm -f "$TMP"
-  systemctl reload caddy && echo "caddy h3-guard: applied + reloaded"
+  echo "caddy h3-guard(protocols): already present — ok"
 else
-  rm -f "$TMP"
-  echo "caddy h3-guard: validate FAILED (a different global block may exist) - left untouched" >&2
+  echo "caddy h3-guard(protocols): MISSING -> prepending global protocols h1 h2"
+  backup_once
+  TMP=$(mktemp)
+  printf '{\n\tservers {\n\t\tprotocols h1 h2\n\t}\n}\n\n' > "$TMP"
+  cat "$CF" >> "$TMP"
+  mv "$TMP" "$CF"
+fi
+
+# Guard 2: Alt-Svc: clear in the orangecat.ch block (evict already-cached h3)
+if awk '/^orangecat\.ch, www\.orangecat\.ch \{/{f=1} f{print} /^\}/{if(f)exit}' "$CF" | grep -qi "Alt-Svc"; then
+  echo "caddy h3-guard(alt-svc): already present — ok"
+else
+  echo "caddy h3-guard(alt-svc): MISSING -> adding header Alt-Svc clear to orangecat.ch"
+  backup_once
+  TMP=$(mktemp)
+  awk '/^orangecat\.ch, www\.orangecat\.ch \{/{print; print "\theader Alt-Svc \"clear\""; next} {print}' "$CF" > "$TMP"
+  mv "$TMP" "$CF"
+fi
+
+if [ "$changed" = 1 ]; then
+  if caddy validate --adapter caddyfile --config "$CF" >/dev/null 2>&1; then
+    chmod 644 "$CF"; systemctl reload caddy && echo "caddy h3-guard: applied + reloaded"
+  else
+    echo "caddy h3-guard: validate FAILED — restoring backup" >&2
+    cp "$(ls -t "$CF".bak.* | head -1)" "$CF"
+  fi
+else
+  echo "caddy h3-guard: nothing to change"
 fi
 CADDY_GUARD
 
