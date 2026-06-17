@@ -35,7 +35,7 @@ describe('parseActionsFromResponse — create_entity', () => {
   });
 
   it('parses a group action using name as primary field and normalises to title', () => {
-    const content = response('Let\'s create a group:', {
+    const content = response("Let's create a group:", {
       type: 'create_entity',
       entityType: 'group',
       prefill: { name: 'Local Builders Guild', label: 'guild', description: 'We build stuff.' },
@@ -142,11 +142,15 @@ describe('parseActionsFromResponse — publish_entity', () => {
 
 describe('parseActionsFromResponse — exec_action', () => {
   it('parses a set_reminder exec_action', () => {
-    const content = response('Setting reminder:', {
-      type: 'exec_action',
-      actionId: 'set_reminder',
-      parameters: { title: 'Call dentist', due_date: 'in 2 days' },
-    }, 'exec_action');
+    const content = response(
+      'Setting reminder:',
+      {
+        type: 'exec_action',
+        actionId: 'set_reminder',
+        parameters: { title: 'Call dentist', due_date: 'in 2 days' },
+      },
+      'exec_action'
+    );
 
     const { actions } = parseActionsFromResponse(content);
     expect(actions).toHaveLength(1);
@@ -156,11 +160,15 @@ describe('parseActionsFromResponse — exec_action', () => {
   });
 
   it('rejects exec_action with empty actionId', () => {
-    const content = response('Bad exec:', {
-      type: 'exec_action',
-      actionId: '',
-      parameters: {},
-    }, 'exec_action');
+    const content = response(
+      'Bad exec:',
+      {
+        type: 'exec_action',
+        actionId: '',
+        parameters: {},
+      },
+      'exec_action'
+    );
 
     const { actions } = parseActionsFromResponse(content);
     expect(actions).toHaveLength(0);
@@ -171,7 +179,11 @@ describe('parseActionsFromResponse — exec_action', () => {
 
 describe('parseActionsFromResponse — message cleaning', () => {
   it('removes action blocks from the message text', () => {
-    const block = wrap({ type: 'create_entity', entityType: 'service', prefill: { title: 'Design Work' } });
+    const block = wrap({
+      type: 'create_entity',
+      entityType: 'service',
+      prefill: { title: 'Design Work' },
+    });
     const content = `Here is my suggestion:\n\n${block}\n\nLet me know!`;
 
     const { message } = parseActionsFromResponse(content);
@@ -188,11 +200,61 @@ describe('parseActionsFromResponse — message cleaning', () => {
   });
 
   it('handles multiple action blocks in one response', () => {
-    const block1 = wrap({ type: 'create_entity', entityType: 'service', prefill: { title: 'Service A' } });
-    const block2 = wrap({ type: 'create_entity', entityType: 'product', prefill: { title: 'Product B' } });
+    const block1 = wrap({
+      type: 'create_entity',
+      entityType: 'service',
+      prefill: { title: 'Service A' },
+    });
+    const block2 = wrap({
+      type: 'create_entity',
+      entityType: 'product',
+      prefill: { title: 'Product B' },
+    });
     const content = `First:\n\n${block1}\n\nSecond:\n\n${block2}`;
 
     const { actions } = parseActionsFromResponse(content);
     expect(actions).toHaveLength(2);
+  });
+});
+
+// ─── quick_replies parsing ────────────────────────────────────────────────────
+
+describe('parseActionsFromResponse — quick_replies', () => {
+  it('extracts a quick_replies block and strips it from the message', () => {
+    const content =
+      'Want me to start a draft?\n\n```quick_replies\n["Sell my pieces", "Teach a workshop", "Help me decide"]\n```';
+    const { message, quickReplies } = parseActionsFromResponse(content);
+    expect(quickReplies).toEqual(['Sell my pieces', 'Teach a workshop', 'Help me decide']);
+    expect(message).toBe('Want me to start a draft?');
+    expect(message).not.toContain('quick_replies');
+  });
+
+  it('coexists with an action block', () => {
+    const content =
+      'Here is a draft.\n\n```action\n{"type":"create_entity","entityType":"service","prefill":{"title":"DJ Set"}}\n```\n\n```quick_replies\n["Publish it", "Edit first"]\n```';
+    const { message, actions, quickReplies } = parseActionsFromResponse(content);
+    expect(actions).toHaveLength(1);
+    expect(quickReplies).toEqual(['Publish it', 'Edit first']);
+    expect(message).toBe('Here is a draft.');
+  });
+
+  it('caps at 4 options, trims, and drops oversized/non-string entries', () => {
+    const long = 'x'.repeat(50);
+    const content = `Pick one\n\n\`\`\`quick_replies\n["  A  ", "B", "C", "D", "E", 7, "${long}"]\n\`\`\``;
+    const { quickReplies } = parseActionsFromResponse(content);
+    expect(quickReplies).toEqual(['A', 'B', 'C', 'D']);
+  });
+
+  it('returns undefined when no block is present', () => {
+    const { quickReplies } = parseActionsFromResponse('Just a plain answer.');
+    expect(quickReplies).toBeUndefined();
+  });
+
+  it('drops a malformed quick_replies block silently (no chips, no throw)', () => {
+    const content = 'Question?\n\n```quick_replies\nnot json\n```';
+    expect(() => parseActionsFromResponse(content)).not.toThrow();
+    const { quickReplies, message } = parseActionsFromResponse(content);
+    expect(quickReplies).toBeUndefined();
+    expect(message).toBe('Question?');
   });
 });

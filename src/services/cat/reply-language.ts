@@ -57,6 +57,10 @@ const GERMAN_WORDS = new Set([
 ]);
 
 const ENGLISH_WORDS = new Set([
+  // Standalone "i" is an unambiguous English signal — German has no bare "i"
+  // (it uses "ich"), so it safely tags openers like "I'm a dj". (Not "im" —
+  // that's the German word "in dem".)
+  'i',
   'the',
   'and',
   'is',
