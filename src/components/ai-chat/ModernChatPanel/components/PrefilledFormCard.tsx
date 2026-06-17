@@ -1,44 +1,49 @@
 /**
- * PREFILLED FORM CARD
+ * PREFILLED FORM CARD — inline entity artifact.
  *
- * Renders a structured draft of an entity (product, service, project, etc.)
- * that the Cat produced via prefill_entity_form. The user reviews the fields
- * and clicks "Open in form" to land on the entity create page with everything
- * already populated — they can edit and submit on their terms.
+ * The Cat drafts an entity (product, service, project, …) via prefill_entity_form.
+ * This card is the "artifact": the user can tweak the key fields and **publish or
+ * save it as a draft right here in the chat** — no bounce to a separate form.
  *
- * Designed so the Cat never auto-creates an entity from chat. The user always
- * has a chance to review the structured fields before committing.
+ * Why post to the entity API (config.apiEndpoint) rather than the create_* Cat
+ * action handler: the API path is the SAME one the create form uses, so price is
+ * stored in the user's currency (the naive action handler hardcodes currency=BTC
+ * and would mis-store "60 CHF" as 60 BTC) and full server-side validation applies.
+ *
+ * "Open full form" remains as a graceful fallback for advanced fields or when
+ * inline publish fails validation.
  */
 
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, Check, Loader2 } from 'lucide-react';
 import { STORAGE_KEYS } from '@/config/storage-keys';
 import { ENTITY_REGISTRY, isValidEntityType, type EntityType } from '@/config/entity-registry';
 import type { PrefillProposal } from '../types';
 
+const EDITABLE_KEYS = ['title', 'name', 'description', 'price', 'price_btc', 'currency'];
+
 const PREVIEW_LABELS: Record<string, string> = {
-  title: 'Title',
-  name: 'Name',
-  description: 'Description',
-  short_description: 'Short description',
-  price_btc: 'Price',
-  price: 'Price',
   category: 'Category',
   tags: 'Tags',
   location: 'Location',
   duration_minutes: 'Duration',
   target_btc: 'Goal',
+  goal_amount: 'Goal',
   start_date: 'Starts',
   end_date: 'Ends',
+  product_type: 'Type',
 };
 
 interface PrefilledFormCardProps {
   proposal: PrefillProposal;
 }
 
-function formatValue(key: string, value: unknown): string {
+type Phase = 'idle' | 'saving' | 'done' | 'error';
+
+function formatValue(value: unknown): string {
   if (value === null || value === undefined || value === '') {
     return '—';
   }
@@ -48,25 +53,37 @@ function formatValue(key: string, value: unknown): string {
   if (typeof value === 'object') {
     return JSON.stringify(value);
   }
-  const str = String(value);
-  // Truncate long descriptions for the inline preview — the form will show full.
-  if (key === 'description' && str.length > 220) {
-    return str.slice(0, 220) + '…';
-  }
-  return str;
+  return String(value);
 }
 
 export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
   const router = useRouter();
   const { entityType, sourceDescription, data } = proposal;
 
-  if (!isValidEntityType(entityType)) {
+  const valid = isValidEntityType(entityType);
+  const meta = valid ? ENTITY_REGISTRY[entityType as EntityType] : null;
+
+  const present = (v: unknown): boolean => v !== null && v !== undefined && v !== '';
+  const [title, setTitle] = useState(String(data.title ?? data.name ?? ''));
+  const [description, setDescription] = useState(String(data.description ?? ''));
+  const hasPrice = present(data.price) || present(data.price_btc);
+  const [price, setPrice] = useState(
+    present(data.price) ? String(data.price) : present(data.price_btc) ? String(data.price_btc) : ''
+  );
+  const currency = typeof data.currency === 'string' ? data.currency : undefined;
+
+  const [phase, setPhase] = useState<Phase>('idle');
+  const [published, setPublished] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  if (!valid || !meta) {
     return null;
   }
-  const meta = ENTITY_REGISTRY[entityType as EntityType];
-  const createPath = meta.createPath;
 
-  const populatedFields = Object.entries(data).filter(([, v]) => {
+  const extraFields = Object.entries(data).filter(([k, v]) => {
+    if (EDITABLE_KEYS.includes(k)) {
+      return false;
+    }
     if (v === null || v === undefined || v === '') {
       return false;
     }
@@ -76,56 +93,195 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
     return true;
   });
 
-  const handleOpenInForm = () => {
+  const buildPayload = (status: 'active' | 'draft'): Record<string, unknown> => {
+    const payload: Record<string, unknown> = { ...data, status };
+    payload.title = title.trim();
+    payload.description = description.trim() || undefined;
+    if (hasPrice) {
+      const n = parseFloat(price);
+      if (!isNaN(n)) {
+        payload.price = n;
+      }
+    }
+    if (currency) {
+      payload.currency = currency;
+    }
+    return payload;
+  };
+
+  const submit = async (publish: boolean) => {
+    setPhase('saving');
+    setErrorMsg(null);
+    try {
+      const res = await fetch(meta.apiEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(buildPayload(publish ? 'active' : 'draft')),
+      });
+      const json = await res.json().catch(() => null);
+      if (!res.ok || !json?.success) {
+        const msg =
+          json?.error?.message ||
+          (typeof json?.error === 'string' ? json.error : null) ||
+          `Couldn't ${publish ? 'publish' : 'save'} this — try "Open full form".`;
+        setErrorMsg(msg);
+        setPhase('error');
+        return;
+      }
+      setPublished(publish);
+      setPhase('done');
+    } catch {
+      setErrorMsg('Network error — try "Open full form".');
+      setPhase('error');
+    }
+  };
+
+  const openInForm = () => {
     if (typeof window !== 'undefined') {
       try {
-        const key = STORAGE_KEYS.ENTITY_PREFILL(entityType as EntityType);
-        window.localStorage.setItem(key, JSON.stringify(data));
+        const merged = {
+          ...data,
+          title,
+          description,
+          ...(hasPrice && !isNaN(parseFloat(price)) ? { price: parseFloat(price) } : {}),
+        };
+        window.localStorage.setItem(
+          STORAGE_KEYS.ENTITY_PREFILL(entityType as EntityType),
+          JSON.stringify(merged)
+        );
       } catch {
         /* localStorage unavailable; the form will start empty */
       }
     }
-    router.push(createPath);
+    router.push(meta.createPath);
   };
+
+  // ── Success state ──────────────────────────────────────────────────────────
+  if (phase === 'done') {
+    return (
+      <div className="mt-3 rounded-md border border-subtle bg-surface-raised/30 p-4">
+        <div className="flex items-center gap-2">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-status-positive">
+            <Check className="h-3 w-3 text-fg-inverted" />
+          </span>
+          <span className="text-sm font-semibold text-fg-primary">
+            {published ? `${meta.name} published` : `Draft saved`}: {title}
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => router.push(meta.basePath)}
+          className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-md bg-fg-primary px-4 py-2 text-sm font-medium text-fg-inverted transition-colors hover:bg-fg-primary/90"
+        >
+          Open your {meta.namePlural.toLowerCase()}
+          <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
+    );
+  }
+
+  const saving = phase === 'saving';
 
   return (
     <div className="mt-3 rounded-md border border-subtle bg-surface-raised/30 p-4">
       <div className="mb-3 flex items-center gap-2">
         <Sparkles className="h-4 w-4 text-fg-primary" />
         <span className="text-sm font-semibold text-fg-primary">
-          Drafted a {meta.name.toLowerCase()}
+          Draft {meta.name.toLowerCase()}
         </span>
       </div>
       {sourceDescription && (
         <p className="mb-3 text-xs italic text-fg-secondary">
           From: &ldquo;
-          {sourceDescription.length > 180
-            ? sourceDescription.slice(0, 180) + '…'
+          {sourceDescription.length > 160
+            ? sourceDescription.slice(0, 160) + '…'
             : sourceDescription}
           &rdquo;
         </p>
       )}
-      <dl className="space-y-1.5 text-sm">
-        {populatedFields.slice(0, 8).map(([key, value]) => (
-          <div key={key} className="flex gap-2">
-            <dt className="w-32 flex-shrink-0 text-xs uppercase tracking-wide text-fg-tertiary">
-              {PREVIEW_LABELS[key] ?? key.replace(/_/g, ' ')}
-            </dt>
-            <dd className="flex-1 text-fg-primary">{formatValue(key, value)}</dd>
-          </div>
-        ))}
-        {populatedFields.length > 8 && (
-          <p className="text-xs text-fg-tertiary">+ {populatedFields.length - 8} more fields</p>
+
+      {/* Editable core fields — tweak inline, no form bounce */}
+      <div className="space-y-2.5">
+        <label className="block">
+          <span className="text-xs uppercase tracking-wide text-fg-tertiary">Title</span>
+          <input
+            type="text"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            disabled={saving}
+            className="mt-1 w-full rounded-md border border-subtle bg-surface-base px-3 py-2 text-sm text-fg-primary focus:border-fg-primary focus:outline-none"
+          />
+        </label>
+        <label className="block">
+          <span className="text-xs uppercase tracking-wide text-fg-tertiary">Description</span>
+          <textarea
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            disabled={saving}
+            rows={2}
+            className="mt-1 w-full resize-y rounded-md border border-subtle bg-surface-base px-3 py-2 text-sm text-fg-primary focus:border-fg-primary focus:outline-none"
+          />
+        </label>
+        {hasPrice && (
+          <label className="block">
+            <span className="text-xs uppercase tracking-wide text-fg-tertiary">Price</span>
+            <div className="mt-1 flex items-center gap-2">
+              <input
+                type="number"
+                inputMode="decimal"
+                value={price}
+                onChange={e => setPrice(e.target.value)}
+                disabled={saving}
+                className="w-40 rounded-md border border-subtle bg-surface-base px-3 py-2 text-sm text-fg-primary focus:border-fg-primary focus:outline-none"
+              />
+              {currency && <span className="text-sm text-fg-secondary">{currency}</span>}
+            </div>
+          </label>
         )}
-      </dl>
-      <div className="mt-4 flex flex-wrap gap-2">
+      </div>
+
+      {/* Remaining fields the Cat inferred (read-only preview) */}
+      {extraFields.length > 0 && (
+        <dl className="mt-3 space-y-1.5 text-sm">
+          {extraFields.slice(0, 5).map(([key, value]) => (
+            <div key={key} className="flex gap-2">
+              <dt className="w-28 flex-shrink-0 text-xs uppercase tracking-wide text-fg-tertiary">
+                {PREVIEW_LABELS[key] ?? key.replace(/_/g, ' ')}
+              </dt>
+              <dd className="flex-1 text-fg-secondary">{formatValue(value)}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      {errorMsg && <p className="mt-3 text-xs text-status-negative">{errorMsg}</p>}
+
+      <div className="mt-4 flex flex-wrap items-center gap-2">
         <button
           type="button"
-          onClick={handleOpenInForm}
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-md bg-fg-primary px-4 py-2 text-sm font-medium text-fg-inverted transition-colors hover:bg-fg-primary/90"
+          onClick={() => submit(true)}
+          disabled={saving || !title.trim()}
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-md bg-fg-primary px-4 py-2 text-sm font-medium text-fg-inverted transition-colors hover:bg-fg-primary/90 disabled:opacity-50"
         >
-          Open in form
-          <ArrowRight className="h-4 w-4" />
+          {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+          Publish
+        </button>
+        <button
+          type="button"
+          onClick={() => submit(false)}
+          disabled={saving || !title.trim()}
+          className="inline-flex min-h-11 items-center rounded-md border border-default px-4 py-2 text-sm font-medium text-fg-primary transition-colors hover:bg-surface-raised disabled:opacity-50"
+        >
+          Save draft
+        </button>
+        <button
+          type="button"
+          onClick={openInForm}
+          disabled={saving}
+          className="inline-flex min-h-11 items-center text-sm font-medium text-fg-secondary underline-offset-4 hover:text-fg-primary hover:underline disabled:opacity-50"
+        >
+          Open full form
         </button>
       </div>
     </div>

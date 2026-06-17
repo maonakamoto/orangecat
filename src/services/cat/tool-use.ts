@@ -146,6 +146,25 @@ const TOOL_TRIGGER_KEYWORDS = [
   'fundraise',
 ];
 
+/**
+ * Strong "I want to create/list my own thing" signals. When present we
+ * PROGRAMMATICALLY suppress search_platform tool calls — the weak free-tier
+ * models ignore the routing prompt and search anyway, wasting a round-trip and
+ * surfacing irrelevant "results" on a pure create intent. prefill_entity_form
+ * is still allowed through.
+ */
+const CREATE_INTENT_PATTERNS = [
+  /\b(i|we)\s+(make|sell|offer|provide|run|teach|organi[sz]e|build|create|craft|bake|design)\b/i,
+  /\bwant(ed)?\s+to\s+(sell|offer|start|create|launch|list|build|make|raise|fundraise)\b/i,
+  /\b(i'?d|i\s+would)\s+like\s+to\s+(sell|offer|create|start|launch|list)\b/i,
+  /\b(create|launch|set\s+up|open|list|start)\s+(a|an|my)\b/i,
+  /\bi\s+need\s+to\s+raise\b/i,
+];
+
+function hasCreateIntent(message: string): boolean {
+  return CREATE_INTENT_PATTERNS.some(re => re.test(message));
+}
+
 const PREFILLABLE_ENTITY_TYPES = [
   'product',
   'service',
@@ -294,9 +313,28 @@ export async function maybeEnrichWithSearchResults(
     }
 
     const assistantMsg = choice.message as ToolCallAssistantMessage;
-    const enriched: ToolAugmentedMessage[] = [...messages, assistantMsg];
 
-    for (const toolCall of assistantMsg.tool_calls) {
+    // Programmatic search guard: on a clear create intent, drop search_platform
+    // calls (the weak model emits them despite the routing prompt). Rebuild the
+    // assistant message with the filtered calls so no tool_call is left
+    // unfulfilled in the thread.
+    let toolCalls = assistantMsg.tool_calls;
+    if (hasCreateIntent(userMessage)) {
+      const kept = toolCalls.filter(tc => tc.function?.name !== 'search_platform');
+      if (kept.length !== toolCalls.length) {
+        toolCalls = kept;
+      }
+    }
+    if (toolCalls.length === 0) {
+      return messages;
+    }
+    const filteredAssistantMsg: ToolCallAssistantMessage = {
+      ...assistantMsg,
+      tool_calls: toolCalls,
+    };
+    const enriched: ToolAugmentedMessage[] = [...messages, filteredAssistantMsg];
+
+    for (const toolCall of toolCalls) {
       const toolName = toolCall.function?.name;
 
       // ── search_platform ────────────────────────────────────────────────
