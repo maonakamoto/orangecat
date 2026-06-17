@@ -261,7 +261,10 @@ export async function maybeEnrichWithSearchResults(
     {
       role: 'system' as const,
       content:
-        'You route an OrangeCat chat request to platform tools. If the user wants to FIND, discover, or connect with people / projects / products / services / events / causes, call search_platform with a concise query (and a type when clear). If the user clearly described something to CREATE, call prefill_entity_form. Otherwise call no tool. Only decide and call the tool — do not write a chat reply.',
+        'You route an OrangeCat chat request to platform tools. Call AT MOST ONE tool.\n' +
+        '- prefill_entity_form: when the user describes something THEY want to create / sell / offer / launch / fundraise (e.g. "I make mugs and want to sell them", "I want to start a project"). This is about THEIR own new thing.\n' +
+        '- search_platform: ONLY when the user wants to FIND, discover, or connect with things that already exist on the platform and belong to OTHERS (e.g. "find a designer", "who else is building X").\n' +
+        'NEVER call search_platform for a create/sell/offer intent — describing your own thing to list is prefill_entity_form, not a search. If neither clearly applies, call no tool. Only decide and call the tool — do not write a chat reply.',
     },
     { role: 'user' as const, content: userMessage },
   ];

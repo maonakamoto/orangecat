@@ -22,6 +22,12 @@ interface BasePrefillFields {
   title?: string;
   description?: string;
   category?: string;
+  // Display price: the amount + currency the user actually sees/enters (e.g. 45 CHF).
+  // The product/service forms use `price` (in the selected `currency`), NOT price_btc —
+  // so a Cat draft that only set price_btc left the Price field at 0. Map the display
+  // pair onto the real form fields.
+  price?: number;
+  currency?: string;
   // Numeric fields (all parsed as float to preserve BTC decimals)
   price_btc?: number;
   goal_amount?: number;
@@ -135,6 +141,19 @@ export function useCreatePrefill<T extends Record<string, unknown>>({
           }
         }
       }
+      // Display price pair → the form's actual `price` + `currency` fields.
+      const priceDisplayAmount = searchParams?.get('price_display_amount');
+      if (priceDisplayAmount) {
+        const parsed = parseFloat(priceDisplayAmount);
+        if (!isNaN(parsed)) {
+          prefillData.price = parsed;
+        }
+      }
+      const priceDisplayCurrency = searchParams?.get('price_display_currency');
+      if (priceDisplayCurrency) {
+        prefillData.currency = priceDisplayCurrency;
+      }
+
       const stringFields = [
         'goal_deadline',
         'location',

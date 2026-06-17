@@ -178,14 +178,28 @@ export function MessageBubble({
           </div>
         </div>
 
-        {/* Action buttons */}
-        {!isUser && message.actions && message.actions.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {message.actions.map((action, idx) => (
-              <ActionButton key={idx} action={action} onClick={() => onActionClick?.(action)} />
-            ))}
-          </div>
-        )}
+        {/* Action buttons. When a prefill card is also present for an entity draft,
+            suppress the redundant `create_entity` button — the card is the richer,
+            single primary affordance (it can be edited + published inline). */}
+        {(() => {
+          if (isUser || !message.actions || message.actions.length === 0) {
+            return null;
+          }
+          const hasPrefill = !!message.prefillProposals && message.prefillProposals.length > 0;
+          const visibleActions = hasPrefill
+            ? message.actions.filter(a => a.type !== 'create_entity')
+            : message.actions;
+          if (visibleActions.length === 0) {
+            return null;
+          }
+          return (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {visibleActions.map((action, idx) => (
+                <ActionButton key={idx} action={action} onClick={() => onActionClick?.(action)} />
+              ))}
+            </div>
+          );
+        })()}
 
         {/* Exec action result chips */}
         {!isUser && message.execResults && message.execResults.length > 0 && (
