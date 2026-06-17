@@ -105,6 +105,10 @@ export const API_ROUTES = {
     FAVORITE: (id: string) => `${ENTITY_REGISTRY['project'].apiEndpoint}/${id}/favorite`,
     FAVORITES: `${ENTITY_REGISTRY['project'].apiEndpoint}/favorites`,
   },
+  PROJECT_ROLES: {
+    BASE: '/api/project-roles',
+    BY_ID: (id: string) => `/api/project-roles/${id}`,
+  },
   LOANS: {
     BASE: ENTITY_REGISTRY['loan'].apiEndpoint,
     COLLATERAL: '/api/loan-collateral',

@@ -85,6 +85,7 @@ const headerNavigationConfig = {
     { name: 'Home', href: ROUTES.FEED },
     { name: 'Dashboard', href: ROUTES.DASHBOARD.HOME },
     { name: 'Discover', href: ROUTES.DISCOVER },
+    { name: 'Collaborate', href: ROUTES.COLLABORATE },
     { name: 'Community', href: ROUTES.COMMUNITY },
   ],
 

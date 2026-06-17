@@ -394,6 +394,8 @@ export const ROUTES = {
   TIMELINE: '/timeline',
   // Personalized "Following" home feed (people/projects you follow)
   FEED: '/home',
+  // Open-roles collaborator board (project_roles)
+  COLLABORATE: '/collaborate',
 
   // Messages routes
   MESSAGES: '/messages',

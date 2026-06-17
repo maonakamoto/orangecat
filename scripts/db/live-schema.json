@@ -827,6 +827,17 @@
   ],
   "project_favorites": ["id", "user_id", "project_id", "created_at"],
   "project_media": ["id", "project_id", "storage_path", "position", "alt_text", "created_at"],
+  "project_roles": [
+    "id",
+    "project_id",
+    "role_title",
+    "skills",
+    "engagement_type",
+    "description",
+    "status",
+    "created_at",
+    "updated_at"
+  ],
   "projects": [
     "id",
     "user_id",
