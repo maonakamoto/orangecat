@@ -27,33 +27,16 @@ if (!supabaseUrl.startsWith('https://')) {
   throw new Error('Supabase URL format looks incorrect. Expected an https:// URL');
 }
 
-// Safe storage with localStorage/sessionStorage fallback
-const safeStorage = {
-  getItem: (key: string) => {
-    try {
-      return localStorage.getItem(key) || sessionStorage.getItem(key);
-    } catch {
-      return null;
-    }
-  },
-  setItem: (key: string, value: string) => {
-    try {
-      localStorage.setItem(key, value);
-    } catch {
-      try {
-        sessionStorage.setItem(key, value);
-      } catch {}
-    }
-  },
-  removeItem: (key: string) => {
-    try {
-      localStorage.removeItem(key);
-    } catch {}
-    try {
-      sessionStorage.removeItem(key);
-    } catch {}
-  },
-};
+// Auth-session storage: intentionally NOT overridden. @supabase/ssr's
+// createBrowserClient defaults to a COOKIE adapter so the browser and the
+// server (src/lib/supabase/server.ts + middleware) share ONE cookie-based
+// session. The previous `storage: safeStorage` (localStorage) override broke
+// that: password/anonymous logins only wrote localStorage, so server routes and
+// middleware couldn't see the session until the /api/auth/sync band-aid fired,
+// and nothing cleaned the server-set cookies on sign-out — they accumulated
+// across login cycles + project-ref changes until the Cookie header overflowed
+// (HTTP 431). Using the cookie default unifies the session and lets the client
+// own the cookie lifecycle (set on login, refresh in place, clear on sign-out).
 
 // Create the browser client with optimized configuration for authentication
 // Control debug logging via environment variable (default: only in development)
@@ -63,7 +46,7 @@ const enableAuthDebug =
 
 const supabase = createBrowserClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: safeStorage, // Use safe storage wrapper
+    // No `storage` override → @supabase/ssr cookie adapter (shared with server).
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
