@@ -17,7 +17,7 @@ import { CurrencyInput } from '@/components/ui/CurrencyInput';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
 import type { FormFieldProps } from './types';
 import type { Currency } from '@/types/settings';
-import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
+import { DictationButton } from '@/components/ui/DictationButton';
 
 // ==================== COMPONENT ====================
 
@@ -56,7 +56,7 @@ export function FormField({
               className={baseInputClass}
             />
             {process.env.NEXT_PUBLIC_FEATURE_VOICE_INPUT === 'true' && (
-              <VoiceInputButton
+              <DictationButton
                 size="sm"
                 ariaLabel={`Voice input for ${label}`}
                 onTranscript={t =>
@@ -239,7 +239,7 @@ export function FormField({
               className={baseInputClass}
             />
             {process.env.NEXT_PUBLIC_FEATURE_VOICE_INPUT === 'true' && (
-              <VoiceInputButton
+              <DictationButton
                 size="sm"
                 ariaLabel={`Voice input for ${label}`}
                 onTranscript={t =>

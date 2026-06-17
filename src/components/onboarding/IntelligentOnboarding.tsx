@@ -17,7 +17,7 @@ import { Cat, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
-import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
+import { DictationButton } from '@/components/ui/DictationButton';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { ProfileService } from '@/services/profile';
@@ -128,7 +128,7 @@ export default function IntelligentOnboarding() {
               }}
             />
             {process.env.NEXT_PUBLIC_FEATURE_VOICE_INPUT === 'true' && (
-              <VoiceInputButton
+              <DictationButton
                 ariaLabel="Voice input"
                 size="sm"
                 onTranscript={t => setDescription(prev => (prev ? prev + ' ' : '') + t)}

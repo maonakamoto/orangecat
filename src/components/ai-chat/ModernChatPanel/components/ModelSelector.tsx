@@ -12,9 +12,19 @@ interface ModelSelectorProps {
   selectedModel: string;
   onSelect: (model: string) => void;
   disabled?: boolean;
+  /** Open the menu upward — for use at the bottom-anchored composer. */
+  openUp?: boolean;
+  /** Ghost trigger (no border/fill) so it reads as part of the composer bar. */
+  subtle?: boolean;
 }
 
-export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelectorProps) {
+export function ModelSelector({
+  selectedModel,
+  onSelect,
+  disabled,
+  openUp,
+  subtle,
+}: ModelSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -41,20 +51,31 @@ export function ModelSelector({ selectedModel, onSelect, disabled }: ModelSelect
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
         className={cn(
-          'flex items-center gap-2 rounded-md px-3 py-1.5 text-sm',
-          'border border-subtle bg-surface-raised transition-colors hover:bg-surface-raised/80',
+          'flex items-center gap-1.5 rounded-md text-sm transition-colors',
+          subtle
+            ? 'px-2 py-1 text-fg-secondary hover:bg-surface-raised hover:text-fg-primary'
+            : 'border border-subtle bg-surface-raised px-3 py-1.5 hover:bg-surface-raised/80',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
         <Sparkles className="h-4 w-4 text-fg-secondary" />
-        <span className="text-fg-primary max-w-[120px] truncate">{displayName}</span>
+        <span
+          className={cn('max-w-[120px] truncate', subtle ? 'text-fg-secondary' : 'text-fg-primary')}
+        >
+          {displayName}
+        </span>
         <ChevronDown
           className={cn('h-4 w-4 text-fg-tertiary transition-transform', isOpen && 'rotate-180')}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-full z-50 mt-2 max-h-80 w-72 overflow-y-auto rounded-md border border-subtle bg-surface-modal py-2 shadow-sm">
+        <div
+          className={cn(
+            'absolute left-0 z-50 max-h-80 w-72 overflow-y-auto rounded-md border border-subtle bg-surface-modal py-2 shadow-sm',
+            openUp ? 'bottom-full mb-2' : 'top-full mt-2'
+          )}
+        >
           <button
             onClick={() => {
               onSelect('auto');

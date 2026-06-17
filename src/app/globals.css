@@ -409,12 +409,18 @@
   }
 
   .oc-chat-composer {
-    @apply relative flex flex-1 items-end gap-2 rounded-2xl border border-border-subtle bg-muted/30 px-3 py-2 shadow-sm;
+    @apply relative flex w-full flex-col gap-1 rounded-2xl border border-border-subtle bg-muted/30 px-3 py-2 shadow-sm;
     @apply focus-within:border-ring/40 focus-within:ring-2 focus-within:ring-ring/15;
   }
 
+  /* Bottom control row inside the composer box: model picker + clear on the
+     left, dictation + send on the right — one cohesive control. */
+  .oc-chat-composer-controls {
+    @apply flex items-center justify-between gap-2;
+  }
+
   .oc-chat-composer-input {
-    @apply max-h-[200px] min-h-[2.5rem] w-full flex-1 resize-none bg-transparent py-2 text-sm leading-relaxed text-foreground;
+    @apply max-h-[200px] min-h-[2.25rem] w-full resize-none bg-transparent px-1 py-1.5 text-sm leading-relaxed text-foreground;
     @apply placeholder:text-muted-foreground focus:outline-none;
   }
 

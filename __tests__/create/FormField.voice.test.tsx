@@ -2,10 +2,12 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FormField } from '@/components/create/FormField';
 
-jest.mock('@/components/ui/VoiceInputButton', () => ({
+jest.mock('@/components/ui/DictationButton', () => ({
   __esModule: true,
-  VoiceInputButton: ({ onTranscript }: { onTranscript: (t: string) => void }) => (
-    <button onClick={() => onTranscript('voice-data')} aria-label="Voice input for Description">Voice</button>
+  DictationButton: ({ onTranscript }: { onTranscript: (t: string) => void }) => (
+    <button onClick={() => onTranscript('voice-data')} aria-label="Voice input for Description">
+      Voice
+    </button>
   ),
   default: () => null,
 }));
@@ -37,4 +39,3 @@ describe('FormField voice integration', () => {
     expect(onChange).toHaveBeenCalledWith('voice-data');
   });
 });
-
