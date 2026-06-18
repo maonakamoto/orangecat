@@ -32,7 +32,7 @@ export function useProfileTheme() {
     applied.current = true;
     const prefs = profile.preferences as Record<string, unknown> | null;
     const saved = prefs?.theme;
-    if (saved === 'light' || saved === 'dark') {
+    if (saved === 'light' || saved === 'dark' || saved === 'system') {
       setTheme(saved);
     }
   }, [hydrated, profile, setTheme]);

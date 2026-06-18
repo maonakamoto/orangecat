@@ -279,7 +279,7 @@ export default function EventsPage() {
             <Button
               onClick={handleGetStarted}
               size="lg"
-              className="bg-surface-raised/400 hover:bg-fg-primary text-white"
+              className="bg-surface-raised hover:bg-fg-primary text-fg-primary hover:text-fg-inverted transition-colors"
             >
               Create Your Event
               <ArrowRight className="ml-2 h-5 w-5" />

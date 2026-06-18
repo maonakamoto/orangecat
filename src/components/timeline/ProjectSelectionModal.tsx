@@ -66,7 +66,7 @@ export default function ProjectSelectionModal({
           >
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-md bg-fg-primary">
-                <Users className="w-5 h-5 text-white" />
+                <Users className="w-5 h-5 text-fg-inverted" />
               </div>
               <div className="text-left">
                 <div className="text-base font-semibold text-fg-primary">Everyone</div>

@@ -79,7 +79,7 @@ export default function SettingsPage() {
       >
         <div className="bg-surface-base rounded-lg shadow-sm border border-subtle overflow-hidden">
           <div className="bg-fg-primary px-6 py-6">
-            <div className="flex items-center text-white">
+            <div className="flex items-center text-fg-inverted">
               <Lock className="w-8 h-8 mr-4" />
               <div>
                 <h2 className="text-2xl font-semibold">Account & Security</h2>
