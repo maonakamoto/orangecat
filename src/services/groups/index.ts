@@ -10,8 +10,12 @@ class GroupsService {
     return import('./mutations/groups').then(m => m.createGroup(input));
   }
 
-  async getGroup(identifier: string, bySlug: boolean = false) {
-    return import('./queries/groups').then(m => m.getGroup(identifier, bySlug));
+  async getGroup(
+    identifier: string,
+    bySlug: boolean = false,
+    client?: Parameters<typeof import('./queries/groups').getGroup>[2]
+  ) {
+    return import('./queries/groups').then(m => m.getGroup(identifier, bySlug, client));
   }
 
   async updateGroup(

@@ -23,23 +23,23 @@ import { ENTITY_STATUS } from '@/config/database-constants';
 // Entity-specific column selections for optimal queries
 const ENTITY_COLUMNS: Record<EntityType, string> = {
   project:
-    'id, title, description, category, tags, status, bitcoin_address, lightning_address, goal_amount, currency, raised_amount, bitcoin_balance_btc, created_at, updated_at, thumbnail_url',
+    'id, title, description, category, tags, status, bitcoin_address, lightning_address, goal_amount, currency, raised_amount, created_at, updated_at',
   product: 'id, title, description, category, price, currency, status, images, created_at',
   service:
-    'id, title, description, category, pricing_type, hourly_rate, fixed_price, currency, status, created_at',
-  cause: 'id, title, description, category, goal_amount, currency, status, created_at',
+    'id, title, description, category, hourly_rate, fixed_price, currency, status, created_at',
+  cause: 'id, title, description, goal_amount, currency, status, created_at',
   ai_assistant: 'id, title, description, category, pricing_model, status, avatar_url, created_at',
   asset:
     'id, title, description, type, estimated_value, currency, verification_status, status, created_at',
   loan: 'id, title, description, original_amount, remaining_balance, interest_rate, currency, status, created_at',
   investment:
-    'id, title, description, investment_type, target_amount, minimum_investment, total_raised, currency, expected_return_rate, return_frequency, term_months, status, risk_level, investor_count, created_at',
+    'id, title, description, investment_type, target_amount, minimum_investment, total_raised, currency, expected_return_rate, return_frequency, term_months, status, risk_level, created_at',
   event:
     'id, title, description, event_type, category, start_date, end_date, venue_name, venue_city, is_online, status, ticket_price, is_free, currency, created_at',
   wallet: 'id, label, wallet_type, address, is_active, created_at',
   group: 'id, name, slug, description, is_public, created_at',
   research:
-    'id, title, description, field, methodology, expected_outcome, funding_goal_btc, current_funding_btc, status, created_at',
+    'id, title, description, field, methodology, expected_outcome, funding_goal_btc, funding_raised_btc, status, created_at',
   wishlist:
     'id, title, description, type, visibility, is_active, event_date, cover_image_url, created_at',
   document: 'id, title, content, document_type, visibility, tags, created_at',
@@ -107,8 +107,16 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
       .from(tableName)
       .select(columns)
       .eq(userIdField, filterValue)
-      .neq('status', ENTITY_STATUS.DRAFT) // Exclude drafts from public profile
       .order('created_at', { ascending: false });
+
+    // Exclude drafts from the public profile. Most entities use a `status` column;
+    // wishlists have no status (they use is_active) — applying .neq('status',…) there
+    // 500s ("column wishlists.status does not exist").
+    if (entityType === 'wishlist') {
+      query = query.neq('is_active', false);
+    } else {
+      query = query.neq('status', ENTITY_STATUS.DRAFT);
+    }
 
     // Add show_on_profile filter (exclude false, keep true and null)
     query = query.neq('show_on_profile', false);
