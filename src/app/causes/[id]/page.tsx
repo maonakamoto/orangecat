@@ -57,7 +57,7 @@ const config: EntityDetailConfig = {
             <span className="text-sm text-fg-secondary">
               {formatCurrency(raised, currency)} raised
             </span>
-            <span className="font-bold text-lg text-rose-600">
+            <span className="font-bold text-lg text-fg-primary">
               {formatCurrency(goal, currency)} goal
             </span>
           </div>

@@ -83,7 +83,7 @@ export default function AnalyticsPage() {
         label: 'Success Rate',
         value: `${successRate.toFixed(1)}%`,
         icon: Zap,
-        color: 'text-teal-600',
+        color: 'text-fg-primary',
       },
     ];
   };

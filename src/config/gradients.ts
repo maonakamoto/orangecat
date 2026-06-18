@@ -21,8 +21,8 @@ export const GRADIENTS = {
   brandOrangeAmber: 'bg-fg-primary',
   brandGreen: 'bg-status-positive',
   brandBlue: 'bg-fg-primary',
-  brandRose: 'bg-rose-600',
-  brandRoseDark: 'bg-rose-600',
+  brandRose: 'bg-status-negative',
+  brandRoseDark: 'bg-status-negative',
 
   // ── Section / card background tints ───────────────────────────────────────
   sectionClean: 'bg-surface-page',

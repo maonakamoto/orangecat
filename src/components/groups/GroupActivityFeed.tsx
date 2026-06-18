@@ -32,22 +32,22 @@ const ACTIVITY_CONFIG: Record<
   joined_group: {
     icon: UserPlus,
     label: () => 'joined the group',
-    color: 'text-emerald-600',
+    color: 'text-fg-secondary',
   },
   created_proposal: {
     icon: FileText,
     label: meta => (meta.title ? `created proposal "${meta.title}"` : 'created a proposal'),
-    color: 'text-blue-600',
+    color: 'text-fg-secondary',
   },
   voted: {
     icon: Vote,
     label: meta => (meta.vote ? `voted ${meta.vote} on a proposal` : 'voted on a proposal'),
-    color: 'text-purple-600',
+    color: 'text-fg-secondary',
   },
   created_event: {
     icon: CalendarPlus,
     label: meta => (meta.title ? `created event "${meta.title}"` : 'created an event'),
-    color: 'text-amber-600',
+    color: 'text-fg-secondary',
   },
 };
 
