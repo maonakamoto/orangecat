@@ -276,7 +276,9 @@ export async function getPublicJobPostings(
         { count: 'exact' }
       )
       .eq('proposal_type', 'employment')
-      .eq('is_public', true)
+      // A job posting is public when its GROUP is public — group_proposals has no
+      // is_public column of its own (filtering it 42703'd). Filter the !inner-joined group.
+      .eq('groups.is_public', true)
       .eq('status', STATUS.PROPOSALS.ACTIVE)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
