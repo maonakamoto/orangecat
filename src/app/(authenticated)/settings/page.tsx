@@ -77,16 +77,18 @@ export default function SettingsPage() {
         title="Account Settings"
         description="Manage your email, password, and security"
       >
-        <div className="bg-surface-base rounded-lg shadow-sm border border-subtle overflow-hidden">
-          <div className="bg-fg-primary px-6 py-6">
-            <div className="flex items-center text-fg-inverted">
-              <Lock className="w-8 h-8 mr-4" />
-              <div>
-                <h2 className="text-2xl font-semibold">Account & Security</h2>
-                <p className="text-fg-inverted/70 text-base mt-1">
-                  Manage your login credentials and account security
-                </p>
-              </div>
+        <div className="bg-surface-base rounded-lg border border-subtle overflow-hidden">
+          <div className="flex items-center gap-4 border-b border-subtle px-8 py-6">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-surface-raised text-fg-secondary">
+              <Lock className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold tracking-tight text-fg-primary">
+                Account &amp; Security
+              </h2>
+              <p className="mt-0.5 text-sm text-fg-secondary">
+                Manage your login credentials and account security
+              </p>
             </div>
           </div>
 
