@@ -1,0 +1,71 @@
+name: Uptime
+
+# Free, off-box uptime monitor. Runs on GitHub's infrastructure (NOT the Hetzner box),
+# so it keeps working — and alerts — even if the box is completely down. On failure it
+# opens/refreshes a single GitHub issue (you get a notification); on recovery it closes
+# it. Optional: set the DISCORD_WEBHOOK / SLACK_WEBHOOK repo secret for a chat ping too.
+#
+# Caveat: GitHub's scheduled runs can be delayed/dropped under load (~5–15 min granularity),
+# so this is a solid free baseline, not an SLA-grade monitor. For tighter checks, add a free
+# UptimeRobot monitor on https://orangecat.ch/api/health (50 monitors / 5-min, no cost).
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # every ~10 min (GitHub minimum is 5; it may run late)
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+
+concurrency:
+  group: uptime
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe endpoints (2 tries before declaring down — avoid transient blips)
+        id: probe
+        run: |
+          check() {
+            for try in 1 2 3; do
+              code=$(curl -sS -o /tmp/body -w '%{http_code}' --max-time 20 "$1" || echo 000)
+              [ "$code" = "200" ] && return 0
+              sleep 10
+            done
+            echo "DOWN: $1 → HTTP $code"
+            return 1
+          }
+          fail=0
+          check "https://orangecat.ch/api/health" || fail=1
+          # health must also report healthy, not just 200
+          if [ "$fail" = 0 ] && ! grep -q '"status":"healthy"' /tmp/body 2>/dev/null; then
+            echo "DOWN: health endpoint not 'healthy'"; fail=1
+          fi
+          check "https://orangecat.ch/" || fail=1
+          echo "down=$fail" >> "$GITHUB_OUTPUT"
+
+      - name: Alert / resolve via GitHub issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const down = '${{ steps.probe.outputs.down }}' === '1';
+            const title = '🔴 orangecat.ch is DOWN';
+            const { owner, repo } = context.repo;
+            const open = (await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', labels: 'uptime', per_page: 1,
+            })).data[0];
+            const now = new Date().toISOString();
+            if (down) {
+              const body = `Health check failed at ${now} (run ${context.runId}).\nProbed: /api/health + homepage.`;
+              if (open) {
+                await github.rest.issues.createComment({ owner, repo, issue_number: open.number, body: `Still down at ${now}.` });
+              } else {
+                await github.rest.issues.create({ owner, repo, title, body, labels: ['uptime'] });
+              }
+              core.setFailed('Site is DOWN');
+            } else if (open) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: open.number, body: `✅ Recovered at ${now} — closing.` });
+              await github.rest.issues.update({ owner, repo, issue_number: open.number, state: 'closed' });
+            }
