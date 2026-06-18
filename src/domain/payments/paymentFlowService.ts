@@ -15,6 +15,8 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { STATUS } from '@/config/database-constants';
 import { getEntityMetadata, type EntityType } from '@/config/entity-registry';
 import { getAdminClient } from '@/lib/supabase/admin';
+import { convertToBTC } from '@/services/currency/rates';
+import type { CurrencyCode } from '@/config/currencies';
 import { resolveSellerWallet, getSellerUserId } from './walletResolutionService';
 import { generateInvoice } from './invoiceGenerationService';
 import { checkNWCPaymentStatus, checkOnchainPaymentStatus } from './paymentStatusService';
@@ -300,20 +302,31 @@ async function resolveAmount(
     return inputAmount;
   }
 
-  // Fixed price: read from entity's price_btc column (use admin to bypass RLS)
-  // Cast to untyped client — queries use dynamic column names from entity registry.
+  // Fixed price: read the entity's price (stored in its OWN currency, NOT BTC —
+  // there is no price_btc column; reading it threw "Entity has no price set" on
+  // every fixed-price checkout) and convert to BTC for the invoice. The price
+  // column differs by entity: products use `price`, services use `fixed_price`.
+  // We convert via the same rate path the UI uses to DISPLAY prices, so the
+  // amount charged matches what the buyer was shown.
   const admin = getAdminClient() as unknown as SupabaseClient;
+  const priceColumn = meta.tableName === 'user_services' ? 'fixed_price' : 'price';
   const { data: entity } = await admin
     .from(meta.tableName)
-    .select('price_btc')
+    .select(`${priceColumn}, currency`)
     .eq('id', entityId)
     .single();
 
-  if (!entity?.price_btc) {
+  const rawPrice = entity ? (entity as Record<string, unknown>)[priceColumn] : null;
+  const priceNum = typeof rawPrice === 'number' ? rawPrice : Number(rawPrice);
+  if (!priceNum || priceNum <= 0) {
     throw new Error('Entity has no price set');
   }
 
-  return entity.price_btc;
+  const currency = String((entity as Record<string, unknown>).currency || 'BTC').toUpperCase();
+  if (currency === 'BTC') {
+    return priceNum;
+  }
+  return await convertToBTC(priceNum, currency as CurrencyCode);
 }
 
 async function getEntityTitle(

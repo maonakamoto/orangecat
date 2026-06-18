@@ -218,11 +218,18 @@ export async function createEntity<T = Record<string, unknown>>(
   delete (sanitizedData as Record<string, unknown>)._resolved_actor_id;
   delete (sanitizedData as Record<string, unknown>)._resolved_is_test;
 
-  const payload = {
+  // `is_test` only exists on the public-API entity tables (migration
+  // 20260604000002 added it to those 9, not to e.g. user_documents). It is only
+  // ever true for sandbox-key requests, which only ever target those tables.
+  // Injecting `is_test: false` on every create 400s on tables without the column
+  // (document creation was fully broken by this). Only stamp it when true.
+  const payload: Record<string, unknown> = {
     actor_id: actorId,
-    is_test: isTest,
     ...sanitizedData,
   };
+  if (isTest) {
+    payload.is_test = true;
+  }
 
   const { data: created, error } = await client
     .from(tableName)

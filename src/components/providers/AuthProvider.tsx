@@ -67,7 +67,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
-      await syncSessionToServer(event, session);
+      // INITIAL_SESSION with no session = a logged-out visitor on cold load:
+      // nothing to sync, and the server route rightly 400s on an empty payload.
+      // Skip that one case so every logged-out page load stops emitting a
+      // console 400 (and a wasted round-trip). With the cookie-based browser
+      // client this server-sync is mostly belt-and-suspenders anyway.
+      if (event !== 'INITIAL_SESSION' || session) {
+        await syncSessionToServer(event, session);
+      }
 
       logger.debug(
         'Auth state change detected',

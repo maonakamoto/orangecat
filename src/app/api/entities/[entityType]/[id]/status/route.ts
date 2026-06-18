@@ -79,15 +79,19 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
     const tableName = getTableName(entityType as EntityType);
     const userIdField = getUserIdField(entityType as EntityType);
 
-    // Some entities (wishlists today; circles likely too) store their
-    // publish state as `is_active: boolean` instead of `status: text`.
-    // Without this branch the generic select+update below 500s on those
-    // tables ("column status does not exist"), which is exactly why the
-    // wishlist Publish Now button was silently broken.
-    // Lift this into ENTITY_REGISTRY (`statusColumn: 'status' | 'is_active'`)
-    // when a third entity needs it — two cases is still under the rule of three.
-    const usesIsActive = entityType === 'wishlist';
-    const statusSelectColumn = usesIsActive ? 'is_active' : 'status';
+    // Some entities store publish state as a boolean column instead of
+    // `status: text` — wishlist → is_active, group → is_public. Without this
+    // branch the generic select+update on `status` 400s ("column status does
+    // not exist"), which silently broke the Publish Now button for those
+    // (wishlist historically, and groups). Lift into ENTITY_REGISTRY
+    // (`statusColumn`) if a fourth entity needs it.
+    const BOOLEAN_PUBLISH_COLUMN: Record<string, string> = {
+      wishlist: 'is_active',
+      group: 'is_public',
+    };
+    const boolStatusColumn = BOOLEAN_PUBLISH_COLUMN[entityType as string] ?? null;
+    const usesIsActive = boolStatusColumn !== null;
+    const statusSelectColumn = boolStatusColumn ?? 'status';
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: existing, error: fetchError } = await (supabase.from(tableName) as any)
@@ -145,7 +149,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
     }
 
     const currentStatus = usesIsActive
-      ? existing.is_active
+      ? existing[boolStatusColumn as string]
         ? ENTITY_STATUS.ACTIVE
         : ENTITY_STATUS.DRAFT
       : (existing.status || ENTITY_STATUS.DRAFT).toLowerCase();
@@ -157,7 +161,10 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
     }
 
     const updatePayload = usesIsActive
-      ? { is_active: newStatus === ENTITY_STATUS.ACTIVE, updated_at: new Date().toISOString() }
+      ? {
+          [boolStatusColumn as string]: newStatus === ENTITY_STATUS.ACTIVE,
+          updated_at: new Date().toISOString(),
+        }
       : { status: newStatus, updated_at: new Date().toISOString() };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

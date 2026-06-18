@@ -369,8 +369,13 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       const entityData: Record<string, unknown> = {
         ...transformedData,
         ...defaultFields,
-        is_test: auth.isTest,
       };
+      // Only stamp is_test when true (sandbox). It only exists on the public-API
+      // entity tables; injecting `false` everywhere 400s tables without the
+      // column. When true it's still applied here (last), so a caller can't spoof it.
+      if (auth.isTest) {
+        entityData.is_test = true;
+      }
 
       // Extract _wallet_id before DB insert (not a real column)
       const walletIdForLink = entityData._wallet_id as string | undefined;

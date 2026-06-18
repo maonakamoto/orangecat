@@ -210,7 +210,15 @@ export class ProfileWriter {
   }
 
   /**
-   * Fallback profile update (direct database update)
+   * Direct partial profile update by user id.
+   *
+   * Was previously an `update_profile` Postgres RPC — but that function never
+   * existed on the self-hosted DB (PGRST202), so every call silently failed.
+   * Its one live caller is the intelligent-onboarding step that persists the
+   * new user's name/bio/onboarding flags; that data was being thrown away,
+   * which is why freshly-onboarded users still showed as "User". This now does
+   * the direct table update its name always implied. RLS lets a user update
+   * their own row, so no SECURITY DEFINER function is needed.
    */
   static async fallbackUpdate(
     userId: string,
@@ -221,18 +229,18 @@ export class ProfileWriter {
     }
 
     try {
-      // Prefer Postgres function for atomic profile update when available
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase.rpc as any)('update_profile', {
-        profile_data: updates,
-      });
+      const { data, error } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', userId)
+        .select('*');
 
       if (error) {
         logger.error('ProfileWriter.fallbackUpdate error:', error);
-        return { success: false, error: 'All profile update methods failed: ' + error.message };
+        return { success: false, error: 'Profile update failed: ' + error.message };
       }
 
-      return { success: true, data };
+      return { success: true, data: Array.isArray(data) ? data[0] : data };
     } catch (err) {
       logger.error('ProfileWriter.fallbackUpdate unexpected error:', err);
       return { success: false, error: 'An unexpected error occurred during fallback update' };
