@@ -11,6 +11,7 @@
 
 import { NextRequest } from 'next/server';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
+import { createServerClient } from '@/lib/supabase/server';
 import groupsService from '@/services/groups';
 import { updateGroupSchema } from '@/services/groups/validation';
 import { logger } from '@/utils/logger';
@@ -33,8 +34,12 @@ export async function GET(_request: NextRequest, context: RouteContext) {
   try {
     const { slug } = await context.params;
 
+    // Pass a server client — without it the service falls back to the browser client,
+    // whose auth.getUser()/queries fail server-side and 500 this public endpoint.
+    const supabase = await createServerClient();
+
     // Get group by slug (second param is bySlug=true)
-    const result = await groupsService.getGroup(slug, true);
+    const result = await groupsService.getGroup(slug, true, supabase);
 
     if (!result.success) {
       if (result.error?.includes('not found')) {
@@ -69,8 +74,8 @@ export const PUT = withAuth(async (request: AuthenticatedRequest, context: Route
       return apiBadRequest('Invalid request', validationResult.error.errors);
     }
 
-    // Get group first to check permissions
-    const groupResult = await groupsService.getGroup(slug, true);
+    // Get group first to check permissions (use the authenticated server client)
+    const groupResult = await groupsService.getGroup(slug, true, request.supabase);
     if (!groupResult.success || !groupResult.group) {
       return apiNotFound('Group not found');
     }
@@ -115,8 +120,8 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest, context: Ro
 
     const { slug } = await context.params;
 
-    // Get group first to check permissions
-    const groupResult = await groupsService.getGroup(slug, true);
+    // Get group first to check permissions (use the authenticated server client)
+    const groupResult = await groupsService.getGroup(slug, true, request.supabase);
     if (!groupResult.success || !groupResult.group) {
       return apiNotFound('Group not found');
     }

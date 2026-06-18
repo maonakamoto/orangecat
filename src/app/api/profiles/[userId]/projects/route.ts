@@ -41,8 +41,6 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
         goal_amount,
         currency,
         raised_amount,
-        bitcoin_balance_btc,
-        bitcoin_balance_updated_at,
         created_at,
         updated_at,
         project_media(id, storage_path, position)
