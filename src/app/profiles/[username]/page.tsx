@@ -227,6 +227,15 @@ export default async function PublicProfilePage({ params }: PageProps) {
     }
   }
 
+  // A profile's legacy single bitcoin_address / lightning_address is a real way to
+  // receive Bitcoin (the public donation card sends to exactly these), even though
+  // they predate the multi-wallet table. Count them so the Wallets tab badge never
+  // reads "0" for a profile that can actually receive. (SSOT note: legacy fields +
+  // the wallets table are two representations of "ways to receive"; both feed the
+  // badge until the legacy address is migrated into the wallets table.)
+  const receiveMethodCount =
+    walletCount + (profile.bitcoin_address ? 1 : 0) + (profile.lightning_address ? 1 : 0);
+
   // Fetch entity counts for profile tab badges in parallel.
   // userField differs for asset (owner_id) vs. all others (user_id) — legacy schema.
   const ENTITY_COUNT_CONFIG: Array<{ type: EntityType; userField: string }> = [
@@ -299,7 +308,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
           totalRaised,
           followerCount: followerCount || 0,
           followingCount: followingCount || 0,
-          walletCount,
+          walletCount: receiveMethodCount,
           entityCounts,
         }}
       />
