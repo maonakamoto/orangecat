@@ -34,6 +34,7 @@ import {
 import Button from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { formatCurrency } from '@/services/currency';
 
 export interface BookEntityDialogProps {
   isOpen: boolean;
@@ -41,9 +42,13 @@ export interface BookEntityDialogProps {
   bookableType: 'service' | 'asset';
   bookableId: string;
   bookableTitle: string;
-  /** BTC price (NUMERIC) the booking will be created at. Display only — the
-   *  server re-reads the bookable's current price authoritatively. */
+  /** The listing's price. Display only — the server re-reads the bookable's current
+   *  price authoritatively. For assets this is BTC; for services it's a value in
+   *  `priceCurrency`. */
   priceBtc?: number;
+  /** Currency `priceBtc` is denominated in. Omitted/'BTC' → render as BTC; otherwise
+   *  render as that fiat currency (services price in their own currency, not BTC). */
+  priceCurrency?: string;
   /** When set, dialog renders a single start input and derives ends_at. */
   durationMinutes?: number;
 }
@@ -67,9 +72,14 @@ export function BookEntityDialog({
   bookableId,
   bookableTitle,
   priceBtc,
+  priceCurrency,
   durationMinutes,
 }: BookEntityDialogProps) {
   const { formatAmountBtc } = useDisplayCurrency();
+  const renderPrice = (amount: number) =>
+    priceCurrency && priceCurrency.toUpperCase() !== 'BTC'
+      ? formatCurrency(amount, priceCurrency)
+      : formatAmountBtc(amount);
   const [startsAtLocal, setStartsAtLocal] = useState('');
   const [endsAtLocal, setEndsAtLocal] = useState('');
   const [notes, setNotes] = useState('');
@@ -152,8 +162,7 @@ export function BookEntityDialog({
             Send a booking request to the provider. They&apos;ll confirm or reject.
             {typeof priceBtc === 'number' && priceBtc > 0 && (
               <span className="mt-1 block text-sm">
-                Price:{' '}
-                <span className="font-medium text-fg-primary">{formatAmountBtc(priceBtc)}</span>
+                Price: <span className="font-medium text-fg-primary">{renderPrice(priceBtc)}</span>
                 {hasDuration && ` · ${durationMinutes} min`}
               </span>
             )}

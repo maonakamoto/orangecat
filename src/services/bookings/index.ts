@@ -13,6 +13,8 @@ import { logger } from '@/utils/logger';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
 import { NotificationDispatcher } from '@/services/notifications/dispatcher';
+import { convertToBTC } from '@/services/currency/rates';
+import type { CurrencyCode } from '@/config/currencies';
 
 // Types
 type BookableType = 'service' | 'asset';
@@ -137,8 +139,16 @@ class BookingService {
     if (!providerActorId) {
       return { success: false, error: `${input.bookable_type} has no actor_id` };
     }
+    // Asset rental_price_btc is genuinely BTC; service fixed_price is in the listing's
+    // OWN currency (e.g. CHF) and MUST be converted — otherwise a 50 CHF service was
+    // recorded as 50 BTC (currency:'BTC' hardcoded below). Mirror resolveAmount() in
+    // paymentFlowService so the booking record stores real BTC.
     const priceCol = input.bookable_type === 'service' ? 'fixed_price' : 'rental_price_btc';
-    const priceBtc = Number(row[priceCol] ?? 0);
+    const rawPrice = Number(row[priceCol] ?? 0);
+    const priceBtc =
+      input.bookable_type === 'service' && rawPrice > 0
+        ? await convertToBTC(rawPrice, String(row.currency || 'BTC').toUpperCase() as CurrencyCode)
+        : rawPrice;
     const durationMinutes =
       input.bookable_type === 'service' ? ((row.duration_minutes as number | null) ?? null) : null;
 

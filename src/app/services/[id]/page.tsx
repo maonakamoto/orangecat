@@ -6,12 +6,29 @@ import PublicEntityDetailPage, {
 } from '@/components/public/PublicEntityDetailPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { ROUTES } from '@/config/routes';
-import { displayBTC } from '@/services/currency';
+import { formatCurrency } from '@/services/currency';
 import { BookEntityButton } from '@/components/bookings/BookEntityButton';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
+
+// user_services stores its price in `fixed_price` (or `hourly_rate`) in the entity's
+// chosen `currency` — NOT price_btc (no such column) and NOT in BTC. The old code read
+// price_btc ?? fixed_price and rendered it with displayBTC(), so a 50 CHF service showed
+// as "50 BTC". Read the real column + currency and format in that currency.
+// See decision_currency_convention.
+const getServicePrice = (entity: Record<string, unknown>) => {
+  const fixed = entity.fixed_price;
+  const hourly = entity.hourly_rate;
+  const raw = typeof fixed === 'number' && fixed > 0 ? fixed : hourly;
+  const amount = typeof raw === 'number' ? raw : Number(raw ?? NaN);
+  return {
+    amount: Number.isFinite(amount) ? amount : 0,
+    currency: (entity.currency as string) || 'CHF',
+    perHour: !(typeof fixed === 'number' && fixed > 0) && typeof hourly === 'number' && hourly > 0,
+  };
+};
 
 const config: EntityDetailConfig = {
   entityType: 'service',
@@ -19,20 +36,17 @@ const config: EntityDetailConfig = {
   createdLabel: 'Listed',
   descriptionTitle: 'About this Service',
   getViewRoute: id => ROUTES.SERVICES.VIEW(id),
-  getJsonLdExtra: entity => ({
-    ...(entity.price_btc && {
-      offers: { '@type': 'Offer', priceCurrency: 'BTC', price: entity.price_btc },
-    }),
-    ...(entity.duration_minutes && { duration: `PT${entity.duration_minutes}M` }),
-  }),
+  getJsonLdExtra: entity => {
+    const { amount, currency } = getServicePrice(entity);
+    return {
+      ...(amount > 0 && {
+        offers: { '@type': 'Offer', priceCurrency: currency, price: amount },
+      }),
+      ...(entity.duration_minutes && { duration: `PT${entity.duration_minutes}M` }),
+    };
+  },
   renderDetails: entity => {
-    // The service-detail Booking interface uses `price_btc`, but the
-    // user_services table stores the column as `fixed_price`. Read
-    // whichever is populated so the price + booking CTA work either way
-    // until that mismatch is consolidated.
-    const priceBtc =
-      (entity as { price_btc?: number; fixed_price?: number }).price_btc ??
-      (entity as { fixed_price?: number }).fixed_price;
+    const { amount, currency, perHour } = getServicePrice(entity);
     const durationMinutes = (entity as { duration_minutes?: number }).duration_minutes;
     return (
       <Card>
@@ -40,10 +54,13 @@ const config: EntityDetailConfig = {
           <CardTitle className="text-lg">Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {typeof priceBtc === 'number' && priceBtc > 0 && (
+          {amount > 0 && (
             <div className="flex items-center justify-between">
               <span className="text-fg-secondary">Price</span>
-              <span className="text-xl font-bold text-fg-primary">{displayBTC(priceBtc)}</span>
+              <span className="text-xl font-bold text-fg-primary">
+                {formatCurrency(amount, currency)}
+                {perHour ? ' / hr' : ''}
+              </span>
             </div>
           )}
           {durationMinutes && (
@@ -57,7 +74,8 @@ const config: EntityDetailConfig = {
             bookableType="service"
             bookableId={entity.id as string}
             bookableTitle={(entity.title as string) || 'this service'}
-            priceBtc={priceBtc}
+            priceBtc={amount > 0 ? amount : undefined}
+            priceCurrency={currency}
             durationMinutes={durationMinutes}
           />
         </CardContent>
