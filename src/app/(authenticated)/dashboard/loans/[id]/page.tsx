@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import type { Loan } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
 import { formatRelativeTime } from '@/utils/dates';
-import { calculateProgress } from '@/components/loans/useLoanList';
+import { calculateProgress } from '@/lib/loans/progress';
 
 interface PageProps {
   params: Promise<{ id: string }>;

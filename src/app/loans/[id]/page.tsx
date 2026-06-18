@@ -14,7 +14,7 @@ import PublicEntityDetailPage, {
   type EntityDetailConfig,
   type EntityData,
 } from '@/components/public/PublicEntityDetailPage';
-import { calculateProgress } from '@/components/loans/useLoanList';
+import { calculateProgress } from '@/lib/loans/progress';
 
 interface PageProps {
   params: Promise<{ id: string }>;

@@ -62,12 +62,19 @@ export const GET = withOptionalAuth(async (req, { params }: RouteParams) => {
       .limit(10);
 
     if (updatesError) {
-      // 42P01 = relation does not exist. The project_updates table has not
-      // been migrated yet. Returning an empty list lets the ProjectUpdatesTimeline
-      // component render its "No recent activity yet" empty state instead of the
-      // misleading "Could not load activity. Please refresh the page." fail
-      // branch. Same handling as createCreditDeposit (depositService.ts:49).
-      if ((updatesError as { code?: string }).code === '42P01') {
+      // The project_updates table has not been migrated yet. Returning an empty list
+      // lets the ProjectUpdatesTimeline component render its "No recent activity yet"
+      // empty state instead of the misleading "Could not load activity" fail branch.
+      // Postgres reports a missing relation as 42P01, but PostgREST (self-host) returns
+      // PGRST205 "Could not find the table ... in the schema cache" — without handling
+      // BOTH, every project page 500'd. Match either code or the message.
+      const errCode = (updatesError as { code?: string }).code;
+      const errMsg = (updatesError as { message?: string }).message || '';
+      const tableMissing =
+        errCode === '42P01' ||
+        errCode === 'PGRST205' ||
+        /does not exist|schema cache|could not find the table/i.test(errMsg);
+      if (tableMissing) {
         return apiSuccess({ updates: [], count: 0 });
       }
       logger.error(

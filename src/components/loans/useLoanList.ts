@@ -15,12 +15,9 @@ export const formatLoanAmount = (amount: number, currency: string = PLATFORM_DEF
   return formatCurrency(amount, validCurrency);
 };
 
-export const calculateProgress = (original: number, remaining: number) => {
-  if (original === 0) {
-    return 0;
-  }
-  return ((original - remaining) / original) * 100;
-};
+// Re-exported from a non-client module so server components can import it directly
+// from '@/lib/loans/progress' (see that file). Client importers may keep using this.
+export { calculateProgress } from '@/lib/loans/progress';
 
 export function useLoanList(onLoanUpdated?: () => void) {
   const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null);

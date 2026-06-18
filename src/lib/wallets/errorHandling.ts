@@ -64,11 +64,21 @@ export function logWalletError(
 }
 
 /**
- * Check if error is a table not found error
+ * Check if error is a "table/relation does not exist" error.
+ *
+ * Postgres reports this as 42P01, but PostgREST (the self-hosted Supabase REST layer)
+ * surfaces a missing table as PGRST205 "Could not find the table ... in the schema
+ * cache" instead — so a 42P01-only check silently fails against the self-host. Match
+ * either code, or the message as a last resort.
  */
 export function isTableNotFoundError(error: unknown): boolean {
-  if (error && typeof error === 'object' && 'code' in error) {
-    return (error as { code?: string }).code === '42P01';
+  if (error && typeof error === 'object') {
+    const code = (error as { code?: string }).code;
+    if (code === '42P01' || code === 'PGRST205') {
+      return true;
+    }
+    const message = (error as { message?: string }).message || '';
+    return /does not exist|schema cache|could not find the table/i.test(message);
   }
   return false;
 }
