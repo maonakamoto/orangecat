@@ -8,12 +8,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { ROUTES } from '@/config/routes';
-import { displayBTC } from '@/services/currency';
+import { formatCurrency } from '@/services/currency';
 import { INVESTMENT_TYPE_LABELS, INVESTMENT_RISK_COLORS } from '@/config/investments';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
+
+// investments carry a `currency` column (today all BTC, but CHF etc. are possible).
+// Format amounts in that currency rather than assuming BTC. formatCurrency(x,'BTC')
+// renders identically to the old displayBTC, so this is regression-safe + future-proof.
+const invFmt = (entity: Record<string, unknown>, amount: unknown) =>
+  formatCurrency(Number(amount ?? 0), (entity.currency as string) || 'BTC');
 
 const config: EntityDetailConfig = {
   entityType: 'investment',
@@ -25,7 +31,11 @@ const config: EntityDetailConfig = {
     ...(entity.target_amount && {
       funding: {
         '@type': 'MonetaryGrant',
-        amount: { '@type': 'MonetaryAmount', value: entity.target_amount, currency: 'BTC' },
+        amount: {
+          '@type': 'MonetaryAmount',
+          value: entity.target_amount,
+          currency: (entity.currency as string) || 'BTC',
+        },
       },
     }),
   }),
@@ -47,10 +57,10 @@ const config: EntityDetailConfig = {
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center">
               <span className="text-sm text-fg-secondary">
-                {displayBTC(entity.total_raised ?? 0)} raised
+                {invFmt(entity, entity.total_raised)} raised
               </span>
               <span className="font-bold text-lg text-fg-primary">
-                {displayBTC(entity.target_amount)} goal
+                {invFmt(entity, entity.target_amount)} goal
               </span>
             </div>
             <Progress value={progress} className="h-2" />
@@ -102,12 +112,12 @@ const config: EntityDetailConfig = {
             )}
             <div className="flex justify-between items-center">
               <span className="text-sm text-fg-secondary">Minimum Investment</span>
-              <span className="font-semibold">{displayBTC(entity.minimum_investment)}</span>
+              <span className="font-semibold">{invFmt(entity, entity.minimum_investment)}</span>
             </div>
             {entity.maximum_investment !== null && entity.maximum_investment !== undefined && (
               <div className="flex justify-between items-center">
                 <span className="text-sm text-fg-secondary">Maximum Investment</span>
-                <span className="font-semibold">{displayBTC(entity.maximum_investment)}</span>
+                <span className="font-semibold">{invFmt(entity, entity.maximum_investment)}</span>
               </div>
             )}
           </CardContent>
