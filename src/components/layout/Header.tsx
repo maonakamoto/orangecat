@@ -98,8 +98,11 @@ export function Header({
               <Logo showText={true} size="md" className="hidden sm:flex" />
             </div>
 
-            {/* Desktop Navigation Links */}
-            <DesktopNavigation items={navigation} />
+            {/* Desktop Navigation Links — public/marketing routes only. On
+                authenticated app routes the left sidebar owns section nav, so
+                showing these here was a second, redundant nav (it even renamed
+                the same destinations: top "Discover" = sidebar "Explore"). */}
+            {!isAuthRoute && <DesktopNavigation items={navigation} />}
           </div>
 
           {/* Center Section: Search trigger (Desktop only). Opens the

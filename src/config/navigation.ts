@@ -32,6 +32,7 @@ import {
   Cat,
   ClipboardList,
   BarChart3,
+  Handshake,
 } from 'lucide-react';
 
 /**
@@ -135,6 +136,15 @@ const entitySections = generateEntityNavigation().map(section =>
             href: ROUTES.DASHBOARD.PEOPLE,
             icon: Users,
             description: 'Find connections',
+            requiresAuth: true,
+          },
+          {
+            // Open-roles board. Lives here (not the top header) since the
+            // slimmed app header hands all section nav to the sidebar.
+            name: 'Collaborate',
+            href: ROUTES.COLLABORATE,
+            icon: Handshake,
+            description: 'Open roles',
             requiresAuth: true,
           },
         ],
