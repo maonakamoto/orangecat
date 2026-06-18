@@ -89,6 +89,47 @@ function selectCols(str) {
     .filter(c => c && c !== '*' && /^[a-z_][a-z0-9_]*$/i.test(c));
 }
 
+// Extract the TOP-LEVEL keys of the object literal that opens just after `from`
+// in `s`. Brace-depth tracking keeps nested object keys (e.g. metadata:{title})
+// out, and spreads (...x) are skipped — they bring dynamic keys we can't verify.
+// Handles both `key: value` and shorthand `{ key }`.
+function topLevelObjectKeys(s, from) {
+  let open = from;
+  while (open < s.length && /\s/.test(s[open])) open++;
+  if (s[open] !== '{') return []; // not an object-literal payload (e.g. a variable)
+  const keys = [];
+  let depth = 0;
+  let atKey = false;
+  for (let i = open; i < s.length; i++) {
+    const ch = s[i];
+    if (ch === '{') {
+      depth++;
+      if (depth === 1) atKey = true;
+      continue;
+    }
+    if (ch === '}') {
+      depth--;
+      if (depth === 0) break;
+      continue;
+    }
+    if (depth !== 1) continue;
+    if (ch === ',') {
+      atKey = true;
+      continue;
+    }
+    if (/\s/.test(ch)) continue;
+    if (atKey) {
+      const m = s.slice(i).match(/^([a-z_][a-z0-9_]*)\s*[:,}]/i);
+      if (m) {
+        keys.push(m[1]);
+        i += m[1].length - 1;
+      }
+      atKey = false;
+    }
+  }
+  return keys;
+}
+
 function lineOf(text, idx) {
   return text.slice(0, idx).split('\n').length;
 }
@@ -116,6 +157,15 @@ for (const file of walk(path.join(ROOT, 'src'))) {
     // filter ops: .eq('col', ...), .order('col'), .not('col', ...)
     for (const om of win.matchAll(/\.([a-z]+)\(\s*['"]([a-z_][a-z0-9_]*)['"]/g)) {
       if (FILTER_OPS.has(om[1])) refs.push({ col: om[2], off: om.index });
+    }
+    // write payloads: .insert({...}) / .update({...}) / .upsert({...}) — check the
+    // literal top-level keys (this is the class the `is_test` 400 fell into — selects
+    // alone never catch a bad INSERT/UPDATE column). Keys starting with `_` are
+    // treated as synthetic/internal (stripped before the DB call) and skipped.
+    for (const wm of win.matchAll(/\.(?:insert|update|upsert)\(/g)) {
+      for (const key of topLevelObjectKeys(win, wm.index + wm[0].length)) {
+        if (!key.startsWith('_')) refs.push({ col: key, off: wm.index });
+      }
     }
 
     for (const r of refs) {

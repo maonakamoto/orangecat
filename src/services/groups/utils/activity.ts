@@ -37,17 +37,15 @@ export async function logGroupActivity(
   try {
     const supabaseClient = client || supabase;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // The group_activities table stores everything but the core fields in `metadata`
+    // (jsonb) — description + related_* are NOT columns. Inserting them as columns
+    // failed (PostgREST: column does not exist) and the catch below swallowed it, so
+    // the group activity feed never recorded anything. Fold them into metadata.
     await (supabaseClient.from(DATABASE_TABLES.GROUP_ACTIVITIES) as any).insert({
       group_id: groupId,
       user_id: userId,
       activity_type: activityType,
-      description,
-      related_wallet_id: metadata?.related_wallet_id || null,
-      related_project_id: metadata?.related_project_id || null,
-      related_loan_id: metadata?.related_loan_id || null,
-      related_proposal_id: metadata?.related_proposal_id || null,
-      related_amount_btc: metadata?.related_amount_btc || null,
-      metadata: metadata || {},
+      metadata: { description, ...(metadata || {}) },
     });
   } catch (error) {
     logger.error('Failed to log group activity', error, 'Groups');
