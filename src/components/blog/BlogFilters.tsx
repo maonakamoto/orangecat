@@ -43,8 +43,8 @@ export function BlogFilters({
               onClick={() => setSelectedTag(null)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 !selectedTag
-                  ? 'bg-surface-raised/400 text-white'
-                  : 'bg-surface-raised text-fg-secondary hover:bg-gray-200 dark:hover:bg-surface-raised/80'
+                  ? 'bg-fg-primary text-fg-inverted'
+                  : 'bg-surface-raised text-fg-secondary hover:bg-surface-overlay'
               }`}
             >
               All Topics
@@ -55,8 +55,8 @@ export function BlogFilters({
                 onClick={() => setSelectedTag(tag)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedTag === tag
-                    ? 'bg-surface-raised/400 text-white'
-                    : 'bg-surface-raised text-fg-secondary hover:bg-gray-200 dark:hover:bg-surface-raised/80'
+                    ? 'bg-fg-primary text-fg-inverted'
+                    : 'bg-surface-raised text-fg-secondary hover:bg-surface-overlay'
                 }`}
               >
                 {tag}
@@ -78,8 +78,8 @@ export function BlogFilters({
               onClick={() => setSelectedTimeFilter(option.key)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 selectedTimeFilter === option.key
-                  ? 'bg-surface-raised/400 text-white'
-                  : 'bg-surface-raised text-fg-secondary hover:bg-gray-200 dark:hover:bg-surface-raised/80'
+                  ? 'bg-fg-primary text-fg-inverted'
+                  : 'bg-surface-raised text-fg-secondary hover:bg-surface-overlay'
               }`}
             >
               {option.label}

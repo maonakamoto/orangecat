@@ -128,7 +128,7 @@ export default function JobsPage() {
                       </CardDescription>
                     )}
                   </div>
-                  <Badge variant="default" className="bg-surface-raised/400">
+                  <Badge variant="default" className="bg-surface-raised">
                     Active
                   </Badge>
                 </div>

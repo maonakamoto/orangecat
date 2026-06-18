@@ -229,7 +229,7 @@ export default function ResearchDashboard() {
                   <Badge
                     className={
                       RESEARCH_STATUS_DOT_COLORS[entity.status || 'draft'] ??
-                      'bg-surface-raised/400 dark:bg-surface-raised'
+                      'bg-surface-raised dark:bg-surface-raised'
                     }
                   >
                     {entity.status || 'draft'}

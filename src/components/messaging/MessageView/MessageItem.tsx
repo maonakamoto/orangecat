@@ -163,7 +163,7 @@ export default function MessageItem({
             className={cn(
               'rounded-lg px-4 py-2',
               isCurrentUser
-                ? 'bg-surface-raised/400 text-white'
+                ? 'bg-fg-primary text-fg-inverted'
                 : 'bg-surface-raised text-fg-primary',
               isEditing && 'p-2'
             )}
@@ -182,7 +182,7 @@ export default function MessageItem({
                   <button
                     type="button"
                     onClick={onEditCancel}
-                    className="text-sm px-3 py-1.5 min-h-9 rounded text-white/80 hover:text-white"
+                    className="text-sm px-3 py-1.5 min-h-9 rounded text-fg-inverted/80 hover:text-fg-inverted"
                   >
                     Cancel
                   </button>

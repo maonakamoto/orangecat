@@ -55,7 +55,7 @@ const mdxComponents = {
   ),
   li: ({ children, ...props }: ComponentProps<'li'>) => (
     <li className="flex items-start" {...props}>
-      <span className="w-2 h-2 bg-surface-raised/400 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+      <span className="w-2 h-2 bg-surface-raised rounded-full mt-2 mr-4 flex-shrink-0"></span>
       <span>{children}</span>
     </li>
   ),

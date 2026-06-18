@@ -66,6 +66,31 @@ for attempt in 1 2 3; do
   [ "$attempt" = 3 ] && { echo "ERROR: rsync failed after 3 attempts" >&2; exit 1; }
 done
 
+echo "=== apply pending DB migrations → box ==="
+# The self-host has no Supabase-CLI migration tracking, so the box silently drifted
+# from supabase/migrations/* (the root cause of a whole class of prod 500s — a missed
+# migration). Applied files are recorded in public.schema_migrations (one-time
+# backfilled with the 147 pre-existing migrations on 2026-06-18, so only NEW files
+# run). Apply any *.sql not yet recorded, in filename order, BEFORE the boot-test so
+# the schema is ready before the new code runs. Each migration manages its own
+# transaction; ON_ERROR_STOP + abort-on-fail leaves the current live release
+# untouched, and we record a file only after it succeeds (re-runs stay safe because
+# new migrations are written idempotently — IF NOT EXISTS / OR REPLACE).
+applied="$(ssh "${SSH_OPTS[@]}" "$OC_BOX" "docker exec supabase-db psql -U postgres -tAc 'SELECT filename FROM public.schema_migrations'" 2>/dev/null || true)"
+for mig in supabase/migrations/*.sql; do
+  fn="$(basename "$mig")"
+  printf '%s\n' "$applied" | grep -qxF "$fn" && continue
+  echo "  → applying $fn"
+  if cat "$mig" | ssh "${SSH_OPTS[@]}" "$OC_BOX" "docker exec -i supabase-db psql -U postgres -v ON_ERROR_STOP=1 -q"; then
+    ssh "${SSH_OPTS[@]}" "$OC_BOX" \
+      "docker exec supabase-db psql -U postgres -q -c \"INSERT INTO public.schema_migrations(filename) VALUES ('$fn') ON CONFLICT DO NOTHING\"" >/dev/null
+  else
+    echo "ERROR: migration $fn failed — aborting deploy (live release untouched)" >&2
+    exit 1
+  fi
+done
+echo "  migrations up to date"
+
 echo "=== boot-test + atomic swap + health-check (with rollback) ==="
 ssh "${SSH_OPTS[@]}" "$OC_BOX" \
   "BASE='$OC_APP_BASE' SVC='$OC_SERVICE' PORT='$OC_PORT' BOOT='$OC_BOOT_PORT' HEALTH='$OC_HEALTH' bash -s" <<'REMOTE'

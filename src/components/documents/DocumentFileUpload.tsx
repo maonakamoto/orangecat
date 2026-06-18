@@ -183,8 +183,8 @@ export function DocumentFileUpload({
           'flex flex-col items-center justify-center p-8 text-center',
           state === 'idle' &&
             'border-strong bg-surface-raised hover:border-fg-primary hover:bg-surface-raised/80 cursor-pointer',
-          state === 'dragging' && 'border-fg-primary bg-surface-raised/400/10 scale-[1.02]',
-          state === 'uploading' && 'border-fg-primary bg-surface-raised/400/10 cursor-wait',
+          state === 'dragging' && 'border-fg-primary bg-surface-raised/10 scale-[1.02]',
+          state === 'uploading' && 'border-fg-primary bg-surface-raised/10 cursor-wait',
           state === 'success' && 'border-status-positive/40 bg-status-positive/10',
           state === 'error' && 'border-status-negative/40 bg-status-negative/10 cursor-pointer'
         )}
