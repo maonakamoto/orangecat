@@ -71,7 +71,7 @@ export function TooltipContent({ children, className, sideOffset = 4 }: TooltipC
   return (
     <div
       className={cn(
-        'absolute z-50 overflow-hidden rounded-md bg-gray-900 px-3 py-1.5 text-xs text-white',
+        'absolute z-50 overflow-hidden rounded-md bg-fg-primary px-3 py-1.5 text-xs text-fg-inverted',
         'animate-in fade-in-0 zoom-in-95',
         'bottom-full left-1/2 -translate-x-1/2 mb-2',
         className
