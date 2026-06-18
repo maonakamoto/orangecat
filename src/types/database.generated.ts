@@ -1065,7 +1065,7 @@ export type Database = {
           description: string | null;
           end_date: string | null;
           event_type: string | null;
-          funding_goal_btc: number | null;
+          funding_goal: number | null;
           id: string;
           images: string[] | null;
           is_all_day: boolean | null;
@@ -1085,7 +1085,7 @@ export type Database = {
           status: string | null;
           tags: string[] | null;
           thumbnail_url: string | null;
-          ticket_price_btc: number | null;
+          ticket_price: number | null;
           timezone: string | null;
           title: string;
           updated_at: string | null;
@@ -1109,7 +1109,7 @@ export type Database = {
           description?: string | null;
           end_date?: string | null;
           event_type?: string | null;
-          funding_goal_btc?: number | null;
+          funding_goal?: number | null;
           id?: string;
           images?: string[] | null;
           is_all_day?: boolean | null;
@@ -1129,7 +1129,7 @@ export type Database = {
           status?: string | null;
           tags?: string[] | null;
           thumbnail_url?: string | null;
-          ticket_price_btc?: number | null;
+          ticket_price?: number | null;
           timezone?: string | null;
           title: string;
           updated_at?: string | null;
@@ -1153,7 +1153,7 @@ export type Database = {
           description?: string | null;
           end_date?: string | null;
           event_type?: string | null;
-          funding_goal_btc?: number | null;
+          funding_goal?: number | null;
           id?: string;
           images?: string[] | null;
           is_all_day?: boolean | null;
@@ -1173,7 +1173,7 @@ export type Database = {
           status?: string | null;
           tags?: string[] | null;
           thumbnail_url?: string | null;
-          ticket_price_btc?: number | null;
+          ticket_price?: number | null;
           timezone?: string | null;
           title?: string;
           updated_at?: string | null;

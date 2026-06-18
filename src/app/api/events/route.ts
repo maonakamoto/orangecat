@@ -115,18 +115,11 @@ export const POST = createEntityPostHandler({
       );
     }
 
-    // Map schema field names to database column names
-    // Schema uses: ticket_price, funding_goal
-    // Database uses: ticket_price_btc, funding_goal_btc
-    if ('ticket_price' in cleaned) {
-      cleaned.ticket_price_btc = cleaned.ticket_price;
-      delete cleaned.ticket_price;
-    }
-    if ('funding_goal' in cleaned) {
-      cleaned.funding_goal_btc = cleaned.funding_goal;
-      delete cleaned.funding_goal;
-    }
-
+    // ticket_price / funding_goal are stored in the entity's chosen `currency`
+    // (NOT BTC) — events are a currency-denominated priced entity, like products
+    // (price) and services (fixed_price). Columns are named neutrally to match
+    // (see docs/architecture/CURRENCY_AND_BITCOIN_ARCHITECTURE.md). No mapping needed:
+    // the schema field name and the DB column name are identical.
     return cleaned;
   },
   defaultFields: {
