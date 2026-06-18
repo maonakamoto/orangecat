@@ -1,9 +1,14 @@
-import { Inter, Space_Grotesk, IBM_Plex_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 
-const inter = Inter({
-  subsets: ['latin'],
+// Self-hosted fonts (src/fonts/*.woff2) — NO build-time fetch from Google Fonts.
+// Removes a non-sovereign external dependency and the ETIMEDOUT build flakiness;
+// builds are now fully deterministic + offline. Inter & Space Grotesk are variable
+// (one file each, all weights); IBM Plex Mono ships the 3 weights actually used.
+const inter = localFont({
+  src: '../fonts/inter-variable.woff2',
   variable: '--font-inter',
   display: 'swap',
+  weight: '100 900',
   fallback: [
     'system-ui',
     '-apple-system',
@@ -13,26 +18,25 @@ const inter = Inter({
     'sans-serif',
   ],
   preload: true,
-  adjustFontFallback: true,
 });
 
-// FleetCrown-aligned display typography (migration commit 7/N).
-// Space Grotesk for display/heading; IBM Plex Mono for code. Body
-// stays Inter for now — applying Space Grotesk as the body face is
-// a separate decision worth its own user-visible commit.
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
+// FleetCrown-aligned display typography: Space Grotesk for display/heading,
+// IBM Plex Mono for code. Body stays Inter.
+const spaceGrotesk = localFont({
+  src: '../fonts/space-grotesk-variable.woff2',
   variable: '--font-heading',
   display: 'swap',
-  weight: ['500', '600', '700'],
+  weight: '300 700',
   preload: true,
-  adjustFontFallback: true,
 });
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
+const ibmPlexMono = localFont({
+  src: [
+    { path: '../fonts/ibm-plex-mono-400.woff2', weight: '400', style: 'normal' },
+    { path: '../fonts/ibm-plex-mono-500.woff2', weight: '500', style: 'normal' },
+    { path: '../fonts/ibm-plex-mono-600.woff2', weight: '600', style: 'normal' },
+  ],
   variable: '--font-mono',
   display: 'swap',
-  weight: ['400', '500', '600'],
   preload: false,
   fallback: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
 });
