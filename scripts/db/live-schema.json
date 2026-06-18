@@ -1072,12 +1072,23 @@
   ],
   "transactions": [
     "id",
-    "funding_page_id",
-    "amount",
-    "transaction_hash",
-    "created_at",
+    "amount_btc",
+    "currency",
+    "from_entity_type",
+    "from_entity_id",
+    "to_entity_type",
+    "to_entity_id",
+    "payment_method",
+    "purpose",
+    "message",
+    "anonymous",
+    "public_visibility",
     "status",
-    "amount_btc"
+    "initiated_at",
+    "confirmed_at",
+    "settled_at",
+    "created_at",
+    "updated_at"
   ],
   "transparency_scores": [
     "id",
