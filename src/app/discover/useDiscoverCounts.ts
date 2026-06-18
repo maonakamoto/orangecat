@@ -102,7 +102,9 @@ export function useDiscoverCounts(): DiscoverCounts {
             supabase
               .from(getTableName('asset'))
               .select('*', { count: 'exact', head: true })
-              .eq('public_visibility', true)
+              // Assets are public when active (status-driven, like products). The
+              // public_visibility flag is created false and never set, so gating on it
+              // hid every asset — see 20260618000006.
               .eq('status', ENTITY_STATUS.ACTIVE)
           ),
           head(

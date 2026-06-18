@@ -121,7 +121,8 @@ export function useDiscoverFinancialData(
         let query = supabase
           .from(getTableName('asset'))
           .select('id, title, description, status, type, created_at')
-          .eq('public_visibility', true)
+          // Assets are public when active (status-driven, like products); the
+          // public_visibility flag is never set true, so it hid every asset (20260618000006).
           .eq('status', ENTITY_STATUS.ACTIVE)
           .order('created_at', { ascending: false })
           .limit(activeTab === 'assets' ? 50 : 12);
