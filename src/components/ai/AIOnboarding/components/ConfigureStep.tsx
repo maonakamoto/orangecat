@@ -51,7 +51,7 @@ export function ConfigureStep({
           >
             <span
               className={cn(
-                'inline-block h-4 w-4 transform rounded-full bg-surface-base dark:bg-fg-primary transition-transform',
+                'inline-block h-4 w-4 transform rounded-full bg-surface-base transition-transform',
                 autoRouterEnabled ? 'translate-x-6' : 'translate-x-1'
               )}
             />

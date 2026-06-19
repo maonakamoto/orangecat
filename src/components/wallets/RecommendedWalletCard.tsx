@@ -77,7 +77,7 @@ export function RecommendedWalletCard({ wallet }: RecommendedWalletCardProps) {
           {wallet.lightning && (
             <Badge
               variant="outline"
-              className="text-xs bg-yellow-50 text-yellow-700 border-yellow-200"
+              className="text-xs bg-bitcoinOrange/10 text-bitcoinOrange border-bitcoinOrange/20"
             >
               <Zap className="w-3 h-3 mr-1" />
               Lightning

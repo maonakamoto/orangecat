@@ -78,7 +78,7 @@ function CapabilityToggleCard({
         >
           <span
             className={cn(
-              'inline-block h-3 w-3 transform rounded-full bg-surface-base dark:bg-fg-primary transition-transform',
+              'inline-block h-3 w-3 transform rounded-full bg-surface-base transition-transform',
               checked ? 'translate-x-5' : 'translate-x-1'
             )}
           />
@@ -135,7 +135,7 @@ export function AIModelPreferences({
           >
             <span
               className={cn(
-                'inline-block h-4 w-4 transform rounded-full bg-surface-base dark:bg-fg-primary transition-transform',
+                'inline-block h-4 w-4 transform rounded-full bg-surface-base transition-transform',
                 preferences.autoRouterEnabled ? 'translate-x-6' : 'translate-x-1'
               )}
             />
