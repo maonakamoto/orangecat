@@ -72,16 +72,23 @@ echo "=== apply pending DB migrations → box ==="
 # migration). Applied files are recorded in public.schema_migrations (one-time
 # backfilled with the 147 pre-existing migrations on 2026-06-18, so only NEW files
 # run). Apply any *.sql not yet recorded, in filename order, BEFORE the boot-test so
-# the schema is ready before the new code runs. Each migration manages its own
-# transaction; ON_ERROR_STOP + abort-on-fail leaves the current live release
-# untouched, and we record a file only after it succeeds (re-runs stay safe because
-# new migrations are written idempotently — IF NOT EXISTS / OR REPLACE).
+# the schema is ready before the new code runs. ON_ERROR_STOP + abort-on-fail leaves
+# the current live release untouched, and we record a file only after it succeeds
+# (re-runs stay safe because new migrations are written idempotently — IF NOT
+# EXISTS / OR REPLACE).
+#
+# `-1` (single-transaction) is CRITICAL: it wraps each migration in BEGIN/COMMIT so a
+# mid-file failure ROLLS BACK every statement. Without it, a migration that drops a
+# view early then fails later (e.g. a stale out-of-order migration referencing a
+# since-renamed column) leaves the schema half-applied — it dropped a live view the
+# app needs but never recreated it (a real prod regression on 2026-06-19). No
+# migration uses CREATE INDEX CONCURRENTLY (verified), so single-txn mode is safe.
 applied="$(ssh "${SSH_OPTS[@]}" "$OC_BOX" "docker exec supabase-db psql -U postgres -tAc 'SELECT filename FROM public.schema_migrations'" 2>/dev/null || true)"
 for mig in supabase/migrations/*.sql; do
   fn="$(basename "$mig")"
   printf '%s\n' "$applied" | grep -qxF "$fn" && continue
   echo "  → applying $fn"
-  if cat "$mig" | ssh "${SSH_OPTS[@]}" "$OC_BOX" "docker exec -i supabase-db psql -U postgres -v ON_ERROR_STOP=1 -q"; then
+  if cat "$mig" | ssh "${SSH_OPTS[@]}" "$OC_BOX" "docker exec -i supabase-db psql -U postgres -1 -v ON_ERROR_STOP=1 -q"; then
     ssh "${SSH_OPTS[@]}" "$OC_BOX" \
       "docker exec supabase-db psql -U postgres -q -c \"INSERT INTO public.schema_migrations(filename) VALUES ('$fn') ON CONFLICT DO NOTHING\"" >/dev/null
   else
