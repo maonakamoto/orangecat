@@ -11,7 +11,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useId } from 'react';
 import Link from 'next/link';
 import { ChevronDown, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -171,6 +171,9 @@ interface HeaderNavDropdownProps {
 function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  // Stable id linking the trigger (aria-controls) to the panel — disclosure pattern.
+  const panelId = useId();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -180,12 +183,22 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
       }
     };
 
+    // Escape closes the panel and returns focus to the trigger (keyboard a11y).
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+        buttonRef.current?.focus();
+      }
+    };
+
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);
 
@@ -195,7 +208,11 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
+        ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+        aria-controls={panelId}
         className={cn(
           'px-4 py-2.5 min-h-11 text-sm font-medium rounded-md transition-colors duration-150 relative flex items-center gap-1',
           hasActiveChild
@@ -204,12 +221,19 @@ function HeaderNavDropdown({ item, isActive }: HeaderNavDropdownProps) {
         )}
       >
         {item.name}
-        <ChevronDown className={cn('w-4 h-4 transition-transform', isOpen && 'rotate-180')} />
+        <ChevronDown
+          aria-hidden="true"
+          className={cn('w-4 h-4 transition-transform', isOpen && 'rotate-180')}
+        />
         {hasActiveChild && <div className="absolute inset-x-3 bottom-0 h-px bg-fg-primary" />}
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-56 bg-surface-base rounded-lg shadow-sm border border-default py-2 z-50">
+        <div
+          id={panelId}
+          aria-label={item.name}
+          className="absolute top-full left-0 mt-2 w-56 bg-surface-base rounded-lg shadow-sm border border-default py-2 z-50"
+        >
           {item.children?.map((child, _index) => {
             // Skip children without href
             if (!child.href) {
