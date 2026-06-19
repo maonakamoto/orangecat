@@ -134,7 +134,10 @@ export function Header({
 
             {/* Notifications - Always visible for authenticated users regardless of route */}
             {authStatus.authenticated && (
-              <NotificationsButton onClick={() => setShowNotifications(!showNotifications)} />
+              <NotificationsButton
+                onClick={() => setShowNotifications(!showNotifications)}
+                isOpen={showNotifications}
+              />
             )}
 
             {/* Theme Toggle */}
