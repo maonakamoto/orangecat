@@ -19,6 +19,11 @@ export type {
 
 // Services
 export { initiatePayment, checkPaymentStatus, buyerConfirmPayment } from './paymentFlowService';
-export { resolveSellerWallet, getSellerUserId } from './walletResolutionService';
+export {
+  resolveSellerWallet,
+  resolveSellerReceiveInfo,
+  getSellerUserId,
+} from './walletResolutionService';
+export type { SellerReceiveInfo } from './walletResolutionService';
 export { generateInvoice } from './invoiceGenerationService';
 export { encrypt, decrypt } from './encryptionService';

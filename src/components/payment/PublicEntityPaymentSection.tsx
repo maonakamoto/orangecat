@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSellerPaymentMethods } from '@/hooks/useSellerPaymentMethods';
 import { PaymentButton } from './PaymentButton';
 import { SellerWalletBanner } from './SellerWalletBanner';
+import { OwnerCollectPanel } from './OwnerCollectPanel';
 import type { EntityType } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
 
@@ -24,8 +25,10 @@ interface PublicEntityPaymentSectionProps {
   entityType: EntityType;
   entityId: string;
   entityTitle: string;
-  /** Price in BTC (for fixed_price entities) */
-  priceBtc?: number;
+  /** Price amount in the entity's own currency (for fixed_price entities) */
+  priceAmount?: number;
+  /** Currency the price is denominated in (e.g. 'CHF'); 'BTC'/omitted → BTC */
+  priceCurrency?: string;
   /** Seller's profile/actor ID for wallet lookup (null if no seller found) */
   sellerProfileId: string | null;
   /** Seller's auth.users ID for self-purchase detection (null if no seller found) */
@@ -38,7 +41,8 @@ export function PublicEntityPaymentSection({
   entityType,
   entityId,
   entityTitle,
-  priceBtc,
+  priceAmount,
+  priceCurrency,
   sellerProfileId,
   sellerUserId,
   signInRedirect,
@@ -89,10 +93,23 @@ export function PublicEntityPaymentSection({
     );
   }
 
-  // Logged in, IS the seller — show wallet banner
+  // Logged in, IS the seller — show the owner-facing collect panel.
+  // Prompts to connect a wallet when none is set; otherwise shows which address
+  // receives funds plus share/QR so the owner can get paid.
   const isOwner = !!sellerUserId && user?.id === sellerUserId;
   if (isOwner) {
-    return <SellerWalletBanner isOwner={true} hasWallet={hasWallet} />;
+    if (!hasWallet) {
+      return <SellerWalletBanner isOwner={true} hasWallet={hasWallet} />;
+    }
+    return (
+      <OwnerCollectPanel
+        entityType={entityType}
+        entityId={entityId}
+        entityTitle={entityTitle}
+        priceAmount={priceAmount}
+        priceCurrency={priceCurrency}
+      />
+    );
   }
 
   // Logged in, NOT the seller — show payment button
@@ -103,7 +120,8 @@ export function PublicEntityPaymentSection({
           entityType={entityType}
           entityId={entityId}
           entityTitle={entityTitle}
-          priceBtc={priceBtc}
+          priceBtc={priceAmount}
+          priceCurrency={priceCurrency}
           sellerProfileId={sellerProfileId ?? undefined}
           sellerHasWallet={hasWallet}
           className="w-full min-h-11"

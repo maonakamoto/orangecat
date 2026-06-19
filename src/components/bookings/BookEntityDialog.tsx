@@ -34,7 +34,6 @@ import {
 import Button from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
-import { formatCurrency } from '@/services/currency';
 
 export interface BookEntityDialogProps {
   isOpen: boolean;
@@ -75,11 +74,7 @@ export function BookEntityDialog({
   priceCurrency,
   durationMinutes,
 }: BookEntityDialogProps) {
-  const { formatAmountBtc } = useDisplayCurrency();
-  const renderPrice = (amount: number) =>
-    priceCurrency && priceCurrency.toUpperCase() !== 'BTC'
-      ? formatCurrency(amount, priceCurrency)
-      : formatAmountBtc(amount);
+  const { formatPrice } = useDisplayCurrency();
   const [startsAtLocal, setStartsAtLocal] = useState('');
   const [endsAtLocal, setEndsAtLocal] = useState('');
   const [notes, setNotes] = useState('');
@@ -162,7 +157,10 @@ export function BookEntityDialog({
             Send a booking request to the provider. They&apos;ll confirm or reject.
             {typeof priceBtc === 'number' && priceBtc > 0 && (
               <span className="mt-1 block text-sm">
-                Price: <span className="font-medium text-fg-primary">{renderPrice(priceBtc)}</span>
+                Price:{' '}
+                <span className="font-medium text-fg-primary">
+                  {formatPrice(priceBtc, priceCurrency)}
+                </span>
                 {hasDuration && ` · ${durationMinutes} min`}
               </span>
             )}

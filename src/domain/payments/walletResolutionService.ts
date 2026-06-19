@@ -35,6 +35,16 @@ export async function resolveSellerWallet(
   // Cast to untyped client — queries use dynamic column names from entity registry.
   const admin = getAdminClient() as unknown as SupabaseClient;
 
+  // Step 0: Entity-specific wallet override. If the owner explicitly tied a
+  // wallet to THIS entity (entity_wallets), that wallet receives the funds —
+  // regardless of which wallet is their profile default. Owners may have
+  // multiple addresses and route different entities to different ones. Falls
+  // through to the owner's primary wallet (Step 1) when no link exists.
+  const linked = await resolveLinkedEntityWallet(admin, entityType, entityId);
+  if (linked) {
+    return linked;
+  }
+
   // Step 1: Find the entity's owner (seller)
   const meta = getEntityMetadata(entityType);
   const { data: entity, error: entityError } = await admin
@@ -86,6 +96,41 @@ export async function resolveSellerWallet(
 
   // profile_id or user_id maps directly to auth user id
   return resolveUserWallet(admin, ownerId);
+}
+
+/** Display-safe receiving info for an entity (no secrets — never the NWC URI). */
+export interface SellerReceiveInfo {
+  method: ResolvedWallet['method'];
+  /**
+   * Receiving address to show: the Lightning address or on-chain address.
+   * Null for NWC (a connection has no static address to display).
+   */
+  address: string | null;
+}
+
+/**
+ * Resolve display-safe receiving info for an entity, reusing the same wallet
+ * resolution the payment flow uses (SSOT) so what the owner sees matches what
+ * buyers will actually pay to. Returns null when no wallet is connected.
+ */
+export async function resolveSellerReceiveInfo(
+  supabase: SupabaseClient,
+  entityType: EntityType,
+  entityId: string
+): Promise<SellerReceiveInfo | null> {
+  const resolved = await resolveSellerWallet(supabase, entityType, entityId);
+  if (!resolved) {
+    return null;
+  }
+
+  const address =
+    resolved.method === 'lightning_address'
+      ? (resolved.lightning_address ?? null)
+      : resolved.method === 'onchain'
+        ? (resolved.onchain_address ?? null)
+        : null;
+
+  return { method: resolved.method, address };
 }
 
 /**
@@ -154,9 +199,90 @@ export async function getSellerUserId(
 // INTERNAL HELPERS
 // =====================================================================
 
+/** A wallet row shaped for payment-method selection. */
+interface WalletRow {
+  id: string;
+  nwc_connection_uri?: string | null;
+  lightning_address?: string | null;
+  address_or_xpub?: string | null;
+}
+
+/**
+ * Pick the best payment method from a SINGLE wallet row.
+ * Priority: NWC > Lightning Address > On-chain. Returns null if the wallet has
+ * no usable payment detail (or its NWC URI fails to decrypt).
+ */
+function pickMethodFromWallet(wallet: WalletRow): ResolvedWallet | null {
+  if (wallet.nwc_connection_uri) {
+    try {
+      return { method: 'nwc', wallet_id: wallet.id, nwc_uri: decrypt(wallet.nwc_connection_uri) };
+    } catch (e) {
+      logger.error('Failed to decrypt NWC URI', { walletId: wallet.id, error: e });
+      // Fall through to next method
+    }
+  }
+
+  if (wallet.lightning_address) {
+    return {
+      method: 'lightning_address',
+      wallet_id: wallet.id,
+      lightning_address: wallet.lightning_address,
+    };
+  }
+
+  if (wallet.address_or_xpub) {
+    return { method: 'onchain', wallet_id: wallet.id, onchain_address: wallet.address_or_xpub };
+  }
+
+  return null;
+}
+
+/**
+ * Resolve the wallet explicitly linked to a specific entity via entity_wallets.
+ * is_primary-first so the choice is deterministic when several are linked.
+ * Returns null when no active linked wallet yields a usable payment method.
+ */
+async function resolveLinkedEntityWallet(
+  supabase: SupabaseClient,
+  entityType: EntityType,
+  entityId: string
+): Promise<ResolvedWallet | null> {
+  const { data: links } = await supabase
+    .from(DATABASE_TABLES.ENTITY_WALLETS)
+    .select('wallet_id, is_primary')
+    .eq('entity_type', entityType)
+    .eq('entity_id', entityId)
+    .order('is_primary', { ascending: false });
+
+  if (!links || links.length === 0) {
+    return null;
+  }
+
+  for (const link of links as Array<{ wallet_id: string }>) {
+    const { data: wallet } = await supabase
+      .from(DATABASE_TABLES.WALLETS)
+      .select('id, nwc_connection_uri, lightning_address, address_or_xpub')
+      .eq('id', link.wallet_id)
+      .eq('is_active', true)
+      .single();
+
+    if (!wallet) {
+      continue;
+    }
+
+    const resolved = pickMethodFromWallet(wallet as WalletRow);
+    if (resolved) {
+      return resolved;
+    }
+  }
+
+  return null;
+}
+
 /**
  * Resolve best wallet for a user from the wallets table.
- * Priority: NWC > Lightning Address > On-chain
+ * Priority across wallets: a wallet with NWC > one with a Lightning Address >
+ * one with an on-chain address. Primary wallet wins ties (ordered first).
  */
 async function resolveUserWallet(
   supabase: SupabaseClient,

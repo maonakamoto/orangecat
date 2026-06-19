@@ -69,6 +69,13 @@ export interface EntityDetailConfig {
   renderHeaderExtra?: (entity: EntityData) => ReactNode;
   /** Entity-specific detail cards below description */
   renderDetails?: (entity: EntityData) => ReactNode;
+  /**
+   * Resolve the entity's price for the payment section, in its OWN currency
+   * (NOT BTC — there is no price_btc column). Returns null when the entity has
+   * no fixed price (e.g. contribution entities). The buyer is charged the
+   * BTC-converted amount server-side; this only drives display.
+   */
+  getPrice?: (entity: EntityData) => { amount: number; currency: string } | null;
   /** Extra sidebar cards rendered after EntityShare (e.g., Quick Stats, CTAs) */
   renderSidebarExtra?: (entity: EntityData) => ReactNode;
   /** Select columns for metadata query (defaults to 'title, description, price_btc') */
@@ -235,19 +242,24 @@ export default async function PublicEntityDetailPage({
 
               {config.renderSidebarExtra?.(entity)}
 
-              {config.showPaymentSection !== false && (
-                <div id="pay">
-                  <PublicEntityPaymentSection
-                    entityType={config.entityType}
-                    entityId={id}
-                    entityTitle={entity.title}
-                    priceBtc={entity.price_btc ? Number(entity.price_btc) : undefined}
-                    sellerProfileId={owner?.id ?? null}
-                    sellerUserId={owner?.user_id ?? null}
-                    signInRedirect={viewRoute}
-                  />
-                </div>
-              )}
+              {config.showPaymentSection !== false &&
+                (() => {
+                  const price = config.getPrice?.(entity) ?? null;
+                  return (
+                    <div id="pay">
+                      <PublicEntityPaymentSection
+                        entityType={config.entityType}
+                        entityId={id}
+                        entityTitle={entity.title}
+                        priceAmount={price && price.amount > 0 ? price.amount : undefined}
+                        priceCurrency={price?.currency}
+                        sellerProfileId={owner?.id ?? null}
+                        sellerUserId={owner?.user_id ?? null}
+                        signInRedirect={viewRoute}
+                      />
+                    </div>
+                  );
+                })()}
 
               <PublicEntityTimestamps
                 createdAt={entity.created_at}

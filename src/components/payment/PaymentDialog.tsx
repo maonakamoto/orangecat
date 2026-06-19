@@ -32,8 +32,10 @@ interface PaymentDialogProps {
   entityId: string;
   /** Entity title for display */
   entityTitle: string;
-  /** Price in BTC (for fixed_price entities) */
+  /** Price amount in the entity's own currency (for fixed_price entities) */
   priceBtc?: number;
+  /** Currency the price is denominated in (e.g. 'CHF'); 'BTC'/omitted → BTC */
+  priceCurrency?: string;
   /** Seller's profile ID (for checking wallet availability) */
   sellerProfileId?: string;
   /** Seed the contribution amount picker (e.g. wishlist tier target) */
@@ -49,11 +51,12 @@ export function PaymentDialog({
   entityId,
   entityTitle,
   priceBtc,
+  priceCurrency,
   defaultAmount,
 }: PaymentDialogProps) {
   const meta = getEntityMetadata(entityType);
   const isContribution = meta.paymentPattern === 'contribution';
-  const { formatAmountBtc } = useDisplayCurrency();
+  const { formatAmountBtc, formatPrice } = useDisplayCurrency();
 
   const { state, initiate, confirmPaid, reset, isLoading } = usePaymentFlow();
 
@@ -89,7 +92,14 @@ export function PaymentDialog({
     });
   };
 
-  const amountBtc = isContribution ? contributionAmount : (priceBtc ?? 0);
+  // Fixed-price entities are priced in their own currency (priceBtc carries that
+  // amount, priceCurrency the unit); contributions are chosen in BTC. The server
+  // re-derives the BTC charge authoritatively — this only drives display + gating.
+  const fixedPrice = priceBtc ?? 0;
+  const hasValidAmount = isContribution ? contributionAmount > 0 : fixedPrice > 0;
+  const priceLabel = isContribution
+    ? formatAmountBtc(contributionAmount)
+    : formatPrice(fixedPrice, priceCurrency);
 
   // Prevent accidental dismissal while a payment is in flight
   const isPaymentActive = state.phase === 'initiating' || state.phase === 'awaiting_payment';
@@ -108,7 +118,7 @@ export function PaymentDialog({
           <DialogDescription>
             {isContribution
               ? `Choose an amount to support this ${meta.name.toLowerCase()}`
-              : `Pay ${formatAmountBtc(amountBtc)}`}
+              : `Pay ${priceLabel}`}
           </DialogDescription>
         </DialogHeader>
 
@@ -148,12 +158,10 @@ export function PaymentDialog({
 
               <Button
                 onClick={handleInitiate}
-                disabled={isLoading || amountBtc <= 0}
+                disabled={isLoading || !hasValidAmount}
                 className="w-full min-h-11"
               >
-                {isContribution
-                  ? `Support with ${formatAmountBtc(amountBtc)}`
-                  : `Pay ${formatAmountBtc(amountBtc)}`}
+                {isContribution ? `Support with ${priceLabel}` : `Pay ${priceLabel}`}
               </Button>
             </>
           )}

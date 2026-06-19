@@ -319,20 +319,24 @@ async function resolveAmount(
   // We convert via the same rate path the UI uses to DISPLAY prices, so the
   // amount charged matches what the buyer was shown.
   const admin = getAdminClient() as unknown as SupabaseClient;
-  const priceColumn = meta.tableName === 'user_services' ? 'fixed_price' : 'price';
+  // Price column is declared per entity in the registry (SSOT). Defaults to
+  // `price` for entities that don't override it (e.g. products).
+  const priceColumn = meta.priceColumn ?? 'price';
   const { data: entity } = await admin
     .from(meta.tableName)
     .select(`${priceColumn}, currency`)
     .eq('id', entityId)
     .single();
 
-  const rawPrice = entity ? (entity as Record<string, unknown>)[priceColumn] : null;
+  // Dynamic select column widens the PostgREST result type — read via unknown.
+  const row = entity as unknown as Record<string, unknown> | null;
+  const rawPrice = row ? row[priceColumn] : null;
   const priceNum = typeof rawPrice === 'number' ? rawPrice : Number(rawPrice);
   if (!priceNum || priceNum <= 0) {
     throw new Error('Entity has no price set');
   }
 
-  const currency = String((entity as Record<string, unknown>).currency || 'BTC').toUpperCase();
+  const currency = String(row?.currency || 'BTC').toUpperCase();
   if (currency === 'BTC') {
     return priceNum;
   }

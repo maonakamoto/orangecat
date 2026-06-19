@@ -116,6 +116,13 @@ export interface EntityMetadata {
   createPriority: number;
   /** How this entity is paid for: fixed_price (buy), contribution (support), none (no payment) */
   paymentPattern: PaymentPattern;
+  /**
+   * SSOT for the column holding a fixed_price entity's price (in its own
+   * `currency`, NOT BTC). Read by payment-amount resolution and price display so
+   * the column isn't hardcoded per call site. Only meaningful for
+   * paymentPattern === 'fixed_price'; omit for contribution/none entities.
+   */
+  priceColumn?: string;
 }
 
 /**
@@ -184,6 +191,7 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     category: 'business',
     createPriority: 2,
     paymentPattern: 'fixed_price',
+    priceColumn: 'price',
   },
   service: {
     type: 'service',
@@ -203,6 +211,7 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     category: 'business',
     createPriority: 3,
     paymentPattern: 'fixed_price',
+    priceColumn: 'fixed_price',
   },
   cause: {
     type: 'cause',

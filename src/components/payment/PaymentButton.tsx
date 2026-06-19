@@ -18,8 +18,10 @@ interface PaymentButtonProps {
   entityType: EntityType;
   entityId: string;
   entityTitle: string;
-  /** Price in BTC (for fixed_price entities) */
+  /** Price amount in the entity's own currency (for fixed_price entities) */
   priceBtc?: number;
+  /** Currency the price is denominated in (e.g. 'CHF'); 'BTC'/omitted → BTC */
+  priceCurrency?: string;
   /** Seller's profile ID */
   sellerProfileId?: string;
   /** Whether the seller has a wallet connected */
@@ -33,13 +35,14 @@ export function PaymentButton({
   entityId,
   entityTitle,
   priceBtc,
+  priceCurrency,
   sellerProfileId,
   sellerHasWallet = true,
   className,
 }: PaymentButtonProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const meta = getEntityMetadata(entityType);
-  const { formatAmountBtc } = useDisplayCurrency();
+  const { formatPrice } = useDisplayCurrency();
 
   // Don't render for entities that aren't purchasable
   if (meta.paymentPattern === 'none') {
@@ -61,7 +64,7 @@ export function PaymentButton({
         <Wallet className="mr-2 h-4 w-4" />
         {disabled ? 'No wallet connected' : buttonText}
         {!isContribution && priceBtc && !disabled && (
-          <span className="ml-1 opacity-75">({formatAmountBtc(priceBtc)})</span>
+          <span className="ml-1 opacity-75">({formatPrice(priceBtc, priceCurrency)})</span>
         )}
       </Button>
 
@@ -72,6 +75,7 @@ export function PaymentButton({
         entityId={entityId}
         entityTitle={entityTitle}
         priceBtc={priceBtc}
+        priceCurrency={priceCurrency}
         sellerProfileId={sellerProfileId}
       />
     </>

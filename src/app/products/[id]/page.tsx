@@ -26,6 +26,10 @@ const config: EntityDetailConfig = {
   ownerLabel: 'Seller',
   createdLabel: 'Listed',
   getViewRoute: id => ROUTES.PRODUCTS.VIEW(id),
+  getPrice: entity => {
+    const { amount, currency } = getPrice(entity);
+    return Number.isFinite(amount) && amount > 0 ? { amount, currency } : null;
+  },
   getJsonLdExtra: entity => {
     const { amount, currency } = getPrice(entity);
     return amount > 0

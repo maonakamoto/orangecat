@@ -36,6 +36,10 @@ const config: EntityDetailConfig = {
   createdLabel: 'Listed',
   descriptionTitle: 'About this Service',
   getViewRoute: id => ROUTES.SERVICES.VIEW(id),
+  getPrice: entity => {
+    const { amount, currency } = getServicePrice(entity);
+    return amount > 0 ? { amount, currency } : null;
+  },
   getJsonLdExtra: entity => {
     const { amount, currency } = getServicePrice(entity);
     return {
