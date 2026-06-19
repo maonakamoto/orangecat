@@ -17,7 +17,14 @@ type TransferResult =
   | { ok: true; transaction: Record<string, unknown>; wallets: Wallet[] | null; message: string }
   | {
       ok: false;
-      code: 'NOT_FOUND' | 'FORBIDDEN' | 'INSUFFICIENT_BALANCE' | 'TX_ERROR' | 'UPDATE_ERROR';
+      code:
+        | 'INVALID_AMOUNT'
+        | 'SAME_WALLET'
+        | 'NOT_FOUND'
+        | 'FORBIDDEN'
+        | 'INSUFFICIENT_BALANCE'
+        | 'TX_ERROR'
+        | 'UPDATE_ERROR';
       message: string;
     };
 
@@ -29,6 +36,17 @@ export async function executeWalletTransfer(
   amountBtc: number,
   note?: string
 ): Promise<TransferResult> {
+  // Defense-in-depth: the API boundary validates these, but this service is also
+  // callable from CLI/jobs. A non-positive amount or a same-wallet transfer must
+  // never reach the balance-move RPC — a negative amount would flow funds the
+  // wrong direction (it passes the `balance < amount` check).
+  if (!Number.isFinite(amountBtc) || amountBtc <= 0) {
+    return { ok: false, code: 'INVALID_AMOUNT', message: 'Transfer amount must be positive' };
+  }
+  if (fromWalletId === toWalletId) {
+    return { ok: false, code: 'SAME_WALLET', message: 'Cannot transfer to the same wallet' };
+  }
+
   // Fetch both wallets and verify they exist
   const { data: walletsData, error: walletsError } = await (
     supabase.from(DATABASE_TABLES.WALLETS) as AnyClient

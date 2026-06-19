@@ -45,6 +45,9 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
 
     if (!result.ok) {
       switch (result.code) {
+        case 'INVALID_AMOUNT':
+        case 'SAME_WALLET':
+          return apiBadRequest(result.message);
         case 'NOT_FOUND':
           return apiNotFound(result.message);
         case 'FORBIDDEN':
