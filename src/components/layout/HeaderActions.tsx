@@ -35,7 +35,14 @@ export function MessagesButton() {
 /**
  * Notifications button with unread count
  */
-export function NotificationsButton({ onClick }: { onClick: () => void }) {
+export function NotificationsButton({
+  onClick,
+  isOpen = false,
+}: {
+  onClick: () => void;
+  /** Whether the notification center it controls is currently open. */
+  isOpen?: boolean;
+}) {
   const { count: unreadCount } = useUnreadNotifications();
 
   return (
@@ -44,6 +51,9 @@ export function NotificationsButton({ onClick }: { onClick: () => void }) {
       label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ''}`}
       onClick={onClick}
       badgeCount={unreadCount}
+      active={isOpen}
+      aria-haspopup="dialog"
+      aria-expanded={isOpen}
     />
   );
 }
