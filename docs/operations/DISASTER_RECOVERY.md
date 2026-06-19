@@ -1,11 +1,13 @@
 # OrangeCat — Disaster Recovery Runbook
 
 **Scenario:** `bitbaum` (the Hetzner box) is lost or corrupted and OrangeCat must be
-restored onto a fresh box. Last verified topology: 2026-06-18.
+restored onto a fresh box. Last verified topology: 2026-06-19.
 
-> ⚠️ Restore is only as good as the backups. See "Backup reality" below — as of
-> 2026-06-18 backups are **local-only** (no off-site) and the **stack configs/secrets
-> are not yet backed up**. Both are gaps to close before this runbook is fully reliable.
+> ✅ As of 2026-06-19 the two historical gaps are CLOSED: backups are pushed **off-site**
+> (encrypted, restic → Backblaze B2 `b2:orangecat-restic:bitbaum-pg`) **and** the stack
+> **configs/secrets are now in the backup set** (`/opt/backups/config` → same B2 snapshot:
+> Supabase `.env`, app `.env`, Caddyfile, all `docker-compose*.yml`). A from-scratch restore
+> is now possible from the off-site backup alone.
 
 ---
 
@@ -37,14 +39,23 @@ There is **no DB named `orangecat`** — OrangeCat lives in the Supabase contain
 
 ## Restore procedure (fresh box)
 
-### 0. Prerequisites you need in hand
+### 0. Prerequisites — pull everything from the off-site (B2) backup
 
-- The latest `supabase-postgres-*.dump` (OrangeCat data) and `globals-*.sql.gz`.
-- The Supabase stack `.env` (JWT_SECRET, ANON_KEY, SERVICE_ROLE_KEY, DB password) **and**
-  the app `/opt/orangecat/app/.env`. ⚠️ **If these secrets are lost, the restored Supabase
-  generates NEW keys and the app's keys won't match → auth breaks.** Keep them with the
-  backups (encrypted). _(This config backup is the open gap — see below.)_
-- The `Caddyfile`.
+Everything needed is in the encrypted restic repo `b2:orangecat-restic:bitbaum-pg`. You need
+the `restic.env` values (RESTIC_PASSWORD + the B2 key) — keep a copy somewhere OUTSIDE the box
+(password manager). With those, restore the whole set to a scratch dir:
+
+```
+# On any machine with restic + the restic.env values exported:
+restic restore latest --target /restore        # pulls /opt/backups/{pg,config}
+ls /restore/opt/backups/pg                      # *.dump + globals-*.sql.gz
+ls /restore/opt/backups/config                  # supabase.env, orangecat-app.env, Caddyfile, docker-compose*.yml
+```
+
+- DB: latest `supabase-postgres-*.dump` (OrangeCat data) + `globals-*.sql.gz` (under `pg/`).
+- Secrets/config (under `config/`): `supabase.env`, `orangecat-app.env`, `Caddyfile`, and all
+  `docker-compose*.yml`. ⚠️ **These secrets MUST be the originals** — if lost, a fresh Supabase
+  mints NEW keys that won't match the restored app → auth breaks. (Now backed up; see below.)
 
 ### 1. Provision + base
 
@@ -93,23 +104,27 @@ Smoke-test: load a profile, discover, log in.
 
 ---
 
-## Backup reality & gaps (close these to make DR real)
+## Backup reality & status
 
-1. **Off-site** — backups are LOCAL on the box (a disk loss loses them too). Free fix:
-   Backblaze B2 10 GB free tier + restic (`/opt/backups/restic.env`). 1.5 MB fits trivially.
-2. **Config/secret backup** — only DB dumps are backed up; the Supabase `.env` (JWT/service
-   keys), app `.env`, Caddyfile, and compose are **not**. Add them (encrypted) to the backup
-   set, or step 0/2/4 above can't be completed from backups alone.
-3. **Versioned source** — `pg-backup.sh` lives in fleetcrown's `scripts/hetzner/`; the
-   container-dump fix must be mirrored there or a reinstall reverts it.
+1. ✅ **Off-site** — restic → Backblaze B2 (`b2:orangecat-restic:bitbaum-pg`), nightly, encrypted.
+2. ✅ **Config/secret backup** (closed 2026-06-19) — `pg-backup.sh` now stages the Supabase `.env`,
+   app `.env`, Caddyfile and all `docker-compose*.yml` into `/opt/backups/config` (600 root) and
+   restic pushes it in the same snapshot. **Restore mapping** (where each staged file goes back):
+   `supabase.env → /opt/supabase/docker/.env`, `orangecat-app.env → /opt/orangecat/app/.env`,
+   `Caddyfile → /etc/caddy/Caddyfile`, `docker-compose*.yml → /opt/supabase/docker/`.
+3. ⏳ **Versioned source (still open)** — `pg-backup.sh` lives in fleetcrown's `scripts/hetzner/`;
+   BOTH the container-dump fix AND this config-backup block are box-local edits that a fleetcrown
+   `install-backups.sh` reinstall would revert. Mirror them into that installer (cross-project).
 
 ## Quick reference
 
 ```
 # Inspect OrangeCat data (ALWAYS the container, not sudo -u postgres):
 ssh root@167.233.22.31 "docker exec supabase-db psql -U postgres -c '\dt'"
-# Latest OrangeCat backup:
+# Latest OrangeCat backup (local):
 ssh root@167.233.22.31 "ls -lt /opt/backups/pg/supabase-postgres-*.dump | head -1"
-# Run a backup now:
+# Run a backup now (DB dumps + config/secrets → B2):
 ssh root@167.233.22.31 "sudo /opt/backups/pg-backup.sh"
+# Verify the off-site snapshot includes configs:
+ssh root@167.233.22.31 "set -a; . /opt/backups/restic.env; set +a; restic snapshots --latest 1; restic ls latest | grep /opt/backups/config/"
 ```
