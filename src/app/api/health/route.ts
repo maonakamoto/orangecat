@@ -1,11 +1,12 @@
 import { apiSuccess, apiServiceUnavailable } from '@/lib/api/standardResponse';
 import { checkHealth } from '@/lib/health';
+import { getHostMetrics } from '@/lib/host-metrics';
 
 const CACHE = 'public, s-maxage=10, stale-while-revalidate=30';
 
 // GET /api/health - lightweight liveness/readiness endpoint
 export async function GET() {
-  const report = await checkHealth();
+  const [report, host] = await Promise.all([checkHealth(), getHostMetrics()]);
   const healthy = report.overall === 'operational';
 
   const body = {
@@ -14,6 +15,8 @@ export async function GET() {
     services: Object.fromEntries(
       report.services.map(s => [s.name.toLowerCase().replace(' ', '_'), s.status])
     ),
+    // Box resource pressure — surfaced for the off-box uptime monitor to alert on.
+    host,
   };
 
   const response = healthy

@@ -112,6 +112,12 @@ Smoke-test: load a profile, discover, log in.
    restic pushes it in the same snapshot. **Restore mapping** (where each staged file goes back):
    `supabase.env → /opt/supabase/docker/.env`, `orangecat-app.env → /opt/orangecat/app/.env`,
    `Caddyfile → /etc/caddy/Caddyfile`, `docker-compose*.yml → /opt/supabase/docker/`.
+   - ✅ **Restore drill 2026-06-19** — pulled the latest snapshot back DOWN from B2
+     (`restic restore latest`), confirmed configs intact + the OrangeCat dump valid (504 entries),
+     and `pg_restore`d it into a throwaway DB: real data survived (profiles 45, projects 5,
+     timeline_events 1359, user_products 6). Only benign noise (Supabase Vault `secrets` +
+     `log_min_messages` need the superuser role → restore globals first, as step 3 already does).
+     Not yet drilled onto a _fresh box_ (needs a throwaway Hetzner box).
 3. ⏳ **Versioned source (still open)** — `pg-backup.sh` lives in fleetcrown's `scripts/hetzner/`;
    BOTH the container-dump fix AND this config-backup block are box-local edits that a fleetcrown
    `install-backups.sh` reinstall would revert. Mirror them into that installer (cross-project).

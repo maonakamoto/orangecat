@@ -43,6 +43,11 @@ jobs:
           if [ "$fail" = 0 ] && ! grep -q '"status":"healthy"' /tmp/body 2>/dev/null; then
             echo "DOWN: health endpoint not 'healthy'"; fail=1
           fi
+          # Box disk pressure — read from the health host metrics while /tmp/body is
+          # still the health response (the homepage check below overwrites it).
+          disk=$(jq -r '.data.host.disk_used_pct // empty' /tmp/body 2>/dev/null || true)
+          echo "disk=$disk" >> "$GITHUB_OUTPUT"
+          echo "Box disk used: ${disk:-unknown}%"
           check "https://orangecat.ch/" || fail=1
           echo "down=$fail" >> "$GITHUB_OUTPUT"
 
@@ -67,5 +72,31 @@ jobs:
               core.setFailed('Site is DOWN');
             } else if (open) {
               await github.rest.issues.createComment({ owner, repo, issue_number: open.number, body: `✅ Recovered at ${now} — closing.` });
+              await github.rest.issues.update({ owner, repo, issue_number: open.number, state: 'closed' });
+            }
+
+      # Separate, non-fatal alert: the single box is the whole failure domain, so a
+      # silently-filling disk = a future hard outage. Warn early (≥85%), auto-resolve below.
+      - name: Disk-pressure alert / resolve
+        if: ${{ steps.probe.outputs.disk != '' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const disk = parseInt('${{ steps.probe.outputs.disk }}', 10);
+            const THRESHOLD = 85;
+            const { owner, repo } = context.repo;
+            const open = (await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', labels: 'disk-pressure', per_page: 1,
+            })).data[0];
+            const now = new Date().toISOString();
+            if (Number.isFinite(disk) && disk >= THRESHOLD) {
+              const body = `bitbaum root disk at **${disk}%** (≥${THRESHOLD}%) as of ${now}. Free space before it fills — old backups in /opt/backups/pg, docker prune, logs.`;
+              if (open) {
+                await github.rest.issues.createComment({ owner, repo, issue_number: open.number, body: `Still ${disk}% at ${now}.` });
+              } else {
+                await github.rest.issues.create({ owner, repo, title: `🟠 bitbaum disk ${disk}%`, body, labels: ['disk-pressure'] });
+              }
+            } else if (open) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: open.number, body: `✅ Disk back to ${disk}% at ${now} — closing.` });
               await github.rest.issues.update({ owner, repo, issue_number: open.number, state: 'closed' });
             }
