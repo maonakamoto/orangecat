@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
@@ -53,7 +53,11 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [offset, setOffset] = useState(0);
+  // Pagination cursor. A ref, not state: it is only read inside fetchNotifications
+  // and must NOT be a dependency of it — otherwise advancing the cursor recreates
+  // fetchNotifications, which is an effect dependency, re-running the load effect
+  // and double-fetching page 1 on every mount / filter change.
+  const offsetRef = useRef(0);
   const [total, setTotal] = useState(0);
 
   const fetchNotifications = useCallback(
@@ -66,7 +70,7 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
         setIsLoading(true);
         setError(null);
 
-        const currentOffset = reset ? 0 : offset;
+        const currentOffset = reset ? 0 : offsetRef.current;
         const params = new URLSearchParams({
           limit: limit.toString(),
           offset: currentOffset.toString(),
@@ -86,10 +90,10 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
 
         if (reset) {
           setNotifications(data.data.notifications);
-          setOffset(limit);
+          offsetRef.current = limit;
         } else {
           setNotifications(prev => [...prev, ...data.data.notifications]);
-          setOffset(prev => prev + limit);
+          offsetRef.current = currentOffset + limit;
         }
         setTotal(data.data.total);
       } catch (err) {
@@ -98,7 +102,7 @@ export function useNotifications(options: UseNotificationsOptions = {}) {
         setIsLoading(false);
       }
     },
-    [user, offset, limit, filter]
+    [user, limit, filter]
   );
 
   const fetchUnreadCount = useCallback(async () => {
