@@ -1,0 +1,90 @@
+/**
+ * handlePaymentConfirmed (via the on-chain confirmed path of checkPaymentStatus).
+ *
+ * On a verified payment we must mark it PAID and advance the order — but a
+ * failed order update must NOT throw (the buyer's payment really succeeded and
+ * the terminal-status short-circuit means a retry won't re-run this). It must,
+ * however, be logged loudly for reconciliation rather than failing silently.
+ */
+
+import { checkPaymentStatus } from '@/domain/payments/paymentFlowService';
+import { STATUS } from '@/config/database-constants';
+import { logger } from '@/utils/logger';
+import { checkOnchainPaymentStatus } from '@/domain/payments/paymentStatusService';
+
+jest.mock('@/utils/logger', () => ({
+  logger: { warn: jest.fn(), error: jest.fn(), info: jest.fn(), debug: jest.fn() },
+}));
+jest.mock('@/lib/email/send-seller-notification', () => ({
+  sendSellerPaymentNotification: jest.fn().mockResolvedValue(undefined),
+}));
+jest.mock('@/services/notifications/dispatcher', () => ({
+  NotificationDispatcher: { dispatch: jest.fn().mockResolvedValue(undefined) },
+}));
+jest.mock('@/domain/payments/paymentStatusService', () => ({
+  checkNWCPaymentStatus: jest.fn(),
+  checkOnchainPaymentStatus: jest.fn(),
+}));
+
+const errorMock = logger.error as jest.Mock;
+const onchainMock = checkOnchainPaymentStatus as jest.Mock;
+
+const PI_ID = 'pi-1';
+const BUYER = 'buyer-1';
+
+const onchainIntent = {
+  id: PI_ID,
+  buyer_id: BUYER,
+  seller_id: 'seller-1',
+  status: STATUS.PAYMENT_INTENTS.INVOICE_READY,
+  payment_method: 'onchain',
+  onchain_address: 'bc1qxyz',
+  entity_type: 'product', // fixed_price
+  entity_id: 'prod-1',
+  amount_btc: 0.01,
+  description: 'Product: Blue Mug',
+  paid_at: null,
+  expires_at: null,
+};
+
+/**
+ * single() -> the intent. Awaited builder chains resolve from a queue in order:
+ *   [ intent status update, order update ].  rpc() resolves cleanly.
+ */
+function makeSupabase(orderUpdateError: unknown) {
+  const awaitQueue: Array<{ error: unknown }> = [{ error: null }, { error: orderUpdateError }];
+  const builder: Record<string, unknown> = {};
+  for (const m of ['select', 'update', 'eq', 'in']) {
+    builder[m] = jest.fn(() => builder);
+  }
+  builder.single = jest.fn(() => Promise.resolve({ data: onchainIntent, error: null }));
+  builder.then = (resolve: (v: unknown) => unknown, reject: (e: unknown) => unknown) =>
+    Promise.resolve(awaitQueue.shift() ?? { error: null }).then(resolve, reject);
+  const rpc = jest.fn(() => Promise.resolve({ error: null }));
+  return { from: jest.fn(() => builder), rpc } as never;
+}
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  onchainMock.mockResolvedValue('confirmed');
+});
+
+describe('handlePaymentConfirmed via checkPaymentStatus (onchain confirmed)', () => {
+  it('returns PAID on a confirmed on-chain payment', async () => {
+    const supabase = makeSupabase(null);
+    const res = await checkPaymentStatus(supabase, PI_ID, BUYER);
+    expect(res.status).toBe(STATUS.PAYMENT_INTENTS.PAID);
+  });
+
+  it('does not throw but logs for reconciliation when the order update fails', async () => {
+    const supabase = makeSupabase({ message: 'db down' });
+    const res = await checkPaymentStatus(supabase, PI_ID, BUYER);
+    // Payment succeeded — must still report PAID to the buyer.
+    expect(res.status).toBe(STATUS.PAYMENT_INTENTS.PAID);
+    // ...but the stuck order must be logged loudly.
+    expect(errorMock).toHaveBeenCalledWith(
+      expect.stringContaining('reconciliation'),
+      expect.objectContaining({ paymentIntentId: PI_ID })
+    );
+  });
+});

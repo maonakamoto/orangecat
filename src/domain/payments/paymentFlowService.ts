@@ -397,11 +397,23 @@ async function handlePaymentConfirmed(
   const meta = getEntityMetadata(entityType);
 
   if (meta.paymentPattern === 'fixed_price') {
-    // Update order status
-    await supabase
+    // Update order status. The payment is already verified+paid, so we must NOT
+    // throw here (that would 500 the buyer's status check after a successful
+    // payment, and the terminal-status short-circuit means a retry wouldn't
+    // re-run this anyway). But a silent failure left the order stuck in
+    // pending_payment with no trace — log it loudly so it can be reconciled.
+    const { error: orderError } = await supabase
       .from(DATABASE_TABLES.ORDERS)
       .update({ status: STATUS.ORDERS.PAID })
       .eq('payment_intent_id', piId);
+    if (orderError) {
+      logger.error('Order status update failed after confirmed payment — needs reconciliation', {
+        paymentIntentId: piId,
+        entityType,
+        entityId,
+        error: orderError,
+      });
+    }
 
     // Decrement inventory (atomic — prevents overselling)
     await supabase
