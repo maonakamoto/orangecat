@@ -272,10 +272,20 @@ export async function buyerConfirmPayment(
   if (pi.entity_type) {
     const meta = getEntityMetadata(pi.entity_type as EntityType);
     if (meta.paymentPattern === 'fixed_price') {
-      await supabase
+      const { error: orderError } = await supabase
         .from(DATABASE_TABLES.ORDERS)
         .update({ status: STATUS.ORDERS.PAID })
         .eq('payment_intent_id', paymentIntentId);
+
+      // The intent is already buyer_confirmed; a silent order-update failure
+      // would leave the order stuck in pending_payment. Surface it.
+      if (orderError) {
+        logger.error('Failed to update order status after buyer confirmation', {
+          paymentIntentId,
+          error: orderError,
+        });
+        throw new Error('Failed to update order status');
+      }
     }
   }
 
@@ -357,7 +367,17 @@ async function updatePaymentStatus(
     updates.paid_at = new Date().toISOString();
   }
 
-  await supabase.from(DATABASE_TABLES.PAYMENT_INTENTS).update(updates).eq('id', paymentIntentId);
+  const { error } = await supabase
+    .from(DATABASE_TABLES.PAYMENT_INTENTS)
+    .update(updates)
+    .eq('id', paymentIntentId);
+
+  // A swallowed error here leaves the payment intent in a stale status while the
+  // caller reports success — money state diverging from reality. Surface it.
+  if (error) {
+    logger.error('Failed to update payment intent status', { paymentIntentId, status, error });
+    throw new Error('Failed to update payment status');
+  }
 }
 
 /**
