@@ -108,6 +108,13 @@ export interface FieldGroup {
     field: string;
     value: string | string[];
   };
+  /**
+   * Non-essential group — collapsed under an "Advanced options" disclosure so
+   * the create form opens on just the essentials (least cognitive load). The
+   * group still mounts (defaults/pre-fill/validation behave normally); it's
+   * only visually collapsed until the user expands it.
+   */
+  advanced?: boolean;
 }
 
 // ==================== WIZARD TYPES ====================

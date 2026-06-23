@@ -114,6 +114,7 @@ const fieldGroups: FieldGroup[] = [
     id: 'location',
     title: 'Location & Availability',
     description: 'Where can you deliver your service?',
+    advanced: true,
     fields: [
       {
         name: 'service_location_type',
@@ -140,6 +141,7 @@ const fieldGroups: FieldGroup[] = [
     id: 'visibility',
     title: 'Profile Visibility',
     description: 'Control where this service appears',
+    advanced: true,
     fields: [
       {
         name: 'show_on_profile',
