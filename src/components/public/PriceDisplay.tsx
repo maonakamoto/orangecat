@@ -22,12 +22,18 @@ interface PriceDisplayProps {
   currency: string;
   /** Tailwind classes for the primary amount. */
   className?: string;
+  /**
+   * Per-unit suffix appended after both amounts (e.g. ' / hr', ' / message').
+   * Include the leading space. Rendered muted so the amount stays the focus.
+   */
+  suffix?: string;
 }
 
 export default async function PriceDisplay({
   amount,
   currency,
   className = 'text-2xl font-bold text-fg-primary',
+  suffix,
 }: PriceDisplayProps) {
   // Show the opposite denomination: Bitcoin prices get a fiat equivalent,
   // fiat prices get the Bitcoin equivalent.
@@ -52,6 +58,7 @@ export default async function PriceDisplay({
           ≈ {formatCurrency(secondary, secondaryCurrency)}
         </span>
       )}
+      {suffix && <span className="text-base font-normal text-fg-secondary">{suffix}</span>}
     </p>
   );
 }
