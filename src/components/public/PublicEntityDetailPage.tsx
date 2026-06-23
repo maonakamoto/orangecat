@@ -20,6 +20,9 @@ import PublicEntityOwnerCard from '@/components/public/PublicEntityOwnerCard';
 import PublicEntityHero from '@/components/public/PublicEntityHero';
 import PublicEntityTimestamps from '@/components/public/PublicEntityTimestamps';
 import { PublicEntityPaymentSection } from '@/components/payment';
+import { resolveSellerReceiveInfo, type SellerReceiveInfo } from '@/domain/payments';
+import { currencyConverter } from '@/services/currency';
+import { type CurrencyCode } from '@/config/currencies';
 import { fetchEntityOwner } from '@/lib/entities/fetchEntityOwner';
 import { ROUTES } from '@/config/routes';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
@@ -162,6 +165,23 @@ export default async function PublicEntityDetailPage({
 
   const owner = await fetchEntityOwner(supabase, entity);
 
+  // Resolve the seller's public receiving info + BTC amount server-side so a
+  // logged-out visitor can pay direct (permissionless) — no account, no gate.
+  // Skipped for entities with no payment section (e.g. loans).
+  const price = config.getPrice?.(entity) ?? null;
+  const priceAmount = price && price.amount > 0 ? price.amount : undefined;
+  let sellerReceive: SellerReceiveInfo | null = null;
+  let priceAmountBtc: number | undefined;
+  if (config.showPaymentSection !== false) {
+    sellerReceive = await resolveSellerReceiveInfo(supabase, config.entityType, id);
+    if (priceAmount !== undefined && price) {
+      priceAmountBtc =
+        (price.currency || 'BTC') === 'BTC'
+          ? priceAmount
+          : await currencyConverter.convert(priceAmount, price.currency as CurrencyCode, 'BTC');
+    }
+  }
+
   const jsonLd = generateEntityJsonLd({
     type: config.entityType,
     id,
@@ -258,24 +278,22 @@ export default async function PublicEntityDetailPage({
 
               {config.renderSidebarExtra?.(entity)}
 
-              {config.showPaymentSection !== false &&
-                (() => {
-                  const price = config.getPrice?.(entity) ?? null;
-                  return (
-                    <div id="pay">
-                      <PublicEntityPaymentSection
-                        entityType={config.entityType}
-                        entityId={id}
-                        entityTitle={entity.title}
-                        priceAmount={price && price.amount > 0 ? price.amount : undefined}
-                        priceCurrency={price?.currency}
-                        sellerProfileId={owner?.id ?? null}
-                        sellerUserId={owner?.user_id ?? null}
-                        signInRedirect={viewRoute}
-                      />
-                    </div>
-                  );
-                })()}
+              {config.showPaymentSection !== false && (
+                <div id="pay">
+                  <PublicEntityPaymentSection
+                    entityType={config.entityType}
+                    entityId={id}
+                    entityTitle={entity.title}
+                    priceAmount={priceAmount}
+                    priceCurrency={price?.currency}
+                    sellerProfileId={owner?.id ?? null}
+                    sellerUserId={owner?.user_id ?? null}
+                    sellerReceive={sellerReceive}
+                    priceAmountBtc={priceAmountBtc}
+                    signInRedirect={viewRoute}
+                  />
+                </div>
+              )}
 
               <PublicEntityTimestamps
                 createdAt={entity.created_at}

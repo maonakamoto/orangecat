@@ -18,7 +18,8 @@ import { useSellerPaymentMethods } from '@/hooks/useSellerPaymentMethods';
 import { PaymentButton } from './PaymentButton';
 import { SellerWalletBanner } from './SellerWalletBanner';
 import { OwnerCollectPanel } from './OwnerCollectPanel';
-import type { EntityType } from '@/config/entity-registry';
+import { PublicPayPanel } from './PublicPayPanel';
+import { getEntityMetadata, type EntityType } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
 
 interface PublicEntityPaymentSectionProps {
@@ -33,6 +34,13 @@ interface PublicEntityPaymentSectionProps {
   sellerProfileId: string | null;
   /** Seller's auth.users ID for self-purchase detection (null if no seller found) */
   sellerUserId: string | null;
+  /**
+   * Seller's public receiving info, resolved server-side (no secrets). Drives
+   * the anonymous pay-direct panel. `address` is null for NWC-only sellers.
+   */
+  sellerReceive: { method: 'nwc' | 'lightning_address' | 'onchain'; address: string | null } | null;
+  /** Fixed price converted to BTC, for the anonymous BIP21 amount. */
+  priceAmountBtc?: number;
   /** Redirect path after sign-in */
   signInRedirect: string;
 }
@@ -45,6 +53,8 @@ export function PublicEntityPaymentSection({
   priceCurrency,
   sellerProfileId,
   sellerUserId,
+  sellerReceive,
+  priceAmountBtc,
   signInRedirect,
 }: PublicEntityPaymentSectionProps) {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -63,20 +73,51 @@ export function PublicEntityPaymentSection({
     );
   }
 
-  // Not logged in — show sign-in CTA
+  // Not logged in — permissionless by default: let anyone pay direct to the
+  // seller's public address (no account). Falls back to sign-in only when there
+  // is no static address to reveal (NWC-only seller), and to an honest notice
+  // when the seller has no wallet at all.
   if (!isAuthenticated) {
+    const meta = getEntityMetadata(entityType);
+
+    if (
+      sellerReceive?.address &&
+      (sellerReceive.method === 'onchain' || sellerReceive.method === 'lightning_address')
+    ) {
+      return (
+        <PublicPayPanel
+          entityTitle={entityTitle}
+          isContribution={meta.paymentPattern === 'contribution'}
+          priceAmount={priceAmount}
+          priceCurrency={priceCurrency}
+          amountBtc={priceAmountBtc}
+          method={sellerReceive.method}
+          address={sellerReceive.address}
+          signInHref={`${ROUTES.AUTH}?mode=login&from=${signInRedirect}`}
+        />
+      );
+    }
+
     return (
       <Card>
         <CardContent className="pt-6 space-y-3">
-          <Link href={`${ROUTES.AUTH}?mode=login&from=${signInRedirect}`} className="block">
-            <Button className="w-full gap-2 min-h-11">
-              <LogIn className="w-4 h-4" />
-              Sign in to continue
-            </Button>
-          </Link>
-          <p className="text-xs text-fg-secondary text-center">
-            Sign in to buy or support with Bitcoin
-          </p>
+          {!sellerReceive ? (
+            <p className="text-sm text-fg-secondary text-center">
+              This {meta.name.toLowerCase()} isn&apos;t set up to receive Bitcoin yet.
+            </p>
+          ) : (
+            <>
+              <Link href={`${ROUTES.AUTH}?mode=login&from=${signInRedirect}`} className="block">
+                <Button className="w-full gap-2 min-h-11">
+                  <LogIn className="w-4 h-4" />
+                  Sign in to continue
+                </Button>
+              </Link>
+              <p className="text-xs text-fg-secondary text-center">
+                Sign in to pay via the seller&apos;s connected wallet
+              </p>
+            </>
+          )}
         </CardContent>
       </Card>
     );
