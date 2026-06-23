@@ -36,6 +36,8 @@ const config: EntityDetailConfig = {
   createdLabel: 'Listed',
   descriptionTitle: 'About this Service',
   getViewRoute: id => ROUTES.SERVICES.VIEW(id),
+  getCoverImages: entity =>
+    (Array.isArray(entity.images) ? (entity.images as string[]) : []).filter(Boolean),
   getPrice: entity => {
     const { amount, currency } = getServicePrice(entity);
     return amount > 0 ? { amount, currency } : null;

@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import { generateEntityJsonLd, JsonLdScript } from '@/lib/seo/structured-data';
 import EntityShare from '@/components/sharing/EntityShare';
 import PublicEntityOwnerCard from '@/components/public/PublicEntityOwnerCard';
+import PublicEntityHero from '@/components/public/PublicEntityHero';
 import PublicEntityTimestamps from '@/components/public/PublicEntityTimestamps';
 import { PublicEntityPaymentSection } from '@/components/payment';
 import { fetchEntityOwner } from '@/lib/entities/fetchEntityOwner';
@@ -65,6 +66,12 @@ export interface EntityDetailConfig {
   getJsonLdExtra?: (entity: EntityData) => Record<string, unknown>;
   /** Override the themed icon box in the header (e.g., a cover image) */
   renderHeaderIcon?: (entity: EntityData) => ReactNode;
+  /**
+   * Ordered cover image URLs (cover first) for the full-width hero, rendered
+   * below the header. Return [] for entities with no imagery — the page then
+   * falls back to the header type icon. Drives PublicEntityHero.
+   */
+  getCoverImages?: (entity: EntityData) => string[];
   /** Header badges/extra info (e.g., date for events, category for products) */
   renderHeaderExtra?: (entity: EntityData) => ReactNode;
   /** Entity-specific detail cards below description */
@@ -208,6 +215,15 @@ export default async function PublicEntityDetailPage({
             </div>
           </div>
         </div>
+
+        {(() => {
+          const coverImages = config.getCoverImages?.(entity) ?? [];
+          return coverImages.length > 0 ? (
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+              <PublicEntityHero images={coverImages} title={entity.title} />
+            </div>
+          ) : null;
+        })()}
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

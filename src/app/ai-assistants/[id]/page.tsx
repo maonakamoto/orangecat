@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { generateEntityMetadata } from '@/lib/seo/metadata';
 import PublicEntityDetailPage, {
   fetchEntityForMetadata,
@@ -37,6 +38,17 @@ const config: EntityDetailConfig = {
   descriptionTitle: 'About this AI Assistant',
   metadataSelect: 'title, description, avatar_url',
   getViewRoute: id => ROUTES.AI_ASSISTANTS.VIEW(id),
+  renderHeaderIcon: entity =>
+    entity.avatar_url ? (
+      <Image
+        src={entity.avatar_url as string}
+        alt={(entity.title as string) || 'AI assistant'}
+        width={64}
+        height={64}
+        className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+        unoptimized
+      />
+    ) : undefined,
   renderHeaderExtra: entity => {
     if (!entity.category) {
       return null;

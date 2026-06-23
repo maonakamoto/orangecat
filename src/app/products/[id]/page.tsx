@@ -26,6 +26,10 @@ const config: EntityDetailConfig = {
   ownerLabel: 'Seller',
   createdLabel: 'Listed',
   getViewRoute: id => ROUTES.PRODUCTS.VIEW(id),
+  getCoverImages: entity => {
+    const images = Array.isArray(entity.images) ? (entity.images as string[]) : [];
+    return [...images, entity.thumbnail_url as string].filter(Boolean);
+  },
   getPrice: entity => {
     const { amount, currency } = getPrice(entity);
     return Number.isFinite(amount) && amount > 0 ? { amount, currency } : null;
