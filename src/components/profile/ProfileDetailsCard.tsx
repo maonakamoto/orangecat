@@ -25,7 +25,10 @@ export function ProfileDetailsCard({
 }: ProfileDetailsCardProps) {
   const joinDate = profile.created_at ? new Date(profile.created_at) : null;
   const lastActive = profile.updated_at ? new Date(profile.updated_at) : null;
-  const publicContactEmail = profile.contact_email || profile.email || userEmail || null;
+  // Public "Contact Email" is ONLY the opt-in contact_email — never the private
+  // account login email. The registration email has its own owner-gated field
+  // below. See profile email-leak fix.
+  const publicContactEmail = profile.contact_email || null;
 
   const locationValue = (() => {
     if (isLocationHidden(profile.location_context || '')) {

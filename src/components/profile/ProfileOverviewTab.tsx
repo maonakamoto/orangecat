@@ -42,7 +42,9 @@ export default function ProfileOverviewTab({
   context = 'public',
 }: ProfileOverviewTabProps) {
   const isDashboardView = context === 'dashboard';
-  const publicContactEmail = profile.contact_email || profile.email;
+  // Public contact email is ONLY the opt-in contact_email field — never the
+  // private account login email (profile.email). See profile email-leak fix.
+  const publicContactEmail = profile.contact_email;
   const { formatAmountBtc } = useDisplayCurrency();
 
   return (

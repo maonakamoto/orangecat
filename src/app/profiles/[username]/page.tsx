@@ -291,6 +291,12 @@ export default async function PublicProfilePage({ params }: PageProps) {
   } = await supabase.auth.getUser();
   const isOwnProfile = !!currentUser && currentUser.id === profile.id;
 
+  // The `email` column is the account login email — private. `select('*')` pulls
+  // it into the row, which would otherwise ship to every visitor's client
+  // payload. Redact it for non-owners so it never leaves the server. (phone /
+  // contact_email are opt-in public fields and stay.)
+  const safeProfile = isOwnProfile ? profile : { ...profile, email: null };
+
   // Pass data to client component for interactivity
   return (
     <>
@@ -300,7 +306,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: safeJsonLdString(structuredData) }}
       />
       <ProfilePageClient
-        profile={profile}
+        profile={safeProfile}
         projects={projects || []}
         isOwnProfile={isOwnProfile}
         stats={{

@@ -78,36 +78,41 @@ export default function ProfileInfoTab({
         isDashboardView={isDashboardView}
       />
 
-      <Card>
-        <CardHeader>
-          <h3 className="text-lg font-semibold flex items-center gap-2">
-            <Shield className="w-5 h-5 text-fg-secondary" />
-            Account Status
-          </h3>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-fg-secondary">Email Verified</span>
-            <span
-              className={profile.email ? 'text-status-positive font-medium' : 'text-fg-tertiary'}
-            >
-              {profile.email ? '✓ Verified' : 'Not verified'}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-fg-secondary">Profile Complete</span>
-            <span
-              className={
-                profile.bio && profile.avatar_url
-                  ? 'text-status-positive font-medium'
-                  : 'text-fg-secondary font-medium'
-              }
-            >
-              {profile.bio && profile.avatar_url ? '✓ Complete' : 'In Progress'}
-            </span>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Account Status is owner-only meta (email verification, completeness).
+          Not public — and "Email Verified" keys off the now-redacted account
+          email, so it must not render for visitors. */}
+      {isOwnProfile && (
+        <Card>
+          <CardHeader>
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Shield className="w-5 h-5 text-fg-secondary" />
+              Account Status
+            </h3>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-fg-secondary">Email Verified</span>
+              <span
+                className={profile.email ? 'text-status-positive font-medium' : 'text-fg-tertiary'}
+              >
+                {profile.email ? '✓ Verified' : 'Not verified'}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-fg-secondary">Profile Complete</span>
+              <span
+                className={
+                  profile.bio && profile.avatar_url
+                    ? 'text-status-positive font-medium'
+                    : 'text-fg-secondary font-medium'
+                }
+              >
+                {profile.bio && profile.avatar_url ? '✓ Complete' : 'In Progress'}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
