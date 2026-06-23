@@ -165,8 +165,8 @@ export const POST = withAuth(
         .eq('id', user.id)
         .single();
 
-      // Await — Vercel terminates the function on response, so the
-      // void pattern silently dropped activity rows.
+      // Await so the write completes before responding — the void
+      // pattern silently dropped activity rows.
       try {
         await recordGroupActivity(req.supabase, {
           group_id: group.id,

@@ -8,7 +8,7 @@
 #
 # Features:
 # - direnv for automatic environment loading
-# - Interactive OAuth login for GitHub/Vercel
+# - Interactive OAuth login for GitHub
 # - Automated backups and recovery
 # - Environment validation
 #
@@ -136,14 +136,13 @@ echo ""
 echo "Your environment is now protected with:"
 echo "  • 🔄 Automatic loading via direnv"
 echo "  • 💾 Automatic backups before changes"
-echo "  • 🔐 Secure OAuth login for GitHub/Vercel"
+echo "  • 🔐 Secure OAuth login for GitHub"
 echo "  • ✅ Environment validation"
 echo ""
 echo "Next steps:"
 echo "  1. Add GitHub token: node scripts/auth/github-login.js"
-echo "  2. Add Vercel token: node scripts/auth/vercel-login.js"
-echo "  3. Validate setup: node scripts/utils/env-manager.js validate"
-echo "  4. Start developing: npm run dev"
+echo "  2. Validate setup: node scripts/utils/env-manager.js validate"
+echo "  3. Start developing: npm run dev"
 echo ""
 echo "Management commands:"
 echo "  • Backup: node scripts/utils/env-manager.js backup"

@@ -523,7 +523,7 @@ export const ORANGECAT_FLEETCROWN_INTEGRATION = {
   fleetCrown: {
     title: 'FleetCrown',
     id: '8130c927-114a-45b7-8cc2-99efd5224025',
-    site: 'https://fleetcrown.vercel.app',
+    site: 'https://fleetcrown.orangecat.ch',
   },
   wallet: { btc: 'bc1q3hh4yklcmwtpnqmxyksw36yedg7zyfy6tzzqwz', lightning: 'orangecat@getalby.com' },
   relation: 'FleetCrown is customer of OrangeCat.',

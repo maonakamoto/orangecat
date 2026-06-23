@@ -65,43 +65,31 @@ else
     log_warning "Build failed but attempting deployment anyway"
 fi
 
-# 3. Deploy to Vercel
-log_info "Deploying to Vercel..."
+# 3. Deploy to the Hetzner box (self-host)
+log_info "Deploying to bitbaum (self-host)..."
 
-if command -v vercel &> /dev/null; then
-    log_info "Using Vercel CLI..."
-
-    # Deploy with production flag
-    vercel --prod 2>&1 | tee /tmp/vercel-deploy.log
-
-    # Extract deployment URL
-    DEPLOY_URL=$(grep -o 'https://[^ ]*\.vercel\.app' /tmp/vercel-deploy.log | head -1)
-
-    if [ -n "$DEPLOY_URL" ]; then
-        log_success "Deployed to: $DEPLOY_URL"
-        echo ""
-        echo "🌐 TEST THE APP:"
-        echo "- Visit: $DEPLOY_URL"
-        echo "- Try user registration"
-        echo "- Test entity creation (products)"
-        echo "- Check responsive design"
-        echo ""
-        echo "🎯 MASS ADOPTION CHECKLIST:"
-        echo "- Few clicks to achieve goals?"
-        echo "- Clear user paths?"
-        echo "- Bitcoin/Lightning intuitive?"
-        echo "- AI features helpful?"
-        echo ""
-        echo "Report back with feedback!"
-    else
-        log_warning "Deployment completed but URL not captured"
-        echo "Check Vercel dashboard: https://vercel.com/dashboard"
-    fi
+if [ -x scripts/deploy-selfhost.sh ]; then
+    scripts/deploy-selfhost.sh 2>&1 | tee /tmp/oc-deploy.log
+    log_success "Deploy finished — verify https://orangecat.ch/api/health"
+    echo ""
+    echo "🌐 TEST THE APP:"
+    echo "- Visit: https://orangecat.ch"
+    echo "- Try user registration"
+    echo "- Test entity creation (products)"
+    echo "- Check responsive design"
+    echo ""
+    echo "🎯 MASS ADOPTION CHECKLIST:"
+    echo "- Few clicks to achieve goals?"
+    echo "- Clear user paths?"
+    echo "- Bitcoin/Lightning intuitive?"
+    echo "- AI features helpful?"
+    echo ""
+    echo "Report back with feedback!"
 else
-    log_warning "Vercel CLI not installed"
+    log_warning "scripts/deploy-selfhost.sh not found/executable"
     echo "Manual deployment steps:"
-    echo "1. Push to main branch"
-    echo "2. Check Vercel dashboard"
+    echo "1. Merge to main (CD runs .github/workflows/cd.yml)"
+    echo "2. Verify https://orangecat.ch/api/health"
     echo "3. Test the deployed app"
 fi
 

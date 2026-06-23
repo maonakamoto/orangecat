@@ -35,9 +35,9 @@ export default function SecurityPage() {
     },
     {
       icon: Server,
-      title: 'Managed Infrastructure',
+      title: 'Self-Hosted Infrastructure',
       description:
-        'Hosted on managed cloud platforms (Vercel for the app, Supabase for the database) that handle patching and uptime.',
+        'Runs on dedicated, self-hosted infrastructure — the app and a self-hosted Supabase database — so patching, access, and uptime are under our direct control.',
     },
     {
       icon: Eye,
@@ -48,7 +48,7 @@ export default function SecurityPage() {
       icon: AlertTriangle,
       title: 'Platform Monitoring',
       description:
-        'Uptime and error monitoring are provided by the underlying platforms. We do not currently run a dedicated security operations center.',
+        'We monitor uptime and errors on our own infrastructure. We do not currently run a dedicated security operations center.',
     },
   ];
 

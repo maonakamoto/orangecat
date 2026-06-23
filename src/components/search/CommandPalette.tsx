@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Command palette — Linear/Vercel/Stripe-style ⌘K overlay.
+ * Command palette — Linear/Stripe-style ⌘K overlay.
  *
  * Replaces the inline dropdown that EnhancedSearchBar used to render
  * for desktop. Mobile keeps a full-width form below md.

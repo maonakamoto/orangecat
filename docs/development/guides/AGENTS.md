@@ -51,5 +51,5 @@ Bitcoin-powered crowdfunding platform built for transparency and impact with nat
 - Never delete or overwrite local environment files: `.env.local` and the `.env-backups/` directory.
 - Always use `node scripts/utils/env-manager.js backup` before any change to env files, and `restore` to recover.
 - Do not run commands that recreate `.env.local` if it already exists. Prefer `validate` or `setup` via Env Manager.
-- CI/agents must not modify developer-local env files; only read them or use Vercel env management.
+- CI/agents must not modify developer-local env files; only read them. Production env lives in `/opt/orangecat/app/.env` on the Hetzner box, managed there — not in any local file.
 - If an automation suggests copying `.env.example` over `.env.local`, reject it and use the Env Manager instead.

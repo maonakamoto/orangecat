@@ -24,6 +24,7 @@ export GITHUB_TOKEN="your_github_token_here"
 ```
 
 Or create a `.env` file:
+
 ```
 GITHUB_TOKEN=your_github_token_here
 ```
@@ -73,36 +74,7 @@ Add to your Claude Desktop config file (`~/AppData/Roaming/Claude/claude_desktop
 }
 ```
 
-## 4. Vercel via MCP Adapter
-
-We include a minimal OpenAPI file at `mcp-servers/vercel-openapi.json` so you can use `@vercel/mcp-adapter` to call Vercel endpoints. Set `VERCEL_TOKEN` in your environment.
-
-Claude Desktop example:
-
-```json
-{
-  "mcpServers": {
-    "vercel": {
-      "command": "mcp-adapter",
-      "args": [
-        "--openapi",
-        "/path/to/orangecat/mcp-servers/vercel-openapi.json",
-        "--name",
-        "vercel"
-      ],
-      "env": { "VERCEL_TOKEN": "your_vercel_token" }
-    }
-  }
-}
-```
-
-Run locally:
-
-```bash
-npm run mcp:vercel
-```
-
-## 5. Test Servers
+## 4. Test Servers
 
 ```bash
 cd mcp-servers
@@ -115,7 +87,7 @@ node jest-server.js        # Jest
 node supabase-server.js    # Supabase
 ```
 
-## 6. Available Tools (highlights)
+## 5. Available Tools (highlights)
 
 Once configured, you'll have access to these tools in Claude/Codex:
 
@@ -127,12 +99,13 @@ Once configured, you'll have access to these tools in Claude/Codex:
 - Jest: run tests by pattern or file
 - Supabase: select/insert/update/count rows
 
-## 7. Example Usage
+## 6. Example Usage
 
 After setup, you can ask Claude to:
+
 - "Check the status of my latest GitHub Actions"
 - "Add a new repository secret"
 - "What are the current status checks for my latest commit?"
 - "Trigger the deployment workflow"
 
-The server will handle all GitHub API interactions automatically! 
+The server will handle all GitHub API interactions automatically!

@@ -96,7 +96,7 @@ function writeEnvFile(env, filePath) {
           lines.push(line); // Keep non-variable lines
         }
       } else if (trimmed.startsWith('#') && !trimmed.includes('Created by')) {
-        lines.push(line); // Keep comments (except Vercel auto-generated)
+        lines.push(line); // Keep comments (except auto-generated headers)
       }
     }
   }
@@ -137,18 +137,9 @@ function writeEnvFile(env, filePath) {
   lines.push('# ==================== AUTH TOKENS ====================');
   lines.push('# Use the auth scripts to set these securely:');
   lines.push('# node scripts/auth/github-login.js');
-  lines.push('# node scripts/auth/vercel-login.js');
   lines.push('');
   if (!env.GITHUB_TOKEN && !lines.some(l => l.includes('GITHUB_TOKEN'))) {
     lines.push('# GITHUB_TOKEN=your_github_token_here');
-  }
-  if (
-    !env.VERCEL_TOKEN &&
-    !env.VERCEL_ACCESS_TOKEN &&
-    !lines.some(l => l.includes('VERCEL_TOKEN') || l.includes('VERCEL_ACCESS_TOKEN'))
-  ) {
-    lines.push('# VERCEL_TOKEN=your_vercel_token_here');
-    lines.push('# VERCEL_ACCESS_TOKEN=your_vercel_access_token_here');
   }
 
   fs.writeFileSync(filePath, lines.join('\n') + '\n');

@@ -1,7 +1,7 @@
 /**
  * GET /api/cron/webhook-worker — handler-level branch tests.
  *
- * Vercel cron runs this every minute. Silent failures in processDelivery
+ * A systemd timer runs this every minute. Silent failures in processDelivery
  * drop deliveries on the floor; customers see "0 deliveries" with no
  * signal, and OrangeCat operators don't notice until a customer complains.
  *

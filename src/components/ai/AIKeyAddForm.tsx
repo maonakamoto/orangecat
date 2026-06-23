@@ -25,7 +25,7 @@ import { ROUTES } from '@/config/routes';
  * Direct: Groq + the OpenAI-compatible direct providers (OpenAI, Together,
  * DeepSeek, xAI). Aggregator: OpenRouter. Local providers (Ollama,
  * LM Studio) aren't here yet — they need a different architecture
- * because the Vercel backend can't reach the user's localhost.
+ * because the server backend can't reach the user's localhost.
  *
  * Anthropic and Google are intentionally NOT here — they use different
  * wire formats (not OpenAI-compatible) and need their own client classes.

@@ -5,7 +5,7 @@ done:
 - Live UI tour at orangecat.ch found two bugs on the logged-in dashboard:
   1. "Recommended Next Steps" card showed "100% Setup" next to "3 tasks remaining" — the % filtered to critical+high tasks while the count included Suggested/Optional. Fixed in TasksSection.tsx so both metrics scope to the same priority set; reads "Setup complete" when zero critical+high remain.
   2. ProfileProjectsTab.tsx referenced an undefined `IntegrationNote` ("defined above" — but it wasn't), leftover from the fleetwave rename. Dead assignment, never read. Deleted; `npx tsc --noEmit` is now clean.
-- Both fixes shipped to main and pushed; live deploy via Vercel.
+- Both fixes shipped to main and pushed; live deploy to the Hetzner box.
 
 next: open items observed but not yet addressed —
 

@@ -7,10 +7,7 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { Octokit } from '@octokit/rest';
 import _sodium from 'libsodium-wrappers';
 
@@ -135,7 +132,11 @@ class GitHubMCPServer {
             properties: {
               owner: { type: 'string', description: 'Repository owner' },
               repo: { type: 'string', description: 'Repository name' },
-              state: { type: 'string', description: 'PR state (open, closed, all)', default: 'open' },
+              state: {
+                type: 'string',
+                description: 'PR state (open, closed, all)',
+                default: 'open',
+              },
               per_page: { type: 'number', description: 'Number of PRs to return', default: 10 },
             },
             required: ['owner', 'repo'],
@@ -149,7 +150,11 @@ class GitHubMCPServer {
             properties: {
               owner: { type: 'string', description: 'Repository owner' },
               repo: { type: 'string', description: 'Repository name' },
-              state: { type: 'string', description: 'Issue state (open, closed, all)', default: 'open' },
+              state: {
+                type: 'string',
+                description: 'Issue state (open, closed, all)',
+                default: 'open',
+              },
               per_page: { type: 'number', description: 'Number of issues to return', default: 10 },
             },
             required: ['owner', 'repo'],
@@ -157,40 +162,31 @@ class GitHubMCPServer {
         },
         {
           name: 'fix_deployment_blockers',
-          description: 'Automatically fix the issues blocking deployment (failing tests, security issues, build errors)',
+          description:
+            'Automatically fix the issues blocking deployment (failing tests, security issues, build errors)',
           inputSchema: {
             type: 'object',
             properties: {
               owner: { type: 'string', description: 'Repository owner', default: 'g-but' },
               repo: { type: 'string', description: 'Repository name', default: 'orangecat' },
-              auto_fix: { type: 'boolean', description: 'Whether to automatically apply fixes', default: true }
-            }
-          }
+              auto_fix: {
+                type: 'boolean',
+                description: 'Whether to automatically apply fixes',
+                default: true,
+              },
+            },
+          },
         },
         {
           name: 'check_deployment_status',
-          description: 'Check current deployment status and what\'s blocking it',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              owner: { type: 'string', description: 'Repository owner', default: 'g-but' },
-              repo: { type: 'string', description: 'Repository name', default: 'orangecat' }
-            }
-          }
-        },
-        {
-          name: 'setup_vercel_secrets',
-          description: 'Set up missing Vercel secrets for automatic deployment',
+          description: "Check current deployment status and what's blocking it",
           inputSchema: {
             type: 'object',
             properties: {
               owner: { type: 'string', description: 'Repository owner', default: 'g-but' },
               repo: { type: 'string', description: 'Repository name', default: 'orangecat' },
-              vercel_token: { type: 'string', description: 'Vercel token' },
-              vercel_org_id: { type: 'string', description: 'Vercel org ID' },
-              vercel_project_id: { type: 'string', description: 'Vercel project ID' }
-            }
-          }
+            },
+          },
         },
         {
           name: 'force_deploy_now',
@@ -200,9 +196,13 @@ class GitHubMCPServer {
             properties: {
               owner: { type: 'string', description: 'Repository owner', default: 'g-but' },
               repo: { type: 'string', description: 'Repository name', default: 'orangecat' },
-              bypass_tests: { type: 'boolean', description: 'Bypass failing tests', default: false }
-            }
-          }
+              bypass_tests: {
+                type: 'boolean',
+                description: 'Bypass failing tests',
+                default: false,
+              },
+            },
+          },
         },
         {
           name: 'get_repo_secrets',
@@ -211,9 +211,9 @@ class GitHubMCPServer {
             type: 'object',
             properties: {
               owner: { type: 'string', description: 'Repository owner', default: 'g-but' },
-              repo: { type: 'string', description: 'Repository name', default: 'orangecat' }
-            }
-          }
+              repo: { type: 'string', description: 'Repository name', default: 'orangecat' },
+            },
+          },
         },
         {
           name: 'auto_fix_and_deploy',
@@ -222,14 +222,14 @@ class GitHubMCPServer {
             type: 'object',
             properties: {
               owner: { type: 'string', description: 'Repository owner', default: 'g-but' },
-              repo: { type: 'string', description: 'Repository name', default: 'orangecat' }
-            }
-          }
+              repo: { type: 'string', description: 'Repository name', default: 'orangecat' },
+            },
+          },
         },
       ],
     }));
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -254,8 +254,6 @@ class GitHubMCPServer {
             return await this.fixDeploymentBlockers(args);
           case 'check_deployment_status':
             return await this.checkDeploymentStatus(args);
-          case 'setup_vercel_secrets':
-            return await this.setupVercelSecrets(args);
           case 'force_deploy_now':
             return await this.forceDeployNow(args);
           case 'get_repo_secrets':
@@ -352,11 +350,17 @@ class GitHubMCPServer {
       const keyId = keyResponse.data.key_id;
 
       // Encrypt the secret using libsodium
-      const publicKeyBytes = this.sodium.from_base64(publicKey, this.sodium.base64_variants.ORIGINAL);
+      const publicKeyBytes = this.sodium.from_base64(
+        publicKey,
+        this.sodium.base64_variants.ORIGINAL
+      );
       const secretBytes = this.sodium.from_string(secret_value);
-      
+
       const encryptedBytes = this.sodium.crypto_box_seal(secretBytes, publicKeyBytes);
-      const encryptedValue = this.sodium.to_base64(encryptedBytes, this.sodium.base64_variants.ORIGINAL);
+      const encryptedValue = this.sodium.to_base64(
+        encryptedBytes,
+        this.sodium.base64_variants.ORIGINAL
+      );
 
       await this.octokit.rest.actions.createOrUpdateRepoSecret({
         owner,
@@ -426,19 +430,23 @@ class GitHubMCPServer {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              state: response.data.state,
-              total_count: response.data.total_count,
-              sha: response.data.sha,
-              statuses: response.data.statuses.map(s => ({
-                context: s.context,
-                state: s.state,
-                description: s.description,
-                target_url: s.target_url,
-                created_at: s.created_at,
-                updated_at: s.updated_at,
-              }))
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                state: response.data.state,
+                total_count: response.data.total_count,
+                sha: response.data.sha,
+                statuses: response.data.statuses.map(s => ({
+                  context: s.context,
+                  state: s.state,
+                  description: s.description,
+                  target_url: s.target_url,
+                  created_at: s.created_at,
+                  updated_at: s.updated_at,
+                })),
+              },
+              null,
+              2
+            ),
           },
         ],
       };
@@ -581,8 +589,8 @@ class GitHubMCPServer {
   async checkDeploymentStatus({ owner, repo }) {
     try {
       // This is a placeholder for actual deployment status check logic.
-      // In a real scenario, this would involve querying Vercel API
-      // or checking GitHub Actions workflow runs.
+      // In a real scenario, this would involve checking GitHub Actions
+      // workflow runs or the box's deploy status.
       const message = `Checking deployment status for ${owner}/${repo}.`;
       console.log(message);
       return {
@@ -600,35 +608,6 @@ class GitHubMCPServer {
           {
             type: 'text',
             text: `Failed to check deployment status: ${error.message}`,
-          },
-        ],
-        isError: true,
-      };
-    }
-  }
-
-  async setupVercelSecrets({ owner, repo, vercel_token, vercel_org_id, vercel_project_id }) {
-    try {
-      // This is a placeholder for actual Vercel secrets setup logic.
-      // In a real scenario, this would involve creating secrets in the repository
-      // and potentially pushing them to Vercel.
-      const message = `Setting up Vercel secrets for ${owner}/${repo}. Vercel Token: ${vercel_token ? 'Present' : 'Missing'}, Org ID: ${vercel_org_id ? 'Present' : 'Missing'}, Project ID: ${vercel_project_id ? 'Present' : 'Missing'}.`;
-      console.log(message);
-      return {
-        content: [
-          {
-            type: 'text',
-            text: message,
-          },
-        ],
-      };
-    } catch (error) {
-      console.error(`Failed to setup Vercel secrets: ${error.message}`);
-      return {
-        content: [
-          {
-            type: 'text',
-            text: `Failed to setup Vercel secrets: ${error.message}`,
           },
         ],
         isError: true,
@@ -727,4 +706,4 @@ class GitHubMCPServer {
 }
 
 const server = new GitHubMCPServer();
-server.run().catch(console.error); 
+server.run().catch(console.error);

@@ -44,10 +44,10 @@ Local Development
 
 Production
 
-- Configure envs in Vercel Project settings (Production/Preview):
+- Configure envs in `/opt/orangecat/app/.env` on the Hetzner box (Production):
   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (required)
   - `SUPABASE_SERVICE_ROLE_KEY` (optional; only if admin operations are required at runtime)
-- CI workflow uses GitHub Secrets for Vercel credentials only.
+- Production points at the self-hosted Supabase at `supabase.orangecat.ch`.
 
 Troubleshooting
 

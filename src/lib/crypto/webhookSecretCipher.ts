@@ -48,7 +48,7 @@ export function loadKey(): Buffer {
   const hex = process.env.WEBHOOK_SECRET_KEY;
   if (!hex) {
     throw new Error(
-      "WEBHOOK_SECRET_KEY is not set. Generate one with `node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"` and set it in Vercel env."
+      "WEBHOOK_SECRET_KEY is not set. Generate one with `node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"` and set it in the environment (locally in .env.local; in production in /opt/orangecat/app/.env on the box)."
     );
   }
   if (!/^[0-9a-f]{64}$/i.test(hex)) {

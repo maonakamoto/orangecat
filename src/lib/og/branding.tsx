@@ -1,7 +1,7 @@
 /**
  * Shared design tokens for next/og image generators.
  *
- * @vercel/og (satori) doesn't support Tailwind — every style is inline.
+ * next/og (Satori) doesn't support Tailwind — every style is inline.
  * Keep this file as the SSOT for share-card colours / spacing / typography
  * so every OG image (homepage, profile, group, project) looks like the
  * same product.

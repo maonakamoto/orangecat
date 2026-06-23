@@ -31,7 +31,7 @@ export const EXTERNAL_PUBLISH_SOURCE_LABELS: Record<ExternalPublishSource, strin
  * exact-origin discipline.
  */
 export const EXTERNAL_PUBLISH_SOURCE_ORIGINS: Record<ExternalPublishSource, readonly string[]> = {
-  fleetcrown: ['https://fleetcrown.orangecat.ch', 'https://fleetcrown.vercel.app'],
+  fleetcrown: ['https://fleetcrown.orangecat.ch'],
 };
 
 /** True if `url`'s origin is allowed for `source` (used to gate the deep-link). */

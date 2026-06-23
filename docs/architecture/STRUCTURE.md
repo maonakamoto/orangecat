@@ -17,7 +17,6 @@ This document provides a detailed explanation of the OrangeCat project's file st
 - `postcss.config.js` - PostCSS configuration for processing CSS.
 - `tailwind.config.js` - Tailwind CSS framework configuration.
 - `tsconfig.json` - TypeScript configuration, including compiler options and paths.
-- `vercel.json` - Vercel deployment configuration.
 
 ### Documentation Files
 
@@ -55,19 +54,23 @@ The app directory follows Next.js 13+ App Router conventions.
 Reusable React components used throughout the application.
 
 #### Layout Components
+
 - `components/layout/Header.tsx` - Main navigation header component.
 - `components/layout/Footer.tsx` - Footer component.
 
 #### Dashboard Components
+
 - `components/dashboard/DashboardLayout.tsx` - Layout wrapper for dashboard pages.
 - `components/dashboard/DashboardContent.tsx` - Main content component for dashboard.
 - `components/dashboard/StatsCard.tsx` - Component for displaying statistics.
 
 #### Authentication Components
+
 - `components/auth/AuthForm.tsx` - Form component for authentication.
 - `components/auth/AuthButton.tsx` - Button component for auth actions.
 
 #### UI Components
+
 - `components/ui/Card.tsx` - Reusable card component.
 - `components/ui/Button.tsx` - Button component with variants.
 - `components/ui/Loading.tsx` - Loading spinner component.
@@ -116,7 +119,6 @@ orangecat/
 ├── postcss.config.js
 ├── tailwind.config.js
 ├── tsconfig.json
-├── vercel.json
 ├── CHANGELOG.md
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
@@ -153,4 +155,4 @@ orangecat/
 └── .git/
 ```
 
-This structure follows modern Next.js best practices, with clear separation of concerns and modular organization of code. Each directory and file has a specific purpose and follows established conventions for React and Next.js applications. 
+This structure follows modern Next.js best practices, with clear separation of concerns and modular organization of code. Each directory and file has a specific purpose and follows established conventions for React and Next.js applications.

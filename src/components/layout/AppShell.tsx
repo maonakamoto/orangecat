@@ -40,7 +40,7 @@ export function AppShell({ children }: AppShellProps) {
   const isAppSurface = surface === 'app';
   // Auth pages render their own minimal chrome — global header + nav +
   // search are noise on a sign-in screen and dilute the focus from the
-  // form. Stripe/Linear/Notion/Vercel all do this.
+  // form. Stripe/Linear/Notion all do this.
   const isAuthSurface = surface === 'auth';
 
   // Wait for auth hydration to prevent sidebar flash

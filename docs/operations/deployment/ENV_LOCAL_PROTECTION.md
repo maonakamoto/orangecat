@@ -10,12 +10,9 @@ last_modified_summary: Documentation for .env.local protection
 
 The `.env.local` file contains your local development environment variables. **Scripts should NEVER overwrite this file completely** - they should only update specific values while preserving all existing content.
 
-## What Happened
+## What Happened (historical)
 
-The `vercel link` command downloaded environment variables from Vercel and **overwrote** the entire `.env.local` file, removing all existing variables except:
-
-- `SUPABASE_SECRET_KEY`
-- `VERCEL_OIDC_TOKEN`
+An external env-sync tool once downloaded environment variables and **overwrote** the entire `.env.local` file, removing most existing variables. That tooling is gone (production env now lives in `/opt/orangecat/app/.env` on the Hetzner box), but the lesson stands: any script touching `.env.local` must merge, never overwrite.
 
 ## ✅ Solution
 
@@ -36,19 +33,13 @@ This script:
 
 The following scripts have been updated to **preserve existing content**:
 
-### 1. `scripts/auth/vercel-login.js`
-
-- Only updates `VERCEL_TOKEN` or `VERCEL_ACCESS_TOKEN`
-- Preserves all other variables
-- Creates backup before changes
-
-### 2. `scripts/auth/github-login.js`
+### 1. `scripts/auth/github-login.js`
 
 - Only updates `GITHUB_TOKEN`
 - Preserves all other variables
 - Creates backup before changes
 
-### 3. `scripts/utils/env-manager.js`
+### 2. `scripts/utils/env-manager.js`
 
 - `setupInitialEnv()` only runs if `.env.local` doesn't exist
 - Always creates backup before any changes
@@ -67,34 +58,19 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 NEXT_PUBLIC_BITCOIN_ADDRESS=...
 NEXT_PUBLIC_LIGHTNING_ADDRESS=...
 
-# Optional (from Vercel)
+# Optional
 SUPABASE_SECRET_KEY=...
-VERCEL_OIDC_TOKEN=...
-VERCEL_TOKEN=... (if using Vercel CLI)
-VERCEL_ACCESS_TOKEN=... (if using Vercel CLI)
 
 # Optional (from GitHub)
 GITHUB_TOKEN=... (if using GitHub API)
 ```
 
-## 🚨 Warning: vercel link
+## 🚨 Warning: env-sync tools
 
-The `vercel link` command will **overwrite** `.env.local` with variables from Vercel.
-
-**Before running `vercel link`:**
+Any external tool that "pulls" or "links" environment variables can **overwrite** `.env.local`. Before running one:
 
 1. Create a backup: `cp .env.local .env.local.backup`
 2. Or use the restore script after: `node scripts/utils/restore-env-local.js`
-
-**Better approach:**
-
-```bash
-# Link project without overwriting env
-vercel link --yes
-
-# Then restore missing variables
-node scripts/utils/restore-env-local.js
-```
 
 ## 🔄 Restore Process
 
@@ -121,7 +97,7 @@ If your `.env.local` gets overwritten:
 
 1. **Always create backups** before modifying `.env.local`
 2. **Only update specific variables**, never overwrite the entire file
-3. **Use the restore script** after `vercel link`
+3. **Use the restore script** after any env-sync tool runs
 4. **Check .env.local** after running any script that might modify it
 5. **Keep .env.local in .gitignore** (already configured)
 
@@ -144,7 +120,7 @@ Example of **correct** approach:
 const existing = parseEnvFile('.env.local');
 
 // Update only specific variable
-existing.VERCEL_TOKEN = newToken;
+existing.GITHUB_TOKEN = newToken;
 
 // Write back preserving structure
 writeEnvFile(existing, '.env.local');

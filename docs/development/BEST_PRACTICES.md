@@ -2,7 +2,7 @@
 
 This guide captures practical applications of our core engineering principles across development, deployment, and operations. See also: ../standards/engineering_principles.md
 
-> **Note (2026-06):** Production is **self-hosted on Hetzner** — Vercel is no longer the prod pipeline. The Vercel analytics/tools references below are historical; for deployment see `docs/deployment/DEPLOYMENT_PROCESS.md`.
+> **Note (2026-06):** Production is **self-hosted on Hetzner** ("bitbaum", behind Caddy). For deployment see `docs/operations/deployment/DEPLOYMENT_PROCESS.md`.
 
 ## Core Principles (Applied)
 
@@ -16,45 +16,27 @@ This guide captures practical applications of our core engineering principles ac
 
 ## Initial Deployment Checklist
 
-- [ ] Basic Vercel analytics enabled
 - [ ] Core routes tested
-- [ ] Environment variables configured
-- [ ] Domain setup verified
-- [ ] SSL certificates confirmed
+- [ ] Environment variables configured in `/opt/orangecat/app/.env` on the box
+- [ ] Domain setup verified (Caddy reverse proxy)
+- [ ] SSL certificates confirmed (Caddy auto-TLS)
+- [ ] `/api/health` returns OK after deploy
+
+## Monitoring on the Box
+
+The self-hosted app runs behind Caddy on Hetzner. Observe it with:
+
+1. **App logs** — the systemd/process logs for the running Next.js standalone server
+2. **Caddy logs** — request/error logs at the reverse-proxy layer
+3. **Health check** — `curl https://orangecat.ch/api/health`
 
 ## When to Add Additional Tools
 
 Only add error tracking and advanced monitoring when:
 
 1. You have actual users experiencing issues
-2. The basic analytics show problems
-3. You need more detailed insights than Vercel provides
-
-## Vercel's Built-in Tools
-
-1. **Analytics Dashboard**
-   - Page views
-   - Performance metrics
-   - Error rates
-   - Deployment history
-
-2. **Logs**
-   - Build logs
-   - Runtime logs
-   - Error logs
-
-3. **Performance Monitoring**
-   - Page load times
-   - API response times
-   - Build times
-
-## Adding External Tools
-
-Only consider external tools when:
-
-1. Vercel's built-in tools are insufficient
-2. You have specific needs not covered by Vercel
-3. You have the capacity to maintain additional services
+2. The basic logs show problems
+3. You need more detailed insights than process/Caddy logs provide
 
 ## Documentation
 

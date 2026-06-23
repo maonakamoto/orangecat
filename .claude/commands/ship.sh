@@ -170,34 +170,19 @@ if [ $CHECKS_PASSED -lt $CHECKS_TOTAL ]; then
     error_exit "Pre-deployment checks failed. Fix issues before deploying."
 fi
 
-# 8. Deployment to Vercel
-log_info "🚀 Step 8: Deploying to Vercel"
+# 8. Deployment to the Hetzner box (self-host)
+log_info "🚀 Step 8: Deploying to bitbaum (self-host)"
 
-# Check if Vercel CLI is available
-if command -v vercel &> /dev/null; then
-    log_info "Using Vercel CLI for deployment..."
-
-    # Set production environment
-    export NODE_ENV=production
-
-    # Deploy
-    vercel --prod 2>&1 | tee /tmp/vercel-deploy.log
-
-    # Extract deployment URL
-    DEPLOY_URL=$(grep -o 'https://[^ ]*\.vercel\.app' /tmp/vercel-deploy.log | head -1)
-
-    if [ -n "$DEPLOY_URL" ]; then
-        log_success "Deployment completed: $DEPLOY_URL"
-    else
-        log_warning "Deployment may have succeeded but URL not captured"
-    fi
-
+if [ -x scripts/deploy-selfhost.sh ]; then
+    log_info "Running scripts/deploy-selfhost.sh..."
+    scripts/deploy-selfhost.sh 2>&1 | tee /tmp/oc-deploy.log
+    log_success "Deploy finished — verifying health next"
 else
-    log_warning "Vercel CLI not found. Please deploy manually or install Vercel CLI."
+    log_warning "scripts/deploy-selfhost.sh not found. Deploy via CI instead."
     log_info "Manual deployment steps:"
-    log_info "1. Push to main branch"
-    log_info "2. Check Vercel dashboard: https://vercel.com/dashboard"
-    log_info "3. Verify deployment status"
+    log_info "1. Merge to main (CD runs .github/workflows/cd.yml)"
+    log_info "2. Verify https://orangecat.ch/api/health"
+    log_info "3. Confirm the app is serving"
 fi
 
 # 9. Post-deployment Testing

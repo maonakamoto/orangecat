@@ -21,7 +21,7 @@ Status: Ready for use
 
 ## 2) Security & Privacy
 
-- Do not commit `.env.local`; manage secrets via Vercel dashboard or server vault.
+- Do not commit `.env.local`; production secrets live in `/opt/orangecat/app/.env` on the Hetzner box.
 - Ensure HTTPS + HSTS; set CSP, COOP/COEP as appropriate.
 - Verify no chat content is persisted in private chat; only usage counters for non‑BYOK.
 
@@ -60,4 +60,3 @@ Status: Ready for use
 
 - Enable logs/analytics; add RED/USE dashboards if applicable.
 - Monitor 4xx/5xx rates and rate‑limit events.
-

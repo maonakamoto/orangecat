@@ -10,7 +10,7 @@ The `.env.local` file contains essential API keys and secrets that enable seamle
 
 - **Supabase** (database and authentication)
 - **GitHub** (version control and deployments)
-- **Vercel** (hosting and deployments)
+- **Hetzner box** (`bitbaum`) — production hosting
 - **MCP Servers** (tool integrations)
 - Other critical development services
 
@@ -19,7 +19,7 @@ The `.env.local` file contains essential API keys and secrets that enable seamle
 When `.env.local` is deleted or modified:
 
 1. All MCP server access is immediately lost
-2. CLI tools (Supabase CLI, GitHub CLI, Vercel CLI) stop working
+2. CLI tools (Supabase CLI, GitHub CLI) stop working
 3. Development workflow breaks completely
 4. Manual retrieval of credentials from multiple services is required
 5. Significant time is wasted re-configuring the environment
@@ -70,9 +70,9 @@ This rule applies to:
 
 ### After pushing to main:
 
-1. Check Vercel dashboard - `npx vercel ls`
-2. Verify deployment status is "Ready" for **Production** (not just Preview)
-3. If only Preview deployed, manually promote: `npx vercel promote <preview-url> --yes`
+1. CI deploys to the Hetzner box (`bitbaum`) via `.github/workflows/cd.yml` (or run `scripts/deploy-selfhost.sh`)
+2. Verify the deploy finished and the app is serving
+3. Check `https://orangecat.ch/api/health`
 4. Test on orangecat.ch before considering the task complete
 
 ### Why this matters:

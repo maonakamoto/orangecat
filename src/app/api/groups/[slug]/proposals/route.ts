@@ -105,8 +105,8 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
       return apiBadRequest(result.error);
     }
 
-    // Await so the activity row is persisted before Vercel kills the
-    // function. Fire-and-forget was silently dropping the row.
+    // Await so the activity row is persisted (and errors surface) before
+    // responding. Fire-and-forget was silently dropping the row.
     try {
       await recordGroupActivity(request.supabase, {
         group_id: groupResult.group.id,

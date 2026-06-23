@@ -20,7 +20,7 @@ try {
 }
 
 const nextConfig = {
-  // ESLint is a devDependency — lint in CI, skip in Vercel build
+  // ESLint is a devDependency — lint in CI, skip during the build
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -32,8 +32,8 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
 
   // Externalize Supabase packages for server-side rendering
-  // 'standalone' output is incompatible with Vercel, but it is exactly what
-  // the Hetzner self-host needs — opt in via SELF_HOST=1 at build time.
+  // 'standalone' output is what the Hetzner self-host needs — opt in via
+  // SELF_HOST=1 at build time.
   ...(process.env.SELF_HOST ? { output: 'standalone' } : {}),
   serverExternalPackages: ['@supabase/supabase-js', '@supabase/ssr'],
 
@@ -269,7 +269,7 @@ const nextConfig = {
       };
     }
 
-    // Note: Manual webpack externals REMOVED - they cause build issues on Vercel
+    // Note: Manual webpack externals REMOVED - they caused build issues.
     // Supabase packages are handled via serverExternalPackages config instead
 
     // Configure fallbacks for Node.js polyfills (only for client-side)

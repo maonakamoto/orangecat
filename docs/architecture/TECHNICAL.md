@@ -273,13 +273,12 @@ npm test -- --testPathPattern="security|verification|validation"
 
 ## Deployment
 
-The application is deployed on Vercel with the following configuration:
+The application is self-hosted on Hetzner ("bitbaum", behind Caddy) with the following configuration:
 
-- Automatic deployments from main branch
-- Environment variables managed in Vercel dashboard
+- Deploys performed on the box via the self-host flow (`scripts/deploy-selfhost.sh`); pushes to `main` run CI but do not deploy
+- Environment variables in `/opt/orangecat/app/.env` on the box
 - Production URL: https://orangecat.ch
-- Staging environment available
-- Automated testing before deployment
+- Automated testing in CI before a commit is deployed
 - **Security**: All critical vulnerabilities fixed before deployment
 
 ## Architecture Priorities

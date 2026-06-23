@@ -23,19 +23,19 @@ This document provides a comprehensive overview of the authentication and user p
 1.  User provides email and password.
 2.  The `signUp` method in `src/store/auth.ts` is called.
 3.  `supabase.auth.signUp()` is invoked:
-    *   Creates a new user in the `auth.users` table.
-    *   Sends a confirmation email (if email confirmations are enabled in Supabase).
+    - Creates a new user in the `auth.users` table.
+    - Sends a confirmation email (if email confirmations are enabled in Supabase).
 4.  **Profile Creation:** Immediately after successful sign-up in `auth.users`, the `signUp` method in `src/store/auth.ts` also:
-    *   Constructs a new profile object.
-    *   Populates initial fields:
-        *   `id`: Matches the `auth.users.id`.
-        *   `username`: Derived from the email prefix.
-        *   `display_name`: Also derived from the email prefix.
-        *   `avatar_url`: `null` by default.
-        *   `bio`: `null` by default.
-        *   `bitcoin_address`: `null` by default.
-        *   `created_at` & `updated_at`: Current timestamp.
-    *   Inserts this new record into the `public.profiles` table.
+    - Constructs a new profile object.
+    - Populates initial fields:
+      - `id`: Matches the `auth.users.id`.
+      - `username`: Derived from the email prefix.
+      - `display_name`: Also derived from the email prefix.
+      - `avatar_url`: `null` by default.
+      - `bio`: `null` by default.
+      - `bitcoin_address`: `null` by default.
+      - `created_at` & `updated_at`: Current timestamp.
+    - Inserts this new record into the `public.profiles` table.
 5.  The `onAuthStateChange` listener in `src/store/auth.ts` will eventually fire with a `SIGNED_IN` event (or `USER_ADDED` depending on Supabase config), triggering a profile fetch and state update.
 
 ### 2.2. User Log-In
@@ -63,17 +63,17 @@ This document provides a comprehensive overview of the authentication and user p
 ### 2.4. Session Management & Route Protection
 
 - **Next.js Middleware (`src/middleware.ts`):**
-    - Intercepts requests to protected routes.
-    - Uses `@supabase/ssr`'s `createServerClient` to check for a valid session from cookies.
-    - If no session, redirects to `/auth`.
-    - Handles sign-out URL (`/auth/signout`).
+  - Intercepts requests to protected routes.
+  - Uses `@supabase/ssr`'s `createServerClient` to check for a valid session from cookies.
+  - If no session, redirects to `/auth`.
+  - Handles sign-out URL (`/auth/signout`).
 - **Client-Side Hooks (`src/hooks/useAuth.ts`):**
-    - `useRequireAuth()`: For client-side components/pages. If no authenticated user (after hydration), redirects to `/auth`.
-    - `useRedirectIfAuthenticated()`: If an authenticated user visits a page like `/auth`, redirects them to `/dashboard`.
+  - `useRequireAuth()`: For client-side components/pages. If no authenticated user (after hydration), redirects to `/auth`.
+  - `useRedirectIfAuthenticated()`: If an authenticated user visits a page like `/auth`, redirects them to `/dashboard`.
 - **Zustand Store Hydration:**
-    - The store is persisted to `localStorage`.
-    - On app load, the `onAuthStateChange` listener (with `INITIAL_SESSION` event) and persisted state help rehydrate the auth status quickly.
-    - `hydrated` and `isLoading` flags in the store are crucial for UI to prevent flicker and show appropriate loading states.
+  - The store is persisted to `localStorage`.
+  - On app load, the `onAuthStateChange` listener (with `INITIAL_SESSION` event) and persisted state help rehydrate the auth status quickly.
+  - `hydrated` and `isLoading` flags in the store are crucial for UI to prevent flicker and show appropriate loading states.
 
 ### 2.5. Password Reset (Recovery) Flow
 
@@ -95,7 +95,7 @@ Configuration requirements (Production):
     - `https://www.orangecat.ch/auth/reset-password`
     - `https://orangecat.ch/auth/reset-password`
     - (Optional for dev): `http://localhost:3000/auth/reset-password`
-- Vercel (or hosting) Environment Variables:
+- Production Environment Variables (`/opt/orangecat/app/.env` on the Hetzner box):
   - Set `NEXT_PUBLIC_SITE_URL` to the SAME canonical domain used for `site_url` above (e.g., `https://www.orangecat.ch`).
   - This ensures the `redirectTo` generated server-side matches the allow-list in Supabase exactly.
 - Notes:
@@ -105,17 +105,17 @@ Configuration requirements (Production):
 ## 3. State Management (`src/store/auth.ts`)
 
 - **`useAuthStore` (Zustand):** Single source of truth for client-side authentication state.
-    - `user: User | null`: The Supabase `User` object.
-    - `session: Session | null`: The Supabase `Session` object.
-    - `profile: Profile | null`: The user's custom profile data from the `profiles` table (typed by `Profile` from `src/types/database.ts`).
-    - `isLoading: boolean`: Indicates if an auth operation or profile fetch is in progress.
-    - `hydrated: boolean`: Indicates if the store has been rehydrated from `localStorage` and initial session check is complete.
-    - `isAdmin: boolean`: Derived from `user?.app_metadata?.role`.
-    - `error: string | null`: Stores any error messages from auth operations.
+  - `user: User | null`: The Supabase `User` object.
+  - `session: Session | null`: The Supabase `Session` object.
+  - `profile: Profile | null`: The user's custom profile data from the `profiles` table (typed by `Profile` from `src/types/database.ts`).
+  - `isLoading: boolean`: Indicates if an auth operation or profile fetch is in progress.
+  - `hydrated: boolean`: Indicates if the store has been rehydrated from `localStorage` and initial session check is complete.
+  - `isAdmin: boolean`: Derived from `user?.app_metadata?.role`.
+  - `error: string | null`: Stores any error messages from auth operations.
 - **`onAuthStateChange` Listener:**
-    - Listens to Supabase auth events (`SIGNED_IN`, `SIGNED_OUT`, `USER_UPDATED`, `INITIAL_SESSION`, etc.).
-    - Updates the store accordingly, including fetching/clearing the user profile.
-    - This is the primary mechanism for keeping the client-side state in sync with Supabase's auth state.
+  - Listens to Supabase auth events (`SIGNED_IN`, `SIGNED_OUT`, `USER_UPDATED`, `INITIAL_SESSION`, etc.).
+  - Updates the store accordingly, including fetching/clearing the user profile.
+  - This is the primary mechanism for keeping the client-side state in sync with Supabase's auth state.
 
 ## 4. User Profiles
 
@@ -126,14 +126,14 @@ The structure of user profiles is defined by the `Profile` interface in `src/typ
 ```typescript
 // From: src/types/database.ts
 export interface Profile {
-  id: string;                  // Primary key, matches auth.users.id
+  id: string; // Primary key, matches auth.users.id
   username?: string | null;
   display_name: string | null;
   avatar_url?: string | null;
   bio: string | null;
   bitcoin_address: string | null;
-  created_at: string;          // ISO timestamp
-  updated_at: string;          // ISO timestamp
+  created_at: string; // ISO timestamp
+  updated_at: string; // ISO timestamp
 }
 ```
 
@@ -145,24 +145,24 @@ export interface Profile {
 
 - **Creation:** As detailed in the "User Sign-Up" flow, a profile is automatically created in `public.profiles` when a new user signs up via `src/store/auth.ts`.
 - **Updates:**
-    - Users can update their profile information through UI elements.
-    - The `updateProfile` method in `src/store/auth.ts` is called.
-    - This method, in turn, may call `ProfileService.updateProfile` (or directly use the Supabase client as it currently does).
-    - The service/store updates the relevant row in the `public.profiles` table using the user's ID.
-    - After a successful update, the local `profile` state in the Zustand store is also updated.
+  - Users can update their profile information through UI elements.
+  - The `updateProfile` method in `src/store/auth.ts` is called.
+  - This method, in turn, may call `ProfileService.updateProfile` (or directly use the Supabase client as it currently does).
+  - The service/store updates the relevant row in the `public.profiles` table using the user's ID.
+  - After a successful update, the local `profile` state in the Zustand store is also updated.
 
 ## 5. Database Interaction (`public.profiles` Table)
 
 - **Schema Consistency:** It is **critical** that the columns and data types in your `public.profiles` table in Supabase **exactly match** the `Profile` interface in `src/types/database.ts`. Mismatches will lead to runtime errors.
 - **Row Level Security (RLS):**
-    - RLS should be enabled on the `public.profiles` table.
-    - **Recommended Policies:**
-        - Users can only select their own profile:
-          `CREATE POLICY "Enable read access for own user" ON public.profiles FOR SELECT USING (auth.uid() = id);`
-        - Users can only update their own profile:
-          `CREATE POLICY "Enable update access for own user" ON public.profiles FOR UPDATE USING (auth.uid() = id) WITH CHECK (auth.uid() = id);`
-        - Profile creation is handled by the application logic after user sign-up (often using service_role key implicitly via `supabase.auth.signUp` context or explicit service client if profile creation is separate and secured). For client-side initiated profile inserts linked to new users, ensure the RLS policy for INSERT allows it only if `id` matches `auth.uid()`.
-          `CREATE POLICY "Enable insert for own user" ON public.profiles FOR INSERT WITH CHECK (auth.uid() = id);`
+  - RLS should be enabled on the `public.profiles` table.
+  - **Recommended Policies:**
+    - Users can only select their own profile:
+      `CREATE POLICY "Enable read access for own user" ON public.profiles FOR SELECT USING (auth.uid() = id);`
+    - Users can only update their own profile:
+      `CREATE POLICY "Enable update access for own user" ON public.profiles FOR UPDATE USING (auth.uid() = id) WITH CHECK (auth.uid() = id);`
+    - Profile creation is handled by the application logic after user sign-up (often using service_role key implicitly via `supabase.auth.signUp` context or explicit service client if profile creation is separate and secured). For client-side initiated profile inserts linked to new users, ensure the RLS policy for INSERT allows it only if `id` matches `auth.uid()`.
+      `CREATE POLICY "Enable insert for own user" ON public.profiles FOR INSERT WITH CHECK (auth.uid() = id);`
 
 ### 5.1. Cascading Deletes (Important Setup)
 
@@ -171,6 +171,7 @@ By default, deleting a user from `auth.users` (e.g., via Supabase dashboard or a
 To enable automatic cascading deletes:
 
 1.  **Create a Database Function:** Execute this in the Supabase SQL Editor:
+
     ```sql
     CREATE OR REPLACE FUNCTION public.handle_user_delete()
     RETURNS TRIGGER AS $$
@@ -181,7 +182,8 @@ To enable automatic cascading deletes:
     END;
     $$ LANGUAGE plpgsql SECURITY DEFINER;
     ```
-    *(Note: `SECURITY DEFINER` allows the function to run with the permissions of the user who defined it, which is necessary to delete from `public.profiles` if restrictive RLS is in place for the calling user.)*
+
+    _(Note: `SECURITY DEFINER` allows the function to run with the permissions of the user who defined it, which is necessary to delete from `public.profiles` if restrictive RLS is in place for the calling user.)_
 
 2.  **Create a Trigger on `auth.users`:** Execute this in the Supabase SQL Editor:
     ```sql
@@ -210,4 +212,4 @@ To enable automatic cascading deletes:
 - **Single Responsibility:** Consider refining services so that `ProfileService.ts` becomes the sole handler of all direct `profiles` table interactions, which the store would then use.
 - **Keep Documentation Updated:** As the authentication system evolves, update this document.
 
-This detailed guide should help current and future developers understand the intricacies of the authentication system. 
+This detailed guide should help current and future developers understand the intricacies of the authentication system.
