@@ -3,17 +3,12 @@ import { logger } from '@/utils/logger';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Target, Bitcoin, ArrowRight } from 'lucide-react';
+import { Target, ArrowRight } from 'lucide-react';
 import type { ScalableProfile } from '@/services/profile/types';
 import Button from '@/components/ui/Button';
+import ProfileProjectCard from '@/components/profile/ProfileProjectCard';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';
-import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
-import { formatBitcoinDisplay } from '@/services/currency/formatting';
-import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { formatRelativeTimeCompact } from '@/utils/dates';
-import { getStatusInfo } from '@/config/status-config';
 import { PROJECT_STATUS } from '@/config/project-statuses';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 
@@ -142,140 +137,25 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
 
       {/* Projects Grid */}
       <div className="space-y-4">
-        {publicProjects.map(project => {
-          const statusInfo = getStatusInfo(project.status || PROJECT_STATUS.ACTIVE);
-          const balanceBTC = project.bitcoin_balance_btc || 0;
-          const goalAmount = project.goal_amount || 0;
-          const raisedAmount = project.raised_amount || 0;
-          const currentAmount = balanceBTC > 0 ? balanceBTC : raisedAmount;
-          const progress = goalAmount > 0 ? Math.min((currentAmount / goalAmount) * 100, 100) : 0;
-          const showStatusBadge =
-            project.status &&
-            !([PROJECT_STATUS.ACTIVE, PROJECT_STATUS.DRAFT] as string[]).includes(
-              project.status.toLowerCase()
-            );
-
-          return (
-            <Link
-              key={project.id}
-              href={ROUTES.PROJECTS.VIEW(project.id)}
-              className="block overflow-hidden rounded-lg border-2 border-default hover:border-strong hover:shadow-sm bg-surface-base transition-all duration-200 group"
-            >
-              <div className="flex flex-col sm:flex-row">
-                {/* Thumbnail */}
-                <div className="relative w-full sm:w-32 h-48 sm:h-auto flex-shrink-0 bg-surface-raised">
-                  {project.thumbnail_url ? (
-                    <Image
-                      src={project.thumbnail_url}
-                      alt={project.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Target className="w-12 h-12 text-fg-secondary" />
-                    </div>
-                  )}
-                  {project.category && (
-                    <div className="absolute top-2 left-2">
-                      <span className="px-2 py-1 bg-surface-base/90 dark:bg-surface-base/90 backdrop-blur-sm rounded-md text-xs font-medium text-fg-primary">
-                        {project.category}
-                      </span>
-                    </div>
-                  )}
-                  {showStatusBadge && (
-                    <div className="absolute top-2 right-2">
-                      <span
-                        className={`px-2 py-1 rounded-md text-xs font-medium ${statusInfo.className}`}
-                      >
-                        {statusInfo.label}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 p-4 sm:p-5 flex flex-col">
-                  <div className="flex-1">
-                    <h4 className="font-bold text-fg-primary text-lg mb-1.5 line-clamp-1">
-                      {project.title}
-                    </h4>
-                    {project.description && (
-                      <p className="text-sm text-fg-secondary line-clamp-2 mb-3">
-                        {project.description}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Progress */}
-                  {goalAmount > 0 ? (
-                    <div className="space-y-2 mb-3">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-fg-secondary">Progress</span>
-                        <span className="font-semibold text-fg-primary">
-                          {progress.toFixed(1)}%
-                        </span>
-                      </div>
-                      <div className="w-full bg-surface-raised rounded-full h-2 overflow-hidden">
-                        <div
-                          className="bg-fg-primary h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${progress}%` }}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-fg-secondary">
-                          <CurrencyDisplay
-                            amount={currentAmount}
-                            currency={project.currency || PLATFORM_DEFAULT_CURRENCY}
-                            size="sm"
-                          />
-                        </span>
-                        <span className="text-fg-secondary">
-                          of{' '}
-                          <CurrencyDisplay
-                            amount={goalAmount}
-                            currency={project.currency || PLATFORM_DEFAULT_CURRENCY}
-                            size="sm"
-                          />
-                        </span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mb-3">
-                      <div className="flex items-center gap-2">
-                        <Bitcoin className="w-4 h-4 text-bitcoinOrange" />
-                        <span className="text-sm font-semibold text-fg-primary">
-                          {balanceBTC > 0 ? (
-                            formatBitcoinDisplay(balanceBTC)
-                          ) : raisedAmount > 0 ? (
-                            <CurrencyDisplay
-                              amount={raisedAmount}
-                              currency={project.currency || PLATFORM_DEFAULT_CURRENCY}
-                              size="sm"
-                            />
-                          ) : (
-                            'No funds yet'
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Footer */}
-                  <div className="flex items-center justify-between text-xs text-fg-secondary pt-2 border-t border-subtle">
-                    <span>{formatRelativeTimeCompact(project.created_at)}</span>
-                    {project.bitcoin_address && (
-                      <span className="flex items-center gap-1 text-bitcoinOrange">
-                        <Bitcoin className="w-3 h-3" />
-                        Wallet
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
+        {publicProjects.map(project => (
+          <ProfileProjectCard
+            key={project.id}
+            project={{
+              id: project.id,
+              title: project.title,
+              description: project.description,
+              imageUrl: project.thumbnail_url,
+              goalAmount: project.goal_amount,
+              raisedAmount: project.raised_amount,
+              balanceBtc: project.bitcoin_balance_btc,
+              currency: project.currency,
+              category: project.category,
+              status: project.status,
+              hasWallet: !!project.bitcoin_address,
+              createdAt: project.created_at,
+            }}
+          />
+        ))}
       </div>
     </div>
   );

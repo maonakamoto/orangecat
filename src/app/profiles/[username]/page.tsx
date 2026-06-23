@@ -175,6 +175,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
       goal_amount,
       currency,
       raised_amount,
+      cover_image_url,
       created_at,
       updated_at
     `
