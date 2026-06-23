@@ -42,6 +42,13 @@ interface UseDisplayCurrencyReturn {
   formatSats: (sats: number, options?: DisplayCurrencyOptions) => string;
   /** Format a BTC amount (database canonical unit) in user's preferred display currency. Caller must pass BTC. */
   formatAmountBtc: (btc: number, options?: DisplayCurrencyOptions) => string;
+  /**
+   * Format a listing price that may be denominated in fiat OR BTC. When
+   * `currency` is a non-BTC fiat code, render it in that currency (entities
+   * price in their own currency, not BTC); otherwise (omitted/'BTC') render as
+   * a BTC amount in the user's preferred display unit.
+   */
+  formatPrice: (amount: number, currency?: string) => string;
   /** User's preferred display currency code */
   displayCurrency: CurrencyCode;
   /** Whether user prefers fiat (CHF/EUR/USD) vs crypto (BTC/SATS) */
@@ -123,9 +130,18 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
     [formatSats]
   );
 
+  const formatPrice = useCallback(
+    (amount: number, currency?: string): string =>
+      currency && currency.toUpperCase() !== 'BTC'
+        ? formatCurrency(amount, currency as CurrencyCode)
+        : formatAmountBtc(amount),
+    [formatAmountBtc]
+  );
+
   return {
     formatSats,
     formatAmountBtc,
+    formatPrice,
     displayCurrency,
     prefersFiat,
     isLoading,

@@ -330,7 +330,15 @@ export function GroupWallets({
                         <div className="flex items-center gap-2">
                           <div>
                             <div className="text-sm text-fg-secondary">Balance</div>
-                            <div className="text-lg font-bold text-status-positive">
+                            {/* Green only for a non-zero balance — a zero
+                                rendered green reads as a positive it isn't. */}
+                            <div
+                              className={`text-lg font-bold ${
+                                Number(wallet.current_balance_btc) > 0
+                                  ? 'text-status-positive'
+                                  : 'text-fg-primary'
+                              }`}
+                            >
                               {formatAmountBtc(wallet.current_balance_btc)}
                             </div>
                           </div>

@@ -17,8 +17,12 @@ import { Badge } from '@/components/ui/badge';
 import { generateEntityJsonLd, JsonLdScript } from '@/lib/seo/structured-data';
 import EntityShare from '@/components/sharing/EntityShare';
 import PublicEntityOwnerCard from '@/components/public/PublicEntityOwnerCard';
+import PublicEntityHero from '@/components/public/PublicEntityHero';
 import PublicEntityTimestamps from '@/components/public/PublicEntityTimestamps';
 import { PublicEntityPaymentSection } from '@/components/payment';
+import { resolveSellerReceiveInfo, type SellerReceiveInfo } from '@/domain/payments';
+import { currencyConverter } from '@/services/currency';
+import { type CurrencyCode } from '@/config/currencies';
 import { fetchEntityOwner } from '@/lib/entities/fetchEntityOwner';
 import { ROUTES } from '@/config/routes';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
@@ -65,10 +69,23 @@ export interface EntityDetailConfig {
   getJsonLdExtra?: (entity: EntityData) => Record<string, unknown>;
   /** Override the themed icon box in the header (e.g., a cover image) */
   renderHeaderIcon?: (entity: EntityData) => ReactNode;
+  /**
+   * Ordered cover image URLs (cover first) for the full-width hero, rendered
+   * below the header. Return [] for entities with no imagery — the page then
+   * falls back to the header type icon. Drives PublicEntityHero.
+   */
+  getCoverImages?: (entity: EntityData) => string[];
   /** Header badges/extra info (e.g., date for events, category for products) */
   renderHeaderExtra?: (entity: EntityData) => ReactNode;
   /** Entity-specific detail cards below description */
   renderDetails?: (entity: EntityData) => ReactNode;
+  /**
+   * Resolve the entity's price for the payment section, in its OWN currency
+   * (NOT BTC — there is no price_btc column). Returns null when the entity has
+   * no fixed price (e.g. contribution entities). The buyer is charged the
+   * BTC-converted amount server-side; this only drives display.
+   */
+  getPrice?: (entity: EntityData) => { amount: number; currency: string } | null;
   /** Extra sidebar cards rendered after EntityShare (e.g., Quick Stats, CTAs) */
   renderSidebarExtra?: (entity: EntityData) => ReactNode;
   /** Select columns for metadata query (defaults to 'title, description, price_btc') */
@@ -148,6 +165,23 @@ export default async function PublicEntityDetailPage({
 
   const owner = await fetchEntityOwner(supabase, entity);
 
+  // Resolve the seller's public receiving info + BTC amount server-side so a
+  // logged-out visitor can pay direct (permissionless) — no account, no gate.
+  // Skipped for entities with no payment section (e.g. loans).
+  const price = config.getPrice?.(entity) ?? null;
+  const priceAmount = price && price.amount > 0 ? price.amount : undefined;
+  let sellerReceive: SellerReceiveInfo | null = null;
+  let priceAmountBtc: number | undefined;
+  if (config.showPaymentSection !== false) {
+    sellerReceive = await resolveSellerReceiveInfo(supabase, config.entityType, id);
+    if (priceAmount !== undefined && price) {
+      priceAmountBtc =
+        (price.currency || 'BTC') === 'BTC'
+          ? priceAmount
+          : await currencyConverter.convert(priceAmount, price.currency as CurrencyCode, 'BTC');
+    }
+  }
+
   const jsonLd = generateEntityJsonLd({
     type: config.entityType,
     id,
@@ -202,6 +236,15 @@ export default async function PublicEntityDetailPage({
           </div>
         </div>
 
+        {(() => {
+          const coverImages = config.getCoverImages?.(entity) ?? [];
+          return coverImages.length > 0 ? (
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+              <PublicEntityHero images={coverImages} title={entity.title} />
+            </div>
+          ) : null;
+        })()}
+
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
@@ -241,9 +284,12 @@ export default async function PublicEntityDetailPage({
                     entityType={config.entityType}
                     entityId={id}
                     entityTitle={entity.title}
-                    priceBtc={entity.price_btc ? Number(entity.price_btc) : undefined}
+                    priceAmount={priceAmount}
+                    priceCurrency={price?.currency}
                     sellerProfileId={owner?.id ?? null}
                     sellerUserId={owner?.user_id ?? null}
+                    sellerReceive={sellerReceive}
+                    priceAmountBtc={priceAmountBtc}
                     signInRedirect={viewRoute}
                   />
                 </div>

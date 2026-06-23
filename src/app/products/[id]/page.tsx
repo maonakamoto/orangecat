@@ -5,8 +5,8 @@ import PublicEntityDetailPage, {
   type EntityDetailConfig,
 } from '@/components/public/PublicEntityDetailPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import PriceDisplay from '@/components/public/PriceDisplay';
 import { ROUTES } from '@/config/routes';
-import { formatCurrency } from '@/services/currency';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -26,6 +26,14 @@ const config: EntityDetailConfig = {
   ownerLabel: 'Seller',
   createdLabel: 'Listed',
   getViewRoute: id => ROUTES.PRODUCTS.VIEW(id),
+  getCoverImages: entity => {
+    const images = Array.isArray(entity.images) ? (entity.images as string[]) : [];
+    return [...images, entity.thumbnail_url as string].filter(Boolean);
+  },
+  getPrice: entity => {
+    const { amount, currency } = getPrice(entity);
+    return Number.isFinite(amount) && amount > 0 ? { amount, currency } : null;
+  },
   getJsonLdExtra: entity => {
     const { amount, currency } = getPrice(entity);
     return amount > 0
@@ -40,7 +48,7 @@ const config: EntityDetailConfig = {
           <CardTitle className="text-lg">Price</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-bold text-fg-primary">{formatCurrency(amount, currency)}</p>
+          <PriceDisplay amount={amount} currency={currency} />
         </CardContent>
       </Card>
     ) : null;

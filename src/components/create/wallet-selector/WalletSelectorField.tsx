@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Wallet as WalletIcon, PenLine, Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Input } from '@/components/ui/Input';
@@ -70,6 +70,31 @@ export function WalletSelectorField({
   useEffect(() => {
     fetchWallets();
   }, [fetchWallets]);
+
+  // Pre-select the user's primary wallet once loaded so an existing address is
+  // tied to the entity by default (they can switch or enter another). Without
+  // this, a user who has a wallet but never clicks a card creates an entity with
+  // no explicit link — and may not realise their address could be attached.
+  const didPreselect = useRef(false);
+  useEffect(() => {
+    if (didPreselect.current || wallets.length === 0) {
+      return;
+    }
+    didPreselect.current = true;
+
+    // Honour an existing selection (edit mode) instead of overriding it.
+    if (formData._wallet_id) {
+      setSelectedWalletId(formData._wallet_id as string);
+      return;
+    }
+
+    const primary = wallets.find(w => w.is_primary) ?? wallets[0];
+    setSelectedWalletId(primary.id);
+    onFieldChange('bitcoin_address', primary.address_or_xpub);
+    onFieldChange('lightning_address', primary.lightning_address || '');
+    onFieldChange('_wallet_id', primary.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once after wallets load
+  }, [wallets]);
 
   const handleSelectWallet = (wallet: Wallet) => {
     setSelectedWalletId(wallet.id);

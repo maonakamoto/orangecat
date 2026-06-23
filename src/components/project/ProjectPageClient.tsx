@@ -160,6 +160,13 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
               entityTitle={project.title}
               sellerProfileId={project.user_id}
               sellerUserId={project.user_id}
+              sellerReceive={
+                project.bitcoin_address
+                  ? { method: 'onchain', address: project.bitcoin_address }
+                  : project.lightning_address
+                    ? { method: 'lightning_address', address: project.lightning_address }
+                    : null
+              }
               signInRedirect={ROUTES.PROJECTS.VIEW(project.id)}
             />
 

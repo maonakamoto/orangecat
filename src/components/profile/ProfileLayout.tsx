@@ -196,12 +196,10 @@ export default function ProfileLayout({
               @{profile.username}
             </p>
             {profile.bio && (
-              // Bio used to live only on the Overview tab. Visitors hit
-              // Timeline by default and never saw who the person was unless
-              // they clicked through. Surface it in the header card so the
-              // "who is this" answer is immediate. Clamp to 3 lines so a
-              // long bio doesn't push tabs off-screen — Overview still has
-              // the full text.
+              // Surface the bio in the header card so the "who is this" answer
+              // is immediate, reinforcing the Overview-first default below.
+              // Clamp to 3 lines so a long bio doesn't push tabs off-screen —
+              // the Overview tab still has the full text.
               <p className="mb-3 line-clamp-3 max-w-3xl text-sm text-fg-secondary sm:mb-4 sm:text-base">
                 {profile.bio}
               </p>
@@ -220,7 +218,9 @@ export default function ProfileLayout({
             )}
           </div>
 
-          <ProfileViewTabs tabs={filteredTabs} defaultTab="timeline" />
+          {/* Overview-first: a shared profile should open on the scannable
+              "who is this / what do they offer" summary, not the timeline feed. */}
+          <ProfileViewTabs tabs={filteredTabs} defaultTab="overview" />
         </div>
       </div>
     </div>

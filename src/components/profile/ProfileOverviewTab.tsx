@@ -42,7 +42,9 @@ export default function ProfileOverviewTab({
   context = 'public',
 }: ProfileOverviewTabProps) {
   const isDashboardView = context === 'dashboard';
-  const publicContactEmail = profile.contact_email || profile.email;
+  // Public contact email is ONLY the opt-in contact_email field — never the
+  // private account login email (profile.email). See profile email-leak fix.
+  const publicContactEmail = profile.contact_email;
   const { formatAmountBtc } = useDisplayCurrency();
 
   return (
@@ -99,7 +101,13 @@ export default function ProfileOverviewTab({
           <Card>
             <CardContent className="pt-4 sm:pt-6">
               <div className="text-center">
-                <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-status-positive">
+                {/* Success green only signals an actual raise — a zero balance
+                    rendered green reads as a positive metric it isn't. */}
+                <div
+                  className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold ${
+                    stats.totalRaised > 0 ? 'text-status-positive' : 'text-fg-primary'
+                  }`}
+                >
                   {formatAmountBtc(stats.totalRaised)}
                 </div>
                 <div className="text-xs sm:text-sm text-fg-secondary mt-1">Total Raised</div>

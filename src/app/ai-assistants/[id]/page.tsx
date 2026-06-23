@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { generateEntityMetadata } from '@/lib/seo/metadata';
 import PublicEntityDetailPage, {
   fetchEntityForMetadata,
@@ -6,11 +7,30 @@ import PublicEntityDetailPage, {
 } from '@/components/public/PublicEntityDetailPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
+import PriceDisplay from '@/components/public/PriceDisplay';
 import { ROUTES } from '@/config/routes';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
+
+// ai_assistants price by pricing_model, stored in BTC (no currency column;
+// the sats→BTC migration dropped the _sats suffix and converted values).
+const AI_PRICE_BY_MODEL: Record<string, { column: string; suffix: string }> = {
+  per_message: { column: 'price_per_message', suffix: ' / message' },
+  per_token: { column: 'price_per_1k_tokens', suffix: ' / 1k tokens' },
+  subscription: { column: 'subscription_price', suffix: ' / month' },
+};
+
+const getAiPricing = (entity: Record<string, unknown>) => {
+  const model = (entity.pricing_model as string) || 'free';
+  if (model === 'free') {
+    return { isFree: true, amount: 0, suffix: '' };
+  }
+  const spec = AI_PRICE_BY_MODEL[model];
+  const amount = spec ? Number(entity[spec.column] ?? 0) : 0;
+  return { isFree: false, amount, suffix: spec?.suffix ?? '' };
+};
 
 const config: EntityDetailConfig = {
   entityType: 'ai_assistant',
@@ -18,6 +38,17 @@ const config: EntityDetailConfig = {
   descriptionTitle: 'About this AI Assistant',
   metadataSelect: 'title, description, avatar_url',
   getViewRoute: id => ROUTES.AI_ASSISTANTS.VIEW(id),
+  renderHeaderIcon: entity =>
+    entity.avatar_url ? (
+      <Image
+        src={entity.avatar_url as string}
+        alt={(entity.title as string) || 'AI assistant'}
+        width={64}
+        height={64}
+        className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+        unoptimized
+      />
+    ) : undefined,
   renderHeaderExtra: entity => {
     if (!entity.category) {
       return null;
@@ -34,9 +65,25 @@ const config: EntityDetailConfig = {
       ? entity.personality_traits
       : [];
     const welcome = entity.welcome_message as string | null | undefined;
+    const pricing = getAiPricing(entity);
 
     return (
       <>
+        {(pricing.isFree || pricing.amount > 0) && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Pricing</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {pricing.isFree ? (
+                <p className="text-2xl font-bold text-fg-primary">Free</p>
+              ) : (
+                <PriceDisplay amount={pricing.amount} currency="BTC" suffix={pricing.suffix} />
+              )}
+            </CardContent>
+          </Card>
+        )}
+
         {welcome && (
           <Card>
             <CardHeader>

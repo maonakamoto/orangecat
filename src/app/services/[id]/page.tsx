@@ -5,8 +5,8 @@ import PublicEntityDetailPage, {
   type EntityDetailConfig,
 } from '@/components/public/PublicEntityDetailPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import PriceDisplay from '@/components/public/PriceDisplay';
 import { ROUTES } from '@/config/routes';
-import { formatCurrency } from '@/services/currency';
 import { BookEntityButton } from '@/components/bookings/BookEntityButton';
 
 interface PageProps {
@@ -36,6 +36,12 @@ const config: EntityDetailConfig = {
   createdLabel: 'Listed',
   descriptionTitle: 'About this Service',
   getViewRoute: id => ROUTES.SERVICES.VIEW(id),
+  getCoverImages: entity =>
+    (Array.isArray(entity.images) ? (entity.images as string[]) : []).filter(Boolean),
+  getPrice: entity => {
+    const { amount, currency } = getServicePrice(entity);
+    return amount > 0 ? { amount, currency } : null;
+  },
   getJsonLdExtra: entity => {
     const { amount, currency } = getServicePrice(entity);
     return {
@@ -55,12 +61,14 @@ const config: EntityDetailConfig = {
         </CardHeader>
         <CardContent className="space-y-4">
           {amount > 0 && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-4">
               <span className="text-fg-secondary">Price</span>
-              <span className="text-xl font-bold text-fg-primary">
-                {formatCurrency(amount, currency)}
-                {perHour ? ' / hr' : ''}
-              </span>
+              <PriceDisplay
+                amount={amount}
+                currency={currency}
+                className="text-xl font-bold text-fg-primary text-right"
+                suffix={perHour ? ' / hr' : undefined}
+              />
             </div>
           )}
           {durationMinutes && (
