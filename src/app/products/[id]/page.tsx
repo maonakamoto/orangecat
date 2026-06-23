@@ -5,8 +5,8 @@ import PublicEntityDetailPage, {
   type EntityDetailConfig,
 } from '@/components/public/PublicEntityDetailPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import PriceDisplay from '@/components/public/PriceDisplay';
 import { ROUTES } from '@/config/routes';
-import { formatCurrency } from '@/services/currency';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -44,7 +44,7 @@ const config: EntityDetailConfig = {
           <CardTitle className="text-lg">Price</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-bold text-fg-primary">{formatCurrency(amount, currency)}</p>
+          <PriceDisplay amount={amount} currency={currency} />
         </CardContent>
       </Card>
     ) : null;
