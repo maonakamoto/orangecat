@@ -149,6 +149,7 @@ export const API_ROUTES = {
   BOOKINGS: {
     BASE: '/api/bookings',
     BY_ID: (id: string) => `/api/bookings/${id}`,
+    RECEIVE_INFO: (id: string) => `/api/bookings/${id}/receive-info`,
   },
   PRESENCE: {
     OFFLINE: '/api/presence/offline',

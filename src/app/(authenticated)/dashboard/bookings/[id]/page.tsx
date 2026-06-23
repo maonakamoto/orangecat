@@ -15,7 +15,14 @@ import { STATUS } from '@/config/database-constants';
 import { formatDate, formatTime } from '@/utils/dates';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { logger } from '@/utils/logger';
+import { PublicPayPanel } from '@/components/payment/PublicPayPanel';
 import type { Booking } from '@/services/bookings';
+
+interface ReceiveInfo {
+  hasWallet: boolean;
+  method: 'nwc' | 'lightning_address' | 'onchain' | null;
+  address: string | null;
+}
 
 type BookingWithCustomer = Booking & {
   customer?: {
@@ -43,6 +50,8 @@ export default function BookingDetailPage() {
   const [booking, setBooking] = useState<BookingWithCustomer | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActing, setIsActing] = useState(false);
+  // undefined = not fetched yet, null = no payable wallet, object = resolved
+  const [receive, setReceive] = useState<ReceiveInfo | null | undefined>(undefined);
 
   const id = params.id as string;
 
@@ -72,6 +81,40 @@ export default function BookingDetailPage() {
   useEffect(() => {
     void loadBooking();
   }, [loadBooking]);
+
+  // For the customer on a confirmed-but-unpaid booking, fetch where to pay
+  // (the provider's public receiving address) so we can show a pay panel.
+  useEffect(() => {
+    if (!booking) {
+      return;
+    }
+    const payable =
+      booking.role === 'customer' &&
+      (booking.status === STATUS.BOOKINGS.CONFIRMED ||
+        booking.status === STATUS.BOOKINGS.IN_PROGRESS) &&
+      booking.price_btc > 0 &&
+      (booking.total_paid_btc ?? 0) < booking.price_btc;
+    if (!payable) {
+      setReceive(null);
+      return;
+    }
+    let cancelled = false;
+    fetch(API_ROUTES.BOOKINGS.RECEIVE_INFO(id))
+      .then(res => (res.ok ? res.json() : null))
+      .then(body => {
+        if (!cancelled) {
+          setReceive((body?.data as ReceiveInfo) ?? null);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setReceive(null);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [booking, id]);
 
   const handleAction = async (action: 'confirm' | 'reject' | 'complete' | 'cancel') => {
     setIsActing(true);
@@ -216,6 +259,38 @@ export default function BookingDetailPage() {
         </CardContent>
       </Card>
 
+      {/* Customer pay step — the booking dead-ended here before: confirmed,
+          but no way to pay. Reveal the provider's address + exact amount. */}
+      {!isProvider &&
+        (booking.status === STATUS.BOOKINGS.CONFIRMED ||
+          booking.status === STATUS.BOOKINGS.IN_PROGRESS) &&
+        booking.price_btc > 0 &&
+        (booking.total_paid_btc ?? 0) < booking.price_btc &&
+        (receive === undefined ? (
+          <Card>
+            <CardContent className="pt-6 flex items-center gap-2 text-sm text-fg-secondary">
+              <Loader2 className="h-4 w-4 animate-spin" /> Loading payment details…
+            </CardContent>
+          </Card>
+        ) : receive?.address &&
+          (receive.method === 'onchain' || receive.method === 'lightning_address') ? (
+          <PublicPayPanel
+            entityTitle={serviceTitle}
+            isContribution={false}
+            priceAmount={booking.price_btc}
+            priceCurrency="BTC"
+            amountBtc={booking.price_btc}
+            method={receive.method}
+            address={receive.address}
+          />
+        ) : (
+          <Card>
+            <CardContent className="pt-6 text-sm text-fg-secondary">
+              The provider hasn&apos;t set up a payable Bitcoin address for this booking yet.
+            </CardContent>
+          </Card>
+        ))}
+
       {(booking.customer_notes || booking.provider_notes || booking.cancellation_reason) && (
         <Card>
           <CardHeader>
@@ -278,6 +353,23 @@ export default function BookingDetailPage() {
           )}
         </div>
       )}
+
+      {/* Customer can cancel a pending or confirmed booking (had no actions before). */}
+      {!isProvider &&
+        (booking.status === STATUS.BOOKINGS.PENDING ||
+          booking.status === STATUS.BOOKINGS.CONFIRMED) && (
+          <div className="flex gap-3 flex-wrap">
+            <Button
+              variant="outline"
+              onClick={() => handleAction('cancel')}
+              disabled={isActing}
+              className="gap-2"
+            >
+              {isActing && <Loader2 className="h-4 w-4 animate-spin" />}
+              Cancel booking
+            </Button>
+          </div>
+        )}
     </div>
   );
 }

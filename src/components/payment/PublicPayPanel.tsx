@@ -35,8 +35,11 @@ interface PublicPayPanelProps {
   method: 'onchain' | 'lightning_address';
   /** The receiving address to reveal. */
   address: string;
-  /** Sign-in link for the optional "track your order" affordance. */
-  signInHref: string;
+  /**
+   * Sign-in link for the optional "track your order" affordance (anonymous
+   * visitors). Omit for already-authed contexts (e.g. a booking customer).
+   */
+  signInHref?: string;
 }
 
 function truncateMiddle(value: string, head = 12, tail = 10): string {
@@ -140,12 +143,14 @@ export function PublicPayPanel({
         <p className="text-xs text-fg-secondary text-center">
           Pay directly from any Bitcoin wallet — no account needed.
         </p>
-        <p className="text-xs text-fg-tertiary text-center">
-          Have an account?{' '}
-          <Link href={signInHref} className="underline hover:text-fg-secondary">
-            Sign in to track your order
-          </Link>
-        </p>
+        {signInHref && (
+          <p className="text-xs text-fg-tertiary text-center">
+            Have an account?{' '}
+            <Link href={signInHref} className="underline hover:text-fg-secondary">
+              Sign in to track your order
+            </Link>
+          </p>
+        )}
       </CardContent>
     </Card>
   );
