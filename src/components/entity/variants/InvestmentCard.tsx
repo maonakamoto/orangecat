@@ -85,7 +85,13 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm text-fg-secondary">Raised</span>
-              <span className="font-semibold text-status-positive">
+              {/* Green only when something's actually been raised — a zero
+                  rendered green reads as a positive metric it isn't. */}
+              <span
+                className={`font-semibold ${
+                  Number(investment.total_raised) > 0 ? 'text-status-positive' : 'text-fg-primary'
+                }`}
+              >
                 {formatAmount(investment.total_raised)}
               </span>
             </div>
