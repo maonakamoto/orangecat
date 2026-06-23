@@ -156,8 +156,8 @@ npm run build
 # Verify environment variables
 npm run env:validate
 
-# Check deployment logs
-vercel logs --follow
+# Check deployment logs (on the Hetzner box)
+# Tail the app process logs / Caddy logs on bitbaum
 ```
 
 **Solutions:**

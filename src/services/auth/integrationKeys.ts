@@ -252,7 +252,7 @@ export async function revokeIntegrationKey(keyId: string, userId: string): Promi
  *
  * Why no grace period in v1: it's simpler, matches the leak-response
  * mental model ("the old key is compromised, kill it now"), and matches
- * the typical Vercel env-var swap flow.
+ * the typical env-var swap flow.
  *
  * @throws Error when the old key doesn't belong to the user or is
  *         already revoked — exposed as a generic 404 by the route to

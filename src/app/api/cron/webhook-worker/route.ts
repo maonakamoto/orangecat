@@ -2,7 +2,7 @@
  * Webhook delivery worker.
  *
  * Schedule: systemd timer `orangecat-webhook-worker.timer` on bitbaum,
- * every minute (installed 2026-06-13; was a Vercel cron until e5aef265).
+ * every minute (installed 2026-06-13).
  *
  * For each due delivery row:
  *   1. Optimistically claim (atomic UPDATE WHERE attempt_count = expected)

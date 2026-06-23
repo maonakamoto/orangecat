@@ -57,8 +57,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
       return apiBadRequest(result.error);
     }
 
-    // Await activity write before responding — Vercel kills the
-    // function the moment the response is sent, so the void/.then
+    // Await the activity write before responding — the void/.then
     // pattern silently dropped vote-activity rows in prod.
     try {
       const group = await resolveGroupBySlug(supabase, slug);

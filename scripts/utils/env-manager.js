@@ -24,7 +24,6 @@ class EnvManager {
     this.requiredVars = ['NEXT_PUBLIC_SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_ANON_KEY'];
     this.optionalVars = [
       'GITHUB_TOKEN',
-      'VERCEL_TOKEN',
       'NEXT_PUBLIC_SITE_URL',
       'NEXT_PUBLIC_SITE_NAME',
       'NEXT_PUBLIC_BITCOIN_ADDRESS',
@@ -208,13 +207,9 @@ NEXT_PUBLIC_LIGHTNING_ADDRESS=orangecat@getalby.com
 # ==================== AUTH TOKENS ====================
 # Use the auth scripts to set these securely:
 # node scripts/auth/github-login.js
-# node scripts/auth/vercel-login.js
 
 # GitHub Configuration
 # GITHUB_TOKEN=your_github_token_here
-
-# Vercel Configuration
-# VERCEL_TOKEN=your_vercel_token_here
 `;
 
     fs.writeFileSync(this.envFile, envContent);
@@ -247,7 +242,6 @@ EXAMPLES:
 
 AUTH SCRIPTS:
   node scripts/auth/github-login.js    - Login to GitHub securely
-  node scripts/auth/vercel-login.js    - Login to Vercel securely
 
 SAFETY FEATURES:
   • Automatic backups before any changes
@@ -297,6 +291,3 @@ if (require.main === module) {
 }
 
 module.exports = EnvManager;
-
-
-

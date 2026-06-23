@@ -23,10 +23,10 @@ step has the exact command, a verification, and a rollback if it fails.
        (e.g. cd ~/dev/fleetcrown && npm run migrate)
 [ ] 5. Repack the SDK tarball into the customer's vendor/ folder
 [ ] 6. (Optional) npm publish --access public on @orangecat/sdk
-[ ] 7. Set CRON_SECRET in OrangeCat Vercel env
+[ ] 7. Set CRON_SECRET in OrangeCat prod env (/opt/orangecat/app/.env)
 [ ] 8. Set UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN
-       in OrangeCat Vercel env
-[ ] 9. Set WEBHOOK_SECRET_KEY in OrangeCat Vercel env
+       in OrangeCat prod env (/opt/orangecat/app/.env)
+[ ] 9. Set WEBHOOK_SECRET_KEY in OrangeCat prod env (/opt/orangecat/app/.env)
        (master key encrypting webhook_endpoints.secret_encrypted at rest)
 
 [ ] Smoke test: trigger an entity-create on the customer side,
@@ -175,7 +175,7 @@ reasons; deprecate is the polite recall.
 
 ---
 
-## Step 7 — Set CRON_SECRET in OrangeCat Vercel env
+## Step 7 — Set CRON_SECRET in OrangeCat prod env
 
 Without this, both cron routes 401 every minute / every day:
 
@@ -190,7 +190,7 @@ Generate a high-entropy secret:
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-Set it in Vercel for the OrangeCat project (Production) as `CRON_SECRET`.
+Set it as `CRON_SECRET` in `/opt/orangecat/app/.env` on the Hetzner box and restart the app.
 
 **Verify**: trigger the worker manually with the secret:
 
@@ -202,17 +202,17 @@ curl -sS https://orangecat.ch/api/cron/webhook-worker \
 ```
 
 **Rollback**: remove the env var; cron routes return 401. Crons fail
-soft (Vercel logs the 401 every minute but no data is harmed).
+soft (the app logs the 401 every minute but no data is harmed).
 
 ---
 
 ## Step 8 — Set Upstash Redis env vars
 
 Without these, per-key rate limits silently degrade to an in-memory
-single-instance bucket (only effective within one Vercel worker).
+single-instance bucket (only effective within one app process).
 Production multi-instance traffic will not be properly throttled.
 
-In the OrangeCat Vercel project (Production):
+In `/opt/orangecat/app/.env` on the box (Production):
 
 | Var                        | Value                       |
 | -------------------------- | --------------------------- |
@@ -228,7 +228,7 @@ in-memory. Not data-harmful, just less correct under load.
 
 ---
 
-## Step 9 — Set WEBHOOK_SECRET_KEY in OrangeCat Vercel env
+## Step 9 — Set WEBHOOK_SECRET_KEY in OrangeCat prod env
 
 Without this, every `POST /api/webhook-endpoints` mint **throws** —
 the service encrypts the signing secret at rest with this key, and
@@ -240,8 +240,8 @@ Generate a high-entropy 32-byte hex key:
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-Set it in Vercel for the OrangeCat project (Production) as
-`WEBHOOK_SECRET_KEY`. The value must be exactly 64 hex characters.
+Set it as `WEBHOOK_SECRET_KEY` in `/opt/orangecat/app/.env` on the box
+(Production). The value must be exactly 64 hex characters.
 
 **Verify**:
 
@@ -268,7 +268,7 @@ all unreadable. If the key is leaked, the safe response is:
 3. Once all old endpoints are revoked, drop the old key.
 
 There is no "undo" for `WEBHOOK_SECRET_KEY` going stale — treat it
-as a high-value secret with restricted Vercel team access.
+as a high-value secret with restricted access to the box env file.
 
 ---
 

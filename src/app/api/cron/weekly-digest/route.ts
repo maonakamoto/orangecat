@@ -2,8 +2,8 @@
  * Weekly Digest Cron Route
  *
  * Schedule: systemd timer `orangecat-cron@weekly-digest.timer` on bitbaum,
- * Mondays 08:00 UTC. (The header used to claim a vercel.json entry that
- * never existed — this route was unscheduled from creation until 2026-06.)
+ * Mondays 08:00 UTC. (This route was unscheduled from creation until the
+ * 2026-06 migration to systemd timers.)
  *
  * Processes users in batches of 50 to bound per-request work.
  *

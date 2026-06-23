@@ -1,7 +1,7 @@
 /**
  * GET /api/cron/cleanup — handler-level branch tests.
  *
- * Vercel cron runs this daily at 02:00 UTC. Silent failures here mean
+ * A systemd timer runs this daily at 02:00 UTC. Silent failures here mean
  * idempotency_results + webhook_deliveries (delivered rows) grow
  * unbounded — invisible until someone notices the deliveries drawer
  * takes ages to render or pg_stat_activity flags table bloat.
@@ -9,7 +9,7 @@
  * The route fans out to two tasks (pruneExpiredIdempotencyResults +
  * pruneDeliveredWebhookDeliveries). Each is independent — one
  * failing doesn't stop the other — and the response summarises per
- * task so Vercel logs are diagnosable.
+ * task so server logs are diagnosable.
  *
  * Created: 2026-06-04
  */

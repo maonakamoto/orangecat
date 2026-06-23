@@ -4,8 +4,8 @@
  * Authenticated endpoint that hits each configured AI provider with a
  * minimal probe ("ping") and returns the raw upstream status + sanitized
  * error message. Built specifically so users (and us) can answer the
- * question "why isn't Cat answering?" without having to read Vercel
- * function logs.
+ * question "why isn't Cat answering?" without having to read server
+ * logs.
  *
  * The error class returned is one of:
  *   - 'ok'            — provider answered 2xx

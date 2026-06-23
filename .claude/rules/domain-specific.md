@@ -400,28 +400,29 @@ const navigation = context.type === 'individual' ? individualNavigation : groupN
 
 ## Deployment
 
-### Vercel Production
+### Self-Hosted Production (Hetzner)
 
-**Automatic Deploys**:
+Production runs self-hosted on the Hetzner box (`bitbaum`), behind Caddy.
+There is no Vercel.
 
 ```
-main branch        → Production (orangecat.app)
-feature/* branches → Preview URLs
+main branch → deployed to bitbaum via .github/workflows/cd.yml
+              (or run scripts/deploy-selfhost.sh)
 ```
 
 **Environment Variables**:
 
-- Stored in Vercel Dashboard
-- Also in `.env.local` for development
-- Use `vercel env pull` to sync
+- Production env lives in `/opt/orangecat/app/.env` on the box
+- `.env.local` for local development
+- No `vercel env pull` — there is no Vercel
 
 **Pre-Deployment Checklist**:
 
 - [ ] All tests pass
 - [ ] Type check passes
-- [ ] Build succeeds locally
+- [ ] Build succeeds locally (`SELF_HOST=1 npm run build`)
 - [ ] No console.logs remaining
-- [ ] Environment variables set in Vercel
+- [ ] Production env set in `/opt/orangecat/app/.env`
 - [ ] Database migrations applied
 - [ ] No breaking changes without communication
 
@@ -434,21 +435,13 @@ git checkout -b feature/add-warranty
 # 2. Make changes, commit
 git commit -m "feat: add warranty field"
 
-# 3. Push to GitHub
+# 3. Push + open a PR
 git push origin feature/add-warranty
+# GitHub Actions run type-check / lint / tests / build
 
-# 4. Create PR
-# GitHub Actions run:
-# - Type checks
-# - Lints
-# - Tests
-# - Build verification
-
-# 5. Vercel creates preview
-# Test preview URL
-
-# 6. Merge to main
-# Auto-deploys to production
+# 4. Merge to main
+# 5. cd.yml deploys to the box (or run scripts/deploy-selfhost.sh)
+# 6. Verify https://orangecat.ch/api/health
 ```
 
 ---

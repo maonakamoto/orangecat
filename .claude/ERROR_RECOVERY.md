@@ -270,7 +270,7 @@ npm run build
 
 # 6. If still failing, check specific error
 # Common: Missing environment variables in build
-# Solution: Add to Vercel dashboard
+# Solution: add to .env.local (local) or /opt/orangecat/app/.env on the box (prod)
 ```
 
 **Prevention**:

@@ -88,25 +88,18 @@ cp .env.example .env.local
 
 ### For GitHub Actions
 
-Add the following secrets to your GitHub repository:
+Add the following secrets to your GitHub repository (used by CI/E2E only — production runtime env lives on the box):
 
-- `VERCEL_TOKEN`: Your Vercel API token
 - `NEXT_PUBLIC_BITCOIN_ADDRESS`: Your Bitcoin address
 - `NEXT_PUBLIC_LIGHTNING_ADDRESS`: Your Lightning address
 - `NEXT_PUBLIC_SITE_URL`: Your site URL
 - `NEXT_PUBLIC_SITE_NAME`: Your site name
 
-### For Vercel Deployment
+### For Production Deployment
 
-Environment variables are managed through:
-
-1. The Vercel dashboard
-2. Our `npm run env:push` script
-3. CI/CD pipeline
-
-## Environment Variables in CI/CD
-
-During CI/CD, we create a `.env.production` file from GitHub Secrets and use it for the build.
+Production environment variables live in `/opt/orangecat/app/.env` on the Hetzner
+box. Edit them there directly and restart the `orangecat-app` service. There is no
+dashboard or env-push script — see `docs/operations/deployment/DEPLOYMENT_PROCESS.md`.
 
 ## Best Practices
 

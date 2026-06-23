@@ -65,7 +65,7 @@ OrangeCat enables payments using Bitcoin and Lightning Network. You understand a
 We share information only as described below:
 
 - **Other marketplace participants:** sellers see buyer information necessary to fulfill an order (e.g., shipping address); buyers see seller information necessary to assess a listing (e.g., shop name, reviews, public profile).
-- **Service providers** acting on our behalf: hosting (Supabase, Vercel, etc.), AI inference (Anthropic, OpenAI), authentication, email delivery, error monitoring, analytics, fraud detection, identity verification, payment routing. Each is bound by contractual or legal data-protection obligations.
+- **Service providers** acting on our behalf: hosting and infrastructure (Hetzner, Supabase, etc.), AI inference (Anthropic, OpenAI), authentication, email delivery, error monitoring, analytics, fraud detection, identity verification, payment routing. Each is bound by contractual or legal data-protection obligations.
 - **Legal requirements:** when required by law, court order, subpoena, or other legal process; or when necessary to protect the rights, property, or safety of our users, ourselves, or others. This may include responding to lawful requests from law enforcement or financial-crime authorities.
 - **Business transfers:** in connection with a merger, acquisition, financing, or sale of assets, your information may be transferred. We will notify users of any such transfer that materially affects their rights.
 

@@ -89,9 +89,8 @@ async function handleFollow(request: AuthenticatedRequest) {
       .maybeSingle();
     const followerName: string = followerProfile?.name || followerProfile?.username || 'Someone';
     const followerUsername: string | null = followerProfile?.username ?? null;
-    // Await before returning — on Vercel, fire-and-forget (`void
-    // dispatch(...)`) is killed the instant the response is sent, so
-    // follow notifications were silently lost in production. Adds
+    // Await before returning — fire-and-forget (`void dispatch(...)`)
+    // was silently losing follow notifications in production. Adds
     // ~50ms to the response but guarantees delivery.
     try {
       await NotificationDispatcher.dispatch({

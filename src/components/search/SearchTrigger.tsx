@@ -4,7 +4,7 @@
  * SearchTrigger — replaces the inline EnhancedSearchBar in the header.
  *
  * Shows as a search-icon button with a placeholder and ⌘K kbd hint
- * (matches Linear / Vercel / Stripe). Click OR press ⌘K anywhere in
+ * (matches Linear / Stripe). Click OR press ⌘K anywhere in
  * the app opens the CommandPalette. The "/" hotkey also opens it when
  * focus isn't already in an input (Slack/GitHub-style).
  *
@@ -60,7 +60,7 @@ export function SearchTrigger({ compact = false, className }: SearchTriggerProps
           className={className}
         />
       ) : (
-        // Inline pill with placeholder + ⌘K hint (Linear / Vercel / Stripe).
+        // Inline pill with placeholder + ⌘K hint (Linear / Stripe).
         <button
           type="button"
           onClick={() => setOpen(true)}

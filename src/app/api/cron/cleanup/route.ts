@@ -2,7 +2,7 @@
  * Generic Cleanup Cron Route
  *
  * Schedule: systemd timer `orangecat-cron@cleanup.timer` on bitbaum,
- * daily 02:00 UTC (was a Vercel cron until the 2026-06 Hetzner migration).
+ * daily 02:00 UTC.
  *
  * Housekeeping for plumbing tables that grow unbounded otherwise.
  * Each cleanup is independent — one failing doesn't stop the others —

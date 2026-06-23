@@ -2,7 +2,7 @@
 
 **Complete guide to managing environment variables safely in OrangeCat development.**
 
-> **Note (2026-06):** Production is **self-hosted on Hetzner** — Vercel is no longer the prod pipeline. The Vercel CLI/login steps below apply only to legacy/optional tooling; production env lives in the app's `.env` on the box (see `docs/deployment/DEPLOYMENT_PROCESS.md`).
+> **Note (2026-06):** Production is **self-hosted on Hetzner** ("bitbaum", behind Caddy). The production env lives in `/opt/orangecat/app/.env` on the box; deploys go through the self-host flow (`scripts/deploy-selfhost.sh` / the GitHub Actions `deploy` job). This guide covers **local development** env only.
 
 ## 🚨 The Problem
 
@@ -48,15 +48,6 @@ node scripts/auth/github-login.js
 - Uses GitHub's Device Flow OAuth
 - No password/token exposure
 - Automatic token storage in `.env.local`
-
-**Vercel Login:**
-
-```bash
-node scripts/auth/vercel-login.js
-```
-
-- Uses Vercel CLI authentication
-- Automatic token generation and storage
 
 ### 3. **Environment Manager**
 
@@ -105,7 +96,6 @@ node scripts/utils/env-manager.js restore
 
 # 2. Authenticate with services
 node scripts/auth/github-login.js
-node scripts/auth/vercel-login.js
 
 # 3. Validate setup
 node scripts/utils/env-manager.js validate
@@ -231,11 +221,8 @@ direnv allow .
 # Re-run GitHub login
 node scripts/auth/github-login.js
 
-# Re-run Vercel login
-node scripts/auth/vercel-login.js
-
 # Check tokens are set
-grep -E "(GITHUB_TOKEN|VERCEL_TOKEN)" .env.local
+grep -E "GITHUB_TOKEN" .env.local
 ```
 
 ## 📋 File Structure
@@ -249,8 +236,7 @@ orangecat/
 ├── scripts/
 │   ├── setup-env.sh         # Automated setup script
 │   ├── auth/                # OAuth login scripts
-│   │   ├── github-login.js
-│   │   └── vercel-login.js
+│   │   └── github-login.js
 │   └── utils/
 │       └── env-manager.js   # Environment management tool
 └── docs/

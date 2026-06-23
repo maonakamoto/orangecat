@@ -80,7 +80,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
       return apiInternalError(result.error || 'Failed to join group');
     }
 
-    // Await — Vercel kills the function on response.
+    // Await so the activity write completes (and errors surface) before responding.
     try {
       await recordGroupActivity(request.supabase, {
         group_id: groupResult.group.id,

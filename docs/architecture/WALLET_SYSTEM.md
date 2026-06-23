@@ -96,17 +96,17 @@ CREATE TABLE public.wallet_addresses (
 
 Predefined categories with icons for better UX:
 
-| Category       | Icon | Description                      |
-| -------------- | ---- | -------------------------------- |
-| `general`      | 💰   | General purpose donations        |
-| `rent`         | 🏠   | Rent & housing costs             |
-| `food`         | 🍔   | Food & groceries                 |
-| `medical`      | 💊   | Medical expenses & healthcare    |
-| `education`    | 🎓   | School fees & learning materials |
-| `emergency`    | 🚨   | Urgent unexpected expenses       |
-| `transportation` | 🚗 | Travel & commute costs           |
-| `utilities`    | 💡   | Power, water, internet bills     |
-| `custom`       | 📦   | Other custom categories          |
+| Category         | Icon | Description                      |
+| ---------------- | ---- | -------------------------------- |
+| `general`        | 💰   | General purpose donations        |
+| `rent`           | 🏠   | Rent & housing costs             |
+| `food`           | 🍔   | Food & groceries                 |
+| `medical`        | 💊   | Medical expenses & healthcare    |
+| `education`      | 🎓   | School fees & learning materials |
+| `emergency`      | 🚨   | Urgent unexpected expenses       |
+| `transportation` | 🚗   | Travel & commute costs           |
+| `utilities`      | 💡   | Power, water, internet bills     |
+| `custom`         | 📦   | Other custom categories          |
 
 ---
 
@@ -117,10 +117,12 @@ Predefined categories with icons for better UX:
 Fetch wallets for a profile or project.
 
 **Query Parameters:**
+
 - `profile_id` (UUID) - Get wallets for a profile
 - `project_id` (UUID) - Get wallets for a project
 
 **Response:**
+
 ```json
 {
   "wallets": [
@@ -148,9 +150,10 @@ Fetch wallets for a profile or project.
 Create a new wallet.
 
 **Body:**
+
 ```json
 {
-  "profile_id": "uuid",  // OR project_id
+  "profile_id": "uuid", // OR project_id
   "label": "Food Budget",
   "description": "Monthly groceries",
   "address_or_xpub": "zpub...",
@@ -161,6 +164,7 @@ Create a new wallet.
 ```
 
 **Response:** `201 Created`
+
 ```json
 {
   "wallet": { ... }
@@ -172,6 +176,7 @@ Create a new wallet.
 Update an existing wallet.
 
 **Body:** (all fields optional)
+
 ```json
 {
   "label": "Updated Name",
@@ -185,6 +190,7 @@ Update an existing wallet.
 Soft delete a wallet (sets `is_active = false`).
 
 **Response:**
+
 ```json
 {
   "success": true
@@ -198,6 +204,7 @@ Refresh wallet balance from blockchain.
 **Rate Limit:** 5 minutes cooldown
 
 **Response:**
+
 ```json
 {
   "wallet": { ... },
@@ -217,25 +224,26 @@ Sarah creates multiple wallets for her personal needs:
 // 1. Rent wallet
 await createWallet({
   profile_id: sarah.id,
-  label: "Monthly Rent",
-  category: "rent",
-  address_or_xpub: "zpub6r...",  // Her rent xpub
+  label: 'Monthly Rent',
+  category: 'rent',
+  address_or_xpub: 'zpub6r...', // Her rent xpub
   goal_amount: 1200,
-  goal_currency: "USD"
+  goal_currency: 'USD',
 });
 
 // 2. Food wallet
 await createWallet({
   profile_id: sarah.id,
-  label: "Groceries",
-  category: "food",
-  address_or_xpub: "zpub6s...",  // Her food xpub
+  label: 'Groceries',
+  category: 'food',
+  address_or_xpub: 'zpub6s...', // Her food xpub
   goal_amount: 400,
-  goal_currency: "USD"
+  goal_currency: 'USD',
 });
 ```
 
 **Donor Experience:**
+
 ```
 Support Sarah
 ○ 🏠 Rent ($950/$1200) - 79% funded
@@ -255,20 +263,20 @@ A community project has multiple funding categories:
 // Create project wallets
 await createWallet({
   project_id: project.id,
-  label: "Food Program",
-  category: "food",
-  address_or_xpub: "bc1q...",
+  label: 'Food Program',
+  category: 'food',
+  address_or_xpub: 'bc1q...',
   goal_amount: 5000,
-  goal_currency: "USD"
+  goal_currency: 'USD',
 });
 
 await createWallet({
   project_id: project.id,
-  label: "School Supplies",
-  category: "education",
-  address_or_xpub: "bc1p...",
+  label: 'School Supplies',
+  category: 'education',
+  address_or_xpub: 'bc1p...',
   goal_amount: 2000,
-  goal_currency: "USD"
+  goal_currency: 'USD',
 });
 ```
 
@@ -279,6 +287,7 @@ await createWallet({
 ### Single Address (Simple)
 
 **When to use:**
+
 - User has a specific address for donations
 - Simple mobile wallet (BlueWallet, Muun, etc.)
 - One-time fundraising
@@ -294,6 +303,7 @@ await createWallet({
 ❌ Not scalable
 
 **Example:**
+
 ```
 address_or_xpub: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
 wallet_type: "address"
@@ -304,6 +314,7 @@ wallet_type: "address"
 ### Extended Public Key (xpub) - **RECOMMENDED**
 
 **When to use:**
+
 - User has an HD wallet (most modern wallets)
 - Ongoing fundraising
 - Want comprehensive tracking
@@ -319,12 +330,14 @@ wallet_type: "address"
 ❌ Privacy consideration (reveals all addresses)
 
 **Example:**
+
 ```
 address_or_xpub: "zpub6r4GZg1BLgZU8YBvxz7E3..."
 wallet_type: "xpub"
 ```
 
 **Supported formats:**
+
 - `xpub` - Legacy (P2PKH)
 - `ypub` - SegWit wrapped (P2SH-P2WPKH)
 - `zpub` - Native SegWit (P2WPKH) ⭐ **Recommended**
@@ -372,15 +385,18 @@ const balanceBtc = balanceSats / 100_000_000;
 ### Row-Level Security (RLS)
 
 **Public can view:**
+
 - Active wallets for active projects
 - Wallets for public profiles
 
 **Owners can:**
+
 - View all their wallets (any status)
 - Create/update/delete their own wallets
 - Refresh balances
 
 **Policies:**
+
 ```sql
 -- Public read for active wallets
 CREATE POLICY "wallets_select_public" ON wallets FOR SELECT
@@ -398,17 +414,20 @@ CREATE POLICY "wallets_select_own" ON wallets FOR SELECT
 ⚠️ **Important:** An xpub reveals ALL addresses derived from it (read-only).
 
 **What xpub reveals:**
+
 - All receive addresses
 - All change addresses
 - Transaction history
 - Total balance
 
 **What xpub CANNOT do:**
+
 - Cannot spend funds
 - Cannot derive private keys
 - Cannot sign transactions
 
 **Recommendation:**
+
 - Only share xpubs for transparency purposes
 - Consider using dedicated xpubs for fundraising
 - Don't use your main wallet's xpub if you value privacy
@@ -422,6 +441,7 @@ CREATE POLICY "wallets_select_own" ON wallets FOR SELECT
 **Option 1: Automatic Migration (Recommended)**
 
 When user edits project with old `bitcoin_address`:
+
 1. Create primary wallet from `bitcoin_address`
 2. Keep old field for backward compatibility
 3. Display uses new wallet system
@@ -435,6 +455,7 @@ VALUES (project.id, 'Primary Wallet', project.bitcoin_address, 'general', true);
 **Option 2: Gradual Migration**
 
 Show banner on project page:
+
 ```
 "🎉 New feature! Create multiple wallets for different purposes."
 [Migrate to new system]
@@ -456,7 +477,7 @@ function ProfilePage({ profile, wallets }) {
       entityType="profile"
       entityId={profile.id}
       isOwner={isCurrentUser}
-      onAdd={async (data) => {
+      onAdd={async data => {
         await fetch('/api/wallets', {
           method: 'POST',
           body: JSON.stringify({ ...data, profile_id: profile.id }),
@@ -468,10 +489,10 @@ function ProfilePage({ profile, wallets }) {
           body: JSON.stringify(data),
         });
       }}
-      onDelete={async (id) => {
+      onDelete={async id => {
         await fetch(`/api/wallets/${id}`, { method: 'DELETE' });
       }}
-      onRefresh={async (id) => {
+      onRefresh={async id => {
         await fetch(`/api/wallets/${id}/refresh`, { method: 'POST' });
       }}
     />
@@ -484,12 +505,14 @@ function ProfilePage({ profile, wallets }) {
 ## Testing Checklist
 
 ### Database
+
 - [ ] Migration runs successfully
 - [ ] RLS policies work correctly
 - [ ] Constraint checks enforce max 10 wallets
 - [ ] Helper functions return correct balances
 
 ### API
+
 - [ ] Create wallet for profile
 - [ ] Create wallet for project
 - [ ] Cannot create wallet for other user's profile/project
@@ -501,6 +524,7 @@ function ProfilePage({ profile, wallets }) {
 - [ ] Refresh has 5-minute cooldown
 
 ### UI
+
 - [ ] Wallet list displays correctly
 - [ ] Category icons show properly
 - [ ] Add wallet form validates input
@@ -511,6 +535,7 @@ function ProfilePage({ profile, wallets }) {
 - [ ] Copy address to clipboard works
 
 ### Balance Tracking
+
 - [ ] Single address balance fetches correctly
 - [ ] xpub balance fetches correctly
 - [ ] Rate limiting enforces 5-min cooldown
@@ -522,18 +547,21 @@ function ProfilePage({ profile, wallets }) {
 ## Future Enhancements
 
 ### Phase 2: Full xpub Derivation
+
 - Derive individual addresses using BIP32/84
 - Store addresses in `wallet_addresses` table
 - Track per-address balances
 - Gap limit: 20 (BIP44 standard)
 
 ### Phase 3: Transaction History
+
 - Create `wallet_transactions` table
 - Store individual transactions
 - Show transaction feed in UI
 - Enable "proof of donation"
 
 ### Phase 4: Advanced Features
+
 - Automatic balance refresh (cron job)
 - Webhook notifications on new transactions
 - QR code generation per wallet
@@ -558,17 +586,19 @@ psql $DATABASE_URL -c "SELECT tablename, policyname FROM pg_policies WHERE table
 ### Environment Variables
 
 No new environment variables needed! Uses existing:
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-### Vercel Deployment
+### Deployment
 
 ```bash
 git add .
 git commit -m "feat: multi-wallet system for profiles and projects"
 git push origin main
 
-# Auto-deploys to Vercel
+# Green CI on main; deploy on the Hetzner box via the self-host flow
+# (scripts/deploy-selfhost.sh). See docs/operations/deployment/DEPLOYMENT_PROCESS.md
 ```
 
 ---
@@ -576,6 +606,7 @@ git push origin main
 ## Summary
 
 **What we built:**
+
 - ✅ Unified wallet system for profiles and projects
 - ✅ Support for both single addresses and xpubs
 - ✅ Categorized wallets (rent, food, medical, etc.)
@@ -585,17 +616,20 @@ git push origin main
 - ✅ Full API with RLS security
 
 **What donors see:**
+
 - Choose which wallet/category to support
 - See progress per category
 - Transparent balance tracking
 
 **What fundraisers get:**
+
 - Easy wallet management
 - Automatic address derivation (xpub)
 - Accurate balance tracking
 - Category-based fundraising
 
 **Next steps:**
+
 1. Apply migration
 2. Test wallet creation
 3. Test balance refresh

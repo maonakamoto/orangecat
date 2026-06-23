@@ -61,14 +61,14 @@ npm run dev -- -p 3020  # Port 3020 to avoid conflicts
 
 ## Tech Stack
 
-| Layer      | Technology                         |
-| ---------- | ---------------------------------- |
-| Framework  | Next.js 15 (App Router)            |
-| Language   | TypeScript 5.8                     |
-| Styling    | Tailwind CSS 3.3                   |
-| Database   | Supabase (PostgreSQL + Auth + RLS) |
-| Bitcoin    | Lightning Network, BTCPay, NWC     |
-| Deployment | Vercel                             |
+| Layer      | Technology                                       |
+| ---------- | ------------------------------------------------ |
+| Framework  | Next.js 15 (App Router)                          |
+| Language   | TypeScript 5.8                                   |
+| Styling    | Tailwind CSS 3.3                                 |
+| Database   | Self-hosted Supabase (PostgreSQL + Auth + RLS)   |
+| Bitcoin    | Lightning Network, BTCPay, NWC                   |
+| Deployment | Self-hosted on Hetzner (`bitbaum`, behind Caddy) |
 
 ---
 

@@ -67,13 +67,8 @@ lerna-debug.log*
 .env.local
 .env.build
 .env.preview
-.env.vercel
 .env.local.backup*
 .env-backups/*.backup*
-
-# Vercel
-.vercel
-.vercel/
 
 # TypeScript
 *.tsbuildinfo
