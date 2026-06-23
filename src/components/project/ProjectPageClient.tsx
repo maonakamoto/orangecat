@@ -154,21 +154,23 @@ export default function ProjectPageClient({ project }: ProjectPageClientProps) {
             </div>
           </div>
           <div className="space-y-6">
-            <PublicEntityPaymentSection
-              entityType="project"
-              entityId={project.id}
-              entityTitle={project.title}
-              sellerProfileId={project.user_id}
-              sellerUserId={project.user_id}
-              sellerReceive={
-                project.bitcoin_address
-                  ? { method: 'onchain', address: project.bitcoin_address }
-                  : project.lightning_address
-                    ? { method: 'lightning_address', address: project.lightning_address }
-                    : null
-              }
-              signInRedirect={ROUTES.PROJECTS.VIEW(project.id)}
-            />
+            <div id="pay" className="scroll-mt-24">
+              <PublicEntityPaymentSection
+                entityType="project"
+                entityId={project.id}
+                entityTitle={project.title}
+                sellerProfileId={project.user_id}
+                sellerUserId={project.user_id}
+                sellerReceive={
+                  project.bitcoin_address
+                    ? { method: 'onchain', address: project.bitcoin_address }
+                    : project.lightning_address
+                      ? { method: 'lightning_address', address: project.lightning_address }
+                      : null
+                }
+                signInRedirect={ROUTES.PROJECTS.VIEW(project.id)}
+              />
+            </div>
 
             <ProjectSummaryRail
               project={{

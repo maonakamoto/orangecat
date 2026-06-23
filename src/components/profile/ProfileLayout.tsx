@@ -56,7 +56,7 @@ interface ProfileLayoutProps {
 
 export default function ProfileLayout({
   profile,
-  projects: _projects,
+  projects,
   stats,
   mode: _mode = 'view',
   onSave,
@@ -86,6 +86,7 @@ export default function ProfileLayout({
       content: (
         <ProfileOverviewTab
           profile={profile}
+          projects={projects}
           stats={stats}
           isOwnProfile={isOwnProfile}
           context="public"
