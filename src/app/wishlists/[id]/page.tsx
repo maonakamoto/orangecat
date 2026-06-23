@@ -4,7 +4,7 @@ import { Gift } from 'lucide-react';
 import { createServerClient } from '@/lib/supabase/server';
 import { generateEntityMetadata } from '@/lib/seo/metadata';
 import { DATABASE_TABLES } from '@/config/database-tables';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { displayBTC } from '@/services/currency/formatting';
 import { Progress } from '@/components/ui/progress';
@@ -12,6 +12,7 @@ import PublicEntityDetailPage, {
   fetchEntityForMetadata,
   type EntityDetailConfig,
 } from '@/components/public/PublicEntityDetailPage';
+import FundingProgress from '@/components/public/FundingProgress';
 import { WISHLIST_TYPE_LABELS } from '@/config/wishlists';
 import type { Database } from '@/types/database';
 
@@ -63,7 +64,6 @@ export default async function PublicWishlistPage({ params }: PageProps) {
   const items = (itemsData || []) as WishlistItem[];
   const totalTarget = items.reduce((sum, item) => sum + (item.target_amount_btc || 0), 0);
   const totalFunded = items.reduce((sum, item) => sum + (item.funded_amount_btc || 0), 0);
-  const overallProgress = totalTarget > 0 ? Math.round((totalFunded / totalTarget) * 100) : 0;
 
   const config: EntityDetailConfig = {
     entityType: 'wishlist',
@@ -108,20 +108,16 @@ export default async function PublicWishlistPage({ params }: PageProps) {
     ),
     renderDetails: () => (
       <>
-        {items.length > 0 && totalTarget > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Overall Progress</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="flex justify-between text-sm text-fg-secondary">
-                <span>{displayBTC(totalFunded)} funded</span>
-                <span>{displayBTC(totalTarget)} total</span>
-              </div>
-              <Progress value={overallProgress} className="h-2" />
-              <p className="text-sm text-fg-secondary">{overallProgress}% of total goal</p>
-            </CardContent>
-          </Card>
+        {items.length > 0 && (
+          <FundingProgress
+            title="Overall Progress"
+            raised={totalFunded}
+            goal={totalTarget}
+            currency="BTC"
+            raisedLabel="funded"
+            goalLabel="total"
+            hideWhenEmpty
+          />
         )}
 
         {items.length > 0 ? (

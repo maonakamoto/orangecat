@@ -4,10 +4,8 @@ import PublicEntityDetailPage, {
   fetchEntityForMetadata,
   type EntityDetailConfig,
 } from '@/components/public/PublicEntityDetailPage';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Progress } from '@/components/ui/progress';
+import FundingProgress from '@/components/public/FundingProgress';
 import { ROUTES } from '@/config/routes';
-import { formatCurrency } from '@/services/currency';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -43,29 +41,9 @@ const config: EntityDetailConfig = {
   },
   renderDetails: entity => {
     const { goal, raised, currency } = causeFunding(entity);
-    if (goal <= 0) {
-      return null;
-    }
-    const progress = Math.round((raised / goal) * 100);
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Funding Progress</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-fg-secondary">
-              {formatCurrency(raised, currency)} raised
-            </span>
-            <span className="font-bold text-lg text-fg-primary">
-              {formatCurrency(goal, currency)} goal
-            </span>
-          </div>
-          <Progress value={progress} className="h-2" />
-          <p className="text-sm text-fg-secondary">{progress}% funded</p>
-        </CardContent>
-      </Card>
-    );
+    // Always render — a cause with no goal set must still show an inviting
+    // funding state, never a blank page. FundingProgress owns that decision.
+    return <FundingProgress raised={raised} goal={goal} currency={currency} />;
   },
 };
 

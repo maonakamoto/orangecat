@@ -6,9 +6,8 @@ import PublicEntityDetailPage, {
 } from '@/components/public/PublicEntityDetailPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import FundingProgress from '@/components/public/FundingProgress';
 import { ROUTES } from '@/config/routes';
-import { displayBTC } from '@/services/currency';
 import { RESEARCH_FIELDS, METHODOLOGIES, TIMELINES } from '@/config/research';
 
 interface PageProps {
@@ -38,30 +37,10 @@ const config: EntityDetailConfig = {
   renderDetails: entity => {
     const fundingGoal = Number(entity.funding_goal_btc ?? entity.funding_goal ?? 0);
     const fundingRaised = Number(entity.funding_raised_btc ?? 0);
-    const progress = fundingGoal > 0 ? Math.round((fundingRaised / fundingGoal) * 100) : 0;
 
     return (
       <>
-        {/* Funding Progress */}
-        {fundingGoal > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Funding Progress</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-fg-secondary">
-                  {displayBTC(fundingRaised)} raised
-                </span>
-                <span className="font-bold text-lg text-fg-primary">
-                  {displayBTC(fundingGoal)} goal
-                </span>
-              </div>
-              <Progress value={progress} className="h-2" />
-              <p className="text-sm text-fg-secondary">{progress}% funded</p>
-            </CardContent>
-          </Card>
-        )}
+        <FundingProgress raised={fundingRaised} goal={fundingGoal} currency="BTC" />
 
         {/* Research Details */}
         <Card>

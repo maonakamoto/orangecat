@@ -5,8 +5,8 @@ import PublicEntityDetailPage, {
   type EntityDetailConfig,
 } from '@/components/public/PublicEntityDetailPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import FundingProgress from '@/components/public/FundingProgress';
 import { ROUTES } from '@/config/routes';
 import { formatCurrency } from '@/services/currency';
 import { INVESTMENT_TYPE_LABELS, INVESTMENT_RISK_COLORS } from '@/config/investments';
@@ -40,33 +40,13 @@ const config: EntityDetailConfig = {
     }),
   }),
   renderDetails: entity => {
-    const progress =
-      entity.target_amount && entity.total_raised
-        ? Math.min(
-            Math.round((Number(entity.total_raised) / Number(entity.target_amount)) * 100),
-            100
-          )
-        : 0;
-
     return (
       <div className="space-y-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Funding Progress</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-fg-secondary">
-                {invFmt(entity, entity.total_raised)} raised
-              </span>
-              <span className="font-bold text-lg text-fg-primary">
-                {invFmt(entity, entity.target_amount)} goal
-              </span>
-            </div>
-            <Progress value={progress} className="h-2" />
-            <p className="text-sm text-fg-secondary">{progress}% funded</p>
-          </CardContent>
-        </Card>
+        <FundingProgress
+          raised={Number(entity.total_raised ?? 0)}
+          goal={Number(entity.target_amount ?? 0)}
+          currency={(entity.currency as string) || 'BTC'}
+        />
 
         <Card>
           <CardHeader>
