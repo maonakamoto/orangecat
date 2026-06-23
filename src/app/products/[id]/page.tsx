@@ -4,7 +4,6 @@ import PublicEntityDetailPage, {
   fetchEntityForMetadata,
   type EntityDetailConfig,
 } from '@/components/public/PublicEntityDetailPage';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import PriceDisplay from '@/components/public/PriceDisplay';
 import { ROUTES } from '@/config/routes';
 
@@ -40,18 +39,11 @@ const config: EntityDetailConfig = {
       ? { offers: { '@type': 'Offer', priceCurrency: currency, price: amount } }
       : {};
   },
-  renderDetails: entity => {
+  // Price is the decision fact — show it under the title, above the fold,
+  // not in a card below. (Was a lonely "Price" card lower down.)
+  headerFact: entity => {
     const { amount, currency } = getPrice(entity);
-    return amount > 0 ? (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Price</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <PriceDisplay amount={amount} currency={currency} />
-        </CardContent>
-      </Card>
-    ) : null;
+    return amount > 0 ? <PriceDisplay amount={amount} currency={currency} /> : null;
   },
 };
 
