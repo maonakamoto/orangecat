@@ -18,9 +18,9 @@
  * Created: 2026-06-04
  */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Bell, LogIn, Save } from 'lucide-react';
+import { ArrowLeft, Bell, Check, Loader2, LogIn } from 'lucide-react';
 import { useRequireAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/config/routes';
 import Loading from '@/components/Loading';
@@ -108,49 +108,58 @@ export default function NotificationSettingsPage() {
     };
   }, [user]);
 
+  // Auto-save on every change — optimistic, reverting if the server rejects.
+  // No "Save" button to forget (the old flow silently lost unsaved toggles).
+  const persist = useCallback(
+    async (next: NotificationPreferences, prev: NotificationPreferences) => {
+      setPrefs(next); // optimistic
+      setSaving(true);
+      setError(null);
+      setSavedAt(null);
+      try {
+        const body = {
+          economic_emails: next.economic_emails,
+          social_emails: next.social_emails,
+          group_emails: next.group_emails,
+          progress_emails: next.progress_emails,
+          reengagement_emails: next.reengagement_emails,
+          digest_frequency: next.digest_frequency,
+        };
+        const res = await fetch('/api/notifications/preferences', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(body),
+        });
+        if (!res.ok) {
+          const errBody = (await res.json().catch(() => null)) as { error?: string } | null;
+          throw new Error(errBody?.error || `Failed to save (${res.status})`);
+        }
+        const json = (await res.json()) as { data: NotificationPreferences };
+        setPrefs(json.data);
+        setSavedAt(new Date().toLocaleTimeString());
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to save');
+        setPrefs(prev); // revert so the UI never lies about what's saved
+      } finally {
+        setSaving(false);
+      }
+    },
+    []
+  );
+
   function setToggle(key: (typeof CATEGORIES)[number]['key'], value: boolean) {
-    setPrefs(prev => (prev ? { ...prev, [key]: value } : prev));
-    setSavedAt(null);
-  }
-
-  function setDigest(value: DigestFrequency) {
-    setPrefs(prev => (prev ? { ...prev, digest_frequency: value } : prev));
-    setSavedAt(null);
-  }
-
-  async function handleSave() {
     if (!prefs) {
       return;
     }
-    setSaving(true);
-    setError(null);
-    try {
-      const body = {
-        economic_emails: prefs.economic_emails,
-        social_emails: prefs.social_emails,
-        group_emails: prefs.group_emails,
-        progress_emails: prefs.progress_emails,
-        reengagement_emails: prefs.reengagement_emails,
-        digest_frequency: prefs.digest_frequency,
-      };
-      const res = await fetch('/api/notifications/preferences', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) {
-        const errBody = (await res.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(errBody?.error || `Failed to save (${res.status})`);
-      }
-      const json = (await res.json()) as { data: NotificationPreferences };
-      setPrefs(json.data);
-      setSavedAt(new Date().toLocaleTimeString());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save');
-    } finally {
-      setSaving(false);
+    void persist({ ...prefs, [key]: value }, prefs);
+  }
+
+  function setDigest(value: DigestFrequency) {
+    if (!prefs) {
+      return;
     }
+    void persist({ ...prefs, digest_frequency: value }, prefs);
   }
 
   if (authLoading) {
@@ -266,12 +275,18 @@ export default function NotificationSettingsPage() {
             </div>
           </section>
 
-          <div className="flex items-center justify-end gap-3">
-            {savedAt && <span className="text-xs text-fg-secondary">Saved at {savedAt}</span>}
-            <Button onClick={handleSave} disabled={saving}>
-              <Save className="mr-1 h-4 w-4" />
-              {saving ? 'Saving…' : 'Save changes'}
-            </Button>
+          <div className="flex items-center justify-end gap-2 text-xs text-fg-secondary">
+            {saving ? (
+              <>
+                <Loader2 className="h-3.5 w-3.5 animate-spin" /> Saving…
+              </>
+            ) : savedAt ? (
+              <>
+                <Check className="h-3.5 w-3.5 text-status-positive" /> Saved {savedAt}
+              </>
+            ) : (
+              <span>Changes save automatically</span>
+            )}
           </div>
         </>
       )}

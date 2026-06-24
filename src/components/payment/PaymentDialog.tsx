@@ -74,10 +74,15 @@ export function PaymentDialog({
   }, [defaultAmount]);
   const [message, setMessage] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
+  // Message + anonymous are optional — keep them one tap away so the default
+  // path is just amount → pay (fewer decisions, shortest path to support).
+  const [showMore, setShowMore] = useState(false);
 
   const handleClose = () => {
     reset();
     setMessage('');
+    setIsAnonymous(false);
+    setShowMore(false);
     setContributionAmount(defaultAmount ?? DEFAULT_CONTRIBUTION_BTC);
     onOpenChange(false);
   };
@@ -132,27 +137,39 @@ export function PaymentDialog({
                     value={contributionAmount}
                     onChange={setContributionAmount}
                   />
-                  <div>
-                    <label className="text-sm font-medium text-fg-primary">
-                      Message (optional)
-                    </label>
-                    <Textarea
-                      value={message}
-                      onChange={e => setMessage(e.target.value)}
-                      placeholder="Leave a message of support..."
-                      rows={2}
-                      className="mt-1"
-                    />
-                  </div>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={isAnonymous}
-                      onChange={e => setIsAnonymous(e.target.checked)}
-                      className="rounded border-strong"
-                    />
-                    Contribute anonymously
-                  </label>
+                  {showMore ? (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium text-fg-primary">
+                          Message (optional)
+                        </label>
+                        <Textarea
+                          value={message}
+                          onChange={e => setMessage(e.target.value)}
+                          placeholder="Leave a message of support..."
+                          rows={2}
+                          className="mt-1"
+                        />
+                      </div>
+                      <label className="flex items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={isAnonymous}
+                          onChange={e => setIsAnonymous(e.target.checked)}
+                          className="rounded border-strong"
+                        />
+                        Contribute anonymously
+                      </label>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setShowMore(true)}
+                      className="text-sm text-fg-secondary underline-offset-4 hover:text-fg-primary hover:underline"
+                    >
+                      Add a message or give anonymously
+                    </button>
+                  )}
                 </div>
               )}
 
