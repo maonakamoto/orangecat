@@ -14,7 +14,24 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/badge';
-import { Users, UserPlus, Crown, Shield, User } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
+import {
+  Users,
+  UserPlus,
+  Crown,
+  Shield,
+  ShieldOff,
+  User,
+  LogOut,
+  MoreVertical,
+  UserMinus,
+} from 'lucide-react';
 import { STATUS } from '@/config/database-constants';
 import type { GroupMember, GroupRole } from '@/types/group';
 import { getInitial } from '@/utils/string';
@@ -39,6 +56,9 @@ interface GroupMembersProps {
 export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) {
   const { user } = useAuth();
   const [joining, setJoining] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+  const [confirmLeave, setConfirmLeave] = useState(false);
+  const [busyMemberId, setBusyMemberId] = useState<string | null>(null);
 
   const handleJoin = async () => {
     try {
@@ -58,7 +78,73 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
     }
   };
 
-  const isMember = members.some(m => m.user_id === user?.id);
+  const handleLeave = async () => {
+    try {
+      setLeaving(true);
+      const result = await groupsService.leaveGroup(groupId);
+      if (result.success) {
+        toast.success('You left the group');
+        setConfirmLeave(false);
+        onUpdate?.();
+      } else {
+        toast.error(result.error || 'Failed to leave group');
+      }
+    } catch (error) {
+      logger.error('Failed to leave group:', error);
+      toast.error('Failed to leave group');
+    } finally {
+      setLeaving(false);
+    }
+  };
+
+  const currentMember = members.find(m => m.user_id === user?.id);
+  const isMember = !!currentMember;
+  // Founders cannot leave (must transfer ownership or delete) — the service
+  // rejects it, so we don't even offer the affordance.
+  const canLeave = isMember && currentMember?.role !== STATUS.GROUP_MEMBERS.FOUNDER;
+  // Founders/admins manage members. The service re-checks permissions, so this
+  // only gates the affordance — the server is the source of truth.
+  const canManage =
+    currentMember?.role === STATUS.GROUP_MEMBERS.FOUNDER ||
+    currentMember?.role === STATUS.GROUP_MEMBERS.ADMIN;
+
+  const handleRoleChange = async (memberUserId: string, role: GroupRole) => {
+    try {
+      setBusyMemberId(memberUserId);
+      const result = await groupsService.updateMember(groupId, memberUserId, { role });
+      if (result.success) {
+        toast.success(
+          role === STATUS.GROUP_MEMBERS.ADMIN ? 'Member promoted to admin' : 'Admin set to member'
+        );
+        onUpdate?.();
+      } else {
+        toast.error(result.error || 'Failed to update member');
+      }
+    } catch (error) {
+      logger.error('Failed to update member role:', error);
+      toast.error('Failed to update member');
+    } finally {
+      setBusyMemberId(null);
+    }
+  };
+
+  const handleRemove = async (memberUserId: string) => {
+    try {
+      setBusyMemberId(memberUserId);
+      const result = await groupsService.removeMember(groupId, memberUserId);
+      if (result.success) {
+        toast.success('Member removed');
+        onUpdate?.();
+      } else {
+        toast.error(result.error || 'Failed to remove member');
+      }
+    } catch (error) {
+      logger.error('Failed to remove member:', error);
+      toast.error('Failed to remove member');
+    } finally {
+      setBusyMemberId(null);
+    }
+  };
 
   const getRoleIcon = (role: GroupRole) => {
     switch (role) {
@@ -131,13 +217,93 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">{getRoleBadge(member.role)}</div>
+                  <div className="flex items-center gap-2">
+                    {getRoleBadge(member.role)}
+                    {canManage &&
+                      member.user_id !== user?.id &&
+                      member.role !== STATUS.GROUP_MEMBERS.FOUNDER && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                              disabled={busyMemberId === member.user_id}
+                              aria-label="Manage member"
+                            >
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {member.role === STATUS.GROUP_MEMBERS.ADMIN ? (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleRoleChange(member.user_id, STATUS.GROUP_MEMBERS.MEMBER)
+                                }
+                              >
+                                <ShieldOff className="h-4 w-4 mr-2" />
+                                Make member
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleRoleChange(member.user_id, STATUS.GROUP_MEMBERS.ADMIN)
+                                }
+                              >
+                                <Shield className="h-4 w-4 mr-2" />
+                                Make admin
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => handleRemove(member.user_id)}
+                              className="text-status-negative focus:text-status-negative"
+                            >
+                              <UserMinus className="h-4 w-4 mr-2" />
+                              Remove from group
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Leave group (members only; founders must transfer/delete instead) */}
+      {canLeave && (
+        <div className="flex justify-end">
+          {confirmLeave ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-fg-secondary">Leave this group?</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setConfirmLeave(false)}
+                disabled={leaving}
+              >
+                Cancel
+              </Button>
+              <Button variant="danger" size="sm" onClick={handleLeave} disabled={leaving}>
+                {leaving ? 'Leaving…' : 'Leave'}
+              </Button>
+            </div>
+          ) : (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setConfirmLeave(true)}
+              className="text-fg-secondary hover:text-status-negative"
+            >
+              <LogOut className="h-4 w-4 mr-1.5" />
+              Leave group
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

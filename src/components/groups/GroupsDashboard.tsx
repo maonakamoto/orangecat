@@ -15,7 +15,8 @@ import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Plus, Users, Target, TrendingUp, Building2 } from 'lucide-react';
+import { Input } from '@/components/ui/Input';
+import { Plus, Users, Target, TrendingUp, Building2, Search } from 'lucide-react';
 import groupsService from '@/services/groups';
 import type { Group } from '@/types/group';
 import { GROUP_LABELS, type GroupLabel } from '@/config/group-labels';
@@ -34,6 +35,7 @@ export function GroupsDashboard() {
   const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [availableGroups, setAvailableGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     loadDashboardData();
@@ -85,6 +87,14 @@ export function GroupsDashboard() {
   // Formal groups (everything else)
   const formalCount = myGroups.length - informalCount;
 
+  // Client-side search across name + description (lists are already loaded).
+  const q = query.trim().toLowerCase();
+  const matches = (g: Group) =>
+    !q || g.name.toLowerCase().includes(q) || (g.description || '').toLowerCase().includes(q);
+  const filteredMyGroups = myGroups.filter(matches);
+  const filteredAvailable = availableGroups.filter(matches);
+  const hasAnyGroups = myGroups.length + availableGroups.length > 0;
+
   const headerActions = (
     <Link href={ROUTES.DASHBOARD.GROUPS_CREATE}>
       <Button variant="accent" className="gap-2">
@@ -100,16 +110,31 @@ export function GroupsDashboard() {
       description="Create groups, join communities, and collaborate with like-minded people"
       headerActions={headerActions}
     >
+      {/* Search across both tabs (only when there's something to search) */}
+      {hasAnyGroups && (
+        <div className="relative mb-6">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-secondary" />
+          <Input
+            type="search"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search groups by name or description…"
+            className="pl-9"
+            aria-label="Search groups"
+          />
+        </div>
+      )}
+
       {/* Tabs for My Groups and Discover */}
       <Tabs defaultValue="my-groups" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="my-groups" className="gap-2 text-xs sm:text-sm">
             <Users className="h-4 w-4" />
-            <span className="truncate">My Groups ({myGroups.length})</span>
+            <span className="truncate">My Groups ({filteredMyGroups.length})</span>
           </TabsTrigger>
           <TabsTrigger value="discover" className="gap-2 text-xs sm:text-sm">
             <Building2 className="h-4 w-4" />
-            <span className="truncate">Discover ({availableGroups.length})</span>
+            <span className="truncate">Discover ({filteredAvailable.length})</span>
           </TabsTrigger>
         </TabsList>
 
@@ -125,9 +150,13 @@ export function GroupsDashboard() {
                 </Button>
               </Link>
             </div>
+          ) : filteredMyGroups.length === 0 ? (
+            <div className="text-center py-12 px-4 bg-surface-base rounded-lg border dark:border-default">
+              <p className="text-fg-secondary">No groups match “{query}”.</p>
+            </div>
           ) : (
             <GroupList
-              groups={myGroups}
+              groups={filteredMyGroups}
               onGroupClick={group =>
                 router.push(`${ENTITY_REGISTRY['group'].basePath}/${group.slug}`)
               }
@@ -147,9 +176,13 @@ export function GroupsDashboard() {
                 </Button>
               </Link>
             </div>
+          ) : filteredAvailable.length === 0 ? (
+            <div className="text-center py-12 px-4 bg-surface-base rounded-lg border dark:border-default">
+              <p className="text-fg-secondary">No groups match “{query}”.</p>
+            </div>
           ) : (
             <GroupList
-              groups={availableGroups}
+              groups={filteredAvailable}
               onGroupClick={group =>
                 router.push(`${ENTITY_REGISTRY['group'].basePath}/${group.slug}`)
               }
