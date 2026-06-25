@@ -11,7 +11,14 @@ import type { AIPrefillBarProps, AIPrefillResponse } from './types';
 import { getExampleDescriptions } from '@/lib/ai/prompts/form-prefill';
 import type { EntityType } from '@/config/entity-registry';
 
-export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: AIPrefillBarProps) {
+export function AIPrefillBar({
+  entityType,
+  onPrefill,
+  disabled,
+  existingData,
+  mode = 'create',
+}: AIPrefillBarProps) {
+  const isEdit = mode === 'edit';
   const [description, setDescription] = useState('');
   const [refineInput, setRefineInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -56,9 +63,10 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
           setRefineInput('');
           toast.success('Form updated');
         } else {
-          toast.success('Form filled — review and adjust below', {
-            description: 'You can also tell AI what to change',
-          });
+          toast.success(
+            isEdit ? 'Changes applied — review below' : 'Form filled — review and adjust below',
+            { description: 'You can also tell AI what to change' }
+          );
         }
       } catch (err) {
         logger.error('AI prefill error', err, 'AI');
@@ -67,16 +75,20 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
         setter(false);
       }
     },
-    [entityType, existingData, onPrefill]
+    [entityType, existingData, onPrefill, isEdit]
   );
 
   const handleGenerate = useCallback(() => {
     if (!description.trim() || description.trim().length < 10) {
-      setError('Please describe what you want to create (at least 10 characters)');
+      setError(
+        isEdit
+          ? 'Please describe the change you want (at least 10 characters)'
+          : 'Please describe what you want to create (at least 10 characters)'
+      );
       return;
     }
     callAI(description, false);
-  }, [description, callAI]);
+  }, [description, callAI, isEdit]);
 
   const handleRefine = useCallback(() => {
     if (!refineInput.trim()) {
@@ -99,7 +111,13 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-fg-primary" />
           <span className="text-sm font-semibold text-fg-primary">
-            {hasFilled ? 'AI filled the form' : 'Fill with AI'}
+            {hasFilled
+              ? isEdit
+                ? 'AI updated the form'
+                : 'AI filled the form'
+              : isEdit
+                ? 'Edit with AI'
+                : 'Fill with AI'}
           </span>
           {hasFilled && <CheckCircle2 className="h-4 w-4 text-status-positive" />}
         </div>
@@ -130,7 +148,11 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
                 handleGenerate();
               }
             }}
-            placeholder={`Describe what you want to create — AI will fill the form for you.\n\nExample: "I'm an artist selling original watercolour prints of Swiss landscapes, priced around 80 CHF each, shipping worldwide."`}
+            placeholder={
+              isEdit
+                ? `Describe the change you want — AI will update the fields for you.\n\nExample: "Lower the price to 60 CHF and make the description more concise."`
+                : `Describe what you want to create — AI will fill the form for you.\n\nExample: "I'm an artist selling original watercolour prints of Swiss landscapes, priced around 80 CHF each, shipping worldwide."`
+            }
             disabled={isGenerating || disabled}
             rows={3}
             className="block w-full resize-none rounded-md border border-subtle bg-surface-page px-3 py-2 text-sm placeholder:text-fg-tertiary focus:border-interactive focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
@@ -138,7 +160,7 @@ export function AIPrefillBar({ entityType, onPrefill, disabled, existingData }: 
 
           <div className="flex items-center justify-between gap-2">
             {/* Example chips */}
-            {examples.length > 0 && !description && (
+            {!isEdit && examples.length > 0 && !description && (
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex items-center gap-1 text-xs text-fg-tertiary">
                   <Lightbulb className="h-3 w-3" />

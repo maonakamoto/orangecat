@@ -174,14 +174,17 @@ export function EntityForm<T extends Record<string, unknown>>({
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-8">
-                {mode === 'create' && (
-                  <AIPrefillBar
-                    entityType={config.type}
-                    onPrefill={handleAIPrefill}
-                    disabled={formState.isSubmitting}
-                    existingData={formState.data}
-                  />
-                )}
+                {/* Cat-powered prefill on EVERY form — create and edit alike — so
+                    users can describe what they want (or the change they want)
+                    and have the fields filled instead of typing each one. On edit
+                    the bar refines the existing values (it receives existingData). */}
+                <AIPrefillBar
+                  entityType={config.type}
+                  onPrefill={handleAIPrefill}
+                  disabled={formState.isSubmitting}
+                  existingData={formState.data}
+                  mode={mode}
+                />
 
                 <FormFieldGroups
                   visibleFieldGroups={visibleFieldGroups}

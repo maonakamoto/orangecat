@@ -388,6 +388,12 @@ export interface AIPrefillBarProps {
   disabled?: boolean;
   /** Existing form data (to preserve user input) */
   existingData?: Record<string, unknown>;
+  /**
+   * Form mode — drives the copy. `create` (default) frames it as "describe
+   * what you want and AI fills the form"; `edit` frames it as "describe the
+   * change you want" since the fields are already populated.
+   */
+  mode?: 'create' | 'edit';
 }
 
 /**
