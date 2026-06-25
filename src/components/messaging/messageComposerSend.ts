@@ -82,6 +82,26 @@ export async function sendMessage({
 
   const tempId = optimisticMessage.id;
 
+  // Re-send the same content — wired into the "Retry" action on failure toasts.
+  // Spawns a fresh optimistic message + attempt; the failed one was already
+  // removed by onMessageFailed, so the user never loses what they wrote.
+  const retry = () =>
+    void sendMessage({
+      content: messageContent,
+      isSending: false,
+      user,
+      profile,
+      conversationId,
+      stopTyping,
+      onMessageSent,
+      onMessageFailed,
+      onMessageConfirmed,
+      selectedActor,
+      setIsSending,
+      setContent,
+      textareaRef,
+    });
+
   if (
     await queueIfOffline(
       { conversationId, content: messageContent, messageType: MESSAGE_TYPES.TEXT, tempId },
@@ -127,6 +147,7 @@ export async function sendMessage({
       const desc = errEnvelope?.details ?? errorData.details ?? '';
       toast.error(errMessage || 'Failed to send message', {
         description: typeof desc === 'string' ? desc : undefined,
+        action: { label: 'Retry', onClick: retry },
       });
       onMessageFailed?.(tempId, errMessage || (typeof desc === 'string' ? desc : ''));
     } else {
@@ -163,7 +184,9 @@ export async function sendMessage({
       setIsSending(false);
       return;
     }
-    toast.error('Network error. Please try again.');
+    toast.error('Network error. Please try again.', {
+      action: { label: 'Retry', onClick: retry },
+    });
     onMessageFailed?.(tempId, 'Network error');
   } finally {
     setIsSending(false);
