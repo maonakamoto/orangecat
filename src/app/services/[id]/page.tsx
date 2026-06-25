@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import PriceDisplay from '@/components/public/PriceDisplay';
 import { ROUTES } from '@/config/routes';
 import { BookEntityButton } from '@/components/bookings/BookEntityButton';
+import { hasAvailability, formatAvailabilityLines } from '@/lib/availability';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -75,6 +76,18 @@ const config: EntityDetailConfig = {
             <div className="flex items-center justify-between">
               <span className="text-fg-secondary">Duration</span>
               <span className="font-medium">{durationMinutes} minutes</span>
+            </div>
+          )}
+          {hasAvailability(entity.availability_schedule) && (
+            <div className="flex items-start justify-between gap-4">
+              <span className="text-fg-secondary">Availability</span>
+              <div className="text-right">
+                {formatAvailabilityLines(entity.availability_schedule).map(line => (
+                  <div key={line} className="font-medium text-fg-primary">
+                    {line}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
           <BookEntityButton

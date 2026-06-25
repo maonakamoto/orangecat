@@ -18,6 +18,7 @@ import { useUserCurrency } from '@/hooks/useUserCurrency';
 import type { FormFieldProps } from './types';
 import type { Currency } from '@/types/settings';
 import { DictationButton } from '@/components/ui/DictationButton';
+import { AvailabilityEditor } from './fields/AvailabilityEditor';
 
 // ==================== COMPONENT ====================
 
@@ -222,6 +223,9 @@ export function FormField({
             className={baseInputClass}
           />
         );
+
+      case 'availability':
+        return <AvailabilityEditor value={value} onChange={onChange} />;
 
       case 'text':
       default:
