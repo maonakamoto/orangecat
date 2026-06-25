@@ -34,14 +34,23 @@ export function ProfileImagesSection({
       {/* Banner Upload */}
       <div className="relative">
         <div
-          className="relative h-32 bg-surface-raised rounded-lg border-2 border-dashed border-strong cursor-pointer overflow-hidden"
+          role="button"
+          tabIndex={0}
+          aria-label="Upload banner photo"
+          className="relative h-32 bg-surface-raised rounded-lg border-2 border-dashed border-strong cursor-pointer overflow-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           onClick={() => bannerInputRef.current?.click()}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              bannerInputRef.current?.click();
+            }
+          }}
         >
           {bannerPreview || profile.banner_url ? (
             // eslint-disable-next-line @next/next/no-img-element -- Dynamic banner preview
             <img
               src={bannerPreview || profile.banner_url || ''}
-              alt="Banner"
+              alt={`${profile.username || 'Profile'} banner`}
               className="w-full h-full object-cover"
             />
           ) : (
@@ -68,14 +77,23 @@ export function ProfileImagesSection({
       {/* Avatar Upload */}
       <div className="flex items-start gap-4">
         <div
-          className="relative w-20 h-20 bg-surface-raised rounded-full border-2 border-strong cursor-pointer overflow-hidden flex-shrink-0"
+          role="button"
+          tabIndex={0}
+          aria-label="Upload profile photo"
+          className="relative w-20 h-20 bg-surface-raised rounded-full border-2 border-strong cursor-pointer overflow-hidden flex-shrink-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           onClick={() => avatarInputRef.current?.click()}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              avatarInputRef.current?.click();
+            }
+          }}
         >
           {avatarPreview || profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element -- Dynamic avatar preview
             <img
               src={avatarPreview || profile.avatar_url || ''}
-              alt="Avatar"
+              alt={`${profile.username || 'Profile'} avatar`}
               className="w-full h-full object-cover"
             />
           ) : (
