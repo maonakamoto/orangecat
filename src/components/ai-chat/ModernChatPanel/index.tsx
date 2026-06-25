@@ -151,8 +151,11 @@ export function ModernChatPanel({
         }
       } else if (action.type === 'update_entity' || action.type === 'publish_entity') {
         const entityMeta = ENTITY_REGISTRY[action.entityType];
-        if (entityMeta?.basePath) {
-          router.push(`${entityMeta.basePath}/${action.entityId}/edit`);
+        // Entities are edited via their create page in edit mode (?edit=<id>) —
+        // EntityCreateEditPage reads it. There is no /{basePath}/{id}/edit route
+        // for most types, so the old path 404'd for everything but causes/tasks.
+        if (entityMeta?.createPath) {
+          router.push(`${entityMeta.createPath}?edit=${action.entityId}`);
         }
       } else if (action.type === 'suggest_wallet') {
         const walletMeta = ENTITY_REGISTRY.wallet;

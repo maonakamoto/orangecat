@@ -145,7 +145,7 @@ export default async function DocumentDetailPage({ params }: PageProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link href={`/dashboard/cat?tab=context/create?edit=${id}`}>
+          <Link href={`${ROUTES.DASHBOARD.DOCUMENTS_CREATE}?edit=${id}`}>
             <Button variant="outline" size="sm">
               <Edit className="h-4 w-4 mr-2" />
               Edit
