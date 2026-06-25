@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type DragEvent } from 'react';
+import { toast } from 'sonner';
 import { Plus, ChevronUp, ChevronDown, GripVertical, Bot } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import {
@@ -74,6 +75,7 @@ export function AIKeyManager({
     try {
       await onDelete(keyToDelete.id);
       setKeyToDelete(null);
+      toast.success('API key deleted');
     } catch (err) {
       setDeleteError(err instanceof Error ? err.message : 'Failed to delete key');
     }

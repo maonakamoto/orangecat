@@ -18,6 +18,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import WebhookEndpointMintForm from '@/components/settings/WebhookEndpointMintForm';
 import WebhookEndpointRow, { type WebhookEndpoint } from '@/components/settings/WebhookEndpointRow';
@@ -156,6 +157,7 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
       setEndpoints(prev =>
         prev.map(e => (e.id === endpoint.id ? { ...e, revoked_at: new Date().toISOString() } : e))
       );
+      toast.success('Webhook endpoint revoked');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to revoke endpoint');
     }

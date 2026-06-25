@@ -12,6 +12,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import IntegrationKeyMintForm from '@/components/settings/IntegrationKeyMintForm';
 import IntegrationKeyRow from '@/components/settings/IntegrationKeyRow';
@@ -174,6 +175,7 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
       setKeys(prev =>
         prev.map(k => (k.id === key.id ? { ...k, revoked_at: new Date().toISOString() } : k))
       );
+      toast.success('Integration key revoked');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to revoke key');
     }
