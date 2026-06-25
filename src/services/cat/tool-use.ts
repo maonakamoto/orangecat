@@ -233,6 +233,183 @@ const PLATFORM_TOOL_DEFINITION = [
  * lifecycle event ('running' → one of completed/no_results/failed). The route
  * uses these to surface tool activity to the user via SSE.
  */
+/** Max model⇄tool round-trips per user turn. Bounds cost + latency; most
+ *  requests need 1, some 2 (search → refine, or search → prefill). */
+const MAX_TOOL_STEPS = 3;
+
+type RawToolCall = { id: string; type: string; function: { name: string; arguments: string } };
+
+/**
+ * Execute a single tool call and return the `tool` result message to feed back
+ * to the model. Side-effects (onToolCall lifecycle, onPrefillProposal) fire here.
+ */
+async function executeToolCall(
+  supabase: AnySupabaseClient,
+  toolCall: RawToolCall,
+  onToolCall?: OnToolCall,
+  onPrefillProposal?: OnPrefillProposal
+): Promise<ToolResultMessage> {
+  const toolName = toolCall.function?.name;
+
+  // ── search_platform ──────────────────────────────────────────────────────
+  if (toolName === 'search_platform') {
+    const parsedArgs = (() => {
+      try {
+        return JSON.parse(toolCall.function.arguments ?? '{}') as { query?: string; type?: string };
+      } catch {
+        return {} as { query?: string; type?: string };
+      }
+    })();
+
+    onToolCall?.({
+      id: toolCall.id,
+      name: toolName,
+      status: 'running',
+      args: { query: parsedArgs.query, type: parsedArgs.type ?? 'all' },
+    });
+
+    let searchContent: string;
+    try {
+      const results = await searchPlatform(
+        supabase,
+        parsedArgs.query ?? '',
+        (parsedArgs.type ?? 'all') as SearchType
+      );
+      if (results.length > 0) {
+        searchContent = JSON.stringify(results, null, 2);
+        const refs: ToolCallResultRef[] = results
+          .slice(0, 8)
+          .map(r => ({ url: r.url, type: r.type, title: r.title }));
+        onToolCall?.({
+          id: toolCall.id,
+          name: toolName,
+          status: 'completed',
+          resultCount: results.length,
+          results: refs,
+        });
+      } else {
+        searchContent = 'No results found for this search query.';
+        onToolCall?.({ id: toolCall.id, name: toolName, status: 'no_results' });
+      }
+    } catch (err) {
+      searchContent = 'Search failed. Please try a different query.';
+      onToolCall?.({
+        id: toolCall.id,
+        name: toolName,
+        status: 'failed',
+        error: err instanceof Error ? err.message : 'unknown',
+      });
+    }
+    return { role: 'tool', tool_call_id: toolCall.id, content: searchContent };
+  }
+
+  // ── prefill_entity_form ──────────────────────────────────────────────────
+  if (toolName === 'prefill_entity_form') {
+    const parsedArgs = (() => {
+      try {
+        return JSON.parse(toolCall.function.arguments ?? '{}') as {
+          entityType?: string;
+          description?: string;
+        };
+      } catch {
+        return {} as { entityType?: string; description?: string };
+      }
+    })();
+
+    const requestedType = parsedArgs.entityType ?? '';
+    const description = parsedArgs.description ?? '';
+
+    onToolCall?.({
+      id: toolCall.id,
+      name: toolName,
+      status: 'running',
+      args: { entityType: requestedType },
+    });
+
+    if (!isValidEntityType(requestedType)) {
+      onToolCall?.({
+        id: toolCall.id,
+        name: toolName,
+        status: 'failed',
+        error: 'invalid_entity_type',
+      });
+      return {
+        role: 'tool',
+        tool_call_id: toolCall.id,
+        content: `Invalid entityType "${requestedType}". Pick one of: ${PREFILLABLE_ENTITY_TYPES.join(', ')}.`,
+      };
+    }
+
+    const entityType = requestedType as EntityType;
+    const entityConfig = getEntityConfig(entityType);
+    if (!entityConfig) {
+      onToolCall?.({
+        id: toolCall.id,
+        name: toolName,
+        status: 'failed',
+        error: 'no_entity_config',
+      });
+      return {
+        role: 'tool',
+        tool_call_id: toolCall.id,
+        content: `No config for entity type "${entityType}". Skip prefill.`,
+      };
+    }
+
+    try {
+      const prefill = await generateFormPrefill(entityType, description, entityConfig);
+      if (!prefill.success) {
+        onToolCall?.({
+          id: toolCall.id,
+          name: toolName,
+          status: 'failed',
+          error: prefill.error ?? 'unknown',
+        });
+        return {
+          role: 'tool',
+          tool_call_id: toolCall.id,
+          content: `Prefill failed: ${prefill.error ?? 'unknown error'}`,
+        };
+      }
+
+      const fieldCount = Object.keys(prefill.data).length;
+      onToolCall?.({
+        id: toolCall.id,
+        name: toolName,
+        status: 'completed',
+        resultCount: fieldCount,
+        results: [],
+      });
+      onPrefillProposal?.({
+        entityType,
+        sourceDescription: description,
+        data: prefill.data as Record<string, unknown>,
+        confidence: prefill.confidence as Record<string, number>,
+      });
+      return {
+        role: 'tool',
+        tool_call_id: toolCall.id,
+        content: `Drafted a ${entityType} with ${fieldCount} fields. The user will see a card to review and open in the form. Do not repeat the field values in your response — just briefly confirm what you drafted and invite them to review.`,
+      };
+    } catch (err) {
+      onToolCall?.({
+        id: toolCall.id,
+        name: toolName,
+        status: 'failed',
+        error: err instanceof Error ? err.message : 'unknown',
+      });
+      return { role: 'tool', tool_call_id: toolCall.id, content: 'Prefill failed unexpectedly.' };
+    }
+  }
+
+  // Unknown tool — return a benign result so the thread stays well-formed.
+  return {
+    role: 'tool',
+    tool_call_id: toolCall.id,
+    content: `Unknown tool "${toolName ?? ''}".`,
+  };
+}
+
 export async function maybeEnrichWithSearchResults(
   supabase: AnySupabaseClient,
   messages: ToolAugmentedMessage[],
@@ -280,228 +457,79 @@ export async function maybeEnrichWithSearchResults(
     {
       role: 'system' as const,
       content:
-        'You route an OrangeCat chat request to platform tools. Call AT MOST ONE tool.\n' +
+        'You gather what an OrangeCat chat request needs by calling platform tools. Call ONE tool at a time; after you see its result you may call another tool to refine or follow up, or stop when you have enough.\n' +
         '- prefill_entity_form: when the user describes something THEY want to create / sell / offer / launch / fundraise (e.g. "I make mugs and want to sell them", "I want to start a project"). This is about THEIR own new thing.\n' +
-        '- search_platform: ONLY when the user wants to FIND, discover, or connect with things that already exist on the platform and belong to OTHERS (e.g. "find a designer", "who else is building X").\n' +
-        'NEVER call search_platform for a create/sell/offer intent — describing your own thing to list is prefill_entity_form, not a search. If neither clearly applies, call no tool. Only decide and call the tool — do not write a chat reply.',
+        '- search_platform: ONLY when the user wants to FIND, discover, or connect with things that already exist on the platform and belong to OTHERS (e.g. "find a designer", "who else is building X"). You may search again with a refined query if the first results are weak.\n' +
+        'NEVER call search_platform for a create/sell/offer intent — describing your own thing to list is prefill_entity_form, not a search. If neither clearly applies, call no tool. Only decide and call tools — do not write a chat reply.',
     },
     { role: 'user' as const, content: userMessage },
   ];
 
   try {
-    const res = await fetch(toolEndpoint, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${toolKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: modelToUse,
-        messages: detectionMessages,
-        tools: PLATFORM_TOOL_DEFINITION,
-        tool_choice: 'auto',
-        stream: false,
-        max_tokens: 500,
-      }),
-    });
+    // Bounded agentic loop: the model can call a tool, see the result, and
+    // decide its next move — up to MAX_TOOL_STEPS round-trips. `loopMessages`
+    // carries the routing context + accumulated tool dialogue so each step is
+    // informed by prior results; `enriched` is what the main chat call sees.
+    const loopMessages: ToolAugmentedMessage[] = [...detectionMessages];
+    const enriched: ToolAugmentedMessage[] = [...messages];
 
-    if (!res.ok) {
-      return messages;
-    }
-
-    const data = await res.json();
-    const choice = data.choices?.[0];
-    if (choice?.finish_reason !== 'tool_calls' || !choice.message?.tool_calls?.length) {
-      return messages;
-    }
-
-    const assistantMsg = choice.message as ToolCallAssistantMessage;
-
-    // Programmatic search guard: on a clear create intent, drop search_platform
-    // calls (the weak model emits them despite the routing prompt). Rebuild the
-    // assistant message with the filtered calls so no tool_call is left
-    // unfulfilled in the thread.
-    let toolCalls = assistantMsg.tool_calls;
-    if (hasCreateIntent(userMessage)) {
-      const kept = toolCalls.filter(tc => tc.function?.name !== 'search_platform');
-      if (kept.length !== toolCalls.length) {
-        toolCalls = kept;
-      }
-    }
-    if (toolCalls.length === 0) {
-      return messages;
-    }
-    const filteredAssistantMsg: ToolCallAssistantMessage = {
-      ...assistantMsg,
-      tool_calls: toolCalls,
-    };
-    const enriched: ToolAugmentedMessage[] = [...messages, filteredAssistantMsg];
-
-    for (const toolCall of toolCalls) {
-      const toolName = toolCall.function?.name;
-
-      // ── search_platform ────────────────────────────────────────────────
-      if (toolName === 'search_platform') {
-        const parsedArgs = (() => {
-          try {
-            return JSON.parse(toolCall.function.arguments ?? '{}') as {
-              query?: string;
-              type?: string;
-            };
-          } catch {
-            return {} as { query?: string; type?: string };
-          }
-        })();
-
-        onToolCall?.({
-          id: toolCall.id,
-          name: toolName,
-          status: 'running',
-          args: { query: parsedArgs.query, type: parsedArgs.type ?? 'all' },
-        });
-
-        let searchContent: string;
-        try {
-          const results = await searchPlatform(
-            supabase,
-            parsedArgs.query ?? '',
-            (parsedArgs.type ?? 'all') as SearchType
-          );
-          if (results.length > 0) {
-            searchContent = JSON.stringify(results, null, 2);
-            const refs: ToolCallResultRef[] = results
-              .slice(0, 8)
-              .map(r => ({ url: r.url, type: r.type, title: r.title }));
-            onToolCall?.({
-              id: toolCall.id,
-              name: toolName,
-              status: 'completed',
-              resultCount: results.length,
-              results: refs,
-            });
-          } else {
-            searchContent = 'No results found for this search query.';
-            onToolCall?.({ id: toolCall.id, name: toolName, status: 'no_results' });
-          }
-        } catch (err) {
-          searchContent = 'Search failed. Please try a different query.';
-          onToolCall?.({
-            id: toolCall.id,
-            name: toolName,
-            status: 'failed',
-            error: err instanceof Error ? err.message : 'unknown',
-          });
-        }
-        enriched.push({ role: 'tool', tool_call_id: toolCall.id, content: searchContent });
-        continue;
+    for (let step = 0; step < MAX_TOOL_STEPS; step++) {
+      const res = await fetch(toolEndpoint, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${toolKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: modelToUse,
+          messages: loopMessages,
+          tools: PLATFORM_TOOL_DEFINITION,
+          tool_choice: 'auto',
+          stream: false,
+          max_tokens: 500,
+        }),
+      });
+      if (!res.ok) {
+        break;
       }
 
-      // ── prefill_entity_form ────────────────────────────────────────────
-      if (toolName === 'prefill_entity_form') {
-        const parsedArgs = (() => {
-          try {
-            return JSON.parse(toolCall.function.arguments ?? '{}') as {
-              entityType?: string;
-              description?: string;
-            };
-          } catch {
-            return {} as { entityType?: string; description?: string };
-          }
-        })();
-
-        const requestedType = parsedArgs.entityType ?? '';
-        const description = parsedArgs.description ?? '';
-
-        onToolCall?.({
-          id: toolCall.id,
-          name: toolName,
-          status: 'running',
-          args: { entityType: requestedType },
-        });
-
-        if (!isValidEntityType(requestedType)) {
-          enriched.push({
-            role: 'tool',
-            tool_call_id: toolCall.id,
-            content: `Invalid entityType "${requestedType}". Pick one of: ${PREFILLABLE_ENTITY_TYPES.join(', ')}.`,
-          });
-          onToolCall?.({
-            id: toolCall.id,
-            name: toolName,
-            status: 'failed',
-            error: 'invalid_entity_type',
-          });
-          continue;
-        }
-
-        const entityType = requestedType as EntityType;
-        const entityConfig = getEntityConfig(entityType);
-        if (!entityConfig) {
-          enriched.push({
-            role: 'tool',
-            tool_call_id: toolCall.id,
-            content: `No config for entity type "${entityType}". Skip prefill.`,
-          });
-          onToolCall?.({
-            id: toolCall.id,
-            name: toolName,
-            status: 'failed',
-            error: 'no_entity_config',
-          });
-          continue;
-        }
-
-        try {
-          const prefill = await generateFormPrefill(entityType, description, entityConfig);
-          if (!prefill.success) {
-            enriched.push({
-              role: 'tool',
-              tool_call_id: toolCall.id,
-              content: `Prefill failed: ${prefill.error ?? 'unknown error'}`,
-            });
-            onToolCall?.({
-              id: toolCall.id,
-              name: toolName,
-              status: 'failed',
-              error: prefill.error ?? 'unknown',
-            });
-            continue;
-          }
-
-          const fieldCount = Object.keys(prefill.data).length;
-          enriched.push({
-            role: 'tool',
-            tool_call_id: toolCall.id,
-            // Short acknowledgment back to the LLM — the actual form draft is
-            // delivered to the user via the prefill_proposal SSE event below,
-            // not embedded in the conversation history.
-            content: `Drafted a ${entityType} with ${fieldCount} fields. The user will see a card to review and open in the form. Do not repeat the field values in your response — just briefly confirm what you drafted and invite them to review.`,
-          });
-          onToolCall?.({
-            id: toolCall.id,
-            name: toolName,
-            status: 'completed',
-            resultCount: fieldCount,
-            results: [],
-          });
-          onPrefillProposal?.({
-            entityType,
-            sourceDescription: description,
-            data: prefill.data as Record<string, unknown>,
-            confidence: prefill.confidence as Record<string, number>,
-          });
-        } catch (err) {
-          enriched.push({
-            role: 'tool',
-            tool_call_id: toolCall.id,
-            content: 'Prefill failed unexpectedly.',
-          });
-          onToolCall?.({
-            id: toolCall.id,
-            name: toolName,
-            status: 'failed',
-            error: err instanceof Error ? err.message : 'unknown',
-          });
-        }
-        continue;
+      const data = await res.json();
+      const choice = data.choices?.[0];
+      // Model stopped calling tools → it has what it needs; the main chat call
+      // produces the final answer from the gathered context.
+      if (choice?.finish_reason !== 'tool_calls' || !choice.message?.tool_calls?.length) {
+        break;
       }
+
+      const assistantMsg = choice.message as ToolCallAssistantMessage;
+
+      // Programmatic search guard: on a clear create intent, drop search_platform
+      // calls (the weak model emits them despite the routing prompt) so no
+      // tool_call is left unfulfilled in the thread.
+      let toolCalls = assistantMsg.tool_calls;
+      if (hasCreateIntent(userMessage)) {
+        const kept = toolCalls.filter(tc => tc.function?.name !== 'search_platform');
+        if (kept.length !== toolCalls.length) {
+          toolCalls = kept;
+        }
+      }
+      if (toolCalls.length === 0) {
+        break;
+      }
+
+      const assistantToolMsg: ToolCallAssistantMessage = { ...assistantMsg, tool_calls: toolCalls };
+      loopMessages.push(assistantToolMsg);
+      enriched.push(assistantToolMsg);
+
+      for (const toolCall of toolCalls) {
+        const resultMessage = await executeToolCall(
+          supabase,
+          toolCall,
+          onToolCall,
+          onPrefillProposal
+        );
+        loopMessages.push(resultMessage);
+        enriched.push(resultMessage);
+      }
+      // Loop continues — the model now sees these results and may call another
+      // tool (e.g. refine a search) or stop.
     }
 
     return enriched;
