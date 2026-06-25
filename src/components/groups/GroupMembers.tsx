@@ -36,6 +36,7 @@ import {
 import { STATUS } from '@/config/database-constants';
 import type { GroupMember, GroupRole } from '@/types/group';
 import { getInitial } from '@/utils/string';
+import { InviteMemberDialog } from './InviteMemberDialog';
 import groupsService from '@/services/groups';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
@@ -60,6 +61,7 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
   const [leaving, setLeaving] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
   const [busyMemberId, setBusyMemberId] = useState<string | null>(null);
+  const [inviteOpen, setInviteOpen] = useState(false);
 
   const handleJoin = async () => {
     try {
@@ -186,11 +188,21 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
       {/* Members List */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5" />
-            Members ({members.length})
-          </CardTitle>
-          <CardDescription>People who are part of this group</CardDescription>
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Members ({members.length})
+              </CardTitle>
+              <CardDescription>People who are part of this group</CardDescription>
+            </div>
+            {canManage && (
+              <Button variant="outline" size="sm" onClick={() => setInviteOpen(true)}>
+                <UserPlus className="mr-1.5 h-4 w-4" />
+                Invite
+              </Button>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           {members.length === 0 ? (
@@ -310,6 +322,16 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
             </Button>
           )}
         </div>
+      )}
+
+      {canManage && (
+        <InviteMemberDialog
+          groupId={groupId}
+          open={inviteOpen}
+          onOpenChange={setInviteOpen}
+          existingMemberIds={members.map(m => m.user_id)}
+          onInvited={() => onUpdate?.()}
+        />
       )}
     </div>
   );
