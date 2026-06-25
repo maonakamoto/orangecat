@@ -4,12 +4,11 @@
  * Three plans, honest about what's shipped:
  *   - free → what every user gets today (10 msgs/day on free models)
  *   - byok → already implemented; zero platform cost; recommended for power users
- *   - pro  → waitlist only. The Pro card is intentionally vague about WHAT
- *            you'd be paying for — the business model isn't decided yet
- *            (could be more Cat capacity, could be platform features like
- *            entity caps + verified badge, could be transaction fees, could
- *            be all of the above). The waitlist exists to collect signal
- *            before any irreversible decision is made.
+ *   - pro  → managed frontier AI, not live yet. OrangeCat has no fiat rails
+ *            yet (can't bill francs or pay inference providers in fiat), so the
+ *            franc price is a future anchor and the CTA routes to /support:
+ *            back OrangeCat in Bitcoin as a founding supporter (a donation, NOT
+ *            redeemable inference) + use BYOK to get frontier models today.
  *
  * The /pricing page and QuotaMeter both read from this file. If the daily
  * limit changes, update CAT_FREE_DAILY_LIMIT here and api-key-service.ts in
@@ -86,20 +85,22 @@ export const CAT_PLANS: CatPlan[] = [
     ],
     cta: { label: 'Add your key', href: ROUTES.SETTINGS_AI, variant: 'accent' },
     status: 'available',
-    badge: 'Most freedom',
+    badge: 'Available now',
   },
   {
     id: 'pro',
     name: 'Pro',
-    tagline: 'Shape it with us',
-    priceCopy: 'No price yet — waitlist first',
+    tagline: 'Managed frontier AI — zero setup',
+    // Franc price as the future anchor; the card makes clear it's not live yet.
+    priceCopy: 'CHF 19 / mo · founding access',
     bullets: [
-      'What you pay for is still open: more Cat capacity, platform features, both',
-      'OrangeCat earns when you earn — likely transaction fees, not AI markup',
-      'Bitcoin-aligned: Lightning or BTC payments, no card-on-file required',
-      'Until Pro ships, Free + BYOK cover real use — Cat works for everyone today',
+      'Frontier models (Claude, GPT-4o, Grok) managed by OrangeCat — no keys, no setup',
+      'Higher limits, smarter defaults, full agentic Cat (discovery, matchmaking, multi-step)',
+      'Fiat billing is coming — until then, back us in Bitcoin as a founding supporter',
+      'Founding supporters get recognition and first access the day Pro goes live',
     ],
-    cta: { label: 'Join the waitlist', href: '#waitlist', variant: 'outline' },
+    cta: { label: 'Become a founding supporter', href: ROUTES.SUPPORT, variant: 'outline' },
     status: 'coming-soon',
+    badge: 'Founding access',
   },
 ];
