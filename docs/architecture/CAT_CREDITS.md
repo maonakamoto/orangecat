@@ -1,7 +1,15 @@
 # Cat Credits — Bitcoin-paid access to frontier models
 
-**Status:** Spec / proposal (not built). Authored 2026-06-25.
+**Status:** Phases 1–2 built (ledger + Lightning top-up). Authored 2026-06-25.
 **Companion to:** the Settings → AI "sovereignty ladder" (Free → BYOK → Local) and the in-chat upgrade nudge (shipped).
+
+## Decisions (locked 2026-06-25)
+
+- **Denomination: BTC** (canonical unit, `NUMERIC(18,8)` = 1-sat precision). Sats appear ONLY at the Lightning protocol boundary (the `makeInvoice` call). _"Sats" are not a product concept._
+- **Pricing: near-cost pass-through** — credits ≈ wholesale + a small disclosed spread; OC's margin is Supporter + platform activity, never inference markup.
+- **Receive backend: platform NWC wallet** (`PLATFORM_NWC_URI`) — OC's own receiving wallet, abstracted so it can later point at self-hosted LNbits/BTCPay with no code change. Reuses the existing NWC client + polling-settlement pattern. (BTCPay/LNbits remain the "at scale / max sovereignty" graduation.)
+- **Model backend (Phase 3): OpenRouter** = all models, one key/bill — _pending a TOS check on reselling_.
+- **User funds stay non-custodial.** OC's receiving wallet only ever holds OC's own credit revenue; a user's credit balance is prepaid, non-withdrawable service credit (an entitlement to inference), not a holding of their bitcoin.
 
 ---
 
@@ -25,7 +33,7 @@ Cat Credits closes that gap: the user pays **OrangeCat in Bitcoin/Lightning**, O
 ## 2. Guiding principles (non-negotiable)
 
 1. **Near cost, transparently.** Credits are priced at or barely above wholesale. OC's margin is **Supporter + platform activity, never inference markup** — the Settings page already promises "OrangeCat earns from platform activity, not your AI bill." Keep that promise. Disclose the rate.
-2. **Denominated in sats, 1:1.** A sat of credit = a sat paid. No funny-money "credits" abstraction. Balance shown in sats (+ fiat equiv via `useDisplayCurrency`). Honest and Bitcoin-native.
+2. **Denominated in BTC (canonical unit).** Balance is real BTC (`NUMERIC(18,8)`), shown via `useDisplayCurrency` (BTC or the user's currency). No funny-money "credits" abstraction. Sats appear only at the Lightning protocol boundary.
 3. **Prepaid, single-purpose, non-withdrawable, non-refundable service credit.** Credits buy Cat inference and nothing else; they can never be cashed out or transferred. This is the key design constraint that keeps it _prepaid service credit_ (like buying API credits) rather than _stored value / a wallet_ — materially lowering custody/money-transmission exposure. **Flag for legal review regardless.**
 4. **Ledger is the source of truth.** Balance is derived from an append-only ledger, never a free-floating mutable number (Ground Truth #2 — no state in two places).
 5. **Graceful, never hard-fail.** Out of credits → fall back to the free model + offer top-up. Never a dead end.
@@ -37,17 +45,18 @@ Cat Credits closes that gap: the user pays **OrangeCat in Bitcoin/Lightning**, O
 ### `cat_credit_entries` (append-only ledger — SSOT)
 
 ```
-id              uuid pk
-user_id         uuid not null → auth.users (RLS: read own)
-kind            text  -- 'topup' | 'usage' | 'grant' | 'refund' | 'adjustment'
-amount_sats     bigint not null  -- signed: + topup/grant/refund, − usage
-balance_after   bigint not null  -- denormalized running balance (set in txn)
-ref             text  -- lightning payment hash (topup) | cat_messages.id (usage)
-metadata        jsonb -- { model, inputTokens, outputTokens, costBtc, rateSats }
-created_at      timestamptz default now()
+id                uuid pk
+seq               bigint identity   -- monotonic order (created_at ties within a txn)
+user_id           uuid not null → auth.users (RLS: read own)
+kind              text  -- 'topup' | 'usage' | 'grant' | 'refund' | 'adjustment'
+amount_btc        numeric(18,8) not null  -- signed: + topup/grant/refund, − usage
+balance_after_btc numeric(18,8) not null  -- running balance (set atomically)
+ref               text  -- lightning payment hash (topup) | cat_messages.id (usage)
+metadata          jsonb
+created_at        timestamptz default now()
 
 unique (kind, ref) where ref is not null   -- idempotency: a payment/message credits once
-index (user_id, created_at desc)
+index (user_id, seq desc)
 ```
 
 - **Balance** = `balance_after` of the latest row (O(1) read), with `SUM(amount_sats)` as the reconciliation check. Optionally a thin `cat_credit_balances` cache row, rebuilt from the ledger — but the ledger is truth.

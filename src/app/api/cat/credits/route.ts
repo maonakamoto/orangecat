@@ -9,17 +9,20 @@
  */
 
 import { getCreditBalance, listCreditEntries } from '@/services/cat/credits';
+import { platformReceiveEnabled } from '@/lib/bitcoin/platform-wallet';
 import { apiSuccess, handleApiError } from '@/lib/api/standardResponse';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 
 export const GET = withAuth(async (request: AuthenticatedRequest) => {
   const { user, supabase } = request;
   try {
-    const [balanceSats, entries] = await Promise.all([
+    const [balanceBtc, entries] = await Promise.all([
       getCreditBalance(supabase, user.id),
       listCreditEntries(supabase, user.id),
     ]);
-    return apiSuccess({ balanceSats, entries });
+    // topupEnabled tells the UI whether to offer Lightning top-up (only when a
+    // platform receiving wallet is configured — otherwise the button stays off).
+    return apiSuccess({ balanceBtc, entries, topupEnabled: platformReceiveEnabled() });
   } catch (error) {
     return handleApiError(error);
   }

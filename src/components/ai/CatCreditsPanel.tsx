@@ -3,22 +3,23 @@
 /**
  * CatCreditsPanel — your Bitcoin-paid Cat credit balance + ledger history.
  *
- * Phase 1: read-only. Shows the sats balance (the canonical unit — Bitcoin
- * Orange applies) with the user's display-currency equivalent, plus the ledger.
- * "Top up" is shown but disabled until platform Lightning-receiving infra is
- * provisioned (Phase 2). See docs/architecture/CAT_CREDITS.md.
+ * Balance is BTC (canonical unit), shown via the user's display currency. Top-up
+ * (Lightning) is offered only when the platform receiving wallet is configured
+ * (topupEnabled); otherwise the button stays disabled. See
+ * docs/architecture/CAT_CREDITS.md.
  */
 
 import { useCallback, useEffect, useState } from 'react';
 import { Coins, Loader2, AlertCircle, ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { logger } from '@/utils/logger';
+import { TopUpDialog } from './TopUpDialog';
 
 interface CreditEntry {
   id: string;
   kind: 'topup' | 'usage' | 'grant' | 'refund' | 'adjustment';
-  amount_sats: number;
-  balance_after: number;
+  amount_btc: number;
+  balance_after_btc: number;
   created_at: string;
 }
 
@@ -31,11 +32,13 @@ const KIND_LABELS: Record<CreditEntry['kind'], string> = {
 };
 
 export function CatCreditsPanel() {
-  const { formatSats } = useDisplayCurrency();
-  const [balanceSats, setBalanceSats] = useState(0);
+  const { formatAmountBtc } = useDisplayCurrency();
+  const [balanceBtc, setBalanceBtc] = useState(0);
   const [entries, setEntries] = useState<CreditEntry[]>([]);
+  const [topupEnabled, setTopupEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [topUpOpen, setTopUpOpen] = useState(false);
 
   const load = useCallback(async () => {
     setIsLoading(true);
@@ -46,8 +49,9 @@ export function CatCreditsPanel() {
         throw new Error('Failed to load credits');
       }
       const json = await res.json();
-      setBalanceSats(json?.data?.balanceSats ?? 0);
+      setBalanceBtc(json?.data?.balanceBtc ?? 0);
       setEntries((json?.data?.entries ?? []) as CreditEntry[]);
+      setTopupEnabled(!!json?.data?.topupEnabled);
     } catch (err) {
       logger.error('Failed to load cat credits', err, 'CatCredits');
       setError('Could not load your credits. Try again.');
@@ -83,21 +87,22 @@ export function CatCreditsPanel() {
             <Loader2 className="mt-1 h-5 w-5 animate-spin text-fg-secondary" />
           ) : (
             <p className="mt-0.5 text-2xl font-semibold text-bitcoinOrange">
-              {balanceSats.toLocaleString('en-US')}{' '}
-              <span className="text-base font-normal text-fg-secondary">sats</span>
+              {formatAmountBtc(balanceBtc)}
             </p>
-          )}
-          {!isLoading && balanceSats > 0 && (
-            <p className="text-xs text-fg-tertiary">≈ {formatSats(balanceSats)}</p>
           )}
         </div>
         <button
           type="button"
-          disabled
-          title="Lightning top-up is coming soon"
-          className="cursor-not-allowed rounded-md border border-subtle px-4 py-2 text-sm font-medium text-fg-tertiary opacity-60"
+          onClick={() => setTopUpOpen(true)}
+          disabled={!topupEnabled}
+          title={topupEnabled ? 'Top up with Lightning' : 'Lightning top-up is coming soon'}
+          className={
+            topupEnabled
+              ? 'rounded-md bg-bitcoinOrange px-4 py-2 text-sm font-medium text-white hover:bg-bitcoinOrange/90'
+              : 'cursor-not-allowed rounded-md border border-subtle px-4 py-2 text-sm font-medium text-fg-tertiary opacity-60'
+          }
         >
-          Top up (soon)
+          {topupEnabled ? 'Top up' : 'Top up (soon)'}
         </button>
       </div>
 
@@ -117,12 +122,13 @@ export function CatCreditsPanel() {
         </div>
       ) : isLoading ? null : entries.length === 0 ? (
         <p className="text-sm text-fg-tertiary">
-          No credit activity yet. Once top-up is live, your purchases and Cat usage show here.
+          No credit activity yet. {topupEnabled ? 'Top up' : 'Once top-up is live'} to run Cat on
+          frontier models; purchases and usage will show here.
         </p>
       ) : (
         <ul className="divide-y divide-border-subtle">
           {entries.map(e => {
-            const credit = e.amount_sats >= 0;
+            const credit = e.amount_btc >= 0;
             return (
               <li key={e.id} className="flex items-center justify-between py-2 text-sm">
                 <span className="flex items-center gap-2 text-fg-primary">
@@ -137,13 +143,23 @@ export function CatCreditsPanel() {
                   </span>
                 </span>
                 <span className={credit ? 'text-status-positive' : 'text-fg-secondary'}>
-                  {credit ? '+' : ''}
-                  {e.amount_sats.toLocaleString('en-US')} sats
+                  {credit ? '+' : '−'}
+                  {formatAmountBtc(Math.abs(e.amount_btc))}
                 </span>
               </li>
             );
           })}
         </ul>
+      )}
+
+      {topUpOpen && (
+        <TopUpDialog
+          onClose={() => setTopUpOpen(false)}
+          onSuccess={() => {
+            setTopUpOpen(false);
+            void load();
+          }}
+        />
       )}
     </section>
   );
