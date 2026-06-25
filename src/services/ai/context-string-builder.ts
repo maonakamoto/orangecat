@@ -555,9 +555,34 @@ export function buildFullContextString(context: FullUserContext): string {
     return '';
   }
 
+  // Budget the context so it can't overflow the model window or drown a small
+  // free model on large accounts. Sections are pushed in priority order
+  // (session → profile → documents → entities → … → activity summary), so we
+  // greedily keep the highest-priority ones that fit and note any omission.
+  // ~28k chars ≈ ~7k tokens — leaves ample room for the system prompt + history.
+  const CONTEXT_CHAR_BUDGET = 28000;
+  const SEP = '\n\n';
+  const budgetedSections: string[] = [];
+  let used = 0;
+  let omitted = 0;
+  for (const section of sections) {
+    const cost = section.length + SEP.length;
+    if (used + cost <= CONTEXT_CHAR_BUDGET || budgetedSections.length === 0) {
+      budgetedSections.push(section);
+      used += cost;
+    } else {
+      omitted++;
+    }
+  }
+  if (omitted > 0) {
+    budgetedSections.push(
+      `_(${omitted} lower-priority context section(s) omitted to stay within limits. Ask about a specific area for more detail.)_`
+    );
+  }
+
   return `# User Context for Personalized Advice
 
-${sections.join('\n\n')}
+${budgetedSections.join(SEP)}
 
 ---
 **Instructions for using this context**:
