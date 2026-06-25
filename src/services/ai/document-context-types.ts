@@ -109,6 +109,30 @@ export interface GroupMembershipSummary {
   visibility: 'public' | 'members_only' | 'private';
 }
 
+/**
+ * A recent activity event about one of the user's projects. Sourced from the
+ * timeline_events bus — `source: 'fleetcrown'` rows are build updates published
+ * by FleetCrown; `'orangecat'` rows are native platform activity.
+ */
+export interface ProjectActivityEvent {
+  projectId: string;
+  title: string;
+  description: string | null;
+  eventType: string;
+  source: 'fleetcrown' | 'orangecat';
+  at: string;
+}
+
+/**
+ * A typed relationship the user's project has with another party — most
+ * importantly "customer" (e.g. FleetCrown built X for this customer).
+ */
+export interface StakeholderSummary {
+  kind: string;
+  counterparty: string;
+  status: string | null;
+}
+
 /** The user's follow graph — counts plus a few people they follow, for context. */
 export interface SocialGraphSummary {
   followers: number;
@@ -172,6 +196,8 @@ export interface FullUserContext {
   inboundActivity: InboundActivity;
   memberGroups: GroupMembershipSummary[];
   socialGraph: SocialGraphSummary;
+  projectActivity: ProjectActivityEvent[];
+  stakeholders: StakeholderSummary[];
   paymentCapabilities: PaymentCapabilities;
   /** Runtime session context — what's true RIGHT NOW. See RuntimeContext for fields. */
   runtime: RuntimeContext;

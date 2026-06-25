@@ -70,6 +70,9 @@ export const DATABASE_TABLES = {
   COMMUNITY_TIMELINE: 'community_timeline_no_duplicates',
   TIMELINE_POSTS: 'timeline_posts',
 
+  // Stakeholder graph (typed edges between projects: customer, collaborator, ...)
+  STAKEHOLDER_RELATIONSHIPS: 'stakeholder_relationships',
+
   // Documents
   USER_DOCUMENTS: 'user_documents',
 
