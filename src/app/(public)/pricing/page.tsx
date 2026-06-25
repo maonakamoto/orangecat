@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Check, Sparkles, Cat as CatIcon } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { CAT_PLANS, type CatPlan } from '@/config/cat-plans';
+import { ROUTES } from '@/config/routes';
 import { cn } from '@/lib/utils';
 
 export const metadata = {
@@ -44,55 +45,57 @@ export default function PricingPage() {
           ))}
         </div>
 
-        {/* Why pay? — intentionally open-ended */}
+        {/* Where this is going — honest about the fiat gap */}
         <section className="mb-16 rounded-lg border border-default bg-surface-base p-8">
-          <h2 className="mb-4 text-2xl font-semibold text-fg-primary">What Pro will be</h2>
+          <h2 className="mb-4 font-heading text-2xl font-bold tracking-display text-fg-primary">
+            Where this is going
+          </h2>
           <div className="space-y-4 text-fg-primary">
             <p>
-              We haven&apos;t decided. There are three plausible directions for what you&apos;d be
-              paying for, and we&apos;d rather hear from you before we lock one in:
+              The destination is <strong>Pro</strong>: frontier models — Claude, GPT-4o, Grok —
+              fully managed by OrangeCat, no keys, no setup. The kind of effortless AI a serious
+              company runs on.
+            </p>
+            <p>
+              We&apos;re not there yet, and we won&apos;t pretend otherwise. OrangeCat doesn&apos;t
+              have fiat payment rails — we can&apos;t bill your francs, and we can&apos;t pay the
+              inference providers in fiat. So until those rails exist, there are two honest ways to
+              get more:
             </p>
             <ul className="space-y-3 pl-4">
               <li>
-                <strong className="text-fg-primary">More Cat.</strong> Higher daily limits, better
-                default models — you pay OrangeCat, we pay the provider.
+                <strong className="text-fg-primary">Bring your own key</strong> — the real path to
+                frontier models <em>today</em>. Your key, your bill, zero markup. Cat runs Claude or
+                GPT-4o for you right now.
               </li>
               <li>
-                <strong className="text-fg-primary">Platform features.</strong> Unlimited entities,
-                Cat autonomous actions, verified badge, priority discovery — none of which touch the
-                AI bill.
-              </li>
-              <li>
-                <strong className="text-fg-primary">No subscription at all.</strong> OrangeCat earns
-                a small fee on transactions that happen on the platform (sales, funding, loans). AI
-                stays free for everyone, forever. Bitcoin-aligned: we win when you win.
+                <strong className="text-fg-primary">Back us in Bitcoin</strong> — believe in where
+                this is heading? Become a founding supporter. It&apos;s a donation, not a
+                subscription — and supporters get first access the day Pro ships.
               </li>
             </ul>
-            <p>
-              Most likely some mix. Until then: Free + BYOK cover real use today. Cat works for
-              everyone right now, no card on file, no commitment.
-            </p>
           </div>
         </section>
 
-        {/* Waitlist */}
-        <section id="waitlist" className="mb-12 rounded-lg bg-surface-public p-8 text-fg-inverted">
+        {/* Founding supporter CTA band */}
+        <section id="founding" className="mb-12 rounded-lg bg-surface-public p-8 text-fg-inverted">
           <div className="text-center">
             <Sparkles className="mx-auto mb-4 h-10 w-10" aria-hidden="true" />
             <h2 className="mb-3 font-heading text-2xl font-bold tracking-display">
-              Shape what Pro becomes
+              Found the permissionless economy
             </h2>
             <p className="mx-auto mb-6 max-w-2xl text-fg-inverted/70">
-              No commitment, no payment details. Tell us which of the three directions above (or
-              something else) would make you actually pay. We read every reply.
+              We&apos;re building toward a world where anyone can earn, fund, and govern without
+              gatekeepers. Fiat billing is coming — until then, back OrangeCat in Bitcoin and get
+              first access to Pro the day it&apos;s live.
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
-              <a href="mailto:hello@orangecat.ch?subject=Cat%20Pro%20waitlist">
+              <Link href={ROUTES.SUPPORT}>
                 <Button variant="accent" size="lg">
-                  Email the waitlist
+                  Become a founding supporter
                 </Button>
-              </a>
-              <Link href="/dashboard/cat">
+              </Link>
+              <Link href={ROUTES.DASHBOARD.CAT}>
                 <Button variant="outline" size="lg">
                   Try Cat free
                 </Button>
@@ -104,8 +107,8 @@ export default function PricingPage() {
         {/* Footer note */}
         <div className="text-center text-sm text-fg-secondary">
           <p>
-            Whatever Pro becomes, payments will be Bitcoin/Lightning-native — no card-on-file
-            required. The price isn&apos;t committed until you tell us what works.
+            Payments are Bitcoin/Lightning-native — no card-on-file, ever. When fiat billing lands,
+            Pro will price honestly and founding supporters come first.
           </p>
         </div>
       </div>
