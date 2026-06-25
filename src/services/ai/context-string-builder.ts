@@ -254,6 +254,36 @@ export function buildFullContextString(context: FullUserContext): string {
     }
   }
 
+  // Project activity — recent timeline updates about the user's projects,
+  // including FleetCrown-published build updates (source: fleetcrown).
+  if (context.projectActivity && context.projectActivity.length > 0) {
+    const lines = context.projectActivity.map(e => {
+      const tag = e.source === 'fleetcrown' ? ' [via FleetCrown]' : '';
+      const when = e.at ? ` (${e.at.slice(0, 10)})` : '';
+      const desc = e.description ? ` — ${e.description.slice(0, 140)}` : '';
+      return `- **${e.title}**${tag}${when}${desc}`;
+    });
+    sections.push(
+      `## Recent Project Activity\nUpdates on the user's projects (FleetCrown build updates are tagged):\n${lines.join('\n')}`
+    );
+  }
+
+  // Stakeholder edges — who the user's projects are connected to (customers, ...).
+  if (context.stakeholders && context.stakeholders.length > 0) {
+    const byKind = new Map<string, string[]>();
+    for (const s of context.stakeholders) {
+      const list = byKind.get(s.kind) ?? [];
+      list.push(s.counterparty);
+      byKind.set(s.kind, list);
+    }
+    const lines = Array.from(byKind.entries()).map(
+      ([kind, parties]) => `- ${kind}: ${parties.join(', ')}`
+    );
+    sections.push(
+      `## Stakeholders\nTyped relationships on the user's projects (e.g. customers):\n${lines.join('\n')}`
+    );
+  }
+
   // Tasks section
   if (context.tasks.length > 0) {
     const now = new Date();
