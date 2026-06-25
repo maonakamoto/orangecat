@@ -46,6 +46,8 @@ interface ProfileProjectsTabProps {
 export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfileProjectsTabProps) {
   const [projects, setProjects] = useState<ProfileProjectItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     if (!profile.id) {
@@ -55,11 +57,15 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
     const fetchProjects = async () => {
       try {
         setLoading(true);
+        setError(false);
         const response = await fetch(API_ROUTES.PROFILES.PROJECTS(profile.id), {
           signal: controller.signal,
         });
         if (controller.signal.aborted) {
           return;
+        }
+        if (!response.ok) {
+          throw new Error(`Failed to load projects (${response.status})`);
         }
         const result = await response.json();
         if (controller.signal.aborted) {
@@ -74,6 +80,7 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
           return;
         }
         logger.error('Failed to fetch projects:', error);
+        setError(true);
       } finally {
         if (!controller.signal.aborted) {
           setLoading(false);
@@ -83,10 +90,23 @@ export default function ProfileProjectsTab({ profile, isOwnProfile }: ProfilePro
 
     fetchProjects();
     return () => controller.abort();
-  }, [profile.id]);
+  }, [profile.id, reloadKey]);
 
   if (loading) {
     return <div className="text-fg-secondary text-sm py-8 text-center">Loading projects...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <Target className="w-12 h-12 mx-auto mb-4 text-fg-tertiary" />
+        <h3 className="text-lg font-semibold text-fg-primary mb-2">Couldn’t load projects</h3>
+        <p className="text-fg-secondary mb-6">Something went wrong fetching projects.</p>
+        <Button variant="outline" onClick={() => setReloadKey(k => k + 1)}>
+          Try again
+        </Button>
+      </div>
+    );
   }
 
   // Filter out drafts for public display

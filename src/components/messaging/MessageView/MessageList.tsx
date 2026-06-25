@@ -10,7 +10,7 @@
  */
 
 import React, { useRef, useCallback, useEffect, useState } from 'react';
-import { ChevronUp, Loader2 } from 'lucide-react';
+import { ChevronUp, Loader2, MessageSquare } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import MessageItem, { shouldShowDateDivider, getDateDividerText } from './MessageItem';
 import type { Message } from '@/features/messaging/types';
@@ -101,6 +101,15 @@ export default function MessageList({
             )}
             {isLoadingMore ? 'Loading...' : 'Load older messages'}
           </Button>
+        </div>
+      )}
+
+      {/* Empty state — new/empty conversation (no blank screen) */}
+      {messages.length === 0 && !hasMore && (
+        <div className="flex flex-1 flex-col items-center justify-center py-16 text-center">
+          <MessageSquare className="mb-3 h-10 w-10 text-fg-tertiary" />
+          <p className="text-sm font-medium text-fg-primary">No messages yet</p>
+          <p className="text-sm text-fg-secondary">Say hello to start the conversation.</p>
         </div>
       )}
 
