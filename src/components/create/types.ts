@@ -37,7 +37,8 @@ export type FieldInputType =
   | 'phone'
   | 'currency'
   | 'bitcoin_address'
-  | 'tags';
+  | 'tags'
+  | 'availability';
 
 export interface SelectOption {
   value: string;

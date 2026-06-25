@@ -134,6 +134,13 @@ const fieldGroups: FieldGroup[] = [
         },
         colSpan: 2,
       },
+      {
+        name: 'availability_schedule',
+        label: 'Weekly availability',
+        type: 'availability',
+        hint: 'When are you available? Shown to people before they book.',
+        colSpan: 2,
+      },
     ],
   },
   {
