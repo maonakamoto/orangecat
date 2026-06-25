@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -202,9 +203,15 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
                   className="flex items-center justify-between p-3 rounded-lg border hover:bg-surface-raised/40 dark:hover:bg-gray-800 transition-colors"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="h-10 w-10 rounded-full flex items-center justify-center bg-surface-raised text-fg-secondary border-2 border-strong">
-                      {getInitial(member.display_name || member.username)}
-                    </div>
+                    <Avatar className="h-10 w-10 border-2 border-strong">
+                      <AvatarImage
+                        src={member.avatar_url || undefined}
+                        alt={member.display_name || member.username || 'Member'}
+                      />
+                      <AvatarFallback className="bg-surface-raised text-fg-secondary">
+                        {getInitial(member.display_name || member.username)}
+                      </AvatarFallback>
+                    </Avatar>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <p className="font-medium truncate">
