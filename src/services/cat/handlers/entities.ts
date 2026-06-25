@@ -36,6 +36,39 @@ export const entityHandlers: Record<string, ActionHandler> = {
     };
   },
 
+  create_ai_assistant: async (supabase, userId, actorId, params) => {
+    const title = params.title as string;
+    const systemPrompt = (params.system_prompt as string) || '';
+    if (!title || !systemPrompt) {
+      return { success: false, error: 'An AI assistant needs a name and a system prompt.' };
+    }
+    // ai_assistants requires both user_id and actor_id (both NOT NULL).
+    const { data, error } = await supabase
+      .from(ENTITY_REGISTRY.ai_assistant.tableName)
+      .insert({
+        user_id: userId,
+        actor_id: actorId,
+        title,
+        description: params.description || null,
+        system_prompt: systemPrompt,
+        category: params.category || null,
+        pricing_model: (params.pricing_model as string) || 'per_message',
+        status: params.publish ? STATUS.AI_ASSISTANTS.ACTIVE : STATUS.AI_ASSISTANTS.DRAFT,
+        is_public: !!params.publish,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+    const statusLabel = params.publish ? 'live' : 'draft';
+    return {
+      success: true,
+      data: { ...data, displayMessage: `🤖 AI assistant "${title}" created (${statusLabel})` },
+    };
+  },
+
   create_service: async (supabase, _userId, actorId, params) => {
     // DB columns are `hourly_rate` and `fixed_price` (no _btc suffix)
     const priceField = params.hourly_rate
