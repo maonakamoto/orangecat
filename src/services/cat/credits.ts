@@ -24,8 +24,10 @@ export type CreditEntryKind = 'topup' | 'usage' | 'grant' | 'refund' | 'adjustme
 export interface CreditEntry {
   id: string;
   kind: CreditEntryKind;
-  amount_sats: number;
-  balance_after: number;
+  /** BTC (canonical unit). Signed: + topup/grant/refund, − usage. */
+  amount_btc: number;
+  /** Running balance in BTC after this entry. */
+  balance_after_btc: number;
   ref: string | null;
   metadata: Record<string, unknown> | null;
   created_at: string;
@@ -35,7 +37,7 @@ export interface CreditEntry {
 const HISTORY_LIMIT = 100;
 
 /**
- * Current credit balance in sats (0 on any failure — missing table, RLS, etc.).
+ * Current credit balance in BTC (0 on any failure — missing table, RLS, etc.).
  * Never throws; callers treat unavailable as "no credits".
  */
 export async function getCreditBalance(
@@ -63,7 +65,7 @@ export async function listCreditEntries(
   try {
     const { data, error } = await supabase
       .from(DATABASE_TABLES.CAT_CREDIT_ENTRIES)
-      .select('id, kind, amount_sats, balance_after, ref, metadata, created_at')
+      .select('id, kind, amount_btc, balance_after_btc, ref, metadata, created_at')
       .eq('user_id', userId)
       .order('seq', { ascending: false })
       .limit(HISTORY_LIMIT);
@@ -87,14 +89,14 @@ export async function listCreditEntries(
  * anon/authenticated so a normal user client cannot post entries. Used by the
  * top-up (Lightning settlement) and usage-metering paths.
  *
- * @returns the new balance in sats, or null on failure (incl. insufficient credits).
+ * @returns the new balance in BTC, or null on failure (incl. insufficient credits).
  */
 export async function appendCreditEntry(
   serviceSupabase: AnySupabaseClient,
   userId: string,
   entry: {
     kind: CreditEntryKind;
-    amountSats: number;
+    amountBtc: number;
     ref?: string | null;
     metadata?: Record<string, unknown> | null;
   }
@@ -103,7 +105,7 @@ export async function appendCreditEntry(
     const { data, error } = await serviceSupabase.rpc('cat_credit_append', {
       p_user_id: userId,
       p_kind: entry.kind,
-      p_amount_sats: entry.amountSats,
+      p_amount_btc: entry.amountBtc,
       p_ref: entry.ref ?? null,
       p_metadata: entry.metadata ?? null,
     });
