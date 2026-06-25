@@ -125,19 +125,26 @@ const GROQ_MODELS = {
 } as const;
 
 /**
- * Default Groq model. Was llama-3.3-70b-versatile (smarter but Groq's free
- * tier caps it at 100k tokens/day — a single user can blow through that in
- * ~30 reasonable conversations). Switched to llama-3.1-8b-instant which
- * has 500k tokens/day on the same free tier (5x the headroom) and runs
- * ~3x faster, at a quality drop most chat queries don't notice. Heavy
- * reasoning still gets routed to OpenRouter free models via the fallback
- * chain when 8B underperforms.
+ * Default Groq model — the platform baseline a free (non-BYOK) user gets.
  *
- * To override per-deployment without code change, set GROQ_DEFAULT_MODEL.
+ * Upgraded from llama-3.1-8b-instant → llama-3.3-70b-versatile. 8B is only
+ * "Conversational" tier (weak at multi-step reasoning, grounding, tool use);
+ * 70B is "Capable" (see config/model-capability.ts), a clear quality jump for
+ * the baseline experience. We can't buy a better default — OrangeCat has no
+ * fiat rails to pay providers — so the best free model IS the upgrade.
+ *
+ * Trade-off, accepted: Groq's free tier gives 70B ~100k tokens/day vs 500k for
+ * 8B, so under load the platform Groq key exhausts sooner. That's fine — the
+ * fallback chain rolls to OpenRouter's gpt-oss-120b (also "Capable"), so the
+ * baseline stays Capable even when Groq rate-limits; users just take the
+ * already-handled provider swap. GROQ_MAX_OUTPUT_TOKENS stays at 2048 to fit
+ * Groq's per-minute TPM bucket (reserved max_tokens counts against it).
+ *
+ * To dial back to 8B for more headroom without a deploy, set GROQ_DEFAULT_MODEL.
  */
 export const DEFAULT_GROQ_MODEL: keyof typeof GROQ_MODELS =
   (process.env.GROQ_DEFAULT_MODEL as keyof typeof GROQ_MODELS | undefined) ??
-  'llama-3.1-8b-instant';
+  'llama-3.3-70b-versatile';
 
 /**
  * Default max output tokens for chat completions.
