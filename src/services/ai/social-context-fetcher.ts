@@ -8,6 +8,7 @@ import type {
   BookingRecord,
   InboundActivity,
   GroupMembershipSummary,
+  SocialGraphSummary,
 } from './document-context-types';
 
 export async function fetchConversationsForCat(
@@ -218,6 +219,56 @@ export async function fetchInboundActivityForCat(
   } catch (error) {
     logger.error('Exception fetching inbound activity for cat', error, 'DocumentContext');
     return { recentSales: [], upcomingBookings: [] };
+  }
+}
+
+/**
+ * The user's follow graph: follower/following counts + a few accounts they
+ * follow. Gives Cat a sense of the user's network so it can reason about who
+ * they're connected to (e.g. "message someone you follow").
+ */
+export async function fetchSocialGraphForCat(
+  supabase: AnySupabaseClient,
+  userId: string
+): Promise<SocialGraphSummary> {
+  const empty: SocialGraphSummary = { followers: 0, following: 0, recentFollowing: [] };
+  try {
+    const [followersRes, followingRes, recentRes] = await Promise.all([
+      supabase
+        .from(DATABASE_TABLES.FOLLOWS)
+        .select('id', { count: 'exact', head: true })
+        .eq('following_id', userId),
+      supabase
+        .from(DATABASE_TABLES.FOLLOWS)
+        .select('id', { count: 'exact', head: true })
+        .eq('follower_id', userId),
+      supabase
+        .from(DATABASE_TABLES.FOLLOWS)
+        .select('following:profiles!follows_following_id_fkey(username, name)')
+        .eq('follower_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(5),
+    ]);
+
+    // PostgREST types the to-one FK embed as an array; at runtime it's a single
+    // object (or null). Cast through unknown per the project's PostgREST gotcha.
+    const recentFollowing = (
+      (recentRes.data as unknown as {
+        following: { username: string | null; name: string | null } | null;
+      }[]) || []
+    )
+      .map(r => r.following)
+      .filter((p): p is { username: string | null; name: string | null } => !!p)
+      .map(p => ({ username: p.username, name: p.name }));
+
+    return {
+      followers: followersRes.count ?? 0,
+      following: followingRes.count ?? 0,
+      recentFollowing,
+    };
+  } catch (error) {
+    logger.error('Exception fetching social graph for cat', error, 'DocumentContext');
+    return empty;
   }
 }
 

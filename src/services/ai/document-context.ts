@@ -31,6 +31,7 @@ import {
   fetchConversationsForCat,
   fetchInboundActivityForCat,
   fetchGroupMembershipsForCat,
+  fetchSocialGraphForCat,
 } from './social-context-fetcher';
 
 // Re-export types so existing callers stay unchanged
@@ -61,6 +62,7 @@ export {
   fetchConversationsForCat,
   fetchInboundActivityForCat,
   fetchGroupMembershipsForCat,
+  fetchSocialGraphForCat,
 } from './social-context-fetcher';
 
 async function fetchDocumentsForCat(
@@ -147,7 +149,7 @@ async function fetchWalletsForCat(
     const { data: wallets, error } = await supabase
       .from(DATABASE_TABLES.WALLETS)
       .select(
-        'label, description, category, behavior_type, goal_amount, goal_currency, goal_deadline, budget_amount, budget_period, is_primary, nwc_connection_uri, lightning_address'
+        'label, description, category, behavior_type, goal_amount, goal_currency, goal_deadline, budget_amount, budget_period, is_primary, balance_btc, balance_updated_at, nwc_connection_uri, lightning_address'
       )
       .eq('profile_id', profile.id)
       .eq('is_active', true)
@@ -169,6 +171,8 @@ async function fetchWalletsForCat(
       budget_amount: w.budget_amount,
       budget_period: w.budget_period,
       is_primary: w.is_primary,
+      balance_btc: w.balance_btc ?? null,
+      balance_updated_at: w.balance_updated_at ?? null,
       has_nwc: !!w.nwc_connection_uri,
       lightning_address: w.lightning_address ?? null,
     })) as WalletSummary[];
@@ -330,6 +334,7 @@ export async function fetchFullContextForCat(
     conversations,
     inboundActivity,
     memberGroups,
+    socialGraph,
   ] = await Promise.all([
     fetchProfileForCat(supabase, userId),
     fetchDocumentsForCat(supabase, userId),
@@ -339,6 +344,7 @@ export async function fetchFullContextForCat(
     fetchConversationsForCat(supabase, userId),
     fetchInboundActivityForCat(supabase, userId),
     fetchGroupMembershipsForCat(supabase, userId),
+    fetchSocialGraphForCat(supabase, userId),
   ]);
 
   const runtime = await fetchRuntimeContextForCat(supabase, userId, runtimeHints, profile);
@@ -361,6 +367,7 @@ export async function fetchFullContextForCat(
     conversations,
     inboundActivity,
     memberGroups,
+    socialGraph,
     paymentCapabilities,
     runtime,
     stats: {

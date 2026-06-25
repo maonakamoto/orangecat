@@ -239,6 +239,21 @@ export function buildFullContextString(context: FullUserContext): string {
     );
   }
 
+  // Social graph — follower/following counts + a few accounts they follow.
+  {
+    const sg = context.socialGraph;
+    if (sg && (sg.followers > 0 || sg.following > 0)) {
+      const lines = [`- ${sg.followers} follower(s), following ${sg.following} account(s)`];
+      if (sg.recentFollowing.length > 0) {
+        const handles = sg.recentFollowing
+          .map(p => (p.username ? `@${p.username}` : p.name || 'unknown'))
+          .join(', ');
+        lines.push(`- Recently followed: ${handles}`);
+      }
+      sections.push(`## Social Graph\n${lines.join('\n')}`);
+    }
+  }
+
   // Tasks section
   if (context.tasks.length > 0) {
     const now = new Date();
@@ -302,6 +317,15 @@ export function buildFullContextString(context: FullUserContext): string {
     const walletLines = context.wallets.map(w => {
       const parts = [`- **${w.label}**`];
       parts.push(`(${w.category}`);
+      // Last-synced on-chain balance. Cached (refreshed from the chain), not
+      // real-time — so Cat can answer "how much do I have?" but should caveat
+      // that it's the last synced figure rather than a live wallet balance.
+      if (typeof w.balance_btc === 'number') {
+        parts.push(`, balance: ${w.balance_btc} BTC`);
+        if (w.balance_updated_at) {
+          parts.push(` (synced ${w.balance_updated_at.slice(0, 10)})`);
+        }
+      }
       if (w.behavior_type === 'one_time_goal' && w.goal_amount) {
         parts.push(`, goal: ${w.goal_amount} ${w.goal_currency || 'BTC'}`);
         if (w.goal_deadline) {
@@ -321,7 +345,13 @@ export function buildFullContextString(context: FullUserContext): string {
       return parts.join('');
     });
 
-    sections.push(`## User's Wallets\n${walletLines.join('\n')}`);
+    const totalBtc = context.wallets.reduce((sum, w) => sum + (w.balance_btc ?? 0), 0);
+    const totalLine =
+      totalBtc > 0
+        ? `\n_Total last-synced balance across wallets: ${Number(totalBtc.toFixed(8))} BTC (cached on-chain figures, not real-time)._`
+        : '';
+
+    sections.push(`## User's Wallets\n${walletLines.join('\n')}${totalLine}`);
   }
 
   // Conversations section — gives Cat visibility into recent messages so it can help reply
