@@ -1,6 +1,5 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { OAUTH_PROVIDERS } from './OAuthIcons';
 import { useEnabledOAuthProviders } from './oauthProviders';
@@ -11,16 +10,9 @@ interface AuthSocialLoginProps {
   setMode: (mode: AuthMode) => void;
   loading: boolean;
   onOAuthSignIn: (provider: OAuthProvider) => void;
-  onAnonymousSignIn: () => void;
 }
 
-export function AuthSocialLogin({
-  mode,
-  setMode,
-  loading,
-  onOAuthSignIn,
-  onAnonymousSignIn,
-}: AuthSocialLoginProps) {
+export function AuthSocialLogin({ mode, setMode, loading, onOAuthSignIn }: AuthSocialLoginProps) {
   // Only show providers the server actually has enabled — never a button that fails.
   const { enabled } = useEnabledOAuthProviders();
   const providers = OAUTH_PROVIDERS.filter(p => enabled.has(p.id));
@@ -42,10 +34,9 @@ export function AuthSocialLogin({
 
   return (
     <>
-      {/* Single divider — was two stacked dividers ("or continue with" then
-          "or") which looked broken. One divider, OAuth grid below, an
-          anonymous-sign-in TEXT LINK below that (no second full-width
-          button competing for attention with the OAuth options). */}
+      {/* OAuth providers only. Anonymous sign-in is now the lead CTA above the
+          email form (anonymous-first onboarding), so there's no secondary
+          anonymous link here. */}
       <div className="mt-6">
         {/* Social providers — only rendered for providers the server has
             enabled (see useEnabledOAuthProviders). When none are enabled the
@@ -88,30 +79,6 @@ export function AuthSocialLogin({
             </div>
           </>
         )}
-
-        {/* Anonymous sign-in — secondary text link, not a heavyweight button.
-            Privacy-conscious users will find it; default users won't be
-            distracted by it. */}
-        <div className="mt-5 text-center">
-          <button
-            type="button"
-            disabled={loading}
-            onClick={onAnonymousSignIn}
-            className="inline-flex items-center gap-1 text-sm text-fg-secondary hover:text-fg-primary disabled:opacity-60"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                <span>Continuing…</span>
-              </>
-            ) : (
-              <>
-                Try it anonymously
-                <span className="text-fg-tertiary">— upgrade anytime</span>
-              </>
-            )}
-          </button>
-        </div>
       </div>
 
       <div className="mt-6 text-center">
