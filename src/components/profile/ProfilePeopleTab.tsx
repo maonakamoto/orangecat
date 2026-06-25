@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Users } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 import type { ScalableProfile } from '@/services/profile/types';
 import DefaultAvatar from '@/components/ui/DefaultAvatar';
 import supabase from '@/lib/supabase/browser';
@@ -46,6 +47,8 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
   const [following, setFollowing] = useState<Connection[]>([]);
   const [followers, setFollowers] = useState<Connection[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
   const [activeView, setActiveView] = useState<'following' | 'followers'>('followers');
 
   useEffect(() => {
@@ -57,6 +60,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
     const fetchConnections = async () => {
       try {
         setLoading(true);
+        setError(false);
 
         // Check if this is the user's own profile (use prop or check user)
         const isCurrentUserProfile = isOwnProfile || user?.id === profile.id;
@@ -160,6 +164,7 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
       } catch (error) {
         if (!cancelled) {
           logger.error('Failed to fetch connections:', error);
+          setError(true);
         }
       } finally {
         if (!cancelled) {
@@ -172,10 +177,23 @@ export default function ProfilePeopleTab({ profile, isOwnProfile }: ProfilePeopl
     return () => {
       cancelled = true;
     };
-  }, [profile.id, isOwnProfile, user?.id]);
+  }, [profile.id, isOwnProfile, user?.id, reloadKey]);
 
   if (loading) {
     return <div className="text-fg-secondary text-sm py-8 text-center">Loading connections...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <Users className="w-12 h-12 mx-auto mb-4 text-fg-tertiary" />
+        <h3 className="text-lg font-semibold text-fg-primary mb-2">Couldn’t load connections</h3>
+        <p className="text-fg-secondary mb-6">Something went wrong fetching followers.</p>
+        <Button variant="outline" onClick={() => setReloadKey(k => k + 1)}>
+          Try again
+        </Button>
+      </div>
+    );
   }
 
   const currentList = activeView === 'following' ? following : followers;

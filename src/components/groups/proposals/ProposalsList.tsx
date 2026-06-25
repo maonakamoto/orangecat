@@ -48,6 +48,7 @@ export function ProposalsList({
   const { user } = useAuth();
   const [proposals, setProposals] = useState<ProposalWithSlug[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [statusFilter, setStatusFilter] = useState<ProposalStatusFilter>('all');
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   // Monotonic load id — only the most recent load writes state.
@@ -57,6 +58,7 @@ export function ProposalsList({
     const myLoadId = ++loadIdRef.current;
     try {
       setLoading(true);
+      setError(false);
       const params = new URLSearchParams();
       if (statusFilter !== 'all') {
         params.append('status', statusFilter);
@@ -94,6 +96,7 @@ export function ProposalsList({
         return;
       }
       logger.error('Failed to load proposals:', error);
+      setError(true);
       toast.error('Failed to load proposals');
     } finally {
       if (myLoadId === loadIdRef.current) {
@@ -123,6 +126,19 @@ export function ProposalsList({
           <div className="flex items-center justify-center">
             <Loader2 className="h-6 w-6 animate-spin text-fg-tertiary" />
           </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+          <p className="text-sm text-fg-secondary">Couldn’t load proposals.</p>
+          <Button variant="outline" size="sm" onClick={() => loadProposals()}>
+            Try again
+          </Button>
         </CardContent>
       </Card>
     );

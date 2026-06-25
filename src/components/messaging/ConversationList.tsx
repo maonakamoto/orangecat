@@ -40,14 +40,13 @@ export default function ConversationList({
   onStartNew,
 }: ConversationListProps) {
   const { user } = useAuth();
-  const [error, setError] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [isPointerSelecting, setIsPointerSelecting] = useState(false);
   const [dragAction, setDragAction] = useState<'select' | 'deselect' | null>(null);
   const pressTimerRef = React.useRef<number | null>(null);
   const currentUserId = user?.id;
 
-  const { conversations, loading, refresh, removeLocal } = useConversations(
+  const { conversations, loading, error, refresh, removeLocal } = useConversations(
     searchQuery,
     selectedConversationId
   );
@@ -176,10 +175,7 @@ export default function ConversationList({
         <MessageSquare className="mx-auto mb-2 h-8 w-8 text-status-negative" />
         <p className="mb-3 text-sm text-status-negative">{error}</p>
         <button
-          onClick={() => {
-            setError(null);
-            refresh();
-          }}
+          onClick={() => refresh()}
           className="inline-flex items-center gap-2 text-sm text-fg-primary hover:text-fg-secondary"
         >
           <RefreshCw className="w-4 h-4" />

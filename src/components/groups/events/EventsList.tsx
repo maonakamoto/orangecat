@@ -41,6 +41,7 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
   const { user: _user } = useAuth();
   const [events, setEvents] = useState<GroupEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [statusFilter, setStatusFilter] = useState<EventStatusFilter>('upcoming');
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const loadIdRef = useRef(0);
@@ -49,6 +50,7 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
     const myLoadId = ++loadIdRef.current;
     try {
       setLoading(true);
+      setError(false);
       const params = new URLSearchParams();
       if (statusFilter !== 'all') {
         params.append('status', statusFilter);
@@ -77,6 +79,7 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
         return;
       }
       logger.error('Failed to load events:', error);
+      setError(true);
       toast.error('Failed to load events');
     } finally {
       if (myLoadId === loadIdRef.current) {
@@ -105,6 +108,19 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
       <Card>
         <CardContent className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-fg-tertiary" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+          <p className="text-sm text-fg-secondary">Couldn’t load events.</p>
+          <Button variant="outline" size="sm" onClick={() => loadEvents()}>
+            Try again
+          </Button>
         </CardContent>
       </Card>
     );
