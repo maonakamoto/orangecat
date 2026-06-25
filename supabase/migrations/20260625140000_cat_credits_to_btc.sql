@@ -11,11 +11,30 @@
 -- appear ONLY at the Lightning protocol boundary (the makeInvoice call).
 -- ============================================================================
 
-alter table public.cat_credit_entries rename column amount_sats to amount_btc;
+-- Idempotent: the column rename only happens if the old column still exists, so
+-- this is safe to re-run (the deploy pipeline auto-applies migrations, and the
+-- conversion may already have been applied directly). Renames first, then the
+-- type widening (which is a no-op if already numeric(18,8)).
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'cat_credit_entries'
+      and column_name = 'amount_sats'
+  ) then
+    alter table public.cat_credit_entries rename column amount_sats to amount_btc;
+  end if;
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'cat_credit_entries'
+      and column_name = 'balance_after'
+  ) then
+    alter table public.cat_credit_entries rename column balance_after to balance_after_btc;
+  end if;
+end $$;
+
 alter table public.cat_credit_entries
   alter column amount_btc type numeric(18, 8) using amount_btc::numeric;
-
-alter table public.cat_credit_entries rename column balance_after to balance_after_btc;
 alter table public.cat_credit_entries
   alter column balance_after_btc type numeric(18, 8) using balance_after_btc::numeric;
 
