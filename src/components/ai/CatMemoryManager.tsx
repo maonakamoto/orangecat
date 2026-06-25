@@ -1,0 +1,191 @@
+'use client';
+
+/**
+ * CatMemoryManager — view and control what Cat remembers about you.
+ *
+ * Lists the durable facts Cat has learned (from chat), with per-item delete and
+ * a guarded "Forget everything". Privacy-first: memory is only useful if the
+ * user can see and erase it, ChatGPT-style. Talks to /api/cat/memories.
+ */
+
+import { useCallback, useEffect, useState } from 'react';
+import { Brain, Trash2, Loader2, AlertCircle } from 'lucide-react';
+import { toast } from 'sonner';
+import Button from '@/components/ui/Button';
+import { logger } from '@/utils/logger';
+
+interface Memory {
+  id: string;
+  content: string;
+  created_at: string;
+}
+
+export function CatMemoryManager() {
+  const [memories, setMemories] = useState<Memory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmClear, setConfirmClear] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+
+  const load = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/cat/memories');
+      if (!res.ok) {
+        throw new Error('Failed to load memories');
+      }
+      const json = await res.json();
+      setMemories((json?.data?.memories ?? []) as Memory[]);
+    } catch (err) {
+      logger.error('Failed to load cat memories', err, 'CatMemory');
+      setError('Could not load memories. Try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const handleDelete = useCallback(async (id: string) => {
+    setDeletingId(id);
+    try {
+      const res = await fetch(`/api/cat/memories?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        throw new Error('delete failed');
+      }
+      setMemories(prev => prev.filter(m => m.id !== id));
+      toast.success('Memory forgotten');
+    } catch (err) {
+      logger.error('Failed to delete memory', err, 'CatMemory');
+      toast.error('Could not delete that memory');
+    } finally {
+      setDeletingId(null);
+    }
+  }, []);
+
+  const handleClearAll = useCallback(async () => {
+    setIsClearing(true);
+    try {
+      const res = await fetch('/api/cat/memories?all=true', { method: 'DELETE' });
+      if (!res.ok) {
+        throw new Error('clear failed');
+      }
+      setMemories([]);
+      setConfirmClear(false);
+      toast.success('Cleared everything Cat remembered');
+    } catch (err) {
+      logger.error('Failed to clear memories', err, 'CatMemory');
+      toast.error('Could not clear memories');
+    } finally {
+      setIsClearing(false);
+    }
+  }, []);
+
+  return (
+    <section className="rounded-lg border border-default bg-surface-base p-6">
+      <div className="mb-4 flex items-start gap-3">
+        <div className="rounded-md bg-surface-raised p-2">
+          <Brain className="h-5 w-5 text-fg-primary" />
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold text-fg-primary">What Cat remembers</h2>
+            {memories.length > 0 && !confirmClear && (
+              <button
+                type="button"
+                onClick={() => setConfirmClear(true)}
+                className="text-sm text-fg-secondary underline hover:text-status-negative"
+              >
+                Forget everything
+              </button>
+            )}
+          </div>
+          <p className="mt-1 text-sm text-fg-secondary">
+            Durable facts Cat has learned about you from your conversations, so it carries context
+            across sessions. You control all of it — delete anything, anytime.
+          </p>
+        </div>
+      </div>
+
+      {confirmClear && (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-md border border-status-negative/30 bg-status-negative-subtle p-3">
+          <span className="text-sm text-fg-primary">
+            Forget everything Cat remembers? This can&apos;t be undone.
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setConfirmClear(false)}
+              disabled={isClearing}
+              className="h-8 px-3 text-sm"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleClearAll}
+              disabled={isClearing}
+              className="h-8 gap-2 bg-status-negative px-3 text-sm text-fg-inverted hover:bg-status-negative/90"
+            >
+              {isClearing && <Loader2 className="h-4 w-4 animate-spin" />}
+              Forget everything
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="flex items-center gap-2 py-6 text-sm text-fg-secondary">
+          <Loader2 className="h-4 w-4 animate-spin" /> Loading memories…
+        </div>
+      ) : error ? (
+        <div className="flex items-center justify-between gap-3 rounded-md border border-subtle bg-surface-raised/30 p-4">
+          <span className="flex items-center gap-2 text-sm text-status-negative">
+            <AlertCircle className="h-4 w-4" /> {error}
+          </span>
+          <Button variant="outline" onClick={load} className="h-8 px-3 text-sm">
+            Retry
+          </Button>
+        </div>
+      ) : memories.length === 0 ? (
+        <div className="rounded-md border border-subtle bg-surface-raised/30 p-6 text-center">
+          <p className="text-sm text-fg-secondary">
+            Cat hasn&apos;t saved any memories yet. As you chat and share preferences, goals, or
+            details about your projects, it&apos;ll remember the durable ones here.
+          </p>
+        </div>
+      ) : (
+        <ul className="space-y-2">
+          {memories.map(m => (
+            <li
+              key={m.id}
+              className="flex items-start justify-between gap-3 rounded-md border border-subtle bg-surface-raised/30 p-3"
+            >
+              <span className="text-sm text-fg-primary">{m.content}</span>
+              <button
+                type="button"
+                onClick={() => handleDelete(m.id)}
+                disabled={deletingId === m.id}
+                aria-label="Forget this memory"
+                className="shrink-0 rounded-md p-1 text-fg-tertiary hover:bg-surface-raised hover:text-status-negative disabled:opacity-40"
+              >
+                {deletingId === m.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+export default CatMemoryManager;

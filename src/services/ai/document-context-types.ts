@@ -200,6 +200,12 @@ export interface RuntimeContext {
 
 export interface FullUserContext {
   profile: ProfileContext | null;
+  /**
+   * Durable facts Cat remembers about this user, recalled semantically for the
+   * CURRENT message (see cat/memory.ts). Optional: only the chat path populates
+   * it; other context consumers leave it undefined.
+   */
+  memories?: Array<{ content: string }>;
   documents: DocumentContext[];
   entities: EntitySummary[];
   tasks: TaskSummary[];

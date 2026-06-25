@@ -96,6 +96,17 @@ export function buildFullContextString(context: FullUserContext): string {
     }
   }
 
+  // Persistent memory — durable facts Cat has learned about this user, recalled
+  // semantically for THIS message. Placed near the top (right after the session)
+  // so it's effectively always kept by the budget and Cat treats it as known
+  // truth about the person, not a transient detail.
+  if (context.memories && context.memories.length > 0) {
+    const memoryLines = context.memories.map(m => `- ${m.content}`);
+    sections.push(
+      `## What you remember about this user\nThese are durable facts you've learned about them across past conversations. Treat them as known and use them naturally — don't re-ask what you already know.\n${memoryLines.join('\n')}`
+    );
+  }
+
   // Current date/time — injected so Cat can reason temporally about reminders,
   // deadlines, overdue tasks, and upcoming events. Formatted in the user's locale.
   {
