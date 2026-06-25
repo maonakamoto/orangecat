@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { getFreeModels, getModelMetadata } from '@/config/ai-models';
-import { Sparkles, ChevronDown, Check } from 'lucide-react';
+import { Sparkles, ChevronDown, Check, ArrowRight } from 'lucide-react';
 
 interface ModelSelectorProps {
   selectedModel: string;
@@ -26,10 +26,21 @@ export function ModelSelector({
   subtle,
 }: ModelSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [customModel, setCustomModel] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const freeModels = getFreeModels();
   const selectedMeta = getModelMetadata(selectedModel);
+
+  const applyCustom = () => {
+    const id = customModel.trim();
+    if (!id) {
+      return;
+    }
+    onSelect(id);
+    setCustomModel('');
+    setIsOpen(false);
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -125,6 +136,44 @@ export function ModelSelector({
               </div>
             </button>
           ))}
+
+          <div className="h-px bg-border-subtle my-1" />
+
+          {/* Custom model — run Cat on ANY model id (requires your own API key in
+              Settings → AI; OpenRouter unlocks 200+ models with one key). */}
+          <div className="px-3 py-1.5 text-xs font-medium text-fg-secondary uppercase">
+            Custom model
+          </div>
+          <div className="px-3 pb-2">
+            <div className="flex items-center gap-1.5">
+              <input
+                type="text"
+                value={customModel}
+                onChange={e => setCustomModel(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    applyCustom();
+                  }
+                }}
+                placeholder="e.g. anthropic/claude-3.5-sonnet"
+                className="min-w-0 flex-1 rounded-md border border-subtle bg-surface-base px-2 py-1.5 text-sm text-fg-primary placeholder:text-fg-tertiary"
+                aria-label="Custom model id"
+              />
+              <button
+                type="button"
+                onClick={applyCustom}
+                disabled={!customModel.trim()}
+                aria-label="Use custom model"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-subtle text-fg-secondary hover:bg-surface-raised disabled:opacity-40"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mt-1 text-xs text-fg-tertiary">
+              Any model id from a provider you’ve added a key for (Settings → AI).
+            </p>
+          </div>
         </div>
       )}
     </div>

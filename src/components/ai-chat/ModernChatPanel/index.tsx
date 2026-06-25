@@ -52,8 +52,27 @@ export function ModernChatPanel({
   const router = useRouter();
   const [input, setInput] = useState('');
   const [internalModel, setInternalModel] = useState('auto');
+  // Remember the user's model choice (incl. custom ids) across reloads.
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('cat:model');
+      if (saved) {
+        setInternalModel(saved);
+      }
+    } catch {
+      // localStorage unavailable — fall back to the in-memory default.
+    }
+  }, []);
+  const persistModel = useCallback((m: string) => {
+    setInternalModel(m);
+    try {
+      localStorage.setItem('cat:model', m);
+    } catch {
+      // ignore persistence failures
+    }
+  }, []);
   const selectedModel = selectedModelProp ?? internalModel;
-  const setSelectedModel = onModelSelect ?? setInternalModel;
+  const setSelectedModel = onModelSelect ?? persistModel;
   const lastUserMessageRef = useRef<string>('');
   const initialMessageSentRef = useRef(false);
   const refreshPendingActionsRef = useRef<(() => Promise<void>) | undefined>(undefined);

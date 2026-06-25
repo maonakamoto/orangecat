@@ -125,15 +125,19 @@ export async function resolveProvider(
       };
     }
     if (prov === 'openrouter') {
-      let model =
-        requestedModel && requestedModel !== 'auto' && requestedModel !== 'any'
-          ? requestedModel
-          : DEFAULT_FREE_MODEL_ID;
-      if (requestedModel === 'auto' || requestedModel === 'any') {
+      const explicit = requestedModel && requestedModel !== 'auto' && requestedModel !== 'any';
+      let model: string;
+      if (explicit) {
+        // BYOK: the user pays for their own OpenRouter key, so trust whatever
+        // model id they chose — including any of OpenRouter's 200+ models that
+        // aren't in our curated registry. (Platform/non-BYOK usage goes through
+        // buildPlatformProviders, which stays registry-constrained.)
+        model = requestedModel;
+      } else {
         model = createAutoRouter().selectModel({ message, conversationHistory: [] }).model;
-      }
-      if (!getModelMetadata(model)) {
-        model = DEFAULT_FREE_MODEL_ID;
+        if (!getModelMetadata(model)) {
+          model = DEFAULT_FREE_MODEL_ID;
+        }
       }
       return {
         provider: 'openrouter',
