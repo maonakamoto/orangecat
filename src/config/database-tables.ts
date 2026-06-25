@@ -73,6 +73,9 @@ export const DATABASE_TABLES = {
   // Stakeholder graph (typed edges between projects: customer, collaborator, ...)
   STAKEHOLDER_RELATIONSHIPS: 'stakeholder_relationships',
 
+  // Cache of a user's public GitHub repos (for Cat context)
+  GITHUB_REPO_CACHE: 'github_repo_cache',
+
   // Documents
   USER_DOCUMENTS: 'user_documents',
 

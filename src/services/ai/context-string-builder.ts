@@ -284,6 +284,29 @@ export function buildFullContextString(context: FullUserContext): string {
     );
   }
 
+  // GitHub repos — the user's public GitHub work (from their profile handle).
+  if (context.githubRepos && context.githubRepos.length > 0) {
+    const lines = context.githubRepos.map(r => {
+      const meta: string[] = [];
+      if (r.language) {
+        meta.push(r.language);
+      }
+      if (r.stars > 0) {
+        meta.push(`★${r.stars}`);
+      }
+      if (r.archived) {
+        meta.push('archived');
+      }
+      const metaStr = meta.length ? ` (${meta.join(', ')})` : '';
+      const desc = r.description ? ` — ${r.description.slice(0, 120)}` : '';
+      const when = r.pushedAt ? ` [pushed ${r.pushedAt.slice(0, 10)}]` : '';
+      return `- **${r.name}**${metaStr}${desc}${when}`;
+    });
+    sections.push(
+      `## GitHub Repositories\nThe user's public GitHub projects (most recently pushed first):\n${lines.join('\n')}`
+    );
+  }
+
   // Tasks section
   if (context.tasks.length > 0) {
     const now = new Date();
