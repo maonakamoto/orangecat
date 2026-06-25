@@ -147,6 +147,18 @@ const TOOL_TRIGGER_KEYWORDS = [
 ];
 
 /**
+ * Whether a message looks like a discovery / creation / multi-step task — the
+ * kind that benefits from an agentic (frontier) model and triggers the tool
+ * pass. Exported so the chat route can decide whether to nudge a user on a
+ * weaker model toward upgrading, using the SAME signal that gates tool use
+ * (one source of truth for "this wants more than chat").
+ */
+export function messageMightNeedTools(message: string): boolean {
+  const lower = message.toLowerCase();
+  return TOOL_TRIGGER_KEYWORDS.some(kw => lower.includes(kw));
+}
+
+/**
  * Strong "I want to create/list my own thing" signals. When present we
  * PROGRAMMATICALLY suppress search_platform tool calls — the weak free-tier
  * models ignore the routing prompt and search anyway, wasting a round-trip and
@@ -438,9 +450,7 @@ export async function maybeEnrichWithSearchResults(
     return messages;
   }
 
-  const lowerMessage = userMessage.toLowerCase();
-  const mightNeedTool = TOOL_TRIGGER_KEYWORDS.some(kw => lowerMessage.includes(kw));
-  if (!mightNeedTool) {
+  if (!messageMightNeedTools(userMessage)) {
     return messages;
   }
 
