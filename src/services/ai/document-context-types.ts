@@ -133,6 +133,18 @@ export interface StakeholderSummary {
   status: string | null;
 }
 
+/** One of the user's public GitHub repositories (cached). */
+export interface GitHubRepoSummary {
+  name: string;
+  description: string | null;
+  language: string | null;
+  stars: number;
+  url: string;
+  pushedAt: string;
+  fork: boolean;
+  archived: boolean;
+}
+
 /** The user's follow graph — counts plus a few people they follow, for context. */
 export interface SocialGraphSummary {
   followers: number;
@@ -198,6 +210,7 @@ export interface FullUserContext {
   socialGraph: SocialGraphSummary;
   projectActivity: ProjectActivityEvent[];
   stakeholders: StakeholderSummary[];
+  githubRepos: GitHubRepoSummary[];
   paymentCapabilities: PaymentCapabilities;
   /** Runtime session context — what's true RIGHT NOW. See RuntimeContext for fields. */
   runtime: RuntimeContext;

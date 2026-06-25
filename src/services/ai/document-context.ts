@@ -34,6 +34,7 @@ import {
   fetchSocialGraphForCat,
 } from './social-context-fetcher';
 import { fetchProjectActivityForCat, fetchStakeholdersForCat } from './project-activity-fetcher';
+import { fetchGitHubReposForCat } from './github-repos-fetcher';
 
 // Re-export types so existing callers stay unchanged
 export type {
@@ -51,6 +52,7 @@ export type {
   SocialGraphSummary,
   ProjectActivityEvent,
   StakeholderSummary,
+  GitHubRepoSummary,
   FullUserContext,
   RuntimeContext,
 } from './document-context-types';
@@ -71,6 +73,9 @@ export {
 
 // Re-export project-activity / stakeholder fetchers
 export { fetchProjectActivityForCat, fetchStakeholdersForCat } from './project-activity-fetcher';
+
+// Re-export GitHub repos fetcher
+export { fetchGitHubReposForCat } from './github-repos-fetcher';
 
 async function fetchDocumentsForCat(
   supabase: AnySupabaseClient,
@@ -344,6 +349,7 @@ export async function fetchFullContextForCat(
     socialGraph,
     projectActivity,
     stakeholders,
+    githubRepos,
   ] = await Promise.all([
     fetchProfileForCat(supabase, userId),
     fetchDocumentsForCat(supabase, userId),
@@ -356,6 +362,7 @@ export async function fetchFullContextForCat(
     fetchSocialGraphForCat(supabase, userId),
     fetchProjectActivityForCat(supabase, userId),
     fetchStakeholdersForCat(supabase, userId),
+    fetchGitHubReposForCat(supabase, userId),
   ]);
 
   const runtime = await fetchRuntimeContextForCat(supabase, userId, runtimeHints, profile);
@@ -381,6 +388,7 @@ export async function fetchFullContextForCat(
     socialGraph,
     projectActivity,
     stakeholders,
+    githubRepos,
     paymentCapabilities,
     runtime,
     stats: {
