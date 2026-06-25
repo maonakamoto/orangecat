@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { AlertCircle, ArrowLeft, CheckCircle2, RefreshCw } from 'lucide-react';
+import { AlertCircle, ArrowLeft, CheckCircle2, Loader2, RefreshCw, Sparkles } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 import Button from '@/components/ui/Button';
 import Loading from '@/components/Loading';
@@ -135,6 +135,43 @@ export default function AuthPage() {
             </div>
           )}
 
+          {/* Anonymous-first: the fastest way in is the lead CTA. Pseudonymous
+              by default is a core principle — let people start with zero friction
+              and add an email later. Email/social remain right below. */}
+          {mode !== 'forgot' && (
+            <div className="mb-6">
+              <Button
+                type="button"
+                variant="accent"
+                disabled={loading}
+                onClick={handleAnonymousSignIn}
+                className="w-full h-12 font-semibold"
+              >
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    Start instantly — no email
+                  </span>
+                )}
+              </Button>
+              <p className="mt-2 text-center text-xs text-fg-tertiary">
+                Explore pseudonymously. Add an email anytime to secure your account.
+              </p>
+              <div className="relative mt-5">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-default" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase tracking-wider">
+                  <span className="bg-surface-raised/40 dark:bg-surface-page px-3 text-fg-tertiary">
+                    or {mode === 'login' ? 'sign in' : 'sign up'} with email
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
           <AuthFormBody
             mode={mode}
             setMode={setMode}
@@ -163,7 +200,6 @@ export default function AuthPage() {
             setMode={setMode}
             loading={loading}
             onOAuthSignIn={handleOAuthSignIn}
-            onAnonymousSignIn={handleAnonymousSignIn}
           />
         </div>
       </div>
