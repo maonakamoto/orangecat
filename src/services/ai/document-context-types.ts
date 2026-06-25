@@ -56,6 +56,10 @@ export interface WalletSummary {
   budget_amount: number | null;
   budget_period: string | null;
   is_primary: boolean;
+  /** Last-synced on-chain balance in BTC (cached; refreshed from chain, not real-time). */
+  balance_btc: number | null;
+  /** When balance_btc was last refreshed from the chain. */
+  balance_updated_at: string | null;
   /** Whether this wallet has a Nostr Wallet Connect URI configured (can auto-send payments) */
   has_nwc: boolean;
   /** Lightning address for receiving payments, if configured */
@@ -103,6 +107,14 @@ export interface GroupMembershipSummary {
   label: string;
   role: 'founder' | 'admin' | 'member';
   visibility: 'public' | 'members_only' | 'private';
+}
+
+/** The user's follow graph — counts plus a few people they follow, for context. */
+export interface SocialGraphSummary {
+  followers: number;
+  following: number;
+  /** A handful of accounts the user follows (most recent first), for grounding. */
+  recentFollowing: Array<{ username: string | null; name: string | null }>;
 }
 
 /** An upcoming booking where the user is the service/asset provider */
@@ -159,6 +171,7 @@ export interface FullUserContext {
   conversations: ConversationSummary[];
   inboundActivity: InboundActivity;
   memberGroups: GroupMembershipSummary[];
+  socialGraph: SocialGraphSummary;
   paymentCapabilities: PaymentCapabilities;
   /** Runtime session context — what's true RIGHT NOW. See RuntimeContext for fields. */
   runtime: RuntimeContext;
