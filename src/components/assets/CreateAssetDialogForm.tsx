@@ -1,5 +1,6 @@
 'use client';
 import { logger } from '@/utils/logger';
+import { toast } from 'sonner';
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -91,11 +92,11 @@ export function CreateAssetDialog({
         throw new Error(errorData.error || 'Failed to create asset');
       }
 
+      toast.success('Asset created');
       onAssetCreated();
     } catch (error) {
       logger.error('Failed to create asset:', error);
-      // For now, just show success since the API might be failing due to migration
-      onAssetCreated();
+      toast.error(error instanceof Error ? error.message : 'Failed to create asset');
     } finally {
       setLoading(false);
     }

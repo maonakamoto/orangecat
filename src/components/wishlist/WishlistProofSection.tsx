@@ -12,6 +12,7 @@
 
 import React, { useState } from 'react';
 import { Plus, Receipt, ChevronDown, ChevronUp } from 'lucide-react';
+import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
 import { Button } from '@/components/ui/Button';
@@ -40,40 +41,36 @@ export function WishlistProofSection({
     onProofAdded?.(proof);
   };
 
-  const handleLike = async (proofId: string) => {
+  const submitFeedback = async (
+    proofId: string,
+    feedbackType: 'like' | 'dislike',
+    comment?: string
+  ) => {
     try {
-      await fetch(API_ROUTES.WISHLISTS.FEEDBACK, {
+      const res = await fetch(API_ROUTES.WISHLISTS.FEEDBACK, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           wishlist_item_id: wishlistItemId,
           fulfillment_proof_id: proofId,
-          feedback_type: 'like',
+          feedback_type: feedbackType,
+          ...(comment ? { comment } : {}),
         }),
       });
+      if (!res.ok) {
+        throw new Error(`Failed (${res.status})`);
+      }
       onFeedbackChanged?.();
     } catch (error) {
-      logger.error('Error submitting like', error, 'Wishlist');
+      logger.error(`Error submitting ${feedbackType}`, error, 'Wishlist');
+      toast.error('Could not submit your feedback. Please try again.');
     }
   };
 
-  const handleDislike = async (proofId: string, comment: string) => {
-    try {
-      await fetch(API_ROUTES.WISHLISTS.FEEDBACK, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          wishlist_item_id: wishlistItemId,
-          fulfillment_proof_id: proofId,
-          feedback_type: 'dislike',
-          comment,
-        }),
-      });
-      onFeedbackChanged?.();
-    } catch (error) {
-      logger.error('Error submitting dislike', error, 'Wishlist');
-    }
-  };
+  const handleLike = (proofId: string) => submitFeedback(proofId, 'like');
+
+  const handleDislike = (proofId: string, comment: string) =>
+    submitFeedback(proofId, 'dislike', comment);
 
   const handleDelete = async (proofId: string) => {
     if (!confirm('Are you sure you want to delete this proof?')) {
@@ -81,12 +78,17 @@ export function WishlistProofSection({
     }
 
     try {
-      await fetch(`${API_ROUTES.WISHLISTS.PROOFS}/${proofId}`, {
+      const res = await fetch(`${API_ROUTES.WISHLISTS.PROOFS}/${proofId}`, {
         method: 'DELETE',
       });
+      if (!res.ok) {
+        throw new Error(`Failed (${res.status})`);
+      }
+      toast.success('Proof deleted');
       onProofDeleted?.(proofId);
     } catch (error) {
       logger.error('Error deleting proof', error, 'Wishlist');
+      toast.error('Could not delete the proof. Please try again.');
     }
   };
 

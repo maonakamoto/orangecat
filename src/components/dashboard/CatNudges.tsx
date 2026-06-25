@@ -42,12 +42,23 @@ export function CatNudges() {
   }, []);
 
   const dismiss = (id: string) => {
+    // Optimistically remove, but restore on failure so the nudge doesn't silently
+    // reappear on next load (the dismissal wasn't persisted).
+    const prev = nudges;
     setNudges(n => n?.filter(x => x.id !== id) ?? null);
     fetch('/api/cat/nudges', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'dismiss', id }),
-    }).catch(() => {});
+    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Failed to dismiss (${res.status})`);
+        }
+      })
+      .catch(() => {
+        setNudges(prev);
+      });
   };
 
   if (!nudges || nudges.length === 0) {
