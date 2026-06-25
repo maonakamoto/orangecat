@@ -144,6 +144,7 @@ export const DATABASE_TABLES = {
   CAT_PERMISSIONS: 'cat_permissions',
   CAT_ACTION_LOG: 'cat_action_log',
   CAT_PENDING_ACTIONS: 'cat_pending_actions',
+  CAT_MEMORIES: 'cat_memories',
 
   // Messaging Views
   MESSAGE_DETAILS: 'message_details',

@@ -21,6 +21,7 @@ import { useRequireAuth } from '@/hooks/useAuth';
 import { useAISettings } from '@/hooks/useAISettings';
 import Loading from '@/components/Loading';
 import { AIKeyManager } from '@/components/ai/AIKeyManager';
+import { CatMemoryManager } from '@/components/ai/CatMemoryManager';
 import { getProvidersByCategory } from '@/data/aiProviders';
 
 export default function AISettingsPage() {
@@ -128,6 +129,9 @@ export default function AISettingsPage() {
             isLoading={settingsLoading}
           />
         </section>
+
+        {/* ── Memory ────────────────────────────────────────────────────── */}
+        <CatMemoryManager />
 
         {/* ── Local ─────────────────────────────────────────────────────── */}
         <section className="rounded-lg border border-default bg-surface-base p-6">

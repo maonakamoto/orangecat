@@ -27,6 +27,7 @@ import {
   saveMessages,
 } from '@/services/cat/conversation-history';
 import { resolveProvider, type FallbackProvider } from '@/services/cat/provider-resolver';
+import { recallMemories, extractAndStoreMemories } from '@/services/cat/memory';
 import {
   maybeEnrichWithSearchResults,
   type ToolAugmentedMessage,
@@ -205,6 +206,10 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       locale,
       lastVisitedPath,
     });
+    // Recall durable facts Cat has learned about this user, ranked by relevance
+    // to THIS message, and fold them into the context (rendered near the top so
+    // the budget always keeps them). Best-effort: [] if memory is unavailable.
+    userContext.memories = await recallMemories(supabase, user.id, message);
     const contextString = buildFullContextString(userContext);
     // Examples are appended as labeled text (not injected as fake conversation
     // turns) so weaker models can't mistake the example people for the real user.
@@ -372,6 +377,17 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
               ]).catch((err: unknown) => {
                 logger.error('Failed to persist streaming messages', { err }, 'cat/chat');
               });
+              // Learn durable facts from this exchange for future turns. Fully
+              // best-effort and detached — never blocks or fails the response.
+              void extractAndStoreMemories(
+                supabase,
+                user.id,
+                conversationId,
+                message,
+                fullContent,
+                activeService,
+                activeModel
+              );
             }
             if (!hasByok && usage?.totalTokens) {
               await keyService.incrementPlatformUsage(user.id, 1, usage.totalTokens);
@@ -513,6 +529,16 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       ]).catch((err: unknown) => {
         logger.error('Failed to persist messages', { err }, 'cat/chat');
       });
+      // Learn durable facts from this exchange (best-effort, detached).
+      void extractAndStoreMemories(
+        supabase,
+        user.id,
+        conversationId,
+        message,
+        cleanedMessage,
+        fellBackTo?.aiService ?? aiService,
+        fellBackTo?.modelToUse ?? modelToUse
+      );
     }
 
     return applyRateLimitHeaders(

@@ -1,0 +1,327 @@
+/**
+ * Cat Memory Service
+ *
+ * Persistent, semantic memory for My Cat. Durable facts about a user
+ * ("Prefers Lightning over on-chain", "Building FleetCrown") are extracted
+ * from chat, embedded, and recalled by MEANING on later turns — so Cat keeps
+ * context across sessions instead of re-deriving everything each time.
+ *
+ * Two paths, both best-effort and non-blocking (Cat never breaks if memory is
+ * unavailable — missing table, no embeddings provider, or a failed LLM call all
+ * degrade to "no memory this turn"):
+ *   - recallMemories():       embed the current message → nearest stored facts
+ *   - extractAndStoreMemories(): after a turn, distil new durable facts → store
+ *
+ * Reuses the platform's 1536-dim pgvector setup (see content_embeddings) via the
+ * match_cat_memories RPC. Privacy: cat_memories is RLS-scoped to the owner, and
+ * users can view/delete everything Cat remembers (Settings → AI).
+ */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { DATABASE_TABLES } from '@/config/database-tables';
+import { embeddingsEnabled, embedText, embedTexts } from '@/services/ai/embeddings';
+import { logger } from '@/utils/logger';
+
+export interface CatMemory {
+  id: string;
+  content: string;
+  /** Cosine similarity to the recall query (0–1), present only on recall. */
+  similarity?: number;
+  created_at: string;
+}
+
+/** How many memories to recall and inject per turn. */
+const RECALL_COUNT = 6;
+/** Relevance floor for recall — below this a memory isn't worth injecting. */
+const RECALL_MIN_SIMILARITY = 0.3;
+/** A candidate fact this close to an existing one is treated as already known. */
+const DEDUP_SIMILARITY = 0.88;
+/** Cap facts distilled from a single exchange — keeps extraction cheap + focused. */
+const MAX_FACTS_PER_TURN = 3;
+/** Soft cap per user; oldest beyond this are pruned on write. */
+const MAX_MEMORIES_PER_USER = 300;
+/** Trim any single fact to this length before storing. */
+const MAX_FACT_CHARS = 240;
+
+/** Minimal Ai service shape used for extraction (matches the chat provider). */
+export interface MemoryAiService {
+  chatCompletion(opts: {
+    model: string;
+    messages: Array<{ role: string; content: string }>;
+    temperature: number;
+  }): Promise<{ content: string }>;
+}
+
+// ─── Recall ───────────────────────────────────────────────────────────────────
+
+/**
+ * Recall the memories most relevant to the current message. Returns [] (never
+ * throws) when embeddings are disabled, the query is empty, or anything fails.
+ */
+export async function recallMemories(
+  supabase: AnySupabaseClient,
+  userId: string,
+  queryText: string
+): Promise<CatMemory[]> {
+  if (!embeddingsEnabled() || !queryText?.trim()) {
+    return [];
+  }
+  try {
+    const vec = await embedText(queryText);
+    if (!vec) {
+      return [];
+    }
+    const { data, error } = await supabase.rpc('match_cat_memories', {
+      p_user_id: userId,
+      // pgvector accepts its text format ("[0.1,0.2,…]") for the vector param.
+      query_embedding: JSON.stringify(vec),
+      match_count: RECALL_COUNT,
+      min_similarity: RECALL_MIN_SIMILARITY,
+    });
+    if (error) {
+      logger.warn('match_cat_memories RPC failed', { error }, 'CatMemory');
+      return [];
+    }
+    return (data ?? []) as CatMemory[];
+  } catch (err) {
+    logger.warn('recallMemories threw', { err }, 'CatMemory');
+    return [];
+  }
+}
+
+// ─── Extraction ─────────────────────────────────────────────────────────────
+
+/**
+ * Cheap gate: only spend an LLM call on extraction when the user's message
+ * plausibly discloses something durable about them (preference, identity, goal,
+ * relationship). Mirrors the tool-use keyword pre-filter — most utility queries
+ * ("convert 0.1 BTC", "what's my balance") skip extraction entirely.
+ */
+function looksLikeSelfDisclosure(message: string): boolean {
+  const m = message.toLowerCase();
+  if (m.trim().length < 12) {
+    return false;
+  }
+  return SELF_DISCLOSURE_SIGNALS.some(s => m.includes(s));
+}
+
+const SELF_DISCLOSURE_SIGNALS = [
+  'i ',
+  "i'm",
+  'i am',
+  'i prefer',
+  'i like',
+  'i love',
+  'i hate',
+  'i use',
+  'i have',
+  'i live',
+  'i work',
+  'i build',
+  'i run',
+  'my ',
+  'me ',
+  'we ',
+  'our ',
+  "we're",
+  'remember',
+  'prefer',
+  'always',
+  'never',
+  'usually',
+  'call me',
+  'working on',
+  'focused on',
+];
+
+const EXTRACTION_SYSTEM = `You extract durable, user-specific facts worth remembering long-term about a person, from one chat exchange.
+
+Return ONLY a JSON array of short factual statements written in the third person, e.g.:
+["Prefers Lightning over on-chain payments", "Building FleetCrown, a life-OS for builders", "Based in Zürich"]
+
+Include ONLY stable facts: preferences, identity, goals, skills, relationships, or constraints that will still be true next week.
+EXCLUDE: one-off requests, questions, the assistant's suggestions, transient state, and anything trivial or already obvious.
+If there is nothing durable worth remembering, return exactly [].
+Return at most ${MAX_FACTS_PER_TURN} facts. No prose, no markdown — just the JSON array.`;
+
+/** Parse the model's reply into a clean list of fact strings (defensive). */
+function parseFacts(raw: string): string[] {
+  if (!raw) {
+    return [];
+  }
+  // Strip code fences and grab the first JSON array if the model wrapped it.
+  const cleaned = raw.replace(/```(?:json)?/gi, '').trim();
+  const match = cleaned.match(/\[[\s\S]*\]/);
+  if (!match) {
+    return [];
+  }
+  try {
+    const arr = JSON.parse(match[0]);
+    if (!Array.isArray(arr)) {
+      return [];
+    }
+    return arr
+      .filter((x): x is string => typeof x === 'string')
+      .map(s => s.trim().slice(0, MAX_FACT_CHARS))
+      .filter(s => s.length >= 3)
+      .slice(0, MAX_FACTS_PER_TURN);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Distil durable facts from one exchange and store the new ones. Best-effort
+ * and non-blocking — call without awaiting on the response path. Skips silently
+ * when embeddings are off, the message isn't self-disclosure, or the LLM/DB
+ * fails. Dedupes against existing memories by vector similarity.
+ */
+export async function extractAndStoreMemories(
+  supabase: AnySupabaseClient,
+  userId: string,
+  conversationId: string | null,
+  userMessage: string,
+  assistantMessage: string,
+  aiService: MemoryAiService,
+  model: string
+): Promise<void> {
+  if (!embeddingsEnabled() || !looksLikeSelfDisclosure(userMessage)) {
+    return;
+  }
+  try {
+    const { content } = await aiService.chatCompletion({
+      model,
+      temperature: 0,
+      messages: [
+        { role: 'system', content: EXTRACTION_SYSTEM },
+        {
+          role: 'user',
+          content: `User said: "${userMessage}"\n\nAssistant replied: "${assistantMessage.slice(0, 800)}"\n\nExtract durable facts about the user as a JSON array.`,
+        },
+      ],
+    });
+
+    const facts = parseFacts(content);
+    if (facts.length === 0) {
+      return;
+    }
+
+    // Embed all candidates in one batch, then dedupe each against what we know.
+    const vectors = await embedTexts(facts);
+    const toInsert: Array<{ content: string; embedding: string }> = [];
+    for (let i = 0; i < facts.length; i++) {
+      const vec = vectors[i];
+      if (!vec) {
+        continue;
+      }
+      const { data: near } = await supabase.rpc('match_cat_memories', {
+        p_user_id: userId,
+        query_embedding: JSON.stringify(vec),
+        match_count: 1,
+        min_similarity: DEDUP_SIMILARITY,
+      });
+      if (Array.isArray(near) && near.length > 0) {
+        continue; // already remember something equivalent
+      }
+      toInsert.push({ content: facts[i], embedding: JSON.stringify(vec) });
+    }
+
+    if (toInsert.length === 0) {
+      return;
+    }
+
+    const { error } = await supabase.from(DATABASE_TABLES.CAT_MEMORIES).insert(
+      toInsert.map(m => ({
+        user_id: userId,
+        content: m.content,
+        embedding: m.embedding,
+        source: 'chat',
+        source_conversation_id: conversationId,
+      }))
+    );
+    if (error) {
+      logger.warn('Failed to insert cat memories', { error }, 'CatMemory');
+      return;
+    }
+
+    await pruneIfNeeded(supabase, userId);
+  } catch (err) {
+    logger.warn('extractAndStoreMemories threw', { err }, 'CatMemory');
+  }
+}
+
+/** Keep the corpus bounded: delete the oldest memories beyond the per-user cap. */
+async function pruneIfNeeded(supabase: AnySupabaseClient, userId: string): Promise<void> {
+  const { count } = await supabase
+    .from(DATABASE_TABLES.CAT_MEMORIES)
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', userId);
+  if (!count || count <= MAX_MEMORIES_PER_USER) {
+    return;
+  }
+  const { data: oldest } = await supabase
+    .from(DATABASE_TABLES.CAT_MEMORIES)
+    .select('id')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: true })
+    .limit(count - MAX_MEMORIES_PER_USER);
+  const ids = (oldest as Array<{ id: string }> | null)?.map(r => r.id) ?? [];
+  if (ids.length > 0) {
+    await supabase.from(DATABASE_TABLES.CAT_MEMORIES).delete().in('id', ids);
+  }
+}
+
+// ─── Management (list / delete) ───────────────────────────────────────────────
+
+/** List a user's memories, newest first (for the Settings → AI manager). */
+export async function listMemories(
+  supabase: AnySupabaseClient,
+  userId: string
+): Promise<CatMemory[]> {
+  const { data, error } = await supabase
+    .from(DATABASE_TABLES.CAT_MEMORIES)
+    .select('id, content, created_at')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(MAX_MEMORIES_PER_USER);
+  if (error) {
+    logger.warn('listMemories failed', { error }, 'CatMemory');
+    return [];
+  }
+  return (data ?? []) as CatMemory[];
+}
+
+/** Delete one memory the user owns. RLS guarantees cross-user safety. */
+export async function deleteMemory(
+  supabase: AnySupabaseClient,
+  userId: string,
+  id: string
+): Promise<boolean> {
+  const { error } = await supabase
+    .from(DATABASE_TABLES.CAT_MEMORIES)
+    .delete()
+    .eq('id', id)
+    .eq('user_id', userId);
+  if (error) {
+    logger.warn('deleteMemory failed', { error }, 'CatMemory');
+    return false;
+  }
+  return true;
+}
+
+/** Forget everything Cat remembers about the user. */
+export async function deleteAllMemories(
+  supabase: AnySupabaseClient,
+  userId: string
+): Promise<boolean> {
+  const { error } = await supabase
+    .from(DATABASE_TABLES.CAT_MEMORIES)
+    .delete()
+    .eq('user_id', userId);
+  if (error) {
+    logger.warn('deleteAllMemories failed', { error }, 'CatMemory');
+    return false;
+  }
+  return true;
+}
