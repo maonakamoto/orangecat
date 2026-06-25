@@ -98,6 +98,11 @@ export interface Message {
   quickReplies?: string[];
   /** Set when the route fell over from primary to fallback provider. */
   fallback?: FallbackNotice;
+  /**
+   * True when this task would benefit from a frontier model but answered on a
+   * weaker one — the UI shows a gentle "upgrade for sharper results" nudge.
+   */
+  suggestUpgrade?: boolean;
 }
 
 export interface UserStatus {

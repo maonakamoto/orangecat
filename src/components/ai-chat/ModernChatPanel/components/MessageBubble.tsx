@@ -12,6 +12,7 @@ import { renderChatMarkdown } from '@/utils/markdown';
 import { ActionButton } from './ActionButton';
 import { ToolCallChip } from './ToolCallChip';
 import { PrefilledFormCard } from './PrefilledFormCard';
+import { UpgradeNudge } from './UpgradeNudge';
 import type { Message, CatAction, ExecActionResult } from '../types';
 import { ENTITY_REGISTRY, ENTITY_TYPES } from '@/config/entity-registry';
 
@@ -292,6 +293,10 @@ export function MessageBubble({
             instead.
           </p>
         )}
+
+        {/* Upgrade nudge — only on the latest assistant turn, when this task
+            would have been sharper on a frontier model. Dismissable per session. */}
+        {!isUser && isLast && message.suggestUpgrade && displayContent && <UpgradeNudge />}
       </div>
     </div>
   );

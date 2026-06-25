@@ -158,6 +158,7 @@ export function useChatMessages({
         let actions: CatAction[] | undefined;
         let execResults: ExecActionResult[] | undefined;
         let quickReplies: string[] | undefined;
+        let suggestUpgrade = false;
 
         await readEventStream(res.body, (json: unknown) => {
           const event = json as {
@@ -172,6 +173,7 @@ export function useChatMessages({
             tool_call?: ToolCallEvent;
             prefill_proposal?: PrefillProposal;
             fallback?: { from: string; to: string; model: string; reason: string };
+            suggestUpgrade?: boolean;
             error?: string;
           };
           if (event?.error) {
@@ -236,6 +238,9 @@ export function useChatMessages({
               prev.map(m => (m.id === assistantId ? { ...m, fallback: notice } : m))
             );
           }
+          if (event?.done && event.suggestUpgrade) {
+            suggestUpgrade = true;
+          }
         });
 
         if (abortController.signal.aborted) {
@@ -249,7 +254,15 @@ export function useChatMessages({
         setMessages(prev =>
           prev.map(m =>
             m.id === assistantId
-              ? { ...m, modelUsed, provider: providerUsed, actions, execResults, quickReplies }
+              ? {
+                  ...m,
+                  modelUsed,
+                  provider: providerUsed,
+                  actions,
+                  execResults,
+                  quickReplies,
+                  suggestUpgrade,
+                }
               : m
           )
         );

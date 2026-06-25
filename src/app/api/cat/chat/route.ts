@@ -30,10 +30,12 @@ import { resolveProvider, type FallbackProvider } from '@/services/cat/provider-
 import { recallMemories, extractAndStoreMemories } from '@/services/cat/memory';
 import {
   maybeEnrichWithSearchResults,
+  messageMightNeedTools,
   type ToolAugmentedMessage,
   type ToolCallEvent,
   type PrefillProposal,
 } from '@/services/cat/tool-use';
+import { isAgenticModel } from '@/config/model-capability';
 import { fetchFullContextForCat, buildFullContextString } from '@/services/ai/document-context';
 import { createActionExecutor } from '@/services/cat';
 import { getUserActorId } from '@/domain/actors';
@@ -211,6 +213,12 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     // the budget always keeps them). Best-effort: [] if memory is unavailable.
     userContext.memories = await recallMemories(supabase, user.id, message);
     const contextString = buildFullContextString(userContext);
+
+    // Does this message want more than chat (discovery, creation, multi-step)?
+    // If so AND the answering model isn't agentic (frontier), we flag the
+    // response so the UI can gently suggest upgrading to a more powerful model.
+    // Uses the same signal that gates tool use — one source of truth.
+    const wantsAgentic = messageMightNeedTools(message);
     // Examples are appended as labeled text (not injected as fake conversation
     // turns) so weaker models can't mistake the example people for the real user.
     // The per-turn reply-language directive goes DEAD LAST: weak free models
@@ -309,7 +317,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
                   const execResults = await runExecActions(supabase, user.id, actorId, actions);
                   controller.enqueue(
                     encoder.encode(
-                      `data: ${JSON.stringify({ done: true, usage, model: activeModel, provider: activeProvider, actions: actions.length > 0 ? actions : undefined, execResults: execResults.length > 0 ? execResults : undefined, quickReplies })}\n\n`
+                      `data: ${JSON.stringify({ done: true, usage, model: activeModel, provider: activeProvider, actions: actions.length > 0 ? actions : undefined, execResults: execResults.length > 0 ? execResults : undefined, quickReplies, suggestUpgrade: wantsAgentic && !isAgenticModel(activeModel) })}\n\n`
                     )
                   );
                   break;
@@ -552,6 +560,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
           collectedPrefillProposals.length > 0 ? collectedPrefillProposals : undefined,
         modelUsed: result.model,
         provider: activeProvider,
+        suggestUpgrade: wantsAgentic && !isAgenticModel(fellBackTo?.modelToUse ?? modelToUse),
         fallback: fellBackTo
           ? {
               from: provider,
