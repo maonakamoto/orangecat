@@ -39,8 +39,17 @@ export function useEntityCreationWizard<T extends Record<string, unknown>>({
   const hasTemplates = (config.templates?.length ?? 0) > 0;
   const isTemplateOnlyMode = !hasWizard && hasTemplates && !initialData;
 
-  const [currentStep, setCurrentStep] = useState(0);
-  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  // When Cat (or any deep link) supplies a prefilled draft, skip the optional
+  // template-picker step and land straight on the first content step — the
+  // template is irrelevant once the fields are already drafted. Manual creates
+  // (no prefill) still open on the picker, and "Previous" from step 1 lets a
+  // prefilled user reach the templates anyway, so nothing is lost.
+  const skipTemplateStep = wizardSteps[0]?.id === 'template' && !!initialData;
+
+  const [currentStep, setCurrentStep] = useState(skipTemplateStep ? 1 : 0);
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(
+    skipTemplateStep ? new Set([0]) : new Set()
+  );
   const [selectedTemplate, setSelectedTemplate] = useState<EntityTemplate<T> | null>(null);
   const [formInitialValues, setFormInitialValues] = useState<Partial<T> | undefined>(initialData);
   const [showTemplateSelection, setShowTemplateSelection] = useState(isTemplateOnlyMode);
