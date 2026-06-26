@@ -47,6 +47,13 @@ jobs:
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+      # OrangeCat's public donation addresses, baked into the client bundle for
+      # the /support founding-supporter page. Repo *variables* (not secrets) —
+      # these are public receiving addresses, meant to be shown. Unset → the
+      # page shows its graceful "opens shortly" state. (NEXT_PUBLIC_* must be set
+      # HERE at build time; the box's runtime .env can't reach the client bundle.)
+      NEXT_PUBLIC_LIGHTNING_ADDRESS: ${{ vars.NEXT_PUBLIC_LIGHTNING_ADDRESS }}
+      NEXT_PUBLIC_BITCOIN_ADDRESS: ${{ vars.NEXT_PUBLIC_BITCOIN_ADDRESS }}
       OC_BOX: ${{ vars.OC_BOX || 'root@167.233.22.31' }}
     steps:
       - name: Guard — is the deploy key configured?
