@@ -9,8 +9,8 @@
  * Last Modified Summary: Initial creation - DRY extraction from 3 create pages
  */
 
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams, type ReadonlyURLSearchParams } from 'next/navigation';
 import { STORAGE_KEYS } from '@/config/storage-keys';
 import type { EntityType } from '@/config/entity-registry';
 
@@ -84,122 +84,141 @@ interface UseCreatePrefillReturn<T extends Record<string, unknown>> {
  *   enabled: isAuthenticated,
  * });
  */
+/**
+ * Pure: build prefill data from URL params. Synchronous — the params are
+ * available on first render, so callers can `useMemo` this and avoid the
+ * one-render delay that left wizard forms blank when Cat handed off a draft.
+ * Returns undefined when no recognizable prefill params are present.
+ */
+function buildUrlPrefill<T extends Record<string, unknown>>(
+  searchParams: ReadonlyURLSearchParams | null
+): Partial<T> | undefined {
+  const title = searchParams?.get('title');
+  const description = searchParams?.get('description');
+  const category = searchParams?.get('category');
+  const name = searchParams?.get('name');
+
+  if (!(title || description || name)) {
+    return undefined;
+  }
+
+  const prefillData: BasePrefillFields = {};
+  if (title) {
+    prefillData.title = title;
+  }
+  if (description) {
+    prefillData.description = description;
+  }
+  if (category) {
+    prefillData.category = category;
+  }
+  if (name) {
+    prefillData.name = name;
+  }
+
+  // Numeric fields — parseFloat (not parseInt) so BTC decimals survive.
+  const numericFields = [
+    'price_btc',
+    'goal_amount',
+    'hourly_rate',
+    'fixed_price',
+    'original_amount',
+    'interest_rate', // loan
+    'target_amount',
+    'minimum_investment', // investment
+    'funding_goal_btc', // research
+  ] as const;
+  for (const field of numericFields) {
+    const val = searchParams?.get(field);
+    if (val) {
+      const parsed = parseFloat(val);
+      if (!isNaN(parsed)) {
+        prefillData[field] = parsed;
+      }
+    }
+  }
+  // Display price pair → the form's actual `price` + `currency` fields.
+  const priceDisplayAmount = searchParams?.get('price_display_amount');
+  if (priceDisplayAmount) {
+    const parsed = parseFloat(priceDisplayAmount);
+    if (!isNaN(parsed)) {
+      prefillData.price = parsed;
+    }
+  }
+  const priceDisplayCurrency = searchParams?.get('price_display_currency');
+  if (priceDisplayCurrency) {
+    prefillData.currency = priceDisplayCurrency;
+  }
+
+  const stringFields = [
+    'goal_deadline',
+    'location',
+    'start_date',
+    'end_date',
+    'event_date',
+    'label',
+    'field',
+    'type',
+    'loan_type',
+    'cause_category',
+    'investment_type',
+    'methodology',
+    'visibility', // new entity types
+  ] as const;
+  for (const field of stringFields) {
+    const val = searchParams?.get(field);
+    if (val) {
+      prefillData[field] = val;
+    }
+  }
+
+  return prefillData as Partial<T>;
+}
+
 export function useCreatePrefill<T extends Record<string, unknown>>({
   entityType,
   enabled = true,
 }: UseCreatePrefillOptions): UseCreatePrefillReturn<T> {
   const searchParams = useSearchParams();
-  const [initialData, setInitialData] = useState<Partial<T> | undefined>(undefined);
+
+  // URL params (from Cat action buttons, links). Computed SYNCHRONOUSLY so it's
+  // present on the very first render — a create wizard that seeds its form state
+  // with `useState(initialData)` on mount would otherwise capture `undefined`
+  // (the old async useEffect resolved a render too late) and render a blank form
+  // even though Cat passed a full draft.
+  const urlData = useMemo(
+    () => (enabled ? buildUrlPrefill<T>(searchParams) : undefined),
+    [enabled, searchParams]
+  );
+
+  // localStorage fallback (legacy AI-chat prefill) — inherently a side effect
+  // (read + clear), so it stays async. Only consulted when no URL prefill.
+  const [lsData, setLsData] = useState<Partial<T> | undefined>(undefined);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Only run when enabled
     if (!enabled) {
       return;
     }
-
-    // Check URL params first (from action buttons, links, etc.)
-    const title = searchParams?.get('title');
-    const description = searchParams?.get('description');
-    const category = searchParams?.get('category');
-    const name = searchParams?.get('name');
-
-    if (title || description || name) {
-      const prefillData: BasePrefillFields = {};
-      if (title) {
-        prefillData.title = title;
-      }
-      if (description) {
-        prefillData.description = description;
-      }
-      if (category) {
-        prefillData.category = category;
-      }
-      if (name) {
-        prefillData.name = name;
-      }
-
-      // Parse additional fields from URL params
-      // Use parseFloat (not parseInt) so BTC decimals (e.g., 0.001) survive
-      const numericFields = [
-        'price_btc',
-        'goal_amount',
-        'hourly_rate',
-        'fixed_price',
-        'original_amount',
-        'interest_rate', // loan
-        'target_amount',
-        'minimum_investment', // investment
-        'funding_goal_btc', // research
-      ] as const;
-      for (const field of numericFields) {
-        const val = searchParams?.get(field);
-        if (val) {
-          const parsed = parseFloat(val);
-          if (!isNaN(parsed)) {
-            prefillData[field] = parsed;
-          }
-        }
-      }
-      // Display price pair → the form's actual `price` + `currency` fields.
-      const priceDisplayAmount = searchParams?.get('price_display_amount');
-      if (priceDisplayAmount) {
-        const parsed = parseFloat(priceDisplayAmount);
-        if (!isNaN(parsed)) {
-          prefillData.price = parsed;
-        }
-      }
-      const priceDisplayCurrency = searchParams?.get('price_display_currency');
-      if (priceDisplayCurrency) {
-        prefillData.currency = priceDisplayCurrency;
-      }
-
-      const stringFields = [
-        'goal_deadline',
-        'location',
-        'start_date',
-        'end_date',
-        'event_date',
-        'label',
-        'field',
-        'type',
-        'loan_type',
-        'cause_category',
-        'investment_type',
-        'methodology',
-        'visibility', // new entity types
-      ] as const;
-      for (const field of stringFields) {
-        const val = searchParams?.get(field);
-        if (val) {
-          prefillData[field] = val;
-        }
-      }
-
-      // Cast to Partial<T> - the calling code knows T includes these base fields
-      setInitialData(prefillData as Partial<T>);
+    if (urlData) {
       setIsLoaded(true);
       return;
     }
-
-    // Fall back to localStorage (legacy support / AI chat prefill)
     try {
       const storageKey = STORAGE_KEYS.ENTITY_PREFILL(entityType);
       const raw = localStorage.getItem(storageKey);
       if (raw) {
-        const data = JSON.parse(raw) as Partial<T>;
-        setInitialData(data);
+        setLsData(JSON.parse(raw) as Partial<T>);
         localStorage.removeItem(storageKey);
       }
     } catch {
       // Ignore parse errors
     }
-
     setIsLoaded(true);
-  }, [enabled, searchParams, entityType]);
+  }, [enabled, urlData, entityType]);
 
   return {
-    initialData,
+    initialData: urlData ?? lsData,
     isLoaded,
   };
 }
