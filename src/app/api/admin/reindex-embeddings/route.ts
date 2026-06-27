@@ -24,6 +24,7 @@ import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { embeddingsEnabled, embedTexts } from '@/services/ai/embeddings';
 import { ENTITY_STATUS } from '@/config/database-constants';
+import { getEntityMetadata, type EntityType } from '@/config/entity-registry';
 import { logger } from '@/utils/logger';
 
 export const dynamic = 'force-dynamic';
@@ -73,11 +74,20 @@ const causeQuality = (o: { updatedAt?: string | null; raised?: number; goal?: nu
 const EMBED_BATCH = 96;
 const key = (t: string, id: string) => `${t}:${id}`;
 
-const ENTITY_CFG: Record<string, { table: string; basePath: string }> = {
-  product: { table: 'user_products', basePath: '/products' },
-  service: { table: 'user_services', basePath: '/services' },
-  cause: { table: 'user_causes', basePath: '/causes' },
-};
+/** Entity types whose public rows are embedded into the search corpus.
+ *  The allow-list is a deliberate scope decision; table + path come from the registry SSOT. */
+const INDEXABLE_ENTITY_TYPES = [
+  'product',
+  'service',
+  'cause',
+] as const satisfies readonly EntityType[];
+
+const ENTITY_CFG: Record<string, { table: string; basePath: string }> = Object.fromEntries(
+  INDEXABLE_ENTITY_TYPES.map(t => {
+    const meta = getEntityMetadata(t);
+    return [t, { table: meta.tableName, basePath: meta.publicBasePath }];
+  })
+);
 
 /**
  * Reconcile ONE row (called near-instantly by the DB trigger on a write).

@@ -18,7 +18,7 @@
 2. **Pseudonymous by default** — real identity is opt-in, never required. Any pseudonymous actor is a full economic participant.
 3. **Any currency** — Bitcoin/Lightning is native and preferred, but any payment method — local or global (Twint, PayPal, Venmo, bank transfers, and regional fiat equivalents worldwide) — is a first-class citizen. Meet users where they are.
 4. **Full economic spectrum** — from gift (no strings) to loan (some strings) to investment (more strings). All forms of value coordination belong on this platform.
-5. **Private where needed, transparent where chosen** — E2E encrypted messaging, Nostr as the censorship-resistant layer, Bitcoin's on-chain transparency available when appropriate.
+5. **Private where needed, transparent where chosen** — the privacy goal (E2E-encrypted messaging and Nostr as the censorship-resistant layer) is on the roadmap, **not yet shipped**: direct messages are currently stored as plaintext (realtime, but server-readable). Bitcoin's on-chain transparency is available when appropriate. Do not describe messaging as encrypted until it actually is.
 6. **Entities are the Cat's world model** — every entity type represents a form of economic or governance activity. The richer the entity structure, the smarter the Cat can be.
 
 ### Entity Economic Taxonomy

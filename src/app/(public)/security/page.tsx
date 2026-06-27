@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Shield, Lock, Eye, Server, Key, AlertTriangle } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { PageHeading } from '@/components/layout/PageHeading';
 import { ROUTES } from '@/config/routes';
 
 export const metadata = {
@@ -88,9 +89,7 @@ export default function SecurityPage() {
           <div className="flex justify-center mb-4">
             <Shield className="w-16 h-16 text-fg-secondary" />
           </div>
-          <h1 className="font-heading tracking-display text-4xl font-bold text-fg-primary mb-4">
-            Security &amp; Privacy
-          </h1>
+          <PageHeading className="mb-4">Security &amp; Privacy</PageHeading>
           <p className="text-xl text-fg-secondary">
             Your security and privacy are our top priorities at OrangeCat
           </p>

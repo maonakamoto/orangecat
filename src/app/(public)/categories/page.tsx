@@ -4,6 +4,7 @@ import { categories } from '@/config/categories';
 import Link from 'next/link';
 import { Palette, Code, GraduationCap, Building2, Heart, ArrowRight } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { PageHeading } from '@/components/layout/PageHeading';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/config/routes';
@@ -32,9 +33,7 @@ export default function CategoriesPage() {
     <div className="min-h-screen pt-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h1 className="font-heading tracking-display text-4xl font-bold mb-4">
-            Find Your Community
-          </h1>
+          <PageHeading className="mb-4">Find Your Community</PageHeading>
           <p className="text-xl text-fg-secondary max-w-2xl mx-auto">
             Whether you&apos;re a creator, builder, educator, or organization, OrangeCat helps you
             exchange, fund, lend, invest, and govern—without gatekeepers.

@@ -19,6 +19,7 @@ import { searchPlatform, type SearchType } from './platform-search';
 import { generateFormPrefill } from '@/lib/ai/form-prefill-service';
 import { getEntityConfig } from '@/config/entity-configs/get-config';
 import { isValidEntityType, type EntityType } from '@/config/entity-registry';
+import { CAT_CREATABLE_ENTITY_TYPES } from '@/types/cat';
 
 /** Standard chat message (system/user/assistant) */
 export type { OpenRouterMessage as ChatMessage };
@@ -177,18 +178,13 @@ function hasCreateIntent(message: string): boolean {
   return CREATE_INTENT_PATTERNS.some(re => re.test(message));
 }
 
-const PREFILLABLE_ENTITY_TYPES = [
-  'product',
-  'service',
-  'project',
-  'cause',
-  'event',
-  'asset',
-  'loan',
-  'investment',
-  'research',
-  'wishlist',
-] as const;
+/** Entity types Cat can DRAFT via the prefill tool. Derived from the creatable SSOT so the
+ *  two lists can't drift. `group` is creatable but not prefillable — it uses a `name`, not the
+ *  form-field prefill flow. Add an entry here only by removing it from this exclusion set. */
+const NON_PREFILLABLE_ENTITY_TYPES = new Set<string>(['group']);
+const PREFILLABLE_ENTITY_TYPES = CAT_CREATABLE_ENTITY_TYPES.filter(
+  t => !NON_PREFILLABLE_ENTITY_TYPES.has(t)
+);
 
 const PLATFORM_TOOL_DEFINITION = [
   {

@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Check, Sparkles, Cat as CatIcon } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { PageHeading } from '@/components/layout/PageHeading';
 import { CAT_PLANS, type CatPlan } from '@/config/cat-plans';
 import { ROUTES } from '@/config/routes';
 import { cn } from '@/lib/utils';
@@ -28,9 +29,7 @@ export default function PricingPage() {
           <div className="mb-4 flex justify-center">
             <CatIcon className="h-16 w-16 text-fg-secondary" />
           </div>
-          <h1 className="mb-4 font-heading text-4xl font-bold tracking-display text-fg-primary">
-            Your AI, your bill, your choice
-          </h1>
+          <PageHeading className="mb-4">Your AI, your bill, your choice</PageHeading>
           <p className="mx-auto max-w-2xl text-xl text-fg-secondary">
             Cat works any way you want. Free out of the box, or bring your own key from six wired
             providers — OpenAI, OpenRouter, Together, Groq, DeepSeek, xAI. OrangeCat doesn&apos;t
