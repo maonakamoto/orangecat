@@ -88,9 +88,11 @@ export default function ProjectHeader({
 
   return (
     <div className="mb-6">
-      <div className="flex items-start justify-between gap-4 mb-4">
-        <div className="flex-1">
-          <h1 className="text-4xl font-bold text-fg-primary mb-3">{project.title}</h1>
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-fg-primary mb-3 break-words">
+            {project.title}
+          </h1>
 
           {/* Categories - Show prominently for quick project understanding */}
           {(project.category || (project.tags && project.tags.length > 0)) && (

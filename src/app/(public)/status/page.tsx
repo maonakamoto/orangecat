@@ -1,6 +1,7 @@
 import { CheckCircle, AlertTriangle, XCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { checkHealth } from '@/lib/health';
+import { PageHeading } from '@/components/layout/PageHeading';
 import { ROUTES } from '@/config/routes';
 import type { ServiceStatus } from '@/lib/health';
 
@@ -82,9 +83,7 @@ export default async function StatusPage() {
       <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="font-heading tracking-display text-4xl font-bold text-fg-primary mb-4">
-            System Status
-          </h1>
+          <PageHeading className="mb-4">System Status</PageHeading>
           <p className="text-xl text-fg-secondary">Current status of OrangeCat platform services</p>
           <p className="text-sm text-fg-tertiary mt-2">Last checked: {checkedAt}</p>
         </div>

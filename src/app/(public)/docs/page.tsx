@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { ENTITY_REGISTRY, ENTITY_TYPES as ENTITY_TYPE_KEYS } from '@/config/entity-registry';
 import Button from '@/components/ui/Button';
+import { PageHeading } from '@/components/layout/PageHeading';
 import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
@@ -37,9 +38,7 @@ export default function DocsPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-14">
-          <h1 className="font-heading tracking-display text-4xl font-bold text-fg-primary mb-4">
-            Platform Documentation
-          </h1>
+          <PageHeading className="mb-4">Platform Documentation</PageHeading>
           <p className="text-xl text-fg-secondary max-w-2xl mx-auto">
             How OrangeCat works — the AI agent, entity system, payments, and security.
           </p>

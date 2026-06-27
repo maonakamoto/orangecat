@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronDown, Bot, Coins, Users, Shield, Zap, HelpCircle } from 'lucide-react';
+import { PageHeading } from '@/components/layout/PageHeading';
 import { cn } from '@/lib/utils';
 
 interface FaqItem {
@@ -252,7 +253,7 @@ export default function FAQPage() {
       {/* Header */}
       <div className="border-b border-default bg-surface-page py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-fg-primary mb-4">Frequently Asked Questions</h1>
+          <PageHeading className="mb-4">Frequently Asked Questions</PageHeading>
           <p className="text-xl text-fg-secondary max-w-2xl mx-auto">
             Everything you need to know about OrangeCat — your AI economic agent.
           </p>

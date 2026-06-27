@@ -11,7 +11,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { AnySupabaseClient } from '@/lib/supabase/types';
-import { getTableName } from '@/config/entity-registry';
+import { getTableName, getEntityMetadata } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { ENTITY_STATUS } from '@/config/database-constants';
 import { embeddingsEnabled, embedText } from '@/services/ai/embeddings';
@@ -37,6 +37,10 @@ export interface SearchResult {
 }
 
 const MAX_RESULTS_PER_TYPE = 5;
+
+/** Public detail-page base path for an entity type — SSOT is the registry, never a literal. */
+const pubPath = (type: Parameters<typeof getEntityMetadata>[0]): string =>
+  getEntityMetadata(type).publicBasePath;
 
 /**
  * Search the platform for users and entities.
@@ -96,19 +100,40 @@ export async function searchPlatform(
       ? searchProfiles(supabase, tokens, results)
       : Promise.resolve(),
     type === 'all' || type === 'projects'
-      ? searchTable(supabase, getTableName('project'), 'projects', '/fund', tokens, results)
+      ? searchTable(
+          supabase,
+          getTableName('project'),
+          'projects',
+          pubPath('project'),
+          tokens,
+          results
+        )
       : Promise.resolve(),
     type === 'all' || type === 'causes'
-      ? searchTable(supabase, getTableName('cause'), 'causes', '/causes', tokens, results)
+      ? searchTable(supabase, getTableName('cause'), 'causes', pubPath('cause'), tokens, results)
       : Promise.resolve(),
     type === 'all' || type === 'products'
-      ? searchTable(supabase, getTableName('product'), 'products', '/products', tokens, results)
+      ? searchTable(
+          supabase,
+          getTableName('product'),
+          'products',
+          pubPath('product'),
+          tokens,
+          results
+        )
       : Promise.resolve(),
     type === 'all' || type === 'services'
-      ? searchTable(supabase, getTableName('service'), 'services', '/services', tokens, results)
+      ? searchTable(
+          supabase,
+          getTableName('service'),
+          'services',
+          pubPath('service'),
+          tokens,
+          results
+        )
       : Promise.resolve(),
     type === 'all' || type === 'events'
-      ? searchTable(supabase, getTableName('event'), 'events', '/events', tokens, results)
+      ? searchTable(supabase, getTableName('event'), 'events', pubPath('event'), tokens, results)
       : Promise.resolve(),
   ]);
 

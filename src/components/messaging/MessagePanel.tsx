@@ -88,7 +88,7 @@ export default function MessagePanel({
         className={cn(
           'flex flex-col border-r border-subtle bg-surface-raised/30 transition-transform duration-300 ease-in-out',
           selectedConversationId ? 'hidden md:flex md:w-80' : 'flex w-full md:w-80',
-          fullPage && 'w-[23rem]'
+          fullPage && 'w-full md:w-[23rem]'
         )}
       >
         <div className="flex items-center justify-between border-b border-subtle bg-surface-page p-4">

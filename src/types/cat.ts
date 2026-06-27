@@ -14,26 +14,12 @@ import type { EntityType } from '@/config/entity-registry';
 import type { WalletBehaviorType, WalletCategory, BudgetPeriod } from '@/types/wallet';
 
 /**
- * Entity types that Cat can suggest creating.
- * Subset of the full EntityType from the entity registry.
+ * SSOT for the entity types Cat can suggest creating — a subset of the registry's EntityType.
+ * Every consumer (the `CatCreatableEntityType` type, the prefill list in tool-use.ts, the
+ * response parser, the action enum) derives from THIS array so the set can never drift.
+ * `satisfies readonly EntityType[]` guarantees each entry is a real registry type.
  */
-type CatCreatableEntityType = Extract<
-  EntityType,
-  | 'product'
-  | 'service'
-  | 'project'
-  | 'cause'
-  | 'event'
-  | 'asset'
-  | 'loan'
-  | 'investment'
-  | 'research'
-  | 'wishlist'
-  | 'group'
->;
-
-/** All entity types Cat can create, as a runtime array for validation */
-export const CAT_CREATABLE_ENTITY_TYPES: CatCreatableEntityType[] = [
+export const CAT_CREATABLE_ENTITY_TYPES = [
   'product',
   'service',
   'project',
@@ -45,7 +31,11 @@ export const CAT_CREATABLE_ENTITY_TYPES: CatCreatableEntityType[] = [
   'research',
   'wishlist',
   'group',
-];
+  'ai_assistant',
+  'document',
+] as const satisfies readonly EntityType[];
+
+type CatCreatableEntityType = (typeof CAT_CREATABLE_ENTITY_TYPES)[number];
 
 /**
  * An action suggesting entity creation, embedded as ```action JSON blocks in AI responses.
