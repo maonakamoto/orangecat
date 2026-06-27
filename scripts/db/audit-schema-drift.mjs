@@ -58,27 +58,18 @@ const MISSING_TABLE_ALLOW = new Set([
   'information_schema.tables',
   'pg_tables',
   'pg_proc',
-  // (b) KNOWN DRIFT — these tables are referenced by app code but are NOT on the
-  //     self-host box (surfaced 2026-06-27 when this missing-table check was added;
-  //     the box silently drifted from supabase/migrations/*, the same root cause as
-  //     the ai_conversations/ai_messages outage). Allowlisted so the deploy gate
-  //     stays GREEN for the existing backlog while still failing on any NEW missing
-  //     table. REMEDIATION = apply each table's create migration to the box (then
-  //     remove it from this list). Tracked: these features 500 in prod until fixed.
-  'group_invitations',
-  'loan_collateral',
-  'project_support',
-  'project_support_stats',
+  // (b) KNOWN DRIFT — tables referenced by app code that have NO create migration
+  //     anywhere in supabase/migrations (surfaced 2026-06-27). Unlike the tables
+  //     already remediated, these were never defined — the code addresses a table
+  //     that doesn't exist in the schema SSOT at all (likely dead/abandoned feature
+  //     code or a stale name). Allowlisted so the deploy gate stays GREEN while they
+  //     are triaged; RESOLUTION = delete the dead code OR author a real migration,
+  //     then remove from this list. Do NOT just create these blindly.
   'project_updates',
-  'research_progress_updates',
-  'research_votes',
-  'research_contributions',
+  'audit_logs',
+  'loan_collateral',
   'channel_waitlist',
   'wallet_ownerships',
-  'user_presence',
-  'typing_indicators',
-  'audit_logs',
-  'contracts',
 ]);
 
 const FILTER_OPS = new Set([

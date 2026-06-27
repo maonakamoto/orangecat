@@ -317,6 +317,21 @@
     "updated_at",
     "quality_score"
   ],
+  "contracts": [
+    "id",
+    "party_a_actor_id",
+    "party_b_actor_id",
+    "contract_type",
+    "terms",
+    "status",
+    "proposal_id",
+    "created_by",
+    "created_at",
+    "updated_at",
+    "activated_at",
+    "completed_at",
+    "terminated_at"
+  ],
   "contributions": [
     "id",
     "payment_intent_id",
@@ -499,6 +514,20 @@
     "enabled_at",
     "enabled_by"
   ],
+  "group_invitations": [
+    "id",
+    "group_id",
+    "user_id",
+    "email",
+    "token",
+    "role",
+    "message",
+    "status",
+    "invited_by",
+    "expires_at",
+    "responded_at",
+    "created_at"
+  ],
   "group_members": [
     "id",
     "group_id",
@@ -523,7 +552,8 @@
     "voting_ends_at",
     "executed_at",
     "created_at",
-    "updated_at"
+    "updated_at",
+    "is_public"
   ],
   "group_votes": ["id", "proposal_id", "voter_id", "vote", "voting_power", "voted_at"],
   "group_wallets": [
@@ -915,6 +945,31 @@
     "created_at",
     "updated_at"
   ],
+  "project_support": [
+    "id",
+    "project_id",
+    "user_id",
+    "support_type",
+    "amount_btc",
+    "transaction_hash",
+    "lightning_invoice",
+    "display_name",
+    "message",
+    "is_anonymous",
+    "reaction_emoji",
+    "created_at",
+    "updated_at"
+  ],
+  "project_support_stats": [
+    "project_id",
+    "total_bitcoin_btc",
+    "total_signatures",
+    "total_messages",
+    "total_reactions",
+    "total_supporters",
+    "last_support_at",
+    "updated_at"
+  ],
   "projects": [
     "id",
     "user_id",
@@ -939,6 +994,20 @@
     "actor_id",
     "is_test",
     "show_on_profile"
+  ],
+  "research_contributions": [
+    "id",
+    "research_entity_id",
+    "user_id",
+    "amount_btc",
+    "funding_model",
+    "message",
+    "anonymous",
+    "lightning_invoice",
+    "onchain_tx",
+    "created_at",
+    "status",
+    "confirmed_at"
   ],
   "research_entities": [
     "id",
@@ -976,6 +1045,29 @@
     "metadata",
     "actor_id",
     "show_on_profile"
+  ],
+  "research_progress_updates": [
+    "id",
+    "research_entity_id",
+    "user_id",
+    "title",
+    "description",
+    "milestone_achieved",
+    "funding_released",
+    "attachments",
+    "created_at",
+    "votes_up",
+    "votes_down",
+    "total_votes"
+  ],
+  "research_votes": [
+    "id",
+    "research_entity_id",
+    "user_id",
+    "vote_type",
+    "choice",
+    "weight",
+    "created_at"
   ],
   "schema_migrations": ["filename", "applied_at"],
   "shipping_addresses": [
@@ -1181,6 +1273,7 @@
     "created_at",
     "updated_at"
   ],
+  "typing_indicators": ["id", "conversation_id", "user_id", "started_at", "expires_at"],
   "user_ai_preferences": [
     "id",
     "user_id",
@@ -1278,6 +1371,7 @@
     "created_at",
     "updated_at"
   ],
+  "user_presence": ["user_id", "status", "last_seen_at", "updated_at"],
   "user_products": [
     "id",
     "user_id",
