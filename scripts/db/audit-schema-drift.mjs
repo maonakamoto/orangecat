@@ -53,23 +53,14 @@ const ALLOW = new Set([
 // A genuinely-missing app table (e.g. ai_conversations drifting off the box) must
 // NOT be added here — that's exactly the silent drift this check exists to catch.
 const MISSING_TABLE_ALLOW = new Set([
-  // (a) not app tables — introspection / system catalogs
+  // Not app tables — introspection / system catalogs. (The 2026-06-27 known-drift
+  // backlog of 14 missing tables has been fully remediated: 9 by replaying their
+  // create migrations, 4 by new migrations 20260627000001/2, and wallet_ownerships
+  // by removing its dead fallback. The gate now blocks on ANY missing table.)
   'information_schema.columns',
   'information_schema.tables',
   'pg_tables',
   'pg_proc',
-  // (b) KNOWN DRIFT — tables referenced by app code that have NO create migration
-  //     anywhere in supabase/migrations (surfaced 2026-06-27). Unlike the tables
-  //     already remediated, these were never defined — the code addresses a table
-  //     that doesn't exist in the schema SSOT at all (likely dead/abandoned feature
-  //     code or a stale name). Allowlisted so the deploy gate stays GREEN while they
-  //     are triaged; RESOLUTION = delete the dead code OR author a real migration,
-  //     then remove from this list. Do NOT just create these blindly.
-  'project_updates',
-  'audit_logs',
-  'loan_collateral',
-  'channel_waitlist',
-  'wallet_ownerships',
 ]);
 
 const FILTER_OPS = new Set([

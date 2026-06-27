@@ -157,6 +157,19 @@
     "show_on_profile",
     "is_test"
   ],
+  "audit_logs": [
+    "id",
+    "action",
+    "user_id",
+    "entity_type",
+    "entity_id",
+    "metadata",
+    "ip_address",
+    "user_agent",
+    "success",
+    "error_message",
+    "created_at"
+  ],
   "availability_slots": [
     "id",
     "service_id",
@@ -288,6 +301,7 @@
     "created_at",
     "updated_at"
   ],
+  "channel_waitlist": ["id", "email", "user_id", "source", "referrer", "created_at"],
   "community_timeline_no_duplicates": [
     "id",
     "event_type",
@@ -647,6 +661,16 @@
     "is_test"
   ],
   "loan_categories": ["id", "name", "description", "icon", "is_active", "created_at", "updated_at"],
+  "loan_collateral": [
+    "id",
+    "loan_id",
+    "asset_id",
+    "owner_id",
+    "pledged_value",
+    "currency",
+    "status",
+    "created_at"
+  ],
   "loan_offers": [
     "id",
     "loan_id",
@@ -970,6 +994,7 @@
     "last_support_at",
     "updated_at"
   ],
+  "project_updates": ["id", "project_id", "type", "title", "content", "amount_btc", "created_at"],
   "projects": [
     "id",
     "user_id",
