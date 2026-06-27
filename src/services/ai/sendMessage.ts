@@ -24,6 +24,12 @@ import {
   getFreeModels,
 } from '@/config/ai-models';
 import { createAutoRouter } from '@/services/ai/auto-router';
+import { getAdminClient } from '@/lib/supabase/admin';
+import {
+  computeCreatorChargeBtc,
+  checkAffordability,
+  settleAssistantCharge,
+} from '@/services/ai/assistant-charge';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -143,10 +149,23 @@ export async function sendAiMessage(
     freeMessagesPerDay
   );
 
-  // 8. AI assistants are free for now — the credits/charging system was scaffolded
-  // but never wired to a real backing store. Strip the charge math; keep
-  // free-messages-per-day quota as the only spending dial.
-  const creatorCharge = 0;
+  // 8. Compute the creator's per-message charge (BTC) and pre-authorize it against the
+  //    user's Cat Credits balance BEFORE calling the model, so we can return a clean
+  //    INSUFFICIENT_CREDITS without serving a message. Free messages / non-per_message
+  //    pricing cost nothing (see assistant-charge.ts).
+  const creatorCharge = computeCreatorChargeBtc(assistant, usesFreeMessage);
+  const admin = creatorCharge > 0 ? getAdminClient() : null;
+  if (admin && creatorCharge > 0) {
+    const affordability = await checkAffordability(admin, userId, creatorCharge);
+    if (!affordability.ok) {
+      return {
+        code: 'INSUFFICIENT_CREDITS',
+        currentBalance: affordability.balance,
+        requiredAmount: creatorCharge,
+        shortfall: creatorCharge - affordability.balance,
+      };
+    }
+  }
 
   // 9. Store user message
   const userMsgResult = await storeUserMessage(supabase, convId, content);
@@ -192,9 +211,23 @@ export async function sendAiMessage(
   }
   const assistantMessage = aiMsgResult.message;
 
-  // 12. Post-message side effects (creator-charge block stripped — see #8)
+  // 12. Post-message side effects.
   if (!hasByok) {
     await keyService.incrementPlatformUsage(userId, 1, aiResponse.totalTokens);
+  }
+
+  // 12b. Settle the charge: debit the payer's Cat Credits, credit the creator's 95% share.
+  //      Pre-authorized in step 8; idempotent on the assistant message id.
+  if (admin && creatorCharge > 0) {
+    await settleAssistantCharge(admin, {
+      payerUserId: userId,
+      creatorUserId: assistant.user_id,
+      assistantId: assistant.id,
+      messageId: (assistantMessage as { id: string }).id,
+      chargeBtc: creatorCharge,
+      model: aiResponse.model,
+      totalTokens: aiResponse.totalTokens,
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

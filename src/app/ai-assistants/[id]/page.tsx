@@ -8,6 +8,7 @@ import PublicEntityDetailPage, {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import PriceDisplay from '@/components/public/PriceDisplay';
+import AiAssistantChat from '@/components/ai-assistants/AiAssistantChat';
 import { ROUTES } from '@/config/routes';
 
 interface PageProps {
@@ -69,6 +70,14 @@ const config: EntityDetailConfig = {
 
     return (
       <>
+        <AiAssistantChat
+          assistantId={entity.id as string}
+          assistantName={(entity.title as string) || 'this assistant'}
+          assistantAvatar={entity.avatar_url as string | null | undefined}
+          welcomeMessage={welcome}
+          pricing={pricing}
+        />
+
         {(pricing.isFree || pricing.amount > 0) && (
           <Card>
             <CardHeader>
