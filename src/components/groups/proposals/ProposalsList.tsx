@@ -159,7 +159,7 @@ export function ProposalsList({
             value={statusFilter}
             onValueChange={value => setStatusFilter(value as ProposalStatusFilter)}
           >
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-full sm:w-[140px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
