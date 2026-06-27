@@ -54,6 +54,7 @@ import {
   waitForIdempotencyResult,
 } from '@/services/idempotency/idempotencyResults';
 import { enqueueWebhookEvent } from '@/services/webhooks/deliveryService';
+import { auditLog, AUDIT_ACTIONS } from '@/lib/api/auditLog';
 
 // Type for the awaited Supabase client
 type SupabaseClient = Awaited<ReturnType<typeof createServerClient>>;
@@ -313,6 +314,21 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         }
       }
 
+      // Fire-and-forget audit trail for every successful entity creation. Never
+      // blocks or fails the response (auditLog swallows its own errors). One place
+      // here covers all 10+ factory-based create routes (DRY).
+      const recordAudit = (entityId: string): void => {
+        void auditLog({
+          action: AUDIT_ACTIONS.ENTITY_CREATED,
+          userId,
+          entityType,
+          entityId,
+          metadata: { actorId: resolvedActor.id, source: auth.source },
+          ipAddress: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || undefined,
+          userAgent: request.headers.get('user-agent') || undefined,
+        });
+      };
+
       // Use custom creation function if provided (for domain services).
       // Pass the resolved actor on the body's `_resolved_actor_id` side
       // channel — domain/base/entityService.ts unwraps it.
@@ -324,6 +340,7 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         };
         const entity = await createEntity(userId, bodyForCreate, supabase);
         logger.info(`${meta.name} created successfully`, { [`${entityType}Id`]: entity.id });
+        recordAudit(entity.id as string);
         // Fire-and-forget: never block the user response on webhook
         // enqueue. enqueueWebhookEvent swallows its own errors.
         void enqueueWebhookEvent({
@@ -417,6 +434,7 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
 
       const createdEntity = entity as { id: string } & Record<string, unknown>;
       logger.info(`${meta.name} created successfully`, { [`${entityType}Id`]: createdEntity.id });
+      recordAudit(createdEntity.id);
 
       // Link wallet to entity if _wallet_id was provided (non-fatal)
       if (walletIdForLink && createdEntity.id) {
