@@ -440,10 +440,52 @@ async function callAi(
       return { response: result };
     }
   } catch (aiError: unknown) {
+    // The platform-free OpenRouter tier frequently 429s. Rather than fail the whole
+    // chat, fall back to Groq (platform key) for non-BYOK users — mirrors the Cat path.
+    if (provider === 'openrouter' && !hasByok && isAiRateLimitError(aiError) && isGroqAvailable()) {
+      try {
+        const result = await createGroqService().chatCompletion({
+          model: DEFAULT_GROQ_MODEL,
+          messages: messages as GroqMessage[],
+          systemPrompt: assistant.system_prompt || undefined,
+          temperature: assistant.temperature ?? 0.7,
+          maxTokens: assistant.max_tokens_per_response || undefined,
+        });
+        return { response: { ...result, costBtc: 0 } };
+      } catch (groqError: unknown) {
+        logger.error(
+          'Groq fallback after OpenRouter rate-limit also failed',
+          groqError,
+          'AIMessagesService'
+        );
+      }
+    }
     logger.error('AI API error', aiError, 'AIMessagesService');
-    const message = aiError instanceof Error ? aiError.message : 'AI service error';
-    return { error: { code: 'AI_ERROR', message } };
+    const isRateLimited = isAiRateLimitError(aiError);
+    return {
+      error: isRateLimited
+        ? {
+            code: 'RATE_LIMITED',
+            message:
+              'The free AI tier is busy right now. Try again shortly, or add your own API key in Settings → AI for unlimited use.',
+          }
+        : {
+            code: 'AI_ERROR',
+            message: aiError instanceof Error ? aiError.message : 'AI service error',
+          },
+    };
   }
+}
+
+/** Detect provider rate-limit errors (OpenRouter 429 / Groq TPM) across error shapes. */
+function isAiRateLimitError(error: unknown): boolean {
+  const e = error as { statusCode?: number; status?: number; type?: string; message?: string };
+  return (
+    e?.statusCode === 429 ||
+    e?.status === 429 ||
+    e?.type === 'rate_limit' ||
+    /rate.?limit|429|too many requests/i.test(e?.message ?? '')
+  );
 }
 
 async function storeUserMessage(
