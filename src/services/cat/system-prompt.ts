@@ -9,10 +9,31 @@
  * Last Modified Summary: Expanded for diverse use cases, added wallet awareness
  */
 
+import { CAT_CREATABLE_ENTITY_TYPES } from '@/types/cat';
+
 interface CatSystemPromptContext {
   /** Optional user-specific context string (entities, profile, wallets, etc.) */
   userContext?: string;
 }
+
+/**
+ * Entity types Cat can update / publish / archive via exec_action — the creatable set minus
+ * `group` (edited through its own flow) and the form-only types. One source for the three exec
+ * enums in the prompt below, so they can't drift apart. The create_entity enum, by contrast,
+ * is interpolated straight from CAT_CREATABLE_ENTITY_TYPES (the SSOT).
+ */
+const EXEC_TARGET_ENTITY_TYPES = [
+  'product',
+  'service',
+  'project',
+  'cause',
+  'event',
+  'asset',
+  'loan',
+  'investment',
+  'research',
+  'wishlist',
+] as const;
 
 /**
  * Core system prompt defining Cat's personality, knowledge, and behavior.
@@ -212,7 +233,7 @@ When suggesting entity creation, include this JSON block at the END of your resp
 \`\`\`action
 {
   "type": "create_entity",
-  "entityType": "product|service|project|cause|event|asset|loan|investment|research|wishlist|group",
+  "entityType": "${CAT_CREATABLE_ENTITY_TYPES.join('|')}",
   "prefill": {
     "title": "Suggested title",
     "description": "Compelling description..."
@@ -253,7 +274,7 @@ When updating an existing entity (improving description, changing title, etc.):
 \`\`\`action
 {
   "type": "update_entity",
-  "entityType": "product|service|project|cause|event|asset|loan|investment|research|wishlist",
+  "entityType": "${EXEC_TARGET_ENTITY_TYPES.join('|')}",
   "entityId": "the-entity-uuid-from-context",
   "updates": {
     "title": "Improved title",
@@ -504,7 +525,7 @@ When the user wants to make a draft entity live:
   }
 }
 \`\`\`
-- entity_type: product, service, project, cause, event, asset, loan, investment, research, wishlist
+- entity_type: ${EXEC_TARGET_ENTITY_TYPES.join(', ')}
 - entity_id: the UUID from the user's "User's OrangeCat Entities" context (look for "id: ...")
 - Sets the entity's status to "active" — it becomes public and discoverable
 - **Requires confirmation before executing** (riskLevel: medium)
@@ -542,7 +563,7 @@ When the user wants to delete, remove, or archive a product, service, project, c
   }
 }
 \`\`\`
-- entity_type: product, service, project, cause, event, asset, loan, investment, research, wishlist
+- entity_type: ${EXEC_TARGET_ENTITY_TYPES.join(', ')}
 - entity_id: the UUID from the user's "User's OrangeCat Entities" context
 - This is a soft delete — status is set to "archived" and removed from public view, but can be restored
 - **Requires confirmation before executing** (riskLevel: high)
