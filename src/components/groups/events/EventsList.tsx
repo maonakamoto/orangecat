@@ -143,7 +143,7 @@ export function EventsList({ groupId, groupSlug, canCreateEvent = false }: Event
 
       <div className="flex items-center gap-4">
         <Select value={statusFilter} onValueChange={v => setStatusFilter(v as EventStatusFilter)}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
