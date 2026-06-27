@@ -98,6 +98,29 @@ for mig in supabase/migrations/*.sql; do
 done
 echo "  migrations up to date"
 
+echo "=== schema-drift gate (deployed code vs LIVE box schema) ==="
+# Migrations applying is necessary but not sufficient: the box can still lack an
+# object the code needs — e.g. a migration that was backfilled-as-applied but never
+# actually ran (the ai_conversations outage), or a manual DB change. Dump the box's
+# REAL post-migration schema and fail the deploy if the code references a table/
+# column that isn't there, BEFORE the swap — turning silent prod 500s into a loud
+# deploy-time stop. Known pre-existing gaps are allowlisted in audit-schema-drift.mjs
+# so this only blocks on NEW drift. A dump failure is non-fatal (don't block deploys
+# on an ssh hiccup).
+LIVE_SCHEMA_TMP="$(mktemp)"
+if OC_BOX="$OC_BOX" bash scripts/db/dump-live-schema.sh > "$LIVE_SCHEMA_TMP" 2>/dev/null && [ -s "$LIVE_SCHEMA_TMP" ]; then
+  if ! LIVE_SCHEMA_PATH="$LIVE_SCHEMA_TMP" node scripts/db/audit-schema-drift.mjs; then
+    rm -f "$LIVE_SCHEMA_TMP"
+    echo "ERROR: schema drift — deployed code references DB objects missing from the box (above)." >&2
+    echo "       Add the missing migration (or allowlist if intentional). Aborting deploy; live release untouched." >&2
+    exit 1
+  fi
+  rm -f "$LIVE_SCHEMA_TMP"
+else
+  rm -f "$LIVE_SCHEMA_TMP"
+  echo "WARN: could not dump live schema for the drift gate — skipping (non-fatal)." >&2
+fi
+
 echo "=== boot-test + atomic swap + health-check (with rollback) ==="
 ssh "${SSH_OPTS[@]}" "$OC_BOX" \
   "BASE='$OC_APP_BASE' SVC='$OC_SERVICE' PORT='$OC_PORT' BOOT='$OC_BOOT_PORT' HEALTH='$OC_HEALTH' bash -s" <<'REMOTE'

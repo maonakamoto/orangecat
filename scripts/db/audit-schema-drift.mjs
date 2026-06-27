@@ -21,7 +21,11 @@ import fs from 'fs';
 import path from 'path';
 
 const ROOT = process.cwd();
-const schema = JSON.parse(fs.readFileSync('scripts/db/live-schema.json', 'utf8'));
+// Default to the committed snapshot; the deploy pipeline points this at a FRESH
+// dump of the live box (scripts/db/dump-live-schema.sh) so drift is checked
+// against the real post-migration schema, not a snapshot that can itself be stale.
+const SCHEMA_PATH = process.env.LIVE_SCHEMA_PATH || 'scripts/db/live-schema.json';
+const schema = JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
 const tableCols = Object.fromEntries(Object.entries(schema).map(([t, c]) => [t, new Set(c)]));
 
 // DATABASE_TABLES.CONST -> 'table_name'
@@ -41,6 +45,40 @@ const ALLOW = new Set([
   'wishlist_feedback.user_id', // table keys on actor_id; needs actor resolution
   'wishlist_fulfillment_proofs.user_id', // proofs have no owner column — product decision
   'group_proposals.is_public', // proposals have no public flag
+]);
+
+// Tables a resolvable `.from()` addresses by a concrete name that are EXPECTED to
+// be absent from public.information_schema.columns (so the missing-table check
+// below doesn't false-positive): cross-schema tables, RPC-only relations, etc.
+// A genuinely-missing app table (e.g. ai_conversations drifting off the box) must
+// NOT be added here — that's exactly the silent drift this check exists to catch.
+const MISSING_TABLE_ALLOW = new Set([
+  // (a) not app tables — introspection / system catalogs
+  'information_schema.columns',
+  'information_schema.tables',
+  'pg_tables',
+  'pg_proc',
+  // (b) KNOWN DRIFT — these tables are referenced by app code but are NOT on the
+  //     self-host box (surfaced 2026-06-27 when this missing-table check was added;
+  //     the box silently drifted from supabase/migrations/*, the same root cause as
+  //     the ai_conversations/ai_messages outage). Allowlisted so the deploy gate
+  //     stays GREEN for the existing backlog while still failing on any NEW missing
+  //     table. REMEDIATION = apply each table's create migration to the box (then
+  //     remove it from this list). Tracked: these features 500 in prod until fixed.
+  'group_invitations',
+  'loan_collateral',
+  'project_support',
+  'project_support_stats',
+  'project_updates',
+  'research_progress_updates',
+  'research_votes',
+  'research_contributions',
+  'channel_waitlist',
+  'wallet_ownerships',
+  'user_presence',
+  'typing_indicators',
+  'audit_logs',
+  'contracts',
 ]);
 
 const FILTER_OPS = new Set([
@@ -144,7 +182,21 @@ for (const file of walk(path.join(ROOT, 'src'))) {
   while ((fm = fromRe.exec(text))) froms.push({ idx: fm.index, arg: fm[1], end: fromRe.lastIndex });
   for (let i = 0; i < froms.length; i++) {
     const table = resolveTable(froms[i].arg);
-    if (!table || !tableCols[table]) continue; // unknown/dynamic/view → skip
+    if (!table) continue; // dynamic/variable/computed table name → can't verify
+    if (!tableCols[table]) {
+      // Resolved to a concrete table the live schema doesn't have → drift (this is
+      // the ai_conversations-class failure: code addresses a table that silently
+      // never made it onto the box). Skipped silently before; now surfaced.
+      if (!MISSING_TABLE_ALLOW.has(table)) {
+        findings.push({
+          file: path.relative(ROOT, file),
+          line: lineOf(text, froms[i].end),
+          table,
+          col: '(table missing from live schema)',
+        });
+      }
+      continue;
+    }
     const cols = tableCols[table];
     const windowEnd = i + 1 < froms.length ? froms[i + 1].idx : Math.min(text.length, froms[i].end + 1200);
     const win = text.slice(froms[i].end, windowEnd);

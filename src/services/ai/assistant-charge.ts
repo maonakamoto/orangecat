@@ -146,14 +146,13 @@ async function bumpAssistantRevenue(
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await (admin.from(DATABASE_TABLES.AI_ASSISTANTS) as any)
-      .select('total_revenue, total_messages')
+      .select('total_revenue')
       .eq('id', assistantId)
       .single();
     const nextRevenue = roundBtc(Number(data?.total_revenue ?? 0) + amountBtc);
-    const nextMessages = Number(data?.total_messages ?? 0) + 1;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (admin.from(DATABASE_TABLES.AI_ASSISTANTS) as any)
-      .update({ total_revenue: nextRevenue, total_messages: nextMessages })
+      .update({ total_revenue: nextRevenue })
       .eq('id', assistantId);
   } catch (err) {
     logger.warn(

@@ -45,7 +45,36 @@
     "updated_at",
     "published_at",
     "total_withdrawn_btc",
-    "actor_id"
+    "actor_id",
+    "show_on_profile",
+    "allowed_models",
+    "default_model",
+    "min_model_tier"
+  ],
+  "ai_conversations": [
+    "id",
+    "assistant_id",
+    "user_id",
+    "title",
+    "status",
+    "total_messages",
+    "total_tokens_used",
+    "total_cost_btc",
+    "last_message_at",
+    "created_at",
+    "updated_at"
+  ],
+  "ai_cost_analytics": [
+    "assistant_id",
+    "assistant_title",
+    "creator_id",
+    "total_messages",
+    "total_tokens",
+    "total_cost_btc",
+    "total_api_cost_btc",
+    "total_creator_earnings_btc",
+    "avg_cost_per_message",
+    "unique_users"
   ],
   "ai_creator_earnings": [
     "id",
@@ -71,6 +100,19 @@
     "created_at",
     "updated_at",
     "net_amount_btc"
+  ],
+  "ai_messages": [
+    "id",
+    "conversation_id",
+    "role",
+    "content",
+    "tokens_used",
+    "cost_btc",
+    "model_used",
+    "metadata",
+    "created_at",
+    "api_cost_btc",
+    "creator_markup_btc"
   ],
   "asset_availability": [
     "id",
@@ -175,6 +217,38 @@
     "created_at"
   ],
   "cat_conversations": ["id", "user_id", "title", "is_default", "created_at", "updated_at"],
+  "cat_credit_entries": [
+    "id",
+    "seq",
+    "user_id",
+    "kind",
+    "amount_btc",
+    "balance_after_btc",
+    "ref",
+    "metadata",
+    "created_at"
+  ],
+  "cat_credit_topups": [
+    "id",
+    "user_id",
+    "amount_btc",
+    "payment_hash",
+    "bolt11",
+    "status",
+    "created_at",
+    "expires_at",
+    "paid_at"
+  ],
+  "cat_memories": [
+    "id",
+    "user_id",
+    "content",
+    "embedding",
+    "source",
+    "source_conversation_id",
+    "created_at",
+    "updated_at"
+  ],
   "cat_messages": [
     "id",
     "conversation_id",
@@ -383,9 +457,11 @@
     "created_at",
     "updated_at",
     "actor_id",
-    "is_test"
+    "is_test",
+    "show_on_profile"
   ],
   "follows": ["id", "follower_id", "following_id", "created_at"],
+  "github_repo_cache": ["user_id", "handle", "repos", "fetched_at"],
   "group_activities": [
     "id",
     "group_id",
@@ -609,7 +685,8 @@
     "desired_rate",
     "loan_type",
     "amount",
-    "is_test"
+    "is_test",
+    "show_on_profile"
   ],
   "message_details": [
     "id",
@@ -860,7 +937,8 @@
     "creator_id",
     "group_id",
     "actor_id",
-    "is_test"
+    "is_test",
+    "show_on_profile"
   ],
   "research_entities": [
     "id",
@@ -896,8 +974,10 @@
     "is_featured",
     "search_vector",
     "metadata",
-    "actor_id"
+    "actor_id",
+    "show_on_profile"
   ],
+  "schema_migrations": ["filename", "applied_at"],
   "shipping_addresses": [
     "id",
     "user_id",
@@ -1155,7 +1235,8 @@
     "created_at",
     "updated_at",
     "actor_id",
-    "is_test"
+    "is_test",
+    "show_on_profile"
   ],
   "user_documents": [
     "id",
@@ -1217,7 +1298,8 @@
     "updated_at",
     "group_id",
     "actor_id",
-    "is_test"
+    "is_test",
+    "show_on_profile"
   ],
   "user_services": [
     "id",
@@ -1239,7 +1321,8 @@
     "updated_at",
     "group_id",
     "actor_id",
-    "is_test"
+    "is_test",
+    "show_on_profile"
   ],
   "wallets": [
     "id",
@@ -1410,6 +1493,7 @@
     "cover_image_url",
     "created_at",
     "updated_at",
-    "is_test"
+    "is_test",
+    "show_on_profile"
   ]
 }
