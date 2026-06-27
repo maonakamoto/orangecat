@@ -210,22 +210,11 @@ export default async function PublicProfilePage({ params }: PageProps) {
     })) as { data: Array<{ is_active: boolean }> | null };
     walletCount = walletData ? walletData.filter(w => w.is_active).length : 0;
   } catch {
-    // Fallback: try querying wallet_ownerships table directly
-    try {
-      const { count } = await (
-        supabase
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .from(DATABASE_TABLES.WALLET_OWNERSHIPS) as any
-      )
-        .select('*', { count: 'exact', head: true })
-        .eq('owner_type', 'profile')
-        .eq('owner_id', profile.id)
-        .eq('is_active', true);
-      walletCount = count || 0;
-    } catch {
-      // Wallet architecture not fully migrated - this is expected during transition
-      // walletCount remains 0
-    }
+    // get_entity_wallets is the current wallet architecture; if it errs we just show
+    // 0 (legacy receive addresses are still counted below). The old wallet_ownerships
+    // fallback was removed — that table was never migrated onto the box and the
+    // try/catch silently swallowed its absence, so it never contributed a count.
+    walletCount = 0;
   }
 
   // A profile's legacy single bitcoin_address / lightning_address is a real way to

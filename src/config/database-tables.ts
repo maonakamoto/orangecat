@@ -50,7 +50,6 @@ export const DATABASE_TABLES = {
 
   // Wallets & Transactions
   WALLETS: 'wallets',
-  WALLET_OWNERSHIPS: 'wallet_ownerships',
   ENTITY_WALLETS: 'entity_wallets',
   TRANSACTIONS: 'transactions',
 
