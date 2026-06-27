@@ -36,6 +36,11 @@ export const AUDIT_ACTIONS = {
   PROFILE_UPDATED: 'PROFILE_UPDATED',
   PROFILE_DELETED: 'PROFILE_DELETED',
 
+  // Entities (generic — any registry entity type; the specific type is in entityType)
+  ENTITY_CREATED: 'ENTITY_CREATED',
+  ENTITY_UPDATED: 'ENTITY_UPDATED',
+  ENTITY_DELETED: 'ENTITY_DELETED',
+
   // Projects
   PROJECT_CREATED: 'PROJECT_CREATED',
   PROJECT_UPDATED: 'PROJECT_UPDATED',
@@ -76,7 +81,9 @@ type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];
 interface AuditLogEntry {
   action: AuditAction;
   userId: string | null;
-  entityType?: 'profile' | 'project' | 'wallet' | 'post' | 'donation' | 'other';
+  /** Any registry entity type (product, service, project, …) or profile/wallet/etc.
+   *  Stored in the audit_logs.entity_type text column. */
+  entityType?: string;
   entityId?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata?: Record<string, any>;
