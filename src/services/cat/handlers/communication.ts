@@ -1,24 +1,35 @@
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { isValidEntityType } from '@/config/entity-registry';
 import type { ActionHandler } from './types';
 
 export const communicationHandlers: Record<string, ActionHandler> = {
   post_to_timeline: async (supabase, _userId, actorId, params) => {
     // timeline_events schema: event_type, event_subtype, subject_type (all required),
-    // title (required), description (text), content (jsonb { text: ... })
-    // No entity_id column — not timeline_posts (which doesn't exist).
+    // title (required), description (text), content (jsonb { text: ... }).
+    // An entity is LINKED via subject_type/subject_id — the post is "about" that
+    // entity — so "promote my project" surfaces the project on the feed instead of
+    // an unlinked blurb. Plain posts subject the author's own profile.
     const text = (params.content as string) || '';
     const title = text.length > 100 ? text.slice(0, 97) + '…' : text;
+
+    const entityId = params.entity_id as string | undefined;
+    const entityType = params.entity_type as string | undefined;
+    const linkEntity = !!entityId && !!entityType && isValidEntityType(entityType);
 
     const { data, error } = await supabase
       .from(DATABASE_TABLES.TIMELINE_EVENTS)
       .insert({
         actor_id: actorId,
         event_type: 'post',
-        event_subtype: 'text',
-        subject_type: 'profile',
+        event_subtype: linkEntity ? 'promotion' : 'text',
+        subject_type: linkEntity ? entityType : 'profile',
+        subject_id: linkEntity ? entityId : null,
         title,
         description: text,
-        content: { text },
+        content: {
+          text,
+          ...(linkEntity ? { linked_entity: { type: entityType, id: entityId } } : {}),
+        },
         visibility: (params.visibility as string) || 'public',
       })
       .select()
@@ -28,9 +39,12 @@ export const communicationHandlers: Record<string, ActionHandler> = {
       return { success: false, error: error.message };
     }
     const snippet = text.length > 60 ? text.slice(0, 57) + '…' : text;
+    const displayMessage = linkEntity
+      ? `📢 Promoted your ${entityType} to the timeline: "${snippet}"`
+      : `📢 Posted to timeline: "${snippet}"`;
     return {
       success: true,
-      data: { ...data, displayMessage: `📢 Posted to timeline: "${snippet}"` },
+      data: { ...data, displayMessage },
     };
   },
 

@@ -619,7 +619,14 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
         name: 'entity_id',
         type: 'entity_id',
         required: false,
-        description: 'Entity to link/promote',
+        description: 'Entity to link/promote (pass entity_type too)',
+      },
+      {
+        name: 'entity_type',
+        type: 'string',
+        required: false,
+        description:
+          'Type of the linked entity (project, product, cause, event, …) — required when entity_id is set',
       },
     ],
     examples: [
