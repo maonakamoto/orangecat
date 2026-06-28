@@ -57,6 +57,7 @@ const fieldGroups: FieldGroup[] = [
     id: 'goal',
     title: 'Fundraising Goal',
     description: 'Set your target amount (optional for open-ended fundraising)',
+    advanced: true,
     fields: [
       {
         name: 'goal_amount',
@@ -72,7 +73,8 @@ const fieldGroups: FieldGroup[] = [
   {
     id: 'payment',
     title: 'Bitcoin & Payments',
-    description: 'Select a wallet or enter an address',
+    description: 'Defaults to your profile wallet — change it only if you want a separate one',
+    advanced: true,
     customComponent: WalletSelectorField,
     fields: [
       { name: 'bitcoin_address', label: 'Bitcoin Address', type: 'bitcoin_address' },
@@ -83,6 +85,7 @@ const fieldGroups: FieldGroup[] = [
     id: 'visibility',
     title: 'Profile Visibility',
     description: 'Control where this cause appears',
+    advanced: true,
     fields: [
       {
         name: 'show_on_profile',

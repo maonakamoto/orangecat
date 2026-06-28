@@ -93,6 +93,7 @@ const fieldGroups: FieldGroup[] = [
     id: 'inventory',
     title: 'Inventory & Fulfillment',
     description: 'Manage stock and delivery',
+    advanced: true,
     fields: [
       {
         name: 'inventory_count',
@@ -114,6 +115,7 @@ const fieldGroups: FieldGroup[] = [
     id: 'visibility',
     title: 'Profile Visibility',
     description: 'Control where this product appears',
+    advanced: true,
     fields: [
       {
         name: 'show_on_profile',

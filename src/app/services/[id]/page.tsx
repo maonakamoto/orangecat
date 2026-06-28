@@ -52,8 +52,15 @@ const config: EntityDetailConfig = {
       ...(entity.duration_minutes && { duration: `PT${entity.duration_minutes}M` }),
     };
   },
-  renderDetails: entity => {
+  // Price up top, above the fold (was a row inside the Details card below).
+  headerFact: entity => {
     const { amount, currency, perHour } = getServicePrice(entity);
+    return amount > 0 ? (
+      <PriceDisplay amount={amount} currency={currency} suffix={perHour ? ' / hr' : undefined} />
+    ) : null;
+  },
+  renderDetails: entity => {
+    const { amount, currency } = getServicePrice(entity);
     const durationMinutes = (entity as { duration_minutes?: number }).duration_minutes;
     return (
       <Card>
@@ -61,17 +68,6 @@ const config: EntityDetailConfig = {
           <CardTitle className="text-lg">Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {amount > 0 && (
-            <div className="flex items-center justify-between gap-4">
-              <span className="text-fg-secondary">Price</span>
-              <PriceDisplay
-                amount={amount}
-                currency={currency}
-                className="text-xl font-bold text-fg-primary text-right"
-                suffix={perHour ? ' / hr' : undefined}
-              />
-            </div>
-          )}
           {durationMinutes && (
             <div className="flex items-center justify-between">
               <span className="text-fg-secondary">Duration</span>
