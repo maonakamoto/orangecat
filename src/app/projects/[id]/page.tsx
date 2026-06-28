@@ -112,7 +112,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description =
     project.description ||
     `Support ${project.title} on ${APP_NAME}. ${progress > 0 ? `${progress}% funded. ` : ''}Community-funded project by ${creatorName}.`;
-  const image = creatorProfile?.avatar_url || '/images/og-default.png';
+  // Rich dynamic share card (cover + title + funding goal), consistent with
+  // every other entity type. Replaces the avatar-only image (and a dead
+  // /images/og-default.png fallback that 404'd to social previewers).
+  const image = `${SITE_URL}/api/og/entity/project/${id}`;
   const url = `${SITE_URL}${ROUTES.PROJECTS.VIEW(id)}`;
 
   return {

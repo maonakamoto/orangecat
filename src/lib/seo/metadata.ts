@@ -20,18 +20,20 @@ export function generateEntityMetadata({
   id,
   title,
   description,
-  imageUrl,
+  // Accepted for backward-compat but no longer used for the share image:
+  // the dynamic entity OG card below re-derives the cover from the row and
+  // renders it WITH the title + key fact, which previews far better than a
+  // bare cropped image.
+  imageUrl: _imageUrl,
 }: EntityMetadataInput): Metadata {
   const entityMeta = ENTITY_REGISTRY[type];
   const url = `${BASE_URL}${entityMeta.publicBasePath}/${id}`;
   const desc = description || `${title} on OrangeCat - Bitcoin-native marketplace.`;
 
-  // Fallback to the branded root OG card (src/app/opengraph-image.tsx)
-  // when an entity has no avatar/cover image. The previous hardcoded
-  // `/images/og-default.png` pointed at a file that doesn't exist; every
-  // share of a service/product/project/cause/loan/event/asset/investment/
-  // research detail page emitted a 404 to social previewers.
-  const image = imageUrl || `${BASE_URL}/opengraph-image`;
+  // Rich per-entity share card (cover/mark + type + title + key fact). Every
+  // entity type that uses this helper now unfurls as a branded card instead
+  // of the generic site image — the top-of-funnel lever for shared links.
+  const image = `${BASE_URL}/api/og/entity/${type}/${id}`;
 
   return {
     title,

@@ -77,6 +77,12 @@ export interface EntityDetailConfig {
   getCoverImages?: (entity: EntityData) => string[];
   /** Header badges/extra info (e.g., date for events, category for products) */
   renderHeaderExtra?: (entity: EntityData) => ReactNode;
+  /**
+   * The ONE decision-relevant fact (price / goal / rate), rendered prominently
+   * right under the title so a shared-link recipient sees it above the fold —
+   * not buried in a card lower down. Drives comprehension → action.
+   */
+  headerFact?: (entity: EntityData) => ReactNode;
   /** Entity-specific detail cards below description */
   renderDetails?: (entity: EntityData) => ReactNode;
   /**
@@ -230,6 +236,11 @@ export default async function PublicEntityDetailPage({
                     )}
                     {config.renderHeaderExtra?.(entity)}
                   </div>
+                  {config.headerFact && (
+                    <div className="mt-3 text-xl sm:text-2xl font-semibold text-fg-primary">
+                      {config.headerFact(entity)}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
