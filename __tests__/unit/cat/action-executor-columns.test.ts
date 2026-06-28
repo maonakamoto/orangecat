@@ -880,7 +880,10 @@ describe('Cat action-executor — correct DB column names', () => {
       expect(insert!.event_type).toBe('post');
       expect(insert!.event_subtype).toBe('text');
       expect(insert!.subject_type).toBe('profile');
-      expect(insert!.actor_id).toBe(ACTOR_ID);
+      // timeline_events.actor_id holds the USER id, not the actor id (the INSERT RLS
+      // policy is `auth.uid() = actor_id` and the feed views join it → profiles.id).
+      // Inserting the distinct actor id fails RLS — so this must be the user id.
+      expect(insert!.actor_id).toBe(USER_ID);
 
       // title is a truncated version of content; description is the full text
       expect(insert!.title).toBe(content);

@@ -3,12 +3,17 @@ import { isValidEntityType } from '@/config/entity-registry';
 import type { ActionHandler } from './types';
 
 export const communicationHandlers: Record<string, ActionHandler> = {
-  post_to_timeline: async (supabase, _userId, actorId, params) => {
+  post_to_timeline: async (supabase, userId, _actorId, params) => {
     // timeline_events schema: event_type, event_subtype, subject_type (all required),
     // title (required), description (text), content (jsonb { text: ... }).
     // An entity is LINKED via subject_type/subject_id — the post is "about" that
     // entity — so "promote my project" surfaces the project on the feed instead of
     // an unlinked blurb. Plain posts subject the author's own profile.
+    //
+    // IMPORTANT: despite the name, timeline_events.actor_id holds the USER id, not the
+    // actor id — the INSERT RLS policy is `WITH CHECK (auth.uid() = actor_id)` and the
+    // feed/enriched views join actor_id → profiles.id. Inserting the (distinct) actor id
+    // here fails RLS, which is why posting silently never worked. Use userId.
     const text = (params.content as string) || '';
     const title = text.length > 100 ? text.slice(0, 97) + '…' : text;
 
@@ -19,7 +24,7 @@ export const communicationHandlers: Record<string, ActionHandler> = {
     const { data, error } = await supabase
       .from(DATABASE_TABLES.TIMELINE_EVENTS)
       .insert({
-        actor_id: actorId,
+        actor_id: userId,
         event_type: 'post',
         event_subtype: linkEntity ? 'promotion' : 'text',
         subject_type: linkEntity ? entityType : 'profile',
