@@ -302,6 +302,21 @@
     "updated_at"
   ],
   "channel_waitlist": ["id", "email", "user_id", "source", "referrer", "created_at"],
+  "circles": [
+    "id",
+    "actor_id",
+    "title",
+    "description",
+    "category",
+    "visibility",
+    "cover_image_url",
+    "tags",
+    "status",
+    "member_count",
+    "is_test",
+    "created_at",
+    "updated_at"
+  ],
   "community_timeline_no_duplicates": [
     "id",
     "event_type",

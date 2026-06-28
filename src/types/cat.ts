@@ -31,6 +31,7 @@ export const CAT_CREATABLE_ENTITY_TYPES = [
   'research',
   'wishlist',
   'group',
+  'circle',
   'ai_assistant',
   'document',
 ] as const satisfies readonly EntityType[];

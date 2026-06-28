@@ -15,4 +15,5 @@ export * from './ai';
 export * from './wishlist';
 export * from './documents';
 export * from './groups';
+export * from './circles';
 export * from './proposals';

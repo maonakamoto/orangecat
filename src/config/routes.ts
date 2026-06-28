@@ -308,6 +308,9 @@ export const ROUTES = {
   CAUSES: {
     VIEW: (id: string) => `${ENTITY_REGISTRY['cause'].publicBasePath}/${id}`,
   },
+  CIRCLES: {
+    VIEW: (id: string) => `${ENTITY_REGISTRY['circle'].publicBasePath}/${id}`,
+  },
   LOANS: {
     VIEW: (id: string) => `${ENTITY_REGISTRY['loan'].publicBasePath}/${id}`,
   },
@@ -361,6 +364,8 @@ export const ROUTES = {
     SERVICES_CREATE: ENTITY_REGISTRY['service'].createPath,
     CAUSES: ENTITY_REGISTRY['cause'].basePath,
     CAUSES_CREATE: ENTITY_REGISTRY['cause'].createPath,
+    CIRCLES: ENTITY_REGISTRY['circle'].basePath,
+    CIRCLES_CREATE: ENTITY_REGISTRY['circle'].createPath,
     AI_ASSISTANTS: ENTITY_REGISTRY['ai_assistant'].basePath,
     AI_ASSISTANTS_CREATE: ENTITY_REGISTRY['ai_assistant'].createPath,
     WISHLISTS: ENTITY_REGISTRY['wishlist'].basePath,

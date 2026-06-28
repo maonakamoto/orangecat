@@ -38,6 +38,7 @@ const ENTITY_COLUMNS: Record<EntityType, string> = {
     'id, title, description, event_type, category, start_date, end_date, venue_name, venue_city, is_online, status, ticket_price, is_free, currency, created_at',
   wallet: 'id, label, wallet_type, address, is_active, created_at',
   group: 'id, name, slug, description, is_public, created_at',
+  circle: 'id, title, description, category, visibility, tags, member_count, created_at',
   research:
     'id, title, description, field, methodology, expected_outcome, funding_goal_btc, funding_raised_btc, status, created_at',
   wishlist:
@@ -58,6 +59,7 @@ const USER_ID_FIELD: Record<EntityType, string> = {
   event: 'actor_id',
   wallet: 'profile_id',
   group: 'created_by',
+  circle: 'actor_id',
   research: 'user_id',
   wishlist: 'actor_id',
   document: 'actor_id',

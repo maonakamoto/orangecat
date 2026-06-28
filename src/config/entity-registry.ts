@@ -35,6 +35,7 @@ import {
   FileText,
   TrendingUp,
   FlaskConical,
+  CircleDashed,
 } from 'lucide-react';
 
 // ==================== ENTITY TYPES ====================
@@ -50,6 +51,7 @@ export const ENTITY_TYPES = [
   'cause',
   'ai_assistant',
   'group',
+  'circle',
   'asset',
   'loan',
   'investment',
@@ -270,6 +272,25 @@ export const ENTITY_REGISTRY: Record<EntityType, EntityMetadata> = {
     createActionLabel: 'Start a community group',
     category: 'community',
     createPriority: 1,
+    paymentPattern: 'none',
+  },
+  circle: {
+    type: 'circle',
+    name: 'Circle',
+    namePlural: 'Circles',
+    tableName: 'circles',
+    userIdField: 'actor_id',
+    icon: CircleDashed,
+    colorTheme: 'tiffany',
+    basePath: '/dashboard/circles',
+    createPath: '/dashboard/circles/create',
+    publicBasePath: '/circles',
+    apiEndpoint: '/api/circles',
+    hasTemplates: false,
+    description: 'Lightweight communities and interest circles',
+    createActionLabel: 'Start a circle',
+    category: 'community',
+    createPriority: 2,
     paymentPattern: 'none',
   },
 

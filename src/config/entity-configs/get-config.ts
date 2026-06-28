@@ -23,13 +23,13 @@ import { groupConfig } from './group-config';
 import { wishlistConfig } from './wishlist-config';
 import { researchWizardConfig } from './research-wizard-config';
 import { documentFormConfig } from './document-form-config';
+import { circleConfig } from './circle-config';
 
 /**
  * Map of entity types to their configurations
  *
  * Note: Only includes entity types that are defined in ENTITY_TYPES
- * from entity-registry.ts. Some configs (circle, organization) exist
- * but their entity types are not in the registry.
+ * from entity-registry.ts.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ENTITY_CONFIGS: Partial<Record<EntityType, EntityConfig<any>>> = {
@@ -46,6 +46,7 @@ const ENTITY_CONFIGS: Partial<Record<EntityType, EntityConfig<any>>> = {
   wishlist: wishlistConfig,
   research: researchWizardConfig,
   document: documentFormConfig,
+  circle: circleConfig,
 };
 
 /**
