@@ -14,6 +14,7 @@
  */
 
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 
 export type PaidTier = 'free' | 'pro';
@@ -43,7 +44,7 @@ const FREE_PLAN: UserPlan = {
  */
 export async function getUserPlan(supabase: AnySupabaseClient, userId: string): Promise<UserPlan> {
   const { data, error } = await supabase
-    .from('user_plans')
+    .from(DATABASE_TABLES.USER_PLANS)
     .select('tier, daily_limit, expires_at')
     .eq('user_id', userId)
     .maybeSingle();

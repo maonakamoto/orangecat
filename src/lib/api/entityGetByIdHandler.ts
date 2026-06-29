@@ -13,6 +13,7 @@
  */
 
 import { NextRequest } from 'next/server';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { createServerClient } from '@/lib/supabase/server';
 import {
   apiSuccess,
@@ -165,7 +166,7 @@ async function isCallerOwner(
   }
   if (row.actor_id) {
     const { data } = await supabase
-      .from('actors')
+      .from(DATABASE_TABLES.ACTORS)
       .select('id')
       .eq('id', row.actor_id as string)
       .eq('user_id', userId)

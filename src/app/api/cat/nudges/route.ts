@@ -8,6 +8,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from 'next/server';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { createServerClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { generateNudges } from '@/services/cat/nudges';
@@ -29,7 +30,7 @@ export async function GET() {
   const db = createAdminClient() as any;
 
   const { data: existing } = await db
-    .from('user_nudges')
+    .from(DATABASE_TABLES.USER_NUDGES)
     .select('id, nudge_type, title, body, cta_label, cta_url, score, generated_at')
     .eq('user_id', user.id)
     .eq('status', 'active')
@@ -40,7 +41,7 @@ export async function GET() {
   let stale = !existing?.length || Date.now() - newest > STALE_MS;
   if (!stale) {
     const { data: prof } = await db
-      .from('profiles')
+      .from(DATABASE_TABLES.PROFILES)
       .select('updated_at')
       .eq('id', user.id)
       .maybeSingle();
@@ -57,16 +58,20 @@ export async function GET() {
   try {
     const fresh = await generateNudges(db, user.id);
     const { data: dismissedRows } = await db
-      .from('user_nudges')
+      .from(DATABASE_TABLES.USER_NUDGES)
       .select('dedupe_key')
       .eq('user_id', user.id)
       .eq('status', 'dismissed');
     const dismissed = new Set((dismissedRows ?? []).map((r: any) => r.dedupe_key));
     const toStore = fresh.filter(n => !dismissed.has(n.dedupe_key));
 
-    await db.from('user_nudges').delete().eq('user_id', user.id).eq('status', 'active');
+    await db
+      .from(DATABASE_TABLES.USER_NUDGES)
+      .delete()
+      .eq('user_id', user.id)
+      .eq('status', 'active');
     if (toStore.length > 0) {
-      await db.from('user_nudges').upsert(
+      await db.from(DATABASE_TABLES.USER_NUDGES).upsert(
         toStore.map(n => ({
           user_id: user.id,
           nudge_type: n.nudge_type,
@@ -84,7 +89,7 @@ export async function GET() {
     }
 
     const { data: stored } = await db
-      .from('user_nudges')
+      .from(DATABASE_TABLES.USER_NUDGES)
       .select('id, nudge_type, title, body, cta_label, cta_url, score, generated_at')
       .eq('user_id', user.id)
       .eq('status', 'active')
@@ -110,7 +115,7 @@ export async function POST(request: Request) {
   }
   const db = createAdminClient() as any;
   await db
-    .from('user_nudges')
+    .from(DATABASE_TABLES.USER_NUDGES)
     .update({ status: 'dismissed', dismissed_at: new Date().toISOString() })
     .eq('user_id', user.id)
     .eq('id', body.id);

@@ -154,6 +154,24 @@ export const DATABASE_TABLES = {
   // Entity Tables (for direct access when not using entity-registry)
   USER_ASSETS: 'assets',
   AI_ASSISTANTS: 'ai_assistants',
+
+  // Cat nudges
+  USER_NUDGES: 'user_nudges',
+
+  // Search / embeddings
+  CONTENT_EMBEDDINGS: 'content_embeddings',
+
+  // Collaboration
+  PROJECT_ROLES: 'project_roles',
+
+  // Plans
+  USER_PLANS: 'user_plans',
+
+  // OAuth provider ("Login with OrangeCat")
+  OAUTH_CLIENTS: 'oauth_clients',
+  OAUTH_AUTH_CODES: 'oauth_auth_codes',
+  OAUTH_REFRESH_TOKENS: 'oauth_refresh_tokens',
+  OAUTH_USER_GRANTS: 'oauth_user_grants',
 } as const;
 
 // Timeline tables shorthand (for backward compatibility with timeline services)

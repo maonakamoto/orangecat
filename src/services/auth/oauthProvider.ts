@@ -11,6 +11,7 @@
  * See src/lib/oauth/config.ts (SSOT) and docs/architecture/PLATFORM_AND_COLLABORATION.md.
  */
 import { createHash, randomBytes } from 'node:crypto';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { SignJWT } from 'jose';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
@@ -39,7 +40,7 @@ export interface OAuthClient {
 
 export async function getClient(clientId: string): Promise<OAuthClient | null> {
   const { data } = await adminDb()
-    .from('oauth_clients')
+    .from(DATABASE_TABLES.OAUTH_CLIENTS)
     .select('*')
     .eq('client_id', clientId)
     .is('disabled_at', null)
@@ -79,7 +80,7 @@ export async function createAuthCode(params: {
   const code = randomToken(32);
   const expiresAt = new Date(Date.now() + OAUTH_TTL.authCode * 1000).toISOString();
   const { error } = await adminDb()
-    .from('oauth_auth_codes')
+    .from(DATABASE_TABLES.OAUTH_AUTH_CODES)
     .insert({
       code_hash: sha256(code),
       client_id: params.clientId,
@@ -116,7 +117,7 @@ export async function consumeAuthCode(
 ): Promise<ConsumedCode | null> {
   const db = adminDb();
   const { data } = await db
-    .from('oauth_auth_codes')
+    .from(DATABASE_TABLES.OAUTH_AUTH_CODES)
     .select('*')
     .eq('code_hash', sha256(code))
     .maybeSingle();
@@ -143,7 +144,7 @@ export async function consumeAuthCode(
 
   // Single-use: conditional update guards against a concurrent second redeem.
   const { data: claimed } = await db
-    .from('oauth_auth_codes')
+    .from(DATABASE_TABLES.OAUTH_AUTH_CODES)
     .update({ consumed_at: new Date().toISOString() })
     .eq('id', data.id)
     .is('consumed_at', null)
@@ -180,7 +181,7 @@ export async function profileClaims(
     return {};
   }
   const { data: profile } = await adminDb()
-    .from('profiles')
+    .from(DATABASE_TABLES.PROFILES)
     .select('username, name, avatar_url, email')
     .eq('id', userId)
     .maybeSingle();
@@ -243,7 +244,7 @@ export async function issueTokens(params: {
   if (params.withRefresh !== false) {
     refresh_token = randomToken(32);
     const { error } = await adminDb()
-      .from('oauth_refresh_tokens')
+      .from(DATABASE_TABLES.OAUTH_REFRESH_TOKENS)
       .insert({
         token_hash: sha256(refresh_token),
         client_id: params.client.client_id,
@@ -275,7 +276,7 @@ export async function rotateRefreshToken(
 ): Promise<TokenResponse | null> {
   const db = adminDb();
   const { data } = await db
-    .from('oauth_refresh_tokens')
+    .from(DATABASE_TABLES.OAUTH_REFRESH_TOKENS)
     .select('*')
     .eq('token_hash', sha256(refreshToken))
     .maybeSingle();
@@ -289,7 +290,7 @@ export async function rotateRefreshToken(
 
   // Revoke (rotate) — conditional to avoid double-rotation races.
   const { data: revoked } = await db
-    .from('oauth_refresh_tokens')
+    .from(DATABASE_TABLES.OAUTH_REFRESH_TOKENS)
     .update({ revoked_at: new Date().toISOString(), last_used_at: new Date().toISOString() })
     .eq('id', data.id)
     .is('revoked_at', null)
@@ -316,7 +317,7 @@ export async function hasRememberedGrant(
   scopes: string[]
 ): Promise<boolean> {
   const { data } = await adminDb()
-    .from('oauth_user_grants')
+    .from(DATABASE_TABLES.OAUTH_USER_GRANTS)
     .select('scopes')
     .eq('user_id', userId)
     .eq('client_id', clientId)
@@ -334,7 +335,7 @@ export async function recordGrant(
   scopes: string[]
 ): Promise<void> {
   await adminDb()
-    .from('oauth_user_grants')
+    .from(DATABASE_TABLES.OAUTH_USER_GRANTS)
     .upsert(
       { user_id: userId, client_id: clientId, scopes, granted_at: new Date().toISOString() },
       { onConflict: 'user_id,client_id' }

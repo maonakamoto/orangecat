@@ -175,7 +175,7 @@ export function useAISettings() {
             : prev.preferences;
         return { ...prev, keys: reordered, preferences };
       });
-      const res = await fetch('/api/user/api-keys', {
+      const res = await fetch(API_ROUTES.USER.API_KEYS, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ order: orderedIds }),

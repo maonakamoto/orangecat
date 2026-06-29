@@ -21,6 +21,7 @@
  */
 
 import { useState } from 'react';
+import { API_ROUTES } from '@/config/api-routes';
 import { toast } from 'sonner';
 import { Calendar, Loader2 } from 'lucide-react';
 import {
@@ -119,7 +120,7 @@ export function BookEntityDialog({
 
     setSubmitting(true);
     try {
-      const res = await fetch('/api/bookings', {
+      const res = await fetch(API_ROUTES.BOOKINGS.BASE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

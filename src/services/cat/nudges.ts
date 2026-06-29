@@ -14,6 +14,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { ROUTES } from '@/config/routes';
 import { DEFAULT_FREE_MODEL_ID } from '@/config/ai-models';
 import { createOpenRouterService } from '@/services/ai';
@@ -45,7 +46,7 @@ const usernameFromUrl = (url: string): string | null => {
 
 export async function generateNudges(supabase: any, userId: string): Promise<Nudge[]> {
   const { data: profile } = await supabase
-    .from('profiles')
+    .from(DATABASE_TABLES.PROFILES)
     .select('id, username, name, bio, location_city')
     .eq('id', userId)
     .maybeSingle();
@@ -57,7 +58,7 @@ export async function generateNudges(supabase: any, userId: string): Promise<Nud
 
   // ── User's own entities (active + drafts) ──────────────────────────────────
   const { data: actor } = await supabase
-    .from('actors')
+    .from(DATABASE_TABLES.ACTORS)
     .select('id')
     .eq('user_id', userId)
     .eq('actor_type', 'user')

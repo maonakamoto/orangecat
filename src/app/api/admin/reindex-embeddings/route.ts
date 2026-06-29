@@ -21,6 +21,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from 'next/server';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { embeddingsEnabled, embedTexts } from '@/services/ai/embeddings';
 import { ENTITY_STATUS } from '@/config/database-constants';
@@ -103,7 +104,7 @@ async function reconcileOne(
 
   if (type === 'profile') {
     const { data } = await supabase
-      .from('profiles')
+      .from(DATABASE_TABLES.PROFILES)
       .select(
         'id, username, name, bio, location_city, updated_at, last_active_at, verification_status'
       )
@@ -113,7 +114,7 @@ async function reconcileOne(
       const text = [data.name, data.bio, data.location_city].filter(Boolean).join('. ').trim();
       if (text) {
         const { count: followers } = await supabase
-          .from('follows')
+          .from(DATABASE_TABLES.FOLLOWS)
           .select('id', { count: 'exact', head: true })
           .eq('following_id', data.id);
         item = {
@@ -162,7 +163,11 @@ async function reconcileOne(
   }
 
   if (!item) {
-    await supabase.from('content_embeddings').delete().eq('entity_type', type).eq('entity_id', id);
+    await supabase
+      .from(DATABASE_TABLES.CONTENT_EMBEDDINGS)
+      .delete()
+      .eq('entity_type', type)
+      .eq('entity_id', id);
     return { indexed: 0, pruned: 1, failed: 0 };
   }
 
@@ -170,7 +175,7 @@ async function reconcileOne(
   if (!vec) {
     return { indexed: 0, pruned: 0, failed: 1 };
   }
-  const { error } = await supabase.from('content_embeddings').upsert(
+  const { error } = await supabase.from(DATABASE_TABLES.CONTENT_EMBEDDINGS).upsert(
     [
       {
         entity_type: item.entity_type,
@@ -232,7 +237,7 @@ export async function POST(request: Request) {
 
   // Follower counts (one query) → per-profile connection signal.
   const followerCount = new Map<string, number>();
-  const { data: follows } = await supabase.from('follows').select('following_id');
+  const { data: follows } = await supabase.from(DATABASE_TABLES.FOLLOWS).select('following_id');
   for (const f of follows ?? []) {
     if (f.following_id) {
       followerCount.set(f.following_id, (followerCount.get(f.following_id) ?? 0) + 1);
@@ -240,7 +245,7 @@ export async function POST(request: Request) {
   }
 
   const { data: profiles } = await supabase
-    .from('profiles')
+    .from(DATABASE_TABLES.PROFILES)
     .select(
       'id, username, name, bio, location_city, updated_at, last_active_at, verification_status'
     )
@@ -314,7 +319,7 @@ export async function POST(request: Request) {
 
   // ── 2. Load what's already indexed (key → last-embedded source timestamp) ────
   const { data: existingRows } = await supabase
-    .from('content_embeddings')
+    .from(DATABASE_TABLES.CONTENT_EMBEDDINGS)
     .select('entity_type, entity_id, updated_at');
   const existing = new Map<string, string | null>();
   for (const r of existingRows ?? []) {
@@ -358,7 +363,7 @@ export async function POST(request: Request) {
       .filter((r): r is NonNullable<typeof r> => r !== null);
     if (rows.length > 0) {
       const { error } = await supabase
-        .from('content_embeddings')
+        .from(DATABASE_TABLES.CONTENT_EMBEDDINGS)
         .upsert(rows, { onConflict: 'entity_type,entity_id' });
       if (error) {
         logger.error('content_embeddings upsert failed', { error }, 'Reindex');
@@ -380,7 +385,7 @@ export async function POST(request: Request) {
       continue;
     }
     const { error } = await supabase
-      .from('content_embeddings')
+      .from(DATABASE_TABLES.CONTENT_EMBEDDINGS)
       .update({ quality_score: it.quality })
       .eq('entity_type', it.entity_type)
       .eq('entity_id', it.entity_id);
@@ -394,7 +399,7 @@ export async function POST(request: Request) {
   for (const k of toPrune) {
     const [etype, eid] = k.split(':');
     const { error } = await supabase
-      .from('content_embeddings')
+      .from(DATABASE_TABLES.CONTENT_EMBEDDINGS)
       .delete()
       .eq('entity_type', etype)
       .eq('entity_id', eid);
