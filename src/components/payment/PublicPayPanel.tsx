@@ -3,9 +3,10 @@
  *
  * Permissionless participation is a core principle: a logged-out visitor must
  * be able to send sats. The seller's receiving address is public data (the same
- * address the profile page already shows), so this reveals it with a baked-in
- * amount, a QR, and an open-in-wallet link. The payer settles directly from
- * their own wallet — non-custodial, no sign-up.
+ * address the profile page already shows), so this reveals it with a QR, an
+ * open-in-wallet link, and — for open-amount contributions — quick amount
+ * suggestions. The payer settles directly from their own wallet — non-custodial,
+ * no sign-up.
  *
  * Only renders for sellers with a static address (on-chain or Lightning
  * address). NWC-only sellers have no static address to reveal — the caller
@@ -14,10 +15,12 @@
 
 'use client';
 
+import { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import Link from 'next/link';
 import { Bitcoin, Zap, Copy, Check, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { cn } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
@@ -42,6 +45,9 @@ interface PublicPayPanelProps {
   signInHref?: string;
 }
 
+/** Quick-pick contribution amounts (BTC). Small/Medium/Large, like the dashboard. */
+const SUGGESTED_BTC = [0.001, 0.005, 0.01] as const;
+
 function truncateMiddle(value: string, head = 12, tail = 10): string {
   return value.length <= head + tail + 1 ? value : `${value.slice(0, head)}…${value.slice(-tail)}`;
 }
@@ -61,15 +67,25 @@ export function PublicPayPanel({
 
   const isOnchain = method === 'onchain';
   const Icon = isOnchain ? Bitcoin : Zap;
+  const title = isOnchain ? 'Pay with Bitcoin' : 'Pay with Lightning';
+
+  const hasFixedAmount = !isContribution && priceAmount !== undefined && priceAmount > 0;
+
+  // Open-amount contributions: let the payer pick a quick amount. For on-chain
+  // it bakes into the BIP21 URI (wallet pre-fills it); for a Lightning address
+  // the URI can't carry an amount, so it's shown as guidance and the wallet
+  // prompts for it.
+  const [selectedBtc, setSelectedBtc] = useState<number | null>(null);
+  const effectiveBtc = hasFixedAmount ? amountBtc : (selectedBtc ?? undefined);
 
   // Build the payment URI. On-chain uses BIP21 with the amount + label baked in;
   // a Lightning address is paid via the lightning: scheme (wallet prompts for
-  // the amount, which we also show on screen).
+  // the amount, which we also surface on screen).
   const paymentUri = (() => {
     if (isOnchain) {
       const params = new URLSearchParams();
-      if (amountBtc && amountBtc > 0) {
-        params.set('amount', amountBtc.toFixed(8).replace(/\.?0+$/, ''));
+      if (effectiveBtc && effectiveBtc > 0) {
+        params.set('amount', effectiveBtc.toFixed(8).replace(/\.?0+$/, ''));
       }
       if (entityTitle) {
         params.set('label', entityTitle);
@@ -80,14 +96,12 @@ export function PublicPayPanel({
     return `lightning:${address}`;
   })();
 
-  const hasFixedAmount = !isContribution && priceAmount !== undefined && priceAmount > 0;
-
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
           <Icon className="h-5 w-5 text-bitcoinOrange" />
-          Pay with Bitcoin
+          {title}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -104,7 +118,41 @@ export function PublicPayPanel({
             </span>
           </div>
         ) : (
-          <p className="text-sm text-fg-secondary">Send any amount in Bitcoin to support this.</p>
+          <div className="space-y-2">
+            <p className="text-sm text-fg-secondary">
+              Choose an amount, or send any in your wallet.
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {SUGGESTED_BTC.map(btc => {
+                const active = selectedBtc === btc;
+                return (
+                  <button
+                    key={btc}
+                    type="button"
+                    onClick={() => setSelectedBtc(active ? null : btc)}
+                    aria-pressed={active}
+                    className={cn(
+                      'rounded-lg border px-2 py-2 text-center transition-colors',
+                      active
+                        ? 'border-bitcoinOrange bg-bitcoinOrange/10 text-fg-primary'
+                        : 'border-default bg-surface-raised/40 text-fg-secondary hover:bg-surface-raised/70'
+                    )}
+                  >
+                    <span className="block text-sm font-semibold text-fg-primary">
+                      {formatAmountBtc(btc)}
+                    </span>
+                    <span className="block text-xs">{formatPrice(btc, 'BTC')}</span>
+                  </button>
+                );
+              })}
+            </div>
+            {selectedBtc !== null && !isOnchain && (
+              <p className="text-xs text-fg-tertiary">
+                Lightning wallets ask for the amount — enter {formatAmountBtc(selectedBtc)} when
+                prompted.
+              </p>
+            )}
+          </div>
         )}
 
         <div className="flex justify-center rounded-lg border border-default bg-surface-base p-4">
@@ -141,7 +189,8 @@ export function PublicPayPanel({
         </a>
 
         <p className="text-xs text-fg-secondary text-center">
-          Pay directly from any Bitcoin wallet — no account needed.
+          Scan the QR or tap Open in wallet — pay from any {isOnchain ? 'Bitcoin' : 'Lightning'}{' '}
+          wallet, no account needed.
         </p>
         {signInHref && (
           <p className="text-xs text-fg-tertiary text-center">
