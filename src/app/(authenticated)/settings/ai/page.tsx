@@ -17,6 +17,7 @@
 import Link from 'next/link';
 import { ArrowLeft, Bot, Check, Server, Terminal, AlertCircle } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
+import { CAT_FRONTIER_MODELS_OR } from '@/config/cat-plans';
 import { useRequireAuth } from '@/hooks/useAuth';
 import { useAISettings } from '@/hooks/useAISettings';
 import Loading from '@/components/Loading';
@@ -93,7 +94,7 @@ export default function AISettingsPage() {
                 Capability: <span className="font-medium text-fg-secondary">Capable</span> — great
                 for chat, drafting, and suggestions. Discovery, matchmaking, and multi-step tasks
                 work best on a <span className="font-medium text-fg-secondary">frontier</span> model
-                — add a Claude, GPT-4o, or Grok key below to unlock them.
+                — add a {CAT_FRONTIER_MODELS_OR} key below to unlock them.
               </p>
             </div>
           </div>
@@ -119,7 +120,8 @@ export default function AISettingsPage() {
               </div>
               <p className="mt-1 text-sm text-fg-secondary">
                 Use any provider — direct or aggregator. You pay them, OrangeCat never sees your
-                bill. Want Claude or GPT-4o? Add an OpenRouter key — one key fronts all 200+ models.
+                bill. Want {CAT_FRONTIER_MODELS_OR}? Add an OpenRouter key — one key fronts all 200+
+                models.
               </p>
             </div>
           </div>

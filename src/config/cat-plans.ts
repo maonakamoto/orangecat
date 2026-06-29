@@ -57,6 +57,18 @@ export const CAT_WIRED_PROVIDERS = [
   'xAI (Grok)',
 ] as const;
 
+/**
+ * SSOT for the frontier models named in marketing copy (pricing, support,
+ * settings). Brand-level on purpose — never a specific version like "GPT-4o",
+ * which reads as stale the moment a new model ships. Change here once and every
+ * page updates; do NOT hardcode this list in page copy.
+ */
+export const CAT_FRONTIER_MODELS = ['Claude', 'GPT', 'Grok'] as const;
+/** "Claude, GPT, Grok" */
+export const CAT_FRONTIER_MODELS_LIST = CAT_FRONTIER_MODELS.join(', ');
+/** "Claude, GPT, or Grok" */
+export const CAT_FRONTIER_MODELS_OR = `${CAT_FRONTIER_MODELS.slice(0, -1).join(', ')}, or ${CAT_FRONTIER_MODELS[CAT_FRONTIER_MODELS.length - 1]}`;
+
 export const CAT_PLANS: CatPlan[] = [
   {
     id: 'free',
@@ -79,7 +91,7 @@ export const CAT_PLANS: CatPlan[] = [
     priceCopy: 'CHF 0 / mo to OrangeCat',
     bullets: [
       `Six providers wired direct: ${CAT_WIRED_PROVIDERS.join(', ')}`,
-      'Want Claude / GPT-4o / Gemini? OpenRouter fronts 200+ models with one key',
+      'Want Claude / GPT / Gemini? OpenRouter fronts 200+ models with one key',
       'Cat routes through your key — OrangeCat never sees your bill, never marks it up',
       'Keys encrypted at rest, scrubbed from logs, never echoed back to the client',
     ],
@@ -94,7 +106,7 @@ export const CAT_PLANS: CatPlan[] = [
     // Franc price as the future anchor; the card makes clear it's not live yet.
     priceCopy: 'CHF 19 / mo · founding access',
     bullets: [
-      'Frontier models (Claude, GPT-4o, Grok) managed by OrangeCat — no keys, no setup',
+      `Frontier models (${CAT_FRONTIER_MODELS_LIST}) managed by OrangeCat — no keys, no setup`,
       'Higher limits, smarter defaults, full agentic Cat (discovery, matchmaking, multi-step)',
       'Fiat billing is coming — until then, back us in Bitcoin as a founding supporter',
       'Founding supporters get recognition and first access the day Pro goes live',
