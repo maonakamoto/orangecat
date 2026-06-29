@@ -203,7 +203,7 @@ export function ModernChatPanel({
       className={cn(
         'oc-chat-layout',
         !isFocus && 'min-h-[34rem] rounded-md border border-subtle',
-        !isFocus && 'h-[calc(100dvh-15.5rem)] sm:h-[calc(100dvh-13rem)]',
+        !isFocus && 'h-[calc(100dvh_-_15.5rem)] sm:h-[calc(100dvh_-_13rem)]',
         className
       )}
     >
