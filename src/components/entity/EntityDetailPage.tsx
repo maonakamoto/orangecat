@@ -4,7 +4,7 @@ import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
 import EntityDetailLayout from '@/components/entity/EntityDetailLayout';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { getTableName, type EntityType } from '@/config/entity-registry';
+import { getTableName, getEntityMetadata, type EntityType } from '@/config/entity-registry';
 import type { EntityConfig, BaseEntity } from '@/types/entity';
 import { PLATFORM_DEFAULT_CURRENCY, isSupportedCurrency } from '@/config/currencies';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -94,7 +94,6 @@ function makeDefaultDetailFields<T extends BaseEntity>(
     'fulfillment_type',
     'duration_minutes',
   ];
-  const rightFields = ['created_at', 'updated_at', 'published_at'];
 
   if (entity.status) {
     left.push({
@@ -129,24 +128,11 @@ function makeDefaultDetailFields<T extends BaseEntity>(
 
     if (leftFields.some(field => key.includes(field))) {
       left.push({ label, value: formattedValue });
-    } else if (rightFields.some(field => key.includes(field))) {
-      right.push({ label, value: formattedValue });
     }
   });
 
-  if (entity.created_at) {
-    right.push({
-      label: 'Created',
-      value: new Date(entity.created_at).toLocaleString(),
-    });
-  }
-  if (entity.updated_at) {
-    right.push({
-      label: 'Updated',
-      value: new Date(entity.updated_at).toLocaleString(),
-    });
-  }
-
+  // Intentionally NO created_at/updated_at: raw timestamps are noise on a detail
+  // page — they answer no question a viewer (or the owner) actually has.
   return { left, right };
 }
 
@@ -217,28 +203,23 @@ export default async function EntityDetailPage<T extends BaseEntity>({
     right: rawFields.right ?? [],
   };
 
-  // Auto-append timestamps when makeDetailFields didn't already include them
-  if (makeDetailFields) {
-    const hasCreated = fields.right.some(f => f.label === 'Created');
-    const hasUpdated = fields.right.some(f => f.label === 'Updated');
-    if (!hasCreated && entity.created_at) {
-      fields.right.push({ label: 'Created', value: new Date(entity.created_at).toLocaleString() });
-    }
-    if (!hasUpdated && entity.updated_at) {
-      fields.right.push({ label: 'Updated', value: new Date(entity.updated_at).toLocaleString() });
-    }
-  }
-
+  // The owner's listing as buyers see it is the source of truth — give them a
+  // direct path to it (and to editing). No raw timestamps.
+  const publicHref = `${getEntityMetadata(entityType).publicBasePath}/${entityId}`;
   const headerActions = (
-    <Link href={config.editPath(entityId)}>
-      <Button>Edit</Button>
-    </Link>
+    <div className="flex items-center gap-2">
+      <Link href={publicHref}>
+        <Button variant="outline">View public page</Button>
+      </Link>
+      <Link href={config.editPath(entityId)}>
+        <Button>Edit</Button>
+      </Link>
+    </div>
   );
 
-  const breadcrumbItems = [
-    { label: config.namePlural, href: config.listPath },
-    { label: entity.title || 'Untitled' },
-  ];
+  // Breadcrumb ends at the entity type — the page title is already the h1, so
+  // repeating it as the last crumb just doubles the heading.
+  const breadcrumbItems = [{ label: config.namePlural, href: config.listPath }];
 
   return (
     <EntityDetailLayout
