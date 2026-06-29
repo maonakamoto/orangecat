@@ -107,9 +107,11 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
       const btc = satsToBitcoin(sats);
       const fiatAmount = convertFromBTC(btc, displayCurrency);
 
-      // If rates not loaded yet, fall back to sats
+      // Rates not loaded yet (e.g. logged-out visitors) → fall back to BTC, the
+      // canonical unit — NEVER sats. Showing sats here was why public pages
+      // rendered "100,000 sat" before rates arrived.
       if (isLoading || fiatAmount === 0) {
-        return formatRawSats(sats);
+        return formatCurrency(btc, 'BTC', { showSymbol, compact });
       }
 
       const fiatFormatted = formatCurrency(fiatAmount, displayCurrency, { showSymbol, compact });

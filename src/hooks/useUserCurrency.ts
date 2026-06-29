@@ -28,7 +28,14 @@ export function useUserCurrency(): Currency {
     | string
     | undefined;
 
-  if (profileCurrency && isSupportedCurrency(profileCurrency)) {
+  // SATS is a Lightning protocol unit, not a user-facing display currency — we
+  // never display amounts in sats. Honor any legacy SATS preference as the
+  // default (CHF) instead.
+  if (
+    profileCurrency &&
+    isSupportedCurrency(profileCurrency) &&
+    profileCurrency.toUpperCase() !== 'SATS'
+  ) {
     return profileCurrency as Currency;
   }
 
