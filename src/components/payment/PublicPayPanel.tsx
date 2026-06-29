@@ -23,6 +23,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { cn } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { displayBTC } from '@/services/currency';
 
 interface PublicPayPanelProps {
   entityTitle: string;
@@ -46,7 +47,11 @@ interface PublicPayPanelProps {
 }
 
 /** Quick-pick contribution amounts (BTC). Small/Medium/Large, like the dashboard. */
-const SUGGESTED_BTC = [0.001, 0.005, 0.01] as const;
+const SUGGESTED_BTC = [
+  { btc: 0.001, label: 'Small' },
+  { btc: 0.005, label: 'Medium' },
+  { btc: 0.01, label: 'Large' },
+] as const;
 
 function truncateMiddle(value: string, head = 12, tail = 10): string {
   return value.length <= head + tail + 1 ? value : `${value.slice(0, head)}…${value.slice(-tail)}`;
@@ -123,7 +128,7 @@ export function PublicPayPanel({
               Choose an amount, or send any in your wallet.
             </p>
             <div className="grid grid-cols-3 gap-2">
-              {SUGGESTED_BTC.map(btc => {
+              {SUGGESTED_BTC.map(({ btc, label }) => {
                 const active = selectedBtc === btc;
                 return (
                   <button
@@ -139,16 +144,16 @@ export function PublicPayPanel({
                     )}
                   >
                     <span className="block text-sm font-semibold text-fg-primary">
-                      {formatAmountBtc(btc)}
+                      {displayBTC(btc)}
                     </span>
-                    <span className="block text-xs">{formatPrice(btc, 'BTC')}</span>
+                    <span className="block text-xs">{label}</span>
                   </button>
                 );
               })}
             </div>
             {selectedBtc !== null && !isOnchain && (
               <p className="text-xs text-fg-tertiary">
-                Lightning wallets ask for the amount — enter {formatAmountBtc(selectedBtc)} when
+                Lightning wallets ask for the amount — enter {displayBTC(selectedBtc)} when
                 prompted.
               </p>
             )}
