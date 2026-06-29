@@ -87,10 +87,6 @@ function CurrencyBreakdown({ amount, currency }: { amount: number; currency: str
           <span className="text-fg-secondary">Bitcoin (BTC)</span>
           <span className="font-mono font-semibold">₿ {btc.toFixed(8)}</span>
         </div>
-        <div className="flex justify-between">
-          <span className="text-fg-secondary">Lightning (sats)</span>
-          <span className="font-mono font-semibold">{fmt(Math.round(btc * 100_000_000), 0)}</span>
-        </div>
         <div className="border-t border-subtle pt-2 space-y-1 text-xs">
           <div className="flex justify-between text-fg-secondary">
             <span>USD</span>
