@@ -21,7 +21,7 @@ import { buildReplyLanguageDirective } from '@/services/cat/reply-language';
 import { getCatFewShotExamplesText } from '@/services/cat/few-shot-examples';
 import { parseActionsFromResponse } from '@/services/cat/response-parser';
 import {
-  getOrCreateDefaultConversation,
+  resolveConversationIdOrDefault,
   getMessagesForContext,
   saveMessages,
 } from '@/services/cat/conversation-history';
@@ -45,6 +45,8 @@ export const catChatBodySchema = z.object({
   message: z.string().min(1).max(AI_MESSAGE_MAX_CHARS),
   model: z.string().optional(),
   stream: z.boolean().optional(),
+  /** Target conversation. Omitted → the user's default conversation. */
+  conversationId: z.string().uuid().optional(),
   /**
    * Runtime session hints from the client. Optional and untrusted — the server
    * validates each field. Drive Cat's locale, price quoting, and recent-page
@@ -180,6 +182,7 @@ export async function orchestrateCatChat(
     preferredCurrency,
     locale,
     lastVisitedPath,
+    conversationId: requestedConversationId,
   } = body;
 
   // Resolve provider, BYOK keys, model, and platform limits
@@ -238,8 +241,12 @@ export async function orchestrateCatChat(
   let conversationId: string | null = null;
   let historyMessages: Array<{ role: 'user' | 'assistant'; content: string }> = [];
   try {
-    conversationId = await getOrCreateDefaultConversation(supabase, user.id);
-    historyMessages = await getMessagesForContext(supabase, user.id);
+    conversationId = await resolveConversationIdOrDefault(
+      supabase,
+      user.id,
+      requestedConversationId
+    );
+    historyMessages = await getMessagesForContext(supabase, user.id, conversationId);
   } catch {
     /* Non-fatal — continue without history */
   }

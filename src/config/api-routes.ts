@@ -19,6 +19,8 @@ export const API_ROUTES = {
     CREDITS_TOPUP: '/api/cat/credits/topup',
     MEMORIES: '/api/cat/memories',
     NUDGES: '/api/cat/nudges',
+    CONVERSATIONS: '/api/cat/conversations',
+    CONVERSATION: (id: string) => `/api/cat/conversations/${id}`,
   },
   INTEGRATION_KEYS: {
     BASE: '/api/integration-keys',

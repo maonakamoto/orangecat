@@ -3,14 +3,29 @@ import { API_ROUTES } from '@/config/api-routes';
 import { logger } from '@/utils/logger';
 import type { Message } from '../types';
 
-export function useChatHistory(setMessages: React.Dispatch<React.SetStateAction<Message[]>>) {
+/**
+ * Loads chat history for the active conversation. When `conversationId` is given
+ * it loads that conversation (and reloads on switch); otherwise the user's
+ * default conversation. Clears the view immediately on switch so messages from
+ * the previous conversation don't linger while the next loads.
+ */
+export function useChatHistory(
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
+  conversationId?: string | null
+) {
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
     setIsLoadingHistory(true);
+    // Switching conversations: drop the old thread right away.
+    setMessages([]);
 
-    fetch(API_ROUTES.CAT.HISTORY)
+    const url = conversationId
+      ? API_ROUTES.CAT.CONVERSATION(conversationId)
+      : API_ROUTES.CAT.HISTORY;
+
+    fetch(url)
       .then(r => (r.ok ? r.json() : null))
       .then(data => {
         if (cancelled || !data?.data?.length) {
@@ -45,7 +60,7 @@ export function useChatHistory(setMessages: React.Dispatch<React.SetStateAction<
     return () => {
       cancelled = true;
     };
-  }, [setMessages]);
+  }, [setMessages, conversationId]);
 
   return { isLoadingHistory };
 }
