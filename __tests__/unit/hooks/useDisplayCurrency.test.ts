@@ -21,8 +21,7 @@ jest.mock('@/hooks/useUserCurrency', () => ({
 jest.mock('@/hooks/useCurrencyConversion', () => ({
   useCurrencyConversion: () => ({
     isLoading: mockIsLoading,
-    convertFromBTC: (btc: number, currency: string) =>
-      currency === 'CHF' ? btc * CHF_PER_BTC : 0,
+    convertFromBTC: (btc: number, currency: string) => (currency === 'CHF' ? btc * CHF_PER_BTC : 0),
     convertToBTC: (amount: number) => amount / CHF_PER_BTC,
   }),
 }));
@@ -72,11 +71,15 @@ describe('useDisplayCurrency', () => {
     expect(result.current.formatAmountBtc(0.001)).toBe('₿0.001');
   });
 
-  it('falls back to sats while rates are loading (no wrong fiat flash)', () => {
+  it('falls back to BTC (never sats) while rates are loading', () => {
+    // The platform never displays sats. Before fiat rates load (e.g. logged-out
+    // visitors) we show the canonical BTC unit, not raw sats.
     mockCurrency = 'CHF';
     mockIsLoading = true;
     const { result } = renderHook(() => useDisplayCurrency());
-    expect(result.current.formatSats(100_000)).toBe('100,000 sat');
+    const out = result.current.formatSats(100_000); // 0.001 BTC
+    expect(out).not.toMatch(/sat/i);
+    expect(out).toMatch(/BTC|₿/);
     expect(result.current.isLoading).toBe(true);
   });
 
