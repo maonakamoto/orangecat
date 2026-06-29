@@ -69,8 +69,8 @@ export function GenericPublicCard({
     <Link href={href}>
       <Card className="oc-card-link h-full">
         <CardHeader className="pb-3">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-2">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex min-w-0 items-center gap-2">
               <div className="oc-icon-tile h-8 w-8 flex-shrink-0">
                 {Icon && <Icon className="w-4 h-4 text-fg-secondary" />}
               </div>
