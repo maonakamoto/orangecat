@@ -55,7 +55,11 @@ export function FormFieldGroups<T extends Record<string, unknown>>({
             </div>
 
             {group.fields && group.fields.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              // Single-column, full-width fields. A 2-up grid halved every input
+              // (~half width on desktop), which cramped long titles/text and
+              // couldn't be widened. Single-column forms are the best-practice
+              // default — faster to complete and readable at any text length.
+              <div className="space-y-4">
                 {group.fields.map(field => {
                   if (!isFieldVisible(field)) {
                     return null;
@@ -65,10 +69,7 @@ export function FormFieldGroups<T extends Record<string, unknown>>({
                   const aiConfidence = aiGeneratedFields.confidence[field.name] || 0.7;
 
                   return (
-                    <div
-                      key={field.name}
-                      className={`${field.colSpan === 2 ? 'md:col-span-2' : ''} ${isAIGenerated ? 'relative' : ''}`}
-                    >
+                    <div key={field.name} className={isAIGenerated ? 'relative' : ''}>
                       {isAIGenerated && <AIGeneratedIndicator confidence={aiConfidence} />}
                       <div
                         className={

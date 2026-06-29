@@ -51,9 +51,9 @@ export default function PricingPage() {
           </h2>
           <div className="space-y-4 text-fg-primary">
             <p>
-              The destination is <strong>Pro</strong>: frontier models — Claude, GPT-4o, Grok —
-              fully managed by OrangeCat, no keys, no setup. The kind of effortless AI a serious
-              company runs on.
+              The destination is <strong>Pro</strong>: frontier models — Claude, GPT, Grok — fully
+              managed by OrangeCat, no keys, no setup. The kind of effortless AI a serious company
+              runs on.
             </p>
             <p>
               We&apos;re not there yet, and we won&apos;t pretend otherwise. OrangeCat doesn&apos;t
@@ -65,7 +65,7 @@ export default function PricingPage() {
               <li>
                 <strong className="text-fg-primary">Bring your own key</strong> — the real path to
                 frontier models <em>today</em>. Your key, your bill, zero markup. Cat runs Claude or
-                GPT-4o for you right now.
+                GPT for you right now.
               </li>
               <li>
                 <strong className="text-fg-primary">Back us in Bitcoin</strong> — believe in where
@@ -77,13 +77,16 @@ export default function PricingPage() {
         </section>
 
         {/* Founding supporter CTA band */}
-        <section id="founding" className="mb-12 rounded-lg bg-surface-public p-8 text-fg-inverted">
+        <section
+          id="founding"
+          className="mb-12 rounded-lg border border-accent-warm/30 bg-accent-warm/5 p-8 text-fg-primary"
+        >
           <div className="text-center">
-            <Sparkles className="mx-auto mb-4 h-10 w-10" aria-hidden="true" />
+            <Sparkles className="mx-auto mb-4 h-10 w-10 text-accent-warm" aria-hidden="true" />
             <h2 className="mb-3 font-heading text-2xl font-bold tracking-display">
-              Found the permissionless economy
+              Help found the permissionless economy
             </h2>
-            <p className="mx-auto mb-6 max-w-2xl text-fg-inverted/70">
+            <p className="mx-auto mb-6 max-w-2xl text-fg-secondary">
               We&apos;re building toward a world where anyone can earn, fund, and govern without
               gatekeepers. Fiat billing is coming — until then, back OrangeCat in Bitcoin and get
               first access to Pro the day it&apos;s live.
