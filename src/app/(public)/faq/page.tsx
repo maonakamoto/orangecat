@@ -162,7 +162,7 @@ const FAQ_SECTIONS: FaqSection[] = [
       {
         question: 'What currencies are displayed?',
         answer:
-          'You can choose your preferred display currency (CHF, USD, EUR, GBP, or Bitcoin/sats) in your profile settings. All amounts are stored in BTC internally for precision, then converted for display using live exchange rates. This means you always see amounts in the currency you understand best.',
+          'You can choose your preferred display currency (CHF, USD, EUR, GBP, or Bitcoin) in your profile settings. All amounts are stored in BTC internally for precision, then converted for display using live exchange rates. This means you always see amounts in the currency you understand best.',
       },
     ],
   },

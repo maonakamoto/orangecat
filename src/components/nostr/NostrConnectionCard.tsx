@@ -5,9 +5,9 @@ import Button from '@/components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
-import { CurrencyDisplay } from '@/components/ui/CurrencyDisplay';
 import { shortenNpub } from '@/lib/nostr';
 import { useNostrConnectionCard } from './useNostrConnectionCard';
+import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
 export function NostrConnectionCard() {
   const {
@@ -39,6 +39,9 @@ export function NostrConnectionCard() {
     handleCancelNpub,
     handleCopyNpub,
   } = useNostrConnectionCard();
+  // NWC returns the balance in sats; render it in the user's display currency
+  // (CHF/BTC) — the platform never shows sats.
+  const { formatSats } = useDisplayCurrency();
 
   return (
     <Card>
@@ -124,11 +127,9 @@ export function NostrConnectionCard() {
                     <div className="flex items-center gap-2 p-2 rounded-md bg-status-positive-subtle border border-status-positive/20">
                       <Wallet className="h-4 w-4 text-status-positive" />
                       <span className="text-sm font-medium text-status-positive">Balance:</span>
-                      <CurrencyDisplay
-                        amount={balanceSats}
-                        currency="SATS"
-                        className="text-sm font-semibold text-status-positive"
-                      />
+                      <span className="text-sm font-semibold text-status-positive">
+                        {formatSats(balanceSats)}
+                      </span>
                     </div>
                   )}
                   {balanceLoading && (
