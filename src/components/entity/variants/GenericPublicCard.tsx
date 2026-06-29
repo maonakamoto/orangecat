@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { formatRelativeTime } from '@/utils/dates';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
+import { EntityCard } from '@/components/entity/EntityCard';
 import { ENTITY_REGISTRY, type EntityType } from '@/config/entity-registry';
 
 export interface GenericPublicEntity {
@@ -66,41 +67,26 @@ export function GenericPublicCard({
   }
 
   return (
-    <Link href={href}>
-      <Card className="oc-card-link h-full">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex min-w-0 items-center gap-2">
-              <div className="oc-icon-tile h-8 w-8 flex-shrink-0">
-                {Icon && <Icon className="w-4 h-4 text-fg-secondary" />}
-              </div>
-              <div className="flex-1 min-w-0">
-                <CardTitle className="text-base truncate">{entity.title}</CardTitle>
-                <CardDescription className="text-xs">
-                  {formatRelativeTime(entity.created_at)}
-                </CardDescription>
-              </div>
-            </div>
-            {entity.status && (
-              <Badge variant="secondary" className="capitalize text-xs flex-shrink-0">
-                {entity.status}
-              </Badge>
-            )}
-          </div>
-        </CardHeader>
-
-        <CardContent className="space-y-2">
-          {entity.description && (
-            <p className="text-sm text-fg-secondary line-clamp-3">{entity.description}</p>
-          )}
-          {category && (
-            <Badge variant="outline" className="text-xs capitalize">
-              {category.replace(/_/g, ' ')}
-            </Badge>
-          )}
-        </CardContent>
-      </Card>
-    </Link>
+    <EntityCard
+      id={entity.id}
+      title={entity.title}
+      description={entity.description}
+      href={href}
+      headerSlot={
+        entity.status ? (
+          <Badge variant="secondary" className="text-xs capitalize">
+            {entity.status}
+          </Badge>
+        ) : null
+      }
+      metadata={
+        category ? (
+          <Badge variant="outline" className="text-xs capitalize">
+            {category.replace(/_/g, ' ')}
+          </Badge>
+        ) : null
+      }
+    />
   );
 }
 
