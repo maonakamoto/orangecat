@@ -333,7 +333,10 @@
   }
 
   .oc-page-title {
-    @apply mb-0 text-xl font-semibold leading-tight text-foreground sm:text-2xl;
+    /* Same heading character as the canonical <PageHeading> (font-heading +
+       tracking-display + bold) so dashboard and public titles match. Scale is
+       a touch tighter (no md:text-4xl) to suit denser dashboard layouts. */
+    @apply mb-0 font-heading text-2xl font-bold leading-tight tracking-display text-foreground sm:text-3xl;
   }
 
   .oc-page-subtitle {

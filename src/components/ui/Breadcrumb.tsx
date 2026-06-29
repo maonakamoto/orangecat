@@ -27,15 +27,15 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
     >
       <Link
         href={ROUTES.DASHBOARD.HOME}
-        className="flex items-center gap-1 hover:text-foreground transition-colors"
+        className="flex items-center gap-1.5 hover:text-foreground transition-colors"
       >
-        <Home className="h-3.5 w-3.5" />
-        <span className="sr-only sm:not-sr-only">Home</span>
+        <Home className="h-3.5 w-3.5 shrink-0" />
+        <span>Home</span>
       </Link>
 
       {items.map((item, i) => (
         <span key={i} className="flex items-center gap-1.5">
-          <ChevronRight className="h-3.5 w-3.5 text-muted-dim dark:text-muted-foreground" />
+          <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
           {item.href ? (
             <Link href={item.href} className="hover:text-foreground transition-colors">
               {item.label}
