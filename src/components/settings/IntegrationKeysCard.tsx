@@ -17,6 +17,7 @@ import { logger } from '@/utils/logger';
 import IntegrationKeyMintForm from '@/components/settings/IntegrationKeyMintForm';
 import IntegrationKeyRow from '@/components/settings/IntegrationKeyRow';
 import PlaintextRevealCard from '@/components/settings/PlaintextRevealCard';
+import { API_ROUTES } from '@/config/api-routes';
 
 export interface IntegrationKey {
   id: string;
@@ -91,7 +92,7 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/integration-keys', { credentials: 'include' });
+        const res = await fetch(API_ROUTES.INTEGRATION_KEYS.BASE, { credentials: 'include' });
         if (!res.ok) {
           throw new Error(`Failed to load keys (${res.status})`);
         }
@@ -135,7 +136,7 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
       if (isTest) {
         body.is_test = true;
       }
-      const res = await fetch('/api/integration-keys', {
+      const res = await fetch(API_ROUTES.INTEGRATION_KEYS.BASE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -165,7 +166,7 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
       return;
     }
     try {
-      const res = await fetch(`/api/integration-keys/${key.id}`, {
+      const res = await fetch(API_ROUTES.INTEGRATION_KEYS.BY_ID(key.id), {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -191,7 +192,7 @@ export default function IntegrationKeysCard({ actors, defaultActorId }: Props) {
     }
     setError(null);
     try {
-      const res = await fetch(`/api/integration-keys/${key.id}/rotate`, {
+      const res = await fetch(`${API_ROUTES.INTEGRATION_KEYS.BY_ID(key.id)}/rotate`, {
         method: 'POST',
         credentials: 'include',
       });

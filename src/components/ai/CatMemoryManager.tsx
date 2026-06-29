@@ -13,6 +13,7 @@ import { Brain, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import Button from '@/components/ui/Button';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface Memory {
   id: string;
@@ -32,7 +33,7 @@ export function CatMemoryManager() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/cat/memories');
+      const res = await fetch(API_ROUTES.CAT.MEMORIES);
       if (!res.ok) {
         throw new Error('Failed to load memories');
       }
@@ -53,7 +54,7 @@ export function CatMemoryManager() {
   const handleDelete = useCallback(async (id: string) => {
     setDeletingId(id);
     try {
-      const res = await fetch(`/api/cat/memories?id=${encodeURIComponent(id)}`, {
+      const res = await fetch(`${API_ROUTES.CAT.MEMORIES}?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
       });
       if (!res.ok) {
@@ -72,7 +73,7 @@ export function CatMemoryManager() {
   const handleClearAll = useCallback(async () => {
     setIsClearing(true);
     try {
-      const res = await fetch('/api/cat/memories?all=true', { method: 'DELETE' });
+      const res = await fetch(`${API_ROUTES.CAT.MEMORIES}?all=true`, { method: 'DELETE' });
       if (!res.ok) {
         throw new Error('clear failed');
       }
