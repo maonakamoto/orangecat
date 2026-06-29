@@ -18,8 +18,8 @@ import { generateEntityJsonLd, JsonLdScript } from '@/lib/seo/structured-data';
 import EntityShare from '@/components/sharing/EntityShare';
 import PublicEntityOwnerCard from '@/components/public/PublicEntityOwnerCard';
 import PublicEntityHero from '@/components/public/PublicEntityHero';
-import PublicEntityTimestamps from '@/components/public/PublicEntityTimestamps';
 import { PublicEntityPaymentSection } from '@/components/payment';
+import { getEntityPrimaryCta } from '@/config/entity-cta';
 import { resolveSellerReceiveInfo, type SellerReceiveInfo } from '@/domain/payments';
 import { currencyConverter } from '@/services/currency';
 import { type CurrencyCode } from '@/config/currencies';
@@ -199,10 +199,7 @@ export default async function PublicEntityDetailPage({
         <div className="bg-surface-base border-b border-default">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb
-              items={[
-                { label: meta.namePlural, href: meta.publicBasePath || ROUTES.DISCOVER },
-                { label: entity.title },
-              ]}
+              items={[{ label: meta.namePlural, href: meta.publicBasePath || ROUTES.DISCOVER }]}
               className="mb-4"
             />
             <div className="flex items-start justify-between">
@@ -294,12 +291,6 @@ export default async function PublicEntityDetailPage({
                   />
                 </div>
               )}
-
-              <PublicEntityTimestamps
-                createdAt={entity.created_at}
-                updatedAt={entity.updated_at}
-                createdLabel={config.createdLabel}
-              />
             </div>
           </div>
         </div>
@@ -328,12 +319,13 @@ function MobileStickyCTA({ config, entity }: { config: EntityDetailConfig; entit
   if (config.mobileStickyCTA) {
     return <StickyBar href={config.mobileStickyCTA.href} label={config.mobileStickyCTA.label} />;
   }
-  // Default: anchor to the payment section. Suppressed when there
-  // isn't one and the entity hasn't provided its own.
+  // Default: anchor to the payment section with the entity's own primary verb
+  // (SSOT in entity-cta.ts) — "Book this service", "Fund this project", etc. —
+  // instead of a generic "Support". Suppressed when there's no payment section.
   if (config.showPaymentSection === false) {
     return null;
   }
-  return <StickyBar href="#pay" label="Support" />;
+  return <StickyBar href="#pay" label={getEntityPrimaryCta(config.entityType)} />;
 }
 
 function StickyBar({ href, label }: { href: string; label: string }) {
