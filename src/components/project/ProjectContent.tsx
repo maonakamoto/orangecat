@@ -163,7 +163,6 @@ export default function ProjectContent({ project }: ProjectContentProps) {
             ownerId={project.user_id}
             projectTitle={project.title || 'Project'}
             bitcoinAddress={project.bitcoin_address}
-            lightningAddress={project.lightning_address}
             isOwner={project.isOwner}
           />
         </CardContent>

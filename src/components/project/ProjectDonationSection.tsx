@@ -1,14 +1,7 @@
 'use client';
 
-import { Bitcoin, Heart, Copy, ShieldCheck, Zap } from 'lucide-react';
-import dynamic from 'next/dynamic';
+import { Bitcoin, Heart, Copy, ShieldCheck } from 'lucide-react';
 import BitcoinPaymentButton from '@/components/bitcoin/BitcoinPaymentButton';
-
-// SSR-skipped: LightningPayment renders form inputs whose React id pool desyncs
-// between server and client renders.
-const LightningPayment = dynamic(() => import('@/components/lightning/LightningPayment'), {
-  ssr: false,
-});
 import Button from '@/components/ui/Button';
 import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
@@ -22,7 +15,6 @@ interface ProjectDonationSectionProps {
   projectId: string;
   ownerId?: string;
   bitcoinAddress: string | null;
-  lightningAddress: string | null;
   projectTitle?: string;
   isOwner?: boolean;
 }
@@ -37,7 +29,6 @@ export function ProjectDonationSection({
   projectId,
   ownerId,
   bitcoinAddress,
-  lightningAddress,
   projectTitle = ENTITY_REGISTRY.project.name,
   isOwner = false,
 }: ProjectDonationSectionProps) {
@@ -99,7 +90,7 @@ export function ProjectDonationSection({
             </Button>
           )}
 
-          {(bitcoinAddress || lightningAddress) && (
+          {bitcoinAddress && (
             <div className="flex-1">
               <div className="hidden sm:block">
                 <BitcoinPaymentButton projectId={projectId} projectTitle={projectTitle} />
@@ -230,38 +221,6 @@ export function ProjectDonationSection({
             <p className="text-xs text-fg-secondary mt-3 text-center">
               Click to copy address with suggested amount reminder
             </p>
-          </div>
-        </section>
-      )}
-
-      {lightningAddress && (
-        <section className="mt-6" aria-labelledby="lightning-heading">
-          <h3 id="lightning-heading" className="text-lg font-semibold mb-3 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-bitcoin-orange" aria-hidden="true" />
-            Lightning Payment
-          </h3>
-          <LightningPayment
-            recipientAddress={lightningAddress}
-            projectTitle={projectTitle}
-            projectId={projectId}
-          />
-          <div className="mt-3 bg-surface-raised rounded-lg p-3 border border-default">
-            <div className="flex items-center justify-between gap-4">
-              <code
-                className="text-xs font-mono text-fg-secondary break-all"
-                aria-label={`Lightning address: ${lightningAddress}`}
-              >
-                {lightningAddress}
-              </code>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => copyToClipboard(lightningAddress, 'Lightning address')}
-                aria-label="Copy Lightning address to clipboard"
-              >
-                <Copy className="w-3 h-3" />
-              </Button>
-            </div>
           </div>
         </section>
       )}
