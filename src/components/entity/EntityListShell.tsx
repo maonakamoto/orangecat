@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 /**
  * EntityListShell — canonical page-header wrapper for every in-app surface.
@@ -38,28 +38,16 @@ export default function EntityListShell({
   children,
   className,
 }: EntityListShellProps) {
-  const crumbs = breadcrumbs ?? [{ label: title }];
-  // A single-segment auto-generated breadcrumb just repeats the page
-  // title (~24px of redundant chrome on every dashboard list page).
-  // Show only when there's an explicit trail OR a real multi-segment
-  // nav context.
-  const showBreadcrumb = !hideBreadcrumb && (!!breadcrumbs || crumbs.length > 1);
-
   return (
     <div className={cn('oc-page pb-20 md:pb-8', className)}>
       <div className="oc-page-container oc-page-stack">
-        {showBreadcrumb && <Breadcrumb items={crumbs} />}
-        <div className="oc-page-header">
-          <div className="flex-1 min-w-0">
-            <h1 className="oc-page-title break-words">{title}</h1>
-            {description && <p className="oc-page-subtitle break-words">{description}</p>}
-          </div>
-          {headerActions && (
-            <div className="w-full flex-shrink-0 sm:w-auto">
-              <div className="oc-page-actions">{headerActions}</div>
-            </div>
-          )}
-        </div>
+        <PageHeader
+          title={title}
+          subtitle={description}
+          breadcrumbs={breadcrumbs}
+          hideBreadcrumb={hideBreadcrumb}
+          actions={headerActions}
+        />
         {children}
       </div>
     </div>
