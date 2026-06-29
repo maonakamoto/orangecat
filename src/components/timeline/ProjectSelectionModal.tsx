@@ -56,7 +56,7 @@ export default function ProjectSelectionModal({
       </div>
 
       {/* Content */}
-      <div className="overflow-y-auto max-h-[calc(100dvh-60px)]">
+      <div className="overflow-y-auto max-h-[calc(100dvh_-_60px)]">
         {/* Everyone option (default - always selected) */}
         <div className="px-4 py-4 border-b border-default">
           <button
