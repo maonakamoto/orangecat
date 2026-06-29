@@ -1,0 +1,572 @@
+/**
+ * Per-section renderers for the Cat user-context string. Each returns a `## …`
+ * markdown block (or null when it has nothing to show). buildFullContextString
+ * composes them in priority order, then budgets + wraps. Extracted from
+ * context-string-builder.ts purely for SoC — output is byte-identical (guarded by
+ * context-string-builder.snapshot.test.ts), so keep wording/format changes here.
+ */
+import type { DocumentContext, EntitySummary, FullUserContext } from './document-context-types';
+import { ENTITY_STATUS } from '@/config/database-constants';
+
+const DOCUMENT_TYPE_LABELS: Record<string, string> = {
+  goals: 'Goals & Aspirations',
+  skills: 'Skills & Expertise',
+  finances: 'Financial Information',
+  business_plan: 'Business Plans',
+  background: 'Background & History',
+  preferences: 'Preferences & Values',
+  plans: 'Plans & Projects',
+  notes: 'Notes & Ideas',
+  other: 'Other Context',
+};
+
+function buildDocumentContextString(documents: DocumentContext[]): string {
+  if (documents.length === 0) {
+    return '';
+  }
+
+  const sections: string[] = [];
+
+  const byType = documents.reduce(
+    (acc, doc) => {
+      const type = doc.document_type || 'other';
+      if (!acc[type]) {
+        acc[type] = [];
+      }
+      acc[type].push(doc);
+      return acc;
+    },
+    {} as Record<string, DocumentContext[]>
+  );
+
+  for (const [type, docs] of Object.entries(byType)) {
+    const label = DOCUMENT_TYPE_LABELS[type] || type;
+    const docContents = docs
+      .map(doc => {
+        const content =
+          doc.content.length > 1500 ? doc.content.substring(0, 1500) + '...' : doc.content;
+        return `**${doc.title}**:\n${content}`;
+      })
+      .join('\n\n');
+
+    sections.push(`### ${label}\n${docContents}`);
+  }
+
+  return `## Personal Context (from user's My Context documents)
+
+The user has shared the following context to help you provide personalized advice:
+
+${sections.join('\n\n')}
+
+---
+Use this context to personalize your responses. Reference their goals, skills, and situation when relevant. If they ask about something related to their context, use this information.`;
+}
+
+export function renderCurrentSession(r: FullUserContext['runtime']): string | null {
+  if (!r) {
+    return null;
+  }
+  const lines: string[] = [];
+  if (r.currentActor) {
+    const actorLabel =
+      r.currentActor.type === 'individual'
+        ? `**Acting as**: yourself${r.currentActor.name ? ` (${r.currentActor.name})` : ''}`
+        : `**Acting as**: group "${r.currentActor.name ?? 'unnamed'}" (you have permission to act on this group's behalf)`;
+    lines.push(actorLabel);
+  }
+  lines.push(
+    `**Display currency**: ${r.preferredCurrency} — quote prices in this currency by default; convert to/from BTC as needed.`
+  );
+  if (r.btcRate) {
+    lines.push(
+      `**Live BTC price**: 1 BTC ≈ ${Math.round(r.btcRate.rate).toLocaleString('en-US')} ${r.btcRate.currency} right now — use THIS rate for every BTC⇄fiat conversion. Never recall or guess a rate.`
+    );
+  } else {
+    lines.push(
+      `**Live BTC price**: unavailable this turn — do NOT guess a BTC⇄fiat rate; say you can't quote an exact conversion right now.`
+    );
+  }
+  lines.push(
+    `**Locale**: ${r.locale} — reply in the language and conventions of this locale unless the user writes in another language.`
+  );
+  if (r.lastVisitedPath) {
+    lines.push(
+      `**Just came from**: \`${r.lastVisitedPath}\` — if relevant to their question, reference what's on that page.`
+    );
+  }
+  return `## Current Session\n${lines.join('\n')}`;
+}
+
+export function renderMemories(memories: FullUserContext['memories']): string | null {
+  if (!memories || memories.length === 0) {
+    return null;
+  }
+  const memoryLines = memories.map(m => `- ${m.content}`);
+  return `## What you remember about this user\nThese are durable facts you've learned about them across past conversations. Treat them as known and use them naturally — don't re-ask what you already know.\n${memoryLines.join('\n')}`;
+}
+
+export function renderDateTime(locale: string): string {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString(locale, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+  const timeStr = now.toISOString().slice(11, 16);
+  return `## Current Date & Time\nToday is ${dateStr}, ${timeStr} UTC.`;
+}
+
+export function renderProfile(p: FullUserContext['profile']): string | null {
+  if (!p) {
+    return null;
+  }
+  const profileParts: string[] = [];
+
+  if (p.name) {
+    profileParts.push(`**Name**: ${p.name}`);
+  }
+  if (p.username) {
+    profileParts.push(`**Username**: @${p.username}`);
+  }
+  if (p.bio) {
+    profileParts.push(`**Bio**: ${p.bio}`);
+  }
+  if (p.location_city || p.location_country) {
+    profileParts.push(
+      `**Location**: ${[p.location_city, p.location_country].filter(Boolean).join(', ')}`
+    );
+  }
+  if (p.background) {
+    profileParts.push(`**Background**: ${p.background}`);
+  }
+  if (p.website) {
+    profileParts.push(`**Website**: ${p.website}`);
+  }
+
+  if (profileParts.length === 0) {
+    return null;
+  }
+  return `## User Profile\n${profileParts.join('\n')}`;
+}
+
+export function renderDocuments(documents: DocumentContext[]): string | null {
+  if (documents.length === 0) {
+    return null;
+  }
+  return buildDocumentContextString(documents) || null;
+}
+
+export function renderEntities(entities: EntitySummary[]): string | null {
+  if (entities.length === 0) {
+    return null;
+  }
+  const entityGroups: Record<string, EntitySummary[]> = {};
+  entities.forEach(e => {
+    if (!entityGroups[e.type]) {
+      entityGroups[e.type] = [];
+    }
+    entityGroups[e.type].push(e);
+  });
+
+  const entityParts: string[] = [];
+
+  const typeLabels: Record<string, string> = {
+    product: 'Products',
+    service: 'Services',
+    project: 'Projects',
+    cause: 'Causes',
+    event: 'Events',
+    asset: 'Assets',
+    loan: 'Loans',
+    investment: 'Investments',
+    research: 'Research',
+    wishlist: 'Wishlists',
+  };
+
+  for (const [type, items] of Object.entries(entityGroups)) {
+    const label = typeLabels[type] || type;
+    const itemList = items
+      .map(item => {
+        const parts = [`- **${item.title}**`];
+        if (item.status !== ENTITY_STATUS.ACTIVE) {
+          parts.push(` [${item.status}]`);
+        }
+        if (item.price_btc) {
+          parts.push(` (${item.price_btc} BTC)`);
+        }
+        if (item.category) {
+          parts.push(` [${item.category}]`);
+        }
+        if (item.location) {
+          parts.push(` @ ${item.location}`);
+        }
+        // Show funding received where known (projects, research, causes)
+        if (item.raised_btc !== undefined && item.raised_btc > 0) {
+          const supporterNote = item.num_supporters
+            ? ` from ${item.num_supporters} supporter${item.num_supporters !== 1 ? 's' : ''}`
+            : '';
+          parts.push(` — raised ${item.raised_btc} BTC${supporterNote}`);
+        }
+        if (item.description) {
+          parts.push(`: ${item.description}`);
+        }
+        parts.push(` (id: ${item.id})`);
+        return parts.join('');
+      })
+      .join('\n');
+    entityParts.push(`### ${label}\n${itemList}`);
+  }
+
+  if (entityParts.length === 0) {
+    return null;
+  }
+  return `## User's OrangeCat Entities\n\nThe user has created the following on OrangeCat:\n\n${entityParts.join('\n\n')}`;
+}
+
+export function renderGroupMemberships(
+  memberGroups: FullUserContext['memberGroups']
+): string | null {
+  if (memberGroups.length === 0) {
+    return null;
+  }
+  const groupLines = memberGroups.map(g => {
+    const parts = [`- **${g.name}**`];
+    if (g.label) {
+      parts.push(` [${g.label}]`);
+    }
+    parts.push(` — role: ${g.role}`);
+    if (g.visibility !== 'public') {
+      parts.push(` (${g.visibility})`);
+    }
+    if (g.description) {
+      parts.push(`: ${g.description.substring(0, 200)}`);
+    }
+    // Include group ID so Cat can reference it in invite_to_organization exec_action
+    parts.push(` (id: ${g.id})`);
+    return parts.join('');
+  });
+  return `## Group Memberships\nThe user is a member of the following groups:\n${groupLines.join('\n')}`;
+}
+
+export function renderSocialGraph(sg: FullUserContext['socialGraph']): string | null {
+  if (!sg || !(sg.followers > 0 || sg.following > 0)) {
+    return null;
+  }
+  const lines = [`- ${sg.followers} follower(s), following ${sg.following} account(s)`];
+  if (sg.recentFollowing.length > 0) {
+    const handles = sg.recentFollowing
+      .map(p => (p.username ? `@${p.username}` : p.name || 'unknown'))
+      .join(', ');
+    lines.push(`- Recently followed: ${handles}`);
+  }
+  return `## Social Graph\n${lines.join('\n')}`;
+}
+
+export function renderProjectActivity(
+  projectActivity: FullUserContext['projectActivity']
+): string | null {
+  if (!projectActivity || projectActivity.length === 0) {
+    return null;
+  }
+  const lines = projectActivity.map(e => {
+    const tag = e.source === 'fleetcrown' ? ' [via FleetCrown]' : '';
+    const when = e.at ? ` (${e.at.slice(0, 10)})` : '';
+    const desc = e.description ? ` — ${e.description.slice(0, 140)}` : '';
+    return `- **${e.title}**${tag}${when}${desc}`;
+  });
+  return `## Recent Project Activity\nUpdates on the user's projects (FleetCrown build updates are tagged):\n${lines.join('\n')}`;
+}
+
+export function renderStakeholders(stakeholders: FullUserContext['stakeholders']): string | null {
+  if (!stakeholders || stakeholders.length === 0) {
+    return null;
+  }
+  const byKind = new Map<string, string[]>();
+  for (const s of stakeholders) {
+    const list = byKind.get(s.kind) ?? [];
+    list.push(s.counterparty);
+    byKind.set(s.kind, list);
+  }
+  const lines = Array.from(byKind.entries()).map(
+    ([kind, parties]) => `- ${kind}: ${parties.join(', ')}`
+  );
+  return `## Stakeholders\nTyped relationships on the user's projects (e.g. customers):\n${lines.join('\n')}`;
+}
+
+export function renderGithubRepos(githubRepos: FullUserContext['githubRepos']): string | null {
+  if (!githubRepos || githubRepos.length === 0) {
+    return null;
+  }
+  const lines = githubRepos.map(r => {
+    const meta: string[] = [];
+    if (r.language) {
+      meta.push(r.language);
+    }
+    if (r.stars > 0) {
+      meta.push(`★${r.stars}`);
+    }
+    if (r.archived) {
+      meta.push('archived');
+    }
+    const metaStr = meta.length ? ` (${meta.join(', ')})` : '';
+    const desc = r.description ? ` — ${r.description.slice(0, 120)}` : '';
+    const when = r.pushedAt ? ` [pushed ${r.pushedAt.slice(0, 10)}]` : '';
+    return `- **${r.name}**${metaStr}${desc}${when}`;
+  });
+  return `## GitHub Repositories\nThe user's public GitHub projects (most recently pushed first):\n${lines.join('\n')}`;
+}
+
+export function renderTasks(tasks: FullUserContext['tasks'], locale: string): string | null {
+  if (tasks.length === 0) {
+    return null;
+  }
+  const now = new Date();
+  const urgent = tasks.filter(
+    t => t.priority === 'urgent' || t.current_status === 'needs_attention'
+  );
+  const overdueReminders = tasks.filter(
+    t => t.is_reminder && t.due_date && new Date(t.due_date) < now
+  );
+  const taskLines = tasks.map(t => {
+    const parts = [`- **${t.title}**`];
+    if (t.is_reminder) {
+      parts.push(' [reminder]');
+    } else {
+      parts.push(` [${t.category}]`);
+    }
+    if (t.priority !== 'normal') {
+      parts.push(` priority:${t.priority}`);
+    }
+    if (t.current_status !== 'idle') {
+      parts.push(` status:${t.current_status}`);
+    }
+    if (t.due_date) {
+      const due = new Date(t.due_date);
+      const isOverdue = due < now;
+      const dueStr =
+        due.toLocaleString(locale, {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'UTC',
+          hour12: false,
+        }) + ' UTC';
+      parts.push(isOverdue ? ` ⚠️ OVERDUE (was due ${dueStr})` : ` — due ${dueStr}`);
+    } else if (t.task_type !== 'one_time' && t.schedule_human) {
+      parts.push(` — ${t.schedule_human}`);
+    }
+    // Always include task ID so Cat can reference it in complete_task exec_action
+    parts.push(` [task_id: ${t.id}]`);
+    return parts.join('');
+  });
+  const alerts: string[] = [];
+  if (urgent.length > 0) {
+    alerts.push(
+      `⚠️ ${urgent.length} task${urgent.length > 1 ? 's' : ''} need${urgent.length === 1 ? 's' : ''} attention.`
+    );
+  }
+  if (overdueReminders.length > 0) {
+    alerts.push(
+      `🔔 ${overdueReminders.length} reminder${overdueReminders.length > 1 ? 's are' : ' is'} overdue.`
+    );
+  }
+  const alertNote = alerts.length > 0 ? `\n${alerts.join(' ')}` : '';
+  return `## Active Tasks & Reminders${alertNote}\n${taskLines.join('\n')}`;
+}
+
+export function renderWallets(wallets: FullUserContext['wallets']): string | null {
+  if (wallets.length === 0) {
+    return null;
+  }
+  const walletLines = wallets.map(w => {
+    const parts = [`- **${w.label}**`];
+    parts.push(`(${w.category}`);
+    // Last-synced on-chain balance. Cached (refreshed from the chain), not
+    // real-time — so Cat can answer "how much do I have?" but should caveat
+    // that it's the last synced figure rather than a live wallet balance.
+    if (typeof w.balance_btc === 'number') {
+      parts.push(`, balance: ${w.balance_btc} BTC`);
+      if (w.balance_updated_at) {
+        parts.push(` (synced ${w.balance_updated_at.slice(0, 10)})`);
+      }
+    }
+    if (w.behavior_type === 'one_time_goal' && w.goal_amount) {
+      parts.push(`, goal: ${w.goal_amount} ${w.goal_currency || 'BTC'}`);
+      if (w.goal_deadline) {
+        parts.push(` by ${w.goal_deadline}`);
+      }
+    }
+    if (w.behavior_type === 'recurring_budget' && w.budget_amount) {
+      parts.push(`, budget: ${w.budget_amount} BTC/${w.budget_period || 'month'}`);
+    }
+    parts.push(')');
+    if (w.behavior_type !== 'general') {
+      parts.push(` - ${w.behavior_type}`);
+    }
+    if (w.is_primary) {
+      parts.push(' - primary wallet');
+    }
+    return parts.join('');
+  });
+
+  const totalBtc = wallets.reduce((sum, w) => sum + (w.balance_btc ?? 0), 0);
+  const totalLine =
+    totalBtc > 0
+      ? `\n_Total last-synced balance across wallets: ${Number(totalBtc.toFixed(8))} BTC (cached on-chain figures, not real-time)._`
+      : '';
+
+  return `## User's Wallets\n${walletLines.join('\n')}${totalLine}`;
+}
+
+export function renderConversations(
+  conversations: FullUserContext['conversations']
+): string | null {
+  if (conversations.length === 0) {
+    return null;
+  }
+  const unreadCount = conversations.filter(c => c.has_unread).length;
+  const convLines = conversations.map(c => {
+    const who = c.other_username ? `@${c.other_username}` : '(group chat)';
+    const direction = c.last_message_is_mine ? 'you sent' : 'received';
+    const preview = c.last_message_preview
+      ? `: "${c.last_message_preview.substring(0, 80)}${c.last_message_preview.length > 80 ? '…' : ''}"`
+      : '';
+    const unreadBadge = c.has_unread ? ' 🔴 UNREAD' : '';
+    return `- ${who}${unreadBadge}${preview} (${direction}) [conv id: ${c.id}]`;
+  });
+  const unreadNote =
+    unreadCount > 0
+      ? `\n📬 ${unreadCount} unread conversation${unreadCount > 1 ? 's' : ''} — proactively mention this to the user.`
+      : '';
+  return `## Recent Conversations${unreadNote}\nUse the conversation id with reply_to_message to reply on the user's behalf.\n${convLines.join('\n')}`;
+}
+
+export function renderInboundActivity(
+  inboundActivity: FullUserContext['inboundActivity'],
+  locale: string
+): string | null {
+  const { recentSales, upcomingBookings } = inboundActivity;
+  const parts: string[] = [];
+
+  if (recentSales.length > 0) {
+    const saleLines = recentSales.map(s => {
+      const date = new Date(s.created_at).toLocaleDateString(locale, {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'UTC',
+      });
+      return `- **${s.entity_title}** (${s.entity_type}) — ${s.amount_btc} BTC — ${date}`;
+    });
+    parts.push(`### Recent Sales (paid)\n${saleLines.join('\n')}`);
+  }
+
+  if (upcomingBookings.length > 0) {
+    const bookingLines = upcomingBookings.map(b => {
+      const start = new Date(b.starts_at).toLocaleString(locale, {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'UTC',
+        hour12: false,
+      });
+      const who =
+        b.customer_display_name ??
+        (b.customer_username ? `@${b.customer_username}` : 'unknown customer');
+      return `- ${start} UTC with ${who} [${b.status}]`;
+    });
+    parts.push(`### Upcoming Bookings (as provider)\n${bookingLines.join('\n')}`);
+  }
+
+  if (parts.length === 0) {
+    return null;
+  }
+  return `## Inbound Economic Activity\n${parts.join('\n\n')}`;
+}
+
+export function renderPaymentCapabilities(
+  paymentCapabilities: FullUserContext['paymentCapabilities']
+): string {
+  const { hasNwcWallet, lightningAddress } = paymentCapabilities;
+  const capLines: string[] = [];
+  if (hasNwcWallet) {
+    capLines.push(
+      '⚡ **NWC wallet connected** — can use send_payment and fund_project exec_action blocks to send Bitcoin automatically'
+    );
+  } else {
+    capLines.push(
+      '❌ **No NWC wallet** — cannot auto-send payments; if user asks to send Bitcoin, tell them to connect a Nostr Wallet Connect wallet first (Settings → Wallets)'
+    );
+  }
+  if (lightningAddress) {
+    capLines.push(`📬 **Lightning address**: ${lightningAddress} (others can pay the user here)`);
+  } else {
+    capLines.push(
+      '📬 **No lightning address configured** — user cannot receive lightning payments without one'
+    );
+  }
+  return `## Payment Capabilities\n${capLines.join('\n')}`;
+}
+
+export function renderActivitySummary(stats: FullUserContext['stats']): string | null {
+  const hasAnyEntities =
+    stats.totalProducts +
+      stats.totalServices +
+      stats.totalProjects +
+      stats.totalCauses +
+      stats.totalEvents +
+      stats.totalAssets +
+      stats.totalLoans +
+      stats.totalResearch +
+      stats.totalWishlists >
+    0;
+
+  if (!hasAnyEntities) {
+    return null;
+  }
+  const statParts: string[] = [];
+  if (stats.totalProducts > 0) {
+    statParts.push(`${stats.totalProducts} product${stats.totalProducts > 1 ? 's' : ''}`);
+  }
+  if (stats.totalServices > 0) {
+    statParts.push(`${stats.totalServices} service${stats.totalServices > 1 ? 's' : ''}`);
+  }
+  if (stats.totalProjects > 0) {
+    statParts.push(`${stats.totalProjects} project${stats.totalProjects > 1 ? 's' : ''}`);
+  }
+  if (stats.totalCauses > 0) {
+    statParts.push(`${stats.totalCauses} cause${stats.totalCauses > 1 ? 's' : ''}`);
+  }
+  if (stats.totalEvents > 0) {
+    statParts.push(`${stats.totalEvents} event${stats.totalEvents > 1 ? 's' : ''}`);
+  }
+  if (stats.totalAssets > 0) {
+    statParts.push(`${stats.totalAssets} asset${stats.totalAssets > 1 ? 's' : ''}`);
+  }
+  if (stats.totalLoans > 0) {
+    statParts.push(`${stats.totalLoans} loan${stats.totalLoans > 1 ? 's' : ''}`);
+  }
+  if (stats.totalResearch > 0) {
+    statParts.push(
+      `${stats.totalResearch} research ${stats.totalResearch > 1 ? 'entities' : 'entity'}`
+    );
+  }
+  if (stats.totalWishlists > 0) {
+    statParts.push(`${stats.totalWishlists} wishlist${stats.totalWishlists > 1 ? 's' : ''}`);
+  }
+  if (stats.totalTasks > 0) {
+    const taskStat = `${stats.totalTasks} active task${stats.totalTasks > 1 ? 's' : ''}`;
+    statParts.push(stats.urgentTasks > 0 ? `${taskStat} (${stats.urgentTasks} urgent)` : taskStat);
+  }
+  if (stats.totalWallets > 0) {
+    statParts.push(`${stats.totalWallets} wallet${stats.totalWallets > 1 ? 's' : ''}`);
+  }
+
+  return `## Activity Summary\nThe user has: ${statParts.join(', ')}.`;
+}
