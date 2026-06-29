@@ -11,9 +11,10 @@
 
 import Link from 'next/link';
 import { DollarSign, Percent, TrendingUp, User } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { EntityCard } from '@/components/entity/EntityCard';
 import { formatRelativeTime } from '@/utils/dates';
 import type { Loan } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
@@ -67,52 +68,36 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
   }
 
   return (
-    <Link href={`${ENTITY_REGISTRY['loan'].publicBasePath}/${loan.id}`}>
-      <Card className="oc-card-link h-full">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex min-w-0 items-center gap-2">
-              <div className="oc-icon-tile h-8 w-8 flex-shrink-0">
-                <DollarSign className="w-4 h-4 text-fg-primary" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <CardTitle className="text-base truncate">{loan.title}</CardTitle>
-                <CardDescription className="text-xs">
-                  Listed {formatRelativeTime(loan.created_at)}
-                </CardDescription>
-              </div>
-            </div>
-            <Badge
-              variant={loan.status === STATUS.LOANS.ACTIVE ? 'default' : 'secondary'}
-              className="capitalize text-xs"
-            >
-              {loan.status}
-            </Badge>
+    <EntityCard
+      id={loan.id}
+      title={loan.title}
+      description={loan.description}
+      href={`${ENTITY_REGISTRY['loan'].publicBasePath}/${loan.id}`}
+      headerSlot={
+        <Badge
+          variant={loan.status === STATUS.LOANS.ACTIVE ? 'default' : 'secondary'}
+          className="text-xs capitalize"
+        >
+          {loan.status}
+        </Badge>
+      }
+      progressSlot={
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-fg-secondary">Remaining</span>
+            <span className="font-semibold text-fg-primary">
+              {formatAmount(loan.remaining_balance, loan.currency)}
+            </span>
           </div>
-        </CardHeader>
-
-        <CardContent className="space-y-3">
-          {/* Description */}
-          {loan.description && (
-            <p className="text-sm text-fg-secondary line-clamp-2">{loan.description}</p>
-          )}
-
-          {/* Financial Summary */}
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-fg-secondary">Remaining</span>
-              <span className="font-semibold text-fg-primary">
-                {formatAmount(loan.remaining_balance, loan.currency)}
-              </span>
-            </div>
-            <Progress value={progress} className="h-1.5" />
-            <div className="flex justify-between text-xs text-fg-secondary">
-              <span>{progress.toFixed(0)}% funded</span>
-              <span>{formatAmount(loan.original_amount, loan.currency)} total</span>
-            </div>
+          <Progress value={progress} className="h-1.5" />
+          <div className="flex justify-between text-xs text-fg-secondary">
+            <span>{progress.toFixed(0)}% funded</span>
+            <span>{formatAmount(loan.original_amount, loan.currency)} total</span>
           </div>
-
-          {/* Interest Rate & Monthly Payment */}
+        </div>
+      }
+      metricsSlot={
+        loan.interest_rate || loan.monthly_payment ? (
           <div className="flex items-center justify-between text-sm">
             {loan.interest_rate && (
               <div className="flex items-center gap-1">
@@ -127,17 +112,17 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
               </div>
             )}
           </div>
-
-          {/* Lender Info */}
-          {loan.lender_name && (
-            <div className="flex items-center gap-2 text-xs text-fg-secondary">
-              <User className="h-3 w-3" />
-              <span className="truncate">Current lender: {loan.lender_name}</span>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </Link>
+        ) : null
+      }
+      footerSlot={
+        loan.lender_name ? (
+          <div className="flex items-center gap-2 text-xs text-fg-secondary">
+            <User className="h-3 w-3" />
+            <span className="truncate">Current lender: {loan.lender_name}</span>
+          </div>
+        ) : null
+      }
+    />
   );
 }
 

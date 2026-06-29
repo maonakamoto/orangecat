@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { TrendingUp, Percent, Shield } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { EntityCard } from '@/components/entity/EntityCard';
 import { formatRelativeTime } from '@/utils/dates';
 import type { Investment } from '@/types/investments';
 import { formatCurrency as formatCurrencyFn } from '@/services/currency';
@@ -56,82 +57,67 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
   }
 
   return (
-    <Link href={`${ENTITY_REGISTRY['investment'].publicBasePath}/${investment.id}`}>
-      <Card className="oc-card-link h-full">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex min-w-0 items-center gap-2">
-              <div className="oc-icon-tile h-8 w-8 flex-shrink-0">
-                <TrendingUp className="w-4 h-4 text-status-positive" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <CardTitle className="text-base truncate">{investment.title}</CardTitle>
-                <CardDescription className="text-xs">
-                  Listed {formatRelativeTime(investment.created_at)}
-                </CardDescription>
-              </div>
-            </div>
-            <Badge variant="secondary" className="capitalize text-xs">
-              {INVESTMENT_TYPE_LABELS[investment.investment_type] ?? investment.investment_type}
-            </Badge>
+    <EntityCard
+      id={investment.id}
+      title={investment.title}
+      description={investment.description}
+      href={`${ENTITY_REGISTRY['investment'].publicBasePath}/${investment.id}`}
+      headerSlot={
+        <Badge variant="secondary" className="text-xs capitalize">
+          {INVESTMENT_TYPE_LABELS[investment.investment_type] ?? investment.investment_type}
+        </Badge>
+      }
+      progressSlot={
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-fg-secondary">Raised</span>
+            {/* Green only when something's actually been raised — a zero
+                rendered green reads as a positive metric it isn't. */}
+            <span
+              className={`font-semibold ${
+                Number(investment.total_raised) > 0 ? 'text-status-positive' : 'text-fg-primary'
+              }`}
+            >
+              {formatAmount(investment.total_raised)}
+            </span>
           </div>
-        </CardHeader>
-
-        <CardContent className="space-y-3">
-          {investment.description && (
-            <p className="text-sm text-fg-secondary line-clamp-2">{investment.description}</p>
-          )}
-
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-fg-secondary">Raised</span>
-              {/* Green only when something's actually been raised — a zero
-                  rendered green reads as a positive metric it isn't. */}
-              <span
-                className={`font-semibold ${
-                  Number(investment.total_raised) > 0 ? 'text-status-positive' : 'text-fg-primary'
-                }`}
-              >
-                {formatAmount(investment.total_raised)}
-              </span>
-            </div>
-            <Progress value={progress} className="h-1.5" />
-            <div className="flex justify-between text-xs text-fg-secondary">
-              <span>{progress}% funded</span>
-              <span>{formatAmount(investment.target_amount)} goal</span>
-            </div>
+          <Progress value={progress} className="h-1.5" />
+          <div className="flex justify-between text-xs text-fg-secondary">
+            <span>{progress}% funded</span>
+            <span>{formatAmount(investment.target_amount)} goal</span>
           </div>
-
-          <div className="flex items-center justify-between text-sm">
-            {investment.expected_return_rate !== null &&
-              investment.expected_return_rate !== undefined && (
-                <div className="flex items-center gap-1">
-                  <Percent className="h-3 w-3 text-fg-tertiary" />
-                  <span>{investment.expected_return_rate}% expected return</span>
-                </div>
-              )}
-            {investment.risk_level && (
-              <span
-                className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 ${
-                  INVESTMENT_RISK_COLORS[investment.risk_level] ??
-                  'bg-surface-raised text-fg-primary border-default'
-                }`}
-              >
-                <Shield className="h-3 w-3" />
-                {investment.risk_level} risk
-              </span>
+        </div>
+      }
+      metricsSlot={
+        <div className="flex items-center justify-between text-sm">
+          {investment.expected_return_rate !== null &&
+            investment.expected_return_rate !== undefined && (
+              <div className="flex items-center gap-1">
+                <Percent className="h-3 w-3 text-fg-tertiary" />
+                <span>{investment.expected_return_rate}% expected return</span>
+              </div>
             )}
-          </div>
-
-          {investment.term_months !== null && investment.term_months !== undefined && (
-            <p className="text-xs text-fg-secondary">
-              {investment.term_months}-month term · min{' '}
-              {formatAmount(investment.minimum_investment)}
-            </p>
+          {investment.risk_level && (
+            <span
+              className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 ${
+                INVESTMENT_RISK_COLORS[investment.risk_level] ??
+                'bg-surface-raised text-fg-primary border-default'
+              }`}
+            >
+              <Shield className="h-3 w-3" />
+              {investment.risk_level} risk
+            </span>
           )}
-        </CardContent>
-      </Card>
-    </Link>
+        </div>
+      }
+      footerSlot={
+        investment.term_months !== null && investment.term_months !== undefined ? (
+          <p className="text-xs text-fg-secondary">
+            {investment.term_months}-month term · min {formatAmount(investment.minimum_investment)}
+          </p>
+        ) : null
+      }
+    />
   );
 }
 
