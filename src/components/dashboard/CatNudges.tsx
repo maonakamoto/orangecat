@@ -9,6 +9,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Sparkles, X, ArrowRight } from 'lucide-react';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface Nudge {
   id: string;
@@ -24,7 +25,7 @@ export function CatNudges() {
 
   useEffect(() => {
     let on = true;
-    fetch('/api/cat/nudges')
+    fetch(API_ROUTES.CAT.NUDGES)
       .then(r => (r.ok ? r.json() : null))
       .then(d => {
         if (on && d?.success) {
@@ -46,7 +47,7 @@ export function CatNudges() {
     // reappear on next load (the dismissal wasn't persisted).
     const prev = nudges;
     setNudges(n => n?.filter(x => x.id !== id) ?? null);
-    fetch('/api/cat/nudges', {
+    fetch(API_ROUTES.CAT.NUDGES, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'dismiss', id }),

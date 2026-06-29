@@ -15,6 +15,18 @@ export const API_ROUTES = {
     PERMISSIONS: '/api/cat/permissions',
     ACTIONS: '/api/cat/actions',
     QUOTA: '/api/cat/quota',
+    CREDITS: '/api/cat/credits',
+    CREDITS_TOPUP: '/api/cat/credits/topup',
+    MEMORIES: '/api/cat/memories',
+    NUDGES: '/api/cat/nudges',
+  },
+  INTEGRATION_KEYS: {
+    BASE: '/api/integration-keys',
+    BY_ID: (id: string) => `/api/integration-keys/${id}`,
+  },
+  WEBHOOK_ENDPOINTS: {
+    BASE: '/api/webhook-endpoints',
+    BY_ID: (id: string) => `/api/webhook-endpoints/${id}`,
   },
   MESSAGES: {
     BASE: '/api/messages',

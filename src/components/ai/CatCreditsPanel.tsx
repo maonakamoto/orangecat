@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Coins, Loader2, AlertCircle, ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 import { TopUpDialog } from './TopUpDialog';
 
 interface CreditEntry {
@@ -44,7 +45,7 @@ export function CatCreditsPanel() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/cat/credits');
+      const res = await fetch(API_ROUTES.CAT.CREDITS);
       if (!res.ok) {
         throw new Error('Failed to load credits');
       }

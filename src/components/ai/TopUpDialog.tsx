@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import Button from '@/components/ui/Button';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { logger } from '@/utils/logger';
+import { API_ROUTES } from '@/config/api-routes';
 
 /** Preset amounts in BTC (1-sat precision): 10k / 50k / 100k sats. */
 const PRESETS_BTC = [0.0001, 0.0005, 0.001];
@@ -53,7 +54,7 @@ export function TopUpDialog({ onClose, onSuccess }: TopUpDialogProps) {
     setCreating(true);
     setError(null);
     try {
-      const res = await fetch('/api/cat/credits/topup', {
+      const res = await fetch(API_ROUTES.CAT.CREDITS_TOPUP, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amountBtc }),
@@ -82,7 +83,9 @@ export function TopUpDialog({ onClose, onSuccess }: TopUpDialogProps) {
     }
     pollRef.current = setInterval(async () => {
       try {
-        const res = await fetch(`/api/cat/credits/topup?id=${encodeURIComponent(invoice.topupId)}`);
+        const res = await fetch(
+          `${API_ROUTES.CAT.CREDITS_TOPUP}?id=${encodeURIComponent(invoice.topupId)}`
+        );
         const json = await res.json();
         const status = json?.data?.status;
         if (status === 'paid') {

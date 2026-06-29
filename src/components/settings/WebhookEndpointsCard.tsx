@@ -23,6 +23,7 @@ import { logger } from '@/utils/logger';
 import WebhookEndpointMintForm from '@/components/settings/WebhookEndpointMintForm';
 import WebhookEndpointRow, { type WebhookEndpoint } from '@/components/settings/WebhookEndpointRow';
 import PlaintextRevealCard from '@/components/settings/PlaintextRevealCard';
+import { API_ROUTES } from '@/config/api-routes';
 
 interface MintResponse {
   data: { endpoint: WebhookEndpoint; secret: string };
@@ -80,7 +81,7 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/webhook-endpoints', { credentials: 'include' });
+        const res = await fetch(API_ROUTES.WEBHOOK_ENDPOINTS.BASE, { credentials: 'include' });
         if (!res.ok) {
           throw new Error(`Failed to load endpoints (${res.status})`);
         }
@@ -118,7 +119,7 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
       if (selectedEvents.size > 0) {
         body.event_types = Array.from(selectedEvents);
       }
-      const res = await fetch('/api/webhook-endpoints', {
+      const res = await fetch(API_ROUTES.WEBHOOK_ENDPOINTS.BASE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -147,7 +148,7 @@ export default function WebhookEndpointsCard({ actors, defaultActorId }: Props) 
       return;
     }
     try {
-      const res = await fetch(`/api/webhook-endpoints/${endpoint.id}`, {
+      const res = await fetch(API_ROUTES.WEBHOOK_ENDPOINTS.BY_ID(endpoint.id), {
         method: 'DELETE',
         credentials: 'include',
       });
