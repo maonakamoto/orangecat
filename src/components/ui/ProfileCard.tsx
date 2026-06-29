@@ -20,7 +20,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
   const displayName = profile.name || profile.username || 'Anonymous';
 
   const TypeBadge = () => (
-    <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-fg-secondary border border-border-subtle">
+    <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-surface-raised text-fg-secondary border border-border-subtle">
       <Users className="w-3 h-3 mr-1" />
       Person
     </div>
@@ -31,7 +31,7 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
       <Card className="p-4 oc-card-link">
         <div className="flex items-center gap-4">
           <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-muted flex-shrink-0">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-surface-raised flex-shrink-0">
               {profile.avatar_url ? (
                 <Image
                   src={profile.avatar_url}
@@ -51,17 +51,17 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-                <h3 className="font-semibold text-foreground hover:underline underline-offset-4 truncate">
+                <h3 className="font-semibold text-fg-primary hover:underline underline-offset-4 truncate">
                   {displayName}
                 </h3>
               </Link>
               <TypeBadge />
             </div>
             {profile.username && (
-              <p className="text-sm text-muted-foreground truncate">@{profile.username}</p>
+              <p className="text-sm text-fg-secondary truncate">@{profile.username}</p>
             )}
             {profile.bio && (
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{profile.bio}</p>
+              <p className="text-sm text-fg-secondary mt-1 line-clamp-2">{profile.bio}</p>
             )}
           </div>
 
@@ -80,10 +80,10 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
 
   // Grid view
   return (
-    <Card className="p-6 oc-card-link">
+    <Card className="h-full p-6 oc-card-link">
       <div className="text-center">
         <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-          <div className="relative w-20 h-20 rounded-full overflow-hidden bg-muted mx-auto mb-4">
+          <div className="relative w-20 h-20 rounded-full overflow-hidden bg-surface-raised mx-auto mb-4">
             {profile.avatar_url ? (
               <Image
                 src={profile.avatar_url}
@@ -100,19 +100,17 @@ export default function ProfileCard({ profile, viewMode = 'grid' }: ProfileCardP
 
         <div className="flex items-center justify-center gap-2 mb-2">
           <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>
-            <h3 className="font-semibold text-foreground hover:underline underline-offset-4">
+            <h3 className="font-semibold text-fg-primary hover:underline underline-offset-4">
               {displayName}
             </h3>
           </Link>
           <TypeBadge />
         </div>
 
-        {profile.username && (
-          <p className="text-sm text-muted-foreground mb-3">@{profile.username}</p>
-        )}
+        {profile.username && <p className="text-sm text-fg-secondary mb-3">@{profile.username}</p>}
 
         {profile.bio && (
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{profile.bio}</p>
+          <p className="text-sm text-fg-secondary mb-4 line-clamp-3">{profile.bio}</p>
         )}
 
         <Link href={ROUTES.PROFILES.VIEW(profile.username || profile.id)}>

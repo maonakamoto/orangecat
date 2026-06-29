@@ -226,7 +226,7 @@ export default function UserProfileDropdown({
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
         disabled={isProfileLoading}
-        className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3 text-foreground hover:bg-muted transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-lg px-1.5 sm:px-2 md:px-3 py-1.5 sm:py-2 md:py-2.5 min-h-9 sm:min-h-10 md:min-h-11 disabled:opacity-50"
+        className="flex h-11 items-center gap-1.5 rounded-md px-1.5 text-fg-secondary transition-colors hover:bg-surface-raised focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:opacity-50 sm:h-10 sm:gap-2 sm:px-2"
         aria-haspopup="menu"
         aria-expanded={isOpen}
         aria-label="User menu"

@@ -148,18 +148,39 @@ export default async function PublicEntityDetailPage({
   const Icon = meta.icon;
 
   const supabase = await createServerClient();
-  const { data, error } = await supabase
-    .from(getTableName(config.entityType))
+  const table = getTableName(config.entityType);
+  const visibilityCol = config.visibilityFilter?.column ?? 'status';
+  const visibilityVal = config.visibilityFilter?.value ?? STATUS.PRODUCTS.ACTIVE;
+
+  const { data: publicData } = await supabase
+    .from(table)
     .select('*')
     .eq('id', id)
-    .eq(
-      config.visibilityFilter?.column ?? 'status',
-      config.visibilityFilter?.value ?? STATUS.PRODUCTS.ACTIVE
-    )
+    .eq(visibilityCol, visibilityVal)
     .single();
 
-  const entity = data as EntityData | null;
-  if (error || !entity) {
+  let entity = publicData as EntityData | null;
+  let isOwnerPreview = false;
+
+  // Not publicly visible (e.g. a draft). Let the OWNER preview it — the dashboard
+  // "View public page" link would otherwise hit a bare 404 for unpublished
+  // entities. Verify ownership before showing; never leak a draft to anyone else.
+  if (!entity) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { data: ownData } = await supabase.from(table).select('*').eq('id', id).single();
+      const candidate = ownData as EntityData | null;
+      const candidateOwner = candidate ? await fetchEntityOwner(supabase, candidate) : null;
+      if (candidate && candidateOwner?.user_id && candidateOwner.user_id === user.id) {
+        entity = candidate;
+        isOwnerPreview = true;
+      }
+    }
+  }
+
+  if (!entity) {
     notFound();
   }
 
@@ -196,6 +217,13 @@ export default async function PublicEntityDetailPage({
     <>
       <JsonLdScript data={jsonLd} />
       <div className={`min-h-screen oc-mobile-action-stack-padding ${pageSurface}`}>
+        {isOwnerPreview && (
+          <div className="border-b border-accent-warm/30 bg-accent-warm/10 px-4 py-2.5 text-center text-sm text-fg-primary">
+            Preview — this {meta.name.toLowerCase()} is{' '}
+            <span className="font-medium capitalize">{entity.status}</span> and only visible to you.
+            Publish it to make this page public.
+          </div>
+        )}
         <div className="bg-surface-base border-b border-default">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumb

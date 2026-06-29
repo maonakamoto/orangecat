@@ -59,9 +59,9 @@ export function InvestmentCard({ investment, viewMode = 'grid' }: InvestmentCard
     <Link href={`${ENTITY_REGISTRY['investment'].publicBasePath}/${investment.id}`}>
       <Card className="oc-card-link h-full">
         <CardHeader className="pb-3">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-2">
-              <div className="oc-icon-tile h-8 w-8">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex min-w-0 items-center gap-2">
+              <div className="oc-icon-tile h-8 w-8 flex-shrink-0">
                 <TrendingUp className="w-4 h-4 text-status-positive" />
               </div>
               <div className="flex-1 min-w-0">
