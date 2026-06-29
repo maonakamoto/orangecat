@@ -40,7 +40,10 @@ export const CURRENCY_METADATA: Record<
   SATS: { label: 'Satoshis', symbol: 'sat', precision: 0 },
 };
 
-export const currencySelectOptions = CURRENCY_CODES.map(code => ({
+// SATS stays a valid code for internal/Lightning-protocol use, but is never
+// offered as a user-facing DISPLAY currency — the platform never shows amounts
+// in sats (always a fiat currency or BTC).
+export const currencySelectOptions = CURRENCY_CODES.filter(code => code !== 'SATS').map(code => ({
   value: code,
   label: CURRENCY_METADATA[code].label,
 }));
