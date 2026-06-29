@@ -16,16 +16,17 @@ export const APP_HEADER_HEIGHT_MOBILE = '3.5rem' as const;
 export const APP_HEADER_HEIGHT_DESKTOP = '4rem' as const;
 
 /**
- * Tailwind classes for a column that fills the viewport below the fixed header.
+ * Class for a column that fills the viewport below the fixed header.
  * Use on chat-style surfaces (Cat, messages, ai-chat).
  *
- * NOTE: the underscores are REQUIRED. Tailwind converts `_` → space inside
- * arbitrary values, yielding valid `calc(100dvh - 4rem)`. Without them the CSS is
- * `calc(100dvh-4rem)` — invalid, silently dropped — so the height never applies
- * and chat surfaces collapse to content height (composer floats, page scrolls).
+ * This is a REAL CSS utility defined in globals.css (.app-content-height), NOT a
+ * Tailwind arbitrary value. Tailwind's content scanner doesn't extract class
+ * strings referenced only from this .ts const, so an `h-[calc(...)]` here never
+ * generated a rule — the height silently didn't apply and chat surfaces collapsed
+ * to content height (composer floated, whole page scrolled). The globals.css
+ * utility is always present and handles the responsive header offset (56/64px).
  */
-export const APP_CONTENT_HEIGHT_CLASS =
-  'h-[calc(100dvh_-_3.5rem)] sm:h-[calc(100dvh_-_4rem)]' as const;
+export const APP_CONTENT_HEIGHT_CLASS = 'app-content-height' as const;
 
 /** Max width for chat message columns (ChatGPT-style readable measure) */
 export const CHAT_CONTENT_MAX_WIDTH_CLASS = 'max-w-3xl' as const;

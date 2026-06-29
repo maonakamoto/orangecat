@@ -392,6 +392,23 @@
     @apply flex min-h-0 flex-col overflow-hidden bg-background;
   }
 
+  /*
+   * Fills the viewport below the fixed app header (chat surfaces: Cat, messages).
+   * Real CSS, NOT a Tailwind arbitrary class — the value lives in a .ts const
+   * (APP_CONTENT_HEIGHT_CLASS) that Tailwind's content scanner doesn't extract,
+   * so the generated `h-[calc(...)]` rule was always missing and chat surfaces
+   * collapsed to content height (composer floated, page scrolled). Header height
+   * is 56px (pt-14) on mobile, 64px (sm:pt-16) on >=sm — keep in sync with AppShell.
+   */
+  .app-content-height {
+    height: calc(100dvh - 3.5rem);
+  }
+  @media (min-width: 640px) {
+    .app-content-height {
+      height: calc(100dvh - 4rem);
+    }
+  }
+
   .oc-chat-toolbar {
     @apply flex flex-shrink-0 items-center justify-between gap-3 border-b border-border-subtle px-3 py-2 sm:px-4;
   }
