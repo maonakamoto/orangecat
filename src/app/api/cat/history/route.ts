@@ -33,7 +33,9 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest) => {
   }
 
   try {
-    await clearDefaultConversation(supabase, user.id);
+    // Clears the given conversation's messages, or the default when omitted.
+    const conversationId = new URL(request.url).searchParams.get('conversationId');
+    await clearDefaultConversation(supabase, user.id, conversationId);
     return apiSuccess({ success: true });
   } catch (error) {
     return handleApiError(error);

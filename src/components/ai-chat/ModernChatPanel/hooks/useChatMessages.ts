@@ -60,6 +60,8 @@ function readLocale(): string {
 
 interface UseChatMessagesOptions {
   selectedModel: string;
+  /** Active conversation. Omitted/null → the user's default conversation. */
+  conversationId?: string | null;
   onPendingResult?: () => void;
   /**
    * Fires once per send attempt after the request settles (success, error,
@@ -67,12 +69,19 @@ interface UseChatMessagesOptions {
    * the platform's daily counter without a page reload.
    */
   onMessageSent?: () => void;
+  /**
+   * Fires after the FIRST message of a brand-new conversation is sent, so the
+   * rail can refresh (the conversation gets its auto-title server-side).
+   */
+  onConversationStarted?: () => void;
 }
 
 export function useChatMessages({
   selectedModel,
+  conversationId,
   onPendingResult,
   onMessageSent,
+  onConversationStarted,
 }: UseChatMessagesOptions) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -83,9 +92,11 @@ export function useChatMessages({
   onPendingResultRef.current = onPendingResult;
   const onMessageSentRef = useRef(onMessageSent);
   onMessageSentRef.current = onMessageSent;
+  const onConversationStartedRef = useRef(onConversationStarted);
+  onConversationStartedRef.current = onConversationStarted;
   const preferredCurrency = useUserCurrency();
 
-  const { isLoadingHistory } = useChatHistory(setMessages);
+  const { isLoadingHistory } = useChatHistory(setMessages, conversationId);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -133,6 +144,7 @@ export function useChatMessages({
             preferredCurrency,
             locale: readLocale(),
             lastVisitedPath: readLastVisitedPath(),
+            conversationId: conversationId ?? undefined,
           }),
           signal: abortController.signal,
         });
@@ -289,18 +301,23 @@ export function useChatMessages({
         abortControllerRef.current = null;
         setIsLoading(false);
         onMessageSentRef.current?.();
+        // Refresh the rail: titles (first message) + recency ordering.
+        onConversationStartedRef.current?.();
       }
     },
-    [isLoading, selectedModel, preferredCurrency]
+    [isLoading, selectedModel, preferredCurrency, conversationId]
   );
 
   const clearChat = useCallback(() => {
     setMessages([]);
     setError(null);
-    fetch(API_ROUTES.CAT.HISTORY, { method: 'DELETE' }).catch((err: unknown) => {
+    const url = conversationId
+      ? `${API_ROUTES.CAT.HISTORY}?conversationId=${encodeURIComponent(conversationId)}`
+      : API_ROUTES.CAT.HISTORY;
+    fetch(url, { method: 'DELETE' }).catch((err: unknown) => {
       logger.warn('Failed to clear server history', { err }, 'useChatMessages');
     });
-  }, []);
+  }, [conversationId]);
 
   const setErrorState = useCallback((err: string | null) => {
     setError(err);

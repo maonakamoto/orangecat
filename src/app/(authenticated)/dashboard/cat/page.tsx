@@ -16,12 +16,23 @@ import { useCatQuota } from '@/components/ai-chat/ModernChatPanel/hooks/useCatQu
 import { CatChatToolbar } from '@/components/ai-chat/CatChatToolbar';
 import { CatSecondaryPanel } from '@/components/ai-chat/CatSecondaryPanel';
 import { isCatHubTab, type CatHubTab } from '@/config/cat-hub';
+import { APP_CONTENT_HEIGHT_CLASS } from '@/config/layout-chrome';
+import { useConversations } from '@/components/ai-chat/ModernChatPanel/hooks/useConversations';
+import { ConversationRail } from '@/components/ai-chat/ModernChatPanel/components/ConversationRail';
 
 export default function CatHubPage() {
   const { user, isLoading } = useRequireAuth();
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<CatHubTab>('chat');
   const { quota, refresh: refreshQuota } = useCatQuota();
+  const {
+    conversations,
+    activeId,
+    refresh: refreshConversations,
+    selectConversation,
+    newConversation,
+    deleteConversation,
+  } = useConversations();
 
   useEffect(() => {
     const tab = searchParams?.get('tab');
@@ -48,18 +59,31 @@ export default function CatHubPage() {
   }
 
   return (
-    // h-full (not a 100dvh calc): fill the flex-resolved <main> height so the
-    // composer pins to the bottom. The dvh calc was collapsing to content height
-    // on this route, floating the composer halfway up the page.
-    <div className="oc-chat-layout h-full min-h-0">
-      <CatChatToolbar activePanel="chat" quota={quota} />
-      <ModernChatPanel
-        variant="focus"
-        initialMessage={initialMessage}
-        isNewUser={isNewUser}
-        onMessageSent={refreshQuota}
-        className="min-h-0 flex-1"
+    // Viewport-lock the chat to the region below the fixed header (the mobile
+    // bottom nav is hidden on this route — see getRouteChrome). This bounds the
+    // column to an absolute height, so a growing textarea scrolls the thread
+    // instead of pushing the composer off-screen. `h-full` collapsed to content
+    // height because the AppShell chain is min-h-screen (no bounded ancestor).
+    <div className={`relative flex min-h-0 ${APP_CONTENT_HEIGHT_CLASS}`}>
+      <ConversationRail
+        conversations={conversations}
+        activeId={activeId}
+        onSelect={selectConversation}
+        onNew={newConversation}
+        onDelete={deleteConversation}
       />
+      <div className="oc-chat-layout min-h-0 min-w-0 flex-1">
+        <CatChatToolbar activePanel="chat" quota={quota} />
+        <ModernChatPanel
+          variant="focus"
+          conversationId={activeId}
+          onConversationStarted={refreshConversations}
+          initialMessage={initialMessage}
+          isNewUser={isNewUser}
+          onMessageSent={refreshQuota}
+          className="min-h-0 flex-1"
+        />
+      </div>
     </div>
   );
 }

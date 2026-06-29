@@ -1,13 +1,15 @@
 /**
  * Cat Conversation History Service
  *
- * Manages persistent chat history for My Cat AI.
- * Each user has a default conversation that accumulates across sessions.
+ * Manages persistent chat history for My Cat AI. Supports multiple named
+ * conversations per user (Grok/ChatGPT-style), plus a default one used when no
+ * conversation is specified (back-compat with the single-thread UI).
  *
  * Design:
- * - One default conversation per user
- * - Last N messages injected into LLM context for continuity
+ * - Many conversations per user; one flagged is_default
+ * - Last N messages of the ACTIVE conversation injected into LLM context
  * - Messages saved after each exchange (non-blocking on the response path)
+ * - A conversation's title is auto-set from its first user message
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -22,6 +24,9 @@ const HISTORY_INJECTION_LIMIT = 20;
 /** Max messages to return for UI history display */
 const HISTORY_DISPLAY_LIMIT = 50;
 
+/** Max length of an auto-generated conversation title. */
+const TITLE_MAX_LENGTH = 60;
+
 interface StoredMessage {
   id: string;
   role: 'user' | 'assistant';
@@ -30,6 +35,13 @@ interface StoredMessage {
   provider?: string | null;
   token_count?: number | null;
   created_at: string;
+}
+
+export interface ConversationSummary {
+  id: string;
+  title: string | null;
+  is_default: boolean;
+  updated_at: string;
 }
 
 /**
@@ -67,6 +79,90 @@ export async function getOrCreateDefaultConversation(
 }
 
 /**
+ * Resolve the conversation to operate on: the requested one (if it exists and
+ * belongs to the user), otherwise null so callers can fall back to the default.
+ * Guards against acting on another user's conversation id.
+ */
+export async function resolveOwnedConversationId(
+  supabase: AnySupabaseClient,
+  userId: string,
+  conversationId?: string | null
+): Promise<string | null> {
+  if (!conversationId) {
+    return null;
+  }
+  const { data } = await supabase
+    .from(DATABASE_TABLES.CAT_CONVERSATIONS)
+    .select('id')
+    .eq('id', conversationId)
+    .eq('user_id', userId)
+    .single();
+  return data?.id ?? null;
+}
+
+/**
+ * Resolve to a usable conversation id: the requested+owned one, else the default
+ * (created on demand). Use on the write path so a message always lands somewhere.
+ */
+export async function resolveConversationIdOrDefault(
+  supabase: AnySupabaseClient,
+  userId: string,
+  conversationId?: string | null
+): Promise<string> {
+  const owned = await resolveOwnedConversationId(supabase, userId, conversationId);
+  return owned ?? (await getOrCreateDefaultConversation(supabase, userId));
+}
+
+/** List the user's conversations, most-recently-updated first. */
+export async function listConversations(
+  supabase: AnySupabaseClient,
+  userId: string
+): Promise<ConversationSummary[]> {
+  const { data } = await supabase
+    .from(DATABASE_TABLES.CAT_CONVERSATIONS)
+    .select('id, title, is_default, updated_at')
+    .eq('user_id', userId)
+    .order('updated_at', { ascending: false });
+  return (data as ConversationSummary[]) ?? [];
+}
+
+/** Create a fresh (non-default) conversation and return its id. */
+export async function createConversation(
+  supabase: AnySupabaseClient,
+  userId: string,
+  title?: string | null
+): Promise<string> {
+  const { data, error } = await supabase
+    .from(DATABASE_TABLES.CAT_CONVERSATIONS)
+    .insert({ user_id: userId, is_default: false, title: title ?? null })
+    .select('id')
+    .single();
+  if (error || !data) {
+    throw new Error(`Failed to create conversation: ${error?.message}`);
+  }
+  return data.id;
+}
+
+/** Delete a conversation (and its messages) the user owns. Returns success. */
+export async function deleteConversation(
+  supabase: AnySupabaseClient,
+  userId: string,
+  conversationId: string
+): Promise<boolean> {
+  const owned = await resolveOwnedConversationId(supabase, userId, conversationId);
+  if (!owned) {
+    return false;
+  }
+  await supabase.from(DATABASE_TABLES.CAT_MESSAGES).delete().eq('conversation_id', owned);
+  const { error } = await supabase
+    .from(DATABASE_TABLES.CAT_CONVERSATIONS)
+    .delete()
+    .eq('id', owned)
+    .eq('user_id', userId);
+  return !error;
+}
+
+/**
  * Saves a batch of messages to a conversation.
  * Used to save user + assistant message pair after each exchange.
  */
@@ -94,6 +190,36 @@ export async function saveMessages(
 
   await supabase.from(DATABASE_TABLES.CAT_MESSAGES).insert(rows);
   // Ignore errors — history is best-effort, never blocks responses
+
+  // Keep the conversation fresh for rail ordering, and name an untitled
+  // conversation from its first user message (Grok/ChatGPT behaviour).
+  const firstUser = messages.find(m => m.role === 'user')?.content;
+  await bumpConversation(supabase, conversationId, firstUser);
+}
+
+/**
+ * Touch a conversation's updated_at (for recency ordering) and, if it has no
+ * title yet, set it from the given text. Best-effort.
+ */
+export async function bumpConversation(
+  supabase: AnySupabaseClient,
+  conversationId: string,
+  titleFrom?: string
+): Promise<void> {
+  const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+  const title = titleFrom?.trim();
+  if (title) {
+    const { data: row } = await supabase
+      .from(DATABASE_TABLES.CAT_CONVERSATIONS)
+      .select('title')
+      .eq('id', conversationId)
+      .single();
+    if (row && !row.title) {
+      patch.title =
+        title.length > TITLE_MAX_LENGTH ? `${title.slice(0, TITLE_MAX_LENGTH).trimEnd()}…` : title;
+    }
+  }
+  await supabase.from(DATABASE_TABLES.CAT_CONVERSATIONS).update(patch).eq('id', conversationId);
 }
 
 /**
@@ -103,9 +229,12 @@ export async function saveMessages(
 export async function getMessagesForContext(
   supabase: AnySupabaseClient,
   userId: string,
+  conversationIdArg?: string | null,
   limit: number = HISTORY_INJECTION_LIMIT
 ): Promise<Array<{ role: 'user' | 'assistant'; content: string }>> {
-  const conversationId = await getDefaultConversationId(supabase, userId);
+  const conversationId =
+    (await resolveOwnedConversationId(supabase, userId, conversationIdArg)) ??
+    (await getDefaultConversationId(supabase, userId));
   if (!conversationId) {
     return [];
   }
@@ -132,9 +261,12 @@ export async function getMessagesForContext(
 export async function getMessagesForDisplay(
   supabase: AnySupabaseClient,
   userId: string,
+  conversationIdArg?: string | null,
   limit: number = HISTORY_DISPLAY_LIMIT
 ): Promise<StoredMessage[]> {
-  const conversationId = await getDefaultConversationId(supabase, userId);
+  const conversationId =
+    (await resolveOwnedConversationId(supabase, userId, conversationIdArg)) ??
+    (await getDefaultConversationId(supabase, userId));
   if (!conversationId) {
     return [];
   }
@@ -154,13 +286,17 @@ export async function getMessagesForDisplay(
 }
 
 /**
- * Deletes all messages in the user's default conversation (clear chat).
+ * Deletes all messages in a conversation (clear chat). Defaults to the user's
+ * default conversation when none is given.
  */
 export async function clearDefaultConversation(
   supabase: AnySupabaseClient,
-  userId: string
+  userId: string,
+  conversationIdArg?: string | null
 ): Promise<void> {
-  const conversationId = await getDefaultConversationId(supabase, userId);
+  const conversationId =
+    (await resolveOwnedConversationId(supabase, userId, conversationIdArg)) ??
+    (await getDefaultConversationId(supabase, userId));
   if (!conversationId) {
     return;
   }

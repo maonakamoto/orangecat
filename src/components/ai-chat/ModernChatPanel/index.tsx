@@ -36,6 +36,10 @@ interface ModernChatPanelProps {
    * page reload. Composed alongside the internal post-send wiring.
    */
   onMessageSent?: () => void;
+  /** Active conversation to load/send to. Omitted/null → default conversation. */
+  conversationId?: string | null;
+  /** Fires after each send so the conversation rail can refresh title + order. */
+  onConversationStarted?: () => void;
   className?: string;
 }
 
@@ -47,6 +51,8 @@ export function ModernChatPanel({
   onModelSelect,
   onLoadingChange,
   onMessageSent,
+  conversationId,
+  onConversationStarted,
   className,
 }: ModernChatPanelProps = {}) {
   const router = useRouter();
@@ -93,11 +99,13 @@ export function ModernChatPanel({
     addSystemMessage,
   } = useChatMessages({
     selectedModel,
+    conversationId,
     onPendingResult: () => refreshPendingActionsRef.current?.(),
     onMessageSent: () => {
       refreshQuota();
       onMessageSent?.();
     },
+    onConversationStarted,
   });
 
   const { suggestions, hasContext, isLoadingSuggestions } = useSuggestions();
