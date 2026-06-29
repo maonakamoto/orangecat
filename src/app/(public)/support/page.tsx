@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Bitcoin, KeyRound, Sparkles, Check } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { ROUTES } from '@/config/routes';
+import { CAT_FRONTIER_MODELS_LIST, CAT_FRONTIER_MODELS_OR } from '@/config/cat-plans';
 import { FoundingSupporterDonation } from '@/components/support/FoundingSupporterDonation';
 
 export const metadata = {
@@ -41,7 +42,7 @@ export default function SupportPage() {
         <section className="mx-auto mt-16 max-w-2xl space-y-4 text-fg-primary">
           <h2 className="font-heading text-2xl font-bold tracking-display">Why Bitcoin, why now</h2>
           <p>
-            The destination is <strong>Pro</strong>: frontier models — Claude, GPT-4o, Grok —
+            The destination is <strong>Pro</strong>: frontier models — {CAT_FRONTIER_MODELS_LIST} —
             managed entirely by OrangeCat, no keys, no setup. The effortless AI a serious company
             runs on.
           </p>
@@ -97,16 +98,19 @@ export default function SupportPage() {
         </section>
 
         {/* BYOK — the works-today path */}
-        <section className="mx-auto mt-16 max-w-2xl rounded-lg bg-surface-public p-8 text-fg-inverted">
+        <section className="mx-auto mt-16 max-w-2xl rounded-lg border border-accent-warm/30 bg-accent-warm/5 p-8 text-fg-primary">
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
-              <KeyRound className="mt-1 h-6 w-6 flex-shrink-0" aria-hidden="true" />
+              <KeyRound
+                className="mt-1 h-6 w-6 flex-shrink-0 text-accent-warm"
+                aria-hidden="true"
+              />
               <div>
                 <h2 className="font-heading text-xl font-bold tracking-display">
                   Want frontier models right now?
                 </h2>
-                <p className="mt-1 max-w-md text-fg-inverted/70">
-                  Bring your own key. Cat runs Claude, GPT-4o, or Grok for you today — your key,
+                <p className="mt-1 max-w-md text-fg-secondary">
+                  Bring your own key. Cat runs {CAT_FRONTIER_MODELS_OR} for you today — your key,
                   your bill, zero markup. No waiting on us.
                 </p>
               </div>

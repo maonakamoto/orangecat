@@ -3,7 +3,12 @@ import Link from 'next/link';
 import { Check, Sparkles, Cat as CatIcon } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { PageHeading } from '@/components/layout/PageHeading';
-import { CAT_PLANS, type CatPlan } from '@/config/cat-plans';
+import {
+  CAT_PLANS,
+  CAT_FRONTIER_MODELS_LIST,
+  CAT_FRONTIER_MODELS_OR,
+  type CatPlan,
+} from '@/config/cat-plans';
 import { ROUTES } from '@/config/routes';
 import { cn } from '@/lib/utils';
 
@@ -51,9 +56,9 @@ export default function PricingPage() {
           </h2>
           <div className="space-y-4 text-fg-primary">
             <p>
-              The destination is <strong>Pro</strong>: frontier models — Claude, GPT, Grok — fully
-              managed by OrangeCat, no keys, no setup. The kind of effortless AI a serious company
-              runs on.
+              The destination is <strong>Pro</strong>: frontier models — {CAT_FRONTIER_MODELS_LIST}{' '}
+              — fully managed by OrangeCat, no keys, no setup. The kind of effortless AI a serious
+              company runs on.
             </p>
             <p>
               We&apos;re not there yet, and we won&apos;t pretend otherwise. OrangeCat doesn&apos;t
@@ -64,8 +69,8 @@ export default function PricingPage() {
             <ul className="space-y-3 pl-4">
               <li>
                 <strong className="text-fg-primary">Bring your own key</strong> — the real path to
-                frontier models <em>today</em>. Your key, your bill, zero markup. Cat runs Claude or
-                GPT for you right now.
+                frontier models <em>today</em>. Your key, your bill, zero markup. Cat runs{' '}
+                {CAT_FRONTIER_MODELS_OR} for you right now.
               </li>
               <li>
                 <strong className="text-fg-primary">Back us in Bitcoin</strong> — believe in where
