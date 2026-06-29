@@ -206,15 +206,21 @@ export async function orchestrateCatChat(
 
   // Build context + history. Runtime hints flow client→server so Cat knows
   // currency, locale, and recent-page state for THIS exchange.
-  const userContext = await fetchFullContextForCat(supabase, user.id, {
-    preferredCurrency,
-    locale,
-    lastVisitedPath,
-  });
-  // Recall durable facts Cat has learned about this user, ranked by relevance
-  // to THIS message, and fold them into the context (rendered near the top so
-  // the budget always keeps them). Best-effort: [] if memory is unavailable.
-  userContext.memories = await recallMemories(supabase, user.id, message);
+  //
+  // Memory recall (an embedding round-trip + pgvector query) is INDEPENDENT of the
+  // context fetch, so run both concurrently — recall no longer adds its latency to
+  // every turn, it just has to beat the (already parallel) context fetchers. Recall
+  // is best-effort: [] if memory is unavailable. Folded in near the top of the
+  // context so the budget always keeps the durable facts.
+  const [userContext, memories] = await Promise.all([
+    fetchFullContextForCat(supabase, user.id, {
+      preferredCurrency,
+      locale,
+      lastVisitedPath,
+    }),
+    recallMemories(supabase, user.id, message),
+  ]);
+  userContext.memories = memories;
   const contextString = buildFullContextString(userContext);
 
   // Does this message want more than chat (discovery, creation, multi-step)?
