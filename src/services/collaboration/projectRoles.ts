@@ -7,6 +7,8 @@
  * type, so we use the codebase's loose AnySupabaseClient (as elsewhere).
  */
 import { createServerClient } from '@/lib/supabase/server';
+import { getTableName } from '@/config/entity-registry';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import {
   isEngagementType,
@@ -54,7 +56,7 @@ export interface ListFilters {
 /** Public collaborator board — open roles across all projects, newest first. */
 export async function listOpenRoles(filters: ListFilters = {}): Promise<ProjectRole[]> {
   let q = (await db())
-    .from('project_roles')
+    .from(DATABASE_TABLES.PROJECT_ROLES)
     .select(SELECT)
     .eq('status', 'open')
     .order('created_at', { ascending: false })
@@ -75,7 +77,7 @@ export async function listOpenRoles(filters: ListFilters = {}): Promise<ProjectR
 /** All roles for one project (owner sees all statuses via RLS; others see open). */
 export async function getRolesForProject(projectId: string): Promise<ProjectRole[]> {
   const { data, error } = await (await db())
-    .from('project_roles')
+    .from(DATABASE_TABLES.PROJECT_ROLES)
     .select(SELECT)
     .eq('project_id', projectId)
     .order('created_at', { ascending: false });
@@ -113,7 +115,7 @@ export async function createRole(input: CreateRoleInput, userId: string): Promis
   const sb = await db();
   // App-layer ownership check (RLS is the backstop).
   const { data: project } = await sb
-    .from('projects')
+    .from(getTableName('project'))
     .select('id, user_id')
     .eq('id', input.projectId)
     .maybeSingle();
@@ -125,7 +127,7 @@ export async function createRole(input: CreateRoleInput, userId: string): Promis
   }
 
   const { data, error } = await sb
-    .from('project_roles')
+    .from(DATABASE_TABLES.PROJECT_ROLES)
     .insert({
       project_id: input.projectId,
       role_title: roleTitle,
@@ -148,7 +150,7 @@ export async function updateRoleStatus(
 ): Promise<ProjectRole> {
   const sb = await db();
   const { data: role } = await sb
-    .from('project_roles')
+    .from(DATABASE_TABLES.PROJECT_ROLES)
     .select('id, project_id, projects(user_id)')
     .eq('id', roleId)
     .maybeSingle();
@@ -160,7 +162,7 @@ export async function updateRoleStatus(
   }
 
   const { data, error } = await sb
-    .from('project_roles')
+    .from(DATABASE_TABLES.PROJECT_ROLES)
     .update({ status, updated_at: new Date().toISOString() })
     .eq('id', roleId)
     .select(SELECT)

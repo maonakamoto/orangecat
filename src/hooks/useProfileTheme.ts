@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useCallback, useRef } from 'react';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/lib/supabase/browser';
@@ -45,7 +46,7 @@ export function useProfileTheme() {
       }
       const currentPrefs = (profileRef.current?.preferences as Record<string, unknown>) ?? {};
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase.from('profiles') as any)
+      const { error } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
         .update({ preferences: { ...currentPrefs, theme: newTheme } })
         .eq('id', user.id);
       if (error && process.env.NODE_ENV === 'development') {

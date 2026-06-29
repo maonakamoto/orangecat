@@ -21,6 +21,7 @@
  * it to auth.uid()), despite the column name — see the home-feed work.
  */
 import { createAdminClient } from '@/lib/supabase/admin';
+import { getTableName } from '@/config/entity-registry';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { logger } from '@/utils/logger';
 import { EXTERNAL_PUBLISH_META, type ExternalPublishInput } from '@/config/external-publish';
@@ -64,7 +65,11 @@ async function assertOwnsProject(
   projectId: string,
   userId: string
 ): Promise<'ok' | 'subject_not_found' | 'forbidden'> {
-  const { data } = await db.from('projects').select('user_id').eq('id', projectId).maybeSingle();
+  const { data } = await db
+    .from(getTableName('project'))
+    .select('user_id')
+    .eq('id', projectId)
+    .maybeSingle();
   if (!data) {
     return 'subject_not_found';
   }

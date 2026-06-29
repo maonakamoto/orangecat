@@ -69,7 +69,7 @@ export function AIChatMessage({
             <span className="text-xs text-fg-tertiary">({message.tokens_used} tokens)</span>
           )}
         </div>
-        <div className="prose prose-sm max-w-none text-fg-primary whitespace-pre-wrap">
+        <div className="prose prose-sm max-w-none text-fg-primary whitespace-pre-wrap break-words">
           {message.content}
         </div>
         {!isUser && message.cost_btc && message.cost_btc > 0 && (

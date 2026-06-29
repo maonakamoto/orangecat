@@ -9,6 +9,7 @@
  */
 
 import { z } from 'zod';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import {
   apiSuccess,
@@ -76,7 +77,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: unk
     }
 
     const { data, error } = await supabase
-      .from('stakeholder_relationships')
+      .from(DATABASE_TABLES.STAKEHOLDER_RELATIONSHIPS)
       .update(updates)
       .eq('id', id)
       .select('*')
@@ -112,7 +113,7 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest, context: un
     // Verify the row exists + is visible under RLS before delete so we
     // can return a meaningful 404 instead of a silent 0-rows-affected.
     const { data: existing, error: existingErr } = await supabase
-      .from('stakeholder_relationships')
+      .from(DATABASE_TABLES.STAKEHOLDER_RELATIONSHIPS)
       .select('id')
       .eq('id', id)
       .maybeSingle();
@@ -125,7 +126,10 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest, context: un
       return apiNotFound('Stakeholder relationship not found');
     }
 
-    const { error } = await supabase.from('stakeholder_relationships').delete().eq('id', id);
+    const { error } = await supabase
+      .from(DATABASE_TABLES.STAKEHOLDER_RELATIONSHIPS)
+      .delete()
+      .eq('id', id);
 
     if (error) {
       logger.error('Failed to delete stakeholder relationship', error, 'StakeholdersAPI');

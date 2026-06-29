@@ -25,6 +25,7 @@
  */
 
 import { z } from 'zod';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import {
   apiSuccess,
@@ -95,7 +96,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     }
 
     let query = supabase
-      .from('stakeholder_relationships')
+      .from(DATABASE_TABLES.STAKEHOLDER_RELATIONSHIPS)
       .select('*')
       .eq('from_project_id', fromProjectId)
       .order('updated_at', { ascending: false });
@@ -145,7 +146,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     // RLS would block writes for the wrong actor; we set it explicitly
     // here so the row is well-formed up front.
     const { data: actorRow, error: actorErr } = await supabase
-      .from('actors')
+      .from(DATABASE_TABLES.ACTORS)
       .select('id')
       .eq('user_id', user.id)
       .eq('actor_type', 'user')
@@ -190,7 +191,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     };
 
     const { data: inserted, error: insertErr } = await supabase
-      .from('stakeholder_relationships')
+      .from(DATABASE_TABLES.STAKEHOLDER_RELATIONSHIPS)
       .insert(row)
       .select('*')
       .single();
