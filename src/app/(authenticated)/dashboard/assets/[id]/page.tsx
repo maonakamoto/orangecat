@@ -1,104 +1,18 @@
-import EntityDetailPage from '@/components/entity/EntityDetailPage';
-import { assetEntityConfig } from '@/config/entities/assets';
-import type { Asset } from '@/types/asset';
-import { formatDate } from '@/utils/dates';
-import { capitalize, capitalizeWords } from '@/utils/string';
+import PublicEntityDetailPage from '@/components/public/PublicEntityDetailPage';
+import { assetDetailConfig } from '@/components/public/detail-configs/asset';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 /**
- * Asset Detail Page
+ * Asset detail (owner / dashboard).
  *
- * Unified detail page using EntityDetailPage component.
- *
- * Created: 2026-01-03
- * Last Modified: 2026-01-03
- * Last Modified Summary: Initial creation using unified EntityDetailPage component
+ * Renders the SAME layout renters/buyers see (PublicEntityDetailPage) plus the
+ * owner manage bar — no separate flat label→value grid. Config shared with the
+ * public route via assetDetailConfig (SSOT).
  */
 export default async function AssetDetailPage({ params }: PageProps) {
   const { id } = await params;
-
-  return (
-    <EntityDetailPage<Asset>
-      config={assetEntityConfig}
-      entityId={id}
-      requireAuth={true}
-      redirectPath="/auth?mode=login&from=/dashboard/assets"
-      makeDetailFields={asset => {
-        const left = [
-          {
-            label: 'Status',
-            value: capitalize(asset.status || 'draft'),
-          },
-          {
-            label: 'Type',
-            value: asset.type ? capitalizeWords(asset.type) : '—',
-          },
-          {
-            label: 'Estimated Value',
-            value: asset.estimated_value
-              ? `${asset.estimated_value.toLocaleString()} ${asset.currency || 'CHF'}`
-              : 'Not set',
-          },
-          {
-            label: 'Verification Status',
-            value:
-              asset.verification_status === 'third_party_verified'
-                ? 'Third Party Verified'
-                : asset.verification_status === 'user_provided'
-                  ? 'Self-Verified'
-                  : 'Not Verified',
-          },
-        ];
-
-        if (asset.location) {
-          left.push({
-            label: 'Location',
-            value: asset.location,
-          });
-        }
-
-        if (asset.description) {
-          left.push({
-            label: 'Description',
-            value: asset.description,
-          });
-        }
-
-        if (asset.purchase_date) {
-          left.push({
-            label: 'Purchase Date',
-            value: formatDate(asset.purchase_date),
-          });
-        }
-
-        if (asset.purchase_price) {
-          left.push({
-            label: 'Purchase Price',
-            value: `${asset.purchase_price.toLocaleString()} ${asset.currency || 'CHF'}`,
-          });
-        }
-
-        const right: Array<{ label: string; value: string }> = [];
-
-        if (asset.documentation_url) {
-          right.push({
-            label: 'Documentation',
-            value: asset.documentation_url,
-          });
-        }
-
-        if (asset.notes) {
-          right.push({
-            label: 'Notes',
-            value: asset.notes,
-          });
-        }
-
-        return { left, right };
-      }}
-    />
-  );
+  return <PublicEntityDetailPage id={id} config={assetDetailConfig} />;
 }
