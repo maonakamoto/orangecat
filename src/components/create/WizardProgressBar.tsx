@@ -65,7 +65,7 @@ export function WizardProgressBar({
                 {isCompleted ? <Check className="w-4 h-4" /> : index + 1}
               </div>
               <span
-                className={`text-xs font-medium max-w-[80px] text-center leading-tight ${
+                className={`max-w-[64px] text-center text-[10px] font-medium leading-tight sm:max-w-[80px] sm:text-xs ${
                   isCurrent ? 'text-fg-primary' : 'text-fg-secondary'
                 }`}
               >

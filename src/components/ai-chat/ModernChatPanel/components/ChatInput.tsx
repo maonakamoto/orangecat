@@ -102,7 +102,7 @@ export function ChatInput({
                 <button
                   type="button"
                   onClick={onClearChat}
-                  className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-fg-secondary transition-colors hover:bg-surface-raised hover:text-fg-primary"
+                  className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-fg-secondary transition-colors hover:bg-surface-raised hover:text-fg-primary"
                   aria-label="Clear chat"
                   title="Clear chat"
                 >
@@ -122,7 +122,7 @@ export function ChatInput({
                 <button
                   type="button"
                   onClick={onStop}
-                  className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-fg-primary text-fg-inverted transition-opacity hover:opacity-90"
+                  className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-fg-primary text-fg-inverted transition-opacity hover:opacity-90"
                   aria-label="Stop generating"
                 >
                   <Square className="h-3.5 w-3.5 fill-current" />
@@ -133,7 +133,7 @@ export function ChatInput({
                   onClick={onSend}
                   disabled={!canSend}
                   className={cn(
-                    'flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg transition-colors',
+                    'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg transition-colors',
                     canSend
                       ? 'bg-fg-primary text-fg-inverted hover:opacity-90'
                       : 'cursor-not-allowed text-fg-secondary'

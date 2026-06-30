@@ -18,7 +18,7 @@ export function TextFormatToolbar({
 }: TextFormatToolbarProps) {
   const baseClasses = cn(
     'flex items-center justify-center rounded-md transition-colors',
-    size === 'sm' ? 'h-9 w-9' : 'min-h-11 min-w-11 p-2'
+    size === 'sm' ? 'h-10 w-10' : 'min-h-11 min-w-11 p-2'
   );
 
   const colorClasses =
@@ -140,7 +140,7 @@ export function ProjectToggleButton({
       type="button"
       onClick={onToggle}
       className={cn(
-        'flex h-9 w-9 items-center justify-center rounded-md transition-colors touch-manipulation',
+        'flex h-10 w-10 items-center justify-center rounded-md transition-colors touch-manipulation',
         isActive
           ? variant === 'accent'
             ? 'bg-surface-raised text-fg-primary ring-1 ring-border-strong'

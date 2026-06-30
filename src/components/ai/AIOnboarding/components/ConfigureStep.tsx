@@ -80,7 +80,7 @@ export function ConfigureStep({
             </span>
           )}
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {MODEL_TIERS.map(tier => {
             const config = TIER_CONFIG[tier];
             const tierInfo = tierDescriptions[tier];

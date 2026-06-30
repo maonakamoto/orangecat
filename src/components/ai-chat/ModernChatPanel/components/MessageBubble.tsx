@@ -271,7 +271,7 @@ export function MessageBubble({
             </span>
             <button
               onClick={handleCopy}
-              className="text-fg-tertiary hover:text-fg-primary transition-colors p-0.5"
+              className="rounded p-2 text-fg-tertiary transition-colors hover:text-fg-primary"
               title="Copy response"
             >
               {copied ? (

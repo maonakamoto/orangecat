@@ -35,7 +35,7 @@ export default function PublicEntityHero({ images, title }: PublicEntityHeroProp
         <Image src={cover} alt={title} fill unoptimized className="object-cover" />
       </div>
       {extras.length > 0 && (
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
           {extras.map((src, i) => (
             <div
               key={`${src}-${i}`}

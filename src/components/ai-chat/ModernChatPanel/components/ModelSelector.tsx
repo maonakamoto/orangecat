@@ -83,7 +83,7 @@ export function ModelSelector({
       {isOpen && (
         <div
           className={cn(
-            'absolute left-0 z-50 max-h-80 w-72 overflow-y-auto rounded-md border border-subtle bg-surface-modal py-2 shadow-sm',
+            'absolute left-0 z-50 max-h-80 w-72 max-w-[calc(100vw-1.5rem)] overflow-y-auto rounded-md border border-subtle bg-surface-modal py-2 shadow-sm',
             openUp ? 'bottom-full mb-2' : 'top-full mt-2'
           )}
         >
