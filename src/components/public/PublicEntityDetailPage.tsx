@@ -7,9 +7,11 @@
  * Each entity page becomes a thin wrapper that passes entityType + optional custom sections.
  */
 
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Tag } from 'lucide-react';
+import { Pencil, Tag } from 'lucide-react';
 import { createServerClient } from '@/lib/supabase/server';
+import Button from '@/components/ui/Button';
 import { getTableName, getEntityMetadata, type EntityType } from '@/config/entity-registry';
 import { STATUS } from '@/config/database-constants';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -152,6 +154,10 @@ export default async function PublicEntityDetailPage({
   const visibilityCol = config.visibilityFilter?.column ?? 'status';
   const visibilityVal = config.visibilityFilter?.value ?? STATUS.PRODUCTS.ACTIVE;
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { data: publicData } = await supabase
     .from(table)
     .select('*')
@@ -165,18 +171,13 @@ export default async function PublicEntityDetailPage({
   // Not publicly visible (e.g. a draft). Let the OWNER preview it — the dashboard
   // "View public page" link would otherwise hit a bare 404 for unpublished
   // entities. Verify ownership before showing; never leak a draft to anyone else.
-  if (!entity) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) {
-      const { data: ownData } = await supabase.from(table).select('*').eq('id', id).single();
-      const candidate = ownData as EntityData | null;
-      const candidateOwner = candidate ? await fetchEntityOwner(supabase, candidate) : null;
-      if (candidate && candidateOwner?.user_id && candidateOwner.user_id === user.id) {
-        entity = candidate;
-        isOwnerPreview = true;
-      }
+  if (!entity && user) {
+    const { data: ownData } = await supabase.from(table).select('*').eq('id', id).single();
+    const candidate = ownData as EntityData | null;
+    const candidateOwner = candidate ? await fetchEntityOwner(supabase, candidate) : null;
+    if (candidate && candidateOwner?.user_id === user.id) {
+      entity = candidate;
+      isOwnerPreview = true;
     }
   }
 
@@ -185,6 +186,11 @@ export default async function PublicEntityDetailPage({
   }
 
   const owner = await fetchEntityOwner(supabase, entity);
+  // The viewer owns this entity (published or draft) → show a manage bar. This is
+  // also the owner's dashboard detail view: one layout, buyers see the listing,
+  // the owner sees it + Edit (no separate flat-grid dashboard page).
+  const isOwner = !!user && !!owner?.user_id && owner.user_id === user.id;
+  const editHref = `${meta.basePath}/${id}/edit`;
 
   // Resolve the seller's public receiving info + BTC amount server-side so a
   // logged-out visitor can pay direct (permissionless) — no account, no gate.
@@ -217,11 +223,27 @@ export default async function PublicEntityDetailPage({
     <>
       <JsonLdScript data={jsonLd} />
       <div className={`min-h-screen oc-mobile-action-stack-padding ${pageSurface}`}>
-        {isOwnerPreview && (
-          <div className="border-b border-accent-warm/30 bg-accent-warm/10 px-4 py-2.5 text-center text-sm text-fg-primary">
-            Preview — this {meta.name.toLowerCase()} is{' '}
-            <span className="font-medium capitalize">{entity.status}</span> and only visible to you.
-            Publish it to make this page public.
+        {isOwner && (
+          <div className="border-b border-default bg-surface-raised">
+            <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-2.5 sm:px-6 lg:px-8">
+              <span className="text-sm text-fg-secondary">
+                {isOwnerPreview ? (
+                  <>
+                    Preview — this {meta.name.toLowerCase()} is{' '}
+                    <span className="font-medium capitalize text-fg-primary">{entity.status}</span>{' '}
+                    and only visible to you. Publish it to go live.
+                  </>
+                ) : (
+                  <>This is your live {meta.name.toLowerCase()} as buyers see it.</>
+                )}
+              </span>
+              <Link href={editHref}>
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <Pencil className="h-3.5 w-3.5" />
+                  Edit
+                </Button>
+              </Link>
+            </div>
           </div>
         )}
         <div className="bg-surface-base border-b border-default">
