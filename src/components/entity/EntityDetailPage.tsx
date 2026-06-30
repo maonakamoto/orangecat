@@ -230,7 +230,7 @@ export default async function EntityDetailPage<T extends BaseEntity>({
       left={
         <div className="space-y-4">
           {(fields.left ?? []).length > 0 ? (
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
               {(fields.left ?? []).map((field, idx) => (
                 <div key={idx}>
                   <div className="text-fg-secondary">{field.label}</div>

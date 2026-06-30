@@ -190,10 +190,10 @@ export default function ProfileLayout({
 
         <div className="mt-12 sm:mt-16 md:mt-20">
           <div className="oc-surface mb-4 p-4 sm:mb-6 sm:p-6">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-fg-primary mb-1 sm:mb-2">
+            <h1 className="mb-1 break-words text-xl font-bold text-fg-primary sm:mb-2 sm:text-2xl md:text-3xl">
               {profile.name || profile.username || 'User'}
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-fg-secondary font-medium mb-3 sm:mb-4">
+            <p className="mb-3 break-all text-sm font-medium text-fg-secondary sm:mb-4 sm:text-base md:text-lg">
               @{profile.username}
             </p>
             {profile.bio && (

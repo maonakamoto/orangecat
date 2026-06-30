@@ -108,7 +108,7 @@ export default function MessageHeader({ conversation, currentUserId, onBack }: M
           </div>
         ) : null}
 
-        <div>
+        <div className="min-w-0 flex-1">
           {primaryParticipant && !conversation.is_group ? (
             <Link
               href={
@@ -120,12 +120,12 @@ export default function MessageHeader({ conversation, currentUserId, onBack }: M
               }
               className="hover:underline"
             >
-              <h2 className="font-semibold text-fg-primary">{displayName}</h2>
+              <h2 className="truncate font-semibold text-fg-primary">{displayName}</h2>
             </Link>
           ) : (
-            <h2 className="font-semibold text-fg-primary">{displayName}</h2>
+            <h2 className="truncate font-semibold text-fg-primary">{displayName}</h2>
           )}
-          <p className="text-sm text-fg-secondary">{subtitle}</p>
+          <p className="truncate text-sm text-fg-secondary">{subtitle}</p>
         </div>
       </div>
     </div>
