@@ -7,7 +7,7 @@
  */
 import type { DocumentContext, EntitySummary, FullUserContext } from './document-context-types';
 import { ENTITY_STATUS } from '@/config/database-constants';
-import { isEconomicProfileEmpty } from '@/services/cat/economic-profile';
+import { economicProfileGaps } from '@/services/cat/economic-profile';
 
 const DOCUMENT_TYPE_LABELS: Record<string, string> = {
   goals: 'Goals & Aspirations',
@@ -153,39 +153,55 @@ export function renderProfile(p: FullUserContext['profile']): string | null {
 }
 
 /**
- * The structured economic profile — what this person can offer. Returns null when
- * empty so it's invisible (and snapshot-neutral) until the user is interviewed.
+ * The structured economic profile — what this person can offer, plus what's still
+ * unknown (which drives the proactive interview). Returns null only when the field
+ * was never provided (e.g. non-chat contexts / snapshot), so it's snapshot-neutral;
+ * for a real user it always renders — either what we know, an invitation to draw
+ * out what we don't, or both.
  */
 export function renderEconomicProfile(ep: FullUserContext['economicProfile']): string | null {
-  if (!ep || isEconomicProfileEmpty(ep)) {
+  if (ep === undefined) {
     return null;
   }
   const parts: string[] = [];
-  if (ep.skills.length) {
+  if (ep) {
+    if (ep.skills.length) {
+      parts.push(
+        `**Skills**: ${ep.skills.map(s => (s.level ? `${s.name} (${s.level})` : s.name)).join(', ')}`
+      );
+    }
+    if (ep.askedFor.length) {
+      parts.push(`**People come to them for**: ${ep.askedFor.join('; ')}`);
+    }
+    if (ep.assets.length) {
+      parts.push(`**Assets**: ${ep.assets.map(a => a.name).join(', ')}`);
+    }
+    if (ep.goals.length) {
+      parts.push(
+        `**Goals**: ${ep.goals.map(g => (g.kind ? `${g.text} [${g.kind}]` : g.text)).join('; ')}`
+      );
+    }
+    if (ep.constraints.length) {
+      parts.push(`**Constraints**: ${ep.constraints.join('; ')}`);
+    }
+    if (ep.motivation) {
+      parts.push(`**Here for**: ${ep.motivation}`);
+    }
+    if (ep.stage) {
+      parts.push(`**Stage**: ${ep.stage}`);
+    }
+  }
+
+  // What's still unknown drives the interview: tell Cat exactly what to draw out.
+  const gaps = economicProfileGaps(ep ?? null);
+  if (gaps.length) {
     parts.push(
-      `**Skills**: ${ep.skills.map(s => (s.level ? `${s.name} (${s.level})` : s.name)).join(', ')}`
+      parts.length
+        ? `_Still unknown: ${gaps.join(', ')}. When it fits, draw these out ONE at a time (see "Drawing out what they can offer")._`
+        : `_Nothing captured yet. When it fits naturally, surface their latent value with ONE story-based question (see "Drawing out what they can offer") — start with what people come to them for._`
     );
   }
-  if (ep.askedFor.length) {
-    parts.push(`**People come to them for**: ${ep.askedFor.join('; ')}`);
-  }
-  if (ep.assets.length) {
-    parts.push(`**Assets**: ${ep.assets.map(a => a.name).join(', ')}`);
-  }
-  if (ep.goals.length) {
-    parts.push(
-      `**Goals**: ${ep.goals.map(g => (g.kind ? `${g.text} [${g.kind}]` : g.text)).join('; ')}`
-    );
-  }
-  if (ep.constraints.length) {
-    parts.push(`**Constraints**: ${ep.constraints.join('; ')}`);
-  }
-  if (ep.motivation) {
-    parts.push(`**Here for**: ${ep.motivation}`);
-  }
-  if (ep.stage) {
-    parts.push(`**Stage**: ${ep.stage}`);
-  }
+
   if (parts.length === 0) {
     return null;
   }

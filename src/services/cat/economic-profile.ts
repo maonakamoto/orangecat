@@ -73,6 +73,34 @@ export function isEconomicProfileEmpty(p: EconomicProfile | null): boolean {
   );
 }
 
+/**
+ * The economic dimensions still unknown, in the order Cat should probe them —
+ * "what people ask them for" first (the richest signal), motivation last.
+ * Drives the proactive interview: the context tells Cat exactly what to draw out.
+ */
+export function economicProfileGaps(p: EconomicProfile | null): string[] {
+  const gaps: string[] = [];
+  if (!p || p.askedFor.length === 0) {
+    gaps.push('what people come to them for');
+  }
+  if (!p || p.skills.length === 0) {
+    gaps.push('skills');
+  }
+  if (!p || p.assets.length === 0) {
+    gaps.push('assets they own that could earn');
+  }
+  if (!p || p.goals.length === 0) {
+    gaps.push('goals');
+  }
+  if (!p || p.constraints.length === 0) {
+    gaps.push('constraints (time, capital)');
+  }
+  if (!p || !p.motivation) {
+    gaps.push('what they want from being here');
+  }
+  return gaps;
+}
+
 export async function getEconomicProfile(
   supabase: AnySupabaseClient,
   userId: string
