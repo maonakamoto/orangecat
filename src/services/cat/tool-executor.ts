@@ -7,6 +7,7 @@
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { searchPlatform, type SearchType } from './platform-search';
 import { generateFormPrefill } from '@/lib/ai/form-prefill-service';
+import { generateOffers } from './offer-engine';
 import { getEntityConfig } from '@/config/entity-configs/get-config';
 import { isValidEntityType, type EntityType } from '@/config/entity-registry';
 import { PREFILLABLE_ENTITY_TYPES } from './tool-use-detection';
@@ -24,11 +25,81 @@ import type {
  */
 export async function executeToolCall(
   supabase: AnySupabaseClient,
+  userId: string,
   toolCall: RawToolCall,
   onToolCall?: OnToolCall,
   onPrefillProposal?: OnPrefillProposal
 ): Promise<ToolResultMessage> {
   const toolName = toolCall.function?.name;
+
+  // ── suggest_offers (economic agent) ────────────────────────────────────────
+  // Reads the user's full context, reasons over latent assets, and emits each
+  // grounded offer as a prefill card (the UI already renders N cards per turn).
+  if (toolName === 'suggest_offers') {
+    const parsedArgs = (() => {
+      try {
+        return JSON.parse(toolCall.function.arguments ?? '{}') as {
+          focus?: string;
+          count?: number;
+        };
+      } catch {
+        return {} as { focus?: string; count?: number };
+      }
+    })();
+
+    const offers = await generateOffers(supabase, userId, {
+      count: parsedArgs.count,
+      focus: parsedArgs.focus,
+    });
+
+    let emitted = 0;
+    await Promise.all(
+      offers.map(async offer => {
+        const entityConfig = getEntityConfig(offer.entityType);
+        if (!entityConfig) {
+          return;
+        }
+        try {
+          const prefill = await generateFormPrefill(
+            offer.entityType,
+            offer.description,
+            entityConfig
+          );
+          if (!prefill.success) {
+            return;
+          }
+          emitted += 1;
+          onPrefillProposal?.({
+            entityType: offer.entityType,
+            sourceDescription: offer.rationale
+              ? `${offer.description}\n\nWhy: ${offer.rationale}`
+              : offer.description,
+            data: prefill.data as Record<string, unknown>,
+            confidence: prefill.confidence as Record<string, number>,
+          });
+        } catch {
+          // One offer failing to prefill shouldn't sink the rest.
+        }
+      })
+    );
+
+    onToolCall?.({
+      id: toolCall.id,
+      name: toolName,
+      status: 'completed',
+      resultCount: emitted,
+      results: [],
+    });
+
+    return {
+      role: 'tool',
+      tool_call_id: toolCall.id,
+      content:
+        emitted > 0
+          ? `Proposed ${emitted} grounded offer${emitted === 1 ? '' : 's'} as draft cards the user can review and publish. Introduce them in one or two warm sentences — do NOT list the field values; the cards show those.`
+          : `Couldn't draft grounded offers from the user's current context. Invite them to add a little more about themselves (a quick document or a few profile details) so you can tailor real ideas — do not invent offers.`,
+    };
+  }
 
   // ── search_platform ──────────────────────────────────────────────────────
   if (toolName === 'search_platform') {
