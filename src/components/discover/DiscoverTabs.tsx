@@ -1,6 +1,7 @@
 'use client';
 
 import { Grid3X3, Users } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import type { EntityType } from '@/config/entity-registry';
 
@@ -82,8 +83,11 @@ export default function DiscoverTabs({
   const allCount = Object.values(counts).reduce((sum, n) => sum + (n || 0), 0);
 
   return (
-    <div className="border-b border-default bg-surface-base backdrop-blur-sm rounded-t-lg sticky top-0 z-10 overflow-x-auto">
-      <nav className="-mb-px flex space-x-6 px-6 pt-4 min-w-max" aria-label="Tabs">
+    // Wrapping pills, not a horizontally-scrolling row: every entity type stays
+    // visible and flows onto more rows on narrow screens (mobile-first). The old
+    // overflow-x-auto hid Research / AI Assistants / People behind a scroll.
+    <div className="rounded-t-lg border-b border-default bg-surface-base px-4 py-3 sm:px-6">
+      <nav className="flex flex-wrap gap-2" aria-label="Filter by type">
         {tabs.map(({ id, label, Icon }) => {
           const isActive = activeTab === id;
           const count = id === 'all' ? allCount : counts[id] || 0;
@@ -92,49 +96,28 @@ export default function DiscoverTabs({
             <button
               key={id}
               onClick={() => onTabChange(id)}
-              className={`
-                group relative inline-flex items-center gap-2 px-1 py-3 text-sm font-medium
-                transition-colors duration-200
-                ${
-                  isActive
-                    ? 'text-fg-primary'
-                    : 'text-fg-secondary hover:text-fg-primary hover:border-strong'
-                }
-              `}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
+                isActive
+                  ? 'border-fg-primary bg-fg-primary text-fg-inverted'
+                  : 'border-default bg-surface-base text-fg-secondary hover:bg-surface-raised hover:text-fg-primary'
+              )}
               aria-current={isActive ? 'page' : undefined}
             >
-              {/* Icon */}
-              <span
-                className={`
-                transition-colors duration-200
-                ${isActive ? 'text-fg-primary' : 'text-fg-tertiary group-hover:text-fg-secondary dark:group-hover:text-fg-primary'}
-              `}
-              >
-                <Icon className="w-4 h-4" />
-              </span>
-
-              {/* Label */}
+              <Icon className="h-4 w-4 flex-shrink-0" />
               <span>{label}</span>
-
-              {/* Count Badge */}
               {!loading && count > 0 && (
                 <span
-                  className={`
-                    inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium rounded-full
-                    transition-colors duration-200
-                    ${
-                      isActive
-                        ? 'border border-strong bg-surface-raised text-fg-primary'
-                        : 'bg-surface-raised text-fg-secondary border border-default group-hover:bg-gray-200 dark:group-hover:bg-surface-raised/80'
-                    }
-                  `}
+                  className={cn(
+                    'rounded-full px-1.5 text-xs tabular-nums',
+                    isActive
+                      ? 'bg-fg-inverted/20 text-fg-inverted'
+                      : 'bg-surface-raised text-fg-secondary'
+                  )}
                 >
                   {count}
                 </span>
               )}
-
-              {/* Active indicator line */}
-              {isActive && <div className="absolute bottom-0 left-0 right-0 h-px bg-fg-primary" />}
             </button>
           );
         })}
