@@ -38,6 +38,12 @@ const config: EntityDetailConfig = {
   ownerLabel: 'Created by',
   descriptionTitle: 'About this AI Assistant',
   metadataSelect: 'title, description, avatar_url',
+  // No pay-the-seller-direct section: you don't pay an assistant up front — you
+  // chat, and it charges per its pricing model (free / per-message via Cat
+  // Credits) inside the chat widget. This also suppresses the default mobile
+  // sticky CTA, which would otherwise anchor "Chat" to a #pay section that
+  // shouldn't exist here. The chat widget is the primary action.
+  showPaymentSection: false,
   getViewRoute: id => ROUTES.AI_ASSISTANTS.VIEW(id),
   renderHeaderIcon: entity =>
     entity.avatar_url ? (

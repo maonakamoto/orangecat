@@ -25,6 +25,7 @@ const config: EntityDetailConfig = {
   entityType: 'product',
   ownerLabel: 'Seller',
   createdLabel: 'Listed',
+  descriptionTitle: 'About this product',
   getViewRoute: id => ROUTES.PRODUCTS.VIEW(id),
   getCoverImages: entity => {
     const images = Array.isArray(entity.images) ? (entity.images as string[]) : [];
@@ -42,16 +43,54 @@ const config: EntityDetailConfig = {
   },
   renderDetails: entity => {
     const { amount, currency } = getPrice(entity);
-    return amount > 0 ? (
+    const hasPrice = Number.isFinite(amount) && amount > 0;
+    const productType = entity.product_type as string | undefined;
+    const inventory = entity.inventory_count as number | null | undefined;
+    return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Price</CardTitle>
+          <CardTitle className="text-lg">Details</CardTitle>
         </CardHeader>
-        <CardContent>
-          <PriceDisplay amount={amount} currency={currency} />
+        <CardContent className="space-y-4">
+          {hasPrice && (
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-fg-secondary">Price</span>
+              <PriceDisplay
+                amount={amount}
+                currency={currency}
+                className="text-right text-xl font-bold text-fg-primary"
+              />
+            </div>
+          )}
+          {productType && (
+            <div className="flex items-center justify-between">
+              <span className="text-fg-secondary">Type</span>
+              <span className="font-medium capitalize">{productType}</span>
+            </div>
+          )}
+          <div className="flex items-center justify-between">
+            <span className="text-fg-secondary">Availability</span>
+            <span className="font-medium">
+              {inventory === null || inventory === undefined
+                ? 'In stock'
+                : inventory > 0
+                  ? `${inventory} available`
+                  : 'Sold out'}
+            </span>
+          </div>
+          {hasPrice && (
+            // Anchors to the payment section (#pay) — the buyer's "Buy" is paying
+            // the seller direct in Bitcoin. Mirrors the service page's Book CTA.
+            <a
+              href="#pay"
+              className="mt-1 flex w-full items-center justify-center rounded-md bg-accent-warm px-4 py-2.5 font-medium text-white transition-colors hover:bg-accent-warm/90"
+            >
+              Buy now
+            </a>
+          )}
         </CardContent>
       </Card>
-    ) : null;
+    );
   },
 };
 
