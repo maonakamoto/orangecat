@@ -5,6 +5,7 @@
  *  - activation:  bio implies an offering they haven't created → "Publish a … service"
  *  - connection:  a real, semantically-related person → "You should meet X"
  *  - completion:  deterministic gaps → add a bio, publish a draft
+ *  - growth:      a skill/asset they HAVE but haven't listed → one-tap prefilled draft
  *
  * Activation + connection are LLM-reasoned (grounded: never invents a skill they
  * didn't state or a person not surfaced by semantic search). Completion is
@@ -19,10 +20,11 @@ import { ROUTES } from '@/config/routes';
 import { DEFAULT_FREE_MODEL_ID } from '@/config/ai-models';
 import { createOpenRouterService } from '@/services/ai';
 import { searchPlatform } from './platform-search';
+import { getEconomicProfile, type EconomicProfile } from './economic-profile';
 import { logger } from '@/utils/logger';
 
 export interface Nudge {
-  nudge_type: 'activation' | 'connection' | 'completion';
+  nudge_type: 'activation' | 'connection' | 'completion' | 'growth';
   title: string;
   body: string;
   cta_label: string | null;
@@ -107,6 +109,20 @@ export async function generateNudges(supabase: any, userId: string): Promise<Nud
     }
   }
 
+  // ── Growth nudges (deterministic, grounded in the economic profile) ─────────
+  // A skill or asset they HAVE but haven't turned into a listing → the smallest
+  // publishable next step, one tap from a prefilled draft. The "gap is the gift".
+  if (actor?.id) {
+    try {
+      const econ = await getEconomicProfile(supabase, userId);
+      if (econ) {
+        nudges.push(...(await growthNudges(supabase, actor.id, econ)));
+      }
+    } catch (err) {
+      logger.warn('nudges: growth generation failed', { err }, 'Nudges');
+    }
+  }
+
   // ── Smart nudges (activation + connection), only with a bio to reason from ──
   if (profile.bio) {
     let neighbors: Array<{ username: string; title: string; description: string }> = [];
@@ -142,6 +158,75 @@ export async function generateNudges(supabase: any, userId: string): Promise<Nud
     .sort((a, b) => b.score - a.score)
     .filter(n => (seen.has(n.dedupe_key) ? false : (seen.add(n.dedupe_key), true)))
     .slice(0, 5);
+}
+
+/**
+ * Growth nudges: a skill or asset the user HAS but hasn't listed yet → the smallest
+ * publishable next step, deep-linked to a PREFILLED create form (one tap, no template
+ * picker). Deterministic and grounded — only their real, stated skills/assets, and
+ * only when nothing active already covers them. Capped to one skill + one asset so it
+ * inspires rather than nags.
+ */
+async function growthNudges(
+  supabase: any,
+  actorId: string,
+  econ: EconomicProfile
+): Promise<Nudge[]> {
+  if (econ.skills.length === 0 && econ.assets.length === 0) {
+    return [];
+  }
+  // What's already offered, so we never suggest listing something they've listed.
+  const activeTitles: string[] = [];
+  for (const type of ['service', 'product', 'asset'] as const) {
+    const { data } = await supabase
+      .from(ENTITY_REGISTRY[type].tableName)
+      .select('title, status')
+      .eq('actor_id', actorId)
+      .eq('status', 'active');
+    for (const r of data ?? []) {
+      if (r?.title) {
+        activeTitles.push(String(r.title).toLowerCase());
+      }
+    }
+  }
+  const covered = (term: string): boolean => {
+    const x = term.toLowerCase().trim();
+    if (!x) {
+      return true;
+    }
+    const stem = x.slice(0, Math.max(4, Math.round(x.length * 0.6)));
+    return activeTitles.some(t => t.includes(x) || t.includes(stem));
+  };
+
+  const out: Nudge[] = [];
+
+  const skill = econ.skills.map(s => s.name).find(n => n && !covered(n));
+  if (skill) {
+    out.push({
+      nudge_type: 'growth',
+      title: `Turn "${skill}" into a service`,
+      body: `You can do ${skill}, but it isn't listed yet — people here can only hire you for what they can see. Drafting it takes one tap.`,
+      cta_label: `Draft a ${skill} service`,
+      cta_url: `${ENTITY_REGISTRY.service.createPath}?title=${encodeURIComponent(skill)}`,
+      dedupe_key: `growth:skill:${skill.toLowerCase()}`,
+      score: 0.82,
+    });
+  }
+
+  const asset = econ.assets.map(a => a.name).find(n => n && !covered(n));
+  if (asset) {
+    out.push({
+      nudge_type: 'growth',
+      title: `Put your ${asset} to work`,
+      body: `Your ${asset} mostly sits idle. Listed as an asset, it can earn while you're not using it.`,
+      cta_label: `List your ${asset}`,
+      cta_url: `${ENTITY_REGISTRY.asset.createPath}?title=${encodeURIComponent(asset)}`,
+      dedupe_key: `growth:asset:${asset.toLowerCase()}`,
+      score: 0.8,
+    });
+  }
+
+  return out;
 }
 
 async function smartNudges(
