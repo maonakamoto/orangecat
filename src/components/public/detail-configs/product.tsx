@@ -66,7 +66,8 @@ export const productDetailConfig: EntityDetailConfig = {
           <div className="flex items-center justify-between">
             <span className="text-fg-secondary">Availability</span>
             <span className="font-medium">
-              {inventory === null || inventory === undefined
+              {/* inventory_count -1 (or null) = unlimited, e.g. digital goods. */}
+              {inventory === null || inventory === undefined || inventory < 0
                 ? 'In stock'
                 : inventory > 0
                   ? `${inventory} available`
