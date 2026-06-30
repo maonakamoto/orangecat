@@ -5,7 +5,8 @@
  *  - activation:  bio implies an offering they haven't created → "Publish a … service"
  *  - connection:  a real, semantically-related person → "You should meet X"
  *  - completion:  deterministic gaps → add a bio, publish a draft
- *  - growth:      a skill/asset they HAVE but haven't listed → one-tap prefilled draft
+ *  - growth:      a skill/asset they HAVE but haven't listed → one-tap prefilled draft,
+ *                 preferring (and flagging) ones real platform demand is asking for
  *
  * Activation + connection are LLM-reasoned (grounded: never invents a skill they
  * didn't state or a person not surfaced by semantic search). Completion is
@@ -160,12 +161,71 @@ export async function generateNudges(supabase: any, userId: string): Promise<Nud
     .slice(0, 5);
 }
 
+/** Stem-aware substring match — conservative, so a "match" is a real signal. */
+function termMatches(term: string, haystack: string[]): boolean {
+  const x = term.toLowerCase().trim();
+  if (!x || haystack.length === 0) {
+    return false;
+  }
+  const stem = x.slice(0, Math.max(4, Math.round(x.length * 0.6)));
+  return haystack.some(h => h.includes(x) || h.includes(stem));
+}
+
+/**
+ * Real platform DEMAND, lowercased — what people here are actually asking for.
+ * Sourced from PUBLIC wishlists + their items (the only honest demand-side data;
+ * there's no search log yet). Returns [] when there's nothing — in which case growth
+ * nudges fall back to plain "you haven't listed this" copy and never claim demand.
+ */
+async function gatherPlatformDemand(supabase: any): Promise<string[]> {
+  const out: string[] = [];
+  try {
+    const { data: lists } = await supabase
+      .from(DATABASE_TABLES.WISHLISTS)
+      .select('id, title, description')
+      .eq('visibility', 'public')
+      .limit(100);
+    const ids: string[] = [];
+    for (const w of lists ?? []) {
+      if (w?.title) {
+        out.push(String(w.title).toLowerCase());
+      }
+      if (w?.description) {
+        out.push(String(w.description).toLowerCase());
+      }
+      if (w?.id) {
+        ids.push(w.id);
+      }
+    }
+    if (ids.length) {
+      const { data: items } = await supabase
+        .from(DATABASE_TABLES.WISHLIST_ITEMS)
+        .select('title, description, wishlist_id')
+        .in('wishlist_id', ids)
+        .limit(300);
+      for (const it of items ?? []) {
+        if (it?.title) {
+          out.push(String(it.title).toLowerCase());
+        }
+        if (it?.description) {
+          out.push(String(it.description).toLowerCase());
+        }
+      }
+    }
+  } catch (err) {
+    logger.warn('nudges: demand gather failed', { err }, 'Nudges');
+  }
+  return out;
+}
+
 /**
  * Growth nudges: a skill or asset the user HAS but hasn't listed yet → the smallest
  * publishable next step, deep-linked to a PREFILLED create form (one tap, no template
- * picker). Deterministic and grounded — only their real, stated skills/assets, and
- * only when nothing active already covers them. Capped to one skill + one asset so it
- * inspires rather than nags.
+ * picker). Deterministic and grounded — only their real, stated skills/assets, only
+ * when nothing active already covers them. DEMAND-GROUNDED: a skill/asset that matches
+ * real platform demand (public wishlists) is preferred and ranked higher, and its copy
+ * says so; with no demand evidence it falls back to plain copy (never invents demand).
+ * Capped to one skill + one asset so it inspires rather than nags.
  */
 async function growthNudges(
   supabase: any,
@@ -175,8 +235,8 @@ async function growthNudges(
   if (econ.skills.length === 0 && econ.assets.length === 0) {
     return [];
   }
-  // What's already offered, so we never suggest listing something they've listed.
-  const activeTitles: string[] = [];
+  // What this user already offers, so we never suggest listing something they list.
+  const ownTitles: string[] = [];
   for (const type of ['service', 'product', 'asset'] as const) {
     const { data } = await supabase
       .from(ENTITY_REGISTRY[type].tableName)
@@ -185,44 +245,49 @@ async function growthNudges(
       .eq('status', 'active');
     for (const r of data ?? []) {
       if (r?.title) {
-        activeTitles.push(String(r.title).toLowerCase());
+        ownTitles.push(String(r.title).toLowerCase());
       }
     }
   }
-  const covered = (term: string): boolean => {
-    const x = term.toLowerCase().trim();
-    if (!x) {
-      return true;
-    }
-    const stem = x.slice(0, Math.max(4, Math.round(x.length * 0.6)));
-    return activeTitles.some(t => t.includes(x) || t.includes(stem));
-  };
+  const covered = (term: string) => term.trim() === '' || termMatches(term, ownTitles);
+
+  const demand = await gatherPlatformDemand(supabase);
+  const wanted = (term: string) => termMatches(term, demand);
 
   const out: Nudge[] = [];
 
-  const skill = econ.skills.map(s => s.name).find(n => n && !covered(n));
+  // Prefer an uncovered skill that real demand is asking for; else the first uncovered.
+  const uncoveredSkills = econ.skills.map(s => s.name).filter(n => n && !covered(n));
+  const skill = uncoveredSkills.find(wanted) ?? uncoveredSkills[0];
   if (skill) {
+    const isWanted = wanted(skill);
     out.push({
       nudge_type: 'growth',
       title: `Turn "${skill}" into a service`,
-      body: `You can do ${skill}, but it isn't listed yet — people here can only hire you for what they can see. Drafting it takes one tap.`,
+      body: isWanted
+        ? `People on OrangeCat are already asking for ${skill} — and you can do it, but it isn't listed yet. Drafting it takes one tap.`
+        : `You can do ${skill}, but it isn't listed yet — people here can only hire you for what they can see. Drafting it takes one tap.`,
       cta_label: `Draft a ${skill} service`,
       cta_url: `${ENTITY_REGISTRY.service.createPath}?title=${encodeURIComponent(skill)}`,
       dedupe_key: `growth:skill:${skill.toLowerCase()}`,
-      score: 0.82,
+      score: isWanted ? 0.88 : 0.82,
     });
   }
 
-  const asset = econ.assets.map(a => a.name).find(n => n && !covered(n));
+  const uncoveredAssets = econ.assets.map(a => a.name).filter(n => n && !covered(n));
+  const asset = uncoveredAssets.find(wanted) ?? uncoveredAssets[0];
   if (asset) {
+    const isWanted = wanted(asset);
     out.push({
       nudge_type: 'growth',
       title: `Put your ${asset} to work`,
-      body: `Your ${asset} mostly sits idle. Listed as an asset, it can earn while you're not using it.`,
+      body: isWanted
+        ? `People here are looking for things like ${asset} — and yours mostly sits idle. Listed as an asset, it can earn.`
+        : `Your ${asset} mostly sits idle. Listed as an asset, it can earn while you're not using it.`,
       cta_label: `List your ${asset}`,
       cta_url: `${ENTITY_REGISTRY.asset.createPath}?title=${encodeURIComponent(asset)}`,
       dedupe_key: `growth:asset:${asset.toLowerCase()}`,
-      score: 0.8,
+      score: isWanted ? 0.86 : 0.8,
     });
   }
 
