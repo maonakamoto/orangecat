@@ -1,3 +1,5 @@
+import type { EconomicProfile } from '@/services/cat/economic-profile';
+
 export interface DocumentContext {
   id: string;
   title: string;
@@ -200,6 +202,12 @@ export interface RuntimeContext {
 
 export interface FullUserContext {
   profile: ProfileContext | null;
+  /**
+   * Structured latent economic value (skills, assets, goals, constraints, what
+   * people ask them for) — the keystone of the economic agent. Optional: only the
+   * full Cat context fetch populates it; null/empty until the user is interviewed.
+   */
+  economicProfile?: EconomicProfile | null;
   /**
    * Durable facts Cat remembers about this user, recalled semantically for the
    * CURRENT message (see cat/memory.ts). Optional: only the chat path populates

@@ -7,6 +7,7 @@
  */
 import type { DocumentContext, EntitySummary, FullUserContext } from './document-context-types';
 import { ENTITY_STATUS } from '@/config/database-constants';
+import { isEconomicProfileEmpty } from '@/services/cat/economic-profile';
 
 const DOCUMENT_TYPE_LABELS: Record<string, string> = {
   goals: 'Goals & Aspirations',
@@ -149,6 +150,46 @@ export function renderProfile(p: FullUserContext['profile']): string | null {
     return null;
   }
   return `## User Profile\n${profileParts.join('\n')}`;
+}
+
+/**
+ * The structured economic profile — what this person can offer. Returns null when
+ * empty so it's invisible (and snapshot-neutral) until the user is interviewed.
+ */
+export function renderEconomicProfile(ep: FullUserContext['economicProfile']): string | null {
+  if (!ep || isEconomicProfileEmpty(ep)) {
+    return null;
+  }
+  const parts: string[] = [];
+  if (ep.skills.length) {
+    parts.push(
+      `**Skills**: ${ep.skills.map(s => (s.level ? `${s.name} (${s.level})` : s.name)).join(', ')}`
+    );
+  }
+  if (ep.askedFor.length) {
+    parts.push(`**People come to them for**: ${ep.askedFor.join('; ')}`);
+  }
+  if (ep.assets.length) {
+    parts.push(`**Assets**: ${ep.assets.map(a => a.name).join(', ')}`);
+  }
+  if (ep.goals.length) {
+    parts.push(
+      `**Goals**: ${ep.goals.map(g => (g.kind ? `${g.text} [${g.kind}]` : g.text)).join('; ')}`
+    );
+  }
+  if (ep.constraints.length) {
+    parts.push(`**Constraints**: ${ep.constraints.join('; ')}`);
+  }
+  if (ep.motivation) {
+    parts.push(`**Here for**: ${ep.motivation}`);
+  }
+  if (ep.stage) {
+    parts.push(`**Stage**: ${ep.stage}`);
+  }
+  if (parts.length === 0) {
+    return null;
+  }
+  return `## Economic Profile (what they can offer)\n${parts.join('\n')}`;
 }
 
 export function renderDocuments(documents: DocumentContext[]): string | null {
