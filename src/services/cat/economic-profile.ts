@@ -74,31 +74,41 @@ export function isEconomicProfileEmpty(p: EconomicProfile | null): boolean {
 }
 
 /**
- * The economic dimensions still unknown, in the order Cat should probe them —
- * "what people ask them for" first (the richest signal), motivation last.
- * Drives the proactive interview: the context tells Cat exactly what to draw out.
+ * SSOT for the economic dimensions, in the order Cat should probe them — "what
+ * people ask them for" first (the richest signal), motivation last. Both the gap
+ * list and the completeness score derive from this, so they can never drift.
  */
+const ECONOMIC_DIMENSIONS: ReadonlyArray<{
+  label: string;
+  filled: (p: EconomicProfile) => boolean;
+}> = [
+  { label: 'what people come to them for', filled: p => p.askedFor.length > 0 },
+  { label: 'skills', filled: p => p.skills.length > 0 },
+  { label: 'assets they own that could earn', filled: p => p.assets.length > 0 },
+  { label: 'goals', filled: p => p.goals.length > 0 },
+  { label: 'constraints (time, capital)', filled: p => p.constraints.length > 0 },
+  { label: 'what they want from being here', filled: p => !!p.motivation },
+];
+
+/** The dimensions still unknown — drives the proactive interview. */
 export function economicProfileGaps(p: EconomicProfile | null): string[] {
-  const gaps: string[] = [];
-  if (!p || p.askedFor.length === 0) {
-    gaps.push('what people come to them for');
+  if (!p) {
+    return ECONOMIC_DIMENSIONS.map(d => d.label);
   }
-  if (!p || p.skills.length === 0) {
-    gaps.push('skills');
+  return ECONOMIC_DIMENSIONS.filter(d => !d.filled(p)).map(d => d.label);
+}
+
+/**
+ * How complete the economic picture is, 0–100 (deterministic, even-weighted across
+ * the dimensions). Tells Cat how hard to lean into discovery and lets it frame
+ * progress for the user ("you're X% of the way to a full picture").
+ */
+export function economicCompleteness(p: EconomicProfile | null): number {
+  if (!p) {
+    return 0;
   }
-  if (!p || p.assets.length === 0) {
-    gaps.push('assets they own that could earn');
-  }
-  if (!p || p.goals.length === 0) {
-    gaps.push('goals');
-  }
-  if (!p || p.constraints.length === 0) {
-    gaps.push('constraints (time, capital)');
-  }
-  if (!p || !p.motivation) {
-    gaps.push('what they want from being here');
-  }
-  return gaps;
+  const filled = ECONOMIC_DIMENSIONS.filter(d => d.filled(p)).length;
+  return Math.round((filled / ECONOMIC_DIMENSIONS.length) * 100);
 }
 
 export async function getEconomicProfile(

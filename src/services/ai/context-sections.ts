@@ -7,7 +7,7 @@
  */
 import type { DocumentContext, EntitySummary, FullUserContext } from './document-context-types';
 import { ENTITY_STATUS } from '@/config/database-constants';
-import { economicProfileGaps } from '@/services/cat/economic-profile';
+import { economicProfileGaps, economicCompleteness } from '@/services/cat/economic-profile';
 
 const DOCUMENT_TYPE_LABELS: Record<string, string> = {
   goals: 'Goals & Aspirations',
@@ -193,12 +193,17 @@ export function renderEconomicProfile(ep: FullUserContext['economicProfile']): s
   }
 
   // What's still unknown drives the interview: tell Cat exactly what to draw out.
+  const pct = economicCompleteness(ep ?? null);
   const gaps = economicProfileGaps(ep ?? null);
   if (gaps.length) {
     parts.push(
       parts.length
-        ? `_Still unknown: ${gaps.join(', ')}. When it fits, draw these out ONE at a time (see "Drawing out what they can offer")._`
-        : `_Nothing captured yet. When it fits naturally, surface their latent value with ONE story-based question (see "Drawing out what they can offer") — start with what people come to them for._`
+        ? `_Economic picture ~${pct}% complete — still unknown: ${gaps.join(', ')}. When it fits, draw these out ONE at a time (see "Drawing out what they can offer"). You can frame it for them: "you're most of the way to a full picture."_`
+        : `_Economic picture 0% — nothing captured yet. When it fits naturally, surface their latent value with ONE story-based question (see "Drawing out what they can offer") — start with what people come to them for._`
+    );
+  } else {
+    parts.push(
+      `_Economic picture ~${pct}% complete — you have a full picture; focus on turning it into offers and next steps, not more discovery questions._`
     );
   }
 
