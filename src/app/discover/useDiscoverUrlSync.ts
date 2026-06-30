@@ -38,10 +38,11 @@ export function useDiscoverUrlSync({
       p.delete('type');
     }
     if (searchTerm) {
-      p.set('search', searchTerm);
+      p.set('q', searchTerm);
     } else {
-      p.delete('search');
+      p.delete('q');
     }
+    p.delete('search'); // legacy param — standardized on `q`
     if (selectedCategories.length > 0) {
       p.set('category', selectedCategories.join(','));
     } else {

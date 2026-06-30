@@ -20,7 +20,9 @@ export function useDiscoverState() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const initialSearchTerm = searchParams?.get('search') || '';
+  // Standardize on `q` (matches the global search handoff + the SEO sitelinks template);
+  // fall back to the legacy `search` param so old links/bookmarks still work.
+  const initialSearchTerm = searchParams?.get('q') || searchParams?.get('search') || '';
   const initialCategories = (searchParams?.get('category') || '')
     .split(',')
     .map(s => s.trim())
