@@ -177,9 +177,9 @@ function termMatches(term: string, haystack: string[]): boolean {
 
 /**
  * Real platform DEMAND, lowercased — what people here are actually asking for.
- * Sourced from PUBLIC wishlists + their items (the only honest demand-side data;
- * there's no search log yet). Returns [] when there's nothing — in which case growth
- * nudges fall back to plain "you haven't listed this" copy and never claim demand.
+ * Sourced from committed SEARCH queries (the strongest signal — what people look for)
+ * plus PUBLIC wishlists + their items. Returns [] when there's nothing — in which case
+ * growth nudges fall back to plain "you haven't listed this" copy and never claim demand.
  */
 async function gatherPlatformDemand(supabase: any): Promise<string[]> {
   const out: string[] = [];
@@ -218,6 +218,21 @@ async function gatherPlatformDemand(supabase: any): Promise<string[]> {
     }
   } catch (err) {
     logger.warn('nudges: demand gather failed', { err }, 'Nudges');
+  }
+  // Committed searches — the strongest demand signal (what people actively look for).
+  try {
+    const { data: searches } = await supabase
+      .from(DATABASE_TABLES.SEARCH_QUERIES)
+      .select('query')
+      .order('created_at', { ascending: false })
+      .limit(500);
+    for (const s of searches ?? []) {
+      if (s?.query) {
+        out.push(String(s.query).toLowerCase());
+      }
+    }
+  } catch (err) {
+    logger.warn('nudges: search-demand gather failed', { err }, 'Nudges');
   }
   return out;
 }
