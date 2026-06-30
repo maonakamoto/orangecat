@@ -40,11 +40,17 @@ CREATE INDEX IF NOT EXISTS idx_user_economic_profile_skills
 
 ALTER TABLE user_economic_profile ENABLE ROW LEVEL SECURITY;
 
+-- DROP+CREATE so the migration is idempotent: Postgres has no
+-- CREATE POLICY IF NOT EXISTS, and the deploy pipeline re-applies migrations.
+DROP POLICY IF EXISTS "user_economic_profile_select" ON user_economic_profile;
 CREATE POLICY "user_economic_profile_select" ON user_economic_profile
   FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "user_economic_profile_insert" ON user_economic_profile;
 CREATE POLICY "user_economic_profile_insert" ON user_economic_profile
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "user_economic_profile_update" ON user_economic_profile;
 CREATE POLICY "user_economic_profile_update" ON user_economic_profile
   FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "user_economic_profile_delete" ON user_economic_profile;
 CREATE POLICY "user_economic_profile_delete" ON user_economic_profile
   FOR DELETE USING (auth.uid() = user_id);
