@@ -49,7 +49,7 @@ export type ActionRiskLevel = 'low' | 'medium' | 'high';
 
 interface ActionParameter {
   name: string;
-  type: 'string' | 'number' | 'boolean' | 'entity_id' | 'user_id' | 'btc';
+  type: 'string' | 'number' | 'boolean' | 'entity_id' | 'user_id' | 'btc' | 'array';
   required: boolean;
   description: string;
   default?: unknown;
@@ -874,6 +874,66 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
 
   // ---------- CONTEXT ACTIONS ----------
 
+  save_economic_profile: {
+    id: 'save_economic_profile',
+    name: 'Save Economic Profile',
+    description:
+      'Save latent economic value the user reveals — skills, things they own to rent/sell, goals, constraints, what people come to them for, motivation, or stage — into their structured economic profile so Cat can suggest better offers.',
+    category: 'context',
+    icon: TrendingUp,
+    riskLevel: 'low',
+    requiresConfirmation: false,
+    parameters: [
+      {
+        name: 'skills',
+        type: 'array',
+        required: false,
+        description: 'Skills — strings, or {name, level?, years?}',
+      },
+      {
+        name: 'assets',
+        type: 'array',
+        required: false,
+        description: 'Things they own that could be rented/sold — strings, or {name, type?}',
+      },
+      {
+        name: 'goals',
+        type: 'array',
+        required: false,
+        description: 'Goals — strings, or {text, kind: earn|fund|learn|connect|build}',
+      },
+      {
+        name: 'constraints',
+        type: 'array',
+        required: false,
+        description: 'Constraints, e.g. "only evenings", "no upfront capital"',
+      },
+      {
+        name: 'asked_for',
+        type: 'array',
+        required: false,
+        description: 'What people come to them for (the richest signal)',
+      },
+      {
+        name: 'motivation',
+        type: 'string',
+        required: false,
+        description: 'Why they are here: earn / community / meaning / learn / unsure',
+      },
+      {
+        name: 'stage',
+        type: 'string',
+        required: false,
+        description: 'exploring / has-offers / scaling',
+      },
+    ],
+    examples: [
+      "I'm a translator and I fix bikes on weekends",
+      'I have a spare workshop I could rent out',
+      'I want to earn from my design skills',
+    ],
+    enabled: true,
+  },
   add_context: {
     id: 'add_context',
     name: 'Add Context',

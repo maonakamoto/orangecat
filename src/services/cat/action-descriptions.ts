@@ -66,6 +66,8 @@ export function generateActionDescription(
     }
     case 'add_context':
       return `Add context document: "${parameters.title}"`;
+    case 'save_economic_profile':
+      return 'Update your economic profile';
     case 'create_task': {
       const priority = parameters.priority ? ` [${parameters.priority}]` : '';
       const due = parameters.due_date ? ` due ${parameters.due_date}` : '';
