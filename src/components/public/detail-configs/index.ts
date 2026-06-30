@@ -14,6 +14,9 @@ import { causeDetailConfig } from './cause';
 import { researchDetailConfig } from './research';
 import { eventDetailConfig } from './event';
 import { aiAssistantDetailConfig } from './ai-assistant';
+import { loanDetailConfig } from './loan';
+import { investmentDetailConfig } from './investment';
+import { assetDetailConfig } from './asset';
 
 export {
   productDetailConfig,
@@ -22,6 +25,9 @@ export {
   researchDetailConfig,
   eventDetailConfig,
   aiAssistantDetailConfig,
+  loanDetailConfig,
+  investmentDetailConfig,
+  assetDetailConfig,
 };
 
 export const DETAIL_CONFIGS: Partial<Record<EntityType, EntityDetailConfig>> = {
@@ -31,4 +37,7 @@ export const DETAIL_CONFIGS: Partial<Record<EntityType, EntityDetailConfig>> = {
   research: researchDetailConfig,
   event: eventDetailConfig,
   ai_assistant: aiAssistantDetailConfig,
+  loan: loanDetailConfig,
+  investment: investmentDetailConfig,
+  asset: assetDetailConfig,
 };
