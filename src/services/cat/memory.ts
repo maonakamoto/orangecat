@@ -98,7 +98,7 @@ export async function recallMemories(
  * relationship). Mirrors the tool-use keyword pre-filter — most utility queries
  * ("convert 0.1 BTC", "what's my balance") skip extraction entirely.
  */
-function looksLikeSelfDisclosure(message: string): boolean {
+export function looksLikeSelfDisclosure(message: string): boolean {
   const m = message.toLowerCase();
   if (m.trim().length < 12) {
     return false;
