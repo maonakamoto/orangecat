@@ -1,62 +1,17 @@
-import EntityDetailPage from '@/components/entity/EntityDetailPage';
-import { aiAssistantEntityConfig } from '@/config/entities/ai-assistants';
-import type { AIAssistant } from '@/types/database';
-import { capitalize } from '@/utils/string';
+import PublicEntityDetailPage from '@/components/public/PublicEntityDetailPage';
+import { aiAssistantDetailConfig } from '@/components/public/detail-configs/ai-assistant';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 /**
- * AI Assistant Detail Page
+ * AI-assistant detail (owner / dashboard).
  *
- * Unified detail page using EntityDetailPage component.
- *
- * Created: 2026-01-03
- * Last Modified: 2026-01-03
- * Last Modified Summary: Initial creation using unified EntityDetailPage component
+ * Renders the SAME layout visitors see (PublicEntityDetailPage) plus the owner
+ * manage bar. Config shared with the public route via aiAssistantDetailConfig (SSOT).
  */
 export default async function AIAssistantDetailPage({ params }: PageProps) {
   const { id } = await params;
-
-  return (
-    <EntityDetailPage<AIAssistant>
-      config={aiAssistantEntityConfig}
-      entityId={id}
-      requireAuth={true}
-      redirectPath="/auth?mode=login&from=/dashboard/ai-assistants"
-      makeDetailFields={assistant => {
-        const left = [
-          {
-            label: 'Status',
-            value: capitalize(assistant.status || 'draft'),
-          },
-          { label: 'Category', value: assistant.category || '—' },
-          { label: 'Model Preference', value: assistant.model_preference || 'Any' },
-        ];
-
-        if (assistant.tags && assistant.tags.length > 0) {
-          left.push({ label: 'Tags', value: assistant.tags.join(', ') });
-        }
-
-        const right: Array<{ label: string; value: string }> = [];
-
-        if (assistant.lightning_address) {
-          right.push({ label: 'Lightning Address', value: assistant.lightning_address });
-        }
-        if (assistant.bitcoin_address) {
-          right.push({ label: 'Bitcoin Address', value: assistant.bitcoin_address });
-        }
-
-        if (assistant.published_at) {
-          right.push({
-            label: 'Published',
-            value: new Date(assistant.published_at).toLocaleString(),
-          });
-        }
-
-        return { left, right };
-      }}
-    />
-  );
+  return <PublicEntityDetailPage id={id} config={aiAssistantDetailConfig} />;
 }
