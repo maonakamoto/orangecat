@@ -97,11 +97,13 @@ export function useEnhancedSearch({ showQuickActions = true }: UseEnhancedSearch
         localStorage.setItem(`search-history-${user.id}`, JSON.stringify(newHistory));
       }
       // Log the committed search as an aggregate demand signal — fire-and-forget,
-      // no PII; never blocks navigation.
+      // no PII. `keepalive` lets the request outlive the navigation that follows on
+      // the next line (otherwise the browser cancels the in-flight fetch).
       void fetch(API_ROUTES.SEARCH.LOG, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: searchQuery }),
+        keepalive: true,
       }).catch(() => {});
       router.push(`/discover?q=${encodeURIComponent(searchQuery)}`);
       setIsOpen(false);
