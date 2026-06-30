@@ -111,6 +111,44 @@ export function economicCompleteness(p: EconomicProfile | null): number {
   return Math.round((filled / ECONOMIC_DIMENSIONS.length) * 100);
 }
 
+// Skill phrases that describe a sellable ARTIFACT (a thing you make once and sell
+// many times) rather than time-for-hire. Everything else defaults to a service.
+const PRODUCT_SKILL_HINTS = [
+  'ebook',
+  'e-book',
+  'template',
+  'preset',
+  'course',
+  'guide',
+  'pattern',
+  'sample pack',
+  'print',
+  'poster',
+  'sticker',
+  'kit',
+  'plugin',
+  'font',
+  'stock photo',
+  'recipe',
+  'beat',
+  'album',
+  'artwork',
+  'worksheet',
+  'planner',
+  'mockup',
+  'lut',
+];
+
+/**
+ * The entity type a skill most naturally becomes: a sellable artifact → product,
+ * otherwise a service (time/expertise for hire — the common case). Deterministic;
+ * lets the growth nudge open the RIGHT prefilled form instead of always a service.
+ */
+export function suggestedEntityForSkill(skill: string): 'service' | 'product' {
+  const s = skill.toLowerCase();
+  return PRODUCT_SKILL_HINTS.some(h => s.includes(h)) ? 'product' : 'service';
+}
+
 export async function getEconomicProfile(
   supabase: AnySupabaseClient,
   userId: string

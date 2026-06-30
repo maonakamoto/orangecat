@@ -21,7 +21,11 @@ import { ROUTES } from '@/config/routes';
 import { DEFAULT_FREE_MODEL_ID } from '@/config/ai-models';
 import { createOpenRouterService } from '@/services/ai';
 import { searchPlatform } from './platform-search';
-import { getEconomicProfile, type EconomicProfile } from './economic-profile';
+import {
+  getEconomicProfile,
+  suggestedEntityForSkill,
+  type EconomicProfile,
+} from './economic-profile';
 import { logger } from '@/utils/logger';
 
 export interface Nudge {
@@ -261,14 +265,19 @@ async function growthNudges(
   const skill = uncoveredSkills.find(wanted) ?? uncoveredSkills[0];
   if (skill) {
     const isWanted = wanted(skill);
+    const et = suggestedEntityForSkill(skill);
+    const meta = ENTITY_REGISTRY[et];
+    const noun = meta.name.toLowerCase();
     out.push({
       nudge_type: 'growth',
-      title: `Turn "${skill}" into a service`,
+      title: `Turn "${skill}" into a ${noun}`,
       body: isWanted
-        ? `People on OrangeCat are already asking for ${skill} — and you can do it, but it isn't listed yet. Drafting it takes one tap.`
-        : `You can do ${skill}, but it isn't listed yet — people here can only hire you for what they can see. Drafting it takes one tap.`,
-      cta_label: `Draft a ${skill} service`,
-      cta_url: `${ENTITY_REGISTRY.service.createPath}?title=${encodeURIComponent(skill)}`,
+        ? `People on OrangeCat are already asking for ${skill} — and you have it, but it isn't listed yet. Drafting it takes one tap.`
+        : et === 'product'
+          ? `You make ${skill}, but it isn't listed yet — people here can only buy what they can see. Drafting it takes one tap.`
+          : `You can do ${skill}, but it isn't listed yet — people here can only hire you for what they can see. Drafting it takes one tap.`,
+      cta_label: `Draft a ${skill} ${noun}`,
+      cta_url: `${meta.createPath}?title=${encodeURIComponent(skill)}`,
       dedupe_key: `growth:skill:${skill.toLowerCase()}`,
       score: isWanted ? 0.88 : 0.82,
     });

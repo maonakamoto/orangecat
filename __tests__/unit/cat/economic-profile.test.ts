@@ -7,6 +7,7 @@ import {
   economicCompleteness,
   economicProfileGaps,
   isEconomicProfileEmpty,
+  suggestedEntityForSkill,
   type EconomicProfile,
 } from '@/services/cat/economic-profile';
 
@@ -76,5 +77,19 @@ describe('isEconomicProfileEmpty', () => {
   it('matches a 0% score', () => {
     expect(isEconomicProfileEmpty(empty)).toBe(true);
     expect(isEconomicProfileEmpty(full)).toBe(false);
+  });
+});
+
+describe('suggestedEntityForSkill', () => {
+  it('maps sellable artifacts to product', () => {
+    expect(suggestedEntityForSkill('ebook writing')).toBe('product');
+    expect(suggestedEntityForSkill('Lightroom presets')).toBe('product');
+    expect(suggestedEntityForSkill('online course')).toBe('product');
+  });
+
+  it('defaults skills to service (time/expertise for hire)', () => {
+    expect(suggestedEntityForSkill('photography')).toBe('service');
+    expect(suggestedEntityForSkill('translation')).toBe('service');
+    expect(suggestedEntityForSkill('coaching')).toBe('service');
   });
 });
