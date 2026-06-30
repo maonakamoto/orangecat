@@ -78,7 +78,7 @@ export default function SettingsPage() {
         description="Manage your email, password, and security"
       >
         <div className="bg-surface-base rounded-lg border border-subtle overflow-hidden">
-          <div className="flex items-center gap-4 border-b border-subtle px-8 py-6">
+          <div className="flex items-center gap-4 border-b border-subtle px-4 py-5 sm:px-8 sm:py-6">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-surface-raised text-fg-secondary">
               <Lock className="h-5 w-5" />
             </div>
@@ -92,7 +92,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="p-8 space-y-10">
+          <div className="space-y-10 p-4 sm:p-8">
             <SettingsEmailSection
               email={formData.email}
               isSubmitting={isSubmittingEmail}

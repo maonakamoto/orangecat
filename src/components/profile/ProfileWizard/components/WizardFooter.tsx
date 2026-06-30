@@ -44,7 +44,7 @@ export function WizardFooter({
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <Button
           type="button"
           variant="outline"
@@ -80,7 +80,7 @@ export function WizardFooter({
             onClick={onNext}
             disabled={!canProceed || isSaving}
             variant="accent"
-            className="px-8 py-2 min-w-[140px]"
+            className="px-5 py-2 sm:min-w-[140px] sm:px-8"
           >
             {isSaving ? (
               <>

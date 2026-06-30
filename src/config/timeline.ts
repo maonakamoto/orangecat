@@ -77,7 +77,7 @@ export const TIMELINE_SURFACE = {
   buttonPrimary:
     'rounded-md bg-fg-primary px-5 py-2 text-sm font-semibold text-fg-inverted transition-colors hover:bg-fg-primary/90 disabled:bg-surface-raised disabled:text-fg-secondary',
   iconButton:
-    'flex min-h-10 min-w-10 items-center justify-center rounded-md text-fg-secondary transition-colors hover:bg-surface-raised hover:text-fg-primary disabled:cursor-not-allowed disabled:opacity-50',
+    'flex min-h-11 min-w-11 items-center justify-center rounded-md text-fg-secondary transition-colors hover:bg-surface-raised hover:text-fg-primary disabled:cursor-not-allowed disabled:opacity-50',
   chip: 'inline-flex items-center gap-1.5 rounded-md border border-subtle bg-surface-page px-2.5 py-1 text-xs font-medium text-fg-secondary transition-colors hover:border-default hover:text-fg-primary',
   chipActive:
     'border-fg-primary bg-fg-primary text-fg-inverted hover:border-fg-primary hover:text-fg-inverted',

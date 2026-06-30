@@ -66,7 +66,7 @@ function RailBody({ conversations, activeId, onSelect, onNew, onDelete }: Conver
                 <button
                   type="button"
                   onClick={() => onDelete(c.id)}
-                  className="flex-shrink-0 rounded p-1 text-fg-tertiary opacity-0 transition-opacity hover:text-status-negative group-hover:opacity-100"
+                  className="flex-shrink-0 rounded p-2 text-fg-tertiary opacity-100 transition-opacity hover:text-status-negative md:opacity-0 md:group-hover:opacity-100"
                   aria-label={`Delete ${railTitle(c)}`}
                   title="Delete conversation"
                 >
