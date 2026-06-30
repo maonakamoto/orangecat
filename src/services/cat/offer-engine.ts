@@ -51,6 +51,7 @@ RULES (these are hard constraints):
 - NEVER invent facts about the user. NEVER invent demand, market size, or statistics (e.g. "3 people searched for this"). You have no demand data — propose based on what they HAVE, not on claimed demand.
 - Do NOT duplicate something they already offer (check their existing entities).
 - Each "description" must be a full, publishable description (what it is, who it is for, a sensible scope) so it can prefill a create form — but do NOT fabricate a specific price; leave price out unless the context clearly implies one.
+- Money is always Bitcoin (BTC) or a fiat currency. NEVER write "sats" or "satoshis" — say "BTC" (e.g. "0.0005 BTC", never "50,000 sats").
 - Prefer VARIETY across the economic spectrum over several of the same type.
 - Quality over quantity: if the context is thin, return fewer offers (or none). A weak, generic offer is worse than no offer.
 

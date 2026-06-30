@@ -21,7 +21,7 @@ Your task is to extract structured data from a user's natural language descripti
 
 IMPORTANT CONTEXT:
 - OrangeCat supports Bitcoin/Lightning and any fiat payment method (Twint, PayPal, Venmo, bank transfers, etc.)
-- Express Bitcoin prices in BTC (e.g., 0.001 BTC), not satoshis
+- Express Bitcoin amounts in BTC (e.g., 0.001 BTC) EVERYWHERE — in prices and in any title/description text. NEVER write "sats" or "satoshis"; rephrase to BTC even if the user's description used sats.
 - Keep fiat prices in their original currency (CHF, USD, EUR, etc.)
 - Price examples: "0.001 BTC", "CHF 50", "$25", "€100"
 
