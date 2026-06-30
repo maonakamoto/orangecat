@@ -51,6 +51,21 @@ const TOOL_TRIGGER_KEYWORDS = [
   'i organize',
   'i need to raise',
   'fundraise',
+  // economic-agent / suggest_offers ("what can I offer?")
+  'what can i offer',
+  'what can i sell',
+  'what could i offer',
+  'what should i create',
+  'what should i sell',
+  'make money',
+  'earn money',
+  'monetize',
+  'monetise',
+  'ways to earn',
+  'help me make money',
+  'what can i do to earn',
+  'ideas for me',
+  'how can i participate',
 ];
 
 /**
@@ -134,6 +149,28 @@ export const PLATFORM_TOOL_DEFINITION = [
           },
         },
         required: ['entityType', 'description'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'suggest_offers',
+      description:
+        'The economic agent. Call this when the user asks what they could offer, sell, or create, how they could make money, or wants ideas grounded in who they are. It reads everything OrangeCat knows about them (profile, documents, memories, existing entities) and proposes several concrete, ready-to-publish offers across the economic spectrum, each as a draft card. Takes no required arguments — it reads their stored context, not the message.',
+      parameters: {
+        type: 'object',
+        properties: {
+          focus: {
+            type: 'string',
+            description:
+              'Optional area to focus suggestions on (e.g. "design", "teaching", "renting out gear"). Omit for a broad spread.',
+          },
+          count: {
+            type: 'number',
+            description: 'How many offers to propose (1-5). Default 4.',
+          },
+        },
       },
     },
   },

@@ -285,6 +285,7 @@ export async function orchestrateCatChat(
           // PrefilledFormCard instead of narrating field values as prose.
           const messages = await maybeEnrichWithSearchResults(
             supabase,
+            user.id,
             baseMessages,
             message,
             provider,
@@ -476,6 +477,7 @@ export async function orchestrateCatChat(
   const collectedPrefillProposals: PrefillProposal[] = [];
   const messages = await maybeEnrichWithSearchResults(
     supabase,
+    user.id,
     baseMessages,
     message,
     provider,
