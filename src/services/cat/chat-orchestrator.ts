@@ -27,6 +27,7 @@ import {
 } from '@/services/cat/conversation-history';
 import { resolveProvider, type FallbackProvider } from '@/services/cat/provider-resolver';
 import { recallMemories, extractAndStoreMemories } from '@/services/cat/memory';
+import { extractAndStoreEconomicProfile } from '@/services/cat/economic-profile';
 import {
   maybeEnrichWithSearchResults,
   messageMightNeedTools,
@@ -413,6 +414,16 @@ export async function orchestrateCatChat(
               activeService,
               activeModel
             );
+            // Reliably populate the economic-profile store from the same exchange —
+            // deterministic, not dependent on the chat model emitting an action.
+            void extractAndStoreEconomicProfile(
+              supabase,
+              user.id,
+              message,
+              fullContent,
+              activeService,
+              activeModel
+            );
           }
           if (!hasByok && usage?.totalTokens) {
             await keyService.incrementPlatformUsage(user.id, 1, usage.totalTokens);
@@ -560,6 +571,14 @@ export async function orchestrateCatChat(
       supabase,
       user.id,
       conversationId,
+      message,
+      cleanedMessage,
+      fellBackTo?.aiService ?? aiService,
+      fellBackTo?.modelToUse ?? modelToUse
+    );
+    void extractAndStoreEconomicProfile(
+      supabase,
+      user.id,
       message,
       cleanedMessage,
       fellBackTo?.aiService ?? aiService,

@@ -15,6 +15,7 @@
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
+import { looksLikeSelfDisclosure, type MemoryAiService } from './memory';
 
 export interface EconomicSkill {
   name: string;
@@ -147,5 +148,111 @@ export async function saveEconomicProfile(
   } catch (err) {
     logger.warn('saveEconomicProfile failed', { err: String(err) }, 'EconomicProfile');
     return false;
+  }
+}
+
+/**
+ * Normalize a loose object (LLM extraction or action params) into an EconomicProfile
+ * patch: arrays accept plain strings or objects; scalars pass through when strings.
+ * Returns null if nothing usable is present.
+ */
+export function normalizeEconomicPatch(
+  o: Record<string, unknown>
+): Partial<EconomicProfile> | null {
+  const strs = (v: unknown): string[] =>
+    Array.isArray(v)
+      ? v.filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
+      : [];
+  const skills: EconomicSkill[] = (Array.isArray(o.skills) ? o.skills : [])
+    .map(s => (typeof s === 'string' ? { name: s } : (s as EconomicSkill)))
+    .filter(
+      (s): s is EconomicSkill => !!s && typeof s.name === 'string' && s.name.trim().length > 0
+    );
+  const assets: EconomicAsset[] = (Array.isArray(o.assets) ? o.assets : [])
+    .map(a => (typeof a === 'string' ? { name: a } : (a as EconomicAsset)))
+    .filter(
+      (a): a is EconomicAsset => !!a && typeof a.name === 'string' && a.name.trim().length > 0
+    );
+  const goals: EconomicGoal[] = (Array.isArray(o.goals) ? o.goals : [])
+    .map(g => (typeof g === 'string' ? { text: g } : (g as EconomicGoal)))
+    .filter(
+      (g): g is EconomicGoal => !!g && typeof g.text === 'string' && g.text.trim().length > 0
+    );
+
+  const patch: Partial<EconomicProfile> = {
+    skills,
+    assets,
+    goals,
+    constraints: strs(o.constraints),
+    askedFor: strs(o.asked_for ?? o.askedFor),
+    motivation: typeof o.motivation === 'string' && o.motivation.trim() ? o.motivation : undefined,
+    stage: typeof o.stage === 'string' && o.stage.trim() ? o.stage : undefined,
+  };
+  const hasAny =
+    skills.length > 0 ||
+    assets.length > 0 ||
+    goals.length > 0 ||
+    (patch.constraints?.length ?? 0) > 0 ||
+    (patch.askedFor?.length ?? 0) > 0 ||
+    !!patch.motivation ||
+    !!patch.stage;
+  return hasAny ? patch : null;
+}
+
+const ECON_EXTRACTION_SYSTEM = `You extract a person's LATENT ECONOMIC VALUE from one chat exchange — only what they actually stated or clearly implied, never invented.
+
+Pull, where present:
+- skills: things they can do (names). Treat self-deprecation ("it's nothing", "just a hobby", "anyone can do that") as a real skill worth capturing.
+- assets: things they OWN that could be rented or sold.
+- goals: what they want; each {text, kind} where kind is earn | fund | learn | connect | build.
+- constraints: limits like "only evenings", "no upfront capital".
+- asked_for: what people come to them for.
+- motivation: why they're here — earn | community | meaning | learn | unsure.
+- stage: exploring | has-offers | scaling.
+
+Rules: ground everything in THIS exchange; omit anything not stated; never infer demand, prices, or stats. Output ONLY a JSON object with those keys (arrays empty if none), nothing else. Example:
+{"skills":["translation"],"assets":[],"goals":[{"text":"earn on the side","kind":"earn"}],"constraints":[],"asked_for":["writing clear emails"],"motivation":"earn","stage":null}`;
+
+/**
+ * Passive, deterministic economic extraction — runs after each self-disclosing turn
+ * (the reliable path the chat model's save_economic_profile action can't guarantee).
+ * One extraction call → merge-upsert into the store. Fire-and-forget; never throws.
+ */
+export async function extractAndStoreEconomicProfile(
+  supabase: AnySupabaseClient,
+  userId: string,
+  userMessage: string,
+  assistantMessage: string,
+  aiService: MemoryAiService,
+  model: string
+): Promise<void> {
+  if (!looksLikeSelfDisclosure(userMessage)) {
+    return;
+  }
+  try {
+    const { content } = await aiService.chatCompletion({
+      model,
+      temperature: 0,
+      messages: [
+        { role: 'system', content: ECON_EXTRACTION_SYSTEM },
+        {
+          role: 'user',
+          content: `User said: "${userMessage}"\n\nAssistant replied: "${assistantMessage.slice(0, 800)}"\n\nExtract the user's economic profile as a JSON object.`,
+        },
+      ],
+    });
+    const start = content.indexOf('{');
+    const end = content.lastIndexOf('}');
+    if (start === -1 || end <= start) {
+      return;
+    }
+    const parsed = JSON.parse(content.slice(start, end + 1)) as Record<string, unknown>;
+    const patch = normalizeEconomicPatch(parsed);
+    if (!patch) {
+      return;
+    }
+    await saveEconomicProfile(supabase, userId, patch);
+  } catch (err) {
+    logger.warn('extractAndStoreEconomicProfile threw', { err: String(err) }, 'EconomicProfile');
   }
 }
