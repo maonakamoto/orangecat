@@ -148,6 +148,9 @@ export const DATABASE_TABLES = {
   CAT_CREDIT_ENTRIES: 'cat_credit_entries',
   CAT_CREDIT_TOPUPS: 'cat_credit_topups',
 
+  // Search (aggregate demand signal — server-only)
+  SEARCH_QUERIES: 'search_queries',
+
   // Messaging Views
   MESSAGE_DETAILS: 'message_details',
   CONVERSATION_DETAILS: 'conversation_details',

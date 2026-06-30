@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSearchSuggestions } from '@/hooks/useSearchSuggestions';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/config/routes';
+import { API_ROUTES } from '@/config/api-routes';
 import { useEnhancedSearchKeyboard } from './useEnhancedSearchKeyboard';
 
 export interface SearchItem {
@@ -95,6 +96,13 @@ export function useEnhancedSearch({ showQuickActions = true }: UseEnhancedSearch
         setSearchHistory(newHistory);
         localStorage.setItem(`search-history-${user.id}`, JSON.stringify(newHistory));
       }
+      // Log the committed search as an aggregate demand signal — fire-and-forget,
+      // no PII; never blocks navigation.
+      void fetch(API_ROUTES.SEARCH.LOG, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: searchQuery }),
+      }).catch(() => {});
       router.push(`/discover?q=${encodeURIComponent(searchQuery)}`);
       setIsOpen(false);
       setQuery('');

@@ -22,6 +22,9 @@ export const API_ROUTES = {
     CONVERSATIONS: '/api/cat/conversations',
     CONVERSATION: (id: string) => `/api/cat/conversations/${id}`,
   },
+  SEARCH: {
+    LOG: '/api/search/log',
+  },
   INTEGRATION_KEYS: {
     BASE: '/api/integration-keys',
     BY_ID: (id: string) => `/api/integration-keys/${id}`,

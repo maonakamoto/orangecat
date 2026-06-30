@@ -1,0 +1,50 @@
+import { NextResponse } from 'next/server';
+import { createServerClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { DATABASE_TABLES } from '@/config/database-tables';
+import { logger } from '@/utils/logger';
+
+/**
+ * Log a COMMITTED search query as an aggregate demand signal (feeds demand-grounded
+ * growth + reveals unmet demand). Privacy by design: we persist the query text and an
+ * optional result count, never the user — identity is used ONLY to gate the endpoint
+ * against spam, then discarded. Always returns success; logging must never disrupt search.
+ */
+export async function POST(request: Request) {
+  try {
+    const auth = await createServerClient();
+    const {
+      data: { user },
+    } = await auth.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ success: true });
+    }
+
+    const body = (await request.json().catch(() => ({}))) as {
+      query?: unknown;
+      resultCount?: unknown;
+    };
+    const query = String(body.query ?? '')
+      .trim()
+      .toLowerCase()
+      .slice(0, 120);
+    if (query.length < 2) {
+      return NextResponse.json({ success: true });
+    }
+    const resultCount =
+      typeof body.resultCount === 'number' && Number.isFinite(body.resultCount)
+        ? Math.max(0, Math.trunc(body.resultCount))
+        : null;
+
+    // search_queries isn't in the generated DB types yet; the admin client is the
+    // only writer (RLS-on, no policies), so a loose cast here is intentional.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = createAdminClient() as any;
+    await db.from(DATABASE_TABLES.SEARCH_QUERIES).insert({ query, result_count: resultCount });
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    logger.warn('search log failed', { err: String(err) }, 'Search');
+    return NextResponse.json({ success: true });
+  }
+}
