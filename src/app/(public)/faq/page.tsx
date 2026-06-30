@@ -234,7 +234,7 @@ function FaqAccordionItem({
       </button>
       {isOpen && (
         <div className="px-5 pb-5 pt-1 bg-surface-base border-t border-subtle">
-          <div className="text-fg-secondary leading-relaxed text-[15px]">{item.answer}</div>
+          <div className="text-base leading-relaxed text-fg-secondary">{item.answer}</div>
         </div>
       )}
     </div>

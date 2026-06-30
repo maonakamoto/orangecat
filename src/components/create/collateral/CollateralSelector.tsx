@@ -158,10 +158,10 @@ export function CollateralSelector({
                 key={`${item.type}-${item.id}`}
                 className="flex items-center justify-between p-3 bg-surface-raised/50 rounded-lg border border-default"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3">
                   <div
                     className={cn(
-                      'h-8 w-8 rounded-full flex items-center justify-center',
+                      'h-8 w-8 flex-shrink-0 rounded-full flex items-center justify-center',
                       item.type === 'asset' ? BADGE_COLORS.info : BADGE_COLORS.tiffany
                     )}
                   >
@@ -171,9 +171,11 @@ export function CollateralSelector({
                       <Wallet className="w-4 h-4" />
                     )}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-fg-primary">{item.name}</span>
+                      <span className="truncate text-sm font-medium text-fg-primary">
+                        {item.name}
+                      </span>
                       <Badge variant="outline" className="text-xs">
                         {item.type === 'asset' ? 'Asset' : 'Wallet'}
                       </Badge>

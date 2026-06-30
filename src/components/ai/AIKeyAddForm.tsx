@@ -146,7 +146,7 @@ export function AIKeyAddForm({ onAdd, onCancel, onFieldFocus }: AIKeyAddFormProp
         <div>
           <label className="block text-sm font-medium text-fg-primary mb-2">Provider</label>
           <div
-            className="grid grid-cols-2 gap-2"
+            className="grid grid-cols-1 gap-2 sm:grid-cols-2"
             onFocus={() => onFieldFocus?.('provider')}
             onBlur={() => onFieldFocus?.(null)}
           >
