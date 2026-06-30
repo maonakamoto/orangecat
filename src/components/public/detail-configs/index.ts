@@ -17,6 +17,7 @@ import { aiAssistantDetailConfig } from './ai-assistant';
 import { loanDetailConfig } from './loan';
 import { investmentDetailConfig } from './investment';
 import { assetDetailConfig } from './asset';
+import { circleDetailConfig } from './circle';
 
 export {
   productDetailConfig,
@@ -28,6 +29,7 @@ export {
   loanDetailConfig,
   investmentDetailConfig,
   assetDetailConfig,
+  circleDetailConfig,
 };
 
 export const DETAIL_CONFIGS: Partial<Record<EntityType, EntityDetailConfig>> = {
@@ -40,4 +42,5 @@ export const DETAIL_CONFIGS: Partial<Record<EntityType, EntityDetailConfig>> = {
   loan: loanDetailConfig,
   investment: investmentDetailConfig,
   asset: assetDetailConfig,
+  circle: circleDetailConfig,
 };

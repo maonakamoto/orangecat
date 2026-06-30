@@ -1,27 +1,18 @@
-import EntityDetailPage from '@/components/entity/EntityDetailPage';
-import { circleEntityConfig, type CircleListItem } from '@/config/entities/circles';
-import { capitalize } from '@/utils/string';
+import PublicEntityDetailPage from '@/components/public/PublicEntityDetailPage';
+import { circleDetailConfig } from '@/components/public/detail-configs/circle';
 
-interface CircleDetailPageProps {
+interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function CircleDetailPage({ params }: CircleDetailPageProps) {
+/**
+ * Circle detail (owner / dashboard).
+ *
+ * Renders the SAME layout members see (PublicEntityDetailPage) plus the owner
+ * manage bar — no separate flat label→value grid. Config shared with the public
+ * route via circleDetailConfig (SSOT).
+ */
+export default async function CircleDetailPage({ params }: PageProps) {
   const { id } = await params;
-
-  return (
-    <EntityDetailPage<CircleListItem>
-      config={circleEntityConfig}
-      entityId={id}
-      requireAuth={false}
-      makeDetailFields={circle => ({
-        left: [
-          { label: 'Category', value: circle.category || '—' },
-          { label: 'Visibility', value: capitalize(circle.visibility || 'public') },
-          { label: 'Members', value: String(circle.member_count ?? 0) },
-        ],
-        right: [],
-      })}
-    />
-  );
+  return <PublicEntityDetailPage id={id} config={circleDetailConfig} />;
 }
