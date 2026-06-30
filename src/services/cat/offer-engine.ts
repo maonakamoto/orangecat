@@ -18,6 +18,7 @@ import { PREFILLABLE_ENTITY_TYPES } from './tool-use-detection';
 import { fetchFullContextForCat } from '@/services/ai/document-context';
 import { buildFullContextString } from '@/services/ai/context-string-builder';
 import { listMemories } from './memory';
+import { getDemandSignals } from './demand-signals';
 import { logger } from '@/utils/logger';
 
 // Capable, JSON-reliable defaults (mirrors form-prefill-service's provider choice).
@@ -48,7 +49,8 @@ Map their LATENT ASSETS to the right OrangeCat entity type:
 
 RULES (these are hard constraints):
 - Ground EVERY offer in something SPECIFIC from the provided context. In "rationale", name the concrete skill, asset, document, or experience it comes from.
-- NEVER invent facts about the user. NEVER invent demand, market size, or statistics (e.g. "3 people searched for this"). You have no demand data — propose based on what they HAVE, not on claimed demand.
+- NEVER invent facts about the user. NEVER invent demand, market size, or statistics (e.g. "3 people searched for this"). The "PLATFORM LANDSCAPE" section is the ONLY demand/supply data you have — do not invent searches, trends, or numbers beyond it.
+- Use the PLATFORM LANDSCAPE to make offers sharper: price in line with comparable active listings, prefer viable types, point out a GAP the user could fill ("no translation services exist on OrangeCat yet"), or differentiate where a niche is already crowded. When a landscape signal informs an offer, reference it in the rationale.
 - Do NOT duplicate something they already offer (check their existing entities).
 - Each "description" must be a full, publishable description (what it is, who it is for, a sensible scope) so it can prefill a create form — but do NOT fabricate a specific price; leave price out unless the context clearly implies one.
 - Money is always Bitcoin (BTC) or a fiat currency. NEVER write "sats" or "satoshis" — say "BTC" (e.g. "0.0005 BTC", never "50,000 sats").
@@ -71,14 +73,15 @@ export async function generateOffers(
 ): Promise<ProposedOffer[]> {
   const count = Math.min(Math.max(opts?.count ?? 4, 1), MAX_OFFERS);
 
-  const [context, memories] = await Promise.all([
+  const [context, memories, demandBlob] = await Promise.all([
     fetchFullContextForCat(supabase, userId),
     listMemories(supabase, userId),
+    getDemandSignals(supabase),
   ]);
   const contextBlob = buildFullContextString(context);
   const memoryBlob = memories.length ? memories.map(m => `- ${m.content}`).join('\n') : '(none)';
 
-  const raw = await callOfferModel(contextBlob, memoryBlob, count, opts?.focus);
+  const raw = await callOfferModel(contextBlob, memoryBlob, demandBlob, count, opts?.focus);
   if (!raw) {
     return [];
   }
@@ -88,6 +91,7 @@ export async function generateOffers(
 async function callOfferModel(
   contextBlob: string,
   memoryBlob: string,
+  demandBlob: string,
   count: number,
   focus?: string
 ): Promise<string | null> {
@@ -118,6 +122,9 @@ ${contextBlob}
 
 DURABLE MEMORIES:
 ${memoryBlob}
+
+PLATFORM LANDSCAPE — what's already active on OrangeCat right now (real, the only demand/supply data you have):
+${demandBlob || '(the platform is very early — few or no listings yet)'}
 ${focus ? `\nFocus the suggestions around: ${focus}\n` : ''}
 Propose up to ${count} grounded offers as JSON.`;
 
