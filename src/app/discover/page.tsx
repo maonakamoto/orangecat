@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SlidersHorizontal } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -12,7 +11,6 @@ import DiscoverEmptyState from '@/components/discover/DiscoverEmptyState';
 import { DiscoverLoadingState } from '@/components/discover/DiscoverLoadingState';
 import DiscoverResults from '@/components/discover/DiscoverResults';
 import { GRADIENTS } from '@/config/gradients';
-import { API_ROUTES } from '@/config/api-routes';
 import { useDiscoverState } from './useDiscoverState';
 
 export default function DiscoverPage() {
@@ -100,43 +98,6 @@ export default function DiscoverPage() {
     wishlists.length +
     research.length +
     aiAssistants.length;
-
-  // Log each committed search as an aggregate demand signal WITH its true result
-  // count — zero/low-result searches are the sharpest unmet-demand signal. This is
-  // the single logging point (every committed search lands here, from ⌘K, a direct
-  // link, or the in-page box). No PII; deduped per query. We fire ~1.5s after the
-  // query stabilizes (via a ref to the latest count) rather than gating on the
-  // page's loading flags — those can stay "loading" if a load cycle isn't observed,
-  // which would silently suppress the log. sendBeacon survives navigation.
-  const resultsFoundRef = useRef(0);
-  resultsFoundRef.current = resultsFound;
-  const loggedSearchRef = useRef<string | null>(null);
-  useEffect(() => {
-    const q = searchTerm.trim().toLowerCase();
-    if (!q || searchError || loggedSearchRef.current === q) {
-      return;
-    }
-    const timer = setTimeout(() => {
-      loggedSearchRef.current = q;
-      try {
-        const payload = JSON.stringify({ query: q, resultCount: resultsFoundRef.current });
-        const beacon = navigator.sendBeacon?.bind(navigator);
-        if (beacon) {
-          beacon(API_ROUTES.SEARCH.LOG, new Blob([payload], { type: 'application/json' }));
-        } else {
-          void fetch(API_ROUTES.SEARCH.LOG, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: payload,
-            keepalive: true,
-          }).catch(() => {});
-        }
-      } catch {
-        /* logging must never disrupt discovery */
-      }
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, [searchTerm, searchError]);
 
   // Shared filter props to avoid duplication between desktop and mobile
   const filterProps = {
