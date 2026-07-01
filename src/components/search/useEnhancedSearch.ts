@@ -96,15 +96,26 @@ export function useEnhancedSearch({ showQuickActions = true }: UseEnhancedSearch
         setSearchHistory(newHistory);
         localStorage.setItem(`search-history-${user.id}`, JSON.stringify(newHistory));
       }
-      // Log the committed search as an aggregate demand signal — fire-and-forget,
-      // no PII. `keepalive` lets the request outlive the navigation that follows on
-      // the next line (otherwise the browser cancels the in-flight fetch).
-      void fetch(API_ROUTES.SEARCH.LOG, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: searchQuery }),
-        keepalive: true,
-      }).catch(() => {});
+      // Log the committed search as an aggregate demand signal — no PII. Use
+      // sendBeacon: it's built to survive the navigation that follows on the next
+      // line (a plain fetch — even keepalive — gets canceled by router.push).
+      // Falls back to a keepalive fetch where sendBeacon is unavailable.
+      try {
+        const payload = JSON.stringify({ query: searchQuery });
+        const beacon = navigator.sendBeacon?.bind(navigator);
+        if (beacon) {
+          beacon(API_ROUTES.SEARCH.LOG, new Blob([payload], { type: 'application/json' }));
+        } else {
+          void fetch(API_ROUTES.SEARCH.LOG, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload,
+            keepalive: true,
+          }).catch(() => {});
+        }
+      } catch {
+        /* logging must never disrupt search */
+      }
       router.push(`/discover?q=${encodeURIComponent(searchQuery)}`);
       setIsOpen(false);
       setQuery('');
