@@ -47,7 +47,6 @@ import {
   Wallet,
 } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
-import { API_ROUTES } from '@/config/api-routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { cn } from '@/lib/utils';
 import type { GlobalSearchHit } from '@/services/search';
@@ -130,24 +129,8 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       if (!trimmed) {
         return;
       }
-      // Log the committed search as an aggregate demand signal — no PII. sendBeacon
-      // survives the navigation that follows (a plain fetch would be canceled).
-      try {
-        const beacon = navigator.sendBeacon?.bind(navigator);
-        const payload = JSON.stringify({ query: trimmed });
-        if (beacon) {
-          beacon(API_ROUTES.SEARCH.LOG, new Blob([payload], { type: 'application/json' }));
-        } else {
-          void fetch(API_ROUTES.SEARCH.LOG, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: payload,
-            keepalive: true,
-          }).catch(() => {});
-        }
-      } catch {
-        /* logging must never disrupt search */
-      }
+      // The demand log fires from the discover page (the single point every
+      // committed search lands on), where the true result count is known.
       close();
       router.push(`${ROUTES.DISCOVER}?q=${encodeURIComponent(trimmed)}`);
     },

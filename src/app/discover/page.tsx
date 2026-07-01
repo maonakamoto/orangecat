@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SlidersHorizontal } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -11,6 +12,7 @@ import DiscoverEmptyState from '@/components/discover/DiscoverEmptyState';
 import { DiscoverLoadingState } from '@/components/discover/DiscoverLoadingState';
 import DiscoverResults from '@/components/discover/DiscoverResults';
 import { GRADIENTS } from '@/config/gradients';
+import { API_ROUTES } from '@/config/api-routes';
 import { useDiscoverState } from './useDiscoverState';
 
 export default function DiscoverPage() {
@@ -79,6 +81,55 @@ export default function DiscoverPage() {
     handleLoadMore,
     clearFilters,
   } = useDiscoverState();
+
+  // The total the page shows as "N results found" — single source for the UI and
+  // the demand log below. Mirrors the per-tab handling: useSearch only counts
+  // projects/profiles/all; entity tabs add their own loaded lengths.
+  const resultsFound =
+    (activeTab === 'all' || activeTab === 'projects' || activeTab === 'profiles'
+      ? totalResults
+      : 0) +
+    loans.length +
+    investments.length +
+    assets.length +
+    causes.length +
+    events.length +
+    products.length +
+    services.length +
+    groups.length +
+    wishlists.length +
+    research.length +
+    aiAssistants.length;
+
+  // Log each committed search as an aggregate demand signal WITH its true result
+  // count — zero/low-result searches are the sharpest unmet-demand signal. This is
+  // the single logging point (every committed search lands here, from ⌘K, a direct
+  // link, or the in-page box). No PII; deduped per query; only once results settle;
+  // sendBeacon survives navigation.
+  const loggedSearchRef = useRef<string | null>(null);
+  useEffect(() => {
+    const q = searchTerm.trim().toLowerCase();
+    if (!q || showInitialLoading || searchError || loggedSearchRef.current === q) {
+      return;
+    }
+    loggedSearchRef.current = q;
+    try {
+      const payload = JSON.stringify({ query: q, resultCount: resultsFound });
+      const beacon = navigator.sendBeacon?.bind(navigator);
+      if (beacon) {
+        beacon(API_ROUTES.SEARCH.LOG, new Blob([payload], { type: 'application/json' }));
+      } else {
+        void fetch(API_ROUTES.SEARCH.LOG, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload,
+          keepalive: true,
+        }).catch(() => {});
+      }
+    } catch {
+      /* logging must never disrupt discovery */
+    }
+  }, [searchTerm, showInitialLoading, searchError, resultsFound]);
 
   // Shared filter props to avoid duplication between desktop and mobile
   const filterProps = {
@@ -215,30 +266,7 @@ export default function DiscoverPage() {
                   wishlists={wishlists}
                   research={research}
                   aiAssistants={aiAssistants}
-                  totalResults={
-                    // useSearch (which feeds `totalResults`) only handles
-                    // projects + profiles + all. When the active tab is one
-                    // of the entity-specific tabs (loans, causes, …) it
-                    // still returns its initialType count — i.e., a
-                    // projects count that nothing on-screen reflects —
-                    // and adding it produces "6 results found" while
-                    // only 3 loans render. Skip that contribution unless
-                    // the tab is one useSearch actually targets.
-                    (activeTab === 'all' || activeTab === 'projects' || activeTab === 'profiles'
-                      ? totalResults
-                      : 0) +
-                    loans.length +
-                    investments.length +
-                    assets.length +
-                    causes.length +
-                    events.length +
-                    products.length +
-                    services.length +
-                    groups.length +
-                    wishlists.length +
-                    research.length +
-                    aiAssistants.length
-                  }
+                  totalResults={resultsFound}
                   loading={
                     loading || loansLoading || investmentsLoading || assetsLoading || genericLoading
                   }
