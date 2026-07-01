@@ -52,7 +52,7 @@ jobs:
           echo "down=$fail" >> "$GITHUB_OUTPUT"
 
       - name: Alert / resolve via GitHub issue
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const down = '${{ steps.probe.outputs.down }}' === '1';
@@ -79,7 +79,7 @@ jobs:
       # silently-filling disk = a future hard outage. Warn early (≥85%), auto-resolve below.
       - name: Disk-pressure alert / resolve
         if: ${{ steps.probe.outputs.disk != '' }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const disk = parseInt('${{ steps.probe.outputs.disk }}', 10);
