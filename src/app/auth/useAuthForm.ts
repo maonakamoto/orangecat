@@ -6,9 +6,9 @@ import { signInAnonymously } from '@/services/supabase/auth';
 import { getReadableError } from '@/utils/getReadableError';
 import supabase from '@/lib/supabase/browser';
 import { useAuthSubmission } from './useAuthSubmission';
-import { OAUTH_TO_SUPABASE } from './oauthProviders';
+import { OAUTH_TO_SUPABASE, type OAuthProvider } from './oauth-provider-map';
 
-export type OAuthProvider = 'google' | 'github' | 'apple' | 'x' | 'facebook';
+export type { OAuthProvider };
 
 export type AuthMode = 'login' | 'register' | 'forgot';
 

@@ -11,6 +11,7 @@ import DiscoverEmptyState from '@/components/discover/DiscoverEmptyState';
 import { DiscoverLoadingState } from '@/components/discover/DiscoverLoadingState';
 import DiscoverResults from '@/components/discover/DiscoverResults';
 import { GRADIENTS } from '@/config/gradients';
+import { DISCOVER_TAB_FILTERS } from './discoverConstants';
 import { useDiscoverState } from './useDiscoverState';
 
 export default function DiscoverPage() {
@@ -110,10 +111,10 @@ export default function DiscoverPage() {
     onViewModeChange: setViewMode,
     selectedStatuses,
     onToggleStatus: handleToggleStatus,
-    showStatusFilter: activeTab !== 'profiles',
+    showStatusFilter: DISCOVER_TAB_FILTERS[activeTab].projectStatus,
     selectedCategories,
     onToggleCategory: handleToggleCategory,
-    showCategoryFilter: activeTab !== 'profiles',
+    showCategoryFilter: DISCOVER_TAB_FILTERS[activeTab].projectCategories,
     country,
     onCountryChange: setCountry,
     city,
