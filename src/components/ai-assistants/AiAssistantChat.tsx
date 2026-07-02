@@ -152,7 +152,7 @@ export default function AiAssistantChat({
           <div className="flex flex-col">
             <div
               ref={scrollRef}
-              className="flex flex-col gap-0 max-h-[28rem] overflow-y-auto rounded-md border border-subtle bg-surface-base"
+              className="flex h-[50vh] min-h-[20rem] flex-col gap-0 overflow-y-auto rounded-md border border-subtle bg-surface-base"
             >
               {welcomeMessage && messages.length === 0 && (
                 <AIChatMessage
