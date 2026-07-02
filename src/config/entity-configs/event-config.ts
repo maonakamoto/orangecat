@@ -236,7 +236,7 @@ const fieldGroups: FieldGroup[] = [
         type: 'currency',
         placeholder: '50.00',
         min: 1,
-        hint: 'Price per ticket. Enter in your preferred currency. All transactions settle in Bitcoin. Tip: Use BTC or SATS for Bitcoin-native pricing (no price conversion).',
+        hint: 'Price per ticket. Enter in your preferred currency. All transactions settle in Bitcoin. Tip: price in BTC for Bitcoin-native pricing (no conversion).',
         showWhen: {
           field: 'is_free',
           value: false,

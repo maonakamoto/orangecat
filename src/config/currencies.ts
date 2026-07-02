@@ -5,7 +5,8 @@
  * All database constraints, validation schemas, and UI components MUST use these values.
  *
  * IMPORTANT:
- * - All transactions are stored and settled in BTC (satoshis)
+ * - Bitcoin amounts are stored and settled in BTC — the canonical unit.
+ *   Satoshis are a Lightning protocol detail and are NOT a currency here.
  * - Currency is ONLY for display and input purposes
  * - Users can set their preferred currency in settings (stored in profiles.currency)
  * - Default currency is CHF (Swiss-focused platform)
@@ -14,11 +15,11 @@
  * Database migrations MUST reference these values - do NOT hardcode currency lists.
  *
  * Created: 2025-01-03
- * Last Modified: 2026-01-05
- * Last Modified Summary: Established as SSOT with clear documentation about BTC-only transactions
+ * Last Modified: 2026-07-02
+ * Last Modified Summary: Removed SATS as a currency code — BTC is the only Bitcoin unit (prod had zero SATS rows).
  */
 
-export const CURRENCY_CODES = ['USD', 'EUR', 'CHF', 'GBP', 'BTC', 'SATS'] as const;
+export const CURRENCY_CODES = ['USD', 'EUR', 'CHF', 'GBP', 'BTC'] as const;
 export type CurrencyCode = (typeof CURRENCY_CODES)[number];
 
 /**
@@ -37,13 +38,9 @@ export const CURRENCY_METADATA: Record<
   CHF: { label: 'CHF (Swiss Franc)', symbol: 'CHF', precision: 2 },
   GBP: { label: 'GBP (British Pound)', symbol: '£', precision: 2 },
   BTC: { label: 'BTC (Bitcoin)', symbol: '₿', precision: 8 },
-  SATS: { label: 'Satoshis', symbol: 'sat', precision: 0 },
 };
 
-// SATS stays a valid code for internal/Lightning-protocol use, but is never
-// offered as a user-facing DISPLAY currency — the platform never shows amounts
-// in sats (always a fiat currency or BTC).
-export const currencySelectOptions = CURRENCY_CODES.filter(code => code !== 'SATS').map(code => ({
+export const currencySelectOptions = CURRENCY_CODES.map(code => ({
   value: code,
   label: CURRENCY_METADATA[code].label,
 }));

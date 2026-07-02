@@ -1,7 +1,7 @@
 /**
  * Cat Credits Service
  *
- * Bitcoin-paid access to frontier models. Users top up a sats balance over
+ * Bitcoin-paid access to frontier models. Users top up a BTC balance over
  * Lightning; frontier inference is metered against it. See
  * docs/architecture/CAT_CREDITS.md.
  *

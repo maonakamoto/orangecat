@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 
 interface CurrencyDisplayProps {
   amount: number | string;
-  currency: 'BTC' | 'USD' | 'CHF' | 'EUR' | 'SATS' | string;
+  currency: 'BTC' | 'USD' | 'CHF' | 'EUR' | string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   showSymbol?: boolean;
@@ -50,11 +50,6 @@ export const CurrencyDisplay: React.FC<CurrencyDisplayProps> = ({
         // BTC: up to 8 decimal places, remove trailing zeros
         const btcFormatted = numAmount.toFixed(8).replace(/\.?0+$/, '');
         return showSymbol ? `${btcFormatted} BTC` : btcFormatted;
-      case 'SATS':
-        // SATS: no decimals, with thousand separators
-        return showSymbol
-          ? `${Math.round(numAmount).toLocaleString('en-US')} sat`
-          : Math.round(numAmount).toLocaleString('en-US');
       case 'USD':
         // Fiat currencies: 2 decimal places
         const usdFormatted = numAmount.toLocaleString('en-US', {

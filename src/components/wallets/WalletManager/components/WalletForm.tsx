@@ -206,7 +206,6 @@ export function WalletForm({
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
             <option value="BTC">BTC</option>
-            <option value="SATS">SATS</option>
           </select>
         </div>
       </div>

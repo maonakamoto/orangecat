@@ -388,13 +388,18 @@ export function getAvailableModels(): AIModelMetadata[] {
 }
 
 /**
- * Calculate cost in satoshis for a given model and token usage
+ * Calculate inference cost in BTC (the canonical unit) for a model + token usage.
+ *
+ * Rounds UP to 1e-8 (the ledger/DB precision) so tiny completions never bill
+ * as zero. Historical bug fixed 2026-07-02: this returned SATOSHIS despite the
+ * name, which would have drifted every BTC-denominated column it fed
+ * (ai_messages.api_cost_btc / cost_btc) by 1e8.
  *
  * @param modelId - The model ID
  * @param inputTokens - Number of input tokens
  * @param outputTokens - Number of output tokens
  * @param btcPriceUsd - Current BTC price in USD (default: 100000)
- * @returns Cost in satoshis
+ * @returns Cost in BTC
  */
 export function calculateCostBtc(
   modelId: string,
@@ -411,9 +416,7 @@ export function calculateCostBtc(
   const outputCostUsd = (outputTokens / 1_000_000) * model.outputCostPer1M;
   const totalCostUsd = inputCostUsd + outputCostUsd;
 
-  // Convert USD to sats (1 BTC = 100M sats)
-  const satsPerUsd = 100_000_000 / btcPriceUsd;
-  return Math.ceil(totalCostUsd * satsPerUsd);
+  return Math.ceil((totalCostUsd / btcPriceUsd) * 1e8) / 1e8;
 }
 
 // ==================== CONSTANTS ====================

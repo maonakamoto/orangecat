@@ -5,7 +5,6 @@
  */
 
 import { CURRENCY_METADATA } from '@/config/currencies';
-import { bitcoinToSats } from './conversion';
 
 // ==================== GENERAL FORMATTING ====================
 
@@ -23,14 +22,6 @@ export function formatCurrency(
 
   if (!metadata) {
     return amount.toLocaleString(locale);
-  }
-
-  if (currency === 'SATS') {
-    const formatted =
-      compact && amount >= 1000000
-        ? `${(amount / 1000000).toFixed(1)}M`
-        : amount.toLocaleString(locale, { maximumFractionDigits: 0 });
-    return showSymbol ? `${formatted} sat` : formatted;
   }
 
   if (currency === 'BTC') {
@@ -64,19 +55,15 @@ export function formatCurrency(
 
 // ==================== BITCOIN DISPLAY ====================
 
-export function formatBitcoinDisplay(amount: number, unit: 'BTC' | 'sats' = 'BTC'): string {
-  if (unit === 'sats') {
-    return `${amount.toLocaleString('en-US')} sat`;
-  }
-
+export function formatBitcoinDisplay(amount: number): string {
+  // BTC is the only user-facing Bitcoin unit — small amounts get more
+  // precision, never a satoshi rendering.
   if (amount >= 1) {
     return `${amount.toFixed(4)} BTC`;
   } else if (amount >= 0.001) {
     return `${amount.toFixed(6)} BTC`;
-  } else {
-    const sats = bitcoinToSats(amount);
-    return `${sats.toLocaleString('en-US')} sat`;
   }
+  return `${amount.toFixed(8).replace(/0+$/, '')} BTC`;
 }
 
 export function formatBTC(amount: number): string {

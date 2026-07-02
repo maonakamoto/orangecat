@@ -44,25 +44,9 @@ describe('useDisplayCurrency', () => {
     const chf = renderHook(() => useDisplayCurrency());
     expect(chf.result.current.formatSats(0)).toBe('CHF 0.00');
 
-    mockCurrency = 'SATS';
-    const sats = renderHook(() => useDisplayCurrency());
-    expect(sats.result.current.formatSats(0)).toBe('0 sat');
-
     mockCurrency = 'BTC';
     const btc = renderHook(() => useDisplayCurrency());
     expect(btc.result.current.formatSats(0)).toBe('₿0');
-  });
-
-  it('respects forceSats regardless of preference', () => {
-    mockCurrency = 'CHF';
-    const { result } = renderHook(() => useDisplayCurrency());
-    expect(result.current.formatSats(100_000, { forceSats: true })).toBe('100,000 sat');
-  });
-
-  it('renders sats preference as raw sats', () => {
-    mockCurrency = 'SATS';
-    const { result } = renderHook(() => useDisplayCurrency());
-    expect(result.current.formatSats(100_000)).toBe('100,000 sat');
   });
 
   it('renders BTC preference with the ₿ symbol', () => {
@@ -81,11 +65,5 @@ describe('useDisplayCurrency', () => {
     expect(out).not.toMatch(/sat/i);
     expect(out).toMatch(/BTC|₿/);
     expect(result.current.isLoading).toBe(true);
-  });
-
-  it('shows both fiat and sats when requested', () => {
-    mockCurrency = 'CHF';
-    const { result } = renderHook(() => useDisplayCurrency());
-    expect(result.current.formatSats(100_000, { showBoth: true })).toBe('CHF 86.00 (100,000 sat)');
   });
 });

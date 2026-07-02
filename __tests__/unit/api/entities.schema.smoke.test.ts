@@ -21,7 +21,7 @@ describe('Entity schema smoke validation', () => {
       min_funding_sats: 1000,
       funding_type: 'all_or_nothing',
       deadline: new Date(Date.now() + 86400000).toISOString(),
-      currency: 'SATS',
+      currency: 'BTC',
       transparency_mode: 'public',
       status: 'draft',
     });
@@ -35,7 +35,7 @@ describe('Entity schema smoke validation', () => {
       description: 'desc',
       category: 'test',
       price: 1500,
-      currency: 'SATS',
+      currency: 'BTC',
       product_type: 'physical',
       images: [],
     });
@@ -49,7 +49,7 @@ describe('Entity schema smoke validation', () => {
       description: 'desc',
       category: 'consulting',
       fixed_price: 5000,
-      currency: 'SATS',
+      currency: 'BTC',
       service_location_type: 'remote',
     });
 
@@ -62,7 +62,7 @@ describe('Entity schema smoke validation', () => {
       description: 'desc',
       cause_category: 'Healthcare',
       goal_amount: 20000,
-      currency: 'SATS',
+      currency: 'BTC',
       lightning_address: '',
       beneficiaries: [],
     });
@@ -76,7 +76,7 @@ describe('Entity schema smoke validation', () => {
       type: 'real_estate',
       description: 'Asset description',
       estimated_value: 1000000,
-      currency: 'SATS',
+      currency: 'BTC',
       documents: [],
     });
 
@@ -108,7 +108,7 @@ describe('Entity schema smoke validation', () => {
       is_online: true,
       online_url: 'https://example.com/meet',
       ticket_price: 1000,
-      currency: 'SATS',
+      currency: 'BTC',
       lightning_address: '',
     });
 

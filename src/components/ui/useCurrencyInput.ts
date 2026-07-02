@@ -47,8 +47,6 @@ export function useCurrencyInput(
       let formatted: string;
       if (inputCurrency === 'BTC') {
         formatted = numValue.toFixed(8).replace(/\.?0+$/, '');
-      } else if (inputCurrency === 'SATS') {
-        formatted = Math.round(numValue).toLocaleString('en-US', { maximumFractionDigits: 0 });
       } else {
         formatted = numValue.toFixed(2);
       }

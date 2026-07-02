@@ -10,8 +10,9 @@ describe('isBitcoinNativeCurrency', () => {
     expect(isBitcoinNativeCurrency('BTC')).toBe(true);
   });
 
-  it('returns true for SATS', () => {
-    expect(isBitcoinNativeCurrency('SATS')).toBe(true);
+  it('returns false for SATS — satoshis are not a product currency', () => {
+    // @ts-expect-error SATS was removed from CurrencyCode (2026-07-02)
+    expect(isBitcoinNativeCurrency('SATS')).toBe(false);
   });
 
   it('returns false for CHF', () => {
@@ -52,13 +53,13 @@ describe('isFiatCurrency', () => {
     expect(isFiatCurrency('BTC')).toBe(false);
   });
 
-  it('returns false for SATS', () => {
-    expect(isFiatCurrency('SATS')).toBe(false);
+  it('returns false for BTC-only edge', () => {
+    expect(isFiatCurrency('BTC')).toBe(false);
   });
 });
 
 describe('getGoalExplanation', () => {
-  const currencies: Currency[] = ['BTC', 'SATS', 'CHF', 'USD', 'EUR', 'GBP'];
+  const currencies: Currency[] = ['BTC', 'CHF', 'USD', 'EUR', 'GBP'];
 
   // Verify no thrown errors and always returns a non-empty string
   for (const currency of currencies) {

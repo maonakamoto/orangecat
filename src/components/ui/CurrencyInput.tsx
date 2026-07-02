@@ -3,9 +3,9 @@
 import { ArrowLeftRight, Bitcoin, Info } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Currency, ALL_CURRENCIES } from '@/types/settings';
-import { formatCurrency, bitcoinToSats } from '@/services/currency';
+import { formatCurrency } from '@/services/currency';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
-import { getGoalExplanation, isBitcoinNativeCurrency } from '@/utils/currency-helpers';
+import { getGoalExplanation } from '@/utils/currency-helpers';
 import { useCurrencyInput } from './useCurrencyInput';
 
 interface CurrencyInputProps {
@@ -86,7 +86,7 @@ export function CurrencyInput({
             onChange={handleInputChange}
             onFocus={onFocus}
             onBlur={() => handleBlur(onBlur)}
-            placeholder={placeholder || (inputCurrency === 'SATS' ? '0' : '0.00')}
+            placeholder={placeholder || '0.00'}
             disabled={disabled}
             className={`rounded-r-none ${error ? 'border-destructive' : ''}`}
           />
@@ -146,17 +146,8 @@ export function CurrencyInput({
               </div>
             )}
 
-            {inputCurrency !== 'SATS' && (
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">SATS</span>
-                <span className="font-mono font-medium text-foreground">
-                  {bitcoinToSats(breakdown.btc).toLocaleString('en-US')}
-                </span>
-              </div>
-            )}
-
             {Object.entries(breakdown.other)
-              .slice(0, inputCurrency === 'BTC' || inputCurrency === 'SATS' ? 3 : 2)
+              .slice(0, inputCurrency === 'BTC' ? 3 : 2)
               .map(([curr, amount]) => (
                 <div key={curr} className="flex justify-between items-center">
                   <span className="text-muted-foreground">{curr}</span>
@@ -172,8 +163,6 @@ export function CurrencyInput({
             <p className="text-xs text-muted-foreground">
               All transactions settle in Bitcoin. Amounts shown are estimates based on current
               exchange rates.
-              {isBitcoinNativeCurrency(inputCurrency) &&
-                ' SATS shown for Bitcoin-native convenience.'}
             </p>
           </div>
         </div>

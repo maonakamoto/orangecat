@@ -118,7 +118,6 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                           | 'USD'
                           | 'EUR'
                           | 'BTC'
-                          | 'SATS'
                       }
                     />
                   </div>
@@ -132,7 +131,6 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                           | 'USD'
                           | 'EUR'
                           | 'BTC'
-                          | 'SATS'
                       }
                     />
                   </div>

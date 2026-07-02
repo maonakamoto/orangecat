@@ -27,8 +27,8 @@ export default function BTCAmountDisplay({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Skip conversion if already in BTC/SATS
-    if (currency === 'BTC' || currency === 'SATS') {
+    // Skip conversion if already in BTC
+    if (currency === 'BTC') {
       setIsLoading(false);
       return;
     }
@@ -70,14 +70,12 @@ export default function BTCAmountDisplay({
     };
   }, [amount, currency]);
 
-  // If already in BTC/SATS, just show the amount
-  if (currency === 'BTC' || currency === 'SATS') {
+  // If already in BTC, just show the amount
+  if (currency === 'BTC') {
     return (
       <span className={`inline-flex items-center gap-1 ${className}`}>
         {showIcon && <Bitcoin className="w-3 h-3 text-bitcoinOrange" />}
-        <span>
-          {currencyConverter.formatBTC(currency === 'BTC' ? amount : amount / 100_000_000)}
-        </span>
+        <span>{currencyConverter.formatBTC(amount)}</span>
       </span>
     );
   }

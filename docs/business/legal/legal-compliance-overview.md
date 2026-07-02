@@ -161,7 +161,14 @@ Based on codebase analysis, OrangeCat:
 
 ### Tax Implications
 
-- **Platform Fees:** OrangeCat's revenue from transaction fees may be subject to VAT/sales tax
+- **Platform Revenue:** OrangeCat charges NO transaction fees (updated
+  2026-07-02 — consistent with the pure-facilitation posture above). Revenue
+  comes from selling the platform's own AI service: prepaid Cat Credits
+  (Bitcoin top-ups spent on managed frontier-model usage, cost + margin) and
+  a 5% platform share on paid AI-assistant messages. As a prepaid service
+  sold by the platform, this is ordinary service revenue — likely subject to
+  Swiss VAT once over the registration threshold; confirm treatment of
+  Bitcoin-denominated prepaid balances with a Swiss tax advisor.
 - **User Transactions:** Not taxable by platform (peer-to-peer)
 - **No Withholding:** No tax withholding obligations for Bitcoin transactions
 
@@ -364,6 +371,3 @@ Based on codebase analysis:
 **KEY TAKEAWAY:** OrangeCat's peer-to-peer model significantly reduces regulatory complexity compared to traditional fintech platforms. However, professional legal counsel is still essential for proper compliance implementation.
 
 **This document is for informational purposes only and does not constitute legal advice. OrangeCat must obtain professional legal counsel before proceeding with any platform development or launch activities.\*\***
-
-
-

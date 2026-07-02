@@ -18,12 +18,7 @@ import { useCallback } from 'react';
 import { useUserCurrency } from './useUserCurrency';
 import { isFiatCurrency } from '@/utils/currency-helpers';
 import { useCurrencyConversion } from './useCurrencyConversion';
-import {
-  formatCurrency,
-  formatSats as formatRawSats,
-  satsToBitcoin,
-  bitcoinToSats,
-} from '@/services/currency';
+import { formatCurrency, satsToBitcoin, bitcoinToSats } from '@/services/currency';
 import type { CurrencyCode } from '@/config/currencies';
 
 interface DisplayCurrencyOptions {
@@ -31,10 +26,6 @@ interface DisplayCurrencyOptions {
   showSymbol?: boolean;
   /** Compact format for large numbers (default: false) */
   compact?: boolean;
-  /** Always show in sats regardless of user preference */
-  forceSats?: boolean;
-  /** Show both fiat and sats (e.g., "CHF 86.00 (100,000 sats)") */
-  showBoth?: boolean;
 }
 
 interface UseDisplayCurrencyReturn {
@@ -79,22 +70,14 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
 
   const formatSats = useCallback(
     (sats: number, options: DisplayCurrencyOptions = {}): string => {
-      const { showSymbol = true, compact = false, forceSats = false, showBoth = false } = options;
+      const { showSymbol = true, compact = false } = options;
 
       // Handle zero/invalid amounts
       if (!sats || sats === 0) {
-        if (forceSats || displayCurrency === 'SATS') {
-          return '0 sat';
-        }
         if (displayCurrency === 'BTC') {
           return showSymbol ? '₿0' : '0';
         }
         return formatCurrency(0, displayCurrency, { showSymbol, compact });
-      }
-
-      // If user prefers sats or forceSats is true
-      if (forceSats || displayCurrency === 'SATS') {
-        return formatRawSats(sats);
       }
 
       // If user prefers BTC
@@ -114,14 +97,7 @@ export function useDisplayCurrency(): UseDisplayCurrencyReturn {
         return formatCurrency(btc, 'BTC', { showSymbol, compact });
       }
 
-      const fiatFormatted = formatCurrency(fiatAmount, displayCurrency, { showSymbol, compact });
-
-      // Show both fiat and sats if requested
-      if (showBoth) {
-        return `${fiatFormatted} (${formatRawSats(sats)})`;
-      }
-
-      return fiatFormatted;
+      return formatCurrency(fiatAmount, displayCurrency, { showSymbol, compact });
     },
     [displayCurrency, convertFromBTC, isLoading]
   );

@@ -17,10 +17,10 @@ import { Currency } from '@/types/settings';
  * Bitcoin-native currencies work differently:
  * - Goals can ONLY be reached by contributions (not price appreciation)
  * - No conversion needed for comparison (direct BTC comparison)
- * - Used by Bitcoin-native users who think in BTC/sats
+ * - Used by Bitcoin-native users who think in BTC
  */
 export function isBitcoinNativeCurrency(currency: Currency): boolean {
-  return currency === 'BTC' || currency === 'SATS';
+  return currency === 'BTC';
 }
 
 /**
