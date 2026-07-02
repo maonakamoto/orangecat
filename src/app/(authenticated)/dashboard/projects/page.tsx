@@ -1,6 +1,7 @@
 'use client';
 
 import EntityDashboardPage from '@/components/entity/EntityDashboardPage';
+import FleetCrownBuildCta from '@/components/integrations/FleetCrownBuildCta';
 import Button from '@/components/ui/Button';
 import { Target, Heart } from 'lucide-react';
 import { projectEntityConfig, type ProjectListItem } from '@/config/entities/projects';
@@ -14,6 +15,7 @@ export default function ProjectsDashboardPage() {
       title="My Projects"
       description="Manage your projects and track funding"
       createButtonLabel="Create Project"
+      headerContent={<FleetCrownBuildCta variant="banner" />}
       tabs={[
         { id: 'my-projects', label: 'My Projects', icon: Target },
         {
