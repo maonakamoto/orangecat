@@ -19,6 +19,8 @@ interface GeneratedInvoice {
   payment_hash: string | null;
   /** On-chain BTC address */
   onchain_address: string | null;
+  /** LUD-21 verify URL (lightning_address only, when the provider supports it) */
+  lnurl_verify_url: string | null;
   /** QR code data (bolt11 uppercased, or bitcoin: URI) */
   qr_data: string;
   /** When the invoice expires (ISO string) */
@@ -76,6 +78,7 @@ async function generateNWCInvoice(
       bolt11: invoice.invoice,
       payment_hash: invoice.payment_hash,
       onchain_address: null,
+      lnurl_verify_url: null,
       qr_data: invoice.invoice.toUpperCase(), // Uppercase for QR efficiency
       expires_at: expiresAt,
     };
@@ -145,10 +148,19 @@ async function generateLightningAddressInvoice(
     throw new Error('LNURL callback did not return a payment request');
   }
 
+  // LUD-21: providers like Alby and Coinos return a `verify` URL alongside the
+  // invoice. Polling it lets us detect settlement trustlessly — without it the
+  // flow degrades to buyer-confirmed ("I've paid").
+  const verifyUrl =
+    typeof invoiceData.verify === 'string' && invoiceData.verify.startsWith('https://')
+      ? invoiceData.verify
+      : null;
+
   return {
     bolt11: invoiceData.pr,
     payment_hash: null, // LNURL-pay doesn't always return payment_hash directly
     onchain_address: null,
+    lnurl_verify_url: verifyUrl,
     qr_data: invoiceData.pr.toUpperCase(),
     expires_at: new Date(Date.now() + LIGHTNING_INVOICE_EXPIRY_SECS * 1000).toISOString(),
   };
@@ -175,6 +187,7 @@ async function generateOnchainInvoice(
     bolt11: null,
     payment_hash: null,
     onchain_address: address,
+    lnurl_verify_url: null,
     qr_data: bip21Uri,
     // On-chain payments don't expire — address is valid forever
     expires_at: null,

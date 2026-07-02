@@ -3,7 +3,8 @@
  *
  * Checks payment status using the appropriate method:
  * - NWC: lookup_invoice via Nostr relay
- * - Lightning Address: buyer-confirmed (no server-side verification)
+ * - Lightning Address: LNURL-verify (LUD-21) when the provider supports it,
+ *   otherwise buyer-confirmed (no server-side verification)
  * - On-chain: Mempool.space API polling
  */
 
@@ -68,6 +69,39 @@ export async function checkNWCPaymentStatus(
     return false;
   } finally {
     client.disconnect();
+  }
+}
+
+/**
+ * Check if a lightning_address payment has settled via its LUD-21 verify URL.
+ *
+ * The verify endpoint returns `{ status: "OK", settled: boolean, ... }`.
+ * Returns true only on an explicit `settled: true`. Never throws — network or
+ * provider errors are logged and treated as "not settled yet".
+ */
+export async function checkLnurlVerifyPaymentStatus(
+  paymentIntent: Pick<PaymentIntent, 'id' | 'lnurl_verify_url'>
+): Promise<boolean> {
+  if (!paymentIntent.lnurl_verify_url) {
+    return false;
+  }
+
+  try {
+    const response = await fetch(paymentIntent.lnurl_verify_url, {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!response.ok) {
+      return false;
+    }
+
+    const data = (await response.json()) as { status?: string; settled?: boolean };
+    return data.status === 'OK' && data.settled === true;
+  } catch (error) {
+    logger.warn('LNURL-verify check failed', {
+      paymentIntentId: paymentIntent.id,
+      error,
+    });
+    return false;
   }
 }
 

@@ -19,7 +19,11 @@ import { convertToBTC } from '@/services/currency/rates';
 import type { CurrencyCode } from '@/config/currencies';
 import { resolveSellerWallet, getSellerUserId } from './walletResolutionService';
 import { generateInvoice } from './invoiceGenerationService';
-import { checkNWCPaymentStatus, checkOnchainPaymentStatus } from './paymentStatusService';
+import {
+  checkNWCPaymentStatus,
+  checkOnchainPaymentStatus,
+  checkLnurlVerifyPaymentStatus,
+} from './paymentStatusService';
 import type {
   InitiatePaymentInput,
   InitiatePaymentResult,
@@ -87,6 +91,7 @@ export async function initiatePayment(
       bolt11: invoice.bolt11,
       payment_hash: invoice.payment_hash,
       onchain_address: invoice.onchain_address,
+      lnurl_verify_url: invoice.lnurl_verify_url,
       status:
         invoice.bolt11 || invoice.onchain_address
           ? STATUS.PAYMENT_INTENTS.INVOICE_READY
@@ -211,6 +216,15 @@ export async function checkPaymentStatus(
   // For NWC, actively check via relay
   if (pi.payment_method === 'nwc' && pi.payment_hash) {
     const paid = await checkNWCPaymentStatus(supabase, pi);
+    if (paid) {
+      await handlePaymentConfirmed(supabase, pi);
+      return { status: STATUS.PAYMENT_INTENTS.PAID, paid_at: new Date().toISOString() };
+    }
+  }
+
+  // For lightning_address with LUD-21 support, actively check the verify URL
+  if (pi.payment_method === 'lightning_address' && pi.lnurl_verify_url) {
+    const paid = await checkLnurlVerifyPaymentStatus(pi);
     if (paid) {
       await handlePaymentConfirmed(supabase, pi);
       return { status: STATUS.PAYMENT_INTENTS.PAID, paid_at: new Date().toISOString() };
