@@ -75,7 +75,7 @@ export function AIChatMessage({
         </div>
         {!isUser && (message.cost_btc ?? 0) > 0 && (
           <div className="mt-2 text-xs text-fg-tertiary">
-            Cost: {formatAmountBtc(message.cost_btc)}
+            Cost: {formatAmountBtc(message.cost_btc ?? 0)}
           </div>
         )}
       </div>
