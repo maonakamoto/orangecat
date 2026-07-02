@@ -5,6 +5,8 @@
  */
 import {
   extractHttpUrls,
+  isUrlOnlyMessage,
+  normalizeToHttpUrl,
   resolveRequestedUrl,
   isPrivateAddress,
   validateTargetUrl,
@@ -67,6 +69,56 @@ describe('extractHttpUrls', () => {
   it('returns empty for messages without URLs', () => {
     expect(extractHttpUrls('I sell mugs and want to list them')).toEqual([]);
   });
+
+  it('extracts a bare schemeless domain and normalizes it to https', () => {
+    expect(extractHttpUrls('revampit.orangecat.ch')).toEqual(['https://revampit.orangecat.ch/']);
+  });
+
+  it('extracts a schemeless domain with a path mid-sentence', () => {
+    expect(extractHttpUrls('my shop lives at mybakery.ch/shop these days')).toEqual([
+      'https://mybakery.ch/shop',
+    ]);
+  });
+
+  it('does not extract the domain of an email address', () => {
+    expect(extractHttpUrls('mail me at g@revamp-it.ch please')).toEqual([]);
+  });
+
+  it('does not extract version numbers or abbreviations', () => {
+    expect(extractHttpUrls('use version 3.5 e.g. for testing')).toEqual([]);
+  });
+});
+
+describe('normalizeToHttpUrl', () => {
+  it('prepends https:// to schemeless input', () => {
+    expect(normalizeToHttpUrl('revampit.orangecat.ch')).toBe('https://revampit.orangecat.ch');
+  });
+
+  it('leaves schemed URLs untouched', () => {
+    expect(normalizeToHttpUrl('http://example.com/a')).toBe('http://example.com/a');
+    expect(normalizeToHttpUrl('https://example.com')).toBe('https://example.com');
+  });
+});
+
+describe('isUrlOnlyMessage', () => {
+  it.each([
+    'revampit.orangecat.ch',
+    '  revampit.orangecat.ch  ',
+    'revampit.orangecat.ch.',
+    'https://example.com',
+    'www.example.com/shop',
+  ])('is true when the message is nothing but a URL/domain: %s', msg => {
+    expect(isUrlOnlyMessage(msg)).toBe(true);
+  });
+
+  it.each([
+    'check out revampit.orangecat.ch please',
+    'https://a.com and https://b.com',
+    'hello there',
+    '',
+  ])('is false otherwise: %s', msg => {
+    expect(isUrlOnlyMessage(msg)).toBe(false);
+  });
 });
 
 describe('resolveRequestedUrl', () => {
@@ -84,6 +136,12 @@ describe('resolveRequestedUrl', () => {
 
   it('refuses when the message has no URL at all', () => {
     expect(resolveRequestedUrl('https://example.com', 'set me up please')).toBeNull();
+  });
+
+  it('accepts a schemeless model url against a schemeless message', () => {
+    expect(resolveRequestedUrl('revampit.orangecat.ch', 'revampit.orangecat.ch')).toBe(
+      'https://revampit.orangecat.ch/'
+    );
   });
 
   it('refuses a non-matching URL when the message has several', () => {
@@ -340,11 +398,57 @@ describe('analyze_website wiring', () => {
     expect(hasWebsiteAnalysisIntent('can you analyze https://example.com for me')).toBe(true);
   });
 
-  it('does not trigger on a bare URL without intent', () => {
-    expect(hasWebsiteAnalysisIntent('https://example.com')).toBe(false);
+  it('triggers when the message is ONLY a URL (bare-URL message = analyze intent)', () => {
+    expect(hasWebsiteAnalysisIntent('https://example.com')).toBe(true);
+  });
+
+  it('triggers when the message is ONLY a bare schemeless domain (prod bug repro)', () => {
+    expect(hasWebsiteAnalysisIntent('revampit.orangecat.ch')).toBe(true);
+    expect(messageMightNeedTools('revampit.orangecat.ch')).toBe(true);
+  });
+
+  it('does not trigger on a URL pasted casually mid-sentence without intent', () => {
+    expect(hasWebsiteAnalysisIntent('someone shared https://example.com in chat yesterday')).toBe(
+      false
+    );
   });
 
   it('does not trigger on intent without a URL', () => {
     expect(hasWebsiteAnalysisIntent('set me up on OrangeCat')).toBe(false);
+  });
+});
+
+// ── Schemeless input through the fetcher (normalization + SSRF stays on) ─────
+
+describe('fetchWebsiteText with schemeless input', () => {
+  it('normalizes a bare domain to https and fetches it', async () => {
+    const fetchFn: FetchLike = jest.fn(async () =>
+      htmlResponse(
+        '<html><title>RevampIT</title><body><p>We refurbish computers.</p></body></html>'
+      )
+    );
+    const result = await fetchWebsiteText('revampit.orangecat.ch', {
+      fetchFn,
+      lookupFn: publicLookup,
+    });
+    expect(result).toMatchObject({ ok: true, title: 'RevampIT' });
+    expect(fetchFn).toHaveBeenCalledWith('https://revampit.orangecat.ch/', expect.anything());
+  });
+
+  it('still rejects a schemeless private IP literal', async () => {
+    const fetchFn = jest.fn();
+    const result = await fetchWebsiteText('127.0.0.1', { fetchFn, lookupFn: publicLookup });
+    expect(result.ok).toBe(false);
+    expect(fetchFn).not.toHaveBeenCalled();
+  });
+
+  it('still rejects a schemeless host that resolves to a private address', async () => {
+    const fetchFn = jest.fn();
+    const result = await fetchWebsiteText('internal.example.com', {
+      fetchFn,
+      lookupFn: privateLookup,
+    });
+    expect(result.ok).toBe(false);
+    expect(fetchFn).not.toHaveBeenCalled();
   });
 });

@@ -31,22 +31,38 @@ const USER_AGENT = 'OrangeCat/1.0 (+https://orangecat.ch; website-analysis)';
 
 // ── URL extraction from a chat message ──────────────────────────────────────
 
-/** Matches http(s) URLs and bare www. hosts in free text. */
-const MESSAGE_URL_REGEX = /\b(?:https?:\/\/|www\.)[^\s<>"'`]+/gi;
+/**
+ * Matches http(s) URLs, bare `www.` hosts, AND schemeless domain-like tokens
+ * (e.g. `revampit.orangecat.ch`, `foo.bar/path`) in free text.
+ *
+ * The bare-domain branch requires: not preceded by `@`/word chars/`.`/`-`
+ * (so email addresses and mid-domain starts never match), one or more
+ * dot-separated labels, and a final alphabetic label of 2+ chars (so version
+ * numbers like "3.5" and abbreviations like "e.g." never match).
+ */
+const MESSAGE_URL_REGEX =
+  /\b(?:https?:\/\/|www\.)[^\s<>"'`]+|(?<![@\w.-])(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}\b(?:\/[^\s<>"'`]*)?/gi;
 
 /** Trailing punctuation that belongs to the sentence, not the URL. */
 const TRAILING_PUNCTUATION_REGEX = /[.,;:!?)\]}»”"']+$/;
 
+/** Prepend `https://` to a schemeless URL/domain token. Already-schemed input passes through. */
+export function normalizeToHttpUrl(raw: string): string {
+  const trimmed = raw.trim();
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
 /**
- * Extract every http(s) URL the user actually typed. `www.` hosts are
- * normalized to `https://`. Non-parseable candidates are dropped.
+ * Extract every URL the user actually typed. Schemeless hosts (`www.` or bare
+ * domains like `foo.bar.ch`) are normalized to `https://`. Non-parseable
+ * candidates are dropped.
  */
 export function extractHttpUrls(message: string): string[] {
   const matches = message.match(MESSAGE_URL_REGEX) ?? [];
   const urls: string[] = [];
   for (const raw of matches) {
     const cleaned = raw.replace(TRAILING_PUNCTUATION_REGEX, '');
-    const candidate = /^https?:\/\//i.test(cleaned) ? cleaned : `https://${cleaned}`;
+    const candidate = normalizeToHttpUrl(cleaned);
     try {
       urls.push(new URL(candidate).href);
     } catch {
@@ -54,6 +70,27 @@ export function extractHttpUrls(message: string): string[] {
     }
   }
   return urls;
+}
+
+/**
+ * True when the message is NOTHING BUT a single URL/domain (plus punctuation).
+ * A user who sends only "revampit.orangecat.ch" means "analyze this site and
+ * set me up" — there is no other plausible chat intent in a bare address.
+ */
+export function isUrlOnlyMessage(message: string): boolean {
+  const trimmed = message.trim();
+  if (!trimmed) {
+    return false;
+  }
+  const matches = trimmed.match(MESSAGE_URL_REGEX) ?? [];
+  if (matches.length !== 1) {
+    return false;
+  }
+  const remainder = trimmed.replace(matches[0], '').replace(TRAILING_PUNCTUATION_REGEX, '').trim();
+  if (remainder) {
+    return false;
+  }
+  return extractHttpUrls(trimmed).length === 1;
 }
 
 /** Normalized comparison key so "https://X.com/" and "https://x.com" match. */
@@ -76,7 +113,8 @@ export function resolveRequestedUrl(modelUrl: string, userMessage: string): stri
   if (inMessage.length === 0) {
     return null;
   }
-  const wanted = urlKey(modelUrl);
+  // Models often echo the user's schemeless input verbatim — normalize before comparing.
+  const wanted = urlKey(normalizeToHttpUrl(modelUrl));
   const match = inMessage.find(u => urlKey(u) === wanted);
   if (match) {
     return match;
@@ -246,7 +284,9 @@ export async function fetchWebsiteText(
   const fetchFn = deps.fetchFn ?? (fetch as unknown as FetchLike);
   const lookupFn = deps.lookupFn ?? defaultLookup;
 
-  let current = validateTargetUrl(rawUrl);
+  // Schemeless input ("revampit.orangecat.ch") is normalized to https:// FIRST,
+  // then runs through every SSRF guard exactly like a schemed URL.
+  let current = validateTargetUrl(normalizeToHttpUrl(rawUrl));
   if (!current.ok) {
     return { ok: false, error: current.error };
   }

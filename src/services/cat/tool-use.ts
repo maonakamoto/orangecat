@@ -21,14 +21,18 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 import {
   messageMightNeedTools,
   hasCreateIntent,
+  hasWebsiteAnalysisIntent,
   PLATFORM_TOOL_DEFINITION,
 } from './tool-use-detection';
 import { executeToolCall } from './tool-executor';
+import { extractHttpUrls, isUrlOnlyMessage } from './website-analysis';
 import type {
   ToolAugmentedMessage,
   ToolCallAssistantMessage,
+  ToolResultMessage,
   OnToolCall,
   OnPrefillProposal,
+  RawToolCall,
 } from './tool-use-types';
 
 // Public surface — unchanged for consumers (chat-orchestrator imports from here).
@@ -48,12 +52,48 @@ export type {
 const MAX_TOOL_STEPS = 3;
 
 /**
+ * Hard ceiling for the ENTIRE tool phase (routing round-trips + tool
+ * executions). The tool phase runs inside the SSE stream BEFORE any content
+ * reaches the user, so an unbounded await here means the chat hangs on typing
+ * dots. When the deadline hits, we degrade to the un-enriched messages (plus
+ * an honest note when the user clearly wanted a site analyzed) and let the
+ * main model answer.
+ */
+const TOOL_PHASE_TIMEOUT_MS = 25_000;
+
+/**
+ * When the tool phase fails or times out on a message that wanted a website
+ * read, the main model must NOT guess the site's content — it gets this note
+ * so it can tell the user honestly what happened.
+ */
+const WEBSITE_FETCH_FAILED_NOTE =
+  "NOTE: The user's message contains a website URL, but the site could not be fetched " +
+  '(the tool step failed or timed out). Tell the user plainly that you could not reach ' +
+  'the site right now and ask them to check the URL or try again — do NOT guess, ' +
+  "describe, or invent the site's content.";
+
+/** What the tool phase falls back to when it fails or times out. */
+function degradedMessages(
+  messages: ToolAugmentedMessage[],
+  userMessage: string
+): ToolAugmentedMessage[] {
+  if (hasWebsiteAnalysisIntent(userMessage)) {
+    return [...messages, { role: 'system', content: WEBSITE_FETCH_FAILED_NOTE }];
+  }
+  return messages;
+}
+
+/**
  * Returns the messages array, possibly enriched with platform search results.
- * Non-fatal: on any failure returns the original messages unchanged.
+ * Non-fatal AND bounded: on any failure — or when the whole tool phase exceeds
+ * its hard timeout — resolves with the original messages (plus an honest
+ * degrade note where appropriate). It never throws and never hangs, so the
+ * chat stream around it always completes.
  *
  * If `onToolCall` is provided, every tool the Cat invokes emits at least one
  * lifecycle event ('running' → one of completed/no_results/failed). The route
- * uses these to surface tool activity to the user via SSE.
+ * uses these to surface tool activity to the user via SSE. After the timeout
+ * fires, late callbacks are suppressed (the stream has moved on).
  */
 export async function maybeEnrichWithSearchResults(
   supabase: AnySupabaseClient,
@@ -64,7 +104,8 @@ export async function maybeEnrichWithSearchResults(
   groqKey: string | null,
   modelToUse: string,
   onToolCall?: OnToolCall,
-  onPrefillProposal?: OnPrefillProposal
+  onPrefillProposal?: OnPrefillProposal,
+  opts?: { timeoutMs?: number }
 ): Promise<ToolAugmentedMessage[]> {
   // Tool detection uses OpenAI-compatible function-calling. Enabled on the two
   // providers that actually serve OrangeCat: Groq (BYOK, paid TPM) and
@@ -92,6 +133,91 @@ export async function maybeEnrichWithSearchResults(
     return messages;
   }
 
+  // Robustness guarantee: the whole tool phase races a hard deadline. A
+  // hanging provider or tool can therefore never stall the chat stream — the
+  // worst case is an un-enriched answer. After the deadline, callback events
+  // from the orphaned loop are suppressed so nothing is enqueued into a
+  // stream that has moved on.
+  const timeoutMs = opts?.timeoutMs ?? TOOL_PHASE_TIMEOUT_MS;
+  let expired = false;
+  const guardedOnToolCall: OnToolCall | undefined = onToolCall
+    ? event => {
+        if (!expired) {
+          onToolCall(event);
+        }
+      }
+    : undefined;
+  const guardedOnPrefillProposal: OnPrefillProposal | undefined = onPrefillProposal
+    ? proposal => {
+        if (!expired) {
+          onPrefillProposal(proposal);
+        }
+      }
+    : undefined;
+
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const raced = await Promise.race([
+      runToolLoop({
+        supabase,
+        userId,
+        messages,
+        userMessage,
+        toolEndpoint,
+        toolKey,
+        modelToUse,
+        timeoutMs,
+        onToolCall: guardedOnToolCall,
+        onPrefillProposal: guardedOnPrefillProposal,
+      }),
+      new Promise<'timeout'>(resolve => {
+        timer = setTimeout(() => resolve('timeout'), timeoutMs);
+      }),
+    ]);
+    if (raced === 'timeout') {
+      return degradedMessages(messages, userMessage);
+    }
+    return raced;
+  } catch {
+    return degradedMessages(messages, userMessage);
+  } finally {
+    expired = true;
+    if (timer) {
+      clearTimeout(timer);
+    }
+  }
+}
+
+/**
+ * The bounded agentic loop: the model can call a tool, see the result, and
+ * decide its next move — up to MAX_TOOL_STEPS round-trips. May throw or run
+ * long; maybeEnrichWithSearchResults wraps it with the catch + deadline.
+ */
+async function runToolLoop(args: {
+  supabase: AnySupabaseClient;
+  userId: string;
+  messages: ToolAugmentedMessage[];
+  userMessage: string;
+  toolEndpoint: string;
+  toolKey: string;
+  modelToUse: string;
+  timeoutMs: number;
+  onToolCall?: OnToolCall;
+  onPrefillProposal?: OnPrefillProposal;
+}): Promise<ToolAugmentedMessage[]> {
+  const {
+    supabase,
+    userId,
+    messages,
+    userMessage,
+    toolEndpoint,
+    toolKey,
+    modelToUse,
+    timeoutMs,
+    onToolCall,
+    onPrefillProposal,
+  } = args;
+
   // Tool detection runs on a SLIM, routing-only prompt — NOT the full
   // conversational system prompt. The big "be a warm helpful agent" prompt
   // biases the model to chat (finish_reason=stop) instead of emitting a
@@ -105,86 +231,115 @@ export async function maybeEnrichWithSearchResults(
         '- prefill_entity_form: when the user describes something THEY want to create / sell / offer / launch / fundraise (e.g. "I make mugs and want to sell them", "I want to start a project"). This is about THEIR own new thing.\n' +
         '- search_platform: ONLY when the user wants to FIND, discover, or connect with things that already exist on the platform and belong to OTHERS (e.g. "find a designer", "who else is building X"). You may search again with a refined query if the first results are weak.\n' +
         '- suggest_offers: when the user asks what THEY could offer/sell/create, how they could make money or participate, or wants ideas grounded in who they are (e.g. "what can I offer?", "help me make money", "any ideas for me?"). It reads their stored profile/documents/memories — pass no message text, just an optional focus.\n' +
-        '- analyze_website: when the user pastes a website URL and wants it read, analyzed, or used to set them up (e.g. "here\'s my site: https://… — set me up on OrangeCat"). Pass the EXACT URL from their message. After you see the extracted site text, follow its instructions: chain prefill_entity_form calls (at most 3, all in one message) for entities the site directly evidences — never for anything the site does not say.\n' +
+        '- analyze_website: when the user pastes a website URL or bare domain and wants it read, analyzed, or used to set them up (e.g. "here\'s my site: https://… — set me up on OrangeCat", or a message that is nothing but a domain). Pass the EXACT URL from their message. After you see the extracted site text, follow its instructions: chain prefill_entity_form calls (at most 3, all in one message) for entities the site directly evidences — never for anything the site does not say.\n' +
         'NEVER call search_platform for a create/sell/offer intent — describing your own thing to list is prefill_entity_form, not a search. If neither clearly applies, call no tool. Only decide and call tools — do not write a chat reply.',
     },
     { role: 'user' as const, content: userMessage },
   ];
 
-  try {
-    // Bounded agentic loop: the model can call a tool, see the result, and
-    // decide its next move — up to MAX_TOOL_STEPS round-trips. `loopMessages`
-    // carries the routing context + accumulated tool dialogue so each step is
-    // informed by prior results; `enriched` is what the main chat call sees.
-    const loopMessages: ToolAugmentedMessage[] = [...detectionMessages];
-    const enriched: ToolAugmentedMessage[] = [...messages];
+  // `loopMessages` carries the routing context + accumulated tool dialogue so
+  // each step is informed by prior results; `enriched` is what the main chat
+  // call sees.
+  const loopMessages: ToolAugmentedMessage[] = [...detectionMessages];
+  const enriched: ToolAugmentedMessage[] = [...messages];
 
-    for (let step = 0; step < MAX_TOOL_STEPS; step++) {
-      const res = await fetch(toolEndpoint, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${toolKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: modelToUse,
-          messages: loopMessages,
-          tools: PLATFORM_TOOL_DEFINITION,
-          tool_choice: 'auto',
-          stream: false,
-          // Enough headroom for the analyze_website → prefill chain, where one
-          // assistant message carries up to 3 prefill_entity_form calls with
-          // full descriptions. Plain routing turns use far less.
-          max_tokens: 1200,
-        }),
-      });
-      if (!res.ok) {
-        break;
-      }
+  // A message that is ONLY a URL/domain has exactly one plausible meaning —
+  // "read this site and set me up" — so run analyze_website programmatically
+  // instead of hoping the (weak) routing model decides to. The model then
+  // sees the fetched site text on its first round-trip and chains
+  // prefill_entity_form calls from it.
+  if (isUrlOnlyMessage(userMessage)) {
+    const url = extractHttpUrls(userMessage)[0];
+    if (url) {
+      const syntheticCall: RawToolCall = {
+        id: `call_analyze_${Date.now().toString(36)}`,
+        type: 'function',
+        function: { name: 'analyze_website', arguments: JSON.stringify({ url }) },
+      };
+      const assistantMsg: ToolCallAssistantMessage = {
+        role: 'assistant',
+        content: null,
+        tool_calls: [syntheticCall],
+      };
+      const resultMsg: ToolResultMessage = await executeToolCall(
+        supabase,
+        userId,
+        syntheticCall,
+        userMessage,
+        onToolCall,
+        onPrefillProposal
+      );
+      loopMessages.push(assistantMsg, resultMsg);
+      enriched.push(assistantMsg, resultMsg);
+    }
+  }
 
-      const data = await res.json();
-      const choice = data.choices?.[0];
-      // Model stopped calling tools → it has what it needs; the main chat call
-      // produces the final answer from the gathered context.
-      if (choice?.finish_reason !== 'tool_calls' || !choice.message?.tool_calls?.length) {
-        break;
-      }
-
-      const assistantMsg = choice.message as ToolCallAssistantMessage;
-
-      // Programmatic search guard: on a clear create intent, drop search_platform
-      // calls (the weak model emits them despite the routing prompt) so no
-      // tool_call is left unfulfilled in the thread.
-      let toolCalls = assistantMsg.tool_calls;
-      if (hasCreateIntent(userMessage)) {
-        const kept = toolCalls.filter(tc => tc.function?.name !== 'search_platform');
-        if (kept.length !== toolCalls.length) {
-          toolCalls = kept;
-        }
-      }
-      if (toolCalls.length === 0) {
-        break;
-      }
-
-      const assistantToolMsg: ToolCallAssistantMessage = { ...assistantMsg, tool_calls: toolCalls };
-      loopMessages.push(assistantToolMsg);
-      enriched.push(assistantToolMsg);
-
-      for (const toolCall of toolCalls) {
-        const resultMessage = await executeToolCall(
-          supabase,
-          userId,
-          toolCall,
-          userMessage,
-          onToolCall,
-          onPrefillProposal
-        );
-        loopMessages.push(resultMessage);
-        enriched.push(resultMessage);
-      }
-      // Loop continues — the model now sees these results and may call another
-      // tool (e.g. refine a search) or stop.
+  for (let step = 0; step < MAX_TOOL_STEPS; step++) {
+    const res = await fetch(toolEndpoint, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${toolKey}`, 'Content-Type': 'application/json' },
+      // Belt & braces with the outer race: the provider socket itself is
+      // aborted at the same deadline so no orphaned request lingers.
+      signal: AbortSignal.timeout(timeoutMs),
+      body: JSON.stringify({
+        model: modelToUse,
+        messages: loopMessages,
+        tools: PLATFORM_TOOL_DEFINITION,
+        tool_choice: 'auto',
+        stream: false,
+        // Enough headroom for the analyze_website → prefill chain, where one
+        // assistant message carries up to 3 prefill_entity_form calls with
+        // full descriptions. Plain routing turns use far less.
+        max_tokens: 1200,
+      }),
+    });
+    if (!res.ok) {
+      break;
     }
 
-    return enriched;
-  } catch {
-    return messages;
+    const data = await res.json();
+    const choice = data.choices?.[0];
+    // Model stopped calling tools → it has what it needs; the main chat call
+    // produces the final answer from the gathered context.
+    if (choice?.finish_reason !== 'tool_calls' || !choice.message?.tool_calls?.length) {
+      break;
+    }
+
+    const assistantMsg = choice.message as ToolCallAssistantMessage;
+
+    // Programmatic search guard: on a clear create intent, drop search_platform
+    // calls (the weak model emits them despite the routing prompt) so no
+    // tool_call is left unfulfilled in the thread.
+    let toolCalls = assistantMsg.tool_calls;
+    if (hasCreateIntent(userMessage)) {
+      const kept = toolCalls.filter(tc => tc.function?.name !== 'search_platform');
+      if (kept.length !== toolCalls.length) {
+        toolCalls = kept;
+      }
+    }
+    if (toolCalls.length === 0) {
+      break;
+    }
+
+    const assistantToolMsg: ToolCallAssistantMessage = { ...assistantMsg, tool_calls: toolCalls };
+    loopMessages.push(assistantToolMsg);
+    enriched.push(assistantToolMsg);
+
+    for (const toolCall of toolCalls) {
+      const resultMessage = await executeToolCall(
+        supabase,
+        userId,
+        toolCall,
+        userMessage,
+        onToolCall,
+        onPrefillProposal
+      );
+      loopMessages.push(resultMessage);
+      enriched.push(resultMessage);
+    }
+    // Loop continues — the model now sees these results and may call another
+    // tool (e.g. refine a search) or stop.
   }
+
+  return enriched;
 }
