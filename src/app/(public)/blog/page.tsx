@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { getPublishedPosts, getFeaturedPost, getAllTags } from '@/lib/blog';
 import BlogClientWrapper from '@/components/blog/BlogClientWrapper';
@@ -25,9 +24,7 @@ export default function BlogPage() {
           </p>
         </div>
 
-        <Suspense fallback={<div>Loading blog posts...</div>}>
-          <BlogClientWrapper posts={allPosts} featuredPost={featuredPost} tags={allTags} />
-        </Suspense>
+        <BlogClientWrapper posts={allPosts} featuredPost={featuredPost} tags={allTags} />
       </div>
     </div>
   );

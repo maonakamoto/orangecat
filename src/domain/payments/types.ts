@@ -31,6 +31,8 @@ export interface PaymentIntent {
   bolt11: string | null;
   payment_hash: string | null;
   onchain_address: string | null;
+  /** LUD-21 verify URL — enables trustless settlement detection for lightning_address */
+  lnurl_verify_url: string | null;
   status: PaymentIntentStatus;
   description: string | null;
   expires_at: string | null;
