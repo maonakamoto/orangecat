@@ -11,6 +11,7 @@ import { generateOffers } from './offer-engine';
 import { getEntityConfig } from '@/config/entity-configs/get-config';
 import { isValidEntityType, type EntityType } from '@/config/entity-registry';
 import { PREFILLABLE_ENTITY_TYPES } from './tool-use-detection';
+import { fetchWebsiteText, resolveRequestedUrl } from './website-analysis';
 import type {
   ToolResultMessage,
   ToolCallResultRef,
@@ -27,10 +28,82 @@ export async function executeToolCall(
   supabase: AnySupabaseClient,
   userId: string,
   toolCall: RawToolCall,
+  userMessage: string,
   onToolCall?: OnToolCall,
   onPrefillProposal?: OnPrefillProposal
 ): Promise<ToolResultMessage> {
   const toolName = toolCall.function?.name;
+
+  // ── analyze_website ─────────────────────────────────────────────────────
+  // Fetches a site the user pasted (SSRF-guarded) and returns its readable
+  // text plus a strict grounding instruction; the model then chains
+  // prefill_entity_form calls for the entities the site actually evidences.
+  if (toolName === 'analyze_website') {
+    const parsedArgs = (() => {
+      try {
+        return JSON.parse(toolCall.function.arguments ?? '{}') as { url?: string };
+      } catch {
+        return {} as { url?: string };
+      }
+    })();
+
+    // Only fetch URLs the user actually typed — never a model-invented one.
+    const requestedUrl = resolveRequestedUrl(parsedArgs.url ?? '', userMessage);
+    if (!requestedUrl) {
+      onToolCall?.({
+        id: toolCall.id,
+        name: toolName,
+        status: 'failed',
+        error: 'no_url_in_message',
+      });
+      return {
+        role: 'tool',
+        tool_call_id: toolCall.id,
+        content:
+          "No matching http(s) URL was found in the user's message. Ask the user to paste the full website URL (starting with https://).",
+      };
+    }
+
+    onToolCall?.({
+      id: toolCall.id,
+      name: toolName,
+      status: 'running',
+      args: { url: requestedUrl },
+    });
+
+    const result = await fetchWebsiteText(requestedUrl);
+    if (!result.ok) {
+      onToolCall?.({ id: toolCall.id, name: toolName, status: 'failed', error: result.error });
+      return {
+        role: 'tool',
+        tool_call_id: toolCall.id,
+        content: `Could not read the website: ${result.error} Tell the user plainly what went wrong and ask them to check the URL — do NOT guess or describe the site's content.`,
+      };
+    }
+
+    onToolCall?.({
+      id: toolCall.id,
+      name: toolName,
+      status: 'completed',
+      resultCount: 1,
+      results: [{ url: result.url, type: 'website', title: result.title ?? result.url }],
+    });
+
+    return {
+      role: 'tool',
+      tool_call_id: toolCall.id,
+      content: `WEBSITE CONTENT fetched from ${result.url}:
+---
+${result.text}
+---
+INSTRUCTIONS (hard constraints):
+- Propose AT MOST 3 entities by calling prefill_entity_form — put all calls in your NEXT message, one call per entity.
+- Every entity MUST be directly evidenced by the site text above: a service they visibly offer, a product they visibly sell, or the organization itself as a project or group. In each description, quote or reference the exact wording from the site that evidences it.
+- NEVER invent prices. Leave price out of the description unless the site states one; if it states a fiat price, keep it in that currency (e.g. "CHF 120"). Bitcoin amounts are always BTC — never sats.
+- If the site text is thin or ambiguous, call NO further tools; the final reply should say so honestly and ask the user ONE clarifying question instead of proposing anything.
+- In the final user-facing reply, briefly say what you read on the site and point to the draft cards — do not restate field values or add anything the site does not say.`,
+    };
+  }
 
   // ── suggest_offers (economic agent) ────────────────────────────────────────
   // Reads the user's full context, reasons over latent assets, and emits each

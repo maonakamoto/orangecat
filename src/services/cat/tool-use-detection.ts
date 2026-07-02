@@ -4,6 +4,7 @@
  */
 
 import { CAT_CREATABLE_ENTITY_TYPES } from '@/types/cat';
+import { extractHttpUrls } from './website-analysis';
 
 /**
  * Cheap pre-filter to decide whether the user message MIGHT need a tool call.
@@ -77,7 +78,58 @@ const TOOL_TRIGGER_KEYWORDS = [
  */
 export function messageMightNeedTools(message: string): boolean {
   const lower = message.toLowerCase();
-  return TOOL_TRIGGER_KEYWORDS.some(kw => lower.includes(kw));
+  return TOOL_TRIGGER_KEYWORDS.some(kw => lower.includes(kw)) || hasWebsiteAnalysisIntent(message);
+}
+
+/**
+ * Intent words that, TOGETHER with a pasted URL, signal "read my site and act
+ * on it" (analyze_website). A bare URL alone doesn't trigger the tool pass —
+ * people also paste links casually — but a URL plus any of these does.
+ */
+const URL_ANALYZE_INTENT_KEYWORDS = [
+  'set me up',
+  'set us up',
+  'set it up',
+  'my site',
+  'my website',
+  'my webpage',
+  'my homepage',
+  'my business',
+  'my shop',
+  'my store',
+  'my page',
+  'my company',
+  'our site',
+  'our website',
+  'our business',
+  'this site',
+  'this website',
+  'the site',
+  'the website',
+  'analyze',
+  'analyse',
+  'import',
+  'onboard',
+  'check out',
+  'take a look',
+  'have a look',
+  'look at',
+  'read it',
+  'read my',
+  'from my',
+  'based on',
+];
+
+/**
+ * A pasted http(s) URL + setup/analyze/import intent → the message wants the
+ * Cat to actually READ the site (analyze_website), not just chat about it.
+ */
+export function hasWebsiteAnalysisIntent(message: string): boolean {
+  if (extractHttpUrls(message).length === 0) {
+    return false;
+  }
+  const lower = message.toLowerCase();
+  return URL_ANALYZE_INTENT_KEYWORDS.some(kw => lower.includes(kw));
 }
 
 /**
@@ -149,6 +201,24 @@ export const PLATFORM_TOOL_DEFINITION = [
           },
         },
         required: ['entityType', 'description'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'analyze_website',
+      description:
+        "Fetch and read a business website whose URL the user pasted in their message, returning the site's readable text. Use when the user shares a site URL and wants to be set up on OrangeCat, or asks you to analyze/import/read their site. Only URLs actually present in the user's message can be fetched. After reading the result, propose entities via prefill_entity_form grounded STRICTLY in what the site says — never invent.",
+      parameters: {
+        type: 'object',
+        properties: {
+          url: {
+            type: 'string',
+            description: "The exact http(s) URL from the user's message.",
+          },
+        },
+        required: ['url'],
       },
     },
   },

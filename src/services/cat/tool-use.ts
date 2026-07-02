@@ -105,6 +105,7 @@ export async function maybeEnrichWithSearchResults(
         '- prefill_entity_form: when the user describes something THEY want to create / sell / offer / launch / fundraise (e.g. "I make mugs and want to sell them", "I want to start a project"). This is about THEIR own new thing.\n' +
         '- search_platform: ONLY when the user wants to FIND, discover, or connect with things that already exist on the platform and belong to OTHERS (e.g. "find a designer", "who else is building X"). You may search again with a refined query if the first results are weak.\n' +
         '- suggest_offers: when the user asks what THEY could offer/sell/create, how they could make money or participate, or wants ideas grounded in who they are (e.g. "what can I offer?", "help me make money", "any ideas for me?"). It reads their stored profile/documents/memories — pass no message text, just an optional focus.\n' +
+        '- analyze_website: when the user pastes a website URL and wants it read, analyzed, or used to set them up (e.g. "here\'s my site: https://… — set me up on OrangeCat"). Pass the EXACT URL from their message. After you see the extracted site text, follow its instructions: chain prefill_entity_form calls (at most 3, all in one message) for entities the site directly evidences — never for anything the site does not say.\n' +
         'NEVER call search_platform for a create/sell/offer intent — describing your own thing to list is prefill_entity_form, not a search. If neither clearly applies, call no tool. Only decide and call tools — do not write a chat reply.',
     },
     { role: 'user' as const, content: userMessage },
@@ -128,7 +129,10 @@ export async function maybeEnrichWithSearchResults(
           tools: PLATFORM_TOOL_DEFINITION,
           tool_choice: 'auto',
           stream: false,
-          max_tokens: 500,
+          // Enough headroom for the analyze_website → prefill chain, where one
+          // assistant message carries up to 3 prefill_entity_form calls with
+          // full descriptions. Plain routing turns use far less.
+          max_tokens: 1200,
         }),
       });
       if (!res.ok) {
@@ -168,6 +172,7 @@ export async function maybeEnrichWithSearchResults(
           supabase,
           userId,
           toolCall,
+          userMessage,
           onToolCall,
           onPrefillProposal
         );
