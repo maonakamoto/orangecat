@@ -202,6 +202,14 @@ The bridge spec (`fleetcrown/docs/architecture/cross-product-identity-bridge.md`
 correct and its build order stands — except step 1 is already half-done (OC's OIDC
 provider is live). Remaining work is mostly FC-side:
 
+> **Status update 2026-07-02 (from the FleetCrown tab):** 1.1, 1.3, and 1.4
+> SHIPPED same day this plan was written (FC PR #55, commits `6e96bce` +
+> `b879625`; token-auth-method fix `7bdf0c9`). 1.2 is effectively satisfied via
+> per-user OIDC bearer tokens with refresh rotation (`orangecat-identity.ts`)
+> instead of `ock_` keys. 1.6 done. Still open: 1.5 (FC-side wallet/funding
+> read surface), plus FC-side backfill job and settings-connect (tracked in
+> `fleetcrown/docs/master-plan-2026-07.md`, the FC counterpart to this plan).
+
 | #   | Item                                                                                                                                                                                                           | Where   |
 | --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | 1.1 | "Login with OrangeCat" in FleetCrown: custom Auth.js OIDC provider against orangecat.ch, `users.orangecatActorId` column, account-linking UI; surface the button on FC's sign-in                               | FC      |

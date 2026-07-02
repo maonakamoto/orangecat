@@ -42,12 +42,21 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
       {items.map((item, i) => (
         <Fragment key={i}>
           <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
+          {/* inline-flex items-center: globals.css forces a{min-height:44px} (touch
+              targets), and a plain block link top-aligns its text inside that box
+              while the Home link centers — THE breadcrumb misalignment. Center all
+              links the same way inside the forced box. */}
           {item.href ? (
-            <Link href={item.href} className="hover:text-foreground transition-colors">
+            <Link
+              href={item.href}
+              className="inline-flex items-center hover:text-foreground transition-colors"
+            >
               {item.label}
             </Link>
           ) : (
-            <span className="text-foreground font-medium">{item.label}</span>
+            <span className="inline-flex items-center text-foreground font-medium">
+              {item.label}
+            </span>
           )}
         </Fragment>
       ))}
