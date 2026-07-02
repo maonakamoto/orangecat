@@ -16,7 +16,10 @@ import { ORANGECAT_FLEETCROWN_INTEGRATION } from '@/config/entity-registry';
  * - `card`: compact block for the project detail sidebar rail.
  */
 
-const FLEETCROWN_BUILD_URL = `${ORANGECAT_FLEETCROWN_INTEGRATION.fleetCrown.site}/sign-in?callbackUrl=${encodeURIComponent('/projects')}`;
+// Deep link straight into FleetCrown's create-project dialog (?new=1 opens it,
+// params survive the sign-in redirect — FC PR #56). Unauthenticated users pass
+// through "Continue with OrangeCat" and land in the open dialog.
+const FLEETCROWN_BUILD_URL = `${ORANGECAT_FLEETCROWN_INTEGRATION.fleetCrown.site}/projects?new=1`;
 
 const COPY = {
   title: `Build it with ${ORANGECAT_FLEETCROWN_INTEGRATION.fleetCrown.title}`,
