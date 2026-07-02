@@ -17,7 +17,7 @@ import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
 
-/** Preset amounts in BTC (1-sat precision): 10k / 50k / 100k sats. */
+/** Preset top-up amounts in BTC. */
 const PRESETS_BTC = [0.0001, 0.0005, 0.001];
 const POLL_MS = 3000;
 
