@@ -1,8 +1,7 @@
 import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
-import PriceDisplay from '@/components/public/PriceDisplay';
 import AiAssistantChat from '@/components/ai-assistants/AiAssistantChat';
+import { AssistantPriceChip } from '@/components/ai-assistants/AssistantPriceChip';
 import type { EntityDetailConfig } from '@/components/public/PublicEntityDetailPage';
 import { ROUTES } from '@/config/routes';
 
@@ -21,10 +20,21 @@ const getAiPricing = (entity: Record<string, unknown>) => {
   }
   const spec = AI_PRICE_BY_MODEL[model];
   const amount = spec ? Number(entity[spec.column] ?? 0) : 0;
+  // A paid pricing model with no price set behaves as free — chip and chat
+  // must agree, so normalize here (the chat charge path treats 0 as free too).
+  if (amount <= 0) {
+    return { isFree: true, amount: 0, suffix: '' };
+  }
   return { isFree: false, amount, suffix: spec?.suffix ?? '' };
 };
 
-/** SSOT for the AI-assistant detail page — shared by the public + owner dashboard routes. */
+/**
+ * SSOT for the AI-assistant detail page — shared by the public + owner
+ * dashboard routes. Design: the assistant's page IS the conversation
+ * (docs/specs/ai-assistant-surface.md). Header carries identity + price;
+ * the chat is the main event; metadata is one compact strip below it —
+ * no stacked leftover cards.
+ */
 export const aiAssistantDetailConfig: EntityDetailConfig = {
   entityType: 'ai_assistant',
   ownerLabel: 'Created by',
@@ -49,13 +59,13 @@ export const aiAssistantDetailConfig: EntityDetailConfig = {
       />
     ) : undefined,
   renderHeaderExtra: entity => {
-    if (!entity.category) {
-      return null;
-    }
+    const pricing = getAiPricing(entity);
     return (
-      <Badge variant="outline" className="capitalize">
-        {entity.category}
-      </Badge>
+      <AssistantPriceChip
+        isFree={pricing.isFree}
+        amountBtc={pricing.amount}
+        suffix={pricing.suffix}
+      />
     );
   },
   renderDetails: entity => {
@@ -76,64 +86,19 @@ export const aiAssistantDetailConfig: EntityDetailConfig = {
           pricing={pricing}
         />
 
-        {(pricing.isFree || pricing.amount > 0) && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Pricing</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {pricing.isFree ? (
-                <p className="text-2xl font-bold text-fg-primary">Free</p>
-              ) : (
-                <PriceDisplay amount={pricing.amount} currency="BTC" suffix={pricing.suffix} />
-              )}
-            </CardContent>
-          </Card>
-        )}
-
-        {welcome && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Welcome Message</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-fg-primary italic whitespace-pre-wrap">{welcome}</p>
-            </CardContent>
-          </Card>
-        )}
-
         {(tags.length > 0 || traits.length > 0) && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {tags.length > 0 && (
-                <div>
-                  <p className="text-sm text-fg-secondary mb-2">Tags</p>
-                  <div className="flex flex-wrap gap-2">
-                    {tags.map(tag => (
-                      <Badge key={tag} variant="secondary">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {traits.length > 0 && (
-                <div>
-                  <p className="text-sm text-fg-secondary mb-2">Personality</p>
-                  <div className="flex flex-wrap gap-2">
-                    {traits.map(trait => (
-                      <Badge key={trait} variant="outline">
-                        {trait}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          <div className="flex flex-wrap items-center gap-2">
+            {tags.map(tag => (
+              <Badge key={tag} variant="secondary">
+                {tag}
+              </Badge>
+            ))}
+            {traits.map(trait => (
+              <Badge key={trait} variant="outline">
+                {trait}
+              </Badge>
+            ))}
+          </div>
         )}
       </>
     );
