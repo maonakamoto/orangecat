@@ -63,6 +63,15 @@ export const catChatBodySchema = z.object({
 export type CatChatBody = z.infer<typeof catChatBodySchema>;
 
 /**
+ * Shown when the model finishes without producing ANY content. The client
+ * renders an empty last assistant message as eternal typing dots (no error,
+ * no reply — a "hang" to the user), so the stream must always deliver at
+ * least one honest sentence.
+ */
+export const EMPTY_REPLY_FALLBACK =
+  "I couldn't put together a reply to that. Could you rephrase or add a bit more detail?";
+
+/**
  * Provider-agnostic rate-limit detection. Every AI provider error class we ship
  * (GroqAPIError, OpenRouterAPIError, OpenAICompatibleAPIError) carries a
  * `statusCode` field — 429 means rate limit, full stop. Some providers also
@@ -321,7 +330,29 @@ export async function orchestrateCatChat(
           let activeService = aiService;
           let streamStarted = false;
 
+          const emitDone = async () => {
+            // Completion guarantee: a model that finishes without emitting any
+            // content (e.g. it tried to "call a tool" the main completion
+            // doesn't have) would leave the client's last assistant bubble
+            // empty — rendered as typing dots forever. Always send at least
+            // one honest sentence before closing.
+            if (!fullContent.trim()) {
+              fullContent = EMPTY_REPLY_FALLBACK;
+              controller.enqueue(
+                encoder.encode(`data: ${JSON.stringify({ content: fullContent })}\n\n`)
+              );
+            }
+            const { actions, quickReplies } = parseActionsFromResponse(fullContent);
+            const execResults = await runExecActions(supabase, user.id, actorId, actions);
+            controller.enqueue(
+              encoder.encode(
+                `data: ${JSON.stringify({ done: true, usage, model: activeModel, provider: activeProvider, actions: actions.length > 0 ? actions : undefined, execResults: execResults.length > 0 ? execResults : undefined, quickReplies, suggestUpgrade: wantsAgentic && !isAgenticModel(activeModel) })}\n\n`
+              )
+            );
+          };
+
           const consumeStream = async () => {
+            let doneEmitted = false;
             for await (const chunk of activeService.streamChatCompletion({
               model: activeModel,
               messages,
@@ -338,15 +369,15 @@ export async function orchestrateCatChat(
                 );
               }
               if (chunk.done) {
-                const { actions, quickReplies } = parseActionsFromResponse(fullContent);
-                const execResults = await runExecActions(supabase, user.id, actorId, actions);
-                controller.enqueue(
-                  encoder.encode(
-                    `data: ${JSON.stringify({ done: true, usage, model: activeModel, provider: activeProvider, actions: actions.length > 0 ? actions : undefined, execResults: execResults.length > 0 ? execResults : undefined, quickReplies, suggestUpgrade: wantsAgentic && !isAgenticModel(activeModel) })}\n\n`
-                  )
-                );
+                await emitDone();
+                doneEmitted = true;
                 break;
               }
+            }
+            // Provider stream ended without a done chunk — still finalize so
+            // the client never waits on a reply that will never come.
+            if (!doneEmitted) {
+              await emitDone();
             }
           };
 
@@ -574,11 +605,10 @@ export async function orchestrateCatChat(
     await keyService.incrementPlatformUsage(user.id, 1, result.totalTokens);
   }
 
-  const {
-    message: cleanedMessage,
-    actions,
-    quickReplies,
-  } = parseActionsFromResponse(result.content);
+  // Same completion guarantee as the streaming path: never hand the client an
+  // empty reply (it renders as a hang, not as an answer).
+  const rawContent = result.content?.trim() ? result.content : EMPTY_REPLY_FALLBACK;
+  const { message: cleanedMessage, actions, quickReplies } = parseActionsFromResponse(rawContent);
   const execResults = await runExecActions(supabase, user.id, actorId, actions);
 
   if (conversationId) {

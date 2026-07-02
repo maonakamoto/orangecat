@@ -4,7 +4,7 @@
  */
 
 import { CAT_CREATABLE_ENTITY_TYPES } from '@/types/cat';
-import { extractHttpUrls } from './website-analysis';
+import { extractHttpUrls, isUrlOnlyMessage } from './website-analysis';
 
 /**
  * Cheap pre-filter to decide whether the user message MIGHT need a tool call.
@@ -83,8 +83,9 @@ export function messageMightNeedTools(message: string): boolean {
 
 /**
  * Intent words that, TOGETHER with a pasted URL, signal "read my site and act
- * on it" (analyze_website). A bare URL alone doesn't trigger the tool pass —
- * people also paste links casually — but a URL plus any of these does.
+ * on it" (analyze_website). A URL pasted casually MID-SENTENCE doesn't trigger
+ * the tool pass on its own — but a URL plus any of these does. A message that
+ * is ONLY a URL/domain always triggers (see hasWebsiteAnalysisIntent).
  */
 const URL_ANALYZE_INTENT_KEYWORDS = [
   'set me up',
@@ -121,12 +122,18 @@ const URL_ANALYZE_INTENT_KEYWORDS = [
 ];
 
 /**
- * A pasted http(s) URL + setup/analyze/import intent → the message wants the
- * Cat to actually READ the site (analyze_website), not just chat about it.
+ * The message wants the Cat to actually READ a site (analyze_website), not
+ * just chat about it. True when either:
+ * - the message IS a URL/domain and nothing else ("revampit.orangecat.ch" —
+ *   the only plausible intent is "analyze this site and set me up"), or
+ * - a pasted URL appears together with setup/analyze/import intent words.
  */
 export function hasWebsiteAnalysisIntent(message: string): boolean {
   if (extractHttpUrls(message).length === 0) {
     return false;
+  }
+  if (isUrlOnlyMessage(message)) {
+    return true;
   }
   const lower = message.toLowerCase();
   return URL_ANALYZE_INTENT_KEYWORDS.some(kw => lower.includes(kw));
