@@ -65,14 +65,15 @@ export function AIChatMessage({
             {isUser ? userName : assistantName}
           </span>
           <span className="text-xs text-fg-tertiary">{formatShortTime(message.created_at)}</span>
-          {!isUser && message.tokens_used && message.tokens_used > 0 && (
+          {/* Numeric guards must yield booleans — `value && …` renders a literal "0" when the value is 0. */}
+          {!isUser && (message.tokens_used ?? 0) > 0 && (
             <span className="text-xs text-fg-tertiary">({message.tokens_used} tokens)</span>
           )}
         </div>
         <div className="prose prose-sm max-w-none text-fg-primary whitespace-pre-wrap break-words">
           {message.content}
         </div>
-        {!isUser && message.cost_btc && message.cost_btc > 0 && (
+        {!isUser && (message.cost_btc ?? 0) > 0 && (
           <div className="mt-2 text-xs text-fg-tertiary">
             Cost: {formatAmountBtc(message.cost_btc)}
           </div>
