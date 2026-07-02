@@ -26,6 +26,8 @@ import {
   saveMessages,
 } from '@/services/cat/conversation-history';
 import { resolveProvider, type FallbackProvider } from '@/services/cat/provider-resolver';
+import { meterCreditUsage } from '@/services/cat/credit-metering';
+import { getAdminClient } from '@/lib/supabase/admin';
 import { recallMemories, extractAndStoreMemories } from '@/services/cat/memory';
 import { extractAndStoreEconomicProfile } from '@/services/cat/economic-profile';
 import {
@@ -202,8 +204,13 @@ export async function orchestrateCatChat(
     platformUsage,
     keyService,
     userGroqKey,
+    metered,
     fallbacks,
   } = resolved;
+
+  // One stable id per request — the ledger idempotency ref for a metered
+  // (credit-paid frontier) exchange.
+  const meterRef = metered ? `cat_chat_${crypto.randomUUID()}` : null;
 
   // Resolve actor ID for exec_action execution
   const actorId = await getUserActorId(supabase, user.id);
@@ -425,7 +432,18 @@ export async function orchestrateCatChat(
               activeModel
             );
           }
-          if (!hasByok && usage?.totalTokens) {
+          if (metered && meterRef && usage?.totalTokens && activeModel === modelToUse) {
+            // Credit-paid frontier exchange: debit the ledger for the model
+            // that actually served. If a rate-limit fallback answered instead
+            // (activeModel changed), the user is NOT billed.
+            await meterCreditUsage(getAdminClient() as never, user.id, {
+              model: activeModel,
+              inputTokens: usage.inputTokens ?? 0,
+              outputTokens: usage.outputTokens ?? 0,
+              ref: meterRef,
+              conversationId,
+            });
+          } else if (!hasByok && usage?.totalTokens) {
             await keyService.incrementPlatformUsage(user.id, 1, usage.totalTokens);
           }
         } catch (err) {
@@ -542,7 +560,17 @@ export async function orchestrateCatChat(
     throw lastErr ?? new Error('Cat chat: no AI provider produced a response');
   }
 
-  if (!hasByok) {
+  if (metered && meterRef && !fellBackTo) {
+    // Credit-paid frontier exchange (non-streaming): debit only when the
+    // metered primary served — a fallback answer is a free-tier answer.
+    await meterCreditUsage(getAdminClient() as never, user.id, {
+      model: result.model,
+      inputTokens: result.inputTokens,
+      outputTokens: result.outputTokens,
+      ref: meterRef,
+      conversationId,
+    });
+  } else if (!hasByok) {
     await keyService.incrementPlatformUsage(user.id, 1, result.totalTokens);
   }
 

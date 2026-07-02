@@ -59,12 +59,29 @@ OrangeCat is building the infrastructure for personal economies and voluntary so
 
 ## 💰 Business Model
 
-### Revenue Streams
+> Updated 2026-07-02 per `master-plan-2026-07.md` §3.3 — "sell intelligence,
+> not rails". The previous transaction-fee model contradicted both the
+> non-custodial legal posture (the platform never processes or holds funds)
+> and the public 0%-fee positioning, and is retired.
 
-1. **Platform Fees:** Percentage-based fees on successful Bitcoin transactions
-2. **Premium AI Features:** Enhanced AI capabilities, custom integrations, priority support
-3. **Professional Services:** AI consulting and custom implementations for enterprises
-4. **Data & Insights:** Aggregated market intelligence and analytics (future)
+### The model: 0% rails, paid intelligence
+
+1. **Peer-to-peer payments: 0% platform fees, forever, non-custodial.**
+   Payments settle wallet-to-wallet (NWC / Lightning address / on-chain);
+   OrangeCat never touches the funds. This is the marketing wedge AND the
+   legal posture — never reintroduce a transaction take-rate.
+2. **Cat Credits (built, primary revenue):** prepaid Lightning top-ups spent
+   on platform-served frontier AI, billed at provider cost + 20% margin
+   (SSOT: `src/services/cat/credit-metering.ts`). Selling our own service —
+   prepaid credits — not payment processing.
+3. **Paid AI assistants (built):** creators charge per message; the platform
+   keeps 5% of the AI-service price (95% creator share). The only take-rate,
+   and it is on platform-mediated AI services, not P2P money.
+4. **Supporter subscription (future):** a flat CHF/month plan (proposal:
+   CHF 10) with a monthly frontier allowance. Deliberately NOT advertised
+   until it can actually be purchased.
+5. **Professional services / data insights:** long-horizon options, not
+   planned revenue.
 
 ### Cost Structure
 
@@ -87,16 +104,22 @@ OrangeCat is building the infrastructure for personal economies and voluntary so
 - **Channels:** Bitcoin communities, tech forums, professional networks
 - **Goals:** Establish user base, validate AI assistant value proposition
 
-### Phase 2: Professional Adoption
+### Phase 2: AI-assisted builders (primary ICP — updated 2026-07-02)
 
-- **Target:** High-value professionals (lawyers, doctors, consultants)
-- **Channels:** Industry associations, professional networks, content marketing
-- **Goals:** Build reputation in professional segments, establish revenue
+- **Target:** Solo builders and micro-studios shipping with AI agents —
+  FleetCrown's exact audience; people who need a public economic presence
+  without a company, a Stripe account, or a real name
+- **Channels:** FleetCrown cross-sell (identity bridge, live since
+  2026-07-02), founder's build-in-public loop, Swiss Bitcoin community
+- **Goals:** Closed loops — published offers, completed payments, credit
+  spend. (The earlier lawyers/doctors persona set is retired; it was
+  AI-generated fiction never validated against a real user.)
 
 ### Phase 3: Market Expansion
 
-- **Target:** Broader professional and creative communities
-- **Channels:** Partnerships, referrals, content-driven growth
+- **Target:** Broader creative and pseudonymous-builder communities
+- **Channels:** Partnerships, referrals, content-driven growth, SEO from
+  server-rendered public entity pages
 - **Goals:** Scale adoption, refine AI capabilities based on user feedback
 
 ## 🎯 Product Roadmap
@@ -207,6 +230,3 @@ OrangeCat is building the infrastructure for personal economies and voluntary so
 - [Future updates will be tracked here]
 
 **Approval:** Founder & CEO
-
-
-

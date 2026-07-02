@@ -1,14 +1,17 @@
 /**
  * Cat plans — SSOT for the pricing page and any in-product upgrade CTA.
  *
- * Three plans, honest about what's shipped:
- *   - free → what every user gets today (10 msgs/day on free models)
- *   - byok → already implemented; zero platform cost; recommended for power users
- *   - pro  → managed frontier AI, not live yet. OrangeCat has no fiat rails
- *            yet (can't bill francs or pay inference providers in fiat), so the
- *            franc price is a future anchor and the CTA routes to /support:
- *            back OrangeCat in Bitcoin as a founding supporter (a donation, NOT
- *            redeemable inference) + use BYOK to get frontier models today.
+ * Three plans, honest about what's shipped ("sell intelligence, not rails" —
+ * P2P payments stay 0% forever; the platform earns on Cat Credits):
+ *   - free    → what every user gets today (10 msgs/day on free models)
+ *   - byok    → already implemented; zero platform cost; for power users
+ *   - credits → pay-as-you-go frontier AI, billed in Bitcoin against a
+ *               prepaid Cat Credit balance (ledger + metering are live in
+ *               code; Lightning top-up activates with the platform wallet —
+ *               flip CAT_CREDITS_LIVE when PLATFORM_NWC_URI is provisioned).
+ *
+ * A flat Supporter subscription (CHF/month) may come later; it is deliberately
+ * NOT a card until it can actually be bought.
  *
  * The /pricing page and QuotaMeter both read from this file. If the daily
  * limit changes, update CAT_FREE_DAILY_LIMIT here and api-key-service.ts in
@@ -17,7 +20,17 @@
 
 import { ROUTES } from '@/config/routes';
 
-export type CatPlanId = 'free' | 'byok' | 'pro';
+export type CatPlanId = 'free' | 'byok' | 'credits';
+
+/**
+ * Flip to true the moment the platform Lightning wallet (PLATFORM_NWC_URI)
+ * is provisioned and one live top-up has been verified — the credits card
+ * then switches from "activating" to a live top-up CTA.
+ */
+export const CAT_CREDITS_LIVE = false;
+
+/** Platform margin on frontier inference billed to Cat Credits (SSOT: credit-metering.ts). */
+export const CAT_CREDITS_MARKUP_LABEL = 'provider cost + 20%';
 
 export interface CatPlan {
   id: CatPlanId;
@@ -100,19 +113,20 @@ export const CAT_PLANS: CatPlan[] = [
     badge: 'Available now',
   },
   {
-    id: 'pro',
-    name: 'Pro',
-    tagline: 'Managed frontier AI — zero setup',
-    // Franc price as the future anchor; the card makes clear it's not live yet.
-    priceCopy: 'CHF 19 / mo · founding access',
+    id: 'credits',
+    name: 'Cat Credits',
+    tagline: 'Pay as you go — managed frontier AI, billed in Bitcoin',
+    priceCopy: `Top up over Lightning · ${CAT_CREDITS_MARKUP_LABEL}`,
     bullets: [
       `Frontier models (${CAT_FRONTIER_MODELS_LIST}) managed by OrangeCat — no keys, no setup`,
-      'Higher limits, smarter defaults, full agentic Cat (discovery, matchmaking, multi-step)',
-      'Fiat billing is coming — until then, back us in Bitcoin as a founding supporter',
-      'Founding supporters get recognition and first access the day Pro goes live',
+      'No subscription: you pay only for what the Cat actually computes',
+      'Prepaid balance, transparent per-message ledger, top up from 0.00001 BTC',
+      'Full agentic Cat: discovery, matchmaking, multi-step tasks',
     ],
-    cta: { label: 'Become a founding supporter', href: ROUTES.SUPPORT, variant: 'outline' },
-    status: 'coming-soon',
-    badge: 'Founding access',
+    cta: CAT_CREDITS_LIVE
+      ? { label: 'Top up credits', href: ROUTES.SETTINGS_AI, variant: 'accent' }
+      : { label: 'Back us as a founding supporter', href: ROUTES.SUPPORT, variant: 'outline' },
+    status: CAT_CREDITS_LIVE ? 'available' : 'coming-soon',
+    badge: CAT_CREDITS_LIVE ? 'Live' : 'Activating',
   },
 ];

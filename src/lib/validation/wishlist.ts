@@ -49,11 +49,14 @@ export const wishlistItemSchema = z.object({
   external_source: z.string().max(100).optional().nullable(),
 
   // Funding
+  // BTC is the canonical unit — fractional amounts down to 1e-8. The old
+  // .int('whole satoshis') gate was a sats-era leftover that rejected every
+  // normal BTC value (0.001 etc.).
   target_amount_btc: z
     .number()
-    .int('Amount must be whole satoshis')
-    .positive('Target amount must be positive'),
-  currency: z.enum(CURRENCY_CODES).optional().default('SATS'),
+    .positive('Target amount must be positive')
+    .multipleOf(0.00000001, 'Amount has a maximum precision of 8 decimal places'),
+  currency: z.enum(CURRENCY_CODES).optional().default('BTC'),
   original_amount: z.number().positive().optional().nullable(),
 
   // Wallet routing

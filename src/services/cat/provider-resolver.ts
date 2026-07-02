@@ -8,12 +8,15 @@
 
 import { createApiKeyService } from '@/services/ai/api-key-service';
 import {
+  createOpenRouterService,
   createOpenRouterServiceWithByok,
   createGroqServiceWithByok,
   createOpenAICompatibleServiceWithByok,
   isGroqAvailable,
   DEFAULT_GROQ_MODEL,
 } from '@/services/ai';
+import { getAdminClient } from '@/lib/supabase/admin';
+import { isPlatformMeteredModel, checkFrontierAccess } from '@/services/cat/credit-metering';
 import { getModelMetadata, DEFAULT_FREE_MODEL_ID } from '@/config/ai-models';
 import { getProviderRuntime, isOpenAICompatibleProvider } from '@/config/ai-provider-runtime';
 import { createAutoRouter } from '@/services/ai/auto-router';
@@ -68,6 +71,12 @@ interface ResolvedProvider {
   platformUsage: { daily_limit: number; requests_remaining: number } | null;
   keyService: ReturnType<typeof createApiKeyService>;
   userGroqKey: string | null;
+  /**
+   * True when this request is a platform-served PAID model billed against the
+   * user's Cat Credits (frontier access). Metered requests bypass the free
+   * daily quota and must be debited after completion via meterCreditUsage.
+   */
+  metered: boolean;
   /**
    * Ordered chain of fallback providers to try on rate-limit. Built from
    * the platform chain (Groq + OpenRouter + Together + Ollama, whichever
@@ -247,7 +256,43 @@ export async function resolveProvider(
     );
   }
 
-  const primary = chain[0];
+  let primary = chain[0];
+
+  // ── Frontier access (Cat Credits) ───────────────────────────────────────
+  // A PAID registry model requested by a user whose chain would serve it from
+  // the platform is metered against Cat Credits: gate on balance up front,
+  // serve via the platform OpenRouter key, debit after completion. BYOK
+  // primaries are untouched — the user's own key, their own bill.
+  let metered = false;
+  if (
+    !primary.hasByok &&
+    isPlatformMeteredModel(requestedModel) &&
+    process.env.OPENROUTER_API_KEY
+  ) {
+    const access = await checkFrontierAccess(getAdminClient() as AnySupabaseClient, userId);
+    if (!access.allowed) {
+      return Response.json(
+        {
+          success: false,
+          error: 'Not enough Cat Credits for this model',
+          code: 'INSUFFICIENT_CREDITS',
+          message:
+            'This is a paid frontier model. Top up Cat Credits in Settings → AI, or pick a free model.',
+          balanceBtc: access.balanceBtc,
+          helpUrl: ROUTES.SETTINGS_AI,
+        },
+        { status: 402 }
+      );
+    }
+    primary = {
+      provider: 'openrouter',
+      modelToUse: requestedModel!,
+      aiService: createOpenRouterService(),
+      hasByok: false,
+    };
+    metered = true;
+  }
+
   const provider = primary.provider;
   const hasByok = primary.hasByok;
   const modelToUse = primary.modelToUse;
@@ -256,9 +301,10 @@ export async function resolveProvider(
   // Platform usage limit applies only when the platform default is the
   // primary (it will actually serve and increment usage). This matches the
   // chat route, which increments platform usage on `!hasByok`, and keeps the
-  // no-keys path identical to before.
+  // no-keys path identical to before. Metered (credit-paid) requests are
+  // exempt — they are paid, not free-quota, usage.
   let platformUsage: { daily_limit: number; requests_remaining: number } | null = null;
-  if (!hasByok) {
+  if (!hasByok && !metered) {
     const usage = await keyService.checkPlatformUsage(userId);
     if (!usage.can_use_platform) {
       return Response.json(
@@ -282,7 +328,11 @@ export async function resolveProvider(
 
   // Everything after the primary becomes the fallback chain, tried in order
   // on rate-limit/error. The Cat keeps chatting as long as one link is alive.
-  const fallbacks: FallbackProvider[] = chain.slice(1).map(s => ({
+  // A metered frontier primary sits ABOVE the regular chain, so the whole
+  // chain backs it up (falling back to a free model is safe — the debit only
+  // fires for completions actually served by the metered model).
+  const fallbackSteps = metered ? chain : chain.slice(1);
+  const fallbacks: FallbackProvider[] = fallbackSteps.map(s => ({
     provider: s.provider,
     modelToUse: s.modelToUse,
     aiService: s.aiService,
@@ -297,6 +347,7 @@ export async function resolveProvider(
     platformUsage,
     keyService,
     userGroqKey,
+    metered,
     fallbacks,
   };
 }

@@ -108,7 +108,7 @@ interface CreateProductInput {
   title: string;
   description?: string | null;
   price: number;
-  currency?: 'SATS' | 'BTC' | 'USD' | 'EUR' | 'CHF';
+  currency?: 'BTC' | 'USD' | 'EUR' | 'CHF';
   product_type?: 'physical' | 'digital' | 'service';
   images?: string[];
   thumbnail_url?: string | null;
@@ -132,7 +132,7 @@ interface CreateServiceInput {
   category: string;
   hourly_rate?: number | null;
   fixed_price?: number | null;
-  currency?: 'SATS' | 'BTC' | 'USD' | 'EUR' | 'CHF';
+  currency?: 'BTC' | 'USD' | 'EUR' | 'CHF';
   duration_minutes?: number | null;
   availability_schedule?: AvailabilitySchedule;
   service_location_type?: 'remote' | 'onsite' | 'both';
@@ -224,7 +224,7 @@ interface CreateCauseInput {
   description?: string | null;
   cause_category: string;
   goal_amount?: number | null;
-  currency?: 'SATS' | 'BTC' | 'USD' | 'EUR' | 'CHF';
+  currency?: 'BTC' | 'USD' | 'EUR' | 'CHF';
   bitcoin_address?: string | null;
   lightning_address?: string | null;
   distribution_rules?: DistributionRules;

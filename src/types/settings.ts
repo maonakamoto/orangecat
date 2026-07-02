@@ -7,9 +7,9 @@
 import type { CurrencyCode } from '@/config/currencies';
 
 export type Currency = CurrencyCode;
-type FiatCurrency = Exclude<Currency, 'BTC' | 'SATS'>;
-type CryptoCurrency = Extract<Currency, 'BTC' | 'SATS'>;
+type FiatCurrency = Exclude<Currency, 'BTC'>;
+type CryptoCurrency = Extract<Currency, 'BTC'>;
 
 export const FIAT_CURRENCIES: FiatCurrency[] = ['CHF', 'EUR', 'USD', 'GBP'];
-const CRYPTO_CURRENCIES: CryptoCurrency[] = ['BTC', 'SATS'];
+const CRYPTO_CURRENCIES: CryptoCurrency[] = ['BTC'];
 export const ALL_CURRENCIES: Currency[] = [...FIAT_CURRENCIES, ...CRYPTO_CURRENCIES];

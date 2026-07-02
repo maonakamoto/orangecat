@@ -1,7 +1,7 @@
 /**
  * Cat Credits API
  *
- * GET /api/cat/credits - Your sats credit balance + ledger history
+ * GET /api/cat/credits - Your Cat Credit balance (BTC) + ledger history
  *
  * Read-only. Balance is derived from the cat_credit_entries ledger (SSOT).
  * Top-up (Lightning) and usage metering post entries server-side via

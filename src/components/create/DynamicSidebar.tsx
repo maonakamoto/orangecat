@@ -27,7 +27,7 @@ interface DynamicSidebarProps<T extends string = string> {
   guidanceContent: Record<NonNullable<T>, FieldGuidanceContent>;
   defaultContent: DefaultContent;
   goalAmount?: number;
-  goalCurrency?: 'CHF' | 'USD' | 'EUR' | 'BTC' | 'SATS';
+  goalCurrency?: 'CHF' | 'USD' | 'EUR' | 'BTC';
   className?: string;
 }
 
