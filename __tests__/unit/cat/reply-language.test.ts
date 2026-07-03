@@ -20,6 +20,13 @@ describe('detectReplyLanguage', () => {
     expect(detectReplyLanguage('Größe')).toBe('de');
   });
 
+  it('does not let a Swiss place-name umlaut flip an English message to German (regression)', () => {
+    // "Zürich" carries an umlaut but the sentence is English — the umlaut bump
+    // must not outvote actual English vocabulary.
+    expect(detectReplyLanguage('I offer haircuts at home in Zürich, 40 CHF')).toBe('en');
+    expect(detectReplyLanguage('my shop is in Zürich and I want to sell mugs')).toBe('en');
+  });
+
   it('returns unknown when there is no signal either way', () => {
     expect(detectReplyLanguage('DJ 2026')).toBe('unknown');
     expect(detectReplyLanguage('🎧🎶')).toBe('unknown');

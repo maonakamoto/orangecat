@@ -312,7 +312,7 @@ INSTRUCTIONS (hard constraints):
       return {
         role: 'tool',
         tool_call_id: toolCall.id,
-        content: `Drafted a ${entityType} with ${fieldCount} fields. The user will see a card to review and open in the form. Do not repeat the field values in your response — just briefly confirm what you drafted and invite them to review.`,
+        content: `Drafted a ${entityType} with ${fieldCount} fields. The user will see a card to review and open in the form. Do not repeat the field values in your response — briefly confirm what you drafted, include ONE short line on why a ${entityType} is the right type for it (tied to the user's own words), and invite them to review. Do NOT call prefill_entity_form again for this same ${entityType} — it is already drafted.`,
       };
     } catch (err) {
       onToolCall?.({

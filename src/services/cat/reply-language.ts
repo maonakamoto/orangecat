@@ -122,7 +122,13 @@ export function detectReplyLanguage(message: string): ReplyLanguage {
     }
   }
 
-  if (hasGermanChars) {
+  // Umlauts / ß are a strong German signal — but ONLY when the words around
+  // them don't clearly say otherwise. Swiss place names ("Zürich", "Männedorf")
+  // appear constantly inside English sentences ("I offer haircuts in Zürich"),
+  // and the old unconditional +2 made one umlaut outvote the actual English
+  // words, so English messages got German answers. Count the umlaut bump only
+  // when there's corroborating German vocabulary or no English signal at all.
+  if (hasGermanChars && (de > 0 || en === 0)) {
     de += 2;
   }
 

@@ -76,9 +76,31 @@ const TOOL_TRIGGER_KEYWORDS = [
  * weaker model toward upgrading, using the SAME signal that gates tool use
  * (one source of truth for "this wants more than chat").
  */
+/**
+ * A money NEED ("I need 500 CHF to fix my bike", "can I borrow money here?")
+ * is a lending/funding intent — it should reach the tool pass so Cat can draft
+ * a loan (or project/cause) instead of only suggesting things to sell.
+ * Deliberately narrow: "need" alone never triggers; it must pair with an
+ * amount+currency or an explicit borrow/loan word.
+ */
+const MONEY_NEED_PATTERNS = [
+  /\bborrow\b/i,
+  /\b(a|get|request|take)\s+(out\s+)?a?\s*loan\b/i,
+  /\bneed\s+(some\s+)?(money|cash|funds|capital)\b/i,
+  /\bneed\s+[\d'.,]+\s*(chf|eur|usd|btc|francs?|dollars?|euros?)\b/i,
+];
+
+export function hasMoneyNeedIntent(message: string): boolean {
+  return MONEY_NEED_PATTERNS.some(re => re.test(message));
+}
+
 export function messageMightNeedTools(message: string): boolean {
   const lower = message.toLowerCase();
-  return TOOL_TRIGGER_KEYWORDS.some(kw => lower.includes(kw)) || hasWebsiteAnalysisIntent(message);
+  return (
+    TOOL_TRIGGER_KEYWORDS.some(kw => lower.includes(kw)) ||
+    hasMoneyNeedIntent(message) ||
+    hasWebsiteAnalysisIntent(message)
+  );
 }
 
 /**
@@ -155,7 +177,9 @@ const CREATE_INTENT_PATTERNS = [
 ];
 
 export function hasCreateIntent(message: string): boolean {
-  return CREATE_INTENT_PATTERNS.some(re => re.test(message));
+  // A money need drafts the user's OWN loan/project — a create intent, never a
+  // platform search.
+  return CREATE_INTENT_PATTERNS.some(re => re.test(message)) || hasMoneyNeedIntent(message);
 }
 
 /** Entity types Cat can DRAFT via the prefill tool. Derived from the creatable SSOT so the

@@ -65,7 +65,7 @@ Want me to start a draft for one? Tell me what you make and roughly what you'd c
 **Step 2**: Sell your best photos as Products — passive income.
 **Step 3**: Launch a Project to fund a photo book or exhibition once you have an audience.
 
-Let's start with Step 1:
+Let's start with Step 1 — a **Service** fits here because you're selling your time behind the camera, not an item:
 
 \`\`\`action
 {
