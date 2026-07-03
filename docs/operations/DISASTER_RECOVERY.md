@@ -8,6 +8,12 @@ restored onto a fresh box. Last verified topology: 2026-06-19.
 > **configs/secrets are now in the backup set** (`/opt/backups/config` → same B2 snapshot:
 > Supabase `.env`, app `.env`, Caddyfile, all `docker-compose*.yml`). A from-scratch restore
 > is now possible from the off-site backup alone.
+>
+> ✅ **2026-07-03: the off-site path is PROVEN.** Full restore drill (restic → throwaway
+> Postgres → exact data parity with prod; data-leg RTO ≈ 45 s) documented with commands
+> and timings in [`RESTORE_DRILL.md`](./RESTORE_DRILL.md). Two pipeline gaps fixed:
+> supabase-container cluster globals are now dumped, and the orangecat systemd units +
+> `launch.sh` are now in the config snapshot. Re-run the drill quarterly.
 
 ---
 
