@@ -216,6 +216,32 @@ else
 fi
 CADDY_GUARD
 
+echo "=== ship ops scripts + nightly Cat-eval timer ==="
+# The nightly eval (scripts/eval-cat.mjs + scripts/systemd/orangecat-cat-eval.*)
+# lives OUTSIDE the app swap dir so it survives releases. Repo is the SSOT for
+# both the script and the unit files; every deploy re-syncs them and reloads
+# systemd only when a unit actually changed. Non-fatal: an eval-ship hiccup
+# must never roll back a good app deploy.
+{
+  ssh "${SSH_OPTS[@]}" "$OC_BOX" "mkdir -p $OC_APP_BASE/scripts"
+  scp "${SSH_OPTS[@]}" -q scripts/eval-cat.mjs "$OC_BOX:$OC_APP_BASE/scripts/eval-cat.mjs"
+  scp "${SSH_OPTS[@]}" -q scripts/systemd/orangecat-cat-eval.service \
+    scripts/systemd/orangecat-cat-eval.timer "$OC_BOX:/tmp/"
+  ssh "${SSH_OPTS[@]}" "$OC_BOX" 'bash -s' <<'EVAL_UNITS'
+set -e
+changed=0
+for u in orangecat-cat-eval.service orangecat-cat-eval.timer; do
+  if ! cmp -s "/tmp/$u" "/etc/systemd/system/$u" 2>/dev/null; then
+    install -m 644 "/tmp/$u" "/etc/systemd/system/$u"; changed=1
+  fi
+  rm -f "/tmp/$u"
+done
+[ "$changed" = 1 ] && systemctl daemon-reload
+systemctl enable --now orangecat-cat-eval.timer >/dev/null
+echo "cat-eval timer: $(systemctl is-enabled orangecat-cat-eval.timer) / $(systemctl is-active orangecat-cat-eval.timer)"
+EVAL_UNITS
+} || echo "WARN: cat-eval ship step failed (non-fatal)" >&2
+
 echo "=== verify public ==="
 pub="$(curl -sL -o /dev/null -w '%{http_code}' --max-time 20 "$OC_PUBLIC" || echo 000)"
 echo "public $OC_PUBLIC → $pub"
