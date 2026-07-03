@@ -130,6 +130,8 @@ export interface BaseConfigOptions<T extends Record<string, any>> {
   successRedirectDelay?: number;
   /** Optional wizard configuration for multi-step creation flow */
   wizardConfig?: WizardConfig;
+  /** Optional derivation of UI-only form values from loaded data (see EntityConfig) */
+  deriveInitialValues?: (data: T) => Partial<T>;
 }
 
 /**
@@ -183,5 +185,6 @@ export function createEntityConfig<T extends Record<string, any>>(
     successMessage: options.successMessage,
     successRedirectDelay: options.successRedirectDelay,
     wizardConfig: options.wizardConfig,
+    deriveInitialValues: options.deriveInitialValues,
   };
 }

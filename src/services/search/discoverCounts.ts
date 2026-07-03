@@ -1,5 +1,5 @@
 /**
- * Public entity counts for /discover (hero stats + tab badges).
+ * Public entity counts for /discover (tab badges).
  *
  * Filter shapes mirror discoverGenericFetcher.ts so badge totals match the
  * entity-tab views. Runs on the server (admin client) so anonymous visitors

@@ -103,6 +103,7 @@ export function FormField({
             userCurrency={userCurrency}
             showBreakdown={false} // Don't show breakdown by default (no sats!)
             allowCurrencySwitch={true}
+            isGoal={config.isGoal}
             min={min}
             max={max}
           />

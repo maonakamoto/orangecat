@@ -74,6 +74,18 @@ export interface FieldConfig {
     field: string;
     value: string | string[] | boolean;
   };
+  /**
+   * Sibling fields reset to null when THIS field's value changes — for
+   * mode-toggle fields (e.g. hourly vs fixed pricing) so a value entered under
+   * the previous mode never rides along invisibly into the submit.
+   */
+  clearOnChange?: string[];
+  /**
+   * Currency fields only: true when the amount is a FUNDING GOAL (project /
+   * cause / event goals) — enables the goal explainer under the input. Price
+   * and amount fields must leave this unset.
+   */
+  isGoal?: boolean;
   /** Field depends on another field's value */
   dependsOn?:
     | string
@@ -224,6 +236,12 @@ export interface EntityConfig<T extends Record<string, any> = Record<string, any
   successRedirectDelay?: number;
   /** Optional wizard configuration for multi-step creation flow */
   wizardConfig?: WizardConfig;
+  /**
+   * Derive UI-only form values from loaded data (create defaults or an edit
+   * row) — e.g. infer the service pricing toggle from which price is set.
+   * Runs after defaults + initialValues are merged.
+   */
+  deriveInitialValues?: (data: T) => Partial<T>;
 }
 
 // ==================== FORM STATE ====================

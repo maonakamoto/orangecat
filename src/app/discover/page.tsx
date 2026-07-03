@@ -24,7 +24,6 @@ export default function DiscoverPage() {
     loading,
     loansLoading,
     assetsLoading,
-    totalResults,
     hasMore,
     isLoadingMore,
 
@@ -45,7 +44,6 @@ export default function DiscoverPage() {
     investmentsLoading,
     genericLoading,
     tabCounts,
-    stats,
 
     // UI state
     activeTab,
@@ -81,25 +79,6 @@ export default function DiscoverPage() {
     clearFilters,
   } = useDiscoverState();
 
-  // The total the page shows as "N results found" — single source for the UI and
-  // the demand log below. Mirrors the per-tab handling: useSearch only counts
-  // projects/profiles/all; entity tabs add their own loaded lengths.
-  const resultsFound =
-    (activeTab === 'all' || activeTab === 'projects' || activeTab === 'profiles'
-      ? totalResults
-      : 0) +
-    loans.length +
-    investments.length +
-    assets.length +
-    causes.length +
-    events.length +
-    products.length +
-    services.length +
-    groups.length +
-    wishlists.length +
-    research.length +
-    aiAssistants.length;
-
   // Shared filter props to avoid duplication between desktop and mobile
   const filterProps = {
     searchTerm,
@@ -129,11 +108,7 @@ export default function DiscoverPage() {
   return (
     <div className={`min-h-screen ${GRADIENTS.pageBg}`}>
       {/* Hero Section */}
-      <DiscoverHero
-        totalProjects={stats.totalProjects}
-        totalProfiles={stats.totalProfiles}
-        totalFinancial={stats.totalFinancial}
-      />
+      <DiscoverHero />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -235,7 +210,6 @@ export default function DiscoverPage() {
                   wishlists={wishlists}
                   research={research}
                   aiAssistants={aiAssistants}
-                  totalResults={resultsFound}
                   loading={
                     loading || loansLoading || investmentsLoading || assetsLoading || genericLoading
                   }

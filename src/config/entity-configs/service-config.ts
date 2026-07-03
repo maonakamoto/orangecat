@@ -81,8 +81,25 @@ const fieldGroups: FieldGroup[] = [
   {
     id: 'pricing',
     title: 'Pricing',
-    description: 'Set at least one pricing option (hourly or fixed price)',
+    description: 'Choose how you charge — by the hour or a fixed price',
     fields: [
+      {
+        name: 'pricing_model',
+        label: 'How do you charge?',
+        type: 'radio',
+        options: [
+          { value: 'hourly', label: 'Hourly rate', description: 'You bill for your time' },
+          {
+            value: 'fixed',
+            label: 'Fixed price',
+            description: 'One price for the whole service',
+          },
+        ],
+        // Switching modes resets the price inputs so a value entered under the
+        // other mode never rides along invisibly into the submit.
+        clearOnChange: ['hourly_rate', 'fixed_price'],
+        colSpan: 2,
+      },
       {
         name: 'hourly_rate',
         label: 'Hourly Rate',
@@ -90,6 +107,7 @@ const fieldGroups: FieldGroup[] = [
         placeholder: '50.00',
         min: 1,
         hint: 'Your rate per hour. Enter in your preferred currency.',
+        showWhen: { field: 'pricing_model', value: 'hourly' },
       },
       {
         name: 'fixed_price',
@@ -98,6 +116,7 @@ const fieldGroups: FieldGroup[] = [
         placeholder: '500.00',
         min: 1,
         hint: 'Fixed project price. Enter in your preferred currency.',
+        showWhen: { field: 'pricing_model', value: 'fixed' },
       },
       {
         name: 'duration_minutes',
@@ -166,6 +185,7 @@ const defaultValues: UserServiceFormData = {
   title: '',
   description: '',
   category: '',
+  pricing_model: 'hourly',
   hourly_rate: null,
   fixed_price: null,
   currency: undefined, // Will be set from user's profile preference in EntityForm
@@ -196,6 +216,11 @@ export const serviceConfig = createEntityConfig<UserServiceFormData>({
   fieldGroups,
   validationSchema: userServiceSchema,
   defaultValues,
+  // Edit mode / templates: infer the pricing toggle from which price is set,
+  // so a fixed-price service opens with the fixed field visible.
+  deriveInitialValues: data => ({
+    pricing_model: data.fixed_price && !data.hourly_rate ? 'fixed' : 'hourly',
+  }),
   guidanceContent: serviceGuidanceContent,
   defaultGuidance: serviceDefaultGuidance,
   templates: SERVICE_TEMPLATES as unknown as ServiceTemplate[],

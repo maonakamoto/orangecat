@@ -22,6 +22,12 @@ interface CurrencyInputProps {
   disabled?: boolean;
   showBreakdown?: boolean;
   allowCurrencySwitch?: boolean;
+  /**
+   * True ONLY for funding-goal fields (project/cause/event goals). Shows the
+   * "goal can be reached by contributions OR Bitcoin price appreciation"
+   * explainer — that copy is meaningless (and confusing) on price fields.
+   */
+  isGoal?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
   min?: number;
@@ -43,6 +49,7 @@ export function CurrencyInput({
   disabled = false,
   showBreakdown = false,
   allowCurrencySwitch = true,
+  isGoal = false,
   onFocus,
   onBlur,
   min,
@@ -115,7 +122,7 @@ export function CurrencyInput({
       {error && <p className="text-destructive text-sm">{error}</p>}
       {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
 
-      {!error && !hint && value && value > 0 && (
+      {isGoal && !error && !hint && value && value > 0 && (
         <div className="text-xs text-muted-foreground mt-1">
           <span className="flex items-center gap-1">
             <Info className="w-3 h-3" />

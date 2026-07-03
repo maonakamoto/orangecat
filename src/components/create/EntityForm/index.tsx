@@ -7,9 +7,8 @@ import Loading from '@/components/Loading';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 
 import { GuidancePanel } from '../GuidancePanel';
-import { TemplatePicker } from '../templates/TemplatePicker';
 import { AIPrefillBar } from '../AIPrefillBar';
-import type { EntityConfig, EntityTemplate } from '../types';
+import type { EntityConfig } from '../types';
 import { FORM_THEME } from '@/config/theme-colors';
 
 import { EntityCreationSuccess } from '../EntityCreationSuccess';
@@ -68,7 +67,6 @@ export function EntityForm<T extends Record<string, unknown>>({
     formState,
     aiGeneratedFields,
     lastSavedAt,
-    initialFormData,
     handleFieldChange,
     handleFieldFocus,
     handleAIPrefill,
@@ -107,14 +105,6 @@ export function EntityForm<T extends Record<string, unknown>>({
     wizardMode,
     actorId,
   });
-
-  const handleTemplateSelect = useCallback(
-    (template: EntityTemplate<T>) => {
-      handleFieldChange('__template__' as keyof T, { ...initialFormData, ...template.defaults });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    },
-    [initialFormData, handleFieldChange]
-  );
 
   if (!hydrated || authLoading) {
     return <Loading fullScreen message="Loading..." />;
@@ -188,15 +178,9 @@ export function EntityForm<T extends Record<string, unknown>>({
         </div>
       )}
 
-      {config.templates && config.templates.length > 0 && mode === 'create' && !wizardMode && (
-        <div className="mt-8 pt-8 border-t border-default">
-          <TemplatePicker
-            label={config.namePlural}
-            templates={config.templates as EntityTemplate<T>[]}
-            onSelectTemplate={handleTemplateSelect}
-          />
-        </div>
-      )}
+      {/* No in-form template panel: templates live ONLY in the wizard's step-1
+          picker. A second "Need inspiration?" panel inside the form duplicated
+          that step and could silently overwrite fields already filled in. */}
 
       <FormActions
         isSubmitting={formState.isSubmitting}

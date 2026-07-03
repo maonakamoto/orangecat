@@ -109,9 +109,14 @@ export const userServiceSchema = z
     show_on_profile: z.boolean().optional().default(true),
     status: z.enum(SERVICE_STATUSES).default(ENTITY_STATUS.DRAFT),
   })
-  .refine(data => data.hourly_rate || data.fixed_price, {
-    message: 'At least one pricing method (hourly or fixed) is required',
-    path: ['hourly_rate'], // This will show the error on hourly_rate field
+  .superRefine((data, ctx) => {
+    if (!data.hourly_rate && !data.fixed_price) {
+      // Flag BOTH price fields: the form shows only one at a time (hourly vs
+      // fixed toggle), so the error must land on whichever is visible.
+      const message = 'At least one pricing method (hourly or fixed) is required';
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['hourly_rate'] });
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message, path: ['fixed_price'] });
+    }
   });
 
 export const userCauseSchema = z.object({
@@ -129,5 +134,10 @@ export const userCauseSchema = z.object({
 
 // Types
 export type UserProductFormData = z.infer<typeof userProductSchema>;
-export type UserServiceFormData = z.infer<typeof userServiceSchema>;
+/** The service pricing toggle — which ONE price field the form shows. */
+export type ServicePricingModel = 'hourly' | 'fixed';
+export type UserServiceFormData = z.infer<typeof userServiceSchema> & {
+  /** UI-only (not in the schema): zod .parse strips it, so it's never persisted. */
+  pricing_model?: ServicePricingModel;
+};
 export type UserCauseFormData = z.infer<typeof userCauseSchema>;

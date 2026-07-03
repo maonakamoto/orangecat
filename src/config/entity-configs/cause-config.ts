@@ -62,6 +62,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'goal_amount',
         label: 'Goal Amount',
         type: 'currency',
+        isGoal: true,
         placeholder: '10000.00',
         min: 1,
         hint: 'Leave empty for open-ended fundraising. Enter in your preferred currency.',

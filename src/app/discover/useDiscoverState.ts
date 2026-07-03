@@ -215,12 +215,6 @@ export function useDiscoverState() {
     aiAssistants: generic.aiAssistants,
     totalInvestmentsCount: counts.totalInvestmentsCount,
     tabCounts,
-    stats: {
-      totalProjects: counts.totalProjectsCount,
-      totalProfiles: counts.totalProfilesCount,
-      totalFinancial:
-        counts.totalLoansCount + counts.totalInvestmentsCount + counts.totalAssetsCount,
-    },
     activeTab,
     viewMode,
     setViewMode,
