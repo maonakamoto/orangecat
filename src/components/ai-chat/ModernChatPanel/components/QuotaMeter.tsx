@@ -6,10 +6,13 @@
  *
  * Tier-aware states:
  *   - byok    → "Your key" badge; cap doesn't apply
- *   - pro     → "Pro · N / limit" chip; same near-cap / capped CTA logic as free
- *   - free    → "N / limit" chip, normal weight
- *   - warning → ≤2 remaining: chip + inline "Use your key →" link
+ *   - pro     → "Pro · N of limit … left" chip; same near-cap / capped CTA logic as free
+ *   - free    → "N of limit free messages left today" chip, normal weight
+ *   - warning → ≤2 remaining: chip + inline "Add your key →" link
  *   - capped  → 0 remaining: red chip + same link
+ *
+ * The chip must be self-explanatory (founder feedback): full sentence on ≥sm,
+ * compact "N of M left" on mobile, complete explanation in the tooltip + sr text.
  *
  * The CTA points at /settings/ai (BYOK setup) because that's the only
  * real escape today — once /pricing has a real Pro checkout we swap it
@@ -58,6 +61,13 @@ export function QuotaMeter({ quota, className }: QuotaMeterProps) {
   const isCapped = requestsRemaining <= 0;
   const isNearCap = !isCapped && requestsRemaining <= NEAR_CAP_THRESHOLD;
 
+  // Self-explanatory in full via tooltip + screen readers; the visible chip
+  // stays compact on small screens and spells itself out on ≥sm.
+  const noun = isPro ? 'Cat messages' : 'free messages';
+  const explanation = isCapped
+    ? `You've used all ${dailyLimit} ${noun} for today · Add your own API key for unlimited`
+    : `${requestsRemaining} of ${dailyLimit} ${noun} left today · Add your own API key for unlimited`;
+
   return (
     <span
       className={cn(
@@ -71,24 +81,31 @@ export function QuotaMeter({ quota, className }: QuotaMeterProps) {
         !isCapped && !isNearCap && !isPro && 'border-subtle bg-surface-raised text-fg-secondary',
         className
       )}
+      title={explanation}
     >
       {isPro && !isCapped && !isNearCap && (
         <Sparkles className="h-3 w-3 text-accent-warm" aria-hidden="true" />
       )}
       <span className="whitespace-nowrap" aria-live="polite">
-        {isCapped
-          ? 'Daily limit'
-          : isPro
-            ? `Pro · ${requestsRemaining} / ${dailyLimit}`
-            : `${requestsRemaining} / ${dailyLimit}`}
-        <span className="sr-only"> Cat messages remaining today</span>
+        {isCapped ? (
+          'Daily limit reached'
+        ) : (
+          <>
+            {isPro && 'Pro · '}
+            {requestsRemaining} of {dailyLimit}
+            <span className="hidden sm:inline"> {noun}</span> left
+            <span className="hidden sm:inline"> today</span>
+          </>
+        )}
+        <span className="sr-only"> {explanation}</span>
       </span>
       {(isCapped || isNearCap) && (
         <Link
           href={ROUTES.SETTINGS_AI}
           className="whitespace-nowrap font-medium underline decoration-dotted underline-offset-2 hover:no-underline"
+          title="Bring your own API key — unlimited messages, you pay your provider directly"
         >
-          Use your key →
+          Add your key →
         </Link>
       )}
     </span>

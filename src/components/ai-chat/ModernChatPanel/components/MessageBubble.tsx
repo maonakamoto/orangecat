@@ -6,7 +6,7 @@
 import { cn } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { Cat, User, Copy, Check, Clock, X } from 'lucide-react';
-import { AI_MODEL_REGISTRY } from '@/config/ai-models';
+import { getModelDisplayName } from '@/config/ai-models';
 import { getModelCapability } from '@/config/model-capability';
 import { renderChatMarkdown } from '@/utils/markdown';
 import { ActionButton } from './ActionButton';
@@ -253,7 +253,7 @@ export function MessageBubble({
                   <span aria-hidden> · </span>
                 </>
               )}
-              <span>{AI_MODEL_REGISTRY[message.modelUsed]?.name || message.modelUsed}</span>
+              <span title={message.modelUsed}>{getModelDisplayName(message.modelUsed)}</span>
               {(() => {
                 const cap = getModelCapability(message.modelUsed);
                 return (

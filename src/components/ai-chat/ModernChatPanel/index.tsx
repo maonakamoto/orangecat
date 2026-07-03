@@ -36,10 +36,15 @@ interface ModernChatPanelProps {
    * page reload. Composed alongside the internal post-send wiring.
    */
   onMessageSent?: () => void;
-  /** Active conversation to load/send to. Omitted/null → default conversation. */
+  /**
+   * Active conversation to load/send to. Omitted/null → fresh new-chat draft:
+   * nothing is loaded and a conversation is created lazily on the first send.
+   */
   conversationId?: string | null;
   /** Fires after each send so the conversation rail can refresh title + order. */
   onConversationStarted?: () => void;
+  /** Fires when the first send of a fresh draft created a conversation — adopt it. */
+  onConversationCreated?: (id: string) => void;
   className?: string;
 }
 
@@ -53,6 +58,7 @@ export function ModernChatPanel({
   onMessageSent,
   conversationId,
   onConversationStarted,
+  onConversationCreated,
   className,
 }: ModernChatPanelProps = {}) {
   const router = useRouter();
@@ -106,6 +112,7 @@ export function ModernChatPanel({
       onMessageSent?.();
     },
     onConversationStarted,
+    onConversationCreated,
   });
 
   const { suggestions, hasContext, isLoadingSuggestions } = useSuggestions();

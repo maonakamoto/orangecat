@@ -11,9 +11,13 @@ export interface ConversationSummary {
 
 /**
  * Manages the user's Cat conversation list for the rail: load, switch, start a
- * new chat, and delete. The active id drives which conversation the chat panel
- * loads/sends to. On first load the most-recently-updated conversation is active
- * (null until we know — the panel falls back to the default conversation).
+ * new chat, and delete.
+ *
+ * `activeId === null` means "fresh new chat" — the draft state the page lands
+ * on and the state after "New chat". No conversation row exists yet; the chat
+ * panel creates one lazily on the first send (see useChatMessages) and adopts
+ * it via `adoptConversation`. This is deliberate: eagerly POSTing on load or on
+ * "New chat" litters the rail (and the DB) with empty untitled conversations.
  */
 export function useConversations() {
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
@@ -29,8 +33,6 @@ export function useConversations() {
       const data = await res.json();
       const list: ConversationSummary[] = data?.data?.conversations ?? [];
       setConversations(list);
-      // Adopt an active id on first load (most recent) if none is set yet.
-      setActiveId(prev => prev ?? list[0]?.id ?? null);
     } catch (err) {
       logger.warn('Failed to load conversations', { err }, 'useConversations');
     } finally {
@@ -46,35 +48,26 @@ export function useConversations() {
     setActiveId(id);
   }, []);
 
-  const newConversation = useCallback(async () => {
-    try {
-      const res = await fetch(API_ROUTES.CAT.CONVERSATIONS, { method: 'POST' });
-      if (!res.ok) {
-        return;
-      }
-      const data = await res.json();
-      const id: string | undefined = data?.data?.id;
-      if (id) {
-        setActiveId(id);
-        await refresh();
-      }
-    } catch (err) {
-      logger.warn('Failed to start new conversation', { err }, 'useConversations');
-    }
-  }, [refresh]);
+  /** "New chat": back to the draft state. The row is created on first send. */
+  const newConversation = useCallback(() => {
+    setActiveId(null);
+  }, []);
+
+  /** Adopt a conversation the chat panel just created on first send. */
+  const adoptConversation = useCallback(
+    (id: string) => {
+      setActiveId(id);
+      void refresh();
+    },
+    [refresh]
+  );
 
   const deleteConversation = useCallback(
     async (id: string) => {
-      // Optimistic: drop it from the list immediately.
+      // Optimistic: drop it from the list immediately; if it was active,
+      // fall back to a fresh new chat.
       setConversations(prev => prev.filter(c => c.id !== id));
-      setActiveId(prev => {
-        if (prev !== id) {
-          return prev;
-        }
-        // Was active → fall back to the next most-recent, or default (null).
-        const remaining = conversations.filter(c => c.id !== id);
-        return remaining[0]?.id ?? null;
-      });
+      setActiveId(prev => (prev === id ? null : prev));
       try {
         await fetch(API_ROUTES.CAT.CONVERSATION(id), { method: 'DELETE' });
       } catch (err) {
@@ -82,7 +75,7 @@ export function useConversations() {
       }
       await refresh();
     },
-    [conversations, refresh]
+    [refresh]
   );
 
   return {
@@ -92,6 +85,7 @@ export function useConversations() {
     refresh,
     selectConversation,
     newConversation,
+    adoptConversation,
     deleteConversation,
   };
 }
