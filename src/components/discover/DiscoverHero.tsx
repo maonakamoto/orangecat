@@ -1,20 +1,8 @@
-import Link from 'next/link';
 import { Plus, ArrowRight } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
 
-interface DiscoverHeroProps {
-  totalProjects: number;
-  totalProfiles: number;
-  totalFinancial?: number;
-}
-
-export default function DiscoverHero({
-  totalProjects,
-  totalProfiles,
-  totalFinancial = 0,
-}: DiscoverHeroProps) {
+export default function DiscoverHero() {
   return (
     <section className="relative overflow-hidden bg-surface-page border-b border-default">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -28,26 +16,6 @@ export default function DiscoverHero({
             Projects, causes, products, services, loans, investments, events, and more — from
             creators and communities around the world.
           </p>
-
-          {/* Stats - Compact */}
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto">
-            <Link href={`${ROUTES.DISCOVER}?type=projects`} className="block">
-              <Card className="p-4 transition-colors hover:border-strong">
-                <div className="text-fluid-xl font-bold text-fg-primary">{totalProjects}</div>
-                <div className="text-sm text-fg-secondary mt-1">Active Projects</div>
-              </Card>
-            </Link>
-            <Link href={`${ROUTES.DISCOVER}?type=profiles`} className="block">
-              <Card className="p-4 transition-colors hover:border-strong">
-                <div className="text-fluid-xl font-bold text-fg-primary">{totalProfiles}</div>
-                <div className="text-sm text-fg-secondary mt-1">People</div>
-              </Card>
-            </Link>
-            <Card className="p-4">
-              <div className="text-fluid-xl font-bold text-fg-primary">{totalFinancial}</div>
-              <div className="text-sm text-fg-secondary mt-1">Finance</div>
-            </Card>
-          </div>
 
           {/* Creator CTA */}
           <div className="mt-6">

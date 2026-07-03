@@ -19,14 +19,17 @@ export function useEntityFormState<T extends Record<string, unknown>>({
   mode,
 }: UseEntityFormStateOptions<T>) {
   const initialFormData = useMemo(() => {
-    const data = { ...config.defaultValues, ...initialValues } as T;
+    let data = { ...config.defaultValues, ...initialValues } as T;
     if ('currency' in data && !initialValues?.currency) {
       if (data.currency === undefined || data.currency === null || data.currency === '') {
         (data as Record<string, unknown>).currency = userCurrency;
       }
     }
+    if (config.deriveInitialValues) {
+      data = { ...data, ...config.deriveInitialValues(data) };
+    }
     return data;
-  }, [config.defaultValues, initialValues, userCurrency]);
+  }, [config, initialValues, userCurrency]);
 
   const [formState, setFormState] = useState<FormState<T>>({
     data: initialFormData,
@@ -42,14 +45,20 @@ export function useEntityFormState<T extends Record<string, unknown>>({
   });
 
   useEffect(() => {
-    setFormState(prev => ({
-      ...prev,
-      data: { ...config.defaultValues, ...initialValues } as T,
-      errors: {},
-      isDirty: false,
-      activeField: null,
-    }));
-  }, [initialValues, config.defaultValues]);
+    setFormState(prev => {
+      let data = { ...config.defaultValues, ...initialValues } as T;
+      if (config.deriveInitialValues) {
+        data = { ...data, ...config.deriveInitialValues(data) };
+      }
+      return {
+        ...prev,
+        data,
+        errors: {},
+        isDirty: false,
+        activeField: null,
+      };
+    });
+  }, [initialValues, config]);
 
   const { lastSavedAt, clearDraft } = useEntityFormDraft({
     mode,
@@ -66,6 +75,15 @@ export function useEntityFormState<T extends Record<string, unknown>>({
 
       if (field === 'name' && config.type === 'group') {
         (updatedData as Record<string, unknown>).slug = slugify(value as string);
+      }
+
+      // Mode-toggle fields declare clearOnChange: reset the listed siblings so a
+      // value entered under the previous mode never rides along invisibly.
+      const fieldConfig = config.fieldGroups
+        .flatMap(g => g.fields ?? [])
+        .find(f => f.name === field);
+      for (const sibling of fieldConfig?.clearOnChange ?? []) {
+        (updatedData as Record<string, unknown>)[sibling] = null;
       }
 
       setFormState(prev => ({
@@ -86,7 +104,7 @@ export function useEntityFormState<T extends Record<string, unknown>>({
         return prev;
       });
     },
-    [formState.data, config.type]
+    [formState.data, config.type, config.fieldGroups]
   );
 
   const handleFieldFocus = useCallback((field: string) => {

@@ -57,6 +57,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'goal_amount',
         label: 'Funding Goal',
         type: 'currency',
+        isGoal: true,
         placeholder: '10000',
         hint: 'Optional: Set a funding target for your project. Currency selector is included in this field.',
       },

@@ -49,7 +49,6 @@ interface DiscoverResultsProps {
   wishlists?: GenericPublicEntity[];
   research?: GenericPublicEntity[];
   aiAssistants?: GenericPublicEntity[];
-  totalResults: number;
   loading: boolean;
   hasMore: boolean;
   isLoadingMore: boolean;
@@ -73,7 +72,6 @@ export default function DiscoverResults({
   wishlists = [],
   research = [],
   aiAssistants = [],
-  totalResults,
   loading,
   hasMore,
   isLoadingMore,
@@ -173,22 +171,15 @@ export default function DiscoverResults({
     investments.length +
     genericTabs.reduce((sum, t) => sum + t.items.length, 0);
 
+  // ONE counting source: the entities actually rendered below. The header used
+  // to mix a search-service total with loaded-array lengths, which disagreed
+  // with the tab badges ("All 76" vs "52 results (showing 46)") — a trust bug.
   const resultsHeader = (
     <div className="flex items-center justify-between mb-6">
       <h2 className="text-2xl font-semibold text-fg-primary">
-        {totalResults > 0 ? (
-          <>
-            {totalResults} result{totalResults !== 1 ? 's' : ''} found
-            {displayedCount < totalResults && (
-              <span className="text-fg-secondary text-lg font-normal ml-2">
-                {' '}
-                (showing {displayedCount})
-              </span>
-            )}
-          </>
-        ) : (
-          'No results found'
-        )}
+        {displayedCount > 0
+          ? `Showing ${displayedCount} result${displayedCount !== 1 ? 's' : ''}`
+          : 'No results found'}
       </h2>
     </div>
   );

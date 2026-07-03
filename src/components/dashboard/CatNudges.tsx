@@ -20,6 +20,10 @@ interface Nudge {
   cta_url: string | null;
 }
 
+// The dashboard shows only the top suggestions (API returns them ordered by
+// confidence score, highest first) — two focused cards beat a wall of five.
+const DASHBOARD_NUDGE_CAP = 2;
+
 export function CatNudges() {
   const [nudges, setNudges] = useState<Nudge[] | null>(null);
 
@@ -29,7 +33,7 @@ export function CatNudges() {
       .then(r => (r.ok ? r.json() : null))
       .then(d => {
         if (on && d?.success) {
-          setNudges(d.nudges || []);
+          setNudges((d.nudges || []).slice(0, DASHBOARD_NUDGE_CAP));
         }
       })
       .catch(() => {

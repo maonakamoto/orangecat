@@ -247,6 +247,7 @@ const fieldGroups: FieldGroup[] = [
         name: 'funding_goal',
         label: 'Funding Goal (Optional)',
         type: 'currency',
+        isGoal: true,
         placeholder: '10000.00',
         min: 1,
         hint: 'Optional: Set a funding goal to cover event costs.',
