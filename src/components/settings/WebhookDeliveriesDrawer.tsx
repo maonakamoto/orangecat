@@ -22,6 +22,7 @@ import {
   RotateCcw,
   XCircle,
 } from 'lucide-react';
+import { API_ROUTES } from '@/config/api-routes';
 import { logger } from '@/utils/logger';
 
 interface DeliveryRow {
@@ -96,7 +97,7 @@ export default function WebhookDeliveriesDrawer({ endpointId }: Props) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/webhook-endpoints/${endpointId}/deliveries`, {
+      const res = await fetch(API_ROUTES.WEBHOOK_ENDPOINTS.DELIVERIES(endpointId), {
         credentials: 'include',
       });
       if (!res.ok) {

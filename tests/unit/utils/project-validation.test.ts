@@ -24,10 +24,9 @@ describe('🛠️ Project Validation Tests', () => {
       const completeProject = {
         title: 'Complete Test Project',
         description: 'A comprehensive test project with all fields',
-        goal_amount: 1000000, // 10k sats
-        goal_currency: 'SATS',
+        goal_amount: 1000,
         funding_purpose: 'Development and marketing',
-        currency: 'SATS',
+        currency: 'CHF', // SATS is a retired currency code — CURRENCY_CODES is the SSOT
         bitcoin_address: 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
         lightning_address: 'test@getalby.com',
         category: 'technology',

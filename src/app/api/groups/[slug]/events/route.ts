@@ -21,6 +21,7 @@ import { z } from 'zod';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { resolveGroupBySlug, checkGroupMember } from '@/domain/groups/helpers.server';
 import { recordGroupActivity } from '@/services/groups/activities';
+import { attachEventProfiles, fetchProfilesMap } from '@/services/groups/eventProfiles';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 import { STATUS } from '@/config/database-constants';
 
@@ -62,15 +63,10 @@ export const GET = withAuth(
       );
       const offset = Math.max(parseInt(searchParams.get('offset') || '0', 10) || 0, 0);
 
+      // creator_id / rsvp user_id reference auth.users (not profiles), so
+      // profiles cannot be embedded — attachEventProfiles splits the lookup.
       let query = (supabase.from(DATABASE_TABLES.GROUP_EVENTS) as UntypedTable)
-        .select(
-          `*, creator:profiles!group_events_creator_id_fkey (id, name, avatar_url),
-           rsvps:group_event_rsvps (
-             id, user_id, status,
-             user:profiles!group_event_rsvps_user_id_fkey (id, name, avatar_url)
-           )`,
-          { count: 'exact' }
-        )
+        .select(`*, rsvps:group_event_rsvps (id, user_id, status)`, { count: 'exact' })
         .eq('group_id', group.id)
         .order('starts_at', { ascending: true })
         .range(offset, offset + limit - 1);
@@ -92,7 +88,7 @@ export const GET = withAuth(
       }
 
       return apiSuccess({
-        events: events || [],
+        events: await attachEventProfiles(supabase, events || []),
         total: count || 0,
         hasMore: (events?.length || 0) === limit,
       });
@@ -158,12 +154,8 @@ export const POST = withAuth(
         return handleApiError(insertError);
       }
 
-      const { data: creatorProfile } = await (
-        supabase.from(DATABASE_TABLES.PROFILES) as UntypedTable
-      )
-        .select('id, name, avatar_url')
-        .eq('id', user.id)
-        .single();
+      const profiles = await fetchProfilesMap(supabase, [user.id]);
+      const creatorProfile = profiles.get(user.id);
 
       // Await so the write completes before responding — the void
       // pattern silently dropped activity rows.

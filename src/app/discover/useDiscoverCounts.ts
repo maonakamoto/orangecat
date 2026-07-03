@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { API_ROUTES } from '@/config/api-routes';
 import { logger } from '@/utils/logger';
 import { ZERO_DISCOVER_COUNTS, type DiscoverCounts } from '@/services/search/discoverCounts';
 
@@ -27,7 +28,7 @@ export function useDiscoverCounts(): DiscoverCounts {
           }
         }
 
-        const res = await fetch('/api/discover/counts');
+        const res = await fetch(API_ROUTES.DISCOVER.COUNTS);
         if (!res.ok) {
           throw new Error(`Discover counts request failed: ${res.status}`);
         }

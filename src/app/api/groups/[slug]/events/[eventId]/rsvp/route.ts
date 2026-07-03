@@ -16,6 +16,7 @@ import {
 import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { fetchProfilesMap } from '@/services/groups/eventProfiles';
 import { logger } from '@/utils/logger';
 import { z } from 'zod';
 import { STATUS } from '@/config/database-constants';
@@ -86,13 +87,15 @@ export const POST = withAuth(
         });
       }
 
+      // user_id references auth.users (not profiles) — profile is fetched
+      // separately via fetchProfilesMap instead of a broken embed.
       const { data: rsvp, error: rsvpError } = await supabase
         .from(DATABASE_TABLES.GROUP_EVENT_RSVPS)
         .upsert(
           { event_id: eventId, user_id: user.id, status: validation.data.status },
           { onConflict: 'event_id,user_id' }
         )
-        .select('*, user:profiles!group_event_rsvps_user_id_fkey (id, name, avatar_url)')
+        .select('*')
         .single();
 
       if (rsvpError) {
@@ -100,7 +103,11 @@ export const POST = withAuth(
         return handleApiError(rsvpError);
       }
 
-      return apiSuccess({ rsvp, message: `RSVP updated to ${validation.data.status}` });
+      const profiles = await fetchProfilesMap(supabase, [user.id]);
+      return apiSuccess({
+        rsvp: { ...rsvp, user: profiles.get(user.id) ?? null },
+        message: `RSVP updated to ${validation.data.status}`,
+      });
     } catch (error) {
       logger.error('Event RSVP error', { error }, 'Groups');
       return handleApiError(error);

@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Plus, Search, TrendingUp, Users, DollarSign, Target, Microscope } from 'lucide-react';
+import { Plus, Search, TrendingUp, DollarSign, Target, Microscope } from 'lucide-react';
 import EntityListShell from '@/components/entity/EntityListShell';
 import Loading from '@/components/Loading';
 import { ResearchEntity } from '@/types/research';
@@ -99,7 +99,7 @@ export default function ResearchDashboard() {
       }
     >
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Entities</CardTitle>
@@ -132,17 +132,6 @@ export default function ResearchDashboard() {
                 : formatAmountBtc(
                     entities.reduce((sum, e) => sum + (e.funding_raised_btc || 0), 0)
                   )}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Contributors</CardTitle>
-            <Users className="h-4 w-4 text-fg-secondary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {loading ? '—' : entities.reduce((sum, e) => sum + e.total_contributors, 0)}
             </div>
           </CardContent>
         </Card>
@@ -262,17 +251,6 @@ export default function ResearchDashboard() {
                     }
                     className="h-2"
                   />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Research Progress</span>
-                    <span>{entity.completion_percentage}%</span>
-                  </div>
-                  <Progress value={entity.completion_percentage} className="h-2" />
-                </div>
-                <div className="flex justify-between text-sm text-fg-secondary">
-                  <span>{entity.total_contributors} contributors</span>
-                  <span>{entity.follower_count} followers</span>
                 </div>
               </CardContent>
             </Card>

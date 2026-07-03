@@ -119,22 +119,13 @@ export interface ResearchEntity extends BaseEntity {
 
   // Progress Tracking
   progress_updates: ResearchProgress[];
-  total_votes: number;
-  average_rating?: number;
 
   // Funding History
   contributions: FundingContribution[];
-  total_contributors: number;
 
-  // Computed Fields
-  completion_percentage: number;
-  days_active: number;
-  funding_velocity: number; // sats per day
-
-  // Social Proof
-  follower_count: number;
-  share_count: number;
-  citation_count: number;
+  // NOTE: denormalized counters (total_votes, total_contributors,
+  // completion_percentage, follower_count, citation_count, …) were dropped
+  // from the database in migration 20260404000005 and no longer exist.
 
   // Visibility
   is_public: boolean;
@@ -153,15 +144,6 @@ export interface ResearchEntityCreate extends Omit<
   | 'funding_raised_btc'
   | 'progress_updates'
   | 'contributions'
-  | 'total_contributors'
-  | 'completion_percentage'
-  | 'days_active'
-  | 'funding_velocity'
-  | 'follower_count'
-  | 'share_count'
-  | 'citation_count'
-  | 'total_votes'
-  | 'average_rating'
   // System-managed fields
   | 'wallet_address'
   | 'is_featured'

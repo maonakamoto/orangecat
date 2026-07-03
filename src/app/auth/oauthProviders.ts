@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { API_ROUTES } from '@/config/api-routes';
 import { isOAuthProvider, type OAuthProvider } from './oauth-provider-map';
 
 /**
@@ -21,7 +22,7 @@ export function useEnabledOAuthProviders(): { enabled: Set<OAuthProvider>; loade
     let active = true;
     (async () => {
       try {
-        const res = await fetch('/api/auth/oauth-providers');
+        const res = await fetch(API_ROUTES.AUTH.OAUTH_PROVIDERS);
         const body = (await res.json()) as { success?: boolean; data?: { providers?: string[] } };
         const providers = (body.data?.providers ?? []).filter(isOAuthProvider);
         if (active) {

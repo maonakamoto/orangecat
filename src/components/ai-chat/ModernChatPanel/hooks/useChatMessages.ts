@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { readEventStream } from '@/lib/sse';
 import { logger } from '@/utils/logger';
 import { API_ROUTES } from '@/config/api-routes';
+import { isCatHubPath } from '@/config/routes';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
 import { STORAGE_KEYS } from '@/config/storage-keys';
 import type {
@@ -27,7 +28,7 @@ function readLastVisitedPath(): string | undefined {
   // it survives refresh and direct cat-page loads. Falls back to document.referrer.
   try {
     const stored = window.sessionStorage.getItem(STORAGE_KEYS.LAST_VISITED_PATH);
-    if (stored && stored.startsWith('/') && !stored.startsWith('/dashboard/cat')) {
+    if (stored && stored.startsWith('/') && !isCatHubPath(stored)) {
       return stored;
     }
   } catch {
@@ -42,7 +43,7 @@ function readLastVisitedPath(): string | undefined {
     if (refUrl.origin !== window.location.origin) {
       return undefined;
     }
-    if (refUrl.pathname.startsWith('/dashboard/cat')) {
+    if (isCatHubPath(refUrl.pathname)) {
       return undefined;
     }
     return refUrl.pathname;

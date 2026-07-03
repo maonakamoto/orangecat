@@ -178,7 +178,9 @@ export interface RouteChrome {
   preferCollapsedSidebar: boolean;
 }
 
-function isCatHubPath(pathname: string): boolean {
+/** True when the pathname is the Cat hub (or a sub-route of it). SSOT — do
+ * not re-implement with ad-hoc `startsWith('/dashboard/cat')` checks. */
+export function isCatHubPath(pathname: string): boolean {
   return pathname === '/dashboard/cat' || pathname.startsWith('/dashboard/cat/');
 }
 
@@ -376,6 +378,8 @@ export const ROUTES = {
     BOOKINGS: '/dashboard/bookings',
     CAT: '/dashboard/cat',
     CAT_PERMISSIONS: '/dashboard/cat',
+    // Post-auth landing for new users — Cat is the primary interface.
+    CAT_WELCOME: '/dashboard/cat?welcome=true',
     DOCUMENTS: ENTITY_REGISTRY['document'].basePath,
     DOCUMENTS_CREATE: ENTITY_REGISTRY['document'].createPath,
     // Note: there is no /dashboard/settings page. Account settings live at

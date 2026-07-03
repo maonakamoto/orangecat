@@ -13,6 +13,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { logger } from '@/utils/logger';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { isCatHubPath } from '@/config/routes';
 
 import type {
   DocumentContext,
@@ -255,7 +256,7 @@ function sanitizeLastVisitedPath(path: string | undefined): string | undefined {
     return undefined;
   }
   // Avoid pushing the Cat page itself back into the prompt as "where you came from".
-  if (path.startsWith('/dashboard/cat')) {
+  if (isCatHubPath(path)) {
     return undefined;
   }
   return path;
