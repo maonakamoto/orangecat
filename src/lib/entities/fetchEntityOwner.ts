@@ -17,26 +17,29 @@ export async function fetchEntityOwner(
   supabase: AnySupabaseClient,
   entity: { actor_id?: string | null; user_id?: string | null; created_by?: string | null }
 ): Promise<EntityOwner | null> {
-  // Try actors table if actor_id is present — join profiles for user actors
+  // Try actors table if actor_id is present. NOTE: deliberately two queries —
+  // the live DB has no FK between actors.user_id and profiles, so a PostgREST
+  // embed (`profiles:user_id (...)`) fails with PGRST200 and silently nulled
+  // the owner for EVERY actor-owned entity (draft owner-preview then 404'd).
   if (entity.actor_id) {
     const { data: actorData } = await supabase
       .from(DATABASE_TABLES.ACTORS)
-      .select(
-        `
-        id, actor_type, user_id, group_id,
-        profiles:user_id (username, name, avatar_url)
-      `
-      )
+      .select('id, actor_type, user_id, group_id')
       .eq('id', entity.actor_id)
       .maybeSingle();
     if (actorData) {
-      type ActorRow = {
-        id: string;
-        user_id: string | null;
-        profiles?: { username: string | null; name: string | null; avatar_url: string | null };
-      };
+      type ActorRow = { id: string; user_id: string | null };
+      type ProfileRow = { username: string | null; name: string | null; avatar_url: string | null };
       const actor = actorData as unknown as ActorRow;
-      const profile = actor.profiles;
+      let profile: ProfileRow | null = null;
+      if (actor.user_id) {
+        const { data: profileData } = await supabase
+          .from(DATABASE_TABLES.PROFILES)
+          .select('username, name, avatar_url')
+          .eq('id', actor.user_id)
+          .maybeSingle();
+        profile = profileData as ProfileRow | null;
+      }
       return {
         id: actor.id,
         user_id: actor.user_id || '',

@@ -52,10 +52,15 @@ export const wishlistItemSchema = z.object({
   // BTC is the canonical unit — fractional amounts down to 1e-8. The old
   // .int('whole satoshis') gate was a sats-era leftover that rejected every
   // normal BTC value (0.001 etc.).
+  // NOTE: not .multipleOf(1e-8) — zod's multipleOf uses float modulo, which
+  // rejects perfectly valid values like 0.001 due to floating-point noise.
   target_amount_btc: z
     .number()
     .positive('Target amount must be positive')
-    .multipleOf(0.00000001, 'Amount has a maximum precision of 8 decimal places'),
+    .refine(
+      v => Math.abs(v * 1e8 - Math.round(v * 1e8)) < 1e-3,
+      'Amount has a maximum precision of 8 decimal places'
+    ),
   currency: z.enum(CURRENCY_CODES).optional().default('BTC'),
   original_amount: z.number().positive().optional().nullable(),
 

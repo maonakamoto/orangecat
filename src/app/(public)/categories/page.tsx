@@ -62,7 +62,7 @@ export default function CategoriesPage() {
                   {category.groups.map(group => (
                     <Link
                       key={group.id}
-                      href={`/browse?category=${category.id}&group=${group.id}`}
+                      href={`${ROUTES.DISCOVER}?q=${encodeURIComponent(group.name)}`}
                       className="block p-6 bg-surface-raised rounded-lg hover:bg-surface-raised/80 dark:hover:bg-surface-raised/80 transition-colors group"
                     >
                       <div className="flex items-center justify-between">

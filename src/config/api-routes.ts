@@ -60,7 +60,8 @@ export const API_ROUTES = {
   },
   PROFILES: {
     BASE: '/api/profiles',
-    BY_ID: (id: string) => `/api/profiles/${id}`,
+    // NOTE: no /api/profiles/[id] route exists — single-profile fetch goes
+    // through /api/profile/[identifier] (see API_ROUTES.PROFILE).
     PROJECTS: (id: string) => `/api/profiles/${id}/projects`,
     ENTITIES: (id: string, entityType: string) => `/api/profiles/${id}/entities/${entityType}`,
     WISHLIST_TIERS: (id: string) => `/api/profiles/${id}/wishlist-tiers`,
@@ -96,6 +97,7 @@ export const API_ROUTES = {
   },
   WISHLISTS: {
     BASE: ENTITY_REGISTRY['wishlist'].apiEndpoint,
+    ITEMS: (wishlistId: string) => `${ENTITY_REGISTRY['wishlist'].apiEndpoint}/${wishlistId}/items`,
     PROOFS: `${ENTITY_REGISTRY['wishlist'].apiEndpoint}/proofs`,
     FEEDBACK: `${ENTITY_REGISTRY['wishlist'].apiEndpoint}/feedback`,
     ITEM_PROOFS: (itemId: string) =>
@@ -167,8 +169,5 @@ export const API_ROUTES = {
     BASE: '/api/bookings',
     BY_ID: (id: string) => `/api/bookings/${id}`,
     RECEIVE_INFO: (id: string) => `/api/bookings/${id}/receive-info`,
-  },
-  PRESENCE: {
-    OFFLINE: '/api/presence/offline',
   },
 } as const;
