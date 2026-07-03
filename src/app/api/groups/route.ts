@@ -83,8 +83,11 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       return apiInternalError(result.error || 'Failed to create group');
     }
 
-    // Return in format expected by EntityForm (data property)
-    return apiCreated({ data: result.group, group: result.group });
+    // Standard entity shape: apiCreated already wraps in `data`, so pass
+    // the group itself. (The old `{ data, group }` double-wrap made
+    // `result.data.id`/`result.data.slug` undefined in EntityForm, which
+    // broke the post-create redirect.)
+    return apiCreated(result.group);
   } catch (error) {
     logger.error('Error in POST /api/groups:', error);
     return apiInternalError('Internal server error');

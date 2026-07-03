@@ -55,11 +55,13 @@ export function GroupDetail({ groupSlug }: GroupDetailProps) {
     );
   }
 
+  // SSOT edit convention: createPath?edit=<id> (the old
+  // /groups/[slug]/settings route never existed — dead link).
   const headerActions = isOwner ? (
-    <Link href={`${ENTITY_REGISTRY['group'].publicBasePath}/${group.slug}/settings`}>
+    <Link href={`${ENTITY_REGISTRY['group'].createPath}?edit=${group.id}`}>
       <Button variant="outline">
         <Settings className="h-4 w-4 mr-2" />
-        Settings
+        Edit Group
       </Button>
     </Link>
   ) : null;

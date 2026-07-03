@@ -30,6 +30,13 @@ interface RouteContext {
   params: Promise<{ slug: string }>;
 }
 
+// The segment accepts either a slug or a UUID id. The generic entity edit
+// flow (`createPath?edit=<id>` → GET/PUT `${apiEndpoint}/${id}`) addresses
+// groups by id like every other entity; human-facing URLs use the slug.
+// Slugs are never UUID-shaped, so the two are unambiguous.
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const isBySlug = (identifier: string) => !UUID_PATTERN.test(identifier);
+
 export async function GET(_request: NextRequest, context: RouteContext) {
   try {
     const { slug } = await context.params;
@@ -38,8 +45,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     // whose auth.getUser()/queries fail server-side and 500 this public endpoint.
     const supabase = await createServerClient();
 
-    // Get group by slug (second param is bySlug=true)
-    const result = await groupsService.getGroup(slug, true, supabase);
+    const result = await groupsService.getGroup(slug, isBySlug(slug), supabase);
 
     if (!result.success) {
       if (result.error?.includes('not found')) {
@@ -48,7 +54,9 @@ export async function GET(_request: NextRequest, context: RouteContext) {
       return apiInternalError(result.error || 'Failed to fetch group');
     }
 
-    return apiSuccess({ group: result.group });
+    // Standard entity shape: `data` IS the group — consumed by the generic
+    // edit flow (useEntityCreateEdit). Don't re-wrap as `{ group }`.
+    return apiSuccess(result.group);
   } catch (error) {
     logger.error('Error in GET /api/groups/[slug]:', error);
     return apiInternalError();
@@ -75,7 +83,7 @@ export const PUT = withAuth(async (request: AuthenticatedRequest, context: Route
     }
 
     // Get group first to check permissions (use the authenticated server client)
-    const groupResult = await groupsService.getGroup(slug, true, request.supabase);
+    const groupResult = await groupsService.getGroup(slug, isBySlug(slug), request.supabase);
     if (!groupResult.success || !groupResult.group) {
       return apiNotFound('Group not found');
     }
@@ -101,7 +109,9 @@ export const PUT = withAuth(async (request: AuthenticatedRequest, context: Route
       return apiInternalError(result.error || 'Failed to update group');
     }
 
-    return apiSuccess({ group: result.group });
+    // Standard entity shape: `data` IS the group — the generic edit form
+    // reads `data.slug` to build its success redirect.
+    return apiSuccess(result.group);
   } catch (error) {
     logger.error('Error in PUT /api/groups/[slug]:', error);
     return apiInternalError();
@@ -121,7 +131,7 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest, context: Ro
     const { slug } = await context.params;
 
     // Get group first to check permissions (use the authenticated server client)
-    const groupResult = await groupsService.getGroup(slug, true, request.supabase);
+    const groupResult = await groupsService.getGroup(slug, isBySlug(slug), request.supabase);
     if (!groupResult.success || !groupResult.group) {
       return apiNotFound('Group not found');
     }
