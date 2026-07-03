@@ -190,7 +190,10 @@ export default async function PublicEntityDetailPage({
   // also the owner's dashboard detail view: one layout, buyers see the listing,
   // the owner sees it + Edit (no separate flat-grid dashboard page).
   const isOwner = !!user && !!owner?.user_id && owner.user_id === user.id;
-  const editHref = `${meta.basePath}/${id}/edit`;
+  // SSOT edit convention: entities are edited via their create page in edit
+  // mode (?edit=<id>) — see src/config/entities/*.tsx editPath. There is no
+  // `${basePath}/${id}/edit` route for most entity types; linking it 404'd.
+  const editHref = `${meta.createPath}?edit=${id}`;
 
   // Resolve the seller's public receiving info + BTC amount server-side so a
   // logged-out visitor can pay direct (permissionless) — no account, no gate.
