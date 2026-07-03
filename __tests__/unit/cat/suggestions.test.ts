@@ -8,6 +8,7 @@ import {
   hasRichContext,
   DEFAULT_SUGGESTIONS,
 } from '@/services/ai/suggestions';
+import { CAT_QUICKSTARTS, selectQuickstarts } from '@/config/cat-quickstarts';
 import type { FullUserContext } from '@/services/ai/document-context';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -120,7 +121,9 @@ describe('hasRichContext', () => {
   });
 
   it('returns false when profile exists but is blank', () => {
-    const ctx = makeContext({ profile: { username: 'alice', name: null, bio: null, background: null } });
+    const ctx = makeContext({
+      profile: { username: 'alice', name: null, bio: null, background: null },
+    });
     expect(hasRichContext(ctx)).toBe(false);
   });
 
@@ -165,7 +168,13 @@ describe('generateSuggestionsFromContext', () => {
       documents: [makeDocument('2026 Goals')],
       tasks: [makeTask()],
       wallets: [makeWallet()],
-      stats: { ...EMPTY_STATS, totalProducts: 1, totalServices: 1, totalProjects: 1, totalCauses: 1 },
+      stats: {
+        ...EMPTY_STATS,
+        totalProducts: 1,
+        totalServices: 1,
+        totalProjects: 1,
+        totalCauses: 1,
+      },
     });
     expect(generateSuggestionsFromContext(ctx).length).toBeLessThanOrEqual(4);
   });
@@ -206,22 +215,25 @@ describe('generateSuggestionsFromContext', () => {
     expect(suggestions.some(s => s.includes('Ocean Clean-Up'))).toBe(true);
   });
 
-  it('includes gap suggestion when user has products but no project or cause', () => {
+  it('leads with the wallet chip when user has entities but no wallet', () => {
     const ctx = makeContext({
       entities: [makeEntity('product', 'Merch')],
       stats: { ...EMPTY_STATS, totalProducts: 1 },
     });
     const suggestions = generateSuggestionsFromContext(ctx);
-    expect(suggestions.some(s => s.toLowerCase().includes('project'))).toBe(true);
+    expect(suggestions[0]).toBe(CAT_QUICKSTARTS.entitiesNoWallet[0]);
+    expect(suggestions[0].toLowerCase()).toContain('wallet');
   });
 
-  it('includes gap suggestion when user has services but no products', () => {
+  it('uses the established tier when user has entities and a wallet', () => {
     const ctx = makeContext({
       entities: [makeEntity('service', 'Consulting')],
-      stats: { ...EMPTY_STATS, totalServices: 1 },
+      wallets: [makeWallet()],
+      stats: { ...EMPTY_STATS, totalServices: 1, totalWallets: 1 },
     });
     const suggestions = generateSuggestionsFromContext(ctx);
-    expect(suggestions.some(s => s.toLowerCase().includes('product'))).toBe(true);
+    expect(suggestions[0]).toBe(CAT_QUICKSTARTS.established[0]);
+    expect(suggestions.some(s => s.toLowerCase().includes('wallet'))).toBe(false);
   });
 
   it('includes task nudge when user has tasks', () => {
@@ -234,14 +246,14 @@ describe('generateSuggestionsFromContext', () => {
     expect(suggestions.some(s => s.toLowerCase().includes('task'))).toBe(true);
   });
 
-  it('includes wallet nudge when user has wallets', () => {
+  it('uses the noEntities tier for users with a wallet but nothing listed', () => {
     const ctx = makeContext({
       wallets: [makeWallet()],
       stats: { ...EMPTY_STATS, totalWallets: 1 },
       profile: { name: 'Alice', username: 'alice' },
     });
     const suggestions = generateSuggestionsFromContext(ctx);
-    expect(suggestions.some(s => s.toLowerCase().includes('saving') || s.toLowerCase().includes('goal'))).toBe(true);
+    expect(suggestions[0]).toBe(CAT_QUICKSTARTS.noEntities[0]);
   });
 
   it('returns document-based suggestions when only documents are present', () => {
@@ -266,6 +278,16 @@ describe('generateSuggestionsFromContext', () => {
     expect(unique.size).toBe(suggestions.length);
   });
 
+  it('keeps a named-entity chip alongside the tier chips', () => {
+    const ctx = makeContext({
+      entities: [makeEntity('product', 'Handmade Candles')],
+      wallets: [makeWallet()],
+      stats: { ...EMPTY_STATS, totalProducts: 1, totalWallets: 1 },
+    });
+    const suggestions = generateSuggestionsFromContext(ctx);
+    expect(suggestions.some(s => s.includes('Handmade Candles'))).toBe(true);
+  });
+
   it('falls back to generic suggestions when context exists but produces no specific matches', () => {
     // Profile with a name but no entities/tasks/wallets/docs
     const ctx = makeContext({
@@ -275,5 +297,41 @@ describe('generateSuggestionsFromContext', () => {
     // Should still return something (gap nudge or generic)
     expect(suggestions.length).toBeGreaterThan(0);
     expect(suggestions).not.toEqual(DEFAULT_SUGGESTIONS);
+  });
+});
+
+// ─── selectQuickstarts (tier rules SSOT) ──────────────────────────────────────
+
+describe('selectQuickstarts', () => {
+  it('returns the noEntities tier when the user has nothing listed', () => {
+    expect(selectQuickstarts({ entityCount: 0, hasWallet: false })).toEqual(
+      CAT_QUICKSTARTS.noEntities
+    );
+    expect(selectQuickstarts({ entityCount: 0, hasWallet: true })).toEqual(
+      CAT_QUICKSTARTS.noEntities
+    );
+  });
+
+  it('returns the entitiesNoWallet tier when listings exist but no wallet does', () => {
+    expect(selectQuickstarts({ entityCount: 2, hasWallet: false })).toEqual(
+      CAT_QUICKSTARTS.entitiesNoWallet
+    );
+  });
+
+  it('returns the established tier when entities and a wallet both exist', () => {
+    expect(selectQuickstarts({ entityCount: 1, hasWallet: true })).toEqual(
+      CAT_QUICKSTARTS.established
+    );
+  });
+
+  it('every tier stays within the 3-4 chip budget', () => {
+    for (const chips of Object.values(CAT_QUICKSTARTS)) {
+      expect(chips.length).toBeGreaterThanOrEqual(3);
+      expect(chips.length).toBeLessThanOrEqual(4);
+    }
+  });
+
+  it('DEFAULT_SUGGESTIONS mirrors the noEntities tier', () => {
+    expect(DEFAULT_SUGGESTIONS).toEqual([...CAT_QUICKSTARTS.noEntities]);
   });
 });

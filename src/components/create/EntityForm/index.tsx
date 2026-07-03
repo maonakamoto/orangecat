@@ -141,27 +141,95 @@ export function EntityForm<T extends Record<string, unknown>>({
   const Icon = config.icon;
   const theme = FORM_THEME[config.colorTheme];
 
-  return (
-    <div
-      className={
-        wizardMode || embedded
-          ? ''
-          : `min-h-screen ${theme.pageSurface} p-4 sm:p-6 lg:p-8 pb-24 md:pb-8`
-      }
-    >
-      {!wizardMode && !embedded && (
-        <FormHeader
-          icon={Icon}
-          colorTheme={config.colorTheme}
-          name={config.name}
-          namePlural={config.namePlural}
-          pageDescription={config.pageDescription}
-          backUrl={config.backUrl}
-          mode={mode}
-        />
+  /**
+   * FORM WIDTH SSOT
+   *
+   * Two layout modes, one rule: the form fields always get the full width of
+   * a single comfortable content column — never a fraction of one.
+   *
+   * - Hosted (wizard step / embedded dialog): the host already provides the
+   *   card + width. Render the bare form so fields span the host's content
+   *   width. (Previously this branch kept a `lg:grid-cols-3` + `col-span-2`
+   *   grid whose third column — the GuidancePanel — is never rendered in
+   *   wizard mode, cramping every input to ~2/3 of an already-nested card.)
+   * - Full page (create without wizard / edit): a max-w-6xl shell where the
+   *   form card takes 2/3 (~3xl of fields) and the GuidancePanel 1/3.
+   */
+  const formElement = (
+    <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Cat-powered prefill on EVERY form — create and edit alike — so
+                    users can describe what they want (or the change they want)
+                    and have the fields filled instead of typing each one. On edit
+                    the bar refines the existing values (it receives existingData). */}
+      <AIPrefillBar
+        entityType={config.type}
+        onPrefill={handleAIPrefill}
+        disabled={formState.isSubmitting}
+        existingData={formState.data}
+        mode={mode}
+      />
+
+      <FormFieldGroups
+        visibleFieldGroups={visibleFieldGroups}
+        isGroupVisible={isGroupVisible}
+        isFieldVisible={isFieldVisible}
+        formState={formState}
+        handleFieldChange={handleFieldChange}
+        handleFieldFocus={handleFieldFocus}
+        handleFieldBlur={handleFieldBlur}
+        aiGeneratedFields={aiGeneratedFields}
+      />
+
+      {config.infoBanner && <FormInfoBanner banner={config.infoBanner} />}
+
+      {formState.errors.general && (
+        <div className="oc-error-surface">
+          <p className="text-sm">{formState.errors.general}</p>
+        </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {config.templates && config.templates.length > 0 && mode === 'create' && !wizardMode && (
+        <div className="mt-8 pt-8 border-t border-default">
+          <TemplatePicker
+            label={config.namePlural}
+            templates={config.templates as EntityTemplate<T>[]}
+            onSelectTemplate={handleTemplateSelect}
+          />
+        </div>
+      )}
+
+      <FormActions
+        isSubmitting={formState.isSubmitting}
+        mode={mode}
+        entityName={config.name}
+        backUrl={config.backUrl}
+        theme={theme}
+        wizardMode={wizardMode}
+        lastSavedAt={lastSavedAt}
+        formatRelativeTime={formatRelativeTime}
+      />
+    </form>
+  );
+
+  // Hosted mode: wizard step card or dialog owns the chrome — bare form,
+  // full width of the host's content column.
+  if (wizardMode || embedded) {
+    return formElement;
+  }
+
+  return (
+    <div className={`min-h-screen ${theme.pageSurface} p-4 sm:p-6 lg:p-8 pb-24 md:pb-8`}>
+      <FormHeader
+        icon={Icon}
+        colorTheme={config.colorTheme}
+        name={config.name}
+        namePlural={config.namePlural}
+        pageDescription={config.pageDescription}
+        backUrl={config.backUrl}
+        mode={mode}
+      />
+
+      <div className="max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>
@@ -172,76 +240,17 @@ export function EntityForm<T extends Record<string, unknown>>({
                   : `Update your ${config.name.toLowerCase()} details.`}
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Cat-powered prefill on EVERY form — create and edit alike — so
-                    users can describe what they want (or the change they want)
-                    and have the fields filled instead of typing each one. On edit
-                    the bar refines the existing values (it receives existingData). */}
-                <AIPrefillBar
-                  entityType={config.type}
-                  onPrefill={handleAIPrefill}
-                  disabled={formState.isSubmitting}
-                  existingData={formState.data}
-                  mode={mode}
-                />
-
-                <FormFieldGroups
-                  visibleFieldGroups={visibleFieldGroups}
-                  isGroupVisible={isGroupVisible}
-                  isFieldVisible={isFieldVisible}
-                  formState={formState}
-                  handleFieldChange={handleFieldChange}
-                  handleFieldFocus={handleFieldFocus}
-                  handleFieldBlur={handleFieldBlur}
-                  aiGeneratedFields={aiGeneratedFields}
-                />
-
-                {config.infoBanner && <FormInfoBanner banner={config.infoBanner} />}
-
-                {formState.errors.general && (
-                  <div className="oc-error-surface">
-                    <p className="text-sm">{formState.errors.general}</p>
-                  </div>
-                )}
-
-                {config.templates &&
-                  config.templates.length > 0 &&
-                  mode === 'create' &&
-                  !wizardMode && (
-                    <div className="mt-8 pt-8 border-t border-default">
-                      <TemplatePicker
-                        label={config.namePlural}
-                        templates={config.templates as EntityTemplate<T>[]}
-                        onSelectTemplate={handleTemplateSelect}
-                      />
-                    </div>
-                  )}
-
-                <FormActions
-                  isSubmitting={formState.isSubmitting}
-                  mode={mode}
-                  entityName={config.name}
-                  backUrl={config.backUrl}
-                  theme={theme}
-                  wizardMode={wizardMode}
-                  lastSavedAt={lastSavedAt}
-                  formatRelativeTime={formatRelativeTime}
-                />
-              </form>
-            </CardContent>
+            <CardContent>{formElement}</CardContent>
           </Card>
         </div>
 
-        {!wizardMode && (
-          <div className="lg:col-span-1">
-            <GuidancePanel
-              activeField={formState.activeField}
-              guidanceContent={config.guidanceContent}
-              defaultGuidance={config.defaultGuidance}
-            />
-          </div>
-        )}
+        <div className="lg:col-span-1">
+          <GuidancePanel
+            activeField={formState.activeField}
+            guidanceContent={config.guidanceContent}
+            defaultGuidance={config.defaultGuidance}
+          />
+        </div>
       </div>
     </div>
   );
