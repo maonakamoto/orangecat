@@ -26,6 +26,7 @@ import { resolveSellerReceiveInfo, type SellerReceiveInfo } from '@/domain/payme
 import { currencyConverter } from '@/services/currency';
 import { type CurrencyCode } from '@/config/currencies';
 import { fetchEntityOwner } from '@/lib/entities/fetchEntityOwner';
+import { fetchProfileListingCounts } from '@/services/profile/listingCounts';
 import { ROUTES } from '@/config/routes';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Z_INDEX_CLASSES } from '@/constants/z-index';
@@ -186,6 +187,12 @@ export default async function PublicEntityDetailPage({
   }
 
   const owner = await fetchEntityOwner(supabase, entity);
+  // Provider trust: how many things this person publicly offers. Head-only
+  // count queries (see listingCounts.ts) — same filter shape as the profile
+  // tabs, so the number matches what clicking through to the profile shows.
+  const ownerListingCount = owner?.user_id
+    ? (await fetchProfileListingCounts(supabase, owner.user_id)).total
+    : 0;
   // The viewer owns this entity (published or draft) → show a manage bar. This is
   // also the owner's dashboard detail view: one layout, buyers see the listing,
   // the owner sees it + Edit (no separate flat-grid dashboard page).
@@ -316,7 +323,11 @@ export default async function PublicEntityDetailPage({
 
             <div className="space-y-6">
               {owner && (
-                <PublicEntityOwnerCard owner={owner} label={config.ownerLabel || 'Owner'} />
+                <PublicEntityOwnerCard
+                  owner={owner}
+                  label={config.ownerLabel || 'Owner'}
+                  activeListingCount={ownerListingCount}
+                />
               )}
 
               <EntityShare

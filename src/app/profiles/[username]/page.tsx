@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import ProfilePageClient from '@/components/profile/ProfilePageClient';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getTableName } from '@/config/entity-registry';
-import type { EntityType } from '@/config/entity-registry';
+import { fetchProfileListingCounts } from '@/services/profile/listingCounts';
 import { safeJsonLdString } from '@/lib/seo/structured-data';
 import type { ScalableProfile } from '@/services/profile/types';
 import { mapProjectRow } from '@/types/project';
@@ -226,32 +226,9 @@ export default async function PublicProfilePage({ params }: PageProps) {
   const receiveMethodCount =
     walletCount + (profile.bitcoin_address ? 1 : 0) + (profile.lightning_address ? 1 : 0);
 
-  // Fetch entity counts for profile tab badges in parallel.
-  // userField differs for asset (owner_id) vs. all others (user_id) — legacy schema.
-  const ENTITY_COUNT_CONFIG: Array<{ type: EntityType; userField: string }> = [
-    { type: 'product', userField: 'user_id' },
-    { type: 'service', userField: 'user_id' },
-    { type: 'cause', userField: 'user_id' },
-    { type: 'event', userField: 'user_id' },
-    { type: 'loan', userField: 'user_id' },
-    { type: 'asset', userField: 'owner_id' },
-    { type: 'ai_assistant', userField: 'user_id' },
-  ];
-
-  const entityCountResults = await Promise.all(
-    ENTITY_COUNT_CONFIG.map(({ type, userField }) =>
-      supabase
-        .from(getTableName(type))
-        .select('*', { count: 'exact', head: true })
-        .eq(userField, profile.id)
-        .neq('status', 'draft')
-        .neq('show_on_profile', false)
-    )
-  );
-
-  const entityCounts = Object.fromEntries(
-    ENTITY_COUNT_CONFIG.map(({ type }, i) => [type, entityCountResults[i].count || 0])
-  ) as Partial<Record<EntityType, number>>;
+  // Fetch entity counts for profile tab badges (shared SSOT with the
+  // entity-detail trust block — see listingCounts.ts).
+  const { counts: entityCounts } = await fetchProfileListingCounts(supabase, profile.id);
 
   // Calculate statistics
   const projectCount = projects?.length || 0;

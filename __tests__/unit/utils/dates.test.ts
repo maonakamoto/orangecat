@@ -1,4 +1,4 @@
-import { formatDate, formatTime, formatRelativeTime } from '@/utils/dates';
+import { formatDate, formatTime, formatRelativeTime, formatDurationMinutes } from '@/utils/dates';
 
 describe('formatDate', () => {
   it('formats a Date object to "MMM d, yyyy"', () => {
@@ -76,5 +76,28 @@ describe('formatRelativeTime', () => {
     const tenMinutesAgo = new Date(now.getTime() - 10 * 60 * 1000).toISOString();
     const result = formatRelativeTime(tenMinutesAgo);
     expect(result).toMatch(/10 minutes ago/i);
+  });
+});
+
+describe('formatDurationMinutes', () => {
+  it('formats sub-hour durations in minutes', () => {
+    expect(formatDurationMinutes(45)).toBe('45 min');
+  });
+
+  it('formats whole hours without a minute part', () => {
+    expect(formatDurationMinutes(180)).toBe('3 h');
+    expect(formatDurationMinutes(60)).toBe('1 h');
+  });
+
+  it('formats mixed hours and minutes', () => {
+    expect(formatDurationMinutes(90)).toBe('1 h 30 min');
+  });
+
+  it('returns empty string for missing or non-positive input', () => {
+    expect(formatDurationMinutes(0)).toBe('');
+    expect(formatDurationMinutes(-30)).toBe('');
+    expect(formatDurationMinutes(null)).toBe('');
+    expect(formatDurationMinutes(undefined)).toBe('');
+    expect(formatDurationMinutes(NaN)).toBe('');
   });
 });

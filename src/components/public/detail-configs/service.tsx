@@ -4,6 +4,7 @@ import type { EntityDetailConfig } from '@/components/public/PublicEntityDetailP
 import { ROUTES } from '@/config/routes';
 import { BookEntityButton } from '@/components/bookings/BookEntityButton';
 import { hasAvailability, formatAvailabilityLines } from '@/lib/availability';
+import { formatDurationMinutes } from '@/utils/dates';
 
 // user_services stores its price in `fixed_price` (or `hourly_rate`) in the entity's
 // chosen `currency` — NOT price_btc (no such column) and NOT in BTC. Read the real
@@ -65,7 +66,7 @@ export const serviceDetailConfig: EntityDetailConfig = {
           {durationMinutes && (
             <div className="flex items-center justify-between">
               <span className="text-fg-secondary">Duration</span>
-              <span className="font-medium">{durationMinutes} minutes</span>
+              <span className="font-medium">{formatDurationMinutes(durationMinutes)}</span>
             </div>
           )}
           {hasAvailability(entity.availability_schedule) && (

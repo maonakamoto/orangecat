@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/hooks/useAuth';
 import { useSellerPaymentMethods } from '@/hooks/useSellerPaymentMethods';
 import { PaymentButton } from './PaymentButton';
+import { PaymentExpectationNote } from './PaymentExpectationNote';
 import { SellerWalletBanner } from './SellerWalletBanner';
 import { OwnerCollectPanel } from './OwnerCollectPanel';
 import { PublicPayPanel } from './PublicPayPanel';
@@ -103,7 +104,7 @@ export function PublicEntityPaymentSection({
         <CardContent className="pt-6 space-y-3">
           {!sellerReceive ? (
             <p className="text-sm text-fg-secondary text-center">
-              This {meta.name.toLowerCase()} isn&apos;t set up to receive Bitcoin yet.
+              This creator hasn&apos;t connected a wallet yet.
             </p>
           ) : (
             <>
@@ -116,6 +117,7 @@ export function PublicEntityPaymentSection({
               <p className="text-xs text-fg-secondary text-center">
                 Sign in to pay via the seller&apos;s connected wallet
               </p>
+              <PaymentExpectationNote />
             </>
           )}
         </CardContent>
@@ -153,10 +155,25 @@ export function PublicEntityPaymentSection({
     );
   }
 
-  // Logged in, NOT the seller — show payment button
+  // Logged in, NOT the seller, seller has no wallet — no purchase CTA. A greyed
+  // "No wallet connected" button promised an action that could never complete;
+  // say the true thing instead.
+  if (!hasWallet) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <p className="text-sm text-fg-secondary text-center">
+            This creator hasn&apos;t connected a wallet yet.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Logged in, NOT the seller — show payment button + what the payment means.
   return (
     <Card>
-      <CardContent className="pt-6">
+      <CardContent className="pt-6 space-y-3">
         <PaymentButton
           entityType={entityType}
           entityId={entityId}
@@ -167,6 +184,7 @@ export function PublicEntityPaymentSection({
           sellerHasWallet={hasWallet}
           className="w-full min-h-11"
         />
+        <PaymentExpectationNote />
       </CardContent>
     </Card>
   );

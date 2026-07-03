@@ -22,6 +22,7 @@ import { Bitcoin, Zap, Copy, Check, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { cn } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
+import { PaymentExpectationNote } from './PaymentExpectationNote';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { displayBTC } from '@/services/currency';
 
@@ -197,6 +198,7 @@ export function PublicPayPanel({
           Scan the QR or tap Open in wallet — pay from any {isOnchain ? 'Bitcoin' : 'Lightning'}{' '}
           wallet, no account needed.
         </p>
+        <PaymentExpectationNote />
         {signInHref && (
           <p className="text-xs text-fg-tertiary text-center">
             Have an account?{' '}

@@ -7,6 +7,8 @@ export interface EntityOwner {
   username: string | null;
   name: string | null;
   avatar_url: string | null;
+  /** profiles.created_at — drives the "On OrangeCat since <month year>" trust line. */
+  created_at: string | null;
 }
 
 /**
@@ -29,13 +31,18 @@ export async function fetchEntityOwner(
       .maybeSingle();
     if (actorData) {
       type ActorRow = { id: string; user_id: string | null };
-      type ProfileRow = { username: string | null; name: string | null; avatar_url: string | null };
+      type ProfileRow = {
+        username: string | null;
+        name: string | null;
+        avatar_url: string | null;
+        created_at: string | null;
+      };
       const actor = actorData as unknown as ActorRow;
       let profile: ProfileRow | null = null;
       if (actor.user_id) {
         const { data: profileData } = await supabase
           .from(DATABASE_TABLES.PROFILES)
-          .select('username, name, avatar_url')
+          .select('username, name, avatar_url, created_at')
           .eq('id', actor.user_id)
           .maybeSingle();
         profile = profileData as ProfileRow | null;
@@ -46,6 +53,7 @@ export async function fetchEntityOwner(
         username: profile?.username || null,
         name: profile?.name || null,
         avatar_url: profile?.avatar_url || null,
+        created_at: profile?.created_at || null,
       };
     }
   }
@@ -55,7 +63,7 @@ export async function fetchEntityOwner(
   if (profileId) {
     const { data: profileData } = await supabase
       .from(DATABASE_TABLES.PROFILES)
-      .select('username, name, avatar_url')
+      .select('username, name, avatar_url, created_at')
       .eq('id', profileId)
       .maybeSingle();
     if (profileData) {
@@ -66,6 +74,7 @@ export async function fetchEntityOwner(
         username: profile.username,
         name: profile.name,
         avatar_url: profile.avatar_url,
+        created_at: profile.created_at,
       };
     }
   }
