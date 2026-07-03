@@ -33,9 +33,14 @@
  *   NEXT_PUBLIC_SUPABASE_ANON_KEY / SUPABASE_ANON_KEY
  *   SUPABASE_SERVICE_ROLE_KEY                   cleanup + cap reset + notify
  *   CAT_EVAL_BASE_URL      target app (default https://orangecat.ch)
- *   CAT_EVAL_MODEL         pinned free model (default openai/gpt-oss-120b:free)
+ *   CAT_EVAL_PROVIDER      groq|openrouter (default: openrouter when
+ *                           OPENROUTER_API_KEY is present, otherwise groq)
+ *   CAT_EVAL_MODEL         pinned model (provider default unless overridden)
  *   CAT_EVAL_EMAIL         eval user (default the dedicated Lena test account)
  *   CAT_EVAL_PASSWORD      eval user password
+ *   GROQ_API_KEY / OPENROUTER_API_KEY            optional; used only to choose
+ *                           a default eval provider. The app serves the locked
+ *                           request through its own platform provider config.
  *   CAT_EVAL_NOTIFY        "1" → notify founder in-app on failure
  *   CAT_EVAL_NOTIFY_USER_ID  recipient (default founder mao)
  *   CAT_EVAL_JSON_OUT      write full JSON report to this path
@@ -70,12 +75,16 @@ const BASE_URL = process.env.CAT_EVAL_BASE_URL || 'https://orangecat.ch';
 // Dedicated eval account (test fixture, not a human user).
 const EVAL_EMAIL = process.env.CAT_EVAL_EMAIL || 'lena.brunner.test@proton.me';
 const EVAL_PASSWORD = process.env.CAT_EVAL_PASSWORD || 'Ceramica2026!';
-// Pin one known-good free model: the gate measures the judgment PIPELINE
-// (rubric, tools, prefill, why-line), and unpinned runs kept 429ing on
-// whichever congested free model the rotation picked (observed live:
-// every nemotron pick fast-failed "temporarily busy" while every
-// gpt-oss-120b pick answered fine). Override to eval a different model.
-const EVAL_MODEL = process.env.CAT_EVAL_MODEL || 'openai/gpt-oss-120b:free';
+const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
+const EVAL_PROVIDER =
+  process.env.CAT_EVAL_PROVIDER || (OPENROUTER_API_KEY ? 'openrouter' : 'groq');
+// Pin one provider/model for repeatability: the gate measures the Cat judgment
+// pipeline (rubric, tools, prefill, why-line), not whichever free-model fallback
+// is least congested tonight.
+const EVAL_MODEL =
+  process.env.CAT_EVAL_MODEL ||
+  (EVAL_PROVIDER === 'groq' ? 'llama-3.3-70b-versatile' : 'openai/gpt-oss-120b:free');
 const NOTIFY = process.env.CAT_EVAL_NOTIFY === '1';
 const NOTIFY_USER_ID =
   process.env.CAT_EVAL_NOTIFY_USER_ID || 'cec88bc9-557f-452b-92f1-e093092fecd6'; // founder mao
@@ -220,7 +229,12 @@ async function runProbe(probe, cookie, conversationId) {
   try {
     const res = await fetch(`${BASE_URL}/api/cat/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Cookie: cookie },
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookie,
+        'x-cat-eval-lock-model': '1',
+        'x-cat-eval-provider': EVAL_PROVIDER,
+      },
       body: JSON.stringify({
         message: probe.message,
         model: EVAL_MODEL,
@@ -406,6 +420,24 @@ async function notifyFounder(summaryLine, report) {
   });
 }
 
+async function notifyFounderHarnessError(summaryLine) {
+  await rest('POST', 'notifications', {
+    body: {
+      user_id: NOTIFY_USER_ID,
+      type: 'system',
+      message: `Nightly Cat eval could not complete — ${summaryLine}. Check journalctl -u orangecat-cat-eval on the box.`,
+      action_url: null,
+      metadata: {
+        title: 'Cat eval harness error',
+        source: 'eval-cat.mjs',
+        ranAt: new Date().toISOString(),
+      },
+      is_read: false,
+    },
+    prefer: 'return=minimal',
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
@@ -413,7 +445,9 @@ async function notifyFounder(summaryLine, report) {
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function main() {
-  console.error(`eval-cat: target=${BASE_URL} user=${EVAL_EMAIL}`);
+  console.error(
+    `eval-cat: target=${BASE_URL} user=${EVAL_EMAIL} provider=${EVAL_PROVIDER} model=${EVAL_MODEL}`
+  );
   const session = await signIn();
   const userId = session.user.id;
   const cookie = buildAuthCookie(session);
@@ -491,6 +525,7 @@ async function main() {
 
   // ---- report ------------------------------------------------------------
   const { scores } = report;
+  const providerErrorCount = report.probes.filter(p => Boolean(p.error)).length;
   const pass =
     scores.type >= PASS_THRESHOLD && scores.why >= PASS_THRESHOLD;
   const summaryLine = `type ${scores.type}/${scores.max} · why ${scores.why}/${scores.max} · duplicate-draft probes ${scores.duplicates}`;
@@ -513,6 +548,20 @@ async function main() {
   console.log(`  → ${summaryLine} — ${pass ? 'PASS' : 'FAIL'}`);
   console.log(JSON.stringify(report, null, 2));
   if (JSON_OUT) {writeFileSync(JSON_OUT, JSON.stringify(report, null, 2));}
+
+  if (providerErrorCount > 0) {
+    const line = `${providerErrorCount}/${scores.max} probe(s) failed at the provider layer; judgment score is invalid`;
+    console.error(`eval-cat: HARNESS ERROR — ${line}`);
+    if (NOTIFY) {
+      try {
+        await notifyFounderHarnessError(line);
+        console.error(`eval-cat: founder notified in-app (${NOTIFY_USER_ID})`);
+      } catch (err) {
+        console.error(`eval-cat: failed to insert founder notification: ${err}`);
+      }
+    }
+    process.exit(2);
+  }
 
   if (!pass) {
     console.error(`eval-cat: REGRESSION — ${summaryLine}`);

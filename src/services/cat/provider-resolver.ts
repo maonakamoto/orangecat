@@ -9,6 +9,7 @@
 import { createApiKeyService } from '@/services/ai/api-key-service';
 import {
   createOpenRouterService,
+  createGroqService,
   createOpenRouterServiceWithByok,
   createGroqServiceWithByok,
   createOpenAICompatibleServiceWithByok,
@@ -98,6 +99,13 @@ export async function resolveProvider(
 ): Promise<ResolvedProvider | Response> {
   const { requestedModel, message } = opts;
   const keyService = createApiKeyService(supabase);
+  const evalLockProvider = requestHeaders.get('x-cat-eval-provider');
+  const evalLock =
+    requestHeaders.get('x-cat-eval-lock-model') === '1' &&
+    Boolean(requestedModel) &&
+    requestedModel !== 'auto' &&
+    requestedModel !== 'any' &&
+    (evalLockProvider === 'groq' || evalLockProvider === 'openrouter');
 
   // Per-request header keys are a one-off override (never persisted) and
   // always lead the chain. Stored keys come from the ordered chain below.
@@ -184,7 +192,34 @@ export async function resolveProvider(
   const entries: Entry[] = [];
   const seenKeys = new Set<string>();
 
-  if (clientGroqKey) {
+  if (evalLock) {
+    entries.push({
+      order: -10,
+      build: () => {
+        if (evalLockProvider === 'groq' && isGroqAvailable()) {
+          return [
+            {
+              provider: 'groq',
+              modelToUse: requestedModel!,
+              aiService: createGroqService(),
+              hasByok: false,
+            },
+          ];
+        }
+        if (evalLockProvider === 'openrouter' && process.env.OPENROUTER_API_KEY) {
+          return [
+            {
+              provider: 'openrouter',
+              modelToUse: requestedModel!,
+              aiService: createOpenRouterService(),
+              hasByok: false,
+            },
+          ];
+        }
+        return [];
+      },
+    });
+  } else if (clientGroqKey) {
     seenKeys.add(clientGroqKey);
     entries.push({
       order: -2,
@@ -194,7 +229,7 @@ export async function resolveProvider(
       },
     });
   }
-  if (clientOpenRouterKey) {
+  if (!evalLock && clientOpenRouterKey) {
     seenKeys.add(clientOpenRouterKey);
     entries.push({
       order: -1,
@@ -206,24 +241,26 @@ export async function resolveProvider(
   }
 
   // Stored user keys in their saved order.
-  const storedKeys = await keyService.listDecryptedKeysOrdered(userId);
-  for (const k of storedKeys) {
-    if (seenKeys.has(k.key)) {
-      continue; // a header already supplied this exact key
+  const storedKeys = evalLock ? [] : await keyService.listDecryptedKeysOrdered(userId);
+  if (!evalLock) {
+    for (const k of storedKeys) {
+      if (seenKeys.has(k.key)) {
+        continue; // a header already supplied this exact key
+      }
+      seenKeys.add(k.key);
+      entries.push({
+        order: k.sortOrder,
+        build: () => {
+          const s = buildKeyStep(k.provider, k.key);
+          return s ? [s] : [];
+        },
+      });
     }
-    seenKeys.add(k.key);
-    entries.push({
-      order: k.sortOrder,
-      build: () => {
-        const s = buildKeyStep(k.provider, k.key);
-        return s ? [s] : [];
-      },
-    });
   }
 
   // The free platform default at its saved position (only if env-configured).
   const platformConfigured = isGroqAvailable() || !!process.env.OPENROUTER_API_KEY;
-  if (platformConfigured) {
+  if (!evalLock && platformConfigured) {
     const platformPos = await keyService.getPlatformChainPosition(userId);
     entries.push({
       order: platformPos,
@@ -331,7 +368,7 @@ export async function resolveProvider(
   // A metered frontier primary sits ABOVE the regular chain, so the whole
   // chain backs it up (falling back to a free model is safe — the debit only
   // fires for completions actually served by the metered model).
-  const fallbackSteps = metered ? chain : chain.slice(1);
+  const fallbackSteps = evalLock ? [] : metered ? chain : chain.slice(1);
   const fallbacks: FallbackProvider[] = fallbackSteps.map(s => ({
     provider: s.provider,
     modelToUse: s.modelToUse,
