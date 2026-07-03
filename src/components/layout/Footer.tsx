@@ -8,6 +8,7 @@ import Logo from './Logo';
 import { usePathname } from 'next/navigation';
 import { ArrowUp } from 'lucide-react';
 import { APP_NAME } from '@/config/brand';
+import { useAuth } from '@/hooks/useAuth';
 
 const footerLinkClass =
   'group flex items-center text-sm text-fg-secondary hover:text-fg-primary transition-colors py-1.5 rounded-md min-h-9';
@@ -15,6 +16,7 @@ const footerHeadingClass = 'text-xs font-medium text-fg-secondary uppercase trac
 
 const Footer = React.memo(function Footer() {
   const pathname = usePathname();
+  const { user, hydrated } = useAuth();
   const shouldRender = shouldShowFooter(pathname ?? '/');
 
   const scrollToTop = () => {
@@ -23,8 +25,11 @@ const Footer = React.memo(function Footer() {
     }
   };
 
-  // Don't render footer on authenticated pages to avoid layout conflicts with sidebar
-  if (!shouldRender) {
+  // Marketing footer is for anonymous visitors only. Signed-in users keep
+  // the app chrome everywhere — including public pages and 404/error pages
+  // — instead of getting a second marketing nav system. Also never render
+  // on app surfaces (layout conflicts with the sidebar).
+  if (!shouldRender || (hydrated && !!user)) {
     return null;
   }
 
@@ -75,7 +80,7 @@ const Footer = React.memo(function Footer() {
 
           {/* Navigation Links */}
           <div className="space-y-6">
-            <h3 className={footerHeadingClass}>[ Navigation ]</h3>
+            <h3 className={footerHeadingClass}>Navigation</h3>
             <ul className="space-y-3">
               {footerNavigation.product.map(item => (
                 <li key={item.name}>
@@ -89,7 +94,7 @@ const Footer = React.memo(function Footer() {
 
           {/* Company Links */}
           <div className="space-y-6">
-            <h3 className={footerHeadingClass}>[ Company ]</h3>
+            <h3 className={footerHeadingClass}>Company</h3>
             <ul className="space-y-3">
               {footerNavigation.company.map(item => (
                 <li key={item.name}>
@@ -114,7 +119,7 @@ const Footer = React.memo(function Footer() {
 
           {/* Legal Links */}
           <div className="space-y-6">
-            <h3 className={footerHeadingClass}>[ Legal ]</h3>
+            <h3 className={footerHeadingClass}>Legal</h3>
             <ul className="space-y-3">
               {footerNavigation.legal.map(item => (
                 <li key={item.name}>
@@ -128,7 +133,7 @@ const Footer = React.memo(function Footer() {
 
           {/* Newsletter/CTA Section */}
           <div className="space-y-6 sm:col-span-2 lg:col-span-1">
-            <h3 className={footerHeadingClass}>[ Stay Updated ]</h3>
+            <h3 className={footerHeadingClass}>Stay Updated</h3>
             <div className="space-y-4">
               <p className="text-sm text-fg-secondary leading-relaxed">
                 Get the latest updates on economic freedom, Bitcoin, and building on {APP_NAME}.

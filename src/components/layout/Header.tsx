@@ -56,7 +56,13 @@ export function Header({
   const { isScrolled, isHidden } = useHeaderScroll();
   const mobileMenu = useMobileMenu();
   const isAuthRoute = useIsAuthRoute();
-  const navigation = getHeaderNavigationItems(authState.user);
+  const navigation = getHeaderNavigationItems();
+
+  // Marketing nav (top links + hamburger menu) is for anonymous visitors
+  // only. Signed-in users get ONE navigation system — the app sidebar +
+  // header actions — everywhere, including public pages and 404/error
+  // pages, instead of a second competing marketing nav.
+  const showMarketingNav = !isAuthRoute && !authStatus.authenticated;
 
   // Mobile menu animation state
   const { menuRef, buttonRef, isClosing, handleClose } = useMobileMenuAnimation({
@@ -84,7 +90,7 @@ export function Header({
             {/* Sidebar/Menu Toggle - Always first, proper touch target */}
             {showSidebarToggle && onToggleSidebar ? (
               <MenuToggleButton onClick={onToggleSidebar} ariaLabel="Toggle sidebar" />
-            ) : !isAuthRoute ? (
+            ) : showMarketingNav ? (
               <MenuToggleButton
                 ref={buttonRef}
                 onClick={() => mobileMenu.open()}
@@ -98,11 +104,11 @@ export function Header({
               <Logo showText={true} size="md" className="hidden sm:flex" />
             </div>
 
-            {/* Desktop Navigation Links — public/marketing routes only. On
-                authenticated app routes the left sidebar owns section nav, so
-                showing these here was a second, redundant nav (it even renamed
-                the same destinations: top "Discover" = sidebar "Explore"). */}
-            {!isAuthRoute && <DesktopNavigation items={navigation} />}
+            {/* Desktop Navigation Links — anonymous marketing surfaces only.
+                Signed-in users navigate via the sidebar; rendering these for
+                them (e.g. on 404/error or public pages) was a second,
+                redundant nav system. */}
+            {showMarketingNav && <DesktopNavigation items={navigation} />}
           </div>
 
           {/* Center Section: Search trigger (Desktop only). Opens the
@@ -177,8 +183,8 @@ export function Header({
         />
       )}
 
-      {/* Mobile Menu (public routes only) */}
-      {!isAuthRoute && (
+      {/* Mobile Menu (anonymous marketing surfaces only) */}
+      {showMarketingNav && (
         <MobileMenu
           isOpen={mobileMenu.isOpen}
           isClosing={isClosing}

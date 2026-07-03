@@ -11,9 +11,9 @@
 
 'use client';
 
-import { useState, useRef, useEffect, useId } from 'react';
+import { useState, useRef, useEffect, useId, type ComponentType, type SVGProps } from 'react';
 import Link from 'next/link';
-import { ChevronDown, type LucideIcon } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface NavigationItem {
@@ -37,7 +37,9 @@ interface MobileDrawerProps {
     product?: Array<{ name: string; href: string }>;
     company?: Array<{ name: string; href: string }>;
     legal?: Array<{ name: string; href: string }>;
-    social?: Array<{ name: string; href: string; icon?: LucideIcon }>;
+    // Matches NavigationItem.icon in @/config/navigation — lucide icons and
+    // local brand SVGs (BrandIcons) are both plain SVG components.
+    social?: Array<{ name: string; href: string; icon?: ComponentType<SVGProps<SVGSVGElement>> }>;
   };
   onClose: () => void;
 }

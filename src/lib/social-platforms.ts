@@ -10,14 +10,16 @@
  */
 
 import { MessageCircle, Globe, Heart } from 'lucide-react';
+import { XBrandIcon, GitHubIcon } from '@/components/icons/BrandIcons';
 
-// Brand icons were removed in lucide-react 0.400+
-// Using Globe as a generic fallback for social platforms
-const Twitter = Globe;
+// Brand icons were removed in lucide-react 0.400+.
+// Real brand marks live in @/components/icons/BrandIcons (SSOT); Globe is
+// only a generic fallback for platforms we don't have a mark for yet.
+const Twitter = XBrandIcon;
 const Instagram = Globe;
 const Facebook = Globe;
 const Linkedin = Globe;
-const Github = Globe;
+const Github = GitHubIcon;
 const Youtube = Globe;
 
 export type SocialPlatformId =

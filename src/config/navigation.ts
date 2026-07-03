@@ -17,7 +17,7 @@
 import { ComponentType, SVGProps } from 'react';
 import { generateEntityNavigation } from './navigation-generator';
 import { ROUTES } from './routes';
-import type { User as SupabaseUser } from '@supabase/supabase-js';
+import { XBrandIcon, GitHubIcon } from '@/components/icons/BrandIcons';
 import {
   Home,
   Users,
@@ -77,20 +77,12 @@ interface NavItem {
 /**
  * Header navigation configuration
  *
- * SSOT for all header navigation items.
- * Organized by authentication state.
+ * SSOT for the marketing/public header links. This nav is for anonymous
+ * visitors only — signed-in users get ONE navigation system (the app
+ * sidebar + header actions), never a second marketing nav on top of it.
  */
 const headerNavigationConfig = {
-  /** Navigation for authenticated users */
-  authenticated: [
-    { name: 'Home', href: ROUTES.FEED },
-    { name: 'Dashboard', href: ROUTES.DASHBOARD.HOME },
-    { name: 'Discover', href: ROUTES.DISCOVER },
-    { name: 'Collaborate', href: ROUTES.COLLABORATE },
-    { name: 'Community', href: ROUTES.COMMUNITY },
-  ],
-
-  /** Navigation for unauthenticated users */
+  /** Navigation for unauthenticated visitors (marketing surfaces) */
   unauthenticated: [
     { name: 'Discover', href: ROUTES.DISCOVER },
     { name: 'Community', href: ROUTES.COMMUNITY },
@@ -99,15 +91,12 @@ const headerNavigationConfig = {
 };
 
 /**
- * Get navigation items based on authentication state for header
- *
- * @param user - Supabase User object or null
- * @returns Array of navigation items appropriate for the auth state
+ * Get the marketing header navigation items (anonymous visitors only).
+ * Signed-in users never see this nav — their navigation lives in the
+ * app sidebar and the header action cluster.
  */
-export function getHeaderNavigationItems(user: SupabaseUser | null): NavigationItem[] {
-  return user
-    ? [...headerNavigationConfig.authenticated]
-    : [...headerNavigationConfig.unauthenticated];
+export function getHeaderNavigationItems(): NavigationItem[] {
+  return [...headerNavigationConfig.unauthenticated];
 }
 
 /**
@@ -306,14 +295,14 @@ export const footerNavigation = {
   ],
   social: [
     {
-      name: 'Twitter',
-      href: 'https://twitter.com/orangecat',
-      icon: Globe,
+      name: 'X',
+      href: 'https://x.com/orangecat',
+      icon: XBrandIcon,
     },
     {
       name: 'GitHub',
       href: 'https://github.com/g-but/orangecat',
-      icon: Globe,
+      icon: GitHubIcon,
     },
   ],
   // Compact bottom-bar links (rendered next to the copyright line in
