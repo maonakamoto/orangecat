@@ -1,15 +1,18 @@
 import { createServerClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { SITE_URL } from '@/config/brand';
+import { ROUTES } from '@/config/routes';
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
   // Default to Cat page — primary interface for new users
   // Only allow internal paths (must start with /) to prevent open redirect attacks
-  const rawNext = requestUrl.searchParams.get('next') || '/dashboard/cat?welcome=true';
+  const rawNext = requestUrl.searchParams.get('next') || ROUTES.DASHBOARD.CAT_WELCOME;
   const next =
-    rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/dashboard/cat?welcome=true';
+    rawNext.startsWith('/') && !rawNext.startsWith('//')
+      ? rawNext
+      : ROUTES.DASHBOARD.CAT_WELCOME;
 
   if (code) {
     try {

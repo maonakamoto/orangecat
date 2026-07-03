@@ -21,6 +21,7 @@ import { logger } from '@/utils/logger';
 import { z } from 'zod';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
 import { resolveGroupBySlug, canEditEvent, checkGroupMember } from '@/domain/groups/helpers.server';
+import { attachEventProfiles } from '@/services/groups/eventProfiles';
 import { STATUS } from '@/config/database-constants';
 
 const updateEventSchema = z.object({
@@ -57,12 +58,13 @@ export const GET = withAuth(
         return apiNotFound('Group not found');
       }
 
+      // creator_id / rsvp user_id reference auth.users (not profiles), so
+      // profiles cannot be embedded — attachEventProfiles splits the lookup.
       const { data: event, error: eventError } = await supabase
         .from(DATABASE_TABLES.GROUP_EVENTS)
         .select(
-          `*, creator:profiles!group_events_creator_id_fkey (id, name, avatar_url),
-          group:groups!group_events_group_id_fkey (id, name, slug, avatar_url),
-          rsvps:group_event_rsvps (id, user_id, status, created_at, user:profiles!group_event_rsvps_user_id_fkey (id, name, avatar_url))`
+          `*, group:groups!group_events_group_id_fkey (id, name, slug, avatar_url),
+          rsvps:group_event_rsvps (id, user_id, status, created_at)`
         )
         .eq('id', eventId)
         .eq('group_id', group.id)
@@ -75,7 +77,8 @@ export const GET = withAuth(
         return apiForbidden('This event is private');
       }
 
-      return apiSuccess({ event });
+      const [enrichedEvent] = await attachEventProfiles(supabase, [event]);
+      return apiSuccess({ event: enrichedEvent });
     } catch (error) {
       logger.error('Event GET error', { error }, 'Groups');
       return handleApiError(error);

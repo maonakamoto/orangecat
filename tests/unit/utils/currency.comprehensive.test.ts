@@ -84,7 +84,10 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
       test('formats different currencies', () => {
         expect(formatCurrency(100, 'USD')).toBe('$100.00');
         expect(formatCurrency(1, 'BTC')).toBe('₿1');
-        expect(formatCurrency(1000, 'SATS')).toBe('1,000 sat');
+        expect(formatCurrency(100, 'CHF')).toBe('CHF 100.00');
+        // SATS is a retired currency code — unknown codes fall back to a
+        // plain locale-formatted number.
+        expect(formatCurrency(1000, 'SATS')).toBe('1,000');
       });
 
       test('handles known currencies with proper symbols', () => {
@@ -96,7 +99,7 @@ describe('🪙 Currency Utilities - Comprehensive Coverage', () => {
         // formatCurrency doesn't guard against NaN/Infinity (formatBTC/formatSats do)
         expect(formatCurrency(0, 'USD')).toBe('$0.00');
         expect(formatCurrency(0, 'BTC')).toBe('₿0');
-        expect(formatCurrency(0, 'SATS')).toBe('0 sat');
+        expect(formatCurrency(0, 'CHF')).toBe('CHF 0.00');
       });
     });
   });

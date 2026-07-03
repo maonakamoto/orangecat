@@ -350,14 +350,8 @@ export const entityHandlers: Record<string, ActionHandler> = {
         status: ENTITY_STATUS.DRAFT,
         is_public: true,
         is_featured: false,
-        completion_percentage: 0,
-        days_active: 0,
-        funding_velocity: 0,
-        follower_count: 0,
-        share_count: 0,
-        citation_count: 0,
-        total_votes: 0,
-        total_contributors: 0,
+        // Denormalized counter columns were dropped in migration
+        // 20260404000005 — inserting them breaks live.
       })
       .select()
       .single();

@@ -32,6 +32,10 @@ export const API_ROUTES = {
   WEBHOOK_ENDPOINTS: {
     BASE: '/api/webhook-endpoints',
     BY_ID: (id: string) => `/api/webhook-endpoints/${id}`,
+    DELIVERIES: (id: string) => `/api/webhook-endpoints/${id}/deliveries`,
+  },
+  DISCOVER: {
+    COUNTS: '/api/discover/counts',
   },
   MESSAGES: {
     BASE: '/api/messages',
@@ -89,6 +93,7 @@ export const API_ROUTES = {
     CALLBACK: '/api/auth/callback',
     SYNC: '/api/auth/sync',
     VERIFY_CAPTCHA: '/api/auth/verify-captcha',
+    OAUTH_PROVIDERS: '/api/auth/oauth-providers',
   },
   DOCUMENTS: {
     BASE: ENTITY_REGISTRY['document'].apiEndpoint,

@@ -14,6 +14,7 @@ import {
 import { MobileDashboardSidebar } from '@/components/dashboard/MobileDashboardSidebar';
 import { CatNudges } from '@/components/dashboard/CatNudges';
 import { PendingActionsCard } from '@/components/ai-chat/PendingActionsCard';
+import { ROUTES } from '@/config/routes';
 import { useDashboard } from './useDashboard';
 
 const DashboardTimeline = dynamic(
@@ -76,7 +77,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (isTrulyEmpty) {
-      router.replace('/dashboard/cat?welcome=true');
+      router.replace(ROUTES.DASHBOARD.CAT_WELCOME);
     }
   }, [isTrulyEmpty, router]);
 

@@ -9,8 +9,12 @@
  */
 
 import { ENTITY_REGISTRY, EntityType } from '@/config/entity-registry';
+import { ROUTES } from '@/config/routes';
 
 type CreateActionType = 'post' | 'entity' | 'menu';
+
+/** Timeline composer deep-link shared by every non-entity create action. */
+const COMPOSE_HREF = `${ROUTES.TIMELINE}?compose=true`;
 
 interface ContextualCreateAction {
   /** Type of create action */
@@ -51,10 +55,10 @@ const ROUTE_TO_ENTITY = buildRouteToEntityMap();
  */
 export function getContextualCreateAction(pathname: string): ContextualCreateAction {
   // Timeline/Dashboard home - create a post
-  if (pathname === '/timeline' || pathname === '/dashboard') {
+  if (pathname === ROUTES.TIMELINE || pathname === ROUTES.DASHBOARD.HOME) {
     return {
       type: 'post',
-      href: '/timeline?compose=true',
+      href: COMPOSE_HREF,
       label: 'Post',
       openComposer: true,
     };
@@ -79,34 +83,34 @@ export function getContextualCreateAction(pathname: string): ContextualCreateAct
   }
 
   // Messages page - create a post (natural continuation of communication)
-  if (pathname.startsWith('/messages')) {
+  if (pathname.startsWith(ROUTES.MESSAGES)) {
     return {
       type: 'post',
-      href: '/timeline?compose=true',
+      href: COMPOSE_HREF,
       label: 'Post',
       openComposer: true,
     };
   }
 
   // Profile pages - show menu (user might want to create various things)
-  if (pathname.startsWith('/profiles/') || pathname === '/dashboard/info') {
+  if (pathname.startsWith('/profiles/') || pathname === ROUTES.DASHBOARD.INFO) {
     return {
       type: 'menu',
-      href: '/timeline?compose=true',
+      href: COMPOSE_HREF,
       label: 'Create',
     };
   }
 
   // Public routes (Discover, Community, Home) - show menu with all options
   if (
-    pathname === '/discover' ||
-    pathname === '/community' ||
-    pathname === '/' ||
+    pathname === ROUTES.DISCOVER ||
+    pathname === ROUTES.COMMUNITY ||
+    pathname === ROUTES.HOME ||
     pathname.startsWith('/browse')
   ) {
     return {
       type: 'menu',
-      href: '/timeline?compose=true',
+      href: COMPOSE_HREF,
       label: 'Create',
     };
   }
@@ -114,7 +118,7 @@ export function getContextualCreateAction(pathname: string): ContextualCreateAct
   // Default: show menu (safest option for unknown routes)
   return {
     type: 'menu',
-    href: '/timeline?compose=true',
+    href: COMPOSE_HREF,
     label: 'Create',
   };
 }

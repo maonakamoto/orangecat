@@ -73,14 +73,8 @@ export async function createResearch(
     status: STATUS.RESEARCH.DRAFT,
     is_public: validatedData.is_public ?? true,
     is_featured: false,
-    completion_percentage: 0,
-    days_active: 0,
-    funding_velocity: 0,
-    follower_count: 0,
-    share_count: 0,
-    citation_count: 0,
-    total_votes: 0,
-    total_contributors: 0,
+    // Denormalized counter columns (citation_count, follower_count, …) were
+    // dropped in migration 20260404000005 — inserting them breaks live.
   };
 
   logger.info('Attempting to create research entity', {

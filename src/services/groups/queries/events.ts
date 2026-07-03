@@ -12,6 +12,11 @@ import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { getCurrentUserId } from '../utils/helpers';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import {
+  attachEventProfiles,
+  attachRsvpProfiles,
+  fetchProfilesMap,
+} from '@/services/groups/eventProfiles';
 import type { EventsQuery, EventsListResponse, EventResponse, RsvpsListResponse } from '../types';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
@@ -27,29 +32,11 @@ export async function getGroupEvents(
     const sb = client || supabase;
     const _userId = await getCurrentUserId(sb);
 
+    // creator_id / rsvp user_id reference auth.users (not profiles), so
+    // profiles cannot be embedded — attachEventProfiles splits the lookup.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let query = (sb.from(DATABASE_TABLES.GROUP_EVENTS) as any)
-      .select(
-        `
-        *,
-        creator:profiles!group_events_creator_id_fkey (
-          id,
-          name,
-          avatar_url
-        ),
-        rsvps:group_event_rsvps (
-          id,
-          user_id,
-          status,
-          user:profiles!group_event_rsvps_user_id_fkey (
-            id,
-            name,
-            avatar_url
-          )
-        )
-      `,
-        { count: 'exact' }
-      )
+      .select(`*, rsvps:group_event_rsvps (id, user_id, status)`, { count: 'exact' })
       .eq('group_id', groupId)
       .order('starts_at', { ascending: true });
 
@@ -79,7 +66,7 @@ export async function getGroupEvents(
       return { success: false, error: error.message };
     }
 
-    return { success: true, events: data || [], total: count || 0 };
+    return { success: true, events: await attachEventProfiles(sb, data || []), total: count || 0 };
   } catch (error) {
     logger.error('Exception fetching group events', error, 'Groups');
     return { success: false, error: 'Failed to fetch events' };
@@ -97,16 +84,13 @@ export async function getEvent(
     const sb = client || supabase;
     const _userId = await getCurrentUserId(sb);
 
+    // creator_id / rsvp user_id reference auth.users (not profiles), so
+    // profiles cannot be embedded — attachEventProfiles splits the lookup.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_EVENTS) as any)
       .select(
         `
         *,
-        creator:profiles!group_events_creator_id_fkey (
-          id,
-          name,
-          avatar_url
-        ),
         group:groups!group_events_group_id_fkey (
           id,
           name,
@@ -117,12 +101,7 @@ export async function getEvent(
           id,
           user_id,
           status,
-          created_at,
-          user:profiles!group_event_rsvps_user_id_fkey (
-            id,
-            name,
-            avatar_url
-          )
+          created_at
         )
       `
       )
@@ -138,7 +117,8 @@ export async function getEvent(
       return { success: false, error: 'Event not found' };
     }
 
-    return { success: true, event: data };
+    const [event] = await attachEventProfiles(sb, [data]);
+    return { success: true, event };
   } catch (error) {
     logger.error('Exception fetching event', error, 'Groups');
     return { success: false, error: 'Failed to fetch event' };
@@ -170,20 +150,11 @@ export async function getEventRsvps(
       return { success: false, error: 'Event not found' };
     }
 
-    // Get RSVPs
+    // Get RSVPs — user_id references auth.users (not profiles), so the
+    // profile lookup is split (fetchProfilesMap) instead of embedded.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data, error, count } = await (sb.from(DATABASE_TABLES.GROUP_EVENT_RSVPS) as any)
-      .select(
-        `
-        *,
-        user:profiles!group_event_rsvps_user_id_fkey (
-          id,
-          name,
-          avatar_url
-        )
-      `,
-        { count: 'exact' }
-      )
+      .select('*', { count: 'exact' })
       .eq('event_id', eventId)
       .order('created_at', { ascending: false });
 
@@ -192,7 +163,12 @@ export async function getEventRsvps(
       return { success: false, error: error.message };
     }
 
-    return { success: true, rsvps: data || [], total: count || 0 };
+    const rsvps = data || [];
+    const profiles = await fetchProfilesMap(
+      sb,
+      rsvps.map((r: { user_id: string }) => r.user_id)
+    );
+    return { success: true, rsvps: attachRsvpProfiles(rsvps, profiles), total: count || 0 };
   } catch (error) {
     logger.error('Exception fetching event RSVPs', error, 'Groups');
     return { success: false, error: 'Failed to fetch RSVPs' };

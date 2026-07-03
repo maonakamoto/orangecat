@@ -22,6 +22,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Bell, Check, Loader2, LogIn } from 'lucide-react';
 import { useRequireAuth } from '@/hooks/useAuth';
+import { API_ROUTES } from '@/config/api-routes';
 import { ROUTES } from '@/config/routes';
 import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
@@ -84,7 +85,7 @@ export default function NotificationSettingsPage() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/notifications/preferences', {
+        const res = await fetch(API_ROUTES.NOTIFICATIONS.PREFERENCES, {
           credentials: 'include',
         });
         if (!res.ok) {
@@ -125,7 +126,7 @@ export default function NotificationSettingsPage() {
           reengagement_emails: next.reengagement_emails,
           digest_frequency: next.digest_frequency,
         };
-        const res = await fetch('/api/notifications/preferences', {
+        const res = await fetch(API_ROUTES.NOTIFICATIONS.PREFERENCES, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
