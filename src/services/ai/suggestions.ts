@@ -2,6 +2,7 @@
  * My Cat suggestion generation — pure functions, no DB dependencies.
  */
 
+import { CAT_QUICKSTARTS, selectQuickstarts } from '@/config/cat-quickstarts';
 import type { DocumentContext, FullUserContext } from './document-context';
 
 function truncate(str: string, maxLen: number): string {
@@ -56,17 +57,10 @@ const DOCUMENT_TYPE_SUGGESTIONS: Record<string, (doc: DocumentContext) => string
   other: _doc => [`Give me advice based on my context`, `What opportunities should I consider?`],
 };
 
-// Shown to brand-new users with no context yet.
-// Lead with the magic moment — "Draft a product" lands a PrefilledFormCard
-// the user can publish in one click. That's Cat's superpower the rest of the
-// suggestions don't expose. Other entries cover the rest of the surface
-// (value-finding, profile setup, Bitcoin onboarding) without being filler.
-export const DEFAULT_SUGGESTIONS = [
-  'Draft a product I could sell on OrangeCat',
-  'What can I earn Bitcoin doing today?',
-  'Help me write a clear profile bio',
-  'How do Lightning payments work here?',
-];
+// Shown to anonymous visitors, on fetch errors, and to signed-in users with
+// zero context — all of whom have 0 entities, so the noEntities quick-start
+// tier is exactly right. SSOT: src/config/cat-quickstarts.ts.
+export const DEFAULT_SUGGESTIONS: string[] = [...CAT_QUICKSTARTS.noEntities];
 
 const CONTEXT_AWARE_GENERIC = [
   'What should I create next based on my context?',
@@ -108,7 +102,17 @@ export function generateSuggestionsFromContext(context: FullUserContext): string
     }
   }
 
-  // 1. Named-entity suggestions — most specific and valuable
+  // 1. Quick-start tier — the economically useful next step for this user's
+  //    state (no entities → get set up; entities w/o wallet → get paid;
+  //    both → grow). SSOT + rules: src/config/cat-quickstarts.ts.
+  for (const s of selectQuickstarts({
+    entityCount: context.entities.length,
+    hasWallet: context.wallets.length > 0,
+  })) {
+    add(s);
+  }
+
+  // 2. One named-entity suggestion — the most personal chip we can offer
   const firstProduct = context.entities.find(e => e.type === 'product');
   const firstService = context.entities.find(e => e.type === 'service');
   const firstProject = context.entities.find(e => e.type === 'project');
@@ -116,44 +120,17 @@ export function generateSuggestionsFromContext(context: FullUserContext): string
 
   if (firstProduct) {
     add(`Help me write a better description for "${truncate(firstProduct.title, 35)}"`);
-  }
-  if (firstService) {
+  } else if (firstService) {
     add(`How can I attract more clients for "${truncate(firstService.title, 35)}"?`);
-  }
-  if (firstProject) {
+  } else if (firstProject) {
     add(`What should the next milestone be for "${truncate(firstProject.title, 35)}"?`);
-  }
-  if (firstCause) {
+  } else if (firstCause) {
     add(`How do I grow support for "${truncate(firstCause.title, 35)}"?`);
   }
 
-  // 2. Gap suggestions — based on what the user has vs. what's missing
-  const hasProducts = context.stats.totalProducts > 0;
-  const hasServices = context.stats.totalServices > 0;
-  const hasProjects = context.stats.totalProjects > 0;
-  const hasCauses = context.stats.totalCauses > 0;
-  const hasWallets = context.wallets.length > 0;
-  const hasTasks = context.tasks.length > 0;
-
-  if (hasProducts && !hasProjects && !hasCauses) {
-    add('I have products — should I also create a project to fund a bigger vision?');
-  }
-  if (hasServices && !hasProducts) {
-    add('What digital products could I create alongside my services?');
-  }
-  if (!hasProducts && !hasServices && !hasProjects && !hasCauses) {
-    // Has profile/tasks/wallets but no entities — new user nudge
-    const name = context.profile?.name;
-    if (name) {
-      add(`What's the best first thing to list for someone like me?`);
-    } else {
-      add('What should I create first on OrangeCat?');
-    }
-  }
-  if (hasWallets) {
-    add('How do I reach my savings goal faster?');
-  }
-  if (hasTasks) {
+  // 2b. Light nudges from non-entity context (mostly reachable for users
+  //     without entities, where the tier leaves a free slot)
+  if (context.tasks.length > 0) {
     add('Help me prioritize my current tasks');
   }
 
