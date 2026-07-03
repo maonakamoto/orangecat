@@ -1,17 +1,36 @@
 import Link from 'next/link';
-import { User } from 'lucide-react';
+import { User, CalendarDays, LayoutGrid } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { ROUTES } from '@/config/routes';
+import { APP_NAME } from '@/config/brand';
 import type { EntityOwner } from '@/lib/entities/fetchEntityOwner';
 
 interface PublicEntityOwnerCardProps {
   owner: EntityOwner;
   label: string;
+  /**
+   * The owner's publicly visible listing count (fetchProfileListingCounts).
+   * Rendered only when > 0 — real numbers only, zero adds no trust.
+   */
+  activeListingCount?: number;
 }
 
-export default function PublicEntityOwnerCard({ owner, label }: PublicEntityOwnerCardProps) {
+/**
+ * Provider trust block on public entity pages: who is this, how long have
+ * they been here, what else do they offer. Every line is grounded in real
+ * data (profiles.created_at, live listing counts) — never a fake metric.
+ */
+export default function PublicEntityOwnerCard({
+  owner,
+  label,
+  activeListingCount,
+}: PublicEntityOwnerCardProps) {
   const profileHref = owner.username ? ROUTES.PROFILES.VIEW(owner.username) : '#';
   const isClickable = !!owner.username;
+  const memberSince = owner.created_at
+    ? new Date(owner.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    : null;
+  const showListings = typeof activeListingCount === 'number' && activeListingCount > 0;
 
   return (
     <Card>
@@ -42,6 +61,27 @@ export default function PublicEntityOwnerCard({ owner, label }: PublicEntityOwne
             {owner.username && <div className="text-sm text-fg-secondary">@{owner.username}</div>}
           </div>
         </Link>
+
+        {(memberSince || showListings) && (
+          <div className="mt-3 space-y-1.5 border-t border-default pt-3">
+            {memberSince && (
+              <div className="flex items-center gap-2 text-sm text-fg-secondary">
+                <CalendarDays className="h-4 w-4 shrink-0 text-fg-tertiary" />
+                <span>
+                  On {APP_NAME} since {memberSince}
+                </span>
+              </div>
+            )}
+            {showListings && (
+              <div className="flex items-center gap-2 text-sm text-fg-secondary">
+                <LayoutGrid className="h-4 w-4 shrink-0 text-fg-tertiary" />
+                <span>
+                  {activeListingCount} active {activeListingCount === 1 ? 'listing' : 'listings'}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
