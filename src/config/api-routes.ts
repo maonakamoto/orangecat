@@ -97,6 +97,7 @@ export const API_ROUTES = {
   },
   WISHLISTS: {
     BASE: ENTITY_REGISTRY['wishlist'].apiEndpoint,
+    ITEMS: (wishlistId: string) => `${ENTITY_REGISTRY['wishlist'].apiEndpoint}/${wishlistId}/items`,
     PROOFS: `${ENTITY_REGISTRY['wishlist'].apiEndpoint}/proofs`,
     FEEDBACK: `${ENTITY_REGISTRY['wishlist'].apiEndpoint}/feedback`,
     ITEM_PROOFS: (itemId: string) =>

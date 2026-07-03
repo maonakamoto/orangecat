@@ -41,6 +41,12 @@ jobs:
       - name: Type check
         run: npm run type-check
 
+      - name: Route integrity audit
+        # Every declared route (ROUTES/API_ROUTES/entity registry) and every
+        # emitted internal link must resolve to a real route file. Static,
+        # fast — prevents the internal-link → 404 class of bug.
+        run: npm run audit:routes
+
       - name: Lint
         # Catches the bug class that landed on main as `IntegrationNote` —
         # eslint would have flagged the undefined identifier before merge.

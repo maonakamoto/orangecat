@@ -18,6 +18,10 @@ echo "✅ Type check passed"
 
 # Run tests before pushing (target: ≤30s)
 
+echo "🧭 Checking route integrity..."
+npm run audit:routes || { echo "❌ Route audit failed — a declared or emitted link resolves to no route"; exit 1; }
+echo "✅ Route audit passed"
+
 echo "🧪 Running unit tests..."
 npm run test:unit || { echo "❌ Unit tests failed"; exit 1; }
 echo "✅ Unit tests passed"

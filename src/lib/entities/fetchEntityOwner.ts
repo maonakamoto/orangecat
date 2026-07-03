@@ -29,16 +29,16 @@ export async function fetchEntityOwner(
       .maybeSingle();
     if (actorData) {
       type ActorRow = { id: string; user_id: string | null };
+      type ProfileRow = { username: string | null; name: string | null; avatar_url: string | null };
       const actor = actorData as unknown as ActorRow;
-      let profile: { username: string | null; name: string | null; avatar_url: string | null } | null =
-        null;
+      let profile: ProfileRow | null = null;
       if (actor.user_id) {
         const { data: profileData } = await supabase
           .from(DATABASE_TABLES.PROFILES)
           .select('username, name, avatar_url')
           .eq('id', actor.user_id)
           .maybeSingle();
-        profile = profileData as typeof profile;
+        profile = profileData as ProfileRow | null;
       }
       return {
         id: actor.id,

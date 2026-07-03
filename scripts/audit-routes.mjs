@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 /**
  * audit-routes.mjs — deterministic route-integrity audit.
  *
@@ -227,8 +228,6 @@ const API_ROUTES_MAP = parseConstMap(apiRoutesSrc, 'API_ROUTES');
 // 3. Template resolution
 // ---------------------------------------------------------------------------
 
-const ENTITY_FIELD_RE = /\.(basePath|createPath|publicBasePath|apiEndpoint)\b/;
-
 /**
  * Resolve a template string with ${...} placeholders into one or more
  * checkable paths. Returns { paths: string[], note?: string } or null when
@@ -394,7 +393,7 @@ for (const { rel, src } of files) {
         emittedLinks.push({ path: raw, source, note: '' });
         continue;
       }
-      let resolved = resolveTemplate(raw);
+      const resolved = resolveTemplate(raw);
       if (!resolved) {
         // Leading `${identifier}` — resolve the identifier's bindings across
         // the codebase (props, consts, config fields). Single level.
