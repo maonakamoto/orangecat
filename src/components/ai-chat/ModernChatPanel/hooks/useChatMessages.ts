@@ -61,7 +61,7 @@ function readLocale(): string {
 
 interface UseChatMessagesOptions {
   selectedModel: string;
-  /** Active conversation. Omitted/null → the user's default conversation. */
+  /** Active conversation. Omitted/null → fresh draft; a conversation is created on first send. */
   conversationId?: string | null;
   onPendingResult?: () => void;
   /**
@@ -75,6 +75,26 @@ interface UseChatMessagesOptions {
    * rail can refresh (the conversation gets its auto-title server-side).
    */
   onConversationStarted?: () => void;
+  /**
+   * Fires when the first send of a fresh draft lazily created a conversation,
+   * so the owner can adopt it (highlight in the rail, route later sends to it).
+   */
+  onConversationCreated?: (id: string) => void;
+}
+
+/** Create a conversation row on the server; null on failure (send falls back to default). */
+async function createConversationOnServer(): Promise<string | null> {
+  try {
+    const res = await fetch(API_ROUTES.CAT.CONVERSATIONS, { method: 'POST' });
+    if (!res.ok) {
+      return null;
+    }
+    const data = await res.json();
+    return data?.data?.id ?? null;
+  } catch (err) {
+    logger.warn('Failed to create conversation', { err }, 'useChatMessages');
+    return null;
+  }
 }
 
 export function useChatMessages({
@@ -83,6 +103,7 @@ export function useChatMessages({
   onPendingResult,
   onMessageSent,
   onConversationStarted,
+  onConversationCreated,
 }: UseChatMessagesOptions) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -95,9 +116,28 @@ export function useChatMessages({
   onMessageSentRef.current = onMessageSent;
   const onConversationStartedRef = useRef(onConversationStarted);
   onConversationStartedRef.current = onConversationStarted;
+  const onConversationCreatedRef = useRef(onConversationCreated);
+  onConversationCreatedRef.current = onConversationCreated;
   const preferredCurrency = useUserCurrency();
 
-  const { isLoadingHistory } = useChatHistory(setMessages, conversationId);
+  // Conversation created lazily on the first send of a fresh draft. `pending`
+  // routes follow-up sends until the owner adopts the id into the prop;
+  // `justCreated` tells useChatHistory to skip the one refetch that adoption
+  // triggers (the live thread is already in state).
+  const pendingConversationIdRef = useRef<string | null>(null);
+  const justCreatedConversationIdRef = useRef<string | null>(null);
+
+  // Any change of the active conversation (including → null for "New chat")
+  // invalidates the pending draft id.
+  useEffect(() => {
+    pendingConversationIdRef.current = null;
+  }, [conversationId]);
+
+  const { isLoadingHistory } = useChatHistory(
+    setMessages,
+    conversationId,
+    justCreatedConversationIdRef
+  );
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -124,6 +164,20 @@ export function useChatMessages({
       setMessages(prev => [...prev, userMessage]);
       setIsLoading(true);
 
+      // Fresh draft: create the conversation now (first send), so every new
+      // chat is its own thread instead of piling into the default one. On
+      // failure we send without an id and the server falls back to default.
+      let activeConversationId = conversationId ?? pendingConversationIdRef.current;
+      if (!activeConversationId) {
+        const created = await createConversationOnServer();
+        if (created) {
+          pendingConversationIdRef.current = created;
+          justCreatedConversationIdRef.current = created;
+          activeConversationId = created;
+          onConversationCreatedRef.current?.(created);
+        }
+      }
+
       const assistantId = `assistant-${Date.now()}`;
       setMessages(prev => [
         ...prev,
@@ -145,7 +199,7 @@ export function useChatMessages({
             preferredCurrency,
             locale: readLocale(),
             lastVisitedPath: readLastVisitedPath(),
-            conversationId: conversationId ?? undefined,
+            conversationId: activeConversationId ?? undefined,
           }),
           signal: abortController.signal,
         });
@@ -312,9 +366,12 @@ export function useChatMessages({
   const clearChat = useCallback(() => {
     setMessages([]);
     setError(null);
-    const url = conversationId
-      ? `${API_ROUTES.CAT.HISTORY}?conversationId=${encodeURIComponent(conversationId)}`
-      : API_ROUTES.CAT.HISTORY;
+    // A fresh draft has no server-side thread yet — nothing to clear there.
+    const targetId = conversationId ?? pendingConversationIdRef.current;
+    if (!targetId) {
+      return;
+    }
+    const url = `${API_ROUTES.CAT.HISTORY}?conversationId=${encodeURIComponent(targetId)}`;
     fetch(url, { method: 'DELETE' }).catch((err: unknown) => {
       logger.warn('Failed to clear server history', { err }, 'useChatMessages');
     });

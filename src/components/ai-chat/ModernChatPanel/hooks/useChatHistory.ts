@@ -4,28 +4,47 @@ import { logger } from '@/utils/logger';
 import type { Message } from '../types';
 
 /**
- * Loads chat history for the active conversation. When `conversationId` is given
- * it loads that conversation (and reloads on switch); otherwise the user's
- * default conversation. Clears the view immediately on switch so messages from
- * the previous conversation don't linger while the next loads.
+ * Loads chat history for the active conversation.
+ *
+ * - `conversationId` set → load that conversation (and reload on switch),
+ *   clearing the view immediately so the previous thread doesn't linger.
+ * - `conversationId` null → fresh new-chat draft: no fetch, no loading state.
+ *   (The old behaviour — loading the default conversation — is what made the
+ *   page flash "Loading conversation…" and then open an old thread.)
+ * - `justCreatedIdRef` guard: when the panel lazily creates a conversation on
+ *   first send and adopts it, the id flips null → new id while the live
+ *   stream is already in state. Fetching then would wipe the thread (the
+ *   server saves messages after the exchange), so that one transition is
+ *   skipped. The guard is consumed on match, so revisiting the conversation
+ *   later refetches normally.
  */
 export function useChatHistory(
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
-  conversationId?: string | null
+  conversationId?: string | null,
+  justCreatedIdRef?: React.MutableRefObject<string | null>
 ) {
-  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(!!conversationId);
 
   useEffect(() => {
+    if (!conversationId) {
+      // Fresh new chat: nothing to load.
+      setMessages([]);
+      setIsLoadingHistory(false);
+      return;
+    }
+
+    if (justCreatedIdRef?.current === conversationId) {
+      justCreatedIdRef.current = null;
+      setIsLoadingHistory(false);
+      return;
+    }
+
     let cancelled = false;
     setIsLoadingHistory(true);
     // Switching conversations: drop the old thread right away.
     setMessages([]);
 
-    const url = conversationId
-      ? API_ROUTES.CAT.CONVERSATION(conversationId)
-      : API_ROUTES.CAT.HISTORY;
-
-    fetch(url)
+    fetch(API_ROUTES.CAT.CONVERSATION(conversationId))
       .then(r => (r.ok ? r.json() : null))
       .then(data => {
         if (cancelled || !data?.data?.length) {
@@ -60,7 +79,7 @@ export function useChatHistory(
     return () => {
       cancelled = true;
     };
-  }, [setMessages, conversationId]);
+  }, [setMessages, conversationId, justCreatedIdRef]);
 
   return { isLoadingHistory };
 }

@@ -374,6 +374,58 @@ export function getModelMetadata(modelId: string): AIModelMetadata | undefined {
 }
 
 /**
+ * Human-friendly display name for any model id — registered or not.
+ *
+ * Providers report *resolved* ids that can carry snapshot suffixes the
+ * registry doesn't key on (e.g. `google/gemma-4-31b-it-20260402:free` for the
+ * registered `google/gemma-4-31b-it:free`). Never surface a raw slug in UI:
+ *   1. exact registry hit → its display name
+ *   2. registry entry whose id is a boundary-safe prefix of the reported id
+ *      (or vice versa) → its display name (longest match wins)
+ *   3. otherwise derive a readable name from the slug itself
+ */
+export function getModelDisplayName(modelId: string): string {
+  const exact = AI_MODEL_REGISTRY[modelId];
+  if (exact) {
+    return exact.name;
+  }
+
+  const stripFree = (id: string) => id.replace(/:free$/, '');
+  const base = stripFree(modelId);
+  // "a" is a prefix of "b" ending at a segment boundary ("-", ".", ":" or end).
+  const boundaryPrefix = (a: string, b: string) =>
+    b.startsWith(a) && (b.length === a.length || ['-', '.', ':'].includes(b[a.length]));
+
+  let match: AIModelMetadata | undefined;
+  for (const model of Object.values(AI_MODEL_REGISTRY)) {
+    const registryBase = stripFree(model.id);
+    if (boundaryPrefix(registryBase, base) || boundaryPrefix(base, registryBase)) {
+      if (!match || registryBase.length > stripFree(match.id).length) {
+        match = model;
+      }
+    }
+  }
+  if (match) {
+    return match.name;
+  }
+
+  // Unknown model: prettify the slug ("mistralai/devstral-small-2505" → "Devstral Small 2505").
+  const isFree = modelId.endsWith(':free');
+  const slug = base.split('/').pop() ?? base;
+  const pretty = slug
+    .replace(/-\d{8}$/, '') // drop trailing date snapshot
+    .split('-')
+    .filter(Boolean)
+    .map(word =>
+      /^\d+(\.\d+)?[bm]$/i.test(word)
+        ? word.toUpperCase()
+        : word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join(' ');
+  return isFree ? `${pretty} (Free)` : pretty;
+}
+
+/**
  * Get all models for a specific tier
  */
 export function getModelsByTier(tier: ModelTier): AIModelMetadata[] {

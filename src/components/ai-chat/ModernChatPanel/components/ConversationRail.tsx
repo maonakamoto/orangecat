@@ -15,7 +15,10 @@ import type { ConversationSummary } from '../hooks/useConversations';
 
 interface ConversationRailProps {
   conversations: ConversationSummary[];
+  /** null = fresh new-chat draft (the default landing state). */
   activeId: string | null;
+  /** True while the initial conversation list is loading — show placeholders, not "empty". */
+  isLoading?: boolean;
   onSelect: (id: string) => void;
   onNew: () => void;
   onDelete: (id: string) => void;
@@ -25,14 +28,25 @@ function railTitle(c: ConversationSummary): string {
   return c.title?.trim() || 'New chat';
 }
 
-function RailBody({ conversations, activeId, onSelect, onNew, onDelete }: ConversationRailProps) {
+function RailBody({
+  conversations,
+  activeId,
+  isLoading,
+  onSelect,
+  onNew,
+  onDelete,
+}: ConversationRailProps) {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="p-2">
         <button
           type="button"
           onClick={onNew}
-          className="flex w-full items-center gap-2 rounded-lg border border-subtle bg-surface-base px-3 py-2 text-sm font-medium text-fg-primary transition-colors hover:bg-surface-raised"
+          className={cn(
+            'flex w-full items-center gap-2 rounded-lg border border-subtle px-3 py-2 text-sm font-medium text-fg-primary transition-colors hover:bg-surface-raised',
+            // Draft state (no active conversation) = "New chat" is where you are.
+            activeId === null ? 'bg-surface-raised' : 'bg-surface-base'
+          )}
         >
           <Plus className="h-4 w-4" />
           New chat
@@ -40,7 +54,14 @@ function RailBody({ conversations, activeId, onSelect, onNew, onDelete }: Conver
       </div>
 
       <nav className="min-h-0 flex-1 space-y-0.5 overflow-y-auto px-2 pb-2">
-        {conversations.length === 0 ? (
+        {isLoading ? (
+          // Skeleton rows while the list resolves — never flash "no conversations".
+          <div className="space-y-1.5 px-1 py-1" aria-hidden>
+            {[0, 1, 2].map(i => (
+              <div key={i} className="h-8 animate-pulse rounded-lg bg-surface-raised/60" />
+            ))}
+          </div>
+        ) : conversations.length === 0 ? (
           <p className="px-3 py-4 text-xs text-fg-tertiary">No conversations yet.</p>
         ) : (
           conversations.map(c => {

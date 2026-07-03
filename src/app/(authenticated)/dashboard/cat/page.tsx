@@ -28,9 +28,11 @@ export default function CatHubPage() {
   const {
     conversations,
     activeId,
+    isLoading: isLoadingConversations,
     refresh: refreshConversations,
     selectConversation,
     newConversation,
+    adoptConversation,
     deleteConversation,
   } = useConversations();
 
@@ -68,6 +70,7 @@ export default function CatHubPage() {
       <ConversationRail
         conversations={conversations}
         activeId={activeId}
+        isLoading={isLoadingConversations}
         onSelect={selectConversation}
         onNew={newConversation}
         onDelete={deleteConversation}
@@ -77,6 +80,7 @@ export default function CatHubPage() {
         <ModernChatPanel
           variant="focus"
           conversationId={activeId}
+          onConversationCreated={adoptConversation}
           onConversationStarted={refreshConversations}
           initialMessage={initialMessage}
           isNewUser={isNewUser}
