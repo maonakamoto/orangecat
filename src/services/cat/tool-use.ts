@@ -188,6 +188,16 @@ export async function maybeEnrichWithSearchResults(
   }
 }
 
+/** The entityType a prefill_entity_form call targets ('' when unparseable). */
+function prefillType(toolCall: RawToolCall): string {
+  try {
+    const args = JSON.parse(toolCall.function?.arguments ?? '{}') as { entityType?: string };
+    return args.entityType ?? '';
+  } catch {
+    return '';
+  }
+}
+
 /**
  * The bounded agentic loop: the model can call a tool, see the result, and
  * decide its next move — up to MAX_TOOL_STEPS round-trips. May throw or run
@@ -228,7 +238,7 @@ async function runToolLoop(args: {
       role: 'system' as const,
       content:
         'You gather what an OrangeCat chat request needs by calling platform tools. Call ONE tool at a time; after you see its result you may call another tool to refine or follow up, or stop when you have enough.\n' +
-        '- prefill_entity_form: when the user describes something THEY want to create / sell / offer / launch / fundraise (e.g. "I make mugs and want to sell them", "I want to start a project"). This is about THEIR own new thing.\n' +
+        '- prefill_entity_form: when the user describes something THEY want to create / sell / offer / launch / fundraise (e.g. "I make mugs and want to sell them", "I want to start a project"). This is about THEIR own new thing. Pick entityType by what the thing IS: selling time/skill/labor (even at a fixed price, "haircuts, 40 CHF") = service; a tangible/digital item = product; fundraising a defined outcome = project; open-ended no-strings support = cause; the user NEEDS money and will repay = loan; a dated gathering = event; renting out something owned = asset; a community organizing itself = circle. Call it ONCE per distinct entity — never twice for the same thing.\n' +
         '- search_platform: ONLY when the user wants to FIND, discover, or connect with things that already exist on the platform and belong to OTHERS (e.g. "find a designer", "who else is building X"). You may search again with a refined query if the first results are weak.\n' +
         '- suggest_offers: when the user asks what THEY could offer/sell/create, how they could make money or participate, or wants ideas grounded in who they are (e.g. "what can I offer?", "help me make money", "any ideas for me?"). It reads their stored profile/documents/memories — pass no message text, just an optional focus.\n' +
         '- analyze_website: when the user pastes a website URL or bare domain and wants it read, analyzed, or used to set them up (e.g. "here\'s my site: https://… — set me up on OrangeCat", or a message that is nothing but a domain). Pass the EXACT URL from their message. After you see the extracted site text, follow its instructions: chain prefill_entity_form calls (at most 3, all in one message) for entities the site directly evidences — never for anything the site does not say.\n' +
@@ -242,6 +252,13 @@ async function runToolLoop(args: {
   // call sees.
   const loopMessages: ToolAugmentedMessage[] = [...detectionMessages];
   const enriched: ToolAugmentedMessage[] = [...messages];
+
+  // Entity types already drafted in an EARLIER step. Weak routing models keep
+  // re-calling prefill_entity_form for the same thing after seeing its result,
+  // which showed the user two identical draft cards. Same-step multiples stay
+  // allowed (the website flow legitimately chains several in one message);
+  // a repeat of an already-drafted type in a LATER step is always the dup bug.
+  const prefilledTypes = new Set<string>();
 
   // A message that is ONLY a URL/domain has exactly one plausible meaning —
   // "read this site and set me up" — so run analyze_website programmatically
@@ -317,6 +334,11 @@ async function runToolLoop(args: {
         toolCalls = kept;
       }
     }
+    // Cross-step dedupe: drop prefill calls re-drafting an entity type that an
+    // earlier step already drafted (see prefilledTypes above).
+    toolCalls = toolCalls.filter(
+      tc => tc.function?.name !== 'prefill_entity_form' || !prefilledTypes.has(prefillType(tc))
+    );
     if (toolCalls.length === 0) {
       break;
     }
@@ -336,6 +358,9 @@ async function runToolLoop(args: {
       );
       loopMessages.push(resultMessage);
       enriched.push(resultMessage);
+      if (toolCall.function?.name === 'prefill_entity_form') {
+        prefilledTypes.add(prefillType(toolCall));
+      }
     }
     // Loop continues — the model now sees these results and may call another
     // tool (e.g. refine a search) or stop.
