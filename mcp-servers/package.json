@@ -25,6 +25,7 @@
   "author": "Your Name",
   "license": "MIT",
   "overrides": {
-    "ajv": "^8.18.0"
+    "ajv": "^8.18.0",
+    "hono": "^4.12.27"
   }
 }
