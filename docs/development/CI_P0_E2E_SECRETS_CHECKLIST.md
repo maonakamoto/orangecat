@@ -2,7 +2,7 @@
 
 Date: 2026-02-18  
 Last Modified: 2026-07-04  
-Last Modified Summary: Bootstrap step uses `ensure-e2e-fixtures.mjs` with `ws` transport for Node 20 CI.
+Last Modified Summary: CI mints single-use reset tokens at bootstrap; service role secret documented.
 
 Purpose: ensure the P0 workflow matrix in CI runs fully (no skip-based false green).
 
@@ -31,12 +31,23 @@ Set these in:
   - the fixture user must own this project
   - project should be safe for repeated status transitions
 
-### 4) `E2E_RESET_ACCESS_TOKEN`
+### Supabase (required for CI build + bootstrap)
 
-- Value: valid recovery token for password reset completion phase
-- Notes:
-  - token expiry can cause P0 failures
-  - refresh this secret whenever token expires
+| Secret | Purpose |
+| ------ | ------- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Baked into client bundle at build time |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser auth client |
+| `SUPABASE_SECRET_KEY` | JWT **service_role** key — bootstrap scripts + admin API (not the anon key) |
+
+### 4) `E2E_RESET_ACCESS_TOKEN` / `E2E_RESET_REFRESH_TOKEN` (optional in CI)
+
+- **CI:** minted automatically in the **Bootstrap E2E fixture data** step via `scripts/test-setup/refresh-e2e-reset-tokens.mjs` (recovery tokens are single-use).
+- **Local runs:** generate manually when the password-reset P0 test fails:
+
+```bash
+node scripts/test-setup/refresh-e2e-reset-tokens.mjs
+# export the printed E2E_RESET_* values, then re-run the matrix
+```
 
 ### Fixture resources (configured 2026-07-04)
 
@@ -45,8 +56,8 @@ Set these in:
 | `E2E_USER_EMAIL`          | `test@orangecat.ch` (dedicated CI fixture account)                                                            |
 | `E2E_USER_PASSWORD`       | Rotated via `scripts/test-setup/create-test-user.mjs`                                                         |
 | `E2E_PROJECT_ID`          | `CI E2E Fixture Project` owned by fixture user (`bfb6b306-…`) — safe for status transitions                   |
-| `E2E_RESET_ACCESS_TOKEN`  | Generated via Supabase admin `generateLink` + `verifyOtp`; **expires** — refresh when password-reset P0 fails |
-| `E2E_RESET_REFRESH_TOKEN` | Paired refresh token for `/auth/reset-password` session bootstrap                                             |
+| `E2E_RESET_ACCESS_TOKEN`  | Auto-minted in CI bootstrap; optional GitHub secret for local-only runs                                       |
+| `E2E_RESET_REFRESH_TOKEN` | Paired refresh token; auto-minted in CI bootstrap                                                             |
 
 Legacy secrets `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD` mirror the same credentials.
 
@@ -68,8 +79,9 @@ Legacy secrets `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD` mirror the same 
 
 ### Password reset test fails intermittently
 
-- Most likely stale `E2E_RESET_ACCESS_TOKEN`.
-- Generate a new recovery token and update the secret.
+- Recovery tokens are **single-use**. CI generates a fresh pair during bootstrap.
+- Local runs: `node scripts/test-setup/refresh-e2e-reset-tokens.mjs` and export `E2E_RESET_*` before re-running the matrix.
+- Do not retry the password-reset test with the same token (Playwright retries are disabled for that case in CI).
 
 ### Project status lifecycle fails with 401/403/404
 
@@ -78,9 +90,9 @@ Legacy secrets `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD` mirror the same 
 
 ### Bootstrap E2E fixture data fails
 
-- CI runs `node scripts/test-setup/ensure-e2e-fixtures.mjs` with `SUPABASE_SERVICE_ROLE_KEY` (from `SUPABASE_SECRET_KEY` secret).
-- Requires fixture user to exist (`test@orangecat.ch`); creates self-conversation and owned project if missing.
-- On Node 20, Supabase client needs `realtime: { transport: ws }` (already configured in the script).
+- CI runs `ensure-e2e-fixtures.mjs` then `refresh-e2e-reset-tokens.mjs` with `SUPABASE_SERVICE_ROLE_KEY` (from `SUPABASE_SECRET_KEY` secret — must be the JWT **service_role** key, not anon/publishable).
+- Requires fixture user email/password secrets; creates self-conversation and owned project if missing.
+- On Node 20, Supabase client needs `realtime: { transport: ws }` (already configured in the scripts).
 
 ---
 

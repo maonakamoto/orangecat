@@ -135,36 +135,39 @@ test.describe('workflow matrix', () => {
     expect(roundTrip.ok, JSON.stringify(roundTrip)).toBeTruthy();
   });
 
-  test('@p0 password reset complete flow', async ({ page }) => {
-    const resetToken = process.env.E2E_RESET_ACCESS_TOKEN;
-    const refreshToken = process.env.E2E_RESET_REFRESH_TOKEN;
-    if (!resetToken || !refreshToken) {
-      test.skip(
-        true,
-        'Missing E2E_RESET_ACCESS_TOKEN/E2E_RESET_REFRESH_TOKEN for reset completion phase'
-      );
-    }
+  test.describe('password reset (single-use token)', () => {
+    test.describe.configure({ retries: 0 });
 
-    const newPassword = process.env.E2E_NEW_PASSWORD || 'TestPassword123!';
-    await page.goto(
-      `${BASE_URL}/auth/reset-password?access_token=${resetToken}&refresh_token=${refreshToken}&type=recovery`
-    );
+    test('@p0 password reset complete flow', async ({ page }) => {
+      test.info().annotations.push({ type: 'note', description: 'single-use recovery token' });
 
-    await page
-      .locator('input[type="password"]')
-      .first()
-      .waitFor({ state: 'visible', timeout: 15000 });
-    const passwordInputs = page.locator('input[type="password"]');
-    const count = await passwordInputs.count();
-    if (count >= 1) {
-      await passwordInputs.nth(0).fill(newPassword);
-    }
-    if (count >= 2) {
-      await passwordInputs.nth(1).fill(newPassword);
-    }
+      const resetToken = process.env.E2E_RESET_ACCESS_TOKEN;
+      const refreshToken = process.env.E2E_RESET_REFRESH_TOKEN;
+      if (!resetToken || !refreshToken) {
+        test.skip(
+          true,
+          'Missing E2E_RESET_ACCESS_TOKEN/E2E_RESET_REFRESH_TOKEN for reset completion phase'
+        );
+      }
 
-    await page.getByRole('button', { name: /update password|reset password|save/i }).click();
-    await expect(page.locator('body')).toBeVisible();
+      const newPassword = process.env.E2E_NEW_PASSWORD || 'TestPassword123!';
+      const resetUrl = `${BASE_URL}/auth/reset-password?access_token=${encodeURIComponent(resetToken)}&refresh_token=${encodeURIComponent(refreshToken)}&type=recovery`;
+      await page.goto(resetUrl);
+
+      await expect(page.getByRole('heading', { name: 'Create New Password' })).toBeVisible({
+        timeout: 15000,
+      });
+
+      await page.getByPlaceholder('New password').fill(newPassword);
+      await page.getByPlaceholder('Confirm new password').fill(newPassword);
+
+      await page.getByRole('button', { name: /update password|reset password|save/i }).click();
+      await expect(
+        page.getByRole('heading', { name: /password updated successfully/i })
+      ).toBeVisible({
+        timeout: 15000,
+      });
+    });
   });
 
   test('@p0 publish/unpublish public visibility checks', async ({ page }) => {
