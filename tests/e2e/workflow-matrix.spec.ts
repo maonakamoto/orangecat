@@ -96,7 +96,7 @@ test.describe('workflow matrix', () => {
     }
 
     if (!conversationId) {
-      test.skip(true, 'No test/self conversation bootstrap endpoint available');
+      test.skip(true, 'No self conversation available for messaging lifecycle check');
     }
 
     const text = `matrix-msg-${Date.now()}`;
@@ -145,7 +145,7 @@ test.describe('workflow matrix', () => {
       );
     }
 
-    const newPassword = process.env.E2E_NEW_PASSWORD || `TestPassword123!${Date.now()}`;
+    const newPassword = process.env.E2E_NEW_PASSWORD || 'TestPassword123!';
     await page.goto(
       `${BASE_URL}/auth/reset-password?access_token=${resetToken}&refresh_token=${refreshToken}&type=recovery`
     );
