@@ -1,8 +1,8 @@
 # CI P0 E2E Secrets Checklist
 
 Date: 2026-02-18  
-Last Modified: 2026-07-04  
-Last Modified Summary: CI mints single-use reset tokens at bootstrap; service role secret documented.
+Last Modified: 2026-07-05  
+Last Modified Summary: Document auto-minted reset tokens, distinct reset password, and manual CI rerun.
 
 Purpose: ensure the P0 workflow matrix in CI runs fully (no skip-based false green).
 
@@ -33,11 +33,11 @@ Set these in:
 
 ### Supabase (required for CI build + bootstrap)
 
-| Secret | Purpose |
-| ------ | ------- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Baked into client bundle at build time |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser auth client |
-| `SUPABASE_SECRET_KEY` | JWT **service_role** key — bootstrap scripts + admin API (not the anon key) |
+| Secret                                                                    | Purpose                                                                     |
+| ------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`                                                | Baked into client bundle at build time                                      |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser auth client                                                         |
+| `SUPABASE_SECRET_KEY`                                                     | JWT **service_role** key — bootstrap scripts + admin API (not the anon key) |
 
 ### 4) `E2E_RESET_ACCESS_TOKEN` / `E2E_RESET_REFRESH_TOKEN` (optional in CI)
 
@@ -51,19 +51,19 @@ node scripts/test-setup/refresh-e2e-reset-tokens.mjs
 
 ### Fixture resources (configured 2026-07-04)
 
-| Secret                    | Value source                                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `E2E_USER_EMAIL`          | `test@orangecat.ch` (dedicated CI fixture account)                                                            |
-| `E2E_USER_PASSWORD`       | Rotated via `scripts/test-setup/create-test-user.mjs`                                                         |
-| `E2E_PROJECT_ID`          | `CI E2E Fixture Project` owned by fixture user (`bfb6b306-…`) — safe for status transitions                   |
-| `E2E_RESET_ACCESS_TOKEN`  | Auto-minted in CI bootstrap; optional GitHub secret for local-only runs                                       |
-| `E2E_RESET_REFRESH_TOKEN` | Paired refresh token; auto-minted in CI bootstrap                                                             |
+| Secret                    | Value source                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------- |
+| `E2E_USER_EMAIL`          | `test@orangecat.ch` (dedicated CI fixture account)                                          |
+| `E2E_USER_PASSWORD`       | Rotated via `scripts/test-setup/create-test-user.mjs`                                       |
+| `E2E_PROJECT_ID`          | `CI E2E Fixture Project` owned by fixture user (`bfb6b306-…`) — safe for status transitions |
+| `E2E_RESET_ACCESS_TOKEN`  | Auto-minted in CI bootstrap; optional GitHub secret for local-only runs                     |
+| `E2E_RESET_REFRESH_TOKEN` | Paired refresh token; auto-minted in CI bootstrap                                           |
 
 Legacy secrets `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD` mirror the same credentials.
 
 ---
 
-1. Push a small commit/PR to trigger CI.
+1. Push a small commit/PR to trigger CI, **or** use **Actions → CI → Run workflow** (`workflow_dispatch`).
 2. Confirm the CI step **"Validate required P0 E2E env"** shows all ✅.
 3. Confirm **"Bootstrap E2E fixture data"** succeeds (self-conversation + fixture project).
 4. Confirm **"Run P0 workflow matrix"** executes (not skipped/short-circuited).
@@ -93,6 +93,7 @@ Legacy secrets `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD` mirror the same 
 - CI runs `ensure-e2e-fixtures.mjs` then `refresh-e2e-reset-tokens.mjs` with `SUPABASE_SERVICE_ROLE_KEY` (from `SUPABASE_SECRET_KEY` secret — must be the JWT **service_role** key, not anon/publishable).
 - Requires fixture user email/password secrets; creates self-conversation and owned project if missing.
 - On Node 20, Supabase client needs `realtime: { transport: ws }` (already configured in the scripts).
+- Password-reset P0 sets password to `TestPassword123!v2` (must differ from fixture password); bootstrap resets fixture password to `E2E_USER_PASSWORD` on the next run.
 
 ---
 
