@@ -75,6 +75,7 @@ export async function createLoan(
       // matching shape here.
       status: STATUS.LOANS.DRAFT,
       is_public: false,
+      amount: loanInput.original_amount,
     },
     {
       client: supabase as unknown as AnySupabaseClient,

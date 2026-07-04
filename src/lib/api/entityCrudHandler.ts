@@ -208,7 +208,7 @@ function createGetHandler(config: EntityHandlerConfig) {
         }
       }
 
-      if (requireActiveStatus) {
+      if (requireActiveStatus && !userId) {
         query = query.eq('status', ENTITY_STATUS.ACTIVE);
       }
 
@@ -219,6 +219,25 @@ function createGetHandler(config: EntityHandlerConfig) {
           return apiNotFound(`${meta.name} not found`);
         }
         return handleSupabaseError(error);
+      }
+
+      // Draft/unpublished rows: owners may read; everyone else gets 404.
+      if (requireActiveStatus && entity.status !== ENTITY_STATUS.ACTIVE) {
+        if (!userId) {
+          return apiNotFound(`${meta.name} not found`);
+        }
+        if (config.useActorOwnership && entity[ownershipField]) {
+          const hasAccess = await checkOwnership(
+            entity as { actor_id: string },
+            userId,
+            supabase as AnySupabaseClient
+          );
+          if (!hasAccess) {
+            return apiNotFound(`${meta.name} not found`);
+          }
+        } else if (entity[ownershipField] !== userId) {
+          return apiNotFound(`${meta.name} not found`);
+        }
       }
 
       // Custom authorization check

@@ -11,6 +11,7 @@ export async function createAsset(userId: string, input: AssetFormData) {
     'asset',
     userId,
     {
+      owner_id: userId,
       type: input.type,
       title: input.title,
       description: input.description || null,
