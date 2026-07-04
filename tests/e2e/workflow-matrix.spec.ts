@@ -158,10 +158,10 @@ test.describe('workflow matrix', () => {
         timeout: 15000,
       });
 
-      await page.getByPlaceholder('New password').fill(newPassword);
-      await page.getByPlaceholder('Confirm new password').fill(newPassword);
+      await page.getByPlaceholder('New password').first().fill(newPassword);
+      await page.getByPlaceholder('Confirm new password').first().fill(newPassword);
 
-      await page.getByRole('button', { name: /update password|reset password|save/i }).click();
+      await page.getByRole('button', { name: /update password/i }).click();
       await expect(
         page.getByRole('heading', { name: /password updated successfully/i })
       ).toBeVisible({
