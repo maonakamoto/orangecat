@@ -129,12 +129,18 @@ test.describe('workflow matrix', () => {
 
   test('@p0 password reset complete flow', async ({ page }) => {
     const resetToken = process.env.E2E_RESET_ACCESS_TOKEN;
-    if (!resetToken) {
-      test.skip(true, 'Missing E2E_RESET_ACCESS_TOKEN for reset completion phase');
+    const refreshToken = process.env.E2E_RESET_REFRESH_TOKEN;
+    if (!resetToken || !refreshToken) {
+      test.skip(
+        true,
+        'Missing E2E_RESET_ACCESS_TOKEN/E2E_RESET_REFRESH_TOKEN for reset completion phase'
+      );
     }
 
     const newPassword = process.env.E2E_NEW_PASSWORD || `TestPassword123!${Date.now()}`;
-    await page.goto(`${BASE_URL}/auth/reset-password?access_token=${resetToken}&type=recovery`);
+    await page.goto(
+      `${BASE_URL}/auth/reset-password?access_token=${resetToken}&refresh_token=${refreshToken}&type=recovery`
+    );
 
     await page
       .locator('input[type="password"]')
