@@ -11,13 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
-      # Safe defaults so build doesn't crash on env checks.
-      # NOTE: NODE_ENV=production is set only on the Build step,
-      # not globally, because npm ci skips devDependencies when
-      # NODE_ENV=production (npm 10+).
-      NEXT_PUBLIC_SUPABASE_URL: https://dummy-project.supabase.co
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: dummy
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy
+      # Public Supabase vars are baked into the client bundle at build time.
+      # Use repo secrets when present so P0 auth tests hit the real fixture DB.
+      # Fall back to dummies for fork PRs where secrets are unavailable.
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL != '' && secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy-project.supabase.co' }}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY != '' && secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'dummy' }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY != '' && secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy' }}
       PORT: 3000
     steps:
       - name: Checkout
@@ -75,9 +74,10 @@ jobs:
           E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
           E2E_PROJECT_ID: ${{ secrets.E2E_PROJECT_ID }}
           E2E_RESET_ACCESS_TOKEN: ${{ secrets.E2E_RESET_ACCESS_TOKEN }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
         run: |
           missing=0
-          for key in E2E_USER_EMAIL E2E_USER_PASSWORD E2E_PROJECT_ID E2E_RESET_ACCESS_TOKEN; do
+          for key in E2E_USER_EMAIL E2E_USER_PASSWORD E2E_PROJECT_ID E2E_RESET_ACCESS_TOKEN NEXT_PUBLIC_SUPABASE_URL; do
             if [ -z "${!key}" ]; then
               echo "⚠️  Missing secret: $key"
               missing=1

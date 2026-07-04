@@ -85,26 +85,13 @@ test.describe('workflow matrix', () => {
   test('@p0 messaging open/send/edit/delete lifecycle', async ({ page }) => {
     await login(page);
 
-    let conversationId: string | null = null;
-
-    const selfConversation = await page.request.post(`${BASE_URL}/api/test/conversation/self`);
+    const selfConversation = await page.request.get(`${BASE_URL}/api/messages/self`);
     if (selfConversation.ok()) {
       const data = (await selfConversation.json()) as {
         conversationId?: string;
         data?: { conversationId?: string };
       };
       conversationId = data.data?.conversationId || data.conversationId || null;
-    }
-
-    if (!conversationId) {
-      const fallback = await page.request.get(`${BASE_URL}/api/messages/self`);
-      if (fallback.ok()) {
-        const data = (await fallback.json()) as {
-          conversationId?: string;
-          data?: { conversationId?: string };
-        };
-        conversationId = data.data?.conversationId || data.conversationId || null;
-      }
     }
 
     if (!conversationId) {
