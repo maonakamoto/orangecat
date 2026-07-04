@@ -135,43 +135,6 @@ test.describe('workflow matrix', () => {
     expect(roundTrip.ok, JSON.stringify(roundTrip)).toBeTruthy();
   });
 
-  test.describe('password reset (single-use token)', () => {
-    test.describe.configure({ retries: 0 });
-
-    test('@p0 password reset complete flow', async ({ page }) => {
-      test.info().annotations.push({ type: 'note', description: 'single-use recovery token' });
-
-      const resetToken = process.env.E2E_RESET_ACCESS_TOKEN;
-      const refreshToken = process.env.E2E_RESET_REFRESH_TOKEN;
-      if (!resetToken || !refreshToken) {
-        test.skip(
-          true,
-          'Missing E2E_RESET_ACCESS_TOKEN/E2E_RESET_REFRESH_TOKEN for reset completion phase'
-        );
-      }
-
-      const newPassword = process.env.E2E_NEW_PASSWORD || 'TestPassword123!';
-      const resetUrl = `${BASE_URL}/auth/reset-password?access_token=${encodeURIComponent(resetToken)}&refresh_token=${encodeURIComponent(refreshToken)}&type=recovery`;
-      await page.goto(resetUrl);
-
-      await expect(page.getByRole('heading', { name: 'Create New Password' })).toBeVisible({
-        timeout: 15000,
-      });
-
-      const passwordFields = page.locator('form input[type="password"]');
-      await expect(passwordFields).toHaveCount(2);
-      await passwordFields.nth(0).fill(newPassword);
-      await passwordFields.nth(1).fill(newPassword);
-
-      await page.getByRole('button', { name: 'Update Password', exact: true }).click();
-      await expect(
-        page.getByRole('heading', { name: 'Password Updated Successfully' })
-      ).toBeVisible({
-        timeout: 20000,
-      });
-    });
-  });
-
   test('@p0 publish/unpublish public visibility checks', async ({ page }) => {
     await login(page);
 
@@ -215,5 +178,43 @@ test.describe('workflow matrix', () => {
     const after = unreadAfterBody?.data?.count ?? 0;
 
     expect(after).toBeLessThanOrEqual(before);
+  });
+
+  test.describe('password reset (single-use token)', () => {
+    test.describe.configure({ retries: 0 });
+
+    test('@p0 password reset complete flow', async ({ page }) => {
+      test.info().annotations.push({ type: 'note', description: 'single-use recovery token' });
+
+      const resetToken = process.env.E2E_RESET_ACCESS_TOKEN;
+      const refreshToken = process.env.E2E_RESET_REFRESH_TOKEN;
+      if (!resetToken || !refreshToken) {
+        test.skip(
+          true,
+          'Missing E2E_RESET_ACCESS_TOKEN/E2E_RESET_REFRESH_TOKEN for reset completion phase'
+        );
+      }
+
+      // Must differ from E2E_USER_PASSWORD — Supabase rejects "new password same as old".
+      const newPassword = process.env.E2E_NEW_PASSWORD || 'TestPassword123!v2';
+      const resetUrl = `${BASE_URL}/auth/reset-password?access_token=${encodeURIComponent(resetToken)}&refresh_token=${encodeURIComponent(refreshToken)}&type=recovery`;
+      await page.goto(resetUrl);
+
+      await expect(page.getByRole('heading', { name: 'Create New Password' })).toBeVisible({
+        timeout: 15000,
+      });
+
+      const passwordFields = page.locator('form input[type="password"]');
+      await expect(passwordFields).toHaveCount(2);
+      await passwordFields.nth(0).fill(newPassword);
+      await passwordFields.nth(1).fill(newPassword);
+
+      await page.getByRole('button', { name: 'Update Password', exact: true }).click();
+      await expect(
+        page.getByRole('heading', { name: 'Password Updated Successfully' })
+      ).toBeVisible({
+        timeout: 20000,
+      });
+    });
   });
 });
