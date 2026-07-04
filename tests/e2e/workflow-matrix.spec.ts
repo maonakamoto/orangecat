@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { getE2ECredentials } from './helpers/credentials';
 
 /**
  * Canonical release smoke matrix.
@@ -10,8 +11,7 @@ import { test, expect, type Page } from '@playwright/test';
  */
 
 const BASE_URL = process.env.E2E_BASE_URL || process.env.BASE_URL || 'http://localhost:3000';
-const EMAIL = process.env.E2E_USER_EMAIL;
-const PASSWORD = process.env.E2E_USER_PASSWORD;
+const { email: EMAIL, password: PASSWORD } = getE2ECredentials();
 
 async function login(page: Page) {
   if (!EMAIL || !PASSWORD) {
@@ -49,7 +49,7 @@ test.describe('workflow matrix', () => {
 
   test('@p0 project create route is reachable for authenticated user', async ({ page }) => {
     await login(page);
-    await page.goto(`${BASE_URL}/projects/create`);
+    await page.goto(`${BASE_URL}/dashboard/projects/create`);
     await expect(page.locator('body')).toBeVisible();
   });
 
@@ -94,15 +94,21 @@ test.describe('workflow matrix', () => {
 
     const selfConversation = await page.request.post(`${BASE_URL}/api/test/conversation/self`);
     if (selfConversation.ok()) {
-      const data = (await selfConversation.json()) as { conversationId?: string };
-      conversationId = data.conversationId || null;
+      const data = (await selfConversation.json()) as {
+        conversationId?: string;
+        data?: { conversationId?: string };
+      };
+      conversationId = data.data?.conversationId || data.conversationId || null;
     }
 
     if (!conversationId) {
       const fallback = await page.request.get(`${BASE_URL}/api/messages/self`);
       if (fallback.ok()) {
-        const data = (await fallback.json()) as { conversationId?: string };
-        conversationId = data.conversationId || null;
+        const data = (await fallback.json()) as {
+          conversationId?: string;
+          data?: { conversationId?: string };
+        };
+        conversationId = data.data?.conversationId || data.conversationId || null;
       }
     }
 
@@ -120,8 +126,9 @@ test.describe('workflow matrix', () => {
     const sendBody = (await sendRes.json().catch(() => ({}))) as {
       id?: string;
       messageId?: string;
+      data?: { id?: string };
     };
-    const messageId = sendBody.id || sendBody.messageId;
+    const messageId = sendBody.data?.id || sendBody.id || sendBody.messageId;
     expect(messageId).toBeTruthy();
 
     const editRes = await page.request.patch(`${BASE_URL}/api/messages/edit/${messageId}`, {
@@ -131,7 +138,7 @@ test.describe('workflow matrix', () => {
     expect(editRes.ok()).toBeTruthy();
 
     const deleteRes = await page.request.post(`${BASE_URL}/api/messages/bulk-delete`, {
-      data: { messageIds: [messageId] },
+      data: { conversationId, ids: [messageId] },
       headers: { 'Content-Type': 'application/json' },
     });
     expect(deleteRes.ok()).toBeTruthy();

@@ -1,16 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { requireE2ECredentials } from './helpers/credentials';
 
 const baseURL = process.env.E2E_BASE_URL || 'http://localhost:3000';
-const email = process.env.E2E_TEST_USER_EMAIL as string;
-const password = process.env.E2E_TEST_USER_PASSWORD as string;
+const { email, password } = requireE2ECredentials();
 
 test.describe('Debug Timeline', () => {
-  test.beforeAll(() => {
-    if (!email || !password) {
-      throw new Error('Missing E2E_TEST_USER_EMAIL/E2E_TEST_USER_PASSWORD in environment');
-    }
-  });
-
   test('check timeline page structure', async ({ page }) => {
     // Login first
     await page.goto(`${baseURL}/auth?mode=login`);
@@ -56,6 +50,3 @@ test.describe('Debug Timeline', () => {
     console.log('Page HTML preview:', html.substring(0, 2000) + '...');
   });
 });
-
-
-

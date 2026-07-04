@@ -1,17 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { requireE2ECredentials } from './helpers/credentials';
 
 const baseURL = process.env.E2E_BASE_URL || 'http://localhost:3000';
-const email = process.env.E2E_TEST_USER_EMAIL as string;
-const password = process.env.E2E_TEST_USER_PASSWORD as string;
+const { email, password } = requireE2ECredentials();
 
 test.describe('Login Only Test', () => {
   test.use({ storageState: { cookies: [], origins: [] } });
-
-  test.beforeAll(() => {
-    if (!email || !password) {
-      throw new Error('Missing E2E_TEST_USER_EMAIL/E2E_TEST_USER_PASSWORD in environment');
-    }
-  });
 
   test('just login and check redirect', async ({ page }) => {
     console.log('Testing credential login flow');

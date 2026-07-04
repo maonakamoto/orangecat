@@ -1,5 +1,6 @@
 // Playwright global setup to pre-authenticate and save storage state for tests.
-// Requires environment variables: E2E_TEST_USER_EMAIL and E2E_TEST_USER_PASSWORD.
+// Requires environment variables: E2E_USER_EMAIL and E2E_USER_PASSWORD
+// (legacy E2E_TEST_USER_* also accepted).
 // If credentials are missing or login fails, setup falls back gracefully (no storageState).
 
 const fs = require('fs');
@@ -18,7 +19,7 @@ module.exports = async () => {
   fs.mkdirSync(authDir, { recursive: true });
 
   if (!email || !password) {
-    console.warn('[global-setup] Missing E2E_TEST_USER_EMAIL/E2E_TEST_USER_PASSWORD; skipping pre-auth.');
+    console.warn('[global-setup] Missing E2E_USER_EMAIL/E2E_USER_PASSWORD; skipping pre-auth.');
     return;
   }
 

@@ -1,16 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { requireE2ECredentials } from './helpers/credentials';
 
 const baseURL = process.env.E2E_BASE_URL || 'http://localhost:3000';
-const email = process.env.E2E_TEST_USER_EMAIL as string;
-const password = process.env.E2E_TEST_USER_PASSWORD as string;
+const { email, password } = requireE2ECredentials();
 
 test.describe('Comprehensive OrangeCat Workflow Test', () => {
-  test.beforeAll(() => {
-    if (!email || !password) {
-      throw new Error('Missing E2E_TEST_USER_EMAIL/E2E_TEST_USER_PASSWORD in environment');
-    }
-  });
-
   // Test Registration Workflow
   test('Registration workflow - seamless, fast, no duplicates', async ({ page }) => {
     // Take screenshot before starting
@@ -281,6 +275,3 @@ test.describe('Comprehensive OrangeCat Workflow Test', () => {
     await page.screenshot({ path: 'screenshots/messages-final-state.png' });
   });
 });
-
-
-
