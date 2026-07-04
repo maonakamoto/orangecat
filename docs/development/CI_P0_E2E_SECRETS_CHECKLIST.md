@@ -2,7 +2,7 @@
 
 Date: 2026-02-18  
 Last Modified: 2026-07-04  
-Last Modified Summary: GitHub Actions E2E secrets configured; fixture project + reset token documented.
+Last Modified Summary: Bootstrap step uses `ensure-e2e-fixtures.mjs` with `ws` transport for Node 20 CI.
 
 Purpose: ensure the P0 workflow matrix in CI runs fully (no skip-based false green).
 
@@ -54,7 +54,8 @@ Legacy secrets `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD` mirror the same 
 
 1. Push a small commit/PR to trigger CI.
 2. Confirm the CI step **"Validate required P0 E2E env"** shows all ✅.
-3. Confirm **"Run P0 workflow matrix"** executes (not skipped/short-circuited).
+3. Confirm **"Bootstrap E2E fixture data"** succeeds (self-conversation + fixture project).
+4. Confirm **"Run P0 workflow matrix"** executes (not skipped/short-circuited).
 
 ---
 
@@ -74,6 +75,12 @@ Legacy secrets `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD` mirror the same 
 
 - Fixture account credentials invalid, session issue, or wrong `E2E_PROJECT_ID` ownership.
 - Verify the project belongs to `E2E_USER_EMAIL` account.
+
+### Bootstrap E2E fixture data fails
+
+- CI runs `node scripts/test-setup/ensure-e2e-fixtures.mjs` with `SUPABASE_SERVICE_ROLE_KEY` (from `SUPABASE_SECRET_KEY` secret).
+- Requires fixture user to exist (`test@orangecat.ch`); creates self-conversation and owned project if missing.
+- On Node 20, Supabase client needs `realtime: { transport: ws }` (already configured in the script).
 
 ---
 

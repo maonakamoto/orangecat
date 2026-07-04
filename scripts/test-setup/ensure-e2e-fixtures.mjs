@@ -4,10 +4,11 @@
  * Requires NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SECRET_KEY).
  */
 
-const fs = require('fs');
-const path = require('path');
-const dotenv = require('dotenv');
-const { createClient } = require('@supabase/supabase-js');
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
+import ws from 'ws';
+import { createClient } from '@supabase/supabase-js';
 
 const envPath = path.join(process.cwd(), '.env.local');
 if (fs.existsSync(envPath)) {
@@ -25,6 +26,7 @@ if (!url || !serviceKey) {
 
 const admin = createClient(url, serviceKey, {
   auth: { autoRefreshToken: false, persistSession: false },
+  realtime: { transport: ws },
 });
 
 async function findUserByEmail(targetEmail) {
@@ -114,7 +116,7 @@ async function ensureOwnedProject(userId) {
   return project.id;
 }
 
-(async () => {
+try {
   const user = await findUserByEmail(email);
   if (!user) {
     console.error(`E2E user not found: ${email}`);
@@ -124,7 +126,7 @@ async function ensureOwnedProject(userId) {
   await ensureSelfConversation(user.id);
   await ensureOwnedProject(user.id);
   console.log('E2E fixtures ready');
-})().catch(err => {
+} catch (err) {
   console.error(err);
   process.exit(1);
-});
+}
