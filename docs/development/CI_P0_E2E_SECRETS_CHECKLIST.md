@@ -2,7 +2,7 @@
 
 Date: 2026-02-18  
 Last Modified: 2026-07-04  
-Last Modified Summary: Document legacy E2E*TEST_USER*\* aliases; CI exports both names.
+Last Modified Summary: GitHub Actions E2E secrets configured; fixture project + reset token documented.
 
 Purpose: ensure the P0 workflow matrix in CI runs fully (no skip-based false green).
 
@@ -38,10 +38,16 @@ Set these in:
   - token expiry can cause P0 failures
   - refresh this secret whenever token expires
 
-### Legacy aliases (optional)
+### Fixture resources (configured 2026-07-04)
 
-Older specs and global-setup also accept `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD`.
-CI now exports both names from the same secrets. Prefer `E2E_USER_*` in new code.
+| Secret                   | Value source                                                                                                  |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `E2E_USER_EMAIL`         | `test@orangecat.ch` (dedicated CI fixture account)                                                            |
+| `E2E_USER_PASSWORD`      | Rotated via `scripts/test-setup/create-test-user.mjs`                                                         |
+| `E2E_PROJECT_ID`         | `CI E2E Fixture Project` owned by fixture user (`bfb6b306-…`) — safe for status transitions                   |
+| `E2E_RESET_ACCESS_TOKEN` | Generated via Supabase admin `generateLink` + `verifyOtp`; **expires** — refresh when password-reset P0 fails |
+
+Legacy secrets `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD` mirror the same credentials.
 
 ---
 
