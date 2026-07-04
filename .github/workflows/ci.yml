@@ -99,6 +99,7 @@ jobs:
         if: steps.check-secrets.outputs.has_secrets == 'true'
         env:
           E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
+          E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
         run: node scripts/test-setup/ensure-e2e-fixtures.mjs

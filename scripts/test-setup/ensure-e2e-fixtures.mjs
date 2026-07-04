@@ -17,7 +17,15 @@ if (fs.existsSync(envPath)) {
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
-const email = process.env.E2E_USER_EMAIL || process.env.E2E_TEST_USER_EMAIL || 'test@orangecat.ch';
+const email = (
+  process.env.E2E_USER_EMAIL ||
+  process.env.E2E_TEST_USER_EMAIL ||
+  'test@orangecat.ch'
+).trim();
+const password =
+  process.env.E2E_USER_PASSWORD ||
+  process.env.E2E_TEST_USER_PASSWORD ||
+  'TestPassword123!';
 
 if (!url || !serviceKey) {
   console.error('Missing Supabase admin env for E2E fixture bootstrap');
@@ -37,6 +45,33 @@ async function findUserByEmail(targetEmail) {
     if (!data?.users?.length) break;
   }
   return null;
+}
+
+async function ensureUser(targetEmail) {
+  let user = await findUserByEmail(targetEmail);
+  if (user) {
+    await admin.auth.admin.updateUserById(user.id, { password });
+    return user;
+  }
+
+  const { data, error } = await admin.auth.admin.createUser({
+    email: targetEmail,
+    password,
+    email_confirm: true,
+    user_metadata: { preferred_username: 'e2e_user', name: 'E2E User' },
+  });
+
+  if (error) {
+    user = await findUserByEmail(targetEmail);
+    if (user) {
+      await admin.auth.admin.updateUserById(user.id, { password });
+      return user;
+    }
+    throw error;
+  }
+
+  console.log(`created E2E user: ${targetEmail}`);
+  return data.user;
 }
 
 async function ensureSelfConversation(userId) {
@@ -94,13 +129,26 @@ async function ensureOwnedProject(userId) {
   }
 
   const { data: actor } = await admin.from('actors').select('id').eq('user_id', userId).maybeSingle();
-  if (!actor?.id) throw new Error(`No actor for user ${userId}`);
+  if (!actor?.id) {
+    for (let attempt = 0; attempt < 5; attempt++) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const { data: retryActor } = await admin.from('actors').select('id').eq('user_id', userId).maybeSingle();
+      if (retryActor?.id) {
+        return insertFixtureProject(userId, retryActor.id, fixtureTitle);
+      }
+    }
+    throw new Error(`No actor for user ${userId}`);
+  }
 
+  return insertFixtureProject(userId, actor.id, fixtureTitle);
+}
+
+async function insertFixtureProject(userId, actorId, fixtureTitle) {
   const { data: project, error } = await admin
     .from('projects')
     .insert({
       user_id: userId,
-      actor_id: actor.id,
+      actor_id: actorId,
       title: fixtureTitle,
       description: 'Dedicated project for CI P0 workflow matrix status transitions.',
       status: 'draft',
@@ -117,11 +165,7 @@ async function ensureOwnedProject(userId) {
 }
 
 try {
-  const user = await findUserByEmail(email);
-  if (!user) {
-    console.error(`E2E user not found: ${email}`);
-    process.exit(1);
-  }
+  const user = await ensureUser(email);
 
   await ensureSelfConversation(user.id);
   await ensureOwnedProject(user.id);
