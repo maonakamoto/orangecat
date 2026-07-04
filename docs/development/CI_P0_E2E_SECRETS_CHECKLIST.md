@@ -40,12 +40,13 @@ Set these in:
 
 ### Fixture resources (configured 2026-07-04)
 
-| Secret                   | Value source                                                                                                  |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| `E2E_USER_EMAIL`         | `test@orangecat.ch` (dedicated CI fixture account)                                                            |
-| `E2E_USER_PASSWORD`      | Rotated via `scripts/test-setup/create-test-user.mjs`                                                         |
-| `E2E_PROJECT_ID`         | `CI E2E Fixture Project` owned by fixture user (`bfb6b306-…`) — safe for status transitions                   |
-| `E2E_RESET_ACCESS_TOKEN` | Generated via Supabase admin `generateLink` + `verifyOtp`; **expires** — refresh when password-reset P0 fails |
+| Secret                    | Value source                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `E2E_USER_EMAIL`          | `test@orangecat.ch` (dedicated CI fixture account)                                                            |
+| `E2E_USER_PASSWORD`       | Rotated via `scripts/test-setup/create-test-user.mjs`                                                         |
+| `E2E_PROJECT_ID`          | `CI E2E Fixture Project` owned by fixture user (`bfb6b306-…`) — safe for status transitions                   |
+| `E2E_RESET_ACCESS_TOKEN`  | Generated via Supabase admin `generateLink` + `verifyOtp`; **expires** — refresh when password-reset P0 fails |
+| `E2E_RESET_REFRESH_TOKEN` | Paired refresh token for `/auth/reset-password` session bootstrap                                             |
 
 Legacy secrets `E2E_TEST_USER_EMAIL` / `E2E_TEST_USER_PASSWORD` mirror the same credentials.
 

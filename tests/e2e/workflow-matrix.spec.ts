@@ -100,31 +100,39 @@ test.describe('workflow matrix', () => {
     }
 
     const text = `matrix-msg-${Date.now()}`;
-    const sendRes = await page.request.post(`${BASE_URL}/api/messages/${conversationId}`, {
-      data: { content: text },
-      headers: { 'Content-Type': 'application/json' },
-    });
-    expect(sendRes.ok()).toBeTruthy();
+    const roundTrip = await page.evaluate(
+      async ({ conversationId, content }) => {
+        const sendRes = await fetch(`/api/messages/${conversationId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content }),
+        });
+        const sendBody = await sendRes.json().catch(() => ({}));
+        const messageId = sendBody?.data?.id || sendBody?.id;
+        if (!sendRes.ok || !messageId) {
+          return { ok: false, stage: 'send', status: sendRes.status, body: sendBody };
+        }
 
-    const sendBody = (await sendRes.json().catch(() => ({}))) as {
-      id?: string;
-      messageId?: string;
-      data?: { id?: string };
-    };
-    const messageId = sendBody.data?.id || sendBody.id || sendBody.messageId;
-    expect(messageId).toBeTruthy();
+        const editRes = await fetch(`/api/messages/edit/${messageId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: `${content}-edited` }),
+        });
+        if (!editRes.ok) {
+          return { ok: false, stage: 'edit', status: editRes.status };
+        }
 
-    const editRes = await page.request.patch(`${BASE_URL}/api/messages/edit/${messageId}`, {
-      data: { content: `${text}-edited` },
-      headers: { 'Content-Type': 'application/json' },
-    });
-    expect(editRes.ok()).toBeTruthy();
+        const deleteRes = await fetch('/api/messages/bulk-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ conversationId, ids: [messageId] }),
+        });
+        return { ok: deleteRes.ok, stage: 'delete', status: deleteRes.status };
+      },
+      { conversationId, content: text }
+    );
 
-    const deleteRes = await page.request.post(`${BASE_URL}/api/messages/bulk-delete`, {
-      data: { conversationId, ids: [messageId] },
-      headers: { 'Content-Type': 'application/json' },
-    });
-    expect(deleteRes.ok()).toBeTruthy();
+    expect(roundTrip.ok, JSON.stringify(roundTrip)).toBeTruthy();
   });
 
   test('@p0 password reset complete flow', async ({ page }) => {
