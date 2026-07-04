@@ -12,6 +12,7 @@ export const VALID_TAB_TYPES: DiscoverTabType[] = [
   'products',
   'services',
   'groups',
+  'circles',
   'wishlists',
   'research',
   'ai_assistants',

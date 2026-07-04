@@ -52,7 +52,7 @@ const _CATEGORY_TO_SECTION: CategoryToSectionMap[] = [
     sectionId: 'network',
     sectionTitle: 'Network',
     priority: 4,
-    defaultExpanded: false, // Collapsed - can expand to see Groups, Events, People
+    defaultExpanded: false, // Collapsed - can expand to see Groups, Circles, Events, People
     collapsible: true,
   },
   {
@@ -73,7 +73,7 @@ const _CATEGORY_TO_SECTION: CategoryToSectionMap[] = [
  */
 const CREATE_ENTITIES: EntityType[] = ['product', 'service', 'ai_assistant'];
 const FUND_ENTITIES: EntityType[] = ['project', 'cause', 'research', 'wishlist'];
-const COORDINATE_ENTITIES: EntityType[] = ['group', 'event'];
+const COORDINATE_ENTITIES: EntityType[] = ['group', 'circle', 'event'];
 const FINANCE_ENTITIES: EntityType[] = ['wallet', 'asset', 'loan', 'investment'];
 
 /**

@@ -7,7 +7,7 @@ import { ZERO_DISCOVER_COUNTS, type DiscoverCounts } from '@/services/search/dis
 
 // v3: counts now come from /api/discover/counts (server-side, admin client) so
 // anonymous visitors see the real public numbers instead of RLS-blocked zeros.
-const CACHE_KEY = 'discover_counts_v3';
+const CACHE_KEY = 'discover_counts_v4';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export type { DiscoverCounts };

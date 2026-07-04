@@ -5,11 +5,12 @@
  * Uses unified GroupsService.
  *
  * Created: 2025-01-30
- * Last Modified: 2026-01-28
- * Last Modified Summary: Refactored POST to use withAuth middleware
+ * Last Modified: 2026-07-04
+ * Last Modified Summary: Fix getGroup lookup — use isBySlug + server Supabase client (WF-009)
  */
 
 import { withAuth, withOptionalAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
+import { createServerClient } from '@/lib/supabase/server';
 import groupsService from '@/services/groups';
 import { logger } from '@/utils/logger';
 import {
@@ -26,19 +27,26 @@ interface RouteContext {
   params: Promise<{ slug: string }>;
 }
 
-export const GET = withOptionalAuth(async (request, context: RouteContext) => {
-  try {
-    const { user } = request;
-    const { slug } = await context.params;
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const isBySlug = (identifier: string) => !UUID_PATTERN.test(identifier);
 
-    // Get group first
-    const groupResult = await groupsService.getGroup(slug, !!user);
+export const GET = withOptionalAuth(async (_request, context: RouteContext) => {
+  try {
+    const { slug } = await context.params;
+    const supabase = await createServerClient();
+
+    // Get group first — must pass server client (browser client fails in API routes)
+    const groupResult = await groupsService.getGroup(slug, isBySlug(slug), supabase);
     if (!groupResult.success || !groupResult.group) {
       return apiNotFound('Group not found');
     }
 
-    // Get members
-    const membersResult = await groupsService.getGroupMembers(groupResult.group.id);
+    // Get members — pass the server client so auth/queries work in API route context
+    const membersResult = await groupsService.getGroupMembers(
+      groupResult.group.id,
+      undefined,
+      supabase
+    );
 
     if (!membersResult.success) {
       return apiInternalError(membersResult.error || 'Failed to fetch members');
@@ -66,15 +74,16 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: Rout
     }
 
     const _body = await request.json();
+    const supabase = request.supabase;
 
     // Get group first
-    const groupResult = await groupsService.getGroup(slug, true);
+    const groupResult = await groupsService.getGroup(slug, isBySlug(slug), supabase);
     if (!groupResult.success || !groupResult.group) {
       return apiNotFound('Group not found');
     }
 
-    // Join group
-    const result = await groupsService.joinGroup(groupResult.group.id);
+    // Join group — pass the authed server client so RLS/auth resolve correctly
+    const result = await groupsService.joinGroup(groupResult.group.id, supabase);
 
     if (!result.success) {
       return apiInternalError(result.error || 'Failed to join group');

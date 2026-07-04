@@ -8,6 +8,7 @@ import {
   Briefcase,
   Calendar,
   Building2,
+  CircleDashed,
   Gift,
   FlaskConical,
   Bot,
@@ -46,6 +47,7 @@ interface DiscoverResultsProps {
   products?: GenericPublicEntity[];
   services?: GenericPublicEntity[];
   groups?: GenericPublicEntity[];
+  circles?: GenericPublicEntity[];
   wishlists?: GenericPublicEntity[];
   research?: GenericPublicEntity[];
   aiAssistants?: GenericPublicEntity[];
@@ -69,6 +71,7 @@ export default function DiscoverResults({
   products = [],
   services = [],
   groups = [],
+  circles = [],
   wishlists = [],
   research = [],
   aiAssistants = [],
@@ -133,6 +136,14 @@ export default function DiscoverResults({
       items: groups,
       entityType: 'group',
       makeHref: e => ROUTES.GROUPS.VIEW(e.slug ?? e.id),
+    },
+    {
+      id: 'circles',
+      title: 'Circles',
+      icon: <CircleDashed className="w-5 h-5" />,
+      items: circles,
+      entityType: 'circle',
+      makeHref: e => ROUTES.CIRCLES.VIEW(e.id),
     },
     {
       id: 'wishlists',

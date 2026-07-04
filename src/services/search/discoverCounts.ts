@@ -21,6 +21,7 @@ export interface DiscoverCounts {
   totalProductsCount: number;
   totalServicesCount: number;
   totalGroupsCount: number;
+  totalCirclesCount: number;
   totalWishlistsCount: number;
   totalResearchCount: number;
   totalAiAssistantsCount: number;
@@ -37,6 +38,7 @@ export const ZERO_DISCOVER_COUNTS: DiscoverCounts = {
   totalProductsCount: 0,
   totalServicesCount: 0,
   totalGroupsCount: 0,
+  totalCirclesCount: 0,
   totalWishlistsCount: 0,
   totalResearchCount: 0,
   totalAiAssistantsCount: 0,
@@ -56,6 +58,7 @@ export async function fetchDiscoverCounts(supabase: AnySupabaseClient): Promise<
     productsRes,
     servicesRes,
     groupsRes,
+    circlesRes,
     wishlistsRes,
     researchRes,
     aiAssistantsRes,
@@ -121,6 +124,13 @@ export async function fetchDiscoverCounts(supabase: AnySupabaseClient): Promise<
     ),
     head(
       supabase
+        .from(getTableName('circle'))
+        .select('*', { count: 'exact', head: true })
+        .eq('visibility', 'public')
+        .eq('status', ENTITY_STATUS.ACTIVE)
+    ),
+    head(
+      supabase
         .from(getTableName('wishlist'))
         .select('*', { count: 'exact', head: true })
         .eq('visibility', 'public')
@@ -153,6 +163,7 @@ export async function fetchDiscoverCounts(supabase: AnySupabaseClient): Promise<
     totalProductsCount: productsRes.count ?? 0,
     totalServicesCount: servicesRes.count ?? 0,
     totalGroupsCount: groupsRes.count ?? 0,
+    totalCirclesCount: circlesRes.count ?? 0,
     totalWishlistsCount: wishlistsRes.count ?? 0,
     totalResearchCount: researchRes.count ?? 0,
     totalAiAssistantsCount: aiAssistantsRes.count ?? 0,

@@ -10,8 +10,8 @@
  * Progressive disclosure: Only most-used sections expanded by default to reduce clutter.
  *
  * Created: 2025-01-07
- * Last Modified: 2025-01-30
- * Last Modified Summary: Integrated navigation generator from entity registry, applied progressive disclosure
+ * Last Modified: 2026-07-04
+ * Last Modified Summary: Added Circles to Coordinate nav group; Documents, Bookings to sidebar
  */
 
 import { ComponentType, SVGProps } from 'react';
@@ -33,6 +33,8 @@ import {
   ClipboardList,
   BarChart3,
   Handshake,
+  FileText,
+  CalendarCheck,
 } from 'lucide-react';
 
 /**
@@ -159,6 +161,13 @@ const simplifiedSections: NavSection[] = [
         requiresAuth: true,
       },
       {
+        name: 'Documents',
+        href: ROUTES.DASHBOARD.DOCUMENTS,
+        icon: FileText,
+        description: 'Context for your Cat',
+        requiresAuth: true,
+      },
+      {
         name: 'Home',
         href: ROUTES.DASHBOARD.HOME,
         icon: Home,
@@ -210,6 +219,13 @@ const simplifiedSections: NavSection[] = [
         href: ROUTES.DASHBOARD.TASKS_ANALYTICS,
         icon: BarChart3,
         description: 'Task analytics',
+        requiresAuth: true,
+      },
+      {
+        name: 'Bookings',
+        href: ROUTES.DASHBOARD.BOOKINGS,
+        icon: CalendarCheck,
+        description: 'Service bookings',
         requiresAuth: true,
       },
     ],

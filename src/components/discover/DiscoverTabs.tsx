@@ -17,6 +17,7 @@ export type DiscoverTabType =
   | 'products'
   | 'services'
   | 'groups'
+  | 'circles'
   | 'wishlists'
   | 'research'
   | 'ai_assistants';
@@ -39,6 +40,7 @@ const TAB_TO_ENTITY: Partial<Record<DiscoverTabType, EntityType>> = {
   services: 'service',
   events: 'event',
   groups: 'group',
+  circles: 'circle',
   wishlists: 'wishlist',
   research: 'research',
   ai_assistants: 'ai_assistant',
@@ -63,6 +65,7 @@ const tabs: TabConfig[] = [
       'services',
       'events',
       'groups',
+      'circles',
       'wishlists',
       'research',
       'ai_assistants',

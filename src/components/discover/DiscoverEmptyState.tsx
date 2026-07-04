@@ -20,6 +20,7 @@ const TAB_ENTITY_MAP: Partial<Record<DiscoverTabType, EntityType>> = {
   products: 'product',
   services: 'service',
   groups: 'group',
+  circles: 'circle',
   wishlists: 'wishlist',
   research: 'research',
   ai_assistants: 'ai_assistant',

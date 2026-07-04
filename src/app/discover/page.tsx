@@ -38,6 +38,7 @@ export default function DiscoverPage() {
     products,
     services,
     groups,
+    circles,
     wishlists,
     research,
     aiAssistants,
@@ -207,6 +208,7 @@ export default function DiscoverPage() {
                   products={products}
                   services={services}
                   groups={groups}
+                  circles={circles}
                   wishlists={wishlists}
                   research={research}
                   aiAssistants={aiAssistants}

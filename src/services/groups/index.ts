@@ -52,16 +52,23 @@ class GroupsService {
   }
 
   // Member management
-  async joinGroup(groupId: string) {
-    return import('./mutations/members').then(m => m.joinGroup(groupId));
+  async joinGroup(
+    groupId: string,
+    client?: Parameters<typeof import('./mutations/members').joinGroup>[1]
+  ) {
+    return import('./mutations/members').then(m => m.joinGroup(groupId, client));
   }
 
   async leaveGroup(groupId: string) {
     return import('./mutations/members').then(m => m.leaveGroup(groupId));
   }
 
-  async getGroupMembers(groupId: string, pagination?: { page?: number; pageSize?: number }) {
-    return import('./queries/members').then(m => m.getGroupMembers(groupId, pagination));
+  async getGroupMembers(
+    groupId: string,
+    pagination?: { page?: number; pageSize?: number },
+    client?: Parameters<typeof import('./queries/members').getGroupMembers>[2]
+  ) {
+    return import('./queries/members').then(m => m.getGroupMembers(groupId, pagination, client));
   }
 
   async addMember(

@@ -14,6 +14,7 @@ interface GenericSetters {
   setProducts: Setter<GenericPublicEntity[]>;
   setServices: Setter<GenericPublicEntity[]>;
   setGroups: Setter<GenericPublicEntity[]>;
+  setCircles: Setter<GenericPublicEntity[]>;
   setWishlists: Setter<GenericPublicEntity[]>;
   setResearch: Setter<GenericPublicEntity[]>;
   setAiAssistants: Setter<GenericPublicEntity[]>;
@@ -48,6 +49,7 @@ export async function fetchDiscoverGenericData(
     setProducts,
     setServices,
     setGroups,
+    setCircles,
     setWishlists,
     setResearch,
     setAiAssistants,
@@ -85,6 +87,7 @@ export async function fetchDiscoverGenericData(
       productsRes,
       servicesRes,
       groupsRes,
+      circlesRes,
       wishlistsRes,
       researchRes,
       aiRes,
@@ -142,6 +145,18 @@ export async function fetchDiscoverGenericData(
             'groups',
             8,
             'name,description'
+          )
+        : Promise.resolve({ data: null, error: null }),
+
+      should('circles')
+        ? buildQuery(
+            supabase
+              .from(getTableName('circle'))
+              .select('id, title, description, visibility, status, category, created_at')
+              .eq('visibility', 'public')
+              .eq('status', ENTITY_STATUS.ACTIVE),
+            'circles',
+            8
           )
         : Promise.resolve({ data: null, error: null }),
 
@@ -207,6 +222,9 @@ export async function fetchDiscoverGenericData(
             }) satisfies GenericPublicEntity
         )
       );
+    }
+    if (should('circles')) {
+      setCircles((circlesRes.data ?? []) as unknown as GenericPublicEntity[]);
     }
     if (should('wishlists')) {
       setWishlists((wishlistsRes.data ?? []) as unknown as GenericPublicEntity[]);

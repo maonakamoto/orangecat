@@ -11,6 +11,7 @@ const GENERIC_TABS: DiscoverTabType[] = [
   'products',
   'services',
   'groups',
+  'circles',
   'wishlists',
   'research',
   'ai_assistants',
@@ -23,6 +24,7 @@ interface DiscoverGenericData {
   products: GenericPublicEntity[];
   services: GenericPublicEntity[];
   groups: GenericPublicEntity[];
+  circles: GenericPublicEntity[];
   wishlists: GenericPublicEntity[];
   research: GenericPublicEntity[];
   aiAssistants: GenericPublicEntity[];
@@ -38,6 +40,7 @@ export function useDiscoverGenericData(
   const [products, setProducts] = useState<GenericPublicEntity[]>([]);
   const [services, setServices] = useState<GenericPublicEntity[]>([]);
   const [groups, setGroups] = useState<GenericPublicEntity[]>([]);
+  const [circles, setCircles] = useState<GenericPublicEntity[]>([]);
   const [wishlists, setWishlists] = useState<GenericPublicEntity[]>([]);
   const [research, setResearch] = useState<GenericPublicEntity[]>([]);
   const [aiAssistants, setAiAssistants] = useState<GenericPublicEntity[]>([]);
@@ -54,6 +57,7 @@ export function useDiscoverGenericData(
       setProducts,
       setServices,
       setGroups,
+      setCircles,
       setWishlists,
       setResearch,
       setAiAssistants,
@@ -66,6 +70,7 @@ export function useDiscoverGenericData(
     products,
     services,
     groups,
+    circles,
     wishlists,
     research,
     aiAssistants,
