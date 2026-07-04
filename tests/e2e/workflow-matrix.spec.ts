@@ -158,14 +158,16 @@ test.describe('workflow matrix', () => {
         timeout: 15000,
       });
 
-      await page.getByPlaceholder('New password').first().fill(newPassword);
-      await page.getByPlaceholder('Confirm new password').first().fill(newPassword);
+      const passwordFields = page.locator('form input[type="password"]');
+      await expect(passwordFields).toHaveCount(2);
+      await passwordFields.nth(0).fill(newPassword);
+      await passwordFields.nth(1).fill(newPassword);
 
-      await page.getByRole('button', { name: /update password/i }).click();
+      await page.getByRole('button', { name: 'Update Password', exact: true }).click();
       await expect(
-        page.getByRole('heading', { name: /password updated successfully/i })
+        page.getByRole('heading', { name: 'Password Updated Successfully' })
       ).toBeVisible({
-        timeout: 15000,
+        timeout: 20000,
       });
     });
   });
