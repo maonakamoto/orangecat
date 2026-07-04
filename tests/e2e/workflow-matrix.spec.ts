@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { getE2ECredentials } from './helpers/credentials';
+import { loginE2EUser } from './helpers/login';
 
 /**
  * Canonical release smoke matrix.
@@ -17,13 +18,7 @@ async function login(page: Page) {
   if (!EMAIL || !PASSWORD) {
     test.skip(true, 'Missing E2E_USER_EMAIL/E2E_USER_PASSWORD for authenticated P0 checks');
   }
-
-  await page.goto(`${BASE_URL}/auth?mode=login`);
-  await page.getByLabel('Email address').fill(EMAIL!);
-  await page.getByLabel('Password').fill(PASSWORD!);
-  await page.getByRole('button', { name: /sign in/i }).click();
-
-  await expect(page).toHaveURL(/dashboard|profile|create|projects/i);
+  await loginE2EUser(page);
 }
 
 test.describe('workflow matrix', () => {
