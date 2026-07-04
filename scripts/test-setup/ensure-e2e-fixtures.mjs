@@ -4,10 +4,10 @@
  * Requires NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SECRET_KEY).
  */
 
-import dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'path';
-import { createClient } from '@supabase/supabase-js';
+const fs = require('fs');
+const path = require('path');
+const dotenv = require('dotenv');
+const { createClient } = require('@supabase/supabase-js');
 
 const envPath = path.join(process.cwd(), '.env.local');
 if (fs.existsSync(envPath)) {
@@ -114,12 +114,17 @@ async function ensureOwnedProject(userId) {
   return project.id;
 }
 
-const user = await findUserByEmail(email);
-if (!user) {
-  console.error(`E2E user not found: ${email}`);
-  process.exit(1);
-}
+(async () => {
+  const user = await findUserByEmail(email);
+  if (!user) {
+    console.error(`E2E user not found: ${email}`);
+    process.exit(1);
+  }
 
-await ensureSelfConversation(user.id);
-await ensureOwnedProject(user.id);
-console.log('E2E fixtures ready');
+  await ensureSelfConversation(user.id);
+  await ensureOwnedProject(user.id);
+  console.log('E2E fixtures ready');
+})().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
