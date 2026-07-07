@@ -52,6 +52,19 @@ const LOG_LEVELS = {
 };
 
 // =====================================================================
+// 🔌 ERROR SINK (pluggable)
+// =====================================================================
+// Optional forward target for error-level logs. An integration (e.g. a
+// self-hosted GlitchTip via @sentry/nextjs) registers via setErrorSink() once at
+// startup; until then this is a no-op, so the logger stays dependency-free.
+type ErrorSink = (entry: LogEntry) => void;
+let errorSink: ErrorSink | null = null;
+
+export function setErrorSink(sink: ErrorSink | null): void {
+  errorSink = sink;
+}
+
+// =====================================================================
 // 🔧 LOGGER IMPLEMENTATION
 // =====================================================================
 
@@ -78,13 +91,24 @@ class Logger {
   private output(entry: LogEntry): void {
     const { timestamp, level, message, data, source } = entry;
 
-    // In production, use structured logging
+    // In production, emit structured JSON to stdout/stderr so the systemd journal
+    // (journald) captures a durable, queryable trail. shouldLog() has already
+    // gated by activeLevel (warn+ in prod), so everything reaching here MUST be
+    // emitted — previously only `error` was, silently dropping every warn.
     if (LOGGER_CONFIG.environment === 'production') {
-      // Send to proper logging service in production
-      // For now, use console for critical errors only
+      const line = JSON.stringify(entry);
       if (level === 'error') {
         // eslint-disable-next-line no-console
-        console.error(JSON.stringify(entry));
+        console.error(line);
+        // Forward to the error tracker when one is registered (see setErrorSink).
+        try {
+          errorSink?.(entry);
+        } catch {
+          // Never let error reporting break the request path.
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn(line);
       }
       return;
     }

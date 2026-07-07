@@ -166,6 +166,27 @@ const nextConfig = {
                   key: 'Strict-Transport-Security',
                   value: 'max-age=63072000; includeSubDomains; preload',
                 },
+                // Content-Security-Policy in REPORT-ONLY first: it never blocks,
+                // only reports violations, so we can tune the policy against real
+                // traffic before switching to an enforcing `Content-Security-Policy`
+                // header. The app renders user-generated content, so an XSS-limiting
+                // CSP is the biggest header-layer gap. connect-src covers the
+                // self-hosted Supabase (REST + realtime ws) and R2 media.
+                {
+                  key: 'Content-Security-Policy-Report-Only',
+                  value: [
+                    "default-src 'self'",
+                    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+                    "style-src 'self' 'unsafe-inline'",
+                    "img-src 'self' data: blob: https:",
+                    "font-src 'self' data:",
+                    "connect-src 'self' https://supabase.orangecat.ch wss://supabase.orangecat.ch https://*.cloudflarestorage.com",
+                    "frame-ancestors 'none'",
+                    "base-uri 'self'",
+                    "form-action 'self'",
+                    "object-src 'none'",
+                  ].join('; '),
+                },
               ]
             : []),
           // Disable caching in development
