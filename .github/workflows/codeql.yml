@@ -1,0 +1,49 @@
+name: CodeQL
+
+# Static application security testing (SAST) via GitHub CodeQL — free for public
+# repos. Complements the CI `security` job (secrets + dependency CVEs): this finds
+# code-level vulnerabilities (injection, unsafe flows) and surfaces them in the
+# repo Security tab. Runs on PRs, on main, and weekly to catch newly-published
+# query updates against unchanged code.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 3 * * 1' # Mondays 03:00 UTC
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          # 'security-and-quality' adds maintainability queries on top of the
+          # default security set — a slightly larger but richer sweep.
+          queries: security-and-quality
+
+      # JS/TS is interpreted — no compile step. autobuild is a safe no-op here.
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:javascript-typescript'

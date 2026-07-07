@@ -88,8 +88,18 @@ jobs:
             fi
           done
           if [ "$missing" -ne 0 ]; then
-            echo "⚠️  E2E secrets not configured - skipping P0 matrix tests"
-            echo "has_secrets=false" >> $GITHUB_OUTPUT
+            # PRs (especially from forks) legitimately lack these secrets → soft-skip.
+            # But a push/dispatch to main is what CD deploys on: a green build there
+            # MUST mean the P0 E2E suite actually ran, never "secrets were missing so
+            # we skipped." Fail hard so the deploy gate can't pass untested.
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              echo "⚠️  E2E secrets not configured - skipping P0 matrix (PR / fork build)"
+              echo "has_secrets=false" >> $GITHUB_OUTPUT
+            else
+              echo "❌ E2E secrets missing on a ${{ github.event_name }} to ${{ github.ref }}."
+              echo "   Refusing to report a green build with zero end-to-end coverage — CD deploys on this."
+              exit 1
+            fi
           else
             echo "has_secrets=true" >> $GITHUB_OUTPUT
           fi
@@ -120,3 +130,39 @@ jobs:
           E2E_TEST_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
           E2E_TEST_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
         run: npm run test:e2e:matrix:p0
+
+  # Supply-chain gate: catch committed secrets and known-vuln dependencies before
+  # they ship. Runs in parallel with build-and-smoke (independent). The
+  # `security:scan` npm script existed but nothing invoked it — this wires it in.
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          # gitleaks scans git history for leaked secrets — needs the full log,
+          # not the default shallow clone.
+          fetch-depth: 0
+
+      - name: Secret scan (gitleaks)
+        # Free for public repos; no license needed. Fails the job on any finding.
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Dependency audit
+        # Staged rollout: CRITICAL advisories block the build now; HIGH+ are
+        # reported (annotation) but non-blocking so this gate can land without
+        # being held hostage by pre-existing debt. Escalate the second line to
+        # `--audit-level=high` (blocking) once the tree is clean.
+        run: |
+          npm audit --audit-level=critical --omit=dev
+          npm audit --audit-level=high --omit=dev \
+            || echo "::warning title=Dependency audit::HIGH-severity advisories present — triage and escalate this gate to blocking."
