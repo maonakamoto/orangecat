@@ -1,0 +1,26 @@
+# OrangeCat app — systemd unit (SSOT).
+#
+# This is the live unit from the box (/etc/systemd/system/orangecat-app.service),
+# vendored here so it's version-controlled instead of existing only on bitbaum.
+# Install on a fresh box with:
+#   sudo install -m 644 scripts/systemd/orangecat-app.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now orangecat-app
+# See docs/operations/RESILIENCE.md for full box bring-up.
+[Unit]
+Description=orangecat Next.js application server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/orangecat/app
+EnvironmentFile=/opt/orangecat/app/.env
+ExecStart=/opt/orangecat/app/launch.sh
+Restart=on-failure
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
