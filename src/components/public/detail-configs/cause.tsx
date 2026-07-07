@@ -1,4 +1,5 @@
 import FundingProgress from '@/components/public/FundingProgress';
+import EntityLedgerTotal from '@/components/public/EntityLedgerTotal';
 import type { EntityDetailConfig } from '@/components/public/PublicEntityDetailPage';
 import { ROUTES } from '@/config/routes';
 
@@ -33,6 +34,13 @@ export const causeDetailConfig: EntityDetailConfig = {
     const { goal, raised, currency } = causeFunding(entity);
     // Always render — a cause with no goal set must still show an inviting
     // funding state, never a blank page. FundingProgress owns that decision.
-    return <FundingProgress raised={raised} goal={goal} currency={currency} />;
+    // EntityLedgerTotal adds the honest, ledger-derived BTC total when the
+    // owner has made the fundraise public; it renders nothing when private.
+    return (
+      <div className="space-y-4">
+        <FundingProgress raised={raised} goal={goal} currency={currency} />
+        <EntityLedgerTotal entityType="cause" entityId={String(entity.id)} />
+      </div>
+    );
   },
 };
