@@ -57,7 +57,10 @@ jobs:
         # don't need for a schema build to keep it fast (the auth/storage schemas are
         # seeded by the DB image itself, independent of those service containers).
         run: |
-          supabase start -x realtime,storage-api,imgproxy,kong,inbucket,edge-runtime,studio,logflare,vector,supavisor,pooler
+          # -x names must match the CLI's valid container set (mailpit, not inbucket;
+          # supavisor is the pooler). Keep gotrue/storage-api/postgrest running since
+          # migrations may reference the auth/storage schemas.
+          supabase start -x realtime,imgproxy,kong,edge-runtime,studio,logflare,vector,supavisor,mailpit,postgres-meta
 
       - name: Confirm the applied-migration count
         run: |
