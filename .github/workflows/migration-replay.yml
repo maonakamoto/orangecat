@@ -53,23 +53,25 @@ jobs:
       - name: Apply all migrations from an empty DB
         # `supabase start` boots a fresh local stack and applies supabase/migrations/*
         # in filename order as part of DB init. A migration error fails startup and
-        # this step exits non-zero — that IS the gate. Exclude non-DB services we
-        # don't need for a schema build to keep it fast (the auth/storage schemas are
-        # seeded by the DB image itself, independent of those service containers).
+        # this step exits non-zero — that IS the gate. Keep kong + storage-api up so
+        # the post-migration storage/health step also passes (a clean exit 0 means
+        # the schema built AND the stack came up); exclude the rest for speed.
         run: |
-          # -x names must match the CLI's valid container set (mailpit, not inbucket;
-          # supavisor is the pooler). Keep gotrue/storage-api/postgrest running since
-          # migrations may reference the auth/storage schemas.
-          supabase start -x realtime,imgproxy,kong,edge-runtime,studio,logflare,vector,supavisor,mailpit,postgres-meta
+          # The `avatars` bucket seeds from ./avatars (not in the repo) and rejects
+          # non-image files — irrelevant to a migration check, so drop the seed path
+          # for this run (ephemeral edit to the CI checkout only).
+          sed -i 's|^objects_path = "./avatars"|# objects_path (skipped in migration-replay)|' supabase/config.toml
+          supabase start -x realtime,imgproxy,edge-runtime,studio,logflare,vector,supavisor,mailpit,postgres-meta
 
-      - name: Confirm the applied-migration count
+      - name: Confirm the schema actually materialized
         run: |
-          COUNT=$(psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -tAc \
-            "select count(*) from supabase_migrations.schema_migrations;")
-          echo "Applied $COUNT migrations from scratch."
-          # Guard against a silent no-op (e.g. CLI applied nothing) — the repo has 100+.
-          if [ "${COUNT:-0}" -lt 50 ]; then
-            echo "::error::Expected the full migration set to apply from scratch; only $COUNT recorded."
+          # After the baseline squash the CLI records only 2 migrations, so count the
+          # built SCHEMA instead: the baseline creates 100+ public tables from scratch.
+          TABLES=$(psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -tAc \
+            "select count(*) from information_schema.tables where table_schema='public' and table_type='BASE TABLE';")
+          echo "Built $TABLES public tables from an empty database."
+          if [ "${TABLES:-0}" -lt 100 ]; then
+            echo "::error::Expected the baseline to build 100+ tables from scratch; got $TABLES."
             exit 1
           fi
 
