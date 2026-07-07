@@ -7,6 +7,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Cancel superseded runs on the same ref — a newer push makes the older build
+# obsolete. On main this means only the latest commit's CI (and thus its CD)
+# proceeds, which is what we want: deploy the newest, not a stale in-flight one.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-smoke:
     runs-on: ubuntu-latest
@@ -59,6 +66,16 @@ jobs:
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
+      - name: Cache Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          # Re-key when deps or source change; restore the newest same-deps cache
+          # otherwise so incremental compilation is reused across runs.
+          key: nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx') }}
+          restore-keys: |
+            nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Build
         env:

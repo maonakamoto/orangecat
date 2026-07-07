@@ -78,3 +78,27 @@ jobs:
       - name: Tear down
         if: always()
         run: supabase stop --no-backup || true
+
+  # Fast, independent gate: contract-phase (destructive) DDL in the migrations
+  # changed by this PR must be intentional. Auto-rollback reverts code but not an
+  # applied migration, so an unacknowledged DROP/RENAME breaks rollback safety.
+  safety-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check changed migrations for contract-phase DDL
+        run: |
+          git fetch -q origin main || true
+          changed=$(git diff --name-only origin/main...HEAD -- 'supabase/migrations/*.sql' || true)
+          if [ -z "$changed" ]; then
+            echo "No migration changes vs main — nothing to check."
+            exit 0
+          fi
+          echo "Changed migrations:"; echo "$changed"
+          # shellcheck disable=SC2086
+          node scripts/db/check-migration-safety.mjs $changed
