@@ -1,5 +1,13 @@
 # Cat Credits — Bitcoin-paid access to frontier models
 
+---
+
+created_date: 2026-06-25
+last_modified_date: 2026-07-08
+last_modified_summary: Wire Cat Credits usage metering to OpenRouter’s real per-request cost and refresh the 2026 model roster.
+
+---
+
 **Status:** Phases 1–2 built (ledger + Lightning top-up). Authored 2026-06-25.
 **Companion to:** the Settings → AI "sovereignty ladder" (Free → BYOK → Local) and the in-chat upgrade nudge (shipped).
 
@@ -77,8 +85,12 @@ index (user_id, seq desc)
 ### Usage (metered debit)
 
 1. A frontier request runs on **OC's managed OpenRouter key** (see §5).
-2. `chatCompletion` already returns `costBtc` + token counts. Convert `costBtc → sats` at the live rate (`currencyConverter`), apply pricing policy (§2.1), and append a `usage` entry `−cost` referencing `cat_messages.id`.
-3. Done **after** the response, like `saveMessages` — non-blocking, in a balance-guarding transaction.
+2. OpenRouter now returns a per-request `usage.cost` field (USD) alongside token counts. The platform:
+   - converts that real request cost → BTC at the live rate (`convertFromBTC`),
+   - applies pricing policy (§2.1) as a markup on top of the raw BTC cost, and
+   - appends a `usage` entry `−cost` referencing `cat_messages.id`.
+3. If OpenRouter omits `usage.cost` (older responses, non-OpenRouter providers), the system falls back to the curated model registry (`AI_MODEL_REGISTRY`) to estimate cost from token counts.
+4. Done **after** the response, like `saveMessages` — non-blocking, in a balance-guarding transaction. Ledger metadata records whether each debit used `provider_reported` or `registry_estimate` pricing.
 
 ### Pre-flight gate
 

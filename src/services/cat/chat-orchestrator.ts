@@ -287,7 +287,12 @@ export async function orchestrateCatChat(
         let attemptedFallback = false;
         try {
           let usage:
-            | { inputTokens?: number; outputTokens?: number; totalTokens?: number }
+            | {
+                inputTokens?: number;
+                outputTokens?: number;
+                totalTokens?: number;
+                costBtc?: number;
+              }
             | undefined;
           let fullContent = '';
           controller.enqueue(
@@ -471,6 +476,7 @@ export async function orchestrateCatChat(
               model: activeModel,
               inputTokens: usage.inputTokens ?? 0,
               outputTokens: usage.outputTokens ?? 0,
+              rawCostBtc: usage.costBtc,
               ref: meterRef,
               conversationId,
             });
@@ -598,6 +604,7 @@ export async function orchestrateCatChat(
       model: result.model,
       inputTokens: result.inputTokens,
       outputTokens: result.outputTokens,
+      rawCostBtc: result.costBtc,
       ref: meterRef,
       conversationId,
     });

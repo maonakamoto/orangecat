@@ -8,7 +8,7 @@
  * Free models have rate limits: 50/day (free accounts) or 1000/day ($10+ balance)
  *
  * Created: 2026-01-07
- * Last Modified: 2026-01-08
+ * Last Modified: 2026-07-08
  */
 
 import { BADGE_COLORS } from '@/config/badge-colors';
@@ -54,38 +54,21 @@ export interface AIModelMetadata {
 
 export const AI_MODEL_REGISTRY: Record<string, AIModelMetadata> = {
   // ==================== FREE TIER ====================
-  // No API cost - rate limited (50-1000/day depending on account)
-  // Updated 2026-01-20 with verified OpenRouter free models
-
-  'meta-llama/llama-3.3-70b-instruct:free': {
-    id: 'meta-llama/llama-3.3-70b-instruct:free',
-    name: 'Llama 3.3 70B (Free)',
-    provider: 'Meta',
-    description: 'Powerful 70B parameter model - free tier',
-    contextWindow: 128000,
-    maxOutputTokens: 8192,
-    inputCostPer1M: 0,
-    outputCostPer1M: 0,
-    capabilities: ['text', 'streaming'],
-    tier: 'free',
-    recommendedFor: ['complex reasoning', 'detailed analysis', 'coding'],
-    isAvailable: true,
-    isFree: true,
-    rateLimit: '50-1000/day',
-  },
+  // No API cost - rate limited (50/day on free accounts, 1000/day with $10+ credits)
+  // Refreshed 2026-07-08 against live OpenRouter model pages/docs.
 
   'openai/gpt-oss-120b:free': {
     id: 'openai/gpt-oss-120b:free',
     name: 'GPT-OSS 120B (Free)',
     provider: 'OpenAI',
-    description: 'OpenAI open-weights 120B - strong general model, free tier',
+    description: 'Best free general model for coding, reasoning, and tool-friendly chat',
     contextWindow: 131072,
     maxOutputTokens: 8192,
     inputCostPer1M: 0,
     outputCostPer1M: 0,
-    capabilities: ['text', 'streaming'],
+    capabilities: ['text', 'function_calling', 'json_mode', 'streaming'],
     tier: 'free',
-    recommendedFor: ['complex reasoning', 'detailed analysis', 'coding'],
+    recommendedFor: ['coding', 'complex reasoning', 'general chat'],
     isAvailable: true,
     isFree: true,
     rateLimit: '50-1000/day',
@@ -95,65 +78,48 @@ export const AI_MODEL_REGISTRY: Record<string, AIModelMetadata> = {
     id: 'openai/gpt-oss-20b:free',
     name: 'GPT-OSS 20B (Free)',
     provider: 'OpenAI',
-    description: 'OpenAI open-weights 20B - fast, free tier',
+    description: 'Fast free open-weight model with tool use and structured output support',
     contextWindow: 131072,
     maxOutputTokens: 8192,
     inputCostPer1M: 0,
     outputCostPer1M: 0,
-    capabilities: ['text', 'streaming'],
+    capabilities: ['text', 'function_calling', 'json_mode', 'streaming'],
     tier: 'free',
-    recommendedFor: ['general purpose', 'fast responses', 'instruction following'],
+    recommendedFor: ['fast responses', 'simple tasks', 'tool-friendly chat'],
     isAvailable: true,
     isFree: true,
     rateLimit: '50-1000/day',
   },
 
-  'google/gemma-4-31b-it:free': {
-    id: 'google/gemma-4-31b-it:free',
-    name: 'Gemma 4 31B (Free)',
-    provider: 'Google',
-    description: 'Open-weights Google model, large context - free tier',
-    contextWindow: 262144,
+  'meta-llama/llama-3.3-70b-instruct:free': {
+    id: 'meta-llama/llama-3.3-70b-instruct:free',
+    name: 'Llama 3.3 70B (Free)',
+    provider: 'Meta',
+    description: 'Strong multilingual free model for analysis and everyday coding',
+    contextWindow: 65536,
     maxOutputTokens: 8192,
     inputCostPer1M: 0,
     outputCostPer1M: 0,
     capabilities: ['text', 'streaming'],
     tier: 'free',
-    recommendedFor: ['general purpose', 'large context', 'instruction following'],
+    recommendedFor: ['general purpose', 'multilingual chat', 'analysis'],
     isAvailable: true,
     isFree: true,
     rateLimit: '50-1000/day',
   },
 
-  'google/gemma-4-26b-a4b-it:free': {
-    id: 'google/gemma-4-26b-a4b-it:free',
-    name: 'Gemma 4 26B (Free)',
-    provider: 'Google',
-    description: 'Efficient open-weights Google model - free tier',
-    contextWindow: 262144,
+  'meta-llama/llama-4-scout:free': {
+    id: 'meta-llama/llama-4-scout:free',
+    name: 'Llama 4 Scout (Free)',
+    provider: 'Meta',
+    description: 'Free multimodal long-context model for image-aware and document-heavy prompts',
+    contextWindow: 10000000,
     maxOutputTokens: 8192,
     inputCostPer1M: 0,
     outputCostPer1M: 0,
-    capabilities: ['text', 'streaming'],
+    capabilities: ['text', 'vision', 'streaming'],
     tier: 'free',
-    recommendedFor: ['general purpose', 'fast responses'],
-    isAvailable: true,
-    isFree: true,
-    rateLimit: '50-1000/day',
-  },
-
-  'nvidia/nemotron-3-super-120b-a12b:free': {
-    id: 'nvidia/nemotron-3-super-120b-a12b:free',
-    name: 'Nemotron 3 Super 120B (Free)',
-    provider: 'NVIDIA',
-    description: 'Large reasoning model, very large context - free tier',
-    contextWindow: 1000000,
-    maxOutputTokens: 8192,
-    inputCostPer1M: 0,
-    outputCostPer1M: 0,
-    capabilities: ['text', 'streaming'],
-    tier: 'free',
-    recommendedFor: ['complex reasoning', 'math', 'large context'],
+    recommendedFor: ['vision tasks', 'huge context', 'multimodal chat'],
     isAvailable: true,
     isFree: true,
     rateLimit: '50-1000/day',
@@ -162,215 +128,157 @@ export const AI_MODEL_REGISTRY: Record<string, AIModelMetadata> = {
   // ==================== ECONOMY TIER ====================
   // Fast & cheap for simple tasks
 
-  'google/gemini-2.0-flash-lite': {
-    id: 'google/gemini-2.0-flash-lite',
-    name: 'Gemini 2.0 Flash Lite',
-    provider: 'Google',
-    description: 'Fastest, cheapest model for simple tasks',
-    contextWindow: 128000,
+  'meta-llama/llama-3.1-8b-instruct': {
+    id: 'meta-llama/llama-3.1-8b-instruct',
+    name: 'Llama 3.1 8B Instruct',
+    provider: 'Meta',
+    description: 'Ultra-cheap chat model for short prompts and high-volume utility work',
+    contextWindow: 131072,
     maxOutputTokens: 8192,
-    inputCostPer1M: 0.075,
-    outputCostPer1M: 0.3,
+    inputCostPer1M: 0.02,
+    outputCostPer1M: 0.03,
     capabilities: ['text', 'streaming'],
     tier: 'economy',
-    recommendedFor: ['simple questions', 'quick responses', 'high volume'],
+    recommendedFor: ['simple questions', 'high volume', 'cheap chat'],
     isAvailable: true,
   },
 
-  'anthropic/claude-3-haiku': {
-    id: 'anthropic/claude-3-haiku',
-    name: 'Claude 3 Haiku',
-    provider: 'Anthropic',
-    description: 'Fast and efficient for everyday tasks',
-    contextWindow: 200000,
-    maxOutputTokens: 4096,
-    inputCostPer1M: 0.25,
-    outputCostPer1M: 1.25,
-    capabilities: ['text', 'vision', 'streaming'],
-    tier: 'economy',
-    recommendedFor: ['customer support', 'quick analysis', 'summarization'],
-    isAvailable: true,
-  },
-
-  'anthropic/claude-3.5-haiku': {
-    id: 'anthropic/claude-3.5-haiku',
-    name: 'Claude 3.5 Haiku',
-    provider: 'Anthropic',
-    description: 'Upgraded Haiku with better reasoning',
-    contextWindow: 200000,
-    maxOutputTokens: 8192,
-    inputCostPer1M: 1.0,
-    outputCostPer1M: 5.0,
-    capabilities: ['text', 'vision', 'streaming'],
-    tier: 'economy',
-    recommendedFor: ['coding', 'analysis', 'creative writing'],
-    isAvailable: true,
-  },
-
-  'openai/gpt-4o-mini': {
-    id: 'openai/gpt-4o-mini',
-    name: 'GPT-4o Mini',
+  'openai/gpt-oss-120b': {
+    id: 'openai/gpt-oss-120b',
+    name: 'GPT-OSS 120B',
     provider: 'OpenAI',
-    description: 'Affordable GPT-4 level intelligence',
-    contextWindow: 128000,
-    maxOutputTokens: 16384,
-    inputCostPer1M: 0.15,
-    outputCostPer1M: 0.6,
-    capabilities: ['text', 'vision', 'function_calling', 'json_mode', 'streaming'],
+    description: 'Low-cost open-weight agentic model with native tools and strong coding utility',
+    contextWindow: 131072,
+    maxOutputTokens: 8192,
+    inputCostPer1M: 0.03,
+    outputCostPer1M: 0.15,
+    capabilities: ['text', 'function_calling', 'json_mode', 'streaming'],
     tier: 'economy',
-    recommendedFor: ['general purpose', 'structured output', 'vision'],
+    recommendedFor: ['coding', 'agentic flows', 'cheap reasoning'],
+    isAvailable: true,
+  },
+
+  'deepseek/deepseek-v4-flash': {
+    id: 'deepseek/deepseek-v4-flash',
+    name: 'DeepSeek V4 Flash',
+    provider: 'DeepSeek',
+    description: 'Best-value 1M-context model for responsive coding and long-document work',
+    contextWindow: 1000000,
+    maxOutputTokens: 8192,
+    inputCostPer1M: 0.09,
+    outputCostPer1M: 0.18,
+    capabilities: ['text', 'streaming'],
+    tier: 'economy',
+    recommendedFor: ['large documents', 'coding', 'cost-efficient analysis'],
     isAvailable: true,
   },
 
   // ==================== STANDARD TIER ====================
   // Balanced performance & cost
 
-  'anthropic/claude-3.5-sonnet': {
-    id: 'anthropic/claude-3.5-sonnet',
-    name: 'Claude 3.5 Sonnet',
-    provider: 'Anthropic',
-    description: 'Best balance of speed, quality, and cost',
-    contextWindow: 200000,
+  'qwen/qwen3-32b': {
+    id: 'qwen/qwen3-32b',
+    name: 'Qwen3 32B',
+    provider: 'Qwen',
+    description: 'Strong mid-tier reasoning and tool-use model with unusually low cost',
+    contextWindow: 131072,
     maxOutputTokens: 8192,
-    inputCostPer1M: 3.0,
-    outputCostPer1M: 15.0,
-    capabilities: ['text', 'vision', 'function_calling', 'streaming'],
+    inputCostPer1M: 0.08,
+    outputCostPer1M: 0.28,
+    capabilities: ['text', 'function_calling', 'streaming'],
     tier: 'standard',
-    recommendedFor: ['coding', 'analysis', 'creative writing', 'research'],
+    recommendedFor: ['tool use', 'reasoning', 'multilingual work'],
     isAvailable: true,
   },
 
-  'anthropic/claude-sonnet-4': {
-    id: 'anthropic/claude-sonnet-4',
-    name: 'Claude Sonnet 4',
+  'anthropic/claude-sonnet-5': {
+    id: 'anthropic/claude-sonnet-5',
+    name: 'Claude Sonnet 5',
     provider: 'Anthropic',
-    description: 'Latest Sonnet with improved capabilities',
-    contextWindow: 200000,
-    maxOutputTokens: 8192,
-    inputCostPer1M: 3.0,
-    outputCostPer1M: 15.0,
-    capabilities: ['text', 'vision', 'function_calling', 'streaming'],
-    tier: 'standard',
-    recommendedFor: ['coding', 'analysis', 'complex reasoning'],
-    isAvailable: true,
-  },
-
-  'openai/gpt-4o': {
-    id: 'openai/gpt-4o',
-    name: 'GPT-4o',
-    provider: 'OpenAI',
-    description: 'Versatile multimodal model',
-    contextWindow: 128000,
-    maxOutputTokens: 16384,
-    inputCostPer1M: 2.5,
-    outputCostPer1M: 10.0,
-    capabilities: ['text', 'vision', 'function_calling', 'json_mode', 'streaming'],
-    tier: 'standard',
-    recommendedFor: ['general purpose', 'vision tasks', 'structured output'],
-    isAvailable: true,
-  },
-
-  'google/gemini-2.0-flash': {
-    id: 'google/gemini-2.0-flash',
-    name: 'Gemini 2.0 Flash',
-    provider: 'Google',
-    description: 'Fast multimodal with large context',
+    description: 'Best coding and professional-work balance in the current frontier',
     contextWindow: 1000000,
     maxOutputTokens: 8192,
-    inputCostPer1M: 0.1,
-    outputCostPer1M: 0.4,
+    inputCostPer1M: 2.0,
+    outputCostPer1M: 10.0,
     capabilities: ['text', 'vision', 'function_calling', 'streaming'],
     tier: 'standard',
-    recommendedFor: ['large documents', 'multimodal', 'fast responses'],
+    recommendedFor: ['coding', 'agents', 'professional writing', 'research'],
     isAvailable: true,
   },
 
   // ==================== PREMIUM TIER ====================
   // Maximum capability for complex tasks
 
-  'anthropic/claude-3-opus': {
-    id: 'anthropic/claude-3-opus',
-    name: 'Claude 3 Opus',
+  'anthropic/claude-opus-4.8': {
+    id: 'anthropic/claude-opus-4.8',
+    name: 'Claude Opus 4.8',
     provider: 'Anthropic',
-    description: 'Most capable for complex reasoning',
-    contextWindow: 200000,
-    maxOutputTokens: 4096,
-    inputCostPer1M: 15.0,
-    outputCostPer1M: 75.0,
-    capabilities: ['text', 'vision', 'function_calling', 'streaming'],
-    tier: 'premium',
-    recommendedFor: ['complex reasoning', 'research', 'nuanced analysis'],
-    isAvailable: true,
-  },
-
-  'anthropic/claude-opus-4': {
-    id: 'anthropic/claude-opus-4',
-    name: 'Claude Opus 4',
-    provider: 'Anthropic',
-    description: 'Latest Opus with breakthrough capabilities',
-    contextWindow: 200000,
+    description: 'Highest-quality generally available Anthropic model for hard autonomous work',
+    contextWindow: 1000000,
     maxOutputTokens: 8192,
-    inputCostPer1M: 15.0,
-    outputCostPer1M: 75.0,
+    inputCostPer1M: 5.0,
+    outputCostPer1M: 25.0,
     capabilities: ['text', 'vision', 'function_calling', 'streaming'],
     tier: 'premium',
-    recommendedFor: ['complex reasoning', 'research', 'expert-level tasks'],
+    recommendedFor: ['complex reasoning', 'research', 'high-stakes coding'],
     isAvailable: true,
   },
 
-  'openai/gpt-4-turbo': {
-    id: 'openai/gpt-4-turbo',
-    name: 'GPT-4 Turbo',
-    provider: 'OpenAI',
-    description: 'High capability with vision support',
-    contextWindow: 128000,
-    maxOutputTokens: 4096,
+  'anthropic/claude-fable-5': {
+    id: 'anthropic/claude-fable-5',
+    name: 'Claude Fable 5',
+    provider: 'Anthropic',
+    description: 'Top-end long-horizon model for complex autonomous knowledge work',
+    contextWindow: 1000000,
+    maxOutputTokens: 8192,
     inputCostPer1M: 10.0,
-    outputCostPer1M: 30.0,
-    capabilities: ['text', 'vision', 'function_calling', 'json_mode', 'streaming'],
-    tier: 'premium',
-    recommendedFor: ['complex tasks', 'vision', 'tool use'],
-    isAvailable: true,
-  },
-
-  'google/gemini-2.0-pro': {
-    id: 'google/gemini-2.0-pro',
-    name: 'Gemini 2.0 Pro',
-    provider: 'Google',
-    description: "Google's most capable model",
-    contextWindow: 2000000,
-    maxOutputTokens: 8192,
-    inputCostPer1M: 1.25,
-    outputCostPer1M: 5.0,
+    outputCostPer1M: 50.0,
     capabilities: ['text', 'vision', 'function_calling', 'streaming'],
     tier: 'premium',
-    recommendedFor: ['very large context', 'complex analysis', 'multimodal'],
-    isAvailable: true,
-  },
-
-  'x-ai/grok-2': {
-    id: 'x-ai/grok-2',
-    name: 'Grok 2',
-    provider: 'xAI',
-    description: 'Real-time knowledge with wit',
-    contextWindow: 131072,
-    maxOutputTokens: 8192,
-    inputCostPer1M: 2.0,
-    outputCostPer1M: 10.0,
-    capabilities: ['text', 'function_calling', 'streaming'],
-    tier: 'premium',
-    recommendedFor: ['current events', 'creative tasks', 'reasoning'],
+    recommendedFor: ['autonomous agents', 'long-running tasks', 'deep research'],
     isAvailable: true,
   },
 };
 
 // ==================== UTILITY FUNCTIONS ====================
 
+const stripFreeSuffix = (id: string): string => id.replace(/:free$/, '');
+
+// "a" is a prefix of "b" ending at a segment boundary ("-", ".", ":" or end).
+const isBoundaryPrefix = (a: string, b: string): boolean =>
+  b.startsWith(a) && (b.length === a.length || ['-', '.', ':'].includes(b[a.length]));
+
 /**
- * Get metadata for a specific model
+ * Resolve a provider-reported model id back to a registered id.
+ *
+ * Providers can return snapshot/resolved ids that carry date/build suffixes
+ * after the requested id. Billing and display must still hit the registry
+ * instead of treating that known paid model as an unknown/free model.
+ */
+export function getRegisteredModelId(modelId: string): string | undefined {
+  if (AI_MODEL_REGISTRY[modelId]) {
+    return modelId;
+  }
+
+  const base = stripFreeSuffix(modelId);
+  let match: AIModelMetadata | undefined;
+  for (const model of Object.values(AI_MODEL_REGISTRY)) {
+    const registryBase = stripFreeSuffix(model.id);
+    if (isBoundaryPrefix(registryBase, base)) {
+      if (!match || registryBase.length > stripFreeSuffix(match.id).length) {
+        match = model;
+      }
+    }
+  }
+  return match?.id;
+}
+
+/**
+ * Get metadata for a specific model, including provider-resolved snapshot ids.
  */
 export function getModelMetadata(modelId: string): AIModelMetadata | undefined {
-  return AI_MODEL_REGISTRY[modelId];
+  const registeredId = getRegisteredModelId(modelId);
+  return registeredId ? AI_MODEL_REGISTRY[registeredId] : undefined;
 }
 
 /**
@@ -390,28 +298,14 @@ export function getModelDisplayName(modelId: string): string {
     return exact.name;
   }
 
-  const stripFree = (id: string) => id.replace(/:free$/, '');
-  const base = stripFree(modelId);
-  // "a" is a prefix of "b" ending at a segment boundary ("-", ".", ":" or end).
-  const boundaryPrefix = (a: string, b: string) =>
-    b.startsWith(a) && (b.length === a.length || ['-', '.', ':'].includes(b[a.length]));
-
-  let match: AIModelMetadata | undefined;
-  for (const model of Object.values(AI_MODEL_REGISTRY)) {
-    const registryBase = stripFree(model.id);
-    if (boundaryPrefix(registryBase, base) || boundaryPrefix(base, registryBase)) {
-      if (!match || registryBase.length > stripFree(match.id).length) {
-        match = model;
-      }
-    }
-  }
-  if (match) {
-    return match.name;
+  const registeredId = getRegisteredModelId(modelId);
+  if (registeredId) {
+    return AI_MODEL_REGISTRY[registeredId].name;
   }
 
   // Unknown model: prettify the slug ("mistralai/devstral-small-2505" → "Devstral Small 2505").
   const isFree = modelId.endsWith(':free');
-  const slug = base.split('/').pop() ?? base;
+  const slug = stripFreeSuffix(modelId).split('/').pop() ?? stripFreeSuffix(modelId);
   const pretty = slug
     .replace(/-\d{8}$/, '') // drop trailing date snapshot
     .split('-')
@@ -459,7 +353,7 @@ export function calculateCostBtc(
   outputTokens: number,
   btcPriceUsd: number = 100000
 ): number {
-  const model = AI_MODEL_REGISTRY[modelId];
+  const model = getModelMetadata(modelId);
   if (!model) {
     return 0;
   }
@@ -521,6 +415,6 @@ export function getFreeModels(): AIModelMetadata[] {
  * Check if a model is free
  */
 export function isModelFree(modelId: string): boolean {
-  const model = AI_MODEL_REGISTRY[modelId];
+  const model = getModelMetadata(modelId);
   return model?.isFree === true;
 }
