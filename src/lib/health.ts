@@ -46,15 +46,22 @@ async function probeDatabase(): Promise<ServiceStatus> {
 }
 
 // Probe GoTrue directly — auth can be down while the DB is up (the old code
-// inferred "db up ⇒ auth up", which hid a GoTrue-only outage).
+// inferred "db up ⇒ auth up", which hid a GoTrue-only outage). The self-host's
+// Kong gateway enforces `apikey` on /auth/v1/* (401 without it), so the probe
+// MUST send the anon key — otherwise it always reads 'outage'.
 async function probeAuth(): Promise<ServiceStatus> {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const apikey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!base) {
     return 'outage';
   }
   try {
     const res = await withTimeout(
-      fetch(`${base}/auth/v1/health`, { cache: 'no-store' }),
+      fetch(`${base}/auth/v1/health`, {
+        cache: 'no-store',
+        headers: apikey ? { apikey } : {},
+      }),
       PROBE_TIMEOUT_MS
     );
     return res.ok ? 'operational' : 'outage';
@@ -100,11 +107,13 @@ export async function checkHealth(): Promise<HealthReport> {
     { name: 'Bitcoin Integration', status: 'operational' },
   ];
 
-  // Only the CRITICAL dependencies (DB, auth) can flip the site to unhealthy and
-  // page the uptime monitor. Cache degradation is surfaced for visibility but
-  // stays non-paging (the in-memory fallback keeps the site working).
-  const overall: ServiceStatus =
-    dbStatus === 'outage' || authStatus === 'outage' ? 'outage' : 'operational';
+  // The 200/503 that the DEPLOY health-gate and uptime monitor key on reflects
+  // core LIVENESS only: the app is serving + the DB is reachable. Auth and cache
+  // are probed and reported in `services` for visibility, but a GoTrue/Redis blip
+  // must NOT flip the endpoint to 503 — that would roll back a healthy deploy (it
+  // did: a bugged auth probe took every deploy down). Alert on a real auth outage
+  // off this critical path (uptime.yml reads services.authentication).
+  const overall: ServiceStatus = dbStatus === 'outage' ? 'outage' : 'operational';
 
   return { overall, timestamp, services };
 }
