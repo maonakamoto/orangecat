@@ -54,7 +54,13 @@ describe('calculateCostBtc returns BTC, not satoshis', () => {
     expect(cost).toBeGreaterThanOrEqual(0.00000001);
   });
 
-  it('unknown models cost 0', () => {
+  it('provider-resolved paid model ids use the registered model price', () => {
+    expect(calculateCostBtc(`${PAID_MODEL}-20260708`, 1000, 1000)).toBe(
+      calculateCostBtc(PAID_MODEL, 1000, 1000)
+    );
+  });
+
+  it('unknown models cost 0 until a registry model can be resolved', () => {
     expect(calculateCostBtc('no-such-model', 1000, 1000)).toBe(0);
   });
 });
@@ -62,7 +68,9 @@ describe('calculateCostBtc returns BTC, not satoshis', () => {
 describe('isPlatformMeteredModel', () => {
   it('true for paid registry models only', () => {
     expect(isPlatformMeteredModel(PAID_MODEL)).toBe(true);
+    expect(isPlatformMeteredModel(`${PAID_MODEL}-20260708`)).toBe(true);
     expect(isPlatformMeteredModel(FREE_MODEL)).toBe(false);
+    expect(isPlatformMeteredModel(`${FREE_MODEL.replace(/:free$/, '')}-20260708:free`)).toBe(false);
     expect(isPlatformMeteredModel('not-in-registry')).toBe(false);
     expect(isPlatformMeteredModel(undefined)).toBe(false);
   });
@@ -121,6 +129,37 @@ describe('meterCreditUsage', () => {
       ref: 'r2',
     });
     expect(appendCreditEntry).not.toHaveBeenCalled();
+  });
+
+  it('bills provider-resolved paid model ids instead of treating them as unknown', async () => {
+    appendCreditEntry.mockResolvedValue(0.001);
+    const charged = await meterCreditUsage(admin, 'u1', {
+      model: `${PAID_MODEL}-20260708`,
+      inputTokens: 100000,
+      outputTokens: 100000,
+      ref: 'resolved-model',
+    });
+
+    expect(charged).toBeGreaterThan(0);
+    expect(appendCreditEntry).toHaveBeenCalledTimes(1);
+  });
+
+  it('prefers provider-reported request cost over the registry estimate when available', async () => {
+    appendCreditEntry.mockResolvedValue(0.001);
+    const providerReportedRawCostBtc = 0.00000234;
+    const charged = await meterCreditUsage(admin, 'u1', {
+      model: PAID_MODEL,
+      inputTokens: 100000,
+      outputTokens: 100000,
+      rawCostBtc: providerReportedRawCostBtc,
+      ref: 'provider-cost',
+    });
+
+    const expectedCharge = Math.ceil(providerReportedRawCostBtc * CREDIT_USAGE_MARKUP * 1e8) / 1e8;
+    expect(charged).toBe(expectedCharge);
+    const [, , entry] = appendCreditEntry.mock.calls[0] as [unknown, string, any];
+    expect(entry.metadata.rawCostBtc).toBe(providerReportedRawCostBtc);
+    expect(entry.metadata.pricingSource).toBe('provider_reported');
   });
 
   it('returns 0 (never throws) when the ledger append fails', async () => {

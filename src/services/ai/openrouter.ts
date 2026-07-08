@@ -51,6 +51,12 @@ interface OpenRouterResponse {
     prompt_tokens: number;
     completion_tokens: number;
     total_tokens: number;
+    cost?: number;
+    cost_details?: {
+      upstream_inference_cost?: number | null;
+      upstream_inference_prompt_cost?: number;
+      upstream_inference_completions_cost?: number;
+    };
   };
   created: number;
 }
@@ -70,6 +76,12 @@ interface OpenRouterStreamChunk {
     prompt_tokens: number;
     completion_tokens: number;
     total_tokens: number;
+    cost?: number;
+    cost_details?: {
+      upstream_inference_cost?: number | null;
+      upstream_inference_prompt_cost?: number;
+      upstream_inference_completions_cost?: number;
+    };
   };
 }
 
@@ -94,6 +106,7 @@ interface StreamChunk {
     inputTokens: number;
     outputTokens: number;
     totalTokens: number;
+    costBtc?: number;
   };
 }
 
@@ -198,15 +211,18 @@ export class OpenRouterService {
     // Check if this is a free model
     const isFreeModel = isModelFree(model);
 
-    // Calculate cost in sats (0 for free models)
+    // Prefer OpenRouter's returned request charge when present; otherwise fall
+    // back to the registry estimate so older/partial responses still meter.
+    const reportedCostBtc = toBtcFromOpenRouterUsage(response.usage, this.btcPriceUsd);
     const costBtc = isFreeModel
       ? 0
-      : calculateCostBtc(
+      : (reportedCostBtc ??
+        calculateCostBtc(
           model,
           response.usage.prompt_tokens,
           response.usage.completion_tokens,
           this.btcPriceUsd
-        );
+        ));
 
     return {
       content: response.choices[0]?.message?.content || '',
@@ -270,7 +286,9 @@ export class OpenRouterService {
 
     const decoder = new TextDecoder();
     let buffer = '';
-    let usage: { inputTokens: number; outputTokens: number; totalTokens: number } | undefined;
+    let usage:
+      | { inputTokens: number; outputTokens: number; totalTokens: number; costBtc?: number }
+      | undefined;
 
     try {
       while (true) {
@@ -301,6 +319,7 @@ export class OpenRouterService {
                   inputTokens: parsed.usage.prompt_tokens,
                   outputTokens: parsed.usage.completion_tokens,
                   totalTokens: parsed.usage.total_tokens,
+                  costBtc: toBtcFromOpenRouterUsage(parsed.usage, this.btcPriceUsd),
                 };
               }
 
@@ -428,6 +447,26 @@ export class OpenRouterService {
 
     return response.json();
   }
+}
+
+function toBtcFromOpenRouterUsage(
+  usage:
+    | {
+        cost?: number;
+        cost_details?: {
+          upstream_inference_cost?: number | null;
+          upstream_inference_prompt_cost?: number;
+          upstream_inference_completions_cost?: number;
+        };
+      }
+    | undefined,
+  btcPriceUsd: number
+): number | undefined {
+  const reportedUsd = usage?.cost;
+  if (!Number.isFinite(reportedUsd) || reportedUsd === undefined || reportedUsd <= 0) {
+    return undefined;
+  }
+  return Math.ceil((reportedUsd / btcPriceUsd) * 1e8) / 1e8;
 }
 
 // ==================== ERROR CLASS ====================

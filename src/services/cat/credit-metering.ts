@@ -77,12 +77,14 @@ export async function meterCreditUsage(
     model: string;
     inputTokens: number;
     outputTokens: number;
+    /** Real request cost from the provider response when available. */
+    rawCostBtc?: number;
     /** Stable per-request id — the ledger idempotency ref. */
     ref: string;
     conversationId?: string | null;
   }
 ): Promise<number> {
-  const { model, inputTokens, outputTokens, ref, conversationId } = args;
+  const { model, inputTokens, outputTokens, rawCostBtc, ref, conversationId } = args;
   if (!isPlatformMeteredModel(model)) {
     return 0;
   }
@@ -97,11 +99,14 @@ export async function meterCreditUsage(
     /* keep conservative default */
   }
 
-  const rawCostBtc = calculateCostBtc(model, inputTokens, outputTokens, btcPriceUsd);
-  if (rawCostBtc <= 0) {
+  const meteredRawCostBtc =
+    Number.isFinite(rawCostBtc) && (rawCostBtc ?? 0) > 0
+      ? (rawCostBtc as number)
+      : calculateCostBtc(model, inputTokens, outputTokens, btcPriceUsd);
+  if (meteredRawCostBtc <= 0) {
     return 0;
   }
-  const chargeBtc = ceilBtc(rawCostBtc * CREDIT_USAGE_MARKUP);
+  const chargeBtc = ceilBtc(meteredRawCostBtc * CREDIT_USAGE_MARKUP);
 
   const newBalance = await appendCreditEntry(admin, userId, {
     kind: 'usage',
@@ -112,7 +117,11 @@ export async function meterCreditUsage(
       model,
       inputTokens,
       outputTokens,
-      rawCostBtc,
+      rawCostBtc: meteredRawCostBtc,
+      pricingSource:
+        Number.isFinite(rawCostBtc) && (rawCostBtc ?? 0) > 0
+          ? 'provider_reported'
+          : 'registry_estimate',
       markup: CREDIT_USAGE_MARKUP,
       conversationId: conversationId ?? null,
     },
