@@ -1,0 +1,104 @@
+name: Migration Replay
+
+# Applies supabase/migrations/* to a FRESH database from zero, in order, via the
+# Supabase CLI. The box's DB is only ever migrated forward incrementally and the
+# restore drill restores *data* (a dump), so the from-scratch schema build is
+# otherwise never exercised — a migration that can't build on an empty DB (bad
+# ordering, missing prerequisite, non-idempotent replay) would only surface when
+# provisioning a new box during a disaster. This job turns that into a PR-time
+# check, and doubles as the missing pre-prod gate for migration changes.
+#
+# Deliberately a SEPARATE workflow, not a job in CI: CD deploys on the `CI`
+# workflow_run succeeding, and we don't want a from-scratch DB spin-up (heavier,
+# and new) sitting in that critical path. This is advisory-but-visible on the PR.
+#
+# Runs when migrations / config / this workflow change (so it self-tests on the PR
+# that introduces it) and on demand.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/migrations/**'
+      - 'supabase/config.toml'
+      - '.github/workflows/migration-replay.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'supabase/migrations/**'
+      - 'supabase/config.toml'
+      - '.github/workflows/migration-replay.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: migration-replay-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Apply all migrations from an empty DB
+        # `supabase start` boots a fresh local stack and applies supabase/migrations/*
+        # in filename order as part of DB init. A migration error fails startup and
+        # this step exits non-zero — that IS the gate. Keep kong + storage-api up so
+        # the post-migration storage/health step also passes (a clean exit 0 means
+        # the schema built AND the stack came up); exclude the rest for speed.
+        run: |
+          # The `avatars` bucket seeds from ./avatars (not in the repo) and rejects
+          # non-image files — irrelevant to a migration check, so drop the seed path
+          # for this run (ephemeral edit to the CI checkout only).
+          sed -i 's|^objects_path = "./avatars"|# objects_path (skipped in migration-replay)|' supabase/config.toml
+          supabase start -x realtime,imgproxy,edge-runtime,studio,logflare,vector,supavisor,mailpit,postgres-meta
+
+      - name: Confirm the schema actually materialized
+        run: |
+          # After the baseline squash the CLI records only 2 migrations, so count the
+          # built SCHEMA instead: the baseline creates 100+ public tables from scratch.
+          TABLES=$(psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -tAc \
+            "select count(*) from information_schema.tables where table_schema='public' and table_type='BASE TABLE';")
+          echo "Built $TABLES public tables from an empty database."
+          if [ "${TABLES:-0}" -lt 100 ]; then
+            echo "::error::Expected the baseline to build 100+ tables from scratch; got $TABLES."
+            exit 1
+          fi
+
+      - name: Tear down
+        if: always()
+        run: supabase stop --no-backup || true
+
+  # Fast, independent gate: contract-phase (destructive) DDL in the migrations
+  # changed by this PR must be intentional. Auto-rollback reverts code but not an
+  # applied migration, so an unacknowledged DROP/RENAME breaks rollback safety.
+  safety-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check changed migrations for contract-phase DDL
+        run: |
+          git fetch -q origin main || true
+          changed=$(git diff --name-only origin/main...HEAD -- 'supabase/migrations/*.sql' || true)
+          if [ -z "$changed" ]; then
+            echo "No migration changes vs main — nothing to check."
+            exit 0
+          fi
+          echo "Changed migrations:"; echo "$changed"
+          # shellcheck disable=SC2086
+          node scripts/db/check-migration-safety.mjs $changed

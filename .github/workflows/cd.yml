@@ -83,12 +83,32 @@ jobs:
         if: steps.guard.outputs.ok == 'true'
         run: npm ci
 
-      - name: Build standalone (SELF_HOST=1)
+      - name: Download standalone artifact from the triggering CI run
+        # Ship the EXACT artifact CI built + tested (tested == shipped), and skip
+        # the rebuild. Best-effort: if the download fails — or this is a manual
+        # dispatch with no CI run behind it — the next step falls back to building,
+        # so a broken artifact path can never break deploys (worst case = today).
+        if: steps.guard.outputs.ok == 'true' && github.event_name == 'workflow_run'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: standalone-${{ github.event.workflow_run.head_sha }}
+          path: .next/standalone
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build standalone if no artifact (fallback / manual dispatch)
         if: steps.guard.outputs.ok == 'true'
         env:
           NODE_ENV: production
           SELF_HOST: '1'
-        run: npm run build
+        run: |
+          if [ -f .next/standalone/server.js ]; then
+            echo "Using the CI-built standalone artifact — skipping rebuild."
+          else
+            echo "No artifact (manual dispatch or download failed) — building standalone."
+            npm run build
+          fi
 
       - name: Configure SSH
         if: steps.guard.outputs.ok == 'true'

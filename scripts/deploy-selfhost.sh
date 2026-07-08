@@ -54,7 +54,12 @@ ST="$REPO_ROOT/.next/standalone"
 [ -d "$ST" ] || { echo "ERROR: no .next/standalone — build with SELF_HOST=1 first" >&2; exit 1; }
 
 echo "=== assemble standalone (static + public) ==="
-cp -r "$REPO_ROOT/.next/static" "$ST/.next/static"
+# When CD ships a pre-assembled artifact (CI built the standalone with static +
+# public already copied in), the repo-root .next/static / public won't exist —
+# skip the copy rather than failing. A freshly-built tree still has them and
+# assembles normally. The artifact is ALWAYS pre-assembled before upload, so a
+# skipped copy here never means missing assets.
+[ -d "$REPO_ROOT/.next/static" ] && cp -r "$REPO_ROOT/.next/static" "$ST/.next/static"
 [ -d "$REPO_ROOT/public" ] && cp -r "$REPO_ROOT/public" "$ST/public"
 
 echo "=== rsync → $OC_BOX:$OC_APP_BASE/app-next ==="
@@ -86,21 +91,34 @@ echo "=== schema-drift gate (deployed code vs LIVE box schema) ==="
 # REAL post-migration schema and fail the deploy if the code references a table/
 # column that isn't there, BEFORE the swap — turning silent prod 500s into a loud
 # deploy-time stop. Known pre-existing gaps are allowlisted in audit-schema-drift.mjs
-# so this only blocks on NEW drift. A dump failure is non-fatal (don't block deploys
-# on an ssh hiccup).
+# so this only blocks on NEW drift.
+#
+# Reachability: the dump is retried (a transient ssh blip must not silently
+# disable the gate), and if the box schema genuinely can't be read after retries
+# we BLOCK rather than ship unguarded — every later step (swap, restart) needs
+# ssh anyway, so "can't read the schema" is not a benign hiccup here.
 LIVE_SCHEMA_TMP="$(mktemp)"
-if OC_BOX="$OC_BOX" bash scripts/db/dump-live-schema.sh > "$LIVE_SCHEMA_TMP" 2>/dev/null && [ -s "$LIVE_SCHEMA_TMP" ]; then
-  if ! LIVE_SCHEMA_PATH="$LIVE_SCHEMA_TMP" node scripts/db/audit-schema-drift.mjs; then
-    rm -f "$LIVE_SCHEMA_TMP"
-    echo "ERROR: schema drift — deployed code references DB objects missing from the box (above)." >&2
-    echo "       Add the missing migration (or allowlist if intentional). Aborting deploy; live release untouched." >&2
-    exit 1
+dump_ok=0
+for attempt in 1 2 3; do
+  if OC_BOX="$OC_BOX" bash scripts/db/dump-live-schema.sh > "$LIVE_SCHEMA_TMP" 2>/dev/null && [ -s "$LIVE_SCHEMA_TMP" ]; then
+    dump_ok=1; break
   fi
+  echo "live-schema dump attempt $attempt failed; retrying…" >&2
+  sleep 3
+done
+if [ "$dump_ok" != 1 ]; then
   rm -f "$LIVE_SCHEMA_TMP"
-else
-  rm -f "$LIVE_SCHEMA_TMP"
-  echo "WARN: could not dump live schema for the drift gate — skipping (non-fatal)." >&2
+  echo "ERROR: could not dump the live box schema for the drift gate after 3 attempts —" >&2
+  echo "       refusing to deploy unguarded. Check box reachability and retry." >&2
+  exit 1
 fi
+if ! LIVE_SCHEMA_PATH="$LIVE_SCHEMA_TMP" node scripts/db/audit-schema-drift.mjs; then
+  rm -f "$LIVE_SCHEMA_TMP"
+  echo "ERROR: schema drift — deployed code references DB objects missing from the box (above)." >&2
+  echo "       Add the missing migration (or allowlist if intentional). Aborting deploy; live release untouched." >&2
+  exit 1
+fi
+rm -f "$LIVE_SCHEMA_TMP"
 
 echo "=== boot-test + atomic swap + health-check (with rollback) ==="
 ssh "${SSH_OPTS[@]}" "$OC_BOX" \
@@ -158,8 +176,12 @@ if [ "$live" != "200" ]; then
   exit 1
 fi
 
-rm -rf "$BASE/app-old"
-echo "DEPLOY_OK (local health 200)"
+# Keep the previous release at app-old as a manual-rollback target until the NEXT
+# deploy (which removes it at its start, above). Deleting it here left zero
+# rollback target between deploys. NOTE: we do NOT auto-rollback on a failed
+# PUBLIC health check below — local health already passed, so a public failure is
+# a Caddy/DNS/network issue, and reverting a healthy app would not fix that.
+echo "DEPLOY_OK (local health 200) — previous release kept at app-old for manual rollback"
 REMOTE
 
 echo "=== ensure Caddy kills HTTP/3 (Brave/QUIC self-heal) ==="

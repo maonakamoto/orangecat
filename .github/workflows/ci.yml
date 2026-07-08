@@ -7,6 +7,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Cancel superseded runs on the same ref — a newer push makes the older build
+# obsolete. On main this means only the latest commit's CI (and thus its CD)
+# proceeds, which is what we want: deploy the newest, not a stale in-flight one.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-smoke:
     runs-on: ubuntu-latest
@@ -60,14 +67,48 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Build
+      - name: Cache Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          # Re-key when deps or source change; restore the newest same-deps cache
+          # otherwise so incremental compilation is reused across runs.
+          key: nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx') }}
+          restore-keys: |
+            nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Build (standalone — the exact bundle CD ships)
         env:
           NODE_ENV: production
+          # Build the SELF_HOST standalone here so CI tests the same artifact CD
+          # deploys (tested == shipped). On main this artifact is uploaded and
+          # shipped verbatim; PRs build it too (dummy env) to catch standalone-only
+          # breakage. Bake the same client vars CD bakes — public receiving
+          # addresses; empty on PRs/forks, which is fine for a test build.
+          SELF_HOST: '1'
+          NEXT_PUBLIC_LIGHTNING_ADDRESS: ${{ vars.NEXT_PUBLIC_LIGHTNING_ADDRESS }}
+          NEXT_PUBLIC_BITCOIN_ADDRESS: ${{ vars.NEXT_PUBLIC_BITCOIN_ADDRESS }}
         run: npm run build
 
-      - name: Start server
+      - name: Assemble standalone (static + public)
+        # Copy the assets into the standalone tree so both the E2E run below and
+        # the uploaded artifact are complete and runnable as-is.
         run: |
-          npm start &
+          cp -r .next/static .next/standalone/.next/static
+          [ -d public ] && cp -r public .next/standalone/public || true
+
+      - name: Upload standalone artifact (main → shipped by CD)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: standalone-${{ github.sha }}
+          path: .next/standalone
+          include-hidden-files: true # .next/* is hidden; excluded by default
+          retention-days: 3
+
+      - name: Start server (standalone — the shipped entrypoint)
+        run: |
+          PORT=3000 node .next/standalone/server.js &
           npx wait-on http://localhost:3000
 
       - name: Validate required P0 E2E env
@@ -88,8 +129,18 @@ jobs:
             fi
           done
           if [ "$missing" -ne 0 ]; then
-            echo "⚠️  E2E secrets not configured - skipping P0 matrix tests"
-            echo "has_secrets=false" >> $GITHUB_OUTPUT
+            # PRs (especially from forks) legitimately lack these secrets → soft-skip.
+            # But a push/dispatch to main is what CD deploys on: a green build there
+            # MUST mean the P0 E2E suite actually ran, never "secrets were missing so
+            # we skipped." Fail hard so the deploy gate can't pass untested.
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              echo "⚠️  E2E secrets not configured - skipping P0 matrix (PR / fork build)"
+              echo "has_secrets=false" >> $GITHUB_OUTPUT
+            else
+              echo "❌ E2E secrets missing on a ${{ github.event_name }} to ${{ github.ref }}."
+              echo "   Refusing to report a green build with zero end-to-end coverage — CD deploys on this."
+              exit 1
+            fi
           else
             echo "has_secrets=true" >> $GITHUB_OUTPUT
           fi
@@ -120,3 +171,39 @@ jobs:
           E2E_TEST_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
           E2E_TEST_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
         run: npm run test:e2e:matrix:p0
+
+  # Supply-chain gate: catch committed secrets and known-vuln dependencies before
+  # they ship. Runs in parallel with build-and-smoke (independent). The
+  # `security:scan` npm script existed but nothing invoked it — this wires it in.
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          # gitleaks scans git history for leaked secrets — needs the full log,
+          # not the default shallow clone.
+          fetch-depth: 0
+
+      - name: Secret scan (gitleaks)
+        # Free for public repos; no license needed. Fails the job on any finding.
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Dependency audit
+        # Staged rollout: CRITICAL advisories block the build now; HIGH+ are
+        # reported (annotation) but non-blocking so this gate can land without
+        # being held hostage by pre-existing debt. Escalate the second line to
+        # `--audit-level=high` (blocking) once the tree is clean.
+        run: |
+          npm audit --audit-level=critical --omit=dev
+          npm audit --audit-level=high --omit=dev \
+            || echo "::warning title=Dependency audit::HIGH-severity advisories present — triage and escalate this gate to blocking."
