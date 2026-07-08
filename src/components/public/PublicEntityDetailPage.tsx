@@ -28,7 +28,7 @@ import { type CurrencyCode } from '@/config/currencies';
 import { fetchEntityOwner } from '@/lib/entities/fetchEntityOwner';
 import { fetchProfileListingCounts } from '@/services/profile/listingCounts';
 import { WalletVisibilityToggle } from '@/components/wallets/WalletVisibilityToggle';
-import { WALLET_VISIBILITY_DEFAULT, type WalletVisibility } from '@/config/wallet-visibility';
+import { type WalletVisibility } from '@/config/wallet-visibility';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { ROUTES } from '@/config/routes';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
@@ -218,11 +218,14 @@ export default async function PublicEntityDetailPage({
       .limit(1)
       .maybeSingle();
     if (link) {
-      // `visibility` is a new column not yet in the generated Supabase types.
-      const row = link as { wallet_id: string; visibility?: string | null };
+      // supabase-js's deep select-type inference degrades to `never` for this
+      // dynamic .from().select()…maybeSingle() chain against the large schema
+      // (reproduced even selecting a single known column), so narrow explicitly.
+      // The shape/types match entity_wallets — visibility is a real typed column.
+      const row = link as { wallet_id: string; visibility: string };
       fundingLink = {
         walletId: row.wallet_id,
-        visibility: (row.visibility as WalletVisibility) ?? WALLET_VISIBILITY_DEFAULT,
+        visibility: row.visibility as WalletVisibility,
       };
     }
   }

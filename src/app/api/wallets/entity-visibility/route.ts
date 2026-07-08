@@ -38,12 +38,10 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest) => {
     }
     const { wallet_id, entity_type, entity_id, visibility } = parsed.data;
 
-    // RLS scopes this to links whose wallet the caller owns. Untyped: the
-    // `visibility` column may not be in the generated Supabase types yet.
+    // RLS scopes this to links whose wallet the caller owns.
     const { data, error } = await supabase
       .from(DATABASE_TABLES.ENTITY_WALLETS)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- new column not in generated types
-      .update({ visibility } as any)
+      .update({ visibility })
       .eq('wallet_id', wallet_id)
       .eq('entity_type', entity_type)
       .eq('entity_id', entity_id)
