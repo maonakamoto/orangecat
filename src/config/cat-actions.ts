@@ -634,7 +634,6 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
       'Announce my project launch',
       'Share an update with my followers',
     ],
-    apiEndpoint: '/api/posts',
     enabled: true,
   },
 
@@ -705,7 +704,6 @@ export const CAT_ACTIONS: Record<string, CatAction> = {
       'Pay for the service I ordered',
       'Tip a small amount to that creator',
     ],
-    apiEndpoint: '/api/payments/send',
     enabled: true,
   },
 

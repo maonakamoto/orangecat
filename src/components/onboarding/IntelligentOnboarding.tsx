@@ -23,6 +23,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ProfileService } from '@/services/profile';
 import { logger } from '@/utils/logger';
 import { ROUTES } from '@/config/routes';
+import { FEATURES } from '@/config/features';
 import { ONBOARDING_METHOD } from '@/config/onboarding';
 
 const EXAMPLE_PROMPTS = [
@@ -127,7 +128,7 @@ export default function IntelligentOnboarding() {
                 }
               }}
             />
-            {process.env.NEXT_PUBLIC_FEATURE_VOICE_INPUT === 'true' && (
+            {FEATURES.voiceInput && (
               <DictationButton
                 ariaLabel="Voice input"
                 size="sm"

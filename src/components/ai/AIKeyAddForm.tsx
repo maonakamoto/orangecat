@@ -16,23 +16,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import Button from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { cn } from '@/lib/utils';
-import { aiProviders, getAIProvider, validateApiKeyFormat } from '@/data/aiProviders';
+import { getAIProvider, validateApiKeyFormat, wiredProviders } from '@/data/aiProviders';
 import { ROUTES } from '@/config/routes';
-
-/**
- * Providers Cat's chat route can actually route through today.
- *
- * Direct: Groq + the OpenAI-compatible direct providers (OpenAI, Together,
- * DeepSeek, xAI). Aggregator: OpenRouter. Local providers (Ollama,
- * LM Studio) aren't here yet — they need a different architecture
- * because the server backend can't reach the user's localhost.
- *
- * Anthropic and Google are intentionally NOT here — they use different
- * wire formats (not OpenAI-compatible) and need their own client classes.
- * Users who want Claude or Gemini should add an OpenRouter key.
- */
-const WIRED_PROVIDER_IDS = new Set(['groq', 'openrouter', 'openai', 'together', 'deepseek', 'xai']);
-const wiredProviders = aiProviders.filter(p => WIRED_PROVIDER_IDS.has(p.id));
 
 interface AIKeyAddFormProps {
   onAdd: (data: { provider: string; apiKey: string; keyName: string }) => Promise<void>;

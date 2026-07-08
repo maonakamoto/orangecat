@@ -42,7 +42,7 @@ interface PaymentDialogProps {
   defaultAmount?: number;
 }
 
-const DEFAULT_CONTRIBUTION_BTC = 0.0001; // ~$10 at $100k/BTC
+import { DEFAULT_CONTRIBUTION_BTC } from '@/config/payment-presets';
 
 export function PaymentDialog({
   open,

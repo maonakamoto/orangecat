@@ -12,13 +12,8 @@ import ProfileShare from '@/components/sharing/ProfileShare';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { waitlistSchema, type WaitlistFormData } from '@/lib/validation/social';
 import { toast } from 'sonner';
-
-const waitlistSchema = z.object({
-  email: z.string().email(),
-});
-type WaitlistFormData = z.infer<typeof waitlistSchema>;
 
 export default function ChannelComingSoonPage() {
   const { user, profile } = useAuth();

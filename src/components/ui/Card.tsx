@@ -23,14 +23,14 @@ export const CardHeader = ({ className, ...p }: React.HTMLAttributes<HTMLDivElem
 );
 
 export const CardTitle = ({ className, ...p }: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h3 {...p} className={cn('text-lg font-semibold leading-tight text-foreground', className)} />
+  <h3 {...p} className={cn('text-lg font-semibold leading-tight text-fg-primary', className)} />
 );
 
 export const CardDescription = ({
   className,
   ...p
 }: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p {...p} className={cn('mt-1 text-sm leading-6 text-muted-foreground', className)} />
+  <p {...p} className={cn('mt-1 text-sm leading-6 text-fg-secondary', className)} />
 );
 
 export const CardContent = ({ className, ...p }: React.HTMLAttributes<HTMLDivElement>) => (

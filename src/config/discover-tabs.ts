@@ -1,0 +1,96 @@
+/**
+ * Discover tabs — SSOT for tab IDs, entity mapping, and filter config.
+ *
+ * Import from here instead of duplicating TAB_TO_ENTITY / TAB_ENTITY_MAP
+ * across DiscoverTabs, DiscoverEmptyState, and discoverConstants.
+ */
+
+import type { EntityType } from '@/config/entity-registry';
+
+export type DiscoverTabType =
+  | 'all'
+  | 'projects'
+  | 'profiles'
+  | 'loans'
+  | 'investments'
+  | 'assets'
+  | 'causes'
+  | 'events'
+  | 'products'
+  | 'services'
+  | 'groups'
+  | 'circles'
+  | 'wishlists'
+  | 'research'
+  | 'ai_assistants';
+
+export const VALID_TAB_TYPES: DiscoverTabType[] = [
+  'all',
+  'projects',
+  'profiles',
+  'loans',
+  'investments',
+  'assets',
+  'causes',
+  'events',
+  'products',
+  'services',
+  'groups',
+  'circles',
+  'wishlists',
+  'research',
+  'ai_assistants',
+];
+
+/** Maps plural discover tab IDs to their singular EntityType in the registry. */
+export const DISCOVER_TAB_TO_ENTITY: Partial<Record<DiscoverTabType, EntityType>> = {
+  projects: 'project',
+  causes: 'cause',
+  investments: 'investment',
+  loans: 'loan',
+  assets: 'asset',
+  products: 'product',
+  services: 'service',
+  events: 'event',
+  groups: 'group',
+  circles: 'circle',
+  wishlists: 'wishlist',
+  research: 'research',
+  ai_assistants: 'ai_assistant',
+};
+
+/** Entity-backed tabs shown after "All" in the discover nav (order matters). */
+export const DISCOVER_ENTITY_TAB_IDS = [
+  'projects',
+  'causes',
+  'investments',
+  'loans',
+  'assets',
+  'products',
+  'services',
+  'events',
+  'groups',
+  'circles',
+  'wishlists',
+  'research',
+  'ai_assistants',
+] as const satisfies readonly DiscoverTabType[];
+
+export interface DiscoverTabFilterConfig {
+  projectStatus: boolean;
+  projectCategories: boolean;
+}
+
+const PROJECT_SEARCH_TABS = new Set<DiscoverTabType>(['all', 'projects']);
+
+/** Which sidebar filter blocks apply per tab. */
+export const DISCOVER_TAB_FILTERS: Record<DiscoverTabType, DiscoverTabFilterConfig> =
+  Object.fromEntries(
+    VALID_TAB_TYPES.map(tab => [
+      tab,
+      {
+        projectStatus: PROJECT_SEARCH_TABS.has(tab),
+        projectCategories: PROJECT_SEARCH_TABS.has(tab),
+      },
+    ])
+  ) as Record<DiscoverTabType, DiscoverTabFilterConfig>;

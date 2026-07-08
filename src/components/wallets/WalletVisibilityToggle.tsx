@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import { Check, Loader2 } from 'lucide-react';
 import type { EntityType } from '@/config/entity-registry';
 import { WALLET_VISIBILITY_OPTIONS, type WalletVisibility } from '@/config/wallet-visibility';
+import { API_ROUTES } from '@/config/api-routes';
 import { cn } from '@/lib/utils';
 
 interface WalletVisibilityToggleProps {
@@ -40,7 +41,7 @@ export function WalletVisibilityToggle({
     setPending(next);
     setVisibility(next); // optimistic
     try {
-      const res = await fetch('/api/wallets/entity-visibility', {
+      const res = await fetch(API_ROUTES.WALLETS.ENTITY_VISIBILITY, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
