@@ -1,172 +1,171 @@
-# 🤖 Chat API
+# My Cat Chat API
+
+**Created**: 2025-12-09
+**Last Modified**: 2026-07-08
+**Last Modified Summary**: Rewrote to document the current authenticated `POST /api/cat/chat` endpoint (provider chain, streaming SSE, Cat Credits metering) — the old public `/api/chat` Gemini widget no longer exists.
 
 ## Overview
 
-The Chat API provides access to OrangeCat's AI assistant powered by Google Gemini 2.0 Flash-Lite. This is the cheapest available LLM, making it cost-effective for user assistance.
+The Chat API powers **My Cat**, OrangeCat's AI assistant. Requests run through a
+provider chain (Groq → OpenRouter free pool → Together → Ollama) for free-tier
+users, or through the user's own key (BYOK) / Cat Credits for frontier models.
+Model metadata is sourced from `src/config/ai-models.ts` (`AI_MODEL_REGISTRY`).
 
-## Endpoints
+The ephemeral path does **not** persist conversation content; when a
+`conversationId` is supplied, messages are saved to the user's conversation.
 
-### POST `/api/chat`
+## Authentication
 
-Send a message to the AI assistant and receive a response.
+All requests require an authenticated OrangeCat session (`withAuth`). There is no
+unauthenticated public chat endpoint.
+
+## Endpoint
+
+### POST `/api/cat/chat`
+
+Send a message to My Cat and receive a response (buffered JSON or streaming SSE).
 
 #### Request
 
 ```javascript
-POST /api/chat
+POST /api/cat/chat
 Content-Type: application/json
 
 {
   "message": "How does OrangeCat work?",
-  "systemPrompt": "You are OrangeCat's AI assistant..." // optional
+  "model": "auto",              // optional: registry id, "auto", or "any"
+  "stream": false,               // optional: true → SSE stream
+  "conversationId": "<uuid>",   // optional: omit for the default conversation
+  "preferredCurrency": "CHF",   // optional runtime hint
+  "locale": "de-CH",            // optional runtime hint
+  "lastVisitedPath": "/discover" // optional runtime hint
 }
 ```
+
+Optional BYOK headers (per-request, never stored):
+
+- `x-openrouter-key: sk-or-...`
+- `x-groq-api-key: gsk_...`
 
 #### Parameters
 
-| Parameter      | Type   | Required | Description                                       |
-| -------------- | ------ | -------- | ------------------------------------------------- |
-| `message`      | string | Yes      | The user's message (max 10,000 characters)        |
-| `systemPrompt` | string | No       | Custom system prompt to override default behavior |
+| Parameter           | Type    | Required | Description                                                       |
+| ------------------- | ------- | -------- | ----------------------------------------------------------------- |
+| `message`           | string  | Yes      | The user's message (see `AI_MESSAGE_MAX_CHARS`).                  |
+| `model`             | string  | No       | Registry model id, `"auto"`, or `"any"`. Defaults to auto-select. |
+| `stream`            | boolean | No       | When `true`, response is an SSE stream.                           |
+| `conversationId`    | uuid    | No       | Target conversation; omitted → the user's default conversation.   |
+| `preferredCurrency` | string  | No       | Runtime hint for price quoting.                                   |
+| `locale`            | string  | No       | Runtime hint for reply language.                                  |
+| `lastVisitedPath`   | string  | No       | Runtime hint for recent-page awareness.                           |
 
-#### Response
+#### Response — non-streaming (200)
 
-**Success (200)**:
-
-```javascript
-{
-  "message": "OrangeCat is a Bitcoin-native crowdfunding platform where users can fund projects directly with Bitcoin...",
-  "model": "gemini-2.0-flash-lite",
-  "timestamp": "2025-12-09T10:30:00.000Z"
-}
-```
-
-**Error Responses**:
-
-**400 Bad Request**:
+Uses the standard API envelope (`{ success, data }`):
 
 ```javascript
 {
-  "error": "Message is required and must be a string"
+  "success": true,
+  "data": {
+    "message": "OrangeCat is a Bitcoin-native platform...",
+    "actions": [ /* parsed exec_action blocks, if any */ ],
+    "quickReplies": [ "Tell me more", "Show me projects" ],
+    "execResults": [ /* results of executed actions, if any */ ],
+    "toolCalls": [ /* tool lifecycle events, if any */ ],
+    "prefillProposals": [ /* prefilled entity form drafts, if any */ ],
+    "modelUsed": "openai/gpt-oss-120b:free",
+    "provider": "openrouter",
+    "suggestUpgrade": false,
+    "fallback": null,
+    "usage": {
+      "inputTokens": 320,
+      "outputTokens": 210,
+      "totalTokens": 530,
+      "apiCostBtc": 0,
+      "isFreeModel": true,
+      "usedByok": false
+    },
+    "userStatus": {
+      "hasByok": false,
+      "freeMessagesPerDay": 25,
+      "freeMessagesRemaining": 18
+    }
+  }
 }
 ```
 
-**429 Rate Limited**:
+#### Response — streaming (200, `text/event-stream`)
+
+When `stream: true`, the endpoint emits Server-Sent Events. Each event is a
+`data: <json>` line. Notable payloads:
+
+- `{ "model": "...", "provider": "..." }` — active model/provider (sent again on fallback).
+- `{ "content": "..." }` — an incremental token chunk.
+- `{ "tool_call": { ... } }` — a tool lifecycle event.
+- `{ "prefill_proposal": { ... } }` — a prefilled entity form draft.
+- `{ "fallback": { "from": "...", "to": "...", "model": "...", "reason": "rate_limit" } }` — provider swap before content streamed.
+- Final: `{ "done": true, "usage": { ... }, "model": "...", "provider": "...", "actions": [...], "execResults": [...], "quickReplies": [...], "suggestUpgrade": false }`.
+- On failure: an `event: error` line followed by `data: { "error": "...", "code": "..." }`.
+
+#### Error responses
+
+**400 Bad Request** — invalid body (fails `catChatBodySchema`):
 
 ```javascript
-{
-  "error": "Rate limit exceeded",
-  "code": "RATE_LIMIT_EXCEEDED",
-  "limit": 5,
-  "remaining": 0,
-  "resetTime": 1733740200000,
-  "resetDate": "Mon, 09 Dec 2025 10:30:00 GMT"
-}
+{ "success": false, "error": "Invalid request", "details": { /* zod flatten */ } }
 ```
+
+**429 Rate Limited** — write-tier rate limit or all providers exhausted. Includes
+standard rate-limit headers; non-streaming errors use codes such as
+`AI_RATE_LIMITED` or `ALL_PROVIDERS_DOWN`.
 
 **500 Internal Server Error**:
 
 ```javascript
-{
-  "error": "Failed to generate response"
-}
+{ "success": false, "error": "Failed to generate response" }
 ```
 
-### GET `/api/chat`
+## Rate limiting
 
-Get information about the chat service and current model.
+- Uses the **write-tier** per-user rate limit (`rateLimitWriteAsync`).
+- Standard rate-limit headers are applied to responses:
+  - `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`, `Retry-After`.
+- Free-tier users additionally have a **daily message allowance**
+  (`ai_platform_usage.daily_limit`), surfaced as `freeMessagesRemaining`.
 
-#### Response
+## Cost & metering
 
-```javascript
-{
-  "status": "healthy",
-  "model": "gemini-2.0-flash-lite",
-  "provider": "Google Gemini",
-  "pricing": {
-    "input": "$0.075 per 1M tokens",
-    "output": "$0.30 per 1M tokens"
-  },
-  "timestamp": "2025-12-09T10:30:00.000Z"
-}
-```
-
-## Rate Limiting
-
-- **5 requests per 5 minutes** per IP address
-- Rate limit headers are included in responses:
-  - `X-RateLimit-Limit`: Maximum requests allowed
-  - `X-RateLimit-Remaining`: Remaining requests in current window
-  - `X-RateLimit-Reset`: Timestamp when limit resets
-  - `Retry-After`: Seconds until limit resets
-
-## Error Handling
-
-The API handles various error conditions:
-
-- **Invalid Input**: Message validation failures
-- **API Key Issues**: Authentication problems with Gemini API
-- **Quota Exceeded**: Gemini API usage limits reached
-- **Content Filtering**: Messages blocked by safety filters
-- **Network Issues**: Connection problems with Gemini API
+- Free models report `apiCostBtc: 0`.
+- Paid frontier models served on the platform key are metered to **Cat Credits**,
+  preferring OpenRouter's real `usage.cost` and falling back to registry token
+  pricing. See `docs/architecture/CAT_CREDITS.md`.
+- BYOK requests are never metered to Cat Credits (the user pays their provider).
 
 ## Security
 
-- API keys are stored server-side only
-- Input validation prevents malicious payloads
-- Rate limiting prevents abuse
-- Content filtering through Gemini's safety features
-- Error messages don't expose sensitive information
+- Provider/API keys are handled server-side; BYOK header keys are ephemeral and
+  never persisted.
+- Input is validated at the boundary (`catChatBodySchema`).
+- Raw provider error messages are never echoed to the client (they can contain
+  credentials); errors are logged server-side and returned as structured codes.
 
-## Usage Examples
-
-### Basic Chat
+## Usage example
 
 ```javascript
-const response = await fetch('/api/chat', {
+const response = await fetch('/api/cat/chat', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    message: 'What is Bitcoin crowdfunding?',
-  }),
+  body: JSON.stringify({ message: 'What is Bitcoin crowdfunding?' }),
 });
 
-const data = await response.json();
-console.log(data.message);
+const { data } = await response.json();
+console.log(data.message, data.modelUsed);
 ```
 
-### Custom System Prompt
+## References
 
-```javascript
-const response = await fetch('/api/chat', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    message: 'Explain Bitcoin to a beginner',
-    systemPrompt: 'You are a patient teacher explaining complex topics simply.',
-  }),
-});
-```
-
-## Cost Information
-
-- **Input**: $0.075 per 1 million tokens
-- **Output**: $0.30 per 1 million tokens
-- **Model**: Google Gemini 2.0 Flash-Lite
-- **Context Window**: 128K tokens
-
-## Frontend Integration
-
-The chat feature is integrated as a floating chat widget available site-wide. The component handles:
-
-- Real-time message exchange
-- Auto-scrolling message history
-- Error states and loading indicators
-- Keyboard shortcuts and accessibility
-- Responsive design for mobile and desktop
-
----
-
-**Created**: 2025-12-09
-**Last Modified**: 2025-12-09
-**Last Modified Summary**: Initial API documentation for chat endpoint
+- **Endpoint:** `src/app/api/cat/chat/route.ts`
+- **Orchestrator:** `src/services/cat/chat-orchestrator.ts`
+- **Provider resolver:** `src/services/cat/provider-resolver.ts`
+- **Model registry (SSOT):** `src/config/ai-models.ts`
+- **Model system guide:** `docs/development/ai/MODEL_SYSTEM.md`

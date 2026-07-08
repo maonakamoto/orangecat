@@ -15,9 +15,9 @@ describe('getModelDisplayName', () => {
   });
 
   it('resolves dated snapshot ids to the registered model name', () => {
-    // The founder-reported case: gemma snapshot id printed raw under replies.
-    expect(getModelDisplayName('google/gemma-4-31b-it-20260402:free')).toBe(
-      AI_MODEL_REGISTRY['google/gemma-4-31b-it:free'].name
+    // Providers can append snapshot suffixes to current free-model ids too.
+    expect(getModelDisplayName('meta-llama/llama-4-scout-20260402:free')).toBe(
+      AI_MODEL_REGISTRY['meta-llama/llama-4-scout:free'].name
     );
   });
 

@@ -1,491 +1,258 @@
+---
+created_date: 2026-01-18
+last_modified_date: 2026-07-08
+last_modified_summary: Rewrote to match the real architecture (ai-models.ts SSOT + provider-resolver chain + Cat Credits metering) and the refreshed 2026 model roster; removed references to the retired UnifiedAIClient/ModelStatusBadge and /api/chat.
+---
+
 # AI Model System - Complete Guide
 
-**Last Updated:** 2026-01-18
 **Status:** Implemented
 
 ---
 
 ## Overview
 
-OrangeCat's AI model system is designed to be **effortless for beginners** while **powerful for advanced users**.
+OrangeCat's AI model system is **effortless for beginners** and **powerful for advanced users**.
 
-**The golden rule:** Users can start chatting with AI immediately, without any setup or configuration.
+**The golden rule:** users can start chatting with My Cat immediately, without any setup or configuration.
+
+The system runs on a **sovereignty ladder**:
+
+| Rung           | Pays              | Pseudonymous? | For                          |
+| -------------- | ----------------- | ------------- | ---------------------------- |
+| Free (managed) | nobody            | yes           | everyone, baseline           |
+| Cat Credits    | OC, in Bitcoin    | yes           | most upgraders               |
+| BYOK           | provider directly | no (card)     | power users, max sovereignty |
+| Local (Ollama) | nobody            | yes           | run-it-yourself              |
+
+See `docs/architecture/CAT_CREDITS.md` for the Bitcoin-paid frontier rung.
 
 ---
 
 ## User Experience
 
-### For Non-Technical Users (Default)
+### For non-technical users (default)
 
-```
-1. Sign up to OrangeCat
-2. Open My Cat chat
-3. Start talking immediately
-   ↓
-✓ Free AI model automatically selected
-✓ Zero configuration needed
-✓ 100% private (no data stored)
-✓ 10 free messages per day
-```
+1. Sign up to OrangeCat.
+2. Open My Cat chat.
+3. Start talking immediately.
 
-**Model Used:** Llama 4 Maverick (free tier via OpenRouter)
+A free model is auto-selected, no configuration is needed, and no conversation
+content is persisted on the ephemeral path. The daily free-message allowance is
+**database-driven** (`ai_platform_usage.daily_limit`), not hardcoded — surfaced
+to the client as `freeMessagesPerDay` / `freeMessagesRemaining`.
 
-- Fast responses
-- Good quality
-- No API costs
-- Rate limited to prevent abuse
+**Default free model:** `DEFAULT_FREE_MODEL_ID` (`openai/gpt-oss-120b:free`).
+The platform provider chain (see below) can also answer on Groq's
+`llama-3.3-70b-versatile` when it leads the chain.
 
-### For Power Users (Optional Upgrade)
+### For power users (optional upgrade)
 
-Users can optionally:
-
-1. **Add API Key** (BYOK - Bring Your Own Key)
-   - OpenRouter key → Access to 200+ models
-   - OR individual keys (OpenAI, Anthropic, Google, etc.)
-
-2. **Run Locally** (Ultimate Privacy)
-   - Install Ollama
-   - Download models
-   - 100% private, zero cloud data
-
-3. **Choose Specific Models**
-   - GPT-4o for best quality
-   - Claude 3.5 for reasoning
-   - Gemini 2.0 for huge context
-   - Grok for real-time data
+1. **Cat Credits** — pay OrangeCat in Bitcoin/Lightning, spend on frontier
+   models. No card, no per-provider account. (`docs/architecture/CAT_CREDITS.md`)
+2. **BYOK (Bring Your Own Key)** — an OpenRouter key unlocks 200+ models; or add
+   individual provider keys (OpenAI, Anthropic, Google, DeepSeek, xAI, Together).
+3. **Local (Ollama)** — point the platform at a self-hosted model for full
+   sovereignty.
 
 ---
 
 ## Technical Architecture
 
-### Model Registry (SSOT)
+### Model registry (SSOT)
 
-**Location:** `src/config/model-registry.ts`
+**Location:** `src/config/ai-models.ts` — `AI_MODEL_REGISTRY`.
 
-Single source of truth for all AI models:
+This is the single source of truth for every curated, platform-served model:
+pricing, context window, capabilities, tier, and free-vs-paid status. Tiers are
+`free | economy | standard | premium` (`MODEL_TIERS`).
 
 ```typescript
-export const MODEL_REGISTRY: Record<string, ModelMetadata> = {
-  'groq/mixtral-8x7b': {
-    id: 'groq/mixtral-8x7b',
-    name: 'Mixtral 8x7B',
-    provider: 'Groq',
-    tier: 'freemium',
-    availability: 'cloud',
-    requiresApiKey: false, // Use server key
-    // ... more metadata
-  },
-
-  'openai/gpt-4o': {
-    id: 'openai/gpt-4o',
-    name: 'GPT-4o',
+export const AI_MODEL_REGISTRY: Record<string, AIModelMetadata> = {
+  'openai/gpt-oss-120b:free': {
+    id: 'openai/gpt-oss-120b:free',
+    name: 'GPT-OSS 120B (Free)',
     provider: 'OpenAI',
-    tier: 'paid',
-    requiresApiKey: true, // User must provide
-    // ... more metadata
-  },
-
-  'local/llama-3.1-8b': {
-    id: 'local/llama-3.1-8b',
-    name: 'Llama 3.1 8B (Local)',
-    provider: 'Meta (via Ollama)',
     tier: 'free',
-    availability: 'local',
-    requiresApiKey: false, // Runs on user's computer
-    // ... more metadata
+    isFree: true,
+    inputCostPer1M: 0,
+    outputCostPer1M: 0,
+    // ...more metadata
   },
+  // ...
 };
 ```
 
-**Benefits:**
+**Compatibility adapter:** `src/config/model-registry.ts` exposes the legacy
+`MODEL_REGISTRY` shape, but it is a thin **projection generated from
+`AI_MODEL_REGISTRY`** — never a second hand-maintained list. New code should read
+`ai-models.ts` directly.
 
-- ✅ One place to define all models
-- ✅ Easy to add new models
-- ✅ Consistent metadata across app
-- ✅ Type-safe model selection
+Helper functions (all in `ai-models.ts`):
 
----
+- `getModelMetadata(id)` / `getRegisteredModelId(id)` — resolve provider-reported
+  snapshot ids (e.g. `...-20260708`) back to the registered model.
+- `getModelDisplayName(id)` — never surface a raw slug in the UI.
+- `getModelsByTier(tier)`, `getAvailableModels()`, `getFreeModels()`.
+- `calculateCostBtc(id, inputTokens, outputTokens, btcPriceUsd)` — registry-based
+  cost estimate (fallback for metering).
 
-### Unified AI Client
+### Provider services
 
-**Location:** `src/lib/ai/unified-client.ts`
+Each provider is a small service class with a shared `chatCompletion` /
+`streamChatCompletion` interface so the resolver can swap implementations:
 
-Single interface for all providers:
+- `src/services/ai/openrouter.ts` — `OpenRouterService` (BTC cost tracking;
+  prefers OpenRouter's returned `usage.cost`).
+- `src/services/ai/groq.ts` — `GroqService` (ultra-fast free tier).
+- `src/services/ai/openai-compat.ts` — `OpenAICompatibleService` (OpenAI,
+  Together, DeepSeek, xAI, Ollama, LM Studio — anything OpenAI-wire-compatible).
 
-```typescript
-const client = new UnifiedAIClient(config);
+### Platform provider chain
 
-// Works with ANY model
-const response = await client.chat({
-  model: 'groq/mixtral-8x7b', // OR 'openai/gpt-4o' OR 'local/llama-3.1-8b'
-  messages: [{ role: 'user', content: 'Hello!' }],
-  stream: true,
-});
-```
+**Location:** `src/services/ai/platform-providers.ts`.
 
-**Supported Providers:**
+For non-BYOK users, `buildPlatformProviders(message)` composes an ordered chain,
+first available wins and the rest become rate-limit fallbacks:
 
-- ✅ OpenRouter (200+ models, one API key)
-- ✅ OpenAI (GPT-4o, GPT-4o-mini, etc.)
-- ✅ Anthropic (Claude 3.5 Sonnet, Opus 4)
-- ✅ Google (Gemini 2.0 Flash, Pro)
-- ✅ X.AI (Grok 2)
-- ✅ Groq (ultra-fast inference)
-- ✅ Together AI (open models)
-- ✅ Ollama (local models)
-- ✅ LM Studio (local models)
+1. **Groq** — fastest inference, generous free tier.
+2. **OpenRouter** — the free model pool (one entry per free model).
+3. **Together AI** — backup free pool.
+4. **Platform Ollama** — Hetzner-hosted small model, sovereignty backstop.
 
----
+Each is enabled by the presence of its env var, so the chain shrinks gracefully.
 
-### API Endpoint
+### Provider resolution
 
-**Location:** `src/app/api/cat/chat/route.ts`
+**Location:** `src/services/cat/provider-resolver.ts`.
 
-**Default Behavior:**
+`resolveProvider(...)` builds the merged, fully-ordered chain: per-request header
+keys → stored BYOK keys (user order) → the platform chain. It also decides
+whether a request is a **credit-metered frontier** call and returns the primary
+service plus an ordered `fallbacks[]`.
 
-```typescript
-// Non-technical user sends message
-POST /api/cat/chat
-{
-  "message": "I want to make money"
-}
+### Chat endpoint + orchestration
 
-// Response uses FREE model automatically
-// No configuration needed
-// User doesn't even know which model was used (unless they check)
-```
+**Endpoint:** `POST /api/cat/chat` (`src/app/api/cat/chat/route.ts`) — a thin
+wrapper: auth + rate limit + body validation.
 
-**Power User with BYOK:**
+**Orchestrator:** `src/services/cat/chat-orchestrator.ts` (`orchestrateCatChat`)
+owns provider resolution, context/memory, tool use, the model call with the
+rate-limit fallback chain, streaming vs non-streaming responses, persistence, and
+the post-response Cat Credits debit.
 
-```typescript
-// User with API key can choose model
-POST /api/cat/chat
-Headers: { 'x-openrouter-key': 'sk-...' }
-{
-  "message": "I want to make money",
-  "model": "anthropic/claude-3.5-sonnet" // Specific model
-}
-
-// OR auto-select best model
-{
-  "message": "Complex reasoning task",
-  "model": "auto" // Auto-router selects best model
-}
-```
+See `docs/reference/api/chat.md` for the request/response contract.
 
 ---
 
-## Model Selection Logic
+## Cost tracking & Cat Credits metering
 
-### Priority System
-
-```
-1. User Specifies Model → Use that model
-2. User Has BYOK → Auto-select from all models
-3. User on Free Tier → Auto-select from free models only
-4. Fallback → DEFAULT_FREE_MODEL_ID
-```
-
-### Auto-Router
-
-Smart model selection based on task:
-
-```typescript
-const route = autoRouter.selectModel({
-  message: "Write a complex function",
-  conversationHistory: [...],
-  allowedModels: availableModels,
-});
-
-// Returns best model for the task
-// - Code tasks → Models with function calling
-// - Creative tasks → Models with large context
-// - Vision tasks → Models with vision support
-```
+- `OpenRouterService.chatCompletion` / `streamChatCompletion` return `costBtc`.
+  It **prefers OpenRouter's real per-request `usage.cost`** (converted USD→BTC),
+  and falls back to `calculateCostBtc` (registry token pricing) when the field is
+  absent (older responses, non-OpenRouter providers).
+- Free models always meter to `costBtc: 0`.
+- For credit-paid frontier requests, the orchestrator calls
+  `meterCreditUsage(...)` (`src/services/cat/credit-metering.ts`) with the real
+  `rawCostBtc` when available. The debit is `rawCost × CREDIT_USAGE_MARKUP`,
+  rounded up to 1e-8 BTC. Ledger metadata records `pricingSource` as
+  `provider_reported` or `registry_estimate`.
+- BYOK usage is never metered to Cat Credits (the user pays their provider).
 
 ---
 
-## Security
+## Model selection logic
 
-### API Key Storage
+### Priority
 
-**Three Tiers:**
-
-#### 1. Free Tier (Zero User Risk)
-
-```typescript
-// Server uses its own API key
-const apiKey = process.env.GROQ_API_KEY; // Server-side only
-
-// User never sees this
-// User never pays for this
-// It's OrangeCat's cost
+```
+1. User specifies a concrete model  → use it (BYOK trusts any OpenRouter model)
+2. User has BYOK                     → auto-select across allowed models
+3. Free tier                         → auto-select from free models only
+4. Fallback                          → DEFAULT_FREE_MODEL_ID
 ```
 
-#### 2. Ephemeral BYOK (Most Secure)
+### Auto-router
 
-```typescript
-// User's key sent per-request in header
-// NEVER stored in database
-// Cleared from memory after use
+**Location:** `src/services/ai/auto-router.ts`.
 
-fetch('/api/cat/chat', {
-  headers: {
-    'x-openrouter-key': userKey, // Ephemeral
-  },
-});
-```
-
-#### 3. Encrypted Storage (Opt-In Convenience)
-
-```typescript
-// User explicitly opts in
-// Password-based encryption
-// Zero-knowledge (server can't decrypt)
-
-const encrypted = await encryptApiKey(apiKey, userPassword);
-// Store encrypted blob in DB
-// Decrypt on client with password
-```
-
-**Default:** Ephemeral (most secure)
+`createAutoRouter().selectModel({ message, conversationHistory, allowedModels })`
+scores message complexity and picks a tier, then the cheapest suitable model
+within it. It is also used to order the OpenRouter free pool per request.
 
 ---
 
-## Model Categories
+## Current roster (refreshed 2026-07-08)
 
-### Free Tier
+Prices are per 1M tokens (input / output), verified against live OpenRouter /
+provider pages.
 
-- ✅ Llama 4 Maverick (default)
-- ✅ Llama 3.3 70B
-- ✅ Gemini 2.0 Flash
-- ✅ DeepSeek R1
-- ✅ Qwen QWQ 32B
+### Free tier (rate limited: 50/day free accounts, 1000/day with $10+ credits)
 
-**Limits:** 10 messages/day on platform key
+- `openai/gpt-oss-120b:free` — GPT-OSS 120B (default free model)
+- `openai/gpt-oss-20b:free` — GPT-OSS 20B
+- `meta-llama/llama-3.3-70b-instruct:free` — Llama 3.3 70B
+- `meta-llama/llama-4-scout:free` — Llama 4 Scout (multimodal, huge context)
 
-### Premium (BYOK Required)
+### Economy
 
-- 💎 GPT-4o (best overall)
-- 💎 Claude 3.5 Sonnet (best reasoning)
-- 💎 Claude Opus 4 (most capable)
-- 💎 Gemini 2.0 Pro (2M context)
-- 💎 Grok 2 (real-time data)
+- `meta-llama/llama-3.1-8b-instruct` — $0.02 / $0.03
+- `openai/gpt-oss-120b` — $0.03 / $0.15
+- `deepseek/deepseek-v4-flash` — $0.09 / $0.18 (1M context)
 
-**Limits:** User's API key limits
+### Standard
 
-### Local (Ultimate Privacy)
+- `qwen/qwen3-32b` — $0.08 / $0.28
+- `anthropic/claude-sonnet-5` — $2 / $10 (intro pricing through 2026-08-31)
 
-- 🔒 Llama 3.1 8B (fast, 16GB RAM)
-- 🔒 Llama 3.1 70B (best quality, 64GB RAM)
-- 🔒 Mistral 7B (lightweight, 8GB RAM)
+### Premium
 
-**Limits:** Hardware only
+- `anthropic/claude-opus-4.8` — $5 / $25 (1M context)
+- `anthropic/claude-fable-5` — $10 / $50 (1M context)
 
----
-
-## User Interface
-
-### Model Status Badge
-
-**Location:** `src/components/ai-chat/ModelStatusBadge.tsx`
-
-Shows current model with hover details:
-
-```tsx
-<ModelStatusBadge
-  modelName="Llama 4 Maverick"
-  isFree={true}
-  messagesRemaining={7}
-  onUpgrade={() => showModelSelector()}
-/>
-```
-
-**Appearance:**
-
-```
-┌─────────────┐
-│ ⚡ Free     │  ← Hover for details
-└─────────────┘
-```
-
-**On Hover:**
-
-```
-┌──────────────────────────────────┐
-│ ✨ Current Model                 │
-│ Llama 4 Maverick                 │
-│                                  │
-│ ┌────────────────────────────┐  │
-│ │ Free Messages  7 remaining │  │
-│ │                            │  │
-│ │ You're using a free AI     │  │
-│ │ model. No setup required.  │  │
-│ │                            │  │
-│ │ [Upgrade to Premium]       │  │
-│ └────────────────────────────┘  │
-│                                  │
-│ ✓ Benefits:                      │
-│ • No data stored                 │
-│ • 100% private                   │
-│ • Fast responses                 │
-└──────────────────────────────────┘
-```
-
-**For BYOK Users:**
-
-```
-┌─────────────┐
-│ 👑 GPT-4o   │  ← Crown icon
-└─────────────┘
-```
+> Keep this list in sync with `AI_MODEL_REGISTRY`. The registry is authoritative;
+> this section is a human-readable snapshot.
 
 ---
 
-## Implementation Status
+## API key security
 
-### ✅ Completed
+**Three tiers, default is ephemeral:**
 
-- [x] Model Registry created
-- [x] UnifiedAIClient built
-- [x] Cat chat API updated
-- [x] Default free tier working
-- [x] BYOK support implemented
-- [x] Model status badge created
-- [x] Security measures in place
-
-### 🚧 Next Steps
-
-- [ ] Model selector UI component
-- [ ] Local model detection & setup wizard
-- [ ] OpenRouter integration testing
-- [ ] Add model switching to chat UI
-- [ ] Model comparison view
-- [ ] Usage tracking per model
-- [ ] Cost calculator for paid models
+1. **Free tier** — the server uses its own provider key; the user never sees or
+   pays for it.
+2. **Ephemeral BYOK** — the user's key is sent per-request in a header, never
+   stored.
+3. **Encrypted storage** — opt-in convenience; keys are encrypted at rest.
 
 ---
 
-## Adding New Models
+## Adding a new curated model
 
-### 1. Add to Registry
-
-```typescript
-// src/config/model-registry.ts
-
-'newprovider/newmodel': {
-  id: 'newprovider/newmodel',
-  name: 'New Model Name',
-  provider: 'New Provider',
-  tier: 'free', // or 'paid'
-  availability: 'cloud', // or 'local' or 'both'
-  requiresApiKey: true, // or false
-  // ... other metadata
-},
-```
-
-### 2. Add Provider Handler (if needed)
-
-```typescript
-// src/lib/ai/unified-client.ts
-
-private async chatNewProvider(options, modelMeta) {
-  const apiKey = this.config.apiKeys?.newprovider;
-
-  return fetch('https://api.newprovider.com/chat', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: options.model,
-      messages: options.messages,
-    }),
-  });
-}
-```
-
-### 3. Route in Main Client
-
-```typescript
-// src/lib/ai/unified-client.ts
-
-case 'New Provider':
-  return this.chatNewProvider(options, modelMeta);
-```
-
-### 4. Done!
-
-Model is now available everywhere:
-
-- ✅ Cat chat
-- ✅ AI assistants
-- ✅ Auto-router
-- ✅ Model selector UI
-
----
-
-## Best Practices
-
-### For Developers
-
-**DO:**
-
-- ✅ Always use MODEL_REGISTRY for model metadata
-- ✅ Use UnifiedAIClient for all AI calls
-- ✅ Handle streaming responses properly
-- ✅ Show loading states
-- ✅ Handle errors gracefully
-- ✅ Track usage for free tier users
-
-**DON'T:**
-
-- ❌ Hardcode model IDs in components
-- ❌ Bypass the unified client
-- ❌ Store API keys in plaintext
-- ❌ Expose API keys in client code
-- ❌ Make assumptions about model availability
-
-### For UX
-
-**DO:**
-
-- ✅ Default to free tier (zero friction)
-- ✅ Show which model is being used (badge)
-- ✅ Explain upgrade benefits clearly
-- ✅ Make model switching easy
-- ✅ Show usage limits transparently
-
-**DON'T:**
-
-- ❌ Force users to configure before use
-- ❌ Hide which model is being used
-- ❌ Surprise users with costs
-- ❌ Make local setup too technical
-- ❌ Overwhelm with model choices
+1. Add an entry to `AI_MODEL_REGISTRY` in `src/config/ai-models.ts` (id, name,
+   provider, tier, pricing, context, capabilities, `isFree`).
+2. If it needs a new provider transport, add it to
+   `src/services/ai/openai-compat.ts` (or a dedicated service) and wire it into
+   `provider-resolver.ts` / `platform-providers.ts`.
+3. That's it — the legacy `MODEL_REGISTRY`, tier UIs, auto-router, and selectors
+   all read from the SSOT automatically.
 
 ---
 
 ## References
 
-- **Model Registry:** `src/config/model-registry.ts`
-- **Unified Client:** `src/lib/ai/unified-client.ts`
-- **Chat API:** `src/app/api/cat/chat/route.ts`
-- **Status Badge:** `src/components/ai-chat/ModelStatusBadge.tsx`
-- **Existing Models:** `src/config/ai-models.ts`
+- **Registry (SSOT):** `src/config/ai-models.ts`
+- **Legacy compat adapter:** `src/config/model-registry.ts`
+- **Provider services:** `src/services/ai/{openrouter,groq,openai-compat}.ts`
+- **Platform chain:** `src/services/ai/platform-providers.ts`
+- **Provider resolver:** `src/services/cat/provider-resolver.ts`
+- **Auto-router:** `src/services/ai/auto-router.ts`
+- **Chat orchestrator:** `src/services/cat/chat-orchestrator.ts`
+- **Chat endpoint:** `src/app/api/cat/chat/route.ts`
+- **Cat Credits metering:** `src/services/cat/credit-metering.ts`
+- **Cat Credits design:** `docs/architecture/CAT_CREDITS.md`
 
 ---
 
-## Support
-
-For questions or issues:
-
-- Check model registry for available models
-- Verify API keys are correctly configured
-- Check free tier usage limits
-- Test with different models
-- Review error messages in console
-
----
-
-**Remember:** The goal is **instant AI access** for everyone, with optional power features for those who want them.
+**Remember:** the goal is **instant AI access** for everyone, with optional
+Bitcoin-paid and BYOK power features for those who want them.

@@ -1,19 +1,21 @@
 /**
- * Model Registry - SSOT for All AI Models
+ * Compatibility adapter for the legacy chat model selector.
  *
- * This registry contains metadata for all available AI models across providers.
- * It enables users to choose between free, paid, open source, and proprietary models.
+ * The canonical AI model source is `ai-models.ts`. Keep this file as a thin
+ * projection so older UI code does not drift into a second pricing/model list.
  */
 
-interface ModelMetadata {
+import { AI_MODEL_REGISTRY, type AIModelMetadata } from '@/config/ai-models';
+
+export interface ModelMetadata {
   id: string;
   name: string;
   provider: string;
 
   // Economics
   tier: 'free' | 'freemium' | 'paid';
-  costPerMessage?: number; // in USD
-  costPer1MTokens?: number; // in USD
+  costPerMessage?: number;
+  costPer1MTokens?: number;
 
   // Capabilities
   contextWindow: number;
@@ -29,14 +31,14 @@ interface ModelMetadata {
   // Deployment
   availability: 'cloud' | 'local' | 'both';
   localRequirements?: {
-    minRAM: number; // GB
-    minVRAM?: number; // GB
-    diskSpace: number; // GB
+    minRAM: number;
+    minVRAM?: number;
+    diskSpace: number;
   };
 
   // Performance
   speed: 'slow' | 'medium' | 'fast' | 'instant';
-  quality: 1 | 2 | 3 | 4 | 5; // stars
+  quality: 1 | 2 | 3 | 4 | 5;
 
   // Access
   apiEndpoint: string;
@@ -44,409 +46,76 @@ interface ModelMetadata {
   openRouterCompatible: boolean;
   ollamaCompatible: boolean;
 
-  // Description
   description?: string;
 }
 
-export const MODEL_REGISTRY: Record<string, ModelMetadata> = {
-  // ============================================
-  // FREE TIER - Default options
-  // ============================================
+const OPEN_PROVIDERS = new Set(['Meta', 'Mistral', 'NVIDIA', 'DeepSeek', 'Qwen']);
+const OPEN_WEIGHT_MODEL_IDS = new Set([
+  'openai/gpt-oss-120b',
+  'openai/gpt-oss-120b:free',
+  'openai/gpt-oss-20b',
+  'openai/gpt-oss-20b:free',
+]);
 
-  'meta-llama/llama-4-maverick:free': {
-    id: 'meta-llama/llama-4-maverick:free',
-    name: 'Llama 4 Maverick',
-    provider: 'Meta',
+function toLegacyTier(model: AIModelMetadata): ModelMetadata['tier'] {
+  if (model.isFree || model.tier === 'free') {
+    return 'free';
+  }
+  return model.tier === 'economy' ? 'freemium' : 'paid';
+}
 
-    tier: 'free',
-    costPerMessage: 0,
-    costPer1MTokens: 0,
+function toCostPer1MTokens(model: AIModelMetadata): number {
+  return Math.max(model.inputCostPer1M, model.outputCostPer1M);
+}
 
-    type: 'open',
-    license: 'Llama 4 License',
+function toSpeed(model: AIModelMetadata): ModelMetadata['speed'] {
+  if (model.tier === 'free' || model.tier === 'economy') {
+    return 'fast';
+  }
+  return model.tier === 'premium' ? 'medium' : 'fast';
+}
 
+function toQuality(model: AIModelMetadata): ModelMetadata['quality'] {
+  if (model.tier === 'premium') {
+    return 5;
+  }
+  if (model.tier === 'standard') {
+    return 4;
+  }
+  return model.contextWindow >= 128000 ? 4 : 3;
+}
+
+function toLegacyModel(model: AIModelMetadata): ModelMetadata {
+  const costPer1MTokens = toCostPer1MTokens(model);
+  return {
+    id: model.id,
+    name: model.name,
+    provider: model.provider,
+    tier: toLegacyTier(model),
+    costPerMessage: model.isFree ? 0 : undefined,
+    costPer1MTokens,
+    contextWindow: model.contextWindow,
+    maxOutputTokens: model.maxOutputTokens,
+    supportsVision: model.capabilities.includes('vision'),
+    supportsFunctionCalling: model.capabilities.includes('function_calling'),
+    supportsStreaming: model.capabilities.includes('streaming'),
+    type:
+      OPEN_PROVIDERS.has(model.provider) || OPEN_WEIGHT_MODEL_IDS.has(model.id)
+        ? 'open'
+        : 'proprietary',
     availability: 'cloud',
-
-    contextWindow: 128000,
-    maxOutputTokens: 8192,
-    supportsVision: false,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'fast',
-    quality: 5,
-
+    speed: toSpeed(model),
+    quality: toQuality(model),
     apiEndpoint: 'https://openrouter.ai/api/v1/chat/completions',
-    requiresApiKey: false,
+    requiresApiKey: !model.isFree,
     openRouterCompatible: true,
     ollamaCompatible: false,
-
-    description:
-      'Latest Llama 4 MoE model with 128 experts. Free tier: 50-1000 requests/day on OpenRouter.',
-  },
-
-  'groq/mixtral-8x7b': {
-    id: 'groq/mixtral-8x7b',
-    name: 'Mixtral 8x7B',
-    provider: 'Groq',
-
-    tier: 'freemium',
-    costPerMessage: 0, // Free tier: 14,400 requests/day
-    costPer1MTokens: 0.27,
-
-    type: 'open',
-    license: 'Apache 2.0',
-
-    availability: 'cloud',
-
-    contextWindow: 32768,
-    maxOutputTokens: 32768,
-    supportsVision: false,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'instant',
-    quality: 4,
-
-    apiEndpoint: 'https://api.groq.com/openai/v1/chat/completions',
-    requiresApiKey: false, // Use server key for free tier
-    openRouterCompatible: false,
-    ollamaCompatible: false,
-
-    description:
-      'Fast, high-quality open source model. Perfect for getting started with no setup required.',
-  },
-
-  'together/llama-3.1-8b': {
-    id: 'together/llama-3.1-8b',
-    name: 'Llama 3.1 8B',
-    provider: 'Together AI',
-
-    tier: 'freemium',
-    costPerMessage: 0,
-    costPer1MTokens: 0.2,
-
-    type: 'open',
-    license: 'Llama 3.1 License',
-
-    availability: 'both',
-    localRequirements: {
-      minRAM: 16,
-      minVRAM: 8,
-      diskSpace: 10,
-    },
-
-    contextWindow: 131072,
-    maxOutputTokens: 4096,
-    supportsVision: false,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'fast',
-    quality: 4,
-
-    apiEndpoint: 'https://api.together.xyz/v1/chat/completions',
-    requiresApiKey: false,
-    openRouterCompatible: true,
-    ollamaCompatible: true,
-
-    description: 'Excellent balance of quality and speed. Can run locally or in the cloud.',
-  },
-
-  'google/gemini-2.0-flash': {
-    id: 'google/gemini-2.0-flash',
-    name: 'Gemini 2.0 Flash',
-    provider: 'Google',
-
-    tier: 'freemium',
-    costPerMessage: 0,
-    costPer1MTokens: 0.075,
-
-    type: 'proprietary',
-
-    availability: 'cloud',
-
-    contextWindow: 1000000,
-    maxOutputTokens: 8192,
-    supportsVision: true,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'instant',
-    quality: 4,
-
-    apiEndpoint:
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
-    requiresApiKey: true,
-    openRouterCompatible: true,
-    ollamaCompatible: false,
-
-    description: 'Massive 1M token context window. Great for analyzing large documents.',
-  },
-
-  // ============================================
-  // PROPRIETARY PAID - Best Quality
-  // ============================================
-
-  'openai/gpt-4o': {
-    id: 'openai/gpt-4o',
-    name: 'GPT-4o',
-    provider: 'OpenAI',
-
-    tier: 'paid',
-    costPerMessage: 0.03,
-    costPer1MTokens: 5.0,
-
-    type: 'proprietary',
-
-    availability: 'cloud',
-
-    contextWindow: 128000,
-    maxOutputTokens: 16384,
-    supportsVision: true,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'medium',
-    quality: 5,
-
-    apiEndpoint: 'https://api.openai.com/v1/chat/completions',
-    requiresApiKey: true,
-    openRouterCompatible: true,
-    ollamaCompatible: false,
-
-    description: 'Top-tier model with vision and function calling. Best overall performance.',
-  },
-
-  'openai/gpt-4o-mini': {
-    id: 'openai/gpt-4o-mini',
-    name: 'GPT-4o Mini',
-    provider: 'OpenAI',
-
-    tier: 'paid',
-    costPerMessage: 0.002,
-    costPer1MTokens: 0.15,
-
-    type: 'proprietary',
-
-    availability: 'cloud',
-
-    contextWindow: 128000,
-    maxOutputTokens: 16384,
-    supportsVision: true,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'fast',
-    quality: 4,
-
-    apiEndpoint: 'https://api.openai.com/v1/chat/completions',
-    requiresApiKey: true,
-    openRouterCompatible: true,
-    ollamaCompatible: false,
-
-    description: 'Affordable GPT-4 quality. Great value for most use cases.',
-  },
-
-  'anthropic/claude-3.5-sonnet': {
-    id: 'anthropic/claude-3.5-sonnet',
-    name: 'Claude 3.5 Sonnet',
-    provider: 'Anthropic',
-
-    tier: 'paid',
-    costPerMessage: 0.03,
-    costPer1MTokens: 3.0,
-
-    type: 'proprietary',
-
-    availability: 'cloud',
-
-    contextWindow: 200000,
-    maxOutputTokens: 8192,
-    supportsVision: true,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'medium',
-    quality: 5,
-
-    apiEndpoint: 'https://api.anthropic.com/v1/messages',
-    requiresApiKey: true,
-    openRouterCompatible: true,
-    ollamaCompatible: false,
-
-    description: 'Exceptional reasoning and analysis. 200k context window.',
-  },
-
-  'xai/grok-beta': {
-    id: 'xai/grok-beta',
-    name: 'Grok',
-    provider: 'X.AI',
-
-    tier: 'paid',
-    costPerMessage: 0.02,
-    costPer1MTokens: 5.0,
-
-    type: 'proprietary',
-
-    availability: 'cloud',
-
-    contextWindow: 131072,
-    maxOutputTokens: 4096,
-    supportsVision: false,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'fast',
-    quality: 4,
-
-    apiEndpoint: 'https://api.x.ai/v1/chat/completions',
-    requiresApiKey: true,
-    openRouterCompatible: true,
-    ollamaCompatible: false,
-
-    description: 'Fast, witty responses. Real-time access to X/Twitter context.',
-  },
-
-  // ============================================
-  // OPEN SOURCE - Run Locally
-  // ============================================
-
-  'local/llama-3.1-8b': {
-    id: 'local/llama-3.1-8b',
-    name: 'Llama 3.1 8B (Local)',
-    provider: 'Meta (via Ollama)',
-
-    tier: 'free',
-    costPerMessage: 0,
-
-    type: 'open',
-    license: 'Llama 3.1 License',
-
-    availability: 'local',
-    localRequirements: {
-      minRAM: 16,
-      minVRAM: 8,
-      diskSpace: 10,
-    },
-
-    contextWindow: 131072,
-    maxOutputTokens: 4096,
-    supportsVision: false,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'medium',
-    quality: 4,
-
-    apiEndpoint: 'http://localhost:11434/api/chat',
-    requiresApiKey: false,
-    openRouterCompatible: false,
-    ollamaCompatible: true,
-
-    description: '100% private. Runs on your computer. No data sent to cloud.',
-  },
-
-  'local/mistral-7b': {
-    id: 'local/mistral-7b',
-    name: 'Mistral 7B (Local)',
-    provider: 'Mistral AI (via Ollama)',
-
-    tier: 'free',
-    costPerMessage: 0,
-
-    type: 'open',
-    license: 'Apache 2.0',
-
-    availability: 'local',
-    localRequirements: {
-      minRAM: 8,
-      minVRAM: 6,
-      diskSpace: 5,
-    },
-
-    contextWindow: 32768,
-    maxOutputTokens: 8192,
-    supportsVision: false,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'fast',
-    quality: 3,
-
-    apiEndpoint: 'http://localhost:11434/api/chat',
-    requiresApiKey: false,
-    openRouterCompatible: false,
-    ollamaCompatible: true,
-
-    description: 'Lightweight local model. Good for lower-end hardware.',
-  },
-
-  'local/llama-3.1-70b': {
-    id: 'local/llama-3.1-70b',
-    name: 'Llama 3.1 70B (Local)',
-    provider: 'Meta (via Ollama)',
-
-    tier: 'free',
-    costPerMessage: 0,
-
-    type: 'open',
-    license: 'Llama 3.1 License',
-
-    availability: 'local',
-    localRequirements: {
-      minRAM: 64,
-      minVRAM: 48,
-      diskSpace: 40,
-    },
-
-    contextWindow: 131072,
-    maxOutputTokens: 4096,
-    supportsVision: false,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'slow',
-    quality: 5,
-
-    apiEndpoint: 'http://localhost:11434/api/chat',
-    requiresApiKey: false,
-    openRouterCompatible: false,
-    ollamaCompatible: true,
-
-    description: 'Highest quality local model. Requires powerful hardware.',
-  },
-
-  // ============================================
-  // OPENROUTER - Universal Access
-  // ============================================
-
-  'openrouter/auto': {
-    id: 'openrouter/auto',
-    name: 'OpenRouter Auto',
-    provider: 'OpenRouter',
-
-    tier: 'freemium',
-    costPerMessage: 0.001, // Varies by selected model
-
-    type: 'open', // Mixed (aggregator)
-
-    availability: 'cloud',
-
-    contextWindow: 200000, // Varies
-    maxOutputTokens: 16384, // Varies
-    supportsVision: true,
-    supportsFunctionCalling: true,
-    supportsStreaming: true,
-
-    speed: 'medium',
-    quality: 5,
-
-    apiEndpoint: 'https://openrouter.ai/api/v1/chat/completions',
-    requiresApiKey: true,
-    openRouterCompatible: true,
-    ollamaCompatible: false,
-
-    description: 'Access 200+ models with one API key. Automatic fallbacks and best pricing.',
-  },
-};
+    description: model.description,
+  };
+}
+
+export const MODEL_REGISTRY: Record<string, ModelMetadata> = Object.fromEntries(
+  Object.values(AI_MODEL_REGISTRY)
+    .filter(model => model.isAvailable)
+    .map(model => [model.id, toLegacyModel(model)])
+);
