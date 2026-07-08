@@ -77,14 +77,38 @@ jobs:
           restore-keys: |
             nextjs-${{ hashFiles('**/package-lock.json') }}-
 
-      - name: Build
+      - name: Build (standalone — the exact bundle CD ships)
         env:
           NODE_ENV: production
+          # Build the SELF_HOST standalone here so CI tests the same artifact CD
+          # deploys (tested == shipped). On main this artifact is uploaded and
+          # shipped verbatim; PRs build it too (dummy env) to catch standalone-only
+          # breakage. Bake the same client vars CD bakes — public receiving
+          # addresses; empty on PRs/forks, which is fine for a test build.
+          SELF_HOST: '1'
+          NEXT_PUBLIC_LIGHTNING_ADDRESS: ${{ vars.NEXT_PUBLIC_LIGHTNING_ADDRESS }}
+          NEXT_PUBLIC_BITCOIN_ADDRESS: ${{ vars.NEXT_PUBLIC_BITCOIN_ADDRESS }}
         run: npm run build
 
-      - name: Start server
+      - name: Assemble standalone (static + public)
+        # Copy the assets into the standalone tree so both the E2E run below and
+        # the uploaded artifact are complete and runnable as-is.
         run: |
-          npm start &
+          cp -r .next/static .next/standalone/.next/static
+          [ -d public ] && cp -r public .next/standalone/public || true
+
+      - name: Upload standalone artifact (main → shipped by CD)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: standalone-${{ github.sha }}
+          path: .next/standalone
+          include-hidden-files: true # .next/* is hidden; excluded by default
+          retention-days: 3
+
+      - name: Start server (standalone — the shipped entrypoint)
+        run: |
+          PORT=3000 node .next/standalone/server.js &
           npx wait-on http://localhost:3000
 
       - name: Validate required P0 E2E env

@@ -54,7 +54,12 @@ ST="$REPO_ROOT/.next/standalone"
 [ -d "$ST" ] || { echo "ERROR: no .next/standalone — build with SELF_HOST=1 first" >&2; exit 1; }
 
 echo "=== assemble standalone (static + public) ==="
-cp -r "$REPO_ROOT/.next/static" "$ST/.next/static"
+# When CD ships a pre-assembled artifact (CI built the standalone with static +
+# public already copied in), the repo-root .next/static / public won't exist —
+# skip the copy rather than failing. A freshly-built tree still has them and
+# assembles normally. The artifact is ALWAYS pre-assembled before upload, so a
+# skipped copy here never means missing assets.
+[ -d "$REPO_ROOT/.next/static" ] && cp -r "$REPO_ROOT/.next/static" "$ST/.next/static"
 [ -d "$REPO_ROOT/public" ] && cp -r "$REPO_ROOT/public" "$ST/public"
 
 echo "=== rsync → $OC_BOX:$OC_APP_BASE/app-next ==="
