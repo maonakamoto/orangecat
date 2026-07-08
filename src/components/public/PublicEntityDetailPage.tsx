@@ -27,6 +27,9 @@ import { currencyConverter } from '@/services/currency';
 import { type CurrencyCode } from '@/config/currencies';
 import { fetchEntityOwner } from '@/lib/entities/fetchEntityOwner';
 import { fetchProfileListingCounts } from '@/services/profile/listingCounts';
+import { WalletVisibilityToggle } from '@/components/wallets/WalletVisibilityToggle';
+import { WALLET_VISIBILITY_DEFAULT, type WalletVisibility } from '@/config/wallet-visibility';
+import { DATABASE_TABLES } from '@/config/database-tables';
 import { ROUTES } from '@/config/routes';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Z_INDEX_CLASSES } from '@/constants/z-index';
@@ -197,6 +200,32 @@ export default async function PublicEntityDetailPage({
   // also the owner's dashboard detail view: one layout, buyers see the listing,
   // the owner sees it + Edit (no separate flat-grid dashboard page).
   const isOwner = !!user && !!owner?.user_id && owner.user_id === user.id;
+
+  // Owner-only funding transparency. The toggle governs a wallet the owner
+  // explicitly tied to THIS entity (entity_wallets is an optional per-entity
+  // override — see walletResolutionService). Without such a link, funding flows
+  // to the owner's default wallet and there is nothing entity-scoped to control,
+  // so we fetch it only for the owner and render the control only when it exists.
+  let fundingLink: { walletId: string; visibility: WalletVisibility } | null = null;
+  if (isOwner) {
+    const { data: link } = await supabase
+      .from(DATABASE_TABLES.ENTITY_WALLETS)
+      .select('wallet_id, visibility')
+      .eq('entity_type', config.entityType)
+      .eq('entity_id', id)
+      .eq('is_primary', true)
+      .order('created_at')
+      .limit(1)
+      .maybeSingle();
+    if (link) {
+      // `visibility` is a new column not yet in the generated Supabase types.
+      const row = link as { wallet_id: string; visibility?: string | null };
+      fundingLink = {
+        walletId: row.wallet_id,
+        visibility: (row.visibility as WalletVisibility) ?? WALLET_VISIBILITY_DEFAULT,
+      };
+    }
+  }
   // SSOT edit convention: entities are edited via their create page in edit
   // mode (?edit=<id>) — see src/config/entities/*.tsx editPath. There is no
   // `${basePath}/${id}/edit` route for most entity types; linking it 404'd.
@@ -253,6 +282,18 @@ export default async function PublicEntityDetailPage({
                   Edit
                 </Button>
               </Link>
+            </div>
+          </div>
+        )}
+        {isOwner && fundingLink && (
+          <div className="border-b border-default bg-surface-raised">
+            <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
+              <WalletVisibilityToggle
+                walletId={fundingLink.walletId}
+                entityType={config.entityType}
+                entityId={id}
+                initialVisibility={fundingLink.visibility}
+              />
             </div>
           </div>
         )}

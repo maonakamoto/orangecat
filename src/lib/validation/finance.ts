@@ -10,6 +10,7 @@ import {
   BUDGET_PERIOD_VALUES,
   ALLOWED_CATEGORY_ICONS,
 } from '@/types/wallet';
+import { WALLET_VISIBILITY_LEVELS } from '@/config/wallet-visibility';
 import { lightningAddressSchema, optionalText } from './base';
 
 /**
@@ -245,6 +246,21 @@ export const walletTransferSchema = z
     message: 'Cannot transfer to the same wallet',
     path: ['to_wallet_id'],
   });
+
+/**
+ * Schema for PATCH /api/wallets/entity-visibility — set the transparency level
+ * of a wallet-entity link. See src/config/wallet-visibility.ts (SSOT).
+ */
+export const walletVisibilitySchema = z.object({
+  wallet_id: z.string().uuid('wallet_id must be a valid UUID'),
+  entity_type: z.enum(ENTITY_TYPES, {
+    errorMap: () => ({ message: 'Invalid entity type' }),
+  }),
+  entity_id: z.string().uuid('entity_id must be a valid UUID'),
+  visibility: z.enum(WALLET_VISIBILITY_LEVELS, {
+    errorMap: () => ({ message: 'Invalid visibility level' }),
+  }),
+});
 
 // ==================== PAYMENT SCHEMAS ====================
 

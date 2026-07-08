@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
 import FundingProgress from '@/components/public/FundingProgress';
+import EntityLedgerTotal from '@/components/public/EntityLedgerTotal';
 import type { EntityDetailConfig } from '@/components/public/PublicEntityDetailPage';
 import { ROUTES } from '@/config/routes';
 import { RESEARCH_FIELDS, METHODOLOGIES, TIMELINES } from '@/config/research';
@@ -33,6 +34,9 @@ export const researchDetailConfig: EntityDetailConfig = {
     return (
       <>
         <FundingProgress raised={fundingRaised} goal={fundingGoal} currency="BTC" />
+        {/* Honest, ledger-derived BTC total — renders only when the owner has
+            opted the fundraise into transparency (public/total). */}
+        <EntityLedgerTotal entityType="research" entityId={String(entity.id)} />
 
         {/* Research Details */}
         <Card>
