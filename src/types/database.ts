@@ -3332,6 +3332,7 @@ export interface Database {
           entity_type: string;
           id: string;
           is_primary: boolean | null;
+          visibility: string;
           wallet_id: string;
         };
         Insert: {
@@ -3341,6 +3342,7 @@ export interface Database {
           entity_type: string;
           id?: string;
           is_primary?: boolean | null;
+          visibility?: string;
           wallet_id: string;
         };
         Update: {
@@ -3350,6 +3352,7 @@ export interface Database {
           entity_type?: string;
           id?: string;
           is_primary?: boolean | null;
+          visibility?: string;
           wallet_id?: string;
         };
       };

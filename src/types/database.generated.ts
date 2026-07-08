@@ -1,19 +1,74 @@
 // AUTO-GENERATED from the LIVE self-hosted Postgres schema. DO NOT EDIT BY HAND.
 // Regenerate:  npm run gen:types   (see scripts/db/gen-types.sh)
 // Source of truth: supabase.orangecat.ch — postgres-meta /generators/typescript
-//
-// This is the accurate, regenerable SSOT for the database schema. It is NOT yet
-// wired into `@/types/database` app-wide: pointing the `<Database>`-typed
-// singleton clients (browser/admin/server) at these strict types activates
-// postgrest-js query validation and surfaces ~268 pre-existing type gaps in the
-// data layer (dynamic `.from()`, untyped RPCs, loose selects). Adopting it is a
-// dedicated migration — until then, drift is guarded by `npm run audit:schema`.
-// New strongly-typed code can import `Database`/`Tables<...>` directly from here.
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   public: {
     Tables: {
+      _backup_cat_conversations_20260703: {
+        Row: {
+          created_at: string | null;
+          id: string | null;
+          is_default: boolean | null;
+          title: string | null;
+          updated_at: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          id?: string | null;
+          is_default?: boolean | null;
+          title?: string | null;
+          updated_at?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string | null;
+          is_default?: boolean | null;
+          title?: string | null;
+          updated_at?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
+      _backup_cat_messages_20260703: {
+        Row: {
+          content: string | null;
+          conversation_id: string | null;
+          created_at: string | null;
+          id: string | null;
+          model_used: string | null;
+          provider: string | null;
+          role: string | null;
+          token_count: number | null;
+          user_id: string | null;
+        };
+        Insert: {
+          content?: string | null;
+          conversation_id?: string | null;
+          created_at?: string | null;
+          id?: string | null;
+          model_used?: string | null;
+          provider?: string | null;
+          role?: string | null;
+          token_count?: number | null;
+          user_id?: string | null;
+        };
+        Update: {
+          content?: string | null;
+          conversation_id?: string | null;
+          created_at?: string | null;
+          id?: string | null;
+          model_used?: string | null;
+          provider?: string | null;
+          role?: string | null;
+          token_count?: number | null;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       actors: {
         Row: {
           actor_type: string;
@@ -60,6 +115,7 @@ export type Database = {
       ai_assistants: {
         Row: {
           actor_id: string;
+          allowed_models: string[] | null;
           api_provider: string | null;
           avatar_url: string | null;
           average_rating: number | null;
@@ -68,6 +124,7 @@ export type Database = {
           compute_provider_id: string | null;
           compute_provider_type: Database['public']['Enums']['compute_provider_type'] | null;
           created_at: string | null;
+          default_model: string | null;
           description: string | null;
           free_messages_per_day: number | null;
           id: string;
@@ -76,12 +133,14 @@ export type Database = {
           knowledge_base_urls: string[] | null;
           lightning_address: string | null;
           max_tokens_per_response: number | null;
+          min_model_tier: string | null;
           model_preference: string | null;
           personality_traits: string[] | null;
           price_per_1k_tokens: number | null;
           price_per_message: number | null;
           pricing_model: Database['public']['Enums']['ai_pricing_model'] | null;
           published_at: string | null;
+          show_on_profile: boolean | null;
           status: Database['public']['Enums']['ai_assistant_status'] | null;
           subscription_price: number | null;
           system_prompt: string;
@@ -97,6 +156,7 @@ export type Database = {
         };
         Insert: {
           actor_id: string;
+          allowed_models?: string[] | null;
           api_provider?: string | null;
           avatar_url?: string | null;
           average_rating?: number | null;
@@ -105,6 +165,7 @@ export type Database = {
           compute_provider_id?: string | null;
           compute_provider_type?: Database['public']['Enums']['compute_provider_type'] | null;
           created_at?: string | null;
+          default_model?: string | null;
           description?: string | null;
           free_messages_per_day?: number | null;
           id?: string;
@@ -113,12 +174,14 @@ export type Database = {
           knowledge_base_urls?: string[] | null;
           lightning_address?: string | null;
           max_tokens_per_response?: number | null;
+          min_model_tier?: string | null;
           model_preference?: string | null;
           personality_traits?: string[] | null;
           price_per_1k_tokens?: number | null;
           price_per_message?: number | null;
           pricing_model?: Database['public']['Enums']['ai_pricing_model'] | null;
           published_at?: string | null;
+          show_on_profile?: boolean | null;
           status?: Database['public']['Enums']['ai_assistant_status'] | null;
           subscription_price?: number | null;
           system_prompt: string;
@@ -134,6 +197,7 @@ export type Database = {
         };
         Update: {
           actor_id?: string;
+          allowed_models?: string[] | null;
           api_provider?: string | null;
           avatar_url?: string | null;
           average_rating?: number | null;
@@ -142,6 +206,7 @@ export type Database = {
           compute_provider_id?: string | null;
           compute_provider_type?: Database['public']['Enums']['compute_provider_type'] | null;
           created_at?: string | null;
+          default_model?: string | null;
           description?: string | null;
           free_messages_per_day?: number | null;
           id?: string;
@@ -150,12 +215,14 @@ export type Database = {
           knowledge_base_urls?: string[] | null;
           lightning_address?: string | null;
           max_tokens_per_response?: number | null;
+          min_model_tier?: string | null;
           model_preference?: string | null;
           personality_traits?: string[] | null;
           price_per_1k_tokens?: number | null;
           price_per_message?: number | null;
           pricing_model?: Database['public']['Enums']['ai_pricing_model'] | null;
           published_at?: string | null;
+          show_on_profile?: boolean | null;
           status?: Database['public']['Enums']['ai_assistant_status'] | null;
           subscription_price?: number | null;
           system_prompt?: string;
@@ -181,6 +248,61 @@ export type Database = {
             columns: ['user_id'];
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
+          },
+        ];
+      };
+      ai_conversations: {
+        Row: {
+          assistant_id: string;
+          created_at: string | null;
+          id: string;
+          last_message_at: string | null;
+          status: string | null;
+          title: string | null;
+          total_cost_btc: number | null;
+          total_messages: number | null;
+          total_tokens_used: number | null;
+          updated_at: string | null;
+          user_id: string;
+        };
+        Insert: {
+          assistant_id: string;
+          created_at?: string | null;
+          id?: string;
+          last_message_at?: string | null;
+          status?: string | null;
+          title?: string | null;
+          total_cost_btc?: number | null;
+          total_messages?: number | null;
+          total_tokens_used?: number | null;
+          updated_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          assistant_id?: string;
+          created_at?: string | null;
+          id?: string;
+          last_message_at?: string | null;
+          status?: string | null;
+          title?: string | null;
+          total_cost_btc?: number | null;
+          total_messages?: number | null;
+          total_tokens_used?: number | null;
+          updated_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'ai_conversations_assistant_id_fkey';
+            columns: ['assistant_id'];
+            referencedRelation: 'ai_assistants';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'ai_conversations_assistant_id_fkey';
+            columns: ['assistant_id'];
+            referencedRelation: 'ai_cost_analytics';
+            referencedColumns: ['assistant_id'];
           },
         ];
       };
@@ -264,6 +386,55 @@ export type Database = {
           user_id?: string;
         };
         Relationships: [];
+      };
+      ai_messages: {
+        Row: {
+          api_cost_btc: number | null;
+          content: string;
+          conversation_id: string;
+          cost_btc: number | null;
+          created_at: string | null;
+          creator_markup_btc: number | null;
+          id: string;
+          metadata: Json | null;
+          model_used: string | null;
+          role: string;
+          tokens_used: number | null;
+        };
+        Insert: {
+          api_cost_btc?: number | null;
+          content: string;
+          conversation_id: string;
+          cost_btc?: number | null;
+          created_at?: string | null;
+          creator_markup_btc?: number | null;
+          id?: string;
+          metadata?: Json | null;
+          model_used?: string | null;
+          role: string;
+          tokens_used?: number | null;
+        };
+        Update: {
+          api_cost_btc?: number | null;
+          content?: string;
+          conversation_id?: string;
+          cost_btc?: number | null;
+          created_at?: string | null;
+          creator_markup_btc?: number | null;
+          id?: string;
+          metadata?: Json | null;
+          model_used?: string | null;
+          role?: string;
+          tokens_used?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'ai_messages_conversation_id_fkey';
+            columns: ['conversation_id'];
+            referencedRelation: 'ai_conversations';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       asset_availability: {
         Row: {
@@ -419,6 +590,48 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      audit_logs: {
+        Row: {
+          action: string;
+          created_at: string | null;
+          entity_id: string | null;
+          entity_type: string | null;
+          error_message: string | null;
+          id: string;
+          ip_address: string | null;
+          metadata: Json | null;
+          success: boolean | null;
+          user_agent: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          action: string;
+          created_at?: string | null;
+          entity_id?: string | null;
+          entity_type?: string | null;
+          error_message?: string | null;
+          id?: string;
+          ip_address?: string | null;
+          metadata?: Json | null;
+          success?: boolean | null;
+          user_agent?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          action?: string;
+          created_at?: string | null;
+          entity_id?: string | null;
+          entity_type?: string | null;
+          error_message?: string | null;
+          id?: string;
+          ip_address?: string | null;
+          metadata?: Json | null;
+          success?: boolean | null;
+          user_agent?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [];
       };
       availability_slots: {
         Row: {
@@ -659,6 +872,118 @@ export type Database = {
         };
         Relationships: [];
       };
+      cat_credit_entries: {
+        Row: {
+          amount_btc: number;
+          balance_after_btc: number;
+          created_at: string;
+          id: string;
+          kind: string;
+          metadata: Json | null;
+          ref: string | null;
+          seq: number;
+          user_id: string;
+        };
+        Insert: {
+          amount_btc: number;
+          balance_after_btc: number;
+          created_at?: string;
+          id?: string;
+          kind: string;
+          metadata?: Json | null;
+          ref?: string | null;
+          seq?: never;
+          user_id: string;
+        };
+        Update: {
+          amount_btc?: number;
+          balance_after_btc?: number;
+          created_at?: string;
+          id?: string;
+          kind?: string;
+          metadata?: Json | null;
+          ref?: string | null;
+          seq?: never;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      cat_credit_topups: {
+        Row: {
+          amount_btc: number;
+          bolt11: string;
+          created_at: string;
+          expires_at: string;
+          id: string;
+          paid_at: string | null;
+          payment_hash: string;
+          status: string;
+          user_id: string;
+        };
+        Insert: {
+          amount_btc: number;
+          bolt11: string;
+          created_at?: string;
+          expires_at: string;
+          id?: string;
+          paid_at?: string | null;
+          payment_hash: string;
+          status?: string;
+          user_id: string;
+        };
+        Update: {
+          amount_btc?: number;
+          bolt11?: string;
+          created_at?: string;
+          expires_at?: string;
+          id?: string;
+          paid_at?: string | null;
+          payment_hash?: string;
+          status?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      cat_memories: {
+        Row: {
+          content: string;
+          created_at: string;
+          embedding: string | null;
+          id: string;
+          source: string;
+          source_conversation_id: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          content: string;
+          created_at?: string;
+          embedding?: string | null;
+          id?: string;
+          source?: string;
+          source_conversation_id?: string | null;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          content?: string;
+          created_at?: string;
+          embedding?: string | null;
+          id?: string;
+          source?: string;
+          source_conversation_id?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'cat_memories_source_conversation_id_fkey';
+            columns: ['source_conversation_id'];
+            referencedRelation: 'cat_conversations';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       cat_messages: {
         Row: {
           content: string;
@@ -792,6 +1117,88 @@ export type Database = {
         };
         Relationships: [];
       };
+      channel_waitlist: {
+        Row: {
+          created_at: string | null;
+          email: string;
+          id: string;
+          referrer: string | null;
+          source: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          email: string;
+          id?: string;
+          referrer?: string | null;
+          source?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          email?: string;
+          id?: string;
+          referrer?: string | null;
+          source?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
+      circles: {
+        Row: {
+          actor_id: string;
+          category: string | null;
+          cover_image_url: string | null;
+          created_at: string;
+          description: string | null;
+          id: string;
+          is_test: boolean;
+          member_count: number;
+          status: string;
+          tags: string[] | null;
+          title: string;
+          updated_at: string;
+          visibility: string;
+        };
+        Insert: {
+          actor_id: string;
+          category?: string | null;
+          cover_image_url?: string | null;
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_test?: boolean;
+          member_count?: number;
+          status?: string;
+          tags?: string[] | null;
+          title: string;
+          updated_at?: string;
+          visibility?: string;
+        };
+        Update: {
+          actor_id?: string;
+          category?: string | null;
+          cover_image_url?: string | null;
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_test?: boolean;
+          member_count?: number;
+          status?: string;
+          tags?: string[] | null;
+          title?: string;
+          updated_at?: string;
+          visibility?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'circles_actor_id_fkey';
+            columns: ['actor_id'];
+            referencedRelation: 'actors';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       content_embeddings: {
         Row: {
           embedding: string | null;
@@ -824,6 +1231,73 @@ export type Database = {
           url?: string | null;
         };
         Relationships: [];
+      };
+      contracts: {
+        Row: {
+          activated_at: string | null;
+          completed_at: string | null;
+          contract_type: string;
+          created_at: string | null;
+          created_by: string | null;
+          id: string;
+          party_a_actor_id: string;
+          party_b_actor_id: string;
+          proposal_id: string | null;
+          status: string;
+          terminated_at: string | null;
+          terms: Json;
+          updated_at: string | null;
+        };
+        Insert: {
+          activated_at?: string | null;
+          completed_at?: string | null;
+          contract_type: string;
+          created_at?: string | null;
+          created_by?: string | null;
+          id?: string;
+          party_a_actor_id: string;
+          party_b_actor_id: string;
+          proposal_id?: string | null;
+          status?: string;
+          terminated_at?: string | null;
+          terms?: Json;
+          updated_at?: string | null;
+        };
+        Update: {
+          activated_at?: string | null;
+          completed_at?: string | null;
+          contract_type?: string;
+          created_at?: string | null;
+          created_by?: string | null;
+          id?: string;
+          party_a_actor_id?: string;
+          party_b_actor_id?: string;
+          proposal_id?: string | null;
+          status?: string;
+          terminated_at?: string | null;
+          terms?: Json;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'contracts_party_a_actor_id_fkey';
+            columns: ['party_a_actor_id'];
+            referencedRelation: 'actors';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'contracts_party_b_actor_id_fkey';
+            columns: ['party_b_actor_id'];
+            referencedRelation: 'actors';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'contracts_proposal_id_fkey';
+            columns: ['proposal_id'];
+            referencedRelation: 'group_proposals';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       contributions: {
         Row: {
@@ -980,6 +1454,7 @@ export type Database = {
           entity_type: string;
           id: string;
           is_primary: boolean | null;
+          visibility: string;
           wallet_id: string;
         };
         Insert: {
@@ -989,6 +1464,7 @@ export type Database = {
           entity_type: string;
           id?: string;
           is_primary?: boolean | null;
+          visibility?: string;
           wallet_id: string;
         };
         Update: {
@@ -998,6 +1474,7 @@ export type Database = {
           entity_type?: string;
           id?: string;
           is_primary?: boolean | null;
+          visibility?: string;
           wallet_id?: string;
         };
         Relationships: [
@@ -1081,6 +1558,7 @@ export type Database = {
           recurrence_pattern: Json | null;
           requires_rsvp: boolean | null;
           rsvp_deadline: string | null;
+          show_on_profile: boolean | null;
           start_date: string;
           status: string | null;
           tags: string[] | null;
@@ -1125,6 +1603,7 @@ export type Database = {
           recurrence_pattern?: Json | null;
           requires_rsvp?: boolean | null;
           rsvp_deadline?: string | null;
+          show_on_profile?: boolean | null;
           start_date: string;
           status?: string | null;
           tags?: string[] | null;
@@ -1169,6 +1648,7 @@ export type Database = {
           recurrence_pattern?: Json | null;
           requires_rsvp?: boolean | null;
           rsvp_deadline?: string | null;
+          show_on_profile?: boolean | null;
           start_date?: string;
           status?: string | null;
           tags?: string[] | null;
@@ -1227,6 +1707,27 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      github_repo_cache: {
+        Row: {
+          fetched_at: string;
+          handle: string;
+          repos: Json;
+          user_id: string;
+        };
+        Insert: {
+          fetched_at?: string;
+          handle: string;
+          repos?: Json;
+          user_id: string;
+        };
+        Update: {
+          fetched_at?: string;
+          handle?: string;
+          repos?: Json;
+          user_id?: string;
+        };
+        Relationships: [];
       };
       group_activities: {
         Row: {
@@ -1400,6 +1901,58 @@ export type Database = {
           },
         ];
       };
+      group_invitations: {
+        Row: {
+          created_at: string | null;
+          email: string | null;
+          expires_at: string | null;
+          group_id: string;
+          id: string;
+          invited_by: string;
+          message: string | null;
+          responded_at: string | null;
+          role: string;
+          status: string;
+          token: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          email?: string | null;
+          expires_at?: string | null;
+          group_id: string;
+          id?: string;
+          invited_by: string;
+          message?: string | null;
+          responded_at?: string | null;
+          role?: string;
+          status?: string;
+          token?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          email?: string | null;
+          expires_at?: string | null;
+          group_id?: string;
+          id?: string;
+          invited_by?: string;
+          message?: string | null;
+          responded_at?: string | null;
+          role?: string;
+          status?: string;
+          token?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'group_invitations_group_id_fkey';
+            columns: ['group_id'];
+            referencedRelation: 'groups';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       group_members: {
         Row: {
           group_id: string;
@@ -1435,6 +1988,12 @@ export type Database = {
             referencedRelation: 'groups';
             referencedColumns: ['id'];
           },
+          {
+            foreignKeyName: 'group_members_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
         ];
       };
       group_proposals: {
@@ -1446,6 +2005,7 @@ export type Database = {
           executed_at: string | null;
           group_id: string;
           id: string;
+          is_public: boolean;
           proposal_type: string;
           proposer_id: string;
           status: string;
@@ -1463,6 +2023,7 @@ export type Database = {
           executed_at?: string | null;
           group_id: string;
           id?: string;
+          is_public?: boolean;
           proposal_type?: string;
           proposer_id: string;
           status?: string;
@@ -1480,6 +2041,7 @@ export type Database = {
           executed_at?: string | null;
           group_id?: string;
           id?: string;
+          is_public?: boolean;
           proposal_type?: string;
           proposer_id?: string;
           status?: string;
@@ -1494,6 +2056,12 @@ export type Database = {
             foreignKeyName: 'group_proposals_group_id_fkey';
             columns: ['group_id'];
             referencedRelation: 'groups';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'group_proposals_proposer_id_fkey';
+            columns: ['proposer_id'];
+            referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
         ];
@@ -1874,6 +2442,39 @@ export type Database = {
         };
         Relationships: [];
       };
+      loan_collateral: {
+        Row: {
+          asset_id: string;
+          created_at: string | null;
+          currency: string | null;
+          id: string;
+          loan_id: string;
+          owner_id: string;
+          pledged_value: number | null;
+          status: string | null;
+        };
+        Insert: {
+          asset_id: string;
+          created_at?: string | null;
+          currency?: string | null;
+          id?: string;
+          loan_id: string;
+          owner_id: string;
+          pledged_value?: number | null;
+          status?: string | null;
+        };
+        Update: {
+          asset_id?: string;
+          created_at?: string | null;
+          currency?: string | null;
+          id?: string;
+          loan_id?: string;
+          owner_id?: string;
+          pledged_value?: number | null;
+          status?: string | null;
+        };
+        Relationships: [];
+      };
       loan_offers: {
         Row: {
           accepted_at: string | null;
@@ -2054,6 +2655,7 @@ export type Database = {
           paid_off_at: string | null;
           preferred_terms: string | null;
           remaining_balance: number;
+          show_on_profile: boolean | null;
           status: string | null;
           title: string;
           updated_at: string;
@@ -2089,6 +2691,7 @@ export type Database = {
           paid_off_at?: string | null;
           preferred_terms?: string | null;
           remaining_balance: number;
+          show_on_profile?: boolean | null;
           status?: string | null;
           title: string;
           updated_at?: string;
@@ -2124,6 +2727,7 @@ export type Database = {
           paid_off_at?: string | null;
           preferred_terms?: string | null;
           remaining_balance?: number;
+          show_on_profile?: boolean | null;
           status?: string | null;
           title?: string;
           updated_at?: string;
@@ -2369,6 +2973,156 @@ export type Database = {
           },
         ];
       };
+      oauth_auth_codes: {
+        Row: {
+          actor_id: string;
+          client_id: string;
+          code_challenge: string;
+          code_challenge_method: string;
+          code_hash: string;
+          consumed_at: string | null;
+          created_at: string;
+          expires_at: string;
+          id: string;
+          nonce: string | null;
+          redirect_uri: string;
+          scopes: string[];
+          user_id: string;
+        };
+        Insert: {
+          actor_id: string;
+          client_id: string;
+          code_challenge: string;
+          code_challenge_method?: string;
+          code_hash: string;
+          consumed_at?: string | null;
+          created_at?: string;
+          expires_at: string;
+          id?: string;
+          nonce?: string | null;
+          redirect_uri: string;
+          scopes?: string[];
+          user_id: string;
+        };
+        Update: {
+          actor_id?: string;
+          client_id?: string;
+          code_challenge?: string;
+          code_challenge_method?: string;
+          code_hash?: string;
+          consumed_at?: string | null;
+          created_at?: string;
+          expires_at?: string;
+          id?: string;
+          nonce?: string | null;
+          redirect_uri?: string;
+          scopes?: string[];
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      oauth_clients: {
+        Row: {
+          allowed_scopes: string[];
+          client_id: string;
+          client_secret_hash: string | null;
+          created_at: string;
+          disabled_at: string | null;
+          id: string;
+          is_confidential: boolean;
+          is_trusted: boolean;
+          name: string;
+          redirect_uris: string[];
+        };
+        Insert: {
+          allowed_scopes?: string[];
+          client_id: string;
+          client_secret_hash?: string | null;
+          created_at?: string;
+          disabled_at?: string | null;
+          id?: string;
+          is_confidential?: boolean;
+          is_trusted?: boolean;
+          name: string;
+          redirect_uris?: string[];
+        };
+        Update: {
+          allowed_scopes?: string[];
+          client_id?: string;
+          client_secret_hash?: string | null;
+          created_at?: string;
+          disabled_at?: string | null;
+          id?: string;
+          is_confidential?: boolean;
+          is_trusted?: boolean;
+          name?: string;
+          redirect_uris?: string[];
+        };
+        Relationships: [];
+      };
+      oauth_refresh_tokens: {
+        Row: {
+          actor_id: string;
+          client_id: string;
+          created_at: string;
+          expires_at: string;
+          id: string;
+          last_used_at: string | null;
+          revoked_at: string | null;
+          scopes: string[];
+          token_hash: string;
+          user_id: string;
+        };
+        Insert: {
+          actor_id: string;
+          client_id: string;
+          created_at?: string;
+          expires_at: string;
+          id?: string;
+          last_used_at?: string | null;
+          revoked_at?: string | null;
+          scopes?: string[];
+          token_hash: string;
+          user_id: string;
+        };
+        Update: {
+          actor_id?: string;
+          client_id?: string;
+          created_at?: string;
+          expires_at?: string;
+          id?: string;
+          last_used_at?: string | null;
+          revoked_at?: string | null;
+          scopes?: string[];
+          token_hash?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      oauth_user_grants: {
+        Row: {
+          client_id: string;
+          granted_at: string;
+          id: string;
+          scopes: string[];
+          user_id: string;
+        };
+        Insert: {
+          client_id: string;
+          granted_at?: string;
+          id?: string;
+          scopes?: string[];
+          user_id: string;
+        };
+        Update: {
+          client_id?: string;
+          granted_at?: string;
+          id?: string;
+          scopes?: string[];
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       orders: {
         Row: {
           amount_btc: number;
@@ -2450,6 +3204,7 @@ export type Database = {
           entity_type: string;
           expires_at: string | null;
           id: string;
+          lnurl_verify_url: string | null;
           onchain_address: string | null;
           paid_at: string | null;
           payment_hash: string | null;
@@ -2468,6 +3223,7 @@ export type Database = {
           entity_type: string;
           expires_at?: string | null;
           id?: string;
+          lnurl_verify_url?: string | null;
           onchain_address?: string | null;
           paid_at?: string | null;
           payment_hash?: string | null;
@@ -2486,6 +3242,7 @@ export type Database = {
           entity_type?: string;
           expires_at?: string | null;
           id?: string;
+          lnurl_verify_url?: string | null;
           onchain_address?: string | null;
           paid_at?: string | null;
           payment_hash?: string | null;
@@ -2817,6 +3574,187 @@ export type Database = {
           },
         ];
       };
+      project_roles: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          engagement_type: string;
+          id: string;
+          project_id: string;
+          role_title: string;
+          skills: string[];
+          status: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          engagement_type?: string;
+          id?: string;
+          project_id: string;
+          role_title: string;
+          skills?: string[];
+          status?: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          engagement_type?: string;
+          id?: string;
+          project_id?: string;
+          role_title?: string;
+          skills?: string[];
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'project_roles_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      project_support: {
+        Row: {
+          amount_btc: number | null;
+          created_at: string;
+          display_name: string | null;
+          id: string;
+          is_anonymous: boolean | null;
+          lightning_invoice: string | null;
+          message: string | null;
+          project_id: string;
+          reaction_emoji: string | null;
+          support_type: Database['public']['Enums']['support_type'];
+          transaction_hash: string | null;
+          updated_at: string;
+          user_id: string | null;
+        };
+        Insert: {
+          amount_btc?: number | null;
+          created_at?: string;
+          display_name?: string | null;
+          id?: string;
+          is_anonymous?: boolean | null;
+          lightning_invoice?: string | null;
+          message?: string | null;
+          project_id: string;
+          reaction_emoji?: string | null;
+          support_type: Database['public']['Enums']['support_type'];
+          transaction_hash?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Update: {
+          amount_btc?: number | null;
+          created_at?: string;
+          display_name?: string | null;
+          id?: string;
+          is_anonymous?: boolean | null;
+          lightning_invoice?: string | null;
+          message?: string | null;
+          project_id?: string;
+          reaction_emoji?: string | null;
+          support_type?: Database['public']['Enums']['support_type'];
+          transaction_hash?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'project_support_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'project_support_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      project_support_stats: {
+        Row: {
+          last_support_at: string | null;
+          project_id: string;
+          total_bitcoin_btc: number | null;
+          total_messages: number | null;
+          total_reactions: number | null;
+          total_signatures: number | null;
+          total_supporters: number | null;
+          updated_at: string;
+        };
+        Insert: {
+          last_support_at?: string | null;
+          project_id: string;
+          total_bitcoin_btc?: number | null;
+          total_messages?: number | null;
+          total_reactions?: number | null;
+          total_signatures?: number | null;
+          total_supporters?: number | null;
+          updated_at?: string;
+        };
+        Update: {
+          last_support_at?: string | null;
+          project_id?: string;
+          total_bitcoin_btc?: number | null;
+          total_messages?: number | null;
+          total_reactions?: number | null;
+          total_signatures?: number | null;
+          total_supporters?: number | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'project_support_stats_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      project_updates: {
+        Row: {
+          amount_btc: number | null;
+          content: string | null;
+          created_at: string | null;
+          id: string;
+          project_id: string;
+          title: string | null;
+          type: string | null;
+        };
+        Insert: {
+          amount_btc?: number | null;
+          content?: string | null;
+          created_at?: string | null;
+          id?: string;
+          project_id: string;
+          title?: string | null;
+          type?: string | null;
+        };
+        Update: {
+          amount_btc?: number | null;
+          content?: string | null;
+          created_at?: string | null;
+          id?: string;
+          project_id?: string;
+          title?: string | null;
+          type?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'project_updates_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       projects: {
         Row: {
           actor_id: string;
@@ -2835,6 +3773,7 @@ export type Database = {
           is_test: boolean;
           lightning_address: string | null;
           raised_amount: number | null;
+          show_on_profile: boolean | null;
           status: string | null;
           tags: string[] | null;
           title: string | null;
@@ -2859,6 +3798,7 @@ export type Database = {
           is_test?: boolean;
           lightning_address?: string | null;
           raised_amount?: number | null;
+          show_on_profile?: boolean | null;
           status?: string | null;
           tags?: string[] | null;
           title?: string | null;
@@ -2883,6 +3823,7 @@ export type Database = {
           is_test?: boolean;
           lightning_address?: string | null;
           raised_amount?: number | null;
+          show_on_profile?: boolean | null;
           status?: string | null;
           tags?: string[] | null;
           title?: string | null;
@@ -2901,6 +3842,64 @@ export type Database = {
             foreignKeyName: 'projects_group_id_fkey';
             columns: ['group_id'];
             referencedRelation: 'groups';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      research_contributions: {
+        Row: {
+          amount_btc: number;
+          anonymous: boolean | null;
+          confirmed_at: string | null;
+          created_at: string | null;
+          funding_model: string;
+          id: string;
+          lightning_invoice: string | null;
+          message: string | null;
+          onchain_tx: string | null;
+          research_entity_id: string;
+          status: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          amount_btc: number;
+          anonymous?: boolean | null;
+          confirmed_at?: string | null;
+          created_at?: string | null;
+          funding_model: string;
+          id?: string;
+          lightning_invoice?: string | null;
+          message?: string | null;
+          onchain_tx?: string | null;
+          research_entity_id: string;
+          status?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          amount_btc?: number;
+          anonymous?: boolean | null;
+          confirmed_at?: string | null;
+          created_at?: string | null;
+          funding_model?: string;
+          id?: string;
+          lightning_invoice?: string | null;
+          message?: string | null;
+          onchain_tx?: string | null;
+          research_entity_id?: string;
+          status?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'research_contributions_research_entity_id_fkey';
+            columns: ['research_entity_id'];
+            referencedRelation: 'research_entities';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'research_contributions_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
         ];
@@ -2931,6 +3930,7 @@ export type Database = {
           resource_needs: Json | null;
           sdg_alignment: Json | null;
           search_vector: unknown;
+          show_on_profile: boolean | null;
           status: string | null;
           target_audience: string[] | null;
           team_members: Json | null;
@@ -2967,6 +3967,7 @@ export type Database = {
           resource_needs?: Json | null;
           sdg_alignment?: Json | null;
           search_vector?: unknown;
+          show_on_profile?: boolean | null;
           status?: string | null;
           target_audience?: string[] | null;
           team_members?: Json | null;
@@ -3003,6 +4004,7 @@ export type Database = {
           resource_needs?: Json | null;
           sdg_alignment?: Json | null;
           search_vector?: unknown;
+          show_on_profile?: boolean | null;
           status?: string | null;
           target_audience?: string[] | null;
           team_members?: Json | null;
@@ -3028,6 +4030,143 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      research_progress_updates: {
+        Row: {
+          attachments: string[] | null;
+          created_at: string | null;
+          description: string;
+          funding_released: number | null;
+          id: string;
+          milestone_achieved: boolean | null;
+          research_entity_id: string;
+          title: string;
+          total_votes: number | null;
+          user_id: string;
+          votes_down: number | null;
+          votes_up: number | null;
+        };
+        Insert: {
+          attachments?: string[] | null;
+          created_at?: string | null;
+          description: string;
+          funding_released?: number | null;
+          id?: string;
+          milestone_achieved?: boolean | null;
+          research_entity_id: string;
+          title: string;
+          total_votes?: number | null;
+          user_id: string;
+          votes_down?: number | null;
+          votes_up?: number | null;
+        };
+        Update: {
+          attachments?: string[] | null;
+          created_at?: string | null;
+          description?: string;
+          funding_released?: number | null;
+          id?: string;
+          milestone_achieved?: boolean | null;
+          research_entity_id?: string;
+          title?: string;
+          total_votes?: number | null;
+          user_id?: string;
+          votes_down?: number | null;
+          votes_up?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'research_progress_updates_research_entity_id_fkey';
+            columns: ['research_entity_id'];
+            referencedRelation: 'research_entities';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'research_progress_updates_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      research_votes: {
+        Row: {
+          choice: string;
+          created_at: string | null;
+          id: string;
+          research_entity_id: string;
+          user_id: string;
+          vote_type: string;
+          weight: number | null;
+        };
+        Insert: {
+          choice: string;
+          created_at?: string | null;
+          id?: string;
+          research_entity_id: string;
+          user_id: string;
+          vote_type: string;
+          weight?: number | null;
+        };
+        Update: {
+          choice?: string;
+          created_at?: string | null;
+          id?: string;
+          research_entity_id?: string;
+          user_id?: string;
+          vote_type?: string;
+          weight?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'research_votes_research_entity_id_fkey';
+            columns: ['research_entity_id'];
+            referencedRelation: 'research_entities';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'research_votes_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      schema_migrations: {
+        Row: {
+          applied_at: string;
+          filename: string;
+        };
+        Insert: {
+          applied_at?: string;
+          filename: string;
+        };
+        Update: {
+          applied_at?: string;
+          filename?: string;
+        };
+        Relationships: [];
+      };
+      search_queries: {
+        Row: {
+          created_at: string;
+          id: number;
+          query: string;
+          result_count: number | null;
+        };
+        Insert: {
+          created_at?: string;
+          id?: never;
+          query: string;
+          result_count?: number | null;
+        };
+        Update: {
+          created_at?: string;
+          id?: never;
+          query?: string;
+          result_count?: number | null;
+        };
+        Relationships: [];
       };
       shipping_addresses: {
         Row: {
@@ -3911,31 +5050,64 @@ export type Database = {
       };
       transactions: {
         Row: {
-          amount: number;
-          amount_btc: number | null;
+          amount_btc: number;
+          anonymous: boolean;
+          confirmed_at: string | null;
           created_at: string;
-          funding_page_id: string;
+          currency: string;
+          from_entity_id: string;
+          from_entity_type: string;
           id: string;
+          initiated_at: string | null;
+          message: string | null;
+          payment_method: string | null;
+          public_visibility: boolean;
+          purpose: string | null;
+          settled_at: string | null;
           status: string;
-          transaction_hash: string;
+          to_entity_id: string;
+          to_entity_type: string;
+          updated_at: string;
         };
         Insert: {
-          amount: number;
-          amount_btc?: number | null;
+          amount_btc: number;
+          anonymous?: boolean;
+          confirmed_at?: string | null;
           created_at?: string;
-          funding_page_id: string;
+          currency?: string;
+          from_entity_id: string;
+          from_entity_type: string;
           id?: string;
-          status: string;
-          transaction_hash: string;
+          initiated_at?: string | null;
+          message?: string | null;
+          payment_method?: string | null;
+          public_visibility?: boolean;
+          purpose?: string | null;
+          settled_at?: string | null;
+          status?: string;
+          to_entity_id: string;
+          to_entity_type: string;
+          updated_at?: string;
         };
         Update: {
-          amount?: number;
-          amount_btc?: number | null;
+          amount_btc?: number;
+          anonymous?: boolean;
+          confirmed_at?: string | null;
           created_at?: string;
-          funding_page_id?: string;
+          currency?: string;
+          from_entity_id?: string;
+          from_entity_type?: string;
           id?: string;
+          initiated_at?: string | null;
+          message?: string | null;
+          payment_method?: string | null;
+          public_visibility?: boolean;
+          purpose?: string | null;
+          settled_at?: string | null;
           status?: string;
-          transaction_hash?: string;
+          to_entity_id?: string;
+          to_entity_type?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -3974,6 +5146,43 @@ export type Database = {
           updated_at?: string;
         };
         Relationships: [];
+      };
+      typing_indicators: {
+        Row: {
+          conversation_id: string;
+          expires_at: string;
+          id: string;
+          started_at: string;
+          user_id: string;
+        };
+        Insert: {
+          conversation_id: string;
+          expires_at?: string;
+          id?: string;
+          started_at?: string;
+          user_id: string;
+        };
+        Update: {
+          conversation_id?: string;
+          expires_at?: string;
+          id?: string;
+          started_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'typing_indicators_conversation_id_fkey';
+            columns: ['conversation_id'];
+            referencedRelation: 'conversation_details';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'typing_indicators_conversation_id_fkey';
+            columns: ['conversation_id'];
+            referencedRelation: 'conversations';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       user_ai_preferences: {
         Row: {
@@ -4103,6 +5312,7 @@ export type Database = {
           id: string;
           is_test: boolean;
           lightning_address: string | null;
+          show_on_profile: boolean | null;
           status: string | null;
           title: string;
           total_distributed: number | null;
@@ -4123,6 +5333,7 @@ export type Database = {
           id?: string;
           is_test?: boolean;
           lightning_address?: string | null;
+          show_on_profile?: boolean | null;
           status?: string | null;
           title: string;
           total_distributed?: number | null;
@@ -4143,6 +5354,7 @@ export type Database = {
           id?: string;
           is_test?: boolean;
           lightning_address?: string | null;
+          show_on_profile?: boolean | null;
           status?: string | null;
           title?: string;
           total_distributed?: number | null;
@@ -4213,6 +5425,45 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      user_economic_profile: {
+        Row: {
+          asked_for: Json;
+          assets: Json;
+          constraints: Json;
+          created_at: string;
+          goals: Json;
+          motivation: string | null;
+          skills: Json;
+          stage: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          asked_for?: Json;
+          assets?: Json;
+          constraints?: Json;
+          created_at?: string;
+          goals?: Json;
+          motivation?: string | null;
+          skills?: Json;
+          stage?: string | null;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          asked_for?: Json;
+          assets?: Json;
+          constraints?: Json;
+          created_at?: string;
+          goals?: Json;
+          motivation?: string | null;
+          skills?: Json;
+          stage?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
       };
       user_nudges: {
         Row: {
@@ -4295,6 +5546,27 @@ export type Database = {
         };
         Relationships: [];
       };
+      user_presence: {
+        Row: {
+          last_seen_at: string | null;
+          status: string | null;
+          updated_at: string | null;
+          user_id: string;
+        };
+        Insert: {
+          last_seen_at?: string | null;
+          status?: string | null;
+          updated_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          last_seen_at?: string | null;
+          status?: string | null;
+          updated_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       user_products: {
         Row: {
           actor_id: string;
@@ -4311,6 +5583,7 @@ export type Database = {
           is_test: boolean;
           price: number;
           product_type: string | null;
+          show_on_profile: boolean | null;
           status: string | null;
           tags: string[] | null;
           thumbnail_url: string | null;
@@ -4333,6 +5606,7 @@ export type Database = {
           is_test?: boolean;
           price: number;
           product_type?: string | null;
+          show_on_profile?: boolean | null;
           status?: string | null;
           tags?: string[] | null;
           thumbnail_url?: string | null;
@@ -4355,6 +5629,7 @@ export type Database = {
           is_test?: boolean;
           price?: number;
           product_type?: string | null;
+          show_on_profile?: boolean | null;
           status?: string | null;
           tags?: string[] | null;
           thumbnail_url?: string | null;
@@ -4395,6 +5670,7 @@ export type Database = {
           portfolio_links: string[] | null;
           service_area: string | null;
           service_location_type: string | null;
+          show_on_profile: boolean | null;
           status: string | null;
           title: string;
           updated_at: string | null;
@@ -4417,6 +5693,7 @@ export type Database = {
           portfolio_links?: string[] | null;
           service_area?: string | null;
           service_location_type?: string | null;
+          show_on_profile?: boolean | null;
           status?: string | null;
           title: string;
           updated_at?: string | null;
@@ -4439,6 +5716,7 @@ export type Database = {
           portfolio_links?: string[] | null;
           service_area?: string | null;
           service_location_type?: string | null;
+          show_on_profile?: boolean | null;
           status?: string | null;
           title?: string;
           updated_at?: string | null;
@@ -4929,6 +6207,7 @@ export type Database = {
           id: string;
           is_active: boolean | null;
           is_test: boolean;
+          show_on_profile: boolean | null;
           title: string;
           type: string;
           updated_at: string | null;
@@ -4943,6 +6222,7 @@ export type Database = {
           id?: string;
           is_active?: boolean | null;
           is_test?: boolean;
+          show_on_profile?: boolean | null;
           title: string;
           type?: string;
           updated_at?: string | null;
@@ -4957,6 +6237,7 @@ export type Database = {
           id?: string;
           is_active?: boolean | null;
           is_test?: boolean;
+          show_on_profile?: boolean | null;
           title?: string;
           type?: string;
           updated_at?: string | null;
@@ -4973,6 +6254,28 @@ export type Database = {
       };
     };
     Views: {
+      ai_cost_analytics: {
+        Row: {
+          assistant_id: string | null;
+          assistant_title: string | null;
+          avg_cost_per_message: number | null;
+          creator_id: string | null;
+          total_api_cost_btc: number | null;
+          total_cost_btc: number | null;
+          total_creator_earnings_btc: number | null;
+          total_messages: number | null;
+          total_tokens: number | null;
+          unique_users: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'ai_assistants_user_id_fkey';
+            columns: ['creator_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       community_timeline_no_duplicates: {
         Row: {
           actor_data: Json | null;
@@ -5258,6 +6561,10 @@ export type Database = {
       };
     };
     Functions: {
+      accept_group_invitation: {
+        Args: { invitation_id: string };
+        Returns: Json;
+      };
       add_timeline_comment: {
         Args: {
           p_content: string;
@@ -5274,6 +6581,17 @@ export type Database = {
         Args: { p_withdrawal_id: string };
         Returns: undefined;
       };
+      cat_credit_append: {
+        Args: {
+          p_amount_btc: number;
+          p_kind: string;
+          p_metadata?: Json;
+          p_ref?: string;
+          p_user_id: string;
+        };
+        Returns: number;
+      };
+      cat_credit_balance: { Args: { p_user_id: string }; Returns: number };
       check_booking_conflict: {
         Args: {
           p_bookable_id: string;
@@ -5297,6 +6615,7 @@ export type Database = {
           requests_remaining: number;
         }[];
       };
+      cleanup_expired_invitations: { Args: never; Returns: number };
       complete_ai_withdrawal: {
         Args: { p_withdrawal_id: string };
         Returns: undefined;
@@ -5370,6 +6689,14 @@ export type Database = {
         };
         Returns: string;
       };
+      decline_group_invitation: {
+        Args: { invitation_id: string };
+        Returns: Json;
+      };
+      decrement_inventory: {
+        Args: { p_entity_id: string; p_entity_type: string };
+        Returns: undefined;
+      };
       delete_timeline_comment: {
         Args: { p_comment_id: string; p_user_id: string };
         Returns: boolean;
@@ -5387,6 +6714,7 @@ export type Database = {
         Args: { p_reason?: string; p_withdrawal_id: string };
         Returns: undefined;
       };
+      generate_invitation_token: { Args: never; Returns: string };
       get_available_loans: {
         Args: { p_limit?: number; p_offset?: number };
         Returns: {
@@ -5419,6 +6747,7 @@ export type Database = {
           paid_off_at: string | null;
           preferred_terms: string | null;
           remaining_balance: number;
+          show_on_profile: boolean | null;
           status: string | null;
           title: string;
           updated_at: string;
@@ -5464,6 +6793,14 @@ export type Database = {
           visibility: string;
         }[];
       };
+      get_entity_funding_stats: {
+        Args: { p_entity_id: string; p_entity_type: string };
+        Returns: {
+          contributor_count: number;
+          named_supporter_count: number;
+          total_btc: number;
+        }[];
+      };
       get_event_comment_count: { Args: { event_id: string }; Returns: number };
       get_event_comments: {
         Args: { p_event_id: string; p_limit?: number; p_offset?: number };
@@ -5480,6 +6817,48 @@ export type Database = {
       get_event_dislike_count: { Args: { event_id: string }; Returns: number };
       get_event_like_count: { Args: { event_id: string }; Returns: number };
       get_event_share_count: { Args: { event_id: string }; Returns: number };
+      get_following_feed: {
+        Args: { p_limit?: number; p_offset?: number; p_user_id: string };
+        Returns: {
+          actor_id: string | null;
+          actor_type: string | null;
+          amount_btc: number | null;
+          content: Json | null;
+          created_at: string;
+          deleted_at: string | null;
+          deletion_reason: string | null;
+          description: string | null;
+          device_info: Json | null;
+          event_subtype: string | null;
+          event_timestamp: string;
+          event_type: string;
+          id: string;
+          is_cross_post_duplicate: boolean | null;
+          is_deleted: boolean | null;
+          is_featured: boolean | null;
+          is_quote_reply: boolean | null;
+          location_data: Json | null;
+          metadata: Json | null;
+          parent_event_id: string | null;
+          quantity: number | null;
+          subject_id: string | null;
+          subject_type: string;
+          tags: string[] | null;
+          target_id: string | null;
+          target_type: string | null;
+          thread_depth: number | null;
+          thread_id: string | null;
+          title: string;
+          updated_at: string;
+          visibility: string | null;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'timeline_events';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
       get_group_member_count: { Args: { group_uuid: string }; Returns: number };
       get_group_role: {
         Args: { group_uuid: string; user_uuid: string };
@@ -5607,6 +6986,23 @@ export type Database = {
           total_offers: number;
         }[];
       };
+      get_user_pending_invitations: {
+        Args: { user_uuid?: string };
+        Returns: {
+          created_at: string;
+          expires_at: string;
+          group_avatar_url: string;
+          group_id: string;
+          group_name: string;
+          group_slug: string;
+          id: string;
+          inviter_avatar_url: string;
+          inviter_id: string;
+          inviter_name: string;
+          message: string;
+          role: string;
+        }[];
+      };
       get_user_timeline_feed: {
         Args: { p_limit?: number; p_offset?: number; p_user_id: string };
         Returns: {
@@ -5702,6 +7098,20 @@ export type Database = {
         Args: { p_conversation_id: string; p_user_id: string };
         Returns: undefined;
       };
+      match_cat_memories: {
+        Args: {
+          match_count?: number;
+          min_similarity?: number;
+          p_user_id: string;
+          query_embedding: string;
+        };
+        Returns: {
+          content: string;
+          created_at: string;
+          id: string;
+          similarity: number;
+        }[];
+      };
       match_content:
         | {
             Args: {
@@ -5756,6 +7166,30 @@ export type Database = {
           username: string;
         }[];
       };
+      search_profiles_nearby: {
+        Args: {
+          p_lat: number;
+          p_limit?: number;
+          p_lng: number;
+          p_offset?: number;
+          p_query?: string;
+          p_radius_km: number;
+        };
+        Returns: {
+          avatar_url: string;
+          bio: string;
+          created_at: string;
+          distance_km: number;
+          id: string;
+          latitude: number;
+          location_city: string;
+          location_country: string;
+          location_zip: string;
+          longitude: number;
+          name: string;
+          username: string;
+        }[];
+      };
       search_projects_fts: {
         Args: { p_limit?: number; p_offset?: number; p_query: string };
         Returns: {
@@ -5767,6 +7201,35 @@ export type Database = {
           description: string;
           goal_amount: number;
           id: string;
+          raised_amount: number;
+          status: string;
+          title: string;
+          updated_at: string;
+          user_id: string;
+        }[];
+      };
+      search_projects_nearby: {
+        Args: {
+          p_lat: number;
+          p_limit?: number;
+          p_lng: number;
+          p_offset?: number;
+          p_query?: string;
+          p_radius_km: number;
+        };
+        Returns: {
+          bitcoin_address: string;
+          category: string;
+          cover_image_url: string;
+          created_at: string;
+          currency: string;
+          description: string;
+          distance_km: number;
+          goal_amount: number;
+          id: string;
+          location_city: string;
+          location_coordinates: unknown;
+          location_country: string;
           raised_amount: number;
           status: string;
           title: string;
@@ -5797,6 +7260,15 @@ export type Database = {
         Args: { event_id: string; reason?: string };
         Returns: boolean;
       };
+      transfer_between_wallets: {
+        Args: {
+          p_amount_btc: number;
+          p_from_wallet_id: string;
+          p_to_wallet_id: string;
+          p_transaction_id: string;
+        };
+        Returns: undefined;
+      };
       undislike_timeline_event: {
         Args: { p_event_id: string; p_user_id: string };
         Returns: {
@@ -5808,6 +7280,10 @@ export type Database = {
         Returns: {
           like_count: number;
         }[];
+      };
+      update_key_usage: {
+        Args: { p_key_id: string; p_tokens_used?: number };
+        Returns: undefined;
       };
       update_timeline_comment: {
         Args: { p_comment_id: string; p_content: string; p_user_id: string };
@@ -5842,6 +7318,7 @@ export type Database = {
         | 'community'
         | 'foundation'
         | 'other';
+      support_type: 'bitcoin_funding' | 'signature' | 'message' | 'reaction';
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -5985,6 +7462,7 @@ export const Constants = {
       membership_role_enum: ['owner', 'admin', 'moderator', 'member', 'guest'],
       membership_status_enum: ['active', 'pending', 'suspended', 'left', 'banned'],
       organization_type_enum: ['non_profit', 'business', 'dao', 'community', 'foundation', 'other'],
+      support_type: ['bitcoin_funding', 'signature', 'message', 'reaction'],
     },
   },
 } as const;

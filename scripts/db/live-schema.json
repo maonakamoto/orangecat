@@ -1,4 +1,23 @@
 {
+  "_backup_cat_conversations_20260703": [
+    "id",
+    "user_id",
+    "title",
+    "is_default",
+    "created_at",
+    "updated_at"
+  ],
+  "_backup_cat_messages_20260703": [
+    "id",
+    "conversation_id",
+    "user_id",
+    "role",
+    "content",
+    "model_used",
+    "provider",
+    "token_count",
+    "created_at"
+  ],
   "actors": [
     "id",
     "actor_type",
@@ -229,14 +248,7 @@
     "amount_btc",
     "created_at"
   ],
-  "cat_conversations": [
-    "id",
-    "user_id",
-    "title",
-    "is_default",
-    "created_at",
-    "updated_at"
-  ],
+  "cat_conversations": ["id", "user_id", "title", "is_default", "created_at", "updated_at"],
   "cat_credit_entries": [
     "id",
     "seq",
@@ -308,14 +320,7 @@
     "created_at",
     "updated_at"
   ],
-  "channel_waitlist": [
-    "id",
-    "email",
-    "user_id",
-    "source",
-    "referrer",
-    "created_at"
-  ],
+  "channel_waitlist": ["id", "email", "user_id", "source", "referrer", "created_at"],
   "circles": [
     "id",
     "actor_id",
@@ -460,7 +465,8 @@
     "entity_id",
     "is_primary",
     "created_at",
-    "created_by"
+    "created_by",
+    "visibility"
   ],
   "event_attendees": [
     "id",
@@ -518,18 +524,8 @@
     "is_test",
     "show_on_profile"
   ],
-  "follows": [
-    "id",
-    "follower_id",
-    "following_id",
-    "created_at"
-  ],
-  "github_repo_cache": [
-    "user_id",
-    "handle",
-    "repos",
-    "fetched_at"
-  ],
+  "follows": ["id", "follower_id", "following_id", "created_at"],
+  "github_repo_cache": ["user_id", "handle", "repos", "fetched_at"],
   "group_activities": [
     "id",
     "group_id",
@@ -539,14 +535,7 @@
     "created_at",
     "updated_at"
   ],
-  "group_event_rsvps": [
-    "id",
-    "event_id",
-    "user_id",
-    "status",
-    "created_at",
-    "updated_at"
-  ],
+  "group_event_rsvps": ["id", "event_id", "user_id", "status", "created_at", "updated_at"],
   "group_events": [
     "id",
     "group_id",
@@ -615,14 +604,7 @@
     "updated_at",
     "is_public"
   ],
-  "group_votes": [
-    "id",
-    "proposal_id",
-    "voter_id",
-    "vote",
-    "voting_power",
-    "voted_at"
-  ],
+  "group_votes": ["id", "proposal_id", "voter_id", "vote", "voting_power", "voted_at"],
   "group_wallets": [
     "id",
     "group_id",
@@ -713,15 +695,7 @@
     "show_on_profile",
     "is_test"
   ],
-  "loan_categories": [
-    "id",
-    "name",
-    "description",
-    "icon",
-    "is_active",
-    "created_at",
-    "updated_at"
-  ],
+  "loan_categories": ["id", "name", "description", "icon", "is_active", "created_at", "updated_at"],
   "loan_collateral": [
     "id",
     "loan_id",
@@ -817,12 +791,7 @@
     "sender",
     "is_read"
   ],
-  "message_read_receipts": [
-    "id",
-    "message_id",
-    "user_id",
-    "read_at"
-  ],
+  "message_read_receipts": ["id", "message_id", "user_id", "read_at"],
   "messages": [
     "id",
     "conversation_id",
@@ -909,13 +878,7 @@
     "last_used_at",
     "created_at"
   ],
-  "oauth_user_grants": [
-    "id",
-    "user_id",
-    "client_id",
-    "scopes",
-    "granted_at"
-  ],
+  "oauth_user_grants": ["id", "user_id", "client_id", "scopes", "granted_at"],
   "orders": [
     "id",
     "payment_intent_id",
@@ -1029,20 +992,8 @@
     "created_at",
     "updated_at"
   ],
-  "project_favorites": [
-    "id",
-    "user_id",
-    "project_id",
-    "created_at"
-  ],
-  "project_media": [
-    "id",
-    "project_id",
-    "storage_path",
-    "position",
-    "alt_text",
-    "created_at"
-  ],
+  "project_favorites": ["id", "user_id", "project_id", "created_at"],
+  "project_media": ["id", "project_id", "storage_path", "position", "alt_text", "created_at"],
   "project_roles": [
     "id",
     "project_id",
@@ -1079,15 +1030,7 @@
     "last_support_at",
     "updated_at"
   ],
-  "project_updates": [
-    "id",
-    "project_id",
-    "type",
-    "title",
-    "content",
-    "amount_btc",
-    "created_at"
-  ],
+  "project_updates": ["id", "project_id", "type", "title", "content", "amount_btc", "created_at"],
   "projects": [
     "id",
     "user_id",
@@ -1187,16 +1130,8 @@
     "weight",
     "created_at"
   ],
-  "schema_migrations": [
-    "filename",
-    "applied_at"
-  ],
-  "search_queries": [
-    "id",
-    "query",
-    "result_count",
-    "created_at"
-  ],
+  "schema_migrations": ["filename", "applied_at"],
+  "search_queries": ["id", "query", "result_count", "created_at"],
   "shipping_addresses": [
     "id",
     "user_id",
@@ -1309,12 +1244,7 @@
     "deleted_at",
     "deletion_reason"
   ],
-  "timeline_dislikes": [
-    "id",
-    "event_id",
-    "user_id",
-    "created_at"
-  ],
+  "timeline_dislikes": ["id", "event_id", "user_id", "created_at"],
   "timeline_event_stats": [
     "event_id",
     "like_count",
@@ -1364,19 +1294,8 @@
     "thread_depth",
     "is_quote_reply"
   ],
-  "timeline_interactions": [
-    "id",
-    "user_id",
-    "event_id",
-    "interaction_type",
-    "created_at"
-  ],
-  "timeline_likes": [
-    "id",
-    "event_id",
-    "user_id",
-    "created_at"
-  ],
+  "timeline_interactions": ["id", "user_id", "event_id", "interaction_type", "created_at"],
+  "timeline_likes": ["id", "event_id", "user_id", "created_at"],
   "timeline_shares": [
     "id",
     "original_event_id",
@@ -1416,13 +1335,7 @@
     "created_at",
     "updated_at"
   ],
-  "typing_indicators": [
-    "id",
-    "conversation_id",
-    "user_id",
-    "started_at",
-    "expires_at"
-  ],
+  "typing_indicators": ["id", "conversation_id", "user_id", "started_at", "expires_at"],
   "user_ai_preferences": [
     "id",
     "user_id",
@@ -1532,12 +1445,7 @@
     "created_at",
     "updated_at"
   ],
-  "user_presence": [
-    "user_id",
-    "status",
-    "last_seen_at",
-    "updated_at"
-  ],
+  "user_presence": ["user_id", "status", "last_seen_at", "updated_at"],
   "user_products": [
     "id",
     "user_id",
