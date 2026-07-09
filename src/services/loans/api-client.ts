@@ -148,6 +148,35 @@ export async function updateLoanViaApi(
   }
 }
 
+export async function createObligationLoanViaApi(params: {
+  borrowerId: string;
+  lenderProfileName: string;
+  offer: {
+    loan_id: string;
+    offer_amount: number;
+    interest_rate?: number;
+    term_months?: number;
+    currency?: string;
+  };
+}): Promise<LoanResponse> {
+  try {
+    const res = await fetch(API_ROUTES.LOANS.OBLIGATION, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(params),
+    });
+    const result = await parseLoanEnvelope(res);
+    if (result.success) {
+      logger.info('Obligation loan created via API', { loanId: result.loan?.id }, 'Loans');
+    }
+    return result;
+  } catch (error) {
+    logger.error('createObligationLoanViaApi failed', error, 'Loans');
+    return { success: false, error: 'Failed to create obligation loan' };
+  }
+}
+
 export async function deleteLoanViaApi(loanId: string): Promise<ServiceResult> {
   try {
     const res = await fetch(API_ROUTES.LOANS.BY_ID(loanId), {

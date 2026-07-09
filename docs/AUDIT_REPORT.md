@@ -115,7 +115,7 @@ Config SSOT consolidation, phantom routes, UI primitive migration start, integra
 
 ### Phase B — Correctness (in progress)
 
-- ✅ **Loan dual-path closed** — `createLoan` / `updateLoan` / `deleteLoan` route through `/api/loans` via `services/loans/api-client.ts`; `createObligationLoan` deferred to Phase E (offer-accept server route).
+- ✅ **Loan dual-path closed** — all loan mutations including `createObligationLoan` route through `/api/loans` and `/api/loans/obligation` via `services/loans/api-client.ts`.
 - Regenerate DB types; eliminate `as any` on oauth/cat_credit/stakeholder tables
 - Middleware auth prefixes derived from `routes.ts`
 - `config/env.ts` zod validation + CI `validate-env.js` alignment
@@ -158,4 +158,4 @@ grep -rn '\[#' src/    # design token audit — expect 0
 2. **[B2]** Regenerate `database.generated.ts` and migrate Supabase client imports
 3. ~~**[C1]** Migrate dialog/select/dropdown to semantic tokens~~ — done 2026-07-09
 4. ~~**[D1]** Add stakeholders + timeline to v1 SDK~~ — done 2026-07-09
-5. **[E1]** Inventory browser-supabase write sites; migrate loans first
+5. ~~**[E1]** Inventory browser-supabase write sites; migrate loans first~~ — loan obligation route done 2026-07-09; payments/offers still browser-side

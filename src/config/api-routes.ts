@@ -137,6 +137,7 @@ export const API_ROUTES = {
   LOANS: {
     BASE: ENTITY_REGISTRY['loan'].apiEndpoint,
     BY_ID: (id: string) => `${ENTITY_REGISTRY['loan'].apiEndpoint}/${id}`,
+    OBLIGATION: `${ENTITY_REGISTRY['loan'].apiEndpoint}/obligation`,
     COLLATERAL: '/api/loan-collateral',
   },
   PROFILE: '/api/profile',
