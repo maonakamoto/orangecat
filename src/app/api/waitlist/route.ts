@@ -10,13 +10,7 @@ import {
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import { rateLimit, retryAfterSeconds } from '@/lib/rate-limit';
-import { z } from 'zod';
-
-const waitlistSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  source: z.string().max(100).optional(),
-  referrer: z.string().max(500).optional(),
-});
+import { waitlistSchema } from '@/lib/validation/social';
 
 export const POST = withOptionalAuth(async request => {
   try {

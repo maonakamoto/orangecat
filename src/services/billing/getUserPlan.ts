@@ -15,13 +15,14 @@
 
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import { DATABASE_TABLES } from '@/config/database-tables';
+import { CAT_FREE_DAILY_LIMIT } from '@/config/cat-plans';
 import { logger } from '@/utils/logger';
 
 export type PaidTier = 'free' | 'pro';
 
 export interface UserPlan {
   tier: PaidTier;
-  /** Resolved daily message cap. Free=10. Pro plans set their own. */
+  /** Resolved daily message cap. Free uses CAT_FREE_DAILY_LIMIT; Pro sets its own. */
   dailyLimit: number;
   /** ISO timestamp of Pro renewal deadline; null on Free. */
   expiresAt: string | null;
@@ -31,7 +32,7 @@ export interface UserPlan {
 
 const FREE_PLAN: UserPlan = {
   tier: 'free',
-  dailyLimit: 10,
+  dailyLimit: CAT_FREE_DAILY_LIMIT,
   expiresAt: null,
   isExpired: false,
 };
@@ -69,7 +70,7 @@ export async function getUserPlan(supabase: AnySupabaseClient, userId: string): 
 
   return {
     tier,
-    dailyLimit: (data.daily_limit as number | null) ?? 10,
+    dailyLimit: (data.daily_limit as number | null) ?? CAT_FREE_DAILY_LIMIT,
     expiresAt,
     isExpired,
   };

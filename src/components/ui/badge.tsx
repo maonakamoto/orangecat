@@ -7,11 +7,11 @@ import { COMPONENT_STYLES } from '@/config/design-system';
 const badgeVariants = cva(COMPONENT_STYLES.badge.base, {
   variants: {
     variant: {
-      default: 'border-transparent bg-foreground text-background hover:bg-muted-strong',
-      secondary: 'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
+      default: 'border-transparent bg-fg-primary text-fg-inverted hover:bg-muted-strong',
+      secondary: 'border-transparent bg-surface-raised text-fg-secondary hover:bg-surface-raised',
       destructive:
-        'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
-      outline: 'text-foreground',
+        'border-transparent bg-status-negative text-fg-inverted hover:bg-status-negative/90',
+      outline: 'border-default text-fg-primary',
     },
   },
   defaultVariants: {

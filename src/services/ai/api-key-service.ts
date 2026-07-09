@@ -10,6 +10,7 @@
  * Created: 2026-01-08
  */
 
+import { CAT_FREE_DAILY_LIMIT } from '@/config/cat-plans';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 import { createCipheriv, createDecipheriv, randomBytes, scryptSync } from 'crypto';
@@ -459,8 +460,8 @@ export class ApiKeyService {
     if (error || !data || data.length === 0) {
       return {
         daily_requests: 0,
-        daily_limit: 10,
-        requests_remaining: 10,
+        daily_limit: CAT_FREE_DAILY_LIMIT,
+        requests_remaining: CAT_FREE_DAILY_LIMIT,
         can_use_platform: true,
       };
     }

@@ -75,6 +75,8 @@ handlers currently require a session).
 | Endpoint                   | Method | What it does                                          |
 | -------------------------- | ------ | ----------------------------------------------------- |
 | `/api/v1/timeline/publish` | POST   | Publish an external build event onto a project's wall |
+| `/api/v1/stakeholders`     | GET    | List stakeholder relationships for a project          |
+| `/api/v1/stakeholders`     | POST   | Create a stakeholder relationship                     |
 
 `/api/v1/timeline/publish` is the async publish bus: an external client
 (FleetCrown) lands a publish-worthy build event onto a project's OrangeCat
@@ -84,6 +86,10 @@ the subject project. Idempotent + reconcilable — keyed by
 duplicating it. Inbound contract SSOT: `src/config/external-publish.ts`. See
 `docs/architecture/PLATFORM_AND_COLLABORATION.md` ("Async publish + read-only
 surfacing").
+
+`/api/v1/stakeholders` exposes the typed project→stakeholder graph for
+integration clients (FleetCrown). Requires `stakeholders.read` / `stakeholders.write`
+and ownership of the source project. Contract SSOT: `src/config/stakeholders.ts`.
 
 ## Out of scope for v1 (until further notice)
 

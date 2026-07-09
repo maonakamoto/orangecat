@@ -1,9 +1,9 @@
 # OrangeCat Design System
 
-**Created**: June 5, 2025  
-**Last Modified**: June 3, 2026  
-**Last Modified Summary**: Clarified SSOT hierarchy — runtime tokens live in `globals.css` + `tailwind.config.ts`; TS helpers in `design-system.ts`; Cat chat uses `.oc-chat-*` classes. See `docs/architecture/CAT_AND_DESIGN_SSOT.md`.  
-**Version**: 1.1.0
+**Created**: 2025-06-05  
+**Last Modified**: 2026-07-09  
+**Last Modified Summary**: Reconciled with semantic-tier migration — warm accent `#ff5c00` for conversion CTAs, Bitcoin Orange `#f7931a` for Bitcoin-only UI, monochromatic surfaces elsewhere. Tiffany/orange chromatic palette is legacy/retired for new code.  
+**Version**: 2.0.0
 
 ## Overview
 
@@ -17,11 +17,21 @@ This document describes OrangeCat brand and component guidelines. **For implemen
 | Cat chat layout & copy          | `src/config/layout-chrome.ts`, `src/config/cat-hub.ts` |
 | Architecture audit              | `docs/architecture/CAT_AND_DESIGN_SSOT.md`             |
 
-## Brand Colors
+## Brand direction (2026)
 
-### Primary Colors
+- **Surfaces**: achromatic semantic tier (`bg-surface-*`, `text-fg-*`, `border-default`)
+- **Conversion accent**: warm orange `#ff5c00` — `bg-accent-warm` / `variant="accent"` on top-of-funnel CTAs only
+- **Bitcoin UI only**: `#f7931a` — `bg-bitcoinOrange` for balances, Lightning, Bitcoin icons
+- **Status**: `status-positive/warning/negative` — never decorative chroma
+- **Legacy Tiffany/orange Tailwind scales**: exist in `globals.css` for backward compat but must not appear in new components
 
-- **Tiffany Blue** (`#0ABAB5`)
+## Brand Colors (historical reference)
+
+> **Note:** The Tiffany palette below is **retired for new UI**. Kept for email/OG assets migration tracking only.
+
+### Primary Colors (legacy)
+
+- **Tiffany Blue** (`#0ABAB5`) — retired; do not use in new Tailwind classes
   - Primary brand color
   - Used for main CTAs, important elements, and brand identity
   - Light variant: `#E6F7F7` (10% opacity)

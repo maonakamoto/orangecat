@@ -10,6 +10,7 @@ import { convert, formatCurrency, displayBTC } from '@/services/currency';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { useProjectDonation } from './useProjectDonation';
 import { ROUTES } from '@/config/routes';
+import { LABELED_SUPPORT_AMOUNTS_BTC } from '@/config/payment-presets';
 
 interface ProjectDonationSectionProps {
   projectId: string;
@@ -18,12 +19,6 @@ interface ProjectDonationSectionProps {
   projectTitle?: string;
   isOwner?: boolean;
 }
-
-const SUGGESTED_AMOUNTS_BTC = [
-  { btc: 0.001, label: 'Small' },
-  { btc: 0.005, label: 'Medium' },
-  { btc: 0.01, label: 'Large' },
-];
 
 export function ProjectDonationSection({
   projectId,
@@ -190,8 +185,8 @@ export function ProjectDonationSection({
             <p className="text-sm font-medium text-fg-primary mb-3">
               {ownerId && !isOwner ? 'Other amounts:' : 'Suggested support amounts:'}
             </p>
-            <div className="grid grid-cols-3 gap-3">
-              {SUGGESTED_AMOUNTS_BTC.map(({ btc, label }) => {
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              {LABELED_SUPPORT_AMOUNTS_BTC.map(({ btc, label }) => {
                 const displayAmount = convert(btc, 'BTC', userCurrency);
                 const formattedAmount = formatCurrency(displayAmount, userCurrency, {
                   compact: true,

@@ -7,8 +7,8 @@
  * non-versioned internal handlers that the OrangeCat web app talks to.
  *
  * Created: 2026-06-03
- * Last Modified: 2026-06-03
- * Last Modified Summary: Initial — names v1, lists the endpoints that are part of the contract.
+ * Last Modified: 2026-07-09
+ * Last Modified Summary: Added stakeholders + integration endpoint registry for v1 discovery.
  */
 
 import type { EntityType } from '@/config/entity-registry';
@@ -43,15 +43,35 @@ export function publicApiEndpoint(type: PublicApiEntityType, basePath?: string):
   return `${base}${PUBLIC_API_BASE}/${segment}`;
 }
 
+export const PUBLIC_API_INTEGRATION_SCOPE_TOKENS = [
+  'timeline.write',
+  'stakeholders.read',
+  'stakeholders.write',
+] as const;
+
+/** Non-entity v1 endpoints (publish bus, stakeholder graph, …). */
+export const PUBLIC_API_INTEGRATION_ENDPOINTS = [
+  {
+    name: 'timeline.publish',
+    methods: ['POST'] as const,
+    endpoint: `${PUBLIC_API_BASE}/timeline/publish`,
+  },
+  {
+    name: 'stakeholders',
+    methods: ['GET', 'POST'] as const,
+    endpoint: `${PUBLIC_API_BASE}/stakeholders`,
+  },
+] as const;
+
 /**
  * All scope tokens minting UIs can offer. Format mirrors hasScope:
  * `<entity>.<read|write>`. Wildcard `'*'` is the everything-token and
  * is never enumerated here — it's a separate user choice.
  */
-export const PUBLIC_API_SCOPE_TOKENS: readonly string[] = PUBLIC_API_ENTITY_TYPES.flatMap(t => [
-  `${t}.read`,
-  `${t}.write`,
-]);
+export const PUBLIC_API_SCOPE_TOKENS: readonly string[] = [
+  ...PUBLIC_API_ENTITY_TYPES.flatMap(t => [`${t}.read`, `${t}.write`]),
+  ...PUBLIC_API_INTEGRATION_SCOPE_TOKENS,
+];
 
 /**
  * Webhook event types that endpoints can subscribe to. Format mirrors

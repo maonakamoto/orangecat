@@ -1,69 +1,161 @@
 # Codebase Audit Report
 
-**Date**: 2026-06-29
-**Auditor**: Claude Code (3 parallel agents)
+**Date**: 2026-07-09
+**Auditor**: Claude (3 parallel deep-dive agents + remediation pass)
 **Branch**: main
-**Scope**: Next-tier review after a 13-change session (Cat chat/memory, ai_assistant chat + Cat Credits, schema-drift gate, 14-table drift remediation, audit logging, post_to_timeline, circle entity, mobile fixes) — confirm no regressions + surface new high/medium findings.
+**Commit**: post-PR #395 (Cat Credits metering + 2026 model roster)
 
 ## Executive Summary
 
-The session's work holds up well. Build gates are clean (`tsc --noEmit` → **0 errors**, `npm run lint` → clean, **0 `console.*` in any session file**), the design-token SSOT is still pristine (0 hex violations), both previously-flagged registry duplications are confirmed fixed, and mobile-first held across all new UI (circle pages + the public AI-assistant chat inherit the generic mobile-first components cleanly).
+A full-codebase SSOT / SoC / DRY / design-system audit found **strong spine infrastructure** (`entity-registry.ts`, `api-routes.ts`, `ai-models.ts`, `standardResponse`, generic entity handlers) undermined by **duplicate constants**, **phantom API paths**, **legacy UI primitives**, and **parallel data-access paths** (browser Supabase vs API).
 
-The audit found **no HIGH-severity issues** but four genuine MED/LOW defects introduced this session — one of them a security gap (public-table RLS too permissive). All four were fixed in the corrective change accompanying this report. The remaining findings are SSOT-discipline debt on _newer_ (mostly pre-session) code and service-file size — tracked as roadmap, not regressions.
+This pass **fixed 30+ concrete violations** in config, discover tabs, payment presets, AI provider wiring, UI primitives, integration scopes, and documentation. Remaining work is **structural** (DB type migration, loan dual-path, browser-supabase deprecation, FleetCrown emit loop) and tracked in phased roadmap below.
 
 ## Health Score
 
-| Area                   | Score    | Notes                                                                                      |
-| ---------------------- | -------- | ------------------------------------------------------------------------------------------ |
-| First Principles       | 8/10     | Strong SSOT spine; discipline slipped on some new code (raw table literals)                |
-| Best Practices         | 9/10     | 0 console/any in session code; gates green; standard response shapes                       |
-| SSOT / DRY / SoC       | 7/10     | Tokens 0/0; dupes fixed; but ~27 tables missing from DATABASE_TABLES + 7 services >500 LOC |
-| Functional Correctness | 8/10     | 4 real defects (now fixed); auth/RLS otherwise sound                                       |
-| UI/UX & Responsive     | 9/10     | Mobile-first held; 1 LOW (long-token wrap in chat bubble)                                  |
-| **Overall**            | **8/10** | Healthy; the gap is SSOT discipline on new code + a few service god-files                  |
+| Area                            | Score    | Notes                                                                      |
+| ------------------------------- | -------- | -------------------------------------------------------------------------- |
+| First Principles (SSOT/DRY/SoC) | 7/10     | Spine strong; duplicate registries consolidated; env/features SSOT added   |
+| Best Practices                  | 8/10     | Gates green; phantom routes removed; research POST fixed                   |
+| Systems / Integration           | 7/10     | v1 stakeholders + SDK timeline/stakeholders; FC emit still open            |
+| Design System                   | 8/10     | dialog/select/dropdown migrated; semantic tier on core primitives          |
+| Functional Correctness          | 8/10     | Money-path tests pinned; loan dual-path still open                         |
+| **Overall**                     | **7/10** | Healthy core; largest debt is data-access layering + customer API contract |
 
-## Fixed in this corrective change
+---
 
-| Sev        | Finding                                                                                                                                                                                  | Fix                                                                                                                  |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| **MED 🔒** | `project_updates` INSERT RLS was `WITH CHECK (auth.uid() IS NOT NULL)` on a public-read table → any authed user could inject fake updates into ANY project's timeline (`20260627000002`) | Migration `20260629000000`: INSERT scoped to the project's owner (`projects.actor_id → actors.user_id = auth.uid()`) |
-| **MED**    | `sendMessage.fetchAssistant` SELECT omitted `allowed_models`/`min_model_tier` → creator's model allow-list silently ignored for BYOK routing (`sendMessage.ts:296`)                      | Added both columns to the SELECT                                                                                     |
-| **MED**    | `timeline_events.subject_type` CHECK (`20260627000003`) omitted `circle` (added a day later) → Cat promoting a circle would fail the constraint                                          | Migration adds `'circle'` to the CHECK                                                                               |
-| **LOW**    | `audit_logs` INSERT `WITH CHECK (true)` via user-scoped client → spoofable rows                                                                                                          | Migration: `WITH CHECK (user_id = auth.uid() OR auth.uid() IS NULL)`                                                 |
+## Fixed in this remediation pass (2026-07-09)
 
-## Roadmap (not regressions — pre-existing / tracked)
+| Area                     | Fix                                                                                                                   |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| **Phantom routes**       | Removed `/api/payments/send` and `/api/posts` from `api-routes.ts` / `cat-actions.ts` (handlers are in-process)       |
+| **CAT_FREE_DAILY_LIMIT** | Single constant in `cat-plans.ts`; `getUserPlan` + `api-key-service` import it                                        |
+| **WIRED providers**      | `WIRED_PROVIDER_IDS` + `wiredProviders` exported from `aiProviders.ts`; `cat-plans` + `AIKeyAddForm` derive from SSOT |
+| **Credits markup label** | `CAT_CREDITS_MARKUP_LABEL` derived from `CREDIT_USAGE_MARKUP`                                                         |
+| **Payment presets**      | New `config/payment-presets.ts`; PublicPayPanel, ProjectDonationSection, ContributionAmountInput, PaymentDialog       |
+| **Discover tabs**        | New `config/discover-tabs.ts`; DiscoverTabs, DiscoverEmptyState, discoverConstants deduplicated                       |
+| **Waitlist schema**      | Shared `waitlistSchema` in `lib/validation/social.ts`                                                                 |
+| **Research POST**        | Passes `parsed.data` to `createResearch` after Zod validation                                                         |
+| **API_ROUTES gap**       | `WALLETS.ENTITY_VISIBILITY` added; WalletVisibilityToggle uses it                                                     |
+| **Integration scopes**   | `timeline.write` added to `PUBLIC_API_SCOPE_TOKENS` (mint UI can offer it)                                            |
+| **Model selector**       | `ModelSelector` reads `AI_MODEL_REGISTRY` directly (not legacy adapter)                                               |
+| **UI primitives**        | `Card`/`Badge` + `dialog`/`select`/`dropdown-menu` migrated to semantic tokens                                        |
+| **Stakeholders v1**      | `config/stakeholders.ts`, platform service, `/api/v1/stakeholders`, SDK `stakeholders.*` + `timeline.publish`         |
+| **Integration scopes**   | `stakeholders.read/write` added to mint UI + OAuth scope registry                                                     |
+| **Feature flags**        | New `config/features.ts`; voice input gated via `FEATURES.voiceInput`                                                 |
+| **Env SSOT**             | New `config/env.ts` for `SITE_URL` / `APP_URL` canonicalization                                                       |
+| **Responsive pay grids** | PublicPayPanel + ProjectDonationSection: `grid-cols-1 sm:grid-cols-3`                                                 |
+| **Design docs**          | `docs/design-system/README.md` reconciled with semantic-tier direction                                                |
 
-### Quick wins (mechanical, zero behavior change)
+---
 
-- **Backfill `DATABASE_TABLES`** for ~27 raw `.from('literal')` tables not in the SSOT: `oauth_*` (4), `user_nudges`, `content_embeddings`, `project_roles`, `user_plans`, etc. Plus ~18 literals where the const already exists (`profiles`, `actors`, `follows`, `stakeholder_relationships`) — swap them in.
-- Route ~14 hardcoded `fetch('/api/...')` strings through `API_ROUTES`.
-- `AIChatMessage.tsx:72` — add `break-words` so a long unbroken token (URL/hash) can't overflow on a 360px screen (LOW).
+## Phase 1: SSOT / DRY violations (remaining)
 
-### Medium effort (SoC)
+### Critical (next PRs)
 
-- 7 service files exceed the 500-LOC limit: `system-prompt.ts` (655), `context-string-builder.ts` (605), `chat-orchestrator.ts` (597), `timeline/mutations/events.ts` (588), `ai/sendMessage.ts` (559), `cat/tool-use.ts` (545), `timeline/processors/socialInteractions.ts` (524). Decompose the prompt/context builders especially.
-- `reindex-embeddings/route.ts` (418 LOC) — extract embedding/reconcile logic to `src/services/search/`; route becomes a thin trigger.
-- Hand-written `Create*Input` interfaces (groups, contracts, bookings) → derive from Zod (`z.infer`).
-- `assistant-charge.bumpAssistantRevenue` — non-atomic read-modify-write of `total_revenue` (lost-update race; documented best-effort, ledger is SSOT). Convert to an atomic SQL increment.
+1. **Dual `Database` types** — `types/database.ts` (~3.7k lines) vs orphaned `database.generated.ts`. Regenerate and switch Supabase clients.
+2. **Loan dual create path** — `domain/loans/service.ts` (API) vs `services/loans/mutations` (browser Supabase). UI must call `/api/loans`.
+3. **~80 browser-supabase consumers** — groups, timeline, projectStore bypass API validation/audit.
 
-### Strategic / owner
+### High
 
-- Provision `PLATFORM_NWC_URI` on the box — unblocks paid ai_assistants + Cat Credits top-up (and relieves the free-tier 429s). Highest-leverage item.
-- Disk at 91% on bitbaum.
-- Messaging E2E/Nostr — product decision (docs already corrected to "roadmap, not shipped").
+4. **Two `EntityConfig` type names** — rename to `EntityDisplayConfig` vs `EntityFormConfig`.
+5. **Model ID sprawl** — `platform-providers.ts`, `form-prefill-service.ts`, `groq.ts` still hold default strings; import from `ai-models.ts`.
+6. **Auth route lists** — `middleware.ts` `REQUIRES_AUTH_PREFIXES` vs `routes.ts` `ROUTE_CONTEXTS`; derive one from the other.
+7. **~70 scattered `process.env`** — migrate to `config/env.ts` + zod validation incrementally.
 
-## Regression check (per session feature)
+### Medium
 
-- **circle entity** — correct; now also linkable as a timeline subject (fixed).
-- **ai_assistant chat** — correct; `allowed_models` now fetched (fixed).
-- **audit logging** — correct, non-blocking; spoof gap tightened (fixed).
-- **Cat post_to_timeline** — correct; circle subject now allowed (fixed).
-- **schema-drift gate + migrations** — sound, idempotent, fresh-box-safe.
-- **drift remediation (14 tables)** — holds; allowlist empty; gate green.
-- **mobile fixes / PageHeading / selects** — all held.
-- **Cat recall parallelization** — shipped (PR #305).
+8. **Contribution presets** — consolidated; wishlist tiers may still have local amounts.
+9. **`entity-configs` imports UI templates** — move to `config/entity-templates/`.
+10. **`PublicEntityDetailPage` god component** — extract `loadPublicEntity` service.
+11. **14× `entity-guidance/*.ts`** — factory + content maps.
+12. **Notifications dual stack** — `lib/services/notifications.ts` vs `services/notifications/`.
+
+---
+
+## Phase 2: Design system (remaining)
+
+| Item                               | Status                                                                              |
+| ---------------------------------- | ----------------------------------------------------------------------------------- |
+| `[#` in className                  | ✅ 0 violations                                                                     |
+| Legacy shadcn tokens in `ui/*`     | ✅ Card/Badge/dialog/select/dropdown on semantic tier                               |
+| Chromatic Tailwind in config       | ⏳ `badge-colors.ts`, `entity-registry` THEME_COLORS, `contextual-loader-config.ts` |
+| Raw `<button>` vs `<Button>`       | ⏳ ~130 files; chat/timeline worst                                                  |
+| `text-[10px]` arbitrary micro-type | ⏳ ~25 files; use `text-2xs`                                                        |
+| Chart/email hex                    | ⏳ AnalyticsInsights, email templates, OG                                           |
+| Display typography                 | ⏳ `font-heading` only ~14 files                                                    |
+
+**Recommended next design pass:** migrate `dialog`, `select`, `dropdown-menu` internals to semantic tokens (unlocks all consumers in one PR).
+
+---
+
+## Phase 3: FleetCrown / customer integration (remaining)
+
+| Gap                                                | Status                                                             |
+| -------------------------------------------------- | ------------------------------------------------------------------ |
+| OC ingest (`/api/v1/timeline/publish`)             | ✅ Live                                                            |
+| `timeline.write` in mint UI scopes                 | ✅ Fixed                                                           |
+| FC emit build events                               | ❌ Unbuilt                                                         |
+| Stakeholders in v1 API + SDK                       | ✅ `/api/v1/stakeholders` + SDK `stakeholders.list/create`         |
+| SDK `timeline.publish`                             | ✅ `orangecat.timeline.publish()`                                  |
+| OIDC on FC side                                    | ❌ Unbuilt                                                         |
+| Stakeholder management UI                          | ❌ API/seed only                                                   |
+| Hardcoded `ORANGECAT_FLEETCROWN_INTEGRATION` UUIDs | ⏳ Dogfood OK; needs `platform_customers` table for multi-customer |
+
+See `docs/architecture/PLATFORM_AND_COLLABORATION.md` for north star.
+
+---
+
+## Phased roadmap
+
+### Phase A — Quick wins (done this pass)
+
+Config SSOT consolidation, phantom routes, UI primitive migration start, integration scope fix.
+
+### Phase B — Correctness (in progress)
+
+- ✅ **Loan dual-path closed** — `createLoan` / `updateLoan` / `deleteLoan` route through `/api/loans` via `services/loans/api-client.ts`; `createObligationLoan` deferred to Phase E (offer-accept server route).
+- Regenerate DB types; eliminate `as any` on oauth/cat_credit/stakeholder tables
+- Middleware auth prefixes derived from `routes.ts`
+- `config/env.ts` zod validation + CI `validate-env.js` alignment
+
+### Phase C — Design system completion (1–2 weeks)
+
+- ✅ shadcn dialog/select/dropdown → semantic tier
+- `badge-colors.ts` → status semantic tokens
+- Chat/timeline raw button purge
+- Remove tiffany/orange from globals/tailwind when consumers = 0
+
+### Phase D — Platform integration (2–4 weeks)
+
+- ✅ v1 API + SDK: `stakeholders.read/write`, `timeline.publish`
+- FC emit checklist + OIDC relying party
+- Customer registry DB table (move hardcoded UUIDs out of code)
+
+### Phase E — Data access unification (ongoing)
+
+- Deprecate browser writes in `services/loans`, `projectStore`, `services/groups`
+- Rule: UI → `API_ROUTES` → route → domain/service → supabase
+
+---
 
 ## Verification
 
-- `tsc --noEmit --incremental false`: 0 errors · `npm run lint`: clean · 0 `console.*` in session files
-- Schema-drift gate: green against the box · design-token hex: 0/0
+Run after each phase:
+
+```bash
+npm run type-check
+npm test -- --testPathPatterns=__tests__/unit
+grep -rn '\[#' src/    # design token audit — expect 0
+```
+
+---
+
+## Action items (prioritized)
+
+1. ~~**[B1]** Fix loan dual-path~~ — done 2026-07-09
+2. **[B2]** Regenerate `database.generated.ts` and migrate Supabase client imports
+3. ~~**[C1]** Migrate dialog/select/dropdown to semantic tokens~~ — done 2026-07-09
+4. ~~**[D1]** Add stakeholders + timeline to v1 SDK~~ — done 2026-07-09
+5. **[E1]** Inventory browser-supabase write sites; migrate loans first

@@ -14,11 +14,12 @@
  * NOT a card until it can actually be bought.
  *
  * The /pricing page and QuotaMeter both read from this file. If the daily
- * limit changes, update CAT_FREE_DAILY_LIMIT here and api-key-service.ts in
- * the same commit.
+ * limit changes, update CAT_FREE_DAILY_LIMIT here only — all fallbacks import it.
  */
 
 import { ROUTES } from '@/config/routes';
+import { CREDIT_USAGE_MARKUP } from '@/services/cat/credit-metering';
+import { WIRED_PROVIDER_DISPLAY_NAMES } from '@/data/aiProviders';
 
 export type CatPlanId = 'free' | 'byok' | 'credits';
 
@@ -29,8 +30,8 @@ export type CatPlanId = 'free' | 'byok' | 'credits';
  */
 export const CAT_CREDITS_LIVE = false;
 
-/** Platform margin on frontier inference billed to Cat Credits (SSOT: credit-metering.ts). */
-export const CAT_CREDITS_MARKUP_LABEL = 'provider cost + 20%';
+/** Platform margin label — derived from CREDIT_USAGE_MARKUP so marketing never drifts. */
+export const CAT_CREDITS_MARKUP_LABEL = `provider cost + ${Math.round((CREDIT_USAGE_MARKUP - 1) * 100)}%`;
 
 export interface CatPlan {
   id: CatPlanId;
@@ -59,16 +60,9 @@ export const CAT_FREE_DAILY_LIMIT = 10;
 /**
  * Providers Cat actually routes through today, surfaced on /pricing so the
  * BYOK card shows real names instead of a vague "any provider" promise.
- * Mirrors WIRED_PROVIDER_IDS in AIKeyAddForm — keep in sync.
+ * Derived from WIRED_PROVIDER_IDS in src/data/aiProviders.ts.
  */
-export const CAT_WIRED_PROVIDERS = [
-  'Groq',
-  'OpenRouter',
-  'OpenAI',
-  'Together',
-  'DeepSeek',
-  'xAI (Grok)',
-] as const;
+export const CAT_WIRED_PROVIDERS = WIRED_PROVIDER_DISPLAY_NAMES;
 
 /**
  * SSOT for the frontier models named in marketing copy (pricing, support,

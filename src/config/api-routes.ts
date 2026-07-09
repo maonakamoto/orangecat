@@ -53,6 +53,7 @@ export const API_ROUTES = {
   WALLETS: {
     BASE: ENTITY_REGISTRY['wallet'].apiEndpoint,
     TRANSFER: '/api/wallets/transfer',
+    ENTITY_VISIBILITY: '/api/wallets/entity-visibility',
   },
   ENTITY_WALLETS: '/api/entity-wallets',
   NOTIFICATIONS: {
@@ -118,7 +119,6 @@ export const API_ROUTES = {
   },
   PAYMENTS: {
     BASE: '/api/payments',
-    SEND: '/api/payments/send',
   },
   PROJECTS: {
     BASE: ENTITY_REGISTRY['project'].apiEndpoint,
@@ -136,6 +136,7 @@ export const API_ROUTES = {
   },
   LOANS: {
     BASE: ENTITY_REGISTRY['loan'].apiEndpoint,
+    BY_ID: (id: string) => `${ENTITY_REGISTRY['loan'].apiEndpoint}/${id}`,
     COLLATERAL: '/api/loan-collateral',
   },
   PROFILE: '/api/profile',

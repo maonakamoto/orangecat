@@ -23,6 +23,7 @@ import {
 } from '@/config/public-api';
 import { getEntityMetadata } from '@/config/entity-registry';
 import { externalPublishSchema } from '@/config/external-publish';
+import { createStakeholderSchema } from '@/config/stakeholders';
 import {
   userProductSchema,
   userServiceSchema,
@@ -264,11 +265,9 @@ export function registerV1Routes(): void {
   const publishResponseSchema = z
     .object({
       id: z.string().uuid().openapi({ description: 'OrangeCat timeline event id.' }),
-      status: z
-        .enum(['created', 'updated'])
-        .openapi({
-          description: '`created` on first publish, `updated` on a reconciling re-publish.',
-        }),
+      status: z.enum(['created', 'updated']).openapi({
+        description: '`created` on first publish, `updated` on a reconciling re-publish.',
+      }),
     })
     .openapi('TimelinePublishResponse');
 
@@ -310,6 +309,102 @@ export function registerV1Routes(): void {
       404: COMMON_ERROR_RESPONSES[404],
       422: {
         description: 'Validation error — body did not match the schema, or url origin not allowed.',
+        content: { 'application/json': { schema: apiErrorSchema } },
+      },
+      429: COMMON_ERROR_RESPONSES[429],
+      500: COMMON_ERROR_RESPONSES[500],
+    },
+  });
+
+  const stakeholderRowSchema = z
+    .object({
+      id: z.string().uuid(),
+      from_project_id: z.string().uuid(),
+      kind: z.string(),
+      owner_actor_id: z.string().uuid(),
+    })
+    .catchall(z.unknown())
+    .openapi('StakeholderRelationship');
+
+  const stakeholderListSchema = z
+    .object({
+      relationships: z.array(stakeholderRowSchema),
+    })
+    .openapi('StakeholderListResponse');
+
+  const stakeholderCreateSchema = z
+    .object({
+      relationship: stakeholderRowSchema,
+    })
+    .openapi('StakeholderCreateResponse');
+
+  openApiRegistry.registerPath({
+    method: 'get',
+    path: `${PUBLIC_API_BASE}/stakeholders`,
+    summary: 'List stakeholder relationships for a project',
+    description:
+      'Returns typed edges from a project to competitors, collaborators, investors, and other stakeholder categories. Requires `stakeholders.read` and ownership of the project.',
+    tags: ['Stakeholders'],
+    security: [{ IntegrationKey: [] }],
+    request: {
+      query: z.object({
+        fromProjectId: z.string().uuid().openapi({ description: 'Project whose edges to list.' }),
+        kind: z.string().optional().openapi({ description: 'Optional kind filter.' }),
+      }),
+    },
+    responses: {
+      200: {
+        description: 'Relationships for the project.',
+        content: {
+          'application/json': {
+            schema: apiSuccessSchema(stakeholderListSchema, 'StakeholderListSuccess'),
+          },
+        },
+      },
+      401: COMMON_ERROR_RESPONSES[401],
+      403: COMMON_ERROR_RESPONSES[403],
+      404: COMMON_ERROR_RESPONSES[404],
+      422: {
+        description: 'Validation error — invalid kind filter.',
+        content: { 'application/json': { schema: apiErrorSchema } },
+      },
+      429: COMMON_ERROR_RESPONSES[429],
+      500: COMMON_ERROR_RESPONSES[500],
+    },
+  });
+
+  openApiRegistry.registerPath({
+    method: 'post',
+    path: `${PUBLIC_API_BASE}/stakeholders`,
+    summary: 'Create a stakeholder relationship',
+    description:
+      'Adds a typed edge from a project to an actor, another project, or an external URL. Requires `stakeholders.write` and ownership of the source project.',
+    tags: ['Stakeholders'],
+    security: [{ IntegrationKey: [] }],
+    request: {
+      body: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: createStakeholderSchema.openapi('StakeholderCreate'),
+          },
+        },
+      },
+    },
+    responses: {
+      201: {
+        description: 'Relationship created.',
+        content: {
+          'application/json': {
+            schema: apiSuccessSchema(stakeholderCreateSchema, 'StakeholderCreateSuccess'),
+          },
+        },
+      },
+      401: COMMON_ERROR_RESPONSES[401],
+      403: COMMON_ERROR_RESPONSES[403],
+      404: COMMON_ERROR_RESPONSES[404],
+      422: {
+        description: 'Validation error — body did not match the schema.',
         content: { 'application/json': { schema: apiErrorSchema } },
       },
       429: COMMON_ERROR_RESPONSES[429],

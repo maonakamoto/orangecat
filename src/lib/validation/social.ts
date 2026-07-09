@@ -133,5 +133,14 @@ export const eventSchema = z
     }
   );
 
+/** Channel / marketing waitlist sign-up (shared by API route and channel page). */
+export const waitlistSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  source: z.string().max(100).optional(),
+  referrer: z.string().max(500).optional(),
+});
+
+export type WaitlistFormData = z.infer<typeof waitlistSchema>;
+
 // Types
 export type EventFormData = z.infer<typeof eventSchema>;

@@ -21,6 +21,21 @@
 
 export type AIProviderCategory = 'direct' | 'aggregator' | 'local';
 
+/**
+ * Providers Cat's chat route can route through today (server-reachable).
+ * SSOT for AIKeyAddForm filter and CAT_WIRED_PROVIDERS on /pricing.
+ */
+export const WIRED_PROVIDER_IDS = [
+  'groq',
+  'openrouter',
+  'openai',
+  'together',
+  'deepseek',
+  'xai',
+] as const;
+
+export type WiredProviderId = (typeof WIRED_PROVIDER_IDS)[number];
+
 export interface AIProvider {
   id: string;
   name: string;
@@ -153,6 +168,14 @@ export const aiProviders: AIProvider[] = [
     apiKeyExample: 'http://localhost:1234/v1',
   },
 ];
+
+const wiredIdSet = new Set<string>(WIRED_PROVIDER_IDS);
+
+/** Subset of aiProviders that Cat routes through on the platform key path. */
+export const wiredProviders = aiProviders.filter(p => wiredIdSet.has(p.id));
+
+/** Display names for marketing copy — derived from the provider registry. */
+export const WIRED_PROVIDER_DISPLAY_NAMES = wiredProviders.map(p => p.name);
 
 // ==================== UTILITY FUNCTIONS ====================
 

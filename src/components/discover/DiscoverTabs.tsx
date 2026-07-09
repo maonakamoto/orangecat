@@ -3,24 +3,13 @@
 import { Grid3X3, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
-import type { EntityType } from '@/config/entity-registry';
+import {
+  DISCOVER_ENTITY_TAB_IDS,
+  DISCOVER_TAB_TO_ENTITY,
+  type DiscoverTabType,
+} from '@/config/discover-tabs';
 
-export type DiscoverTabType =
-  | 'all'
-  | 'projects'
-  | 'profiles'
-  | 'loans'
-  | 'investments'
-  | 'assets'
-  | 'causes'
-  | 'events'
-  | 'products'
-  | 'services'
-  | 'groups'
-  | 'circles'
-  | 'wishlists'
-  | 'research'
-  | 'ai_assistants';
+export type { DiscoverTabType };
 
 interface DiscoverTabsProps {
   activeTab: DiscoverTabType;
@@ -28,23 +17,6 @@ interface DiscoverTabsProps {
   counts: Partial<Record<DiscoverTabType, number>>;
   loading?: boolean;
 }
-
-/** Maps plural discover tab IDs to their singular EntityType in the registry. */
-const TAB_TO_ENTITY: Partial<Record<DiscoverTabType, EntityType>> = {
-  projects: 'project',
-  causes: 'cause',
-  investments: 'investment',
-  loans: 'loan',
-  assets: 'asset',
-  products: 'product',
-  services: 'service',
-  events: 'event',
-  groups: 'group',
-  circles: 'circle',
-  wishlists: 'wishlist',
-  research: 'research',
-  ai_assistants: 'ai_assistant',
-};
 
 interface TabConfig {
   id: DiscoverTabType;
@@ -54,24 +26,8 @@ interface TabConfig {
 
 const tabs: TabConfig[] = [
   { id: 'all', label: 'All', Icon: Grid3X3 },
-  ...(
-    [
-      'projects',
-      'causes',
-      'investments',
-      'loans',
-      'assets',
-      'products',
-      'services',
-      'events',
-      'groups',
-      'circles',
-      'wishlists',
-      'research',
-      'ai_assistants',
-    ] as DiscoverTabType[]
-  ).map(id => {
-    const meta = ENTITY_REGISTRY[TAB_TO_ENTITY[id]!];
+  ...DISCOVER_ENTITY_TAB_IDS.map(id => {
+    const meta = ENTITY_REGISTRY[DISCOVER_TAB_TO_ENTITY[id]!];
     return { id, label: meta.namePlural, Icon: meta.icon };
   }),
   { id: 'profiles', label: 'People', Icon: Users },

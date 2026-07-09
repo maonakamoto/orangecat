@@ -11,8 +11,10 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
+import { CONTRIBUTION_QUICK_AMOUNTS_BTC } from '@/config/payment-presets';
+
 // Quick-select amounts in BTC (approx $1, $5, $10, $50, $100 at $100k/BTC)
-const QUICK_AMOUNTS = [0.00001, 0.00005, 0.0001, 0.0005, 0.001];
+const QUICK_AMOUNTS = [...CONTRIBUTION_QUICK_AMOUNTS_BTC];
 
 interface ContributionAmountInputProps {
   value: number;

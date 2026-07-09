@@ -1,7 +1,8 @@
 import { Target, Users } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import type { DiscoverTabType } from '@/components/discover/DiscoverTabs';
-import { ENTITY_REGISTRY, type EntityType } from '@/config/entity-registry';
+import type { DiscoverTabType } from '@/config/discover-tabs';
+import { DISCOVER_TAB_TO_ENTITY } from '@/config/discover-tabs';
+import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { ROUTES } from '@/config/routes';
 
 interface DiscoverEmptyStateProps {
@@ -10,28 +11,12 @@ interface DiscoverEmptyStateProps {
   onClearFilters: () => void;
 }
 
-const TAB_ENTITY_MAP: Partial<Record<DiscoverTabType, EntityType>> = {
-  projects: 'project',
-  loans: 'loan',
-  investments: 'investment',
-  assets: 'asset',
-  causes: 'cause',
-  events: 'event',
-  products: 'product',
-  services: 'service',
-  groups: 'group',
-  circles: 'circle',
-  wishlists: 'wishlist',
-  research: 'research',
-  ai_assistants: 'ai_assistant',
-};
-
 export default function DiscoverEmptyState({
   activeTab,
   hasFilters,
   onClearFilters,
 }: DiscoverEmptyStateProps) {
-  const entityType = TAB_ENTITY_MAP[activeTab];
+  const entityType = DISCOVER_TAB_TO_ENTITY[activeTab];
   const meta = entityType ? ENTITY_REGISTRY[entityType] : null;
   const EntityIcon = meta?.icon ?? (activeTab === 'profiles' ? Users : Target);
 

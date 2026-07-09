@@ -25,6 +25,7 @@ import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { PaymentExpectationNote } from './PaymentExpectationNote';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 import { displayBTC } from '@/services/currency';
+import { LABELED_SUPPORT_AMOUNTS_BTC } from '@/config/payment-presets';
 
 interface PublicPayPanelProps {
   entityTitle: string;
@@ -46,13 +47,6 @@ interface PublicPayPanelProps {
    */
   signInHref?: string;
 }
-
-/** Quick-pick contribution amounts (BTC). Small/Medium/Large, like the dashboard. */
-const SUGGESTED_BTC = [
-  { btc: 0.001, label: 'Small' },
-  { btc: 0.005, label: 'Medium' },
-  { btc: 0.01, label: 'Large' },
-] as const;
 
 function truncateMiddle(value: string, head = 12, tail = 10): string {
   return value.length <= head + tail + 1 ? value : `${value.slice(0, head)}…${value.slice(-tail)}`;
@@ -128,8 +122,8 @@ export function PublicPayPanel({
             <p className="text-sm text-fg-secondary">
               Choose an amount, or send any in your wallet.
             </p>
-            <div className="grid grid-cols-3 gap-2">
-              {SUGGESTED_BTC.map(({ btc, label }) => {
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              {LABELED_SUPPORT_AMOUNTS_BTC.map(({ btc, label }) => {
                 const active = selectedBtc === btc;
                 return (
                   <button

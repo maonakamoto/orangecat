@@ -18,6 +18,7 @@ import { useUserCurrency } from '@/hooks/useUserCurrency';
 import type { FormFieldProps } from './types';
 import type { Currency } from '@/types/settings';
 import { DictationButton } from '@/components/ui/DictationButton';
+import { FEATURES } from '@/config/features';
 import { AvailabilityEditor } from './fields/AvailabilityEditor';
 
 // ==================== COMPONENT ====================
@@ -56,7 +57,7 @@ export function FormField({
               disabled={disabled}
               className={baseInputClass}
             />
-            {process.env.NEXT_PUBLIC_FEATURE_VOICE_INPUT === 'true' && (
+            {FEATURES.voiceInput && (
               <DictationButton
                 size="sm"
                 ariaLabel={`Voice input for ${label}`}
@@ -243,7 +244,7 @@ export function FormField({
               disabled={disabled}
               className={baseInputClass}
             />
-            {process.env.NEXT_PUBLIC_FEATURE_VOICE_INPUT === 'true' && (
+            {FEATURES.voiceInput && (
               <DictationButton
                 size="sm"
                 ariaLabel={`Voice input for ${label}`}

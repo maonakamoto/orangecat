@@ -111,14 +111,16 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
 
     const body = await (request as NextRequest).json();
     const schema = researchConfig.schema as ZodType | undefined;
+    let validatedBody = body as ResearchEntityCreate;
     if (schema) {
       const parsed = schema.safeParse(body);
       if (!parsed.success) {
         return handleValidationError(parsed.error);
       }
+      validatedBody = parsed.data as ResearchEntityCreate;
     }
 
-    const { response } = await createResearch(supabase, user.id, body as ResearchEntityCreate);
+    const { response } = await createResearch(supabase, user.id, validatedBody);
     return applyRateLimitHeaders(response, rl);
   } catch (error) {
     return handleApiError(error);
