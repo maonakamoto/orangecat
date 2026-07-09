@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Coins, DollarSign, Target, TrendingUp } from 'lucide-react';
 import EmptyState from '@/components/ui/EmptyState';
 import { AvailableLoans } from '@/components/loans/AvailableLoans';
+import { IncomingLoanOffersList } from '@/components/loans/IncomingLoanOffersList';
 import { LoanOffersList } from '@/components/loans/LoanOffersList';
 import { CreateLoanDialog } from '@/components/loans/CreateLoanDialog';
 import { useLoanList } from './useLoanList';
@@ -33,6 +34,7 @@ export default function LoansPage() {
     switchTab,
     myLoans,
     myOffers,
+    incomingOffers,
     availableLoans,
     availablePage,
     setAvailablePage,
@@ -45,7 +47,9 @@ export default function LoansPage() {
     page,
     total,
     setPage,
+    refresh,
     loadOffers,
+    loadIncomingOffers,
     loadAvailableLoans,
     handleBulkDelete,
     executeBulkDelete,
@@ -62,7 +66,7 @@ export default function LoansPage() {
   }
 
   const headerActions = (
-    <div className="flex items-center gap-2">
+    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
       {activeTab === 'my-loans' && myLoans.length > 0 && (
         <Button onClick={() => setShowSelection(!showSelection)} variant="outline" size="sm">
           {showSelection ? 'Cancel' : 'Select'}
@@ -115,7 +119,7 @@ export default function LoansPage() {
             ) : (
               <>
                 {showSelection && myLoans.length > 0 && (
-                  <div className="mb-4 flex items-center justify-between">
+                  <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <label className="flex items-center gap-2 text-sm text-fg-primary">
                       <input
                         type="checkbox"
@@ -139,6 +143,15 @@ export default function LoansPage() {
                   showSelection={showSelection}
                 />
                 <CommercePagination page={page} limit={12} total={total} onPageChange={setPage} />
+                <IncomingLoanOffersList
+                  offers={incomingOffers}
+                  borrowerId={user.id}
+                  onOfferUpdated={() => {
+                    loadIncomingOffers();
+                    refresh?.();
+                    loadOffers();
+                  }}
+                />
               </>
             )}
           </TabsContent>

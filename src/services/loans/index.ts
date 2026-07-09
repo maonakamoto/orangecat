@@ -19,7 +19,7 @@ import type {
 
 // Import modular functions
 import { getLoan, getUserLoans, getAvailableLoans, getLoanCategories } from './queries/loans';
-import { getLoanOffers, getUserOffers } from './queries/offers';
+import { getIncomingOffers, getLoanOffers, getUserOffers } from './queries/offers';
 import { createLoan, updateLoan, deleteLoan, createObligationLoan } from './mutations/loans';
 import { createLoanOffer, updateLoanOffer, respondToOffer } from './mutations/offers';
 import { createPayment, completePayment } from './mutations/payments';
@@ -99,6 +99,13 @@ class LoansService {
     pagination?: Pagination
   ): Promise<LoanOffersListResponse> {
     return getUserOffers(query, pagination);
+  }
+
+  async getIncomingOffers(
+    query?: LoanOffersQuery,
+    pagination?: Pagination
+  ): Promise<LoanOffersListResponse> {
+    return getIncomingOffers(query, pagination);
   }
 
   async respondToOffer(

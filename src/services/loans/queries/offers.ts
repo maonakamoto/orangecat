@@ -134,3 +134,70 @@ export async function getUserOffers(
     return { success: false, error: 'Failed to get offers' };
   }
 }
+
+/**
+ * Get offers received on the current user's loans.
+ */
+export async function getIncomingOffers(
+  query?: LoanOffersQuery,
+  pagination?: Pagination
+): Promise<LoanOffersListResponse> {
+  try {
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      return { success: false, error: 'Authentication required' };
+    }
+
+    let dbQuery = supabase
+      .from(DATABASE_TABLES.LOAN_OFFERS)
+      .select(
+        `
+        *,
+        profiles!loan_offers_offerer_id_fkey (
+          username,
+          display_name,
+          avatar_url
+        ),
+        loans!loan_offers_loan_id_fkey (
+          id,
+          title,
+          remaining_balance,
+          interest_rate,
+          currency,
+          status,
+          user_id
+        )
+      `,
+        { count: 'exact' }
+      )
+      .eq('loans.user_id', userId);
+
+    if (query?.status) {
+      dbQuery = dbQuery.eq('status', query.status);
+    }
+    if (query?.offer_type) {
+      dbQuery = dbQuery.eq('offer_type', query.offer_type);
+    }
+
+    const sortBy = query?.sort_by || 'created_at';
+    const sortOrder = query?.sort_order || 'desc';
+    dbQuery = dbQuery.order(sortBy, { ascending: sortOrder === 'asc' });
+
+    const pageSize = Math.min(pagination?.pageSize || DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
+    const page = pagination?.page || 1;
+    const offset = (page - 1) * pageSize;
+    dbQuery = dbQuery.range(offset, offset + pageSize - 1);
+
+    const { data, error, count } = await dbQuery;
+
+    if (error) {
+      logger.error('Failed to get incoming offers', error, 'Loans');
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, offers: data || [], total: count || 0 };
+  } catch (error) {
+    logger.error('Exception getting incoming offers', error, 'Loans');
+    return { success: false, error: 'Failed to get incoming offers' };
+  }
+}

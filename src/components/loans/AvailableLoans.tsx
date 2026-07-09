@@ -106,12 +106,16 @@ export function AvailableLoans({ loans, onOfferMade }: AvailableLoansProps) {
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex gap-2 pt-2">
-                  <Button size="sm" className="flex-1 gap-1" onClick={() => handleMakeOffer(loan)}>
+                <div className="flex flex-col gap-2 pt-2 sm:flex-row">
+                  <Button
+                    size="sm"
+                    className="w-full flex-1 gap-1"
+                    onClick={() => handleMakeOffer(loan)}
+                  >
                     <Target className="h-3 w-3" />
                     Make Offer
                   </Button>
-                  <Button variant="outline" size="sm" className="gap-1">
+                  <Button variant="outline" size="sm" className="w-full gap-1 sm:w-auto">
                     <MessageSquare className="h-3 w-3" />
                     Details
                   </Button>

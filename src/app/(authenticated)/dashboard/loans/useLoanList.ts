@@ -20,6 +20,7 @@ export function useLoanList() {
   const [showSelection, setShowSelection] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>('my-loans');
   const [myOffers, setMyOffers] = useState<LoanOffer[]>([]);
+  const [incomingOffers, setIncomingOffers] = useState<LoanOffer[]>([]);
   const [availableLoans, setAvailableLoans] = useState<Loan[]>([]);
   const [availablePage, setAvailablePage] = useState(1);
   const [availableTotal, setAvailableTotal] = useState(0);
@@ -53,6 +54,17 @@ export function useLoanList() {
     }
   }, []);
 
+  const loadIncomingOffers = useCallback(async () => {
+    try {
+      const result = await loansService.getIncomingOffers();
+      if (result.success) {
+        setIncomingOffers(result.offers || []);
+      }
+    } catch (err) {
+      logger.error('Failed to load incoming offers', { error: err }, 'LoansPage');
+    }
+  }, []);
+
   const loadAvailableLoans = useCallback(async () => {
     try {
       const result = await loansService.getAvailableLoans(undefined, {
@@ -75,10 +87,13 @@ export function useLoanList() {
     if (activeTab === 'offers') {
       loadOffers();
     }
+    if (activeTab === 'my-loans') {
+      loadIncomingOffers();
+    }
     if (activeTab === 'available') {
       loadAvailableLoans();
     }
-  }, [activeTab, user?.id, loadOffers, loadAvailableLoans]);
+  }, [activeTab, user?.id, loadIncomingOffers, loadOffers, loadAvailableLoans]);
 
   const switchTab = (tab: ActiveTab) => {
     setActiveTab(tab);
@@ -107,6 +122,7 @@ export function useLoanList() {
     setCreateDialogOpen(false);
     refresh();
     loadOffers();
+    loadIncomingOffers();
     loadAvailableLoans();
     toast.success('Loan created successfully!');
   };
@@ -127,6 +143,7 @@ export function useLoanList() {
     switchTab,
     myLoans: memoizedLoans,
     myOffers,
+    incomingOffers,
     availableLoans,
     availablePage,
     setAvailablePage,
@@ -140,7 +157,9 @@ export function useLoanList() {
     total,
     setPage,
     loadOffers,
+    loadIncomingOffers,
     loadAvailableLoans,
+    refresh,
     handleBulkDelete,
     executeBulkDelete,
     handleLoanCreated,

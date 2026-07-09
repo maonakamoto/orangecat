@@ -68,14 +68,14 @@ export function MakeOfferDialog({
             <CardDescription>{loan.description}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="rounded-md bg-surface-raised/60 p-3">
                 <p className="text-sm text-fg-secondary">Remaining Balance</p>
                 <p className="text-lg font-semibold text-status-negative">
                   {formatLoanCurrency(loan.remaining_balance, loan.currency)}
                 </p>
               </div>
-              <div>
+              <div className="rounded-md bg-surface-raised/60 p-3">
                 <p className="text-sm text-fg-secondary">Current Rate</p>
                 <p className="text-lg font-semibold">
                   {loan.interest_rate ? `${loan.interest_rate}%` : 'N/A'}
@@ -145,7 +145,7 @@ export function MakeOfferDialog({
             />
 
             {watchOfferType === 'refinance' && (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="interest_rate"
@@ -195,7 +195,7 @@ export function MakeOfferDialog({
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="terms"
@@ -231,16 +231,17 @@ export function MakeOfferDialog({
               />
             </div>
 
-            <div className="flex justify-end gap-3 pt-6 border-t">
+            <div className="flex flex-col gap-3 border-t pt-6 sm:flex-row sm:justify-end">
               <Button
                 type="button"
                 variant="outline"
+                className="w-full sm:w-auto"
                 onClick={() => handleOpenChange(false)}
                 disabled={loading}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" className="w-full sm:w-auto" disabled={loading}>
                 {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Submit Offer
               </Button>

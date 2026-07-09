@@ -99,6 +99,23 @@ describe('createLoanPayment domain', () => {
       message: 'Payer and recipient must be different users',
     });
   });
+
+  it('allows the recipient to record a pending payment with an explicit payer', async () => {
+    const result = await createLoanPayment(
+      recipientId,
+      {
+        loan_id: loanId,
+        amount: 1000,
+        currency: 'CHF',
+        payment_type: 'payoff',
+        payer_id: payerId,
+        recipient_id: recipientId,
+      },
+      mockSupabaseForCreate() as never
+    );
+
+    expect(result.ok).toBe(true);
+  });
 });
 
 describe('completeLoanPayment domain', () => {

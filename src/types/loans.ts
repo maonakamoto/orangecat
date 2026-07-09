@@ -96,6 +96,20 @@ export interface LoanOffer {
   updated_at: string;
   accepted_at?: string;
   rejected_at?: string;
+  profiles?: {
+    username?: string | null;
+    display_name?: string | null;
+    avatar_url?: string | null;
+  } | null;
+  loans?: {
+    id: string;
+    title?: string | null;
+    remaining_balance?: number | null;
+    interest_rate?: number | null;
+    currency?: CurrencyCode | string | null;
+    status?: string | null;
+    user_id?: string | null;
+  } | null;
 }
 
 interface LoanPayment {
@@ -162,6 +176,7 @@ export interface CreateLoanPaymentRequest {
   amount: number;
   currency: CurrencyCode;
   payment_type: PaymentType;
+  payer_id?: string;
   recipient_id: string;
   transaction_id?: string;
   payment_method?: PaymentMethod;
