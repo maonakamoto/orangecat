@@ -37,13 +37,13 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
     return (
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
               <CardTitle>Projects</CardTitle>
               <CardDescription>Your projects</CardDescription>
             </div>
             <Link href={ENTITY_REGISTRY.project.createPath}>
-              <Button size="sm">
+              <Button size="sm" className="w-full sm:w-auto">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Create Project
               </Button>
@@ -58,14 +58,14 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
               Not sure what to create? Ask Cat — it can suggest the right shape (project, wishlist,
               cause, service…) based on what you want to do.
             </p>
-            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+            <div className="mx-auto grid max-w-sm grid-cols-1 gap-2 sm:grid-cols-2">
               <Link href={ROUTES.DASHBOARD.CAT}>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="w-full">
                   Ask Cat
                 </Button>
               </Link>
               <Link href={ENTITY_REGISTRY.project.createPath}>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="w-full">
                   Create a project
                 </Button>
               </Link>
@@ -79,15 +79,15 @@ export function DashboardProjects({ projects }: DashboardProjectsProps) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
             <CardTitle>Projects</CardTitle>
             <CardDescription>
               Your projects ({projects.length} {projects.length === 1 ? 'project' : 'projects'})
             </CardDescription>
           </div>
           <Link href={ENTITY_REGISTRY.project.basePath}>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">
               <BarChart3 className="w-4 h-4 mr-2" />
               View All
             </Button>

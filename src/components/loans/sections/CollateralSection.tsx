@@ -97,7 +97,7 @@ export function CollateralSection({
                 ))}
               {/* Create Asset Option */}
               <SelectItem value="__create_asset__" className="text-fg-primary font-medium">
-                ➕ Create New Asset
+                Create New Asset
               </SelectItem>
             </SelectContent>
           </Select>
@@ -106,7 +106,7 @@ export function CollateralSection({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <FormLabel>Pledged Value</FormLabel>
             <Input

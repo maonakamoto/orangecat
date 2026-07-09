@@ -45,8 +45,8 @@ export function PreferencesSection({ control }: PreferencesSectionProps) {
         <CardDescription>Control how your loan appears to potential offerers</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
+        <div className="flex flex-col gap-3 rounded-md border border-subtle p-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0 space-y-0.5">
             <FormLabel>Public Listing</FormLabel>
             <FormDescription>Allow anyone to see and offer on your loan</FormDescription>
           </div>
@@ -61,8 +61,8 @@ export function PreferencesSection({ control }: PreferencesSectionProps) {
           />
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
+        <div className="flex flex-col gap-3 rounded-md border border-subtle p-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0 space-y-0.5">
             <FormLabel>Negotiable Terms</FormLabel>
             <FormDescription>Allow offerers to propose different terms</FormDescription>
           </div>

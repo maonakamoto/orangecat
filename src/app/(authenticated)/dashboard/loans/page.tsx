@@ -66,9 +66,14 @@ export default function LoansPage() {
   }
 
   const headerActions = (
-    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+    <div className="grid w-full grid-cols-1 gap-2 sm:w-auto sm:grid-cols-none sm:flex sm:items-center">
       {activeTab === 'my-loans' && myLoans.length > 0 && (
-        <Button onClick={() => setShowSelection(!showSelection)} variant="outline" size="sm">
+        <Button
+          onClick={() => setShowSelection(!showSelection)}
+          variant="outline"
+          size="sm"
+          className="w-full sm:w-auto"
+        >
           {showSelection ? 'Cancel' : 'Select'}
         </Button>
       )}
@@ -90,14 +95,20 @@ export default function LoansPage() {
           onValueChange={v => switchTab(v as typeof activeTab)}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="my-loans" className="gap-2">
+          <TabsList className="grid h-auto w-full grid-cols-3 gap-1 p-1">
+            <TabsTrigger
+              value="my-loans"
+              className="min-h-10 gap-1 px-2 text-xs sm:gap-2 sm:text-sm"
+            >
               <DollarSign className="h-4 w-4" />
               <span className="hidden sm:inline">My Loans</span>
               <span className="sm:hidden">Mine</span>
               {myLoans.length > 0 && <span className="ml-1 text-xs">({myLoans.length})</span>}
             </TabsTrigger>
-            <TabsTrigger value="available" className="gap-2">
+            <TabsTrigger
+              value="available"
+              className="min-h-10 gap-1 px-2 text-xs sm:gap-2 sm:text-sm"
+            >
               <Target className="h-4 w-4" />
               <span className="hidden sm:inline">Available</span>
               <span className="sm:hidden">Browse</span>
@@ -105,7 +116,7 @@ export default function LoansPage() {
                 <span className="ml-1 text-xs">({availableLoans.length})</span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="offers" className="gap-2">
+            <TabsTrigger value="offers" className="min-h-10 gap-1 px-2 text-xs sm:gap-2 sm:text-sm">
               <TrendingUp className="h-4 w-4" />
               <span className="hidden sm:inline">My Offers</span>
               <span className="sm:hidden">Offers</span>

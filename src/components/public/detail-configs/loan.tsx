@@ -49,9 +49,9 @@ export const loanDetailConfig: EntityDetailConfig = {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-sm text-fg-secondary">Remaining Balance</span>
-                <span className="font-bold text-xl text-fg-primary">
+                <span className="break-words text-xl font-bold text-fg-primary sm:text-right">
                   {formatCurrency(
                     entity.remaining_balance,
                     entity.currency ?? PLATFORM_DEFAULT_CURRENCY
@@ -59,9 +59,9 @@ export const loanDetailConfig: EntityDetailConfig = {
                 </span>
               </div>
               <Progress value={progress} className="h-2" />
-              <div className="flex justify-between text-xs text-fg-secondary">
+              <div className="flex flex-col gap-1 text-xs text-fg-secondary sm:flex-row sm:justify-between">
                 <span>{progress.toFixed(1)}% funded</span>
-                <span>
+                <span className="break-words sm:text-right">
                   Original:{' '}
                   {formatCurrency(
                     entity.original_amount,
@@ -78,7 +78,9 @@ export const loanDetailConfig: EntityDetailConfig = {
                     <Percent className="w-4 h-4" />
                     Interest Rate
                   </div>
-                  <div className="font-semibold text-lg">{entity.interest_rate}% APR</div>
+                  <div className="break-words text-lg font-semibold">
+                    {entity.interest_rate}% APR
+                  </div>
                 </div>
               )}
               {entity.monthly_payment && (
@@ -87,7 +89,7 @@ export const loanDetailConfig: EntityDetailConfig = {
                     <TrendingUp className="w-4 h-4" />
                     Monthly Payment
                   </div>
-                  <div className="font-semibold text-lg">
+                  <div className="break-words text-lg font-semibold">
                     {formatCurrency(
                       entity.monthly_payment,
                       entity.currency ?? PLATFORM_DEFAULT_CURRENCY
@@ -98,9 +100,9 @@ export const loanDetailConfig: EntityDetailConfig = {
             </div>
 
             {entity.lender_name && (
-              <div className="flex items-center gap-2 text-sm text-fg-secondary border-t dark:border-default pt-4">
-                <User className="w-4 h-4" />
-                <span>Current Lender: {entity.lender_name}</span>
+              <div className="flex items-start gap-2 border-t pt-4 text-sm text-fg-secondary dark:border-default">
+                <User className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                <span className="min-w-0 break-words">Current Lender: {entity.lender_name}</span>
               </div>
             )}
           </CardContent>
@@ -126,20 +128,20 @@ export const loanDetailConfig: EntityDetailConfig = {
           <CardTitle className="text-lg">Quick Stats</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:justify-between">
             <span className="text-fg-secondary">Loan Type</span>
             <Badge variant="secondary" className="capitalize">
               {entity.loan_category_id || 'General'}
             </Badge>
           </div>
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:justify-between">
             <span className="text-fg-secondary">Negotiable</span>
             <span className="font-medium">{entity.is_negotiable ? 'Yes' : 'No'}</span>
           </div>
           {entity.minimum_offer_amount && (
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:justify-between">
               <span className="text-fg-secondary">Min Offer</span>
-              <span className="font-medium">
+              <span className="break-words font-medium sm:text-right">
                 {formatCurrency(
                   entity.minimum_offer_amount,
                   entity.currency ?? PLATFORM_DEFAULT_CURRENCY
@@ -147,9 +149,11 @@ export const loanDetailConfig: EntityDetailConfig = {
               </span>
             </div>
           )}
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex flex-col gap-1 text-sm sm:flex-row sm:items-center sm:justify-between">
             <span className="text-fg-secondary">Contact Method</span>
-            <span className="font-medium capitalize">{entity.contact_method || 'Platform'}</span>
+            <span className="break-words font-medium capitalize sm:text-right">
+              {entity.contact_method || 'Platform'}
+            </span>
           </div>
         </CardContent>
       </Card>

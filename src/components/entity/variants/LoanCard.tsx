@@ -37,7 +37,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
     return (
       <Link href={`${ENTITY_REGISTRY['loan'].publicBasePath}/${loan.id}`}>
         <Card className="oc-card-link">
-          <div className="flex items-center p-4 gap-4">
+          <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
             {/* Icon */}
             <div className="oc-icon-tile h-12 w-12">
               <DollarSign className="w-6 h-6 text-fg-primary" />
@@ -52,7 +52,7 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-4 text-sm">
+            <div className="flex flex-wrap items-center gap-2 text-sm sm:justify-end">
               {loan.interest_rate && (
                 <Badge variant="secondary" className="gap-1">
                   <Percent className="h-3 w-3" />
@@ -83,22 +83,24 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
       }
       progressSlot={
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
             <span className="text-sm text-fg-secondary">Remaining</span>
-            <span className="font-semibold text-fg-primary">
+            <span className="break-words font-semibold text-fg-primary sm:text-right">
               {formatAmount(loan.remaining_balance, loan.currency)}
             </span>
           </div>
           <Progress value={progress} className="h-1.5" />
-          <div className="flex justify-between text-xs text-fg-secondary">
+          <div className="flex flex-col gap-1 text-xs text-fg-secondary sm:flex-row sm:justify-between">
             <span>{progress.toFixed(0)}% funded</span>
-            <span>{formatAmount(loan.original_amount, loan.currency)} total</span>
+            <span className="break-words sm:text-right">
+              {formatAmount(loan.original_amount, loan.currency)} total
+            </span>
           </div>
         </div>
       }
       metricsSlot={
         loan.interest_rate || loan.monthly_payment ? (
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
             {loan.interest_rate && (
               <div className="flex items-center gap-1">
                 <Percent className="h-3 w-3 text-fg-tertiary" />
@@ -106,9 +108,11 @@ export function LoanCard({ loan, viewMode = 'grid' }: LoanCardProps) {
               </div>
             )}
             {loan.monthly_payment && (
-              <div className="flex items-center gap-1">
+              <div className="flex min-w-0 items-center gap-1">
                 <TrendingUp className="h-3 w-3 text-fg-tertiary" />
-                <span>{formatAmount(loan.monthly_payment, loan.currency)}/mo</span>
+                <span className="min-w-0 break-words">
+                  {formatAmount(loan.monthly_payment, loan.currency)}/mo
+                </span>
               </div>
             )}
           </div>
