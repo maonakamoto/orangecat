@@ -12,6 +12,7 @@ import type {
   LoanOffersQuery,
   CreateLoanPaymentRequest,
   LoanPaymentResponse,
+  Loan,
   Pagination,
   LoanCategory,
 } from '@/types/loans';
@@ -114,8 +115,11 @@ class LoansService {
     return createPayment(request);
   }
 
-  async completePayment(paymentId: string): Promise<LoanPaymentResponse> {
-    return completePayment(paymentId);
+  async completePayment(
+    paymentId: string,
+    options?: { createObligation?: { lenderProfileName: string } }
+  ): Promise<LoanPaymentResponse & { obligationLoan?: Loan }> {
+    return completePayment(paymentId, options);
   }
 
   // ==================== LOAN CATEGORIES ====================

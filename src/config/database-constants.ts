@@ -77,6 +77,12 @@ export const STATUS = {
     EXPIRED: 'expired',
     CANCELLED: 'cancelled',
   },
+  LOAN_PAYMENTS: {
+    PENDING: 'pending',
+    COMPLETED: 'completed',
+    FAILED: 'failed',
+    REFUNDED: 'refunded',
+  },
   TRANSACTIONS: {
     PENDING: 'pending',
     COMPLETED: 'completed',

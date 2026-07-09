@@ -1,6 +1,6 @@
 created_date: 2025-12-04
 last_modified_date: 2026-07-09
-last_modified_summary: Obligation loan creation routes through POST /api/loans/obligation (no browser Supabase writes).
+last_modified_summary: Loan payments route through POST /api/loans/payments and complete endpoint; optional obligation creation on refinance.
 
 # OrangeCat Loans Flow (Refinance & Payoff)
 
@@ -28,7 +28,7 @@ last_modified_summary: Obligation loan creation routes through POST /api/loans/o
 
 - Frontend now loads “My Offers” and borrower offer lists; borrower can accept/reject offers per loan.
 - Service layer includes `getUserOffers` and reuses `respondToOffer`; UI uses typed service calls with toasts for feedback.
-- RLS and backend validations remain the source of truth; loan mutations use `/api/loans` and `/api/loans/obligation` (no direct DB access from UI).
+- RLS and backend validations remain the source of truth; loan mutations use `/api/loans`, `/api/loans/obligation`, and `/api/loans/payments` (no direct DB access from UI).
 - Currency source of truth lives in `src/config/currencies.ts` and is reused by UI, validation, services, and DB constraints (CHF included).
 - Assets now use real Supabase CRUD APIs (`/api/assets` and `/api/assets/[id]`) with edit/delete support; entity form drives both create and edit flows.
 
@@ -61,5 +61,5 @@ last_modified_summary: Obligation loan creation routes through POST /api/loans/o
 ## Implemented now
 
 - Borrower can accept an offer and immediately open “Record Payoff” to create and complete a payment record (payer = offerer, recipient = borrower for now).
-- Service layer adds `completePayment` and `createObligationLoan` scaffolding for new-loan creation post-payoff (`createObligationLoan` calls `POST /api/loans/obligation`; wire after payment completion in UI).
+- Service layer: `createPayment` / `completePayment` call `/api/loans/payments`; `completePayment` accepts optional `createObligation` to create the refinance obligation loan in one step.
 - UI uses typed forms with validation, toasts for feedback, and disables controls while processing.
