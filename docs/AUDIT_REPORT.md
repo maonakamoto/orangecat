@@ -158,4 +158,4 @@ grep -rn '\[#' src/    # design token audit — expect 0
 2. **[B2]** Regenerate `database.generated.ts` and migrate Supabase client imports
 3. ~~**[C1]** Migrate dialog/select/dropdown to semantic tokens~~ — done 2026-07-09
 4. ~~**[D1]** Add stakeholders + timeline to v1 SDK~~ — done 2026-07-09
-5. ~~**[E1]** Loan browser writes~~ — loans + payments + obligation route through API (2026-07-09); offers still browser-side
+5. ~~**[E1]** Loan browser writes~~ — loans + offers + payments + obligation route through API (2026-07-09)

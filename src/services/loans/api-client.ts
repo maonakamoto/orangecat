@@ -10,7 +10,10 @@ import { logger } from '@/utils/logger';
 import type {
   Loan,
   CreateLoanRequest,
+  CreateLoanOfferRequest,
+  LoanOfferResponse,
   UpdateLoanRequest,
+  UpdateLoanOfferRequest,
   LoanResponse,
   CreateLoanPaymentRequest,
   LoanPaymentResponse,
@@ -102,6 +105,17 @@ async function parseLoanEnvelope(res: Response): Promise<LoanResponse> {
     return { success: false, error: 'Empty response from server' };
   }
   return { success: true, loan: json.data };
+}
+
+async function parseOfferEnvelope(res: Response): Promise<LoanOfferResponse> {
+  const json = (await res.json().catch(() => ({}))) as ApiEnvelope<LoanOfferResponse['offer']>;
+  if (!res.ok || json.success === false) {
+    return { success: false, error: json.error || `Request failed (${res.status})` };
+  }
+  if (!json.data) {
+    return { success: false, error: 'Empty response from server' };
+  }
+  return { success: true, offer: json.data };
 }
 
 export async function getLoanViaApi(loanId: string): Promise<LoanResponse> {
@@ -201,6 +215,72 @@ export async function createObligationLoanViaApi(params: {
   } catch (error) {
     logger.error('createObligationLoanViaApi failed', error, 'Loans');
     return { success: false, error: 'Failed to create obligation loan' };
+  }
+}
+
+export async function createLoanOfferViaApi(
+  request: CreateLoanOfferRequest
+): Promise<LoanOfferResponse> {
+  try {
+    const res = await fetch(API_ROUTES.LOANS.OFFERS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(request),
+    });
+    const result = await parseOfferEnvelope(res);
+    if (result.success) {
+      logger.info('Loan offer created via API', { offerId: result.offer?.id }, 'Loans');
+    }
+    return result;
+  } catch (error) {
+    logger.error('createLoanOfferViaApi failed', error, 'Loans');
+    return { success: false, error: 'Failed to create offer' };
+  }
+}
+
+export async function updateLoanOfferViaApi(
+  offerId: string,
+  request: UpdateLoanOfferRequest
+): Promise<LoanOfferResponse> {
+  try {
+    const res = await fetch(API_ROUTES.LOANS.OFFER_BY_ID(offerId), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(request),
+    });
+    const result = await parseOfferEnvelope(res);
+    if (result.success) {
+      logger.info('Loan offer updated via API', { offerId }, 'Loans');
+    }
+    return result;
+  } catch (error) {
+    logger.error('updateLoanOfferViaApi failed', error, 'Loans');
+    return { success: false, error: 'Failed to update offer' };
+  }
+}
+
+export async function respondToOfferViaApi(
+  offerId: string,
+  accept: boolean,
+  notes?: string
+): Promise<LoanOfferResponse> {
+  try {
+    const res = await fetch(API_ROUTES.LOANS.OFFER_RESPOND(offerId), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ accept, notes }),
+    });
+    const result = await parseOfferEnvelope(res);
+    if (result.success) {
+      logger.info('Loan offer responded via API', { offerId, accept }, 'Loans');
+    }
+    return result;
+  } catch (error) {
+    logger.error('respondToOfferViaApi failed', error, 'Loans');
+    return { success: false, error: 'Failed to respond to offer' };
   }
 }
 
