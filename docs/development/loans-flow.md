@@ -1,15 +1,17 @@
 created_date: 2025-12-04
-last_modified_date: 2025-12-05
-last_modified_summary: Add CHF support + shared currency list; enable real asset CRUD
+last_modified_date: 2026-07-09
+last_modified_summary: Obligation loan creation routes through POST /api/loans/obligation (no browser Supabase writes).
 
 # OrangeCat Loans Flow (Refinance & Payoff)
 
 ## Borrower path
+
 - Create a loan listing with remaining balance, current rate/term, lender mask, minimum acceptable offer, negotiable flag, visibility (public/private), and contact preference.
 - Listing appears under `My Loans`; public listings appear in `Available Loans`.
 - Borrower can view offers per loan, then accept or reject. Acceptance marks the loan as `refinanced` or `paid_off` and triggers payment handoff.
 
 ## Lender path
+
 - Browse `Available Loans`, filter by category/amount/rate, open details to assess risk.
 - Submit an offer:
   - Payoff: propose amount to clear the balance.
@@ -18,17 +20,20 @@ last_modified_summary: Add CHF support + shared currency list; enable real asset
 - Borrower reviews offers and accepts or rejects.
 
 ## Payment handoff (next iteration)
+
 - On accept, record payoff payment (payer, recipient, amount, method). Once completed, the original loan is archived and a new obligation to the offerer is created with the accepted terms.
 - Schedule generation and reminders for refinance terms follow the acceptance.
 
 ## Implementation notes
+
 - Frontend now loads “My Offers” and borrower offer lists; borrower can accept/reject offers per loan.
 - Service layer includes `getUserOffers` and reuses `respondToOffer`; UI uses typed service calls with toasts for feedback.
-- RLS and backend validations remain the source of truth; no direct DB access from UI.
+- RLS and backend validations remain the source of truth; loan mutations use `/api/loans` and `/api/loans/obligation` (no direct DB access from UI).
 - Currency source of truth lives in `src/config/currencies.ts` and is reused by UI, validation, services, and DB constraints (CHF included).
 - Assets now use real Supabase CRUD APIs (`/api/assets` and `/api/assets/[id]`) with edit/delete support; entity form drives both create and edit flows.
 
 ## Payoff / Refinance Payment Handoff (implementation plan)
+
 - Trigger: borrower accepts an offer.
 - Status transitions:
   - Set offer to `accepted` with timestamp.
@@ -54,7 +59,7 @@ last_modified_summary: Add CHF support + shared currency list; enable real asset
   - No console logging; use structured logger on service side.
 
 ## Implemented now
-- Borrower can accept an offer and immediately open “Record Payoff” to create and complete a payment record (payer = offerer, recipient = borrower for now).
-- Service layer adds `completePayment` and `createObligationLoan` scaffolding for new-loan creation post-payoff (not yet invoked).
-- UI uses typed forms with validation, toasts for feedback, and disables controls while processing.
 
+- Borrower can accept an offer and immediately open “Record Payoff” to create and complete a payment record (payer = offerer, recipient = borrower for now).
+- Service layer adds `completePayment` and `createObligationLoan` scaffolding for new-loan creation post-payoff (`createObligationLoan` calls `POST /api/loans/obligation`; wire after payment completion in UI).
+- UI uses typed forms with validation, toasts for feedback, and disables controls while processing.
