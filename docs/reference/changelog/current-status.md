@@ -1,6 +1,6 @@
 # OrangeCat Platform Status
 
-**Last Updated:** 2025-10-13
+**Last Updated:** 2026-07-09
 **Status:** ✅ All Systems Operational
 
 ---
@@ -23,17 +23,11 @@ node scripts/dev/dev-start.js
 ### Deployment
 
 ```bash
-# Deploy to production
-./w
+# Deploy to production on the Hetzner box
+bash scripts/deploy-selfhost.sh
 
-# Or use npm script
-npm run w
-
-# Or use deploy alias
-npm run deploy
-
-# Deploy to staging
-./w staging
+# Build + browser smoke verify against production
+npm run deploy:verify
 ```
 
 ### Other Useful Commands
@@ -77,7 +71,7 @@ npm run format
 ### Developer Tools
 
 - ✅ **Command `d`** - Smart dev server with port detection
-- ✅ **Command `w`** - One-button deployment to Vercel
+- ✅ **Command `deploy-selfhost.sh`** - One-button deployment to Hetzner
 - ✅ **Hot Reload** - Next.js Fast Refresh working
 - ✅ **Type Checking** - TypeScript strict mode
 - ✅ **Testing** - Jest + Playwright configured
@@ -173,8 +167,8 @@ npm run format
 
 ### Production (After Deployment)
 
-- **URL**: https://orangecat.vercel.app (or your custom domain)
-- **Deploy**: Run `./w` to deploy
+- **URL**: https://orangecat.ch
+- **Deploy**: Run `bash scripts/deploy-selfhost.sh`
 
 ---
 
@@ -275,9 +269,8 @@ All critical bugs have been fixed. The platform is stable and ready for feature 
 
 ### For Deployment
 
-- Run `./w` from the project root to deploy to production
-- Use `./w staging` to deploy to staging environment
-- Make sure you're logged in to Vercel CLI (`vercel login`)
+- Run `bash scripts/deploy-selfhost.sh` from the project root to deploy to production
+- Run `npm run deploy:verify` after deploy to smoke-test production
 
 ### For Blog
 
@@ -290,15 +283,16 @@ All critical bugs have been fixed. The platform is stable and ready for feature 
 
 ## 📞 Commands Reference
 
-| Command              | Description                             |
-| -------------------- | --------------------------------------- |
-| `npm run d`          | Start dev server (smart port detection) |
-| `./w`                | Deploy to production                    |
-| `npm run build`      | Build for production                    |
-| `npm run test`       | Run all tests                           |
-| `npm run type-check` | TypeScript type checking                |
-| `npm run lint`       | Lint code                               |
-| `npm run format`     | Format code with Prettier               |
+| Command                           | Description                             |
+| --------------------------------- | --------------------------------------- |
+| `npm run d`                       | Start dev server (smart port detection) |
+| `bash scripts/deploy-selfhost.sh` | Deploy to production on Hetzner         |
+| `npm run deploy:verify`           | Browser smoke-test production           |
+| `npm run build`                   | Build for production                    |
+| `npm run test`                    | Run all tests                           |
+| `npm run type-check`              | TypeScript type checking                |
+| `npm run lint`                    | Lint code                               |
+| `npm run format`                  | Format code with Prettier               |
 
 ---
 
