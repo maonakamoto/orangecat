@@ -61,9 +61,9 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
 
   return (
     <div className="oc-surface oc-surface-padding">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="oc-accent-tile">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+          <div className="oc-accent-tile flex-shrink-0">
             <User className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -82,14 +82,14 @@ export function DashboardHeader({ profile, totalProjects, totalDrafts }: Dashboa
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:shrink-0">
           {totalProjects === 0 && (
             // Cat-first: instead of hardcoding project creation as the
             // canonical first step, route to Cat. Always visible on mobile
             // — header used to have no action affordance on <sm because of
             // a `hidden sm:flex` that wasted the founder's primary viewport.
             <Link href={ROUTES.DASHBOARD.CAT}>
-              <div className="flex items-center gap-1.5 rounded-md bg-fg-primary px-3 py-1.5 text-sm font-medium text-fg-inverted transition-colors hover:bg-muted-strong">
+              <div className="flex min-h-10 w-full items-center justify-center gap-1.5 rounded-md bg-fg-primary px-3 py-1.5 text-sm font-medium text-fg-inverted transition-colors hover:bg-muted-strong sm:w-auto">
                 <Sparkles className="h-4 w-4" />
                 Ask Cat
               </div>

@@ -307,17 +307,19 @@ export default async function PublicEntityDetailPage({
               className="mb-4"
             />
             <div className="flex items-start justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center">
                 {config.renderHeaderIcon?.(entity) ?? (
                   <div
-                    className={`w-16 h-16 ${theme.bg} rounded-lg flex items-center justify-center`}
+                    className={`h-14 w-14 flex-shrink-0 ${theme.bg} rounded-lg flex items-center justify-center sm:h-16 sm:w-16`}
                   >
-                    <Icon className={`w-8 h-8 ${theme.icon}`} />
+                    <Icon className={`h-7 w-7 sm:h-8 sm:w-8 ${theme.icon}`} />
                   </div>
                 )}
-                <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-fg-primary">{entity.title}</h1>
-                  <div className="flex items-center gap-3 mt-2">
+                <div className="min-w-0">
+                  <h1 className="break-words text-2xl font-bold text-fg-primary sm:text-3xl">
+                    {entity.title}
+                  </h1>
+                  <div className="mt-2 flex flex-wrap items-center gap-2 sm:gap-3">
                     {entity.status && (
                       <Badge variant="default" className="capitalize">
                         {entity.status}
@@ -444,7 +446,7 @@ function StickyBar({ href, label }: { href: string; label: string }) {
   // to the page wrapper) reserves matching scroll-bottom room.
   return (
     <div
-      className={`md:hidden fixed inset-x-0 oc-above-mobile-nav ${Z_INDEX_CLASSES.MOBILE_ACTION_BAR} border-t border-subtle bg-surface-base/95 backdrop-blur supports-[backdrop-filter]:bg-surface-base/80 px-4 py-3 shadow-lg`}
+      className={`md:hidden fixed inset-x-0 oc-above-mobile-nav ${Z_INDEX_CLASSES.MOBILE_ACTION_BAR} border-t border-subtle bg-surface-base/95 backdrop-blur supports-[backdrop-filter]:bg-surface-base/80 px-4 py-3 shadow-sm`}
     >
       <a
         href={href}

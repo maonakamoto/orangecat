@@ -47,13 +47,13 @@ export function MobileDashboardSidebar({ stats }: MobileDashboardSidebarProps) {
             <TrendingUp className="w-5 h-5 text-fg-secondary" />
             <h3 className="text-base font-semibold text-fg-primary">Your Impact</h3>
           </button>
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="rounded-md border border-subtle bg-surface-raised/30 p-3 text-center">
               <div className="text-2xl font-bold text-fg-primary">{totalProjects}</div>
               <div className="text-xs text-fg-secondary">Projects</div>
             </div>
             <div className="rounded-md border border-subtle bg-surface-raised/30 p-3 text-center">
-              <div className="text-lg font-bold text-fg-primary">
+              <div className="break-words text-lg font-bold text-fg-primary">
                 <CurrencyDisplay amount={totalRaised} currency={primaryCurrency} />
               </div>
               <div className="text-xs text-fg-secondary">Raised</div>

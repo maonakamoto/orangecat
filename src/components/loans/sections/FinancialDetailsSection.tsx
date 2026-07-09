@@ -40,7 +40,7 @@ export function FinancialDetailsSection({ control }: FinancialDetailsSectionProp
         <CardDescription>Current loan information</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <FormField
             control={control}
             name="original_amount"
@@ -82,7 +82,7 @@ export function FinancialDetailsSection({ control }: FinancialDetailsSectionProp
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <FormField
             control={control}
             name="interest_rate"
