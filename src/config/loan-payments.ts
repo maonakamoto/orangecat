@@ -29,6 +29,7 @@ export const createLoanPaymentSchema = z.object({
   amount: z.number().positive('amount must be greater than 0'),
   currency: z.enum(CURRENCY_CODES),
   payment_type: z.enum(LOAN_PAYMENT_TYPES),
+  payer_id: z.string().uuid().optional(),
   recipient_id: z.string().uuid('recipient_id must be a UUID'),
   transaction_id: z.string().max(200).optional(),
   payment_method: z.enum(LOAN_PAYMENT_METHODS).optional(),

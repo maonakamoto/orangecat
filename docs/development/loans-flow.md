@@ -1,6 +1,6 @@
 created_date: 2025-12-04
 last_modified_date: 2026-07-09
-last_modified_summary: Loan offer writes now route through /api/loans/offers; the loans vertical is API-first for create/respond/payment flows.
+last_modified_summary: Borrower dashboard now wires incoming offers through accept -> payment -> obligation flow with mobile-first offer management UI.
 
 # OrangeCat Loans Flow (Refinance & Payoff)
 
@@ -27,6 +27,7 @@ last_modified_summary: Loan offer writes now route through /api/loans/offers; th
 ## Implementation notes
 
 - Frontend now loads “My Offers” and borrower offer lists; borrower can accept/reject offers per loan.
+- Borrower dashboard surfaces incoming offers under `My Loans`, with responsive cards and an accept dialog that records payment details on all screen sizes.
 - Service layer includes `getUserOffers` and typed offer mutations routed via `/api/loans/offers`; UI uses service calls with toasts for feedback.
 - RLS and backend validations remain the source of truth; loan mutations use `/api/loans`, `/api/loans/offers`, `/api/loans/obligation`, and `/api/loans/payments` (no direct DB access from UI).
 - Currency source of truth lives in `src/config/currencies.ts` and is reused by UI, validation, services, and DB constraints (CHF included).
@@ -61,6 +62,7 @@ last_modified_summary: Loan offer writes now route through /api/loans/offers; th
 ## Implemented now
 
 - Borrower can accept an offer and immediately open “Record Payoff” to create and complete a payment record (payer = offerer, recipient = borrower for now).
+- Incoming offer acceptance now calls `respondToOffer` -> `createPayment` -> `completePayment`, and refinance completion also creates the obligation loan in the same flow.
 - Offer creation / update / accept / reject route through `/api/loans/offers` handlers instead of browser Supabase writes.
 - Service layer: `createPayment` / `completePayment` call `/api/loans/payments`; `completePayment` accepts optional `createObligation` to create the refinance obligation loan in one step.
 - UI uses typed forms with validation, toasts for feedback, and disables controls while processing.

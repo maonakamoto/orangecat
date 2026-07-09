@@ -21,15 +21,24 @@ type PaymentResult =
     };
 
 export async function createLoanPayment(
-  payerUserId: string,
+  userId: string,
   input: CreateLoanPaymentBody,
   supabase: AnySupabaseClient
 ): Promise<PaymentResult> {
-  if (payerUserId === input.recipient_id) {
+  const payerId = input.payer_id ?? userId;
+
+  if (payerId === input.recipient_id) {
     return {
       ok: false,
       reason: 'forbidden',
       message: 'Payer and recipient must be different users',
+    };
+  }
+  if (userId !== payerId && userId !== input.recipient_id) {
+    return {
+      ok: false,
+      reason: 'forbidden',
+      message: 'You must be a party to the payment',
     };
   }
 
@@ -55,7 +64,7 @@ export async function createLoanPayment(
       amount: input.amount,
       currency: input.currency,
       payment_type: input.payment_type,
-      payer_id: payerUserId,
+      payer_id: payerId,
       recipient_id: input.recipient_id,
       transaction_id: input.transaction_id ?? null,
       payment_method: input.payment_method ?? null,

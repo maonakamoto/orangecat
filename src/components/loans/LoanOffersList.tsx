@@ -44,9 +44,9 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
       {offers.map(offer => (
         <Card key={offer.id} className="oc-card-link">
           <CardHeader className="pb-3">
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
                   <CardTitle className="text-lg">
                     {offer.offer_type === 'refinance' ? 'Refinance Offer' : 'Payoff Offer'}
                   </CardTitle>
@@ -57,7 +57,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
                 </div>
                 <CardDescription>Made {formatRelativeTime(offer.created_at)}</CardDescription>
               </div>
-              <div className="flex gap-1">
+              <div className="flex gap-1 self-start">
                 {offer.status === STATUS.LOAN_OFFERS.PENDING && (
                   <Button variant="ghost" size="sm">
                     <Edit className="h-4 w-4" />
@@ -69,7 +69,7 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
 
           <CardContent className="space-y-4">
             {/* Offer Details */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <div className="space-y-1">
                 <p className="text-sm text-fg-secondary">Offer Amount</p>
                 <p className="text-lg font-semibold text-status-positive">
@@ -103,14 +103,14 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
             {offer.terms && (
               <div className="space-y-2">
                 <p className="text-sm font-medium">Terms & Conditions</p>
-                <p className="text-sm text-fg-secondary bg-surface-raised p-3 rounded">
+                <p className="rounded bg-surface-raised p-3 text-sm text-fg-secondary">
                   {offer.terms}
                 </p>
               </div>
             )}
 
             {/* Status-specific info */}
-            <div className="flex items-center justify-between pt-2 border-t">
+            <div className="flex flex-col gap-3 border-t pt-2 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-fg-secondary">
                 {offer.status === STATUS.LOAN_OFFERS.PENDING && offer.expires_at && (
                   <span>Expires {formatRelativeTime(offer.expires_at)}</span>
@@ -123,24 +123,24 @@ export function LoanOffersList({ offers, onOfferUpdated: _onOfferUpdated }: Loan
                 )}
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 {offer.status === STATUS.LOAN_OFFERS.PENDING && (
                   <>
-                    <Button variant="outline" size="sm" className="gap-1">
+                    <Button variant="outline" size="sm" className="w-full gap-1 sm:w-auto">
                       <MessageSquare className="h-3 w-3" />
                       Message
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-status-negative hover:text-status-negative/80"
+                      className="w-full text-status-negative hover:text-status-negative/80 sm:w-auto"
                     >
                       Cancel Offer
                     </Button>
                   </>
                 )}
                 {offer.status === STATUS.LOAN_OFFERS.ACCEPTED && (
-                  <Button variant="outline" size="sm" className="gap-1">
+                  <Button variant="outline" size="sm" className="w-full gap-1 sm:w-auto">
                     <TrendingUp className="h-3 w-3" />
                     View Agreement
                   </Button>
