@@ -1,85 +1,30 @@
 /**
  * LOANS SERVICE - Payment Mutations
  *
- * Created: 2025-01-30
- * Last Modified: 2025-01-30
- * Last Modified Summary: Extracted from loans/index.ts for modularity
+ * All payment writes route through /api/loans/payments.
  */
 
-import supabase from '@/lib/supabase/browser';
-import { logger } from '@/utils/logger';
-import type { CreateLoanPaymentRequest, LoanPaymentResponse } from '@/types/loans';
-import { STATUS } from '@/config/database-constants';
-import { DATABASE_TABLES } from '@/config/database-tables';
-import { getCurrentUserId } from '../utils/auth';
+import type { CreateLoanPaymentRequest, LoanPaymentResponse, Loan } from '@/types/loans';
+import { createPaymentViaApi, completePaymentViaApi } from '@/services/loans/api-client';
 
 /**
- * Record a loan payment
+ * Record a loan payment (via POST /api/loans/payments).
  */
 export async function createPayment(
   request: CreateLoanPaymentRequest
 ): Promise<LoanPaymentResponse> {
-  try {
-    const userId = await getCurrentUserId();
-    if (!userId) {
-      return { success: false, error: 'Authentication required' };
-    }
-
-    const { data, error } = await (
-      supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.LOAN_PAYMENTS) as any
-    )
-      .insert({
-        ...request,
-        payer_id: userId,
-      })
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Failed to create payment', error, 'Loans');
-      return { success: false, error: error.message };
-    }
-
-    return { success: true, payment: data };
-  } catch (error) {
-    logger.error('Exception creating payment', error, 'Loans');
-    return { success: false, error: 'Failed to create payment' };
-  }
+  return createPaymentViaApi(request);
 }
 
 /**
- * Mark a payment as completed and return the updated payment
+ * Mark a payment completed (via POST /api/loans/payments/:id/complete).
+ *
+ * Pass `createObligation` on refinance payments to create the new obligation loan
+ * in the same request after funds are confirmed.
  */
-export async function completePayment(paymentId: string): Promise<LoanPaymentResponse> {
-  try {
-    const userId = await getCurrentUserId();
-    if (!userId) {
-      return { success: false, error: 'Authentication required' };
-    }
-
-    const { data, error } = await (
-      supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.LOAN_PAYMENTS) as any
-    )
-      .update({
-        status: STATUS.LOANS.COMPLETED,
-        processed_at: new Date().toISOString(),
-      })
-      .eq('id', paymentId)
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Failed to complete payment', error, 'Loans');
-      return { success: false, error: error.message };
-    }
-
-    return { success: true, payment: data };
-  } catch (error) {
-    logger.error('Exception completing payment', error, 'Loans');
-    return { success: false, error: 'Failed to complete payment' };
-  }
+export async function completePayment(
+  paymentId: string,
+  options?: { createObligation?: { lenderProfileName: string } }
+): Promise<LoanPaymentResponse & { obligationLoan?: Loan }> {
+  return completePaymentViaApi(paymentId, options);
 }

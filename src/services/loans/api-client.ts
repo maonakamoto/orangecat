@@ -7,7 +7,14 @@
 
 import { API_ROUTES } from '@/config/api-routes';
 import { logger } from '@/utils/logger';
-import type { Loan, CreateLoanRequest, UpdateLoanRequest, LoanResponse } from '@/types/loans';
+import type {
+  Loan,
+  CreateLoanRequest,
+  UpdateLoanRequest,
+  LoanResponse,
+  CreateLoanPaymentRequest,
+  LoanPaymentResponse,
+} from '@/types/loans';
 import type { ServiceResult } from '@/types/common';
 
 interface ApiEnvelope<T> {
@@ -64,6 +71,26 @@ export function loanToApiPayload(
 
 export function createLoanRequestToApiPayload(request: CreateLoanRequest): Record<string, unknown> {
   return loanToApiPayload(request as unknown as Loan);
+}
+
+async function parsePaymentEnvelope(
+  res: Response
+): Promise<LoanPaymentResponse & { obligationLoan?: Loan }> {
+  const json = (await res.json().catch(() => ({}))) as ApiEnvelope<{
+    payment?: LoanPaymentResponse['payment'];
+    obligationLoan?: Loan;
+  }>;
+  if (!res.ok || json.success === false) {
+    return { success: false, error: json.error || `Request failed (${res.status})` };
+  }
+  if (!json.data?.payment) {
+    return { success: false, error: 'Empty response from server' };
+  }
+  return {
+    success: true,
+    payment: json.data.payment,
+    ...(json.data.obligationLoan ? { obligationLoan: json.data.obligationLoan } : {}),
+  };
 }
 
 async function parseLoanEnvelope(res: Response): Promise<LoanResponse> {
@@ -174,6 +201,55 @@ export async function createObligationLoanViaApi(params: {
   } catch (error) {
     logger.error('createObligationLoanViaApi failed', error, 'Loans');
     return { success: false, error: 'Failed to create obligation loan' };
+  }
+}
+
+export async function createPaymentViaApi(
+  request: CreateLoanPaymentRequest
+): Promise<LoanPaymentResponse> {
+  try {
+    const res = await fetch(API_ROUTES.LOANS.PAYMENTS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(request),
+    });
+    const json = (await res.json().catch(() => ({}))) as ApiEnvelope<
+      LoanPaymentResponse['payment']
+    >;
+    if (!res.ok || json.success === false) {
+      return { success: false, error: json.error || `Request failed (${res.status})` };
+    }
+    if (!json.data) {
+      return { success: false, error: 'Empty response from server' };
+    }
+    logger.info('Loan payment created via API', { paymentId: json.data.id }, 'Loans');
+    return { success: true, payment: json.data };
+  } catch (error) {
+    logger.error('createPaymentViaApi failed', error, 'Loans');
+    return { success: false, error: 'Failed to create payment' };
+  }
+}
+
+export async function completePaymentViaApi(
+  paymentId: string,
+  options?: { createObligation?: { lenderProfileName: string } }
+): Promise<LoanPaymentResponse & { obligationLoan?: Loan }> {
+  try {
+    const res = await fetch(API_ROUTES.LOANS.PAYMENT_COMPLETE(paymentId), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(options ?? {}),
+    });
+    const result = await parsePaymentEnvelope(res);
+    if (result.success) {
+      logger.info('Loan payment completed via API', { paymentId }, 'Loans');
+    }
+    return result;
+  } catch (error) {
+    logger.error('completePaymentViaApi failed', error, 'Loans');
+    return { success: false, error: 'Failed to complete payment' };
   }
 }
 
