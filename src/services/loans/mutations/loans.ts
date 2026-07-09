@@ -1,9 +1,8 @@
 /**
  * LOANS SERVICE - Loan Mutations
  *
- * Created: 2025-01-30
- * Last Modified: 2025-01-30
- * Last Modified Summary: Extracted from loans/index.ts for modularity
+ * User-facing create/update/delete route through /api/loans (domain layer + RLS).
+ * createObligationLoan remains a server-adjacent path for offer acceptance flows.
  */
 
 import supabase from '@/lib/supabase/browser';
@@ -12,14 +11,37 @@ import { isSupportedCurrency, PLATFORM_DEFAULT_CURRENCY } from '@/config/currenc
 import { getTableName } from '@/config/entity-registry';
 import type { CreateLoanRequest, UpdateLoanRequest, LoanResponse, Loan } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
-import { getCurrentUserId } from '../utils/auth';
-import { validateCreateLoanRequest } from '../utils/validation';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { ServiceResult } from '@/types/common';
+import { createLoanViaApi, updateLoanViaApi, deleteLoanViaApi } from '@/services/loans/api-client';
+
+/**
+ * Create a new loan listing (via POST /api/loans).
+ */
+export async function createLoan(request: CreateLoanRequest): Promise<LoanResponse> {
+  return createLoanViaApi(request);
+}
+
+/**
+ * Update an existing loan (via PUT /api/loans/:id).
+ */
+export async function updateLoan(
+  loanId: string,
+  request: UpdateLoanRequest
+): Promise<LoanResponse> {
+  return updateLoanViaApi(loanId, request);
+}
+
+/**
+ * Delete a loan (via DELETE /api/loans/:id).
+ */
+export async function deleteLoan(loanId: string): Promise<ServiceResult> {
+  return deleteLoanViaApi(loanId);
+}
 
 /**
  * Resolve a user_id to an actor_id via the browser Supabase client.
- * Returns null if no actor exists.
+ * Used only by createObligationLoan until that flow moves server-side.
  */
 async function resolveActorId(userId: string): Promise<string | null> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,138 +54,9 @@ async function resolveActorId(userId: string): Promise<string | null> {
 }
 
 /**
- * Create a new loan listing
- */
-export async function createLoan(request: CreateLoanRequest): Promise<LoanResponse> {
-  try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      return { success: false, error: 'Authentication required' };
-    }
-
-    // Validate request
-    const validation = validateCreateLoanRequest(request);
-    if (!validation.valid) {
-      return { success: false, error: validation.errors[0]?.message || 'Invalid request' };
-    }
-
-    const actorId = await resolveActorId(user.id);
-    if (!actorId) {
-      return { success: false, error: 'User actor not found' };
-    }
-
-    const { data, error } = await (
-      supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(getTableName('loan')) as any
-    )
-      .insert({
-        ...request,
-        currency: isSupportedCurrency(request.currency)
-          ? request.currency
-          : PLATFORM_DEFAULT_CURRENCY,
-        user_id: user.id,
-        actor_id: actorId,
-      })
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Failed to create loan', error, 'Loans');
-      return { success: false, error: error.message };
-    }
-
-    logger.info('Loan created successfully', { loanId: data.id }, 'Loans');
-    return { success: true, loan: data };
-  } catch (error) {
-    logger.error('Exception creating loan', error, 'Loans');
-    return { success: false, error: 'Failed to create loan' };
-  }
-}
-
-/**
- * Update an existing loan
- */
-export async function updateLoan(
-  loanId: string,
-  request: UpdateLoanRequest
-): Promise<LoanResponse> {
-  try {
-    const userId = await getCurrentUserId();
-    if (!userId) {
-      return { success: false, error: 'Authentication required' };
-    }
-
-    const actorId = await resolveActorId(userId);
-    if (!actorId) {
-      return { success: false, error: 'User actor not found' };
-    }
-
-    const { data, error } = await (
-      supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(getTableName('loan')) as any
-    )
-      .update(request)
-      .eq('id', loanId)
-      .eq('actor_id', actorId)
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Failed to update loan', error, 'Loans');
-      return { success: false, error: error.message };
-    }
-
-    logger.info('Loan updated successfully', { loanId }, 'Loans');
-    return { success: true, loan: data };
-  } catch (error) {
-    logger.error('Exception updating loan', error, 'Loans');
-    return { success: false, error: 'Failed to update loan' };
-  }
-}
-
-/**
- * Delete a loan
- */
-export async function deleteLoan(loanId: string): Promise<ServiceResult> {
-  try {
-    const userId = await getCurrentUserId();
-    if (!userId) {
-      return { success: false, error: 'Authentication required' };
-    }
-
-    const actorId = await resolveActorId(userId);
-    if (!actorId) {
-      return { success: false, error: 'User actor not found' };
-    }
-
-    const { error } = await (
-      supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(getTableName('loan')) as any
-    )
-      .delete()
-      .eq('id', loanId)
-      .eq('actor_id', actorId);
-
-    if (error) {
-      logger.error('Failed to delete loan', error, 'Loans');
-      return { success: false, error: error.message };
-    }
-
-    logger.info('Loan deleted successfully', { loanId }, 'Loans');
-    return { success: true };
-  } catch (error) {
-    logger.error('Exception deleting loan', error, 'Loans');
-    return { success: false, error: 'Failed to delete loan' };
-  }
-}
-
-/**
- * Create a new obligation loan after payoff/refinance
+ * Create a new obligation loan after payoff/refinance.
+ *
+ * TODO(phase-E): move to a server route so browser Supabase writes are eliminated.
  */
 export async function createObligationLoan(params: {
   borrowerId: string;

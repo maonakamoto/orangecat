@@ -110,9 +110,9 @@ See `docs/architecture/PLATFORM_AND_COLLABORATION.md` for north star.
 
 Config SSOT consolidation, phantom routes, UI primitive migration start, integration scope fix.
 
-### Phase B — Correctness (1–2 weeks)
+### Phase B — Correctness (in progress)
 
-- Loan UI → API-only path
+- ✅ **Loan dual-path closed** — `createLoan` / `updateLoan` / `deleteLoan` route through `/api/loans` via `services/loans/api-client.ts`; browser Supabase insert removed from the user-facing path (`createObligationLoan` still TODO for offer-accept flow).
 - Regenerate DB types; eliminate `as any` on oauth/cat_credit/stakeholder tables
 - Middleware auth prefixes derived from `routes.ts`
 - `config/env.ts` zod validation + CI `validate-env.js` alignment
@@ -151,7 +151,7 @@ grep -rn '\[#' src/    # design token audit — expect 0
 
 ## Action items (prioritized)
 
-1. **[B1]** Fix loan dual-path — UI calls `/api/loans` only
+1. ~~**[B1]** Fix loan dual-path~~ — done 2026-07-09
 2. **[B2]** Regenerate `database.generated.ts` and migrate Supabase client imports
 3. **[C1]** Migrate dialog/select/dropdown to semantic tokens
 4. **[D1]** Add stakeholders + timeline to v1 SDK
