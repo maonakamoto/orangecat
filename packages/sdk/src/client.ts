@@ -45,6 +45,11 @@ import type {
   CreateWishlistInput,
   WishlistResponse,
   DiscoveryResponse,
+  TimelinePublishInput,
+  TimelinePublishResponse,
+  CreateStakeholderInput,
+  StakeholderListResponse,
+  StakeholderCreateResponse,
 } from './types.js';
 
 const V1 = '/api/v1';
@@ -98,6 +103,38 @@ class EntityResource<Input, Response> {
   }
 }
 
+class TimelineResource {
+  constructor(private readonly http: HttpClient) {}
+
+  publish(input: TimelinePublishInput, options?: RequestOptions): Promise<TimelinePublishResponse> {
+    return this.http.post<TimelinePublishResponse>(`${V1}/timeline/publish`, input, options);
+  }
+}
+
+export interface StakeholderListParams {
+  fromProjectId: string;
+  kind?: string;
+}
+
+class StakeholdersResource {
+  constructor(private readonly http: HttpClient) {}
+
+  list(params: StakeholderListParams, options?: RequestOptions): Promise<StakeholderListResponse> {
+    const query = new URLSearchParams({ fromProjectId: params.fromProjectId });
+    if (params.kind) {
+      query.set('kind', params.kind);
+    }
+    return this.http.get<StakeholderListResponse>(`${V1}/stakeholders?${query}`, options);
+  }
+
+  create(
+    input: CreateStakeholderInput,
+    options?: RequestOptions
+  ): Promise<StakeholderCreateResponse> {
+    return this.http.post<StakeholderCreateResponse>(`${V1}/stakeholders`, input, options);
+  }
+}
+
 export class OrangeCatClient {
   private readonly http: HttpClient;
 
@@ -110,6 +147,8 @@ export class OrangeCatClient {
   readonly investments: EntityResource<CreateInvestmentInput, InvestmentResponse>;
   readonly assets: EntityResource<CreateAssetInput, AssetResponse>;
   readonly wishlists: EntityResource<CreateWishlistInput, WishlistResponse>;
+  readonly timeline: TimelineResource;
+  readonly stakeholders: StakeholdersResource;
 
   constructor(options: ClientOptions) {
     this.http = new HttpClient(options);
@@ -122,6 +161,8 @@ export class OrangeCatClient {
     this.investments = new EntityResource(this.http, `${V1}/investments`);
     this.assets = new EntityResource(this.http, `${V1}/assets`);
     this.wishlists = new EntityResource(this.http, `${V1}/wishlists`);
+    this.timeline = new TimelineResource(this.http);
+    this.stakeholders = new StakeholdersResource(this.http);
   }
 
   /**

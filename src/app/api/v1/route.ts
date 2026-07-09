@@ -16,6 +16,7 @@ import {
   PUBLIC_API_VERSION,
   PUBLIC_API_BASE,
   PUBLIC_API_ENTITY_TYPES,
+  PUBLIC_API_INTEGRATION_ENDPOINTS,
   publicApiEndpoint,
 } from '@/config/public-api';
 
@@ -32,6 +33,11 @@ export async function GET() {
       type,
       methods: ['POST', 'GET'],
       endpoint: publicApiEndpoint(type),
+    })),
+    integrations: PUBLIC_API_INTEGRATION_ENDPOINTS.map(item => ({
+      name: item.name,
+      methods: [...item.methods],
+      endpoint: item.endpoint,
     })),
     docs: {
       contract: '/api/v1/README.md (in repo)',

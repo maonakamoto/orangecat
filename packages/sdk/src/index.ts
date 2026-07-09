@@ -6,7 +6,7 @@
  */
 
 export { OrangeCatClient } from './client.js';
-export type { ListParams } from './client.js';
+export type { ListParams, StakeholderListParams } from './client.js';
 export { OrangeCatError } from './errors.js';
 export type { OrangeCatErrorCode } from './errors.js';
 export type { ClientOptions, RequestOptions } from './http.js';
@@ -38,4 +38,11 @@ export type {
   CreateWishlistInput,
   WishlistResponse,
   DiscoveryResponse,
+  TimelinePublishInput,
+  TimelinePublishResponse,
+  CreateStakeholderInput,
+  StakeholderListResponse,
+  StakeholderCreateResponse,
+  StakeholderRelationship,
+  StakeholderKind,
 } from './types.js';

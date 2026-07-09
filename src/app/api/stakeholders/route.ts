@@ -14,17 +14,15 @@
  *          stakeholder. Stakeholder target is one of: another actor,
  *          another project, or an external URL.
  *
+ * Integration clients should use GET/POST /api/v1/stakeholders with
+ * stakeholders.read / stakeholders.write scopes instead.
+ *
  * Backed by the stakeholder_relationships table — see migration
  * 20260601000000_create_stakeholder_relationships.sql. RLS in the
  * database is the authoritative ownership check; the validation here
  * is defence in depth.
- *
- * Note: FleetCrown (formerly Cockpit) and OrangeCat share this graph.
- * FleetCrown projects (e.g. "FleetCrown") are customers of OrangeCat
- * projects via this typed edge system.
  */
 
-import { z } from 'zod';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
 import {
@@ -37,93 +35,37 @@ import {
   apiUnauthorized,
 } from '@/lib/api/standardResponse';
 import { logger } from '@/utils/logger';
-import { ENTITY_REGISTRY } from '@/config/entity-registry';
-
-// =====================================================================
-// SHAPES
-// =====================================================================
-
-const STAKEHOLDER_KINDS = [
-  'competitor',
-  'collaborator',
-  'investor',
-  'customer',
-  'employee',
-  'acquirer',
-  'acquisition_target',
-  'in_house_dev',
-] as const;
-
-const createSchema = z
-  .object({
-    fromProjectId: z.string().uuid('fromProjectId must be a UUID'),
-    kind: z.enum(STAKEHOLDER_KINDS),
-    toActorId: z.string().uuid().optional(),
-    toProjectId: z.string().uuid().optional(),
-    toExternalUrl: z.string().url().optional(),
-    toExternalName: z.string().min(1).max(200).optional(),
-    status: z.string().max(50).optional(),
-    confidence: z.number().int().min(0).max(100).optional(),
-    notes: z.string().max(5000).optional(),
-    metadata: z.record(z.unknown()).optional(),
-  })
-  .refine(
-    data => {
-      // Exactly one "to" target must be provided. Mirror the database
-      // CHECK constraint here so we fail fast with a clear message
-      // instead of bubbling a Postgres error.
-      const set = [data.toActorId, data.toProjectId, data.toExternalUrl].filter(Boolean).length;
-      return set === 1;
-    },
-    {
-      message: 'Exactly one of toActorId, toProjectId, or toExternalUrl must be set',
-    }
-  );
-
-// =====================================================================
-// GET — list relationships for a project (the caller must own it via RLS)
-// =====================================================================
+import { createStakeholderSchema } from '@/config/stakeholders';
+import {
+  listStakeholderRelationships,
+  createStakeholderRelationship,
+} from '@/services/platform/stakeholderRelationships';
 
 export const GET = withAuth(async (request: AuthenticatedRequest) => {
   try {
     const { supabase } = request;
     const url = new URL(request.url);
     const fromProjectId = url.searchParams.get('fromProjectId');
-    const kindFilter = url.searchParams.get('kind');
+    const kindFilter = url.searchParams.get('kind') ?? undefined;
 
     if (!fromProjectId) {
       return apiBadRequest('fromProjectId query parameter is required');
     }
 
-    let query = supabase
-      .from(DATABASE_TABLES.STAKEHOLDER_RELATIONSHIPS)
-      .select('*')
-      .eq('from_project_id', fromProjectId)
-      .order('updated_at', { ascending: false });
-
-    if (kindFilter) {
-      if (!(STAKEHOLDER_KINDS as readonly string[]).includes(kindFilter)) {
-        return apiBadRequest(`kind must be one of: ${STAKEHOLDER_KINDS.join(', ')}`);
+    const result = await listStakeholderRelationships(supabase, fromProjectId, kindFilter);
+    if (!result.ok) {
+      if (result.reason === 'bad_kind') {
+        return apiBadRequest(result.message);
       }
-      query = query.eq('kind', kindFilter);
+      return apiInternalError(result.message);
     }
 
-    const { data, error } = await query;
-    if (error) {
-      logger.error('Failed to list stakeholder relationships', error, 'StakeholdersAPI');
-      return apiInternalError('Failed to load stakeholders');
-    }
-
-    return apiSuccess({ relationships: data ?? [] });
+    return apiSuccess({ relationships: result.relationships });
   } catch (error) {
     logger.error('Unexpected error in GET /api/stakeholders', error, 'StakeholdersAPI');
     return apiInternalError('Internal server error');
   }
 });
-
-// =====================================================================
-// POST — create a new stakeholder relationship
-// =====================================================================
 
 export const POST = withAuth(async (request: AuthenticatedRequest) => {
   try {
@@ -136,15 +78,11 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
       return apiBadRequest('Invalid JSON body');
     }
 
-    const parsed = createSchema.safeParse(body);
+    const parsed = createStakeholderSchema.safeParse(body);
     if (!parsed.success) {
       return apiValidationError('Invalid request', parsed.error.flatten());
     }
-    const input = parsed.data;
 
-    // Resolve the caller's actor — the owner of the relationship row.
-    // RLS would block writes for the wrong actor; we set it explicitly
-    // here so the row is well-formed up front.
     const { data: actorRow, error: actorErr } = await supabase
       .from(DATABASE_TABLES.ACTORS)
       .select('id')
@@ -157,51 +95,19 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     }
     const ownerActorId = actorRow.id as string;
 
-    // Guard: the from_project must belong to the caller. RLS on
-    // projects would already enforce this on read, but we verify the
-    // relationship explicitly so the error message is meaningful.
-    const { data: projectRow, error: projectErr } = await supabase
-      .from(ENTITY_REGISTRY.project.tableName)
-      .select('id, actor_id')
-      .eq('id', input.fromProjectId)
-      .maybeSingle();
-    if (projectErr) {
-      logger.error('Failed to verify project ownership', projectErr, 'StakeholdersAPI');
-      return apiInternalError('Failed to verify project');
-    }
-    if (!projectRow) {
-      return apiNotFound('Project not found');
-    }
-    if (projectRow.actor_id !== ownerActorId) {
-      return apiUnauthorized('You can only add stakeholders to your own projects');
+    const result = await createStakeholderRelationship(supabase, ownerActorId, parsed.data);
+    if (!result.ok) {
+      switch (result.reason) {
+        case 'project_not_found':
+          return apiNotFound(result.message);
+        case 'forbidden':
+          return apiUnauthorized(result.message);
+        default:
+          return apiInternalError(result.message);
+      }
     }
 
-    const row = {
-      owner_actor_id: ownerActorId,
-      from_project_id: input.fromProjectId,
-      kind: input.kind,
-      to_actor_id: input.toActorId ?? null,
-      to_project_id: input.toProjectId ?? null,
-      to_external_url: input.toExternalUrl ?? null,
-      to_external_name: input.toExternalName ?? null,
-      status: input.status ?? null,
-      confidence: input.confidence ?? null,
-      notes: input.notes ?? null,
-      metadata: input.metadata ?? {},
-    };
-
-    const { data: inserted, error: insertErr } = await supabase
-      .from(DATABASE_TABLES.STAKEHOLDER_RELATIONSHIPS)
-      .insert(row)
-      .select('*')
-      .single();
-
-    if (insertErr) {
-      logger.error('Failed to insert stakeholder relationship', insertErr, 'StakeholdersAPI');
-      return apiInternalError('Failed to create stakeholder relationship');
-    }
-
-    return apiCreated({ relationship: inserted });
+    return apiCreated({ relationship: result.relationship });
   } catch (error) {
     logger.error('Unexpected error in POST /api/stakeholders', error, 'StakeholdersAPI');
     return apiInternalError('Internal server error');

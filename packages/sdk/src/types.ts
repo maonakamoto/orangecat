@@ -162,10 +162,77 @@ export interface DiscoveryResponse {
     methods: string[];
     endpoint: string;
   }>;
+  integrations?: Array<{
+    name: string;
+    methods: string[];
+    endpoint: string;
+  }>;
   docs: {
     contract: string;
     conventions: string;
     openapi: string;
     changelog: string;
   };
+}
+
+// ── Timeline publish bus ───────────────────────────────────────────────────
+
+export interface TimelinePublishInput {
+  source: string;
+  external_id: string;
+  subject_type: 'project';
+  subject_id: string;
+  event_type: string;
+  title: string;
+  description?: string;
+  content?: Record<string, unknown>;
+  tags?: string[];
+  visibility?: string;
+  url?: string;
+  event_timestamp?: string;
+}
+
+export interface TimelinePublishResponse {
+  id: string;
+  status: 'created' | 'updated';
+}
+
+// ── Stakeholders ─────────────────────────────────────────────────────────────
+
+export type StakeholderKind =
+  | 'competitor'
+  | 'collaborator'
+  | 'investor'
+  | 'customer'
+  | 'employee'
+  | 'acquirer'
+  | 'acquisition_target'
+  | 'in_house_dev';
+
+export interface CreateStakeholderInput {
+  fromProjectId: string;
+  kind: StakeholderKind;
+  toActorId?: string;
+  toProjectId?: string;
+  toExternalUrl?: string;
+  toExternalName?: string;
+  status?: string;
+  confidence?: number;
+  notes?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface StakeholderRelationship extends Record<string, unknown> {
+  id: string;
+  from_project_id: string;
+  kind: StakeholderKind;
+  owner_actor_id: string;
+}
+
+export interface StakeholderListResponse {
+  relationships: StakeholderRelationship[];
+}
+
+export interface StakeholderCreateResponse {
+  relationship: StakeholderRelationship;
 }

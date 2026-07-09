@@ -56,7 +56,8 @@ async function resolveActorId(userId: string): Promise<string | null> {
 /**
  * Create a new obligation loan after payoff/refinance.
  *
- * TODO(phase-E): move to a server route so browser Supabase writes are eliminated.
+ * Offer-accept flow still uses browser Supabase until a server route exists
+ * (AUDIT_REPORT Phase E).
  */
 export async function createObligationLoan(params: {
   borrowerId: string;

@@ -59,6 +59,8 @@ export const OAUTH_SCOPES: readonly OAuthScope[] = [
   { name: 'project.read', description: 'See your projects' },
   { name: 'project.write', description: 'Create and update projects on your behalf' },
   { name: 'timeline.write', description: 'Post updates to your wall on your behalf' },
+  { name: 'stakeholders.read', description: 'Read stakeholder relationships on your projects' },
+  { name: 'stakeholders.write', description: 'Add stakeholder relationships on your projects' },
   { name: 'wallet.read', description: 'See your wallet balances and payment methods' },
   { name: 'messages.read', description: 'Read your messages' },
   { name: 'messages.write', description: 'Send messages on your behalf' },

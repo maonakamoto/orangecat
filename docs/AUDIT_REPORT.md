@@ -17,8 +17,8 @@ This pass **fixed 30+ concrete violations** in config, discover tabs, payment pr
 | ------------------------------- | -------- | -------------------------------------------------------------------------- |
 | First Principles (SSOT/DRY/SoC) | 7/10     | Spine strong; duplicate registries consolidated; env/features SSOT added   |
 | Best Practices                  | 8/10     | Gates green; phantom routes removed; research POST fixed                   |
-| Systems / Integration           | 6/10     | `timeline.write` scope mintable; FC emit/SDK gaps remain                   |
-| Design System                   | 7/10     | 0 className hex; Card/Badge migrated; semantic tier ~95% on surfaces       |
+| Systems / Integration           | 7/10     | v1 stakeholders + SDK timeline/stakeholders; FC emit still open            |
+| Design System                   | 8/10     | dialog/select/dropdown migrated; semantic tier on core primitives          |
 | Functional Correctness          | 8/10     | Money-path tests pinned; loan dual-path still open                         |
 | **Overall**                     | **7/10** | Healthy core; largest debt is data-access layering + customer API contract |
 
@@ -39,7 +39,9 @@ This pass **fixed 30+ concrete violations** in config, discover tabs, payment pr
 | **API_ROUTES gap**       | `WALLETS.ENTITY_VISIBILITY` added; WalletVisibilityToggle uses it                                                     |
 | **Integration scopes**   | `timeline.write` added to `PUBLIC_API_SCOPE_TOKENS` (mint UI can offer it)                                            |
 | **Model selector**       | `ModelSelector` reads `AI_MODEL_REGISTRY` directly (not legacy adapter)                                               |
-| **UI primitives**        | `Card` title/description + `Badge` variants migrated to semantic tokens                                               |
+| **UI primitives**        | `Card`/`Badge` + `dialog`/`select`/`dropdown-menu` migrated to semantic tokens                                        |
+| **Stakeholders v1**      | `config/stakeholders.ts`, platform service, `/api/v1/stakeholders`, SDK `stakeholders.*` + `timeline.publish`         |
+| **Integration scopes**   | `stakeholders.read/write` added to mint UI + OAuth scope registry                                                     |
 | **Feature flags**        | New `config/features.ts`; voice input gated via `FEATURES.voiceInput`                                                 |
 | **Env SSOT**             | New `config/env.ts` for `SITE_URL` / `APP_URL` canonicalization                                                       |
 | **Responsive pay grids** | PublicPayPanel + ProjectDonationSection: `grid-cols-1 sm:grid-cols-3`                                                 |
@@ -77,7 +79,7 @@ This pass **fixed 30+ concrete violations** in config, discover tabs, payment pr
 | Item                               | Status                                                                              |
 | ---------------------------------- | ----------------------------------------------------------------------------------- |
 | `[#` in className                  | ✅ 0 violations                                                                     |
-| Legacy shadcn tokens in `ui/*`     | ⏳ Card/Badge done; dialog/select/dropdown still on `bg-background`                 |
+| Legacy shadcn tokens in `ui/*`     | ✅ Card/Badge/dialog/select/dropdown on semantic tier                               |
 | Chromatic Tailwind in config       | ⏳ `badge-colors.ts`, `entity-registry` THEME_COLORS, `contextual-loader-config.ts` |
 | Raw `<button>` vs `<Button>`       | ⏳ ~130 files; chat/timeline worst                                                  |
 | `text-[10px]` arbitrary micro-type | ⏳ ~25 files; use `text-2xs`                                                        |
@@ -95,7 +97,8 @@ This pass **fixed 30+ concrete violations** in config, discover tabs, payment pr
 | OC ingest (`/api/v1/timeline/publish`)             | ✅ Live                                                            |
 | `timeline.write` in mint UI scopes                 | ✅ Fixed                                                           |
 | FC emit build events                               | ❌ Unbuilt                                                         |
-| Stakeholders in v1 API + SDK                       | ❌ Not exposed                                                     |
+| Stakeholders in v1 API + SDK                       | ✅ `/api/v1/stakeholders` + SDK `stakeholders.list/create`         |
+| SDK `timeline.publish`                             | ✅ `orangecat.timeline.publish()`                                  |
 | OIDC on FC side                                    | ❌ Unbuilt                                                         |
 | Stakeholder management UI                          | ❌ API/seed only                                                   |
 | Hardcoded `ORANGECAT_FLEETCROWN_INTEGRATION` UUIDs | ⏳ Dogfood OK; needs `platform_customers` table for multi-customer |
@@ -112,21 +115,21 @@ Config SSOT consolidation, phantom routes, UI primitive migration start, integra
 
 ### Phase B — Correctness (in progress)
 
-- ✅ **Loan dual-path closed** — `createLoan` / `updateLoan` / `deleteLoan` route through `/api/loans` via `services/loans/api-client.ts`; browser Supabase insert removed from the user-facing path (`createObligationLoan` still TODO for offer-accept flow).
+- ✅ **Loan dual-path closed** — `createLoan` / `updateLoan` / `deleteLoan` route through `/api/loans` via `services/loans/api-client.ts`; `createObligationLoan` deferred to Phase E (offer-accept server route).
 - Regenerate DB types; eliminate `as any` on oauth/cat_credit/stakeholder tables
 - Middleware auth prefixes derived from `routes.ts`
 - `config/env.ts` zod validation + CI `validate-env.js` alignment
 
 ### Phase C — Design system completion (1–2 weeks)
 
-- shadcn primitives → semantic tier
+- ✅ shadcn dialog/select/dropdown → semantic tier
 - `badge-colors.ts` → status semantic tokens
 - Chat/timeline raw button purge
 - Remove tiffany/orange from globals/tailwind when consumers = 0
 
 ### Phase D — Platform integration (2–4 weeks)
 
-- v1 API + SDK: `stakeholders.read/write`, `timeline.publish`
+- ✅ v1 API + SDK: `stakeholders.read/write`, `timeline.publish`
 - FC emit checklist + OIDC relying party
 - Customer registry DB table (move hardcoded UUIDs out of code)
 
@@ -153,6 +156,6 @@ grep -rn '\[#' src/    # design token audit — expect 0
 
 1. ~~**[B1]** Fix loan dual-path~~ — done 2026-07-09
 2. **[B2]** Regenerate `database.generated.ts` and migrate Supabase client imports
-3. **[C1]** Migrate dialog/select/dropdown to semantic tokens
-4. **[D1]** Add stakeholders + timeline to v1 SDK
+3. ~~**[C1]** Migrate dialog/select/dropdown to semantic tokens~~ — done 2026-07-09
+4. ~~**[D1]** Add stakeholders + timeline to v1 SDK~~ — done 2026-07-09
 5. **[E1]** Inventory browser-supabase write sites; migrate loans first
