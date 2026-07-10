@@ -23,6 +23,15 @@ export const LOAN_PAYMENT_METHODS = [
 ] as const;
 export type LoanPaymentMethod = (typeof LOAN_PAYMENT_METHODS)[number];
 
+/** Display labels for payment methods (UI dropdowns). Bitcoin-native ordering. */
+export const LOAN_PAYMENT_METHOD_LABELS: Record<LoanPaymentMethod, string> = {
+  bitcoin: 'Bitcoin',
+  lightning: 'Lightning',
+  bank_transfer: 'Bank transfer',
+  card: 'Card',
+  other: 'Other',
+};
+
 export const createLoanPaymentSchema = z.object({
   loan_id: z.string().uuid('loan_id must be a UUID'),
   offer_id: z.string().uuid().optional(),

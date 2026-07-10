@@ -19,7 +19,7 @@ import type {
 } from '@/types/loans';
 import { STATUS } from '@/config/database-constants';
 import { getCurrentUserId } from '../utils/auth';
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, paginationRange } from '@/constants/pagination';
 
 /**
  * Get a specific loan by ID
@@ -128,11 +128,8 @@ export async function getUserLoans(
     dbQuery = dbQuery.order(sortBy, { ascending: sortOrder === 'asc' });
 
     // Apply pagination
-    const pageSize = Math.min(pagination?.pageSize || DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
-    const page = pagination?.page || 1;
-    const offset = (page - 1) * pageSize;
-
-    dbQuery = dbQuery.range(offset, offset + pageSize - 1);
+    const { from, to } = paginationRange(pagination);
+    dbQuery = dbQuery.range(from, to);
 
     const { data, error, count } = await dbQuery;
 

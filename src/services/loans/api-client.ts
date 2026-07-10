@@ -76,46 +76,52 @@ export function createLoanRequestToApiPayload(request: CreateLoanRequest): Recor
   return loanToApiPayload(request as unknown as Loan);
 }
 
+/**
+ * Read a standard `{ success, data, error }` API envelope, mapping transport
+ * and application errors to a single discriminated result. Shared by every
+ * loans-API parser so the ok/success/empty checks live in one place.
+ */
+async function readEnvelope<T>(
+  res: Response
+): Promise<{ ok: true; data: T } | { ok: false; error: string }> {
+  const json = (await res.json().catch(() => ({}))) as ApiEnvelope<T>;
+  if (!res.ok || json.success === false) {
+    return { ok: false, error: json.error || `Request failed (${res.status})` };
+  }
+  if (json.data === undefined || json.data === null) {
+    return { ok: false, error: 'Empty response from server' };
+  }
+  return { ok: true, data: json.data };
+}
+
 async function parsePaymentEnvelope(
   res: Response
 ): Promise<LoanPaymentResponse & { obligationLoan?: Loan }> {
-  const json = (await res.json().catch(() => ({}))) as ApiEnvelope<{
+  const env = await readEnvelope<{
     payment?: LoanPaymentResponse['payment'];
     obligationLoan?: Loan;
-  }>;
-  if (!res.ok || json.success === false) {
-    return { success: false, error: json.error || `Request failed (${res.status})` };
+  }>(res);
+  if (!env.ok) {
+    return { success: false, error: env.error };
   }
-  if (!json.data?.payment) {
+  if (!env.data.payment) {
     return { success: false, error: 'Empty response from server' };
   }
   return {
     success: true,
-    payment: json.data.payment,
-    ...(json.data.obligationLoan ? { obligationLoan: json.data.obligationLoan } : {}),
+    payment: env.data.payment,
+    ...(env.data.obligationLoan ? { obligationLoan: env.data.obligationLoan } : {}),
   };
 }
 
 async function parseLoanEnvelope(res: Response): Promise<LoanResponse> {
-  const json = (await res.json().catch(() => ({}))) as ApiEnvelope<Loan>;
-  if (!res.ok || json.success === false) {
-    return { success: false, error: json.error || `Request failed (${res.status})` };
-  }
-  if (!json.data) {
-    return { success: false, error: 'Empty response from server' };
-  }
-  return { success: true, loan: json.data };
+  const env = await readEnvelope<Loan>(res);
+  return env.ok ? { success: true, loan: env.data } : { success: false, error: env.error };
 }
 
 async function parseOfferEnvelope(res: Response): Promise<LoanOfferResponse> {
-  const json = (await res.json().catch(() => ({}))) as ApiEnvelope<LoanOfferResponse['offer']>;
-  if (!res.ok || json.success === false) {
-    return { success: false, error: json.error || `Request failed (${res.status})` };
-  }
-  if (!json.data) {
-    return { success: false, error: 'Empty response from server' };
-  }
-  return { success: true, offer: json.data };
+  const env = await readEnvelope<LoanOfferResponse['offer']>(res);
+  return env.ok ? { success: true, offer: env.data } : { success: false, error: env.error };
 }
 
 export async function getLoanViaApi(loanId: string): Promise<LoanResponse> {
@@ -294,17 +300,12 @@ export async function createPaymentViaApi(
       credentials: 'include',
       body: JSON.stringify(request),
     });
-    const json = (await res.json().catch(() => ({}))) as ApiEnvelope<
-      LoanPaymentResponse['payment']
-    >;
-    if (!res.ok || json.success === false) {
-      return { success: false, error: json.error || `Request failed (${res.status})` };
+    const env = await readEnvelope<NonNullable<LoanPaymentResponse['payment']>>(res);
+    if (!env.ok) {
+      return { success: false, error: env.error };
     }
-    if (!json.data) {
-      return { success: false, error: 'Empty response from server' };
-    }
-    logger.info('Loan payment created via API', { paymentId: json.data.id }, 'Loans');
-    return { success: true, payment: json.data };
+    logger.info('Loan payment created via API', { paymentId: env.data.id }, 'Loans');
+    return { success: true, payment: env.data };
   } catch (error) {
     logger.error('createPaymentViaApi failed', error, 'Loans');
     return { success: false, error: 'Failed to create payment' };

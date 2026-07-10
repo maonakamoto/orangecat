@@ -7,7 +7,8 @@ import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import { STATUS } from '@/config/database-constants';
 import { formatRelativeTime } from '@/utils/dates';
-import { getLoanOfferStatusColor } from '@/config/loans';
+import { getLoanOfferStatusColor, getLoanOfferStatusIcon } from '@/config/loans';
+import { LOAN_PAYMENT_METHODS, LOAN_PAYMENT_METHOD_LABELS } from '@/config/loan-payments';
 import { formatLoanAmount } from './useLoanList';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
@@ -39,11 +40,10 @@ import {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { CURRENCY_CODES, PLATFORM_DEFAULT_CURRENCY, type CurrencyCode } from '@/config/currencies';
-import { CheckCircle, Clock, Loader2, XCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 const acceptOfferSchema = z.object({
-  payment_method: z.enum(['bitcoin', 'lightning', 'bank_transfer', 'card', 'other']),
+  payment_method: z.enum(LOAN_PAYMENT_METHODS),
   transaction_id: z.string().max(200).optional(),
   notes: z.string().max(500).optional(),
 });
@@ -54,17 +54,6 @@ interface IncomingLoanOffersListProps {
   offers: LoanOffer[];
   borrowerId: string;
   onOfferUpdated?: () => void;
-}
-
-function getStatusIcon(status: string) {
-  switch (status) {
-    case STATUS.LOAN_OFFERS.ACCEPTED:
-      return <CheckCircle className="h-4 w-4" />;
-    case STATUS.LOAN_OFFERS.REJECTED:
-      return <XCircle className="h-4 w-4" />;
-    default:
-      return <Clock className="h-4 w-4" />;
-  }
 }
 
 export function IncomingLoanOffersList({
@@ -114,52 +103,24 @@ export function IncomingLoanOffersList({
 
     setSubmitting(true);
     try {
-      const respond = await loansService.respondToOffer(activeOffer.id, true, values.notes);
-      if (!respond.success) {
-        toast.error(respond.error || 'Failed to accept offer');
-        return;
-      }
-
-      const loanCurrency =
-        (activeOffer.loans?.currency as CurrencyCode | undefined) ?? PLATFORM_DEFAULT_CURRENCY;
-      const payment = await loansService.createPayment({
-        loan_id: activeOffer.loan_id,
-        offer_id: activeOffer.id,
-        amount: activeOffer.offer_amount,
-        currency: CURRENCY_CODES.includes(loanCurrency) ? loanCurrency : PLATFORM_DEFAULT_CURRENCY,
-        payment_type: activeOffer.offer_type === 'refinance' ? 'refinance' : 'payoff',
-        payer_id: activeOffer.offerer_id,
-        recipient_id: borrowerId,
-        payment_method: values.payment_method,
-        transaction_id: values.transaction_id || undefined,
+      const result = await loansService.acceptOfferAndSettle({
+        offer: activeOffer,
+        borrowerId,
+        paymentMethod: values.payment_method,
+        transactionId: values.transaction_id || undefined,
         notes: values.notes || undefined,
       });
-      if (!payment.success || !payment.payment) {
-        toast.error(payment.error || 'Offer accepted, but payment record failed');
-        onOfferUpdated?.();
-        return;
-      }
 
-      const complete = await loansService.completePayment(payment.payment.id, {
-        ...(activeOffer.offer_type === 'refinance'
-          ? {
-              createObligation: {
-                lenderProfileName:
-                  activeOffer.profiles?.display_name ||
-                  activeOffer.profiles?.username ||
-                  'New lender',
-              },
-            }
-          : {}),
-      });
-      if (!complete.success) {
-        toast.error(complete.error || 'Payment created, but completion failed');
-        onOfferUpdated?.();
+      if (!result.success) {
+        toast.error(result.error || 'Failed to accept offer');
+        if (result.mutated) {
+          onOfferUpdated?.();
+        }
         return;
       }
 
       toast.success(
-        activeOffer.offer_type === 'refinance'
+        result.refinanced
           ? 'Offer accepted and refinance handoff completed'
           : 'Offer accepted and payoff recorded'
       );
@@ -193,6 +154,7 @@ export function IncomingLoanOffersList({
             const offererLabel =
               offer.profiles?.display_name || offer.profiles?.username || 'Community lender';
             const loanTitle = offer.loans?.title || 'Loan';
+            const StatusIcon = getLoanOfferStatusIcon(offer.status);
 
             return (
               <Card key={offer.id}>
@@ -207,7 +169,7 @@ export function IncomingLoanOffersList({
                       </CardDescription>
                     </div>
                     <Badge className={`${getLoanOfferStatusColor(offer.status)} w-fit gap-1`}>
-                      {getStatusIcon(offer.status)}
+                      <StatusIcon className="h-4 w-4" />
                       {offer.status}
                     </Badge>
                   </div>
@@ -317,11 +279,11 @@ export function IncomingLoanOffersList({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="bank_transfer">Bank transfer</SelectItem>
-                        <SelectItem value="bitcoin">Bitcoin</SelectItem>
-                        <SelectItem value="lightning">Lightning</SelectItem>
-                        <SelectItem value="card">Card</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        {LOAN_PAYMENT_METHODS.map(method => (
+                          <SelectItem key={method} value={method}>
+                            {LOAN_PAYMENT_METHOD_LABELS[method]}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

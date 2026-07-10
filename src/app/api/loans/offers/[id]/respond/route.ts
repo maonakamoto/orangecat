@@ -3,14 +3,8 @@
  */
 
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import {
-  apiBadRequest,
-  apiForbidden,
-  apiInternalError,
-  apiNotFound,
-  apiSuccess,
-  apiValidationError,
-} from '@/lib/api/standardResponse';
+import { apiSuccess, apiInternalError } from '@/lib/api/standardResponse';
+import { loanDomainFailureResponse, parseLoanBody } from '@/lib/api/loanRoutes';
 import { respondToLoanOfferSchema } from '@/config/loan-offers';
 import { respondToLoanOffer } from '@/domain/loans/offers';
 import { logger } from '@/utils/logger';
@@ -24,31 +18,14 @@ export const POST = withAuth(async (request: AuthenticatedRequest, { params }: R
     const { user, supabase } = request;
     const { id: offerId } = await params;
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch {
-      return apiBadRequest('Invalid JSON body');
-    }
-
-    const parsed = respondToLoanOfferSchema.safeParse(body);
-    if (!parsed.success) {
-      return apiValidationError('Invalid request', parsed.error.flatten());
+    const parsed = await parseLoanBody(request, respondToLoanOfferSchema);
+    if (!parsed.ok) {
+      return parsed.response;
     }
 
     const result = await respondToLoanOffer(user.id, offerId, parsed.data.accept, supabase);
     if (!result.ok) {
-      switch (result.reason) {
-        case 'not_found':
-          return apiNotFound(result.message);
-        case 'forbidden':
-          return apiForbidden(result.message);
-        case 'invalid_state':
-          return apiBadRequest(result.message);
-        default:
-          logger.error('Loan offer response failed', { message: result.message }, 'LoansAPI');
-          return apiInternalError(result.message);
-      }
+      return loanDomainFailureResponse(result, 'Loan offer response');
     }
 
     return apiSuccess(result.offer);

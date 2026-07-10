@@ -23,6 +23,11 @@ import { getIncomingOffers, getLoanOffers, getUserOffers } from './queries/offer
 import { createLoan, updateLoan, deleteLoan, createObligationLoan } from './mutations/loans';
 import { createLoanOffer, updateLoanOffer, respondToOffer } from './mutations/offers';
 import { createPayment, completePayment } from './mutations/payments';
+import {
+  acceptOfferAndSettle,
+  type AcceptOfferSettlementParams,
+  type AcceptOfferSettlementResult,
+} from './mutations/settlement';
 import type { ServiceResult } from '@/types/common';
 
 /**
@@ -127,6 +132,17 @@ class LoansService {
     options?: { createObligation?: { lenderProfileName: string } }
   ): Promise<LoanPaymentResponse & { obligationLoan?: Loan }> {
     return completePayment(paymentId, options);
+  }
+
+  /**
+   * Accept an incoming offer and run the full settlement handoff
+   * (respond → record payment → complete + obligation). Orchestration lives in
+   * the service layer so components stay presentational.
+   */
+  async acceptOfferAndSettle(
+    params: AcceptOfferSettlementParams
+  ): Promise<AcceptOfferSettlementResult> {
+    return acceptOfferAndSettle(params);
   }
 
   // ==================== LOAN CATEGORIES ====================
