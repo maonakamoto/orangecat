@@ -2,18 +2,23 @@
  * Loan API client payload mapping
  */
 
-import {
-  ensureLoanDescription,
-  loanToApiPayload,
-  createLoanRequestToApiPayload,
-} from '@/services/loans/api-client';
+import { loanToApiPayload, createLoanRequestToApiPayload } from '@/services/loans/api-client';
 import { PLATFORM_DEFAULT_CURRENCY } from '@/config/currencies';
 
 describe('loan API client payloads', () => {
-  it('pads short descriptions to satisfy API min length', () => {
-    const padded = ensureLoanDescription('Hi', 'My loan');
-    expect(padded.length).toBeGreaterThanOrEqual(10);
-    expect(padded).toContain('OrangeCat');
+  it('passes the description through unchanged (no padding)', () => {
+    const payload = createLoanRequestToApiPayload({
+      title: 'My loan',
+      description: 'Hi',
+      original_amount: 100,
+      remaining_balance: 100,
+      currency: PLATFORM_DEFAULT_CURRENCY,
+      is_public: true,
+      is_negotiable: true,
+      contact_method: 'platform',
+    });
+
+    expect(payload.description).toBe('Hi');
   });
 
   it('maps create requests to the finance loanSchema shape', () => {
@@ -31,12 +36,12 @@ describe('loan API client payloads', () => {
     expect(payload).toMatchObject({
       loan_type: 'new_request',
       title: 'Bridge funding',
+      description: 'Need short-term liquidity for inventory.',
       fulfillment_type: 'manual',
       original_amount: 5000,
       remaining_balance: 5000,
       collateral: [],
     });
-    expect((payload.description as string).length).toBeGreaterThanOrEqual(10);
   });
 
   it('merges lender fields and defaults fulfillment_type for legacy rows', () => {

@@ -7,7 +7,7 @@ import type { AnySupabaseClient } from '@/lib/supabase/types';
 export interface CreateLoanInput {
   loan_type?: 'new_request' | 'existing_refinance';
   title: string;
-  description: string;
+  description?: string;
   loan_category_id?: string | null;
   original_amount: number;
   remaining_balance: number;

@@ -26,15 +26,6 @@ interface ApiEnvelope<T> {
   error?: string;
 }
 
-/** API loanSchema requires min 10 chars — pad short descriptions safely. */
-export function ensureLoanDescription(description?: string, title?: string): string {
-  const text = (description?.trim() || title?.trim() || 'Loan listing').slice(0, 1000);
-  if (text.length >= 10) {
-    return text;
-  }
-  return `${text} on OrangeCat`.slice(0, 1000);
-}
-
 /** Map a loan record or form payload to the API contract (lib/validation/finance loanSchema). */
 export function loanToApiPayload(
   loan: Partial<Loan> & Pick<Loan, 'title' | 'original_amount' | 'remaining_balance'>
@@ -46,7 +37,7 @@ export function loanToApiPayload(
   return {
     loan_type: 'new_request',
     title: loan.title,
-    description: ensureLoanDescription(loan.description, loan.title),
+    description: loan.description ?? '',
     loan_category_id: loan.loan_category_id ?? null,
     original_amount: loan.original_amount,
     remaining_balance: loan.remaining_balance,
@@ -158,14 +149,15 @@ export async function updateLoanViaApi(
   patch: UpdateLoanRequest
 ): Promise<LoanResponse> {
   try {
-    // PUT validates the full loan schema — merge partial patches onto the current row.
+    // PUT validates the full loan schema — a full-form patch carries the
+    // required fields (title + both amounts); anything less is merged onto the
+    // current row first.
     const isFullFormPatch =
       Boolean(patch.title) &&
       patch.original_amount !== undefined &&
       patch.original_amount !== null &&
       patch.remaining_balance !== undefined &&
-      patch.remaining_balance !== null &&
-      ensureLoanDescription(patch.description, patch.title).length >= 10;
+      patch.remaining_balance !== null;
 
     let payload: Record<string, unknown>;
     if (isFullFormPatch) {

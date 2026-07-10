@@ -74,7 +74,22 @@ export const assetSchema = z.object({
   show_on_profile: z.boolean().optional().default(true),
 });
 
-// Loan validation
+/** Contact-method values (mirrors the ContactMethod type in types/loans.ts). */
+export const CONTACT_METHOD_VALUES = ['platform', 'email', 'phone'] as const;
+
+/**
+ * Loan validation — the SINGLE source of truth for the loan create/update
+ * contract. Covers every creatable/updatable column on the `loans` row so the
+ * `/api/loans` handlers (and the update-payload builder) receive the full set;
+ * the create/edit dialog validates against a projection of this schema
+ * (components/loans/validation.ts).
+ *
+ * Listing toggles (is_public / is_negotiable / contact_method / currency) are
+ * intentionally optional with NO default here: the shared schema also validates
+ * partial PUT updates, and a schema default would silently re-apply on a partial
+ * edit and clobber a stored value (see app/api/loans/[id]/route.ts). The dialog
+ * projection re-adds the create-form defaults.
+ */
 export const loanSchema = z.object({
   // Loan type: new_request (seeking new loan) or existing_refinance (refinancing existing)
   loan_type: z.enum(LOAN_TYPES.map(t => t.value) as [string, ...string[]]).default('new_request'),
@@ -83,25 +98,38 @@ export const loanSchema = z.object({
     .string()
     .min(3, 'Title must be at least 3 characters')
     .max(100, 'Title must be at most 100 characters'),
-  description: z
-    .string()
-    .min(10, 'Description must be at least 10 characters')
-    .max(1000, 'Description must be at most 1000 characters'),
+  // Optional to match the dialog/domain (which tolerate an empty description);
+  // this is what retired the description-padding workaround in the API client.
+  description: z.string().max(1000, 'Description must be at most 1000 characters').optional(),
   loan_category_id: optionalText(),
   original_amount: z.number().positive('Amount must be greater than 0'),
   remaining_balance: z.number().positive('Balance must be greater than 0'),
   interest_rate: z.number().min(0).max(100).optional().nullable(),
+  monthly_payment: z.number().min(0).optional().nullable(),
+  currency: z.enum(CURRENCY_CODES).optional(),
+
+  // Bitcoin payment addresses
   bitcoin_address: optionalText(),
   lightning_address: lightningAddressSchema,
   fulfillment_type: z
     .enum(LOAN_FULFILLMENT_TYPES.map(t => t.value) as [string, ...string[]])
     .default('manual'),
-  currency: z.string().optional(),
+
+  // Listing / marketplace fields (persisted on the loans row; surfaced on the
+  // public detail + marketplace). Optional, no default — see note above.
+  lender_name: z.string().max(100).optional(),
+  loan_number: z.string().max(100).optional(),
+  origination_date: z.string().optional(),
+  maturity_date: z.string().optional(),
+  is_public: z.boolean().optional(),
+  is_negotiable: z.boolean().optional(),
+  minimum_offer_amount: z.number().min(0).optional().nullable(),
+  preferred_terms: z.string().max(1000).optional(),
+  contact_method: z.enum(CONTACT_METHOD_VALUES).optional(),
 
   // Fields specific to existing loans (refinancing)
   current_lender: optionalText(100),
   current_interest_rate: z.number().min(0).max(100).optional().nullable(),
-  monthly_payment: z.number().min(0).optional().nullable(),
   desired_rate: z.number().min(0).max(100).optional().nullable(),
 
   // Collateral (array of collateral items)
