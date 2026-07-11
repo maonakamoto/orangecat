@@ -54,11 +54,21 @@ export function useEntityFormSubmit<T extends Record<string, unknown>>({
   const router = useRouter();
   const existingWalletLinkIdRef = useRef<string | undefined>(undefined);
 
+  // Load the entity's existing wallet link once when editing. Keyed on entityId
+  // via a ref: without this guard the effect re-ran on every render (its
+  // `handleFieldChange` dep is a fresh identity each render, and the effect
+  // itself calls handleFieldChange → state write → re-render), hammering
+  // /api/entity-wallets in an infinite loop.
+  const walletLinkFetchedForRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     const hasWalletGroup = config.fieldGroups.some(g => g.customComponent);
     if (mode !== 'edit' || !entityId || !hasWalletGroup) {
       return;
     }
+    if (walletLinkFetchedForRef.current === entityId) {
+      return;
+    }
+    walletLinkFetchedForRef.current = entityId;
 
     fetch(`${API_ROUTES.ENTITY_WALLETS}?entity_type=${config.type}&entity_id=${entityId}`, {
       credentials: 'include',
@@ -74,7 +84,8 @@ export function useEntityFormSubmit<T extends Record<string, unknown>>({
       .catch((err: unknown) => {
         logger.warn('Wallet link failed (non-blocking)', { err }, 'EntityForm');
       });
-  }, [mode, entityId, config.type, config.fieldGroups, handleFieldChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fetch once per entityId; config.type/handleFieldChange read but must not re-trigger
+  }, [mode, entityId]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
