@@ -31,7 +31,7 @@ export async function getLoanOffers(
         *,
         profiles!loan_offers_offerer_id_fkey (
           username,
-          display_name,
+          display_name:name,
           avatar_url
         )
       `,
@@ -150,7 +150,7 @@ export async function getIncomingOffers(
         *,
         profiles!loan_offers_offerer_id_fkey (
           username,
-          display_name,
+          display_name:name,
           avatar_url
         ),
         loans!loan_offers_loan_id_fkey (

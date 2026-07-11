@@ -186,7 +186,7 @@ export async function getAvailableLoans(
           ),
           profiles!loans_user_id_fkey (
             username,
-            display_name,
+            display_name:name,
             avatar_url
           )
         `,

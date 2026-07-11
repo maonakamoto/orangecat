@@ -45,12 +45,17 @@ export const loanSchema = canonicalLoanSchema
     is_negotiable: z.boolean().default(true),
     contact_method: z.enum(CONTACT_METHOD_VALUES).default('platform'),
     // Narrow nullable API fields to the non-null shapes the form inputs use.
-    // (The API accepts null because loanToApiPayload sends `?? null`; the form
-    // only ever produces a value or `undefined`.)
+    // (The API accepts null because a saved row round-trips nulls / the payload
+    // sends `?? null`; the form only ever produces a value or `undefined`.)
     loan_category_id: z.string().optional(),
     interest_rate: z.number().min(0).max(100).optional(),
     monthly_payment: z.number().min(0).optional(),
     minimum_offer_amount: z.number().min(0).optional(),
+    lender_name: z.string().max(100).optional(),
+    loan_number: z.string().max(100).optional(),
+    origination_date: z.string().optional(),
+    maturity_date: z.string().optional(),
+    preferred_terms: z.string().max(1000).optional(),
   })
   .refine(data => data.remaining_balance <= data.original_amount, {
     message: 'Remaining balance cannot exceed original amount',

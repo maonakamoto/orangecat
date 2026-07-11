@@ -117,14 +117,16 @@ export const loanSchema = z.object({
 
   // Listing / marketplace fields (persisted on the loans row; surfaced on the
   // public detail + marketplace). Optional, no default — see note above.
-  lender_name: z.string().max(100).optional(),
-  loan_number: z.string().max(100).optional(),
-  origination_date: z.string().optional(),
-  maturity_date: z.string().optional(),
+  // String fields use optionalText so an edit can round-trip a saved row whose
+  // unset columns come back as `null` (a bare `.optional()` rejects null).
+  lender_name: optionalText(100),
+  loan_number: optionalText(100),
+  origination_date: optionalText(),
+  maturity_date: optionalText(),
   is_public: z.boolean().optional(),
   is_negotiable: z.boolean().optional(),
   minimum_offer_amount: z.number().min(0).optional().nullable(),
-  preferred_terms: z.string().max(1000).optional(),
+  preferred_terms: optionalText(1000),
   contact_method: z.enum(CONTACT_METHOD_VALUES).optional(),
 
   // Fields specific to existing loans (refinancing)
