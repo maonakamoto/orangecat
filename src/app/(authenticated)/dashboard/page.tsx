@@ -56,15 +56,16 @@ export default function DashboardPage() {
     handleRejectAction,
   } = useDashboard();
 
-  // Cat-first: a truly empty account (no projects, no pending actions, no
-  // timeline events once loading settles) gets routed to the Cat hub instead
-  // of the generic dashboard. That matches the platform thesis — Cat is the
-  // interface — and avoids the sparse "four CTAs shouting at once" experience
-  // that the dashboard shows for brand-new accounts.
+  // Cat-first (2026-07-13, one-week plan C-1): the Cat is the DEFAULT surface.
+  // Everyone landing on /dashboard is routed to their Cat hub — brand-new
+  // accounts get the welcome variant, everyone else the plain hub. Dashboard
+  // content stays reachable via the left nav (Timeline → ROUTES.TIMELINE,
+  // entities via their own routes).
   //
-  // Bail if the timeline fetch errored — timelineFeed stays null in that case
-  // which would look identical to "no events", so redirecting would hide the
-  // error from the user and lose their retry path.
+  // Exception: if the timeline fetch errored we do NOT redirect — we render the
+  // dashboard below so the user keeps a visible error + retry path instead of
+  // being bounced away from a transient failure. (timelineFeed stays null on
+  // error, which would otherwise look identical to "empty".)
   const isTrulyEmpty =
     hydrated &&
     !localLoading &&
@@ -76,10 +77,24 @@ export default function DashboardPage() {
     (timelineFeed?.events?.length ?? 0) === 0;
 
   useEffect(() => {
+    if (!hydrated || localLoading || !user || timelineError) {
+      return;
+    }
     if (isTrulyEmpty) {
       router.replace(ROUTES.DASHBOARD.CAT_WELCOME);
+    } else if (!timelineLoading && pendingActionsLoaded) {
+      router.replace(ROUTES.DASHBOARD.CAT);
     }
-  }, [isTrulyEmpty, router]);
+  }, [
+    hydrated,
+    localLoading,
+    user,
+    isTrulyEmpty,
+    timelineLoading,
+    pendingActionsLoaded,
+    timelineError,
+    router,
+  ]);
 
   if (!hydrated || localLoading) {
     return <Loading fullScreen message="Loading your account..." />;
@@ -93,7 +108,9 @@ export default function DashboardPage() {
     return null;
   }
 
-  if (isTrulyEmpty) {
+  // Cat-first: show the redirect loader for everyone except the timeline-error
+  // fallback (which renders the dashboard below so the user can retry).
+  if (!timelineError) {
     return <Loading fullScreen message="Taking you to Cat..." />;
   }
 
