@@ -36,7 +36,7 @@ export const productDetailConfig: EntityDetailConfig = {
       ? { offers: { '@type': 'Offer', priceCurrency: currency, price: amount } }
       : {};
   },
-  renderDetails: entity => {
+  renderDetails: (entity, payable) => {
     const { amount, currency } = getPrice(entity);
     const hasPrice = Number.isFinite(amount) && amount > 0;
     const productType = entity.product_type as string | undefined;
@@ -74,9 +74,10 @@ export const productDetailConfig: EntityDetailConfig = {
                   : 'Sold out'}
             </span>
           </div>
-          {hasPrice && (
+          {hasPrice && payable && (
             // Anchors to the payment section (#pay) — the buyer's "Buy" is paying
-            // the seller direct in Bitcoin. Mirrors the service page's Book CTA.
+            // the seller direct in Bitcoin. Hidden when the seller has no wallet
+            // (payable=false), so the CTA never promises an impossible action.
             <a
               href="#pay"
               className="mt-1 flex w-full items-center justify-center rounded-md bg-accent-warm px-4 py-2.5 font-medium text-white transition-colors hover:bg-accent-warm/90"

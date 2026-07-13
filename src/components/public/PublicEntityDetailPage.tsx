@@ -84,7 +84,8 @@ export interface EntityDetailConfig {
   /** Header badges/extra info (e.g., date for events, category for products) */
   renderHeaderExtra?: (entity: EntityData) => ReactNode;
   /** Entity-specific detail cards below description */
-  renderDetails?: (entity: EntityData) => ReactNode;
+  /** `payable` is true when the seller has a connected wallet — gate pay CTAs on it. */
+  renderDetails?: (entity: EntityData, payable: boolean) => ReactNode;
   /**
    * Resolve the entity's price for the payment section, in its OWN currency
    * (NOT BTC — there is no price_btc column). Returns null when the entity has
@@ -364,7 +365,7 @@ export default async function PublicEntityDetailPage({
                 </Card>
               )}
 
-              {config.renderDetails?.(entity)}
+              {config.renderDetails?.(entity, !!sellerReceive)}
             </div>
 
             <div className="space-y-6">
