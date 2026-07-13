@@ -30,6 +30,13 @@ const buildLoanUpdatePayload = createUpdatePayloadBuilder([
   // Currency is for display/input only - all transactions are in BTC
   { from: 'currency' },
   { from: 'fulfillment_type' },
+  { from: 'loan_type' },
+  // Refinancing fields (existing_refinance loans). createLoan persists these, but
+  // the update builder omitted them — so editing a refinance loan silently dropped
+  // its lender/rate details. (Caught by entity-update-builder-coverage guard.)
+  { from: 'current_lender', transform: entityTransforms.emptyStringToNull },
+  { from: 'current_interest_rate' },
+  { from: 'desired_rate' },
   // Loan-specific fields
   { from: 'lender_name', transform: entityTransforms.emptyStringToNull },
   { from: 'loan_number', transform: entityTransforms.emptyStringToNull },

@@ -29,6 +29,18 @@ const buildAssetUpdatePayload = createUpdatePayloadBuilder([
   // Currency is for display/input only - all transactions are in BTC
   { from: 'currency' },
   commonFieldMappings.arrayField('documents', []), // Normalize null to empty array
+  // Sale / rental / deposit config — collected by the form and backed by real
+  // `assets` columns, but previously dropped on both create and update (the form
+  // silently didn't work). Now persisted. (Caught by the update-builder guard.)
+  { from: 'is_for_sale' },
+  { from: 'sale_price_btc' },
+  { from: 'is_for_rent' },
+  { from: 'rental_price_btc' },
+  { from: 'rental_period_type' },
+  { from: 'min_rental_period' },
+  { from: 'max_rental_period' },
+  { from: 'requires_deposit' },
+  { from: 'deposit_amount_btc' },
   { from: 'show_on_profile' },
 ]);
 

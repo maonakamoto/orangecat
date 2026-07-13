@@ -2,6 +2,12 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FormField } from '@/components/create/FormField';
 
+// Voice input is env-gated behind FEATURES.voiceInput, which is evaluated at
+// module-load time — so flipping process.env inside the test is too late once
+// FormField (and config/features) are already imported. Mock the flag ON so the
+// voice-integration path is exercised regardless of the deployment default.
+jest.mock('@/config/features', () => ({ FEATURES: { voiceInput: true } }));
+
 jest.mock('@/components/ui/DictationButton', () => ({
   __esModule: true,
   DictationButton: ({ onTranscript }: { onTranscript: (t: string) => void }) => (
@@ -13,15 +19,6 @@ jest.mock('@/components/ui/DictationButton', () => ({
 }));
 
 describe('FormField voice integration', () => {
-  const OLD_ENV = process.env;
-  beforeEach(() => {
-    jest.resetModules();
-    process.env = { ...OLD_ENV, NEXT_PUBLIC_FEATURE_VOICE_INPUT: 'true' } as any;
-  });
-  afterAll(() => {
-    process.env = OLD_ENV;
-  });
-
   it('appends voice transcript to textarea', () => {
     const onChange = jest.fn();
     render(
