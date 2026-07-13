@@ -7,12 +7,10 @@
  * Each entity page becomes a thin wrapper that passes entityType + optional custom sections.
  */
 
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Pencil, Tag } from 'lucide-react';
+import { Tag } from 'lucide-react';
 import { createServerClient } from '@/lib/supabase/server';
-import Button from '@/components/ui/Button';
-import { getTableName, getEntityMetadata, type EntityType } from '@/config/entity-registry';
+import { getTableName, getEntityMetadata } from '@/config/entity-registry';
 import { STATUS } from '@/config/database-constants';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
@@ -21,123 +19,29 @@ import EntityShare from '@/components/sharing/EntityShare';
 import PublicEntityOwnerCard from '@/components/public/PublicEntityOwnerCard';
 import PublicEntityHero from '@/components/public/PublicEntityHero';
 import { PublicEntityPaymentSection } from '@/components/payment';
-import { getEntityPrimaryCta } from '@/config/entity-cta';
 import { resolveSellerReceiveInfo, type SellerReceiveInfo } from '@/domain/payments';
 import { currencyConverter } from '@/services/currency';
 import { type CurrencyCode } from '@/config/currencies';
 import { fetchEntityOwner } from '@/lib/entities/fetchEntityOwner';
 import { fetchProfileListingCounts } from '@/services/profile/listingCounts';
-import { WalletVisibilityToggle } from '@/components/wallets/WalletVisibilityToggle';
 import { type WalletVisibility } from '@/config/wallet-visibility';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { ROUTES } from '@/config/routes';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
-import { Z_INDEX_CLASSES } from '@/constants/z-index';
-import type { ReactNode } from 'react';
+import { PublicEntityOwnerBar } from './PublicEntityOwnerBar';
+import {
+  THEME_CLASSES,
+  PAGE_SURFACE_CLASSES,
+  fetchEntityForMetadata,
+  type EntityData,
+  type EntityDetailConfig,
+} from './public-entity-detail-config';
+import { MobileStickyCTA } from './PublicEntityStickyCTA';
 
-// Color theme → semantic class mapping. The four colorTheme values in
-// ENTITY_REGISTRY now all resolve to the same neutral chrome — the
-// rebrand commits to monochromatic surfaces, status colors only for
-// actual status. Anything that wants a chromatic accent should opt in
-// via renderHeaderIcon, not the global icon-box theme.
-const NEUTRAL_THEME = { bg: 'bg-surface-raised', icon: 'text-fg-primary', text: 'text-fg-primary' };
-
-const THEME_CLASSES: Record<string, { bg: string; icon: string; text: string }> = {
-  tiffany: NEUTRAL_THEME,
-  rose: NEUTRAL_THEME,
-  orange: NEUTRAL_THEME,
-  green: NEUTRAL_THEME,
-};
-
-const PAGE_SURFACE_CLASSES: Record<string, string> = {
-  tiffany: 'bg-surface-page',
-  rose: 'bg-surface-page',
-  orange: 'bg-surface-page',
-  green: 'bg-surface-page',
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type EntityData = Record<string, any>;
-
-export interface EntityDetailConfig {
-  entityType: EntityType;
-  /** Label for the owner card (e.g., "Seller", "Provider", "Organizer") */
-  ownerLabel?: string;
-  /** Label for the timestamps card (e.g., "Listed") */
-  createdLabel?: string;
-  /** Description card title (e.g., "About this Service") */
-  descriptionTitle?: string;
-  /** Back link text override */
-  backText?: string;
-  /** Back link href override */
-  backHref?: string;
-  /** Extra JSON-LD properties derived from entity data */
-  getJsonLdExtra?: (entity: EntityData) => Record<string, unknown>;
-  /** Override the themed icon box in the header (e.g., a cover image) */
-  renderHeaderIcon?: (entity: EntityData) => ReactNode;
-  /**
-   * Ordered cover image URLs (cover first) for the full-width hero, rendered
-   * below the header. Return [] for entities with no imagery — the page then
-   * falls back to the header type icon. Drives PublicEntityHero.
-   */
-  getCoverImages?: (entity: EntityData) => string[];
-  /** Header badges/extra info (e.g., date for events, category for products) */
-  renderHeaderExtra?: (entity: EntityData) => ReactNode;
-  /** Entity-specific detail cards below description */
-  /** `payable` is true when the seller has a connected wallet — gate pay CTAs on it. */
-  renderDetails?: (entity: EntityData, payable: boolean) => ReactNode;
-  /**
-   * Resolve the entity's price for the payment section, in its OWN currency
-   * (NOT BTC — there is no price_btc column). Returns null when the entity has
-   * no fixed price (e.g. contribution entities). The buyer is charged the
-   * BTC-converted amount server-side; this only drives display.
-   */
-  getPrice?: (entity: EntityData) => { amount: number; currency: string } | null;
-  /** Extra sidebar cards rendered after EntityShare (e.g., Quick Stats, CTAs) */
-  renderSidebarExtra?: (entity: EntityData) => ReactNode;
-  /** Select columns for metadata query (defaults to 'title, description, price_btc') */
-  metadataSelect?: string;
-  /** View route for sign-in redirect */
-  getViewRoute?: (id: string) => string;
-  /** Override default visibility filter. Defaults to `status = active`. */
-  visibilityFilter?: { column: string; value: string | boolean };
-  /** Whether to show the payment section in the sidebar (default: true) */
-  showPaymentSection?: boolean;
-  /**
-   * Mobile-only sticky bottom CTA. On <md the page renders a fixed
-   * bottom bar so the primary visitor action is one tap from any scroll
-   * position. When omitted: defaults to a "Support" button anchored to
-   * the payment section (suppressed when showPaymentSection is false).
-   * Pass an entity-aware getter for actions that depend on entity data
-   * (e.g. loans → /auth?from=/loans/:id). Returning null suppresses
-   * the bar entirely.
-   */
-  mobileStickyCTA?:
-    | { label: string; href: string }
-    | ((entity: EntityData) => { label: string; href: string } | null)
-    | null;
-}
-
-/**
- * Fetch entity data for metadata generation
- */
-export async function fetchEntityForMetadata(
-  entityType: EntityType,
-  id: string,
-  select?: string,
-  visibilityFilter?: { column: string; value: string | boolean }
-) {
-  const supabase = await createServerClient();
-  const filterCol = visibilityFilter?.column ?? 'status';
-  const filterVal = visibilityFilter?.value ?? STATUS.PRODUCTS.ACTIVE;
-  const { data } = await supabase
-    .from(getTableName(entityType))
-    .select(select || 'title, description')
-    .eq('id', id)
-    .eq(filterCol, filterVal)
-    .single();
-  return data as EntityData | null;
-}
+// Re-export config types + metadata helper for back-compat with the many
+// entity page/config modules that import them from here.
+export { fetchEntityForMetadata };
+export type { EntityData, EntityDetailConfig };
 
 /**
  * Main generic entity detail page component
@@ -267,39 +171,15 @@ export default async function PublicEntityDetailPage({
       <JsonLdScript data={jsonLd} />
       <div className={`min-h-screen oc-mobile-action-stack-padding ${pageSurface}`}>
         {isOwner && (
-          <div className="border-b border-default bg-surface-raised">
-            <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-2.5 sm:px-6 lg:px-8">
-              <span className="text-sm text-fg-secondary">
-                {isOwnerPreview ? (
-                  <>
-                    Preview — this {meta.name.toLowerCase()} is{' '}
-                    <span className="font-medium capitalize text-fg-primary">{entity.status}</span>{' '}
-                    and only visible to you. Publish it to go live.
-                  </>
-                ) : (
-                  <>This is your live {meta.name.toLowerCase()} as buyers see it.</>
-                )}
-              </span>
-              <Link href={editHref}>
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Pencil className="h-3.5 w-3.5" />
-                  Edit
-                </Button>
-              </Link>
-            </div>
-          </div>
-        )}
-        {isOwner && fundingLink && (
-          <div className="border-b border-default bg-surface-raised">
-            <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
-              <WalletVisibilityToggle
-                walletId={fundingLink.walletId}
-                entityType={config.entityType}
-                entityId={id}
-                initialVisibility={fundingLink.visibility}
-              />
-            </div>
-          </div>
+          <PublicEntityOwnerBar
+            isOwnerPreview={isOwnerPreview}
+            entityName={meta.name}
+            entityStatus={entity.status}
+            editHref={editHref}
+            fundingLink={fundingLink}
+            entityType={config.entityType}
+            entityId={id}
+          />
         )}
         <div className="bg-surface-base border-b border-default">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -412,65 +292,5 @@ export default async function PublicEntityDetailPage({
         <MobileStickyCTA config={config} entity={entity} payable={!!sellerReceive} />
       </div>
     </>
-  );
-}
-
-function MobileStickyCTA({
-  config,
-  entity,
-  payable,
-}: {
-  config: EntityDetailConfig;
-  entity: EntityData;
-  /** True when the seller has a connected wallet (sellerReceive resolved). */
-  payable: boolean;
-}) {
-  // Explicit override: entity opted out (null) → no bar.
-  if (config.mobileStickyCTA === null) {
-    return null;
-  }
-
-  // Resolve the CTA {href,label} from the config, or fall back to the default:
-  // anchor to the payment section with the entity's own primary verb (SSOT in
-  // entity-cta.ts) — "Book this service", "Fund this project", etc.
-  let cta: { href: string; label: string } | null = null;
-  if (typeof config.mobileStickyCTA === 'function') {
-    cta = config.mobileStickyCTA(entity);
-  } else if (config.mobileStickyCTA) {
-    cta = config.mobileStickyCTA;
-  } else if (config.showPaymentSection !== false) {
-    cta = { href: '#pay', label: getEntityPrimaryCta(config.entityType) };
-  }
-  if (!cta) {
-    return null;
-  }
-
-  // A pay-anchored sticky CTA ("Buy now", "Fund this project") on a listing whose
-  // owner has NO connected wallet promises an action that can't complete — tapping
-  // it only scrolls to the "creator hasn't connected a wallet yet" notice. Hide it.
-  if (cta.href === '#pay' && !payable) {
-    return null;
-  }
-
-  return <StickyBar href={cta.href} label={cta.label} />;
-}
-
-function StickyBar({ href, label }: { href: string; label: string }) {
-  // Position + z-index sourced from SSOT:
-  //   .oc-above-mobile-nav  → globals.css (--mobile-nav-clearance)
-  //   Z_INDEX_CLASSES.MOBILE_ACTION_BAR → src/constants/z-index.ts
-  // Pair on the parent: .oc-mobile-action-stack-padding (already added
-  // to the page wrapper) reserves matching scroll-bottom room.
-  return (
-    <div
-      className={`md:hidden fixed inset-x-0 oc-above-mobile-nav ${Z_INDEX_CLASSES.MOBILE_ACTION_BAR} border-t border-subtle bg-surface-base/95 backdrop-blur supports-[backdrop-filter]:bg-surface-base/80 px-4 py-3 shadow-sm`}
-    >
-      <a
-        href={href}
-        className="flex w-full items-center justify-center gap-2 rounded-md bg-fg-primary px-4 py-3 text-sm font-semibold text-fg-inverted hover:bg-fg-primary/90 transition-colors min-h-12"
-      >
-        {label}
-      </a>
-    </div>
   );
 }
