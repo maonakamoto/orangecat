@@ -58,18 +58,33 @@ curl -s -o /dev/null -w '%{http_code}\n' https://orangecat.ch/api/health   # exp
 
 ## Step 3 — One live top-up test (this is the "first payment")
 
-1. Log in at **https://orangecat.ch** → open the **Cat Credits** top-up (Settings → AI, or the credits card).
+**No code change needed to test.** The Settings → AI top-up button auto-enables
+from the env: `GET /api/cat/credits` returns `topupEnabled = platformReceiveEnabled()`
+(true the moment `PLATFORM_NWC_URI` is set), and `CatCreditsPanel` enables "Top up"
+off that server flag — it does **not** wait on `CAT_CREDITS_LIVE`. So right after
+Step 2's restart:
+
+1. Log in at **https://orangecat.ch** → **Settings → AI** → the **Cat Credits** panel.
+   The **Top up** button is now enabled (it was "Top up (soon)" before). _(The
+   pricing-page "credits card" still says "Activating" until Step 4 — that one is
+   cosmetic; use the Settings → AI panel to test.)_
 2. Request the **minimum** top-up: **0.00001 BTC (1,000 sats)** — bounds are `MIN_TOPUP_BTC=0.00001`, `MAX_TOPUP_BTC=0.01` (`src/services/cat/credit-topup.ts`).
 3. Scan/pay the invoice from any Lightning wallet.
-4. Within a few seconds the balance should credit (the client polls `lookupInvoice`). ✅ **That is OrangeCat's first real payment.**
+4. Within a few seconds the balance credits and a ledger entry appears in the same
+   panel (the client polls `lookupInvoice`). ✅ **That is OrangeCat's first real payment** —
+   and you can watch for it right there (balance + per-message ledger).
 
 If it doesn't credit: check `journalctl -u orangecat-app.service -n 100 --no-pager` for `CatCredits` log lines (`initiateTopUp` / `checkTopUp`), and confirm the Alby connection has invoice + lookup permissions.
 
-## Step 4 — Flip the UI to "Live" (code — I can do this)
+## Step 4 — Flip the marketing card to "Live" (cosmetic — I do this after)
 
-`src/config/cat-plans.ts` has `export const CAT_CREDITS_LIVE = false;`. Env alone makes the **API** work, but the UI still shows the credits card as "Activating / coming-soon". Once you've confirmed one live top-up (Step 3), tell me and I'll flip it to `true` and ship it (small PR + CD deploy) — the card then switches to a live top-up CTA and the "Live" badge.
+`src/config/cat-plans.ts` has `export const CAT_CREDITS_LIVE = false;`. This flag ONLY
+controls the pricing-page card's badge/CTA ("Activating" + "Back us…" → "Live" + "Top
+up credits"). It does **not** gate the actual top-up (Step 3 works without it). Once
+you confirm the top-up credited, ping me and I'll flip it to `true` and ship (small PR
 
-> Do **not** flip it before Step 3 passes, or the UI advertises "Live" while top-up would fail if the env is missing.
+- CD deploy). Safe to flip any time after Step 2, but doing it after Step 3 keeps the
+  public "Live" badge honest.
 
 ---
 
