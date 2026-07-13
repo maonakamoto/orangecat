@@ -31,7 +31,11 @@ const buildProductUpdatePayload = createUpdatePayloadBuilder([
   { from: 'fulfillment_type', default: 'manual' },
   { from: 'category', transform: entityTransforms.emptyStringToNull },
   commonFieldMappings.arrayField('tags', []),
-  { from: 'status', default: 'draft' }, // Ensure status is preserved
+  // No default: a partial PUT that omits `status` must keep the row's existing
+  // status. A `default: 'draft'` silently unpublished active entities on edit
+  // (same bug the events builder already fixed). Status transitions go through
+  // the dedicated /api/entities/[type]/[id]/status endpoint, not this builder.
+  { from: 'status' },
   { from: 'is_featured', default: false },
   { from: 'show_on_profile' },
 ]);

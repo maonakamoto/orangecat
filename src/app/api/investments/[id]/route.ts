@@ -25,7 +25,8 @@ const buildInvestmentUpdatePayload = createUpdatePayloadBuilder([
   { from: 'lightning_address', transform: entityTransforms.emptyStringToNull },
   { from: 'currency' },
   { from: 'is_public', default: false },
-  { from: 'status', default: 'draft' },
+  // No default — see products/[id] note: a status default unpublishes on partial PUT.
+  { from: 'status' },
 ]);
 
 const { GET, PUT, DELETE } = createEntityCrudHandlers({

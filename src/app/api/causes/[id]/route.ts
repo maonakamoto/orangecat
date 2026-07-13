@@ -28,7 +28,8 @@ const buildCauseUpdatePayload = createUpdatePayloadBuilder([
   { from: 'lightning_address', transform: entityTransforms.emptyStringToNull },
   { from: 'distribution_rules' },
   commonFieldMappings.arrayField('beneficiaries', []),
-  { from: 'status', default: 'draft' },
+  // No default — see products/[id] note: a status default unpublishes on partial PUT.
+  { from: 'status' },
   { from: 'show_on_profile' },
 ]);
 

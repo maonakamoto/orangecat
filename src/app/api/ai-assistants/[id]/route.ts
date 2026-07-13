@@ -45,7 +45,8 @@ const buildAIAssistantUpdatePayload = createUpdatePayloadBuilder([
   { from: 'subscription_price', default: 0 },
   { from: 'free_messages_per_day', default: 0 },
   // Visibility & Status
-  { from: 'status', default: 'draft' },
+  // No default — see products/[id] note: a status default unpublishes on partial PUT.
+  { from: 'status' },
   { from: 'is_public', default: false },
   { from: 'is_featured', default: false },
   // Bitcoin Payment Info

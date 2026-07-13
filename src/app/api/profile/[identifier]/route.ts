@@ -12,6 +12,48 @@ import { getOrCreateUserActor } from '@/services/actors/getOrCreateUserActor';
  * Supports both username and email lookups for viewing other users' profiles
  */
 
+/**
+ * Account PII / internal columns on the `profiles` row that must NEVER be
+ * returned from this UNAUTHENTICATED (withOptionalAuth) endpoint. Anyone can
+ * call it — by username OR by email — so returning the raw row (the previous
+ * `select('*')` + `{ ...profile }`) leaked emails, phones, and internal blobs
+ * to any caller and turned the email branch into a harvesting oracle.
+ *
+ * This is a DENYLIST, not an allowlist, on purpose: `src/types/database.ts`
+ * drifts from the live schema (prod has columns like `background`,
+ * `inspiration_statement`, `location_context` that aren't typed here), so an
+ * allowlist would silently drop real public display fields. New sensitive
+ * columns MUST be added here. Contact is via in-app messaging, not raw email.
+ */
+const SENSITIVE_PROFILE_FIELDS = [
+  'email',
+  'contact_email',
+  'phone',
+  'verification_data',
+  'privacy_settings',
+  'payment_preferences',
+  'preferences',
+  'metadata',
+  'last_login_at',
+  'last_active_at',
+  'onboarding_completed',
+  'onboarding_wallet_setup_completed',
+  'onboarding_first_project_created',
+  'onboarding_method',
+  'profile_completed_at',
+  'terms_accepted_at',
+  'privacy_policy_accepted_at',
+  'location_search',
+] as const;
+
+function toPublicProfile(profile: Record<string, unknown>): Record<string, unknown> {
+  const clean: Record<string, unknown> = { ...profile };
+  for (const field of SENSITIVE_PROFILE_FIELDS) {
+    delete clean[field];
+  }
+  return clean;
+}
+
 interface RouteContext {
   params: Promise<{ identifier: string }>;
 }
@@ -123,7 +165,7 @@ export const GET = withOptionalAuth(async (request, context: RouteContext) => {
       // Non-fatal: profile still returned without count
     }
 
-    return apiSuccess({ ...profile, project_count: projectCount });
+    return apiSuccess({ ...toPublicProfile(profile), project_count: projectCount });
   } catch (error) {
     return handleApiError(error);
   }

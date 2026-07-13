@@ -18,7 +18,9 @@ const buildCircleUpdatePayload = createUpdatePayloadBuilder([
   { from: 'visibility' },
   { from: 'cover_image_url', transform: entityTransforms.emptyStringToNull },
   commonFieldMappings.arrayField('tags', []),
-  { from: 'status', default: 'active' },
+  // No default — see products/[id] note. Here a `default: 'active'` was the
+  // opposite hazard: a partial PUT could silently re-activate a paused circle.
+  { from: 'status' },
 ]);
 
 const { GET, PUT, DELETE } = createEntityCrudHandlers({
