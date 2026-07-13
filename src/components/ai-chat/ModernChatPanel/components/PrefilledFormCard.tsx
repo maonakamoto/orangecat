@@ -23,6 +23,9 @@ import { STORAGE_KEYS } from '@/config/storage-keys';
 import { ENTITY_REGISTRY, isValidEntityType, type EntityType } from '@/config/entity-registry';
 import { resolvePublishStatus } from '@/config/entity-status';
 import { ENTITY_STATUS } from '@/config/database-constants';
+import { SellerWalletBanner } from '@/components/payment/SellerWalletBanner';
+import { useAuth } from '@/hooks/useAuth';
+import { useSellerPaymentMethods } from '@/hooks/useSellerPaymentMethods';
 import type { PrefillProposal } from '../types';
 
 const EDITABLE_KEYS = ['title', 'name', 'description', 'price', 'price_btc', 'currency'];
@@ -77,6 +80,13 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
   const [phase, setPhase] = useState<Phase>('idle');
   const [published, setPublished] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // Soft-nudge (C-2): if the just-published entity takes payments but the owner
+  // has no wallet, it's live-but-unpayable. Warn them (self-gating banner).
+  // Hooks run before the early return below so ordering stays stable.
+  const { user } = useAuth();
+  const receivesPayments = !!meta?.paymentPattern && meta.paymentPattern !== 'none';
+  const { hasWallet } = useSellerPaymentMethods(receivesPayments ? (user?.id ?? null) : null);
 
   if (!valid || !meta) {
     return null;
@@ -192,6 +202,11 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
             {published ? `${meta.name} published` : `Draft saved`}: {title}
           </span>
         </div>
+        {published && receivesPayments && (
+          <div className="mt-3">
+            <SellerWalletBanner isOwner hasWallet={hasWallet} />
+          </div>
+        )}
         <button
           type="button"
           onClick={() => router.push(meta.basePath)}

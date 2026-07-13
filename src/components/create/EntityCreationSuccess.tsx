@@ -15,10 +15,14 @@ import { CheckCircle2, Rocket, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
+import { SellerWalletBanner } from '@/components/payment/SellerWalletBanner';
 import { logger } from '@/utils/logger';
 import { entityEvents } from '@/lib/analytics';
 import { API_ROUTES } from '@/config/api-routes';
 import { ENTITY_STATUS } from '@/config/database-constants';
+import { ENTITY_REGISTRY, type EntityType } from '@/config/entity-registry';
+import { useAuth } from '@/hooks/useAuth';
+import { useSellerPaymentMethods } from '@/hooks/useSellerPaymentMethods';
 
 interface EntityCreationSuccessProps {
   /** Entity type identifier (e.g. 'product', 'service') */
@@ -45,6 +49,16 @@ export function EntityCreationSuccess({
 }: EntityCreationSuccessProps) {
   const router = useRouter();
   const [isPublishing, setIsPublishing] = useState(false);
+
+  // Soft-nudge (C-2): if this entity type receives payments and the owner has no
+  // connected wallet, publishing produces a live-but-unpayable entity and they're
+  // never told. Prompt them to connect one — without blocking publish. Skips
+  // entity types that don't take payments (group/circle/asset/loan/document).
+  const { user } = useAuth();
+  const receivesPayments =
+    !!ENTITY_REGISTRY[entityType as EntityType]?.paymentPattern &&
+    ENTITY_REGISTRY[entityType as EntityType]?.paymentPattern !== 'none';
+  const { hasWallet } = useSellerPaymentMethods(receivesPayments ? (user?.id ?? null) : null);
 
   const handlePublish = async () => {
     setIsPublishing(true);
@@ -103,6 +117,14 @@ export function EntityCreationSuccess({
               It&apos;s not visible to anyone yet.
             </p>
           </div>
+
+          {/* Soft-nudge: connect a wallet so the entity is actually payable.
+              Self-gates — renders nothing when the owner already has a wallet. */}
+          {receivesPayments && (
+            <div className="text-left">
+              <SellerWalletBanner isOwner hasWallet={hasWallet} />
+            </div>
+          )}
 
           {/* Actions */}
           <div className="space-y-3">
