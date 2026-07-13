@@ -29,26 +29,7 @@ import {
 import { getFreeModels, getModelMetadata, DEFAULT_FREE_MODEL_ID } from '@/config/ai-models';
 import { createAutoRouter } from '@/services/ai/auto-router';
 
-/** Minimal interface every platform AI service satisfies. */
-interface AiService {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  streamChatCompletion(opts: {
-    model: string;
-    messages: any[];
-    temperature: number;
-  }): AsyncIterable<{ content?: string; usage?: unknown; done?: boolean }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  chatCompletion(opts: { model: string; messages: any[]; temperature: number }): Promise<{
-    content: string;
-    model: string;
-    inputTokens: number;
-    outputTokens: number;
-    totalTokens: number;
-    isFreeModel: boolean;
-    usedByok: boolean;
-    costBtc?: number;
-  }>;
-}
+import type { AiService } from './types';
 
 export interface PlatformProvider {
   providerId: 'groq' | 'openrouter' | 'together' | 'ollama';

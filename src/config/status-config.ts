@@ -48,52 +48,69 @@ interface StatusInfo {
  * Status configuration - SSOT for all status labels and styles
  */
 import { BADGE_COLORS } from '@/config/badge-colors';
+import { STATUS_LABELS } from './status-labels';
 
 export const STATUS_CONFIG: Record<EntityStatus, StatusInfo> = {
   // Generic statuses
-  draft: { label: 'Draft', className: BADGE_COLORS.neutral, description: 'Not yet published' },
-  active: { label: 'Active', className: BADGE_COLORS.success, description: 'Live and visible' },
-  paused: { label: 'Paused', className: BADGE_COLORS.warning, description: 'Temporarily inactive' },
+  draft: {
+    label: STATUS_LABELS.draft,
+    className: BADGE_COLORS.neutral,
+    description: 'Not yet published',
+  },
+  active: {
+    label: STATUS_LABELS.active,
+    className: BADGE_COLORS.success,
+    description: 'Live and visible',
+  },
+  paused: {
+    label: STATUS_LABELS.paused,
+    className: BADGE_COLORS.warning,
+    description: 'Temporarily inactive',
+  },
   completed: {
-    label: 'Completed',
+    label: STATUS_LABELS.completed,
     className: BADGE_COLORS.info,
     description: 'Successfully finished',
   },
-  cancelled: { label: 'Cancelled', className: BADGE_COLORS.error, description: 'No longer active' },
+  cancelled: {
+    label: STATUS_LABELS.cancelled,
+    className: BADGE_COLORS.error,
+    description: 'No longer active',
+  },
   archived: {
-    label: 'Archived',
+    label: STATUS_LABELS.archived,
     className: BADGE_COLORS.muted,
     description: 'Stored for reference',
   },
   // Event-specific live states
   published: {
-    label: 'Published',
+    label: STATUS_LABELS.published,
     className: BADGE_COLORS.success,
     description: 'Live and accepting registrations',
   },
   open: {
-    label: 'Open',
+    label: STATUS_LABELS.open,
     className: BADGE_COLORS.success,
     description: 'Open for registrations or applications',
   },
   full: {
-    label: 'Full',
+    label: STATUS_LABELS.full,
     className: BADGE_COLORS.amber,
     description: 'Capacity reached — no more registrations',
   },
   ongoing: {
-    label: 'Ongoing',
+    label: STATUS_LABELS.ongoing,
     className: BADGE_COLORS.info,
     description: 'Currently in progress',
   },
   // Investment-specific live states
   funded: {
-    label: 'Funded',
+    label: STATUS_LABELS.funded,
     className: BADGE_COLORS.success,
     description: 'Fully funded and running',
   },
   closed: {
-    label: 'Closed',
+    label: STATUS_LABELS.closed,
     className: BADGE_COLORS.muted,
     description: 'No longer accepting investment',
   },
@@ -107,7 +124,7 @@ export const STATUS_CONFIG: Record<EntityStatus, StatusInfo> = {
  *
  * @example
  * const info = getStatusInfo('active');
- * // { label: 'Active', className: 'bg-green-100 text-green-700' }
+ * // { label: STATUS_LABELS.active, className: 'bg-green-100 text-green-700' }
  */
 export function getStatusInfo(status: string | null | undefined): StatusInfo {
   if (!status) {

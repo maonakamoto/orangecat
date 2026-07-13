@@ -10,6 +10,7 @@
  */
 
 import { BADGE_COLORS } from '@/config/badge-colors';
+import { STATUS_LABELS } from './status-labels';
 
 /** String constants for project status comparisons (follows STATUS.* pattern) */
 export const PROJECT_STATUS = {
@@ -22,27 +23,27 @@ export const PROJECT_STATUS = {
 
 export const PROJECT_STATUSES = {
   draft: {
-    label: 'Draft',
+    label: STATUS_LABELS.draft,
     className: `border ${BADGE_COLORS.muted}`,
     badgeVariant: 'default' as const,
   },
   active: {
-    label: 'Active',
+    label: STATUS_LABELS.active,
     className: `border ${BADGE_COLORS.success}`,
     badgeVariant: 'success' as const,
   },
   paused: {
-    label: 'Paused',
+    label: STATUS_LABELS.paused,
     className: `border ${BADGE_COLORS.warning}`,
     badgeVariant: 'warning' as const,
   },
   completed: {
-    label: 'Completed',
+    label: STATUS_LABELS.completed,
     className: `border ${BADGE_COLORS.info}`,
     badgeVariant: 'info' as const,
   },
   cancelled: {
-    label: 'Cancelled',
+    label: STATUS_LABELS.cancelled,
     className: `border ${BADGE_COLORS.error}`,
     badgeVariant: 'error' as const,
   },
