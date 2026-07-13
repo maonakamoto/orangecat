@@ -9,8 +9,9 @@
  * Context rules (evaluated in order):
  *
  * 1. `noEntities` — user has nothing listed yet (0 entities).
- *    Goal: get their world into the platform with minimal typing. Lead with
- *    "give me a link / tell me what you do" so the Cat can do the setup work.
+ *    Goal: get them into the core loop — one tap → the Cat prefills a real,
+ *    publishable economic object. Each chip is a direct create-intent that the
+ *    tool pipeline routes to `prefill_entity_form` (product / project / cause).
  *    Also the fallback for anonymous visitors and fetch errors
  *    (DEFAULT_SUGGESTIONS in src/services/ai/suggestions.ts).
  *
@@ -35,9 +36,9 @@ export interface QuickstartContext {
 
 export const CAT_QUICKSTARTS = {
   noEntities: [
-    "Paste a link to your website or LinkedIn and I'll set you up",
-    "Tell me what you do and I'll suggest what to offer",
-    'What could I earn Bitcoin doing today?',
+    'Sell something I make',
+    'Start a fundraiser for a project',
+    'Raise money for a cause',
   ],
   entitiesNoWallet: [
     'Connect a wallet so you can get paid',

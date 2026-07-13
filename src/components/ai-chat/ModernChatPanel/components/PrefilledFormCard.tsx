@@ -79,6 +79,7 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
 
   const [phase, setPhase] = useState<Phase>('idle');
   const [published, setPublished] = useState(false);
+  const [publishedId, setPublishedId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Soft-nudge (C-2): if the just-published entity takes payments but the owner
@@ -147,6 +148,7 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
       // 2. Publish: flip the draft to its per-type live status via the update
       //    endpoint. Only claim "published" if this actually succeeds (honest state).
       const id = json.data?.id as string | undefined;
+      setPublishedId(id ?? null);
       let didPublish = false;
       if (publish && id) {
         const liveStatus = isValidEntityType(entityType)
@@ -192,6 +194,12 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
 
   // ── Success state ──────────────────────────────────────────────────────────
   if (phase === 'done') {
+    // C-4: once published, link to the entity's PUBLIC page (not the owner list)
+    // so the creator immediately sees the live, shareable result of the loop.
+    const publicUrl =
+      published && publishedId && meta.publicBasePath
+        ? `${meta.publicBasePath}/${publishedId}`
+        : null;
     return (
       <div className="mt-3 rounded-md border border-subtle bg-surface-raised/30 p-4">
         <div className="flex items-center gap-2">
@@ -202,19 +210,44 @@ export function PrefilledFormCard({ proposal }: PrefilledFormCardProps) {
             {published ? `${meta.name} published` : `Draft saved`}: {title}
           </span>
         </div>
-        {published && receivesPayments && (
+        {/* Payable state: reassure when ready, nudge to connect a wallet when not.
+            SellerWalletBanner self-gates (renders nothing once a wallet exists). */}
+        {published && receivesPayments && hasWallet && (
+          <p className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-status-positive">
+            <Check className="h-3 w-3" /> Ready to receive payments
+          </p>
+        )}
+        {published && receivesPayments && !hasWallet && (
           <div className="mt-3">
             <SellerWalletBanner isOwner hasWallet={hasWallet} />
           </div>
         )}
-        <button
-          type="button"
-          onClick={() => router.push(meta.basePath)}
-          className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-md bg-fg-primary px-4 py-2 text-sm font-medium text-fg-inverted transition-colors hover:bg-fg-primary/90"
-        >
-          Open your {meta.namePlural.toLowerCase()}
-          <ArrowRight className="h-4 w-4" />
-        </button>
+        {/* C-4: lead with the public, shareable page; keep the owner list secondary. */}
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          {publicUrl && (
+            <a
+              href={publicUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-md bg-fg-primary px-4 py-2 text-sm font-medium text-fg-inverted transition-colors hover:bg-fg-primary/90"
+            >
+              View public page
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          )}
+          <button
+            type="button"
+            onClick={() => router.push(meta.basePath)}
+            className={
+              publicUrl
+                ? 'inline-flex min-h-11 items-center text-sm font-medium text-fg-secondary hover:text-fg-primary'
+                : 'inline-flex min-h-11 items-center gap-1.5 rounded-md bg-fg-primary px-4 py-2 text-sm font-medium text-fg-inverted transition-colors hover:bg-fg-primary/90'
+            }
+          >
+            Open your {meta.namePlural.toLowerCase()}
+            {!publicUrl && <ArrowRight className="h-4 w-4" />}
+          </button>
+        </div>
       </div>
     );
   }
