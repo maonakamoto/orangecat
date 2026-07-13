@@ -1,34 +1,19 @@
 'use client';
 
-import Link from 'next/link';
 import type { ScalableProfile } from '@/services/profile/types';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
-import { User, Globe, Calendar, Mail, Phone, ArrowRight } from 'lucide-react';
+import { Globe, Calendar, Mail, Phone } from 'lucide-react';
 import { SocialLinksDisplay } from './SocialLinksDisplay';
 import { ProfileSupportSection } from './ProfileSupportSection';
-import ProfileProjectCard from './ProfileProjectCard';
+import {
+  ProfileAboutCard,
+  ProfileProjectsSection,
+  type OverviewProject,
+} from './ProfileOverviewSections';
 import { SocialLink } from '@/types/social';
 import { ROUTES } from '@/config/routes';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
-
-/** Loose project shape — the page passes server-fetched rows; we read defensively. */
-interface OverviewProject {
-  id: string;
-  title: string;
-  description?: string | null;
-  cover_image_url?: string | null;
-  thumbnail_url?: string | null;
-  goal_amount?: number | null;
-  goal_currency?: string | null;
-  currency?: string | null;
-  raised_amount?: number | null;
-  bitcoin_balance_btc?: number | null;
-  category?: string | null;
-  status?: string | null;
-  bitcoin_address?: string | null;
-  created_at: string;
-}
 
 interface ProfileOverviewTabProps {
   profile: ScalableProfile;
@@ -67,7 +52,6 @@ export default function ProfileOverviewTab({
   const isDashboardView = context === 'dashboard';
   const PROJECTS_PREVIEW = 3;
   const visibleProjects = (projects ?? []).slice(0, PROJECTS_PREVIEW);
-  const ProjectIcon = ENTITY_REGISTRY.project.icon;
   const projectsTabHref = `${ROUTES.PROFILES.VIEW(profile.username || profile.id)}?tab=projects`;
   // Public contact email is ONLY the opt-in contact_email field — never the
   // private account login email (profile.email). See profile email-leak fix.
@@ -95,75 +79,20 @@ export default function ProfileOverviewTab({
     <div className="space-y-4 sm:space-y-6">
       {/* Bio Section — prompts to fill in when empty (owner only) */}
       {showBioCard && (
-        <Card>
-          <CardHeader className="p-4 sm:p-6">
-            <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
-              <User className="w-4 h-4 sm:w-5 sm:h-5 text-fg-secondary" />
-              About
-            </h3>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-6 pt-0">
-            {profile.bio ? (
-              <p className="text-sm sm:text-base text-fg-primary whitespace-pre-wrap leading-relaxed">
-                {profile.bio}
-              </p>
-            ) : isOwnProfile && isDashboardView ? (
-              <a
-                href={`${ROUTES.DASHBOARD.INFO_EDIT}#bio`}
-                className="inline-flex items-center gap-2 text-fg-primary hover:text-fg-primary underline-offset-4 hover:underline group text-sm sm:text-base"
-              >
-                <span className="text-fg-tertiary italic group-hover:text-fg-primary">
-                  Tell people more about yourself
-                </span>
-                <span className="text-xs uppercase tracking-wide">Add bio</span>
-              </a>
-            ) : (
-              <p className="text-sm sm:text-base text-fg-tertiary italic">No bio yet.</p>
-            )}
-          </CardContent>
-        </Card>
+        <ProfileAboutCard
+          bio={profile.bio}
+          isOwnProfile={isOwnProfile}
+          isDashboardView={isDashboardView}
+        />
       )}
 
       {/* Projects — explore the owner's work and back any of it without leaving. */}
       {visibleProjects.length > 0 && (
-        <section className="space-y-3 sm:space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-2 text-base font-semibold text-fg-primary sm:text-lg">
-              <ProjectIcon className="h-4 w-4 text-fg-secondary sm:h-5 sm:w-5" />
-              {ENTITY_REGISTRY.project.namePlural}
-            </h3>
-            {(projects?.length ?? 0) > PROJECTS_PREVIEW && (
-              <Link
-                href={projectsTabHref}
-                className="inline-flex items-center gap-1 text-sm text-fg-secondary hover:text-fg-primary"
-              >
-                View all {projects?.length}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            )}
-          </div>
-          <div className="space-y-4">
-            {visibleProjects.map(p => (
-              <ProfileProjectCard
-                key={p.id}
-                project={{
-                  id: p.id,
-                  title: p.title,
-                  description: p.description,
-                  imageUrl: p.cover_image_url ?? p.thumbnail_url ?? null,
-                  goalAmount: p.goal_amount,
-                  raisedAmount: p.raised_amount ?? undefined,
-                  balanceBtc: p.bitcoin_balance_btc ?? undefined,
-                  currency: p.goal_currency ?? p.currency ?? undefined,
-                  category: p.category,
-                  status: p.status,
-                  hasWallet: !!p.bitcoin_address,
-                  createdAt: p.created_at,
-                }}
-              />
-            ))}
-          </div>
-        </section>
+        <ProfileProjectsSection
+          visibleProjects={visibleProjects}
+          totalProjects={projects?.length ?? 0}
+          projectsTabHref={projectsTabHref}
+        />
       )}
 
       <ProfileSupportSection profile={profile} />
