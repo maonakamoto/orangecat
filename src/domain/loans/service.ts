@@ -21,6 +21,7 @@ export interface CreateLoanInput {
   monthly_payment?: number | null;
   desired_rate?: number | null;
   currency?: string;
+  show_on_profile?: boolean;
 }
 
 export async function createLoan(
@@ -75,6 +76,12 @@ export async function createLoan(
       // matching shape here.
       status: STATUS.LOANS.DRAFT,
       is_public: false,
+      // Respect the form's "Show on Public Profile" toggle. Without this the
+      // insert omits the column and the DB default (true) always wins, so an
+      // unchecked box was silently ignored — the loan showed on the profile
+      // anyway once published. Defaults true (matches DB + other entities) when
+      // the caller omits it.
+      show_on_profile: loanInput.show_on_profile ?? true,
       amount: loanInput.original_amount,
     },
     {

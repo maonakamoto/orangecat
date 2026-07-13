@@ -33,6 +33,7 @@ export const loanSchema = canonicalLoanSchema
     maturity_date: true,
     is_public: true,
     is_negotiable: true,
+    show_on_profile: true,
     minimum_offer_amount: true,
     preferred_terms: true,
     contact_method: true,
@@ -43,6 +44,7 @@ export const loanSchema = canonicalLoanSchema
     currency: z.enum(CURRENCY_CODES).default(PLATFORM_DEFAULT_CURRENCY),
     is_public: z.boolean().default(true),
     is_negotiable: z.boolean().default(true),
+    show_on_profile: z.boolean().default(true),
     contact_method: z.enum(CONTACT_METHOD_VALUES).default('platform'),
     // Narrow nullable API fields to the non-null shapes the form inputs use.
     // (The API accepts null because a saved row round-trips nulls / the payload

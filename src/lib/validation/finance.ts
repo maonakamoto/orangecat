@@ -125,6 +125,11 @@ export const loanSchema = z.object({
   maturity_date: optionalText(),
   is_public: z.boolean().optional(),
   is_negotiable: z.boolean().optional(),
+  // Whether this loan appears on the owner's public profile page (loans.show_on_profile,
+  // DB default true). Optional with NO default here — same reasoning as is_public above:
+  // the shared schema also validates partial PUT updates. The create-form default lives
+  // in loanConfig.defaultValues / the dialog projection.
+  show_on_profile: z.boolean().optional(),
   minimum_offer_amount: z.number().min(0).optional().nullable(),
   preferred_terms: optionalText(1000),
   contact_method: z.enum(CONTACT_METHOD_VALUES).optional(),

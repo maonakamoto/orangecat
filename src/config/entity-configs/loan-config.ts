@@ -224,6 +224,10 @@ export const loanConfig = createEntityConfig<LoanFormData>({
     current_interest_rate: undefined,
     monthly_payment: undefined,
     desired_rate: undefined,
+    // Visibility — checked by default, matching the loans.show_on_profile DB
+    // default and every other entity config. The canonical schema omits the
+    // default so partial PUT updates can't re-inject it.
+    show_on_profile: true,
     // Collateral
     collateral: [],
   },

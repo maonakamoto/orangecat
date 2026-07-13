@@ -19,6 +19,7 @@ export const DEFAULT_LOAN_FORM_VALUES: LoanDialogFormData = {
   currency: PLATFORM_DEFAULT_CURRENCY,
   is_public: true,
   is_negotiable: true,
+  show_on_profile: true,
   contact_method: 'platform',
   minimum_offer_amount: undefined,
   interest_rate: undefined,

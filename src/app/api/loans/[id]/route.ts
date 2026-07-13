@@ -43,6 +43,7 @@ const buildLoanUpdatePayload = createUpdatePayloadBuilder([
   // non-negotiable loans back to public+negotiable on partial PUT.
   { from: 'is_public' },
   { from: 'is_negotiable' },
+  { from: 'show_on_profile' },
   { from: 'contact_method' },
 ]);
 
