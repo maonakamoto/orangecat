@@ -408,34 +408,50 @@ export default async function PublicEntityDetailPage({
         {/* Mobile sticky bottom CTA — keeps the primary action one tap
             away from any scroll position. Hidden on >=md where the
             sidebar payment section is naturally visible. */}
-        <MobileStickyCTA config={config} entity={entity} />
+        <MobileStickyCTA config={config} entity={entity} payable={!!sellerReceive} />
       </div>
     </>
   );
 }
 
-function MobileStickyCTA({ config, entity }: { config: EntityDetailConfig; entity: EntityData }) {
+function MobileStickyCTA({
+  config,
+  entity,
+  payable,
+}: {
+  config: EntityDetailConfig;
+  entity: EntityData;
+  /** True when the seller has a connected wallet (sellerReceive resolved). */
+  payable: boolean;
+}) {
   // Explicit override: entity opted out (null) → no bar.
   if (config.mobileStickyCTA === null) {
     return null;
   }
+
+  // Resolve the CTA {href,label} from the config, or fall back to the default:
+  // anchor to the payment section with the entity's own primary verb (SSOT in
+  // entity-cta.ts) — "Book this service", "Fund this project", etc.
+  let cta: { href: string; label: string } | null = null;
   if (typeof config.mobileStickyCTA === 'function') {
-    const resolved = config.mobileStickyCTA(entity);
-    if (!resolved) {
-      return null;
-    }
-    return <StickyBar href={resolved.href} label={resolved.label} />;
+    cta = config.mobileStickyCTA(entity);
+  } else if (config.mobileStickyCTA) {
+    cta = config.mobileStickyCTA;
+  } else if (config.showPaymentSection !== false) {
+    cta = { href: '#pay', label: getEntityPrimaryCta(config.entityType) };
   }
-  if (config.mobileStickyCTA) {
-    return <StickyBar href={config.mobileStickyCTA.href} label={config.mobileStickyCTA.label} />;
-  }
-  // Default: anchor to the payment section with the entity's own primary verb
-  // (SSOT in entity-cta.ts) — "Book this service", "Fund this project", etc. —
-  // instead of a generic "Support". Suppressed when there's no payment section.
-  if (config.showPaymentSection === false) {
+  if (!cta) {
     return null;
   }
-  return <StickyBar href="#pay" label={getEntityPrimaryCta(config.entityType)} />;
+
+  // A pay-anchored sticky CTA ("Buy now", "Fund this project") on a listing whose
+  // owner has NO connected wallet promises an action that can't complete — tapping
+  // it only scrolls to the "creator hasn't connected a wallet yet" notice. Hide it.
+  if (cta.href === '#pay' && !payable) {
+    return null;
+  }
+
+  return <StickyBar href={cta.href} label={cta.label} />;
 }
 
 function StickyBar({ href, label }: { href: string; label: string }) {
