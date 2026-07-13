@@ -1,9 +1,9 @@
 'use client';
 
-import { Bitcoin, Heart, Copy, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
+import { Bitcoin, Heart, Copy, ShieldCheck, ExternalLink } from 'lucide-react';
 import BitcoinPaymentButton from '@/components/bitcoin/BitcoinPaymentButton';
 import Button from '@/components/ui/Button';
-import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
 import { WishlistDonationTiers } from '@/components/wishlist/WishlistDonationTiers';
 import { convert, formatCurrency, displayBTC } from '@/services/currency';
@@ -35,6 +35,17 @@ export function ProjectDonationSection({
     handleToggleFavorite,
     copyToClipboard,
   } = useProjectDonation(projectId);
+
+  // Selected suggested amount (BTC) drives a BIP21 deep-link so the funder can
+  // tap "Open in wallet" and their app opens with the address AND amount
+  // prefilled — the mobile path (you can't scan your own screen). Null = no
+  // amount chosen; the link still opens the wallet with just the address.
+  const [selectedBtc, setSelectedBtc] = useState<number | null>(null);
+  const paymentUri = bitcoinAddress
+    ? `bitcoin:${bitcoinAddress}${
+        selectedBtc ? `?amount=${selectedBtc}&label=${encodeURIComponent(projectTitle)}` : ''
+      }`
+    : '';
 
   return (
     <>
@@ -130,9 +141,19 @@ export function ProjectDonationSection({
 
           <div className="grid md:grid-cols-2 gap-4">
             <div className="flex flex-col items-center justify-center bg-surface-base p-6 rounded-lg border border-default">
+              {/* Mobile-first: tapping opens the funder's default Bitcoin wallet
+                  with the address (+ amount, if one is selected below) prefilled —
+                  no copy/paste, and no scanning your own screen. */}
+              <a
+                href={paymentUri}
+                className="mb-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-bitcoinOrange px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-bitcoinOrange/90"
+              >
+                <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                Open in wallet{selectedBtc ? ` — send ${displayBTC(selectedBtc)}` : ''}
+              </a>
               <div className="bg-surface-base p-3 rounded-lg shadow-sm">
                 <QRCodeSVG
-                  value={`bitcoin:${bitcoinAddress}`}
+                  value={paymentUri}
                   size={180}
                   level="H"
                   includeMargin={true}
@@ -140,7 +161,7 @@ export function ProjectDonationSection({
                 />
               </div>
               <p className="text-xs text-center text-fg-secondary mt-3">
-                Scan with your Bitcoin wallet
+                or scan with a Bitcoin wallet on another device
               </p>
             </div>
 
@@ -192,19 +213,26 @@ export function ProjectDonationSection({
                   compact: true,
                 });
                 const btcDisplay = displayBTC(btc);
+                const isSelected = selectedBtc === btc;
 
                 return (
                   <button
                     key={btc}
-                    onClick={() => {
-                      copyToClipboard(bitcoinAddress, 'Bitcoin address');
-                      toast.success(`Address copied! Send ${btcDisplay}`, {
-                        description: `Suggested ${label.toLowerCase()} support (≈ ${formattedAmount})`,
-                      });
-                    }}
-                    className="px-4 py-3 border-2 border-strong rounded-lg hover:border-bitcoinOrange hover:bg-bitcoinOrange/5 transition-all text-center group"
+                    onClick={() => setSelectedBtc(isSelected ? null : btc)}
+                    aria-pressed={isSelected}
+                    className={`px-4 py-3 border-2 rounded-lg transition-all text-center group ${
+                      isSelected
+                        ? 'border-bitcoinOrange bg-bitcoinOrange/10'
+                        : 'border-strong hover:border-bitcoinOrange hover:bg-bitcoinOrange/5'
+                    }`}
                   >
-                    <div className="font-semibold text-fg-primary group-hover:text-bitcoinOrange">
+                    <div
+                      className={`font-semibold ${
+                        isSelected
+                          ? 'text-bitcoinOrange'
+                          : 'text-fg-primary group-hover:text-bitcoinOrange'
+                      }`}
+                    >
                       {formattedAmount}
                     </div>
                     <div className="text-xs text-fg-tertiary mt-0.5">≈ {btcDisplay}</div>
@@ -214,7 +242,7 @@ export function ProjectDonationSection({
               })}
             </div>
             <p className="text-xs text-fg-secondary mt-3 text-center">
-              Click to copy address with suggested amount reminder
+              Pick an amount to prefill it in your wallet — or send any amount to the address above.
             </p>
           </div>
         </section>
