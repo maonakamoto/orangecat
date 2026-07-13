@@ -33,6 +33,7 @@ import {
   type EconomicProfile,
 } from './economic-profile';
 import { logger } from '@/utils/logger';
+import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 export interface Nudge {
   nudge_type: 'activation' | 'connection' | 'completion' | 'growth';
@@ -68,7 +69,10 @@ interface NeighborPerson {
   description: string;
 }
 
-export async function generateNudges(supabase: any, userId: string): Promise<Nudge[]> {
+export async function generateNudges(
+  supabase: AnySupabaseClient,
+  userId: string
+): Promise<Nudge[]> {
   const { data: profile } = await supabase
     .from(DATABASE_TABLES.PROFILES)
     .select('id, username, name, bio, background, location_city, language, currency')
@@ -196,7 +200,7 @@ export async function generateNudges(supabase: any, userId: string): Promise<Nud
  * people's names on suggestion cards (founder-verified); never trust them alone.
  */
 async function resolveNeighborNames(
-  supabase: any,
+  supabase: AnySupabaseClient,
   neighbors: NeighborPerson[]
 ): Promise<NeighborPerson[]> {
   if (neighbors.length === 0) {
@@ -282,7 +286,7 @@ function isGrounded(text: string, corpus: string[]): boolean {
  * plus PUBLIC wishlists + their items. Returns [] when there's nothing — in which case
  * growth nudges fall back to plain "you haven't listed this" copy and never claim demand.
  */
-async function gatherPlatformDemand(supabase: any): Promise<string[]> {
+async function gatherPlatformDemand(supabase: AnySupabaseClient): Promise<string[]> {
   const out: string[] = [];
   try {
     const { data: lists } = await supabase
@@ -348,7 +352,7 @@ async function gatherPlatformDemand(supabase: any): Promise<string[]> {
  * Capped to one skill + one asset so it inspires rather than nags.
  */
 async function growthNudges(
-  supabase: any,
+  supabase: AnySupabaseClient,
   actorId: string,
   econ: EconomicProfile,
   copy: NudgeCopy
