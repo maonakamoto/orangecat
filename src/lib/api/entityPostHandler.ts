@@ -19,6 +19,7 @@
 import { NextRequest } from 'next/server';
 import { z, ZodObject, ZodSchema } from 'zod';
 import { createServerClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import {
   apiSuccess,
   apiUnauthorized,
@@ -160,7 +161,15 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
         return apiForbidden(`This key is not allowed to write ${meta.namePlural.toLowerCase()}.`);
       }
       userId = auth.userId;
-      const supabase = await createServerClient();
+      // Bearer callers (OIDC "Login with OrangeCat", ock_ integration keys) carry
+      // no Supabase session, so a cookie-session client runs as anon and RLS
+      // rejects the insert (42501 "new row violates row-level security policy").
+      // Authorization is already fully enforced above (resolveRequestAuth +
+      // hasScope + resolveCreationActor set the row's actor), so for non-session
+      // auth we write via the service-role client and rely on that app-layer
+      // authz — the same pattern services/timeline/externalPublish.ts documents
+      // and uses for external event ingest.
+      const supabase = auth.source === 'session' ? await createServerClient() : createAdminClient();
 
       // Idempotency-Key dedup. Runs BEFORE rate limiting so a retry of a
       // successful request doesn't consume quota a second time.

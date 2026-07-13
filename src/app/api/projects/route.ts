@@ -49,7 +49,10 @@ export const POST = createEntityPostHandler({
   entityType: 'project',
   schema: projectSchema,
   useActorOwnership: true,
-  createEntity: async (userId, data, _supabase) => {
-    return await createProject(userId, data as unknown as ProjectData);
+  createEntity: async (userId, data, supabase) => {
+    // Pass the handler-chosen client through so bearer-auth writes use the
+    // service-role client (RLS can't apply without a Supabase session). The
+    // handler already enforced auth + scope + actor ownership.
+    return await createProject(userId, data as unknown as ProjectData, supabase);
   },
 });
