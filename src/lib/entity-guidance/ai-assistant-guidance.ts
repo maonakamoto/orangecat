@@ -167,9 +167,9 @@ export const aiAssistantGuidanceContent: Record<
       'Subscription: Steady monthly income',
     ],
     examples: [
-      'Free with 5 messages/day, then 10 sats/message',
-      '100 sats per 1K tokens',
-      '10,000 sats/month subscription',
+      'Free with 5 messages/day, then CHF 0.10/message',
+      'CHF 1 per 1K tokens',
+      'CHF 10/month subscription',
     ],
   },
   price_per_message: {
@@ -177,7 +177,7 @@ export const aiAssistantGuidanceContent: Record<
     title: 'Price per Message',
     description: 'How much to charge for each message sent. Enter in your preferred currency.',
     tips: [
-      'Start low to attract users (1-10 sats)',
+      'Start low to attract users',
       'Increase as your AI proves value',
       'Consider your compute costs',
       'Free messages can help conversion',
@@ -189,7 +189,7 @@ export const aiAssistantGuidanceContent: Record<
     description: 'Token-based pricing for pay-as-you-go usage. Enter in your preferred currency.',
     tips: [
       'Tokens = words + punctuation (~750 tokens = 500 words)',
-      'Typical range: 1-10 sats per 1K tokens',
+      'Typical range: CHF 0.01–0.10 per 1K tokens',
       'Users pay based on actual usage',
     ],
   },
@@ -202,7 +202,7 @@ export const aiAssistantGuidanceContent: Record<
       'Provides predictable income',
       'Users get unlimited messages',
       'Good for frequent-use assistants',
-      'Typical range: 5,000-50,000 sats/month',
+      'Typical range: CHF 5–50/month',
     ],
   },
   free_messages_per_day: {

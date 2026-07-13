@@ -100,12 +100,12 @@ export const serviceGuidanceContent: Record<NonNullable<ServiceFieldType>, Guida
       'Factor in your experience and expertise',
       'Consider your location and cost of living',
       'You can also set a fixed price for projects',
-      'Enter amount in your preferred currency (USD, CHF, EUR, BTC, or SATS)',
+      'Enter amount in your preferred currency (CHF, EUR, USD, or BTC)',
     ],
     examples: [
-      '$50/hour - Entry level',
-      '$150/hour - Experienced',
-      '$300/hour - Expert/specialized',
+      'CHF 50/hour - Entry level',
+      'CHF 150/hour - Experienced',
+      'CHF 300/hour - Expert/specialized',
     ],
   },
   fixed_price: {

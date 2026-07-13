@@ -103,18 +103,19 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
   price: {
     icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Price',
-    description: 'Set your price in satoshis (sats). 1 Bitcoin = 100,000,000 sats.',
+    description:
+      'Set your price in your preferred currency (CHF by default). All payments settle in Bitcoin.',
     tips: [
       'Research similar products to price competitively',
       'Consider your costs, time, and materials',
       "Factor in shipping if you're covering it",
-      '1000 sats ≈ $1 USD at ~$100k BTC',
+      'Buyers see the price in their chosen display currency',
       'You can adjust prices anytime',
     ],
     examples: [
-      '50,000 sats (~$50) for handmade items',
-      '10,000 sats (~$10) for digital products',
-      '500,000 sats (~$500) for premium items',
+      'CHF 50 for handmade items',
+      'CHF 10 for digital products',
+      'CHF 500 for premium items',
     ],
   },
   currency: {
@@ -123,11 +124,11 @@ export const productGuidanceContent: Record<NonNullable<ProductFieldType>, Guida
     description:
       'Choose how to display your price. All payments are in Bitcoin, but you can show equivalent fiat.',
     tips: [
-      'SATS is the Bitcoin standard (recommended)',
-      'BTC shows whole bitcoin amounts',
+      'BTC is the native Bitcoin unit',
+      'CHF (or your local currency) shows a familiar equivalent',
       'Price is always paid in Bitcoin',
     ],
-    examples: ['50,000 SATS', '0.0005 BTC'],
+    examples: ['CHF 50', '0.0005 BTC'],
   },
   inventory_count: {
     icon: React.createElement(BarChart3, { className: 'w-5 h-5 text-fg-primary' }),

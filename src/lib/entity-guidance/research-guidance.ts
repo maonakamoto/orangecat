@@ -97,10 +97,10 @@ export const researchGuidanceContent: Record<string, GuidanceContent> = {
   funding_goal_btc: {
     icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Funding Goal',
-    description: 'How much funding do you need in satoshis to complete this research?',
+    description: 'How much funding do you need to complete this research? Enter in CHF or BTC.',
     tips: [
       'Calculate actual costs (equipment, time, resources)',
-      'Minimum is 1,000',
+      'Enter the goal in CHF or BTC',
       'Break down costs for transparency',
     ],
   },

@@ -56,7 +56,7 @@ export const documentGuidanceContent: Record<NonNullable<DocumentFieldType>, Gui
       'Structure with sections if needed',
     ],
     examples: [
-      'My goals for this year: 1) Save 10M sats for emergency fund 2) Start a side business...',
+      'My goals for this year: 1) Build an emergency fund 2) Start a side business...',
       'I have 5 years of experience in React, TypeScript, and Node.js. I specialize in...',
     ],
   },

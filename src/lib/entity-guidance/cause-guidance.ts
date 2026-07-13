@@ -70,7 +70,7 @@ export const causeGuidanceContent: Record<NonNullable<CauseFieldType>, GuidanceC
     ],
     examples: [
       'Our village of 500 families has no access to clean water. With your help, we can install a well system...',
-      'Maria, a single mother of three, needs surgery that will cost $15,000. Every satoshi brings her closer...',
+      'Maria, a single mother of three, needs surgery that will cost CHF 15,000. Every contribution brings her closer...',
     ],
   },
   cause_category: {
@@ -104,8 +104,8 @@ export const causeGuidanceContent: Record<NonNullable<CauseFieldType>, GuidanceC
       'You can exceed your goal',
     ],
     examples: [
-      '10,000,000 sats (~$10,000) - Small project',
-      '50,000,000 sats (~$50,000) - Medium project',
+      'CHF 10,000 - Small project',
+      'CHF 50,000 - Medium project',
       'Open-ended - Ongoing support',
     ],
   },
@@ -114,12 +114,12 @@ export const causeGuidanceContent: Record<NonNullable<CauseFieldType>, GuidanceC
     title: 'Display Currency',
     description: 'Choose how to display your goal. All funding is received in Bitcoin.',
     tips: [
-      'SATS is the Bitcoin standard',
+      'BTC is the native Bitcoin unit',
       'Fiat display helps supporters understand value',
       'Goal can be shown in any currency',
       'Actual funding always in Bitcoin',
     ],
-    examples: ['10,000,000 SATS', '0.1 BTC', '$10,000 equivalent in BTC'],
+    examples: ['CHF 10,000', '0.1 BTC', 'Your goal in any currency'],
   },
   bitcoin_address: {
     icon: React.createElement(Bitcoin, { className: 'w-5 h-5 text-rose-600' }),

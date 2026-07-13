@@ -103,16 +103,16 @@ export const projectGuidanceContent: Record<NonNullable<ProjectFieldType>, Guida
     title: 'Currency Selection',
     description: 'Choose the currency that best fits your project and target audience.',
     tips: [
-      'BTC/SATS for Bitcoin-native projects',
-      'CHF/USD/EUR for traditional funding',
+      'BTC for Bitcoin-native projects',
+      'CHF/EUR/USD for traditional funding',
       "Consider your supporters' preferences",
       'Think about currency volatility',
       'All payments convert to Bitcoin',
     ],
     examples: [
-      'SATS for micro-funding and Bitcoin community',
+      'BTC for the Bitcoin-native community',
       'CHF for Swiss-based local projects',
-      'USD for international reach',
+      'EUR/USD for international reach',
     ],
   },
   funding_purpose: {

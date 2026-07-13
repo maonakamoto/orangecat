@@ -72,8 +72,8 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
       'Keep it focused and scannable',
     ],
     examples: [
-      'This proposal seeks to establish a community garden in our neighborhood. The project will require 2M sats for initial setup, including tools, seeds, and irrigation. Expected benefits include fresh produce for members and a gathering space for the community.',
-      'We need to hire a full-stack developer to build our platform. This role is critical for our roadmap and will help us deliver features faster. Budget: 5M sats over 6 months.',
+      'This proposal seeks to establish a community garden in our neighborhood. The project will require 0.02 BTC for initial setup, including tools, seeds, and irrigation. Expected benefits include fresh produce for members and a gathering space for the community.',
+      'We need to hire a full-stack developer to build our platform. This role is critical for our roadmap and will help us deliver features faster. Budget: 0.05 BTC over 6 months.',
     ],
   },
   proposal_type: {
@@ -154,19 +154,18 @@ export const proposalGuidanceContent: Record<NonNullable<ProposalFieldType>, Gui
   amount_btc: {
     icon: React.createElement(DollarSign, { className: 'w-5 h-5 text-fg-primary' }),
     title: 'Amount (BTC)',
-    description:
-      'The amount to spend in satoshis. 1 BTC = 100,000,000 sats. Be specific and justify the amount.',
+    description: 'The amount to spend, in CHF or BTC. Be specific and justify the amount.',
     tips: [
-      '1 BTC = 100,000,000 sats',
+      'Denominate in CHF or BTC',
       'Be specific about the amount needed',
       'Include breakdown if possible',
       'Consider current Bitcoin price',
       'Justify why this amount is needed',
     ],
     examples: [
-      '1,000,000 sats (0.01 BTC) - Small expenses',
-      '10,000,000 sats (0.1 BTC) - Medium projects',
-      '100,000,000 sats (1 BTC) - Major initiatives',
+      '0.01 BTC - Small expenses',
+      '0.1 BTC - Medium projects',
+      '1 BTC - Major initiatives',
     ],
   },
   recipient_address: {

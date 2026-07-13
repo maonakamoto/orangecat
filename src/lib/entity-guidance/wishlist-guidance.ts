@@ -187,7 +187,7 @@ export const wishlistItemGuidanceContent: Record<
   target_amount_btc: {
     icon: React.createElement(Target, { className: 'w-5 h-5 text-rose-600' }),
     title: 'Target Amount',
-    description: 'Set the total amount needed for this item in satoshis.',
+    description: 'Set the total amount needed for this item, in CHF or BTC.',
     tips: [
       'Research the actual price',
       'Include shipping if applicable',
@@ -195,9 +195,9 @@ export const wishlistItemGuidanceContent: Record<
       'Contributors can fund partially',
     ],
     examples: [
-      '500,000 sats (~$50) for headphones',
-      '2,000,000 sats (~$200) for appliance',
-      '10,000,000 sats (~$1000) for major purchase',
+      'CHF 50 for headphones',
+      'CHF 200 for an appliance',
+      'CHF 1,000 for a major purchase',
     ],
   },
   external_url: {
