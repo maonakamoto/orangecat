@@ -25,78 +25,23 @@ import { useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { ArrowRight, Search } from 'lucide-react';
 import {
-  ArrowRight,
-  Bookmark,
-  Briefcase,
-  Building2,
-  Calendar,
-  Compass,
-  HandHeart,
-  Heart,
-  Home,
-  Lightbulb,
-  Mail,
-  MessageCircle,
-  Package,
-  PiggyBank,
-  Search,
-  Sparkles,
-  TrendingUp,
-  Users,
-  Wallet,
-} from 'lucide-react';
+  buildPages,
+  buildQuickActions,
+  hrefForHit,
+  HIT_ICONS,
+  type PaletteItem,
+} from './command-palette-items';
 import { ROUTES } from '@/config/routes';
 import { API_ROUTES } from '@/config/api-routes';
 import { useGlobalSearch } from '@/hooks/useGlobalSearch';
 import { cn } from '@/lib/utils';
-import type { GlobalSearchHit } from '@/services/search';
 import type { LucideIcon } from 'lucide-react';
-
-/** Public detail URL for a global_search hit (profiles route by username). */
-function hrefForHit(hit: GlobalSearchHit): string {
-  switch (hit.entity_type) {
-    case 'project':
-      return ROUTES.PROJECTS.VIEW(hit.id);
-    case 'product':
-      return ROUTES.PRODUCTS.VIEW(hit.id);
-    case 'service':
-      return ROUTES.SERVICES.VIEW(hit.id);
-    case 'cause':
-      return ROUTES.CAUSES.VIEW(hit.id);
-    case 'loan':
-      return ROUTES.LOANS.VIEW(hit.id);
-    case 'event':
-      return ROUTES.EVENTS.VIEW(hit.id);
-    case 'profile':
-      return ROUTES.PROFILES.VIEW((hit.subtitle ?? '').replace(/^@/, '') || hit.id);
-    default:
-      return ROUTES.DISCOVER;
-  }
-}
-
-const HIT_ICONS: Record<string, LucideIcon> = {
-  project: Lightbulb,
-  product: Package,
-  service: Briefcase,
-  cause: HandHeart,
-  loan: PiggyBank,
-  event: Calendar,
-  profile: Users,
-};
 
 export interface CommandPaletteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-}
-
-interface PaletteItem {
-  id: string;
-  label: string;
-  hint?: string;
-  icon: LucideIcon;
-  keywords?: string;
-  run: () => void;
 }
 
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
@@ -155,155 +100,9 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     [close, router, hits]
   );
 
-  const quickActions: PaletteItem[] = useMemo(
-    () => [
-      {
-        id: 'create-product',
-        label: 'Create a product',
-        hint: 'Physical or digital goods',
-        icon: Package,
-        keywords: 'sell store shop merchandise digital',
-        run: () => navigateTo(ROUTES.DASHBOARD.STORE_CREATE),
-      },
-      {
-        id: 'create-service',
-        label: 'Create a service',
-        hint: 'Offer your time or expertise',
-        icon: Briefcase,
-        keywords: 'consulting freelance hourly',
-        run: () => navigateTo(ROUTES.DASHBOARD.SERVICES_CREATE),
-      },
-      {
-        id: 'create-project',
-        label: 'Create a project',
-        hint: 'Raise funds with milestones',
-        icon: Lightbulb,
-        keywords: 'fundraise campaign goal',
-        run: () => navigateTo(ROUTES.DASHBOARD.PROJECTS_CREATE),
-      },
-      {
-        id: 'create-cause',
-        label: 'Create a cause',
-        hint: 'No-strings charitable funding',
-        icon: HandHeart,
-        keywords: 'donate charity nonprofit',
-        run: () => navigateTo(ROUTES.DASHBOARD.CAUSES_CREATE),
-      },
-      {
-        id: 'create-event',
-        label: 'Create an event',
-        hint: 'Workshops, meetups, hackathons',
-        icon: Calendar,
-        keywords: 'meetup workshop conference rsvp',
-        run: () => navigateTo(ROUTES.DASHBOARD.EVENTS_CREATE),
-      },
-      {
-        id: 'create-group',
-        label: 'Create a group',
-        hint: 'Organization, collective, or DAO',
-        icon: Building2,
-        keywords: 'organization team collective dao company',
-        run: () => navigateTo(ROUTES.DASHBOARD.GROUPS_CREATE),
-      },
-      {
-        id: 'create-loan',
-        label: 'Create a loan request',
-        hint: 'Borrow with repayment terms',
-        icon: PiggyBank,
-        keywords: 'borrow credit interest',
-        run: () => navigateTo(ROUTES.DASHBOARD.LOANS_CREATE),
-      },
-      {
-        id: 'create-investment',
-        label: 'Create an investment offer',
-        hint: 'Raise equity / revenue share',
-        icon: TrendingUp,
-        keywords: 'equity revenue share raise capital',
-        run: () => navigateTo(ROUTES.DASHBOARD.INVESTMENTS_CREATE),
-      },
-      {
-        id: 'create-wishlist',
-        label: 'Create a wishlist',
-        hint: 'Gift registry',
-        icon: Heart,
-        keywords: 'gift registry wishlist',
-        run: () => navigateTo(ROUTES.DASHBOARD.WISHLISTS),
-      },
-      {
-        id: 'create-asset',
-        label: 'Create an asset listing',
-        hint: 'Property, equipment, rentals',
-        icon: Bookmark,
-        keywords: 'rental property equipment',
-        run: () => navigateTo(ROUTES.DASHBOARD.ASSETS_CREATE),
-      },
-    ],
-    [navigateTo]
-  );
+  const quickActions: PaletteItem[] = useMemo(() => buildQuickActions(navigateTo), [navigateTo]);
 
-  const pages: PaletteItem[] = useMemo(
-    () => [
-      {
-        id: 'go-cat',
-        label: 'My Cat',
-        hint: 'Your AI economic agent',
-        icon: Sparkles,
-        keywords: 'ai agent chat assistant',
-        run: () => navigateTo(ROUTES.DASHBOARD.CAT),
-      },
-      {
-        id: 'go-dashboard',
-        label: 'Dashboard',
-        icon: Home,
-        run: () => navigateTo(ROUTES.DASHBOARD.HOME),
-      },
-      {
-        id: 'go-discover',
-        label: 'Discover',
-        hint: 'Browse everyone',
-        icon: Compass,
-        keywords: 'explore browse',
-        run: () => navigateTo(ROUTES.DISCOVER),
-      },
-      {
-        id: 'go-timeline',
-        label: 'Timeline',
-        icon: TrendingUp,
-        keywords: 'feed updates',
-        run: () => navigateTo(ROUTES.TIMELINE),
-      },
-      {
-        id: 'go-messages',
-        label: 'Messages',
-        icon: MessageCircle,
-        run: () => navigateTo(ROUTES.MESSAGES),
-      },
-      {
-        id: 'go-people',
-        label: 'People',
-        hint: 'Discover users',
-        icon: Users,
-        keywords: 'profiles users',
-        run: () => navigateTo(ROUTES.DASHBOARD.PEOPLE),
-      },
-      {
-        id: 'go-wallets',
-        label: 'Wallets',
-        icon: Wallet,
-        keywords: 'bitcoin lightning balance',
-        run: () => navigateTo(ROUTES.DASHBOARD.WALLETS),
-      },
-      {
-        id: 'go-integrations',
-        label: 'Integration keys',
-        hint: 'API keys for FleetCrown, hirn.li, …',
-        icon: Mail,
-        keywords: 'api token settings developers',
-        run: () => navigateTo(ROUTES.SETTINGS_INTEGRATIONS),
-      },
-    ],
-    [navigateTo]
-  );
+  const pages: PaletteItem[] = useMemo(() => buildPages(navigateTo), [navigateTo]);
 
   if (!open) {
     return null;
