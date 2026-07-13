@@ -22,6 +22,9 @@ export async function createAsset(userId: string, input: AssetFormData) {
       verification_status: 'unverified' as const,
       status: STATUS.ASSETS.DRAFT,
       public_visibility: false,
+      // Respect the form's profile-visibility toggle; the schema already carries
+      // it but this insert omitted it → DB default true always won.
+      show_on_profile: input.show_on_profile ?? true,
     },
     {
       select: ASSET_SELECT,

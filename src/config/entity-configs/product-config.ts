@@ -143,6 +143,9 @@ const defaultValues: UserProductFormData = {
   tags: [],
   status: ENTITY_STATUS.DRAFT,
   is_featured: false,
+  // Checked by default — matches the DB show_on_profile default and the other
+  // entity configs.
+  show_on_profile: true,
 };
 
 // ==================== EXPORT CONFIG ====================

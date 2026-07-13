@@ -105,6 +105,11 @@ export const eventSchema = z
 
     // Status
     status: z.enum(EVENT_STATUSES).default(STATUS.EVENTS.DRAFT),
+
+    // Public-profile visibility toggle (DB show_on_profile, default true).
+    // Optional/no-default — see userProductSchema note. Was absent → the form
+    // checkbox was silently stripped by zod on submit.
+    show_on_profile: z.boolean().optional(),
   })
   .refine(
     data => {

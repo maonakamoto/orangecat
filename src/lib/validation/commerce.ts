@@ -88,6 +88,11 @@ export const userProductSchema = z.object({
   tags: z.array(z.string()).optional().default([]),
   status: z.enum(PRODUCT_STATUSES).default(ENTITY_STATUS.DRAFT),
   is_featured: z.boolean().default(false),
+  // Whether this product shows on the owner's public profile (DB column
+  // show_on_profile, default true). Optional/no-default so it round-trips edits
+  // and never re-injects on a partial update; create-form default lives in the
+  // entity config. Was absent → the form checkbox was silently stripped by zod.
+  show_on_profile: z.boolean().optional(),
 });
 
 export const userServiceSchema = z
@@ -130,6 +135,9 @@ export const userCauseSchema = z.object({
   distribution_rules: distributionRulesSchema.optional().nullable(),
   beneficiaries: z.array(beneficiarySchema).optional().default([]),
   status: z.enum(CAUSE_STATUSES).default(ENTITY_STATUS.DRAFT),
+  // Public-profile visibility toggle (DB show_on_profile, default true). Optional/
+  // no-default — see userProductSchema note. Was absent → form checkbox stripped.
+  show_on_profile: z.boolean().optional(),
 });
 
 // Types

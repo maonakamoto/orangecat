@@ -319,6 +319,8 @@ const defaultValues: EventFormData = {
   banner_url: '',
   video_url: '',
   status: ENTITY_STATUS.DRAFT,
+  // Checked by default — matches the DB show_on_profile default and other configs.
+  show_on_profile: true,
 };
 
 // ==================== EXPORT CONFIG ====================

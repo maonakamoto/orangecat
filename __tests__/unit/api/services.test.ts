@@ -156,6 +156,7 @@ describe('Service Creation', () => {
         service_area: null,
         images: ['https://example.com/image1.jpg'],
         portfolio_links: ['https://example.com/portfolio'],
+        show_on_profile: true,
         status: 'draft',
       });
       expect(mockSupabase.select).toHaveBeenCalled();
@@ -195,6 +196,7 @@ describe('Service Creation', () => {
         service_area: null,
         images: [],
         portfolio_links: [],
+        show_on_profile: true,
         status: 'draft',
       });
       expect(result).toBeDefined();
@@ -238,6 +240,7 @@ describe('Service Creation', () => {
         service_area: null,
         images: [],
         portfolio_links: [],
+        show_on_profile: true,
         status: 'draft',
       });
       expect(result).toBeDefined();

@@ -203,6 +203,8 @@ export const projectConfig = createEntityConfig<ProjectData>({
     tags: [],
     start_date: '',
     target_completion: '',
+    // Checked by default — matches the DB show_on_profile default and other configs.
+    show_on_profile: true,
   },
   guidanceContent: projectGuidanceContent,
   defaultGuidance: projectDefaultGuidance,

@@ -29,6 +29,7 @@ const buildAssetUpdatePayload = createUpdatePayloadBuilder([
   // Currency is for display/input only - all transactions are in BTC
   { from: 'currency' },
   commonFieldMappings.arrayField('documents', []), // Normalize null to empty array
+  { from: 'show_on_profile' },
 ]);
 
 // Create handlers using generic factory

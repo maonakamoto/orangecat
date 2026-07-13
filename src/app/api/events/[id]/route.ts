@@ -60,6 +60,7 @@ const buildEventUpdatePayload = createUpdatePayloadBuilder([
   // unpublished active events on any partial PUT. Status transitions go
   // through /api/entities/event/{id}/status, not this builder.
   { from: 'status' },
+  { from: 'show_on_profile' },
 ]);
 
 // Create handlers using generic factory

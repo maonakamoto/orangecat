@@ -108,6 +108,8 @@ const defaultValues: UserCauseFormData = {
   lightning_address: '',
   beneficiaries: [],
   status: ENTITY_STATUS.DRAFT,
+  // Checked by default — matches the DB show_on_profile default and other configs.
+  show_on_profile: true,
 };
 
 // ==================== EXPORT CONFIG ====================

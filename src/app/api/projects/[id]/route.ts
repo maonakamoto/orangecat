@@ -118,6 +118,7 @@ const buildProjectUpdatePayload = createUpdatePayloadBuilder([
   commonFieldMappings.arrayField('tags', []),
   commonFieldMappings.dateField('start_date'), // Normalize date fields
   commonFieldMappings.dateField('target_completion'),
+  { from: 'show_on_profile' },
 ]);
 
 // Create handlers using generic CRUD factory

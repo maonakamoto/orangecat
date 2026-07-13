@@ -117,6 +117,7 @@ interface CreateProductInput {
   category?: string | null;
   tags?: string[];
   is_featured?: boolean;
+  show_on_profile?: boolean;
 }
 
 interface AvailabilitySchedule {
@@ -139,6 +140,7 @@ interface CreateServiceInput {
   service_area?: string | null;
   images?: string[];
   portfolio_links?: string[];
+  show_on_profile?: boolean;
 }
 
 export async function createProduct(
@@ -166,6 +168,9 @@ export async function createProduct(
       category: input.category,
       tags: input.tags ?? [],
       is_featured: input.is_featured ?? false,
+      // Respect the form's profile-visibility toggle; DB default (true) would
+      // otherwise always win and ignore an unchecked box.
+      show_on_profile: input.show_on_profile ?? true,
       title: input.title,
       description: input.description ?? null,
       price: input.price,
@@ -197,6 +202,10 @@ export async function createService(
       service_area: input.service_area ?? null,
       images: input.images ?? [],
       portfolio_links: input.portfolio_links ?? [],
+      // Respect the form's profile-visibility toggle at create time (the schema
+      // already carries it, but this insert previously omitted it → DB default
+      // true always won).
+      show_on_profile: input.show_on_profile ?? true,
       status: STATUS.SERVICES.DRAFT as typeof STATUS.SERVICES.DRAFT,
     },
     {
@@ -229,6 +238,7 @@ interface CreateCauseInput {
   lightning_address?: string | null;
   distribution_rules?: DistributionRules;
   beneficiaries?: Beneficiary[];
+  show_on_profile?: boolean;
 }
 
 export async function createCause(userId: string, input: CreateCauseInput): Promise<UserCause> {
@@ -248,6 +258,9 @@ export async function createCause(userId: string, input: CreateCauseInput): Prom
       beneficiaries: input.beneficiaries ?? [],
       status: STATUS.CAUSES.DRAFT as typeof STATUS.CAUSES.DRAFT,
       total_raised: 0,
+      // Respect the form's profile-visibility toggle; DB default (true) would
+      // otherwise always win and ignore an unchecked box.
+      show_on_profile: input.show_on_profile ?? true,
     },
     {
       client: createAdminClient(),

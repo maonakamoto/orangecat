@@ -29,6 +29,7 @@ const buildCauseUpdatePayload = createUpdatePayloadBuilder([
   { from: 'distribution_rules' },
   commonFieldMappings.arrayField('beneficiaries', []),
   { from: 'status', default: 'draft' },
+  { from: 'show_on_profile' },
 ]);
 
 // Create handlers using generic factory

@@ -33,6 +33,7 @@ const buildProductUpdatePayload = createUpdatePayloadBuilder([
   commonFieldMappings.arrayField('tags', []),
   { from: 'status', default: 'draft' }, // Ensure status is preserved
   { from: 'is_featured', default: false },
+  { from: 'show_on_profile' },
 ]);
 
 // Create handlers using generic factory
