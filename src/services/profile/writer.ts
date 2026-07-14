@@ -6,6 +6,7 @@
  * Last Modified Summary: Enhanced with username uniqueness check and proper error handling
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { ProfileMapper } from './mapper';
@@ -75,8 +76,8 @@ export class ProfileWriter {
       };
 
       // Update in database
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+
+      const { data, error } = await fromTable(supabase, DATABASE_TABLES.PROFILES)
         .update(updateData)
         .eq('id', userId)
         .select('*')
@@ -141,7 +142,7 @@ export class ProfileWriter {
 
       const { data, error } = await supabase
         .from(DATABASE_TABLES.PROFILES)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         .insert(insertData as any)
         .select('*')
         .single();
@@ -191,8 +192,7 @@ export class ProfileWriter {
 
       logger.info('[Profile] deleteProfile', { userId });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+      const { error } = await fromTable(supabase, DATABASE_TABLES.PROFILES)
         .delete()
         .eq('id', userId);
 
@@ -229,8 +229,7 @@ export class ProfileWriter {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+      const { data, error } = await fromTable(supabase, DATABASE_TABLES.PROFILES)
         .update({ ...updates, updated_at: new Date().toISOString() })
         .eq('id', userId)
         .select('*');

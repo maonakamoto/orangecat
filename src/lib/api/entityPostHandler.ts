@@ -16,6 +16,7 @@
  * Last Modified Summary: Support async transformData with supabase parameter for user preference access
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { NextRequest } from 'next/server';
 import { z, ZodObject, ZodSchema } from 'zod';
 import { createServerClient } from '@/lib/supabase/server';
@@ -417,8 +418,8 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
 
       // `table` is a runtime string so the row type can't be inferred from
       // Supabase's generated unions; `entityData` is the validated payload.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: entity, error } = await (supabase.from(table) as any)
+
+      const { data: entity, error } = await fromTable(supabase, table)
         .insert(entityData)
         .select()
         .single();
@@ -449,8 +450,8 @@ export function createEntityPostHandler(config: EntityPostHandlerConfig) {
       if (walletIdForLink && createdEntity.id) {
         try {
           // entity_wallets table may not be in generated Supabase types yet
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await (supabase.from(DATABASE_TABLES.ENTITY_WALLETS) as any).insert({
+
+          await fromTable(supabase, DATABASE_TABLES.ENTITY_WALLETS).insert({
             wallet_id: walletIdForLink,
             entity_type: entityType,
             entity_id: createdEntity.id,

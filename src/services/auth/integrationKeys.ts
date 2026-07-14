@@ -17,6 +17,7 @@
  * Last Modified Summary: Initial implementation — first auth path that doesn't require a Supabase session.
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { createHash, randomBytes } from 'crypto';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logger } from '@/utils/logger';
@@ -98,10 +99,7 @@ export async function createIntegrationKey(params: {
 
   const admin = createAdminClient();
   const { data, error } = await (
-    admin.from(DATABASE_TABLES.INTEGRATION_KEYS) as ReturnType<
-      typeof admin.from
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    > as any
+    admin.from(DATABASE_TABLES.INTEGRATION_KEYS) as ReturnType<typeof admin.from> as any
   )
     .insert({
       user_id: userId,
@@ -182,8 +180,8 @@ export async function verifyIntegrationKey(plaintext: string): Promise<{
   }
 
   // Best-effort: don't fail the request if the touch fails.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (admin.from(DATABASE_TABLES.INTEGRATION_KEYS) as any)
+
+  fromTable(admin, DATABASE_TABLES.INTEGRATION_KEYS)
     .update({ last_used_at: new Date().toISOString() })
     .eq('id', row.id)
     .then((result: { error: unknown }) => {
@@ -227,8 +225,8 @@ export async function listIntegrationKeys(userId: string): Promise<IntegrationKe
  */
 export async function revokeIntegrationKey(keyId: string, userId: string): Promise<boolean> {
   const admin = createAdminClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (admin.from(DATABASE_TABLES.INTEGRATION_KEYS) as any)
+
+  const { data, error } = await fromTable(admin, DATABASE_TABLES.INTEGRATION_KEYS)
     .update({ revoked_at: new Date().toISOString() })
     .eq('id', keyId)
     .eq('user_id', userId)

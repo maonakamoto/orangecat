@@ -13,6 +13,7 @@
  * Created: 2025-12-25
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { NextRequest, NextResponse } from 'next/server';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
@@ -125,7 +126,7 @@ async function defaultOwnershipCheck(
   // in serverless), the actor fetch returns null, and every PUT/DELETE on
   // an actor-owned entity 403s for the legitimate owner. Mirrors the fix
   // shipped in 136f65ac for the STATUS endpoint.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   supabase?: any
 ): Promise<NextResponse | null> {
   if (useActorOwnership && existing.actor_id) {
@@ -195,7 +196,7 @@ function createGetHandler(config: EntityHandlerConfig) {
 
       const entityId = params.id;
 
-      let query = (supabase.from(table) as any).select('*').eq('id', entityId);
+      let query = fromTable(supabase, table).select('*').eq('id', entityId);
 
       // If auth required, filter by ownership
       if (requireAuthForGet && userId) {
@@ -320,7 +321,7 @@ function createPutHandler(config: EntityHandlerConfig) {
       const entityId = params.id;
 
       // Check if entity exists
-      const { data: existingData, error: fetchError } = await (supabase.from(table) as any)
+      const { data: existingData, error: fetchError } = await fromTable(supabase, table)
         .select('*')
         .eq('id', entityId)
         .single();
@@ -365,7 +366,7 @@ function createPutHandler(config: EntityHandlerConfig) {
         updated_at: new Date().toISOString(),
       };
 
-      const { data: entity, error } = await (supabase.from(table) as any)
+      const { data: entity, error } = await fromTable(supabase, table)
         .update(updatePayload)
         .eq('id', entityId)
         .select('*')
@@ -441,7 +442,7 @@ function createDeleteHandler(config: EntityHandlerConfig) {
       const entityId = params.id;
 
       // Check if entity exists
-      const { data: existingData, error: fetchError } = await (supabase.from(table) as any)
+      const { data: existingData, error: fetchError } = await fromTable(supabase, table)
         .select('*')
         .eq('id', entityId)
         .single();
@@ -477,7 +478,7 @@ function createDeleteHandler(config: EntityHandlerConfig) {
         await preDelete(existing, user.id, supabase as any);
       }
 
-      const { error } = await (supabase.from(table) as any).delete().eq('id', entityId);
+      const { error } = await fromTable(supabase, table).delete().eq('id', entityId);
 
       if (error) {
         logger.error(`${meta.name} deletion failed`, {

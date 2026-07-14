@@ -1,5 +1,6 @@
 'use client';
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import supabase from '@/lib/supabase/browser';
@@ -48,8 +49,7 @@ export function useMessagesFetcher({
       return;
     }
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: conv } = await (supabase.from(DATABASE_TABLES.CONVERSATION_DETAILS) as any)
+      const { data: conv } = await fromTable(supabase, DATABASE_TABLES.CONVERSATION_DETAILS)
         .select('*')
         .eq('id', conversationId)
         .maybeSingle();
@@ -73,8 +73,7 @@ export function useMessagesFetcher({
       };
       setConversation(mappedConversation);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: msgs } = await (supabase.from(DATABASE_TABLES.MESSAGE_DETAILS) as any)
+      const { data: msgs } = await fromTable(supabase, DATABASE_TABLES.MESSAGE_DETAILS)
         .select('*')
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true });

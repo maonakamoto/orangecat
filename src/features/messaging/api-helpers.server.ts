@@ -5,6 +5,7 @@
  * Extracted to keep the route thin (HTTP layer only).
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { Database } from '@/types/database';
@@ -44,12 +45,8 @@ export async function fetchConversationContext(
   conversationId: string,
   userId: string
 ): Promise<ConversationContext | null> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [convResult, participantsResult] = await Promise.all([
-    (admin.from(DATABASE_TABLES.CONVERSATIONS) as any)
-      .select('*')
-      .eq('id', conversationId)
-      .single(),
+    fromTable(admin, DATABASE_TABLES.CONVERSATIONS).select('*').eq('id', conversationId).single(),
     admin
       .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
       .select(
@@ -119,8 +116,8 @@ export async function verifyParticipantAndReactivate(
       is_active: true,
       last_read_at: new Date().toISOString(),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (admin.from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS) as any)
+
+    await fromTable(admin, DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
       .update(updateData)
       .eq('conversation_id', conversationId)
       .eq('user_id', userId);

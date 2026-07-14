@@ -9,6 +9,7 @@
  * sendMessage-internals.ts and the shared types in sendMessage-types.ts.
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getModelMetadata } from '@/config/ai-models';
@@ -178,8 +179,7 @@ export async function sendAiMessage(
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (supabase.from(DATABASE_TABLES.AI_CONVERSATIONS) as any)
+  await fromTable(supabase, DATABASE_TABLES.AI_CONVERSATIONS)
     .update({ last_message_at: new Date().toISOString() })
     .eq('id', convId);
 

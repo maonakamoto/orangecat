@@ -9,6 +9,7 @@
  * Created: 2026-03-28
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import {
   apiSuccess,
   apiNotFound,
@@ -93,8 +94,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
     const usesIsActive = boolStatusColumn !== null;
     const statusSelectColumn = boolStatusColumn ?? 'status';
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: existing, error: fetchError } = await (supabase.from(tableName) as any)
+    const { data: existing, error: fetchError } = await fromTable(supabase, tableName)
       .select(`id, ${statusSelectColumn}, ${userIdField}`)
       .eq('id', id)
       .maybeSingle();
@@ -167,8 +167,7 @@ export const PATCH = withAuth(async (request: AuthenticatedRequest, context: Rou
         }
       : { status: newStatus, updated_at: new Date().toISOString() };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: updated, error: updateError } = await (supabase.from(tableName) as any)
+    const { data: updated, error: updateError } = await fromTable(supabase, tableName)
       .update(updatePayload)
       .eq('id', id)
       .select()

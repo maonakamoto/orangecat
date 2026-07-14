@@ -12,6 +12,7 @@
  * Created: 2026-06-04
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { NextRequest } from 'next/server';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { createServerClient } from '@/lib/supabase/server';
@@ -100,8 +101,8 @@ export function createEntityGetByIdHandler(config: EntityGetByIdHandlerConfig) {
       }
 
       const supabase = await createServerClient();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let query = (supabase.from(table) as any).select(selectColumns).eq('id', id);
+
+      let query = fromTable(supabase, table).select(selectColumns).eq('id', id);
 
       // Sandbox isolation, scoped to entity types that got the is_test
       // column in migration 20260604000002.

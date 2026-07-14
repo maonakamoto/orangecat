@@ -1,3 +1,4 @@
+import { callRpc } from '@/lib/supabase/untyped';
 import { Metadata } from 'next';
 import { createServerClient } from '@/lib/supabase/server';
 import { notFound, redirect } from 'next/navigation';
@@ -203,8 +204,8 @@ export default async function PublicProfilePage({ params }: PageProps) {
   try {
     // Use the get_entity_wallets function to get active wallets for this profile
     // get_entity_wallets is not in generated DB types — cast the rpc reference to call it
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: walletData } = (await (supabase.rpc as any)('get_entity_wallets', {
+
+    const { data: walletData } = (await callRpc(supabase, 'get_entity_wallets', {
       p_entity_type: 'profile',
       p_entity_id: profile.id,
     })) as { data: Array<{ is_active: boolean }> | null };

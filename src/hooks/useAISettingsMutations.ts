@@ -1,5 +1,6 @@
 'use client';
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { useCallback } from 'react';
 import { supabase } from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -37,8 +38,7 @@ export function useAISettingsMutations({
       }
 
       if (!preferences) {
-        const { data, error } = await // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (supabase.from(DATABASE_TABLES.USER_AI_PREFERENCES) as any)
+        const { data, error } = await fromTable(supabase, DATABASE_TABLES.USER_AI_PREFERENCES)
           .insert({ user_id: user.id, ...updates })
           .select()
           .single();
@@ -51,8 +51,7 @@ export function useAISettingsMutations({
         return data;
       }
 
-      const { data, error } = await // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabase.from(DATABASE_TABLES.USER_AI_PREFERENCES) as any)
+      const { data, error } = await fromTable(supabase, DATABASE_TABLES.USER_AI_PREFERENCES)
         .update(updates)
         .eq('user_id', user.id)
         .select()

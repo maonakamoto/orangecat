@@ -10,6 +10,7 @@
  * the synchronous mapping step. Worst case is 3 batched queries total.
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getTableName, ENTITY_REGISTRY } from '@/config/entity-registry';
@@ -61,8 +62,7 @@ type SubjectInfo = {
  * (timeline enrichment) should use the batched version below.
  */
 export async function getActorInfo(actorId: string): Promise<ActorInfo> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+  const { data: profile } = await fromTable(supabase, DATABASE_TABLES.PROFILES)
     .select('id, name, username, avatar_url')
     .eq('id', actorId)
     .maybeSingle();
@@ -76,16 +76,14 @@ export async function getActorInfo(actorId: string): Promise<ActorInfo> {
 export async function getSubjectInfo(type: TimelineSubjectType, id: string): Promise<SubjectInfo> {
   switch (type) {
     case 'project': {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: project } = await (supabase.from(getTableName('project')) as any)
+      const { data: project } = await fromTable(supabase, getTableName('project'))
         .select('id, title')
         .eq('id', id)
         .maybeSingle();
       return projectRowToSubject(id, project as ProjectRow | null);
     }
     case 'profile': {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: profile } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+      const { data: profile } = await fromTable(supabase, DATABASE_TABLES.PROFILES)
         .select('id, name, username')
         .eq('id', id)
         .maybeSingle();
@@ -203,8 +201,8 @@ async function fetchProfilesById(ids: string[]): Promise<Map<string, ProfileRow>
   if (ids.length === 0) {
     return new Map();
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+
+  const { data } = await fromTable(supabase, DATABASE_TABLES.PROFILES)
     .select('id, name, username, avatar_url')
     .in('id', ids);
   const map = new Map<string, ProfileRow>();
@@ -220,8 +218,8 @@ async function fetchProjectsById(ids: string[]): Promise<Map<string, ProjectRow>
   if (ids.length === 0) {
     return new Map();
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data } = await (supabase.from(getTableName('project')) as any)
+
+  const { data } = await fromTable(supabase, getTableName('project'))
     .select('id, title')
     .in('id', ids);
   const map = new Map<string, ProjectRow>();

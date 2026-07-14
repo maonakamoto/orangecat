@@ -7,6 +7,7 @@
  * they are kept separate to preserve each path's exact behavior.
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { STATUS } from '@/config/database-constants';
@@ -257,8 +258,7 @@ export async function storeUserMessage(
   convId: string,
   content: string
 ): Promise<{ message: Record<string, unknown> } | { error: SendMessageError }> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase.from(DATABASE_TABLES.AI_MESSAGES) as any)
+  const { data, error } = await fromTable(supabase, DATABASE_TABLES.AI_MESSAGES)
     .insert({
       conversation_id: convId,
       role: 'user',
@@ -293,8 +293,7 @@ export async function storeAssistantMessage(
   apiCostBtc: number,
   hasByok: boolean
 ): Promise<{ message: Record<string, unknown> } | { error: SendMessageError }> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase.from(DATABASE_TABLES.AI_MESSAGES) as any)
+  const { data, error } = await fromTable(supabase, DATABASE_TABLES.AI_MESSAGES)
     .insert({
       conversation_id: convId,
       role: 'assistant',

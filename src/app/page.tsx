@@ -1,3 +1,4 @@
+import { fromTable } from '@/lib/supabase/untyped';
 import { redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import HomePublicClient from '@/components/home/HomePublicClient';
@@ -26,14 +27,13 @@ export default async function Home() {
       // got written. Otherwise every visit to / sends a power user back
       // to a wizard they don't want.
       const { count: projectCount } = await supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         .from(ENTITY_REGISTRY.project.tableName as any)
         .select('*', { count: 'exact', head: true })
         .eq('user_id', user.id);
 
       if (projectCount && projectCount > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+        await fromTable(supabase, DATABASE_TABLES.PROFILES)
           .update({ onboarding_completed: true })
           .eq('id', user.id);
         logger.info('Self-healed onboarding_completed for user with content', {

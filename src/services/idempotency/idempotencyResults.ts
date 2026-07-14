@@ -12,6 +12,7 @@
  * Created: 2026-06-03
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { createHash } from 'crypto';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logger } from '@/utils/logger';
@@ -140,8 +141,8 @@ export async function claimIdempotencyKey(params: {
   bodyHash: string;
 }): Promise<IdempotencyClaim> {
   const admin = createAdminClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error: insertError } = await (admin.from(TABLE) as any).insert({
+
+  const { error: insertError } = await fromTable(admin, TABLE).insert({
     user_id: params.userId,
     key: params.key,
     method: params.method,
@@ -294,8 +295,8 @@ export async function completeIdempotencyResult(params: {
   responseBody: unknown;
 }): Promise<void> {
   const admin = createAdminClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (admin.from(TABLE) as any)
+
+  const { error } = await fromTable(admin, TABLE)
     .update({
       status: 'complete',
       response_status: params.responseStatus,

@@ -11,6 +11,7 @@
  * Last Modified Summary: Split create ops into events-create.ts (SoC); behavior unchanged.
  */
 
+import { callRpc } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { TIMELINE_TABLES } from '@/config/database-tables';
@@ -60,7 +61,6 @@ export async function updateEvent(
 
     updateData.updated_at = new Date().toISOString();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error } = await (supabase as any)
       .from(TIMELINE_TABLES.EVENTS)
       .update(updateData)
@@ -94,8 +94,7 @@ export async function updateEventVisibility(
  */
 export async function deleteEvent(eventId: string, reason?: string): Promise<boolean> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabase.rpc as any)('soft_delete_timeline_event', {
+    const { data, error } = await callRpc(supabase, 'soft_delete_timeline_event', {
       event_id: eventId,
       reason,
     });

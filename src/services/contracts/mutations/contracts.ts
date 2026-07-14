@@ -1,3 +1,4 @@
+import { fromTable } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { STATUS } from '@/config/database-constants';
@@ -56,7 +57,7 @@ export async function createContract(input: CreateContractInput) {
         method: 'proposal',
       };
     } else {
-      const { data, error } = await (supabase.from(DATABASE_TABLES.CONTRACTS) as any)
+      const { data, error } = await fromTable(supabase, DATABASE_TABLES.CONTRACTS)
         .insert({
           party_a_actor_id: input.party_a_actor_id,
           party_b_actor_id: input.party_b_actor_id,

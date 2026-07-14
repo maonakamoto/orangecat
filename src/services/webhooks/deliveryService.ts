@@ -19,6 +19,7 @@
  * Created: 2026-06-03
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { randomUUID } from 'crypto';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logger } from '@/utils/logger';
@@ -118,8 +119,8 @@ export async function enqueueWebhookEvent(params: {
     }));
 
     const admin = createAdminClient();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (admin.from(DATABASE_TABLES.WEBHOOK_DELIVERIES) as any).insert(rows);
+
+    const { error } = await fromTable(admin, DATABASE_TABLES.WEBHOOK_DELIVERIES).insert(rows);
     if (error) {
       logger.error('enqueueWebhookEvent: insert failed', { error, eventType: params.eventType });
       return 0;
@@ -190,8 +191,8 @@ export async function pickDueDeliveries(
  */
 export async function claimDelivery(deliveryId: string, expectedAttempt: number): Promise<boolean> {
   const admin = createAdminClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (admin.from(DATABASE_TABLES.WEBHOOK_DELIVERIES) as any)
+
+  const { data, error } = await fromTable(admin, DATABASE_TABLES.WEBHOOK_DELIVERIES)
     .update({ attempt_count: expectedAttempt + 1, last_attempt_at: new Date().toISOString() })
     .eq('id', deliveryId)
     .eq('attempt_count', expectedAttempt)
@@ -212,8 +213,8 @@ export async function markDelivered(
   responseBody: string | null
 ): Promise<void> {
   const admin = createAdminClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (admin.from(DATABASE_TABLES.WEBHOOK_DELIVERIES) as any)
+
+  const { error } = await fromTable(admin, DATABASE_TABLES.WEBHOOK_DELIVERIES)
     .update({
       status: 'delivered',
       response_status: responseStatus,
@@ -301,8 +302,8 @@ export async function deliveryBelongsToEndpoint(
  */
 export async function enqueueDeliveryReplay(deliveryId: string): Promise<boolean> {
   const admin = createAdminClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (admin.from(DATABASE_TABLES.WEBHOOK_DELIVERIES) as any)
+
+  const { data, error } = await fromTable(admin, DATABASE_TABLES.WEBHOOK_DELIVERIES)
     .update({
       status: 'pending',
       attempt_count: 0,
@@ -332,8 +333,7 @@ export async function markFailedOrRetry(
   // reflects "how many attempts have happened including this one".
   const { nextAttemptAt, shouldFail } = computeNextAttempt(delivery.attempt_count);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (admin.from(DATABASE_TABLES.WEBHOOK_DELIVERIES) as any)
+  const { error } = await fromTable(admin, DATABASE_TABLES.WEBHOOK_DELIVERIES)
     .update({
       status: shouldFail ? 'failed' : 'pending',
       response_status: responseStatus,

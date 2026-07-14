@@ -1,3 +1,4 @@
+import { callRpc, fromTable } from '@/lib/supabase/untyped';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logger } from '@/utils/logger';
 import type { Json } from '@/types/database';
@@ -37,8 +38,7 @@ export async function sendMessage(
 
     // If senderActorId provided, verify user has permission to send as that actor
     if (senderActorId) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-      const { data: actor, error: actorError } = await (admin.from(DATABASE_TABLES.ACTORS) as any)
+      const { data: actor, error: actorError } = await fromTable(admin, DATABASE_TABLES.ACTORS)
         .select('id, actor_type, user_id, group_id')
         .eq('id', senderActorId)
         .single();
@@ -54,9 +54,9 @@ export async function sendMessage(
 
       // Group actor: user must be admin/moderator of the group
       if (actor.actor_type === 'group' && actor.group_id) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-        const { data: membership, error: memberError } = await (
-          admin.from(DATABASE_TABLES.GROUP_MEMBERS) as any
+        const { data: membership, error: memberError } = await fromTable(
+          admin,
+          DATABASE_TABLES.GROUP_MEMBERS
         )
           .select('role')
           .eq('group_id', actor.group_id)
@@ -100,10 +100,7 @@ export async function sendMessage(
         senderActorId;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-    const { data: message, error: insertError } = await (
-      admin.from(DATABASE_TABLES.MESSAGES) as any
-    )
+    const { data: message, error: insertError } = await fromTable(admin, DATABASE_TABLES.MESSAGES)
       .insert(messageData)
       .select('id')
       .single();
@@ -120,8 +117,8 @@ export async function sendMessage(
       last_message_sender_id: senderId,
       updated_at: new Date().toISOString(),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-    const { error: updateError } = await (admin.from(DATABASE_TABLES.CONVERSATIONS) as any)
+
+    const { error: updateError } = await fromTable(admin, DATABASE_TABLES.CONVERSATIONS)
       .update(conversationUpdate)
       .eq('id', conversationId);
 
@@ -134,8 +131,8 @@ export async function sendMessage(
     const participantUpdate: ConversationParticipantsUpdate = {
       last_read_at: new Date().toISOString(),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-    const updateQuery = (admin.from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS) as any)
+
+    const updateQuery = fromTable(admin, DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
       .update(participantUpdate)
       .eq('conversation_id', conversationId)
       .eq('user_id', senderId);
@@ -165,8 +162,8 @@ export async function markConversationRead(conversationId: string) {
   const participantUpdate: ConversationParticipantsUpdate = {
     last_read_at: new Date().toISOString(),
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-  await (admin.from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS) as any)
+
+  await fromTable(admin, DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
     .update(participantUpdate)
     .eq('conversation_id', conversationId)
     .eq('user_id', user.id);
@@ -204,8 +201,8 @@ export async function openConversation(
         username: `user_${id.slice(0, 8)}`,
         name: 'User',
       };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-      const insertQuery = (admin.from(DATABASE_TABLES.PROFILES) as any).insert(profileData);
+
+      const insertQuery = fromTable(admin, DATABASE_TABLES.PROFILES).insert(profileData);
       const { error: insertError } = await insertQuery;
       if (insertError) {
         throw insertError;
@@ -223,13 +220,13 @@ export async function openConversation(
       role: 'member',
       is_active: true,
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-    const { error: partErr } = await (
-      admin.from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS) as any
+
+    const { error: partErr } = await fromTable(
+      admin,
+      DATABASE_TABLES.CONVERSATION_PARTICIPANTS
     ).insert(participantData);
     if (partErr) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-      await (admin.from(DATABASE_TABLES.CONVERSATIONS) as any).delete().eq('id', convId);
+      await fromTable(admin, DATABASE_TABLES.CONVERSATIONS).delete().eq('id', convId);
       throw Object.assign(new Error('Failed to add participant'), { status: 500 });
     }
     return convId;
@@ -246,9 +243,10 @@ export async function openConversation(
       { conversation_id: newId, user_id: user.id, role: 'member', is_active: true },
       { conversation_id: newId, user_id: otherId, role: 'member', is_active: true },
     ];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-    const { error: pErr } = await (
-      admin.from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS) as any
+
+    const { error: pErr } = await fromTable(
+      admin,
+      DATABASE_TABLES.CONVERSATION_PARTICIPANTS
     ).insert(participantsData);
     if (pErr) {
       throw Object.assign(new Error('Failed to add participants'), { status: 500 });
@@ -257,15 +255,12 @@ export async function openConversation(
   }
 
   // Group conversation
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic RPC call for database function
-  const { data: groupId, error: groupErr } = await (supabase.rpc as any)(
-    'create_group_conversation',
-    {
-      p_created_by: user.id,
-      p_participant_ids: participantIds,
-      p_title: title || null,
-    }
-  );
+
+  const { data: groupId, error: groupErr } = await callRpc(supabase, 'create_group_conversation', {
+    p_created_by: user.id,
+    p_participant_ids: participantIds,
+    p_title: title || null,
+  });
   if (!groupErr && groupId) {
     return groupId as unknown as string;
   }
@@ -286,10 +281,10 @@ export async function openConversation(
     role: pid === user.id ? 'admin' : 'member',
     is_active: true,
   }));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
-  const { error: pErr } = await (
-    admin.from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS) as any
-  ).insert(rows);
+
+  const { error: pErr } = await fromTable(admin, DATABASE_TABLES.CONVERSATION_PARTICIPANTS).insert(
+    rows
+  );
   if (pErr) {
     throw Object.assign(new Error('Failed to add participants'), { status: 500 });
   }

@@ -1,5 +1,6 @@
 'use client';
 
+import { callRpc } from '@/lib/supabase/untyped';
 import { useCallback, useEffect, useRef } from 'react';
 import supabase from '@/lib/supabase/browser';
 import { useAuth } from '@/hooks/useAuth';
@@ -51,8 +52,7 @@ export function useTypingIndicator(
         return;
       }
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (supabase.rpc as any)('set_typing_indicator', {
+        await callRpc(supabase, 'set_typing_indicator', {
           p_conversation_id: conversationId,
           p_user_id: user.id,
           p_is_typing: isTyping,

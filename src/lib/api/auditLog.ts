@@ -16,6 +16,7 @@
  * ```
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { createServerClient } from '@/lib/supabase/server';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -85,7 +86,7 @@ interface AuditLogEntry {
    *  Stored in the audit_logs.entity_type text column. */
   entityType?: string;
   entityId?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   metadata?: Record<string, any>;
   ipAddress?: string;
   userAgent?: string;
@@ -113,8 +114,8 @@ export async function auditLog(entry: AuditLogEntry): Promise<void> {
     const supabase = await createServerClient();
 
     // Create audit log entry in database
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase.from(DATABASE_TABLES.AUDIT_LOGS) as any).insert({
+
+    const { error } = await fromTable(supabase, DATABASE_TABLES.AUDIT_LOGS).insert({
       action: entry.action,
       user_id: entry.userId,
       entity_type: entry.entityType,
@@ -157,7 +158,7 @@ export async function auditSuccess(
   userId: string,
   entityType?: AuditLogEntry['entityType'],
   entityId?: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   metadata?: Record<string, any>
 ): Promise<void> {
   return auditLog({

@@ -11,6 +11,7 @@
  * is a best-effort denormalized counter for creator stats.
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { getCreditBalance, appendCreditEntry } from '@/services/cat/credits';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -144,14 +145,13 @@ async function bumpAssistantRevenue(
   amountBtc: number
 ): Promise<void> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (admin.from(DATABASE_TABLES.AI_ASSISTANTS) as any)
+    const { data } = await fromTable(admin, DATABASE_TABLES.AI_ASSISTANTS)
       .select('total_revenue')
       .eq('id', assistantId)
       .single();
     const nextRevenue = roundBtc(Number(data?.total_revenue ?? 0) + amountBtc);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (admin.from(DATABASE_TABLES.AI_ASSISTANTS) as any)
+
+    await fromTable(admin, DATABASE_TABLES.AI_ASSISTANTS)
       .update({ total_revenue: nextRevenue })
       .eq('id', assistantId);
   } catch (err) {

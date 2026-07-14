@@ -7,6 +7,7 @@
  * - Simple state management with Zustand
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { create } from 'zustand';
 import { logger } from '@/utils/logger';
 import supabase from '@/lib/supabase/browser';
@@ -72,8 +73,8 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
     try {
       // Resolve user_id to actor_id for ownership filtering
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: actor } = (await (supabase.from(DATABASE_TABLES.ACTORS) as any)
+
+      const { data: actor } = (await fromTable(supabase, DATABASE_TABLES.ACTORS)
         .select('id')
         .eq('user_id', userId)
         .eq('actor_type', 'user')

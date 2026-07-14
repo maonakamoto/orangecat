@@ -8,6 +8,7 @@
  * Last Modified Summary: Created project support mutation functions
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -77,8 +78,8 @@ export async function createProjectSupport(
     }
 
     // Insert support — project_support resolves to never in generated types; cast from() to bypass
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabase.from(DATABASE_TABLES.PROJECT_SUPPORT) as any)
+
+    const { data, error } = await fromTable(supabase, DATABASE_TABLES.PROJECT_SUPPORT)
       .insert(supportData)
       .select()
       .single();
@@ -117,8 +118,9 @@ export async function deleteProjectSupport(supportId: string): Promise<ServiceRe
     }
 
     // Check if user owns this support
-    const { data: support, error: fetchError } = await (
-      supabase.from(DATABASE_TABLES.PROJECT_SUPPORT) as any
+    const { data: support, error: fetchError } = await fromTable(
+      supabase,
+      DATABASE_TABLES.PROJECT_SUPPORT
     )
       .select('user_id')
       .eq('id', supportId)

@@ -1,5 +1,6 @@
 'use client';
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -36,8 +37,9 @@ export function useReadReceipts(
     }
 
     try {
-      const { data: participants, error } = await (
-        supabase.from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS) as any
+      const { data: participants, error } = await fromTable(
+        supabase,
+        DATABASE_TABLES.CONVERSATION_PARTICIPANTS
       )
         .select('user_id, last_read_at')
         .eq('conversation_id', conversationId)

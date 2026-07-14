@@ -17,6 +17,7 @@
  * Created: 2026-03-27
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { ENTITY_REGISTRY } from '@/config/entity-registry';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -171,7 +172,7 @@ export class NotificationEmailService {
     const admin = createAdminClient();
 
     // Fetch user preferences
-    const { data: prefs } = await (admin.from(DATABASE_TABLES.NOTIFICATION_PREFERENCES) as any)
+    const { data: prefs } = await fromTable(admin, DATABASE_TABLES.NOTIFICATION_PREFERENCES)
       .select('*')
       .eq('user_id', userId)
       .maybeSingle();
@@ -214,7 +215,7 @@ export class NotificationEmailService {
     const admin = createAdminClient();
 
     // Profile: contact_email + display name
-    const { data: profile } = await (admin.from(DATABASE_TABLES.PROFILES) as any)
+    const { data: profile } = await fromTable(admin, DATABASE_TABLES.PROFILES)
       .select('contact_email, display_name:name, username')
       .eq('id', userId)
       .single();
@@ -255,7 +256,7 @@ export class NotificationEmailService {
       // Check the tightest cap first (hourly > daily > weekly)
       if (cap.maxPerHour) {
         const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-        const { count } = await (admin.from(DATABASE_TABLES.NOTIFICATION_EMAIL_LOG) as any)
+        const { count } = await fromTable(admin, DATABASE_TABLES.NOTIFICATION_EMAIL_LOG)
           .select('*', { count: 'exact', head: true })
           .eq('user_id', userId)
           .eq('notification_type', type)
@@ -269,7 +270,7 @@ export class NotificationEmailService {
 
       if (cap.maxPerDay) {
         const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-        const { count } = await (admin.from(DATABASE_TABLES.NOTIFICATION_EMAIL_LOG) as any)
+        const { count } = await fromTable(admin, DATABASE_TABLES.NOTIFICATION_EMAIL_LOG)
           .select('*', { count: 'exact', head: true })
           .eq('user_id', userId)
           .eq('notification_type', type)
@@ -283,7 +284,7 @@ export class NotificationEmailService {
 
       if (cap.maxPerWeek) {
         const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-        const { count } = await (admin.from(DATABASE_TABLES.NOTIFICATION_EMAIL_LOG) as any)
+        const { count } = await fromTable(admin, DATABASE_TABLES.NOTIFICATION_EMAIL_LOG)
           .select('*', { count: 'exact', head: true })
           .eq('user_id', userId)
           .eq('notification_type', type)
@@ -314,7 +315,7 @@ export class NotificationEmailService {
     try {
       const admin = createAdminClient();
 
-      await (admin.from(DATABASE_TABLES.NOTIFICATION_EMAIL_LOG) as any).insert({
+      await fromTable(admin, DATABASE_TABLES.NOTIFICATION_EMAIL_LOG).insert({
         user_id: userId,
         notification_type: type,
         sent_at: new Date().toISOString(),

@@ -23,6 +23,7 @@
  * Created: 2026-06-03
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { randomBytes } from 'crypto';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { encryptWebhookSecret, decryptWebhookSecret } from '@/lib/crypto/webhookSecretCipher';
@@ -91,10 +92,7 @@ export async function createWebhookEndpoint(params: {
 
   const admin = createAdminClient();
   const { data, error } = await (
-    admin.from(DATABASE_TABLES.WEBHOOK_ENDPOINTS) as ReturnType<
-      typeof admin.from
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    > as any
+    admin.from(DATABASE_TABLES.WEBHOOK_ENDPOINTS) as ReturnType<typeof admin.from> as any
   )
     .insert({
       user_id: userId,
@@ -260,8 +258,8 @@ export async function userOwnsEndpoint(endpointId: string, userId: string): Prom
  */
 export async function touchEndpointLastDelivery(endpointId: string): Promise<void> {
   const admin = createAdminClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (admin.from(DATABASE_TABLES.WEBHOOK_ENDPOINTS) as any)
+
+  const { error } = await fromTable(admin, DATABASE_TABLES.WEBHOOK_ENDPOINTS)
     .update({ last_delivery_at: new Date().toISOString() })
     .eq('id', endpointId);
   if (error) {
@@ -278,8 +276,8 @@ export async function touchEndpointLastDelivery(endpointId: string): Promise<voi
  */
 export async function revokeWebhookEndpoint(endpointId: string, userId: string): Promise<boolean> {
   const admin = createAdminClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (admin.from(DATABASE_TABLES.WEBHOOK_ENDPOINTS) as any)
+
+  const { data, error } = await fromTable(admin, DATABASE_TABLES.WEBHOOK_ENDPOINTS)
     .update({ revoked_at: new Date().toISOString() })
     .eq('id', endpointId)
     .eq('user_id', userId)

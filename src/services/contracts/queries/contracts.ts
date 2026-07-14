@@ -1,10 +1,11 @@
+import { fromTable } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 
 export async function getContract(contractId: string) {
   try {
-    const { data, error } = await (supabase.from(DATABASE_TABLES.CONTRACTS) as any)
+    const { data, error } = await fromTable(supabase, DATABASE_TABLES.CONTRACTS)
       .select('*')
       .eq('id', contractId)
       .single();

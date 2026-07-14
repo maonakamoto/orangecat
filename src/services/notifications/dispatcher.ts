@@ -10,6 +10,7 @@
  * Created: 2026-03-27
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getEmailClient } from '@/lib/email/client';
@@ -122,8 +123,7 @@ export class NotificationDispatcher {
       source_entity_id: params.sourceEntityId,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (admin.from(DATABASE_TABLES.NOTIFICATIONS) as any).insert({
+    const { error } = await fromTable(admin, DATABASE_TABLES.NOTIFICATIONS).insert({
       user_id: params.userId,
       type: params.type,
       message: params.message,
@@ -151,7 +151,7 @@ export class NotificationDispatcher {
     const admin = createAdminClient();
 
     // Resolve email: profile contact_email -> auth user email
-    const { data: profile } = await (admin.from(DATABASE_TABLES.PROFILES) as any)
+    const { data: profile } = await fromTable(admin, DATABASE_TABLES.PROFILES)
       .select('contact_email, display_name:name')
       .eq('id', params.userId)
       .single();

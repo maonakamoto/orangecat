@@ -1,3 +1,4 @@
+import { fromTable } from '@/lib/supabase/untyped';
 import { createServerClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logger } from '@/utils/logger';
@@ -48,12 +49,11 @@ export async function assertMember(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table access for database config pattern
 export async function createConvRecord(
   admin: AdminClient,
   data: ConversationsInsert
 ): Promise<string> {
-  const { data: conv, error } = await (admin.from(DATABASE_TABLES.CONVERSATIONS) as any)
+  const { data: conv, error } = await fromTable(admin, DATABASE_TABLES.CONVERSATIONS)
     .insert(data)
     .select('id')
     .single();

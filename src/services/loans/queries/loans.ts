@@ -6,6 +6,7 @@
  * Last Modified Summary: Extracted from loans/index.ts for modularity
  */
 
+import { callRpc, fromTable } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { getTableName } from '@/config/entity-registry';
@@ -78,8 +79,8 @@ export async function getUserLoans(
     }
 
     // Resolve user to actor for ownership filtering
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: actor } = (await (supabase.from(DATABASE_TABLES.ACTORS) as any)
+
+    const { data: actor } = (await fromTable(supabase, DATABASE_TABLES.ACTORS)
       .select('id')
       .eq('user_id', userId)
       .eq('actor_type', 'user')
@@ -159,8 +160,7 @@ export async function getAvailableLoans(
     const pageSize = Math.min(pagination?.pageSize || DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
     const offset = pagination?.offset || 0;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabase.rpc as any)('get_available_loans', {
+    const { data, error } = await callRpc(supabase, 'get_available_loans', {
       p_user_id: userId || null,
       p_limit: pageSize,
       p_offset: offset,
@@ -170,11 +170,7 @@ export async function getAvailableLoans(
       logger.warn('Database function not available, using fallback', error, 'Loans');
 
       // Fallback query
-      let dbQuery = (
-        supabase
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .from(getTableName('loan')) as any
-      )
+      let dbQuery = fromTable(supabase, getTableName('loan'))
         .select(
           `
           *,

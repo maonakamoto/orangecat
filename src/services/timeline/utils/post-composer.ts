@@ -1,3 +1,4 @@
+import { fromTable } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { TimelineVisibility } from '@/types/timeline';
@@ -396,8 +397,8 @@ export async function queueOfflinePost(options: PostSubmitOptions): Promise<void
 export async function fetchUserProjects(userId: string): Promise<UserProject[]> {
   try {
     // Resolve user to actor for ownership filtering
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: actor } = (await (supabase.from(DATABASE_TABLES.ACTORS) as any)
+
+    const { data: actor } = (await fromTable(supabase, DATABASE_TABLES.ACTORS)
       .select('id')
       .eq('user_id', userId)
       .eq('actor_type', 'user')

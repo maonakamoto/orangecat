@@ -4,6 +4,7 @@
  * Business logic for creating research entities, extracted from the API route.
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { logger } from '@/utils/logger';
 import { apiRateLimited, apiSuccess } from '@/lib/api/standardResponse';
@@ -16,7 +17,6 @@ import type { NextResponse } from 'next/server';
 const MAX_RESEARCH_PER_USER = 10;
 
 interface CreateResearchResult {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   response: NextResponse<any>;
 }
 
@@ -105,14 +105,7 @@ export async function createResearch(
 
   // Insert with detailed error logging retained for diagnosis
   try {
-    const response = await (
-      supabase
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(tableName) as any
-    )
-      .insert(insertData)
-      .select()
-      .single();
+    const response = await fromTable(supabase, tableName).insert(insertData).select().single();
 
     const { data: researchEntity, error, status, statusText } = response;
 

@@ -11,6 +11,7 @@
  * Last Modified Summary: Extracted from feeds.ts
  */
 
+import { callRpc } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES, TIMELINE_TABLES } from '@/config/database-tables';
@@ -52,8 +53,8 @@ export async function getUserFeed(
     const offset = (page - 1) * limit;
 
     // Build filter conditions
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let query = (supabase.rpc as any)('get_user_timeline_feed', {
+
+    let query = callRpc(supabase, 'get_user_timeline_feed', {
       p_user_id: userId,
       p_limit: limit,
       p_offset: offset,
@@ -84,8 +85,9 @@ export async function getUserFeed(
     const displayEvents = await enrichEventsForDisplay(events || []);
 
     // Total count: use the RPC with count option (it resolves user→actor internally)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { count } = await (supabase.rpc as any)(
+
+    const { count } = await callRpc(
+      supabase,
       'get_user_timeline_feed',
       {
         p_user_id: userId,
@@ -304,8 +306,8 @@ export async function getEnrichedUserFeed(
       // enrichment fields below default to zero, matching what the previous
       // fallback emitted. If get_enriched_timeline_feed is added later,
       // restore the original ladder.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: basicEvents, error: basicError } = await (supabase.rpc as any)(rpcName, {
+
+      const { data: basicEvents, error: basicError } = await callRpc(supabase, rpcName, {
         p_user_id: userId,
         p_limit: limit,
         p_offset: offset,

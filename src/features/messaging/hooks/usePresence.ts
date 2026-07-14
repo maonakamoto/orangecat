@@ -1,5 +1,6 @@
 'use client';
 
+import { callRpc } from '@/lib/supabase/untyped';
 import { useCallback, useState } from 'react';
 import supabase from '@/lib/supabase/browser';
 import { useAuth } from '@/hooks/useAuth';
@@ -50,8 +51,7 @@ export function usePresence(options: UsePresenceOptions = {}): UsePresenceReturn
         return;
       }
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (supabase.rpc as any)('update_presence', { p_status: status });
+        await callRpc(supabase, 'update_presence', { p_status: status });
         setMyStatusState(status);
         debugLog('[usePresence] updated status:', status);
       } catch (error) {

@@ -9,6 +9,7 @@
  * Last Modified Summary: Extracted from duplicated code in wishlists and documents services
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { createServerClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { logger } from '@/utils/logger';
@@ -41,9 +42,10 @@ export async function getOrCreateUserActor(userId: string): Promise<{ id: string
   }
 
   // Actor doesn't exist - create one using admin client (bypasses RLS)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: newActor, error: createError } = await (
-    adminClient.from(DATABASE_TABLES.ACTORS) as any
+
+  const { data: newActor, error: createError } = await fromTable(
+    adminClient,
+    DATABASE_TABLES.ACTORS
   )
     .insert({
       actor_type: 'user',

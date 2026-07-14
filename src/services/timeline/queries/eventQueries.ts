@@ -12,6 +12,7 @@
  * Last Modified Summary: Extracted from feeds.ts
  */
 
+import { callRpc } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { TIMELINE_TABLES } from '@/config/database-tables';
@@ -182,8 +183,7 @@ export async function getThreadPosts(threadId: string): Promise<{
   error?: string;
 }> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = await (supabase.rpc as any)('get_thread_posts', {
+    const result = await callRpc(supabase, 'get_thread_posts', {
       p_thread_id: threadId,
       p_limit: 50,
       p_offset: 0,

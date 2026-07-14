@@ -6,6 +6,7 @@
  * Last Modified Summary: Extracted from profileService.ts for modular architecture - handles read operations
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { ProfileMapper } from './mapper';
@@ -29,7 +30,7 @@ export class ProfileReader {
     try {
       logger.info('[Profile] getProfile', { userId });
 
-      const { data, error } = await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+      const { data, error } = await fromTable(supabase, DATABASE_TABLES.PROFILES)
         .select('*')
         .eq('id', userId)
         .single();
@@ -168,7 +169,7 @@ export class ProfileReader {
       }
 
       // Update view count
-      await (supabase.from(DATABASE_TABLES.PROFILES) as any)
+      await fromTable(supabase, DATABASE_TABLES.PROFILES)
         .update({
           website: JSON.stringify({
             ...JSON.parse(profile.website || '{}'),

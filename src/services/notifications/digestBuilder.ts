@@ -13,6 +13,7 @@
  * Created: 2026-03-27
  */
 
+import { fromTable } from '@/lib/supabase/untyped';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { ENTITY_REGISTRY, ENTITY_TYPES, type EntityType } from '@/config/entity-registry';
@@ -94,7 +95,7 @@ async function fetchUserProfile(
   admin: ReturnType<typeof createAdminClient>,
   userId: string
 ): Promise<{ name: string; bio: string | null } | null> {
-  const { data } = await (admin.from(DATABASE_TABLES.PROFILES) as any)
+  const { data } = await fromTable(admin, DATABASE_TABLES.PROFILES)
     .select('display_name:name, username, bio')
     .eq('id', userId)
     .single();
@@ -112,7 +113,7 @@ async function fetchActorId(
   admin: ReturnType<typeof createAdminClient>,
   userId: string
 ): Promise<string | null> {
-  const { data } = await (admin.from(DATABASE_TABLES.ACTORS) as any)
+  const { data } = await fromTable(admin, DATABASE_TABLES.ACTORS)
     .select('id')
     .eq('user_id', userId)
     .eq('actor_type', 'user')
@@ -205,8 +206,8 @@ async function fetchUserEntities(
   const results = await Promise.all(
     entityTypesToCheck.map(async entityType => {
       const meta = ENTITY_REGISTRY[entityType];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data } = await (admin.from(meta.tableName) as any)
+
+      const { data } = await fromTable(admin, meta.tableName)
         .select('id, title, status')
         .eq('actor_id', actorId);
       return { entityType, rows: (data as { id: string; title: string; status: string }[]) ?? [] };

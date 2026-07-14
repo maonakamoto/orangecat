@@ -5,6 +5,7 @@
  * public surface (timeline/index.ts) is unchanged. No behavior change.
  */
 
+import { callRpc } from '@/lib/supabase/untyped';
 import supabase from '@/lib/supabase/browser';
 import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
@@ -62,8 +63,8 @@ export async function createEventWithVisibility(
 
     // Use database function to create post with visibility contexts
     // The function returns JSONB, so we need to parse it
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabase.rpc as any)('create_post_with_visibility', {
+
+    const { data, error } = await callRpc(supabase, 'create_post_with_visibility', {
       p_event_type: request.eventType || 'post_created',
       p_actor_id: actorId,
       p_subject_type: request.subjectType || 'profile',
@@ -225,8 +226,7 @@ export async function createEvent(
     let eventId: string;
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase.rpc as any)('create_timeline_event', eventData);
+      const { data, error } = await callRpc(supabase, 'create_timeline_event', eventData);
 
       if (error) {
         logger.error('Failed to create timeline event', error, 'Timeline');
@@ -261,7 +261,7 @@ export async function createProjectEvent(
   additionalData?: Partial<CreateTimelineEventRequest>
 ): Promise<TimelineEventResponse> {
   // Get project details
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const { data: project } = await (supabase as any)
     .from(getTableName('project'))
     .select('title, description, goal_amount, currency')
@@ -311,14 +311,12 @@ export async function createTransactionEvent(
     .eq('id', transactionId)
     .single();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: project } = await (supabase as any)
     .from(getTableName('project'))
     .select('title')
     .eq('id', projectId)
     .single();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: supporter } = await (supabase as any)
     .from(DATABASE_TABLES.PROFILES)
     .select('username, display_name:name')
@@ -375,8 +373,7 @@ export async function createQuoteReply(
   ) => Promise<{ success: boolean; event?: TimelineEvent | TimelineDisplayEvent; error?: string }>
 ): Promise<TimelineEventResponse> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = await (supabase.rpc as any)('create_quote_reply', {
+    const result = await callRpc(supabase, 'create_quote_reply', {
       p_parent_event_id: parentPostId,
       p_actor_id: actorId,
       p_content: content,
