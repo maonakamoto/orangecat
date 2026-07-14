@@ -9,7 +9,9 @@
 
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { STATUS } from '@/config/database-constants';
-import { checkGroupAdmin } from '@/domain/groups/helpers.server';
+import { checkGroupAdmin, resolveGroupBySlug } from '@/domain/groups/helpers.server';
+import { logger } from '@/utils/logger';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 
 /** Outcome codes the route maps to apiForbidden / apiNotFound / apiValidationError. */
@@ -19,6 +21,22 @@ export type InvitationResult =
   | { ok: true; message: string; group_slug?: string }
   | { ok: false; code: InvitationErrorCode; message: string }
   | { ok: false; dbError: unknown };
+
+/** Generic discriminated result for the list/create collection operations. */
+export type InvitationCollectionResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; code: InvitationErrorCode; message: string }
+  | { ok: false; dbError: unknown };
+
+/** Validated create-invitation input (shape mirrors the route's zod schema). */
+export type CreateInvitationInput = {
+  user_id?: string;
+  email?: string;
+  create_link?: boolean;
+  role: 'admin' | 'member';
+  message?: string;
+  expires_in_days: number;
+};
 
 type InvitationRow = {
   user_id: string | null;
@@ -146,4 +164,159 @@ export async function revokeInvitation(
     return { ok: false, dbError: updateError };
   }
   return { ok: true, message: 'Invitation revoked' };
+}
+
+/**
+ * List a group's invitations (admins only), newest first, paginated.
+ * `opts` carries the raw URL query values; defaulting/clamping is applied here
+ * so the route stays free of pagination logic.
+ */
+export async function listGroupInvitations(
+  supabase: AnySupabaseClient,
+  slug: string,
+  userId: string,
+  opts: { status?: string | null; limit?: string | null; offset?: string | null }
+): Promise<
+  InvitationCollectionResult<{ invitations: unknown[]; total: number; hasMore: boolean }>
+> {
+  const group = await resolveGroupBySlug(supabase, slug);
+  if (!group) {
+    return { ok: false, code: 'not_found', message: 'Group not found' };
+  }
+  if (!(await checkGroupAdmin(supabase, group.id, userId))) {
+    return { ok: false, code: 'forbidden', message: 'Only admins can view invitations' };
+  }
+
+  const status = opts.status || STATUS.GROUP_INVITATIONS.PENDING;
+  const limit = Math.min(
+    parseInt(opts.limit || String(DEFAULT_PAGE_SIZE), 10) || DEFAULT_PAGE_SIZE,
+    MAX_PAGE_SIZE
+  );
+  const offset = Math.max(parseInt(opts.offset || '0', 10) || 0, 0);
+
+  let query = supabase
+    .from(DATABASE_TABLES.GROUP_INVITATIONS)
+    .select(
+      `*, inviter:profiles!group_invitations_invited_by_fkey (name, avatar_url), invitee:profiles!group_invitations_user_id_fkey (name, avatar_url)`,
+      { count: 'exact' }
+    )
+    .eq('group_id', group.id)
+    .order('created_at', { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  if (status !== 'all') {
+    query = query.eq('status', status);
+  }
+
+  const { data: invitations, count, error } = await query;
+  if (error) {
+    logger.error('Failed to fetch invitations', { error, groupId: group.id }, 'Groups');
+    return { ok: false, dbError: error };
+  }
+
+  return {
+    ok: true,
+    data: {
+      invitations: invitations || [],
+      total: count || 0,
+      hasMore: (invitations?.length || 0) === limit,
+    },
+  };
+}
+
+/**
+ * Authorize invitation creation: resolve the group and confirm the actor is an
+ * admin. Split from the create step so the route can keep its original ordering
+ * (permission gate before body validation). Returns the group id on success.
+ */
+export async function authorizeGroupInvitationCreate(
+  supabase: AnySupabaseClient,
+  slug: string,
+  userId: string
+): Promise<InvitationCollectionResult<{ groupId: string }>> {
+  const group = await resolveGroupBySlug(supabase, slug);
+  if (!group) {
+    return { ok: false, code: 'not_found', message: 'Group not found' };
+  }
+  if (!(await checkGroupAdmin(supabase, group.id, userId))) {
+    return { ok: false, code: 'forbidden', message: 'Only admins can create invitations' };
+  }
+  return { ok: true, data: { groupId: group.id } };
+}
+
+/**
+ * Create an invitation for an already-authorized group. Guards against inviting
+ * an existing member or duplicating a pending invite (targeted invites only),
+ * computes expiry, optionally mints a share token, and returns the row plus its
+ * join URL when a link was requested.
+ */
+export async function createGroupInvitation(
+  supabase: AnySupabaseClient,
+  groupId: string,
+  invitedBy: string,
+  input: CreateInvitationInput
+): Promise<InvitationCollectionResult<{ invitation: Record<string, unknown> }>> {
+  const { user_id, email, create_link, role, message, expires_in_days } = input;
+
+  if (user_id) {
+    const [{ data: existingMember }, { data: existingInvite }] = await Promise.all([
+      supabase
+        .from(DATABASE_TABLES.GROUP_MEMBERS)
+        .select('id')
+        .eq('group_id', groupId)
+        .eq('user_id', user_id)
+        .maybeSingle(),
+      supabase
+        .from(DATABASE_TABLES.GROUP_INVITATIONS)
+        .select('id')
+        .eq('group_id', groupId)
+        .eq('user_id', user_id)
+        .eq('status', STATUS.GROUP_INVITATIONS.PENDING)
+        .maybeSingle(),
+    ]);
+    if (existingMember) {
+      return { ok: false, code: 'invalid', message: 'User is already a member of this group' };
+    }
+    if (existingInvite) {
+      return { ok: false, code: 'invalid', message: 'User already has a pending invitation' };
+    }
+  }
+
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + expires_in_days);
+
+  const invitationData: Record<string, unknown> = {
+    group_id: groupId,
+    role,
+    message: message || null,
+    invited_by: invitedBy,
+    expires_at: expiresAt.toISOString(),
+    ...(user_id && { user_id }),
+    ...(email && { email: email.toLowerCase().trim() }),
+  };
+
+  if (create_link) {
+    const bytes = new Uint8Array(24);
+    crypto.getRandomValues(bytes);
+    invitationData.token = btoa(String.fromCharCode(...bytes))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+  }
+
+  const { data: invitation, error: insertError } = await supabase
+    .from(DATABASE_TABLES.GROUP_INVITATIONS)
+    .insert(invitationData)
+    .select()
+    .single();
+
+  if (insertError || !invitation) {
+    logger.error('Failed to create invitation', { error: insertError, groupId }, 'Groups');
+    return { ok: false, dbError: insertError };
+  }
+
+  const inviteUrl = invitation.token
+    ? `${process.env.NEXT_PUBLIC_APP_URL}/groups/join/${invitation.token}`
+    : undefined;
+  return { ok: true, data: { invitation: { ...invitation, invite_url: inviteUrl } } };
 }

@@ -1,5 +1,6 @@
 /**
- * Group Invitations API
+ * Group Invitations API — thin HTTP layer; business rules live in
+ * @/domain/groups/invitations.server.
  *
  * GET  /api/groups/[slug]/invitations - List invitations (admin only)
  * POST /api/groups/[slug]/invitations - Create invitation (admin only)
@@ -16,12 +17,14 @@ import {
   handleApiError,
 } from '@/lib/api/standardResponse';
 import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
-import { DATABASE_TABLES } from '@/config/database-tables';
-import { STATUS } from '@/config/database-constants';
 import { logger } from '@/utils/logger';
 import { z } from 'zod';
-import { resolveGroupBySlug, checkGroupAdmin } from '@/domain/groups/helpers.server';
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@/constants/pagination';
+import {
+  listGroupInvitations,
+  authorizeGroupInvitationCreate,
+  createGroupInvitation,
+  type InvitationCollectionResult,
+} from '@/domain/groups/invitations.server';
 
 const createInvitationSchema = z
   .object({
@@ -36,6 +39,21 @@ const createInvitationSchema = z
     message: 'Must provide user_id, email, or create_link',
   });
 
+/** Map a failed domain result onto the matching HTTP error response. */
+function toErrorResponse(result: Extract<InvitationCollectionResult<unknown>, { ok: false }>) {
+  if ('dbError' in result) {
+    return handleApiError(result.dbError);
+  }
+  switch (result.code) {
+    case 'not_found':
+      return apiNotFound(result.message);
+    case 'forbidden':
+      return apiForbidden(result.message);
+    default:
+      return apiValidationError(result.message);
+  }
+}
+
 export const GET = withAuth(
   async (req: AuthenticatedRequest, { params }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params;
@@ -43,45 +61,15 @@ export const GET = withAuth(
       const { user, supabase } = req;
       const { searchParams } = new URL(req.url);
 
-      const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {
-        return apiNotFound('Group not found');
-      }
-      if (!(await checkGroupAdmin(supabase, group.id, user.id))) {
-        return apiForbidden('Only admins can view invitations');
-      }
-
-      const status = searchParams.get('status') || STATUS.GROUP_INVITATIONS.PENDING;
-      const limit = Math.min(
-        parseInt(searchParams.get('limit') || String(DEFAULT_PAGE_SIZE), 10) || DEFAULT_PAGE_SIZE,
-        MAX_PAGE_SIZE
-      );
-      const offset = Math.max(parseInt(searchParams.get('offset') || '0', 10) || 0, 0);
-
-      let query = supabase
-        .from(DATABASE_TABLES.GROUP_INVITATIONS)
-        .select(
-          `*, inviter:profiles!group_invitations_invited_by_fkey (name, avatar_url), invitee:profiles!group_invitations_user_id_fkey (name, avatar_url)`,
-          { count: 'exact' }
-        )
-        .eq('group_id', group.id)
-        .order('created_at', { ascending: false })
-        .range(offset, offset + limit - 1);
-
-      if (status !== 'all') {
-        query = query.eq('status', status);
-      }
-      const { data: invitations, count, error } = await query;
-      if (error) {
-        logger.error('Failed to fetch invitations', { error, groupId: group.id }, 'Groups');
-        return handleApiError(error);
-      }
-
-      return apiSuccess({
-        invitations: invitations || [],
-        total: count || 0,
-        hasMore: (invitations?.length || 0) === limit,
+      const result = await listGroupInvitations(supabase, slug, user.id, {
+        status: searchParams.get('status'),
+        limit: searchParams.get('limit'),
+        offset: searchParams.get('offset'),
       });
+      if (!result.ok) {
+        return toErrorResponse(result);
+      }
+      return apiSuccess(result.data);
     } catch (error) {
       logger.error('Invitations GET error', { error }, 'Groups');
       return handleApiError(error);
@@ -100,87 +88,26 @@ export const POST = withAuth(
         return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
       }
 
-      const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {
-        return apiNotFound('Group not found');
-      }
-      if (!(await checkGroupAdmin(supabase, group.id, user.id))) {
-        return apiForbidden('Only admins can create invitations');
+      const authz = await authorizeGroupInvitationCreate(supabase, slug, user.id);
+      if (!authz.ok) {
+        return toErrorResponse(authz);
       }
 
-      const body = await req.json();
-      const validation = createInvitationSchema.safeParse(body);
+      const validation = createInvitationSchema.safeParse(await req.json());
       if (!validation.success) {
         return apiValidationError('Invalid request data', validation.error.flatten());
       }
 
-      const { user_id, email, create_link, role, message, expires_in_days } = validation.data;
-
-      if (user_id) {
-        const [{ data: existingMember }, { data: existingInvite }] = await Promise.all([
-          supabase
-            .from(DATABASE_TABLES.GROUP_MEMBERS)
-            .select('id')
-            .eq('group_id', group.id)
-            .eq('user_id', user_id)
-            .maybeSingle(),
-          supabase
-            .from(DATABASE_TABLES.GROUP_INVITATIONS)
-            .select('id')
-            .eq('group_id', group.id)
-            .eq('user_id', user_id)
-            .eq('status', STATUS.GROUP_INVITATIONS.PENDING)
-            .maybeSingle(),
-        ]);
-        if (existingMember) {
-          return apiValidationError('User is already a member of this group');
-        }
-        if (existingInvite) {
-          return apiValidationError('User already has a pending invitation');
-        }
+      const result = await createGroupInvitation(
+        supabase,
+        authz.data.groupId,
+        user.id,
+        validation.data
+      );
+      if (!result.ok) {
+        return toErrorResponse(result);
       }
-
-      const expiresAt = new Date();
-      expiresAt.setDate(expiresAt.getDate() + expires_in_days);
-
-      const invitationData: Record<string, unknown> = {
-        group_id: group.id,
-        role,
-        message: message || null,
-        invited_by: user.id,
-        expires_at: expiresAt.toISOString(),
-        ...(user_id && { user_id }),
-        ...(email && { email: email.toLowerCase().trim() }),
-      };
-
-      if (create_link) {
-        const bytes = new Uint8Array(24);
-        crypto.getRandomValues(bytes);
-        invitationData.token = btoa(String.fromCharCode(...bytes))
-          .replace(/\+/g, '-')
-          .replace(/\//g, '_')
-          .replace(/=/g, '');
-      }
-
-      const { data: invitation, error: insertError } = await supabase
-        .from(DATABASE_TABLES.GROUP_INVITATIONS)
-        .insert(invitationData)
-        .select()
-        .single();
-
-      if (insertError || !invitation) {
-        logger.error(
-          'Failed to create invitation',
-          { error: insertError, groupId: group.id },
-          'Groups'
-        );
-        return handleApiError(insertError);
-      }
-
-      const inviteUrl = invitation.token
-        ? `${process.env.NEXT_PUBLIC_APP_URL}/groups/join/${invitation.token}`
-        : undefined;
-      return apiCreated({ invitation: { ...invitation, invite_url: inviteUrl } });
+      return apiCreated(result.data);
     } catch (error) {
       logger.error('Invitations POST error', { error }, 'Groups');
       return handleApiError(error);
