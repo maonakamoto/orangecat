@@ -158,10 +158,14 @@ const findings = [];
 
 for (const file of walk(path.join(ROOT, 'src'))) {
   const text = fs.readFileSync(file, 'utf8');
-  const fromRe = /\.from\(\s*([^)]+?)\s*\)/g;
+  // Match both `.from(TABLE)` and the shared untyped helper `fromTable(client, TABLE)`
+  // (see @/lib/supabase/untyped) — otherwise the helper's queries are invisible to
+  // this guard and their columns get mis-attributed to a neighbouring .from().
+  const fromRe = /\.from\(\s*([^)]+?)\s*\)|\bfromTable\(\s*\w+\s*,\s*([^)]+?)\s*\)/g;
   let fm;
   const froms = [];
-  while ((fm = fromRe.exec(text))) froms.push({ idx: fm.index, arg: fm[1], end: fromRe.lastIndex });
+  while ((fm = fromRe.exec(text)))
+    froms.push({ idx: fm.index, arg: fm[1] ?? fm[2], end: fromRe.lastIndex });
   for (let i = 0; i < froms.length; i++) {
     const table = resolveTable(froms[i].arg);
     if (!table) continue; // dynamic/variable/computed table name → can't verify

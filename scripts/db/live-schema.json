@@ -600,6 +600,7 @@
     "voting_starts_at",
     "voting_ends_at",
     "executed_at",
+    "execution_result",
     "created_at",
     "updated_at",
     "is_public"
