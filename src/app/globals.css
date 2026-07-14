@@ -16,7 +16,7 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-surface-page text-fg-primary antialiased;
     /* Improve touch experience on mobile */
     -webkit-tap-highlight-color: transparent;
     /* Prevent horizontal scrolling */
@@ -253,7 +253,7 @@
     --secondary-foreground: var(--text-primary);
     --muted: var(--surface-raised);
     /* Dark muted-foreground bumped 53% → 60% to clear WCAG AA contrast
-       against bg-muted (#1C1C1C). Was ~4.1:1 (fails AA), now ~4.6:1. */
+       against bg-surface-raised (#1C1C1C). Was ~4.1:1 (fails AA), now ~4.6:1. */
     --muted-foreground: var(--text-secondary);
     --accent: var(--surface-overlay);
     --accent-foreground: var(--text-primary);
@@ -317,7 +317,7 @@
    * borders, tight spacing, and restrained OrangeCat accents.
    */
   .oc-page {
-    @apply min-h-screen bg-background text-foreground;
+    @apply min-h-screen bg-surface-page text-fg-primary;
   }
 
   .oc-page-container {
@@ -336,11 +336,11 @@
     /* Same heading character as the canonical <PageHeading> (font-heading +
        tracking-display + bold) so dashboard and public titles match. Scale is
        a touch tighter (no md:text-4xl) to suit denser dashboard layouts. */
-    @apply mb-0 font-heading text-2xl font-bold leading-tight tracking-display text-foreground sm:text-3xl;
+    @apply mb-0 font-heading text-2xl font-bold leading-tight tracking-display text-fg-primary sm:text-3xl;
   }
 
   .oc-page-subtitle {
-    @apply mt-1.5 max-w-2xl text-sm leading-6 text-muted-foreground;
+    @apply mt-1.5 max-w-2xl text-sm leading-6 text-fg-secondary;
   }
 
   .oc-page-actions {
@@ -348,11 +348,11 @@
   }
 
   .oc-surface {
-    @apply rounded-md border border-border-subtle bg-card text-card-foreground shadow-none;
+    @apply rounded-md border border-border-subtle bg-surface-base text-fg-primary shadow-none;
   }
 
   .oc-surface-muted {
-    @apply rounded-md border border-border-subtle bg-muted/30 text-foreground shadow-none;
+    @apply rounded-md border border-border-subtle bg-surface-raised/30 text-fg-primary shadow-none;
   }
 
   .oc-surface-padding {
@@ -360,11 +360,11 @@
   }
 
   .oc-list-row {
-    @apply rounded-md border border-border-subtle bg-card px-3 py-2.5 text-sm text-foreground shadow-none;
+    @apply rounded-md border border-border-subtle bg-surface-base px-3 py-2.5 text-sm text-fg-primary shadow-none;
   }
 
   .oc-empty-surface {
-    @apply rounded-md border border-dashed border-border-strong bg-muted/20 px-4 py-10 text-center text-muted-foreground sm:px-6 sm:py-12;
+    @apply rounded-md border border-dashed border-border-strong bg-surface-raised/20 px-4 py-10 text-center text-fg-secondary sm:px-6 sm:py-12;
   }
 
   .oc-error-surface {
@@ -372,7 +372,7 @@
   }
 
   .oc-icon-tile {
-    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border-subtle bg-muted/40 text-foreground;
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border-subtle bg-surface-raised/40 text-fg-primary;
   }
 
   .oc-accent-tile {
@@ -380,7 +380,7 @@
   }
 
   .oc-card-link {
-    @apply transition-colors duration-150 hover:border-border-strong hover:bg-muted/20;
+    @apply transition-colors duration-150 hover:border-border-strong hover:bg-surface-raised/20;
   }
 
   .oc-selection-ring {
@@ -392,7 +392,7 @@
    * Prefer these over one-off Tailwind in chat components.
    */
   .oc-chat-layout {
-    @apply flex min-h-0 flex-col overflow-hidden bg-background;
+    @apply flex min-h-0 flex-col overflow-hidden bg-surface-page;
   }
 
   .oc-chat-toolbar {
@@ -408,11 +408,11 @@
   }
 
   .oc-chat-composer-wrap {
-    @apply flex-shrink-0 bg-background px-3 pb-3 pt-2 sm:px-4 sm:pb-4;
+    @apply flex-shrink-0 bg-surface-page px-3 pb-3 pt-2 sm:px-4 sm:pb-4;
   }
 
   .oc-chat-composer {
-    @apply relative flex w-full flex-col gap-1 rounded-2xl border border-border-subtle bg-muted/30 px-3 py-2 shadow-sm;
+    @apply relative flex w-full flex-col gap-1 rounded-2xl border border-border-subtle bg-surface-raised/30 px-3 py-2 shadow-sm;
     @apply focus-within:border-ring/40 focus-within:ring-2 focus-within:ring-ring/15;
   }
 
@@ -423,12 +423,12 @@
   }
 
   .oc-chat-composer-input {
-    @apply max-h-[200px] min-h-[2.25rem] w-full resize-none bg-transparent px-1 py-1.5 text-sm leading-relaxed text-foreground;
-    @apply placeholder:text-muted-foreground focus:outline-none;
+    @apply max-h-[200px] min-h-[2.25rem] w-full resize-none bg-transparent px-1 py-1.5 text-sm leading-relaxed text-fg-primary;
+    @apply placeholder:text-fg-secondary focus:outline-none;
   }
 
   .oc-chat-suggestion {
-    @apply rounded-lg border border-border-subtle bg-background px-4 py-3 text-left text-sm text-foreground transition-colors hover:bg-muted/50;
+    @apply rounded-lg border border-border-subtle bg-surface-page px-4 py-3 text-left text-sm text-fg-primary transition-colors hover:bg-surface-raised/50;
   }
 
   .oc-chat-empty {
@@ -437,7 +437,7 @@
 
   /* Brand mark — same contract as FleetCrown ui-brand-mark */
   .ui-brand-mark {
-    @apply flex items-center justify-center rounded-xl border border-border-subtle bg-muted/40 transition-all;
+    @apply flex items-center justify-center rounded-xl border border-border-subtle bg-surface-raised/40 transition-all;
     box-shadow: inset 0 1px 0 hsl(var(--foreground) / 0.04);
   }
   .ui-brand-mark-compact {
@@ -447,12 +447,12 @@
     @apply h-10 w-10 sm:h-11 sm:w-11;
   }
   .ui-kicker {
-    @apply text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:text-xs;
+    @apply text-[10px] font-medium uppercase tracking-[0.14em] text-fg-secondary sm:text-xs;
   }
 
   /* Professional Form Elements - fast, subtle transitions */
   .input {
-    @apply w-full px-3 sm:px-4 py-3 border border-input rounded-md bg-card text-foreground;
+    @apply w-full px-3 sm:px-4 py-3 border border-input rounded-md bg-surface-base text-fg-primary;
     @apply focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring;
     @apply text-base; /* Prevents zoom on iOS */
     @apply min-h-[44px];
@@ -474,7 +474,7 @@
 
   /* Textarea styling */
   .textarea {
-    @apply w-full px-3 sm:px-4 py-3 border border-input rounded-md bg-card text-foreground;
+    @apply w-full px-3 sm:px-4 py-3 border border-input rounded-md bg-surface-base text-fg-primary;
     @apply focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring;
     @apply text-base resize-y min-h-[100px];
     /* Mobile-specific */
@@ -483,7 +483,7 @@
 
   /* Select styling */
   .select {
-    @apply w-full px-3 sm:px-4 py-3 border border-input rounded-md bg-card text-foreground;
+    @apply w-full px-3 sm:px-4 py-3 border border-input rounded-md bg-surface-base text-fg-primary;
     @apply focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-ring;
     @apply text-base min-h-[44px] appearance-none;
     /* iOS-specific */
@@ -492,7 +492,7 @@
 
   /* Progress Indicators */
   .progress-bar {
-    @apply h-2 rounded-full bg-muted overflow-hidden;
+    @apply h-2 rounded-full bg-surface-raised overflow-hidden;
   }
 
   .progress-bar-fill {
@@ -501,7 +501,7 @@
 
   /* Professional Trust Score Styling - faster transitions */
   .trust-score {
-    @apply h-3 rounded-full bg-muted overflow-hidden;
+    @apply h-3 rounded-full bg-surface-raised overflow-hidden;
   }
 
   .trust-score-fill {
@@ -519,11 +519,11 @@
 
   /* KPI Cards */
   .kpi-card {
-    @apply bg-card p-4 sm:p-6 rounded-lg border border-border text-center;
+    @apply bg-surface-base p-4 sm:p-6 rounded-lg border border-default text-center;
   }
 
   .kpi-progress {
-    @apply h-2 rounded-full bg-muted overflow-hidden mt-2;
+    @apply h-2 rounded-full bg-surface-raised overflow-hidden mt-2;
   }
 
   .kpi-progress-fill {
@@ -532,7 +532,7 @@
 
   /* Professional Transparency Score - faster transitions */
   .transparency-score {
-    @apply h-3 rounded-full bg-muted overflow-hidden;
+    @apply h-3 rounded-full bg-surface-raised overflow-hidden;
   }
 
   .transparency-score-fill {
@@ -541,7 +541,7 @@
 
   /* Labels */
   .label {
-    @apply text-sm font-medium text-foreground mb-1 block;
+    @apply text-sm font-medium text-fg-primary mb-1 block;
   }
 
   /* Touch-friendly elements */
@@ -707,7 +707,7 @@
   }
 
   .modal-content-mobile {
-    @apply bg-card w-full max-h-[90vh] overflow-y-auto;
+    @apply bg-surface-base w-full max-h-[90vh] overflow-y-auto;
     @apply rounded-t-xl rounded-b-none;
     @apply sm:rounded-lg sm:max-w-md sm:max-h-[80vh];
     /* Better scrolling on mobile */
@@ -721,7 +721,7 @@
   }
 
   .touch-list-item {
-    @apply px-4 py-4 hover:bg-muted active:bg-muted;
+    @apply px-4 py-4 hover:bg-surface-raised active:bg-surface-raised;
     @apply min-h-[60px] flex items-center;
     @apply transition-colors duration-100;
     /* Touch feedback */
@@ -747,14 +747,14 @@
   .pull-refresh-indicator {
     @apply fixed top-0 left-0 right-0 z-40;
     @apply flex items-center justify-center;
-    @apply bg-muted text-foreground;
+    @apply bg-surface-raised text-fg-primary;
     @apply transition-all duration-300;
   }
 
   /* Professional mobile toasts - faster transitions */
   .toast-mobile {
     @apply fixed bottom-4 left-4 right-4 z-50;
-    @apply bg-card border border-border rounded-lg shadow-sm p-4;
+    @apply bg-surface-base border border-default rounded-lg shadow-sm p-4;
     @apply transform transition-all duration-200;
     @apply sm:bottom-auto sm:top-20 sm:right-4 sm:left-auto sm:max-w-sm;
   }
@@ -861,10 +861,10 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-default;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-surface-page text-fg-primary;
   }
 }
 
