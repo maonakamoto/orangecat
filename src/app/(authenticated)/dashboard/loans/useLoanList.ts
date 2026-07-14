@@ -5,7 +5,6 @@ import { useBulkSelection } from '@/hooks/useBulkSelection';
 import { useBulkDelete } from '@/hooks/useBulkDelete';
 import { loanEntityConfig } from '@/config/entities/loans';
 import { Loan, LoanOffer } from '@/types/loans';
-import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
 import loansService from '@/services/loans';
 
@@ -24,7 +23,6 @@ export function useLoanList() {
   const [availableLoans, setAvailableLoans] = useState<Loan[]>([]);
   const [availablePage, setAvailablePage] = useState(1);
   const [availableTotal, setAvailableTotal] = useState(0);
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   const {
     items: myLoans,
@@ -118,15 +116,6 @@ export function useLoanList() {
     refresh,
   });
 
-  const handleLoanCreated = () => {
-    setCreateDialogOpen(false);
-    refresh();
-    loadOffers();
-    loadIncomingOffers();
-    loadAvailableLoans();
-    toast.success('Loan created successfully!');
-  };
-
   return {
     user,
     isLoading,
@@ -149,8 +138,6 @@ export function useLoanList() {
     setAvailablePage,
     availableTotal,
     availablePageSize: AVAILABLE_PAGE_SIZE,
-    createDialogOpen,
-    setCreateDialogOpen,
     loading,
     error,
     page,
@@ -162,7 +149,6 @@ export function useLoanList() {
     refresh,
     handleBulkDelete,
     executeBulkDelete,
-    handleLoanCreated,
     clearSelection,
   };
 }

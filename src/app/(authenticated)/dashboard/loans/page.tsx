@@ -14,7 +14,6 @@ import EmptyState from '@/components/ui/EmptyState';
 import { AvailableLoans } from '@/components/loans/AvailableLoans';
 import { IncomingLoanOffersList } from '@/components/loans/IncomingLoanOffersList';
 import { LoanOffersList } from '@/components/loans/LoanOffersList';
-import { CreateLoanDialog } from '@/components/loans/CreateLoanDialog';
 import { useLoanList } from './useLoanList';
 
 export default function LoansPage() {
@@ -40,8 +39,6 @@ export default function LoansPage() {
     setAvailablePage,
     availableTotal,
     availablePageSize,
-    createDialogOpen,
-    setCreateDialogOpen,
     loading,
     error,
     page,
@@ -53,7 +50,6 @@ export default function LoansPage() {
     loadAvailableLoans,
     handleBulkDelete,
     executeBulkDelete,
-    handleLoanCreated,
     clearSelection,
   } = useLoanList();
 
@@ -225,11 +221,6 @@ export default function LoansPage() {
         />
       )}
 
-      <CreateLoanDialog
-        open={createDialogOpen}
-        onOpenChange={setCreateDialogOpen}
-        onLoanCreated={handleLoanCreated}
-      />
       <ConfirmDialog
         isOpen={bulkDeleteConfirm}
         onClose={() => setBulkDeleteConfirm(false)}
