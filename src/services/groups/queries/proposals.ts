@@ -4,6 +4,7 @@ import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { STATUS } from '@/config/database-constants';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fromTable } from '../db-helpers';
 
 export type ProposalStatus = 'draft' | 'active' | 'passed' | 'failed' | 'executed' | 'cancelled';
 
@@ -62,8 +63,8 @@ export async function getProposal(
 ): Promise<ProposalResponse> {
   try {
     const sb = client || supabase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_PROPOSALS) as any)
+
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .select(
         `
         *,
@@ -133,8 +134,8 @@ export async function getProposalVotes(
 ): Promise<{ success: boolean; votes?: ProposalVote[]; error?: string }> {
   try {
     const sb = client || supabase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_VOTES) as any)
+
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_VOTES)
       .select('*')
       .eq('proposal_id', proposalId);
 
@@ -166,8 +167,7 @@ export async function getGroupProposals(
     const offset = options?.offset || 0;
     const status = options?.status || 'all';
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let query = (sb.from(DATABASE_TABLES.GROUP_PROPOSALS) as any)
+    let query = fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .select(
         `
         *,
@@ -257,8 +257,7 @@ export async function getPublicJobPostings(
     const limit = Math.min(options?.limit || DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
     const offset = options?.offset || 0;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query = (sb.from(DATABASE_TABLES.GROUP_PROPOSALS) as any)
+    const query = fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
       .select(
         `
         *,

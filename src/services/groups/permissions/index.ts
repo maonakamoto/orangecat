@@ -22,6 +22,7 @@ import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { GOVERNANCE_PRESETS } from '@/config/governance-presets';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fromTable } from '../db-helpers';
 
 // Permission keys that map to governance preset actions
 type GroupPermissionKey =
@@ -79,12 +80,8 @@ export async function checkGroupPermission(
   try {
     const sb = client || supabase;
     // Get group and membership
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: group } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUPS) as any
-    )
+
+    const { data: group } = await fromTable(sb, DATABASE_TABLES.GROUPS)
       .select('is_public, governance_preset')
       .eq('id', groupId)
       .single();
@@ -94,12 +91,8 @@ export async function checkGroupPermission(
     }
 
     // Get membership
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: membership } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUP_MEMBERS) as any
-    )
+
+    const { data: membership } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .select('role, permission_overrides')
       .eq('group_id', groupId)
       .eq('user_id', userId)
@@ -171,12 +164,8 @@ export async function getGroupPermissions(
   try {
     const sb = client || supabase;
     // Get group and membership
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: group2 } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUPS) as any
-    )
+
+    const { data: group2 } = await fromTable(sb, DATABASE_TABLES.GROUPS)
       .select('is_public, governance_preset')
       .eq('id', groupId)
       .single();
@@ -186,12 +175,8 @@ export async function getGroupPermissions(
     }
 
     // Get membership
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: membership2 } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUP_MEMBERS) as any
-    )
+
+    const { data: membership2 } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .select('role, permission_overrides')
       .eq('group_id', groupId)
       .eq('user_id', userId)

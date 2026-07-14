@@ -22,6 +22,7 @@ import { checkGroupPermission } from '../permissions';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import type { ServiceResult } from '@/types/common';
+import { fromTable } from '../db-helpers';
 
 /**
  * Create a group wallet
@@ -43,12 +44,7 @@ export async function createGroupWallet(
       return { success: false, error: 'Insufficient permissions' };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUP_WALLETS) as any
-    )
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_WALLETS)
       .insert({
         group_id: request.group_id,
         name: request.name,
@@ -118,16 +114,12 @@ export async function updateGroupWallet(
     }
 
     // Get wallet to check group_id
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: walletData } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUP_WALLETS) as any
-    )
+
+    const { data: walletData } = await fromTable(sb, DATABASE_TABLES.GROUP_WALLETS)
       .select('group_id')
       .eq('id', walletId)
       .single();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const wallet = walletData as any;
 
     if (!wallet) {
@@ -164,8 +156,7 @@ export async function updateGroupWallet(
       payload.is_active = request.is_active;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (sb.from(DATABASE_TABLES.GROUP_WALLETS) as any)
+    const { error } = await fromTable(sb, DATABASE_TABLES.GROUP_WALLETS)
       .update(payload)
       .eq('id', walletId);
 

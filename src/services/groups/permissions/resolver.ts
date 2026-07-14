@@ -18,6 +18,7 @@ import supabase from '@/lib/supabase/browser';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fromTable } from '../db-helpers';
 
 /**
  * Result of a permission check
@@ -70,12 +71,8 @@ export async function canPerformAction(
   try {
     const sb = client || supabase;
     // Get group from groups table
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: group, error: _groupError } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUPS) as any
-    )
+
+    const { data: group, error: _groupError } = await fromTable(sb, DATABASE_TABLES.GROUPS)
       .select('governance_preset, voting_threshold')
       .eq('id', groupId)
       .maybeSingle();
@@ -91,12 +88,8 @@ export async function canPerformAction(
       };
 
       // Get membership from group_members
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: member } = await (
-        sb
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .from(DATABASE_TABLES.GROUP_MEMBERS) as any
-      )
+
+      const { data: member } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
         .select('role, permission_overrides')
         .eq('group_id', groupId)
         .eq('user_id', userId)

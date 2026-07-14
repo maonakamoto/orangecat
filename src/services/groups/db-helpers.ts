@@ -21,7 +21,7 @@ export type { AnySupabaseClient } from '@/lib/supabase/types';
  *
  * Returns an untyped query builder so callers don't need individual `as any` casts.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export function fromTable(sb: AnySupabaseClient, table: string): any {
   return sb.from(table);
 }
@@ -31,7 +31,7 @@ export function fromTable(sb: AnySupabaseClient, table: string): any {
  *
  * Returns an untyped result so callers don't need individual `as any` casts.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export function callRpc(sb: AnySupabaseClient, fn: string, params?: Record<string, unknown>): any {
   return sb.rpc(fn as never, params as never);
 }

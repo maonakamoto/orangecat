@@ -20,6 +20,7 @@ import { logGroupActivity } from '../utils/activity';
 import { canPerformAction } from '../permissions/resolver';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import type { ServiceResult } from '@/types/common';
+import { fromTable } from '../db-helpers';
 
 /**
  * Join a group
@@ -37,11 +38,11 @@ export async function joinGroup(
 
     // Get group to check join policy
     // Cast to any to bypass Supabase type generation for tables not in generated types
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: group, error: groupError } = (await (sb.from(DATABASE_TABLES.GROUPS) as any)
+
+    const { data: group, error: groupError } = (await fromTable(sb, DATABASE_TABLES.GROUPS)
       .select('is_public, visibility')
       .eq('id', groupId)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       .single()) as {
       data: { is_public: boolean; visibility: string } | null;
       error: Error | null;
@@ -63,8 +64,8 @@ export async function joinGroup(
     }
 
     // Create membership
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: insertError } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any).insert({
+
+    const { error: insertError } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS).insert({
       group_id: groupId,
       user_id: userId,
       role: 'member',
@@ -164,8 +165,8 @@ export async function addMember(
     }
 
     // Add member
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
+
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .insert({
         group_id: groupId,
         user_id: input.user_id,
@@ -222,8 +223,7 @@ export async function updateMember(
       payload.permission_overrides = input.permission_overrides;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .update(payload)
       .eq('group_id', groupId)
       .eq('user_id', memberId)

@@ -8,7 +8,6 @@ import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import type { ActivityType } from './types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyClient = any;
 
 interface ActivityParams {

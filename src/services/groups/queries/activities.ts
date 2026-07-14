@@ -17,6 +17,7 @@ import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
 import { checkGroupPermission } from '../permissions';
 import { getCurrentUserId } from '../utils/helpers';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fromTable } from '../db-helpers';
 
 /**
  * Get group activities
@@ -39,8 +40,8 @@ export async function getGroupActivities(
       }
     } else {
       // Check if group is public
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: group } = await (sb.from(DATABASE_TABLES.GROUPS) as any)
+
+      const { data: group } = await fromTable(sb, DATABASE_TABLES.GROUPS)
         .select('is_public')
         .eq('id', groupId)
         .single();
@@ -50,8 +51,7 @@ export async function getGroupActivities(
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let dbQuery = (sb.from(DATABASE_TABLES.GROUP_ACTIVITIES) as any)
+    let dbQuery = fromTable(sb, DATABASE_TABLES.GROUP_ACTIVITIES)
       .select('*', { count: 'exact' })
       .eq('group_id', groupId);
 

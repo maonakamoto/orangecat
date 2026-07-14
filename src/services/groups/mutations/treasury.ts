@@ -15,6 +15,7 @@ import supabase from '@/lib/supabase/browser';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import type { ServiceResult } from '@/types/common';
 import { satsToBitcoin } from '@/services/currency';
+import { fromTable } from '../db-helpers';
 
 /**
  * Fetch Bitcoin balance from mempool.space API
@@ -67,12 +68,8 @@ async function updateWalletBalance(
 ): Promise<ServiceResult> {
   try {
     const sb = client || supabase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUP_WALLETS) as any
-    )
+
+    const { error } = await fromTable(sb, DATABASE_TABLES.GROUP_WALLETS)
       .update({
         current_balance_btc: balanceBtc,
       })
@@ -103,12 +100,8 @@ export async function refreshWalletBalance(
   try {
     const sb = client || supabase;
     // Get wallet with Bitcoin address
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: wallet, error: fetchError } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUP_WALLETS) as any
-    )
+
+    const { data: wallet, error: fetchError } = await fromTable(sb, DATABASE_TABLES.GROUP_WALLETS)
       .select('bitcoin_address')
       .eq('id', walletId)
       .single();

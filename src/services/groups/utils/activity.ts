@@ -13,6 +13,7 @@ import { logger } from '@/utils/logger';
 import type { ActivityType } from '../types';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fromTable } from '../db-helpers';
 
 /**
  * Log group activity
@@ -36,12 +37,12 @@ export async function logGroupActivity(
 ): Promise<void> {
   try {
     const supabaseClient = client || supabase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     // The group_activities table stores everything but the core fields in `metadata`
     // (jsonb) — description + related_* are NOT columns. Inserting them as columns
     // failed (PostgREST: column does not exist) and the catch below swallowed it, so
     // the group activity feed never recorded anything. Fold them into metadata.
-    await (supabaseClient.from(DATABASE_TABLES.GROUP_ACTIVITIES) as any).insert({
+    await fromTable(supabaseClient, DATABASE_TABLES.GROUP_ACTIVITIES).insert({
       group_id: groupId,
       user_id: userId,
       activity_type: activityType,

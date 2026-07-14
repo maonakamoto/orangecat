@@ -13,6 +13,7 @@ import { logger } from '@/utils/logger';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { slugify } from '@/utils/string';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fromTable } from '../db-helpers';
 
 /**
  * Get current authenticated user ID
@@ -45,8 +46,7 @@ export async function ensureUniqueSlug(
   let counter = 1;
 
   while (true) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (supabaseClient.from(DATABASE_TABLES.GROUPS) as any)
+    const { data } = await fromTable(supabaseClient, DATABASE_TABLES.GROUPS)
       .select('id')
       .eq('slug', slug)
       .maybeSingle();
@@ -69,8 +69,8 @@ export async function getUserGroupIds(
 ): Promise<string[]> {
   try {
     const sb = client || supabase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
+
+    const { data } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .select('group_id')
       .eq('user_id', userId);
 
@@ -91,8 +91,8 @@ export async function isGroupMember(
 ): Promise<boolean> {
   try {
     const sb = client || supabase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
+
+    const { data } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .select('id')
       .eq('group_id', groupId)
       .eq('user_id', userId)
@@ -115,8 +115,8 @@ export async function getUserRole(
 ): Promise<'founder' | 'admin' | 'member' | null> {
   try {
     const sb = client || supabase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
+
+    const { data } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .select('role')
       .eq('group_id', groupId)
       .eq('user_id', userId)

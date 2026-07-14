@@ -19,6 +19,7 @@ import {
 } from '@/services/groups/eventProfiles';
 import type { EventsQuery, EventsListResponse, EventResponse, RsvpsListResponse } from '../types';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fromTable } from '../db-helpers';
 
 /**
  * Get events for a group
@@ -34,8 +35,8 @@ export async function getGroupEvents(
 
     // creator_id / rsvp user_id reference auth.users (not profiles), so
     // profiles cannot be embedded — attachEventProfiles splits the lookup.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let query = (sb.from(DATABASE_TABLES.GROUP_EVENTS) as any)
+
+    let query = fromTable(sb, DATABASE_TABLES.GROUP_EVENTS)
       .select(`*, rsvps:group_event_rsvps (id, user_id, status)`, { count: 'exact' })
       .eq('group_id', groupId)
       .order('starts_at', { ascending: true });
@@ -86,8 +87,8 @@ export async function getEvent(
 
     // creator_id / rsvp user_id reference auth.users (not profiles), so
     // profiles cannot be embedded — attachEventProfiles splits the lookup.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_EVENTS) as any)
+
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENTS)
       .select(
         `
         *,
@@ -140,8 +141,8 @@ export async function getEventRsvps(
     }
 
     // First check if user can access the event
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: event } = await (sb.from(DATABASE_TABLES.GROUP_EVENTS) as any)
+
+    const { data: event } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENTS)
       .select('id, is_public, group_id')
       .eq('id', eventId)
       .single();
@@ -152,8 +153,8 @@ export async function getEventRsvps(
 
     // Get RSVPs — user_id references auth.users (not profiles), so the
     // profile lookup is split (fetchProfilesMap) instead of embedded.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error, count } = await (sb.from(DATABASE_TABLES.GROUP_EVENT_RSVPS) as any)
+
+    const { data, error, count } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENT_RSVPS)
       .select('*', { count: 'exact' })
       .eq('event_id', eventId)
       .order('created_at', { ascending: false });
@@ -213,8 +214,7 @@ export async function getUserRsvpStatus(
       return { success: false, error: 'Authentication required' };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_EVENT_RSVPS) as any)
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_EVENT_RSVPS)
       .select('status')
       .eq('event_id', eventId)
       .eq('user_id', userId)

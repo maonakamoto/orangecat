@@ -19,6 +19,7 @@ import { getCurrentUserId, generateSlug, ensureUniqueSlug } from '../utils/helpe
 import { logGroupActivity } from '../utils/activity';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
 import type { ServiceResult } from '@/types/common';
+import { fromTable } from '../db-helpers';
 
 /**
  * Create a new group
@@ -65,8 +66,8 @@ export async function createGroup(
     };
 
     // Insert into groups table
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabaseClient.from(DATABASE_TABLES.GROUPS) as any)
+
+    const { data, error } = await fromTable(supabaseClient, DATABASE_TABLES.GROUPS)
       .insert(payload)
       .select()
       .single();
@@ -77,9 +78,10 @@ export async function createGroup(
     }
 
     // Add creator as founder in group_members
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: memberError } = await (
-      supabaseClient.from(DATABASE_TABLES.GROUP_MEMBERS) as any
+
+    const { error: memberError } = await fromTable(
+      supabaseClient,
+      DATABASE_TABLES.GROUP_MEMBERS
     ).insert({
       group_id: data.id,
       user_id: currentUserId,
@@ -99,8 +101,7 @@ export async function createGroup(
         enabled_by: currentUserId,
       }));
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabaseClient.from(DATABASE_TABLES.GROUP_FEATURES) as any).insert(featureInserts);
+      await fromTable(supabaseClient, DATABASE_TABLES.GROUP_FEATURES).insert(featureInserts);
     }
 
     // Log activity
@@ -187,8 +188,7 @@ export async function updateGroup(
       payload.voting_threshold = input.voting_threshold;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabaseClient.from(DATABASE_TABLES.GROUPS) as any)
+    const { data, error } = await fromTable(supabaseClient, DATABASE_TABLES.GROUPS)
       .update(payload)
       .eq('id', groupId)
       .select()
@@ -230,8 +230,7 @@ export async function deleteGroup(
       };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabaseClient.from(DATABASE_TABLES.GROUPS) as any)
+    const { error } = await fromTable(supabaseClient, DATABASE_TABLES.GROUPS)
       .delete()
       .eq('id', groupId);
 

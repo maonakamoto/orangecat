@@ -7,6 +7,7 @@ import { getProposal, getProposalVotes } from '../queries/proposals';
 import type { ProposalVote } from '../queries/proposals';
 import { executeProposalAction } from '../execution';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fromTable } from '../db-helpers';
 
 interface CastVoteInput {
   proposal_id: string;
@@ -44,12 +45,7 @@ export async function castVote(input: CastVoteInput, client?: AnySupabaseClient)
       return { success: false, error: 'Voting has ended' };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (
-      sb
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .from(DATABASE_TABLES.GROUP_VOTES) as any
-    )
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_VOTES)
       .upsert(
         {
           proposal_id: input.proposal_id,
@@ -117,12 +113,8 @@ async function checkAndResolveProposal(
       const newStatus: 'passed' | 'failed' = yesPercentage >= threshold ? 'passed' : 'failed';
 
       // Single update; accept idempotency (if already updated, harmless)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (
-        sb
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .from(DATABASE_TABLES.GROUP_PROPOSALS) as any
-      )
+
+      await fromTable(sb, DATABASE_TABLES.GROUP_PROPOSALS)
         .update({ status: newStatus, updated_at: new Date().toISOString() })
         .eq('id', proposalId);
 

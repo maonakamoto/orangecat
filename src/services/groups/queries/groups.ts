@@ -16,6 +16,7 @@ import type { Group, GroupsQuery, GroupsListResponse, GroupResponse } from '../t
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants';
 import { getCurrentUserId, getUserGroupIds } from '../utils/helpers';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fromTable } from '../db-helpers';
 
 // Legacy query fields → live `groups` schema. The table has no `type`,
 // `category`, `governance_model`, or `member_count` columns; those are legacy
@@ -57,7 +58,7 @@ function safeGroupSort(sortBy?: string): string {
  * live schema. Shared by getUserGroups / getAvailableGroups / searchGroups so the
  * mapping lives in exactly one place (was triplicated and drifting).
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 function applyGroupFilters(dbQuery: any, q?: GroupsQuery): any {
   if (!q) {
     return dbQuery;
@@ -118,8 +119,7 @@ export async function getGroup(
     const sb = client || supabase;
     const userId = await getCurrentUserId(sb);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let query = (sb.from(DATABASE_TABLES.GROUPS) as any).select('*');
+    let query = fromTable(sb, DATABASE_TABLES.GROUPS).select('*');
 
     if (bySlug) {
       query = query.eq('slug', identifier);
@@ -174,8 +174,8 @@ export async function getUserGroups(
     }
 
     // Get user's group IDs from group_members
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: memberships } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
+
+    const { data: memberships } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .select('group_id')
       .eq('user_id', userId);
 
@@ -185,8 +185,7 @@ export async function getUserGroups(
 
     const groupIds = memberships.map((m: { group_id: string }) => m.group_id);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let dbQuery = (sb.from(DATABASE_TABLES.GROUPS) as any)
+    let dbQuery = fromTable(sb, DATABASE_TABLES.GROUPS)
       .select('*', { count: 'exact' })
       .in('id', groupIds);
 
@@ -231,8 +230,7 @@ export async function getAvailableGroups(
     const sb = client || supabase;
     const _userId = await getCurrentUserId(sb);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let dbQuery = (sb.from(DATABASE_TABLES.GROUPS) as any)
+    let dbQuery = fromTable(sb, DATABASE_TABLES.GROUPS)
       .select('*', { count: 'exact' })
       .eq('is_public', true);
 
@@ -278,9 +276,8 @@ export async function searchGroups(
     const sb = client || supabase;
     const _userId = await getCurrentUserId(sb);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const escapedSearchQuery = searchQuery.replace(/[%_]/g, '\\$&');
-    let dbQuery = (sb.from(DATABASE_TABLES.GROUPS) as any)
+    let dbQuery = fromTable(sb, DATABASE_TABLES.GROUPS)
       .select('*', { count: 'exact' })
       .or(`name.ilike.%${escapedSearchQuery}%,description.ilike.%${escapedSearchQuery}%`);
 

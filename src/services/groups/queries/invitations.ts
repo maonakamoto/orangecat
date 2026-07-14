@@ -15,6 +15,7 @@ import { STATUS } from '@/config/database-constants';
 import { getCurrentUserId } from '../utils/helpers';
 import { canPerformAction } from '../permissions/resolver';
 import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { callRpc, fromTable } from '../db-helpers';
 
 // ==================== TYPES ====================
 
@@ -81,8 +82,8 @@ export async function getUserPendingInvitations(
     }
 
     // Use the database function for optimized query
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.rpc as any)('get_user_pending_invitations', {
+
+    const { data, error } = await callRpc(sb, 'get_user_pending_invitations', {
       user_uuid: userId,
     });
 
@@ -124,8 +125,7 @@ export async function getUserInvitationCount(client?: AnySupabaseClient): Promis
       return 0;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { count, error } = await (sb.from(DATABASE_TABLES.GROUP_INVITATIONS) as any)
+    const { count, error } = await fromTable(sb, DATABASE_TABLES.GROUP_INVITATIONS)
       .select('*', { count: 'exact', head: true })
       .eq('user_id', userId)
       .eq('status', STATUS.GROUP_INVITATIONS.PENDING)
@@ -175,8 +175,8 @@ export async function getGroupInvitations(
     const status = options?.status || 'all';
 
     // Build query
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let query = (sb.from(DATABASE_TABLES.GROUP_INVITATIONS) as any)
+
+    let query = fromTable(sb, DATABASE_TABLES.GROUP_INVITATIONS)
       .select(
         `
         *,
@@ -266,8 +266,8 @@ export async function getInvitationByToken(
 }> {
   try {
     const sb = client || supabase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (sb.from(DATABASE_TABLES.GROUP_INVITATIONS) as any)
+
+    const { data, error } = await fromTable(sb, DATABASE_TABLES.GROUP_INVITATIONS)
       .select(
         `
         id,
@@ -303,8 +303,8 @@ export async function getInvitationByToken(
     const inviter = data.inviter as { name?: string } | null;
 
     // Get member count
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { count: memberCount } = await (sb.from(DATABASE_TABLES.GROUP_MEMBERS) as any)
+
+    const { count: memberCount } = await fromTable(sb, DATABASE_TABLES.GROUP_MEMBERS)
       .select('*', { count: 'exact', head: true })
       .eq('group_id', group.id);
 
