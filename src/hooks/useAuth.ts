@@ -7,6 +7,7 @@ import { logger } from '@/utils/logger';
 import { ROUTES } from '@/config/routes';
 
 export { useRequireAuth, useRedirectIfAuthenticated } from './useAuthRedirects';
+import { useHydrationCeiling } from './useAuthRedirects';
 
 function useThrottledLog(logFn: () => void, delay: number = 10000) {
   const lastLogTime = useRef(0);
@@ -133,8 +134,18 @@ export function useAuth() {
 
   const isAuthenticated = authState.hydrated && !authState.isLoading && !!authState.user;
 
+  // Honor the same 4s hydration ceiling as useRequireAuth so pages that gate on
+  // `!hydrated` via useAuth (EntityForm, dashboard/people, …) fall through to
+  // their fallback instead of pinning a spinner forever when hydration never
+  // resolves. `isAuthenticated` stays on raw `hydrated` — a timed-out gate is
+  // "resolved enough to render", not "confirmed authenticated".
+  const hydrationTimedOut = useHydrationCeiling(authState.hydrated, authState.isLoading);
+  const effectiveHydrated = authState.hydrated || hydrationTimedOut;
+
   return {
     ...authState,
+    hydrated: effectiveHydrated,
+    hydrationTimedOut,
     isAuthenticated,
     isConsistent: _isConsistent,
     fixInconsistentState,

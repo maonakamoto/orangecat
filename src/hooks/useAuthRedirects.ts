@@ -21,17 +21,13 @@ import { isAuthenticatedRoute, getRouteContext, ROUTES } from '@/config/routes';
  */
 const HYDRATION_TIMEOUT_MS = 4_000;
 
-export function useRequireAuth() {
-  const { user, session, profile, isLoading, hydrated } = useAuthStore();
-  const [_isConsistent, setIsConsistent] = useState(true);
-  const router = useRouter();
-  const pathname = usePathname();
-  const [checkedAuth, setCheckedAuth] = useState(false);
+/**
+ * Hydration ceiling timer. Returns true once auth has failed to resolve within
+ * HYDRATION_TIMEOUT_MS, so consumers can stop gating on `!hydrated` forever.
+ * Shared by useRequireAuth and useAuth so both hook families honor the ceiling.
+ */
+export function useHydrationCeiling(hydrated: boolean, isLoading: boolean): boolean {
   const [hydrationTimedOut, setHydrationTimedOut] = useState(false);
-
-  // Start the hydration ceiling timer the moment we mount. If hydration
-  // resolves first the timer is cancelled cleanly; otherwise the
-  // consumer falls through to the !user branch and renders a sign-in CTA.
   useEffect(() => {
     if (hydrated && !isLoading) {
       return undefined;
@@ -39,6 +35,20 @@ export function useRequireAuth() {
     const timer = setTimeout(() => setHydrationTimedOut(true), HYDRATION_TIMEOUT_MS);
     return () => clearTimeout(timer);
   }, [hydrated, isLoading]);
+  return hydrationTimedOut;
+}
+
+export function useRequireAuth() {
+  const { user, session, profile, isLoading, hydrated } = useAuthStore();
+  const [_isConsistent, setIsConsistent] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
+  const [checkedAuth, setCheckedAuth] = useState(false);
+
+  // Start the hydration ceiling timer the moment we mount. If hydration
+  // resolves first the timer is cancelled cleanly; otherwise the
+  // consumer falls through to the !user branch and renders a sign-in CTA.
+  const hydrationTimedOut = useHydrationCeiling(hydrated, isLoading);
 
   useEffect(() => {
     if (hydrated && !isLoading) {
@@ -83,12 +93,24 @@ export function useRequireAuth() {
   // render their fallback state instead of pinning a spinner forever.
   const effectiveIsLoading = (isLoading || !hydrated || !checkedAuth) && !hydrationTimedOut;
 
+  // Report the SAME ceiling through `hydrated`. Many auth-gated pages gate on
+  // `!hydrated || isLoading` (EntityDashboardPage, settings/ai, research, …).
+  // If we returned raw `hydrated`, the 4s ceiling would flip `isLoading` off
+  // but `!hydrated` would keep those pages pinned on a spinner forever when
+  // hydration never resolves (e.g. Supabase multi-tab lock contention, cookie
+  // domain mismatch). Treating a timed-out gate as "resolved" lets the page
+  // fall through to its `!user` branch — a sign-in CTA / redirect — which is
+  // exactly what the ceiling was built to deliver. No happy-path change: real
+  // auth resolves in <300ms, long before the 4s timer, so effectiveHydrated
+  // === hydrated in the normal case.
+  const effectiveHydrated = hydrated || hydrationTimedOut;
+
   return {
     user,
     profile,
     session,
     isLoading: effectiveIsLoading,
-    hydrated,
+    hydrated: effectiveHydrated,
     /** True when the 4s hydration ceiling fired before auth resolved.
      * Pages can branch on this to show "auth seems stuck — sign in" UX. */
     hydrationTimedOut,

@@ -44,6 +44,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     logger.info('Setting up auth state change listener', undefined, 'Auth');
 
+    // Safety net — scheduled FIRST, before any Supabase call. If
+    // INITIAL_SESSION never fires (Supabase bug, network blip) OR the listener
+    // setup below throws (multi-tab navigator-lock contention, corrupted token
+    // in storage), force hydrated=true after 3s so auth-gated pages resolve to
+    // a sign-in CTA instead of hanging on a spinner forever. Scheduling it up
+    // front means a throw in onAuthStateChange() can no longer starve it.
+    const fallback = setTimeout(() => {
+      pendingTimersRef.current.delete(fallback);
+      const currentState = useAuthStore.getState();
+      if (!currentState.hydrated) {
+        logger.warn(
+          'Force-setting hydrated state — INITIAL_SESSION never arrived',
+          undefined,
+          'Auth'
+        );
+        setInitialAuthState(null, null, null);
+      }
+    }, 3000);
+    pendingTimersRef.current.add(fallback);
+
     // Keep server-side auth cookies in sync so API routes can read the session
     const syncSessionToServer = async (event: AuthChangeEvent, session: Session | null) => {
       try {
@@ -63,136 +83,152 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // 2. This prevents duplicate session checks and excessive lock acquisitions
     // 3. The INITIAL_SESSION handler below will handle any session mismatch
 
-    // Set up the auth state change listener
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
-      // INITIAL_SESSION with no session = a logged-out visitor on cold load:
-      // nothing to sync, and the server route rightly 400s on an empty payload.
-      // Skip that one case so every logged-out page load stops emitting a
-      // console 400 (and a wasted round-trip). With the cookie-based browser
-      // client this server-sync is mostly belt-and-suspenders anyway.
-      if (event !== 'INITIAL_SESSION' || session) {
-        await syncSessionToServer(event, session);
-      }
+    // Set up the auth state change listener. Wrapped so a throw here (e.g.
+    // Supabase client init failing on a locked/corrupted token) can't abort the
+    // effect before the safety-net fallback above gets a chance to run.
+    try {
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange(
+        async (event: AuthChangeEvent, session: Session | null) => {
+          // INITIAL_SESSION with no session = a logged-out visitor on cold load:
+          // nothing to sync, and the server route rightly 400s on an empty payload.
+          // Skip that one case so every logged-out page load stops emitting a
+          // console 400 (and a wasted round-trip). With the cookie-based browser
+          // client this server-sync is mostly belt-and-suspenders anyway.
+          if (event !== 'INITIAL_SESSION' || session) {
+            await syncSessionToServer(event, session);
+          }
 
-      logger.debug(
-        'Auth state change detected',
-        {
-          event,
-          hasSession: !!session,
-          hasUser: !!session?.user,
-        },
-        'Auth'
-      );
-
-      // Handle different auth events
-      switch (event) {
-        case 'INITIAL_SESSION':
-          // Initial session load - set state with existing session
-          logger.info(
-            'INITIAL_SESSION event received',
-            { hasSession: !!session, hasUser: !!session?.user },
+          logger.debug(
+            'Auth state change detected',
+            {
+              event,
+              hasSession: !!session,
+              hasUser: !!session?.user,
+            },
             'Auth'
           );
-          if (session?.user) {
-            const storedUser = useAuthStore.getState().user;
 
-            // Check for session mismatch (user ID changed)
-            if (storedUser && storedUser.id !== session.user.id) {
-              logger.warn(
-                'Session mismatch detected - clearing stale auth data',
-                {
-                  storedUserId: storedUser.id,
-                  sessionUserId: session.user.id,
-                },
+          // Handle different auth events
+          switch (event) {
+            case 'INITIAL_SESSION':
+              // Initial session load - set state with existing session
+              logger.info(
+                'INITIAL_SESSION event received',
+                { hasSession: !!session, hasUser: !!session?.user },
                 'Auth'
               );
+              if (session?.user) {
+                const storedUser = useAuthStore.getState().user;
+
+                // Check for session mismatch (user ID changed)
+                if (storedUser && storedUser.id !== session.user.id) {
+                  logger.warn(
+                    'Session mismatch detected - clearing stale auth data',
+                    {
+                      storedUserId: storedUser.id,
+                      sessionUserId: session.user.id,
+                    },
+                    'Auth'
+                  );
+                  clear();
+                }
+
+                // Always clear profile on initial session to prevent stale data
+                setInitialAuthState(session.user, session, null);
+                logger.info(
+                  'Set initial auth state with user',
+                  { userId: session.user.id },
+                  'Auth'
+                );
+                // Fetch profile in background
+                fetchProfile().catch(err => {
+                  logger.warn('Failed to fetch profile on initial session', { error: err }, 'Auth');
+                });
+              } else {
+                logger.info('No session found, setting null auth state', undefined, 'Auth');
+                setInitialAuthState(null, null, null);
+              }
+              break;
+
+            case 'SIGNED_IN':
+              // User just signed in - set user and session
+              if (session?.user) {
+                logger.info('User signed in', { userId: session.user.id }, 'Auth');
+                // Always clear profile on sign in to prevent stale data from previous user
+                setInitialAuthState(session.user, session, null);
+                // Fetch profile in background (only once - AuthStore signIn no longer fetches)
+                // Use a small delay to ensure state is set before fetching
+                const t = setTimeout(() => {
+                  pendingTimersRef.current.delete(t);
+                  fetchProfile().catch(err => {
+                    logger.warn('Failed to fetch profile after sign in', { error: err }, 'Auth');
+                  });
+                }, 100);
+                pendingTimersRef.current.add(t);
+              }
+              break;
+
+            case 'SIGNED_OUT':
+              // User signed out or session expired
+              logger.info('User signed out', undefined, 'Auth');
+              // Clear any queued offline posts to prevent cross-user leakage
+              try {
+                await offlineQueueService.clearQueue();
+              } catch (e) {
+                logger.warn('Failed to clear offline queue on sign out', { error: e }, 'Auth');
+              }
               clear();
-            }
+              // Tell every other tab in this browser to sign out immediately
+              // instead of waiting for their storage-event listener to catch up.
+              // The receiving side calls clear() too (see channel listener below).
+              broadcastRef.current?.postMessage({ type: 'SIGNED_OUT' });
+              break;
 
-            // Always clear profile on initial session to prevent stale data
-            setInitialAuthState(session.user, session, null);
-            logger.info('Set initial auth state with user', { userId: session.user.id }, 'Auth');
-            // Fetch profile in background
-            fetchProfile().catch(err => {
-              logger.warn('Failed to fetch profile on initial session', { error: err }, 'Auth');
-            });
-          } else {
-            logger.info('No session found, setting null auth state', undefined, 'Auth');
-            setInitialAuthState(null, null, null);
+            case 'TOKEN_REFRESHED':
+              // Token was refreshed - update session
+              if (session?.user) {
+                logger.debug('Token refreshed', { userId: session.user.id }, 'Auth');
+                setInitialAuthState(session.user, session, null);
+              }
+              break;
+
+            case 'USER_UPDATED':
+              // User metadata or profile updated
+              if (session?.user) {
+                logger.debug('User updated', { userId: session.user.id }, 'Auth');
+                setInitialAuthState(session.user, session, null);
+                // Re-fetch profile to get latest data
+                fetchProfile().catch(err => {
+                  logger.warn('Failed to fetch profile after user update', { error: err }, 'Auth');
+                });
+              }
+              break;
+
+            case 'PASSWORD_RECOVERY':
+              // User is in password recovery flow
+              logger.info('Password recovery event detected', undefined, 'Auth');
+              // Session should contain the recovery token
+              if (session?.user) {
+                setInitialAuthState(session.user, session, null);
+              }
+              break;
+
+            default:
+              logger.warn('Unknown auth event', { event }, 'Auth');
           }
-          break;
+        }
+      );
 
-        case 'SIGNED_IN':
-          // User just signed in - set user and session
-          if (session?.user) {
-            logger.info('User signed in', { userId: session.user.id }, 'Auth');
-            // Always clear profile on sign in to prevent stale data from previous user
-            setInitialAuthState(session.user, session, null);
-            // Fetch profile in background (only once - AuthStore signIn no longer fetches)
-            // Use a small delay to ensure state is set before fetching
-            const t = setTimeout(() => {
-              pendingTimersRef.current.delete(t);
-              fetchProfile().catch(err => {
-                logger.warn('Failed to fetch profile after sign in', { error: err }, 'Auth');
-              });
-            }, 100);
-            pendingTimersRef.current.add(t);
-          }
-          break;
-
-        case 'SIGNED_OUT':
-          // User signed out or session expired
-          logger.info('User signed out', undefined, 'Auth');
-          // Clear any queued offline posts to prevent cross-user leakage
-          try {
-            await offlineQueueService.clearQueue();
-          } catch (e) {
-            logger.warn('Failed to clear offline queue on sign out', { error: e }, 'Auth');
-          }
-          clear();
-          // Tell every other tab in this browser to sign out immediately
-          // instead of waiting for their storage-event listener to catch up.
-          // The receiving side calls clear() too (see channel listener below).
-          broadcastRef.current?.postMessage({ type: 'SIGNED_OUT' });
-          break;
-
-        case 'TOKEN_REFRESHED':
-          // Token was refreshed - update session
-          if (session?.user) {
-            logger.debug('Token refreshed', { userId: session.user.id }, 'Auth');
-            setInitialAuthState(session.user, session, null);
-          }
-          break;
-
-        case 'USER_UPDATED':
-          // User metadata or profile updated
-          if (session?.user) {
-            logger.debug('User updated', { userId: session.user.id }, 'Auth');
-            setInitialAuthState(session.user, session, null);
-            // Re-fetch profile to get latest data
-            fetchProfile().catch(err => {
-              logger.warn('Failed to fetch profile after user update', { error: err }, 'Auth');
-            });
-          }
-          break;
-
-        case 'PASSWORD_RECOVERY':
-          // User is in password recovery flow
-          logger.info('Password recovery event detected', undefined, 'Auth');
-          // Session should contain the recovery token
-          if (session?.user) {
-            setInitialAuthState(session.user, session, null);
-          }
-          break;
-
-        default:
-          logger.warn('Unknown auth event', { event }, 'Auth');
-      }
-    });
-
-    listenerRef.current = { data: { subscription } };
+      listenerRef.current = { data: { subscription } };
+    } catch (error) {
+      logger.error(
+        'Failed to set up auth state listener — hydration fallback will resolve auth',
+        { error },
+        'Auth'
+      );
+    }
 
     // Handle the Remember-Me preference: if the user opted out and this is
     // a new browser session, sign them out before INITIAL_SESSION fires.
@@ -259,23 +295,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         logger.warn('Could not open auth BroadcastChannel', { error }, 'Auth');
       }
     }
-
-    // Safety net: if INITIAL_SESSION somehow never fires (Supabase bug,
-    // network blip), force hydrated=true after 3s so unauthenticated
-    // pages don't hang in a loading state forever.
-    const fallback = setTimeout(() => {
-      pendingTimersRef.current.delete(fallback);
-      const currentState = useAuthStore.getState();
-      if (!currentState.hydrated) {
-        logger.warn(
-          'Force-setting hydrated state — INITIAL_SESSION never arrived',
-          undefined,
-          'Auth'
-        );
-        setInitialAuthState(null, null, null);
-      }
-    }, 3000);
-    pendingTimersRef.current.add(fallback);
 
     // Capture the Set instance on entry so the cleanup runs against the
     // same instance the body's scheduling closures were adding to.
