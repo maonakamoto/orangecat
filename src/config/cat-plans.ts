@@ -18,17 +18,23 @@
  */
 
 import { ROUTES } from '@/config/routes';
+import { FEATURES } from '@/config/features';
 import { CREDIT_USAGE_MARKUP } from '@/services/cat/credit-metering';
 import { WIRED_PROVIDER_DISPLAY_NAMES } from '@/data/aiProviders';
 
 export type CatPlanId = 'free' | 'byok' | 'credits';
 
 /**
- * Flip to true the moment the platform Lightning wallet (PLATFORM_NWC_URI)
- * is provisioned and one live top-up has been verified — the credits card
- * then switches from "activating" to a live top-up CTA.
+ * True once the platform Lightning wallet (PLATFORM_NWC_URI) is provisioned and
+ * one live top-up has been verified — the credits card then switches from
+ * "activating" to a live top-up CTA.
+ *
+ * Env-derived (NEXT_PUBLIC_CAT_CREDITS_LIVE) rather than a hardcoded constant so
+ * going live is an env change on the box, not a code deploy. SSOT: the fact
+ * "credits are live" has one source. The server top-up route independently
+ * gates on PLATFORM_NWC_URI, so flipping this without the wallet is safe.
  */
-export const CAT_CREDITS_LIVE = false;
+export const CAT_CREDITS_LIVE = FEATURES.catCreditsLive;
 
 /** Platform margin label — derived from CREDIT_USAGE_MARKUP so marketing never drifts. */
 export const CAT_CREDITS_MARKUP_LABEL = `provider cost + ${Math.round((CREDIT_USAGE_MARKUP - 1) * 100)}%`;

@@ -12,4 +12,11 @@ function envFlag(name: string): boolean {
 export const FEATURES = {
   /** Voice input on create forms and onboarding (requires browser speech APIs). */
   voiceInput: envFlag('NEXT_PUBLIC_FEATURE_VOICE_INPUT'),
+  /**
+   * Cat Credits Lightning top-up is live. Set alongside the server-side
+   * PLATFORM_NWC_URI (the receiving wallet) once one live top-up is verified —
+   * this flag only flips the UI from "Activating" to a live top-up CTA; the
+   * server still independently refuses top-up when PLATFORM_NWC_URI is unset.
+   */
+  catCreditsLive: envFlag('NEXT_PUBLIC_CAT_CREDITS_LIVE'),
 } as const;
