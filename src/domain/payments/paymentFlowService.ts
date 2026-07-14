@@ -34,6 +34,7 @@ import type {
 import { logger } from '@/utils/logger';
 import { sendSellerPaymentNotification } from '@/lib/email/send-seller-notification';
 import { NotificationDispatcher } from '@/services/notifications/dispatcher';
+import { notifyFleetCrownEntitlement } from '@/services/fleetcrown/entitlement-notify';
 
 const METHOD_LABELS: Record<string, string> = {
   nwc: 'Lightning (NWC)',
@@ -454,6 +455,12 @@ async function handlePaymentConfirmed(
   // Notify seller — fire-and-forget, must not block payment confirmation
   sendSellerPaymentNotification(paymentIntent, supabase).catch(err =>
     logger.warn('Seller payment notification failed', { err }, 'paymentFlowService')
+  );
+
+  // Grant a FleetCrown pass if this payment was for one — fire-and-forget,
+  // never blocks settlement. No-op for normal sales / when unconfigured.
+  void notifyFleetCrownEntitlement(paymentIntent).catch(err =>
+    logger.warn('FleetCrown entitlement notify failed', { err }, 'paymentFlowService')
   );
 
   // Also create in-app notification for the seller

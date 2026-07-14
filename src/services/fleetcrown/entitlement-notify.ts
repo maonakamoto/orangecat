@@ -1,0 +1,127 @@
+/**
+ * FleetCrown entitlement notifier — the OrangeCat→FleetCrown settlement signal.
+ *
+ * When a Bitcoin payment for a FleetCrown "pass" product settles, we tell
+ * FleetCrown to grant the plan. FleetCrown's /api/orangecat/entitlement verifies
+ * the HMAC, maps the OC actor → its user, and flips the plan (time-boxed, since
+ * BTC has no native recurring). Idempotent on FleetCrown's side via externalId
+ * (the payment-intent id), so a retried settlement check is safe.
+ *
+ * A pass product is marked with two tags: `fleetcrown-plan:<personal|pro|team>`
+ * and `fleetcrown-days:<n>`. Non-pass payments are ignored. Fire-and-forget:
+ * never throws, never blocks settlement — a dropped notify is recoverable (re-send
+ * is idempotent, and FleetCrown can reconcile).
+ *
+ * Inert until ORANGECAT_WEBHOOK_SECRET is set (shared with FleetCrown).
+ */
+import { createHmac } from 'crypto';
+import { getAdminClient } from '@/lib/supabase/admin';
+import { DATABASE_TABLES } from '@/config/database-tables';
+import { getEntityMetadata, type EntityType } from '@/config/entity-registry';
+import { logger } from '@/utils/logger';
+import type { PaymentIntent } from '@/domain/payments/types';
+
+const FLEETCROWN_URL =
+  process.env.FLEETCROWN_ENTITLEMENT_URL ||
+  'https://fleetcrown.orangecat.ch/api/orangecat/entitlement';
+
+const PLANS = new Set(['personal', 'pro', 'team']);
+
+/** Extract {plan, periodDays} from a product's tags, or null if not a pass. */
+export function parseFleetCrownPass(tags: unknown): { plan: string; periodDays: number } | null {
+  if (!Array.isArray(tags)) {
+    return null;
+  }
+  let plan: string | null = null;
+  let periodDays: number | null = null;
+  for (const raw of tags) {
+    if (typeof raw !== 'string') {
+      continue;
+    }
+    const t = raw.trim();
+    const p = /^fleetcrown-plan:([a-z]+)$/.exec(t);
+    if (p && PLANS.has(p[1])) {
+      plan = p[1];
+    }
+    const d = /^fleetcrown-days:(\d{1,4})$/.exec(t);
+    if (d) {
+      periodDays = parseInt(d[1], 10);
+    }
+  }
+  return plan && periodDays ? { plan, periodDays } : null;
+}
+
+export async function notifyFleetCrownEntitlement(pi: PaymentIntent): Promise<void> {
+  const secret = process.env.ORANGECAT_WEBHOOK_SECRET;
+  if (!secret) {
+    return;
+  } // not wired to FleetCrown yet — inert
+  if (pi.entity_type !== 'product') {
+    return;
+  } // only product passes carry a plan
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const admin = getAdminClient() as any;
+
+    const meta = getEntityMetadata('product' as EntityType);
+    const { data: product } = await admin
+      .from(meta.tableName)
+      .select('tags')
+      .eq('id', pi.entity_id)
+      .single();
+    const pass = parseFleetCrownPass(product?.tags);
+    if (!pass) {
+      return;
+    } // a normal product sale, not a FleetCrown pass
+
+    // The buyer's PERSONAL actor id is what FleetCrown stored as orangecatActorId
+    // (= the OIDC id_token.sub). buyer_id is the user id — resolve via admin
+    // (headless: no session), never create here.
+    const { data: actor } = await admin
+      .from(DATABASE_TABLES.ACTORS)
+      .select('id')
+      .eq('user_id', pi.buyer_id)
+      .eq('actor_type', 'user')
+      .maybeSingle();
+    if (!actor?.id) {
+      logger.warn('[fc-entitlement] no personal actor for buyer — cannot map to FleetCrown', {
+        buyerId: pi.buyer_id,
+      });
+      return;
+    }
+
+    const body = JSON.stringify({
+      actorId: actor.id,
+      plan: pass.plan,
+      externalId: pi.id,
+      periodDays: pass.periodDays,
+      amountBtc: String(pi.amount_btc ?? ''),
+    });
+    const signature = 'sha256=' + createHmac('sha256', secret).update(body).digest('hex');
+
+    const res = await fetch(FLEETCROWN_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-orangecat-signature': signature },
+      body,
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!res.ok) {
+      logger.warn('[fc-entitlement] FleetCrown rejected grant', {
+        piId: pi.id,
+        status: res.status,
+      });
+    } else {
+      logger.info('[fc-entitlement] granted', {
+        piId: pi.id,
+        plan: pass.plan,
+        periodDays: pass.periodDays,
+      });
+    }
+  } catch (err) {
+    logger.error('[fc-entitlement] notify failed (non-fatal)', {
+      piId: pi.id,
+      error: (err as Error).message,
+    });
+  }
+}
