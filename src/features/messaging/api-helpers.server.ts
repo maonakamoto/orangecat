@@ -9,6 +9,11 @@ import { fromTable } from '@/lib/supabase/untyped';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import type { Database } from '@/types/database';
+import {
+  fetchMessages as svcFetchMessages,
+  sendMessage as svcSendMessage,
+} from '@/features/messaging/service.server';
+import type { Message, Pagination } from './types';
 
 type AdminClient = ReturnType<typeof createAdminClient>;
 
@@ -124,4 +129,107 @@ export async function verifyParticipantAndReactivate(
   }
 
   return 'ok';
+}
+
+/** Success payload for the GET messages response. */
+export interface ConversationMessagesPayload {
+  conversation: Record<string, unknown>;
+  messages: Message[];
+  pagination: Pagination;
+}
+
+/**
+ * Load a conversation's messages for the GET handler.
+ *
+ * Verifies participant access (distinguishing forbidden vs. not-found the same
+ * way the route did), then fetches messages + conversation context in parallel.
+ * Returns a discriminated result the route maps to an HTTP response.
+ */
+export async function loadConversationMessages(
+  conversationId: string,
+  userId: string,
+  cursor: string | undefined,
+  limit: number
+): Promise<
+  { ok: true; data: ConversationMessagesPayload } | { ok: false; code: 'forbidden' | 'not_found' }
+> {
+  const admin = createAdminClient();
+
+  // Verify participant access
+  const { data: participant, error: partError } = await admin
+    .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
+    .select('user_id, last_read_at, is_active')
+    .eq('conversation_id', conversationId)
+    .eq('user_id', userId)
+    .eq('is_active', true)
+    .maybeSingle();
+
+  if (partError || !participant) {
+    const { data: convExists } = await admin
+      .from(DATABASE_TABLES.CONVERSATIONS)
+      .select('id')
+      .eq('id', conversationId)
+      .maybeSingle();
+    return { ok: false, code: convExists ? 'forbidden' : 'not_found' };
+  }
+
+  const [{ messages, pagination }, ctx] = await Promise.all([
+    svcFetchMessages(conversationId, userId, cursor, limit),
+    fetchConversationContext(admin, conversationId, userId),
+  ]);
+
+  if (!ctx) {
+    return { ok: false, code: 'not_found' };
+  }
+
+  return {
+    ok: true,
+    data: {
+      conversation: {
+        ...ctx.conversation,
+        participants: ctx.formattedParticipants,
+        unread_count: ctx.unreadCount,
+      },
+      messages,
+      pagination,
+    },
+  };
+}
+
+/** Validated input for sending a message. */
+export interface SendMessageInput {
+  content: string;
+  messageType: string;
+  metadata?: Record<string, unknown>;
+  senderActorId?: string;
+}
+
+/**
+ * Send a message on behalf of `userId` for the POST handler.
+ *
+ * Verifies (and reactivates) participation, then delegates the insert to the
+ * messaging service. Returns a discriminated result the route maps to an HTTP
+ * response ('forbidden' → not a participant).
+ */
+export async function postConversationMessage(
+  conversationId: string,
+  userId: string,
+  input: SendMessageInput
+): Promise<{ ok: true; id: string } | { ok: false; code: 'forbidden' }> {
+  const admin = createAdminClient();
+
+  const membership = await verifyParticipantAndReactivate(admin, conversationId, userId);
+  if (membership === 'not_found') {
+    return { ok: false, code: 'forbidden' };
+  }
+
+  const id = await svcSendMessage(
+    conversationId,
+    userId,
+    input.content,
+    input.messageType,
+    input.metadata || null,
+    input.senderActorId || null
+  );
+  return { ok: true, id };
 }

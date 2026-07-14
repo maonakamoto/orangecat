@@ -1,9 +1,7 @@
 /**
- * Individual Event API
- *
- * GET    /api/groups/[slug]/events/[eventId] - Get event details
- * PUT    /api/groups/[slug]/events/[eventId] - Update event (creator/admin)
- * DELETE /api/groups/[slug]/events/[eventId] - Delete event (creator/admin)
+ * Individual Event API — GET (details), PUT (update, creator/admin),
+ * DELETE (creator/admin). Thin HTTP layer; business rules live in
+ * @/domain/groups/events.server.
  */
 
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
@@ -16,12 +14,16 @@ import {
   handleApiError,
 } from '@/lib/api/standardResponse';
 import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
-import { DATABASE_TABLES } from '@/config/database-tables';
 import { logger } from '@/utils/logger';
 import { z } from 'zod';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
-import { resolveGroupBySlug, canEditEvent, checkGroupMember } from '@/domain/groups/helpers.server';
-import { attachEventProfiles } from '@/services/groups/eventProfiles';
+import {
+  getGroupEvent,
+  authorizeGroupEventEdit,
+  applyGroupEventUpdate,
+  removeGroupEvent,
+  type EventResult,
+} from '@/domain/groups/events.server';
 import { STATUS } from '@/config/database-constants';
 
 const updateEventSchema = z.object({
@@ -40,6 +42,24 @@ const updateEventSchema = z.object({
   requires_rsvp: z.boolean().optional(),
 });
 
+/** Map a domain EventResult onto the matching HTTP response. */
+function toResponse<T>(result: EventResult<T>) {
+  if (result.ok) {
+    return apiSuccess(result.data);
+  }
+  if ('dbError' in result) {
+    return handleApiError(result.dbError);
+  }
+  switch (result.code) {
+    case 'not_found':
+      return apiNotFound(result.message);
+    case 'forbidden':
+      return apiForbidden(result.message);
+    default:
+      return apiValidationError(result.message);
+  }
+}
+
 export const GET = withAuth(
   async (
     req: AuthenticatedRequest,
@@ -52,33 +72,7 @@ export const GET = withAuth(
     }
     try {
       const { user, supabase } = req;
-
-      const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {
-        return apiNotFound('Group not found');
-      }
-
-      // creator_id / rsvp user_id reference auth.users (not profiles), so
-      // profiles cannot be embedded — attachEventProfiles splits the lookup.
-      const { data: event, error: eventError } = await supabase
-        .from(DATABASE_TABLES.GROUP_EVENTS)
-        .select(
-          `*, group:groups!group_events_group_id_fkey (id, name, slug, avatar_url),
-          rsvps:group_event_rsvps (id, user_id, status, created_at)`
-        )
-        .eq('id', eventId)
-        .eq('group_id', group.id)
-        .single();
-
-      if (eventError || !event) {
-        return apiNotFound('Event not found');
-      }
-      if (!event.is_public && !(await checkGroupMember(supabase, group.id, user.id))) {
-        return apiForbidden('This event is private');
-      }
-
-      const [enrichedEvent] = await attachEventProfiles(supabase, [event]);
-      return apiSuccess({ event: enrichedEvent });
+      return toResponse(await getGroupEvent(supabase, slug, eventId, user.id));
     } catch (error) {
       logger.error('Event GET error', { error }, 'Groups');
       return handleApiError(error);
@@ -104,42 +98,17 @@ export const PUT = withAuth(
         return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
       }
 
-      const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {
-        return apiNotFound('Group not found');
+      const authz = await authorizeGroupEventEdit(supabase, slug, eventId, user.id, 'update');
+      if (!authz.ok) {
+        return toResponse(authz);
       }
 
-      const { data: event, error: eventError } = await supabase
-        .from(DATABASE_TABLES.GROUP_EVENTS)
-        .select('id, group_id, creator_id')
-        .eq('id', eventId)
-        .eq('group_id', group.id)
-        .single();
-      if (eventError || !event) {
-        return apiNotFound('Event not found');
-      }
-      if (!(await canEditEvent(supabase, group.id, user.id, event.creator_id))) {
-        return apiForbidden('Only event creator or group admins can update events');
-      }
-
-      const body = await req.json();
-      const validation = updateEventSchema.safeParse(body);
+      const validation = updateEventSchema.safeParse(await req.json());
       if (!validation.success) {
         return apiValidationError('Invalid request data', validation.error.flatten());
       }
 
-      const { data: updatedEvent, error: updateError } = await supabase
-        .from(DATABASE_TABLES.GROUP_EVENTS)
-        .update(validation.data)
-        .eq('id', eventId)
-        .select()
-        .single();
-      if (updateError) {
-        logger.error('Failed to update event', { error: updateError, eventId }, 'Groups');
-        return handleApiError(updateError);
-      }
-
-      return apiSuccess({ event: updatedEvent });
+      return toResponse(await applyGroupEventUpdate(supabase, eventId, validation.data));
     } catch (error) {
       logger.error('Event PUT error', { error }, 'Groups');
       return handleApiError(error);
@@ -165,34 +134,12 @@ export const DELETE = withAuth(
         return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
       }
 
-      const group = await resolveGroupBySlug(supabase, slug);
-      if (!group) {
-        return apiNotFound('Group not found');
+      const authz = await authorizeGroupEventEdit(supabase, slug, eventId, user.id, 'delete');
+      if (!authz.ok) {
+        return toResponse(authz);
       }
 
-      const { data: event, error: eventError } = await supabase
-        .from(DATABASE_TABLES.GROUP_EVENTS)
-        .select('id, group_id, creator_id')
-        .eq('id', eventId)
-        .eq('group_id', group.id)
-        .single();
-      if (eventError || !event) {
-        return apiNotFound('Event not found');
-      }
-      if (!(await canEditEvent(supabase, group.id, user.id, event.creator_id))) {
-        return apiForbidden('Only event creator or group admins can delete events');
-      }
-
-      const { error: deleteError } = await supabase
-        .from(DATABASE_TABLES.GROUP_EVENTS)
-        .delete()
-        .eq('id', eventId);
-      if (deleteError) {
-        logger.error('Failed to delete event', { error: deleteError, eventId }, 'Groups');
-        return handleApiError(deleteError);
-      }
-
-      return apiSuccess({ message: 'Event deleted successfully' });
+      return toResponse(await removeGroupEvent(supabase, eventId));
     } catch (error) {
       logger.error('Event DELETE error', { error }, 'Groups');
       return handleApiError(error);

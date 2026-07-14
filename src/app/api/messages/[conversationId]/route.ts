@@ -3,16 +3,13 @@
  *
  * GET  /api/messages/[conversationId] - Fetch messages with pagination
  * POST /api/messages/[conversationId] - Send a new message
+ *
+ * Thin HTTP layer — participant checks, DB access, and orchestration live in
+ * @/features/messaging/api-helpers.server.
  */
 
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import { createAdminClient } from '@/lib/supabase/admin';
 import { z } from 'zod';
-import { DATABASE_TABLES } from '@/config/database-tables';
-import {
-  fetchMessages as svcFetchMessages,
-  sendMessage as svcSendMessage,
-} from '@/features/messaging/service.server';
 import {
   enforceRateLimit,
   getRateLimitHeaders,
@@ -21,8 +18,8 @@ import {
   MESSAGE_TYPES,
 } from '@/features/messaging/lib';
 import {
-  fetchConversationContext,
-  verifyParticipantAndReactivate,
+  loadConversationMessages,
+  postConversationMessage,
 } from '@/features/messaging/api-helpers.server';
 import {
   apiSuccess,
@@ -67,44 +64,18 @@ export const GET = withAuth(
         PAGINATION.MESSAGES_MAX
       );
 
-      const admin = createAdminClient();
-
-      // Verify participant access
-      const { data: participant, error: partError } = await admin
-        .from(DATABASE_TABLES.CONVERSATION_PARTICIPANTS)
-        .select('user_id, last_read_at, is_active')
-        .eq('conversation_id', conversationId)
-        .eq('user_id', user.id)
-        .eq('is_active', true)
-        .maybeSingle();
-
-      if (partError || !participant) {
-        const { data: convExists } = await admin
-          .from(DATABASE_TABLES.CONVERSATIONS)
-          .select('id')
-          .eq('id', conversationId)
-          .maybeSingle();
-        return convExists ? apiForbidden('Access denied') : apiNotFound('Conversation not found');
+      const result = await loadConversationMessages(
+        conversationId,
+        user.id,
+        cursor || undefined,
+        limit
+      );
+      if (!result.ok) {
+        return result.code === 'forbidden'
+          ? apiForbidden('Access denied')
+          : apiNotFound('Conversation not found');
       }
-
-      const [{ messages, pagination }, ctx] = await Promise.all([
-        svcFetchMessages(conversationId, user.id, cursor || undefined, limit),
-        fetchConversationContext(admin, conversationId, user.id),
-      ]);
-
-      if (!ctx) {
-        return apiNotFound('Conversation not found');
-      }
-
-      return apiSuccess({
-        conversation: {
-          ...ctx.conversation,
-          participants: ctx.formattedParticipants,
-          unread_count: ctx.unreadCount,
-        },
-        messages,
-        pagination,
-      });
+      return apiSuccess(result.data);
     } catch (error) {
       logger.error(
         'Messages GET error',
@@ -154,22 +125,16 @@ export const POST = withAuth(
       }
 
       const { content, messageType, metadata, senderActorId } = validation.data;
-      const admin = createAdminClient();
-
-      const membership = await verifyParticipantAndReactivate(admin, conversationId, user.id);
-      if (membership === 'not_found') {
-        return apiForbidden('Not a participant in this conversation');
-      }
-
-      const newId = await svcSendMessage(
-        conversationId,
-        user.id,
+      const result = await postConversationMessage(conversationId, user.id, {
         content,
         messageType,
-        metadata || null,
-        senderActorId || null
-      );
-      return apiCreated({ id: newId }, { headers: getRateLimitHeaders(rateLimitResult) });
+        metadata,
+        senderActorId,
+      });
+      if (!result.ok) {
+        return apiForbidden('Not a participant in this conversation');
+      }
+      return apiCreated({ id: result.id }, { headers: getRateLimitHeaders(rateLimitResult) });
     } catch (error) {
       logger.error(
         'Messages POST error',

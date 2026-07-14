@@ -4,10 +4,11 @@
  * GET /api/ai-assistants/[id]/conversations/[convId] - Get conversation with messages
  * PUT /api/ai-assistants/[id]/conversations/[convId] - Update conversation (title, archive)
  * DELETE /api/ai-assistants/[id]/conversations/[convId] - Delete conversation
+ *
+ * Thin HTTP layer — business rules live in @/services/ai/conversation-service.
  */
 
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/withAuth';
-import { DATABASE_TABLES } from '@/config/database-tables';
 import { z } from 'zod';
 import { logger } from '@/utils/logger';
 import {
@@ -19,6 +20,12 @@ import {
 } from '@/lib/api/standardResponse';
 import { rateLimitWriteAsync, retryAfterSeconds } from '@/lib/rate-limit';
 import { validateUUID, getValidationError } from '@/lib/api/validation';
+import {
+  getConversationDetail,
+  updateConversation,
+  deleteConversation,
+  type ConversationResult,
+} from '@/services/ai/conversation-service';
 
 interface RouteContext {
   params: Promise<{ id: string; convId: string }>;
@@ -28,6 +35,17 @@ const updateConversationSchema = z.object({
   title: z.string().max(200).optional(),
   status: z.enum(['active', 'archived']).optional(),
 });
+
+/** Map a domain ConversationResult onto the matching HTTP response. */
+function toResponse<T>(result: ConversationResult<T>) {
+  if (result.ok) {
+    return apiSuccess(result.data);
+  }
+  if ('dbError' in result) {
+    return apiInternalError(result.message);
+  }
+  return apiNotFound(result.message);
+}
 
 export const GET = withAuth(async (request: AuthenticatedRequest, context: RouteContext) => {
   const { id: assistantId, convId } = await context.params;
@@ -41,42 +59,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context: Route
   }
   try {
     const { user, supabase } = request;
-
-    const { data: conversation, error: convError } = await supabase
-      .from(DATABASE_TABLES.AI_CONVERSATIONS)
-      .select('*')
-      .eq('id', convId)
-      .eq('assistant_id', assistantId)
-      .eq('user_id', user.id)
-      .single();
-
-    if (convError || !conversation) {
-      return apiNotFound('Conversation not found');
-    }
-
-    const [{ data: messages, error: msgError }, { data: assistant }] = await Promise.all([
-      supabase
-        .from(DATABASE_TABLES.AI_MESSAGES)
-        .select('*')
-        .eq('conversation_id', convId)
-        .order('created_at', { ascending: true }),
-      supabase
-        .from(DATABASE_TABLES.AI_ASSISTANTS)
-        .select('id, title, avatar_url, pricing_model, price_per_message, price_per_1k_tokens')
-        .eq('id', assistantId)
-        .single(),
-    ]);
-
-    if (msgError) {
-      logger.error('Error fetching messages', msgError, 'AIConversationAPI');
-      return apiInternalError('Failed to fetch messages');
-    }
-
-    return apiSuccess({
-      ...(conversation as Record<string, unknown>),
-      messages: messages || [],
-      assistant,
-    });
+    return toResponse(await getConversationDetail(supabase, assistantId, convId, user.id));
   } catch (error) {
     logger.error('Get conversation error', error, 'AIConversationAPI');
     return apiInternalError();
@@ -107,24 +90,9 @@ export const PUT = withAuth(async (request: AuthenticatedRequest, context: Route
       return apiBadRequest('Validation failed', result.error.flatten());
     }
 
-    const { data: conversation, error } = await supabase
-      .from(DATABASE_TABLES.AI_CONVERSATIONS)
-      .update({ ...result.data, updated_at: new Date().toISOString() })
-      .eq('id', convId)
-      .eq('assistant_id', assistantId)
-      .eq('user_id', user.id)
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Error updating conversation', error, 'AIConversationAPI');
-      return apiInternalError('Failed to update conversation');
-    }
-    if (!conversation) {
-      return apiNotFound('Conversation not found');
-    }
-
-    return apiSuccess(conversation);
+    return toResponse(
+      await updateConversation(supabase, assistantId, convId, user.id, result.data)
+    );
   } catch (error) {
     logger.error('Update conversation error', error, 'AIConversationAPI');
     return apiInternalError();
@@ -149,19 +117,7 @@ export const DELETE = withAuth(async (request: AuthenticatedRequest, context: Ro
       return apiRateLimited('Too many requests. Please slow down.', retryAfterSeconds(rl));
     }
 
-    const { error } = await supabase
-      .from(DATABASE_TABLES.AI_CONVERSATIONS)
-      .delete()
-      .eq('id', convId)
-      .eq('assistant_id', assistantId)
-      .eq('user_id', user.id);
-
-    if (error) {
-      logger.error('Error deleting conversation', error, 'AIConversationAPI');
-      return apiInternalError('Failed to delete conversation');
-    }
-
-    return apiSuccess({ message: 'Conversation deleted' });
+    return toResponse(await deleteConversation(supabase, assistantId, convId, user.id));
   } catch (error) {
     logger.error('Delete conversation error', error, 'AIConversationAPI');
     return apiInternalError();
