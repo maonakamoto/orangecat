@@ -1,8 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect, ReactNode } from 'react';
-import { useRequireAuth } from '@/hooks/useAuth';
-import { useUserCurrency } from '@/hooks/useUserCurrency';
+import { ReactNode } from 'react';
 import Button from '@/components/ui/Button';
 import { AlertCircle, Search, X } from 'lucide-react';
 import Input from '@/components/ui/Input';
@@ -13,52 +11,26 @@ import CommercePagination from '@/components/commerce/CommercePagination';
 import BulkActionsBar from '@/components/entity/BulkActionsBar';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useEntityList } from '@/hooks/useEntityList';
-import { useBulkSelection } from '@/hooks/useBulkSelection';
-import { useBulkDelete } from '@/hooks/useBulkDelete';
-import { EntityConfig, BaseEntity } from '@/types/entity';
-import { toast } from 'sonner';
-import { logger } from '@/utils/logger';
-import { API_ROUTES } from '@/config/api-routes';
-import type { LucideIcon } from 'lucide-react';
+import { BaseEntity, EntityConfig } from '@/types/entity';
+import {
+  useEntityDashboard,
+  type EntityTabConfig,
+  type StatusFilterConfig,
+  type StatusFilterOption,
+} from '@/hooks/useEntityDashboard';
+
+// Re-export the config types from their new home so existing importers (and
+// entity page configs) can keep importing them from this component.
+export type { EntityTabConfig, StatusFilterConfig, StatusFilterOption };
 
 /**
  * EntityDashboardPage — single SSOT shell for every "My X" dashboard route.
  *
- * Add features via props; never fork the file. If a real new shape appears
- * (e.g. lender-vs-borrower split for loans), surface it as a config option,
- * not as a sibling page.
+ * All state/data/mutation logic lives in `useEntityDashboard`; this component
+ * is the presentational shell. Add features via props; never fork the file.
+ * If a real new shape appears (e.g. lender-vs-borrower split for loans),
+ * surface it as a config option, not as a sibling page.
  */
-
-export interface EntityTabConfig {
-  id: string;
-  label: string;
-  icon?: LucideIcon;
-  /** Override the default apiEndpoint for this tab (e.g., favorites feed). */
-  apiEndpoint?: string;
-  /** Override the empty state shown when this tab has no items. */
-  emptyState?: EntityConfig<BaseEntity>['emptyState'];
-  /** Bulk select toolbar visibility (default true). */
-  allowBulkSelect?: boolean;
-  /** Hide the status filter on this tab (default false). */
-  hideStatusFilter?: boolean;
-  /** Hide the search input on this tab (default false). */
-  hideSearch?: boolean;
-}
-
-export interface StatusFilterOption {
-  value: string;
-  label: string;
-}
-
-export interface StatusFilterConfig<T extends BaseEntity> {
-  options: StatusFilterOption[];
-  /** Default value (defaults to 'all'). */
-  defaultValue?: string;
-  /** Custom match — when omitted, item.status === value is used. */
-  match?: (item: T, value: string) => boolean;
-}
-
 interface EntityDashboardPageProps<T extends BaseEntity> {
   config: EntityConfig<T>;
   title?: string;
@@ -92,163 +64,41 @@ export default function EntityDashboardPage<T extends BaseEntity>({
   searchPlaceholder,
   statusFilter,
 }: EntityDashboardPageProps<T>) {
-  const { user, isLoading: authLoading, hydrated } = useRequireAuth();
-  const userCurrency = useUserCurrency();
-  const { selectedIds, toggleSelect, toggleSelectAll, clearSelection } = useBulkSelection();
-  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
-  const [changingStatusIds, setChangingStatusIds] = useState<Set<string>>(new Set());
-  const [showSelection, setShowSelection] = useState(false);
-
-  const firstTab = tabs?.[0];
-  const secondTab = tabs?.[1];
-  const [activeTabId, setActiveTabId] = useState<string>(firstTab?.id ?? '__default__');
-
-  const activeTab = useMemo(() => tabs?.find(t => t.id === activeTabId), [tabs, activeTabId]);
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusValue, setStatusValue] = useState<string>(statusFilter?.defaultValue ?? 'all');
-
-  // Primary feed (first tab, or default when there are no tabs).
-  const primary = useEntityList<T>({
-    apiEndpoint: firstTab?.apiEndpoint ?? config.apiEndpoint,
-    userId: user?.id,
-    limit,
-    enabled: !!user?.id && hydrated && !authLoading && (!tabs || activeTabId === firstTab?.id),
-  });
-
-  // Secondary feed (second tab) — only enabled while that tab is active.
-  const secondary = useEntityList<T>({
-    apiEndpoint: secondTab?.apiEndpoint ?? config.apiEndpoint,
-    userId: user?.id,
-    limit,
-    enabled: !!user?.id && hydrated && !authLoading && !!secondTab && activeTabId === secondTab.id,
-  });
-
-  const current = activeTabId === secondTab?.id ? secondary : primary;
-  const items = current.items;
-  const loading = current.loading;
-  const error = current.error;
-  const page = current.page;
-  const total = current.total;
-  const setPage = current.setPage;
-  const refresh = current.refresh;
-
   const {
+    user,
+    authLoading,
+    hydrated,
+    userCurrency,
+    selectedIds,
+    toggleSelect,
+    toggleSelectAll,
+    clearSelection,
+    showSelection,
+    setShowSelection,
+    deletingIds,
+    changingStatusIds,
+    activeTabId,
+    setActiveTabId,
+    activeTab,
+    searchQuery,
+    setSearchQuery,
+    statusValue,
+    setStatusValue,
+    loading,
+    error,
+    page,
+    total,
+    setPage,
+    refresh,
+    filteredItems,
     isDeleting,
     bulkDeleteConfirm,
     setBulkDeleteConfirm,
     handleBulkDelete,
     executeBulkDelete,
-  } = useBulkDelete({
-    selectedIds,
-    apiEndpoint: config.apiEndpoint,
-    entityName: config.name,
-    entityNamePlural: config.namePlural,
-    clearSelection,
-    refresh,
-    onSuccess: () => setShowSelection(false),
-  });
-
-  // When the active tab changes, drop any in-progress selection — selections
-  // don't carry between feeds and showing them on a different tab is confusing.
-  useEffect(() => {
-    clearSelection();
-    setShowSelection(false);
-  }, [activeTabId, clearSelection]);
-
-  // Apply search + status filters client-side. Pagination still tracks the
-  // full feed total — filtered views are intended to be paginated server-side
-  // in the future via `queryParams` to useEntityList.
-  const filteredItems = useMemo(() => {
-    let list = items;
-    const trimmed = searchQuery.trim().toLowerCase();
-    if (trimmed && searchableFields && searchableFields.length > 0) {
-      list = list.filter(item => {
-        for (const field of searchableFields) {
-          const value = item[field];
-          if (value === null || value === undefined) {
-            continue;
-          }
-          if (Array.isArray(value)) {
-            if (value.some(v => typeof v === 'string' && v.toLowerCase().includes(trimmed))) {
-              return true;
-            }
-          } else if (String(value).toLowerCase().includes(trimmed)) {
-            return true;
-          }
-        }
-        return false;
-      });
-    }
-    if (statusFilter && statusValue !== 'all' && !activeTab?.hideStatusFilter) {
-      const matcher =
-        statusFilter.match ??
-        ((it: T, v: string) => (it as unknown as { status?: string }).status === v);
-      list = list.filter(item => matcher(item, statusValue));
-    }
-    return list;
-  }, [items, searchQuery, searchableFields, statusFilter, statusValue, activeTab]);
-
-  const handleStatusChange = useCallback(
-    async (id: string, newStatus: string) => {
-      if (!config.entityType) {
-        return;
-      }
-      setChangingStatusIds(prev => new Set(prev).add(id));
-      try {
-        const response = await fetch(API_ROUTES.ENTITIES.STATUS(config.entityType, id), {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: newStatus }),
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || `Failed to update ${config.name} status`);
-        }
-        await refresh();
-        toast.success(`${config.name} status updated`);
-      } catch (err) {
-        logger.error(
-          `Failed to update ${config.name} status`,
-          { error: err, id },
-          'EntityDashboardPage'
-        );
-        toast.error(`Failed to update ${config.name} status. Please try again.`);
-      } finally {
-        setChangingStatusIds(prev => {
-          const next = new Set(prev);
-          next.delete(id);
-          return next;
-        });
-      }
-    },
-    [config.entityType, config.name, refresh]
-  );
-
-  const handleDeleteItem = useCallback(
-    async (id: string) => {
-      setDeletingIds(prev => new Set(prev).add(id));
-      try {
-        const response = await fetch(`${config.apiEndpoint}/${id}`, { method: 'DELETE' });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || `Failed to delete ${config.name}`);
-        }
-        toast.success(`${config.name} deleted successfully`);
-        await refresh();
-      } catch (err) {
-        logger.error(`Failed to delete ${config.name}`, { error: err, id }, 'EntityDashboardPage');
-        toast.error(`Failed to delete ${config.name}. Please try again.`);
-      } finally {
-        setDeletingIds(prev => {
-          const next = new Set(prev);
-          next.delete(id);
-          return next;
-        });
-      }
-    },
-    [config.apiEndpoint, config.name, refresh]
-  );
+    handleStatusChange,
+    handleDeleteItem,
+  } = useEntityDashboard<T>({ config, limit, tabs, searchableFields, statusFilter });
 
   if (!hydrated || authLoading) {
     return (
