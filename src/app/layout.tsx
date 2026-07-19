@@ -157,6 +157,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </QueryProvider>
           <Toaster position="top-right" richColors closeButton />
         </ThemeProvider>
+        {/* FleetCrown feedback widget — OrangeCat is customer #2 of the sibling
+            product's embeddable feedback loop (visitor points at the broken
+            element → FleetCrown per-project inbox → one-click agent dispatch).
+            Env-gated like GA; data-fc-bottom clears the mobile bottom nav. */}
+        {process.env.FLEETCROWN_FEEDBACK_TOKEN && (
+          <Script
+            src="https://fleetcrown.orangecat.ch/widget.js"
+            strategy="lazyOnload"
+            data-fc-project={process.env.FLEETCROWN_FEEDBACK_TOKEN}
+            data-fc-bottom="80"
+          />
+        )}
         {gaId && (
           <>
             <Script
