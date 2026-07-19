@@ -51,6 +51,53 @@ export function parseFleetCrownPass(tags: unknown): { plan: string; periodDays: 
   return plan && periodDays ? { plan, periodDays } : null;
 }
 
+const FLEETCROWN_EVENTS_URL =
+  process.env.FLEETCROWN_EVENTS_URL || 'https://fleetcrown.orangecat.ch/api/orangecat/events';
+
+/**
+ * Settled-payment signal for FleetCrown-linked projects: when money lands on
+ * an OC project that a FleetCrown project published itself as, tell the fleet —
+ * settled funding is the ground-truth signal the capability layer can't derive
+ * on its own. FleetCrown drops events for unlinked entities, so we send for
+ * every settled project payment and let the receiver filter. Same shared
+ * secret, fire-and-forget, inert until ORANGECAT_WEBHOOK_SECRET is set.
+ */
+export async function notifyFleetCrownProjectFunding(pi: PaymentIntent): Promise<void> {
+  const secret = process.env.ORANGECAT_WEBHOOK_SECRET;
+  if (!secret) {
+    return;
+  }
+  if (pi.entity_type !== 'project' && pi.entity_type !== 'cause') {
+    return;
+  } // funding signals only — product sales are the entitlement path
+
+  try {
+    const body = JSON.stringify({
+      type: 'payment.settled',
+      entityType: pi.entity_type,
+      entityId: pi.entity_id,
+      title: pi.description ?? undefined,
+      amountBtc: String(pi.amount_btc ?? ''),
+      externalId: pi.id,
+    });
+    const signature = 'sha256=' + createHmac('sha256', secret).update(body).digest('hex');
+    const res = await fetch(FLEETCROWN_EVENTS_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-orangecat-signature': signature },
+      body,
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!res.ok) {
+      logger.warn('[fc-funding] FleetCrown rejected event', { piId: pi.id, status: res.status });
+    }
+  } catch (err) {
+    logger.error('[fc-funding] notify failed (non-fatal)', {
+      piId: pi.id,
+      error: (err as Error).message,
+    });
+  }
+}
+
 export async function notifyFleetCrownEntitlement(pi: PaymentIntent): Promise<void> {
   const secret = process.env.ORANGECAT_WEBHOOK_SECRET;
   if (!secret) {

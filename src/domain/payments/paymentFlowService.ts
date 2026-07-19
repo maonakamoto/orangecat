@@ -34,7 +34,10 @@ import type {
 import { logger } from '@/utils/logger';
 import { sendSellerPaymentNotification } from '@/lib/email/send-seller-notification';
 import { NotificationDispatcher } from '@/services/notifications/dispatcher';
-import { notifyFleetCrownEntitlement } from '@/services/fleetcrown/entitlement-notify';
+import {
+  notifyFleetCrownEntitlement,
+  notifyFleetCrownProjectFunding,
+} from '@/services/fleetcrown/entitlement-notify';
 
 const METHOD_LABELS: Record<string, string> = {
   nwc: 'Lightning (NWC)',
@@ -461,6 +464,12 @@ async function handlePaymentConfirmed(
   // never blocks settlement. No-op for normal sales / when unconfigured.
   void notifyFleetCrownEntitlement(paymentIntent).catch(err =>
     logger.warn('FleetCrown entitlement notify failed', { err }, 'paymentFlowService')
+  );
+
+  // Funding on a FleetCrown-linked project → activity signal for the fleet.
+  // Fire-and-forget; the receiver drops events for unlinked entities.
+  void notifyFleetCrownProjectFunding(paymentIntent).catch(err =>
+    logger.warn('FleetCrown funding notify failed', { err }, 'paymentFlowService')
   );
 
   // Also create in-app notification for the seller
