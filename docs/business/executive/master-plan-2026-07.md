@@ -5,6 +5,34 @@
 
 ---
 
+> ## ⏱️ Status update — 2026-07-20 (code ground truth)
+>
+> Re-verified this plan against the codebase. **Most of the code-ownable work is
+> already shipped; the plan's own tables lagged reality.** The critical path is
+> unchanged and it is not engineering — it is Phase 0.1 (the platform wallet).
+>
+> **Done (verified in code):**
+>
+> - **2.1 Cat Credit `usage` metering** — wired (`chat-orchestrator.ts` → `meterCreditUsage`) **and now tested** (PR #405: assistant-charge + top-up + ledger-wrapper, 46 money-path assertions).
+> - **3.2 generic edit** — done: `EntityCreateEditPage` + `useEntityCreateEdit` (`?edit=<id>`) across 13 entity types (the "3 of 15" figure was stale).
+> - **3.3 entity detail redesign** — done for all marketplace types via `PublicEntityDetailPage`; the flat column-dump is deleted. Wishlist owner page was the last holdout → PR #406. **(SSR `/discover` is still `'use client'` — the SEO/crawler half of 3.3 is still open.)**
+> - **0.3 fee copy** — reconciled to one SSOT (`FEE_CLAIMS` in `config/landing-page.ts`); 0% = P2P, 95% = Cat-Credits/paid-AI. No user-facing contradiction. _(But see 2.4 — `strategic-plan.md` still says "transaction fees"; not yet reconciled.)_
+> - **Hardening:** dead 7,468-line `database.generated.ts` deleted; status-label + `AiService` SSOT collapse done (`4dd6465e`, straggler PR #407); money-path tests (4.1, money half).
+> - **Phase 1 (FC⇄OC bridge)** continues shipping: FC feedback widget embedded as "customer #2", notify-sibling on settled project/cause funding (commits `415d5177`, `24089501`).
+>
+> **Still open — the real backlog:**
+>
+> - **0.1 `PLATFORM_NWC_URI`** (founder) — the single blocker. Go-live is env-driven: set it on the box → `npx tsx scripts/bitcoin/verify-platform-wallet.ts` → `NEXT_PUBLIC_CAT_CREDITS_LIVE=true` → one live top-up. Unblocks top-ups + frontier metering + paid-assistant 95/5 at once. **0.2** (first real payment) and **2.2** (first live top-up) are gated on this.
+> - **2.4** reconcile `strategic-plan.md` §Business Model (still claims transaction fees — line 22); **2.5** Swiss attorney (founder).
+> - **3.3** SSR `/discover`; **3.4** search across all entity types; **3.5** LNURL-verify; **3.6** seed real supply; **3.1** Cat economic interviewer (partially built: `economic-profile.ts` + interview handler).
+> - **4.3** dead `MockPaymentProvider` stack still present; **4.1** OIDC/governance test coverage; **4.2** remaining `AnySupabaseClient` casts.
+>
+> Bottom line: **one founder env action stands between OrangeCat and its first-ever
+> economic event.** Everything downstream of it is wired and, for the money paths,
+> tested.
+
+---
+
 ## 1. Ground Truth (2026-07-02)
 
 ### Usage (production DB, supabase.orangecat.ch)
