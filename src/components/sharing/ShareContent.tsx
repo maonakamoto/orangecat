@@ -64,8 +64,8 @@ export const SHARE_PLATFORMS: SharePlatform[] = [
   {
     name: 'WhatsApp',
     icon: MessageCircle,
-    color: 'text-green-600',
-    bgColor: 'bg-green-50 hover:bg-green-100',
+    color: 'text-fg-primary',
+    bgColor: 'bg-surface-raised hover:bg-surface-raised/80',
     action: (shareUrl, shareTitle) => {
       window.open(
         `https://wa.me/?text=${encodeURIComponent(`${shareTitle} ${shareUrl}`)}`,

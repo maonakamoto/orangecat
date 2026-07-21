@@ -145,7 +145,7 @@ export default function BottomSheet({
         >
           {/* Drag handle */}
           <div className="flex justify-center pt-3 pb-2">
-            <div className="w-12 h-1.5 bg-gray-300 dark:bg-muted rounded-full" aria-hidden="true" />
+            <div className="w-12 h-1.5 bg-muted rounded-full" aria-hidden="true" />
           </div>
 
           {/* Header */}

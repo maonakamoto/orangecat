@@ -94,7 +94,7 @@ export function ProfilePageSkeleton() {
         <div className="relative mb-8">
           <div className="relative h-48 sm:h-64 lg:h-80 bg-surface-raised rounded-md shadow-none animate-pulse" />
           <div className="absolute -bottom-12 sm:-bottom-16 left-4 sm:left-8">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-lg bg-gray-300 dark:bg-surface-raised border-4 border-fg-inverted dark:border-default shadow-sm animate-pulse" />
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-lg bg-surface-raised border-4 border-fg-inverted dark:border-default shadow-sm animate-pulse" />
           </div>
           <div className="absolute top-4 right-4 sm:top-6 sm:right-6 flex gap-2 sm:gap-3">
             <div className="h-10 w-24 bg-surface-raised rounded-lg animate-pulse" />

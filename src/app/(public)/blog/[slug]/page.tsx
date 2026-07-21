@@ -241,7 +241,7 @@ export default async function BlogPost({ params }: PageProps) {
                     <Link
                       key={tag}
                       href={`/blog?tag=${encodeURIComponent(tag)}`}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-surface-raised text-fg-primary hover:bg-gray-200 dark:hover:bg-surface-raised/80 transition-colors"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-surface-raised text-fg-primary hover:bg-surface-raised/80 transition-colors"
                     >
                       <Tag className="w-3 h-3 mr-1" />
                       {tag}

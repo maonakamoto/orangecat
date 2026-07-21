@@ -212,7 +212,7 @@ export function GroupMembers({ groupId, members, onUpdate }: GroupMembersProps) 
               {members.map(member => (
                 <div
                   key={member.id}
-                  className="flex items-center justify-between p-3 rounded-lg border hover:bg-surface-raised/40 dark:hover:bg-gray-800 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border hover:bg-surface-raised/40 transition-colors"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <Avatar className="h-10 w-10 border-2 border-strong">

@@ -47,13 +47,13 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
 
   return (
     <div
-      className={`bg-surface-base rounded-lg border-2 p-6 ${isBitcoin ? 'border-bitcoinOrange/30' : 'border-yellow-200'}`}
+      className={`bg-surface-base rounded-lg border-2 p-6 ${isBitcoin ? 'border-bitcoinOrange/30' : 'border-status-warning/30'}`}
       data-bitcoin-card={isBitcoin ? 'true' : undefined}
       data-lightning-card={!isBitcoin ? 'true' : undefined}
     >
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
-        <Icon className={`w-5 h-5 ${isBitcoin ? 'text-bitcoinOrange' : 'text-yellow-600'}`} />
+        <Icon className={`w-5 h-5 ${isBitcoin ? 'text-bitcoinOrange' : 'text-status-warning'}`} />
         <div>
           <h4 className="font-semibold text-fg-primary text-sm">{label}</h4>
           <p className="text-xs text-fg-secondary">{description}</p>
@@ -99,7 +99,7 @@ function AddressCard({ type, address, label, description }: AddressCardProps) {
           variant="outline"
           size="sm"
           onClick={copyToClipboard}
-          className={`w-full ${isBitcoin ? 'border-strong hover:bg-bitcoinOrange/10' : 'border-yellow-300 hover:bg-yellow-50'}`}
+          className={`w-full ${isBitcoin ? 'border-strong hover:bg-bitcoinOrange/10' : 'border-status-warning/30 hover:bg-status-warning-subtle'}`}
         >
           <Copy className="w-3 h-3 mr-1" />
           Copy Address

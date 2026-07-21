@@ -16,7 +16,7 @@ export function Skeleton({ className, ...props }: SkeletonProps) {
     <div
       className={cn(
         // eslint-disable-next-line no-restricted-syntax -- skeleton shimmer requires mid-tone gray; bg-muted dark (11%) is too dark for the animate-pulse effect
-        'animate-pulse rounded-md bg-gray-200 dark:bg-gray-700',
+        'animate-pulse rounded-md bg-surface-raised',
         className
       )}
       {...props}
