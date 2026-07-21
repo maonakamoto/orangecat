@@ -16,6 +16,7 @@ import { embedTexts } from '@/services/ai/embeddings';
 import { ENTITY_STATUS } from '@/config/database-constants';
 import { getEntityMetadata, type EntityType } from '@/config/entity-registry';
 import { logger } from '@/utils/logger';
+import { introduceMatches } from '@/services/match/reverseMatch';
 
 interface IndexItem {
   entity_type: string;
@@ -71,6 +72,32 @@ const causeQuality = (o: { updatedAt?: string | null; raised?: number; goal?: nu
 
 const EMBED_BATCH = 96;
 const key = (t: string, id: string) => `${t}:${id}`;
+
+/**
+ * A wishlist's "need" text = its own title/description PLUS its items' — the
+ * real demand detail usually lives in the items, not the thin container. This
+ * is what gets embedded so a need can be matched to the supply that meets it.
+ */
+async function buildWishlistText(
+  supabase: any,
+  w: { id: string; title?: string | null; description?: string | null }
+): Promise<string> {
+  const parts: string[] = [w.title, w.description].filter(Boolean) as string[];
+  const { data: items } = await supabase
+    .from(DATABASE_TABLES.WISHLIST_ITEMS)
+    .select('title, description')
+    .eq('wishlist_id', w.id)
+    .limit(50);
+  for (const it of items ?? []) {
+    if (it.title) {
+      parts.push(it.title);
+    }
+    if (it.description) {
+      parts.push(it.description);
+    }
+  }
+  return parts.join('. ').trim();
+}
 
 /** Entity types whose public rows are embedded into the search corpus.
  *  The allow-list is a deliberate scope decision; table + path come from the registry SSOT. */
@@ -167,6 +194,30 @@ export async function reconcileOne(
         };
       }
     }
+  } else if (type === 'wishlist') {
+    // The demand side. A public, active wishlist is a standing "I need X" —
+    // indexed into the same vector space as supply so the two can be matched.
+    // (Wishlists key on visibility/is_active, not status='active', so they need
+    // this dedicated branch rather than the generic ENTITY_CFG path.)
+    const { data } = await supabase
+      .from(DATABASE_TABLES.WISHLISTS)
+      .select('id, title, description, visibility, is_active, updated_at')
+      .eq('id', id)
+      .maybeSingle();
+    if (data && data.visibility === 'public' && data.is_active) {
+      const text = await buildWishlistText(supabase, data);
+      if (text) {
+        item = {
+          entity_type: 'wishlist',
+          entity_id: data.id,
+          title: data.title || 'Wishlist',
+          url: `/wishlists/${data.id}`,
+          text,
+          updated_at: data.updated_at ?? null,
+          quality: clamp01(recency(data.updated_at)),
+        };
+      }
+    }
   }
 
   if (!item) {
@@ -197,7 +248,24 @@ export async function reconcileOne(
     ],
     { onConflict: 'entity_type,entity_id' }
   );
-  return error ? { indexed: 0, pruned: 0, failed: 1 } : { indexed: 1, pruned: 0, failed: 0 };
+  if (error) {
+    return { indexed: 0, pruned: 0, failed: 1 };
+  }
+
+  // Two-sided introduction: a freshly (re)indexed listing or wishlist may match
+  // an open counterpart on the other side of the market. Idempotent per pair, so
+  // repeated reconciles (updates, corpus sweeps) never re-notify. Best-effort —
+  // an introduction failure must never fail the index write.
+  if (
+    item.entity_type === 'product' ||
+    item.entity_type === 'service' ||
+    item.entity_type === 'wishlist'
+  ) {
+    await introduceMatches(supabase, item, vec).catch(err =>
+      logger.warn('introduceMatches failed', { err }, 'Reindex')
+    );
+  }
+  return { indexed: 1, pruned: 0, failed: 0 };
 }
 
 /** Build the full current searchable corpus (profiles + active indexable entities). */
@@ -269,6 +337,30 @@ async function buildCorpus(supabase: any): Promise<IndexItem[]> {
             : clamp01(recency(e.updated_at)),
       });
     }
+  }
+
+  // Wishlists = the demand side. Index public + active ones so a standing
+  // "I need X" lives in the same vector space as the "haves" (products/
+  // services) and can be matched to what would meet it.
+  const { data: wishlists } = await supabase
+    .from(DATABASE_TABLES.WISHLISTS)
+    .select('id, title, description, updated_at')
+    .eq('visibility', 'public')
+    .eq('is_active', true);
+  for (const w of wishlists ?? []) {
+    const text = await buildWishlistText(supabase, w);
+    if (!text) {
+      continue;
+    }
+    items.push({
+      entity_type: 'wishlist',
+      entity_id: w.id,
+      title: w.title || 'Wishlist',
+      url: `/wishlists/${w.id}`,
+      text,
+      updated_at: w.updated_at ?? null,
+      quality: clamp01(recency(w.updated_at)),
+    });
   }
 
   return items;
