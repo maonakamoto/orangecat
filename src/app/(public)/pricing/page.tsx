@@ -43,7 +43,7 @@ export default function PricingPage() {
         </div>
 
         {/* Plan cards */}
-        <div className="mb-16 grid gap-6 md:grid-cols-3">
+        <div className="mb-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {CAT_PLANS.map(plan => (
             <PlanCard key={plan.id} plan={plan} />
           ))}

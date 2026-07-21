@@ -38,6 +38,7 @@ import {
   notifyFleetCrownEntitlement,
   notifyFleetCrownProjectFunding,
 } from '@/services/fleetcrown/entitlement-notify';
+import { grantSupporterPlan } from '@/services/supporter/grant';
 
 const METHOD_LABELS: Record<string, string> = {
   nwc: 'Lightning (NWC)',
@@ -470,6 +471,12 @@ async function handlePaymentConfirmed(
   // Fire-and-forget; the receiver drops events for unlinked entities.
   void notifyFleetCrownProjectFunding(paymentIntent).catch(err =>
     logger.warn('FleetCrown funding notify failed', { err }, 'paymentFlowService')
+  );
+
+  // Grant an OrangeCat Supporter plan if this product was a Supporter pass —
+  // fire-and-forget, never blocks settlement. No-op for normal sales.
+  void grantSupporterPlan(paymentIntent).catch(err =>
+    logger.warn('Supporter plan grant failed', { err }, 'paymentFlowService')
   );
 
   // Also create in-app notification for the seller

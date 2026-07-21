@@ -22,7 +22,7 @@ import { FEATURES } from '@/config/features';
 import { CREDIT_USAGE_MARKUP } from '@/services/cat/credit-metering';
 import { WIRED_PROVIDER_DISPLAY_NAMES } from '@/data/aiProviders';
 
-export type CatPlanId = 'free' | 'byok' | 'credits';
+export type CatPlanId = 'free' | 'supporter' | 'byok' | 'credits';
 
 /**
  * True once the platform Lightning wallet (PLATFORM_NWC_URI) is provisioned and
@@ -64,6 +64,27 @@ export interface CatPlan {
 export const CAT_FREE_DAILY_LIMIT = 10;
 
 /**
+ * Supporter plan — OrangeCat's own flat, Bitcoin-native subscription, built on
+ * the same pass-product pattern FleetCrown uses (a tagged product → on
+ * settlement, grant a time-boxed plan). A Supporter pays a flat monthly in
+ * Bitcoin and gets a raised daily Cat cap (tier 'pro' in user_plans); the money
+ * funds the platform AI budget. Period comes from the product's
+ * `supporter-days:<n>` tag; this cap and price are the config SSOT.
+ */
+export const CAT_SUPPORTER_DAILY_LIMIT = 200;
+export const SUPPORTER_PRICE_CHF = 10;
+
+/**
+ * Supporter checkout URL — the OrangeCat product page for the Supporter pass.
+ * Mirrors FleetCrown's ORANGECAT_PAY_URL_* gate: set
+ * NEXT_PUBLIC_SUPPORTER_PRODUCT_URL once the product exists AND the platform
+ * wallet (PLATFORM_NWC_URI) can receive, and the card flips from "activating"
+ * to a live checkout. Unset (today) → the honest founding-supporter fallback.
+ */
+export const SUPPORTER_CHECKOUT_URL = process.env.NEXT_PUBLIC_SUPPORTER_PRODUCT_URL ?? '';
+export const SUPPORTER_LIVE = SUPPORTER_CHECKOUT_URL.length > 0;
+
+/**
  * Providers Cat actually routes through today, surfaced on /pricing so the
  * BYOK card shows real names instead of a vague "any provider" promise.
  * Derived from WIRED_PROVIDER_IDS in src/data/aiProviders.ts.
@@ -96,6 +117,25 @@ export const CAT_PLANS: CatPlan[] = [
     ],
     cta: { label: 'Start chatting', href: ROUTES.DASHBOARD.CAT, variant: 'outline' },
     status: 'available',
+  },
+  {
+    id: 'supporter',
+    name: 'Supporter',
+    tagline: 'Back OrangeCat — and get more Cat',
+    priceCopy: SUPPORTER_LIVE
+      ? `CHF ${SUPPORTER_PRICE_CHF} / mo · in Bitcoin`
+      : `CHF ${SUPPORTER_PRICE_CHF} / mo · activating`,
+    bullets: [
+      `${CAT_SUPPORTER_DAILY_LIMIT} Cat messages every day — ${Math.round(CAT_SUPPORTER_DAILY_LIMIT / CAT_FREE_DAILY_LIMIT)}× the free tier`,
+      'No keys, no metering — a flat monthly, settled in Bitcoin',
+      'Directly funds the platform AI budget (P2P stays 0% fees, always)',
+      `First access to managed frontier models (${CAT_FRONTIER_MODELS_LIST}) the day Pro ships`,
+    ],
+    cta: SUPPORTER_LIVE
+      ? { label: 'Become a Supporter', href: SUPPORTER_CHECKOUT_URL, variant: 'accent' }
+      : { label: 'Back us as a founding supporter', href: ROUTES.SUPPORT, variant: 'outline' },
+    status: SUPPORTER_LIVE ? 'available' : 'coming-soon',
+    badge: SUPPORTER_LIVE ? 'Live' : 'Activating',
   },
   {
     id: 'byok',
