@@ -2,11 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ExternalLink } from 'lucide-react';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 import { TimelineDisplayEvent } from '@/types/timeline';
 import { renderMarkdownToReact } from '@/utils/markdown';
 import { TIMELINE_SURFACE } from '@/config/timeline';
 import { getExternalAttribution } from '@/config/external-publish';
+import { ROUTES } from '@/config/routes';
 
 interface PostContentProps {
   event: TimelineDisplayEvent;
@@ -38,6 +39,13 @@ export function PostContent({ event }: PostContentProps) {
   };
 
   const displayContent = getDisplayContent();
+
+  // Article posts carry their long-form body in metadata; the feed shows a
+  // compact card linking to the full reader instead of the raw excerpt.
+  const articleSlug =
+    event.metadata?.is_article && typeof event.metadata?.article?.slug === 'string'
+      ? (event.metadata.article.slug as string)
+      : null;
 
   // Read-only surfacing of an externally-published build event (e.g. FleetCrown):
   // a status pill + a "via <source>" deep-link back to the originating surface.
@@ -72,8 +80,32 @@ export function PostContent({ event }: PostContentProps) {
       )}
       {/* Titles removed for fluid, threads-like design */}
 
+      {/* Article card: title + excerpt + link to the full reader */}
+      {articleSlug && (
+        <Link
+          href={ROUTES.ARTICLE(articleSlug)}
+          className={`group/article block overflow-hidden ${TIMELINE_SURFACE.panel} p-3 transition-colors hover:border-default sm:p-4`}
+        >
+          <span className="text-xs font-medium uppercase tracking-caps text-fg-tertiary">
+            Article
+          </span>
+          {event.title && (
+            <h3 className="mt-1 text-lg font-semibold leading-snug text-fg-primary group-hover/article:text-accent-warm">
+              {event.title}
+            </h3>
+          )}
+          {displayContent && (
+            <p className="mt-1 line-clamp-2 text-sm text-fg-secondary">{displayContent}</p>
+          )}
+          <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-accent-warm">
+            Read article
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/article:translate-x-0.5" />
+          </span>
+        </Link>
+      )}
+
       {/* Event Description/Content */}
-      {displayContent && (!isRepost || isQuoteRepost) && (
+      {!articleSlug && displayContent && (!isRepost || isQuoteRepost) && (
         <div className="text-fg-primary text-[15px] leading-relaxed whitespace-pre-line break-words">
           {renderMarkdownToReact(displayContent)}
         </div>
