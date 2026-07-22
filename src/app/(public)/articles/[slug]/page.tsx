@@ -10,6 +10,7 @@ import { APP_NAME, SITE_URL } from '@/config/brand';
 import ArticleMarkdown from './ArticleMarkdown';
 import ReadingProgress from './ReadingProgress';
 import ShareButton from './ShareButton';
+import TipButton from '@/components/tips/TipButton';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -180,7 +181,15 @@ export default async function ArticlePage({ params }: PageProps) {
                   <span className="block font-semibold text-fg-primary">{article.author.name}</span>
                 </span>
               </Link>
-              <ShareButton title={article.title} url={shareUrl} />
+              <div className="flex flex-wrap items-center gap-2">
+                {article.author.username && (
+                  <TipButton
+                    username={article.author.username}
+                    recipientName={article.author.name}
+                  />
+                )}
+                <ShareButton title={article.title} url={shareUrl} />
+              </div>
             </div>
 
             <div className="mt-8 flex flex-col items-start gap-3 rounded-xl border border-subtle bg-surface-raised/25 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
