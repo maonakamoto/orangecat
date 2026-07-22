@@ -1,10 +1,16 @@
 /**
- * buyerConfirmPayment — state-transition correctness.
+ * buyerConfirmPayment — state-transition correctness + trust-boundary guard.
  *
  * A buyer confirming a payment flips the intent to BUYER_CONFIRMED and the
  * fixed-price order to PAID. A swallowed DB error used to let this return
  * success while the rows stayed stale; these tests lock in that failures now
  * surface instead of silently diverging money state from reality.
+ *
+ * They also lock the trust boundary: manual self-attestation is refused on any
+ * rail we confirm automatically (NWC, verify-capable Lightning addresses,
+ * on-chain). Only a bare Lightning address with no LUD-21 verify URL may be
+ * self-attested — the buyer's word must never flip an order to paid over a
+ * trustworthy on-rail signal.
  */
 
 import { buyerConfirmPayment } from '@/domain/payments/paymentFlowService';
@@ -57,6 +63,10 @@ const fixedPriceIntent = {
   status: STATUS.PAYMENT_INTENTS.INVOICE_READY,
   entity_type: 'product',
   paid_at: null,
+  // A bare Lightning address (no LUD-21 verify URL) is the ONLY rail eligible for
+  // manual confirmation; every other method is auto-detected and now refused.
+  payment_method: 'lightning_address',
+  lnurl_verify_url: null,
 };
 
 describe('buyerConfirmPayment', () => {
@@ -96,6 +106,21 @@ describe('buyerConfirmPayment', () => {
     });
     await expect(buyerConfirmPayment(supabase, PI_ID, BUYER)).rejects.toThrow(
       'Failed to update order status'
+    );
+  });
+
+  it.each([
+    ['NWC', { payment_method: 'nwc', payment_hash: 'h' }],
+    ['on-chain', { payment_method: 'onchain', onchain_address: 'bc1qxyz' }],
+    [
+      'a verify-capable Lightning address',
+      { payment_method: 'lightning_address', lnurl_verify_url: 'https://ln/verify' },
+    ],
+  ])('refuses manual confirmation for an auto-detected rail: %s', async (_label, rail) => {
+    // Detectable rail → the guard throws before any state change (no write reached).
+    const supabase = makeSupabase({ intent: { ...fixedPriceIntent, ...rail } });
+    await expect(buyerConfirmPayment(supabase, PI_ID, BUYER)).rejects.toThrow(
+      'This payment is confirmed automatically'
     );
   });
 });
