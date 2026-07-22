@@ -1,0 +1,158 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ArrowLeft, Clock, Lock, Users } from 'lucide-react';
+import { getArticleBySlug } from '@/services/articles/get-article';
+import { ARTICLE_COPY } from '@/config/articles';
+import { ROUTES } from '@/config/routes';
+import { JsonLdScript } from '@/lib/seo/structured-data';
+import { APP_NAME, SITE_URL } from '@/config/brand';
+import ArticleMarkdown from './ArticleMarkdown';
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+function profileHref(username: string | undefined, id: string): string {
+  return `/profiles/${username ?? id}`;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getArticleBySlug(slug);
+  if (!article) {
+    return { title: 'Article not found' };
+  }
+
+  const isIndexable = article.visibility === 'public';
+  return {
+    title: article.title,
+    description: article.excerpt,
+    robots: isIndexable ? undefined : { index: false, follow: false },
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      type: 'article',
+      publishedTime: article.publishedAt,
+      authors: [article.author.name],
+      images: article.coverImage ? [article.coverImage] : undefined,
+      url: `${SITE_URL}/articles/${article.slug}`,
+    },
+    twitter: {
+      card: article.coverImage ? 'summary_large_image' : 'summary',
+      title: article.title,
+      description: article.excerpt,
+      images: article.coverImage ? [article.coverImage] : undefined,
+    },
+  };
+}
+
+export default async function ArticlePage({ params }: PageProps) {
+  const { slug } = await params;
+  const article = await getArticleBySlug(slug);
+  if (!article) {
+    notFound();
+  }
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: article.excerpt,
+    datePublished: article.publishedAt,
+    author: { '@type': 'Person', name: article.author.name },
+    publisher: { '@type': 'Organization', name: APP_NAME, url: SITE_URL },
+    url: `${SITE_URL}/articles/${article.slug}`,
+    ...(article.coverImage ? { image: article.coverImage } : {}),
+  };
+
+  const authorHref = profileHref(article.author.username, article.author.id);
+
+  return (
+    <>
+      {article.visibility === 'public' && <JsonLdScript data={jsonLd} />}
+      <div className="min-h-screen bg-surface-page pt-20 pb-24 text-fg-primary">
+        <article className="mx-auto w-full max-w-[680px] px-5">
+          <Link
+            href={ROUTES.ARTICLES}
+            className="mb-8 inline-flex items-center gap-1.5 text-sm text-fg-secondary transition-colors hover:text-fg-primary"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {ARTICLE_COPY.reader.back}
+          </Link>
+
+          {article.coverImage && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={article.coverImage}
+              alt=""
+              className="mb-10 aspect-[2/1] w-full rounded-xl border border-subtle object-cover"
+            />
+          )}
+
+          <header className="mb-10">
+            <h1 className="text-4xl font-semibold leading-[1.15] tracking-display text-fg-primary sm:text-5xl">
+              {article.title}
+            </h1>
+            {article.excerpt && (
+              <p className="mt-5 text-xl leading-relaxed text-fg-secondary">{article.excerpt}</p>
+            )}
+
+            <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-3 border-y border-subtle py-4 text-sm text-fg-secondary">
+              <Link
+                href={authorHref}
+                className="flex items-center gap-2.5 text-fg-primary transition-opacity hover:opacity-80"
+              >
+                {article.author.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={article.author.avatarUrl}
+                    alt=""
+                    className="h-9 w-9 rounded-full border border-subtle object-cover"
+                  />
+                ) : (
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-subtle bg-surface-raised text-xs font-semibold text-fg-secondary">
+                    {article.author.name.slice(0, 1).toUpperCase()}
+                  </span>
+                )}
+                <span className="font-medium">{article.author.name}</span>
+              </Link>
+              <span aria-hidden className="text-fg-tertiary">
+                ·
+              </span>
+              <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
+              <span className="inline-flex items-center gap-1.5">
+                <Clock className="h-4 w-4" />
+                {article.readingTime} min read
+              </span>
+              {article.visibility === 'private' && (
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-surface-raised px-2 py-0.5 text-xs text-fg-secondary">
+                  <Lock className="h-3.5 w-3.5" />
+                  {ARTICLE_COPY.reader.privateNotice}
+                </span>
+              )}
+              {article.visibility === 'followers' && (
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-surface-raised px-2 py-0.5 text-xs text-fg-secondary">
+                  <Users className="h-3.5 w-3.5" />
+                  {ARTICLE_COPY.reader.followersNotice}
+                </span>
+              )}
+            </div>
+          </header>
+
+          <div className="[&>*:first-child]:mt-0">
+            <ArticleMarkdown body={article.body} />
+          </div>
+        </article>
+      </div>
+    </>
+  );
+}
