@@ -6,6 +6,10 @@
 **Commit**: 326bfbf9
 **Previous audit**: 2026-07-09 (overall 7/10) — see "Delta since last audit" below.
 
+> **⏱️ 2026-07-20 note:** the body below is the 2026-07-13 snapshot and is kept
+> as-is. Several of its 🟠/🔴 items have since been resolved — see
+> **"Delta since 2026-07-13 → 2026-07-20"** immediately below the Health Score.
+
 ## Executive Summary
 
 OrangeCat is a **structurally healthy, well-disciplined codebase** whose real gaps are in _product surface area_ (what actually transacts) rather than engineering hygiene. The hard SSOT wins are genuinely done and enforced: **0** hardcoded route strings, **0** leaked entity-table strings, **0** raw-hex design-token violations, a respected entity registry, and only **1.09%** code duplication across ~200k lines. Type-check (non-incremental) and lint are clean; **1018 of 1019 tests pass**.
@@ -24,6 +28,21 @@ The **most important findings are two live correctness/security bugs** surfaced 
 | Functional Correctness | 8/10       | Auth/actor/RLS strong; 1 PII-exposure + 1 unpublish-on-partial-PUT bug class                       |
 | UI/UX & Responsive     | 8/10       | No breakage, good touch/async/a11y; token migration unfinished, god components                     |
 | **Overall**            | **7.7/10** | Ship-quality engineering; product depth + payments are the frontier                                |
+
+## Delta since 2026-07-13 → 2026-07-20
+
+Re-verified against code on 2026-07-20. Several 2026-07-13 findings are resolved:
+
+- ✅ **Dead 7,468-line `database.generated.ts`** — deleted (canonical `database.ts` remains, 36 importers).
+- ✅ **Three status-config files re-declaring labels** — collapsed to `STATUS_LABELS` SSOT in `4dd6465e`; all three (`status-config`, `entity-status`, `project-statuses`) now derive labels from it and colors from `badge-colors.ts`. Last straggler (`ai-assistants.ts` dropdown) → PR #407. The three files are **not** merged and should not be — distinct SoC (badge styling / per-entity variant + transitions / project validation).
+- ✅ **Duplicated `AiService` interface** — deduped (`4dd6465e`).
+- ✅ **Two live bugs** (PII-exposure via full `profiles` row; partial-PUT silent-unpublish) — both fixed in the first-payment sprint (denylist→allowlist; status-default guard).
+- ✅ **Money-path test coverage** (Phase 4.1, money half) — added `assistant-charge` + `credit-topup` + `credits` ledger-wrapper suites (PR #405, 46 assertions); the Cat Credits money loop is now wired **and** tested ahead of go-live.
+- ✅ **Entity detail redesign** — every marketplace type (incl. wishlist, PR #406) renders through the unified `PublicEntityDetailPage`; the flat column-dump owner view is gone.
+- ⏳ **Still open:** `MockPaymentProvider`/`getPaymentProvider` stack still present (4.3); SSR `/discover` still `'use client'` (SEO/crawler gap); remaining `AnySupabaseClient` casts; OIDC/governance test coverage; `strategic-plan.md` still claims transaction fees (business-model reconciliation, plan 2.4).
+- 🔴 **Unchanged and paramount:** **the platform still has never processed a payment.** The money loop is fully wired + tested, but the single blocker remains founder-side — provisioning `PLATFORM_NWC_URI`. Every payments-dependent finding below is gated on that one env action, not on code.
+
+---
 
 ## Delta since last audit (2026-07-09 → 2026-07-13)
 
