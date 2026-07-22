@@ -9,19 +9,19 @@
  */
 
 import { logger } from '@/utils/logger';
-import { DEFAULT_FREE_MODEL_ID } from '@/config/ai-models';
 
 // Capable, JSON-reliable defaults. Groq is fast + cheap for short work; the
-// OpenRouter free 120B handles long-form with a larger output budget than
-// Groq's free tier (which caps output tokens for TPM reasons).
+// OpenRouter free Maverick handles long-form with a large output budget. We use
+// the SAME OpenRouter model the offer-engine proves works on the box — free
+// model IDs rot (a bare gpt-oss-120b:free returned 404 in prod), so we pin the
+// one that's verified live rather than trusting DEFAULT_FREE_MODEL_ID.
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
-const OPENROUTER_SHORT_MODEL = 'meta-llama/llama-4-maverick:free';
-const OPENROUTER_LONGFORM_MODEL = DEFAULT_FREE_MODEL_ID; // 'openai/gpt-oss-120b:free'
+const OPENROUTER_MODEL = 'meta-llama/llama-4-maverick:free';
 
 export interface PlatformJsonOpts {
   temperature?: number;
   maxTokens?: number;
-  /** Long-form (article bodies): prefer the OpenRouter 120B for larger output. */
+  /** Long-form (article bodies): prefer OpenRouter for a larger output budget. */
   longform?: boolean;
 }
 
@@ -36,9 +36,10 @@ function resolveProvider(longform: boolean): Provider | null {
   const groqKey = process.env.GROQ_API_KEY;
   const openRouterKey = process.env.OPENROUTER_API_KEY;
 
-  // Long-form prefers OpenRouter's larger free model; short work prefers Groq's speed.
+  // Long-form prefers OpenRouter (bigger output budget than Groq's free TPM cap);
+  // short work prefers Groq's speed. Same verified model either way.
   if (longform && openRouterKey) {
-    return openRouter(openRouterKey, OPENROUTER_LONGFORM_MODEL);
+    return openRouter(openRouterKey, OPENROUTER_MODEL);
   }
   if (groqKey) {
     return {
@@ -49,7 +50,7 @@ function resolveProvider(longform: boolean): Provider | null {
     };
   }
   if (openRouterKey) {
-    return openRouter(openRouterKey, longform ? OPENROUTER_LONGFORM_MODEL : OPENROUTER_SHORT_MODEL);
+    return openRouter(openRouterKey, OPENROUTER_MODEL);
   }
   return null;
 }
@@ -86,21 +87,38 @@ export async function callPlatformJson(
     headers['HTTP-Referer'] = process.env.NEXT_PUBLIC_APP_URL || 'https://orangecat.ch';
   }
 
-  try {
-    const response = await fetch(provider.url, {
+  const messages = [
+    { role: 'system', content: system },
+    { role: 'user', content: user },
+  ];
+  const maxTokens = opts.maxTokens ?? (opts.longform ? 3000 : 1400);
+  const temperature = opts.temperature ?? 0.6;
+
+  const call = (jsonMode: boolean) =>
+    fetch(provider.url, {
       method: 'POST',
       headers,
       body: JSON.stringify({
         model: provider.model,
-        messages: [
-          { role: 'system', content: system },
-          { role: 'user', content: user },
-        ],
-        temperature: opts.temperature ?? 0.6,
-        max_tokens: opts.maxTokens ?? (opts.longform ? 4000 : 1400),
-        response_format: { type: 'json_object' },
+        messages,
+        temperature,
+        max_tokens: maxTokens,
+        ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
       }),
     });
+
+  try {
+    // Some free models 400 on response_format — retry once without it and lean
+    // on parseJsonLoose (the system prompt already demands JSON-only output).
+    let response = await call(true);
+    if (!response.ok) {
+      logger.warn(
+        'platform-llm: json-mode call failed, retrying without response_format',
+        { status: response.status, model: provider.model },
+        'PlatformLLM'
+      );
+      response = await call(false);
+    }
     if (!response.ok) {
       logger.warn('platform-llm: model call failed', { status: response.status }, 'PlatformLLM');
       return null;
