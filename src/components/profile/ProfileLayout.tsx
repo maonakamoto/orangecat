@@ -219,9 +219,10 @@ export default function ProfileLayout({
             )}
           </div>
 
-          {/* Overview-first: a shared profile should open on the scannable
-              "who is this / what do they offer" summary, not the timeline feed. */}
-          <ProfileViewTabs tabs={filteredTabs} defaultTab="overview" />
+          {/* Timeline-first: open on the living activity feed so visitors see the
+              latest — new projects, funding, updates — the way an X profile does,
+              rather than a static summary. Overview remains one tap away. */}
+          <ProfileViewTabs tabs={filteredTabs} defaultTab="timeline" />
         </div>
       </div>
     </div>

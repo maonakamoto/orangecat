@@ -126,13 +126,14 @@ export default function ProfileViewTabs({ tabs, defaultTab, className }: Profile
     <div className={cn('w-full', className)}>
       {/* Tab Navigation - X/Twitter-style horizontal scroll on mobile, flex on desktop */}
       <div className="border-b border-default mb-4 sm:mb-6 relative">
-        {/* Left fade indicator - only on mobile when scrolled */}
+        {/* Fade affordances — shown on ALL viewports when the strip overflows, so
+            it's clear there are more tabs to scroll to (many entity tabs overflow
+            on desktop too, where the scrollbar is hidden). */}
         {showLeftFade && (
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-surface-page/80 pointer-events-none z-10 sm:hidden" />
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-surface-page to-transparent pointer-events-none z-10" />
         )}
-        {/* Right fade indicator - only on mobile when more tabs available */}
         {showRightFade && (
-          <div className="absolute right-0 top-0 bottom-0 w-8 bg-surface-page/80 pointer-events-none z-10 sm:hidden" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-surface-page to-transparent pointer-events-none z-10" />
         )}
         <nav
           ref={navRef}

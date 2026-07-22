@@ -122,7 +122,10 @@ export function ProfileBasicSection({
             <FormControl>
               <Textarea
                 placeholder="Tell your story..."
-                className="min-h-20 resize-none"
+                // Auto-grow with the content (no inner scrollbar) where supported,
+                // capped so a very long bio doesn't run away; still hand-resizable
+                // as a fallback for browsers without field-sizing.
+                className="min-h-20 max-h-[60vh] resize-y [field-sizing:content]"
                 {...field}
                 value={field.value || ''}
                 onFocus={() => onFieldFocus?.('bio')}
