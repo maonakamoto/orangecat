@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Eye, PenLine } from 'lucide-react';
@@ -13,7 +13,21 @@ import { ARTICLE_COPY, ARTICLE_LIMITS, estimateReadingTime } from '@/config/arti
 import { ROUTES } from '@/config/routes';
 import { publishArticle } from '@/services/articles/create';
 import type { TimelineVisibility } from '@/types/timeline';
+import type { ArticleDraft } from '@/services/cat/writing-types';
 import ArticleMarkdown from '../[slug]/ArticleMarkdown';
+import MarkdownToolbar from '@/components/articles/MarkdownToolbar';
+import { useMarkdownTextarea } from '@/components/articles/useMarkdownTextarea';
+import AiWriterPanel from '@/components/articles/AiWriterPanel';
+
+const DRAFT_KEY = 'oc:draft:article';
+
+interface DraftShape {
+  title: string;
+  excerpt: string;
+  coverImage: string;
+  body: string;
+  visibility: TimelineVisibility;
+}
 
 export default function ArticleComposer({ user }: { user: { id: string } }) {
   const router = useRouter();
@@ -25,9 +39,82 @@ export default function ArticleComposer({ user }: { user: { id: string } }) {
   const [tab, setTab] = useState<'write' | 'preview'>('write');
   const [publishing, setPublishing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [restored, setRestored] = useState(false);
 
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+  const md = useMarkdownTextarea(bodyRef, body, setBody);
+
+  // Restore an in-progress draft once on mount.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) {
+        return;
+      }
+      const d = JSON.parse(raw) as Partial<DraftShape>;
+      if (d.title || d.body) {
+        setTitle(d.title ?? '');
+        setExcerpt(d.excerpt ?? '');
+        setCoverImage(d.coverImage ?? '');
+        setBody(d.body ?? '');
+        if (d.visibility) {
+          setVisibility(d.visibility);
+        }
+        setRestored(true);
+      }
+    } catch {
+      /* ignore corrupt draft */
+    }
+  }, []);
+
+  // Autosave (debounced) whenever content changes.
+  useEffect(() => {
+    if (!title && !body && !excerpt && !coverImage) {
+      return;
+    }
+    const id = setTimeout(() => {
+      try {
+        localStorage.setItem(
+          DRAFT_KEY,
+          JSON.stringify({ title, excerpt, coverImage, body, visibility } satisfies DraftShape)
+        );
+      } catch {
+        /* storage full / disabled — non-fatal */
+      }
+    }, 600);
+    return () => clearTimeout(id);
+  }, [title, excerpt, coverImage, body, visibility]);
+
+  const wordCount = body.trim() ? body.trim().split(/\s+/).length : 0;
+  const readingTime = wordCount ? estimateReadingTime(body) : 0;
   const canPublish = title.trim().length > 0 && body.trim().length > 0 && !publishing;
-  const readingTime = body.trim() ? estimateReadingTime(body) : 0;
+
+  function applyDraft(draft: ArticleDraft) {
+    setTitle(draft.title);
+    if (draft.excerpt) {
+      setExcerpt(draft.excerpt);
+    }
+    setBody(draft.body);
+    setTab('write');
+    setRestored(false);
+  }
+
+  function handleBodyKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (!(e.metaKey || e.ctrlKey)) {
+      return;
+    }
+    const k = e.key.toLowerCase();
+    if (k === 'b') {
+      e.preventDefault();
+      md.wrap('**', '**', 'bold');
+    } else if (k === 'i') {
+      e.preventDefault();
+      md.wrap('*', '*', 'italic');
+    } else if (k === 'k') {
+      e.preventDefault();
+      md.insertLink();
+    }
+  }
 
   async function handlePublish() {
     if (!canPublish) {
@@ -47,6 +134,11 @@ export default function ArticleComposer({ user }: { user: { id: string } }) {
       setPublishing(false);
       return;
     }
+    try {
+      localStorage.removeItem(DRAFT_KEY);
+    } catch {
+      /* ignore */
+    }
     router.push(ROUTES.ARTICLE(result.slug));
   }
 
@@ -61,15 +153,25 @@ export default function ArticleComposer({ user }: { user: { id: string } }) {
           {ARTICLE_COPY.reader.back}
         </Link>
 
-        <header className="mb-6">
+        <header className="mb-5">
           <h1 className="text-2xl font-semibold tracking-display text-fg-primary">
             {ARTICLE_COPY.new.heading}
           </h1>
           <p className="mt-1.5 text-sm text-fg-secondary">{ARTICLE_COPY.new.subheading}</p>
         </header>
 
+        <div className="mb-5">
+          <AiWriterPanel title={title} onApplyDraft={applyDraft} disabled={publishing} />
+        </div>
+
+        {restored && (
+          <p className="mb-4 rounded-md border border-subtle bg-surface-raised/30 px-3 py-2 text-xs text-fg-secondary">
+            Restored your saved draft.
+          </p>
+        )}
+
         {/* Write / Preview tabs */}
-        <div className="mb-4 flex items-center gap-2">
+        <div className="mb-3 flex items-center gap-2">
           <button
             type="button"
             onClick={() => setTab('write')}
@@ -84,8 +186,11 @@ export default function ArticleComposer({ user }: { user: { id: string } }) {
           >
             <Eye className="h-4 w-4" /> Preview
           </button>
-          {readingTime > 0 && (
-            <span className="ml-auto text-xs text-fg-tertiary">{readingTime} min read</span>
+          {wordCount > 0 && (
+            <span className="ml-auto text-xs text-fg-tertiary">
+              {wordCount.toLocaleString()} {wordCount === 1 ? 'word' : 'words'} · {readingTime} min
+              read
+            </span>
           )}
         </div>
 
@@ -114,15 +219,20 @@ export default function ArticleComposer({ user }: { user: { id: string } }) {
               type="url"
               aria-label="Cover image URL"
             />
-            <Textarea
-              value={body}
-              onChange={e => setBody(e.target.value)}
-              placeholder={ARTICLE_COPY.new.bodyPlaceholder}
-              rows={18}
-              maxLength={ARTICLE_LIMITS.body}
-              aria-label="Article body"
-              className="font-mono text-sm leading-6"
-            />
+            <div>
+              <MarkdownToolbar actions={md} disabled={publishing} />
+              <Textarea
+                ref={bodyRef}
+                value={body}
+                onChange={e => setBody(e.target.value)}
+                onKeyDown={handleBodyKeyDown}
+                placeholder={ARTICLE_COPY.new.bodyPlaceholder}
+                rows={18}
+                maxLength={ARTICLE_LIMITS.body}
+                aria-label="Article body"
+                className="rounded-t-none font-mono text-sm leading-6"
+              />
+            </div>
           </div>
         ) : (
           <div className="rounded-lg border border-subtle bg-surface-page p-6">

@@ -8,6 +8,8 @@ import { ROUTES } from '@/config/routes';
 import { JsonLdScript } from '@/lib/seo/structured-data';
 import { APP_NAME, SITE_URL } from '@/config/brand';
 import ArticleMarkdown from './ArticleMarkdown';
+import ReadingProgress from './ReadingProgress';
+import ShareButton from './ShareButton';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -75,10 +77,12 @@ export default async function ArticlePage({ params }: PageProps) {
   };
 
   const authorHref = profileHref(article.author.username, article.author.id);
+  const shareUrl = `${SITE_URL}/articles/${article.slug}`;
 
   return (
     <>
       {article.visibility === 'public' && <JsonLdScript data={jsonLd} />}
+      <ReadingProgress />
       <div className="min-h-screen bg-surface-page pt-20 pb-24 text-fg-primary">
         <article className="mx-auto w-full max-w-[680px] px-5">
           <Link
@@ -151,6 +155,46 @@ export default async function ArticlePage({ params }: PageProps) {
           <div className="[&>*:first-child]:mt-0">
             <ArticleMarkdown body={article.body} />
           </div>
+
+          {/* Footer: author card + share + write-your-own CTA */}
+          <footer className="mt-14 border-t border-subtle pt-8">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <Link
+                href={authorHref}
+                className="flex items-center gap-3 transition-opacity hover:opacity-80"
+              >
+                {article.author.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={article.author.avatarUrl}
+                    alt=""
+                    className="h-11 w-11 rounded-full border border-subtle object-cover"
+                  />
+                ) : (
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-subtle bg-surface-raised text-sm font-semibold text-fg-secondary">
+                    {article.author.name.slice(0, 1).toUpperCase()}
+                  </span>
+                )}
+                <span>
+                  <span className="block text-xs text-fg-tertiary">Written by</span>
+                  <span className="block font-semibold text-fg-primary">{article.author.name}</span>
+                </span>
+              </Link>
+              <ShareButton title={article.title} url={shareUrl} />
+            </div>
+
+            <div className="mt-8 flex flex-col items-start gap-3 rounded-xl border border-subtle bg-surface-raised/25 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-fg-secondary">
+                Have something to say? Publishing on OrangeCat is free.
+              </p>
+              <Link
+                href={ROUTES.ARTICLES_NEW}
+                className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-md bg-accent-warm px-3.5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-warm-hover"
+              >
+                Write your own
+              </Link>
+            </div>
+          </footer>
         </article>
       </div>
     </>
