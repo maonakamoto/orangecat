@@ -6,6 +6,7 @@ import ProfilePageClient from '@/components/profile/ProfilePageClient';
 import { DATABASE_TABLES } from '@/config/database-tables';
 import { getTableName } from '@/config/entity-registry';
 import { fetchProfileListingCounts } from '@/services/profile/listingCounts';
+import { listArticlesByAuthor } from '@/services/articles/get-article';
 import { safeJsonLdString } from '@/lib/seo/structured-data';
 import type { ScalableProfile } from '@/services/profile/types';
 import { mapProjectRow } from '@/types/project';
@@ -259,6 +260,10 @@ export default async function PublicProfilePage({ params }: PageProps) {
   } = await supabase.auth.getUser();
   const isOwnProfile = !!currentUser && currentUser.id === profile.id;
 
+  // Author's long-form articles for the Articles tab. The owner also sees their
+  // non-public (followers/private) articles; visitors see only public ones.
+  const articles = await listArticlesByAuthor(profile.id, { includeNonPublic: isOwnProfile });
+
   // The `email` column is the account login email — private. `select('*')` pulls
   // it into the row, which would otherwise ship to every visitor's client
   // payload. Redact it for non-owners so it never leaves the server. (phone /
@@ -276,6 +281,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
       <ProfilePageClient
         profile={safeProfile}
         projects={projects || []}
+        articles={articles}
         isOwnProfile={isOwnProfile}
         stats={{
           projectCount,
