@@ -52,7 +52,7 @@ BITCOIN_NETWORK=mainnet
 
 ## Production Setup
 
-Production env lives in the app's `.env` on the Hetzner box (not Vercel). Edit it
+Production env lives in the app's `.env` on the Hetzner box. Edit it
 there directly and restart the `orangecat-app` service after changes. See
 `docs/deployment/DEPLOYMENT_PROCESS.md`.
 

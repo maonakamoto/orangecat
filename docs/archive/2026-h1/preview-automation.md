@@ -4,6 +4,12 @@ last_modified_summary: "Initial documentation for automated preview Lighthouse r
 
 # Automated Preview Lighthouse Reporting
 
+> **OBSOLETE (2026-06):** The preview/deploy workflow described below
+> (`.github/workflows/deploy.yml`, `amondnet/vercel-action`, Vercel preview
+> deployments) was removed when OrangeCat migrated off Vercel to self-hosting on
+> Hetzner ("bitbaum"). None of it runs anymore — this file is kept only as a
+> historical record. See `docs/operations/devops/infrastructure.md` for current infra.
+
 > NOTE: This documentation describes the _pull-request_ automation introduced on 2025-06-10. It does not replace the production deployment pipeline; it enhances the developer feedback loop for non-production changes.
 
 ## Overview
