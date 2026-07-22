@@ -18,7 +18,12 @@ async function postJson<T>(url: string, body: unknown): Promise<T> {
   });
   const json = await res.json().catch(() => null);
   if (!res.ok || !json?.success) {
-    throw new Error(json?.error || 'The AI writer is unavailable right now. Please try again.');
+    // Standard API errors carry `error: { code, message }`; tolerate a bare string too.
+    const err = json?.error;
+    const message =
+      (typeof err === 'string' ? err : err?.message) ||
+      'The AI writer is unavailable right now. Please try again.';
+    throw new Error(message);
   }
   return json.data as T;
 }
