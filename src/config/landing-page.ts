@@ -153,7 +153,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     icon: Wallet,
     title: 'Pick Your Currency',
     description:
-      'Bitcoin and Lightning native — but Twint, PayPal, and local fiat payment methods worldwide are all first-class. Meet your counterparty where they are.',
+      'Price your work in any currency — CHF, USD, EUR, or Bitcoin. Payments settle natively in Bitcoin and Lightning: instant, global, and non-custodial.',
     iconGradient: GRADIENTS.iconOrange,
     bgColor: 'bg-surface-raised',
   },
@@ -210,7 +210,7 @@ export const PLATFORM_COMPARISON: ComparisonRow[] = [
   {
     feature: 'Payment methods',
     traditional: 'One currency, their rules',
-    orangecat: 'Any currency — Bitcoin, Twint, PayPal, fiat…',
+    orangecat: 'Price in any currency, settle in Bitcoin',
     highlight: true,
   },
   { feature: 'Platform fees', traditional: '5–10%', orangecat: '0%' },
@@ -252,7 +252,7 @@ export const PLATFORM_BENEFITS: PlatformBenefit[] = [
     icon: Wallet,
     title: 'Any Currency',
     description:
-      'Bitcoin and Lightning are native, but Twint, PayPal, and local fiat payment methods worldwide are first-class.',
+      'Price your work in any currency — CHF, USD, EUR. Payments settle natively in Bitcoin and Lightning.',
   },
   {
     icon: Lock,
@@ -302,7 +302,7 @@ export const EXAMPLE_USE_CASES: ExampleUseCase[] = [
     category: 'Research',
     title: 'Decentralized Science',
     description:
-      'Fund equipment, studies, and publications. Accept Bitcoin, PayPal, Twint — whatever your supporters use.',
+      'Fund equipment, studies, and publications. Price in any currency; receive support directly in Bitcoin and Lightning.',
     transparencyExample: 'Publish findings, share lab updates, build scientific credibility.',
     gradient: 'bg-surface-base',
   },

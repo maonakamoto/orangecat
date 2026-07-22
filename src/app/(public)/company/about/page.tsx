@@ -198,7 +198,8 @@ export default function BitBaumAboutPage() {
                 <div>
                   <h4 className="font-semibold text-fg-primary">Community Growth</h4>
                   <p className="text-fg-secondary text-sm">
-                    Thousands of creators and supporters building with Bitcoin.
+                    An open, censorship-resistant home for creators and supporters building with
+                    Bitcoin.
                   </p>
                 </div>
               </div>
