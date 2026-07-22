@@ -1,0 +1,41 @@
+/**
+ * Browser client for the tipping endpoints. Type-only imports of the service
+ * shapes (erased at compile — no server code pulled into the bundle).
+ */
+
+import type { TipInvoice, TipReceiveInfo } from '@/domain/tips/tip-service';
+
+export type { TipInvoice, TipReceiveInfo } from '@/domain/tips/tip-service';
+
+async function readJson(
+  res: Response
+): Promise<{ success?: boolean; data?: unknown; error?: unknown }> {
+  return (await res.json().catch(() => null)) ?? {};
+}
+
+function errorMessage(json: { error?: unknown }, fallback: string): string {
+  const err = json.error;
+  return (typeof err === 'string' ? err : (err as { message?: string })?.message) || fallback;
+}
+
+export async function fetchTipReceiveInfo(username: string): Promise<TipReceiveInfo> {
+  const res = await fetch(`/api/tips/receive-info?username=${encodeURIComponent(username)}`);
+  const json = await readJson(res);
+  if (!res.ok || !json.success) {
+    throw new Error(errorMessage(json, 'Could not load tip info.'));
+  }
+  return json.data as TipReceiveInfo;
+}
+
+export async function fetchTipInvoice(username: string, amountBtc: number): Promise<TipInvoice> {
+  const res = await fetch('/api/tips/invoice', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, amountBtc }),
+  });
+  const json = await readJson(res);
+  if (!res.ok || !json.success) {
+    throw new Error(errorMessage(json, 'Could not create a tip request.'));
+  }
+  return (json.data as { invoice: TipInvoice }).invoice;
+}

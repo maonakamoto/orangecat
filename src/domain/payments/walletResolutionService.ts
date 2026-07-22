@@ -284,7 +284,7 @@ async function resolveLinkedEntityWallet(
  * Priority across wallets: a wallet with NWC > one with a Lightning Address >
  * one with an on-chain address. Primary wallet wins ties (ordered first).
  */
-async function resolveUserWallet(
+export async function resolveUserWallet(
   supabase: SupabaseClient,
   userId: string
 ): Promise<ResolvedWallet | null> {
