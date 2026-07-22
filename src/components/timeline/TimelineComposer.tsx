@@ -23,6 +23,7 @@ import {
   OfflineIndicator,
   ContextIndicator,
 } from './ComposerShared';
+import PostAiButton from './PostAiButton';
 
 export interface TimelineComposerProps {
   targetOwnerId?: string;
@@ -190,6 +191,9 @@ const TimelineComposer = React.memo(function TimelineComposer({
 
           <div className="mt-4 flex items-center justify-between border-t border-subtle pt-3">
             <div className="flex flex-wrap items-center gap-2">
+              {!parentEventId && (
+                <PostAiButton onDraft={postComposer.setContent} disabled={postComposer.isPosting} />
+              )}
               {!simpleMode && <TextFormatToolbar onFormat={handleFormat} />}
 
               {!simpleMode && allowProjectSelection && postComposer.userProjects.length > 0 && (

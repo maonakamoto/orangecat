@@ -1,0 +1,252 @@
+/**
+ * Writing engine — the user's AI writing companion.
+ *
+ * Given what OrangeCat knows about a person (profile, entities, durable memories,
+ * and the posts they've already written = their voice), it proposes topics they'd
+ * genuinely want to write, and drafts full posts or long-form articles in their
+ * voice. Mirrors the offer-engine's grounding + never-throw contract: any failure
+ * returns [] / null so the composer degrades to a plain blank editor.
+ *
+ * Hard grounding rules (same lineage as the "Cat invented personas" fix): never
+ * fabricate facts, stats, quotes, or people; ground every suggestion in a real
+ * context item; Bitcoin is BTC, never "sats".
+ */
+
+import type { AnySupabaseClient } from '@/lib/supabase/types';
+import { fetchFullContextForCat } from '@/services/ai/document-context';
+import { buildFullContextString } from '@/services/ai/context-string-builder';
+import { getUserActorId } from '@/domain/actors';
+import { TIMELINE_TABLES } from '@/config/database-tables';
+import { ARTICLE_LIMITS } from '@/config/articles';
+import { TIMELINE_CONTENT_LIMITS } from '@/config/timeline';
+import { listMemories } from './memory';
+import { callPlatformJson, parseJsonLoose } from './platform-llm';
+import type { ArticleDraft, PostDraft, ProposedTopic, WritingKind } from './writing-types';
+import { logger } from '@/utils/logger';
+
+export type { ArticleDraft, PostDraft, ProposedTopic, WritingKind } from './writing-types';
+
+const MAX_TOPICS = 8;
+
+const GROUNDING_RULES = `GROUNDING RULES (hard constraints):
+- Ground everything in something SPECIFIC and REAL from the context below (their work, skills, entities, stated interests, or the posts they've already written).
+- NEVER invent facts, statistics, quotes, events, or people. If the context is thin, write about the themes that ARE present rather than fabricating detail.
+- Write in the user's own voice — match the tone of the posts they've already written when samples are provided.
+- Money is Bitcoin (BTC) or a fiat currency; NEVER write "sats" or "satoshis".
+- No clichés, no clickbait, no hashtag spam, no corporate filler. Sound like a real, thoughtful person.`;
+
+async function fetchRecentAuthored(supabase: AnySupabaseClient, actorId: string): Promise<string> {
+  try {
+    const { data } = await supabase
+      .from(TIMELINE_TABLES.EVENTS)
+      .select('title, description, metadata')
+      .eq('actor_id', actorId)
+      .eq('metadata->>is_user_post', 'true')
+      .eq('is_deleted', false)
+      .order('event_timestamp', { ascending: false })
+      .limit(20);
+
+    const rows = (data ?? []) as Array<{
+      title: string | null;
+      description: string | null;
+      metadata: { is_article?: boolean } | null;
+    }>;
+    const lines = rows
+      .map(r => {
+        const text = (r.description || r.title || '').replace(/\s+/g, ' ').trim().slice(0, 200);
+        if (!text) {
+          return '';
+        }
+        return `- ${r.metadata?.is_article ? '[article] ' : ''}${text}`;
+      })
+      .filter(Boolean);
+    return lines.length ? lines.join('\n') : '(none yet)';
+  } catch {
+    return '(none yet)';
+  }
+}
+
+async function buildWriterContext(
+  supabase: AnySupabaseClient,
+  userId: string
+): Promise<{ contextBlob: string; memoryBlob: string; recentBlob: string }> {
+  const [context, memories, actorId] = await Promise.all([
+    fetchFullContextForCat(supabase, userId),
+    listMemories(supabase, userId),
+    getUserActorId(supabase, userId),
+  ]);
+  const contextBlob = buildFullContextString(context);
+  const memoryBlob = memories.length
+    ? memories
+        .slice(0, 40)
+        .map(m => `- ${m.content}`)
+        .join('\n')
+    : '(none)';
+  const recentBlob = actorId ? await fetchRecentAuthored(supabase, actorId) : '(none yet)';
+  return { contextBlob, memoryBlob, recentBlob };
+}
+
+function contextPrompt(
+  ctx: { contextBlob: string; memoryBlob: string; recentBlob: string },
+  focus?: string
+): string {
+  return `Everything OrangeCat knows about this user:
+
+${ctx.contextBlob}
+
+DURABLE MEMORIES:
+${ctx.memoryBlob}
+
+POSTS THEY'VE ALREADY WRITTEN (their voice — match this tone):
+${ctx.recentBlob}
+${focus ? `\nThe user asked to focus on: ${focus}\n` : ''}`;
+}
+
+// ---------------------------------------------------------------------------
+// Topic suggestions
+// ---------------------------------------------------------------------------
+
+export async function suggestTopics(
+  supabase: AnySupabaseClient,
+  userId: string,
+  opts?: { count?: number; kind?: WritingKind | 'any'; focus?: string }
+): Promise<ProposedTopic[]> {
+  const count = Math.min(Math.max(opts?.count ?? 5, 1), MAX_TOPICS);
+  const kind = opts?.kind ?? 'any';
+  const ctx = await buildWriterContext(supabase, userId);
+
+  const kindLine =
+    kind === 'any'
+      ? 'Mix quick POSTS (a sharp thought that sparks replies) and longer ARTICLES (a topic worth 3–8 minutes of reading). Set "kind" to "post" or "article" per idea.'
+      : `Every idea must be a ${kind.toUpperCase()} ("kind":"${kind}").`;
+
+  const system = `You are the user's writing companion inside OrangeCat — a Bitcoin-native platform for expressing ideas in text. Suggest specific things THIS person would genuinely want to write and would write well, so they publish more often.
+
+${kindLine}
+
+Each idea: a concrete, specific "title" (the headline/topic, not a category) and a one-line "angle" (the take or hook, in their voice). Favor ideas that invite other people to respond and share their own experience.
+
+${GROUNDING_RULES}
+
+Output ONLY JSON: {"topics":[{"kind":"post","title":"...","angle":"..."}]}. Return up to ${count} ideas. Quality over quantity — fewer strong ideas beat filler.`;
+
+  const raw = await callPlatformJson(
+    system,
+    `${contextPrompt(ctx, opts?.focus)}\nPropose up to ${count} topics as JSON.`,
+    {
+      temperature: 0.75,
+      maxTokens: 1200,
+    }
+  );
+  return parseTopics(raw, count, kind);
+}
+
+function parseTopics(
+  raw: string | null,
+  count: number,
+  kind: WritingKind | 'any'
+): ProposedTopic[] {
+  const parsed = parseJsonLoose<{ topics?: unknown[] } | unknown[]>(raw);
+  const arr: unknown[] = Array.isArray(parsed) ? parsed : (parsed?.topics ?? []);
+  return arr
+    .filter(
+      (t): t is { kind?: string; title: string; angle?: string } =>
+        !!t &&
+        typeof (t as { title?: unknown }).title === 'string' &&
+        (t as { title: string }).title.trim().length > 0
+    )
+    .map(t => {
+      const k: WritingKind =
+        t.kind === 'article' || t.kind === 'post'
+          ? t.kind
+          : kind === 'article'
+            ? 'article'
+            : 'post';
+      return {
+        kind: kind === 'any' ? k : kind,
+        title: t.title.trim().slice(0, ARTICLE_LIMITS.title),
+        angle: String(t.angle ?? '')
+          .trim()
+          .slice(0, 200),
+      };
+    })
+    .slice(0, count);
+}
+
+// ---------------------------------------------------------------------------
+// Post draft
+// ---------------------------------------------------------------------------
+
+export async function draftPost(
+  supabase: AnySupabaseClient,
+  userId: string,
+  opts?: { topic?: string; focus?: string }
+): Promise<PostDraft | null> {
+  const ctx = await buildWriterContext(supabase, userId);
+  const system = `You are the user's writing companion inside OrangeCat. Write ONE short post in the user's authentic voice that they can publish right now. It should share a genuine, specific thought or question and invite other people to respond with their own take — the goal is to get a real conversation going.
+
+- Keep it under ${TIMELINE_CONTENT_LIMITS.post} characters. No title, no preamble, no hashtags, no emoji spam.
+- Sound like a person, not a brand. One clear idea.
+
+${GROUNDING_RULES}
+
+Output ONLY JSON: {"text":"the post"}.`;
+
+  const userPrompt = `${contextPrompt(ctx, opts?.focus)}${
+    opts?.topic ? `\nWrite the post about: ${opts.topic}\n` : ''
+  }\nWrite the post as JSON.`;
+
+  const raw = await callPlatformJson(system, userPrompt, { temperature: 0.8, maxTokens: 600 });
+  const parsed = parseJsonLoose<{ text?: unknown }>(raw);
+  const text = typeof parsed?.text === 'string' ? parsed.text.trim() : '';
+  if (!text) {
+    logger.warn('writing-engine: empty post draft', {}, 'WritingEngine');
+    return null;
+  }
+  return { text: text.slice(0, TIMELINE_CONTENT_LIMITS.editPost) };
+}
+
+// ---------------------------------------------------------------------------
+// Article draft
+// ---------------------------------------------------------------------------
+
+export async function draftArticle(
+  supabase: AnySupabaseClient,
+  userId: string,
+  opts?: { topic?: string; focus?: string }
+): Promise<ArticleDraft | null> {
+  const ctx = await buildWriterContext(supabase, userId);
+  const system = `You are the user's writing companion inside OrangeCat — a Bitcoin-native platform for long-form expression. Write a COMPLETE, publishable long-form article in the user's authentic voice.
+
+Structure:
+- A compelling, specific "title" (a real headline, not a category).
+- A one-sentence "excerpt" that makes someone want to read.
+- A "body" in Markdown: an engaging opening, 2–5 sections with "## " subheadings, short readable paragraphs, and a bulleted list where it genuinely helps. Aim for a 3–7 minute read. End with a thought that invites the reader to reflect or respond. Do NOT repeat the title as an H1 inside the body.
+
+${GROUNDING_RULES}
+
+Output ONLY JSON: {"title":"...","excerpt":"...","body":"...markdown..."}.`;
+
+  const userPrompt = `${contextPrompt(ctx, opts?.focus)}${
+    opts?.topic ? `\nWrite the article about: ${opts.topic}\n` : ''
+  }\nWrite the article as JSON.`;
+
+  const raw = await callPlatformJson(system, userPrompt, {
+    temperature: 0.7,
+    maxTokens: 4000,
+    longform: true,
+  });
+  const parsed = parseJsonLoose<{ title?: unknown; excerpt?: unknown; body?: unknown }>(raw);
+  const title = typeof parsed?.title === 'string' ? parsed.title.trim() : '';
+  const body = typeof parsed?.body === 'string' ? parsed.body.trim() : '';
+  if (!title || !body) {
+    logger.warn('writing-engine: incomplete article draft', {}, 'WritingEngine');
+    return null;
+  }
+  const excerpt = typeof parsed?.excerpt === 'string' ? parsed.excerpt.trim() : '';
+  return {
+    title: title.slice(0, ARTICLE_LIMITS.title),
+    excerpt: excerpt.slice(0, ARTICLE_LIMITS.excerpt),
+    body: body.slice(0, ARTICLE_LIMITS.body),
+  };
+}
