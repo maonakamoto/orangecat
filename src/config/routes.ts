@@ -280,6 +280,7 @@ export const ROUTES = {
   ABOUT: '/about',
   HOW_IT_WORKS: '/how-it-works',
   BLOG: '/blog',
+  CHANGELOG: '/changelog',
   DOCS: '/docs',
   FAQ: '/faq',
   PRICING: '/pricing',

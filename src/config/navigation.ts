@@ -296,6 +296,7 @@ export const footerNavigation = {
   product: [
     { name: 'Documentation', href: ROUTES.DOCS },
     { name: 'How It Works', href: ROUTES.HOW_IT_WORKS },
+    { name: 'Changelog', href: ROUTES.CHANGELOG },
     { name: 'Status', href: ROUTES.STATUS },
   ],
   company: [
