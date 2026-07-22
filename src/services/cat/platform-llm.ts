@@ -32,15 +32,14 @@ interface Provider {
   isOpenRouter: boolean;
 }
 
-function resolveProvider(longform: boolean): Provider | null {
+function resolveProvider(_longform: boolean): Provider | null {
   const groqKey = process.env.GROQ_API_KEY;
   const openRouterKey = process.env.OPENROUTER_API_KEY;
 
-  // Long-form prefers OpenRouter (bigger output budget than Groq's free TPM cap);
-  // short work prefers Groq's speed. Same verified model either way.
-  if (longform && openRouterKey) {
-    return openRouter(openRouterKey, OPENROUTER_MODEL);
-  }
+  // Prefer Groq — it's the verified-working provider on the box (fast, handles
+  // long-form JSON within the free TPM budget). OpenRouter is a fallback only:
+  // its free model IDs rot and 404 (both gpt-oss-120b:free and llama-4-maverick:free
+  // returned 404 in prod), so never route to it when Groq is available.
   if (groqKey) {
     return {
       url: 'https://api.groq.com/openai/v1/chat/completions',
