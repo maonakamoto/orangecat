@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Clock, Lock, Users } from 'lucide-react';
-import { getArticleBySlug } from '@/services/articles/get-article';
+import { getArticleBySlug, isCurrentUserArticleAuthor } from '@/services/articles/get-article';
 import { ARTICLE_COPY } from '@/config/articles';
 import { ROUTES } from '@/config/routes';
 import { JsonLdScript } from '@/lib/seo/structured-data';
@@ -10,6 +10,7 @@ import { APP_NAME, SITE_URL } from '@/config/brand';
 import ArticleMarkdown from './ArticleMarkdown';
 import ReadingProgress from './ReadingProgress';
 import ShareButton from './ShareButton';
+import ArticleOwnerActions from './ArticleOwnerActions';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -63,6 +64,8 @@ export default async function ArticlePage({ params }: PageProps) {
   if (!article) {
     notFound();
   }
+
+  const isOwner = await isCurrentUserArticleAuthor(article.authorActorId);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -180,7 +183,10 @@ export default async function ArticlePage({ params }: PageProps) {
                   <span className="block font-semibold text-fg-primary">{article.author.name}</span>
                 </span>
               </Link>
-              <ShareButton title={article.title} url={shareUrl} />
+              <div className="flex flex-wrap items-center gap-2">
+                {isOwner && <ArticleOwnerActions articleId={article.id} slug={article.slug} />}
+                <ShareButton title={article.title} url={shareUrl} />
+              </div>
             </div>
 
             <div className="mt-8 flex flex-col items-start gap-3 rounded-xl border border-subtle bg-surface-raised/25 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
