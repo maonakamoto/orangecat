@@ -262,7 +262,11 @@ export async function checkPaymentStatus(
 }
 
 /**
- * Buyer confirms "I've paid" (for Lightning Address / on-chain where we can't auto-detect)
+ * Buyer's manual "I've paid" fallback — ONLY for a bare Lightning address with no
+ * LUD-21 verify URL, the single rail we cannot confirm automatically. Every other
+ * method (NWC, verify-capable Lightning addresses, on-chain) is detected by
+ * checkPaymentStatus, so manual confirmation is refused there: the buyer's word
+ * must never override a trustworthy on-rail signal.
  */
 export async function buyerConfirmPayment(
   supabase: SupabaseClient,
@@ -282,6 +286,18 @@ export async function buyerConfirmPayment(
 
   if (pi.status === STATUS.PAYMENT_INTENTS.PAID) {
     return { status: STATUS.PAYMENT_INTENTS.PAID, paid_at: pi.paid_at };
+  }
+
+  // Guard the trust boundary: only a bare Lightning address (no LUD-21 verify
+  // URL) is genuinely undetectable. NWC (relay lookup), verify-capable Lightning
+  // addresses, and on-chain (mempool confirmation) are all confirmed by
+  // checkPaymentStatus — accepting the buyer's self-attestation there would let
+  // the weakest signal flip an order to paid over a trustworthy one. Refuse it.
+  const isUndetectable = pi.payment_method === 'lightning_address' && !pi.lnurl_verify_url;
+  if (!isUndetectable) {
+    throw new Error(
+      'This payment is confirmed automatically — please wait for detection instead of confirming manually.'
+    );
   }
 
   // Mark as buyer_confirmed — seller verifies in their wallet

@@ -203,12 +203,17 @@ export function PaymentDialog({
 
               <PaymentStatusIndicator status="invoice_ready" />
 
-              {/* "I've paid" fallback for all non-NWC methods (no auto-detect) */}
-              {state.data.payment_intent.payment_method !== 'nwc' && (
-                <Button variant="outline" size="sm" onClick={confirmPaid} className="min-h-11">
-                  I&apos;ve paid
-                </Button>
-              )}
+              {/* "I've paid" fallback ONLY for a bare Lightning address (no LUD-21
+                  verify URL) — the single rail we can't auto-detect. NWC,
+                  verify-capable Lightning addresses, and on-chain are confirmed
+                  automatically and the server refuses manual confirmation for them.
+                  Keep in sync with buyerConfirmPayment's guard. */}
+              {state.data.payment_intent.payment_method === 'lightning_address' &&
+                !state.data.payment_intent.lnurl_verify_url && (
+                  <Button variant="outline" size="sm" onClick={confirmPaid} className="min-h-11">
+                    I&apos;ve paid
+                  </Button>
+                )}
             </div>
           )}
 
