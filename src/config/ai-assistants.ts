@@ -6,6 +6,7 @@
  */
 
 import { STATUS } from '@/config/database-constants';
+import { STATUS_LABELS } from '@/config/status-labels';
 
 // ==================== COMPUTE PROVIDERS ====================
 
@@ -29,13 +30,14 @@ export const AI_PRICING_MODELS = [
 export type AIPricingModel = (typeof AI_PRICING_MODELS)[number]['value'];
 
 // ==================== STATUS ====================
-// Values derived from STATUS.AI_ASSISTANTS (SSOT in database-constants.ts)
+// Values derived from STATUS.AI_ASSISTANTS (SSOT in database-constants.ts);
+// labels from STATUS_LABELS (SSOT in status-labels.ts) so a rename hits once.
 
 export const AI_ASSISTANT_STATUSES = [
-  { value: STATUS.AI_ASSISTANTS.DRAFT, label: 'Draft' },
-  { value: STATUS.AI_ASSISTANTS.ACTIVE, label: 'Active' },
-  { value: STATUS.AI_ASSISTANTS.PAUSED, label: 'Paused' },
-  { value: STATUS.AI_ASSISTANTS.ARCHIVED, label: 'Archived' },
+  { value: STATUS.AI_ASSISTANTS.DRAFT, label: STATUS_LABELS.draft },
+  { value: STATUS.AI_ASSISTANTS.ACTIVE, label: STATUS_LABELS.active },
+  { value: STATUS.AI_ASSISTANTS.PAUSED, label: STATUS_LABELS.paused },
+  { value: STATUS.AI_ASSISTANTS.ARCHIVED, label: STATUS_LABELS.archived },
 ] as const;
 
 export type AIAssistantStatus = (typeof AI_ASSISTANT_STATUSES)[number]['value'];
