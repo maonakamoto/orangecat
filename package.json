@@ -99,7 +99,7 @@
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.3.4",
     "@google/generative-ai": "^0.24.1",
-    "@hono/node-server": "^1.19.10",
+    "@hono/node-server": "^2.0.5",
     "@hookform/resolvers": "^5.2.2",
     "@marsidev/react-turnstile": "^1.4.1",
     "@mdx-js/loader": "^3.1.0",
@@ -220,6 +220,7 @@
     "@isaacs/brace-expansion": "^5.0.1",
     "@babel/core": "^7.29.6",
     "hono": "^4.12.27",
+    "@hono/node-server": "^2.0.5",
     "js-yaml": "^4.1.1",
     "tar": "^7.5.8",
     "postcss": "^8.5.10",
