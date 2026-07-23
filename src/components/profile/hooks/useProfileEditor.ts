@@ -96,6 +96,8 @@ export function useProfileEditor({
       bitcoin_address: profile.bitcoin_address || '',
       lightning_address: profile.lightning_address || '',
       currency: (profile.currency as typeof PLATFORM_DEFAULT_CURRENCY) || PLATFORM_DEFAULT_CURRENCY,
+      privacy_settings:
+        (profile.privacy_settings as { hidden_fields?: string[] } | null | undefined) ?? undefined,
     },
   });
 
