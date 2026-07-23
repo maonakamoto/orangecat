@@ -90,7 +90,7 @@ export default function DocsPage() {
             <p className="text-fg-secondary leading-relaxed mb-5">
               Everything on OrangeCat is an <strong>entity</strong> — a structured unit of economic
               or governance activity. Entities give the Cat a rich world model to read and operate
-              on. There are 14 entity types covering the full economic spectrum:
+              on. There are {ENTITY_TYPES.length} entity types covering the full economic spectrum:
             </p>
             <div className="grid sm:grid-cols-2 gap-3">
               {ENTITY_TYPES.map(entity => (
@@ -127,9 +127,9 @@ export default function DocsPage() {
               ) for instant, near-zero-fee payments. On-chain Bitcoin is also supported.
             </p>
             <p className="text-fg-secondary leading-relaxed">
-              OrangeCat is not Bitcoin-only. Any payment method — Twint, PayPal, Venmo, bank
-              transfers — can be listed as a receiving option. Users choose the method that works
-              for them. Meet counterparties where they are.
+              Price your listing in any currency — CHF, USD, EUR, or Bitcoin — using your preferred
+              display currency. However it&apos;s priced, payments settle in Bitcoin and Lightning:
+              instant, global, and non-custodial.
             </p>
             <div className="grid sm:grid-cols-3 gap-4">
               {/* Highlight cards — uniform neutral tiles per migration 6/N */}
@@ -144,8 +144,10 @@ export default function DocsPage() {
                 <p className="text-fg-secondary text-xs mt-1">OrangeCat never holds your funds</p>
               </div>
               <div className="p-4 bg-surface-raised/40 border border-subtle rounded-lg text-center">
-                <p className="font-medium text-fg-primary text-sm">Any currency</p>
-                <p className="text-fg-secondary text-xs mt-1">Bitcoin, Lightning, fiat, and more</p>
+                <p className="font-medium text-fg-primary text-sm">Price in any currency</p>
+                <p className="text-fg-secondary text-xs mt-1">
+                  Priced in fiat or BTC, settled in Bitcoin
+                </p>
               </div>
             </div>
           </div>
